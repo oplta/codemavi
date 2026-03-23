@@ -1,1 +1,10 @@
 .ant-colony/
+.ralph/
+void/
+plan.md
+node_modules/
+.DS_Store
+.tmp/
+out/
+dist/
+*.db
