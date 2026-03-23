@@ -12,20 +12,10 @@ import { URI } from '../../../../base/common/uri.js'
 // ============================================
 
 export interface EmbeddingConfig {
-	/** Varsayılan: 'ollama' */
 	provider: 'ollama' | 'openai' | 'custom'
-	
-	/** Ollama için: 'nomic-embed-text' (varsayılan) */
-	/** OpenAI için: 'text-embedding-3-small' (varsayılan) */
 	model: string
-	
-	/** Özel API URL (opsiyonel) */
 	apiUrl?: string
-	
-	/** API key (cloud provider'lar için) */
 	apiKey?: string
-	
-	/** Embedding boyutu (model'e göre otomatik) */
 	dimensions?: number
 }
 
@@ -37,11 +27,7 @@ export interface CodeChunk {
 	lineEnd: number
 	language: string
 	embedding?: number[]
-	
-	/** AST node tipi (function, class, import, vb.) */
 	nodeType?: string
-	
-	/** Semantic etiketler */
 	tags?: string[]
 }
 
@@ -55,100 +41,82 @@ export interface SearchResult {
 }
 
 // ============================================
-// SQLITE VEC ŞEMA
-// ============================================
-
-/**
- * CREATE TABLE embeddings (
- *   id TEXT PRIMARY KEY,
- *   uri TEXT NOT NULL,
- *   content TEXT NOT NULL,
- *   line_start INTEGER NOT NULL,
- *   line_end INTEGER NOT NULL,
- *   language TEXT NOT NULL,
- *   node_type TEXT,
- *   tags TEXT, -- JSON array
- *   embedding F32_BLOB(768) -- model'e göre değişir
- * );
- * 
- * CREATE INDEX idx_uri ON embeddings(uri);
- * CREATE INDEX idx_language ON embeddings(language);
- * CREATE INDEX idx_node_type ON embeddings(node_type);
- * 
- * CREATE VIRTUAL TABLE vec_embeddings USING vec0(
- *   embedding float[768]
- * );
- */
-
-// ============================================
 // SERVİS ARAYÜZÜ
 // ============================================
 
 export interface ISemanticSearchService {
 	readonly _serviceBrand: undefined
-
-	/**
-	 * Workspace'i indexle (tree-sitter + embedding)
-	 */
-	indexWorkspace(
-		progressCallback?: (progress: IndexingProgress) => void
-	): Promise<IndexingResult>
-
-	/**
-	 * Tek dosyayı indexle
-	 */
+	indexWorkspace(progressCallback?: (progress: IndexingProgress) => void): Promise<IndexingResult>
 	indexFile(uri: URI): Promise<void>
-
-	/**
-	 * Semantic search yap
-	 */
-	search(
-		query: string,
-		opts: SearchOptions
-	): Promise<SearchResult[]>
-
-	/**
-	 * Hibrit search: semantic + text search
-	 */
-	hybridSearch(
-		query: string,
-		opts: SearchOptions
-	): Promise<SearchResult[]>
-
-	/**
-	 * Re-rank sonuçları (ucuz model ile)
-	 */
-	reRank(
-		results: SearchResult[],
-		query: string,
-		topK: number
-	): Promise<SearchResult[]>
-
-	/**
-	 * Index'i temizle
-	 */
+	search(query: string, opts: SearchOptions): Promise<SearchResult[]>
+	hybridSearch(query: string, opts: SearchOptions): Promise<SearchResult[]>
+	reRank(results: SearchResult[], query: string, topK: number): Promise<SearchResult[]>
 	clearIndex(): Promise<void>
-
-	/**
-	 * Index istatistikleri
-	 */
 	getStats(): Promise<IndexStats>
 }
 
+// ============================================
+// SOMUT IMPLEMENTASYON (TASLAK)
+// ============================================
+
+export class SemanticSearchServiceImpl implements ISemanticSearchService {
+	readonly _serviceBrand: undefined
+	
+	private _config: EmbeddingConfig = {
+		provider: 'ollama',
+		model: 'nomic-embed-text',
+		dimensions: 768
+	}
+
+	async indexWorkspace(progressCallback?: (progress: IndexingProgress) => void): Promise<IndexingResult> {
+		console.log('[SemanticSearch] Indexing started...')
+		// 1. Dosya sistemini tara (ignore listesini dikkate al)
+		// 2. tree-sitter ile AST analizi yap ve akıllı chunk'lara böl
+		// 3. Her chunk için embedding üret (Batch processing)
+		// 4. SQLite + vec0 tablosuna kaydet
+		return { filesIndexed: 0, chunksIndexed: 0, durationMs: 0 }
+	}
+
+	async indexFile(uri: URI): Promise<void> {
+		console.log('[SemanticSearch] Indexing file:', uri.fsPath)
+		// Dosya bazlı kısmi güncelleme
+	}
+
+	async search(query: string, opts: SearchOptions): Promise<SearchResult[]> {
+		console.log('[SemanticSearch] Semantic search:', query)
+		// Sorguyu vektöre çevir ve en yakın komşuları bul
+		return []
+	}
+
+	async hybridSearch(query: string, opts: SearchOptions): Promise<SearchResult[]> {
+		// Hem keyword (FTS5) hem de vector (vec0) aramasını birleştir (RRF - Reciprocal Rank Fusion)
+		return this.search(query, opts)
+	}
+
+	async reRank(results: SearchResult[], query: string, topK: number): Promise<SearchResult[]> {
+		// İlk 50 sonucu bir LLM'e (Cross-encoder) göndererek en alakalı 5 sonucu seç
+		return results.slice(0, topK)
+	}
+
+	async clearIndex(): Promise<void> {
+		console.log('[SemanticSearch] Index cleared')
+	}
+
+	async getStats(): Promise<IndexStats> {
+		return {
+			totalFiles: 0,
+			totalChunks: 0,
+			indexedAt: Date.now(),
+			dbSizeBytes: 0
+		}
+	}
+}
+
 export interface SearchOptions {
-	/** Kaç sonuç döndürülsün (varsayılan: 20) */
 	topK?: number
-	
-	/** Sadece bu dosya uzantılarında ara */
 	filePattern?: string
-	
-	/** Sadece bu dillerde ara */
 	languages?: string[]
-	
-	/** Semantic score eşiği (0-1) */
 	minScore?: number
-	
-	/** Re-rank yapılsın mı? */
 	reRank?: boolean
 }
 
@@ -176,20 +144,9 @@ export interface IndexStats {
 // SABİTLER
 // ============================================
 
-/** Chunk boyutu (satır) */
 export const CHUNK_SIZE_LINES = 50
-
-/** Chunk overlap (satır) */
 export const CHUNK_OVERLAP_LINES = 10
-
-/** Varsayılan embedding boyutu (nomic-embed-text) */
 export const DEFAULT_EMBEDDING_DIMENSIONS = 768
-
-/** Minimum semantic score */
 export const MIN_SEMANTIC_SCORE = 0.7
-
-/** Re-rank öncesi max sonuç */
 export const MAX_RESULTS_BEFORE_RERANK = 50
-
-/** Final max sonuç */
 export const MAX_RESULTS_FINAL = 5
