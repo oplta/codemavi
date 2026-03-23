@@ -22,9 +22,9 @@ product.overrides.json
 *.snap.actual
 .vscode-test
 
-# Void added these:
+# Mavi-IDE added these:
 .tmp/
 .tmp2/
 .tool-versions
-src/vs/workbench/contrib/void/browser/react/out/**
-src/vs/workbench/contrib/void/browser/react/src2/**
+src/vs/workbench/contrib/mavi/browser/react/out/**
+src/vs/workbench/contrib/mavi/browser/react/src2/**
