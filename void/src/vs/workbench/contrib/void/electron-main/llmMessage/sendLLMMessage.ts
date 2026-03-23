@@ -107,7 +107,59 @@ export const sendLLMMessage = async ({
 			return
 		}
 		const { sendFIM, sendChat } = implementation
+
 		if (messagesType === 'chatMessages') {
+			// AGENT MODE: Multi-turn loop
+			if (chatMode === 'agent') {
+				let currentMessages = [...messages_]
+				let iteration = 0
+				const MAX_ITERATIONS = 10
+
+				while (iteration < MAX_ITERATIONS && !_didAbort) {
+					iteration++
+					let toolCallReceived: any = null
+
+					const finalPromise = new Promise<void>((resolve, reject) => {
+						sendChat({
+							messages: currentMessages,
+							onText,
+							onFinalMessage: (params) => {
+								if (params.toolCall) {
+									toolCallReceived = params.toolCall
+								}
+								onFinalMessage_(params)
+								resolve()
+							},
+							onError: (err) => {
+								onError_(err)
+								reject(err)
+							},
+							settingsOfProvider,
+							modelSelectionOptions,
+							overridesOfModel,
+							modelName,
+							_setAborter,
+							providerName,
+							separateSystemMessage,
+							chatMode,
+							mcpTools
+						})
+					})
+
+					await finalPromise
+
+					// Eğer tool call yoksa döngü biter
+					if (!toolCallReceived) break
+
+					// TODO: Burada tool call'u UI'a sormak yerine otomatik çalıştırmak için 
+					// bir tool-execution-service'e ihtiyaç var.
+					// Şimdilik döngüyü burada durduruyoruz (UI'dan geri bildirim beklenecek).
+					break 
+				}
+				return
+			}
+
+			// NORMAL MODE: Single turn
 			await sendChat({ messages: messages_, onText, onFinalMessage, onError, settingsOfProvider, modelSelectionOptions, overridesOfModel, modelName, _setAborter, providerName, separateSystemMessage, chatMode, mcpTools })
 			return
 		}

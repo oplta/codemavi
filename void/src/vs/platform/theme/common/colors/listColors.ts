@@ -101,7 +101,7 @@ export const listFilterWidgetBackground = registerColor('listFilterWidget.backgr
 	nls.localize('listFilterWidgetBackground', 'Background color of the type filter widget in lists and trees.'));
 
 export const listFilterWidgetOutline = registerColor('listFilterWidget.outline',
-	{ dark: Color.transparent, light: Color.transparent, hcDark: '#f38518', hcLight: '#007ACC' },
+	{ dark: Color.transparent, light: Color.transparent, hcDark: '#f38518', hcLight: '#3b82f6' },
 	nls.localize('listFilterWidgetOutline', 'Outline color of the type filter widget in lists and trees.'));
 
 export const listFilterWidgetNoMatchesOutline = registerColor('listFilterWidget.noMatchesOutline',

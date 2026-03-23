@@ -29,7 +29,7 @@ export const inputBorder = registerColor('input.border',
 	nls.localize('inputBoxBorder', "Input box border."));
 
 export const inputActiveOptionBorder = registerColor('inputOption.activeBorder',
-	{ dark: '#007ACC', light: '#007ACC', hcDark: contrastBorder, hcLight: contrastBorder },
+	{ dark: '#3b82f6', light: '#3b82f6', hcDark: contrastBorder, hcLight: contrastBorder },
 	nls.localize('inputBoxActiveOptionBorder', "Border color of activated options in input fields."));
 
 export const inputActiveOptionHoverBackground = registerColor('inputOption.hoverBackground',
@@ -60,7 +60,7 @@ export const inputValidationInfoForeground = registerColor('inputValidation.info
 	nls.localize('inputValidationInfoForeground', "Input validation foreground color for information severity."));
 
 export const inputValidationInfoBorder = registerColor('inputValidation.infoBorder',
-	{ dark: '#007acc', light: '#007acc', hcDark: contrastBorder, hcLight: contrastBorder },
+	{ dark: '#3b82f6', light: '#3b82f6', hcDark: contrastBorder, hcLight: contrastBorder },
 	nls.localize('inputValidationInfoBorder', "Input validation border color for information severity."));
 
 export const inputValidationWarningBackground = registerColor('inputValidation.warningBackground',
@@ -118,7 +118,7 @@ export const buttonSeparator = registerColor('button.separator',
 	nls.localize('buttonSeparator', "Button separator color."));
 
 export const buttonBackground = registerColor('button.background',
-	{ dark: '#0E639C', light: '#007ACC', hcDark: null, hcLight: '#0F4A85' },
+	{ dark: '#3b82f6', light: '#3b82f6', hcDark: null, hcLight: '#0F4A85' },
 	nls.localize('buttonBackground', "Button background color."));
 
 export const buttonHoverBackground = registerColor('button.hoverBackground',

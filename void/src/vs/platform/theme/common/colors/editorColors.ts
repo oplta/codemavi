@@ -17,7 +17,7 @@ import { scrollbarShadow, badgeBackground } from './miscColors.js';
 // ----- editor
 
 export const editorBackground = registerColor('editor.background',
-	{ light: '#ffffff', dark: '#1E1E1E', hcDark: Color.black, hcLight: Color.white },
+	{ light: '#ffffff', dark: '#020b18', hcDark: Color.black, hcLight: Color.white },
 	nls.localize('editorBackground', "Editor background color."));
 
 export const editorForeground = registerColor('editor.foreground',
@@ -227,11 +227,11 @@ export const editorInlayHintParameterBackground = registerColor('editorInlayHint
 // ----- editor lightbulb
 
 export const editorLightBulbForeground = registerColor('editorLightBulb.foreground',
-	{ dark: '#FFCC00', light: '#DDB100', hcDark: '#FFCC00', hcLight: '#007ACC' },
+	{ dark: '#FFCC00', light: '#DDB100', hcDark: '#FFCC00', hcLight: '#3b82f6' },
 	nls.localize('editorLightBulbForeground', "The color used for the lightbulb actions icon."));
 
 export const editorLightBulbAutoFixForeground = registerColor('editorLightBulbAutoFix.foreground',
-	{ dark: '#75BEFF', light: '#007ACC', hcDark: '#75BEFF', hcLight: '#007ACC' },
+	{ dark: '#75BEFF', light: '#3b82f6', hcDark: '#75BEFF', hcLight: '#3b82f6' },
 	nls.localize('editorLightBulbAutoFixForeground', "The color used for the lightbulb auto fix actions icon."));
 
 export const editorLightBulbAiForeground = registerColor('editorLightBulbAi.foreground',
@@ -413,7 +413,7 @@ export const mergeCommonContentBackground = registerColor('merge.commonContentBa
 	nls.localize('mergeCommonContentBackground', 'Common ancestor content background in inline merge-conflicts. The color must not be opaque so as not to hide underlying decorations.'), true);
 
 export const mergeBorder = registerColor('merge.border',
-	{ dark: null, light: null, hcDark: '#C3DF6F', hcLight: '#007ACC' },
+	{ dark: null, light: null, hcDark: '#C3DF6F', hcLight: '#3b82f6' },
 	nls.localize('mergeBorder', 'Border color on headers and the splitter in inline merge-conflicts.'));
 
 
