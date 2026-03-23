@@ -1,71 +1,41 @@
-# 🟦 Code Mavi: Agentic Intelligence Layer
+# Welcome to Void.
 
-> **"Agent beyni olmayan bir IDE, sadece süslü bir metin editörüdür."**
+<div align="center">
+	<img
+		src="./src/vs/workbench/browser/parts/editor/media/slice_of_void.png"
+	 	alt="Void Welcome"
+		width="300"
+	 	height="300"
+	/>
+</div>
 
-Code Mavi, yapay zeka destekli yazılım geliştirme sürecini bir adım öteye taşıyan, **"Agent-First"** felsefesiyle tasarlanmış açık kaynaklı bir zeka katmanıdır. Bu depo, Code Mavi IDE'nin karar alma, kod yürütme ve doğrulama süreçlerini yöneten temel mimariyi ve sistem promptlarını içerir.
+Void is the open-source Cursor alternative.
 
----
+Use AI agents on your codebase, checkpoint and visualize changes, and bring any model or host locally. Void sends messages directly to providers without retaining your data.
 
-## 🎯 Vizyon: Şeffaf ve Özgür Agent Deneyimi
+This repo contains the full sourcecode for Void. If you're new, welcome!
 
-Günümüzün popüler AI editörleri (Cursor vb.) harika işler çıkarsa da, arkadaki "beyin" katmanı kapalı bir kutudur. Code Mavi, bu zekayı **şeffaf, özelleştirilebilir ve topluluk odaklı** hale getirir.
+- 🧭 [Website](https://voideditor.com)
 
-- **Şeffaf Promptlar:** Agent'ın nasıl düşündüğünü görün ve müdahale edin.
-- **Yerel Kurallar:** `.codemavi/rules.md` ile agent davranışını projenize göre terzi usulü dikin.
-- **Kendi Kendini Düzeltme:** Yazılan kodun hatasız olduğundan emin olan aktif bir doğrulama döngüsü.
+- 👋 [Discord](https://discord.gg/RSNjgaugJs)
 
----
+- 🚙 [Project Board](https://github.com/orgs/voideditor/projects/2)
 
-## 🏗️ Mimari: Üçlü Agent Sistemi
 
-Code Mavi, karmaşık görevleri çözmek için üç farklı uzmanlık alanına sahip agent yapısını kullanır:
+## Note
 
-### 🧠 1. Orchestrator (Orkestra Şefi)
-Sistemin merkezi sinir sistemidir. Kullanıcı isteğini analiz eder, kod tabanında araştırma yapar ve stratejik bir plan oluşturur. Görevleri parçalara ayırarak Executor'a iletir.
-*Dosya: `agents/orchestrator-prompt.md`*
+We've paused work on the Void IDE (this repo) to explore a few novel coding ideas. We want to focus on innovation over feature-parity. Void will continue running, but without maintenance some existing features might stop working over time. Depending on the direction of our new work, we might not resume Void as an IDE.
 
-### 🛠️ 2. Executor (Yürütücü)
-Planı hayata geçiren "ellerdir". Hassas "Search/Replace" blokları ve semantik diff'ler üreterek dosyaları fiziksel olarak günceller.
-*Dosya: `agents/executor-prompt.md`*
+We won't be actively reviewing Issues and PRs, but we will respond to all [email](mailto:hello@voideditor.com) inquiries on building and maintaining your own version of Void while we're paused. 
 
-### 🔍 3. Verifier (Doğrulayıcı)
-"Güven ama doğrula" prensibiyle çalışır. Değişiklik sonrası linter hatalarını, tip uyumsuzluklarını ve test sonuçlarını kontrol eder. Hata bulursa döngüyü Executor'a geri göndererek **Self-Correction** (Kendi Kendini Düzeltme) sürecini başlatır.
-*Dosya: `agents/verifier-prompt.md`*
+## Reference
 
----
+Void is a fork of the [vscode](https://github.com/microsoft/vscode) repository. For a guide to the codebase, see [VOID_CODEBASE_GUIDE](https://github.com/voideditor/void/blob/main/VOID_CODEBASE_GUIDE.md).
 
-## 🚀 Öne Çıkan Özellikler
+For a guide on how to develop your own version of Void, see [HOW_TO_CONTRIBUTE](https://github.com/voideditor/void/blob/main/HOW_TO_CONTRIBUTE.md) and [void-builder](https://github.com/voideditor/void-builder).
 
-| Özellik | Açıklama |
-| :--- | :--- |
-| **Semantic Intelligence** | Tree-sitter ve Vektör DB ile kodun sadece metnini değil, yapısını anlar. |
-| **Recursive Loop** | Başarısız olan işlemlerde pes etmez, hatayı analiz edip tekrar dener (Max 3 deneme). |
-| **Rule Engine** | `rules.md` üzerinden stil ve mimari kurallarınızı agent'a dikte edin. |
-| **Tool Integration** | Dosya sistemi, terminal ve kullanıcı etkileşimi için gelişmiş araç seti. |
 
----
 
-## 📂 Klasör Yapısı
 
-```text
-.
-├── agents/          # Agent'ların sistem promptları ve kişilik tanımları
-├── tools/           # Codebase ile etkileşim kuran servis mantıkları
-├── prompts/         # Dinamik prompt şablonları
-├── rules.md         # Global ve projeye özel davranış kuralları
-└── README.md        # Şu an okuduğunuz vizyon belgesi
-```
-
----
-
-## 🤝 Katkıda Bulunun
-
-Code Mavi, açık kaynak topluluğunun gücüyle büyüyor. Eğer agent mimarileri, LLM optimizasyonu veya IDE geliştirme ile ilgileniyorsanız, aramıza katılın!
-
-1. Bu depoyu fork edin.
-2. `agents/` altındaki promptları iyileştirin veya yeni `tools/` ekleyin.
-3. PR (Pull Request) göndererek ekosistemi güçlendirin.
-
----
-
-*Code Mavi — Cursor'un yaptığını açık, şeffaf ve ücretsiz yapar.*
+## Support
+You can always reach us in our Discord server or contact us via email: hello@voideditor.com.
