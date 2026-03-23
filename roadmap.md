@@ -13,8 +13,8 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 - [x] **Folder Organization:** Agent logic moved to `intelligence/` for a cleaner root.
 - [x] **Multi-Model Support:** DeepSeek and Zhipu AI (GLM) integration logic added to ProviderManager.
 - [x] **Embedding Flexibility:** Multi-provider (Ollama, OpenAI) support added to SemanticSearchService.
+- [x] **Prompt Engineering:** Optimized Orchestrator prompt for large context and deep reasoning.
 - [ ] **Tool Expansion:** Terminal and File System tools detailing.
-- [ ] **Prompt Engineering:** Optimize prompts for large context.
 
 ## 🔴 v0.3.0: "Apply" ve "Self-Correction" Zekası
 - [ ] **Semantic Diff Engine:** Üretilen diff'lerin kod tabanına uygulanma algoritmasının mükemmelleştirilmesi.
