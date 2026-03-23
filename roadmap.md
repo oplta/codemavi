@@ -9,11 +9,12 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 - [x] Proje kuralları (`rules.md`) altyapısı.
 - [x] GitHub vitrin düzenlemesi (README, About).
 
-## 🟡 v0.2.0: Model Çeşitliliği ve Sağlayıcılar (Şu anki hedef)
-- [ ] **Multi-Model Support:** Zhipu AI (GLM), DeepSeek ve Together AI entegrasyonu mantığı.
-- [ ] **Embedding Flexibility:** Sadece Ollama değil, yerel ve bulut tabanlı farklı embedding sağlayıcı desteği.
-- [ ] **Tool Expansion:** Terminal ve Dosya Sistemi araçlarının (tools) detaylandırılması.
-- [ ] **Prompt Engineering:** `agents/` altındaki promptların 32k+ context penceresine uygun optimizasyonu.
+## 🟡 v0.2.0: Model Çeşitliliği ve Sağlayıcılar (Geliştiriliyor)
+- [x] **Folder Organization:** Agent logic moved to `intelligence/` for a cleaner root.
+- [x] **Multi-Model Support:** DeepSeek and Zhipu AI (GLM) integration logic added to ProviderManager.
+- [ ] **Embedding Flexibility:** Support for different providers (not just Ollama).
+- [ ] **Tool Expansion:** Terminal and File System tools detailing.
+- [ ] **Prompt Engineering:** Optimize prompts for large context.
 
 ## 🔴 v0.3.0: "Apply" ve "Self-Correction" Zekası
 - [ ] **Semantic Diff Engine:** Üretilen diff'lerin kod tabanına uygulanma algoritmasının mükemmelleştirilmesi.

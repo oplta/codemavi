@@ -76,12 +76,42 @@ export class ProviderManager {
 
 		console.log(`[ProviderManager] Calling ${provider} with model ${request.model || config.defaultModel}`)
 		
-		// Burada her provider için ilgili HTTP/SDK çağrısı yapılacak.
-		// Örn: fetch(config.baseUrl + '/chat/completions', ...)
+		const endpoint = provider === 'zhipu' ? `${config.baseUrl}/chat/completions` : `${config.baseUrl}/chat/completions`
 		
-		return {
-			content: "Provider implementation in progress...",
-			usage: { promptTokens: 0, completionTokens: 0 }
+		try {
+			const response = await fetch(endpoint, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${config.apiKey || ''}`
+				},
+				body: JSON.stringify({
+					model: request.model || config.defaultModel,
+					messages: request.messages,
+					stream: request.stream || false,
+					tools: request.tools,
+					temperature: request.temperature ?? 0.7
+				})
+			})
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				throw new Error(`[${provider}] API Error: ${JSON.stringify(errorData)}`)
+			}
+
+			const data = await response.json()
+			
+			return {
+				content: data.choices[0]?.message?.content || '',
+				toolCalls: data.choices[0]?.message?.tool_calls,
+				usage: {
+					promptTokens: data.usage?.prompt_tokens || 0,
+					completionTokens: data.usage?.completion_tokens || 0
+				}
+			}
+		} catch (error) {
+			console.error(`[ProviderManager] Error calling ${provider}:`, error)
+			throw error
 		}
 	}
 
