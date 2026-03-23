@@ -16,10 +16,10 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 - [x] **Prompt Engineering:** Optimized Orchestrator prompt for large context and deep reasoning.
 - [x] **Tool Expansion:** Terminal and File System tools detailed for advanced operations.
 
-## 🟡 v0.3.0: "Apply" ve "Self-Correction" Zekası (Şu anki hedef)
-- [ ] **Semantic Diff Engine:** Üretilen diff'lerin kod tabanına uygulanma algoritmasının mükemmelleştirilmesi.
-- [ ] **Auto-Verifier:** Linter ve Test sonuçlarının otomatik olarak döngüye sokulması.
-- [ ] **State Management:** Agent'ın "düşünce zinciri" (Chain of Thought) ve durum yönetimi.
+## 🟡 v0.3.0: "Apply" ve "Self-Correction" Zekası (Geliştiriliyor)
+- [x] **Semantic Diff Engine:** Created `ApplyEngine` for parsing and applying SEARCH/REPLACE blocks.
+- [ ] **Auto-Verifier:** Linter and Test results automatically looped back to the agent.
+- [ ] **State Management:** Agent's "Chain of Thought" and state management.
 
 ## 🔵 v1.0.0: IDE Entegrasyonu ve Yayılım
 - [ ] Mantık katmanının Code Mavi IDE (VS Code Fork) ile tam entegrasyonu.
