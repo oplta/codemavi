@@ -136,7 +136,7 @@ module.exports = {
 			}
 
 			return /^(?:Assignment|OptionalCall|Call|New|Update|Yield|Await|Chain)Expression$/u.test(node.type) ||
-				(node.type === 'UnaryExpression' && ['delete', 'void'].indexOf(node.operator) >= 0);
+				(node.type === 'UnaryExpression' && ['delete', 'codemavi'].indexOf(node.operator) >= 0);
 		}
 
 		return {

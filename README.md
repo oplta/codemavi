@@ -2,7 +2,7 @@
 
 > **"A tool that doesn't just assist, but thinks, acts, and verifies."**
 
-Code Mavi, yapay zeka destekli yazılım geliştirme sürecini bir adım öteye taşıyan, **"Agent-First"** felsefesiyle tasarlanmış açık kaynaklı bir IDE'dir. VS Code (via Void) tabanlı bu editör, şeffaf promptları, kendi kendini düzelten döngüleri ve gelişmiş agent orkestrasyonu ile geliştirici deneyimini özgürleştirir.
+Code Mavi, yapay zeka destekli yazılım geliştirme sürecini bir adım öteye taşıyan, **"Agent-First"** felsefesiyle tasarlanmış açık kaynaklı bir IDE'dir. VS Code (via Code Mavi) tabanlı bu editör, şeffaf promptları, kendi kendini düzelten döngüleri ve gelişmiş agent orkestrasyonu ile geliştirici deneyimini özgürleştirir.
 
 ---
 
@@ -22,15 +22,15 @@ Code Mavi, karmaşık görevleri çözmek için uzmanlaşmış üç farklı agen
 
 ### 🧠 1. Orchestrator (Orkestra Şefi)
 Sistemin merkezi sinir sistemidir. Kullanıcı isteğini analiz eder, kod tabanında araştırma yapar ve stratejik bir plan oluşturur.
-*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/orchestrator-prompt.md`*
+*Dosya: `src/vs/workbench/contrib/codemavi/common/mavi-logic/agents/orchestrator-prompt.md`*
 
 ### 🛠️ 2. Executor (Yürütücü)
 Planı hayata geçiren "ellerdir". Hassas "Search/Replace" blokları ve semantik diff'ler üreterek dosyaları fiziksel olarak günceller.
-*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/executor-prompt.md`*
+*Dosya: `src/vs/workbench/contrib/codemavi/common/mavi-logic/agents/executor-prompt.md`*
 
 ### 🔍 3. Verifier (Doğrulayıcı)
 "Güven ama doğrula" prensibiyle çalışır. Değişiklik sonrası linter hatalarını ve test sonuçlarını kontrol eder. Hata bulursa döngüyü Executor'a geri göndererek **Self-Correction** sürecini yönetir.
-*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/verifier-prompt.md`*
+*Dosya: `src/vs/workbench/contrib/codemavi/common/mavi-logic/agents/verifier-prompt.md`*
 
 ---
 

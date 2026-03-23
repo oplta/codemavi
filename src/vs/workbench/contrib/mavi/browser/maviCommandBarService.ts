@@ -19,7 +19,7 @@ import { ITextModel } from '../../../../editor/common/model.js';
 import { IModelService } from '../../../../editor/common/services/model.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
 import { Action2, registerAction2 } from '../../../../platform/actions/common/actions.js';
-import { VOID_ACCEPT_DIFF_ACTION_ID, VOID_REJECT_DIFF_ACTION_ID, VOID_GOTO_NEXT_DIFF_ACTION_ID, VOID_GOTO_PREV_DIFF_ACTION_ID, VOID_GOTO_NEXT_URI_ACTION_ID, VOID_GOTO_PREV_URI_ACTION_ID, VOID_ACCEPT_FILE_ACTION_ID, VOID_REJECT_FILE_ACTION_ID, VOID_ACCEPT_ALL_DIFFS_ACTION_ID, VOID_REJECT_ALL_DIFFS_ACTION_ID } from './actionIDs.js';
+import { MAVI_ACCEPT_DIFF_ACTION_ID, MAVI_REJECT_DIFF_ACTION_ID, MAVI_GOTO_NEXT_DIFF_ACTION_ID, MAVI_GOTO_PREV_DIFF_ACTION_ID, MAVI_GOTO_NEXT_URI_ACTION_ID, MAVI_GOTO_PREV_URI_ACTION_ID, MAVI_ACCEPT_FILE_ACTION_ID, MAVI_REJECT_FILE_ACTION_ID, MAVI_ACCEPT_ALL_DIFFS_ACTION_ID, MAVI_REJECT_ALL_DIFFS_ACTION_ID } from './actionIDs.js';
 import { localize2 } from '../../../../nls.js';
 import { KeybindingWeight } from '../../../../platform/keybinding/common/keybindingsRegistry.js';
 import { ServicesAccessor } from '../../../../editor/browser/editorExtensions.js';
@@ -570,7 +570,7 @@ class AcceptRejectAllFloatingWidget extends Widget implements IOverlayWidget {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_ACCEPT_DIFF_ACTION_ID,
+			id: MAVI_ACCEPT_DIFF_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviAcceptDiffAction', 'Code Mavi: Accept Diff'),
 			keybinding: {
@@ -613,7 +613,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_REJECT_DIFF_ACTION_ID,
+			id: MAVI_REJECT_DIFF_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviRejectDiffAction', 'Code Mavi: Reject Diff'),
 			keybinding: {
@@ -654,7 +654,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_GOTO_NEXT_DIFF_ACTION_ID,
+			id: MAVI_GOTO_NEXT_DIFF_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviGoToNextDiffAction', 'Code Mavi: Go to Next Diff'),
 			keybinding: {
@@ -681,7 +681,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_GOTO_PREV_DIFF_ACTION_ID,
+			id: MAVI_GOTO_PREV_DIFF_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviGoToPrevDiffAction', 'Code Mavi: Go to Previous Diff'),
 			keybinding: {
@@ -708,7 +708,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_GOTO_NEXT_URI_ACTION_ID,
+			id: MAVI_GOTO_NEXT_URI_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviGoToNextUriAction', 'Code Mavi: Go to Next File with Diffs'),
 			keybinding: {
@@ -735,7 +735,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_GOTO_PREV_URI_ACTION_ID,
+			id: MAVI_GOTO_PREV_URI_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviGoToPrevUriAction', 'Code Mavi: Go to Previous File with Diffs'),
 			keybinding: {
@@ -762,7 +762,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_ACCEPT_FILE_ACTION_ID,
+			id: MAVI_ACCEPT_FILE_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviAcceptFileAction', 'Code Mavi: Accept All Diffs in Current File'),
 			keybinding: {
@@ -793,7 +793,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_REJECT_FILE_ACTION_ID,
+			id: MAVI_REJECT_FILE_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviRejectFileAction', 'Code Mavi: Reject All Diffs in Current File'),
 			keybinding: {
@@ -824,7 +824,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_ACCEPT_ALL_DIFFS_ACTION_ID,
+			id: MAVI_ACCEPT_ALL_DIFFS_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviAcceptAllDiffsAction', 'Code Mavi: Accept All Diffs in All Files'),
 			keybinding: {
@@ -849,7 +849,7 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_REJECT_ALL_DIFFS_ACTION_ID,
+			id: MAVI_REJECT_ALL_DIFFS_ACTION_ID,
 			f1: true,
 			title: localize2('codemaviRejectAllDiffsAction', 'Code Mavi: Reject All Diffs in All Files'),
 			keybinding: {

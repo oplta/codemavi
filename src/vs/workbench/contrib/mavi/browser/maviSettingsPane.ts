@@ -118,11 +118,11 @@ Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane
 
 
 // register the gear on the top right
-export const VOID_TOGGLE_SETTINGS_ACTION_ID = 'workbench.action.toggleCode MaviSettings'
+export const MAVI_TOGGLE_SETTINGS_ACTION_ID = 'workbench.action.toggleMaviSettings'
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_TOGGLE_SETTINGS_ACTION_ID,
+			id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
 			title: nls.localize2('codemaviSettings', "Code Mavi: Toggle Settings"),
 			icon: Codicon.settingsGear,
 			menu: [
@@ -167,11 +167,11 @@ registerAction2(class extends Action2 {
 
 
 
-export const VOID_OPEN_SETTINGS_ACTION_ID = 'workbench.action.openCode MaviSettings'
+export const MAVI_OPEN_SETTINGS_ACTION_ID = 'workbench.action.openMaviSettings'
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_OPEN_SETTINGS_ACTION_ID,
+			id: MAVI_OPEN_SETTINGS_ACTION_ID,
 			title: nls.localize2('codemaviSettingsAction2', "Code Mavi: Open Settings"),
 			f1: true,
 			icon: Codicon.settingsGear,
@@ -201,7 +201,7 @@ registerAction2(class extends Action2 {
 MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
 	group: '0_command',
 	command: {
-		id: VOID_TOGGLE_SETTINGS_ACTION_ID,
+		id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
 		title: nls.localize('codemaviSettingsActionGear', "Code Mavi\'s Settings")
 	},
 	order: 1

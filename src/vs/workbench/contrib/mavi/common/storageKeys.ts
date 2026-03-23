@@ -8,7 +8,7 @@
 // 'codemavi.settingsServiceStorageI' // 1.0.2
 
 // 1.0.3
-export const VOID_SETTINGS_STORAGE_KEY = 'codemavi.settingsServiceStorageII'
+export const MAVI_SETTINGS_STORAGE_KEY = 'codemavi.settingsServiceStorageII'
 
 
 // past values:

@@ -101,15 +101,15 @@ class SidebarViewPane extends ViewPane {
 // const codemaviViewIcon = registerIcon('codemavi-view-icon', codemaviThemeIcon, localize('codemaviViewIcon', 'View icon of the Code Mavi chat view.'));
 
 // called VIEWLET_ID in other places for some reason
-export const VOID_VIEW_CONTAINER_ID = 'workbench.view.codemavi'
-export const VOID_VIEW_ID = VOID_VIEW_CONTAINER_ID
+export const MAVI_VIEW_CONTAINER_ID = 'workbench.view.codemavi'
+export const MAVI_VIEW_ID = MAVI_VIEW_CONTAINER_ID
 
 // Register view container
 const viewContainerRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
 const container = viewContainerRegistry.registerViewContainer({
-	id: VOID_VIEW_CONTAINER_ID,
+	id: MAVI_VIEW_CONTAINER_ID,
 	title: nls.localize2('codemaviContainer', 'Chat'), // this is used to say "Code Mavi" (Ctrl + L)
-	ctorDescriptor: new SyncDescriptor(ViewPaneContainer, [VOID_VIEW_CONTAINER_ID, {
+	ctorDescriptor: new SyncDescriptor(ViewPaneContainer, [MAVI_VIEW_CONTAINER_ID, {
 		mergeViewWithContainerWhenSingleView: true,
 		orientation: Orientation.HORIZONTAL,
 	}]),
@@ -127,7 +127,7 @@ const container = viewContainerRegistry.registerViewContainer({
 // Register search default location to the container (sidebar)
 const viewsRegistry = Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry);
 viewsRegistry.registerViews([{
-	id: VOID_VIEW_ID,
+	id: MAVI_VIEW_ID,
 	hideByDefault: false, // start open
 	// containerIcon: codemaviViewIcon,
 	name: nls.localize2('codemaviChat', ''), // this says ... : CHAT
@@ -139,7 +139,7 @@ viewsRegistry.registerViews([{
 	// singleViewPaneContainerTitle: 'hi',
 
 	// openCommandActionDescriptor: {
-	// 	id: VOID_VIEW_CONTAINER_ID,
+	// 	id: MAVI_VIEW_CONTAINER_ID,
 	// 	keybindings: {
 	// 		primary: KeyMod.CtrlCmd | KeyCode.KeyL,
 	// 	},
@@ -149,17 +149,17 @@ viewsRegistry.registerViews([{
 
 
 // open sidebar
-export const VOID_OPEN_SIDEBAR_ACTION_ID = 'codemavi.openSidebar'
+export const MAVI_OPEN_SIDEBAR_ACTION_ID = 'codemavi.openSidebar'
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: VOID_OPEN_SIDEBAR_ACTION_ID,
+			id: MAVI_OPEN_SIDEBAR_ACTION_ID,
 			title: 'Open Code Mavi Sidebar',
 		})
 	}
 	run(accessor: ServicesAccessor): codemavi {
 		const viewsService = accessor.get(IViewsService)
-		viewsService.openViewContainer(VOID_VIEW_CONTAINER_ID);
+		viewsService.openViewContainer(MAVI_VIEW_CONTAINER_ID);
 	}
 });
 
@@ -168,7 +168,7 @@ export class SidebarStartContribution implements IWorkbenchContribution {
 	constructor(
 		@ICommandService private readonly commandService: ICommandService,
 	) {
-		this.commandService.executeCommand(VOID_OPEN_SIDEBAR_ACTION_ID)
+		this.commandService.executeCommand(MAVI_OPEN_SIDEBAR_ACTION_ID)
 	}
 }
 registerWorkbenchContribution2(SidebarStartContribution.ID, SidebarStartContribution, WorkbenchPhase.AfterRestored);

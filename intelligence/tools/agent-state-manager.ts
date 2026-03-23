@@ -40,7 +40,7 @@ export class AgentStateManager {
 	/**
 	 * Düşünce zincirine yeni bir halka ekler.
 	 */
-	addStep(taskId: string, thought: string, action: string): void {
+	addStep(taskId: string, thought: string, action: string): codemavi {
 		const state = this._states.get(taskId)
 		if (!state) return
 
@@ -56,7 +56,7 @@ export class AgentStateManager {
 	/**
 	 * Son yapılan eylemin sonucunu (observation) kaydeder.
 	 */
-	updateLastStep(taskId: string, observation: string): void {
+	updateLastStep(taskId: string, observation: string): codemavi {
 		const state = this._states.get(taskId)
 		if (!state || state.steps.length === 0) return
 
@@ -66,7 +66,7 @@ export class AgentStateManager {
 	/**
 	 * Görev durumunu günceller.
 	 */
-	setStatus(taskId: string, status: IAgentState['status']): void {
+	setStatus(taskId: string, status: IAgentState['status']): codemavi {
 		const state = this._states.get(taskId)
 		if (state) state.status = status
 	}

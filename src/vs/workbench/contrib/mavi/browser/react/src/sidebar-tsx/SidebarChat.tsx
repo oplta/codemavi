@@ -16,8 +16,8 @@ import { ErrorDisplay } from './ErrorDisplay.js';
 import { BlockCode, TextAreaFns, Code MaviCustomDropdownBox, Code MaviInputBox2, Code MaviSlider, Code MaviSwitch, Code MaviDiffEditor } from '../util/inputs.js';
 import { ModelDropdown, } from '../codemavi-settings-tsx/ModelDropdown.js';
 import { PastThreadsList } from './SidebarThreadSelector.js';
-import { VOID_CTRL_L_ACTION_ID } from '../../../actionIDs.js';
-import { VOID_OPEN_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js';
+import { MAVI_CTRL_L_ACTION_ID } from '../../../actionIDs.js';
+import { MAVI_OPEN_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js';
 import { ChatMode, displayInfoOfProviderName, FeatureName, isFeatureNameDisabled } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsTypes.js';
 import { ICommandService } from '../../../../../../../platform/commands/common/commands.js';
 import { WarningBox } from '../codemavi-settings-tsx/WarningBox.js';
@@ -2944,7 +2944,7 @@ export const SidebarChat = () => {
 		await chatThreadsService.abortRunning(threadId)
 	}
 
-	const keybindingString = accessor.get('IKeybindingService').lookupKeybinding(VOID_CTRL_L_ACTION_ID)?.getLabel()
+	const keybindingString = accessor.get('IKeybindingService').lookupKeybinding(MAVI_CTRL_L_ACTION_ID)?.getLabel()
 
 	const threadId = currentThread.id
 	const currCheckpointIdx = chatThreadsState.allThreads[threadId]?.state?.currCheckpointIdx ?? undefined  // if not exist, treat like checkpoint is last message (infinity)
@@ -3046,7 +3046,7 @@ export const SidebarChat = () => {
 					showDismiss={true}
 				/>
 
-				<WarningBox className='text-sm my-2 mx-4' onClick={() => { commandService.executeCommand(VOID_OPEN_SETTINGS_ACTION_ID) }} text='Open settings' />
+				<WarningBox className='text-sm my-2 mx-4' onClick={() => { commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID) }} text='Open settings' />
 			</div>
 		}
 	</ScrollToBottomContainer>

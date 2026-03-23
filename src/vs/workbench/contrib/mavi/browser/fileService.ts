@@ -12,11 +12,11 @@ import { IMaviModelService } from '../common/codemaviModelService.js';
 
 
 class FilePromptActionService extends Action2 {
-	private static readonly VOID_COPY_FILE_PROMPT_ID = 'codemavi.copyfileprompt'
+	private static readonly MAVI_COPY_FILE_PROMPT_ID = 'codemavi.copyfileprompt'
 
 	constructor() {
 		super({
-			id: FilePromptActionService.VOID_COPY_FILE_PROMPT_ID,
+			id: FilePromptActionService.MAVI_COPY_FILE_PROMPT_ID,
 			title: localize2('codemaviCopyPrompt', 'Code Mavi: Copy Prompt'),
 			menu: [{
 				id: MenuId.ExplorerContext,

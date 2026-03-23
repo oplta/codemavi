@@ -7,12 +7,12 @@
 import { useAccessor, useActiveURI, useIsDark, useSettingsState } from '../util/services.js';
 
 import '../styles.css'
-import { VOID_CTRL_K_ACTION_ID, VOID_CTRL_L_ACTION_ID } from '../../../actionIDs.js';
+import { MAVI_CTRL_K_ACTION_ID, MAVI_CTRL_L_ACTION_ID } from '../../../actionIDs.js';
 import { Circle, MoreVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Code MaviSelectionHelperProps } from '../../../../../../contrib/codemavi/browser/codemaviSelectionHelperWidget.js';
-import { VOID_OPEN_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js';
+import { MAVI_OPEN_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js';
 
 
 export const Code MaviSelectionHelperMain = (props: Code MaviSelectionHelperProps) => {
@@ -35,8 +35,8 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 	const keybindingService = accessor.get('IKeybindingService')
 	const commandService = accessor.get('ICommandService')
 
-	const ctrlLKeybind = keybindingService.lookupKeybinding(VOID_CTRL_L_ACTION_ID)
-	const ctrlKKeybind = keybindingService.lookupKeybinding(VOID_CTRL_K_ACTION_ID)
+	const ctrlLKeybind = keybindingService.lookupKeybinding(MAVI_CTRL_L_ACTION_ID)
+	const ctrlKKeybind = keybindingService.lookupKeybinding(MAVI_CTRL_K_ACTION_ID)
 
 	const dividerHTML = <div className='w-[0.5px] bg-codemavi-border-3'></div>
 
@@ -45,7 +45,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 
 	useEffect(() => {
 		const disposable = commandService.onWillExecuteCommand(e => {
-			if (e.commandId === VOID_CTRL_L_ACTION_ID || e.commandId === VOID_CTRL_K_ACTION_ID) {
+			if (e.commandId === MAVI_CTRL_L_ACTION_ID || e.commandId === MAVI_CTRL_K_ACTION_ID) {
 				setClickState('clickedOption')
 			}
 		});
@@ -79,7 +79,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 					cursor-pointer
 				'
 				onClick={() => {
-					commandService.executeCommand(VOID_CTRL_L_ACTION_ID)
+					commandService.executeCommand(MAVI_CTRL_L_ACTION_ID)
 					setClickState('clickedOption');
 				}}
 			>
@@ -99,7 +99,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 					cursor-pointer
 				'
 				onClick={() => {
-					commandService.executeCommand(VOID_CTRL_K_ACTION_ID)
+					commandService.executeCommand(MAVI_CTRL_K_ACTION_ID)
 					setClickState('clickedOption');
 				}}
 			>
@@ -133,7 +133,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 				cursor-pointer
 			'
 			onClick={() => {
-				commandService.executeCommand(VOID_OPEN_SETTINGS_ACTION_ID);
+				commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID);
 				setClickState('clickedOption');
 			}}
 		>

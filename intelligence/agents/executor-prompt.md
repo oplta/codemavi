@@ -60,13 +60,13 @@ Değişikliklerini SEARCH/REPLACE formatında üret:
 <search>
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick: () => codemavi;
 }
 </search>
 <replace>
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick: () => codemavi;
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
 }
@@ -155,7 +155,7 @@ import { Button } from './Button';
 interface ModernComponentProps {
   title: string;
   items: string[];
-  onItemSelect: (item: string) => void;
+  onItemSelect: (item: string) => codemavi;
 }
 
 export const ModernComponent: React.FC<ModernComponentProps> = ({
@@ -243,11 +243,11 @@ export function parseDate(dateStr: string): Date {
 // ✅ Tip güvenliği koru
 interface Props {
   value: string;
-  onChange: (value: string) => void; // spesifik tip kullan
+  onChange: (value: string) => codemavi; // spesifik tip kullan
 }
 
 // ✅ Generic kullan (gerekirse)
-function useLocalStorage<T>(key: string, initial: T): [T, (v: T) => void]
+function useLocalStorage<T>(key: string, initial: T): [T, (v: T) => codemavi]
 
 // ✅ Union types kullan
 type Status = 'idle' | 'loading' | 'success' | 'error';
@@ -327,14 +327,14 @@ Her yanıtında şu yapıyı takip et:
 <search>
 interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: () => codemavi;
   variant?: 'primary' | 'secondary';
 }
 </search>
 <replace>
 interface ButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: () => codemavi;
   variant?: 'primary' | 'secondary';
   loading?: boolean;
 }

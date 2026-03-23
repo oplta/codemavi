@@ -1,7 +1,7 @@
 /**
  * Code Mavi - Agent Tool Tanımları
  * 
- * Void'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
+ * Code Mavi'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
  * Agent-first mimari için gerekli tool'lar
  */
 

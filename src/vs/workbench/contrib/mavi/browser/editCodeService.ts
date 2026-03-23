@@ -26,7 +26,7 @@ import { IConsistentEditorItemService, IConsistentItemService } from './helperSe
 import { codemaviPrefixAndSuffix, ctrlKStream_userMessage, ctrlKStream_systemMessage, defaultQuickEditFimTags, rewriteCode_systemMessage, rewriteCode_userMessage, searchReplaceGivenDescription_systemMessage, searchReplaceGivenDescription_userMessage, tripleTick, } from '../common/prompt/prompts.js';
 import { IMaviCommandBarService } from './codemaviCommandBarService.js';
 import { IKeybindingService } from '../../../../platform/keybinding/common/keybinding.js';
-import { VOID_ACCEPT_DIFF_ACTION_ID, VOID_REJECT_DIFF_ACTION_ID } from './actionIDs.js';
+import { MAVI_ACCEPT_DIFF_ACTION_ID, MAVI_REJECT_DIFF_ACTION_ID } from './actionIDs.js';
 
 import { mountCtrlK } from './react/out/quick-edit-tsx/index.js'
 import { QuickEditPropsType } from './quickEditActions.js';
@@ -47,7 +47,7 @@ import { acceptBg, acceptBorder, buttonFontSize, buttonTextColor, rejectBg, reje
 import { DiffArea, Diff, CtrlKZone, Code MaviFileSnapshot, DiffAreaSnapshotEntry, diffAreaSnapshotKeys, DiffZone, TrackingZone, ComputedDiff } from '../common/editCodeServiceTypes.js';
 import { IConvertToLLMMessageService } from './convertToLLMMessageService.js';
 // import { isMacintosh } from '../../../../base/common/platform.js';
-// import { VOID_OPEN_SETTINGS_ACTION_ID } from './codemaviSettingsPane.js';
+// import { MAVI_OPEN_SETTINGS_ACTION_ID } from './codemaviSettingsPane.js';
 
 const numLinesOfStr = (str: string) => str.split('\n').length
 
@@ -287,7 +287,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	// 				label: `Open Code Mavi's settings`,
 	// 				tooltip: '',
 	// 				class: undefined,
-	// 				run: () => { this._commandService.executeCommand(VOID_OPEN_SETTINGS_ACTION_ID) }
+	// 				run: () => { this._commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID) }
 	// 			}]
 	// 		},
 	// 		source: details ? `(Hold ${isMacintosh ? 'Option' : 'Alt'} to hover) - ${details}\n\nIf this persists, feel free to [report](https://github.com/codemavieditor/codemavi/issues/new) it.` : undefined
@@ -2328,8 +2328,8 @@ class AcceptRejectInlineWidget extends Widget implements IOverlayWidget {
 		const lineHeight = editor.getOption(EditorOption.lineHeight);
 
 		const getAcceptRejectText = () => {
-			const acceptKeybinding = this._keybindingService.lookupKeybinding(VOID_ACCEPT_DIFF_ACTION_ID);
-			const rejectKeybinding = this._keybindingService.lookupKeybinding(VOID_REJECT_DIFF_ACTION_ID);
+			const acceptKeybinding = this._keybindingService.lookupKeybinding(MAVI_ACCEPT_DIFF_ACTION_ID);
+			const rejectKeybinding = this._keybindingService.lookupKeybinding(MAVI_REJECT_DIFF_ACTION_ID);
 
 			// Use the standalone function directly since we're in a nested class that
 			// can't access EditCodeService's methods

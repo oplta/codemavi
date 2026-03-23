@@ -9,7 +9,7 @@ import { useSettingsState, useRefreshModelState, useAccessor } from '../util/ser
 import { _Code MaviSelectBox, Code MaviCustomDropdownBox } from '../util/inputs.js'
 import { SelectBox } from '../../../../../../../base/browser/ui/selectBox/selectBox.js'
 import { IconWarning } from '../sidebar-tsx/SidebarChat.js'
-import { VOID_OPEN_SETTINGS_ACTION_ID, VOID_TOGGLE_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js'
+import { MAVI_OPEN_SETTINGS_ACTION_ID, MAVI_TOGGLE_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js'
 import { modelFilterOfFeatureName, ModelOption } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsService.js'
 import { WarningBox } from './WarningBox.js'
 import ErrorBoundary from '../sidebar-tsx/ErrorBoundary.js'
@@ -78,7 +78,7 @@ export const ModelDropdown = ({ featureName, className }: { featureName: Feature
 	const accessor = useAccessor()
 	const commandService = accessor.get('ICommandService')
 
-	const openSettings = () => { commandService.executeCommand(VOID_OPEN_SETTINGS_ACTION_ID); };
+	const openSettings = () => { commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID); };
 
 
 	const { emptyMessage } = modelFilterOfFeatureName[featureName]

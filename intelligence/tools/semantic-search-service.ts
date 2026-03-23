@@ -46,12 +46,12 @@ export interface SearchResult {
 
 export interface ISemanticSearchService {
 	readonly _serviceBrand: undefined
-	indexWorkspace(progressCallback?: (progress: IndexingProgress) => void): Promise<IndexingResult>
-	indexFile(uri: URI): Promise<void>
+	indexWorkspace(progressCallback?: (progress: IndexingProgress) => codemavi): Promise<IndexingResult>
+	indexFile(uri: URI): Promise<codemavi>
 	search(query: string, opts: SearchOptions): Promise<SearchResult[]>
 	hybridSearch(query: string, opts: SearchOptions): Promise<SearchResult[]>
 	reRank(results: SearchResult[], query: string, topK: number): Promise<SearchResult[]>
-	clearIndex(): Promise<void>
+	clearIndex(): Promise<codemavi>
 	getStats(): Promise<IndexStats>
 }
 
@@ -68,7 +68,7 @@ export class SemanticSearchServiceImpl implements ISemanticSearchService {
 		dimensions: 768
 	}
 
-	async indexWorkspace(progressCallback?: (progress: IndexingProgress) => void): Promise<IndexingResult> {
+	async indexWorkspace(progressCallback?: (progress: IndexingProgress) => codemavi): Promise<IndexingResult> {
 		console.log('[SemanticSearch] Indexing started with provider:', this._config.provider)
 		// 1. Dosya sistemini tara (ignore listesini dikkate al)
 		// 2. tree-sitter ile AST analizi yap ve akıllı chunk'lara böl
@@ -92,7 +92,7 @@ export class SemanticSearchServiceImpl implements ISemanticSearchService {
 		return []
 	}
 
-	async indexFile(uri: URI): Promise<void> {
+	async indexFile(uri: URI): Promise<codemavi> {
 		console.log('[SemanticSearch] Indexing file:', uri.fsPath)
 		// Dosya bazlı kısmi güncelleme
 	}
@@ -113,7 +113,7 @@ export class SemanticSearchServiceImpl implements ISemanticSearchService {
 		return results.slice(0, topK)
 	}
 
-	async clearIndex(): Promise<void> {
+	async clearIndex(): Promise<codemavi> {
 		console.log('[SemanticSearch] Index cleared')
 	}
 

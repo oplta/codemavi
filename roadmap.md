@@ -3,7 +3,7 @@
 Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip eder.
 
 ## 🟢 v0.1.0: Mantık Çekirdeği (Tamamlandı)
-- [x] Void repo temizliği ve "Agent Logic" odaklı yapı.
+- [x] Code Mavi repo temizliği ve "Agent Logic" odaklı yapı.
 - [x] Orchestrator, Executor ve Verifier rollerinin tanımı.
 - [x] Temel `OrchestratorService` ve `SemanticSearchService` iskeleti.
 - [x] Proje kuralları (`rules.md`) altyapısı.
