@@ -1,41 +1,64 @@
-# Welcome to Void.
+# 🟦 Code Mavi: The Agentic Open-Source IDE
 
-<div align="center">
-	<img
-		src="./src/vs/workbench/browser/parts/editor/media/slice_of_void.png"
-	 	alt="Void Welcome"
-		width="300"
-	 	height="300"
-	/>
-</div>
+> **"A tool that doesn't just assist, but thinks, acts, and verifies."**
 
-Void is the open-source Cursor alternative.
+Code Mavi, yapay zeka destekli yazılım geliştirme sürecini bir adım öteye taşıyan, **"Agent-First"** felsefesiyle tasarlanmış açık kaynaklı bir IDE'dir. VS Code (via Void) tabanlı bu editör, şeffaf promptları, kendi kendini düzelten döngüleri ve gelişmiş agent orkestrasyonu ile geliştirici deneyimini özgürleştirir.
 
-Use AI agents on your codebase, checkpoint and visualize changes, and bring any model or host locally. Void sends messages directly to providers without retaining your data.
+---
 
-This repo contains the full sourcecode for Void. If you're new, welcome!
+## 🎯 Vizyon: Şeffaf ve Güçlü Agent Deneyimi
 
-- 🧭 [Website](https://voideditor.com)
+Cursor gibi araçların sunduğu kolaylığı, açık kaynak dünyasının şeffaflığıyla birleştiriyoruz. Code Mavi'de agent'ın nasıl düşündüğünü görebilir, promptlara müdahale edebilir ve yerel kurallarınızla onu yönlendirebilirsiniz.
 
-- 👋 [Discord](https://discord.gg/RSNjgaugJs)
+- **Şeffaf Promptlar:** Gizli kutu yok. Her adım izlenebilir ve özelleştirilebilir.
+- **Agentic Loop:** Hata aldığında durmayan, analiz edip tekrar deneyen bir zeka.
+- **Multi-Model Desteği:** DeepSeek, Zhipu AI, Ollama ve daha fazlası ile tam uyum.
 
-- 🚙 [Project Board](https://github.com/orgs/voideditor/projects/2)
+---
 
+## 🏗️ Mimari: Üçlü Agent Sistemi (The Brain)
 
-## Note
+Code Mavi, karmaşık görevleri çözmek için uzmanlaşmış üç farklı agent katmanını kullanır:
 
-We've paused work on the Void IDE (this repo) to explore a few novel coding ideas. We want to focus on innovation over feature-parity. Void will continue running, but without maintenance some existing features might stop working over time. Depending on the direction of our new work, we might not resume Void as an IDE.
+### 🧠 1. Orchestrator (Orkestra Şefi)
+Sistemin merkezi sinir sistemidir. Kullanıcı isteğini analiz eder, kod tabanında araştırma yapar ve stratejik bir plan oluşturur.
+*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/orchestrator-prompt.md`*
 
-We won't be actively reviewing Issues and PRs, but we will respond to all [email](mailto:hello@voideditor.com) inquiries on building and maintaining your own version of Void while we're paused. 
+### 🛠️ 2. Executor (Yürütücü)
+Planı hayata geçiren "ellerdir". Hassas "Search/Replace" blokları ve semantik diff'ler üreterek dosyaları fiziksel olarak günceller.
+*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/executor-prompt.md`*
 
-## Reference
+### 🔍 3. Verifier (Doğrulayıcı)
+"Güven ama doğrula" prensibiyle çalışır. Değişiklik sonrası linter hatalarını ve test sonuçlarını kontrol eder. Hata bulursa döngüyü Executor'a geri göndererek **Self-Correction** sürecini yönetir.
+*Dosya: `src/vs/workbench/contrib/void/common/mavi-logic/agents/verifier-prompt.md`*
 
-Void is a fork of the [vscode](https://github.com/microsoft/vscode) repository. For a guide to the codebase, see [VOID_CODEBASE_GUIDE](https://github.com/voideditor/void/blob/main/VOID_CODEBASE_GUIDE.md).
+---
 
-For a guide on how to develop your own version of Void, see [HOW_TO_CONTRIBUTE](https://github.com/voideditor/void/blob/main/HOW_TO_CONTRIBUTE.md) and [void-builder](https://github.com/voideditor/void-builder).
+## 🚀 Öne Çıkan Özellikler
 
+| Özellik | Açıklama |
+| :--- | :--- |
+| **Semantic Search** | SQLite + Vektör DB ile kodun yapısını anlayan akıllı arama. |
+| **Recursive Correction** | Linter hatalarını otomatik algılar ve agent tarafından düzeltilmesini sağlar. |
+| **Custom Rules** | `rules.md` üzerinden projeye özel standartları agent'a dikte edin. |
+| **Checkpoints** | Her büyük değişiklik öncesi otomatik güvenli geri dönüş noktaları. |
 
+---
 
+## 🛠️ Geliştirme ve Kurulum
 
-## Support
-You can always reach us in our Discord server or contact us via email: hello@voideditor.com.
+Code Mavi bir VS Code fork'udur. Geliştirmeye başlamak için:
+
+1. `npm install` ile bağımlılıkları yükleyin.
+2. `npm run watch` ile derleme sürecini başlatın.
+3. `./scripts/code.sh` (Mac/Linux) veya `./scripts/code.bat` (Windows) ile geliştirici modunda açın.
+
+---
+
+## 🤝 Katkıda Bulunun
+
+Code Mavi, topluluk odaklı bir projedir. Agent promptlarını iyileştirmek, yeni araçlar (tools) eklemek veya IDE çekirdeğine destek vermek için her zaman PR'larınızı bekliyoruz.
+
+---
+
+*Code Mavi — Cursor'un yaptığını açık, şeffaf ve ücretsiz yapar.*
