@@ -134,42 +134,46 @@ class OpenAIEmbeddingProvider implements IEmbeddingProvider {
 // BROWSER IMPLEMENTATION
 // ============================================
 
+import { IMainProcessService } from '../../../../platform/ipc/common/mainProcessService.js'
+import { IChannel } from '../../../../base/parts/ipc/common/ipc.js'
+
+// =...
 class SemanticSearchServiceImpl extends SemanticSearchService implements IDisposable {
 	private _embeddingProvider?: IEmbeddingProvider
 	private _voidSettingsService: IVoidSettingsService
 	private _fileService: IFileService
 	private _workspaceService: IWorkspaceContextService
 	private _envService: IEnvironmentService
-	
-	// IPC channel to main process (will be implemented)
-	private _ipc: any
+	private _channel: IChannel
 	
 	constructor(
 		@IInstantiationService instantiationService: IInstantiationService,
 		@IVoidSettingsService voidSettingsService: IVoidSettingsService,
 		@IFileService fileService: IFileService,
 		@IWorkspaceContextService workspaceService: IWorkspaceContextService,
-		@IEnvironmentService envService: IEnvironmentService
+		@IEnvironmentService envService: IEnvironmentService,
+		@IMainProcessService private readonly _mainProcessService: IMainProcessService
 	) {
 		super()
 		this._voidSettingsService = voidSettingsService
 		this._fileService = fileService
 		this._workspaceService = workspaceService
 		this._envService = envService
+		this._channel = this._mainProcessService.getChannel('void-channel-semanticSearch')
 		
-		// Initialize embedding provider from settings
 		this._initFromSettings()
 	}
 	
 	private _initFromSettings(): void {
-		// TODO: Get embedding config from voidSettingsService
-		// For now use default
+		const settings = this._voidSettingsService.state.settingsOfProvider
+		// TODO: Settings'ten embedding config oku
 		this._config = {
 			provider: 'ollama',
 			model: 'nomic-embed-text',
 			dimensions: 768
 		}
 		this._updateProvider()
+		this._channel.call('initialize', this._config).catch(err => console.error('Failed to init semantic search DB:', err))
 	}
 	
 	private _updateProvider(): void {
@@ -188,6 +192,7 @@ class SemanticSearchServiceImpl extends SemanticSearchService implements IDispos
 	setConfig(config: IEmbeddingConfig): void {
 		this._config = config
 		this._updateProvider()
+		this._channel.call('initialize', config)
 	}
 	
 	async indexWorkspace(
@@ -201,7 +206,6 @@ class SemanticSearchServiceImpl extends SemanticSearchService implements IDispos
 		const startTime = Date.now()
 		
 		try {
-			// Get all files in workspace
 			const workspaceFolders = this._workspaceService.getWorkspace().folders
 			const filesToIndex: URI[] = []
 			
@@ -210,9 +214,8 @@ class SemanticSearchServiceImpl extends SemanticSearchService implements IDispos
 			}
 			
 			let chunksIndexed = 0
+			const batchSize = 5
 			
-			// Process files in batches
-			const batchSize = 10
 			for (let i = 0; i < filesToIndex.length; i += batchSize) {
 				const batch = filesToIndex.slice(i, i + batchSize)
 				
@@ -240,59 +243,80 @@ class SemanticSearchServiceImpl extends SemanticSearchService implements IDispos
 	}
 	
 	private async _collectFiles(uri: URI, files: URI[]): Promise<void> {
-		// TODO: Implement file collection with gitignore respect
-		// For now skip
+		const children = await this._fileService.resolve(uri)
+		if (children.children) {
+			for (const child of children.children) {
+				if (child.isDirectory) {
+					// .git, node_modules gibi yerleri atla
+					if (child.name === '.git' || child.name === 'node_modules' || child.name === 'out' || child.name === 'dist') continue
+					await this._collectFiles(child.resource, files)
+				} else {
+					const ext = child.name.split('.').pop()?.toLowerCase()
+					const supported = ['ts', 'tsx', 'js', 'jsx', 'py', 'rs', 'go', 'java', 'cpp', 'c', 'h', 'md']
+					if (ext && supported.includes(ext)) {
+						files.push(child.resource)
+					}
+				}
+			}
+		}
 	}
 	
 	private async _indexBatch(uris: URI[]): Promise<void> {
-		// TODO: Send to main process for DB storage
-		// For now just generate embeddings
+		const allChunks: ICodeChunk[] = []
+		
+		for (const uri of uris) {
+			try {
+				const content = await this._fileService.readFile(uri)
+				const text = content.value.toString()
+				const language = uri.fsPath.split('.').pop() || 'text'
+				const chunks = this._chunkFile(uri, text, language)
+				allChunks.push(...chunks)
+			} catch (e) {
+				console.error(`Failed to read file for indexing: ${uri.toString()}`, e)
+			}
+		}
+		
+		if (allChunks.length === 0) return
+
+		// Embeddings üret (ollama/openai)
+		if (this._embeddingProvider) {
+			const texts = allChunks.map(c => `File: ${c.uri.fsPath}\nContent:\n${c.content}`)
+			const embeddings = await this._embeddingProvider.embed(texts)
+			for (let i = 0; i < allChunks.length; i++) {
+				allChunks[i].embedding = embeddings[i]
+			}
+		}
+		
+		// Main process'e gönder
+		await this._channel.call('insertChunks', allChunks)
 	}
 	
 	async indexFile(uri: URI): Promise<void> {
-		// TODO: Implement
-		console.log('Index file:', uri.toString())
+		await this._channel.call('deleteFileIndices', uri)
+		await this._indexBatch([uri])
 	}
 	
 	async search(query: string, opts?: ISearchOptions): Promise<ISearchResult[]> {
-		if (!this._embeddingProvider) {
-			return []
-		}
+		if (!this._embeddingProvider) return []
 		
-		// Generate embedding for query
 		const [queryEmbedding] = await this._embeddingProvider.embed([query])
-		
-		// TODO: Send to main process for vector search
-		// For now return empty
-		return []
+		return await this._channel.call('search', { embedding: queryEmbedding, opts })
 	}
 	
 	async hybridSearch(query: string, opts?: ISearchOptions): Promise<ISearchResult[]> {
-		// TODO: Combine semantic + text search
 		return this.search(query, opts)
 	}
 	
-	async reRank(
-		results: ISearchResult[],
-		query: string,
-		topK: number
-	): Promise<ISearchResult[]> {
-		// TODO: Use cheap LLM to re-rank
+	async reRank(results: ISearchResult[], query: string, topK: number): Promise<ISearchResult[]> {
 		return results.slice(0, topK)
 	}
 	
 	async clearIndex(): Promise<void> {
-		// TODO: Clear DB via main process
+		await this._channel.call('clearAllIndices')
 	}
 	
 	async getStats(): Promise<IIndexStats> {
-		// TODO: Get from main process
-		return {
-			totalFiles: 0,
-			totalChunks: 0,
-			indexedAt: 0,
-			dbSizeBytes: 0
-		}
+		return await this._channel.call('getStats')
 	}
 }
 
