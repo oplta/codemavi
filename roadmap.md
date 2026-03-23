@@ -18,7 +18,7 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 
 ## 🟡 v0.3.0: "Apply" ve "Self-Correction" Zekası (Geliştiriliyor)
 - [x] **Semantic Diff Engine:** Created `ApplyEngine` for parsing and applying SEARCH/REPLACE blocks.
-- [ ] **Auto-Verifier:** Linter and Test results automatically looped back to the agent.
+- [x] **Auto-Verifier:** Created `VerifierService` for tracking lint/test errors and formatting correction prompts.
 - [ ] **State Management:** Agent's "Chain of Thought" and state management.
 
 ## 🔵 v1.0.0: IDE Entegrasyonu ve Yayılım
