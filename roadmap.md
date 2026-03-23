@@ -12,7 +12,7 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 ## 🟡 v0.2.0: Model Çeşitliliği ve Sağlayıcılar (Geliştiriliyor)
 - [x] **Folder Organization:** Agent logic moved to `intelligence/` for a cleaner root.
 - [x] **Multi-Model Support:** DeepSeek and Zhipu AI (GLM) integration logic added to ProviderManager.
-- [ ] **Embedding Flexibility:** Support for different providers (not just Ollama).
+- [x] **Embedding Flexibility:** Multi-provider (Ollama, OpenAI) support added to SemanticSearchService.
 - [ ] **Tool Expansion:** Terminal and File System tools detailing.
 - [ ] **Prompt Engineering:** Optimize prompts for large context.
 

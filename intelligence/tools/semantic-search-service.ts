@@ -69,12 +69,27 @@ export class SemanticSearchServiceImpl implements ISemanticSearchService {
 	}
 
 	async indexWorkspace(progressCallback?: (progress: IndexingProgress) => void): Promise<IndexingResult> {
-		console.log('[SemanticSearch] Indexing started...')
+		console.log('[SemanticSearch] Indexing started with provider:', this._config.provider)
 		// 1. Dosya sistemini tara (ignore listesini dikkate al)
 		// 2. tree-sitter ile AST analizi yap ve akıllı chunk'lara böl
-		// 3. Her chunk için embedding üret (Batch processing)
-		// 4. SQLite + vec0 tablosuna kaydet
+		// 3. Provider'a göre embedding üret
+		if (this._config.provider === 'ollama') {
+			// Ollama API çağrısı
+		} else if (this._config.provider === 'openai') {
+			// OpenAI API çağrısı
+		}
 		return { filesIndexed: 0, chunksIndexed: 0, durationMs: 0 }
+	}
+
+	async getEmbeddings(texts: string[]): Promise<number[][]> {
+		if (this._config.provider === 'ollama') {
+			// Ollama embedding logic
+			return []
+		} else if (this._config.provider === 'openai') {
+			// OpenAI embedding logic
+			return []
+		}
+		return []
 	}
 
 	async indexFile(uri: URI): Promise<void> {
