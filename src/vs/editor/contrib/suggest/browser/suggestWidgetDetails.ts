@@ -26,8 +26,8 @@ export class SuggestDetailsWidget {
 
 	readonly domNode: HTMLDivElement;
 
-	private readonly _onDidClose = new Emitter<void>();
-	readonly onDidClose: Event<void> = this._onDidClose.event;
+	private readonly _onDidClose = new Emitter<codemavi>();
+	readonly onDidClose: Event<codemavi> = this._onDidClose.event;
 
 	private readonly _onDidChangeContents = new Emitter<this>();
 	readonly onDidChangeContents: Event<this> = this._onDidChangeContents.event;
@@ -80,12 +80,12 @@ export class SuggestDetailsWidget {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._renderDisposeable.dispose();
 	}
 
-	private _configureFont(): void {
+	private _configureFont(): codemavi {
 		const options = this._editor.getOptions();
 		const fontInfo = options.get(EditorOption.fontInfo);
 		const fontFamily = fontInfo.getMassagedFontFamily();
@@ -118,7 +118,7 @@ export class SuggestDetailsWidget {
 	}
 
 
-	renderLoading(): void {
+	renderLoading(): codemavi {
 		this._type.textContent = nls.localize('loading', "Loading...");
 		this._docs.textContent = '';
 		this.domNode.classList.remove('no-docs', 'no-type');
@@ -126,7 +126,7 @@ export class SuggestDetailsWidget {
 		this._onDidChangeContents.fire(this);
 	}
 
-	renderItem(item: CompletionItem, explainMode: boolean): void {
+	renderItem(item: CompletionItem, explainMode: boolean): codemavi {
 		this._renderDisposeable.clear();
 
 		let { detail, documentation } = item.completion;
@@ -219,7 +219,7 @@ export class SuggestDetailsWidget {
 		return this._size;
 	}
 
-	layout(width: number, height: number): void {
+	layout(width: number, height: number): codemavi {
 		const newSize = new dom.Dimension(width, height);
 		if (!dom.Dimension.equals(newSize, this._size)) {
 			this._size = newSize;
@@ -228,27 +228,27 @@ export class SuggestDetailsWidget {
 		this._scrollbar.scanDomNode();
 	}
 
-	scrollDown(much = 8): void {
+	scrollDown(much = 8): codemavi {
 		this._body.scrollTop += much;
 	}
 
-	scrollUp(much = 8): void {
+	scrollUp(much = 8): codemavi {
 		this._body.scrollTop -= much;
 	}
 
-	scrollTop(): void {
+	scrollTop(): codemavi {
 		this._body.scrollTop = 0;
 	}
 
-	scrollBottom(): void {
+	scrollBottom(): codemavi {
 		this._body.scrollTop = this._body.scrollHeight;
 	}
 
-	pageDown(): void {
+	pageDown(): codemavi {
 		this.scrollDown(80);
 	}
 
-	pageUp(): void {
+	pageUp(): codemavi {
 		this.scrollUp(80);
 	}
 
@@ -338,7 +338,7 @@ export class SuggestDetailsOverlay implements IOverlayWidget {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._resizable.dispose();
 		this._disposables.dispose();
 		this.hide();
@@ -356,14 +356,14 @@ export class SuggestDetailsOverlay implements IOverlayWidget {
 		return this._topLeft ? { preference: this._topLeft } : null;
 	}
 
-	show(): void {
+	show(): codemavi {
 		if (!this._added) {
 			this._editor.addOverlayWidget(this);
 			this._added = true;
 		}
 	}
 
-	hide(sessionEnded: boolean = false): void {
+	hide(sessionEnded: boolean = false): codemavi {
 		this._resizable.clearSashHoverState();
 
 		if (this._added) {
@@ -473,7 +473,7 @@ export class SuggestDetailsOverlay implements IOverlayWidget {
 		this.widget.layout(this._resizable.size.width, this._resizable.size.height);
 	}
 
-	private _applyTopLeft(topLeft: TopLeftPosition): void {
+	private _applyTopLeft(topLeft: TopLeftPosition): codemavi {
 		this._topLeft = topLeft;
 		this._editor.layoutOverlayWidget(this);
 	}

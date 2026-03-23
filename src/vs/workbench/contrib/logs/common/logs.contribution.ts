@@ -31,7 +31,7 @@ registerAction2(class extends Action2 {
 			f1: true
 		});
 	}
-	run(servicesAccessor: ServicesAccessor): Promise<void> {
+	run(servicesAccessor: ServicesAccessor): Promise<codemavi> {
 		return servicesAccessor.get(IInstantiationService).createInstance(SetLogLevelAction, SetLogLevelAction.ID, SetLogLevelAction.TITLE.value).run();
 	}
 });
@@ -44,7 +44,7 @@ registerAction2(class extends Action2 {
 			category: Categories.Developer,
 		});
 	}
-	run(servicesAccessor: ServicesAccessor, logLevel: LogLevel, extensionId?: string): Promise<void> {
+	run(servicesAccessor: ServicesAccessor, logLevel: LogLevel, extensionId?: string): Promise<codemavi> {
 		return servicesAccessor.get(IDefaultLogLevelsService).setDefaultLogLevel(logLevel, extensionId);
 	}
 });
@@ -87,7 +87,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		this._register(Event.filter(contextKeyService.onDidChangeContext, e => e.affectsSome(this.contextKeys))(() => this.onDidChangeContext()));
 	}
 
-	private onDidAddLoggers(loggers: Iterable<ILoggerResource>): void {
+	private onDidAddLoggers(loggers: Iterable<ILoggerResource>): codemavi {
 		for (const logger of loggers) {
 			if (logger.when) {
 				const contextKeyExpr = ContextKeyExpr.deserialize(logger.when);
@@ -107,7 +107,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private onDidChangeContext(): void {
+	private onDidChangeContext(): codemavi {
 		for (const logger of this.loggerService.getRegisteredLoggers()) {
 			if (logger.when) {
 				if (this.contextKeyService.contextMatchesRules(ContextKeyExpr.deserialize(logger.when))) {
@@ -119,7 +119,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private onDidRemoveLoggers(loggers: Iterable<ILoggerResource>): void {
+	private onDidRemoveLoggers(loggers: Iterable<ILoggerResource>): codemavi {
 		for (const logger of loggers) {
 			if (logger.when) {
 				const contextKeyExpr = ContextKeyExpr.deserialize(logger.when);
@@ -133,7 +133,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private registerLogChannel(logger: ILoggerResource): void {
+	private registerLogChannel(logger: ILoggerResource): codemavi {
 		if (logger.group) {
 			this.registerCompoundLogChannel(logger.group.id, logger.group.name, logger);
 			return;
@@ -155,7 +155,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		this.outputChannelRegistry.registerChannel({ id, label, source: { resource: logger.resource }, log: true, extensionId: logger.extensionId });
 	}
 
-	private registerCompoundLogChannel(id: string, name: string, logger: ILoggerResource): void {
+	private registerCompoundLogChannel(id: string, name: string, logger: ILoggerResource): codemavi {
 		const channel = this.outputChannelRegistry.getChannel(id);
 		const source = { resource: logger.resource, name: logger.name ?? logger.id };
 		if (channel) {
@@ -167,7 +167,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private deregisterLogChannel(logger: ILoggerResource): void {
+	private deregisterLogChannel(logger: ILoggerResource): codemavi {
 		if (logger.group) {
 			const channel = this.outputChannelRegistry.getChannel(logger.group.id);
 			if (channel && isMultiSourceOutputChannelDescriptor(channel)) {
@@ -178,7 +178,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private registerShowWindowLogAction(): void {
+	private registerShowWindowLogAction(): codemavi {
 		this._register(registerAction2(class ShowWindowLogAction extends Action2 {
 			constructor() {
 				super({
@@ -188,7 +188,7 @@ class LogOutputChannels extends Disposable implements IWorkbenchContribution {
 					f1: true
 				});
 			}
-			async run(servicesAccessor: ServicesAccessor): Promise<void> {
+			async run(servicesAccessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = servicesAccessor.get(IOutputService);
 				outputService.showChannel(windowLogId);
 			}

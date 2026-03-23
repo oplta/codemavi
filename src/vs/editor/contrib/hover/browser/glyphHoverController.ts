@@ -71,7 +71,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		return editor.getContribution<GlyphHoverController>(GlyphHoverController.ID);
 	}
 
-	private _hookListeners(): void {
+	private _hookListeners(): codemavi {
 
 		const hoverOpts = this._editor.getOption(EditorOption.hover);
 		this._hoverSettings = {
@@ -99,7 +99,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		this._listenersStore.add(this._editor.onDidScrollChange((e: IScrollEvent) => this._onEditorScrollChanged(e)));
 	}
 
-	private _unhookListeners(): void {
+	private _unhookListeners(): codemavi {
 		this._listenersStore.clear();
 	}
 
@@ -108,13 +108,13 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		this._reactToEditorMouseMoveRunner.cancel();
 	}
 
-	private _onEditorScrollChanged(e: IScrollEvent): void {
+	private _onEditorScrollChanged(e: IScrollEvent): codemavi {
 		if (e.scrollTopChanged || e.scrollLeftChanged) {
 			this.hideGlyphHover();
 		}
 	}
 
-	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): void {
+	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): codemavi {
 		this._hoverState.mouseDown = true;
 		const shouldNotHideCurrentHoverWidget = this._isMouseOnGlyphHoverWidget(mouseEvent);
 		if (shouldNotHideCurrentHoverWidget) {
@@ -131,11 +131,11 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		return false;
 	}
 
-	private _onEditorMouseUp(): void {
+	private _onEditorMouseUp(): codemavi {
 		this._hoverState.mouseDown = false;
 	}
 
-	private _onEditorMouseLeave(mouseEvent: IPartialEditorMouseEvent): void {
+	private _onEditorMouseLeave(mouseEvent: IPartialEditorMouseEvent): codemavi {
 		if (this.shouldKeepOpenOnEditorMouseMoveOrLeave) {
 			return;
 		}
@@ -157,7 +157,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		return isHoverSticky && isMouseOnGlyphHoverWidget;
 	}
 
-	private _onEditorMouseMove(mouseEvent: IEditorMouseEvent): void {
+	private _onEditorMouseMove(mouseEvent: IEditorMouseEvent): codemavi {
 		if (this.shouldKeepOpenOnEditorMouseMoveOrLeave) {
 			return;
 		}
@@ -171,7 +171,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		this._reactToEditorMouseMove(mouseEvent);
 	}
 
-	private _reactToEditorMouseMove(mouseEvent: IEditorMouseEvent | undefined): void {
+	private _reactToEditorMouseMove(mouseEvent: IEditorMouseEvent | undefined): codemavi {
 
 		if (!mouseEvent) {
 			return;
@@ -191,7 +191,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		return glyphWidget.showsOrWillShow(mouseEvent);
 	}
 
-	private _onKeyDown(e: IKeyboardEvent): void {
+	private _onKeyDown(e: IKeyboardEvent): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -205,7 +205,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		this.hideGlyphHover();
 	}
 
-	public hideGlyphHover(): void {
+	public hideGlyphHover(): codemavi {
 		if (_sticky) {
 			return;
 		}
@@ -219,7 +219,7 @@ export class GlyphHoverController extends Disposable implements IEditorContribut
 		return this._glyphWidget;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this._unhookListeners();
 		this._listenersStore.dispose();

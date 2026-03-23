@@ -22,7 +22,7 @@ class InspectKeyMap extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const keybindingService = accessor.get(IKeybindingService);
 		const editorService = accessor.get(IEditorService);
 
@@ -43,7 +43,7 @@ class InspectKeyMapJSON extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const keybindingService = accessor.get(IKeybindingService);
 

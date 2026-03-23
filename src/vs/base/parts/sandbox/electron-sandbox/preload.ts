@@ -53,7 +53,7 @@
 			Object.assign(process.env, resolvedConfiguration.userEnv);
 
 			// Apply zoom level early before even building the
-			// window DOM elements to avoid UI flicker. We always
+			// window DOM elements to acodemavi UI flicker. We always
 			// have to set the zoom level from within the window
 			// because Chrome has it's own way of remembering zoom
 			// settings per origin (if vscode-file:// is used) and
@@ -109,7 +109,7 @@
 
 		ipcRenderer: {
 
-			send(channel: string, ...args: any[]): void {
+			send(channel: string, ...args: any[]): codemavi {
 				if (validateIPC(channel)) {
 					ipcRenderer.send(channel, ...args);
 				}
@@ -121,7 +121,7 @@
 				return ipcRenderer.invoke(channel, ...args);
 			},
 
-			on(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+			on(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => codemavi) {
 				validateIPC(channel);
 
 				ipcRenderer.on(channel, listener);
@@ -129,7 +129,7 @@
 				return this;
 			},
 
-			once(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+			once(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => codemavi) {
 				validateIPC(channel);
 
 				ipcRenderer.once(channel, listener);
@@ -137,7 +137,7 @@
 				return this;
 			},
 
-			removeListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void) {
+			removeListener(channel: string, listener: (event: Electron.IpcRendererEvent, ...args: any[]) => codemavi) {
 				validateIPC(channel);
 
 				ipcRenderer.removeListener(channel, listener);
@@ -172,7 +172,7 @@
 		 */
 		webFrame: {
 
-			setZoomLevel(level: number): void {
+			setZoomLevel(level: number): codemavi {
 				if (typeof level === 'number') {
 					webFrame.setZoomLevel(level);
 				}
@@ -215,7 +215,7 @@
 				return process.getProcessMemoryInfo();
 			},
 
-			on(type: string, callback: (...args: any[]) => void): void {
+			on(type: string, callback: (...args: any[]) => codemavi): codemavi {
 				process.on(type, callback);
 			}
 		},

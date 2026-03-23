@@ -21,12 +21,12 @@ export class ExpandLineSelectionAction extends EditorAction {
 			kbOpts: {
 				weight: KeybindingWeight.EditorCore,
 				kbExpr: EditorContextKeys.textInputFocus,
-				primary: KeyMod.CtrlCmd | KeyCode.KeyM // Void changed this to Cmd+M
+				primary: KeyMod.CtrlCmd | KeyCode.KeyM // Code Mavi changed this to Cmd+M
 			},
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 		args = args || {};
 		if (!editor.hasModel()) {
 			return;

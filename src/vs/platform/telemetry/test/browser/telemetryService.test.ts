@@ -29,7 +29,7 @@ class TestTelemetryAppender implements ITelemetryAppender {
 		this.isDisposed = false;
 	}
 
-	public log(eventName: string, data?: any): void {
+	public log(eventName: string, data?: any): codemavi {
 		this.events.push({ eventName, data });
 	}
 

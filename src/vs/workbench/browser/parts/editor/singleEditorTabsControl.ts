@@ -72,7 +72,7 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		return titleContainer;
 	}
 
-	private registerContainerListeners(titleContainer: HTMLElement): void {
+	private registerContainerListeners(titleContainer: HTMLElement): codemavi {
 
 		// Drag & Drop support
 		let lastDragEvent: DragEvent | undefined = undefined;
@@ -102,20 +102,20 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private onTitleLabelClick(e: MouseEvent): void {
+	private onTitleLabelClick(e: MouseEvent): codemavi {
 		EventHelper.stop(e, false);
 
 		// delayed to let the onTitleClick() come first which can cause a focus change which can close quick access
 		setTimeout(() => this.quickInputService.quickAccess.show());
 	}
 
-	private onTitleDoubleClick(e: MouseEvent): void {
+	private onTitleDoubleClick(e: MouseEvent): codemavi {
 		EventHelper.stop(e);
 
 		this.groupView.pinEditor();
 	}
 
-	private onTitleAuxClick(e: MouseEvent): void {
+	private onTitleAuxClick(e: MouseEvent): codemavi {
 		if (e.button === 1 /* Middle Button */ && this.tabsModel.activeEditor) {
 			EventHelper.stop(e, true /* for https://github.com/microsoft/vscode/issues/56715 */);
 
@@ -125,7 +125,7 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private onTitleTap(e: GestureEvent): void {
+	private onTitleTap(e: GestureEvent): codemavi {
 
 		// We only want to open the quick access picker when
 		// the tap occurred over the editor label, so we need
@@ -161,41 +161,41 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		return activeEditorChanged;
 	}
 
-	beforeCloseEditor(editor: EditorInput): void {
+	beforeCloseEditor(editor: EditorInput): codemavi {
 		// Nothing to do before closing an editor
 	}
 
-	closeEditor(editor: EditorInput): void {
+	closeEditor(editor: EditorInput): codemavi {
 		this.ifActiveEditorChanged(() => this.redraw());
 	}
 
-	closeEditors(editors: EditorInput[]): void {
+	closeEditors(editors: EditorInput[]): codemavi {
 		this.ifActiveEditorChanged(() => this.redraw());
 	}
 
-	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): void {
+	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): codemavi {
 		this.ifActiveEditorChanged(() => this.redraw());
 	}
 
-	pinEditor(editor: EditorInput): void {
+	pinEditor(editor: EditorInput): codemavi {
 		this.ifEditorIsActive(editor, () => this.redraw());
 	}
 
-	stickEditor(editor: EditorInput): void { }
+	stickEditor(editor: EditorInput): codemavi { }
 
-	unstickEditor(editor: EditorInput): void { }
+	unstickEditor(editor: EditorInput): codemavi { }
 
-	setActive(isActive: boolean): void {
+	setActive(isActive: boolean): codemavi {
 		this.redraw();
 	}
 
-	updateEditorSelections(): void { }
+	updateEditorSelections(): codemavi { }
 
-	updateEditorLabel(editor: EditorInput): void {
+	updateEditorLabel(editor: EditorInput): codemavi {
 		this.ifEditorIsActive(editor, () => this.redraw());
 	}
 
-	updateEditorDirty(editor: EditorInput): void {
+	updateEditorDirty(editor: EditorInput): codemavi {
 		this.ifEditorIsActive(editor, () => {
 			const titleContainer = assertIsDefined(this.titleContainer);
 
@@ -211,7 +211,7 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		});
 	}
 
-	override updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {
+	override updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi {
 		super.updateOptions(oldOptions, newOptions);
 
 		if (oldOptions.labelFormat !== newOptions.labelFormat || !equals(oldOptions.decorations, newOptions.decorations)) {
@@ -219,18 +219,18 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		this.redraw();
 	}
 
-	protected handleBreadcrumbsEnablementChange(): void {
+	protected handleBreadcrumbsEnablementChange(): codemavi {
 		const titleContainer = assertIsDefined(this.titleContainer);
 		titleContainer.classList.toggle('breadcrumbs', Boolean(this.breadcrumbsControl));
 
 		this.redraw();
 	}
 
-	private ifActiveEditorChanged(fn: () => void): boolean {
+	private ifActiveEditorChanged(fn: () => codemavi): boolean {
 		if (
 			!this.activeLabel.editor && this.tabsModel.activeEditor || 						// active editor changed from null => editor
 			this.activeLabel.editor && !this.tabsModel.activeEditor || 						// active editor changed from editor => null
@@ -244,7 +244,7 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		return false;
 	}
 
-	private ifActiveEditorPropertiesChanged(fn: () => void): void {
+	private ifActiveEditorPropertiesChanged(fn: () => codemavi): codemavi {
 		if (!this.activeLabel.editor || !this.tabsModel.activeEditor) {
 			return; // need an active editor to check for properties changed
 		}
@@ -254,13 +254,13 @@ export class SingleEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private ifEditorIsActive(editor: EditorInput, fn: () => void): void {
+	private ifEditorIsActive(editor: EditorInput, fn: () => codemavi): codemavi {
 		if (this.tabsModel.isActive(editor)) {
 			fn();  // only run if editor is current active
 		}
 	}
 
-	private redraw(): void {
+	private redraw(): codemavi {
 		const editor = this.tabsModel.activeEditor ?? undefined;
 		const options = this.groupsView.partOptions;
 

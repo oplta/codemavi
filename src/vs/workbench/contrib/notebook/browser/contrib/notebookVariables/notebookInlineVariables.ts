@@ -75,7 +75,7 @@ export class NotebookInlineVariablesController extends Disposable implements INo
 		}));
 	}
 
-	private async updateInlineVariables(event: ICellExecutionStateChangedEvent): Promise<void> {
+	private async updateInlineVariables(event: ICellExecutionStateChangedEvent): Promise<codemavi> {
 		if (event.changed) { // undefined -> execution was completed, so return on all else. no code should execute until we know it's an execution completion
 			return;
 		}
@@ -147,7 +147,7 @@ export class NotebookInlineVariablesController extends Disposable implements INo
 
 				const kernel = this.notebookKernelService.getMatchingKernel(notebook);
 				const kernelVars: VariablesResult[] = [];
-				if (result.some(iv => iv.type === 'variable')) { // if anyone will need a lookup, get vars now to avoid needing to do it multiple times
+				if (result.some(iv => iv.type === 'variable')) { // if anyone will need a lookup, get vars now to acodemavi needing to do it multiple times
 					if (!this.notebookEditor.hasModel()) {
 						return; // should not happen, a cell will be executed
 					}
@@ -621,7 +621,7 @@ export class NotebookInlineVariablesController extends Disposable implements INo
 		this._clearNotebookInlineDecorations();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._clearNotebookInlineDecorations();
 		this.currentCancellationTokenSources.forEach(source => source.cancel());
@@ -641,7 +641,7 @@ registerAction2(class ClearNotebookInlineValues extends NotebookAction {
 		});
 	}
 
-	override runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		const controller = editor.getContribution<NotebookInlineVariablesController>(NotebookInlineVariablesController.id);
 		controller.clearNotebookInlineDecorations();

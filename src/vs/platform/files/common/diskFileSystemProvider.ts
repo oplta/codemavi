@@ -68,7 +68,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 	private universalWatcher: AbstractUniversalWatcherClient | undefined;
 
 	private readonly universalWatchRequests: IUniversalWatchRequest[] = [];
-	private readonly universalWatchRequestDelayer = this._register(new ThrottledDelayer<void>(0));
+	private readonly universalWatchRequestDelayer = this._register(new ThrottledDelayer<codemavi>(0));
 
 	private watchUniversal(resource: URI, opts: IWatchOptions): IDisposable {
 		const request = this.toWatchRequest(resource, opts);
@@ -113,7 +113,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 		return request;
 	}
 
-	private refreshUniversalWatchers(): void {
+	private refreshUniversalWatchers(): codemavi {
 
 		// Buffer requests for universal watching to decide on right watcher
 		// that supports potentially watching more than one path at once
@@ -122,7 +122,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 		}).catch(error => onUnexpectedError(error));
 	}
 
-	private doRefreshUniversalWatchers(): Promise<void> {
+	private doRefreshUniversalWatchers(): Promise<codemavi> {
 
 		// Create watcher if this is the first time
 		if (!this.universalWatcher) {
@@ -143,8 +143,8 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 	}
 
 	protected abstract createUniversalWatcher(
-		onChange: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onChange: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean
 	): AbstractUniversalWatcherClient;
 
@@ -155,7 +155,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 	private nonRecursiveWatcher: AbstractNonRecursiveWatcherClient | undefined;
 
 	private readonly nonRecursiveWatchRequests: INonRecursiveWatchRequest[] = [];
-	private readonly nonRecursiveWatchRequestDelayer = this._register(new ThrottledDelayer<void>(0));
+	private readonly nonRecursiveWatchRequestDelayer = this._register(new ThrottledDelayer<codemavi>(0));
 
 	private watchNonRecursive(resource: URI, opts: IWatchOptions): IDisposable {
 
@@ -183,7 +183,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 		});
 	}
 
-	private refreshNonRecursiveWatchers(): void {
+	private refreshNonRecursiveWatchers(): codemavi {
 
 		// Buffer requests for nonrecursive watching to decide on right watcher
 		// that supports potentially watching more than one path at once
@@ -192,7 +192,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 		}).catch(error => onUnexpectedError(error));
 	}
 
-	private doRefreshNonRecursiveWatchers(): Promise<void> {
+	private doRefreshNonRecursiveWatchers(): Promise<codemavi> {
 
 		// Create watcher if this is the first time
 		if (!this.nonRecursiveWatcher) {
@@ -213,14 +213,14 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 	}
 
 	protected abstract createNonRecursiveWatcher(
-		onChange: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onChange: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean
 	): AbstractNonRecursiveWatcherClient;
 
 	//#endregion
 
-	private onWatcherLogMessage(msg: ILogMessage): void {
+	private onWatcherLogMessage(msg: ILogMessage): codemavi {
 		if (msg.type === 'error') {
 			this._onDidWatchError.fire(msg.message);
 		}
@@ -228,7 +228,7 @@ export abstract class AbstractDiskFileSystemProvider extends Disposable implemen
 		this.logWatcherMessage(msg);
 	}
 
-	protected logWatcherMessage(msg: ILogMessage): void {
+	protected logWatcherMessage(msg: ILogMessage): codemavi {
 		this.logService[msg.type](msg.message);
 	}
 

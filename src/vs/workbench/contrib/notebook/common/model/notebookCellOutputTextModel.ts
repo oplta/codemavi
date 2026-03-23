@@ -10,7 +10,7 @@ import { ICellOutput, IOutputDto, IOutputItemDto, compressOutputItemStreams, isT
 
 export class NotebookCellOutputTextModel extends Disposable implements ICellOutput {
 
-	private _onDidChangeData = this._register(new Emitter<void>());
+	private _onDidChangeData = this._register(new Emitter<codemavi>());
 	onDidChangeData = this._onDidChangeData.event;
 
 	get outputs() {

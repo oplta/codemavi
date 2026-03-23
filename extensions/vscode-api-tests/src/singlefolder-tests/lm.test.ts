@@ -36,7 +36,7 @@ suite('lm', function () {
 	test('lm request and stream', async function () {
 
 		let p: vscode.Progress<vscode.ChatResponseFragment2> | undefined;
-		const defer = new DeferredPromise<void>();
+		const defer = new DeferredPromise<codemavi>();
 
 		disposables.push(vscode.lm.registerChatModelProvider('test-lm', {
 			async provideLanguageModelResponse(_messages, _options, _extensionId, progress, _token) {
@@ -105,7 +105,7 @@ suite('lm', function () {
 
 	test('lm stream fail', async function () {
 
-		const defer = new DeferredPromise<void>();
+		const defer = new DeferredPromise<codemavi>();
 
 		disposables.push(vscode.lm.registerChatModelProvider('test-lm', {
 			async provideLanguageModelResponse(_messages, _options, _extensionId, _progress, _token) {

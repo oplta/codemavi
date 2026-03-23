@@ -43,7 +43,7 @@ export class InstallRemoteExtensionsContribution implements IWorkbenchContributi
 		this.installFailedRemoteExtensions();
 	}
 
-	private async installExtensionsIfInstalledLocallyInRemote(): Promise<void> {
+	private async installExtensionsIfInstalledLocallyInRemote(): Promise<codemavi> {
 		if (!this.remoteAgentService.getConnection()) {
 			return;
 		}
@@ -79,7 +79,7 @@ export class InstallRemoteExtensionsContribution implements IWorkbenchContributi
 		}));
 	}
 
-	private async installFailedRemoteExtensions(): Promise<void> {
+	private async installFailedRemoteExtensions(): Promise<codemavi> {
 		if (!this.remoteAgentService.getConnection()) {
 			return;
 		}
@@ -133,7 +133,7 @@ export class RemoteExtensionsInitializerContribution implements IWorkbenchContri
 		this.initializeRemoteExtensions();
 	}
 
-	private async initializeRemoteExtensions(): Promise<void> {
+	private async initializeRemoteExtensions(): Promise<codemavi> {
 		const connection = this.remoteAgentService.getConnection();
 		const localExtensionManagementServer = this.extensionManagementServerService.localExtensionManagementServer;
 		const remoteExtensionManagementServer = this.extensionManagementServerService.remoteExtensionManagementServer;
@@ -209,7 +209,7 @@ class RemoteExtensionsInitializer extends AbstractExtensionsInitializer {
 		super(extensionManagementService, ignoredExtensionsManagementService, fileService, userDataProfilesService, environmentService, logService, storageService, uriIdentityService);
 	}
 
-	protected override async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
+	protected override async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
 		const remoteExtensions = await this.parseExtensions(remoteUserData);
 		if (!remoteExtensions) {
 			this.logService.info('No synced extensions exist while initializing remote extensions.');

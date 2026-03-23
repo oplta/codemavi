@@ -140,7 +140,7 @@ export class SnippetsSynchroniser extends AbstractSynchroniser implements IUserD
 		throw new Error(`Invalid Resource: ${resource.toString()}`);
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ISnippetsResourcePreview, IAcceptResult][], force: boolean): Promise<void> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ISnippetsResourcePreview, IAcceptResult][], force: boolean): Promise<codemavi> {
 		const accptedResourcePreviews: ISnippetsAcceptedResourcePreview[] = resourcePreviews.map(([resourcePreview, acceptResult]) => ({ ...resourcePreview, acceptResult }));
 		if (accptedResourcePreviews.every(({ localChange, remoteChange }) => localChange === Change.None && remoteChange === Change.None)) {
 			this.logService.info(`${this.syncResourceLogLabel}: No changes found during synchronizing snippets.`);
@@ -400,7 +400,7 @@ export class SnippetsSynchroniser extends AbstractSynchroniser implements IUserD
 		return false;
 	}
 
-	private async updateLocalBackup(resourcePreviews: IFileResourcePreview[]): Promise<void> {
+	private async updateLocalBackup(resourcePreviews: IFileResourcePreview[]): Promise<codemavi> {
 		const local: IStringDictionary<IFileContent> = {};
 		for (const resourcePreview of resourcePreviews) {
 			if (resourcePreview.fileContent) {
@@ -410,7 +410,7 @@ export class SnippetsSynchroniser extends AbstractSynchroniser implements IUserD
 		await this.backupLocal(JSON.stringify(this.toSnippetsContents(local)));
 	}
 
-	private async updateLocalSnippets(resourcePreviews: ISnippetsAcceptedResourcePreview[], force: boolean): Promise<void> {
+	private async updateLocalSnippets(resourcePreviews: ISnippetsAcceptedResourcePreview[], force: boolean): Promise<codemavi> {
 		for (const { fileContent, acceptResult, localResource, remoteResource, localChange } of resourcePreviews) {
 			if (localChange !== Change.None) {
 				const key = remoteResource ? this.extUri.basename(remoteResource) : this.extUri.basename(localResource);
@@ -515,7 +515,7 @@ export class SnippetsInitializer extends AbstractInitializer {
 		super(SyncResource.Snippets, userDataProfilesService, environmentService, logService, fileService, storageService, uriIdentityService);
 	}
 
-	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
+	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
 		const remoteSnippets: IStringDictionary<string> | null = remoteUserData.syncData ? JSON.parse(remoteUserData.syncData.content) : null;
 		if (!remoteSnippets) {
 			this.logService.info('Skipping initializing snippets because remote snippets does not exist.');

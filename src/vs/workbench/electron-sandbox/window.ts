@@ -136,7 +136,7 @@ export class NativeWindow extends BaseWindow {
 		this.create();
 	}
 
-	protected registerListeners(): void {
+	protected registerListeners(): codemavi {
 
 		// Layout
 		this._register(addDisposableListener(mainWindow, EventType.RESIZE, () => this.layoutService.layout()));
@@ -420,7 +420,7 @@ export class NativeWindow extends BaseWindow {
 		this._register(this.lifecycleService.onWillShutdown(e => this.onWillShutdown(e)));
 	}
 
-	private handleRepresentedFilename(part: IEditorPart): void {
+	private handleRepresentedFilename(part: IEditorPart): codemavi {
 		const disposables = new DisposableStore();
 		Event.once(part.onWillDispose)(() => disposables.dispose());
 
@@ -428,7 +428,7 @@ export class NativeWindow extends BaseWindow {
 		disposables.add(scopedEditorService.onDidActiveEditorChange(() => this.updateRepresentedFilename(scopedEditorService, part.windowId)));
 	}
 
-	private updateRepresentedFilename(editorService: IEditorService, targetWindowId: number): void {
+	private updateRepresentedFilename(editorService: IEditorService, targetWindowId: number): codemavi {
 		const file = EditorResourceAccessor.getOriginalUri(editorService.activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY, filterByScheme: Schemas.file });
 
 		// Represented Filename
@@ -442,7 +442,7 @@ export class NativeWindow extends BaseWindow {
 
 	//#region Window Lifecycle
 
-	private onBeforeShutdown({ veto, reason }: BeforeShutdownEvent): void {
+	private onBeforeShutdown({ veto, reason }: BeforeShutdownEvent): codemavi {
 		if (reason === ShutdownReason.CLOSE) {
 			const confirmBeforeCloseSetting = this.configurationService.getValue<'always' | 'never' | 'keyboardOnly'>('window.confirmBeforeClose');
 
@@ -481,7 +481,7 @@ export class NativeWindow extends BaseWindow {
 		this.progressOnBeforeShutdown(reason);
 	}
 
-	private progressOnBeforeShutdown(reason: ShutdownReason): void {
+	private progressOnBeforeShutdown(reason: ShutdownReason): codemavi {
 		this.progressService.withProgress({
 			location: ProgressLocation.Window, 	// use window progress to not be too annoying about this operation
 			delay: 800,							// delay so that it only appears when operation takes a long time
@@ -495,11 +495,11 @@ export class NativeWindow extends BaseWindow {
 		});
 	}
 
-	private onBeforeShutdownError({ error, reason }: BeforeShutdownErrorEvent): void {
+	private onBeforeShutdownError({ error, reason }: BeforeShutdownErrorEvent): codemavi {
 		this.dialogService.error(this.toShutdownLabel(reason, true), localize('shutdownErrorDetail', "Error: {0}", toErrorMessage(error)));
 	}
 
-	private onWillShutdown({ reason, force, joiners }: WillShutdownEvent): void {
+	private onWillShutdown({ reason, force, joiners }: WillShutdownEvent): codemavi {
 
 		// Delay so that the dialog only appears after timeout
 		const shutdownDialogScheduler = new RunOnceScheduler(() => {
@@ -565,7 +565,7 @@ export class NativeWindow extends BaseWindow {
 
 	//#endregion
 
-	private updateDocumentEdited(documentEdited: true | undefined): void {
+	private updateDocumentEdited(documentEdited: true | undefined): codemavi {
 		let setDocumentEdited: boolean;
 		if (typeof documentEdited === 'boolean') {
 			setDocumentEdited = documentEdited;
@@ -591,13 +591,13 @@ export class NativeWindow extends BaseWindow {
 		return WindowMinimumSize.WIDTH;
 	}
 
-	private onDidChangePanelPosition(pos: Position): void {
+	private onDidChangePanelPosition(pos: Position): codemavi {
 		const minWidth = this.getWindowMinimumWidth(pos);
 
 		this.nativeHostService.setMinimumSize(minWidth, undefined);
 	}
 
-	private maybeCloseWindow(): void {
+	private maybeCloseWindow(): codemavi {
 		const closeWhenEmpty = this.configurationService.getValue('window.closeWhenEmpty') || this.nativeEnvironmentService.args.wait;
 		if (!closeWhenEmpty) {
 			return; // return early if configured to not close when empty
@@ -625,7 +625,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private provideCustomTitleContextMenu(filePath: string | undefined): void {
+	private provideCustomTitleContextMenu(filePath: string | undefined): codemavi {
 
 		// Clear old menu
 		this.customTitleContextMenuDisposable.clear();
@@ -660,7 +660,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	protected create(): void {
+	protected create(): codemavi {
 
 		// Handle open calls
 		this.setupOpenHandlers();
@@ -684,7 +684,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private async handleWarnings(): Promise<void> {
+	private async handleWarnings(): Promise<codemavi> {
 
 		// After restored phase is fine for the following ones
 		await this.lifecycleService.when(LifecyclePhase.Restored);
@@ -764,12 +764,12 @@ export class NativeWindow extends BaseWindow {
 		}, () => shellEnv, () => this.openerService.open('https://go.microsoft.com/fwlink/?linkid=2149667'));
 	}
 
-	private setupDriver(): void {
+	private setupDriver(): codemavi {
 		const that = this;
 		let pendingQuit = false;
 
 		registerWindowDriver(this.instantiationService, {
-			async exitApplication(): Promise<void> {
+			async exitApplication(): Promise<codemavi> {
 				if (pendingQuit) {
 					that.logService.info('[driver] not handling exitApplication() due to pending quit() call');
 					return;
@@ -859,7 +859,7 @@ export class NativeWindow extends BaseWindow {
 		return tunnel;
 	}
 
-	private setupOpenHandlers(): void {
+	private setupOpenHandlers(): codemavi {
 
 		// Handle external open() calls
 		this.openerService.setDefaultExternalOpener({
@@ -891,7 +891,7 @@ export class NativeWindow extends BaseWindow {
 	private readonly touchBarDisposables = this._register(new DisposableStore());
 	private lastInstalledTouchedBar: ICommandAction[][] | undefined;
 
-	private updateTouchbarMenu(): void {
+	private updateTouchbarMenu(): codemavi {
 		if (!isMacintosh) {
 			return; // macOS only
 		}
@@ -905,7 +905,7 @@ export class NativeWindow extends BaseWindow {
 		scheduler.schedule();
 	}
 
-	private doUpdateTouchbarMenu(scheduler: RunOnceScheduler): void {
+	private doUpdateTouchbarMenu(scheduler: RunOnceScheduler): codemavi {
 		if (!this.touchBarMenu) {
 			const scopedContextKeyService = this.editorService.activeEditorPane?.scopedContextKeyService || this.editorGroupService.activeGroup.scopedContextKeyService;
 			this.touchBarMenu = this.menuService.createMenu(MenuId.TouchBarContext, scopedContextKeyService);
@@ -959,7 +959,7 @@ export class NativeWindow extends BaseWindow {
 
 	//#endregion
 
-	private onAddRemoveFoldersRequest(request: IAddRemoveFoldersRequest): void {
+	private onAddRemoveFoldersRequest(request: IAddRemoveFoldersRequest): codemavi {
 
 		// Buffer all pending requests
 		this.pendingFoldersToAdd.push(...request.foldersToAdd.map(folder => URI.revive(folder)));
@@ -971,7 +971,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private async doAddRemoveFolders(): Promise<void> {
+	private async doAddRemoveFolders(): Promise<codemavi> {
 		const foldersToAdd: IWorkspaceFolderCreationData[] = this.pendingFoldersToAdd.map(folder => ({ uri: folder }));
 		const foldersToRemove = this.pendingFoldersToRemove.slice(0);
 
@@ -987,7 +987,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private async onOpenFiles(request: INativeOpenFileRequest): Promise<void> {
+	private async onOpenFiles(request: INativeOpenFileRequest): Promise<codemavi> {
 		const diffMode = !!(request.filesToDiff && (request.filesToDiff.length === 2));
 		const mergeMode = !!(request.filesToMerge && (request.filesToMerge.length === 4));
 
@@ -1013,7 +1013,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private async trackClosedWaitFiles(waitMarkerFile: URI, resourcesToWaitFor: URI[]): Promise<void> {
+	private async trackClosedWaitFiles(waitMarkerFile: URI, resourcesToWaitFor: URI[]): Promise<codemavi> {
 
 		// Wait for the resources to be closed in the text editor...
 		await this.instantiationService.invokeFunction(accessor => whenEditorClosed(accessor, resourcesToWaitFor));
@@ -1060,7 +1060,7 @@ export class NativeWindow extends BaseWindow {
 		return typeof windowZoomLevel === 'number' ? windowZoomLevel : 0;
 	}
 
-	private handleOnDidChangeZoomLevel(targetWindowId: number): void {
+	private handleOnDidChangeZoomLevel(targetWindowId: number): codemavi {
 
 		// Zoom status entry
 		this.updateWindowZoomStatusEntry(targetWindowId);
@@ -1078,7 +1078,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private createWindowZoomStatusEntry(part: IEditorPart): void {
+	private createWindowZoomStatusEntry(part: IEditorPart): codemavi {
 		const disposables = new DisposableStore();
 		Event.once(part.onWillDispose)(() => disposables.dispose());
 
@@ -1089,7 +1089,7 @@ export class NativeWindow extends BaseWindow {
 		this.updateWindowZoomStatusEntry(part.windowId);
 	}
 
-	private updateWindowZoomStatusEntry(targetWindowId: number): void {
+	private updateWindowZoomStatusEntry(targetWindowId: number): codemavi {
 		const targetWindow = getWindowById(targetWindowId);
 		const entry = this.mapWindowIdToZoomStatusEntry.get(targetWindowId);
 		if (entry && targetWindow) {
@@ -1106,7 +1106,7 @@ export class NativeWindow extends BaseWindow {
 		}
 	}
 
-	private onDidChangeConfiguredWindowZoomLevel(): void {
+	private onDidChangeConfiguredWindowZoomLevel(): codemavi {
 		this.configuredWindowZoomLevel = this.resolveConfiguredWindowZoomLevel();
 
 		let applyZoomLevel = false;
@@ -1128,7 +1128,7 @@ export class NativeWindow extends BaseWindow {
 
 	//#endregion
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		for (const [, entry] of this.mapWindowIdToZoomStatusEntry) {
@@ -1151,7 +1151,7 @@ class ZoomStatusEntry extends Disposable {
 		super();
 	}
 
-	updateZoomEntry(visibleOrText: false | string, targetWindowId: number): void {
+	updateZoomEntry(visibleOrText: false | string, targetWindowId: number): codemavi {
 		if (typeof visibleOrText === 'string') {
 			if (!this.disposable.value) {
 				this.createZoomEntry(visibleOrText);
@@ -1163,7 +1163,7 @@ class ZoomStatusEntry extends Disposable {
 		}
 	}
 
-	private createZoomEntry(visibleOrText: string): void {
+	private createZoomEntry(visibleOrText: string): codemavi {
 		const disposables = new DisposableStore();
 		this.disposable.value = disposables;
 
@@ -1206,7 +1206,7 @@ class ZoomStatusEntry extends Disposable {
 		}, 'status.windowZoom', StatusbarAlignment.RIGHT, 102));
 	}
 
-	private updateZoomLevelLabel(targetWindowId: number): void {
+	private updateZoomLevelLabel(targetWindowId: number): codemavi {
 		if (this.zoomLevelLabel) {
 			const targetWindow = getWindowById(targetWindowId, true).window;
 			const zoomFactor = Math.round(getZoomFactor(targetWindow) * 100);

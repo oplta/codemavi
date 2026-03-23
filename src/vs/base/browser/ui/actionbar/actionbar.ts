@@ -18,12 +18,12 @@ import './actionbar.css';
 export interface IActionViewItem extends IDisposable {
 	action: IAction;
 	actionRunner: IActionRunner;
-	setActionContext(context: unknown): void;
-	render(element: HTMLElement): void;
+	setActionContext(context: unknown): codemavi;
+	render(element: HTMLElement): codemavi;
 	isEnabled(): boolean;
-	focus(fromRight?: boolean): void; // TODO@isidorn what is this?
-	blur(): void;
-	showHover?(): void;
+	focus(fromRight?: boolean): codemavi; // TODO@isidorn what is this?
+	blur(): codemavi;
+	showHover?(): codemavi;
 }
 
 export interface IActionViewItemProvider {
@@ -94,10 +94,10 @@ export class ActionBar extends Disposable implements IActionRunner {
 	domNode: HTMLElement;
 	protected readonly actionsList: HTMLElement;
 
-	private readonly _onDidBlur = this._register(new Emitter<void>());
+	private readonly _onDidBlur = this._register(new Emitter<codemavi>());
 	readonly onDidBlur = this._onDidBlur.event;
 
-	private readonly _onDidCancel = this._register(new Emitter<void>({ onWillAddFirstListener: () => this.cancelHasListener = true }));
+	private readonly _onDidCancel = this._register(new Emitter<codemavi>({ onWillAddFirstListener: () => this.cancelHasListener = true }));
 	readonly onDidCancel = this._onDidCancel.event;
 	private cancelHasListener = false;
 
@@ -234,7 +234,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		container.appendChild(this.domNode);
 	}
 
-	private refreshRole(): void {
+	private refreshRole(): codemavi {
 		if (this.length() >= 1) {
 			this.actionsList.setAttribute('role', this.options.ariaRole || 'toolbar');
 		} else {
@@ -242,7 +242,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		}
 	}
 
-	setAriaLabel(label: string): void {
+	setAriaLabel(label: string): codemavi {
 		if (label) {
 			this.actionsList.setAttribute('aria-label', label);
 		} else {
@@ -253,7 +253,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 	// Some action bars should not be focusable at times
 	// When an action bar is not focusable make sure to make all the elements inside it not focusable
 	// When an action bar is focusable again, make sure the first item can be focused
-	setFocusable(focusable: boolean): void {
+	setFocusable(focusable: boolean): codemavi {
 		this.focusable = focusable;
 		if (this.focusable) {
 			const firstEnabled = this.viewItems.find(vi => vi instanceof BaseActionViewItem && vi.isEnabled());
@@ -278,7 +278,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		return ret;
 	}
 
-	private updateFocusedItem(): void {
+	private updateFocusedItem(): codemavi {
 		for (let i = 0; i < this.actionsList.children.length; i++) {
 			const elem = this.actionsList.children[i];
 			if (DOM.isAncestor(DOM.getActiveElement(), elem)) {
@@ -346,7 +346,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		return undefined;
 	}
 
-	push(arg: IAction | ReadonlyArray<IAction>, options: IActionOptions = {}): void {
+	push(arg: IAction | ReadonlyArray<IAction>, options: IActionOptions = {}): codemavi {
 		const actions: ReadonlyArray<IAction> = Array.isArray(arg) ? arg : [arg];
 
 		let index = types.isNumber(options.index) ? options.index : null;
@@ -421,7 +421,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		return 0;
 	}
 
-	pull(index: number): void {
+	pull(index: number): codemavi {
 		if (index >= 0 && index < this.viewItems.length) {
 			this.actionsList.childNodes[index].remove();
 			this.viewItemDisposables.deleteAndDispose(this.viewItems[index]);
@@ -430,7 +430,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		}
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		if (this.isEmpty()) {
 			return;
 		}
@@ -449,9 +449,9 @@ export class ActionBar extends Disposable implements IActionRunner {
 		return this.viewItems.length === 0;
 	}
 
-	focus(index?: number): void;
-	focus(selectFirst?: boolean): void;
-	focus(arg?: number | boolean): void {
+	focus(index?: number): codemavi;
+	focus(selectFirst?: boolean): codemavi;
+	focus(arg?: number | boolean): codemavi {
 		let selectFirst: boolean = false;
 		let index: number | undefined = undefined;
 		if (arg === undefined) {
@@ -538,7 +538,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		return true;
 	}
 
-	protected updateFocus(fromRight?: boolean, preventScroll?: boolean, forceFocus: boolean = false): void {
+	protected updateFocus(fromRight?: boolean, preventScroll?: boolean, forceFocus: boolean = false): codemavi {
 		if (typeof this.focusedItem === 'undefined') {
 			this.actionsList.focus({ preventScroll });
 		}
@@ -574,7 +574,7 @@ export class ActionBar extends Disposable implements IActionRunner {
 		}
 	}
 
-	private doTrigger(event: StandardKeyboardEvent): void {
+	private doTrigger(event: StandardKeyboardEvent): codemavi {
 		if (typeof this.focusedItem === 'undefined') {
 			return; //nothing to focus
 		}
@@ -587,11 +587,11 @@ export class ActionBar extends Disposable implements IActionRunner {
 		}
 	}
 
-	async run(action: IAction, context?: unknown): Promise<void> {
+	async run(action: IAction, context?: unknown): Promise<codemavi> {
 		await this._actionRunner.run(action, context);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._context = undefined;
 		this.viewItems = dispose(this.viewItems);
 		this.getContainer().remove();

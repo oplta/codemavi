@@ -24,7 +24,7 @@ export class ExtHostNotebookEditors implements ExtHostNotebookEditorsShape {
 		private readonly _notebooksAndEditors: ExtHostNotebookController,
 	) { }
 
-	$acceptEditorPropertiesChanged(id: string, data: INotebookEditorPropertiesChangeData): void {
+	$acceptEditorPropertiesChanged(id: string, data: INotebookEditorPropertiesChangeData): codemavi {
 		this._logService.debug('ExtHostNotebook#$acceptEditorPropertiesChanged', id, data);
 		const editor = this._notebooksAndEditors.getEditorById(id);
 		// ONE: make all state updates
@@ -50,7 +50,7 @@ export class ExtHostNotebookEditors implements ExtHostNotebookEditorsShape {
 		}
 	}
 
-	$acceptEditorViewColumns(data: INotebookEditorViewColumnInfo): void {
+	$acceptEditorViewColumns(data: INotebookEditorViewColumnInfo): codemavi {
 		for (const id in data) {
 			const editor = this._notebooksAndEditors.getEditorById(id);
 			editor._acceptViewColumn(typeConverters.ViewColumn.to(data[id]));

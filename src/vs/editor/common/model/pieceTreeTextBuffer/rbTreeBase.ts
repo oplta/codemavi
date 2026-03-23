@@ -70,7 +70,7 @@ export class TreeNode {
 		}
 	}
 
-	public detach(): void {
+	public detach(): codemavi {
 		this.parent = null!;
 		this.left = null!;
 		this.right = null!;
@@ -118,7 +118,7 @@ function calculateLF(node: TreeNode): number {
 	return node.lf_left + node.piece.lineFeedCnt + calculateLF(node.right);
 }
 
-function resetSentinel(): void {
+function resetSentinel(): codemavi {
 	SENTINEL.parent = SENTINEL;
 }
 
@@ -375,7 +375,7 @@ export function fixInsert(tree: PieceTreeBase, x: TreeNode) {
 	tree.root.color = NodeColor.Black;
 }
 
-export function updateTreeMetadata(tree: PieceTreeBase, x: TreeNode, delta: number, lineFeedCntDelta: number): void {
+export function updateTreeMetadata(tree: PieceTreeBase, x: TreeNode, delta: number, lineFeedCntDelta: number): codemavi {
 	// node length change or line feed count change
 	while (x !== tree.root && x !== SENTINEL) {
 		if (x.parent.left === x) {

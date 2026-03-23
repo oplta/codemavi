@@ -25,7 +25,7 @@ import { Event } from '../../../../../../base/common/event.js';
 
 class ImplictKernelSelector implements IDisposable {
 
-	readonly dispose: () => void;
+	readonly dispose: () => codemavi;
 
 	constructor(
 		notebook: NotebookTextModel,
@@ -354,7 +354,7 @@ class NotebookEditorStatusContribution extends Disposable implements IWorkbenchC
 		this._register(editorGroupService.onDidCreateAuxiliaryEditorPart(part => this.createNotebookStatus(part)));
 	}
 
-	private createNotebookStatus(part: IEditorPart): void {
+	private createNotebookStatus(part: IEditorPart): codemavi {
 		const disposables = new DisposableStore();
 		Event.once(part.onWillDispose)(() => disposables.dispose());
 

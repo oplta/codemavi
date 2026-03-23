@@ -195,7 +195,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 	private _previousPanelId: string | undefined;
 	private _previousTerminalInstance: ITerminalInstance | undefined;
 	private _terminalStatusManager: TaskTerminalStatus;
-	private _terminalCreationQueue: Promise<ITerminalInstance | void> = Promise.resolve();
+	private _terminalCreationQueue: Promise<ITerminalInstance | codemavi> = Promise.resolve();
 	private _hasReconnected: boolean = false;
 	private readonly _onDidStateChange: Emitter<ITaskEvent>;
 	private _reconnectedTerminals: ITerminalInstance[] | undefined;
@@ -257,11 +257,11 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		return this._onDidStateChange.event;
 	}
 
-	private _log(value: string): void {
+	private _log(value: string): codemavi {
 		this._appendOutput(value + '\n');
 	}
 
-	protected _showOutput(): void {
+	protected _showOutput(): codemavi {
 		this._outputService.showChannel(this._outputChannelId, true);
 	}
 
@@ -403,13 +403,13 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		return Object.keys(this._busyTasks).map(key => this._busyTasks[key]);
 	}
 
-	public customExecutionComplete(task: Task, result: number): Promise<void> {
+	public customExecutionComplete(task: Task, result: number): Promise<codemavi> {
 		const activeTerminal = this._activeTasks[task.getMapKey()];
 		if (!activeTerminal?.terminal) {
 			return Promise.reject(new Error('Expected to have a terminal for a custom execution task'));
 		}
 
-		return new Promise<void>((resolve) => {
+		return new Promise<codemavi>((resolve) => {
 			// activeTerminal.terminal.rendererExit(result);
 			resolve();
 		});
@@ -421,7 +421,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 			(value) => recentKey && recentKey === value.task.getKey());
 	}
 
-	private _removeFromActiveTasks(task: Task | string): void {
+	private _removeFromActiveTasks(task: Task | string): codemavi {
 		const key = typeof task === 'string' ? task : task.getMapKey();
 		const taskToRemove = this._activeTasks[key];
 		if (!taskToRemove) {
@@ -590,7 +590,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		});
 	}
 
-	private _adoptConfigurationForDependencyTask(dependencyTask: Task, task: Task): void {
+	private _adoptConfigurationForDependencyTask(dependencyTask: Task, task: Task): codemavi {
 		if (dependencyTask.configurationProperties.icon) {
 			dependencyTask.configurationProperties.icon.id ||= task.configurationProperties.icon?.id;
 			dependencyTask.configurationProperties.icon.color ||= task.configurationProperties.icon?.color;
@@ -1360,7 +1360,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		return createdTerminal;
 	}
 
-	private _reconnectToTerminals(): void {
+	private _reconnectToTerminals(): codemavi {
 		if (this._hasReconnected) {
 			this._logService.trace(`Already reconnected, to ${this._reconnectedTerminals?.length} terminals so returning`);
 			return;
@@ -1382,7 +1382,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		this._hasReconnected = true;
 	}
 
-	private _deleteTaskAndTerminal(terminal: ITerminalInstance, terminalData: ITerminalData): void {
+	private _deleteTaskAndTerminal(terminal: ITerminalInstance, terminalData: ITerminalData): codemavi {
 		delete this._terminals[terminal.instanceId];
 		delete this._sameTaskTerminals[terminalData.lastTask];
 		this._idleTaskTerminals.delete(terminalData.lastTask);
@@ -1602,7 +1602,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		return TerminalTaskSystem._shellQuotes[shellBasename] || TerminalTaskSystem._osShellQuotes[Platform.PlatformToString(platform)];
 	}
 
-	private _collectTaskVariables(variables: Set<string>, task: CustomTask | ContributedTask): void {
+	private _collectTaskVariables(variables: Set<string>, task: CustomTask | ContributedTask): codemavi {
 		if (task.command && task.command.name) {
 			this._collectCommandVariables(variables, task.command, task);
 		}
@@ -1621,7 +1621,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		}
 	}
 
-	private _collectDefinitionVariables(variables: Set<string>, definition: any): void {
+	private _collectDefinitionVariables(variables: Set<string>, definition: any): codemavi {
 		if (Types.isString(definition)) {
 			this._collectVariables(variables, definition);
 		} else if (Array.isArray(definition)) {
@@ -1633,7 +1633,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		}
 	}
 
-	private _collectCommandVariables(variables: Set<string>, command: ICommandConfiguration, task: CustomTask | ContributedTask): void {
+	private _collectCommandVariables(variables: Set<string>, command: ICommandConfiguration, task: CustomTask | ContributedTask): codemavi {
 		// The custom execution should have everything it needs already as it provided
 		// the callback.
 		if (command.runtime === RuntimeType.CustomExecution) {
@@ -1673,7 +1673,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		}
 	}
 
-	private _collectMatcherVariables(variables: Set<string>, values: Array<string | ProblemMatcher> | undefined): void {
+	private _collectMatcherVariables(variables: Set<string>, values: Array<string | ProblemMatcher> | undefined): codemavi {
 		if (values === undefined || values === null || values.length === 0) {
 			return;
 		}
@@ -1700,7 +1700,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		});
 	}
 
-	private _collectVariables(variables: Set<string>, value: string | CommandString): void {
+	private _collectVariables(variables: Set<string>, value: string | CommandString): codemavi {
 		const string: string = Types.isString(value) ? value : value.value;
 		const r = /\$\{(.*?)\}/g;
 		let matches: RegExpExecArray | null;
@@ -1865,7 +1865,7 @@ export class TerminalTaskSystem extends Disposable implements ITaskSystem {
 		return undefined;
 	}
 
-	private _appendOutput(output: string): void {
+	private _appendOutput(output: string): codemavi {
 		const outputChannel = this._outputService.getChannel(this._outputChannelId);
 		outputChannel?.append(output);
 	}

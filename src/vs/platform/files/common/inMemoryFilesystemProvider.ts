@@ -62,7 +62,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 
 	private memoryFdCounter = 0;
 	private readonly fdMemory = new Map<number, Uint8Array>();
-	private _onDidChangeCapabilities = this._register(new Emitter<void>());
+	private _onDidChangeCapabilities = this._register(new Emitter<codemavi>());
 	readonly onDidChangeCapabilities = this._onDidChangeCapabilities.event;
 
 	private _capabilities = FileSystemProviderCapabilities.FileReadWrite | FileSystemProviderCapabilities.PathCaseSensitive;
@@ -111,7 +111,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		return stream;
 	}
 
-	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
+	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
 		const basename = resources.basename(resource);
 		const parent = this._lookupParentDirectory(resource);
 		let entry = parent.entries.get(basename);
@@ -147,7 +147,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		throw createFileSystemProviderError('file not found', FileSystemProviderErrorCode.FileNotFound);
 	}
 
-	close(fd: number): Promise<void> {
+	close(fd: number): Promise<codemavi> {
 		this.fdMemory.delete(fd);
 		return Promise.resolve();
 	}
@@ -176,7 +176,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 
 	// --- manage files/folders
 
-	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
+	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
 		if (!opts.overwrite && this._lookup(to, true)) {
 			throw createFileSystemProviderError('file exists already', FileSystemProviderErrorCode.FileExists);
 		}
@@ -197,7 +197,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		);
 	}
 
-	async delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
+	async delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
 		const dirname = resources.dirname(resource);
 		const basename = resources.basename(resource);
 		const parent = this._lookupAsDirectory(dirname, false);
@@ -209,7 +209,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		}
 	}
 
-	async mkdir(resource: URI): Promise<void> {
+	async mkdir(resource: URI): Promise<codemavi> {
 		if (this._lookup(resource, true)) {
 			throw createFileSystemProviderError('file exists already', FileSystemProviderErrorCode.FileExists);
 		}
@@ -286,7 +286,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		return Disposable.None;
 	}
 
-	private _fireSoon(...changes: IFileChange[]): void {
+	private _fireSoon(...changes: IFileChange[]): codemavi {
 		this._bufferedChanges.push(...changes);
 
 		if (this._fireSoonHandle) {
@@ -299,7 +299,7 @@ export class InMemoryFileSystemProvider extends Disposable implements
 		}, 5);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.fdMemory.clear();

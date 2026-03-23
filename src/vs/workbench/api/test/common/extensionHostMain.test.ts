@@ -31,10 +31,10 @@ suite('ExtensionHostMain#ErrorHandler - Wrapping prepareStackTrace can cause slo
 
 	const extensionsIndex = TernarySearchTree.forUris<IExtensionDescription>();
 	const mainThreadExtensionsService = new class extends mock<MainThreadExtensionServiceShape>() implements MainThreadErrorsShape {
-		override $onExtensionRuntimeError(extensionId: ExtensionIdentifier, data: SerializedError): void {
+		override $onExtensionRuntimeError(extensionId: ExtensionIdentifier, data: SerializedError): codemavi {
 
 		}
-		$onUnexpectedError(err: any | SerializedError): void {
+		$onUnexpectedError(err: any | SerializedError): codemavi {
 
 		}
 	};
@@ -70,7 +70,7 @@ suite('ExtensionHostMain#ErrorHandler - Wrapping prepareStackTrace can cause slo
 	const originalPrepareStackTrace = Error.prepareStackTrace;
 	const insta = new InstantiationService(collection, false);
 
-	let existingErrorHandler: (e: any) => void;
+	let existingErrorHandler: (e: any) => codemavi;
 	let findSubstrCount = 0;
 
 	ensureNoDisposablesAreLeakedInTestSuite();

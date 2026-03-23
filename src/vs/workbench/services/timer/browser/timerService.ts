@@ -327,7 +327,7 @@ export interface IStartupMetrics {
 		 *
 		 * * Happens in the renderer-process
 		 * * Measured with the `willLoadExtensions` and `didLoadExtensions` performance marks.
-		 * * Reading of package.json-files is avoided by caching them all in a single file (after the read,
+		 * * Reading of package.json-files is acodemavied by caching them all in a single file (after the read,
 		 * until another extension is installed)
 		 * * Happens in parallel to other things, depends on async timing
 		 */
@@ -435,7 +435,7 @@ export interface ITimerService {
 	 * Deliver performance marks from a source, like the main process or extension hosts.
 	 * The source argument acts as an identifier and therefore it must be unique.
 	 */
-	setPerformanceMarks(source: string, marks: perf.PerformanceMark[]): void;
+	setPerformanceMarks(source: string, marks: perf.PerformanceMark[]): codemavi;
 
 	/**
 	 * Get all currently known performance marks by source. There is no sorting of the
@@ -464,7 +464,7 @@ class PerfMarks {
 
 	private readonly _entries: [string, perf.PerformanceMark[]][] = [];
 
-	setMarks(source: string, entries: perf.PerformanceMark[]): void {
+	setMarks(source: string, entries: perf.PerformanceMark[]): codemavi {
 		this._entries.push([source, entries]);
 	}
 
@@ -485,7 +485,7 @@ class PerfMarks {
 		return entry ? entry.startTime : -1;
 	}
 
-	private _findEntry(name: string): perf.PerformanceMark | void {
+	private _findEntry(name: string): perf.PerformanceMark | codemavi {
 		for (const [, marks] of this._entries) {
 			for (let i = marks.length - 1; i >= 0; i--) {
 				if (marks[i].name === name) {
@@ -598,7 +598,7 @@ export abstract class AbstractTimerService implements ITimerService {
 		return this._startupMetrics;
 	}
 
-	setPerformanceMarks(source: string, marks: perf.PerformanceMark[]): void {
+	setPerformanceMarks(source: string, marks: perf.PerformanceMark[]): codemavi {
 		// Perf marks are a shared resource because anyone can generate them
 		// and because of that we only accept marks that start with 'code/'
 		const codeMarks = marks.filter(mark => mark.name.startsWith('code/'));
@@ -618,7 +618,7 @@ export abstract class AbstractTimerService implements ITimerService {
 		return this._marks.getStartTime(mark);
 	}
 
-	private _reportStartupTimes(metrics: IStartupMetrics): void {
+	private _reportStartupTimes(metrics: IStartupMetrics): codemavi {
 		// report IStartupMetrics as telemetry
 		/* __GDPR__
 			"startupTimeVaried" : {
@@ -746,7 +746,7 @@ export abstract class AbstractTimerService implements ITimerService {
 
 	protected abstract _getWindowCount(): Promise<number>;
 
-	protected abstract _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<void>;
+	protected abstract _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<codemavi>;
 }
 
 
@@ -761,7 +761,7 @@ export class TimerService extends AbstractTimerService {
 	protected async _getWindowCount(): Promise<number> {
 		return 1;
 	}
-	protected async _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<void> {
+	protected async _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<codemavi> {
 		info.isVMLikelyhood = 0;
 		info.isARM64Emulated = false;
 		info.platform = navigator.userAgent;

@@ -34,7 +34,7 @@ export class CustomEditorLabelService extends Disposable implements ICustomEdito
 	static readonly SETTING_ID_PATTERNS = 'workbench.editor.customLabels.patterns';
 	static readonly SETTING_ID_ENABLED = 'workbench.editor.customLabels.enabled';
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private patterns: ICustomEditorLabelPattern[] = [];
@@ -54,7 +54,7 @@ export class CustomEditorLabelService extends Disposable implements ICustomEdito
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 			// Cache the enabled state
 			if (e.affectsConfiguration(CustomEditorLabelService.SETTING_ID_ENABLED)) {
@@ -74,12 +74,12 @@ export class CustomEditorLabelService extends Disposable implements ICustomEdito
 		}));
 	}
 
-	private storeEnablementState(): void {
+	private storeEnablementState(): codemavi {
 		this.enabled = this.configurationService.getValue<boolean>(CustomEditorLabelService.SETTING_ID_ENABLED);
 	}
 
 	private _templateRegexValidation: RegExp = /[a-zA-Z0-9]/;
-	private storeCustomPatterns(): void {
+	private storeCustomPatterns(): codemavi {
 		this.patterns = [];
 		const customLabelPatterns = this.configurationService.getValue<ICustomEditorLabelObject>(CustomEditorLabelService.SETTING_ID_PATTERNS);
 		for (const pattern in customLabelPatterns) {
@@ -242,7 +242,7 @@ export const ICustomEditorLabelService = createDecorator<ICustomEditorLabelServi
 
 export interface ICustomEditorLabelService {
 	readonly _serviceBrand: undefined;
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 	getName(resource: URI): string | undefined;
 }
 

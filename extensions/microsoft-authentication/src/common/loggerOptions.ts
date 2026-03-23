@@ -15,7 +15,7 @@ export class MsalLoggerOptions {
 		return this._toMsalLogLevel(env.logLevel);
 	}
 
-	loggerCallback(level: MsalLogLevel, message: string, containsPii: boolean): void {
+	loggerCallback(level: MsalLogLevel, message: string, containsPii: boolean): codemavi {
 		if (containsPii) {
 			// TODO: Should we still log the message if it contains PII? It's just going to
 			// an output channel that doesn't leave the machine.

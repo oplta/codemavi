@@ -11,7 +11,7 @@ performance.mark('code/fork/start');
 
 //#region Helpers
 
-function pipeLoggingToParent(): void {
+function pipeLoggingToParent(): codemavi {
 	const MAX_STREAM_BUFFER_LENGTH = 1024 * 1024;
 	const MAX_LENGTH = 100000;
 
@@ -74,7 +74,7 @@ function pipeLoggingToParent(): void {
 		}
 	}
 
-	function safeSend(arg: { type: string; severity: string; arguments: string }): void {
+	function safeSend(arg: { type: string; severity: string; arguments: string }): codemavi {
 		try {
 			if (process.send) {
 				process.send(arg);
@@ -92,17 +92,17 @@ function pipeLoggingToParent(): void {
 			&& !(obj instanceof Date);
 	}
 
-	function safeSendConsoleMessage(severity: 'log' | 'warn' | 'error', args: string): void {
+	function safeSendConsoleMessage(severity: 'log' | 'warn' | 'error', args: string): codemavi {
 		safeSend({ type: '__$console', severity, arguments: args });
 	}
 
 	/**
 	 * Wraps a console message so that it is transmitted to the renderer.
 	 *
-	 * The wrapped property is not defined with `writable: false` to avoid
+	 * The wrapped property is not defined with `writable: false` to acodemavi
 	 * throwing errors, but rather a no-op setting. See https://github.com/microsoft/vscode-extension-telemetry/issues/88
 	 */
-	function wrapConsoleMethod(method: 'log' | 'info' | 'warn' | 'error', severity: 'log' | 'warn' | 'error'): void {
+	function wrapConsoleMethod(method: 'log' | 'info' | 'warn' | 'error', severity: 'log' | 'warn' | 'error'): codemavi {
 		Object.defineProperty(console, method, {
 			set: () => { },
 			get: () => function () { safeSendConsoleMessage(severity, safeToString(arguments)); },
@@ -115,7 +115,7 @@ function pipeLoggingToParent(): void {
 	 * as to console.log with complete lines so that they're made available
 	 * to the debugger/CLI.
 	 */
-	function wrapStream(streamName: 'stdout' | 'stderr', severity: 'log' | 'warn' | 'error'): void {
+	function wrapStream(streamName: 'stdout' | 'stderr', severity: 'log' | 'warn' | 'error'): codemavi {
 		const stream = process[streamName];
 		const original = stream.write;
 
@@ -123,7 +123,7 @@ function pipeLoggingToParent(): void {
 
 		Object.defineProperty(stream, 'write', {
 			set: () => { },
-			get: () => (chunk: string | Buffer | Uint8Array, encoding: BufferEncoding | undefined, callback: ((err?: Error | undefined) => void) | undefined) => {
+			get: () => (chunk: string | Buffer | Uint8Array, encoding: BufferEncoding | undefined, callback: ((err?: Error | undefined) => codemavi) | undefined) => {
 				buf += chunk.toString(encoding);
 				const eol = buf.length > MAX_STREAM_BUFFER_LENGTH ? buf.length : buf.lastIndexOf('\n');
 				if (eol !== -1) {
@@ -153,7 +153,7 @@ function pipeLoggingToParent(): void {
 	wrapStream('stdout', 'log');
 }
 
-function handleExceptions(): void {
+function handleExceptions(): codemavi {
 
 	// Handle uncaught exceptions
 	process.on('uncaughtException', function (err) {
@@ -166,7 +166,7 @@ function handleExceptions(): void {
 	});
 }
 
-function terminateWhenParentTerminates(): void {
+function terminateWhenParentTerminates(): codemavi {
 	const parentPid = Number(process.env['VSCODE_PARENT_PID']);
 
 	if (typeof parentPid === 'number' && !isNaN(parentPid)) {
@@ -180,7 +180,7 @@ function terminateWhenParentTerminates(): void {
 	}
 }
 
-function configureCrashReporter(): void {
+function configureCrashReporter(): codemavi {
 	const crashReporterProcessType = process.env['VSCODE_CRASH_REPORTER_PROCESS_TYPE'];
 	if (crashReporterProcessType) {
 		try {

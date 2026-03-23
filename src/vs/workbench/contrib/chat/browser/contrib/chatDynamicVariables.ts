@@ -124,7 +124,7 @@ export class ChatDynamicVariableModel extends Disposable implements IChatWidgetC
 			});
 	}
 
-	setInputState(s: any): void {
+	setInputState(s: any): codemavi {
 		if (!Array.isArray(s)) {
 			s = [];
 		}
@@ -141,7 +141,7 @@ export class ChatDynamicVariableModel extends Disposable implements IChatWidgetC
 		}
 	}
 
-	addReference(ref: IDynamicVariable): void {
+	addReference(ref: IDynamicVariable): codemavi {
 		// use `ChatFileReference` for file references and `IDynamicVariable` for other variables
 		const promptSnippetsEnabled = PromptsConfig.enabled(this.configService);
 		const variable = (ref.id === 'vscode.file' && promptSnippetsEnabled)
@@ -164,7 +164,7 @@ export class ChatDynamicVariableModel extends Disposable implements IChatWidgetC
 		}
 	}
 
-	private updateDecorations(): void {
+	private updateDecorations(): codemavi {
 		this.widget.inputEditor.setDecorationsByType('chat', dynamicVariableDecorationType, this._variables.map((r): IDecorationOptions => ({
 			range: r.range,
 			hoverMessage: this.getHoverForReference(r)
@@ -187,7 +187,7 @@ export class ChatDynamicVariableModel extends Disposable implements IChatWidgetC
 	/**
 	 * Dispose all existing variables.
 	 */
-	private disposeVariables(): void {
+	private disposeVariables(): codemavi {
 		for (const variable of this._variables) {
 			if ('dispose' in variable && typeof variable.dispose === 'function') {
 				variable.dispose();
@@ -683,7 +683,7 @@ export class AddDynamicVariableAction extends Action2 {
 }
 registerAction2(AddDynamicVariableAction);
 
-export async function createMarkersQuickPick(accessor: ServicesAccessor, level: 'problem' | 'file', onBackgroundAccept?: (item: IDiagnosticVariableEntryFilterData[]) => void): Promise<IDiagnosticVariableEntryFilterData | undefined> {
+export async function createMarkersQuickPick(accessor: ServicesAccessor, level: 'problem' | 'file', onBackgroundAccept?: (item: IDiagnosticVariableEntryFilterData[]) => codemavi): Promise<IDiagnosticVariableEntryFilterData | undefined> {
 	const markers = accessor.get(IMarkerService).read({ severities: MarkerSeverity.Error | MarkerSeverity.Warning | MarkerSeverity.Info });
 	if (!markers.length) {
 		return;

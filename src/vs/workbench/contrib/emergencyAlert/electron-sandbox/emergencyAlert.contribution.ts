@@ -49,7 +49,7 @@ export class EmergencyAlert implements IWorkbenchContribution {
 		this.fetchAlerts(emergencyAlertUrl);
 	}
 
-	private async fetchAlerts(url: string): Promise<void> {
+	private async fetchAlerts(url: string): Promise<codemavi> {
 		try {
 			await this.doFetchAlerts(url);
 		} catch (e) {
@@ -57,7 +57,7 @@ export class EmergencyAlert implements IWorkbenchContribution {
 		}
 	}
 
-	private async doFetchAlerts(url: string): Promise<void> {
+	private async doFetchAlerts(url: string): Promise<codemavi> {
 		const requestResult = await this.requestService.request({ type: 'GET', url, disableCache: true }, CancellationToken.None);
 
 		if (requestResult.res.statusCode !== 200) {

@@ -58,7 +58,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const textModelService = accessor.get(ITextModelService);
 		const editorWorkerService = accessor.get(IEditorWorkerService);
@@ -133,7 +133,7 @@ registerEditorAction(class FormatCellAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		if (editor.hasModel()) {
 			const instaService = accessor.get(IInstantiationService);
 			await instaService.invokeFunction(formatDocumentWithSelectedProvider, editor, FormattingMode.Explicit, Progress.None, CancellationToken.None, true);
@@ -152,7 +152,7 @@ class FormatOnCellExecutionParticipant implements ICellExecutionParticipant {
 	) {
 	}
 
-	async onWillExecuteCell(executions: INotebookCellExecution[]): Promise<void> {
+	async onWillExecuteCell(executions: INotebookCellExecution[]): Promise<codemavi> {
 
 		const enabled = this.configurationService.getValue<boolean>(NotebookSetting.formatOnCellExecution);
 		if (!enabled) {
@@ -217,7 +217,7 @@ export class CellExecutionParticipantsContribution extends Disposable implements
 		this.registerKernelExecutionParticipants();
 	}
 
-	private registerKernelExecutionParticipants(): void {
+	private registerKernelExecutionParticipants(): codemavi {
 		this._register(this.notebookExecutionService.registerExecutionParticipant(this.instantiationService.createInstance(FormatOnCellExecutionParticipant)));
 	}
 }

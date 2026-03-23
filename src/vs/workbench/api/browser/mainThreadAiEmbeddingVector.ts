@@ -22,7 +22,7 @@ export class MainThreadAiEmbeddingVector extends Disposable implements MainThrea
 		this._proxy = context.getProxy(ExtHostContext.ExtHostAiEmbeddingVector);
 	}
 
-	$registerAiEmbeddingVectorProvider(model: string, handle: number): void {
+	$registerAiEmbeddingVectorProvider(model: string, handle: number): codemavi {
 		const provider: IAiEmbeddingVectorProvider = {
 			provideAiEmbeddingVector: (strings: string[], token: CancellationToken) => {
 				return this._proxy.$provideAiEmbeddingVector(
@@ -35,7 +35,7 @@ export class MainThreadAiEmbeddingVector extends Disposable implements MainThrea
 		this._registrations.set(handle, this._AiEmbeddingVectorService.registerAiEmbeddingVectorProvider(model, provider));
 	}
 
-	$unregisterAiEmbeddingVectorProvider(handle: number): void {
+	$unregisterAiEmbeddingVectorProvider(handle: number): codemavi {
 		this._registrations.deleteAndDispose(handle);
 	}
 }

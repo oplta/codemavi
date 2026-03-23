@@ -44,17 +44,17 @@ const ignoreImportantExtensionRecommendationStorageKey = 'extensionsAssistant/im
 const donotShowWorkspaceRecommendationsStorageKey = 'extensionsAssistant/workspaceRecommendationsIgnore';
 
 type RecommendationsNotificationActions = {
-	onDidInstallRecommendedExtensions(extensions: IExtension[]): void;
-	onDidShowRecommendedExtensions(extensions: IExtension[]): void;
-	onDidCancelRecommendedExtensions(extensions: IExtension[]): void;
-	onDidNeverShowRecommendedExtensionsAgain(extensions: IExtension[]): void;
+	onDidInstallRecommendedExtensions(extensions: IExtension[]): codemavi;
+	onDidShowRecommendedExtensions(extensions: IExtension[]): codemavi;
+	onDidCancelRecommendedExtensions(extensions: IExtension[]): codemavi;
+	onDidNeverShowRecommendedExtensionsAgain(extensions: IExtension[]): codemavi;
 };
 
 type ExtensionRecommendations = Omit<IExtensionRecommendations, 'extensions'> & { extensions: Array<string | URI> };
 
 class RecommendationsNotification extends Disposable {
 
-	private _onDidClose = this._register(new Emitter<void>());
+	private _onDidClose = this._register(new Emitter<codemavi>());
 	readonly onDidClose = this._onDidClose.event;
 
 	private _onDidChangeVisibility = this._register(new Emitter<boolean>());
@@ -72,13 +72,13 @@ class RecommendationsNotification extends Disposable {
 		super();
 	}
 
-	show(): void {
+	show(): codemavi {
 		if (!this.notificationHandle) {
 			this.updateNotificationHandle(this.notificationService.prompt(this.severity, this.message, this.choices, { sticky: true, onCancel: () => this.cancelled = true }));
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		if (this.notificationHandle) {
 			this.onDidCloseDisposable.clear();
 			this.notificationHandle.close();
@@ -126,7 +126,7 @@ export class ExtensionRecommendationNotificationService extends Disposable imple
 	private recommendedExtensions: string[] = [];
 	private recommendationSources: RecommendationSource[] = [];
 
-	private hideVisibleNotificationPromise: CancelablePromise<void> | undefined;
+	private hideVisibleNotificationPromise: CancelablePromise<codemavi> | undefined;
 	private visibleNotification: VisibleRecommendationsNotification | undefined;
 	private pendingNotificaitons: PendingRecommendationsNotification[] = [];
 
@@ -182,7 +182,7 @@ export class ExtensionRecommendationNotificationService extends Disposable imple
 		});
 	}
 
-	async promptWorkspaceRecommendations(recommendations: Array<string | URI>): Promise<void> {
+	async promptWorkspaceRecommendations(recommendations: Array<string | URI>): Promise<codemavi> {
 		if (this.storageService.getBoolean(donotShowWorkspaceRecommendationsStorageKey, StorageScope.WORKSPACE, false)) {
 			return;
 		}
@@ -384,7 +384,7 @@ export class ExtensionRecommendationNotificationService extends Disposable imple
 		}
 	}
 
-	private showNextNotification(): void {
+	private showNextNotification(): codemavi {
 		const index = this.getNextPendingNotificationIndex();
 		const [nextNotificaiton] = index > -1 ? this.pendingNotificaitons.splice(index, 1) : [];
 
@@ -414,7 +414,7 @@ export class ExtensionRecommendationNotificationService extends Disposable imple
 		return index;
 	}
 
-	private hideVisibleNotification(timeInMillis: number): void {
+	private hideVisibleNotification(timeInMillis: number): codemavi {
 		if (this.visibleNotification && !this.hideVisibleNotificationPromise) {
 			const visibleNotification = this.visibleNotification;
 			this.hideVisibleNotificationPromise = timeout(Math.max(timeInMillis - (Date.now() - visibleNotification.from), 0));
@@ -422,7 +422,7 @@ export class ExtensionRecommendationNotificationService extends Disposable imple
 		}
 	}
 
-	private unsetVisibileNotification(): void {
+	private unsetVisibileNotification(): codemavi {
 		this.hideVisibleNotificationPromise?.cancel();
 		this.hideVisibleNotificationPromise = undefined;
 		this.visibleNotification = undefined;

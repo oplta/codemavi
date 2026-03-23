@@ -37,7 +37,7 @@ export class MessageController implements IEditorContribution {
 	private readonly _visible: IContextKey<boolean>;
 	private readonly _messageWidget = new MutableDisposable<MessageWidget>();
 	private readonly _messageListeners = new DisposableStore();
-	private _message: { element: HTMLElement; dispose: () => void } | undefined;
+	private _message: { element: HTMLElement; dispose: () => codemavi } | undefined;
 	private _mouseOverMessage: boolean = false;
 
 	constructor(
@@ -50,7 +50,7 @@ export class MessageController implements IEditorContribution {
 		this._visible = MessageController.MESSAGE_VISIBLE.bindTo(contextKeyService);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._message?.dispose();
 		this._messageListeners.dispose();
 		this._messageWidget.dispose();
@@ -61,7 +61,7 @@ export class MessageController implements IEditorContribution {
 		return this._visible.get();
 	}
 
-	showMessage(message: IMarkdownString | string, position: IPosition): void {
+	showMessage(message: IMarkdownString | string, position: IPosition): codemavi {
 
 		alert(isMarkdownString(message) ? message.value : message);
 
@@ -116,7 +116,7 @@ export class MessageController implements IEditorContribution {
 		}));
 	}
 
-	closeMessage(): void {
+	closeMessage(): codemavi {
 		this._visible.reset();
 		this._messageListeners.clear();
 		if (this._messageWidget.value) {
@@ -215,7 +215,7 @@ class MessageWidget implements IContentWidget {
 		};
 	}
 
-	afterRender(position: ContentWidgetPositionPreference | null): void {
+	afterRender(position: ContentWidgetPositionPreference | null): codemavi {
 		this._domNode.classList.toggle('below', position === ContentWidgetPositionPreference.BELOW);
 	}
 

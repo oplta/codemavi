@@ -28,7 +28,7 @@ export class CommentThreadAdditionalActions<T extends IRange | ICellRange> exten
 		private _commentThread: languages.CommentThread<T>,
 		private _contextKeyService: IContextKeyService,
 		private _commentMenus: CommentMenus,
-		private _actionRunDelegate: (() => void) | null,
+		private _actionRunDelegate: (() => codemavi) | null,
 		@IKeybindingService private _keybindingService: IKeybindingService,
 		@IContextMenuService private _contextMenuService: IContextMenuService,
 	) {

@@ -17,8 +17,8 @@ class OutlineService implements IOutlineService {
 
 	private readonly _factories = new LinkedList<IOutlineCreator<any, any>>();
 
-	private readonly _onDidChange = new Emitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	canCreateOutline(pane: IEditorPane): boolean {
 		for (const factory of this._factories) {

@@ -17,7 +17,7 @@ export class RemoteAuthorityResolverService extends Disposable implements IRemot
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeConnectionData = this._register(new Emitter<void>());
+	private readonly _onDidChangeConnectionData = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeConnectionData = this._onDidChangeConnectionData.event;
 
 	private readonly _resolveAuthorityRequests: Map<string, DeferredPromise<ResolverResult>>;
@@ -70,14 +70,14 @@ export class RemoteAuthorityResolverService extends Disposable implements IRemot
 		};
 	}
 
-	_clearResolvedAuthority(authority: string): void {
+	_clearResolvedAuthority(authority: string): codemavi {
 		if (this._resolveAuthorityRequests.has(authority)) {
 			this._resolveAuthorityRequests.get(authority)!.cancel();
 			this._resolveAuthorityRequests.delete(authority);
 		}
 	}
 
-	_setResolvedAuthority(resolvedAuthority: ResolvedAuthority, options?: ResolvedOptions): void {
+	_setResolvedAuthority(resolvedAuthority: ResolvedAuthority, options?: ResolvedOptions): codemavi {
 		if (this._resolveAuthorityRequests.has(resolvedAuthority.authority)) {
 			const request = this._resolveAuthorityRequests.get(resolvedAuthority.authority)!;
 			if (resolvedAuthority.connectTo.type === RemoteConnectionType.WebSocket) {
@@ -93,21 +93,21 @@ export class RemoteAuthorityResolverService extends Disposable implements IRemot
 		}
 	}
 
-	_setResolvedAuthorityError(authority: string, err: any): void {
+	_setResolvedAuthorityError(authority: string, err: any): codemavi {
 		if (this._resolveAuthorityRequests.has(authority)) {
 			const request = this._resolveAuthorityRequests.get(authority)!;
-			// Avoid that this error makes it to telemetry
+			// Acodemavi that this error makes it to telemetry
 			request.error(errors.ErrorNoTelemetry.fromError(err));
 		}
 	}
 
-	_setAuthorityConnectionToken(authority: string, connectionToken: string): void {
+	_setAuthorityConnectionToken(authority: string, connectionToken: string): codemavi {
 		this._connectionTokens.set(authority, connectionToken);
 		RemoteAuthorities.setConnectionToken(authority, connectionToken);
 		this._onDidChangeConnectionData.fire();
 	}
 
-	_setCanonicalURIProvider(provider: (uri: URI) => Promise<URI>): void {
+	_setCanonicalURIProvider(provider: (uri: URI) => Promise<URI>): codemavi {
 		this._canonicalURIProvider = provider;
 		this._canonicalURIRequests.forEach(({ result, input }) => {
 			this._canonicalURIProvider!(input).then((uri) => result.complete(uri), (err) => result.error(err));

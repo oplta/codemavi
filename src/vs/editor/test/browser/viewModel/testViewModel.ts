@@ -12,7 +12,7 @@ import { createTextModel } from '../../common/testTextModel.js';
 import { TestLanguageConfigurationService } from '../../common/modes/testLanguageConfigurationService.js';
 import { TestThemeService } from '../../../../platform/theme/test/common/testThemeService.js';
 
-export function testViewModel(text: string[], options: IEditorOptions, callback: (viewModel: ViewModel, model: TextModel) => void): void {
+export function testViewModel(text: string[], options: IEditorOptions, callback: (viewModel: ViewModel, model: TextModel) => codemavi): codemavi {
 	const EDITOR_ID = 1;
 
 	const configuration = new TestConfiguration(options);

@@ -21,7 +21,7 @@ export class GitProtocolHandler implements UriHandler {
 		this.disposables.push(window.registerUriHandler(this));
 	}
 
-	handleUri(uri: Uri): void {
+	handleUri(uri: Uri): codemavi {
 		this.logger.info(`[GitProtocolHandler][handleUri] URI:(${uri.toString()})`);
 
 		switch (uri.path) {
@@ -29,7 +29,7 @@ export class GitProtocolHandler implements UriHandler {
 		}
 	}
 
-	private async clone(uri: Uri): Promise<void> {
+	private async clone(uri: Uri): Promise<codemavi> {
 		const data = querystring.parse(uri.query);
 		const ref = data.ref;
 
@@ -91,7 +91,7 @@ export class GitProtocolHandler implements UriHandler {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables = dispose(this.disposables);
 	}
 }

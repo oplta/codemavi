@@ -229,7 +229,7 @@ CommandsRegistry.registerCommand({
 	}
 });
 
-async function resourcesToClipboard(resources: URI[], relative: boolean, clipboardService: IClipboardService, labelService: ILabelService, configurationService: IConfigurationService): Promise<void> {
+async function resourcesToClipboard(resources: URI[], relative: boolean, clipboardService: IClipboardService, labelService: ILabelService, configurationService: IConfigurationService): Promise<codemavi> {
 	if (resources.length) {
 		const lineDelimiter = isWindows ? '\r\n' : '\n';
 
@@ -363,7 +363,7 @@ CommandsRegistry.registerCommand({
 
 // Save / Save As / Save All / Revert
 
-async function saveSelectedEditors(accessor: ServicesAccessor, options?: ISaveEditorsOptions): Promise<void> {
+async function saveSelectedEditors(accessor: ServicesAccessor, options?: ISaveEditorsOptions): Promise<codemavi> {
 	const editorGroupService = accessor.get(IEditorGroupsService);
 	const codeEditorService = accessor.get(ICodeEditorService);
 	const textFileService = accessor.get(ITextFileService);
@@ -423,7 +423,7 @@ async function saveSelectedEditors(accessor: ServicesAccessor, options?: ISaveEd
 	}
 }
 
-function saveDirtyEditorsOfGroups(accessor: ServicesAccessor, groups: readonly IEditorGroup[], options?: ISaveEditorsOptions): Promise<void> {
+function saveDirtyEditorsOfGroups(accessor: ServicesAccessor, groups: readonly IEditorGroup[], options?: ISaveEditorsOptions): Promise<codemavi> {
 	const dirtyEditors: IEditorIdentifier[] = [];
 	for (const group of groups) {
 		for (const editor of group.getEditors(EditorsOrder.MOST_RECENTLY_ACTIVE)) {
@@ -436,7 +436,7 @@ function saveDirtyEditorsOfGroups(accessor: ServicesAccessor, groups: readonly I
 	return doSaveEditors(accessor, dirtyEditors, options);
 }
 
-async function doSaveEditors(accessor: ServicesAccessor, editors: IEditorIdentifier[], options?: ISaveEditorsOptions): Promise<void> {
+async function doSaveEditors(accessor: ServicesAccessor, editors: IEditorIdentifier[], options?: ISaveEditorsOptions): Promise<codemavi> {
 	const editorService = accessor.get(IEditorService);
 	const notificationService = accessor.get(INotificationService);
 	const instantiationService = accessor.get(IInstantiationService);

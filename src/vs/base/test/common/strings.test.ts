@@ -47,7 +47,7 @@ suite('Strings', () => {
 
 	test('compareIgnoreCase', () => {
 
-		function assertCompareIgnoreCase(a: string, b: string, recurse = true): void {
+		function assertCompareIgnoreCase(a: string, b: string, recurse = true): codemavi {
 			let actual = strings.compareIgnoreCase(a, b);
 			actual = actual > 0 ? 1 : actual < 0 ? -1 : actual;
 
@@ -84,7 +84,7 @@ suite('Strings', () => {
 
 	test('compareIgnoreCase (substring)', () => {
 
-		function assertCompareIgnoreCase(a: string, b: string, aStart: number, aEnd: number, bStart: number, bEnd: number, recurse = true): void {
+		function assertCompareIgnoreCase(a: string, b: string, aStart: number, aEnd: number, bStart: number, bEnd: number, recurse = true): codemavi {
 			let actual = strings.compareSubstringIgnoreCase(a, b, aStart, aEnd, bStart, bEnd);
 			actual = actual > 0 ? 1 : actual < 0 ? -1 : actual;
 
@@ -251,7 +251,7 @@ suite('Strings', () => {
 	});
 
 	test('isBasicASCII', () => {
-		function assertIsBasicASCII(str: string, expected: boolean): void {
+		function assertIsBasicASCII(str: string, expected: boolean): codemavi {
 			assert.strictEqual(strings.isBasicASCII(str), expected, str + ` (${str.charCodeAt(0)})`);
 		}
 		assertIsBasicASCII('abcdefghijklmnopqrstuvwxyz', true);

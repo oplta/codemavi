@@ -35,17 +35,17 @@ declare module 'vscode' {
 		/**
 		 * Shows the entry in the chat status.
 		 */
-		show(): void;
+		show(): codemavi;
 
 		/**
 		 * Hide the entry in the chat status.
 		 */
-		hide(): void;
+		hide(): codemavi;
 
 		/**
 		 * Dispose and free associated resources
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	namespace window {

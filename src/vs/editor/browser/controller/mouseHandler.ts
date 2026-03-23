@@ -29,8 +29,8 @@ export interface IPointerHandlerHelper {
 	viewLinesDomNode: HTMLElement;
 	viewLinesGpu: ViewLinesGpu | undefined;
 
-	focusTextArea(): void;
-	dispatchTextAreaEvent(event: CustomEvent): void;
+	focusTextArea(): codemavi;
+	dispatchTextAreaEvent(event: CustomEvent): codemavi;
 
 	/**
 	 * Get the last rendered information for cursors & textarea.
@@ -40,7 +40,7 @@ export interface IPointerHandlerHelper {
 	/**
 	 * Render right now
 	 */
-	renderNow(): void;
+	renderNow(): codemavi;
 
 	shouldSuppressMouseDownOnViewZone(viewZoneId: string): boolean;
 	shouldSuppressMouseDownOnWidget(widgetId: string): boolean;
@@ -135,7 +135,7 @@ export class MouseHandler extends ViewEventHandler {
 		this._context.addEventHandler(this);
 	}
 
-	private _setupMouseWheelZoomListener(): void {
+	private _setupMouseWheelZoomListener(): codemavi {
 
 		const classifier = MouseWheelClassifier.INSTANCE;
 
@@ -196,7 +196,7 @@ export class MouseHandler extends ViewEventHandler {
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._context.removeEventHandler(this);
 		if (this._mouseLeaveMonitor) {
 			this._mouseLeaveMonitor.dispose();
@@ -256,14 +256,14 @@ export class MouseHandler extends ViewEventHandler {
 		return this.mouseTargetFactory.getMouseColumn(e.relativePos);
 	}
 
-	protected _onContextMenu(e: EditorMouseEvent, testEventTarget: boolean): void {
+	protected _onContextMenu(e: EditorMouseEvent, testEventTarget: boolean): codemavi {
 		this.viewController.emitContextMenu({
 			event: e,
 			target: this._createMouseTarget(e, testEventTarget)
 		});
 	}
 
-	protected _onMouseMove(e: EditorMouseEvent): void {
+	protected _onMouseMove(e: EditorMouseEvent): codemavi {
 		const targetIsWidget = this.mouseTargetFactory.mouseTargetIsWidget(e);
 		if (!targetIsWidget) {
 			e.preventDefault();
@@ -285,7 +285,7 @@ export class MouseHandler extends ViewEventHandler {
 		});
 	}
 
-	protected _onMouseLeave(e: EditorMouseEvent): void {
+	protected _onMouseLeave(e: EditorMouseEvent): codemavi {
 		if (this._mouseLeaveMonitor) {
 			this._mouseLeaveMonitor.dispose();
 			this._mouseLeaveMonitor = null;
@@ -297,14 +297,14 @@ export class MouseHandler extends ViewEventHandler {
 		});
 	}
 
-	protected _onMouseUp(e: EditorMouseEvent): void {
+	protected _onMouseUp(e: EditorMouseEvent): codemavi {
 		this.viewController.emitMouseUp({
 			event: e,
 			target: this._createMouseTarget(e, true)
 		});
 	}
 
-	protected _onMouseDown(e: EditorMouseEvent, pointerId: number): void {
+	protected _onMouseDown(e: EditorMouseEvent, pointerId: number): codemavi {
 		const t = this._createMouseTarget(e, true);
 
 		const targetIsContent = (t.type === MouseTargetType.CONTENT_TEXT || t.type === MouseTargetType.CONTENT_EMPTY);
@@ -349,7 +349,7 @@ export class MouseHandler extends ViewEventHandler {
 		});
 	}
 
-	protected _onMouseWheel(e: IMouseWheelEvent): void {
+	protected _onMouseWheel(e: IMouseWheelEvent): codemavi {
 		this.viewController.emitMouseWheel(e);
 	}
 }
@@ -393,7 +393,7 @@ class MouseDownOperation extends Disposable {
 		this._lastMouseEvent = null;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
@@ -401,7 +401,7 @@ class MouseDownOperation extends Disposable {
 		return this._isActive;
 	}
 
-	private _onMouseDownThenMove(e: EditorMouseEvent): void {
+	private _onMouseDownThenMove(e: EditorMouseEvent): codemavi {
 		this._lastMouseEvent = e;
 		this._mouseState.setModifiers(e);
 
@@ -426,7 +426,7 @@ class MouseDownOperation extends Disposable {
 		}
 	}
 
-	public start(targetType: MouseTargetType, e: EditorMouseEvent, pointerId: number): void {
+	public start(targetType: MouseTargetType, e: EditorMouseEvent, pointerId: number): codemavi {
 		this._lastMouseEvent = e;
 
 		this._mouseState.setStartedOnLineNumbers(targetType === MouseTargetType.GUTTER_LINE_NUMBERS);
@@ -498,20 +498,20 @@ class MouseDownOperation extends Disposable {
 		}
 	}
 
-	private _stop(): void {
+	private _stop(): codemavi {
 		this._isActive = false;
 		this._topBottomDragScrolling.stop();
 	}
 
-	public onHeightChanged(): void {
+	public onHeightChanged(): codemavi {
 		this._mouseMoveMonitor.stopMonitoring();
 	}
 
-	public onPointerUp(): void {
+	public onPointerUp(): codemavi {
 		this._mouseMoveMonitor.stopMonitoring();
 	}
 
-	public onCursorStateChanged(e: viewEvents.ViewCursorStateChangedEvent): void {
+	public onCursorStateChanged(e: viewEvents.ViewCursorStateChangedEvent): codemavi {
 		this._currentSelection = e.selections[0];
 	}
 
@@ -605,7 +605,7 @@ class MouseDownOperation extends Disposable {
 		return null;
 	}
 
-	private _dispatchMouse(position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType): void {
+	private _dispatchMouse(position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType): codemavi {
 		if (!position.position) {
 			return;
 		}
@@ -638,18 +638,18 @@ class TopBottomDragScrolling extends Disposable {
 		private readonly _context: ViewContext,
 		private readonly _viewHelper: IPointerHandlerHelper,
 		private readonly _mouseTargetFactory: MouseTargetFactory,
-		private readonly _dispatchMouse: (position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType) => void,
+		private readonly _dispatchMouse: (position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType) => codemavi,
 	) {
 		super();
 		this._operation = null;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this.stop();
 	}
 
-	public start(position: IMouseTargetOutsideEditor, mouseEvent: EditorMouseEvent): void {
+	public start(position: IMouseTargetOutsideEditor, mouseEvent: EditorMouseEvent): codemavi {
 		if (this._operation) {
 			this._operation.setPosition(position, mouseEvent);
 		} else {
@@ -657,7 +657,7 @@ class TopBottomDragScrolling extends Disposable {
 		}
 	}
 
-	public stop(): void {
+	public stop(): codemavi {
 		if (this._operation) {
 			this._operation.dispose();
 			this._operation = null;
@@ -676,7 +676,7 @@ class TopBottomDragScrollingOperation extends Disposable {
 		private readonly _context: ViewContext,
 		private readonly _viewHelper: IPointerHandlerHelper,
 		private readonly _mouseTargetFactory: MouseTargetFactory,
-		private readonly _dispatchMouse: (position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType) => void,
+		private readonly _dispatchMouse: (position: IMouseTarget, inSelectionMode: boolean, revealType: NavigationCommandRevealType) => codemavi,
 		position: IMouseTargetOutsideEditor,
 		mouseEvent: EditorMouseEvent
 	) {
@@ -687,12 +687,12 @@ class TopBottomDragScrollingOperation extends Disposable {
 		this._animationFrameDisposable = dom.scheduleAtNextAnimationFrame(dom.getWindow(mouseEvent.browserEvent), () => this._execute());
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._animationFrameDisposable.dispose();
 		super.dispose();
 	}
 
-	public setPosition(position: IMouseTargetOutsideEditor, mouseEvent: EditorMouseEvent): void {
+	public setPosition(position: IMouseTargetOutsideEditor, mouseEvent: EditorMouseEvent): codemavi {
 		this._position = position;
 		this._mouseEvent = mouseEvent;
 	}
@@ -724,7 +724,7 @@ class TopBottomDragScrollingOperation extends Disposable {
 		return Math.max(200, viewportInLines * (7 + outsideDistanceInLines));
 	}
 
-	private _execute(): void {
+	private _execute(): codemavi {
 		const lineHeight = this._context.configuration.options.get(EditorOption.lineHeight);
 		const scrollSpeedInLines = this._getScrollSpeed();
 		const elapsed = this._tick();
@@ -821,11 +821,11 @@ class MouseDownState {
 		this._middleButton = source.middleButton;
 	}
 
-	public setStartedOnLineNumbers(startedOnLineNumbers: boolean): void {
+	public setStartedOnLineNumbers(startedOnLineNumbers: boolean): codemavi {
 		this._startedOnLineNumbers = startedOnLineNumbers;
 	}
 
-	public trySetCount(setMouseDownCount: number, newMouseDownPosition: Position): void {
+	public trySetCount(setMouseDownCount: number, newMouseDownPosition: Position): codemavi {
 		// a. Invalidate multiple clicking if too much time has passed (will be hit by IE because the detail field of mouse events contains garbage in IE10)
 		const currentTime = (new Date()).getTime();
 		if (currentTime - this._lastSetMouseDownCountTime > MouseDownState.CLEAR_MOUSE_DOWN_COUNT_TIME) {

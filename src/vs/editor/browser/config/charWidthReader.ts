@@ -45,7 +45,7 @@ class DomCharWidthReader {
 		this._testElements = null;
 	}
 
-	public read(targetWindow: Window): void {
+	public read(targetWindow: Window): codemavi {
 		// Create a test container with all these test elements
 		this._createDomElements();
 
@@ -62,7 +62,7 @@ class DomCharWidthReader {
 		this._testElements = null;
 	}
 
-	private _createDomElements(): void {
+	private _createDomElements(): codemavi {
 		const container = document.createElement('div');
 		container.style.position = 'absolute';
 		container.style.top = '-50000px';
@@ -109,7 +109,7 @@ class DomCharWidthReader {
 		this._testElements = testElements;
 	}
 
-	private static _render(testElement: HTMLElement, request: CharWidthRequest): void {
+	private static _render(testElement: HTMLElement, request: CharWidthRequest): codemavi {
 		if (request.chr === ' ') {
 			let htmlString = '\u00a0';
 			// Repeat character 256 (2^8) times
@@ -127,7 +127,7 @@ class DomCharWidthReader {
 		}
 	}
 
-	private _readFromDomElements(): void {
+	private _readFromDomElements(): codemavi {
 		for (let i = 0, len = this._requests.length; i < len; i++) {
 			const request = this._requests[i];
 			const testElement = this._testElements![i];
@@ -137,7 +137,7 @@ class DomCharWidthReader {
 	}
 }
 
-export function readCharWidths(targetWindow: Window, bareFontInfo: BareFontInfo, requests: CharWidthRequest[]): void {
+export function readCharWidths(targetWindow: Window, bareFontInfo: BareFontInfo, requests: CharWidthRequest[]): codemavi {
 	const reader = new DomCharWidthReader(bareFontInfo, requests);
 	reader.read(targetWindow);
 }

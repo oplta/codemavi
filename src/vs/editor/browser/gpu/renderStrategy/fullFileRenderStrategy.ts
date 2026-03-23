@@ -198,12 +198,12 @@ export class FullFileRenderStrategy extends BaseRenderStrategy {
 
 	// #endregion
 
-	private _invalidateAllLines(): void {
+	private _invalidateAllLines(): codemavi {
 		this._upToDateLines[0].clear();
 		this._upToDateLines[1].clear();
 	}
 
-	private _invalidateLinesFrom(lineNumber: number): void {
+	private _invalidateLinesFrom(lineNumber: number): codemavi {
 		for (const i of [0, 1]) {
 			const upToDateLines = this._upToDateLines[i];
 			for (const upToDateLine of upToDateLines) {
@@ -214,7 +214,7 @@ export class FullFileRenderStrategy extends BaseRenderStrategy {
 		}
 	}
 
-	private _invalidateLineRange(fromLineNumber: number, toLineNumber: number): void {
+	private _invalidateLineRange(fromLineNumber: number, toLineNumber: number): codemavi {
 		for (let i = fromLineNumber; i <= toLineNumber; i++) {
 			this._upToDateLines[0].delete(i);
 			this._upToDateLines[1].delete(i);
@@ -235,7 +235,7 @@ export class FullFileRenderStrategy extends BaseRenderStrategy {
 	update(viewportData: ViewportData, viewLineOptions: ViewLineOptions): number {
 		// IMPORTANT: This is a hot function. Variables are pre-allocated and shared within the
 		// loop. This is done so we don't need to trust the JIT compiler to do this optimization to
-		// avoid potential additional blocking time in garbage collector which is a common cause of
+		// acodemavi potential additional blocking time in garbage collector which is a common cause of
 		// dropped frames.
 
 		let chars = '';
@@ -378,7 +378,7 @@ export class FullFileRenderStrategy extends BaseRenderStrategy {
 					// Apply supported inline decoration styles to the cell metadata
 					for (decoration of lineData.inlineDecorations) {
 						// This is Range.strictContainsPosition except it works at the cell level,
-						// it's also inlined to avoid overhead.
+						// it's also inlined to acodemavi overhead.
 						if (
 							(y < decoration.range.startLineNumber || y > decoration.range.endLineNumber) ||
 							(y === decoration.range.startLineNumber && x < decoration.range.startColumn - 1) ||
@@ -504,7 +504,7 @@ export class FullFileRenderStrategy extends BaseRenderStrategy {
 		return visibleObjectCount;
 	}
 
-	draw(pass: GPURenderPassEncoder, viewportData: ViewportData): void {
+	draw(pass: GPURenderPassEncoder, viewportData: ViewportData): codemavi {
 		if (this._visibleObjectCount <= 0) {
 			throw new BugIndicatingError('Attempt to draw 0 objects');
 		}

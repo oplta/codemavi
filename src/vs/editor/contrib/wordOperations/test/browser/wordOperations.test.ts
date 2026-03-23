@@ -65,54 +65,54 @@ suite('WordOperations', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function runEditorCommand(editor: ICodeEditor, command: EditorCommand): void {
+	function runEditorCommand(editor: ICodeEditor, command: EditorCommand): codemavi {
 		instantiationService.invokeFunction((accessor) => {
 			command.runEditorCommand(accessor, editor, null);
 		});
 	}
-	function cursorWordLeft(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordLeft(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordLeftSelect : _cursorWordLeft);
 	}
-	function cursorWordAccessibilityLeft(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordAccessibilityLeft(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordAccessibilityLeft : _cursorWordAccessibilityLeftSelect);
 	}
-	function cursorWordAccessibilityRight(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordAccessibilityRight(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordAccessibilityRightSelect : _cursorWordAccessibilityRight);
 	}
-	function cursorWordStartLeft(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordStartLeft(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordStartLeftSelect : _cursorWordStartLeft);
 	}
-	function cursorWordEndLeft(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordEndLeft(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordEndLeftSelect : _cursorWordEndLeft);
 	}
-	function cursorWordRight(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function cursorWordRight(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordRightSelect : _cursorWordRight);
 	}
-	function moveWordEndRight(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function moveWordEndRight(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordEndRightSelect : _cursorWordEndRight);
 	}
-	function moveWordStartRight(editor: ICodeEditor, inSelectionMode: boolean = false): void {
+	function moveWordStartRight(editor: ICodeEditor, inSelectionMode: boolean = false): codemavi {
 		runEditorCommand(editor, inSelectionMode ? _cursorWordStartRightSelect : _cursorWordStartRight);
 	}
-	function deleteWordLeft(editor: ICodeEditor): void {
+	function deleteWordLeft(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordLeft);
 	}
-	function deleteWordStartLeft(editor: ICodeEditor): void {
+	function deleteWordStartLeft(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordStartLeft);
 	}
-	function deleteWordEndLeft(editor: ICodeEditor): void {
+	function deleteWordEndLeft(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordEndLeft);
 	}
-	function deleteWordRight(editor: ICodeEditor): void {
+	function deleteWordRight(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordRight);
 	}
-	function deleteWordStartRight(editor: ICodeEditor): void {
+	function deleteWordStartRight(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordStartRight);
 	}
-	function deleteWordEndRight(editor: ICodeEditor): void {
+	function deleteWordEndRight(editor: ICodeEditor): codemavi {
 		runEditorCommand(editor, _deleteWordEndRight);
 	}
-	function deleteInsideWord(editor: ICodeEditor): void {
+	function deleteInsideWord(editor: ICodeEditor): codemavi {
 		_deleteInsideWord.run(null!, editor, null);
 	}
 
@@ -790,34 +790,34 @@ suite('WordOperations', () => {
 
 	test('deleteWordRight - issue #3882', () => {
 		withTestCodeEditor([
-			'public void Add( int x,',
+			'public codemavi Add( int x,',
 			'                 int y )'
 		], {}, (editor, _) => {
 			const model = editor.getModel()!;
 			editor.setPosition(new Position(1, 24));
-			deleteWordRight(editor); assert.strictEqual(model.getLineContent(1), 'public void Add( int x,int y )', '001');
+			deleteWordRight(editor); assert.strictEqual(model.getLineContent(1), 'public codemavi Add( int x,int y )', '001');
 		});
 	});
 
 	test('deleteWordStartRight - issue #3882', () => {
 		withTestCodeEditor([
-			'public void Add( int x,',
+			'public codemavi Add( int x,',
 			'                 int y )'
 		], {}, (editor, _) => {
 			const model = editor.getModel()!;
 			editor.setPosition(new Position(1, 24));
-			deleteWordStartRight(editor); assert.strictEqual(model.getLineContent(1), 'public void Add( int x,int y )', '001');
+			deleteWordStartRight(editor); assert.strictEqual(model.getLineContent(1), 'public codemavi Add( int x,int y )', '001');
 		});
 	});
 
 	test('deleteWordEndRight - issue #3882', () => {
 		withTestCodeEditor([
-			'public void Add( int x,',
+			'public codemavi Add( int x,',
 			'                 int y )'
 		], {}, (editor, _) => {
 			const model = editor.getModel()!;
 			editor.setPosition(new Position(1, 24));
-			deleteWordEndRight(editor); assert.strictEqual(model.getLineContent(1), 'public void Add( int x,int y )', '001');
+			deleteWordEndRight(editor); assert.strictEqual(model.getLineContent(1), 'public codemavi Add( int x,int y )', '001');
 		});
 	});
 

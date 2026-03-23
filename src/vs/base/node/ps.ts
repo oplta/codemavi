@@ -250,7 +250,7 @@ export function listProcesses(rootPid: number): Promise<ProcessItem> {
 	});
 }
 
-function parsePsOutput(stdout: string, addToTree: (pid: number, ppid: number, cmd: string, load: number, mem: number) => void): void {
+function parsePsOutput(stdout: string, addToTree: (pid: number, ppid: number, cmd: string, load: number, mem: number) => codemavi): codemavi {
 	const PID_CMD = /^\s*([0-9]+)\s+([0-9]+)\s+([0-9]+\.[0-9]+)\s+([0-9]+\.[0-9]+)\s+(.+)$/;
 	const lines = stdout.toString().split('\n');
 	for (const line of lines) {

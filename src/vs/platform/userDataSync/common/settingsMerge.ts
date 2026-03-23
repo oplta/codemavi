@@ -142,7 +142,7 @@ export function merge(originalLocalContent: string, originalRemoteContent: strin
 
 	const conflicts: Map<string, IConflictSetting> = new Map<string, IConflictSetting>();
 	const handledConflicts: Set<string> = new Set<string>();
-	const handleConflict = (conflictKey: string): void => {
+	const handleConflict = (conflictKey: string): codemavi => {
 		handledConflicts.add(conflictKey);
 		const resolvedConflict = resolvedConflicts.filter(({ key }) => key === conflictKey)[0];
 		if (resolvedConflict) {

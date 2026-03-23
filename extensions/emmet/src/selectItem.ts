@@ -10,7 +10,7 @@ import { nextItemStylesheet, prevItemStylesheet } from './selectItemStylesheet';
 import { HtmlNode, CssNode } from 'EmmetFlatNode';
 import { getRootNode } from './parseDocument';
 
-export function fetchSelectItem(direction: string): void {
+export function fetchSelectItem(direction: string): codemavi {
 	if (!validate() || !vscode.window.activeTextEditor) {
 		return;
 	}

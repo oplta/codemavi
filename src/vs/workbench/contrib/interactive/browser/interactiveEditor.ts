@@ -115,11 +115,11 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 	private _runbuttonToolbar: ToolBar | undefined;
 	private _hintElement: ReplInputHintContentWidget | undefined;
 
-	private _onDidFocusWidget = this._register(new Emitter<void>());
-	override get onDidFocus(): Event<void> { return this._onDidFocusWidget.event; }
+	private _onDidFocusWidget = this._register(new Emitter<codemavi>());
+	override get onDidFocus(): Event<codemavi> { return this._onDidFocusWidget.event; }
 	private _onDidChangeSelection = this._register(new Emitter<IEditorPaneSelectionChangeEvent>());
 	readonly onDidChangeSelection = this._onDidChangeSelection.event;
-	private _onDidChangeScroll = this._register(new Emitter<void>());
+	private _onDidChangeScroll = this._register(new Emitter<codemavi>());
 	readonly onDidChangeScroll = this._onDidChangeScroll.event;
 
 	constructor(
@@ -194,7 +194,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		return 19 + INPUT_EDITOR_PADDING * 2;
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		DOM.append(parent, this._rootElement);
 		this._rootElement.style.position = 'relative';
 		this._notebookEditorContainer = DOM.append(this._rootElement, DOM.$('.notebook-editor-container'));
@@ -222,7 +222,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		this._runbuttonToolbar.setActions([...primary, ...secondary]);
 	}
 
-	private _createLayoutStyles(): void {
+	private _createLayoutStyles(): codemavi {
 		this._styleElement = domStylesheets.createStyleSheet(this._rootElement);
 		const styleSheets: string[] = [];
 
@@ -305,7 +305,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		return computed;
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 		this._saveEditorViewState(this.input);
 		super.saveState();
 	}
@@ -320,7 +320,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		return this._loadNotebookEditorViewState(input);
 	}
 
-	private _saveEditorViewState(input: EditorInput | undefined): void {
+	private _saveEditorViewState(input: EditorInput | undefined): codemavi {
 		if (this._notebookWidget.value && input instanceof InteractiveEditorInput) {
 			if (this._notebookWidget.value.isDisposed) {
 				return;
@@ -355,7 +355,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		return;
 	}
 
-	override async setInput(input: InteractiveEditorInput, options: InteractiveEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: InteractiveEditorInput, options: InteractiveEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		const notebookInput = input.notebookEditorInput;
 
 		// there currently is a widget which we still own so
@@ -566,7 +566,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		this._updateInputHint();
 	}
 
-	override setOptions(options: INotebookEditorOptions | undefined): void {
+	override setOptions(options: INotebookEditorOptions | undefined): codemavi {
 		this._notebookWidget.value?.setOptions(options);
 		super.setOptions(options);
 	}
@@ -622,7 +622,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		}
 	}
 
-	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): void {
+	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): codemavi {
 		this._rootElement.classList.toggle('mid-width', dimension.width < 1000 && dimension.width >= 600);
 		this._rootElement.classList.toggle('narrow-width', dimension.width < 600);
 		const editorHeightChanged = dimension.height !== this._lastLayoutDimensions?.dimension.height;
@@ -668,7 +668,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		));
 	}
 
-	private _updateInputHint(): void {
+	private _updateInputHint(): codemavi {
 		if (!this._codeEditorWidget) {
 			return;
 		}
@@ -694,7 +694,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		};
 	}
 
-	setScrollPosition(position: IEditorPaneScrollPosition): void {
+	setScrollPosition(position: IEditorPaneScrollPosition): codemavi {
 		this._notebookWidget.value?.setScrollTop(position.scrollTop);
 	}
 
@@ -709,7 +709,7 @@ export class InteractiveEditor extends EditorPane implements IEditorPaneWithScro
 		this._notebookWidget.value!.focus();
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		super.setEditorVisible(visible);
 		this._groupListener.value = this.group.onWillCloseEditor(e => this._saveEditorViewState(e.editor));
 

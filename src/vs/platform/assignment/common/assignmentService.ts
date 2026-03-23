@@ -16,7 +16,7 @@ export abstract class BaseAssignmentService implements IAssignmentService {
 	_serviceBrand: undefined;
 	protected tasClient: Promise<TASClient> | undefined;
 	private networkInitialized = false;
-	private overrideInitDelay: Promise<void>;
+	private overrideInitDelay: Promise<codemavi>;
 
 	protected get experimentsEnabled(): boolean {
 		return true;

@@ -52,11 +52,11 @@ const enum Constants {
 	IsMarginOffset = 6,
 
 	/**
-	 * Due to how deletion works (in order to avoid always walking the right subtree of the deleted node),
+	 * Due to how deletion works (in order to acodemavi always walking the right subtree of the deleted node),
 	 * the deltas for nodes can grow and shrink dramatically. It has been observed, in practice, that unless
 	 * the deltas are corrected, integer overflow will occur.
 	 *
-	 * The integer overflow occurs when 53 bits are used in the numbers, but we will try to avoid it as
+	 * The integer overflow occurs when 53 bits are used in the numbers, but we will try to acodemavi it as
 	 * a node's delta gets below a negative 30 bits number.
 	 *
 	 * MIN SMI (SMall Integer) as defined in v8.
@@ -77,7 +77,7 @@ const enum Constants {
 export function getNodeColor(node: IntervalNode): NodeColor {
 	return ((node.metadata & Constants.ColorMask) >>> Constants.ColorOffset);
 }
-function setNodeColor(node: IntervalNode, color: NodeColor): void {
+function setNodeColor(node: IntervalNode, color: NodeColor): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.ColorMaskInverse) | (color << Constants.ColorOffset)
 	);
@@ -85,7 +85,7 @@ function setNodeColor(node: IntervalNode, color: NodeColor): void {
 function getNodeIsVisited(node: IntervalNode): boolean {
 	return ((node.metadata & Constants.IsVisitedMask) >>> Constants.IsVisitedOffset) === 1;
 }
-function setNodeIsVisited(node: IntervalNode, value: boolean): void {
+function setNodeIsVisited(node: IntervalNode, value: boolean): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.IsVisitedMaskInverse) | ((value ? 1 : 0) << Constants.IsVisitedOffset)
 	);
@@ -93,7 +93,7 @@ function setNodeIsVisited(node: IntervalNode, value: boolean): void {
 function getNodeIsForValidation(node: IntervalNode): boolean {
 	return ((node.metadata & Constants.IsForValidationMask) >>> Constants.IsForValidationOffset) === 1;
 }
-function setNodeIsForValidation(node: IntervalNode, value: boolean): void {
+function setNodeIsForValidation(node: IntervalNode, value: boolean): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.IsForValidationMaskInverse) | ((value ? 1 : 0) << Constants.IsForValidationOffset)
 	);
@@ -101,7 +101,7 @@ function setNodeIsForValidation(node: IntervalNode, value: boolean): void {
 function getNodeIsInGlyphMargin(node: IntervalNode): boolean {
 	return ((node.metadata & Constants.IsMarginMask) >>> Constants.IsMarginOffset) === 1;
 }
-function setNodeIsInGlyphMargin(node: IntervalNode, value: boolean): void {
+function setNodeIsInGlyphMargin(node: IntervalNode, value: boolean): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.IsMarginMaskInverse) | ((value ? 1 : 0) << Constants.IsMarginOffset)
 	);
@@ -109,7 +109,7 @@ function setNodeIsInGlyphMargin(node: IntervalNode, value: boolean): void {
 function getNodeStickiness(node: IntervalNode): TrackedRangeStickiness {
 	return ((node.metadata & Constants.StickinessMask) >>> Constants.StickinessOffset);
 }
-function _setNodeStickiness(node: IntervalNode, stickiness: TrackedRangeStickiness): void {
+function _setNodeStickiness(node: IntervalNode, stickiness: TrackedRangeStickiness): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.StickinessMaskInverse) | (stickiness << Constants.StickinessOffset)
 	);
@@ -117,12 +117,12 @@ function _setNodeStickiness(node: IntervalNode, stickiness: TrackedRangeStickine
 function getCollapseOnReplaceEdit(node: IntervalNode): boolean {
 	return ((node.metadata & Constants.CollapseOnReplaceEditMask) >>> Constants.CollapseOnReplaceEditOffset) === 1;
 }
-function setCollapseOnReplaceEdit(node: IntervalNode, value: boolean): void {
+function setCollapseOnReplaceEdit(node: IntervalNode, value: boolean): codemavi {
 	node.metadata = (
 		(node.metadata & Constants.CollapseOnReplaceEditMaskInverse) | ((value ? 1 : 0) << Constants.CollapseOnReplaceEditOffset)
 	);
 }
-export function setNodeStickiness(node: IntervalNode, stickiness: ActualTrackedRangeStickiness): void {
+export function setNodeStickiness(node: IntervalNode, stickiness: ActualTrackedRangeStickiness): codemavi {
 	_setNodeStickiness(node, <number>stickiness);
 }
 
@@ -181,7 +181,7 @@ export class IntervalNode {
 		setNodeIsVisited(this, false);
 	}
 
-	public reset(versionId: number, start: number, end: number, range: Range): void {
+	public reset(versionId: number, start: number, end: number, range: Range): codemavi {
 		this.start = start;
 		this.end = end;
 		this.maxEnd = end;
@@ -204,7 +204,7 @@ export class IntervalNode {
 		setCollapseOnReplaceEdit(this, this.options.collapseOnReplaceEdit);
 	}
 
-	public setCachedOffsets(absoluteStart: number, absoluteEnd: number, cachedVersionId: number): void {
+	public setCachedOffsets(absoluteStart: number, absoluteEnd: number, cachedVersionId: number): codemavi {
 		if (this.cachedVersionId !== cachedVersionId) {
 			this.range = null;
 		}
@@ -213,7 +213,7 @@ export class IntervalNode {
 		this.cachedAbsoluteEnd = absoluteEnd;
 	}
 
-	public detach(): void {
+	public detach(): codemavi {
 		this.parent = null!;
 		this.left = null!;
 		this.right = null!;
@@ -264,17 +264,17 @@ export class IntervalTree {
 		return collectNodesPostOrder(this);
 	}
 
-	public insert(node: IntervalNode): void {
+	public insert(node: IntervalNode): codemavi {
 		rbTreeInsert(this, node);
 		this._normalizeDeltaIfNecessary();
 	}
 
-	public delete(node: IntervalNode): void {
+	public delete(node: IntervalNode): codemavi {
 		rbTreeDelete(this, node);
 		this._normalizeDeltaIfNecessary();
 	}
 
-	public resolveNode(node: IntervalNode, cachedVersionId: number): void {
+	public resolveNode(node: IntervalNode, cachedVersionId: number): codemavi {
 		const initialNode = node;
 		let delta = 0;
 		while (node !== this.root) {
@@ -289,7 +289,7 @@ export class IntervalTree {
 		initialNode.setCachedOffsets(nodeStart, nodeEnd, cachedVersionId);
 	}
 
-	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): void {
+	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): codemavi {
 		// Our strategy is to remove all directly impacted nodes, and then add them back to the tree.
 
 		// (1) collect all nodes that are intersecting this edit as nodes of interest
@@ -322,7 +322,7 @@ export class IntervalTree {
 		return search(this, 0, false, 0, false);
 	}
 
-	private _normalizeDeltaIfNecessary(): void {
+	private _normalizeDeltaIfNecessary(): codemavi {
 		if (!this.requestNormalizeDelta) {
 			return;
 		}
@@ -332,7 +332,7 @@ export class IntervalTree {
 }
 
 //#region Delta Normalization
-function normalizeDelta(T: IntervalTree): void {
+function normalizeDelta(T: IntervalTree): codemavi {
 	let node = T.root;
 	let delta = 0;
 	while (node !== SENTINEL) {
@@ -399,7 +399,7 @@ function adjustMarkerBeforeColumn(markerOffset: number, markerStickToPreviousCha
  * This is a lot more complicated than strictly necessary to maintain the same behaviour
  * as when decorations were implemented using two markers.
  */
-export function nodeAcceptEdit(node: IntervalNode, start: number, end: number, textLength: number, forceMoveMarkers: boolean): void {
+export function nodeAcceptEdit(node: IntervalNode, start: number, end: number, textLength: number, forceMoveMarkers: boolean): codemavi {
 	const nodeStickiness = getNodeStickiness(node);
 	const startStickToPreviousCharacter = (
 		nodeStickiness === TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges
@@ -547,7 +547,7 @@ function searchForEditing(T: IntervalTree, start: number, end: number): Interval
 	return result;
 }
 
-function noOverlapReplace(T: IntervalTree, start: number, end: number, textLength: number): void {
+function noOverlapReplace(T: IntervalTree, start: number, end: number, textLength: number): codemavi {
 	// https://en.wikipedia.org/wiki/Interval_tree#Augmented_tree
 	// Now, it is known that two intervals A and B overlap only when both
 	// A.low <= B.high and A.high >= B.low. When searching the trees for
@@ -907,7 +907,7 @@ function rbTreeInsert(T: IntervalTree, newNode: IntervalNode): IntervalNode {
 	return newNode;
 }
 
-function treeInsert(T: IntervalTree, z: IntervalNode): void {
+function treeInsert(T: IntervalTree, z: IntervalNode): codemavi {
 	let delta: number = 0;
 	let x = T.root;
 	const zAbsoluteStart = z.start;
@@ -950,7 +950,7 @@ function treeInsert(T: IntervalTree, z: IntervalNode): void {
 //#endregion
 
 //#region Deletion
-function rbTreeDelete(T: IntervalTree, z: IntervalNode): void {
+function rbTreeDelete(T: IntervalTree, z: IntervalNode): codemavi {
 
 	let x: IntervalNode;
 	let y: IntervalNode;
@@ -1141,7 +1141,7 @@ function leftest(node: IntervalNode): IntervalNode {
 	return node;
 }
 
-function resetSentinel(): void {
+function resetSentinel(): codemavi {
 	SENTINEL.parent = SENTINEL;
 	SENTINEL.delta = 0; // optional
 	SENTINEL.start = 0; // optional
@@ -1150,7 +1150,7 @@ function resetSentinel(): void {
 //#endregion
 
 //#region Rotations
-function leftRotate(T: IntervalTree, x: IntervalNode): void {
+function leftRotate(T: IntervalTree, x: IntervalNode): codemavi {
 	const y = x.right;				// set y.
 
 	y.delta += x.delta;				// y's delta is no longer influenced by x's delta
@@ -1180,7 +1180,7 @@ function leftRotate(T: IntervalTree, x: IntervalNode): void {
 	recomputeMaxEnd(y);
 }
 
-function rightRotate(T: IntervalTree, y: IntervalNode): void {
+function rightRotate(T: IntervalTree, y: IntervalNode): codemavi {
 	const x = y.left;
 
 	y.delta -= x.delta;
@@ -1230,11 +1230,11 @@ function computeMaxEnd(node: IntervalNode): number {
 	return maxEnd;
 }
 
-export function recomputeMaxEnd(node: IntervalNode): void {
+export function recomputeMaxEnd(node: IntervalNode): codemavi {
 	node.maxEnd = computeMaxEnd(node);
 }
 
-function recomputeMaxEndWalkToRoot(node: IntervalNode): void {
+function recomputeMaxEndWalkToRoot(node: IntervalNode): codemavi {
 	while (node !== SENTINEL) {
 
 		const maxEnd = computeMaxEnd(node);

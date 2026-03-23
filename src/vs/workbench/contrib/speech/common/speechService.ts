@@ -54,7 +54,7 @@ export interface ITextToSpeechEvent {
 export interface ITextToSpeechSession {
 	readonly onDidChange: Event<ITextToSpeechEvent>;
 
-	synthesize(text: string): Promise<void>;
+	synthesize(text: string): Promise<codemavi>;
 }
 
 export enum KeywordRecognitionStatus {
@@ -92,14 +92,14 @@ export interface ISpeechService {
 
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeHasSpeechProvider: Event<void>;
+	readonly onDidChangeHasSpeechProvider: Event<codemavi>;
 
 	readonly hasSpeechProvider: boolean;
 
 	registerSpeechProvider(identifier: string, provider: ISpeechProvider): IDisposable;
 
-	readonly onDidStartSpeechToTextSession: Event<void>;
-	readonly onDidEndSpeechToTextSession: Event<void>;
+	readonly onDidStartSpeechToTextSession: Event<codemavi>;
+	readonly onDidEndSpeechToTextSession: Event<codemavi>;
 
 	readonly hasActiveSpeechToTextSession: boolean;
 
@@ -109,8 +109,8 @@ export interface ISpeechService {
 	 */
 	createSpeechToTextSession(token: CancellationToken, context?: string): Promise<ISpeechToTextSession>;
 
-	readonly onDidStartTextToSpeechSession: Event<void>;
-	readonly onDidEndTextToSpeechSession: Event<void>;
+	readonly onDidStartTextToSpeechSession: Event<codemavi>;
+	readonly onDidEndTextToSpeechSession: Event<codemavi>;
 
 	readonly hasActiveTextToSpeechSession: boolean;
 
@@ -121,8 +121,8 @@ export interface ISpeechService {
 	 */
 	createTextToSpeechSession(token: CancellationToken, context?: string): Promise<ITextToSpeechSession>;
 
-	readonly onDidStartKeywordRecognition: Event<void>;
-	readonly onDidEndKeywordRecognition: Event<void>;
+	readonly onDidStartKeywordRecognition: Event<codemavi>;
+	readonly onDidEndKeywordRecognition: Event<codemavi>;
 
 	readonly hasActiveKeywordRecognition: boolean;
 

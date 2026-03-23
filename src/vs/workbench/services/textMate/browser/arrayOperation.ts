@@ -17,7 +17,7 @@ export class ArrayEdit {
 		this.edits = edits.slice().sort(compareBy(c => c.offset, numberComparator));
 	}
 
-	applyToArray(array: any[]): void {
+	applyToArray(array: any[]): codemavi {
 		for (let i = this.edits.length - 1; i >= 0; i--) {
 			const c = this.edits[i];
 			array.splice(c.offset, c.length, ...new Array(c.newLength));

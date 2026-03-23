@@ -35,7 +35,7 @@ abstract class BaseAstNode {
 	public abstract getChild(idx: number): AstNode | null;
 
 	/**
-	 * Try to avoid using this property, as implementations might need to allocate the resulting array.
+	 * Try to acodemavi using this property, as implementations might need to allocate the resulting array.
 	*/
 	public abstract readonly children: readonly AstNode[];
 
@@ -123,7 +123,7 @@ export class PairAstNode extends BaseAstNode {
 	}
 
 	/**
-	 * Avoid using this property, it allocates an array!
+	 * Acodemavi using this property, it allocates an array!
 	*/
 	public get children() {
 		const result: AstNode[] = [];
@@ -257,11 +257,11 @@ export abstract class ListAstNode extends BaseAstNode {
 		super(length);
 	}
 
-	protected throwIfImmutable(): void {
+	protected throwIfImmutable(): codemavi {
 		// NOOP
 	}
 
-	protected abstract setChild(idx: number, child: AstNode): void;
+	protected abstract setChild(idx: number, child: AstNode): codemavi;
 
 	public makeLastElementMutable(): AstNode | undefined {
 		this.throwIfImmutable();
@@ -314,7 +314,7 @@ export abstract class ListAstNode extends BaseAstNode {
 		return lastChild.canBeReused(openBracketIds);
 	}
 
-	public handleChildrenChanged(): void {
+	public handleChildrenChanged(): codemavi {
 		this.throwIfImmutable();
 
 		const count = this.childrenLength;
@@ -370,9 +370,9 @@ export abstract class ListAstNode extends BaseAstNode {
 	 */
 	public abstract toMutable(): ListAstNode;
 
-	public abstract appendChildOfSameHeight(node: AstNode): void;
+	public abstract appendChildOfSameHeight(node: AstNode): codemavi;
 	public abstract unappendChild(): AstNode | undefined;
-	public abstract prependChildOfSameHeight(node: AstNode): void;
+	public abstract prependChildOfSameHeight(node: AstNode): codemavi;
 	public abstract unprependChild(): AstNode | undefined;
 }
 
@@ -388,7 +388,7 @@ class TwoThreeListAstNode extends ListAstNode {
 		}
 		throw new Error('Invalid child index');
 	}
-	protected setChild(idx: number, node: AstNode): void {
+	protected setChild(idx: number, node: AstNode): codemavi {
 		switch (idx) {
 			case 0: this._item1 = node; return;
 			case 1: this._item2 = node; return;
@@ -433,7 +433,7 @@ class TwoThreeListAstNode extends ListAstNode {
 		);
 	}
 
-	public appendChildOfSameHeight(node: AstNode): void {
+	public appendChildOfSameHeight(node: AstNode): codemavi {
 		if (this._item3) {
 			throw new Error('Cannot append to a full (2,3) tree node');
 		}
@@ -453,7 +453,7 @@ class TwoThreeListAstNode extends ListAstNode {
 		return result;
 	}
 
-	public prependChildOfSameHeight(node: AstNode): void {
+	public prependChildOfSameHeight(node: AstNode): codemavi {
 		if (this._item3) {
 			throw new Error('Cannot prepend to a full (2,3) tree node');
 		}
@@ -491,7 +491,7 @@ class Immutable23ListAstNode extends TwoThreeListAstNode {
 		return new TwoThreeListAstNode(this.length, this.listHeight, this.item1, this.item2, this.item3, this.missingOpeningBracketIds);
 	}
 
-	protected override throwIfImmutable(): void {
+	protected override throwIfImmutable(): codemavi {
 		throw new Error('this instance is immutable');
 	}
 }
@@ -506,7 +506,7 @@ class ArrayListAstNode extends ListAstNode {
 	getChild(idx: number): AstNode | null {
 		return this._children[idx];
 	}
-	protected setChild(idx: number, child: AstNode): void {
+	protected setChild(idx: number, child: AstNode): codemavi {
 		this._children[idx] = child;
 	}
 	get children(): readonly AstNode[] {
@@ -530,7 +530,7 @@ class ArrayListAstNode extends ListAstNode {
 		return new ArrayListAstNode(this.length, this.listHeight, children, this.missingOpeningBracketIds);
 	}
 
-	public appendChildOfSameHeight(node: AstNode): void {
+	public appendChildOfSameHeight(node: AstNode): codemavi {
 		this.throwIfImmutable();
 		this._children.push(node);
 		this.handleChildrenChanged();
@@ -543,7 +543,7 @@ class ArrayListAstNode extends ListAstNode {
 		return item;
 	}
 
-	public prependChildOfSameHeight(node: AstNode): void {
+	public prependChildOfSameHeight(node: AstNode): codemavi {
 		this.throwIfImmutable();
 		this._children.unshift(node);
 		this.handleChildrenChanged();
@@ -569,7 +569,7 @@ class ImmutableArrayListAstNode extends ArrayListAstNode {
 		return new ArrayListAstNode(this.length, this.listHeight, [...this.children], this.missingOpeningBracketIds);
 	}
 
-	protected override throwIfImmutable(): void {
+	protected override throwIfImmutable(): codemavi {
 		throw new Error('this instance is immutable');
 	}
 }

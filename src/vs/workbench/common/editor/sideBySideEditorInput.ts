@@ -76,7 +76,7 @@ export class SideBySideEditorInput extends EditorInput implements ISideBySideEdi
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// When the primary or secondary input gets disposed, dispose this diff editor input
 		this._register(Event.once(Event.any(this.primary.onWillDispose, this.secondary.onWillDispose))(() => {
@@ -224,7 +224,7 @@ export class SideBySideEditorInput extends EditorInput implements ISideBySideEdi
 		return undefined;
 	}
 
-	override revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
+	override revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
 		return this.primary.revert(group, options);
 	}
 

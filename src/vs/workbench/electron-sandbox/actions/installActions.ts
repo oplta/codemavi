@@ -27,7 +27,7 @@ export class InstallShellScriptAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const nativeHostService = accessor.get(INativeHostService);
 		const dialogService = accessor.get(IDialogService);
 		const productService = accessor.get(IProductService);
@@ -57,7 +57,7 @@ export class UninstallShellScriptAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const nativeHostService = accessor.get(INativeHostService);
 		const dialogService = accessor.get(IDialogService);
 		const productService = accessor.get(IProductService);

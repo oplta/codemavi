@@ -35,7 +35,7 @@ export interface IInlineChatSession2 {
 	readonly uri: URI;
 	readonly chatModel: IChatModel;
 	readonly editingSession: IChatEditingSession;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface IInlineChatSessionService {
@@ -48,19 +48,19 @@ export interface IInlineChatSessionService {
 
 	createSession(editor: IActiveCodeEditor, options: { wholeRange?: IRange; session?: Session; headless?: boolean }, token: CancellationToken): Promise<Session | undefined>;
 
-	moveSession(session: Session, newEditor: ICodeEditor): void;
+	moveSession(session: Session, newEditor: ICodeEditor): codemavi;
 
 	getCodeEditor(session: Session): ICodeEditor;
 
 	getSession(editor: ICodeEditor, uri: URI): Session | undefined;
 
-	releaseSession(session: Session): void;
+	releaseSession(session: Session): codemavi;
 
 	stashSession(session: Session, editor: ICodeEditor, undoCancelEdits: IValidEditOperation[]): StashedSession;
 
 	registerSessionKeyComputer(scheme: string, value: ISessionKeyComputer): IDisposable;
 
-	dispose(): void;
+	dispose(): codemavi;
 
 
 	createSession2(editor: ICodeEditor, uri: URI, token: CancellationToken): Promise<IInlineChatSession2>;

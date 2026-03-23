@@ -22,7 +22,7 @@ export class ManagedHoverWidget implements IDisposable {
 
 	constructor(private hoverDelegate: IHoverDelegate, private target: IHoverDelegateTarget | HTMLElement, private fadeInAnimation: boolean) { }
 
-	async update(content: IManagedHoverContent, focus?: boolean, options?: IManagedHoverOptions): Promise<void> {
+	async update(content: IManagedHoverContent, focus?: boolean, options?: IManagedHoverOptions): Promise<codemavi> {
 		if (this._cancellationTokenSource) {
 			// there's an computation ongoing, cancel it
 			this._cancellationTokenSource.dispose(true);
@@ -75,7 +75,7 @@ export class ManagedHoverWidget implements IDisposable {
 		this.show(resolvedContent, focus, options);
 	}
 
-	private show(content: IManagedHoverResolvedContent, focus?: boolean, options?: IManagedHoverOptions): void {
+	private show(content: IManagedHoverResolvedContent, focus?: boolean, options?: IManagedHoverOptions): codemavi {
 		const oldHoverWidget = this._hoverWidget;
 
 		if (this.hasContent(content)) {
@@ -116,7 +116,7 @@ export class ManagedHoverWidget implements IDisposable {
 		return this._hoverWidget?.isDisposed;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._hoverWidget?.dispose();
 		this._cancellationTokenSource?.dispose(true);
 		this._cancellationTokenSource = undefined;

@@ -356,7 +356,7 @@ export class PieceTreeBase {
 		return this._EOL;
 	}
 
-	public setEOL(newEOL: '\r\n' | '\n'): void {
+	public setEOL(newEOL: '\r\n' | '\n'): codemavi {
 		this._EOL = newEOL;
 		this._EOLLength = this._EOL.length;
 		this.normalizeEOL(newEOL);
@@ -846,7 +846,7 @@ export class PieceTreeBase {
 	// #endregion
 
 	// #region Piece Table
-	public insert(offset: number, value: string, eolNormalized: boolean = false): void {
+	public insert(offset: number, value: string, eolNormalized: boolean = false): codemavi {
 		this._EOLNormalized = this._EOLNormalized && eolNormalized;
 		this._lastVisitedLine.lineNumber = 0;
 		this._lastVisitedLine.value = '';
@@ -944,7 +944,7 @@ export class PieceTreeBase {
 		this.computeBufferMetadata();
 	}
 
-	public delete(offset: number, cnt: number): void {
+	public delete(offset: number, cnt: number): codemavi {
 		this._lastVisitedLine.lineNumber = 0;
 		this._lastVisitedLine.value = '';
 
@@ -1155,7 +1155,7 @@ export class PieceTreeBase {
 		return lineStarts[cursor.line] + cursor.column;
 	}
 
-	private deleteNodes(nodes: TreeNode[]): void {
+	private deleteNodes(nodes: TreeNode[]): codemavi {
 		for (let i = 0; i < nodes.length; i++) {
 			rbDelete(this, nodes[i]);
 		}
@@ -1452,7 +1452,7 @@ export class PieceTreeBase {
 		this.validateCRLFWithPrevNode(newNode);
 	}
 
-	private appendToNode(node: TreeNode, value: string): void {
+	private appendToNode(node: TreeNode, value: string): codemavi {
 		if (this.adjustCarriageReturnFromNext(value, node)) {
 			value += '\n';
 		}

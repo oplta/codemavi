@@ -49,7 +49,7 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		this.tryClaimWindow();
 	}
 
-	tryClaimWindow(options?: BrowserWindowConstructorOptions): void {
+	tryClaimWindow(options?: BrowserWindowConstructorOptions): codemavi {
 		if (this._store.isDisposed || this.webContents.isDestroyed()) {
 			return; // already disposed
 		}
@@ -74,7 +74,7 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		}
 	}
 
-	private doTryClaimWindow(options?: BrowserWindowConstructorOptions): void {
+	private doTryClaimWindow(options?: BrowserWindowConstructorOptions): codemavi {
 		if (this._win) {
 			return; // already claimed
 		}

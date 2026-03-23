@@ -12,7 +12,7 @@ import { IProductService } from '../../../product/common/productService.js';
 
 suite('Dialog', () => {
 
-	function assertOptions({ options, buttonIndeces }: IMassagedMessageBoxOptions, buttons: string[], defaultId: number, cancelId: number, indeces: number[]): void {
+	function assertOptions({ options, buttonIndeces }: IMassagedMessageBoxOptions, buttons: string[], defaultId: number, cancelId: number, indeces: number[]): codemavi {
 		deepEqual(options.buttons, buttons);
 		deepEqual(options.defaultId, defaultId);
 		deepEqual(options.cancelId, cancelId);

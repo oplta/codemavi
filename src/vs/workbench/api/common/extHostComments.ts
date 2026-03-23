@@ -160,7 +160,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return commentController.value;
 		}
 
-		async $createCommentThreadTemplate(commentControllerHandle: number, uriComponents: UriComponents, range: IRange | undefined, editorId?: string): Promise<void> {
+		async $createCommentThreadTemplate(commentControllerHandle: number, uriComponents: UriComponents, range: IRange | undefined, editorId?: string): Promise<codemavi> {
 			const commentController = this._commentControllers.get(commentControllerHandle);
 
 			if (!commentController) {
@@ -170,7 +170,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			commentController.$createCommentThreadTemplate(uriComponents, range, editorId);
 		}
 
-		async $setActiveComment(controllerHandle: number, commentInfo: { commentThreadHandle: number; uniqueIdInThread?: number }): Promise<void> {
+		async $setActiveComment(controllerHandle: number, commentInfo: { commentThreadHandle: number; uniqueIdInThread?: number }): Promise<codemavi> {
 			const commentController = this._commentControllers.get(controllerHandle);
 
 			if (!commentController) {
@@ -239,7 +239,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			});
 		}
 
-		$toggleReaction(commentControllerHandle: number, threadHandle: number, uri: UriComponents, comment: languages.Comment, reaction: languages.CommentReaction): Promise<void> {
+		$toggleReaction(commentControllerHandle: number, threadHandle: number, uri: UriComponents, comment: languages.Comment, reaction: languages.CommentReaction): Promise<codemavi> {
 			const commentController = this._commentControllers.get(commentControllerHandle);
 
 			if (!commentController || !commentController.reactionHandler) {
@@ -301,7 +301,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return this._uri;
 		}
 
-		private readonly _onDidUpdateCommentThread = new Emitter<void>();
+		private readonly _onDidUpdateCommentThread = new Emitter<codemavi>();
 		readonly onDidUpdateCommentThread = this._onDidUpdateCommentThread.event;
 
 		set range(range: vscode.Range | undefined) {
@@ -488,7 +488,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 		}
 
 		@debounce(100)
-		eventuallyUpdateCommentThread(): void {
+		eventuallyUpdateCommentThread(): codemavi {
 			if (this._isDiposed) {
 				return;
 			}
@@ -557,7 +557,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return;
 		}
 
-		async reveal(commentOrOptions?: vscode.Comment | vscode.CommentThreadRevealOptions, options?: vscode.CommentThreadRevealOptions): Promise<void> {
+		async reveal(commentOrOptions?: vscode.Comment | vscode.CommentThreadRevealOptions, options?: vscode.CommentThreadRevealOptions): Promise<codemavi> {
 			checkProposedApiEnabled(this.extensionDescription, 'commentReveal');
 			let comment: vscode.Comment | undefined;
 			if (commentOrOptions && (commentOrOptions as vscode.Comment).body !== undefined) {
@@ -578,7 +578,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return proxy.$revealCommentThread(this._commentControllerHandle, this.handle, commentToReveal, { preserveFocus, focusReply });
 		}
 
-		async hide(): Promise<void> {
+		async hide(): Promise<codemavi> {
 			return proxy.$hideCommentThread(this._commentControllerHandle, this.handle);
 		}
 
@@ -589,7 +589,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 		}
 	}
 
-	type ReactionHandler = (comment: vscode.Comment, reaction: vscode.CommentReaction) => Promise<void>;
+	type ReactionHandler = (comment: vscode.Comment, reaction: vscode.CommentReaction) => Promise<codemavi>;
 
 	class ExtHostCommentController {
 		get id(): string {
@@ -720,14 +720,14 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return commentThread;
 		}
 
-		$updateCommentThreadTemplate(threadHandle: number, range: IRange): void {
+		$updateCommentThreadTemplate(threadHandle: number, range: IRange): codemavi {
 			const thread = this._threads.get(threadHandle);
 			if (thread) {
 				thread.range = extHostTypeConverter.Range.to(range);
 			}
 		}
 
-		$updateCommentThread(threadHandle: number, changes: CommentThreadChanges): void {
+		$updateCommentThread(threadHandle: number, changes: CommentThreadChanges): codemavi {
 			const thread = this._threads.get(threadHandle);
 			if (!thread) {
 				return;
@@ -741,7 +741,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			}
 		}
 
-		$deleteCommentThread(threadHandle: number): void {
+		$deleteCommentThread(threadHandle: number): codemavi {
 			const thread = this._threads.get(threadHandle);
 
 			thread?.dispose();
@@ -753,7 +753,7 @@ export function createExtHostComments(mainContext: IMainContext, commands: ExtHo
 			return this._threads.get(handle);
 		}
 
-		dispose(): void {
+		dispose(): codemavi {
 			this._threads.forEach(value => {
 				value.dispose();
 			});

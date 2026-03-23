@@ -39,13 +39,13 @@ export class TerminalNativeContribution extends Disposable implements IWorkbench
 		}
 	}
 
-	private _onOsResume(): void {
+	private _onOsResume(): codemavi {
 		for (const instance of this._terminalService.instances) {
 			instance.xterm?.forceRedraw();
 		}
 	}
 
-	private async _onOpenFileRequest(request: INativeOpenFileRequest): Promise<void> {
+	private async _onOpenFileRequest(request: INativeOpenFileRequest): Promise<codemavi> {
 		// if the request to open files is coming in from the integrated terminal (identified though
 		// the termProgram variable) and we are instructed to wait for editors close, wait for the
 		// marker file to get deleted and then focus back to the integrated terminal.
@@ -58,9 +58,9 @@ export class TerminalNativeContribution extends Disposable implements IWorkbench
 		}
 	}
 
-	private _whenFileDeleted(path: URI): Promise<void> {
+	private _whenFileDeleted(path: URI): Promise<codemavi> {
 		// Complete when wait marker file is deleted
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			let running = false;
 			const interval = disposableWindowInterval(getActiveWindow(), async () => {
 				if (!running) {

@@ -99,7 +99,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		return this.getScreenReaderInfoForNode(this.focusedCommentNode);
 	}
 
-	focusNextNode(): void {
+	focusNextNode(): codemavi {
 		if (!this.tree) {
 			return;
 		}
@@ -117,7 +117,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.tree.setFocus([next]);
 	}
 
-	focusPreviousNode(): void {
+	focusPreviousNode(): codemavi {
 		if (!this.tree) {
 			return;
 		}
@@ -188,7 +188,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this._register(this.filterWidget.onDidChangeFilterText(() => this.updateFilter()));
 	}
 
-	override saveState(): void {
+	override saveState(): codemavi {
 		this.viewState['filter'] = this.filterWidget.getFilterText();
 		this.viewState['filterHistory'] = this.filterWidget.getHistory();
 		this.viewState['showResolved'] = this.filters.showResolved;
@@ -198,7 +198,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		super.saveState();
 	}
 
-	override render(): void {
+	override render(): codemavi {
 		super.render();
 		this._register(registerNavigableContainer({
 			name: 'commentsView',
@@ -216,11 +216,11 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		}));
 	}
 
-	public focusFilter(): void {
+	public focusFilter(): codemavi {
 		this.filterWidget.focus();
 	}
 
-	public clearFilterText(): void {
+	public clearFilterText(): codemavi {
 		this.filterWidget.setFilterText('');
 	}
 
@@ -245,7 +245,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.filterWidget.checkMoreFilters(!this.filters.showResolved || !this.filters.showUnresolved);
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		container.classList.add('comments-panel');
@@ -272,7 +272,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.renderComments();
 	}
 
-	public override focus(): void {
+	public override focus(): codemavi {
 		super.focus();
 
 		const element = this.tree?.getHTMLElement();
@@ -287,7 +287,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		}
 	}
 
-	private renderComments(): void {
+	private renderComments(): codemavi {
 		this.treeContainer.classList.toggle('hidden', !this.commentService.commentsModel.hasCommentThreads());
 		this.renderMessage();
 		this.tree?.setChildren(null, createResourceCommentsIterator(this.commentService.commentsModel));
@@ -317,7 +317,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		return !!this.tree;
 	}
 
-	protected layoutBodyContent(height: number = this.currentHeight, width: number = this.currentWidth): void {
+	protected layoutBodyContent(height: number = this.currentHeight, width: number = this.currentWidth): codemavi {
 		if (this.messageBoxContainer) {
 			this.messageBoxContainer.style.height = `${height}px`;
 		}
@@ -326,12 +326,12 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.currentWidth = width;
 	}
 
-	private createMessageBox(parent: HTMLElement): void {
+	private createMessageBox(parent: HTMLElement): codemavi {
 		this.messageBoxContainer = dom.append(parent, dom.$('.message-box-container'));
 		this.messageBoxContainer.setAttribute('tabIndex', '0');
 	}
 
-	private renderMessage(): void {
+	private renderMessage(): codemavi {
 		this.messageBoxContainer.textContent = this.commentService.commentsModel.getMessage();
 		this.messageBoxContainer.classList.toggle('hidden', this.commentService.commentsModel.hasCommentThreads());
 	}
@@ -415,7 +415,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		return node.replies.length && !forAriaLabel ? nls.localize('replyCount', " {0} replies,", node.replies.length) : '';
 	}
 
-	private createTree(): void {
+	private createTree(): codemavi {
 		this.treeLabels = this._register(this.instantiationService.createInstance(ResourceLabels, this));
 		this.tree = this._register(this.instantiationService.createInstance(CommentsList, this.treeLabels, this.treeContainer, {
 			overrideStyles: this.getLocationBasedColors().listOverrideStyles,
@@ -482,7 +482,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this._register(this.tree.onDidBlur(() => this.commentsFocusedContextKey.set(false)));
 	}
 
-	private openFile(element: any, pinned?: boolean, preserveFocus?: boolean, sideBySide?: boolean): void {
+	private openFile(element: any, pinned?: boolean, preserveFocus?: boolean, sideBySide?: boolean): codemavi {
 		if (!element) {
 			return;
 		}
@@ -495,7 +495,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		return revealCommentThread(this.commentService, this.editorService, this.uriIdentityService, threadToReveal, commentToReveal, false, pinned, preserveFocus, sideBySide);
 	}
 
-	private async refresh(): Promise<void> {
+	private async refresh(): Promise<codemavi> {
 		if (!this.tree) {
 			return;
 		}
@@ -514,7 +514,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		}
 	}
 
-	private onAllCommentsChanged(e: IWorkspaceCommentThreadsEvent): void {
+	private onAllCommentsChanged(e: IWorkspaceCommentThreadsEvent): codemavi {
 		this.cachedFilterStats = undefined;
 		this.totalComments += e.commentThreads.length;
 
@@ -527,7 +527,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.refresh();
 	}
 
-	private onCommentsUpdated(e: ICommentThreadChangedEvent): void {
+	private onCommentsUpdated(e: ICommentThreadChangedEvent): codemavi {
 		this.cachedFilterStats = undefined;
 
 		this.totalComments += e.added.length;
@@ -544,7 +544,7 @@ export class CommentsPanel extends FilterViewPane implements ICommentsView {
 		this.refresh();
 	}
 
-	private onDataProviderDeleted(owner: string | undefined): void {
+	private onDataProviderDeleted(owner: string | undefined): codemavi {
 		this.cachedFilterStats = undefined;
 		this.totalComments = 0;
 		this.refresh();

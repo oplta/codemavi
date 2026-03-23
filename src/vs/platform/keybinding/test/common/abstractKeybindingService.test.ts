@@ -443,7 +443,7 @@ suite('AbstractKeybindingService', () => {
 			kbItem(KeyMod.Shift, 'nope'),
 		]);
 
-		function assertIsIgnored(keybinding: number): void {
+		function assertIsIgnored(keybinding: number): codemavi {
 			const shouldPreventDefault = kbService.testDispatch(keybinding);
 			assert.strictEqual(shouldPreventDefault, false);
 			assert.deepStrictEqual(executeCommandCalls, []);

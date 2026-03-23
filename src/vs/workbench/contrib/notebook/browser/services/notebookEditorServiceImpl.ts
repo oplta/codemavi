@@ -142,14 +142,14 @@ export class NotebookEditorWidgetService implements INotebookEditorService {
 
 	// --- group-based editor borrowing...
 
-	private _disposeWidget(widget: NotebookEditorWidget): void {
+	private _disposeWidget(widget: NotebookEditorWidget): codemavi {
 		widget.onWillHide();
 		const domNode = widget.getDomNode();
 		widget.dispose();
 		domNode.remove();
 	}
 
-	private _allowWidgetMove(input: NotebookEditorInput, sourceID: GroupIdentifier, targetID: GroupIdentifier): void {
+	private _allowWidgetMove(input: NotebookEditorInput, sourceID: GroupIdentifier, targetID: GroupIdentifier): codemavi {
 		const sourcePart = this.editorGroupService.getPart(sourceID);
 		const targetPart = this.editorGroupService.getPart(targetID);
 
@@ -263,12 +263,12 @@ export class NotebookEditorWidgetService implements INotebookEditorService {
 
 	// --- editor management
 
-	addNotebookEditor(editor: INotebookEditor): void {
+	addNotebookEditor(editor: INotebookEditor): codemavi {
 		this._notebookEditors.set(editor.getId(), editor);
 		this._onNotebookEditorAdd.fire(editor);
 	}
 
-	removeNotebookEditor(editor: INotebookEditor): void {
+	removeNotebookEditor(editor: INotebookEditor): codemavi {
 		const notebookUri = editor.getViewModel()?.notebookDocument.uri;
 		if (this._notebookEditors.has(editor.getId())) {
 			this._notebookEditors.delete(editor.getId());
@@ -287,7 +287,7 @@ export class NotebookEditorWidgetService implements INotebookEditorService {
 		return [...this._notebookEditors].map(e => e[1]);
 	}
 
-	updateReplContextKey(uri: string): void {
+	updateReplContextKey(uri: string): codemavi {
 		this._mostRecentRepl.set(uri);
 	}
 }

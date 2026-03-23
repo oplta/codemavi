@@ -4802,7 +4802,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.ts meta.namespace.declaration.ts meta.block.ts meta.class.ts meta.method.declaration.ts meta.return.type.ts support.type.primitive.ts",
 		"r": {
 			"dark_plus": "support.type: #4EC9B0",

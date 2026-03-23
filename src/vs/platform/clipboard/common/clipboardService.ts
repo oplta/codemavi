@@ -15,7 +15,7 @@ export interface IClipboardService {
 	/**
 	 * Writes text to the system clipboard.
 	 */
-	writeText(text: string, type?: string): Promise<void>;
+	writeText(text: string, type?: string): Promise<codemavi>;
 
 	/**
 	 * Reads the content of the clipboard in plain text
@@ -30,12 +30,12 @@ export interface IClipboardService {
 	/**
 	 * Writes text to the system find pasteboard.
 	 */
-	writeFindText(text: string): Promise<void>;
+	writeFindText(text: string): Promise<codemavi>;
 
 	/**
 	 * Writes resources to the system clipboard.
 	 */
-	writeResources(resources: URI[]): Promise<void>;
+	writeResources(resources: URI[]): Promise<codemavi>;
 
 	/**
 	 * Reads resources from the system clipboard.
@@ -52,7 +52,7 @@ export interface IClipboardService {
 	 *
 	 * Used for implementations such as web which do not always support using the real clipboard.
 	 */
-	clearInternalState?(): void;
+	clearInternalState?(): codemavi;
 
 	/**
 	 * Reads resources from the system clipboard as an image. If the clipboard does not contain an

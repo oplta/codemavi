@@ -42,7 +42,7 @@ export class LabelContribution implements IWorkbenchContribution {
 		this.registerFormatters();
 	}
 
-	private registerFormatters(): void {
+	private registerFormatters(): codemavi {
 		this.remoteAgentService.getEnvironment().then(remoteEnvironment => {
 			const os = remoteEnvironment?.os || OS;
 			const formatting: ResourceLabelFormatting = {
@@ -114,7 +114,7 @@ class RemoteInvalidWorkspaceDetector extends Disposable implements IWorkbenchCon
 		}
 	}
 
-	private async validateRemoteWorkspace(): Promise<void> {
+	private async validateRemoteWorkspace(): Promise<codemavi> {
 		const workspace = this.contextService.getWorkspace();
 		const workspaceUriToStat = workspace.configuration ?? workspace.folders.at(0)?.uri;
 		if (!workspaceUriToStat) {
@@ -164,7 +164,7 @@ if (enableDiagnostics) {
 			});
 		}
 
-		async run(accessor: ServicesAccessor): Promise<void> {
+		async run(accessor: ServicesAccessor): Promise<codemavi> {
 			PersistentConnection.debugTriggerReconnection();
 		}
 	}
@@ -179,7 +179,7 @@ if (enableDiagnostics) {
 			});
 		}
 
-		async run(accessor: ServicesAccessor): Promise<void> {
+		async run(accessor: ServicesAccessor): Promise<codemavi> {
 			PersistentConnection.debugPauseSocketWriting();
 		}
 	}

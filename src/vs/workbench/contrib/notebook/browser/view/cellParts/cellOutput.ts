@@ -596,7 +596,7 @@ export class CellOutputContainer extends CellContentPart {
 		}
 	}
 
-	viewUpdateShowOutputs(initRendering: boolean): void {
+	viewUpdateShowOutputs(initRendering: boolean): codemavi {
 		if (this._hasStaleOutputs) {
 			this._hasStaleOutputs = false;
 			this._outputEntries.forEach(entry => {
@@ -617,7 +617,7 @@ export class CellOutputContainer extends CellContentPart {
 		this._relayoutCell();
 	}
 
-	viewUpdateHideOuputs(): void {
+	viewUpdateHideOuputs(): codemavi {
 		for (let index = 0; index < this._outputEntries.length; index++) {
 			this.notebookEditor.hideInset(this._outputEntries[index].model);
 		}

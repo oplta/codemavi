@@ -14,7 +14,7 @@ export interface IViewLines {
 }
 
 export abstract class RestrictedRenderingContext {
-	_restrictedRenderingContextBrand: void = undefined;
+	_restrictedRenderingContextBrand: codemavi = undefined;
 
 	public readonly viewportData: ViewportData;
 
@@ -68,7 +68,7 @@ export abstract class RestrictedRenderingContext {
 }
 
 export class RenderingContext extends RestrictedRenderingContext {
-	_renderingContextBrand: void = undefined;
+	_renderingContextBrand: codemavi = undefined;
 
 	private readonly _viewLines: IViewLines;
 	private readonly _viewLinesGpu?: IViewLines;
@@ -144,7 +144,7 @@ export class LineVisibleRanges {
 }
 
 export class HorizontalRange {
-	_horizontalRangeBrand: void = undefined;
+	_horizontalRangeBrand: codemavi = undefined;
 
 	public left: number;
 	public width: number;
@@ -169,7 +169,7 @@ export class HorizontalRange {
 }
 
 export class FloatHorizontalRange {
-	_floatHorizontalRangeBrand: void = undefined;
+	_floatHorizontalRangeBrand: codemavi = undefined;
 
 	public left: number;
 	public width: number;

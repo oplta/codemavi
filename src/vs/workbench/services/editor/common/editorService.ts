@@ -136,14 +136,14 @@ export interface IEditorService {
 	 *
 	 * @see {@link IEditorService.activeEditorPane}
 	 */
-	readonly onDidActiveEditorChange: Event<void>;
+	readonly onDidActiveEditorChange: Event<codemavi>;
 
 	/**
 	 * Emitted when any of the current visible editors changes.
 	 *
 	 * @see {@link IEditorService.visibleEditorPanes}
 	 */
-	readonly onDidVisibleEditorsChange: Event<void>;
+	readonly onDidVisibleEditorsChange: Event<codemavi>;
 
 	/**
 	 * An aggregated event for any change to any editor across
@@ -299,7 +299,7 @@ export interface IEditorService {
 	 * @returns a promise that is resolved when the replaced active
 	 * editor (if any) has finished loading.
 	 */
-	replaceEditors(replacements: IUntypedEditorReplacement[], group: IEditorGroup | GroupIdentifier): Promise<void>;
+	replaceEditors(replacements: IUntypedEditorReplacement[], group: IEditorGroup | GroupIdentifier): Promise<codemavi>;
 
 	/**
 	 * Find out if the provided editor is opened in any editor group.
@@ -319,12 +319,12 @@ export interface IEditorService {
 	/**
 	 * Close an editor in a specific editor group.
 	 */
-	closeEditor(editor: IEditorIdentifier, options?: ICloseEditorOptions): Promise<void>;
+	closeEditor(editor: IEditorIdentifier, options?: ICloseEditorOptions): Promise<codemavi>;
 
 	/**
 	 * Close multiple editors in specific editor groups.
 	 */
-	closeEditors(editors: readonly IEditorIdentifier[], options?: ICloseEditorOptions): Promise<void>;
+	closeEditors(editors: readonly IEditorIdentifier[], options?: ICloseEditorOptions): Promise<codemavi>;
 
 	/**
 	 * This method will return an entry for each editor that reports

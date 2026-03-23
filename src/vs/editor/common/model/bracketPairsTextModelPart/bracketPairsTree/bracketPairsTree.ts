@@ -25,7 +25,7 @@ import { combineTextEditInfos } from './combineTextEditInfos.js';
 import { ClosingBracketKind, OpeningBracketKind } from '../../../languages/supports/languageBracketsConfiguration.js';
 
 export class BracketPairsTree extends Disposable {
-	private readonly didChangeEmitter = new Emitter<void>();
+	private readonly didChangeEmitter = new Emitter<codemavi>();
 
 	/*
 		There are two trees:
@@ -75,7 +75,7 @@ export class BracketPairsTree extends Disposable {
 
 	//#region TextModel events
 
-	public handleDidChangeBackgroundTokenizationState(): void {
+	public handleDidChangeBackgroundTokenizationState(): codemavi {
 		if (this.textModel.tokenization.backgroundTokenizationState === BackgroundTokenizationState.Completed) {
 			const wasUndefined = this.initialAstWithoutTokens === undefined;
 			// Clear the initial tree as we can use the tree with token information now.
@@ -86,7 +86,7 @@ export class BracketPairsTree extends Disposable {
 		}
 	}
 
-	public handleDidChangeTokens({ ranges }: IModelTokensChangedEvent): void {
+	public handleDidChangeTokens({ ranges }: IModelTokensChangedEvent): codemavi {
 		const edits = ranges.map(r =>
 			new TextEditInfo(
 				toLength(r.fromLineNumber - 1, 0),
@@ -107,7 +107,7 @@ export class BracketPairsTree extends Disposable {
 		this.handleEdits(edits, false);
 	}
 
-	private handleEdits(edits: TextEditInfo[], tokenChange: boolean): void {
+	private handleEdits(edits: TextEditInfo[], tokenChange: boolean): codemavi {
 		// Lazily queue the edits and only apply them when the tree is accessed.
 		const result = combineTextEditInfos(this.queuedTextEdits, edits);
 

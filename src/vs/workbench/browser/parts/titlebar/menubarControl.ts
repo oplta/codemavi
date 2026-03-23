@@ -180,9 +180,9 @@ export abstract class MenubarControl extends Disposable {
 		this.notifyUserOfCustomMenubarAccessibility();
 	}
 
-	protected abstract doUpdateMenubar(firstTime: boolean): void;
+	protected abstract doUpdateMenubar(firstTime: boolean): codemavi;
 
-	protected registerListeners(): void {
+	protected registerListeners(): codemavi {
 		// Listen for window focus changes
 		this._register(this.hostService.onDidChangeFocus(e => this.onDidChangeWindowFocus(e)));
 
@@ -205,7 +205,7 @@ export abstract class MenubarControl extends Disposable {
 		this._register(this.mainMenu.onDidChange(() => { this.setupMainMenu(); this.doUpdateMenubar(true); }));
 	}
 
-	protected setupMainMenu(): void {
+	protected setupMainMenu(): codemavi {
 		this.mainMenuDisposables.clear();
 		this.menus = {};
 		this.topLevelTitles = {};
@@ -219,7 +219,7 @@ export abstract class MenubarControl extends Disposable {
 		}
 	}
 
-	protected updateMenubar(): void {
+	protected updateMenubar(): codemavi {
 		this.menuUpdater.schedule();
 	}
 
@@ -233,11 +233,11 @@ export abstract class MenubarControl extends Disposable {
 		return label;
 	}
 
-	protected onUpdateStateChange(): void {
+	protected onUpdateStateChange(): codemavi {
 		this.updateMenubar();
 	}
 
-	protected onUpdateKeybindings(): void {
+	protected onUpdateKeybindings(): codemavi {
 		this.updateMenubar();
 	}
 
@@ -269,14 +269,14 @@ export abstract class MenubarControl extends Disposable {
 		return result;
 	}
 
-	protected onDidChangeWindowFocus(hasFocus: boolean): void {
+	protected onDidChangeWindowFocus(hasFocus: boolean): codemavi {
 		// When we regain focus, update the recent menu items
 		if (hasFocus) {
 			this.onDidChangeRecentlyOpened();
 		}
 	}
 
-	private onConfigurationUpdated(event: IConfigurationChangeEvent): void {
+	private onConfigurationUpdated(event: IConfigurationChangeEvent): codemavi {
 		if (this.keys.some(key => event.affectsConfiguration(key))) {
 			this.updateMenubar();
 		}
@@ -296,7 +296,7 @@ export abstract class MenubarControl extends Disposable {
 		return isMacintosh && isNative ? false : getMenuBarVisibility(this.configurationService) === 'hidden';
 	}
 
-	protected onDidChangeRecentlyOpened(): void {
+	protected onDidChangeRecentlyOpened(): codemavi {
 
 		// Do not update recently opened when the menubar is hidden #108712
 		if (!this.menubarHidden) {
@@ -346,7 +346,7 @@ export abstract class MenubarControl extends Disposable {
 		return Object.assign(ret, { uri, remoteAuthority });
 	}
 
-	private notifyUserOfCustomMenubarAccessibility(): void {
+	private notifyUserOfCustomMenubarAccessibility(): codemavi {
 		if (isWeb || isMacintosh) {
 			return;
 		}
@@ -373,10 +373,10 @@ export abstract class MenubarControl extends Disposable {
 }
 
 // This is a bit complex due to the issue https://github.com/microsoft/vscode/issues/205836
-let focusMenuBarEmitter: Emitter<void> | undefined = undefined;
-function enableFocusMenuBarAction(): Emitter<void> {
+let focusMenuBarEmitter: Emitter<codemavi> | undefined = undefined;
+function enableFocusMenuBarAction(): Emitter<codemavi> {
 	if (!focusMenuBarEmitter) {
-		focusMenuBarEmitter = new Emitter<void>();
+		focusMenuBarEmitter = new Emitter<codemavi>();
 
 		registerAction2(class extends Action2 {
 			constructor() {
@@ -392,7 +392,7 @@ function enableFocusMenuBarAction(): Emitter<void> {
 				});
 			}
 
-			async run(): Promise<void> {
+			async run(): Promise<codemavi> {
 				focusMenuBarEmitter?.fire();
 			}
 		});
@@ -448,7 +448,7 @@ export class CustomMenubarControl extends MenubarControl {
 		this.registerListeners();
 	}
 
-	protected doUpdateMenubar(firstTime: boolean): void {
+	protected doUpdateMenubar(firstTime: boolean): codemavi {
 		if (!this.focusInsideMenubar) {
 			this.setupCustomMenubar(firstTime);
 		}
@@ -507,7 +507,7 @@ export class CustomMenubarControl extends MenubarControl {
 		return disableMenuBarAltBehavior;
 	}
 
-	private insertActionsBefore(nextAction: IAction, target: IAction[]): void {
+	private insertActionsBefore(nextAction: IAction, target: IAction[]): codemavi {
 		switch (nextAction.id) {
 			case OpenRecentAction.ID:
 				target.push(...this.getOpenRecentActions());
@@ -554,7 +554,7 @@ export class CustomMenubarControl extends MenubarControl {
 		return { horizontal: horizontalDirection, vertical: verticalDirection };
 	}
 
-	private onDidVisibilityChange(visible: boolean): void {
+	private onDidVisibilityChange(visible: boolean): codemavi {
 		this.visible = visible;
 		this.onDidChangeRecentlyOpened();
 		this._onVisibilityChange.fire(visible);
@@ -566,7 +566,7 @@ export class CustomMenubarControl extends MenubarControl {
 
 	private readonly reinstallDisposables = this._register(new DisposableStore());
 	private readonly updateActionsDisposables = this._register(new DisposableStore());
-	private setupCustomMenubar(firstTime: boolean): void {
+	private setupCustomMenubar(firstTime: boolean): codemavi {
 		// If there is no container, we cannot setup the menubar
 		if (!this.container) {
 			return;
@@ -756,7 +756,7 @@ export class CustomMenubarControl extends MenubarControl {
 		};
 	}
 
-	protected override onDidChangeWindowFocus(hasFocus: boolean): void {
+	protected override onDidChangeWindowFocus(hasFocus: boolean): codemavi {
 		if (!this.visible) {
 			return;
 		}
@@ -773,7 +773,7 @@ export class CustomMenubarControl extends MenubarControl {
 		}
 	}
 
-	protected override onUpdateStateChange(): void {
+	protected override onUpdateStateChange(): codemavi {
 		if (!this.visible) {
 			return;
 		}
@@ -781,7 +781,7 @@ export class CustomMenubarControl extends MenubarControl {
 		super.onUpdateStateChange();
 	}
 
-	protected override onDidChangeRecentlyOpened(): void {
+	protected override onDidChangeRecentlyOpened(): codemavi {
 		if (!this.visible) {
 			return;
 		}
@@ -789,7 +789,7 @@ export class CustomMenubarControl extends MenubarControl {
 		super.onDidChangeRecentlyOpened();
 	}
 
-	protected override onUpdateKeybindings(): void {
+	protected override onUpdateKeybindings(): codemavi {
 		if (!this.visible) {
 			return;
 		}
@@ -797,7 +797,7 @@ export class CustomMenubarControl extends MenubarControl {
 		super.onUpdateKeybindings();
 	}
 
-	protected override registerListeners(): void {
+	protected override registerListeners(): codemavi {
 		super.registerListeners();
 
 		this._register(addDisposableListener(mainWindow, EventType.RESIZE, () => {

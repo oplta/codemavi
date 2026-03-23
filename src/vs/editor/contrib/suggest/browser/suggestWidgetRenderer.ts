@@ -82,13 +82,13 @@ export interface ISuggestionTemplateData {
 	readonly readMore: HTMLElement;
 	readonly disposables: DisposableStore;
 
-	readonly configureFont: () => void;
+	readonly configureFont: () => codemavi;
 }
 
 export class ItemRenderer implements IListRenderer<CompletionItem, ISuggestionTemplateData> {
 
-	private readonly _onDidToggleDetails = new Emitter<void>();
-	readonly onDidToggleDetails: Event<void> = this._onDidToggleDetails.event;
+	private readonly _onDidToggleDetails = new Emitter<codemavi>();
+	readonly onDidToggleDetails: Event<codemavi> = this._onDidToggleDetails.event;
 
 	readonly templateId = 'suggestion';
 
@@ -99,7 +99,7 @@ export class ItemRenderer implements IListRenderer<CompletionItem, ISuggestionTe
 		@IThemeService private readonly _themeService: IThemeService
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._onDidToggleDetails.dispose();
 	}
 
@@ -157,7 +157,7 @@ export class ItemRenderer implements IListRenderer<CompletionItem, ISuggestionTe
 		return { root, left, right, icon, colorspan, iconLabel, iconContainer, parametersLabel, qualifierLabel, detailsLabel, readMore, disposables, configureFont };
 	}
 
-	renderElement(element: CompletionItem, index: number, data: ISuggestionTemplateData): void {
+	renderElement(element: CompletionItem, index: number, data: ISuggestionTemplateData): codemavi {
 
 
 		data.configureFont();
@@ -242,7 +242,7 @@ export class ItemRenderer implements IListRenderer<CompletionItem, ISuggestionTe
 		}
 	}
 
-	disposeTemplate(templateData: ISuggestionTemplateData): void {
+	disposeTemplate(templateData: ISuggestionTemplateData): codemavi {
 		templateData.disposables.dispose();
 	}
 }

@@ -183,7 +183,7 @@ export class SnippetFile {
 		this.isUserSnippets = !this._extension;
 	}
 
-	select(selector: string, bucket: Snippet[]): void {
+	select(selector: string, bucket: Snippet[]): codemavi {
 		if (this.isGlobalSnippets || !this.isUserSnippets) {
 			this._scopeSelect(selector, bucket);
 		} else {
@@ -191,14 +191,14 @@ export class SnippetFile {
 		}
 	}
 
-	private _filepathSelect(selector: string, bucket: Snippet[]): void {
+	private _filepathSelect(selector: string, bucket: Snippet[]): codemavi {
 		// for `fooLang.json` files all snippets are accepted
 		if (selector + '.json' === basename(this.location.path)) {
 			bucket.push(...this.data);
 		}
 	}
 
-	private _scopeSelect(selector: string, bucket: Snippet[]): void {
+	private _scopeSelect(selector: string, bucket: Snippet[]): codemavi {
 		// for `my.code-snippets` files we need to look at each snippet
 		for (const snippet of this.data) {
 			const len = snippet.scopes.length;
@@ -253,12 +253,12 @@ export class SnippetFile {
 		return this._loadPromise;
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._loadPromise = undefined;
 		this.data.length = 0;
 	}
 
-	private _parseSnippet(name: string, snippet: JsonSerializedSnippet, bucket: Snippet[]): void {
+	private _parseSnippet(name: string, snippet: JsonSerializedSnippet, bucket: Snippet[]): codemavi {
 
 		let { isFileTemplate, prefix, body, description } = snippet;
 

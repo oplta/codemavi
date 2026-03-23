@@ -110,7 +110,7 @@ export class TextSearchResultRenderer extends Disposable implements ICompressibl
 	) {
 		super();
 	}
-	disposeCompressedElements?(node: ITreeNode<ICompressedTreeNode<ITextSearchHeading>, any>, index: number, templateData: ITextSearchResultTemplate, height: number | undefined): void {
+	disposeCompressedElements?(node: ITreeNode<ICompressedTreeNode<ITextSearchHeading>, any>, index: number, templateData: ITextSearchResultTemplate, height: number | undefined): codemavi {
 
 	}
 	renderTemplate(container: HTMLElement): ITextSearchResultTemplate {
@@ -136,7 +136,7 @@ export class TextSearchResultRenderer extends Disposable implements ICompressibl
 		return { label, disposables, actions, contextKeyService: contextKeyServiceMain };
 	}
 
-	async renderElement(node: ITreeNode<ITextSearchHeading, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): Promise<void> {
+	async renderElement(node: ITreeNode<ITextSearchHeading, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): Promise<codemavi> {
 		if (isPlainTextSearchHeading(node.element)) {
 			templateData.label.setLabel(nls.localize('searchFolderMatch.plainText.label', "Text Results"));
 			SearchContext.AIResultsTitle.bindTo(templateData.contextKeyService).set(false);
@@ -166,11 +166,11 @@ export class TextSearchResultRenderer extends Disposable implements ICompressibl
 		}
 	}
 
-	disposeTemplate(templateData: IFolderMatchTemplate): void {
+	disposeTemplate(templateData: IFolderMatchTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ITextSearchHeading>, any>, index: number, templateData: ITextSearchResultTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ITextSearchHeading>, any>, index: number, templateData: ITextSearchResultTemplate, height: number | undefined): codemavi {
 	}
 
 }
@@ -190,7 +190,7 @@ export class FolderMatchRenderer extends Disposable implements ICompressibleTree
 		super();
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFolderMatch>, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFolderMatch>, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): codemavi {
 		const compressed = node.element;
 		const folder = compressed.elements[compressed.elements.length - 1];
 		const label = compressed.elements.map(e => e.name());
@@ -248,7 +248,7 @@ export class FolderMatchRenderer extends Disposable implements ICompressibleTree
 		};
 	}
 
-	renderElement(node: ITreeNode<ISearchTreeFolderMatch, any>, index: number, templateData: IFolderMatchTemplate): void {
+	renderElement(node: ITreeNode<ISearchTreeFolderMatch, any>, index: number, templateData: IFolderMatchTemplate): codemavi {
 		const folderMatch = node.element;
 		if (folderMatch.resource) {
 			const workspaceFolder = this.contextService.getWorkspaceFolder(folderMatch.resource);
@@ -270,15 +270,15 @@ export class FolderMatchRenderer extends Disposable implements ICompressibleTree
 		this.renderFolderDetails(folderMatch, templateData);
 	}
 
-	disposeElement(element: ITreeNode<RenderableMatch, any>, index: number, templateData: IFolderMatchTemplate): void {
+	disposeElement(element: ITreeNode<RenderableMatch, any>, index: number, templateData: IFolderMatchTemplate): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFolderMatch>, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): void {
+	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFolderMatch>, any>, index: number, templateData: IFolderMatchTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IFolderMatchTemplate): void {
+	disposeTemplate(templateData: IFolderMatchTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 
@@ -307,7 +307,7 @@ export class FileMatchRenderer extends Disposable implements ICompressibleTreeRe
 		super();
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFileMatch>, any>, index: number, templateData: IFileMatchTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeFileMatch>, any>, index: number, templateData: IFileMatchTemplate, height: number | undefined): codemavi {
 		throw new Error('Should never happen since node is incompressible.');
 	}
 
@@ -350,7 +350,7 @@ export class FileMatchRenderer extends Disposable implements ICompressibleTreeRe
 		};
 	}
 
-	renderElement(node: ITreeNode<ISearchTreeFileMatch, any>, index: number, templateData: IFileMatchTemplate): void {
+	renderElement(node: ITreeNode<ISearchTreeFileMatch, any>, index: number, templateData: IFileMatchTemplate): codemavi {
 		const fileMatch = node.element;
 		templateData.el.setAttribute('data-resource', fileMatch.resource.toString());
 
@@ -374,16 +374,16 @@ export class FileMatchRenderer extends Disposable implements ICompressibleTreeRe
 		twistieContainer?.classList.add('force-twistie');
 	}
 
-	disposeElement(element: ITreeNode<RenderableMatch, any>, index: number, templateData: IFileMatchTemplate): void {
+	disposeElement(element: ITreeNode<RenderableMatch, any>, index: number, templateData: IFileMatchTemplate): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IFileMatchTemplate): void {
+	disposeTemplate(templateData: IFileMatchTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 }
 
-export class MatchRenderer extends Disposable implements ICompressibleTreeRenderer<ISearchTreeMatch, void, IMatchTemplate> {
+export class MatchRenderer extends Disposable implements ICompressibleTreeRenderer<ISearchTreeMatch, codemavi, IMatchTemplate> {
 	static readonly TEMPLATE_ID = 'match';
 
 	readonly templateId = MatchRenderer.TEMPLATE_ID;
@@ -398,7 +398,7 @@ export class MatchRenderer extends Disposable implements ICompressibleTreeRender
 	) {
 		super();
 	}
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeMatch>, void>, index: number, templateData: IMatchTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISearchTreeMatch>, codemavi>, index: number, templateData: IMatchTemplate, height: number | undefined): codemavi {
 		throw new Error('Should never happen since node is incompressible.');
 	}
 
@@ -445,7 +445,7 @@ export class MatchRenderer extends Disposable implements ICompressibleTreeRender
 		};
 	}
 
-	renderElement(node: ITreeNode<ISearchTreeMatch, any>, index: number, templateData: IMatchTemplate): void {
+	renderElement(node: ITreeNode<ISearchTreeMatch, any>, index: number, templateData: IMatchTemplate): codemavi {
 		const match = node.element;
 		const preview = match.preview();
 		const replace = this.searchView.model.isReplaceActive() &&
@@ -477,7 +477,7 @@ export class MatchRenderer extends Disposable implements ICompressibleTreeRender
 
 	}
 
-	disposeTemplate(templateData: IMatchTemplate): void {
+	disposeTemplate(templateData: IMatchTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 

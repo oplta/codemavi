@@ -139,7 +139,7 @@ export class InlineEditsView extends Disposable {
 
 		const previousNewText = this._previewTextModel.getValue();
 		if (previousNewText !== newText) {
-			// Only update the model if the text has changed to avoid flickering
+			// Only update the model if the text has changed to acodemavi flickering
 			this._previewTextModel.setValue(newText);
 		}
 

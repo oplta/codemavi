@@ -176,7 +176,7 @@ export class LinkedEditingContribution extends Disposable implements IEditorCont
 		this.updateRanges();
 	}
 
-	private _syncRanges(token: number): void {
+	private _syncRanges(token: number): codemavi {
 		// delayed invocation, make sure we're still on
 		if (!this._editor.hasModel() || token !== this._syncRangesToken || this._currentDecorations.length === 0) {
 			// nothing to do
@@ -250,12 +250,12 @@ export class LinkedEditingContribution extends Disposable implements IEditorCont
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.clearRanges();
 		super.dispose();
 	}
 
-	public clearRanges(): void {
+	public clearRanges(): codemavi {
 		this._visibleContextKey.set(false);
 		this._currentDecorations.clear();
 		if (this._currentRequestCts) {
@@ -273,7 +273,7 @@ export class LinkedEditingContribution extends Disposable implements IEditorCont
 		return this._rangeSyncTriggerPromise || Promise.resolve();
 	}
 
-	public async updateRanges(force = false): Promise<void> {
+	public async updateRanges(force = false): Promise<codemavi> {
 		if (!this._editor.hasModel()) {
 			this.clearRanges();
 			return;
@@ -402,7 +402,7 @@ export class LinkedEditingAction extends EditorAction {
 		});
 	}
 
-	override runCommand(accessor: ServicesAccessor, args: [URI, IPosition]): void | Promise<void> {
+	override runCommand(accessor: ServicesAccessor, args: [URI, IPosition]): codemavi | Promise<codemavi> {
 		const editorService = accessor.get(ICodeEditorService);
 		const [uri, pos] = Array.isArray(args) && args || [undefined, undefined];
 
@@ -422,7 +422,7 @@ export class LinkedEditingAction extends EditorAction {
 		return super.runCommand(accessor, args);
 	}
 
-	run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const controller = LinkedEditingContribution.get(editor);
 		if (controller) {
 			return Promise.resolve(controller.updateRanges(true));

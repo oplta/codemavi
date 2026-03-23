@@ -22,7 +22,7 @@ import { IOverlayWebview, IWebview, IWebviewElement, IWebviewService, KEYBINDING
 export class OverlayWebview extends Disposable implements IOverlayWebview {
 
 	private _isFirstLoad = true;
-	private readonly _firstLoadPendingMessages = new Set<{ readonly message: any; readonly transfer?: readonly ArrayBuffer[]; readonly resolve: (value: boolean) => void }>();
+	private readonly _firstLoadPendingMessages = new Set<{ readonly message: any; readonly transfer?: readonly ArrayBuffer[]; readonly resolve: (value: boolean) => codemavi }>();
 	private readonly _webview = this._register(new MutableDisposable<IWebviewElement>());
 	private readonly _webviewEvents = this._register(new DisposableStore());
 
@@ -74,7 +74,7 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 
 	private _isDisposed = false;
 
-	private readonly _onDidDispose = this._register(new Emitter<void>());
+	private readonly _onDidDispose = this._register(new Emitter<codemavi>());
 	public readonly onDidDispose = this._onDidDispose.event;
 
 	override dispose() {
@@ -106,7 +106,7 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 			this._container.setVisibility('hidden');
 
 			// Webviews cannot be reparented in the dom as it will destroy their contents.
-			// Mount them to a high level node to avoid this.
+			// Mount them to a high level node to acodemavi this.
 			this._layoutService.getContainer(this.window).appendChild(node);
 		}
 
@@ -329,16 +329,16 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 		this._withWebview(webview => webview.localResourcesRoot = resources);
 	}
 
-	private readonly _onDidFocus = this._register(new Emitter<void>());
+	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
 	public readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onDidBlur = this._register(new Emitter<void>());
+	private readonly _onDidBlur = this._register(new Emitter<codemavi>());
 	public readonly onDidBlur = this._onDidBlur.event;
 
 	private readonly _onDidClickLink = this._register(new Emitter<string>());
 	public readonly onDidClickLink = this._onDidClickLink.event;
 
-	private readonly _onDidReload = this._register(new Emitter<void>());
+	private readonly _onDidReload = this._register(new Emitter<codemavi>());
 	public readonly onDidReload = this._onDidReload.event;
 
 	private readonly _onDidScroll = this._register(new Emitter<{ readonly scrollYPercentage: number }>());
@@ -365,7 +365,7 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 		}
 
 		if (this._isFirstLoad) {
-			let resolve: (x: boolean) => void;
+			let resolve: (x: boolean) => codemavi;
 			const p = new Promise<boolean>(r => resolve = r);
 			this._firstLoadPendingMessages.add({ message, transfer, resolve: resolve! });
 			return p;
@@ -374,14 +374,14 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 		return false;
 	}
 
-	focus(): void { this._webview.value?.focus(); }
-	reload(): void { this._webview.value?.reload(); }
-	selectAll(): void { this._webview.value?.selectAll(); }
-	copy(): void { this._webview.value?.copy(); }
-	paste(): void { this._webview.value?.paste(); }
-	cut(): void { this._webview.value?.cut(); }
-	undo(): void { this._webview.value?.undo(); }
-	redo(): void { this._webview.value?.redo(); }
+	focus(): codemavi { this._webview.value?.focus(); }
+	reload(): codemavi { this._webview.value?.reload(); }
+	selectAll(): codemavi { this._webview.value?.selectAll(); }
+	copy(): codemavi { this._webview.value?.copy(); }
+	paste(): codemavi { this._webview.value?.paste(); }
+	cut(): codemavi { this._webview.value?.cut(); }
+	undo(): codemavi { this._webview.value?.undo(); }
+	redo(): codemavi { this._webview.value?.redo(); }
 
 	showFind(animated = true) {
 		if (this._webview.value) {
@@ -395,9 +395,9 @@ export class OverlayWebview extends Disposable implements IOverlayWebview {
 		this._webview.value?.hideFind(animated);
 	}
 
-	runFindAction(previous: boolean): void { this._webview.value?.runFindAction(previous); }
+	runFindAction(previous: boolean): codemavi { this._webview.value?.runFindAction(previous); }
 
-	private _withWebview(f: (webview: IWebview) => void): void {
+	private _withWebview(f: (webview: IWebview) => codemavi): codemavi {
 		if (this._webview.value) {
 			f(this._webview.value);
 		}

@@ -46,7 +46,7 @@ export interface IThemeMainService {
 
 	getBackgroundColor(): string;
 
-	saveWindowSplash(windowId: number | undefined, workspace: IBaseWorkspaceIdentifier | undefined, splash: IPartsSplash): void;
+	saveWindowSplash(windowId: number | undefined, workspace: IBaseWorkspaceIdentifier | undefined, splash: IPartsSplash): codemavi;
 	getWindowSplash(workspace: IBaseWorkspaceIdentifier | undefined): IPartsSplash | undefined;
 
 	getColorScheme(): IColorScheme;
@@ -76,7 +76,7 @@ export class ThemeMainService extends Disposable implements IThemeMainService {
 		this._register(Event.fromNodeEventEmitter(electron.nativeTheme, 'updated')(() => this._onDidChangeColorScheme.fire(this.getColorScheme())));
 	}
 
-	private updateSystemColorTheme(): void {
+	private updateSystemColorTheme(): codemavi {
 		if (isLinux || this.configurationService.getValue(ThemeSettings.DETECT_COLOR_SCHEME)) {
 			// only with `system` we can detect the system color scheme
 			electron.nativeTheme.themeSource = 'system';
@@ -168,7 +168,7 @@ export class ThemeMainService extends Disposable implements IThemeMainService {
 		}
 	}
 
-	saveWindowSplash(windowId: number | undefined, workspace: IBaseWorkspaceIdentifier | undefined, splash: IPartsSplash): void {
+	saveWindowSplash(windowId: number | undefined, workspace: IBaseWorkspaceIdentifier | undefined, splash: IPartsSplash): codemavi {
 
 		// Update override as needed
 		const splashOverride = this.updateWindowSplashOverride(workspace, splash);
@@ -219,7 +219,7 @@ export class ThemeMainService extends Disposable implements IThemeMainService {
 		return changed ? splashOverride : undefined;
 	}
 
-	private updateBackgroundColor(windowId: number, splash: IPartsSplash): void {
+	private updateBackgroundColor(windowId: number, splash: IPartsSplash): codemavi {
 		for (const window of getAllWindowsExcludingOffscreen()) {
 			if (window.id === windowId) {
 				window.setBackgroundColor(splash.colorInfo.background);

@@ -703,7 +703,7 @@ suite('KeybindingsEditorModel', () => {
 		return keybindingItems;
 	}
 
-	function registerCommandWithTitle(command: string, title: string): void {
+	function registerCommandWithTitle(command: string, title: string): codemavi {
 		disposables.add(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -712,7 +712,7 @@ suite('KeybindingsEditorModel', () => {
 					f1: true
 				});
 			}
-			async run(): Promise<void> { }
+			async run(): Promise<codemavi> { }
 		}));
 	}
 
@@ -723,7 +723,7 @@ suite('KeybindingsEditorModel', () => {
 		}
 	}
 
-	function assertKeybindingItem(actual: ResolvedKeybindingItem, expected: ResolvedKeybindingItem): void {
+	function assertKeybindingItem(actual: ResolvedKeybindingItem, expected: ResolvedKeybindingItem): codemavi {
 		assert.strictEqual(actual.command, expected.command);
 		if (actual.when) {
 			assert.ok(!!expected.when);

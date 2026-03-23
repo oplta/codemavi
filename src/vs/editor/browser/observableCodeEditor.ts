@@ -50,7 +50,7 @@ export class ObservableCodeEditor extends Disposable {
 	private _updateCounter = 0;
 	private _currentTransaction: TransactionImpl | undefined = undefined;
 
-	private _beginUpdate(): void {
+	private _beginUpdate(): codemavi {
 		this._updateCounter++;
 		if (this._updateCounter === 1) {
 			this._currentTransaction = new TransactionImpl(() => {
@@ -59,7 +59,7 @@ export class ObservableCodeEditor extends Disposable {
 		}
 	}
 
-	private _endUpdate(): void {
+	private _endUpdate(): codemavi {
 		this._updateCounter--;
 		if (this._updateCounter === 0) {
 			const t = this._currentTransaction!;
@@ -125,7 +125,7 @@ export class ObservableCodeEditor extends Disposable {
 		}));
 	}
 
-	public forceUpdate(): void;
+	public forceUpdate(): codemavi;
 	public forceUpdate<T>(cb: (tx: ITransaction) => T): T;
 	public forceUpdate<T>(cb?: (tx: ITransaction) => T): T {
 		this._beginUpdate();
@@ -138,7 +138,7 @@ export class ObservableCodeEditor extends Disposable {
 		}
 	}
 
-	private _forceUpdate(): void {
+	private _forceUpdate(): codemavi {
 		this._beginUpdate();
 		try {
 			this._model.set(this.editor.getModel(), this._currentTransaction);

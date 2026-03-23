@@ -62,12 +62,12 @@ class CliMain extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		// Dispose on exit
 		process.once('exit', () => this.dispose());
 	}
 
-	async run(): Promise<void> {
+	async run(): Promise<codemavi> {
 		const instantiationService = await this.initServices();
 		await instantiationService.invokeFunction(async accessor => {
 			const configurationService = accessor.get(IConfigurationService);
@@ -146,7 +146,7 @@ class CliMain extends Disposable {
 		return new InstantiationService(services);
 	}
 
-	private async doRun(extensionManagementCLI: ExtensionManagementCLI): Promise<void> {
+	private async doRun(extensionManagementCLI: ExtensionManagementCLI): Promise<codemavi> {
 
 		// List Extensions
 		if (this.args['list-extensions']) {
@@ -180,11 +180,11 @@ class CliMain extends Disposable {
 	}
 }
 
-function eventuallyExit(code: number): void {
+function eventuallyExit(code: number): codemavi {
 	setTimeout(() => process.exit(code), 0);
 }
 
-export async function run(args: ServerParsedArgs, REMOTE_DATA_FOLDER: string, optionDescriptions: OptionDescriptions<ServerParsedArgs>): Promise<void> {
+export async function run(args: ServerParsedArgs, REMOTE_DATA_FOLDER: string, optionDescriptions: OptionDescriptions<ServerParsedArgs>): Promise<codemavi> {
 	if (args.help) {
 		const executable = product.serverApplicationName + (isWindows ? '.cmd' : '');
 		console.log(buildHelpMessage(product.nameLong, executable, product.version, optionDescriptions, { noInputFiles: true, noPipe: true }));

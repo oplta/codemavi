@@ -102,7 +102,7 @@ type DomCreateFn<TAttributes, TResult extends Element> = (
 
 export type ChildNode = ValueOrList2<Element | string | ObserverNode | undefined>;
 
-export type IRef<T> = (value: T) => void;
+export type IRef<T> = (value: T) => codemavi;
 
 export interface IRefWithVal<T> extends IRef<T> {
 	readonly element: T;
@@ -213,7 +213,7 @@ export abstract class ObserverNode<T extends Element = Element> {
 		}
 	}
 
-	readEffect(reader: IReader | undefined): void {
+	readEffect(reader: IReader | undefined): codemavi {
 		for (const d of this._deriveds) {
 			d.read(reader);
 		}
@@ -245,7 +245,7 @@ function setClassName(domNode: Element, className: string) {
 	}
 }
 
-function resolve<T>(value: ValueOrList<T>, reader: IReader | undefined, cb: (val: T) => void): void {
+function resolve<T>(value: ValueOrList<T>, reader: IReader | undefined, cb: (val: T) => codemavi): codemavi {
 	if (isObservable(value)) {
 		cb(value.read(reader));
 		return;

@@ -32,7 +32,7 @@ class OpenProcessExplorer extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const processService = accessor.get(IWorkbenchProcessService);
 
 		return processService.openProcessExplorer();
@@ -61,7 +61,7 @@ class StopTracing extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const processService = accessor.get(IProcessMainService);
 		const environmentService = accessor.get(INativeEnvironmentService);
 		const dialogService = accessor.get(IDialogService);

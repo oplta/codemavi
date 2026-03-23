@@ -53,7 +53,7 @@ export class EmptyView extends ViewPane {
 		return true;
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		this._register(new DragAndDropObserver(container, {
@@ -82,7 +82,7 @@ export class EmptyView extends ViewPane {
 		this.refreshTitle();
 	}
 
-	private refreshTitle(): void {
+	private refreshTitle(): codemavi {
 		if (this._disposed) {
 			return;
 		}
@@ -94,7 +94,7 @@ export class EmptyView extends ViewPane {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._disposed = true;
 		super.dispose();
 	}

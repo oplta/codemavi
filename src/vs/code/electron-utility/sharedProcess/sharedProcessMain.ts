@@ -139,7 +139,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Shared process lifecycle
 		let didExit = false;
@@ -155,7 +155,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		once(process.parentPort, SharedProcessLifecycle.exit, onExit);
 	}
 
-	async init(): Promise<void> {
+	async init(): Promise<codemavi> {
 
 		// Services
 		const instantiationService = await this.initServices();
@@ -382,7 +382,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		return new InstantiationService(services);
 	}
 
-	private initChannels(accessor: ServicesAccessor): void {
+	private initChannels(accessor: ServicesAccessor): codemavi {
 
 		// Extensions Management
 		const channel = new ExtensionManagementChannel(accessor.get(IExtensionManagementService), () => null);
@@ -443,7 +443,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		this.server.registerChannel('sharedWebContentExtractor', webContentExtractorChannel);
 	}
 
-	private registerErrorHandler(logService: ILogService): void {
+	private registerErrorHandler(logService: ILogService): codemavi {
 
 		// Listen on global error events
 		process.on('uncaughtException', error => onUnexpectedError(error));
@@ -460,7 +460,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 		});
 	}
 
-	private async reportClientOSInfo(telemetryService: ITelemetryService, logService: ILogService): Promise<void> {
+	private async reportClientOSInfo(telemetryService: ITelemetryService, logService: ILogService): Promise<codemavi> {
 		if (isLinux) {
 			const [releaseInfo, displayProtocol] = await Promise.all([
 				getOSReleaseInfo(logService.error.bind(logService)),
@@ -521,7 +521,7 @@ class SharedProcessMain extends Disposable implements IClientConnectionFilter {
 	}
 }
 
-export async function main(configuration: ISharedProcessConfiguration): Promise<void> {
+export async function main(configuration: ISharedProcessConfiguration): Promise<codemavi> {
 
 	// create shared process and signal back to main that we are
 	// ready to accept message ports as client connections

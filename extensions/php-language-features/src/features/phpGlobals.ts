@@ -169,7 +169,7 @@ export const keywords: IEntries = {
 	},
 	echo: {
 		description: 'Outputs all parameters. \r\n\r\necho is not actually a function (it is a language construct), so you are not required to use parentheses with it. echo (unlike some other language constructs) does not behave like a function, so it cannot always be used in the context of a function. Additionally, if you want to pass more than one parameter to echo, the parameters must not be enclosed within parentheses.\r\n\r\necho also has a shortcut syntax, where you can immediately follow the opening tag with an equals sign. This short syntax only works with the short_open_tag configuration setting enabled.',
-		signature: '( string $arg1 [, string $... ] ): void'
+		signature: '( string $arg1 [, string $... ] ): codemavi'
 	},
 	empty: {
 		description: 'Determine whether a variable is considered to be empty.',
@@ -177,7 +177,7 @@ export const keywords: IEntries = {
 	},
 	exit: {
 		description: 'Terminates execution of the script. Shutdown functions and object destructors will always be executed even if exit() is called.',
-		signature: '([ string $status ] )\r\nvoid exit ( int $status ): void'
+		signature: '([ string $status ] )\r\ncodemavi exit ( int $status ): codemavi'
 	},
 	eval: {
 		description: 'Evaluates the string given in code_str as PHP code. Among other things, this can be useful for storing code in a database text field for later execution.\r\nThere are some factors to keep in mind when using eval(). Remember that the string passed must be valid PHP code, including things like terminating statements with a semicolon so the parser doesn\'t die on the line after the eval(), and properly escaping things in code_str. To mix HTML output and PHP code you can use a closing PHP tag to leave PHP mode.\r\nAlso remember that variables given values under eval() will retain these values in the main script afterwards.',
@@ -187,7 +187,7 @@ export const keywords: IEntries = {
 		description: 'The include statement includes and evaluates the specified file.',
 	},
 	include_once: {
-		description: 'The include_once statement includes and evaluates the specified file during the execution of the script. This is a behavior similar to the include statement, with the only difference being that if the code from a file has already been included, it will not be included again. As the name suggests, it will be included just once. \r\n\r\ninclude_once may be used in cases where the same file might be included and evaluated more than once during a particular execution of a script, so in this case it may help avoid problems such as function redefinitions, variable value reassignments, etc.',
+		description: 'The include_once statement includes and evaluates the specified file during the execution of the script. This is a behavior similar to the include statement, with the only difference being that if the code from a file has already been included, it will not be included again. As the name suggests, it will be included just once. \r\n\r\ninclude_once may be used in cases where the same file might be included and evaluated more than once during a particular execution of a script, so in this case it may help acodemavi problems such as function redefinitions, variable value reassignments, etc.',
 	},
 	isset: {
 		description: 'Determine if a variable is set and is not NULL. \r\n\r\nIf a variable has been unset with unset(), it will no longer be set. isset() will return FALSE if testing a variable that has been set to NULL. Also note that a NULL byte is not equivalent to the PHP NULL constant. \r\n\r\nIf multiple parameters are supplied then isset() will return TRUE only if all of the parameters are set. Evaluation goes from left to right and stops as soon as an unset variable is encountered.',
@@ -212,7 +212,7 @@ export const keywords: IEntries = {
 	},
 	unset: {
 		description: 'unset() destroys the specified variables. \r\n\r\nThe behavior of unset() inside of a function can vary depending on what type of variable you are attempting to destroy. \r\n\r\nIf a globalized variable is unset() inside of a function, only the local variable is destroyed. The variable in the calling environment will retain the same value as before unset() was called.',
-		signature: '( mixed $var [, mixed $... ] ): void'
+		signature: '( mixed $var [, mixed $... ] ): codemavi'
 	},
 	yield: {
 		description: 'The heart of a generator function is the yield keyword. In its simplest form, a yield statement looks much like a return statement, except that instead of stopping execution of the function and returning, yield instead provides a value to the code looping over the generator and pauses execution of the generator function.',

@@ -128,7 +128,7 @@ class BranchItem extends RefItem {
 }
 
 class CheckoutItem extends BranchItem {
-	async run(repository: Repository, opts?: { detached?: boolean }): Promise<void> {
+	async run(repository: Repository, opts?: { detached?: boolean }): Promise<codemavi> {
 		if (!this.ref.name) {
 			return;
 		}
@@ -150,7 +150,7 @@ class CheckoutProtectedItem extends CheckoutItem {
 
 class CheckoutRemoteHeadItem extends RefItem {
 
-	async run(repository: Repository, opts?: { detached?: boolean }): Promise<void> {
+	async run(repository: Repository, opts?: { detached?: boolean }): Promise<codemavi> {
 		if (!this.ref.name) {
 			return;
 		}
@@ -172,7 +172,7 @@ class CheckoutRemoteHeadItem extends RefItem {
 
 class CheckoutTagItem extends RefItem {
 
-	async run(repository: Repository, opts?: { detached?: boolean }): Promise<void> {
+	async run(repository: Repository, opts?: { detached?: boolean }): Promise<codemavi> {
 		if (!this.ref.name) {
 			return;
 		}
@@ -183,7 +183,7 @@ class CheckoutTagItem extends RefItem {
 
 class BranchDeleteItem extends BranchItem {
 
-	async run(repository: Repository, force?: boolean): Promise<void> {
+	async run(repository: Repository, force?: boolean): Promise<codemavi> {
 		if (this.ref.type === RefType.Head && this.refName) {
 			await repository.deleteBranch(this.refName, force);
 		} else if (this.ref.type === RefType.RemoteHead && this.refRemote && this.refName) {
@@ -195,7 +195,7 @@ class BranchDeleteItem extends BranchItem {
 
 class TagDeleteItem extends RefItem {
 
-	async run(repository: Repository): Promise<void> {
+	async run(repository: Repository): Promise<codemavi> {
 		if (this.ref.name) {
 			await repository.deleteTag(this.ref.name);
 		}
@@ -208,7 +208,7 @@ class RemoteTagDeleteItem extends RefItem {
 		return l10n.t('Remote tag at {0}', this.shortCommit);
 	}
 
-	async run(repository: Repository, remote: string): Promise<void> {
+	async run(repository: Repository, remote: string): Promise<codemavi> {
 		if (this.ref.name) {
 			await repository.deleteRemoteRef(remote, this.ref.name);
 		}
@@ -217,7 +217,7 @@ class RemoteTagDeleteItem extends RefItem {
 
 class MergeItem extends BranchItem {
 
-	async run(repository: Repository): Promise<void> {
+	async run(repository: Repository): Promise<codemavi> {
 		if (this.ref.name || this.ref.commit) {
 			await repository.merge(this.ref.name ?? this.ref.commit!);
 		}
@@ -226,7 +226,7 @@ class MergeItem extends BranchItem {
 
 class RebaseItem extends BranchItem {
 
-	async run(repository: Repository): Promise<void> {
+	async run(repository: Repository): Promise<codemavi> {
 		if (this.ref?.name) {
 			await repository.rebase(this.ref.name);
 		}
@@ -259,7 +259,7 @@ class AddRemoteItem implements QuickPickItem {
 
 	get alwaysShow(): boolean { return true; }
 
-	async run(repository: Repository): Promise<void> {
+	async run(repository: Repository): Promise<codemavi> {
 		await this.cc.addRemote(repository);
 	}
 }
@@ -271,7 +271,7 @@ class RemoteItem implements QuickPickItem {
 
 	constructor(private readonly repository: Repository, private readonly remote: Remote) { }
 
-	async run(): Promise<void> {
+	async run(): Promise<codemavi> {
 		await this.repository.fetch({ remote: this.remote.name });
 	}
 }
@@ -281,7 +281,7 @@ class FetchAllRemotesItem implements QuickPickItem {
 
 	constructor(private readonly repository: Repository) { }
 
-	async run(): Promise<void> {
+	async run(): Promise<codemavi> {
 		await this.repository.fetch({ all: true });
 	}
 }
@@ -617,11 +617,11 @@ class CommandErrorOutputTextDocumentContentProvider implements TextDocumentConte
 
 	private items = new Map<string, string>();
 
-	set(uri: Uri, contents: string): void {
+	set(uri: Uri, contents: string): codemavi {
 		this.items.set(uri.path, contents);
 	}
 
-	delete(uri: Uri): void {
+	delete(uri: Uri): codemavi {
 		this.items.delete(uri.path);
 	}
 
@@ -732,17 +732,17 @@ export class CommandCenter {
 	}
 
 	@command('git.showOutput')
-	showOutput(): void {
+	showOutput(): codemavi {
 		this.logger.show();
 	}
 
 	@command('git.refresh', { repository: true })
-	async refresh(repository: Repository): Promise<void> {
+	async refresh(repository: Repository): Promise<codemavi> {
 		await repository.refresh();
 	}
 
 	@command('git.openResource')
-	async openResource(resource: Resource): Promise<void> {
+	async openResource(resource: Resource): Promise<codemavi> {
 		const repository = this.model.getRepository(resource.resourceUri);
 
 		if (!repository) {
@@ -753,7 +753,7 @@ export class CommandCenter {
 	}
 
 	@command('git.openAllChanges', { repository: true })
-	async openChanges(repository: Repository): Promise<void> {
+	async openChanges(repository: Repository): Promise<codemavi> {
 		for (const resource of [...repository.workingTreeGroup.resourceStates, ...repository.untrackedGroup.resourceStates]) {
 			if (
 				resource.type === Status.DELETED || resource.type === Status.DELETED_BY_THEM ||
@@ -762,7 +762,7 @@ export class CommandCenter {
 				continue;
 			}
 
-			void commands.executeCommand(
+			codemavi commands.executeCommand(
 				'vscode.open',
 				resource.resourceUri,
 				{ background: true, preview: false, }
@@ -882,7 +882,7 @@ export class CommandCenter {
 		}
 	}
 
-	async cloneRepository(url?: string, parentPath?: string, options: { recursive?: boolean; ref?: string } = {}): Promise<void> {
+	async cloneRepository(url?: string, parentPath?: string, options: { recursive?: boolean; ref?: string } = {}): Promise<codemavi> {
 		if (!url || typeof url !== 'string') {
 			url = await pickRemoteSource({
 				providerLabel: provider => l10n.t('Clone from {0}', provider.name),
@@ -1021,7 +1021,7 @@ export class CommandCenter {
 	}
 
 	@command('git.continueInLocalClone')
-	async continueInLocalClone(): Promise<Uri | void> {
+	async continueInLocalClone(): Promise<Uri | codemavi> {
 		if (this.model.repositories.length === 0) { return; }
 
 		// Pick a single repository to continue working on in a local clone if there's more than one
@@ -1067,22 +1067,22 @@ export class CommandCenter {
 			}
 
 			// Otherwise, directly clone
-			void this.clone(uri, undefined, { ref: ref });
+			codemavi this.clone(uri, undefined, { ref: ref });
 		}
 	}
 
 	@command('git.clone')
-	async clone(url?: string, parentPath?: string, options?: { ref?: string }): Promise<void> {
+	async clone(url?: string, parentPath?: string, options?: { ref?: string }): Promise<codemavi> {
 		await this.cloneRepository(url, parentPath, options);
 	}
 
 	@command('git.cloneRecursive')
-	async cloneRecursive(url?: string, parentPath?: string): Promise<void> {
+	async cloneRecursive(url?: string, parentPath?: string): Promise<codemavi> {
 		await this.cloneRepository(url, parentPath, { recursive: true });
 	}
 
 	@command('git.init')
-	async init(skipFolderPrompt = false): Promise<void> {
+	async init(skipFolderPrompt = false): Promise<codemavi> {
 		let repositoryPath: string | undefined = undefined;
 		let askToOpen = true;
 
@@ -1181,7 +1181,7 @@ export class CommandCenter {
 	}
 
 	@command('git.openRepository', { repository: false })
-	async openRepository(path?: string): Promise<void> {
+	async openRepository(path?: string): Promise<codemavi> {
 		if (!path) {
 			const result = await window.showOpenDialog({
 				canSelectFiles: false,
@@ -1202,7 +1202,7 @@ export class CommandCenter {
 	}
 
 	@command('git.reopenClosedRepositories', { repository: false })
-	async reopenClosedRepositories(): Promise<void> {
+	async reopenClosedRepositories(): Promise<codemavi> {
 		if (this.model.closedRepositories.length === 0) {
 			return;
 		}
@@ -1239,7 +1239,7 @@ export class CommandCenter {
 	}
 
 	@command('git.close', { repository: true })
-	async close(repository: Repository, ...args: SourceControl[]): Promise<void> {
+	async close(repository: Repository, ...args: SourceControl[]): Promise<codemavi> {
 		const otherRepositories = args
 			.map(sourceControl => this.model.getRepository(sourceControl))
 			.filter(isDefined);
@@ -1250,7 +1250,7 @@ export class CommandCenter {
 	}
 
 	@command('git.closeOtherRepositories', { repository: true })
-	async closeOtherRepositories(repository: Repository, ...args: SourceControl[]): Promise<void> {
+	async closeOtherRepositories(repository: Repository, ...args: SourceControl[]): Promise<codemavi> {
 		const otherRepositories = args
 			.map(sourceControl => this.model.getRepository(sourceControl))
 			.filter(isDefined);
@@ -1265,7 +1265,7 @@ export class CommandCenter {
 	}
 
 	@command('git.openFile')
-	async openFile(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async openFile(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		const preserveFocus = arg instanceof Resource;
 
 		let uris: Uri[] | undefined;
@@ -1343,12 +1343,12 @@ export class CommandCenter {
 	}
 
 	@command('git.openFile2')
-	async openFile2(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async openFile2(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		this.openFile(arg, ...resourceStates);
 	}
 
 	@command('git.openHEADFile')
-	async openHEADFile(arg?: Resource | Uri): Promise<void> {
+	async openHEADFile(arg?: Resource | Uri): Promise<codemavi> {
 		let resource: Resource | undefined = undefined;
 		const preview = !(arg instanceof Resource);
 
@@ -1377,11 +1377,11 @@ export class CommandCenter {
 			preview
 		};
 
-		return await commands.executeCommand<void>('vscode.open', HEAD, opts, title);
+		return await commands.executeCommand<codemavi>('vscode.open', HEAD, opts, title);
 	}
 
 	@command('git.openChange')
-	async openChange(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async openChange(arg?: Resource | Uri, ...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		let resources: Resource[] | undefined = undefined;
 
 		if (arg instanceof Uri) {
@@ -1413,7 +1413,7 @@ export class CommandCenter {
 	}
 
 	@command('git.rename', { repository: true })
-	async rename(repository: Repository, fromUri: Uri | undefined): Promise<void> {
+	async rename(repository: Repository, fromUri: Uri | undefined): Promise<codemavi> {
 		fromUri = fromUri ?? window.activeTextEditor?.document.uri;
 
 		if (!fromUri) {
@@ -1440,7 +1440,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stage')
-	async stage(...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async stage(...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		this.logger.debug(`[CommandCenter][stage] git.stage ${resourceStates.length} `);
 
 		resourceStates = resourceStates.filter(s => !!s);
@@ -1501,7 +1501,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageAll', { repository: true })
-	async stageAll(repository: Repository): Promise<void> {
+	async stageAll(repository: Repository): Promise<codemavi> {
 		const resources = [...repository.workingTreeGroup.resourceStates, ...repository.untrackedGroup.resourceStates];
 		const uris = resources.map(r => r.resourceUri);
 
@@ -1512,7 +1512,7 @@ export class CommandCenter {
 		}
 	}
 
-	private async _stageDeletionConflict(repository: Repository, uri: Uri): Promise<void> {
+	private async _stageDeletionConflict(repository: Repository, uri: Uri): Promise<codemavi> {
 		const uriString = uri.toString();
 		const resource = repository.mergeGroup.resourceStates.filter(r => r.resourceUri.toString() === uriString)[0];
 
@@ -1548,7 +1548,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageAllTracked', { repository: true })
-	async stageAllTracked(repository: Repository): Promise<void> {
+	async stageAllTracked(repository: Repository): Promise<codemavi> {
 		const resources = repository.workingTreeGroup.resourceStates
 			.filter(r => r.type !== Status.UNTRACKED && r.type !== Status.IGNORED);
 		const uris = resources.map(r => r.resourceUri);
@@ -1557,7 +1557,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageAllUntracked', { repository: true })
-	async stageAllUntracked(repository: Repository): Promise<void> {
+	async stageAllUntracked(repository: Repository): Promise<codemavi> {
 		const resources = [...repository.workingTreeGroup.resourceStates, ...repository.untrackedGroup.resourceStates]
 			.filter(r => r.type === Status.UNTRACKED || r.type === Status.IGNORED);
 		const uris = resources.map(r => r.resourceUri);
@@ -1566,7 +1566,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageAllMerge', { repository: true })
-	async stageAllMerge(repository: Repository): Promise<void> {
+	async stageAllMerge(repository: Repository): Promise<codemavi> {
 		const resources = repository.mergeGroup.resourceStates.filter(s => s instanceof Resource) as Resource[];
 		const { merge, unresolved, deletionConflicts } = await categorizeResourceByResolution(resources);
 
@@ -1603,7 +1603,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageChange')
-	async stageChange(uri: Uri, changes: LineChange[], index: number): Promise<void> {
+	async stageChange(uri: Uri, changes: LineChange[], index: number): Promise<codemavi> {
 		if (!uri) {
 			return;
 		}
@@ -1621,16 +1621,16 @@ export class CommandCenter {
 	}
 
 	@command('git.diff.stageHunk')
-	async diffStageHunk(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<void> {
+	async diffStageHunk(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<codemavi> {
 		this.diffStageHunkOrSelection(changes);
 	}
 
 	@command('git.diff.stageSelection')
-	async diffStageSelection(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<void> {
+	async diffStageSelection(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<codemavi> {
 		this.diffStageHunkOrSelection(changes);
 	}
 
-	async diffStageHunkOrSelection(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<void> {
+	async diffStageHunkOrSelection(changes: DiffEditorSelectionHunkToolbarContext | undefined): Promise<codemavi> {
 		if (!changes) {
 			return;
 		}
@@ -1661,7 +1661,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageSelectedRanges')
-	async stageSelectedChanges(): Promise<void> {
+	async stageSelectedChanges(): Promise<codemavi> {
 		const textEditor = window.activeTextEditor;
 
 		if (!textEditor) {
@@ -1695,7 +1695,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stageFile')
-	async stageFile(uri: Uri): Promise<void> {
+	async stageFile(uri: Uri): Promise<codemavi> {
 		if (!uri) {
 			return;
 		}
@@ -1719,7 +1719,7 @@ export class CommandCenter {
 	}
 
 	@command('git.acceptMerge')
-	async acceptMerge(_uri: Uri | unknown): Promise<void> {
+	async acceptMerge(_uri: Uri | unknown): Promise<codemavi> {
 		const { activeTab } = window.tabGroups.activeTabGroup;
 		if (!activeTab) {
 			return;
@@ -1777,16 +1777,16 @@ export class CommandCenter {
 	}
 
 	@command('git.runGitMerge')
-	async runGitMergeNoDiff3(): Promise<void> {
+	async runGitMergeNoDiff3(): Promise<codemavi> {
 		await this.runGitMerge(false);
 	}
 
 	@command('git.runGitMergeDiff3')
-	async runGitMergeDiff3(): Promise<void> {
+	async runGitMergeDiff3(): Promise<codemavi> {
 		await this.runGitMerge(true);
 	}
 
-	private async runGitMerge(diff3: boolean): Promise<void> {
+	private async runGitMerge(diff3: boolean): Promise<codemavi> {
 		const { activeTab } = window.tabGroups.activeTabGroup;
 		if (!activeTab) {
 			return;
@@ -1821,7 +1821,7 @@ export class CommandCenter {
 		await workspace.applyEdit(e);
 	}
 
-	private async _stageChanges(textEditor: TextEditor, changes: LineChange[]): Promise<void> {
+	private async _stageChanges(textEditor: TextEditor, changes: LineChange[]): Promise<codemavi> {
 		const modifiedDocument = textEditor.document;
 		const modifiedUri = modifiedDocument.uri;
 
@@ -1838,7 +1838,7 @@ export class CommandCenter {
 	}
 
 	@command('git.revertChange')
-	async revertChange(uri: Uri, changes: LineChange[], index: number): Promise<void> {
+	async revertChange(uri: Uri, changes: LineChange[], index: number): Promise<codemavi> {
 		if (!uri) {
 			return;
 		}
@@ -1856,7 +1856,7 @@ export class CommandCenter {
 	}
 
 	@command('git.revertSelectedRanges')
-	async revertSelectedRanges(): Promise<void> {
+	async revertSelectedRanges(): Promise<codemavi> {
 		const textEditor = window.activeTextEditor;
 
 		if (!textEditor) {
@@ -1892,7 +1892,7 @@ export class CommandCenter {
 		textEditor.selections = selectionsBeforeRevert;
 	}
 
-	private async _revertChanges(textEditor: TextEditor, changes: LineChange[]): Promise<void> {
+	private async _revertChanges(textEditor: TextEditor, changes: LineChange[]): Promise<codemavi> {
 		const modifiedDocument = textEditor.document;
 		const modifiedUri = modifiedDocument.uri;
 
@@ -1915,7 +1915,7 @@ export class CommandCenter {
 	}
 
 	@command('git.unstage')
-	async unstage(...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async unstage(...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		resourceStates = resourceStates.filter(s => !!s);
 
 		if (resourceStates.length === 0 || (resourceStates[0] && !(resourceStates[0].resourceUri instanceof Uri))) {
@@ -1940,12 +1940,12 @@ export class CommandCenter {
 	}
 
 	@command('git.unstageAll', { repository: true })
-	async unstageAll(repository: Repository): Promise<void> {
+	async unstageAll(repository: Repository): Promise<codemavi> {
 		await repository.revert([]);
 	}
 
 	@command('git.unstageSelectedRanges')
-	async unstageSelectedRanges(): Promise<void> {
+	async unstageSelectedRanges(): Promise<codemavi> {
 		const textEditor = window.activeTextEditor;
 
 		if (!textEditor) {
@@ -2008,7 +2008,7 @@ export class CommandCenter {
 	}
 
 	@command('git.unstageFile')
-	async unstageFile(uri: Uri): Promise<void> {
+	async unstageFile(uri: Uri): Promise<codemavi> {
 		if (!uri) {
 			return;
 		}
@@ -2031,7 +2031,7 @@ export class CommandCenter {
 
 
 	@command('git.clean')
-	async clean(...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async clean(...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		// Remove duplicate resources
 		const resourceUris = new Set<string>();
 		resourceStates = resourceStates.filter(s => {
@@ -2068,12 +2068,12 @@ export class CommandCenter {
 	}
 
 	@command('git.cleanAll', { repository: true })
-	async cleanAll(repository: Repository): Promise<void> {
+	async cleanAll(repository: Repository): Promise<codemavi> {
 		await this._cleanAll(repository.workingTreeGroup.resourceStates);
 	}
 
 	@command('git.cleanAllTracked', { repository: true })
-	async cleanAllTracked(repository: Repository): Promise<void> {
+	async cleanAllTracked(repository: Repository): Promise<codemavi> {
 		const resources = repository.workingTreeGroup.resourceStates
 			.filter(r => r.type !== Status.UNTRACKED && r.type !== Status.IGNORED);
 
@@ -2085,7 +2085,7 @@ export class CommandCenter {
 	}
 
 	@command('git.cleanAllUntracked', { repository: true })
-	async cleanAllUntracked(repository: Repository): Promise<void> {
+	async cleanAllUntracked(repository: Repository): Promise<codemavi> {
 		const resources = [...repository.workingTreeGroup.resourceStates, ...repository.untrackedGroup.resourceStates]
 			.filter(r => r.type === Status.UNTRACKED || r.type === Status.IGNORED);
 
@@ -2096,7 +2096,7 @@ export class CommandCenter {
 		await this._cleanUntrackedChanges(resources);
 	}
 
-	private async _cleanAll(resources: Resource[]): Promise<void> {
+	private async _cleanAll(resources: Resource[]): Promise<codemavi> {
 		if (resources.length === 0) {
 			return;
 		}
@@ -2136,7 +2136,7 @@ export class CommandCenter {
 		}
 	}
 
-	private async _cleanTrackedChanges(resources: Resource[]): Promise<void> {
+	private async _cleanTrackedChanges(resources: Resource[]): Promise<codemavi> {
 		const allResourcesDeleted = resources.every(r => r.type === Status.DELETED);
 
 		const message = allResourcesDeleted
@@ -2165,7 +2165,7 @@ export class CommandCenter {
 		await this.runByRepository(resourceUris, async (repository, resources) => repository.clean(resources));
 	}
 
-	private async _cleanUntrackedChanges(resources: Resource[]): Promise<void> {
+	private async _cleanUntrackedChanges(resources: Resource[]): Promise<codemavi> {
 		const [message, messageDetail, primaryAction] = this.getDiscardUntrackedChangesDialogDetails(resources);
 		const pick = await window.showWarningMessage(message, { detail: messageDetail, modal: true }, primaryAction);
 
@@ -2216,7 +2216,7 @@ export class CommandCenter {
 		repository: Repository,
 		getCommitMessage: () => Promise<string | undefined>,
 		opts: CommitOptions
-	): Promise<void> {
+	): Promise<codemavi> {
 		const config = workspace.getConfiguration('git', Uri.file(repository.root));
 		let promptToSaveFilesBeforeCommit = config.get<'always' | 'staged' | 'never'>('promptToSaveFilesBeforeCommit');
 
@@ -2416,7 +2416,7 @@ export class CommandCenter {
 		await repository.commit(message, opts);
 	}
 
-	private async commitWithAnyInput(repository: Repository, opts: CommitOptions): Promise<void> {
+	private async commitWithAnyInput(repository: Repository, opts: CommitOptions): Promise<codemavi> {
 		const message = repository.inputBox.value;
 		const root = Uri.file(repository.root);
 		const config = workspace.getConfiguration('git', root);
@@ -2455,52 +2455,52 @@ export class CommandCenter {
 	}
 
 	@command('git.commit', { repository: true })
-	async commit(repository: Repository, postCommitCommand?: string | null): Promise<void> {
+	async commit(repository: Repository, postCommitCommand?: string | null): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { postCommitCommand });
 	}
 
 	@command('git.commitAmend', { repository: true })
-	async commitAmend(repository: Repository): Promise<void> {
+	async commitAmend(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { amend: true });
 	}
 
 	@command('git.commitSigned', { repository: true })
-	async commitSigned(repository: Repository): Promise<void> {
+	async commitSigned(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { signoff: true });
 	}
 
 	@command('git.commitStaged', { repository: true })
-	async commitStaged(repository: Repository): Promise<void> {
+	async commitStaged(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false });
 	}
 
 	@command('git.commitStagedSigned', { repository: true })
-	async commitStagedSigned(repository: Repository): Promise<void> {
+	async commitStagedSigned(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false, signoff: true });
 	}
 
 	@command('git.commitStagedAmend', { repository: true })
-	async commitStagedAmend(repository: Repository): Promise<void> {
+	async commitStagedAmend(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false, amend: true });
 	}
 
 	@command('git.commitAll', { repository: true })
-	async commitAll(repository: Repository): Promise<void> {
+	async commitAll(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true });
 	}
 
 	@command('git.commitAllSigned', { repository: true })
-	async commitAllSigned(repository: Repository): Promise<void> {
+	async commitAllSigned(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true, signoff: true });
 	}
 
 	@command('git.commitAllAmend', { repository: true })
-	async commitAllAmend(repository: Repository): Promise<void> {
+	async commitAllAmend(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true, amend: true });
 	}
 
 	@command('git.commitMessageAccept')
-	async commitMessageAccept(arg?: Uri): Promise<void> {
+	async commitMessageAccept(arg?: Uri): Promise<codemavi> {
 		if (!arg && !window.activeTextEditor) { return; }
 		arg ??= window.activeTextEditor!.document.uri;
 
@@ -2509,7 +2509,7 @@ export class CommandCenter {
 	}
 
 	@command('git.commitMessageDiscard')
-	async commitMessageDiscard(arg?: Uri): Promise<void> {
+	async commitMessageDiscard(arg?: Uri): Promise<codemavi> {
 		if (!arg && !window.activeTextEditor) { return; }
 		arg ??= window.activeTextEditor!.document.uri;
 
@@ -2539,14 +2539,14 @@ export class CommandCenter {
 		this._closeEditorTab(arg);
 	}
 
-	private _closeEditorTab(uri: Uri): void {
+	private _closeEditorTab(uri: Uri): codemavi {
 		const tabToClose = window.tabGroups.all.map(g => g.tabs).flat()
 			.filter(t => t.input instanceof TabInputText && t.input.uri.toString() === uri.toString());
 
 		window.tabGroups.close(tabToClose);
 	}
 
-	private async _commitEmpty(repository: Repository, noVerify?: boolean): Promise<void> {
+	private async _commitEmpty(repository: Repository, noVerify?: boolean): Promise<codemavi> {
 		const root = Uri.file(repository.root);
 		const config = workspace.getConfiguration('git', root);
 		const shouldPrompt = config.get<boolean>('confirmEmptyCommits') === true;
@@ -2568,67 +2568,67 @@ export class CommandCenter {
 	}
 
 	@command('git.commitEmpty', { repository: true })
-	async commitEmpty(repository: Repository): Promise<void> {
+	async commitEmpty(repository: Repository): Promise<codemavi> {
 		await this._commitEmpty(repository);
 	}
 
 	@command('git.commitNoVerify', { repository: true })
-	async commitNoVerify(repository: Repository): Promise<void> {
+	async commitNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { noVerify: true });
 	}
 
 	@command('git.commitStagedNoVerify', { repository: true })
-	async commitStagedNoVerify(repository: Repository): Promise<void> {
+	async commitStagedNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false, noVerify: true });
 	}
 
 	@command('git.commitStagedSignedNoVerify', { repository: true })
-	async commitStagedSignedNoVerify(repository: Repository): Promise<void> {
+	async commitStagedSignedNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false, signoff: true, noVerify: true });
 	}
 
 	@command('git.commitAmendNoVerify', { repository: true })
-	async commitAmendNoVerify(repository: Repository): Promise<void> {
+	async commitAmendNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { amend: true, noVerify: true });
 	}
 
 	@command('git.commitSignedNoVerify', { repository: true })
-	async commitSignedNoVerify(repository: Repository): Promise<void> {
+	async commitSignedNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { signoff: true, noVerify: true });
 	}
 
 	@command('git.commitStagedAmendNoVerify', { repository: true })
-	async commitStagedAmendNoVerify(repository: Repository): Promise<void> {
+	async commitStagedAmendNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: false, amend: true, noVerify: true });
 	}
 
 	@command('git.commitAllNoVerify', { repository: true })
-	async commitAllNoVerify(repository: Repository): Promise<void> {
+	async commitAllNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true, noVerify: true });
 	}
 
 	@command('git.commitAllSignedNoVerify', { repository: true })
-	async commitAllSignedNoVerify(repository: Repository): Promise<void> {
+	async commitAllSignedNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true, signoff: true, noVerify: true });
 	}
 
 	@command('git.commitAllAmendNoVerify', { repository: true })
-	async commitAllAmendNoVerify(repository: Repository): Promise<void> {
+	async commitAllAmendNoVerify(repository: Repository): Promise<codemavi> {
 		await this.commitWithAnyInput(repository, { all: true, amend: true, noVerify: true });
 	}
 
 	@command('git.commitEmptyNoVerify', { repository: true })
-	async commitEmptyNoVerify(repository: Repository): Promise<void> {
+	async commitEmptyNoVerify(repository: Repository): Promise<codemavi> {
 		await this._commitEmpty(repository, true);
 	}
 
 	@command('git.restoreCommitTemplate', { repository: true })
-	async restoreCommitTemplate(repository: Repository): Promise<void> {
+	async restoreCommitTemplate(repository: Repository): Promise<codemavi> {
 		repository.inputBox.value = await repository.getCommitTemplate();
 	}
 
 	@command('git.undoCommit', { repository: true })
-	async undoCommit(repository: Repository): Promise<void> {
+	async undoCommit(repository: Repository): Promise<codemavi> {
 		const HEAD = repository.HEAD;
 
 		if (!HEAD || !HEAD.commit) {
@@ -2663,7 +2663,7 @@ export class CommandCenter {
 	}
 
 	@command('git.graph.checkout', { repository: true })
-	async checkout2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<void> {
+	async checkout2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<codemavi> {
 		const historyItemRef = historyItem?.references?.find(r => r.id === historyItemRefId);
 		if (!historyItemRef) {
 			return;
@@ -2810,12 +2810,12 @@ export class CommandCenter {
 	}
 
 	@command('git.branch', { repository: true })
-	async branch(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<void> {
+	async branch(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<codemavi> {
 		await this._branch(repository, undefined, false, historyItem?.id);
 	}
 
 	@command('git.branchFrom', { repository: true })
-	async branchFrom(repository: Repository): Promise<void> {
+	async branchFrom(repository: Repository): Promise<codemavi> {
 		await this._branch(repository, undefined, true);
 	}
 
@@ -2938,7 +2938,7 @@ export class CommandCenter {
 		return sanitizeBranchName(branchName || '', branchWhitespaceChar);
 	}
 
-	private async _branch(repository: Repository, defaultName?: string, from = false, target?: string): Promise<void> {
+	private async _branch(repository: Repository, defaultName?: string, from = false, target?: string): Promise<codemavi> {
 		target = target ?? 'HEAD';
 
 		const config = workspace.getConfiguration('git');
@@ -3002,12 +3002,12 @@ export class CommandCenter {
 	}
 
 	@command('git.deleteBranch', { repository: true })
-	async deleteBranch(repository: Repository, name: string | undefined, force?: boolean): Promise<void> {
+	async deleteBranch(repository: Repository, name: string | undefined, force?: boolean): Promise<codemavi> {
 		await this._deleteBranch(repository, undefined, name, { remote: false, force });
 	}
 
 	@command('git.graph.deleteBranch', { repository: true })
-	async deleteBranch2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<void> {
+	async deleteBranch2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<codemavi> {
 		const historyItemRef = historyItem?.references?.find(r => r.id === historyItemRefId);
 		if (!historyItemRef) {
 			return;
@@ -3042,12 +3042,12 @@ export class CommandCenter {
 	}
 
 	@command('git.deleteRemoteBranch', { repository: true })
-	async deleteRemoteBranch(repository: Repository): Promise<void> {
+	async deleteRemoteBranch(repository: Repository): Promise<codemavi> {
 		await this._deleteBranch(repository, undefined, undefined, { remote: true });
 	}
 
-	private async _deleteBranch(repository: Repository, remote: string | undefined, name: string | undefined, options: { remote: boolean; force?: boolean }): Promise<void> {
-		let run: (force?: boolean) => Promise<void>;
+	private async _deleteBranch(repository: Repository, remote: string | undefined, name: string | undefined, options: { remote: boolean; force?: boolean }): Promise<codemavi> {
+		let run: (force?: boolean) => Promise<codemavi>;
 
 		const config = workspace.getConfiguration('git');
 		const showRefDetails = config.get<boolean>('showReferenceDetails') === true;
@@ -3105,7 +3105,7 @@ export class CommandCenter {
 	}
 
 	@command('git.renameBranch', { repository: true })
-	async renameBranch(repository: Repository): Promise<void> {
+	async renameBranch(repository: Repository): Promise<codemavi> {
 		const currentBranchName = repository.HEAD && repository.HEAD.name;
 		const branchName = await this.promptForBranchName(repository, undefined, currentBranchName);
 
@@ -3130,7 +3130,7 @@ export class CommandCenter {
 	}
 
 	@command('git.merge', { repository: true })
-	async merge(repository: Repository): Promise<void> {
+	async merge(repository: Repository): Promise<codemavi> {
 		const config = workspace.getConfiguration('git');
 		const showRefDetails = config.get<boolean>('showReferenceDetails') === true;
 
@@ -3157,12 +3157,12 @@ export class CommandCenter {
 	}
 
 	@command('git.mergeAbort', { repository: true })
-	async abortMerge(repository: Repository): Promise<void> {
+	async abortMerge(repository: Repository): Promise<codemavi> {
 		await repository.mergeAbort();
 	}
 
 	@command('git.rebase', { repository: true })
-	async rebase(repository: Repository): Promise<void> {
+	async rebase(repository: Repository): Promise<codemavi> {
 		const config = workspace.getConfiguration('git');
 		const showRefDetails = config.get<boolean>('showReferenceDetails') === true;
 
@@ -3199,7 +3199,7 @@ export class CommandCenter {
 	}
 
 	@command('git.createTag', { repository: true })
-	async createTag(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<void> {
+	async createTag(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<codemavi> {
 		const inputTagName = await window.showInputBox({
 			placeHolder: l10n.t('Tag name'),
 			prompt: l10n.t('Please provide a tag name'),
@@ -3221,7 +3221,7 @@ export class CommandCenter {
 	}
 
 	@command('git.deleteTag', { repository: true })
-	async deleteTag(repository: Repository): Promise<void> {
+	async deleteTag(repository: Repository): Promise<codemavi> {
 		const config = workspace.getConfiguration('git');
 		const showRefDetails = config.get<boolean>('showReferenceDetails') === true;
 
@@ -3239,7 +3239,7 @@ export class CommandCenter {
 	}
 
 	@command('git.graph.deleteTag', { repository: true })
-	async deleteTag2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<void> {
+	async deleteTag2(repository: Repository, historyItem?: SourceControlHistoryItem, historyItemRefId?: string): Promise<codemavi> {
 		const historyItemRef = historyItem?.references?.find(r => r.id === historyItemRefId);
 		if (!historyItemRef) {
 			return;
@@ -3249,7 +3249,7 @@ export class CommandCenter {
 	}
 
 	@command('git.deleteRemoteTag', { repository: true })
-	async deleteRemoteTag(repository: Repository): Promise<void> {
+	async deleteRemoteTag(repository: Repository): Promise<codemavi> {
 		const remotePicks = repository.remotes
 			.filter(r => r.pushUrl !== undefined)
 			.map(r => new RemoteItem(repository, r));
@@ -3298,7 +3298,7 @@ export class CommandCenter {
 	}
 
 	@command('git.fetch', { repository: true })
-	async fetch(repository: Repository): Promise<void> {
+	async fetch(repository: Repository): Promise<codemavi> {
 		if (repository.remotes.length === 0) {
 			window.showWarningMessage(l10n.t('This repository has no remotes configured to fetch from.'));
 			return;
@@ -3341,7 +3341,7 @@ export class CommandCenter {
 	}
 
 	@command('git.fetchPrune', { repository: true })
-	async fetchPrune(repository: Repository): Promise<void> {
+	async fetchPrune(repository: Repository): Promise<codemavi> {
 		if (repository.remotes.length === 0) {
 			window.showWarningMessage(l10n.t('This repository has no remotes configured to fetch from.'));
 			return;
@@ -3352,7 +3352,7 @@ export class CommandCenter {
 
 
 	@command('git.fetchAll', { repository: true })
-	async fetchAll(repository: Repository): Promise<void> {
+	async fetchAll(repository: Repository): Promise<codemavi> {
 		if (repository.remotes.length === 0) {
 			window.showWarningMessage(l10n.t('This repository has no remotes configured to fetch from.'));
 			return;
@@ -3362,7 +3362,7 @@ export class CommandCenter {
 	}
 
 	@command('git.fetchRef', { repository: true })
-	async fetchRef(repository: Repository, ref?: string): Promise<void> {
+	async fetchRef(repository: Repository, ref?: string): Promise<codemavi> {
 		ref = ref ?? repository?.historyProvider.currentHistoryItemRemoteRef?.id;
 		if (!repository || !ref) {
 			return;
@@ -3373,7 +3373,7 @@ export class CommandCenter {
 	}
 
 	@command('git.pullFrom', { repository: true })
-	async pullFrom(repository: Repository): Promise<void> {
+	async pullFrom(repository: Repository): Promise<codemavi> {
 		const remotes = repository.remotes;
 
 		if (remotes.length === 0) {
@@ -3411,7 +3411,7 @@ export class CommandCenter {
 	}
 
 	@command('git.pull', { repository: true })
-	async pull(repository: Repository): Promise<void> {
+	async pull(repository: Repository): Promise<codemavi> {
 		const remotes = repository.remotes;
 
 		if (remotes.length === 0) {
@@ -3423,7 +3423,7 @@ export class CommandCenter {
 	}
 
 	@command('git.pullRebase', { repository: true })
-	async pullRebase(repository: Repository): Promise<void> {
+	async pullRebase(repository: Repository): Promise<codemavi> {
 		const remotes = repository.remotes;
 
 		if (remotes.length === 0) {
@@ -3435,7 +3435,7 @@ export class CommandCenter {
 	}
 
 	@command('git.pullRef', { repository: true })
-	async pullRef(repository: Repository, ref?: string): Promise<void> {
+	async pullRef(repository: Repository, ref?: string): Promise<codemavi> {
 		ref = ref ?? repository?.historyProvider.currentHistoryItemRemoteRef?.id;
 		if (!repository || !ref) {
 			return;
@@ -3563,27 +3563,27 @@ export class CommandCenter {
 	}
 
 	@command('git.push', { repository: true })
-	async push(repository: Repository): Promise<void> {
+	async push(repository: Repository): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.Push });
 	}
 
 	@command('git.pushForce', { repository: true })
-	async pushForce(repository: Repository): Promise<void> {
+	async pushForce(repository: Repository): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.Push, forcePush: true });
 	}
 
 	@command('git.pushWithTags', { repository: true })
-	async pushFollowTags(repository: Repository): Promise<void> {
+	async pushFollowTags(repository: Repository): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.PushFollowTags });
 	}
 
 	@command('git.pushWithTagsForce', { repository: true })
-	async pushFollowTagsForce(repository: Repository): Promise<void> {
+	async pushFollowTagsForce(repository: Repository): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.PushFollowTags, forcePush: true });
 	}
 
 	@command('git.pushRef', { repository: true })
-	async pushRef(repository: Repository): Promise<void> {
+	async pushRef(repository: Repository): Promise<codemavi> {
 		if (!repository) {
 			return;
 		}
@@ -3592,7 +3592,7 @@ export class CommandCenter {
 	}
 
 	@command('git.cherryPick', { repository: true })
-	async cherryPick(repository: Repository): Promise<void> {
+	async cherryPick(repository: Repository): Promise<codemavi> {
 		const hash = await window.showInputBox({
 			placeHolder: l10n.t('Commit Hash'),
 			prompt: l10n.t('Please provide the commit hash'),
@@ -3607,7 +3607,7 @@ export class CommandCenter {
 	}
 
 	@command('git.graph.cherryPick', { repository: true })
-	async cherryPick2(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<void> {
+	async cherryPick2(repository: Repository, historyItem?: SourceControlHistoryItem): Promise<codemavi> {
 		if (!historyItem) {
 			return;
 		}
@@ -3616,22 +3616,22 @@ export class CommandCenter {
 	}
 
 	@command('git.cherryPickAbort', { repository: true })
-	async cherryPickAbort(repository: Repository): Promise<void> {
+	async cherryPickAbort(repository: Repository): Promise<codemavi> {
 		await repository.cherryPickAbort();
 	}
 
 	@command('git.pushTo', { repository: true })
-	async pushTo(repository: Repository, remote?: string, refspec?: string, setUpstream?: boolean): Promise<void> {
+	async pushTo(repository: Repository, remote?: string, refspec?: string, setUpstream?: boolean): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.PushTo, pushTo: { remote: remote, refspec: refspec, setUpstream: setUpstream } });
 	}
 
 	@command('git.pushToForce', { repository: true })
-	async pushToForce(repository: Repository, remote?: string, refspec?: string, setUpstream?: boolean): Promise<void> {
+	async pushToForce(repository: Repository, remote?: string, refspec?: string, setUpstream?: boolean): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.PushTo, pushTo: { remote: remote, refspec: refspec, setUpstream: setUpstream }, forcePush: true });
 	}
 
 	@command('git.pushTags', { repository: true })
-	async pushTags(repository: Repository): Promise<void> {
+	async pushTags(repository: Repository): Promise<codemavi> {
 		await this._push(repository, { pushType: PushType.PushTags });
 	}
 
@@ -3673,7 +3673,7 @@ export class CommandCenter {
 	}
 
 	@command('git.removeRemote', { repository: true })
-	async removeRemote(repository: Repository): Promise<void> {
+	async removeRemote(repository: Repository): Promise<codemavi> {
 		const remotes = repository.remotes;
 
 		if (remotes.length === 0) {
@@ -3693,7 +3693,7 @@ export class CommandCenter {
 		await repository.removeRemote(remote.remoteName);
 	}
 
-	private async _sync(repository: Repository, rebase: boolean): Promise<void> {
+	private async _sync(repository: Repository, rebase: boolean): Promise<codemavi> {
 		const HEAD = repository.HEAD;
 
 		if (!HEAD) {
@@ -3727,7 +3727,7 @@ export class CommandCenter {
 	}
 
 	@command('git.sync', { repository: true })
-	async sync(repository: Repository): Promise<void> {
+	async sync(repository: Repository): Promise<codemavi> {
 		const config = workspace.getConfiguration('git', Uri.file(repository.root));
 		const rebase = config.get<boolean>('rebaseWhenSync', false) === true;
 
@@ -3743,7 +3743,7 @@ export class CommandCenter {
 	}
 
 	@command('git._syncAll')
-	async syncAll(): Promise<void> {
+	async syncAll(): Promise<codemavi> {
 		await Promise.all(this.model.repositories.map(async repository => {
 			const config = workspace.getConfiguration('git', Uri.file(repository.root));
 			const rebase = config.get<boolean>('rebaseWhenSync', false) === true;
@@ -3759,7 +3759,7 @@ export class CommandCenter {
 	}
 
 	@command('git.syncRebase', { repository: true })
-	async syncRebase(repository: Repository): Promise<void> {
+	async syncRebase(repository: Repository): Promise<codemavi> {
 		try {
 			await this._sync(repository, true);
 		} catch (err) {
@@ -3772,7 +3772,7 @@ export class CommandCenter {
 	}
 
 	@command('git.publish', { repository: true })
-	async publish(repository: Repository): Promise<void> {
+	async publish(repository: Repository): Promise<codemavi> {
 		const branchName = repository.HEAD && repository.HEAD.name || '';
 		const remotes = repository.remotes;
 
@@ -3839,7 +3839,7 @@ export class CommandCenter {
 	}
 
 	@command('git.ignore')
-	async ignore(...resourceStates: SourceControlResourceState[]): Promise<void> {
+	async ignore(...resourceStates: SourceControlResourceState[]): Promise<codemavi> {
 		resourceStates = resourceStates.filter(s => !!s);
 
 		if (resourceStates.length === 0 || (resourceStates[0] && !(resourceStates[0].resourceUri instanceof Uri))) {
@@ -3864,7 +3864,7 @@ export class CommandCenter {
 	}
 
 	@command('git.revealInExplorer')
-	async revealInExplorer(resourceState: SourceControlResourceState): Promise<void> {
+	async revealInExplorer(resourceState: SourceControlResourceState): Promise<codemavi> {
 		if (!resourceState) {
 			return;
 		}
@@ -3879,7 +3879,7 @@ export class CommandCenter {
 	@command('git.revealFileInOS.linux')
 	@command('git.revealFileInOS.mac')
 	@command('git.revealFileInOS.windows')
-	async revealFileInOS(resourceState: SourceControlResourceState): Promise<void> {
+	async revealFileInOS(resourceState: SourceControlResourceState): Promise<codemavi> {
 		if (!resourceState) {
 			return;
 		}
@@ -3984,7 +3984,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashPop', { repository: true })
-	async stashPop(repository: Repository): Promise<void> {
+	async stashPop(repository: Repository): Promise<codemavi> {
 		const placeHolder = l10n.t('Pick a stash to pop');
 		const stash = await this.pickStash(repository, placeHolder);
 
@@ -3996,7 +3996,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashPopLatest', { repository: true })
-	async stashPopLatest(repository: Repository): Promise<void> {
+	async stashPopLatest(repository: Repository): Promise<codemavi> {
 		const stashes = await repository.getStashes();
 
 		if (stashes.length === 0) {
@@ -4008,7 +4008,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashPopEditor')
-	async stashPopEditor(uri: Uri): Promise<void> {
+	async stashPopEditor(uri: Uri): Promise<codemavi> {
 		const result = await this.getStashFromUri(uri);
 		if (!result) {
 			return;
@@ -4019,7 +4019,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashApply', { repository: true })
-	async stashApply(repository: Repository): Promise<void> {
+	async stashApply(repository: Repository): Promise<codemavi> {
 		const placeHolder = l10n.t('Pick a stash to apply');
 		const stash = await this.pickStash(repository, placeHolder);
 
@@ -4031,7 +4031,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashApplyLatest', { repository: true })
-	async stashApplyLatest(repository: Repository): Promise<void> {
+	async stashApplyLatest(repository: Repository): Promise<codemavi> {
 		const stashes = await repository.getStashes();
 
 		if (stashes.length === 0) {
@@ -4043,7 +4043,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashApplyEditor')
-	async stashApplyEditor(uri: Uri): Promise<void> {
+	async stashApplyEditor(uri: Uri): Promise<codemavi> {
 		const result = await this.getStashFromUri(uri);
 		if (!result) {
 			return;
@@ -4054,7 +4054,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashDrop', { repository: true })
-	async stashDrop(repository: Repository): Promise<void> {
+	async stashDrop(repository: Repository): Promise<codemavi> {
 		const placeHolder = l10n.t('Pick a stash to drop');
 		const stash = await this.pickStash(repository, placeHolder);
 
@@ -4066,7 +4066,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashDropAll', { repository: true })
-	async stashDropAll(repository: Repository): Promise<void> {
+	async stashDropAll(repository: Repository): Promise<codemavi> {
 		const stashes = await repository.getStashes();
 
 		if (stashes.length === 0) {
@@ -4089,7 +4089,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashDropEditor')
-	async stashDropEditor(uri: Uri): Promise<void> {
+	async stashDropEditor(uri: Uri): Promise<codemavi> {
 		const result = await this.getStashFromUri(uri);
 		if (!result) {
 			return;
@@ -4116,7 +4116,7 @@ export class CommandCenter {
 	}
 
 	@command('git.stashView', { repository: true })
-	async stashView(repository: Repository): Promise<void> {
+	async stashView(repository: Repository): Promise<codemavi> {
 		const placeHolder = l10n.t('Pick a stash to view');
 		const stash = await this.pickStash(repository, placeHolder);
 
@@ -4350,7 +4350,7 @@ export class CommandCenter {
 	}
 
 	@command('git.rebaseAbort', { repository: true })
-	async rebaseAbort(repository: Repository): Promise<void> {
+	async rebaseAbort(repository: Repository): Promise<codemavi> {
 		if (repository.rebaseCommit) {
 			await repository.rebaseAbort();
 		} else {
@@ -4359,12 +4359,12 @@ export class CommandCenter {
 	}
 
 	@command('git.closeAllDiffEditors', { repository: true })
-	closeDiffEditors(repository: Repository): void {
+	closeDiffEditors(repository: Repository): codemavi {
 		repository.closeDiffEditors(undefined, undefined, true);
 	}
 
 	@command('git.closeAllUnmodifiedEditors')
-	closeUnmodifiedEditors(): void {
+	closeUnmodifiedEditors(): codemavi {
 		const editorTabsToClose: Tab[] = [];
 
 		// Collect all modified files
@@ -4395,7 +4395,7 @@ export class CommandCenter {
 	}
 
 	@command('git.openRepositoriesInParentFolders')
-	async openRepositoriesInParentFolders(): Promise<void> {
+	async openRepositoriesInParentFolders(): Promise<codemavi> {
 		const parentRepositories: string[] = [];
 
 		const title = l10n.t('Open Repositories In Parent Folders');
@@ -4428,7 +4428,7 @@ export class CommandCenter {
 	}
 
 	@command('git.manageUnsafeRepositories')
-	async manageUnsafeRepositories(): Promise<void> {
+	async manageUnsafeRepositories(): Promise<codemavi> {
 		const unsafeRepositories: string[] = [];
 
 		const quickpick = window.createQuickPick();
@@ -4474,21 +4474,21 @@ export class CommandCenter {
 	}
 
 	@command('git.viewChanges', { repository: true })
-	async viewChanges(repository: Repository): Promise<void> {
+	async viewChanges(repository: Repository): Promise<codemavi> {
 		await this._viewResourceGroupChanges(repository, repository.workingTreeGroup);
 	}
 
 	@command('git.viewStagedChanges', { repository: true })
-	async viewStagedChanges(repository: Repository): Promise<void> {
+	async viewStagedChanges(repository: Repository): Promise<codemavi> {
 		await this._viewResourceGroupChanges(repository, repository.indexGroup);
 	}
 
 	@command('git.viewUntrackedChanges', { repository: true })
-	async viewUnstagedChanges(repository: Repository): Promise<void> {
+	async viewUnstagedChanges(repository: Repository): Promise<codemavi> {
 		await this._viewResourceGroupChanges(repository, repository.untrackedGroup);
 	}
 
-	private async _viewResourceGroupChanges(repository: Repository, resourceGroup: GitResourceGroup): Promise<void> {
+	private async _viewResourceGroupChanges(repository: Repository, resourceGroup: GitResourceGroup): Promise<codemavi> {
 		if (resourceGroup.resourceStates.length === 0) {
 			switch (resourceGroup.id) {
 				case 'index':
@@ -4512,7 +4512,7 @@ export class CommandCenter {
 	}
 
 	@command('git.copyCommitId', { repository: true })
-	async copyCommitId(repository: Repository, historyItem: SourceControlHistoryItem): Promise<void> {
+	async copyCommitId(repository: Repository, historyItem: SourceControlHistoryItem): Promise<codemavi> {
 		if (!repository || !historyItem) {
 			return;
 		}
@@ -4521,7 +4521,7 @@ export class CommandCenter {
 	}
 
 	@command('git.copyCommitMessage', { repository: true })
-	async copyCommitMessage(repository: Repository, historyItem: SourceControlHistoryItem): Promise<void> {
+	async copyCommitMessage(repository: Repository, historyItem: SourceControlHistoryItem): Promise<codemavi> {
 		if (!repository || !historyItem) {
 			return;
 		}
@@ -4530,7 +4530,7 @@ export class CommandCenter {
 	}
 
 	@command('git.viewCommit', { repository: true })
-	async viewCommit(repository: Repository, historyItemId: string): Promise<void> {
+	async viewCommit(repository: Repository, historyItemId: string): Promise<codemavi> {
 		if (!repository || !historyItemId) {
 			return;
 		}
@@ -4549,7 +4549,7 @@ export class CommandCenter {
 	}
 
 	@command('git.copyContentToClipboard')
-	async copyContentToClipboard(content: string): Promise<void> {
+	async copyContentToClipboard(content: string): Promise<codemavi> {
 		if (typeof content !== 'string') {
 			return;
 		}
@@ -4558,16 +4558,16 @@ export class CommandCenter {
 	}
 
 	@command('git.blame.toggleEditorDecoration')
-	toggleBlameEditorDecoration(): void {
+	toggleBlameEditorDecoration(): codemavi {
 		this._toggleBlameSetting('blame.editorDecoration.enabled');
 	}
 
 	@command('git.blame.toggleStatusBarItem')
-	toggleBlameStatusBarItem(): void {
+	toggleBlameStatusBarItem(): codemavi {
 		this._toggleBlameSetting('blame.statusBarItem.enabled');
 	}
 
-	private _toggleBlameSetting(setting: string): void {
+	private _toggleBlameSetting(setting: string): codemavi {
 		const config = workspace.getConfiguration('git');
 		const enabled = config.get<boolean>(setting) === true;
 
@@ -4618,7 +4618,7 @@ export class CommandCenter {
 				let message: string;
 				let type: 'error' | 'warning' | 'information' = 'error';
 
-				const choices = new Map<string, () => void>();
+				const choices = new Map<string, () => codemavi>();
 				const openOutputChannelChoice = l10n.t('Open Git Log');
 				const outputChannelLogger = this.logger;
 				choices.set(openOutputChannelChoice, () => outputChannelLogger.show());
@@ -4739,7 +4739,7 @@ export class CommandCenter {
 		return result;
 	}
 
-	private async showErrorNotification(type: 'error' | 'warning' | 'information', message: string, options: MessageOptions, choices: Map<string, () => void>): Promise<void> {
+	private async showErrorNotification(type: 'error' | 'warning' | 'information', message: string, options: MessageOptions, choices: Map<string, () => codemavi>): Promise<codemavi> {
 		let result: string | undefined;
 		const allChoices = Array.from(choices.keys());
 
@@ -4831,7 +4831,7 @@ export class CommandCenter {
 		return Promise.all(promises);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.forEach(d => d.dispose());
 	}
 }

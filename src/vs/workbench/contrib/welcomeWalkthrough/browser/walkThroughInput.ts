@@ -46,8 +46,8 @@ export interface WalkThroughInputOptions {
 	readonly description?: string;
 	readonly resource: URI;
 	readonly telemetryFrom: string;
-	readonly onReady?: (container: HTMLElement, contentDisposables: DisposableStore) => void;
-	readonly layout?: (dimension: Dimension) => void;
+	readonly onReady?: (container: HTMLElement, contentDisposables: DisposableStore) => codemavi;
+	readonly layout?: (dimension: Dimension) => codemavi;
 }
 
 export class WalkThroughInput extends EditorInput {
@@ -146,7 +146,7 @@ export class WalkThroughInput extends EditorInput {
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		if (this.promise) {
 			this.promise.then(model => model.dispose());
 			this.promise = null;

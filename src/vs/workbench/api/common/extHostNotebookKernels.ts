@@ -89,7 +89,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 					return v;
 				})
 			],
-			ApiCommandResult.Void);
+			ApiCommandResult.Code Mavi);
 
 		const requestKernelVariablesApiCommand = new ApiCommand(
 			'vscode.executeNotebookVariableProvider',
@@ -116,7 +116,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		this._commands.registerApiCommand(requestKernelVariablesApiCommand);
 	}
 
-	createNotebookController(extension: IExtensionDescription, id: string, viewType: string, label: string, handler?: (cells: vscode.NotebookCell[], notebook: vscode.NotebookDocument, controller: vscode.NotebookController) => void | Thenable<void>, preloads?: vscode.NotebookRendererScript[]): vscode.NotebookController {
+	createNotebookController(extension: IExtensionDescription, id: string, viewType: string, label: string, handler?: (cells: vscode.NotebookCell[], notebook: vscode.NotebookDocument, controller: vscode.NotebookController) => codemavi | Thenable<codemavi>, preloads?: vscode.NotebookRendererScript[]): vscode.NotebookController {
 
 		for (const data of this._kernelData.values()) {
 			if (data.controller.id === id && ExtensionIdentifier.equals(extension.identifier, data.extensionId)) {
@@ -148,7 +148,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 
 		//
 		let _executeHandler = handler ?? _defaultExecutHandler;
-		let _interruptHandler: ((this: vscode.NotebookController, notebook: vscode.NotebookDocument) => void | Thenable<void>) | undefined;
+		let _interruptHandler: ((this: vscode.NotebookController, notebook: vscode.NotebookDocument) => codemavi | Thenable<codemavi>) | undefined;
 		let _variableProvider: vscode.NotebookVariableProvider | undefined;
 
 		this._proxy.$addKernel(handle, data).catch(err => {
@@ -364,7 +364,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		return [];
 	}
 
-	$acceptNotebookAssociation(handle: number, uri: UriComponents, value: boolean): void {
+	$acceptNotebookAssociation(handle: number, uri: UriComponents, value: boolean): codemavi {
 		const obj = this._kernelData.get(handle);
 		if (obj) {
 			// update data structure
@@ -383,7 +383,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		}
 	}
 
-	async $executeCells(handle: number, uri: UriComponents, handles: number[]): Promise<void> {
+	async $executeCells(handle: number, uri: UriComponents, handles: number[]): Promise<codemavi> {
 		const obj = this._kernelData.get(handle);
 		if (!obj) {
 			// extension can dispose kernels in the meantime
@@ -408,7 +408,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		}
 	}
 
-	async $cancelCells(handle: number, uri: UriComponents, handles: number[]): Promise<void> {
+	async $cancelCells(handle: number, uri: UriComponents, handles: number[]): Promise<codemavi> {
 		const obj = this._kernelData.get(handle);
 		if (!obj) {
 			// extension can dispose kernels in the meantime
@@ -443,7 +443,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 	private id = 0;
 	private variableStore: Record<string, vscode.Variable> = {};
 
-	async $provideVariables(handle: number, requestId: string, notebookUri: UriComponents, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): Promise<void> {
+	async $provideVariables(handle: number, requestId: string, notebookUri: UriComponents, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): Promise<codemavi> {
 		const obj = this._kernelData.get(handle);
 		if (!obj) {
 			return;
@@ -497,7 +497,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		}
 	}
 
-	$acceptKernelMessageFromRenderer(handle: number, editorId: string, message: any): void {
+	$acceptKernelMessageFromRenderer(handle: number, editorId: string, message: any): codemavi {
 		const obj = this._kernelData.get(handle);
 		if (!obj) {
 			// extension can dispose kernels in the meantime
@@ -508,7 +508,7 @@ export class ExtHostNotebookKernels implements ExtHostNotebookKernelsShape {
 		obj.onDidReceiveMessage.fire(Object.freeze({ editor: editor.apiEditor, message }));
 	}
 
-	$cellExecutionChanged(uri: UriComponents, cellHandle: number, state: NotebookCellExecutionState | undefined): void {
+	$cellExecutionChanged(uri: UriComponents, cellHandle: number, state: NotebookCellExecutionState | undefined): codemavi {
 		const document = this._extHostNotebook.getNotebookDocument(URI.revive(uri));
 		const cell = document.getCell(cellHandle);
 		if (cell) {
@@ -586,7 +586,7 @@ class NotebookCellExecutionTask extends Disposable {
 	private static HANDLE = 0;
 	private _handle = NotebookCellExecutionTask.HANDLE++;
 
-	private _onDidChangeState = new Emitter<void>();
+	private _onDidChangeState = new Emitter<codemavi>();
 	readonly onDidChangeState = this._onDidChangeState.event;
 
 	private _state = NotebookCellExecutionTaskState.Init;
@@ -611,15 +611,15 @@ class NotebookCellExecutionTask extends Disposable {
 		this._proxy.$createExecution(this._handle, controllerId, this._cell.notebook.uri, this._cell.handle);
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this._tokenSource.cancel();
 	}
 
-	private async updateSoon(update: ICellExecuteUpdateDto): Promise<void> {
+	private async updateSoon(update: ICellExecuteUpdateDto): Promise<codemavi> {
 		await this._collector.addItem(update);
 	}
 
-	private async update(update: ICellExecuteUpdateDto | ICellExecuteUpdateDto[]): Promise<void> {
+	private async update(update: ICellExecuteUpdateDto | ICellExecuteUpdateDto[]): Promise<codemavi> {
 		const updates = Array.isArray(update) ? update : [update];
 		return this._proxy.$updateExecution(this._handle, new SerializableObjectWithBuffers(updates));
 	}
@@ -659,7 +659,7 @@ class NotebookCellExecutionTask extends Disposable {
 		});
 	}
 
-	private async updateOutputs(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell: vscode.NotebookCell | undefined, append: boolean): Promise<void> {
+	private async updateOutputs(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell: vscode.NotebookCell | undefined, append: boolean): Promise<codemavi> {
 		const handle = this.cellIndexToHandle(cell);
 		const outputDtos = this.validateAndConvertOutputs(asArray(outputs));
 		return this.updateSoon(
@@ -671,7 +671,7 @@ class NotebookCellExecutionTask extends Disposable {
 			});
 	}
 
-	private async updateOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput, append: boolean): Promise<void> {
+	private async updateOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput, append: boolean): Promise<codemavi> {
 		items = NotebookCellOutput.ensureUniqueMimeTypes(asArray(items), true);
 		return this.updateSoon({
 			editType: CellExecutionUpdateType.OutputItems,
@@ -695,7 +695,7 @@ class NotebookCellExecutionTask extends Disposable {
 				}]);
 			},
 
-			start(startTime?: number): void {
+			start(startTime?: number): codemavi {
 				if (that._state === NotebookCellExecutionTaskState.Resolved || that._state === NotebookCellExecutionTaskState.Started) {
 					throw new Error('Cannot call start again');
 				}
@@ -709,7 +709,7 @@ class NotebookCellExecutionTask extends Disposable {
 				});
 			},
 
-			end(success: boolean | undefined, endTime?: number, executionError?: vscode.CellExecutionError): void {
+			end(success: boolean | undefined, endTime?: number, executionError?: vscode.CellExecutionError): codemavi {
 				if (that._state === NotebookCellExecutionTaskState.Resolved) {
 					throw new Error('Cannot call resolve twice');
 				}
@@ -730,27 +730,27 @@ class NotebookCellExecutionTask extends Disposable {
 				}));
 			},
 
-			clearOutput(cell?: vscode.NotebookCell): Thenable<void> {
+			clearOutput(cell?: vscode.NotebookCell): Thenable<codemavi> {
 				that.verifyStateForOutput();
 				return that.updateOutputs([], cell, false);
 			},
 
-			appendOutput(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell?: vscode.NotebookCell): Promise<void> {
+			appendOutput(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell?: vscode.NotebookCell): Promise<codemavi> {
 				that.verifyStateForOutput();
 				return that.updateOutputs(outputs, cell, true);
 			},
 
-			replaceOutput(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell?: vscode.NotebookCell): Promise<void> {
+			replaceOutput(outputs: vscode.NotebookCellOutput | vscode.NotebookCellOutput[], cell?: vscode.NotebookCell): Promise<codemavi> {
 				that.verifyStateForOutput();
 				return that.updateOutputs(outputs, cell, false);
 			},
 
-			appendOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput): Promise<void> {
+			appendOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput): Promise<codemavi> {
 				that.verifyStateForOutput();
 				return that.updateOutputItems(items, output, true);
 			},
 
-			replaceOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput): Promise<void> {
+			replaceOutputItems(items: vscode.NotebookCellOutputItem | vscode.NotebookCellOutputItem[], output: vscode.NotebookCellOutput): Promise<codemavi> {
 				that.verifyStateForOutput();
 				return that.updateOutputItems(items, output, false);
 			}
@@ -796,7 +796,7 @@ class NotebookExecutionTask extends Disposable {
 	private static HANDLE = 0;
 	private _handle = NotebookExecutionTask.HANDLE++;
 
-	private _onDidChangeState = new Emitter<void>();
+	private _onDidChangeState = new Emitter<codemavi>();
 	readonly onDidChangeState = this._onDidChangeState.event;
 
 	private _state = NotebookExecutionTaskState.Init;
@@ -814,7 +814,7 @@ class NotebookExecutionTask extends Disposable {
 		this._proxy.$createNotebookExecution(this._handle, controllerId, this._notebook.uri);
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this._tokenSource.cancel();
 	}
 	asApiObject(): vscode.NotebookExecution {
@@ -849,16 +849,16 @@ class NotebookExecutionTask extends Disposable {
 class TimeoutBasedCollector<T> {
 	private batch: T[] = [];
 	private startedTimer = Date.now();
-	private currentDeferred: DeferredPromise<void> | undefined;
+	private currentDeferred: DeferredPromise<codemavi> | undefined;
 
 	constructor(
 		private readonly delay: number,
-		private readonly callback: (items: T[]) => Promise<void>) { }
+		private readonly callback: (items: T[]) => Promise<codemavi>) { }
 
-	addItem(item: T): Promise<void> {
+	addItem(item: T): Promise<codemavi> {
 		this.batch.push(item);
 		if (!this.currentDeferred) {
-			this.currentDeferred = new DeferredPromise<void>();
+			this.currentDeferred = new DeferredPromise<codemavi>();
 			this.startedTimer = Date.now();
 			timeout(this.delay).then(() => {
 				return this.flush();
@@ -874,7 +874,7 @@ class TimeoutBasedCollector<T> {
 		return this.currentDeferred.p;
 	}
 
-	flush(): Promise<void> {
+	flush(): Promise<codemavi> {
 		if (this.batch.length === 0 || !this.currentDeferred) {
 			return Promise.resolve();
 		}

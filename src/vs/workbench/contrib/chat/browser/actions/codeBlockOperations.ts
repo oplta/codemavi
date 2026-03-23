@@ -120,7 +120,7 @@ export class ApplyCodeBlockOperation {
 	) {
 	}
 
-	public async run(context: ICodeBlockActionContext): Promise<void> {
+	public async run(context: ICodeBlockActionContext): Promise<codemavi> {
 		let activeEditorControl = getEditableActiveCodeEditor(this.editorService);
 
 		const codemapperUri = await this.evaluateURIToUse(context.codemapperUri, activeEditorControl);
@@ -311,7 +311,7 @@ export class ApplyCodeBlockOperation {
 		return this.instantiationService.invokeFunction(reviewEdits, codeEditor, edits, tokenSource.token);
 	}
 
-	private tryToRevealCodeBlock(codeEditor: IActiveCodeEditor, codeBlock: string): void {
+	private tryToRevealCodeBlock(codeEditor: IActiveCodeEditor, codeBlock: string): codemavi {
 		const match = codeBlock.match(/(\S[^\n]*)\n/); // substring that starts with a non-whitespace character and ends with a newline
 		if (match && match[1].length > 10) {
 			const findMatch = codeEditor.getModel().findNextMatch(match[1], { lineNumber: 1, column: 1 }, false, false, null, false);

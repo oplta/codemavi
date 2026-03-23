@@ -55,7 +55,7 @@ export class CloseWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const nativeHostService = accessor.get(INativeHostService);
 
 		return nativeHostService.closeWindow({ targetWindowId: getActiveWindow().vscodeWindowId });
@@ -71,7 +71,7 @@ abstract class BaseZoomAction extends Action2 {
 		super(desc);
 	}
 
-	protected async setZoomLevel(accessor: ServicesAccessor, levelOrReset: number | true): Promise<void> {
+	protected async setZoomLevel(accessor: ServicesAccessor, levelOrReset: number | true): Promise<codemavi> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		let target: ApplyZoomTarget;
@@ -138,7 +138,7 @@ export class ZoomInAction extends BaseZoomAction {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		return super.setZoomLevel(accessor, getZoomLevel(getActiveWindow()) + 1);
 	}
 }
@@ -171,7 +171,7 @@ export class ZoomOutAction extends BaseZoomAction {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		return super.setZoomLevel(accessor, getZoomLevel(getActiveWindow()) - 1);
 	}
 }
@@ -199,7 +199,7 @@ export class ZoomResetAction extends BaseZoomAction {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		return super.setZoomLevel(accessor, true);
 	}
 }
@@ -223,7 +223,7 @@ abstract class BaseSwitchWindow extends Action2 {
 
 	protected abstract isQuickNavigate(): boolean;
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const quickInputService = accessor.get(IQuickInputService);
 		const keybindingService = accessor.get(IKeybindingService);
 		const modelService = accessor.get(IModelService);

@@ -25,7 +25,7 @@ export interface ILinkDescriptor {
 }
 
 export interface ILinkOptions {
-	readonly opener?: (href: string) => void;
+	readonly opener?: (href: string) => codemavi;
 	readonly hoverDelegate?: IHoverDelegate;
 	readonly textLinkForeground?: string;
 }
@@ -127,7 +127,7 @@ export class Link extends Disposable {
 		this.enabled = true;
 	}
 
-	private setTooltip(title: string | undefined): void {
+	private setTooltip(title: string | undefined): codemavi {
 		if (this.hoverDelegate.showNativeHover) {
 			this.el.title = title ?? '';
 		} else if (!this.hover && title) {

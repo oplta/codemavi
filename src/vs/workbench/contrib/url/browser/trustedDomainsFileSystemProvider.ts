@@ -118,7 +118,7 @@ export class TrustedDomainsFileSystemProvider implements IFileSystemProviderWith
 		return buffer;
 	}
 
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
 		try {
 			const trustedDomainsContent = VSBuffer.wrap(content).toString();
 			const trustedDomains = parse(trustedDomainsContent);
@@ -142,16 +142,16 @@ export class TrustedDomainsFileSystemProvider implements IFileSystemProviderWith
 			}
 		};
 	}
-	mkdir(resource: URI): Promise<void> {
+	mkdir(resource: URI): Promise<codemavi> {
 		return Promise.resolve(undefined!);
 	}
 	readdir(resource: URI): Promise<[string, FileType][]> {
 		return Promise.resolve(undefined!);
 	}
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
 		return Promise.resolve(undefined!);
 	}
-	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
+	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
 		return Promise.resolve(undefined!);
 	}
 }

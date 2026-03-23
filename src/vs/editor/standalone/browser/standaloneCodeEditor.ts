@@ -85,7 +85,7 @@ export interface IActionDescriptor {
 	 * Method that will be executed when the action is triggered.
 	 * @param editor The editor instance is passed in as a convenience
 	 */
-	run(editor: ICodeEditor, ...args: any[]): void | Promise<void>;
+	run(editor: ICodeEditor, ...args: any[]): codemavi | Promise<codemavi>;
 }
 
 /**
@@ -226,7 +226,7 @@ export interface IStandaloneDiffEditorConstructionOptions extends IDiffEditorCon
 }
 
 export interface IStandaloneCodeEditor extends ICodeEditor {
-	updateOptions(newOptions: IEditorOptions & IGlobalEditorOptions): void;
+	updateOptions(newOptions: IEditorOptions & IGlobalEditorOptions): codemavi;
 	addCommand(keybinding: number, handler: ICommandHandler, context?: string): string | null;
 	createContextKey<T extends ContextKeyValue = ContextKeyValue>(key: string, defaultValue: T): IContextKey<T>;
 	addAction(descriptor: IActionDescriptor): IDisposable;
@@ -335,7 +335,7 @@ export class StandaloneCodeEditor extends CodeEditorWidget implements IStandalon
 		);
 		const contextMenuGroupId = _descriptor.contextMenuGroupId || null;
 		const contextMenuOrder = _descriptor.contextMenuOrder || 0;
-		const run = (_accessor?: ServicesAccessor, ...args: any[]): Promise<void> => {
+		const run = (_accessor?: ServicesAccessor, ...args: any[]): Promise<codemavi> => {
 			return Promise.resolve(_descriptor.run(this, ...args));
 		};
 
@@ -389,7 +389,7 @@ export class StandaloneCodeEditor extends CodeEditorWidget implements IStandalon
 		return toDispose;
 	}
 
-	protected override _triggerCommand(handlerId: string, payload: any): void {
+	protected override _triggerCommand(handlerId: string, payload: any): codemavi {
 		if (this._codeEditorService instanceof StandaloneCodeEditorService) {
 			// Help commands find this editor as the active editor
 			try {
@@ -465,11 +465,11 @@ export class StandaloneEditor extends StandaloneCodeEditor implements IStandalon
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
-	public override updateOptions(newOptions: Readonly<IEditorOptions & IGlobalEditorOptions>): void {
+	public override updateOptions(newOptions: Readonly<IEditorOptions & IGlobalEditorOptions>): codemavi {
 		updateConfigurationService(this._configurationService, newOptions, false);
 		if (typeof newOptions.theme === 'string') {
 			this._standaloneThemeService.setTheme(newOptions.theme);
@@ -480,7 +480,7 @@ export class StandaloneEditor extends StandaloneCodeEditor implements IStandalon
 		super.updateOptions(newOptions);
 	}
 
-	protected override _postDetachModelCleanup(detachedModel: ITextModel): void {
+	protected override _postDetachModelCleanup(detachedModel: ITextModel): codemavi {
 		super._postDetachModelCleanup(detachedModel);
 		if (detachedModel && this._ownsModel) {
 			detachedModel.dispose();
@@ -535,11 +535,11 @@ export class StandaloneDiffEditor2 extends DiffEditorWidget implements IStandalo
 		this._register(themeDomRegistration);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
-	public override updateOptions(newOptions: Readonly<IDiffEditorOptions & IGlobalEditorOptions>): void {
+	public override updateOptions(newOptions: Readonly<IDiffEditorOptions & IGlobalEditorOptions>): codemavi {
 		updateConfigurationService(this._configurationService, newOptions, true);
 		if (typeof newOptions.theme === 'string') {
 			this._standaloneThemeService.setTheme(newOptions.theme);

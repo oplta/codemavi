@@ -336,7 +336,7 @@ export class TestService extends Disposable implements ITestService {
 	/**
 	 * @inheritdoc
 	 */
-	public async syncTests(): Promise<void> {
+	public async syncTests(): Promise<codemavi> {
 		const cts = new CancellationTokenSource();
 		try {
 			await Promise.all([...this.testControllers.get().values()].map(c => c.syncTests(cts.token)));
@@ -348,7 +348,7 @@ export class TestService extends Disposable implements ITestService {
 	/**
 	 * @inheritdoc
 	 */
-	public async refreshTests(controllerId?: string): Promise<void> {
+	public async refreshTests(controllerId?: string): Promise<codemavi> {
 		const cts = new CancellationTokenSource();
 		this.testRefreshCancellations.add(cts);
 		this.isRefreshingTests.set(true);
@@ -369,7 +369,7 @@ export class TestService extends Disposable implements ITestService {
 	/**
 	 * @inheritdoc
 	 */
-	public cancelRefreshTests(): void {
+	public cancelRefreshTests(): codemavi {
 		for (const cts of this.testRefreshCancellations) {
 			cts.cancel();
 		}
@@ -432,7 +432,7 @@ export class TestService extends Disposable implements ITestService {
 		}
 	}
 
-	private async saveAllBeforeTest(req: ResolvedTestRunRequest, configurationService: IConfigurationService = this.configurationService, editorService: IEditorService = this.editorService): Promise<void> {
+	private async saveAllBeforeTest(req: ResolvedTestRunRequest, configurationService: IConfigurationService = this.configurationService, editorService: IEditorService = this.editorService): Promise<codemavi> {
 		if (req.preserveFocus === true) {
 			return;
 		}

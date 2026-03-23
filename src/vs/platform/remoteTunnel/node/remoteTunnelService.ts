@@ -78,7 +78,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 	private _tunnelProcess: CancelablePromise<any> | undefined;
 
 	private _tunnelStatus: TunnelStatus;
-	private _startTunnelProcessDelayer: Delayer<void>;
+	private _startTunnelProcessDelayer: Delayer<codemavi>;
 
 	private _tunnelCommand: string | undefined;
 
@@ -203,7 +203,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 	}
 
 
-	async stopTunnel(): Promise<void> {
+	async stopTunnel(): Promise<codemavi> {
 		if (this._tunnelProcess) {
 			this._tunnelProcess.cancel();
 			this._tunnelProcess = undefined;
@@ -232,7 +232,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 		this.setTunnelStatus(TunnelStates.disconnected());
 	}
 
-	private async updateTunnelProcess(): Promise<void> {
+	private async updateTunnelProcess(): Promise<codemavi> {
 		this.telemetryService.publicLog2<RemoteTunnelEnablementEvent, RemoteTunnelEnablementClassification>('remoteTunnel.enablement', {
 			enabled: this._mode.active,
 			service: this._mode.active && this._mode.asService,
@@ -408,7 +408,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 		});
 	}
 
-	private runCodeTunnelCommand(logLabel: string, commandArgs: string[], onOutput: (message: string, isError: boolean) => void = this.defaultOnOutput, env?: Record<string, string>): CancelablePromise<number> {
+	private runCodeTunnelCommand(logLabel: string, commandArgs: string[], onOutput: (message: string, isError: boolean) => codemavi = this.defaultOnOutput, env?: Record<string, string>): CancelablePromise<number> {
 		return createCancelablePromise<number>(token => {
 			return new Promise((resolve, reject) => {
 				if (token.isCancellationRequested) {
@@ -495,7 +495,7 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 		return INACTIVE_TUNNEL_MODE;
 	}
 
-	private _storeMode(mode: TunnelMode): void {
+	private _storeMode(mode: TunnelMode): codemavi {
 		if (mode.active) {
 			const sessionWithoutToken = {
 				providerId: mode.session.providerId, sessionId: mode.session.sessionId, accountLabel: mode.session.accountLabel

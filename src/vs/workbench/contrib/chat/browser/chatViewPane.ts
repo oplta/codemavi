@@ -52,7 +52,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 	private defaultParticipantRegistrationFailed = false;
 	private didUnregisterProvider = false;
 
-	private _restoringSession: Promise<void> | undefined;
+	private _restoringSession: Promise<codemavi> | undefined;
 
 	constructor(
 		private readonly chatOptions: { location: ChatAgentLocation.Panel | ChatAgentLocation.EditingSession },
@@ -103,7 +103,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 					this._restoringSession =
 						(info.sessionId ? this.chatService.getOrRestoreSession(info.sessionId) : Promise.resolve(undefined)).then(async model => {
 							// The widget may be hidden at this point, because welcome views were allowed. Use setVisible to
-							// avoid doing a render while the widget is hidden. This is changing the condition in `shouldShowWelcome`
+							// acodemavi doing a render while the widget is hidden. This is changing the condition in `shouldShowWelcome`
 							// so it should fire onDidChangeViewWelcomeState.
 							const wasVisible = this._widget.visible;
 							try {
@@ -140,7 +140,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		} : undefined;
 	}
 
-	private async updateModel(model?: IChatModel | undefined, viewState?: IChatViewState): Promise<void> {
+	private async updateModel(model?: IChatModel | undefined, viewState?: IChatViewState): Promise<codemavi> {
 		this.modelDisposables.clear();
 
 		model = model ?? (this.chatService.transferredSessionData?.sessionId && this.chatService.transferredSessionData?.location === this.chatOptions.location
@@ -183,7 +183,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		}
 	}
 
-	protected override async renderBody(parent: HTMLElement): Promise<void> {
+	protected override async renderBody(parent: HTMLElement): Promise<codemavi> {
 		try {
 			super.renderBody(parent);
 
@@ -247,11 +247,11 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		}
 	}
 
-	acceptInput(query?: string): void {
+	acceptInput(query?: string): codemavi {
 		this._widget.acceptInput(query);
 	}
 
-	private async clear(): Promise<void> {
+	private async clear(): Promise<codemavi> {
 		if (this.widget.viewModel) {
 			await this.chatService.clearSession(this.widget.viewModel.sessionId);
 		}
@@ -264,7 +264,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		this.updateActions();
 	}
 
-	async loadSession(sessionId: string, viewState?: IChatViewState): Promise<void> {
+	async loadSession(sessionId: string, viewState?: IChatViewState): Promise<codemavi> {
 		if (this.widget.viewModel) {
 			await this.chatService.clearSession(this.widget.viewModel.sessionId);
 		}
@@ -273,21 +273,21 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		await this.updateModel(newModel, viewState);
 	}
 
-	focusInput(): void {
+	focusInput(): codemavi {
 		this._widget.focusInput();
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this._widget.focusInput();
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this._widget.layout(height, width);
 	}
 
-	override saveState(): void {
+	override saveState(): codemavi {
 		if (this._widget) {
 			// Since input history is per-provider, this is handled by a separate service and not the memento here.
 			// TODO multiple chat views will overwrite each other
@@ -300,7 +300,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 		super.saveState();
 	}
 
-	private updateViewState(viewState?: IChatViewState): void {
+	private updateViewState(viewState?: IChatViewState): codemavi {
 		const newViewState = viewState ?? this._widget.getViewState();
 		for (const [key, value] of Object.entries(newViewState)) {
 			// Assign all props to the memento so they get saved

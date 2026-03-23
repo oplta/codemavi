@@ -48,20 +48,20 @@ class DefineKeybindingEditorContribution extends Disposable implements IDefineKe
 		this._update();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		this._keybindingDecorationRenderer.value = isInterestingEditorModel(this._editor, this._userDataProfileService)
 			// Decorations are shown for the default keybindings.json **and** for the user keybindings.json
 			? this._instantiationService.createInstance(KeybindingEditorDecorationsRenderer, this._editor)
 			: undefined;
 	}
 
-	showDefineKeybindingWidget(): void {
+	showDefineKeybindingWidget(): codemavi {
 		if (isInterestingEditorModel(this._editor, this._userDataProfileService)) {
 			this._defineWidget.start().then(keybinding => this._onAccepted(keybinding));
 		}
 	}
 
-	private _onAccepted(keybinding: string | null): void {
+	private _onAccepted(keybinding: string | null): codemavi {
 		this._editor.focus();
 		if (keybinding && this._editor.hasModel()) {
 			const regexp = new RegExp(/\\/g);
@@ -112,7 +112,7 @@ export class KeybindingEditorDecorationsRenderer extends Disposable {
 		this._updateDecorations.schedule();
 	}
 
-	private _updateDecorationsNow(): void {
+	private _updateDecorationsNow(): codemavi {
 		const model = assertIsDefined(this._editor.getModel());
 
 		const newDecorations: IModelDeltaDecoration[] = [];

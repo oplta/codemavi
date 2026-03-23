@@ -49,7 +49,7 @@ const autoCloseNever = () => false;
 const autoCloseBeforeWhitespace = (chr: string) => (chr === ' ' || chr === '\t');
 
 export class CursorConfiguration {
-	_cursorMoveConfigurationBrand: void = undefined;
+	_cursorMoveConfigurationBrand: codemavi = undefined;
 
 	public readonly readOnly: boolean;
 	public readonly tabSize: number;
@@ -266,7 +266,7 @@ export interface ICursorSimpleModel {
 export type PartialCursorState = CursorState | PartialModelCursorState | PartialViewCursorState;
 
 export class CursorState {
-	_cursorStateBrand: void = undefined;
+	_cursorStateBrand: codemavi = undefined;
 
 	public static fromModelState(modelState: SingleCursorState): PartialModelCursorState {
 		return new PartialModelCursorState(modelState);
@@ -337,7 +337,7 @@ export const enum SelectionStartKind {
  * Represents the cursor state on either the model or on the view model.
  */
 export class SingleCursorState {
-	_singleCursorStateBrand: void = undefined;
+	_singleCursorStateBrand: codemavi = undefined;
 
 	public readonly selection: Selection;
 
@@ -397,7 +397,7 @@ export class SingleCursorState {
 }
 
 export class EditOperationResult {
-	_editOperationResultBrand: void = undefined;
+	_editOperationResultBrand: codemavi = undefined;
 
 	readonly type: EditOperationType;
 	readonly commands: Array<ICommand | null>;

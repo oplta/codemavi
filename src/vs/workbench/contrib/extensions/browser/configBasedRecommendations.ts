@@ -17,7 +17,7 @@ export class ConfigBasedRecommendations extends ExtensionRecommendations {
 	private importantTips: IConfigBasedExtensionTip[] = [];
 	private otherTips: IConfigBasedExtensionTip[] = [];
 
-	private _onDidChangeRecommendations = this._register(new Emitter<void>());
+	private _onDidChangeRecommendations = this._register(new Emitter<codemavi>());
 	readonly onDidChangeRecommendations = this._onDidChangeRecommendations.event;
 
 	private _otherRecommendations: ConfigBasedExtensionRecommendation[] = [];
@@ -35,12 +35,12 @@ export class ConfigBasedRecommendations extends ExtensionRecommendations {
 		super();
 	}
 
-	protected async doActivate(): Promise<void> {
+	protected async doActivate(): Promise<codemavi> {
 		await this.fetch();
 		this._register(this.workspaceContextService.onDidChangeWorkspaceFolders(e => this.onWorkspaceFoldersChanged(e)));
 	}
 
-	private async fetch(): Promise<void> {
+	private async fetch(): Promise<codemavi> {
 		const workspace = this.workspaceContextService.getWorkspace();
 		const importantTips: Map<string, IConfigBasedExtensionTip> = new Map<string, IConfigBasedExtensionTip>();
 		const otherTips: Map<string, IConfigBasedExtensionTip> = new Map<string, IConfigBasedExtensionTip>();
@@ -60,7 +60,7 @@ export class ConfigBasedRecommendations extends ExtensionRecommendations {
 		this._importantRecommendations = this.importantTips.map(tip => this.toExtensionRecommendation(tip));
 	}
 
-	private async onWorkspaceFoldersChanged(event: IWorkspaceFoldersChangeEvent): Promise<void> {
+	private async onWorkspaceFoldersChanged(event: IWorkspaceFoldersChangeEvent): Promise<codemavi> {
 		if (event.added.length) {
 			const oldImportantRecommended = this.importantTips;
 			await this.fetch();

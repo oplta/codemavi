@@ -6,7 +6,7 @@
 import { $ } from '../../dom.js';
 import './dnd.css';
 
-export function applyDragImage(event: DragEvent, container: HTMLElement, label: string, extraClasses: string[] = []): void {
+export function applyDragImage(event: DragEvent, container: HTMLElement, label: string, extraClasses: string[] = []): codemavi {
 	if (!event.dataTransfer) {
 		return;
 	}

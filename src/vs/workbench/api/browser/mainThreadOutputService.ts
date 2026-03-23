@@ -64,7 +64,7 @@ export class MainThreadOutputService extends Disposable implements MainThreadOut
 		return id;
 	}
 
-	public async $update(channelId: string, mode: OutputChannelUpdateMode, till?: number): Promise<void> {
+	public async $update(channelId: string, mode: OutputChannelUpdateMode, till?: number): Promise<codemavi> {
 		const channel = this._getChannel(channelId);
 		if (channel) {
 			if (mode === OutputChannelUpdateMode.Append) {
@@ -75,7 +75,7 @@ export class MainThreadOutputService extends Disposable implements MainThreadOut
 		}
 	}
 
-	public async $reveal(channelId: string, preserveFocus: boolean): Promise<void> {
+	public async $reveal(channelId: string, preserveFocus: boolean): Promise<codemavi> {
 		const channel = this._getChannel(channelId);
 		if (!channel) {
 			return;
@@ -113,7 +113,7 @@ export class MainThreadOutputService extends Disposable implements MainThreadOut
 		}
 	}
 
-	public async $close(channelId: string): Promise<void> {
+	public async $close(channelId: string): Promise<codemavi> {
 		if (this._viewsService.isViewVisible(OUTPUT_VIEW_ID)) {
 			const activeChannel = this._outputService.getActiveChannel();
 			if (activeChannel && channelId === activeChannel.id) {
@@ -122,7 +122,7 @@ export class MainThreadOutputService extends Disposable implements MainThreadOut
 		}
 	}
 
-	public async $dispose(channelId: string): Promise<void> {
+	public async $dispose(channelId: string): Promise<codemavi> {
 		const channel = this._getChannel(channelId);
 		channel?.dispose();
 	}

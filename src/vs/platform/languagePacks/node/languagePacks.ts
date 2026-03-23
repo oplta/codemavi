@@ -41,10 +41,10 @@ export class NativeLanguagePackService extends LanguagePackBaseService {
 		super(extensionGalleryService);
 		this.cache = this._register(new LanguagePacksCache(environmentService, logService));
 		this.extensionManagementService.registerParticipant({
-			postInstall: async (extension: ILocalExtension): Promise<void> => {
+			postInstall: async (extension: ILocalExtension): Promise<codemavi> => {
 				return this.postInstallExtension(extension);
 			},
-			postUninstall: async (extension: ILocalExtension): Promise<void> => {
+			postUninstall: async (extension: ILocalExtension): Promise<codemavi> => {
 				return this.postUninstallExtension(extension);
 			}
 		});
@@ -77,14 +77,14 @@ export class NativeLanguagePackService extends LanguagePackBaseService {
 		return languages;
 	}
 
-	private async postInstallExtension(extension: ILocalExtension): Promise<void> {
+	private async postInstallExtension(extension: ILocalExtension): Promise<codemavi> {
 		if (extension && extension.manifest && extension.manifest.contributes && extension.manifest.contributes.localizations && extension.manifest.contributes.localizations.length) {
 			this.logService.info('Adding language packs from the extension', extension.identifier.id);
 			await this.update();
 		}
 	}
 
-	private async postUninstallExtension(extension: ILocalExtension): Promise<void> {
+	private async postUninstallExtension(extension: ILocalExtension): Promise<codemavi> {
 		const languagePacks = await this.cache.getLanguagePacks();
 		if (Object.keys(languagePacks).some(language => languagePacks[language] && languagePacks[language].extensions.some(e => areSameExtensions(e.extensionIdentifier, extension.identifier)))) {
 			this.logService.info('Removing language packs from the extension', extension.identifier.id);
@@ -131,7 +131,7 @@ class LanguagePacksCache extends Disposable {
 		}).then(() => this.languagePacks);
 	}
 
-	private createLanguagePacksFromExtensions(languagePacks: { [language: string]: ILanguagePack }, ...extensions: ILocalExtension[]): void {
+	private createLanguagePacksFromExtensions(languagePacks: { [language: string]: ILanguagePack }, ...extensions: ILocalExtension[]): codemavi {
 		for (const extension of extensions) {
 			if (extension && extension.manifest && extension.manifest.contributes && extension.manifest.contributes.localizations && extension.manifest.contributes.localizations.length) {
 				this.createLanguagePacksFromExtension(languagePacks, extension);
@@ -140,7 +140,7 @@ class LanguagePacksCache extends Disposable {
 		Object.keys(languagePacks).forEach(languageId => this.updateHash(languagePacks[languageId]));
 	}
 
-	private createLanguagePacksFromExtension(languagePacks: { [language: string]: ILanguagePack }, extension: ILocalExtension): void {
+	private createLanguagePacksFromExtension(languagePacks: { [language: string]: ILanguagePack }, extension: ILocalExtension): codemavi {
 		const extensionIdentifier = extension.identifier;
 		const localizations = extension.manifest.contributes && extension.manifest.contributes.localizations ? extension.manifest.contributes.localizations : [];
 		for (const localizationContribution of localizations) {
@@ -168,7 +168,7 @@ class LanguagePacksCache extends Disposable {
 		}
 	}
 
-	private updateHash(languagePack: ILanguagePack): void {
+	private updateHash(languagePack: ILanguagePack): codemavi {
 		if (languagePack) {
 			const md5 = createHash('md5'); // CodeQL [SM04514] Used to create an hash for language pack extension version, which is not a security issue
 			for (const extension of languagePack.extensions) {

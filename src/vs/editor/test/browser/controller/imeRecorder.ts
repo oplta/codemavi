@@ -105,7 +105,7 @@ import { TextAreaWrapper } from '../../../browser/controller/editContext/textAre
 			recorded.events.push(e);
 		};
 
-		const recordKeyboardEvent = (e: KeyboardEvent): void => {
+		const recordKeyboardEvent = (e: KeyboardEvent): codemavi => {
 			if (e.type !== 'keydown' && e.type !== 'keypress' && e.type !== 'keyup') {
 				throw new Error(`Not supported!`);
 			}
@@ -131,7 +131,7 @@ import { TextAreaWrapper } from '../../../browser/controller/editContext/textAre
 			recordEvent(ev);
 		};
 
-		const recordCompositionEvent = (e: CompositionEvent): void => {
+		const recordCompositionEvent = (e: CompositionEvent): codemavi => {
 			if (e.type !== 'compositionstart' && e.type !== 'compositionupdate' && e.type !== 'compositionend') {
 				throw new Error(`Not supported!`);
 			}
@@ -147,7 +147,7 @@ import { TextAreaWrapper } from '../../../browser/controller/editContext/textAre
 			recordEvent(ev);
 		};
 
-		const recordInputEvent = (e: InputEvent): void => {
+		const recordInputEvent = (e: InputEvent): codemavi => {
 			if (e.type !== 'beforeinput' && e.type !== 'input') {
 				throw new Error(`Not supported!`);
 			}

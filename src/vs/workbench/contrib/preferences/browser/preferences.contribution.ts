@@ -602,7 +602,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor, args: any): void {
+			run(accessor: ServicesAccessor, args: any): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				preferencesEditor?.focusSettings();
 			}
@@ -622,7 +622,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor, args: any): void {
+			run(accessor: ServicesAccessor, args: any): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				preferencesEditor?.focusSettings();
 			}
@@ -642,7 +642,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				if (preferencesEditor instanceof SettingsEditor2) {
 					preferencesEditor.focusSettings();
@@ -667,7 +667,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				if (!(preferencesEditor instanceof SettingsEditor2)) {
 					return;
@@ -690,7 +690,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				if (!(preferencesEditor instanceof SettingsEditor2)) {
 					return;
@@ -719,7 +719,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				if (preferencesEditor instanceof SettingsEditor2) {
 					preferencesEditor.showContextMenu();
@@ -743,7 +743,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const preferencesEditor = getPreferencesEditor(accessor);
 				if (!(preferencesEditor instanceof SettingsEditor2)) {
 					return;
@@ -953,7 +953,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 		this.registerKeybindingEditorActions();
 	}
 
-	private registerKeybindingEditorActions(): void {
+	private registerKeybindingEditorActions(): codemavi {
 		const that = this;
 
 		KeybindingsRegistry.registerCommandAndKeybindingRule({
@@ -1179,7 +1179,7 @@ class PreferencesActionsContribution extends Disposable implements IWorkbenchCon
 					});
 				}
 
-				async run(accessor: ServicesAccessor): Promise<void> {
+				async run(accessor: ServicesAccessor): Promise<codemavi> {
 					const codeEditor = accessor.get(IEditorService).activeTextEditorControl;
 					if (isCodeEditor(codeEditor)) {
 						codeEditor.getContribution<IDefineKeybindingEditorContribution>(DEFINE_KEYBINDING_EDITOR_CONTRIB_ID)?.showDefineKeybindingWidget();

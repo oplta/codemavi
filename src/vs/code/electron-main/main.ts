@@ -83,7 +83,7 @@ import { addUNCHostToAllowlist, getUNCHost } from '../../base/node/unc.js';
  */
 class CodeMain {
 
-	main(): void {
+	main(): codemavi {
 		try {
 			this.startup();
 		} catch (error) {
@@ -92,7 +92,7 @@ class CodeMain {
 		}
 	}
 
-	private async startup(): Promise<void> {
+	private async startup(): Promise<codemavi> {
 
 		// Set the error handler early enough so that we are not getting the
 		// default electron error dialog popping up
@@ -252,7 +252,7 @@ class CodeMain {
 		return instanceEnvironment;
 	}
 
-	private async initServices(environmentMainService: IEnvironmentMainService, userDataProfilesMainService: UserDataProfilesMainService, configurationService: ConfigurationService, stateService: StateService, productService: IProductService): Promise<void> {
+	private async initServices(environmentMainService: IEnvironmentMainService, userDataProfilesMainService: UserDataProfilesMainService, configurationService: ConfigurationService, stateService: StateService, productService: IProductService): Promise<codemavi> {
 		await Promises.settled<unknown>([
 
 			// Environment service (paths)
@@ -418,7 +418,7 @@ class CodeMain {
 		return mainProcessNodeIpcServer;
 	}
 
-	private handleStartupDataDirError(environmentMainService: IEnvironmentMainService, productService: IProductService, error: NodeJS.ErrnoException): void {
+	private handleStartupDataDirError(environmentMainService: IEnvironmentMainService, productService: IProductService, error: NodeJS.ErrnoException): codemavi {
 		if (error.code === 'EACCES' || error.code === 'EPERM') {
 			const directories = coalesce([environmentMainService.userDataPath, environmentMainService.extensionsPath, XDG_RUNTIME_DIR]).map(folder => getPathLabel(URI.file(folder), { os: OS, tildify: environmentMainService }));
 
@@ -430,7 +430,7 @@ class CodeMain {
 		}
 	}
 
-	private showStartupWarningDialog(message: string, detail: string, productService: IProductService): void {
+	private showStartupWarningDialog(message: string, detail: string, productService: IProductService): codemavi {
 
 		// use sync variant here because we likely exit after this method
 		// due to startup issues and otherwise the dialog seems to disappear
@@ -444,7 +444,7 @@ class CodeMain {
 		}, productService).options);
 	}
 
-	private async windowsAllowSetForegroundWindow(launchMainService: ILaunchMainService, logService: ILogService): Promise<void> {
+	private async windowsAllowSetForegroundWindow(launchMainService: ILaunchMainService, logService: ILogService): Promise<codemavi> {
 		if (isWindows) {
 			const processId = await launchMainService.getMainProcessId();
 
@@ -458,7 +458,7 @@ class CodeMain {
 		}
 	}
 
-	private quit(accessor: ServicesAccessor, reason?: ExpectedError | Error): void {
+	private quit(accessor: ServicesAccessor, reason?: ExpectedError | Error): codemavi {
 		const logService = accessor.get(ILogService);
 		const lifecycleMainService = accessor.get(ILifecycleMainService);
 

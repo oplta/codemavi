@@ -64,18 +64,18 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 	private readonly _inputListener = this._register(new MutableDisposable());
 
 	// override onDidFocus and onDidBlur to be based on the NotebookEditorWidget element
-	private readonly _onDidFocusWidget = this._register(new Emitter<void>());
-	override get onDidFocus(): Event<void> { return this._onDidFocusWidget.event; }
-	private readonly _onDidBlurWidget = this._register(new Emitter<void>());
-	override get onDidBlur(): Event<void> { return this._onDidBlurWidget.event; }
+	private readonly _onDidFocusWidget = this._register(new Emitter<codemavi>());
+	override get onDidFocus(): Event<codemavi> { return this._onDidFocusWidget.event; }
+	private readonly _onDidBlurWidget = this._register(new Emitter<codemavi>());
+	override get onDidBlur(): Event<codemavi> { return this._onDidBlurWidget.event; }
 
-	private readonly _onDidChangeModel = this._register(new Emitter<void>());
-	readonly onDidChangeModel: Event<void> = this._onDidChangeModel.event;
+	private readonly _onDidChangeModel = this._register(new Emitter<codemavi>());
+	readonly onDidChangeModel: Event<codemavi> = this._onDidChangeModel.event;
 
 	private readonly _onDidChangeSelection = this._register(new Emitter<IEditorPaneSelectionChangeEvent>());
 	readonly onDidChangeSelection = this._onDidChangeSelection.event;
 
-	protected readonly _onDidChangeScroll = this._register(new Emitter<void>());
+	protected readonly _onDidChangeScroll = this._register(new Emitter<codemavi>());
 	readonly onDidChangeScroll = this._onDidChangeScroll.event;
 
 	constructor(
@@ -104,19 +104,19 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		this._register(this._fileService.onDidChangeFileSystemProviderRegistrations(e => this._onDidChangeFileSystemProvider(e.scheme)));
 	}
 
-	private _onDidChangeFileSystemProvider(scheme: string): void {
+	private _onDidChangeFileSystemProvider(scheme: string): codemavi {
 		if (this.input instanceof NotebookEditorInput && this.input.resource?.scheme === scheme) {
 			this._updateReadonly(this.input);
 		}
 	}
 
-	private _onDidChangeInputCapabilities(input: NotebookEditorInput): void {
+	private _onDidChangeInputCapabilities(input: NotebookEditorInput): codemavi {
 		if (this.input === input) {
 			this._updateReadonly(input);
 		}
 	}
 
-	private _updateReadonly(input: NotebookEditorInput): void {
+	private _updateReadonly(input: NotebookEditorInput): codemavi {
 		this._widget.value?.setOptions({ isReadOnly: !!input.isReadonly() });
 	}
 
@@ -136,7 +136,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		return this._widget.value?.scopedContextKeyService;
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this._rootElement = DOM.append(parent, DOM.$('.notebook-editor'));
 		this._rootElement.id = `notebook-editor-element-${generateUuid()}`;
 	}
@@ -153,14 +153,14 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		return this._widget.value;
 	}
 
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): codemavi {
 		super.setVisible(visible);
 		if (!visible) {
 			this._widget.value?.onWillHide();
 		}
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		super.setEditorVisible(visible);
 		this._groupListener.clear();
 		this._groupListener.add(this.group.onWillCloseEditor(e => this._saveEditorViewState(e.editor)));
@@ -193,7 +193,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		return !!value && (DOM.isAncestorOfActiveElement(value.getDomNode() || DOM.isAncestorOfActiveElement(value.getOverflowContainerDomNode())));
 	}
 
-	override async setInput(input: NotebookEditorInput, options: INotebookEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken, noRetry?: boolean): Promise<void> {
+	override async setInput(input: NotebookEditorInput, options: INotebookEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken, noRetry?: boolean): Promise<codemavi> {
 		try {
 			let perfMarksCaptured = false;
 			const fileOpenMonitor = timeout(10000);
@@ -504,7 +504,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		});
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 		this._inputListener.clear();
 
 		if (this._widget.value) {
@@ -514,12 +514,12 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		super.clearInput();
 	}
 
-	override setOptions(options: INotebookEditorOptions | undefined): void {
+	override setOptions(options: INotebookEditorOptions | undefined): codemavi {
 		this._widget.value?.setOptions(options);
 		super.setOptions(options);
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 		this._saveEditorViewState(this.input);
 		super.saveState();
 	}
@@ -558,7 +558,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		};
 	}
 
-	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): void {
+	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): codemavi {
 		const editor = this.getControl();
 		if (!editor) {
 			throw new Error('Control has not yet been initialized');
@@ -567,7 +567,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		editor.setScrollTop(scrollPosition.scrollTop);
 	}
 
-	private _saveEditorViewState(input: EditorInput | undefined): void {
+	private _saveEditorViewState(input: EditorInput | undefined): codemavi {
 		if (this._widget.value && input instanceof NotebookEditorInput) {
 			if (this._widget.value.isDisposed) {
 				return;
@@ -593,7 +593,7 @@ export class NotebookEditor extends EditorPane implements INotebookEditorPane, I
 		return;
 	}
 
-	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): void {
+	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): codemavi {
 		this._rootElement.classList.toggle('mid-width', dimension.width < 1000 && dimension.width >= 600);
 		this._rootElement.classList.toggle('narrow-width', dimension.width < 600);
 		this._pagePosition = { dimension, position };

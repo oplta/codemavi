@@ -16,7 +16,7 @@ export class ExtHostConsoleForwarder extends AbstractExtHostConsoleForwarder {
 		super(extHostRpc, initData);
 	}
 
-	protected override _nativeConsoleLogMessage(_method: unknown, original: (...args: any[]) => void, args: IArguments) {
+	protected override _nativeConsoleLogMessage(_method: unknown, original: (...args: any[]) => codemavi, args: IArguments) {
 		original.apply(console, args as any);
 	}
 }

@@ -22,7 +22,7 @@ export class MdLinkOpener {
 		return this._client.resolveLinkTarget(linkText, fromResource);
 	}
 
-	public async openDocumentLink(linkText: string, fromResource: vscode.Uri, viewColumn?: vscode.ViewColumn): Promise<void> {
+	public async openDocumentLink(linkText: string, fromResource: vscode.Uri, viewColumn?: vscode.ViewColumn): Promise<codemavi> {
 		const resolved = await this._client.resolveLinkTarget(linkText, fromResource);
 		if (!resolved) {
 			return;

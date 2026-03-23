@@ -13,7 +13,7 @@ suite('TextEdit', () => {
 	suite('inverse', () => {
 		ensureNoDisposablesAreLeakedInTestSuite();
 
-		function runTest(seed: number): void {
+		function runTest(seed: number): codemavi {
 			const rand = Random.create(seed);
 			const source = new StringText(rand.nextMultiLineString(10, new OffsetRange(0, 10)));
 

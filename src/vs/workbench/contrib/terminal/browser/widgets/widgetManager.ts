@@ -18,7 +18,7 @@ export class TerminalWidgetManager implements IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._container) {
 			this._container.remove();
 			this._container = undefined;

@@ -303,11 +303,11 @@ class FileUndoRedoElement implements IWorkspaceUndoRedoElement {
 		this.resources = operations.flatMap(op => op.uris);
 	}
 
-	async undo(): Promise<void> {
+	async undo(): Promise<codemavi> {
 		await this._reverse();
 	}
 
-	async redo(): Promise<void> {
+	async redo(): Promise<codemavi> {
 		await this._reverse();
 	}
 
@@ -332,7 +332,7 @@ export class BulkFileEdits {
 		private readonly _undoRedoGroup: UndoRedoGroup,
 		private readonly _undoRedoSource: UndoRedoSource | undefined,
 		private readonly _confirmBeforeUndo: boolean,
-		private readonly _progress: IProgress<void>,
+		private readonly _progress: IProgress<codemavi>,
 		private readonly _token: CancellationToken,
 		private readonly _edits: ResourceFileEdit[],
 		@IInstantiationService private readonly _instaService: IInstantiationService,

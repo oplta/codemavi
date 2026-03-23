@@ -107,7 +107,7 @@ export class ExtensionsViewletViewsContribution extends Disposable implements IW
 		this.registerViews();
 	}
 
-	private registerViews(): void {
+	private registerViews(): codemavi {
 		const viewDescriptors: IViewDescriptor[] = [];
 
 		/* Default views */
@@ -159,7 +159,7 @@ export class ExtensionsViewletViewsContribution extends Disposable implements IW
 		const serverLabelChangeEvent = Event.any(this.labelService.onDidChangeFormatters, installedWebExtensionsContextChangeEvent);
 		for (const server of servers) {
 			const getInstalledViewName = (): string => getViewName(localize('installed', "Installed"), server);
-			const onDidChangeTitle = Event.map<void, string>(serverLabelChangeEvent, () => getInstalledViewName());
+			const onDidChangeTitle = Event.map<codemavi, string>(serverLabelChangeEvent, () => getInstalledViewName());
 			const id = servers.length > 1 ? `workbench.views.extensions.${server.id}.installed` : `workbench.views.extensions.installed`;
 			/* Installed extensions view */
 			viewDescriptors.push({
@@ -196,7 +196,7 @@ export class ExtensionsViewletViewsContribution extends Disposable implements IW
 							}
 						});
 					}
-					run(accessor: ServicesAccessor): Promise<void> {
+					run(accessor: ServicesAccessor): Promise<codemavi> {
 						return accessor.get(IInstantiationService).createInstance(InstallLocalExtensionsInRemoteAction).run();
 					}
 				}));
@@ -213,7 +213,7 @@ export class ExtensionsViewletViewsContribution extends Disposable implements IW
 						f1: true
 					});
 				}
-				run(accessor: ServicesAccessor): Promise<void> {
+				run(accessor: ServicesAccessor): Promise<codemavi> {
 					return accessor.get(IInstantiationService).createInstance(InstallRemoteExtensionsInLocalAction, 'workbench.extensions.actions.installLocalExtensionsInRemote').run();
 				}
 			}));
@@ -498,7 +498,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 	private readonly searchDeprecatedExtensionsContextKey: IContextKey<boolean>;
 	private readonly recommendedExtensionsContextKey: IContextKey<boolean>;
 
-	private searchDelayer: Delayer<void>;
+	private searchDelayer: Delayer<codemavi>;
 	private root: HTMLElement | undefined;
 	private header: HTMLElement | undefined;
 	private searchBox: SuggestEnabledInput | undefined;
@@ -569,7 +569,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		return this.searchBox?.getValue();
 	}
 
-	override create(parent: HTMLElement): void {
+	override create(parent: HTMLElement): codemavi {
 		parent.classList.add('extensions-viewlet');
 		this.root = parent;
 
@@ -677,13 +677,13 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		}));
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this.searchBox?.focus();
 	}
 
 	private _dimension: Dimension | undefined;
-	override layout(dimension: Dimension): void {
+	override layout(dimension: Dimension): codemavi {
 		this._dimension = dimension;
 		if (this.root) {
 			this.root.classList.toggle('narrow', dimension.width <= 250);
@@ -700,13 +700,13 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		return 400;
 	}
 
-	search(value: string): void {
+	search(value: string): codemavi {
 		if (this.searchBox && this.searchBox.getValue() !== value) {
 			this.searchBox.setValue(value);
 		}
 	}
 
-	async refresh(): Promise<void> {
+	async refresh(): Promise<codemavi> {
 		await this.updateInstalledExtensionsContexts();
 		this.doSearch(true);
 		if (this.configurationService.getValue(AutoCheckUpdatesConfigurationKey)) {
@@ -715,7 +715,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 	}
 
 	private readonly notificationDisposables = this._register(new MutableDisposable<DisposableStore>());
-	private renderNotificaiton(): void {
+	private renderNotificaiton(): codemavi {
 		if (!this.notificationContainer) {
 			return;
 		}
@@ -769,12 +769,12 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		}
 	}
 
-	private async updateInstalledExtensionsContexts(): Promise<void> {
+	private async updateInstalledExtensionsContexts(): Promise<codemavi> {
 		const result = await this.extensionsWorkbenchService.queryLocal();
 		this.hasInstalledExtensionsContextKey.set(result.some(r => !r.isBuiltin));
 	}
 
-	private triggerSearch(): void {
+	private triggerSearch(): codemavi {
 		this.searchDelayer.trigger(() => this.doSearch(), this.searchBox && this.searchBox.getValue() ? 500 : 0).then(undefined, err => this.onError(err));
 	}
 
@@ -790,7 +790,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 			: '';
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 		const value = this.searchBox ? this.searchBox.getValue() : '';
 		if (ExtensionsListView.isLocalExtensionsQuery(value)) {
 			this.searchViewletState['query.value'] = value;
@@ -800,7 +800,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		super.saveState();
 	}
 
-	private doSearch(refresh?: boolean): Promise<void> {
+	private doSearch(refresh?: boolean): Promise<codemavi> {
 		const value = this.normalizedQuery();
 		this.contextKeyService.bufferChangeEvents(() => {
 			const isRecommendedExtensionsQuery = ExtensionsListView.isRecommendedExtensionsQuery(value);
@@ -840,7 +840,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		return addedViews;
 	}
 
-	private alertSearchResult(count: number, viewId: string): void {
+	private alertSearchResult(count: number, viewId: string): codemavi {
 		const view = this.viewContainerModel.visibleViewDescriptors.find(view => view.id === viewId);
 		switch (count) {
 			case 0:
@@ -871,14 +871,14 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		return undefined;
 	}
 
-	private focusListView(): void {
+	private focusListView(): codemavi {
 		const pane = this.getFirstExpandedPane();
 		if (pane && pane.count() > 0) {
 			pane.focus();
 		}
 	}
 
-	private onViewletOpen(viewlet: IPaneComposite): void {
+	private onViewletOpen(viewlet: IPaneComposite): codemavi {
 		if (!viewlet || viewlet.getId() === VIEWLET_ID) {
 			return;
 		}
@@ -898,7 +898,7 @@ export class ExtensionsViewPaneContainer extends ViewPaneContainer implements IE
 		return this.progressService.withProgress({ location: ProgressLocation.Extensions }, () => promise);
 	}
 
-	private onError(err: Error): void {
+	private onError(err: Error): codemavi {
 		if (isCancellationError(err)) {
 			return;
 		}
@@ -942,7 +942,7 @@ export class StatusUpdater extends Disposable implements IWorkbenchContribution 
 		this._register(Event.any(Event.debounce(extensionsWorkbenchService.onChange, () => undefined, 100, undefined, undefined, undefined, this._store), extensionsWorkbenchService.onDidChangeExtensionsNotification)(this.onServiceChange, this));
 	}
 
-	private onServiceChange(): void {
+	private onServiceChange(): codemavi {
 		this.badgeHandle.clear();
 		let badge: IBadge | undefined;
 
@@ -990,13 +990,13 @@ export class MaliciousExtensionChecker implements IWorkbenchContribution {
 		this.loopCheckForMaliciousExtensions();
 	}
 
-	private loopCheckForMaliciousExtensions(): void {
+	private loopCheckForMaliciousExtensions(): codemavi {
 		this.checkForMaliciousExtensions()
 			.then(() => timeout(1000 * 60 * 5)) // every five minutes
 			.then(() => this.loopCheckForMaliciousExtensions());
 	}
 
-	private async checkForMaliciousExtensions(): Promise<void> {
+	private async checkForMaliciousExtensions(): Promise<codemavi> {
 		try {
 			const maliciousExtensions: ILocalExtension[] = [];
 			let shouldRestartExtensions = false;

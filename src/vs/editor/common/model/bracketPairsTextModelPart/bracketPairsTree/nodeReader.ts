@@ -89,7 +89,7 @@ export class NodeReader {
 	}
 
 	// Navigates to the longest node that continues after the current node.
-	private nextNodeAfterCurrent(): void {
+	private nextNodeAfterCurrent(): codemavi {
 		while (true) {
 			const currentOffset = lastOrUndefined(this.offsets);
 			const currentNode = lastOrUndefined(this.nextNodes);

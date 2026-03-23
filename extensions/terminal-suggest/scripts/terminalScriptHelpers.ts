@@ -43,7 +43,7 @@ export const copyright = `/*----------------------------------------------------
 /**
  * Checks if the script is running on Windows and exits if so
  */
-export function checkWindows(): void {
+export function checkWindows(): codemavi {
 	if (platform() === 'win32') {
 		console.error('\x1b[31mThis command is not supported on Windows\x1b[0m');
 		process.exit(1);

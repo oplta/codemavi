@@ -21,7 +21,7 @@ export interface ISerializableContextMenuItem extends ICommonContextMenuItem {
 }
 
 export interface IContextMenuItem extends ICommonContextMenuItem {
-	click?: (event: IContextMenuEvent) => void;
+	click?: (event: IContextMenuEvent) => codemavi;
 	submenu?: IContextMenuItem[];
 }
 

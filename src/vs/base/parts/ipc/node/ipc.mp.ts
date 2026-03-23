@@ -28,11 +28,11 @@ class Protocol implements IMessagePassingProtocol {
 		port.start();
 	}
 
-	send(message: VSBuffer): void {
+	send(message: VSBuffer): codemavi {
 		this.port.postMessage(message.buffer);
 	}
 
-	disconnect(): void {
+	disconnect(): codemavi {
 		this.port.close();
 	}
 }
@@ -93,11 +93,11 @@ export class Server extends IPCServer {
 }
 
 interface INodeMessagePortFragment {
-	on(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
-	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	on(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
+	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
 }
 
-export function once(port: INodeMessagePortFragment, message: unknown, callback: () => void): void {
+export function once(port: INodeMessagePortFragment, message: unknown, callback: () => codemavi): codemavi {
 	const listener = (e: MessageEvent) => {
 		if (e.data === message) {
 			port.removeListener('message', listener);

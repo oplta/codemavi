@@ -59,7 +59,7 @@ export function quickInputButtonToAction(button: IQuickInputButton, id: string, 
 	};
 }
 
-export function renderQuickInputDescription(description: string, container: HTMLElement, actionHandler: { callback: (content: string) => void; disposables: DisposableStore }) {
+export function renderQuickInputDescription(description: string, container: HTMLElement, actionHandler: { callback: (content: string) => codemavi; disposables: DisposableStore }) {
 	dom.reset(container);
 	const parsed = parseLinkedText(description);
 	let tabIndex = 0;

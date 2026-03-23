@@ -65,7 +65,7 @@ import { UndoRedoService } from '../../../platform/undoRedo/common/undoRedoServi
 export interface ITestCodeEditor extends IActiveCodeEditor {
 	getViewModel(): ViewModel | undefined;
 	registerAndInstantiateContribution<T extends IEditorContribution, Services extends BrandedService[]>(id: string, ctor: new (editor: ICodeEditor, ...services: Services) => T): T;
-	registerDisposable(disposable: IDisposable): void;
+	registerDisposable(disposable: IDisposable): codemavi;
 }
 
 export class TestCodeEditor extends CodeEditorWidget implements ICodeEditor {
@@ -79,7 +79,7 @@ export class TestCodeEditor extends CodeEditorWidget implements ICodeEditor {
 		return [null! as View, false];
 	}
 	private _hasTextFocus = false;
-	public setHasTextFocus(hasTextFocus: boolean): void {
+	public setHasTextFocus(hasTextFocus: boolean): codemavi {
 		this._hasTextFocus = hasTextFocus;
 	}
 	public override hasTextFocus(): boolean {
@@ -96,7 +96,7 @@ export class TestCodeEditor extends CodeEditorWidget implements ICodeEditor {
 		this._contributions.set(id, r);
 		return r;
 	}
-	public registerDisposable(disposable: IDisposable): void {
+	public registerDisposable(disposable: IDisposable): codemavi {
 		this._register(disposable);
 	}
 }
@@ -105,12 +105,12 @@ class TestEditorDomElement {
 	parentElement: IContextKeyServiceTarget | null = null;
 	ownerDocument = document;
 	document = document;
-	setAttribute(attr: string, value: string): void { }
-	removeAttribute(attr: string): void { }
+	setAttribute(attr: string, value: string): codemavi { }
+	removeAttribute(attr: string): codemavi { }
 	hasAttribute(attr: string): boolean { return false; }
 	getAttribute(attr: string): string | undefined { return undefined; }
-	addEventListener(event: string): void { }
-	removeEventListener(event: string): void { }
+	addEventListener(event: string): codemavi { }
+	removeEventListener(event: string): codemavi { }
 }
 
 export interface TestCodeEditorCreationOptions extends editorOptions.IEditorOptions {
@@ -141,11 +141,11 @@ export interface ITestEnvConfiguration {
 	accessibilitySupport?: AccessibilitySupport;
 }
 
-export function withTestCodeEditor(text: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => void): void {
+export function withTestCodeEditor(text: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => codemavi): codemavi {
 	return _withTestCodeEditor(text, options, callback);
 }
 
-export async function withAsyncTestCodeEditor(text: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<void>): Promise<void> {
+export async function withAsyncTestCodeEditor(text: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<codemavi>): Promise<codemavi> {
 	return _withTestCodeEditor(text, options, callback);
 }
 
@@ -153,9 +153,9 @@ function isTextModel(arg: ITextModel | string | string[] | ITextBufferFactory): 
 	return Boolean(arg && (arg as ITextModel).uri);
 }
 
-function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => void): void;
-function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<void>): Promise<void>;
-function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<void> | void): Promise<void> | void {
+function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => codemavi): codemavi;
+function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<codemavi>): Promise<codemavi>;
+function _withTestCodeEditor(arg: ITextModel | string | string[] | ITextBufferFactory, options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel, instantiationService: TestInstantiationService) => Promise<codemavi> | codemavi): Promise<codemavi> | codemavi {
 	const disposables = new DisposableStore();
 	const instantiationService = createCodeEditorServices(disposables, options.serviceCollection);
 	delete options.serviceCollection;

@@ -12,8 +12,8 @@ declare module 'vscode' {
 		readonly line: number;
 		readonly height: number;
 		readonly webview: Webview;
-		readonly onDidDispose: Event<void>;
-		dispose(): void;
+		readonly onDidDispose: Event<codemavi>;
+		dispose(): codemavi;
 	}
 
 	export namespace window {

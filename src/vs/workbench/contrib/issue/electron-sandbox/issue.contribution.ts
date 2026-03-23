@@ -87,7 +87,7 @@ class ReportPerformanceIssueUsingReporterAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const issueService = accessor.get(IWorkbenchIssueService); // later can just get IIssueFormService
 
 		return issueService.openReporter({ issueType: IssueType.PerformanceIssue });

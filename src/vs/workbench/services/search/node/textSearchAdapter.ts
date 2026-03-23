@@ -13,7 +13,7 @@ export class TextSearchEngineAdapter {
 
 	constructor(private query: ITextQuery, private numThreads?: number) { }
 
-	search(token: CancellationToken, onResult: (matches: ISerializedFileMatch[]) => void, onMessage: (message: IProgressMessage) => void): Promise<ISerializedSearchSuccess> {
+	search(token: CancellationToken, onResult: (matches: ISerializedFileMatch[]) => codemavi, onMessage: (message: IProgressMessage) => codemavi): Promise<ISerializedSearchSuccess> {
 		if ((!this.query.folderQueries || !this.query.folderQueries.length) && (!this.query.extraFileResources || !this.query.extraFileResources.length)) {
 			return Promise.resolve({
 				type: 'success',

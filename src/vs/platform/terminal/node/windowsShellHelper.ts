@@ -65,7 +65,7 @@ export class WindowsShellHelper extends Disposable implements IWindowsShellHelpe
 		this._startMonitoringShell();
 	}
 
-	private async _startMonitoringShell(): Promise<void> {
+	private async _startMonitoringShell(): Promise<codemavi> {
 		if (this._store.isDisposed) {
 			return;
 		}
@@ -73,7 +73,7 @@ export class WindowsShellHelper extends Disposable implements IWindowsShellHelpe
 	}
 
 	@debounce(500)
-	async checkShell(): Promise<void> {
+	async checkShell(): Promise<codemavi> {
 		if (isWindows) {
 			// Wait to give the shell some time to actually launch a process, this
 			// could lead to a race condition but it would be recovered from when

@@ -42,7 +42,7 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 		pos = 1;
 	}
 
-	function advancePosBy(by: number): void {
+	function advancePosBy(by: number): codemavi {
 		if (locationKeyName === null) {
 			pos = pos + by;
 		} else {
@@ -57,7 +57,7 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 			}
 		}
 	}
-	function advancePosTo(to: number): void {
+	function advancePosTo(to: number): codemavi {
 		if (locationKeyName === null) {
 			pos = to;
 		} else {
@@ -65,7 +65,7 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 		}
 	}
 
-	function skipWhitespace(): void {
+	function skipWhitespace(): codemavi {
 		while (pos < len) {
 			const chCode = content.charCodeAt(pos);
 			if (chCode !== ChCode.SPACE && chCode !== ChCode.TAB && chCode !== ChCode.CARRIAGE_RETURN && chCode !== ChCode.LINE_FEED) {
@@ -83,7 +83,7 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 		return false;
 	}
 
-	function advanceUntil(str: string): void {
+	function advanceUntil(str: string): codemavi {
 		const nextOccurence = content.indexOf(str, pos);
 		if (nextOccurence !== -1) {
 			advancePosTo(nextOccurence + str.length);
@@ -114,14 +114,14 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 	const objStack: any[] = [];
 	let curKey: string | null = null;
 
-	function pushState(newState: State, newCur: any): void {
+	function pushState(newState: State, newCur: any): codemavi {
 		stateStack.push(state);
 		objStack.push(cur);
 		state = newState;
 		cur = newCur;
 	}
 
-	function popState(): void {
+	function popState(): codemavi {
 		if (stateStack.length === 0) {
 			return fail('illegal state stack');
 		}
@@ -129,7 +129,7 @@ function _parse(content: string, filename: string | null, locationKeyName: strin
 		cur = objStack.pop();
 	}
 
-	function fail(msg: string): void {
+	function fail(msg: string): codemavi {
 		throw new Error('Near offset ' + pos + ': ' + msg + ' ~~~' + content.substr(pos, 50) + '~~~');
 	}
 

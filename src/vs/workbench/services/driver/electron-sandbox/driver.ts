@@ -12,7 +12,7 @@ import { BrowserWindowDriver } from '../browser/driver.js';
 import { ILifecycleService } from '../../lifecycle/common/lifecycle.js';
 
 interface INativeWindowDriverHelper {
-	exitApplication(): Promise<void>;
+	exitApplication(): Promise<codemavi>;
 }
 
 class NativeWindowDriver extends BrowserWindowDriver {
@@ -27,11 +27,11 @@ class NativeWindowDriver extends BrowserWindowDriver {
 		super(fileService, environmentService, lifecycleService, logService);
 	}
 
-	override exitApplication(): Promise<void> {
+	override exitApplication(): Promise<codemavi> {
 		return this.helper.exitApplication();
 	}
 }
 
-export function registerWindowDriver(instantiationService: IInstantiationService, helper: INativeWindowDriverHelper): void {
+export function registerWindowDriver(instantiationService: IInstantiationService, helper: INativeWindowDriverHelper): codemavi {
 	Object.assign(mainWindow, { driver: instantiationService.createInstance(NativeWindowDriver, helper) });
 }

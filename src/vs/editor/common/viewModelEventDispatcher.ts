@@ -34,12 +34,12 @@ export class ViewModelEventDispatcher extends Disposable {
 		this._outgoingEvents = [];
 	}
 
-	public emitOutgoingEvent(e: OutgoingViewModelEvent): void {
+	public emitOutgoingEvent(e: OutgoingViewModelEvent): codemavi {
 		this._addOutgoingEvent(e);
 		this._emitOutgoingEvents();
 	}
 
-	private _addOutgoingEvent(e: OutgoingViewModelEvent): void {
+	private _addOutgoingEvent(e: OutgoingViewModelEvent): codemavi {
 		for (let i = 0, len = this._outgoingEvents.length; i < len; i++) {
 			const mergeResult = (this._outgoingEvents[i].kind === e.kind ? this._outgoingEvents[i].attemptToMerge(e) : null);
 			if (mergeResult) {
@@ -51,7 +51,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		this._outgoingEvents.push(e);
 	}
 
-	private _emitOutgoingEvents(): void {
+	private _emitOutgoingEvents(): codemavi {
 		while (this._outgoingEvents.length > 0) {
 			if (this._collector || this._isConsumingViewEventQueue) {
 				// right now collecting or emitting view events, so let's postpone emitting
@@ -65,7 +65,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		}
 	}
 
-	public addViewEventHandler(eventHandler: ViewEventHandler): void {
+	public addViewEventHandler(eventHandler: ViewEventHandler): codemavi {
 		for (let i = 0, len = this._eventHandlers.length; i < len; i++) {
 			if (this._eventHandlers[i] === eventHandler) {
 				console.warn('Detected duplicate listener in ViewEventDispatcher', eventHandler);
@@ -74,7 +74,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		this._eventHandlers.push(eventHandler);
 	}
 
-	public removeViewEventHandler(eventHandler: ViewEventHandler): void {
+	public removeViewEventHandler(eventHandler: ViewEventHandler): codemavi {
 		for (let i = 0; i < this._eventHandlers.length; i++) {
 			if (this._eventHandlers[i] === eventHandler) {
 				this._eventHandlers.splice(i, 1);
@@ -91,7 +91,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		return this._collector!;
 	}
 
-	public endEmitViewEvents(): void {
+	public endEmitViewEvents(): codemavi {
 		this._collectorCnt--;
 		if (this._collectorCnt === 0) {
 			const outgoingEvents = this._collector!.outgoingEvents;
@@ -109,7 +109,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		this._emitOutgoingEvents();
 	}
 
-	public emitSingleViewEvent(event: ViewEvent): void {
+	public emitSingleViewEvent(event: ViewEvent): codemavi {
 		try {
 			const eventsCollector = this.beginEmitViewEvents();
 			eventsCollector.emitViewEvent(event);
@@ -118,7 +118,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		}
 	}
 
-	private _emitMany(events: ViewEvent[]): void {
+	private _emitMany(events: ViewEvent[]): codemavi {
 		if (this._viewEventQueue) {
 			this._viewEventQueue = this._viewEventQueue.concat(events);
 		} else {
@@ -130,7 +130,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		}
 	}
 
-	private _consumeViewEventQueue(): void {
+	private _consumeViewEventQueue(): codemavi {
 		try {
 			this._isConsumingViewEventQueue = true;
 			this._doConsumeQueue();
@@ -139,7 +139,7 @@ export class ViewModelEventDispatcher extends Disposable {
 		}
 	}
 
-	private _doConsumeQueue(): void {
+	private _doConsumeQueue(): codemavi {
 		while (this._viewEventQueue) {
 			// Empty event queue, as events might come in while sending these off
 			const events = this._viewEventQueue;
@@ -168,7 +168,7 @@ export class ViewModelEventsCollector {
 		this.viewEvents.push(event);
 	}
 
-	public emitOutgoingEvent(e: OutgoingViewModelEvent): void {
+	public emitOutgoingEvent(e: OutgoingViewModelEvent): codemavi {
 		this.outgoingEvents.push(e);
 	}
 }

@@ -70,8 +70,8 @@ export class DefaultConfiguration extends BaseDefaultConfiguration {
 		return !isEmptyObject(this.cachedConfigurationDefaultsOverrides);
 	}
 
-	private initiaizeCachedConfigurationDefaultsOverridesPromise: Promise<void> | undefined;
-	private initializeCachedConfigurationDefaultsOverrides(): Promise<void> {
+	private initiaizeCachedConfigurationDefaultsOverridesPromise: Promise<codemavi> | undefined;
+	private initializeCachedConfigurationDefaultsOverrides(): Promise<codemavi> {
 		if (!this.initiaizeCachedConfigurationDefaultsOverridesPromise) {
 			this.initiaizeCachedConfigurationDefaultsOverridesPromise = (async () => {
 				try {
@@ -89,14 +89,14 @@ export class DefaultConfiguration extends BaseDefaultConfiguration {
 		return this.initiaizeCachedConfigurationDefaultsOverridesPromise;
 	}
 
-	protected override onDidUpdateConfiguration(properties: string[], defaultsOverrides?: boolean): void {
+	protected override onDidUpdateConfiguration(properties: string[], defaultsOverrides?: boolean): codemavi {
 		super.onDidUpdateConfiguration(properties, defaultsOverrides);
 		if (defaultsOverrides) {
 			this.updateCachedConfigurationDefaultsOverrides();
 		}
 	}
 
-	private async updateCachedConfigurationDefaultsOverrides(): Promise<void> {
+	private async updateCachedConfigurationDefaultsOverrides(): Promise<codemavi> {
 		if (!this.updateCache) {
 			return;
 		}
@@ -228,8 +228,8 @@ class FileServiceBasedConfiguration extends Disposable {
 	private _standAloneConfigurations: ConfigurationModel[];
 	private _cache: ConfigurationModel;
 
-	private readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	constructor(
 		name: string,
@@ -327,7 +327,7 @@ class FileServiceBasedConfiguration extends Disposable {
 		return this._cache;
 	}
 
-	private consolidate(settingsConfiguration?: ConfigurationModel): void {
+	private consolidate(settingsConfiguration?: ConfigurationModel): codemavi {
 		this._cache = (settingsConfiguration ?? this._folderSettingsModelParser.configurationModel).merge(...this._standAloneConfigurations);
 	}
 
@@ -424,12 +424,12 @@ export class RemoteUserConfiguration extends Disposable {
 		return this._userConfiguration.getRestrictedSettings();
 	}
 
-	private onDidUserConfigurationChange(configurationModel: ConfigurationModel): void {
+	private onDidUserConfigurationChange(configurationModel: ConfigurationModel): codemavi {
 		this.updateCache();
 		this._onDidChangeConfiguration.fire(configurationModel);
 	}
 
-	private async updateCache(): Promise<void> {
+	private async updateCache(): Promise<codemavi> {
 		if (this._userConfiguration instanceof FileServiceBasedRemoteUserConfiguration) {
 			let content: string | undefined;
 			try {
@@ -476,20 +476,20 @@ class FileServiceBasedRemoteUserConfiguration extends Disposable {
 		}));
 	}
 
-	private watchResource(): void {
+	private watchResource(): codemavi {
 		this.fileWatcherDisposable.value = this.fileService.watch(this.configurationResource);
 	}
 
-	private stopWatchingResource(): void {
+	private stopWatchingResource(): codemavi {
 		this.fileWatcherDisposable.value = undefined;
 	}
 
-	private watchDirectory(): void {
+	private watchDirectory(): codemavi {
 		const directory = this.uriIdentityService.extUri.dirname(this.configurationResource);
 		this.directoryWatcherDisposable.value = this.fileService.watch(directory);
 	}
 
-	private stopWatchingDirectory(): void {
+	private stopWatchingDirectory(): codemavi {
 		this.directoryWatcherDisposable.value = undefined;
 	}
 
@@ -524,7 +524,7 @@ class FileServiceBasedRemoteUserConfiguration extends Disposable {
 		return this.parser.restrictedConfigurations;
 	}
 
-	private handleFileChangesEvent(event: FileChangesEvent): void {
+	private handleFileChangesEvent(event: FileChangesEvent): codemavi {
 
 		// Find changes that affect the resource
 		let affectedByChanges = false;
@@ -543,14 +543,14 @@ class FileServiceBasedRemoteUserConfiguration extends Disposable {
 		}
 	}
 
-	private handleFileOperationEvent(event: FileOperationEvent): void {
+	private handleFileOperationEvent(event: FileOperationEvent): codemavi {
 		if ((event.isOperation(FileOperation.CREATE) || event.isOperation(FileOperation.COPY) || event.isOperation(FileOperation.DELETE) || event.isOperation(FileOperation.WRITE))
 			&& this.uriIdentityService.extUri.isEqual(event.resource, this.configurationResource)) {
 			this.reloadConfigurationScheduler.schedule();
 		}
 	}
 
-	private onResourceExists(exists: boolean): void {
+	private onResourceExists(exists: boolean): codemavi {
 		if (exists) {
 			this.stopWatchingDirectory();
 			this.watchResource();
@@ -615,7 +615,7 @@ class CachedRemoteUserConfiguration extends Disposable {
 		return this.configurationModel;
 	}
 
-	async updateConfiguration(content: string | undefined): Promise<void> {
+	async updateConfiguration(content: string | undefined): Promise<codemavi> {
 		if (content) {
 			return this.configurationCache.write(this.key, JSON.stringify({ content }));
 		} else {
@@ -648,7 +648,7 @@ export class WorkspaceConfiguration extends Disposable {
 		this._workspaceConfiguration = this._cachedConfiguration = new CachedWorkspaceConfiguration(configurationCache, logService);
 	}
 
-	async initialize(workspaceIdentifier: IWorkspaceIdentifier, workspaceTrusted: boolean): Promise<void> {
+	async initialize(workspaceIdentifier: IWorkspaceIdentifier, workspaceTrusted: boolean): Promise<codemavi> {
 		this._workspaceIdentifier = workspaceIdentifier;
 		this._isWorkspaceTrusted = workspaceTrusted;
 		if (!this._initialized) {
@@ -662,7 +662,7 @@ export class WorkspaceConfiguration extends Disposable {
 		await this.reload();
 	}
 
-	async reload(): Promise<void> {
+	async reload(): Promise<codemavi> {
 		if (this._workspaceIdentifier) {
 			await this._workspaceConfiguration.load(this._workspaceIdentifier, { scopes: WORKSPACE_SCOPES, skipRestricted: this.isUntrusted() });
 		}
@@ -672,7 +672,7 @@ export class WorkspaceConfiguration extends Disposable {
 		return this._workspaceConfiguration.getFolders();
 	}
 
-	setFolders(folders: IStoredWorkspaceFolder[], jsonEditingService: IJSONEditingService): Promise<void> {
+	setFolders(folders: IStoredWorkspaceFolder[], jsonEditingService: IJSONEditingService): Promise<codemavi> {
 		if (this._workspaceIdentifier) {
 			return jsonEditingService.write(this._workspaceIdentifier.configPath, [{ path: ['folders'], value: folders }], true)
 				.then(() => this.reload());
@@ -702,7 +702,7 @@ export class WorkspaceConfiguration extends Disposable {
 		return this._workspaceConfiguration.getRestrictedSettings();
 	}
 
-	private async waitAndInitialize(workspaceIdentifier: IWorkspaceIdentifier): Promise<void> {
+	private async waitAndInitialize(workspaceIdentifier: IWorkspaceIdentifier): Promise<codemavi> {
 		await whenProviderRegistered(workspaceIdentifier.configPath, this.fileService);
 		if (!(this._workspaceConfiguration instanceof FileServiceBasedWorkspaceConfiguration)) {
 			const fileServiceBasedWorkspaceConfiguration = this._register(new FileServiceBasedWorkspaceConfiguration(this.fileService, this.uriIdentityService, this.logService));
@@ -712,7 +712,7 @@ export class WorkspaceConfiguration extends Disposable {
 		}
 	}
 
-	private doInitialize(fileServiceBasedWorkspaceConfiguration: FileServiceBasedWorkspaceConfiguration): void {
+	private doInitialize(fileServiceBasedWorkspaceConfiguration: FileServiceBasedWorkspaceConfiguration): codemavi {
 		this._workspaceConfigurationDisposables.clear();
 		this._workspaceConfiguration = this._workspaceConfigurationDisposables.add(fileServiceBasedWorkspaceConfiguration);
 		this._workspaceConfigurationDisposables.add(this._workspaceConfiguration.onDidChange(e => this.onDidWorkspaceConfigurationChange(true, false)));
@@ -723,7 +723,7 @@ export class WorkspaceConfiguration extends Disposable {
 		return !this._isWorkspaceTrusted;
 	}
 
-	private async onDidWorkspaceConfigurationChange(reload: boolean, fromCache: boolean): Promise<void> {
+	private async onDidWorkspaceConfigurationChange(reload: boolean, fromCache: boolean): Promise<codemavi> {
 		if (reload) {
 			await this.reload();
 		}
@@ -731,7 +731,7 @@ export class WorkspaceConfiguration extends Disposable {
 		this._onDidUpdateConfiguration.fire(fromCache);
 	}
 
-	private async updateCache(): Promise<void> {
+	private async updateCache(): Promise<codemavi> {
 		if (this._workspaceIdentifier && this.configurationCache.needsCaching(this._workspaceIdentifier.configPath) && this._workspaceConfiguration instanceof FileServiceBasedWorkspaceConfiguration) {
 			const content = await this._workspaceConfiguration.resolveContent(this._workspaceIdentifier);
 			await this._cachedConfiguration.updateWorkspace(this._workspaceIdentifier, content);
@@ -747,8 +747,8 @@ class FileServiceBasedWorkspaceConfiguration extends Disposable {
 	private workspaceConfigWatcher: IDisposable;
 	private readonly reloadConfigurationScheduler: RunOnceScheduler;
 
-	protected readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	protected readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	constructor(
 		private readonly fileService: IFileService,
@@ -777,7 +777,7 @@ class FileServiceBasedWorkspaceConfiguration extends Disposable {
 		return content.value.toString();
 	}
 
-	async load(workspaceIdentifier: IWorkspaceIdentifier, configurationParseOptions: ConfigurationParseOptions): Promise<void> {
+	async load(workspaceIdentifier: IWorkspaceIdentifier, configurationParseOptions: ConfigurationParseOptions): Promise<codemavi> {
 		if (!this._workspaceIdentifier || this._workspaceIdentifier.id !== workspaceIdentifier.id) {
 			this._workspaceIdentifier = workspaceIdentifier;
 			this.workspaceConfigurationModelParser = new WorkspaceConfigurationModelParser(this._workspaceIdentifier.id, this.logService);
@@ -823,7 +823,7 @@ class FileServiceBasedWorkspaceConfiguration extends Disposable {
 		return this.workspaceConfigurationModelParser.getRestrictedWorkspaceSettings();
 	}
 
-	private consolidate(): void {
+	private consolidate(): codemavi {
 		this.workspaceSettings = this.workspaceConfigurationModelParser.settingsModel.merge(this.workspaceConfigurationModelParser.launchModel, this.workspaceConfigurationModelParser.tasksModel);
 	}
 
@@ -835,7 +835,7 @@ class FileServiceBasedWorkspaceConfiguration extends Disposable {
 
 class CachedWorkspaceConfiguration {
 
-	readonly onDidChange: Event<void> = Event.None;
+	readonly onDidChange: Event<codemavi> = Event.None;
 
 	workspaceConfigurationModelParser: WorkspaceConfigurationModelParser;
 	workspaceSettings: ConfigurationModel;
@@ -848,7 +848,7 @@ class CachedWorkspaceConfiguration {
 		this.workspaceSettings = ConfigurationModel.createEmptyModel(logService);
 	}
 
-	async load(workspaceIdentifier: IWorkspaceIdentifier, configurationParseOptions: ConfigurationParseOptions): Promise<void> {
+	async load(workspaceIdentifier: IWorkspaceIdentifier, configurationParseOptions: ConfigurationParseOptions): Promise<codemavi> {
 		try {
 			const key = this.getKey(workspaceIdentifier);
 			const contents = await this.configurationCache.read(key);
@@ -892,11 +892,11 @@ class CachedWorkspaceConfiguration {
 		return this.workspaceConfigurationModelParser.getRestrictedWorkspaceSettings();
 	}
 
-	private consolidate(): void {
+	private consolidate(): codemavi {
 		this.workspaceSettings = this.workspaceConfigurationModelParser.settingsModel.merge(this.workspaceConfigurationModelParser.launchModel, this.workspaceConfigurationModelParser.tasksModel);
 	}
 
-	async updateWorkspace(workspaceIdentifier: IWorkspaceIdentifier, content: string | undefined): Promise<void> {
+	async updateWorkspace(workspaceIdentifier: IWorkspaceIdentifier, content: string | undefined): Promise<codemavi> {
 		try {
 			const key = this.getKey(workspaceIdentifier);
 			if (content) {
@@ -961,7 +961,7 @@ class CachedFolderConfiguration {
 		return this.configurationModel;
 	}
 
-	async updateConfiguration(settingsContent: string | undefined, standAloneConfigurationContents: [string, string | undefined][]): Promise<void> {
+	async updateConfiguration(settingsContent: string | undefined, standAloneConfigurationContents: [string, string | undefined][]): Promise<codemavi> {
 		const content: any = {};
 		if (settingsContent) {
 			content[FOLDER_SETTINGS_NAME] = settingsContent;
@@ -989,7 +989,7 @@ class CachedFolderConfiguration {
 		return this.configurationModel;
 	}
 
-	private consolidate(): void {
+	private consolidate(): codemavi {
 		this.configurationModel = this._folderSettingsModelParser.configurationModel.merge(...this._standAloneConfigurations);
 	}
 
@@ -1000,8 +1000,8 @@ class CachedFolderConfiguration {
 
 export class FolderConfiguration extends Disposable {
 
-	protected readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	protected readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private folderConfiguration: CachedFolderConfiguration | FileServiceBasedConfiguration;
 	private readonly scopes: ConfigurationScope[];
@@ -1061,7 +1061,7 @@ export class FolderConfiguration extends Disposable {
 		return !this.workspaceTrusted;
 	}
 
-	private onDidFolderConfigurationChange(): void {
+	private onDidFolderConfigurationChange(): codemavi {
 		this.updateCache();
 		this._onDidChange.fire();
 	}
@@ -1072,7 +1072,7 @@ export class FolderConfiguration extends Disposable {
 		return new FileServiceBasedConfiguration(this.configurationFolder.toString(), settingsResource, standAloneConfigurationResources, { scopes: this.scopes, skipRestricted: this.isUntrusted() }, fileService, uriIdentityService, logService);
 	}
 
-	private async updateCache(): Promise<void> {
+	private async updateCache(): Promise<codemavi> {
 		if (this.configurationCache.needsCaching(this.configurationFolder) && this.folderConfiguration instanceof FileServiceBasedConfiguration) {
 			const [settingsContent, standAloneConfigurationContents] = await this.folderConfiguration.resolveContents();
 			this.cachedFolderConfiguration.updateConfiguration(settingsContent, standAloneConfigurationContents);

@@ -20,7 +20,7 @@ import { promiseWithResolvers } from '../../../../base/common/async.js';
 export class TerminalInstanceService extends Disposable implements ITerminalInstanceService {
 	declare _serviceBrand: undefined;
 	private _terminalShellTypeContextKey: IContextKey<string>;
-	private _backendRegistration = new Map<string | undefined, { promise: Promise<void>; resolve: () => void }>();
+	private _backendRegistration = new Map<string | undefined, { promise: Promise<codemavi>; resolve: () => codemavi }>();
 
 	private readonly _onDidCreateInstance = this._register(new Emitter<ITerminalInstance>());
 	get onDidCreateInstance(): Event<ITerminalInstance> { return this._onDidCreateInstance.event; }
@@ -37,7 +37,7 @@ export class TerminalInstanceService extends Disposable implements ITerminalInst
 		this._terminalShellTypeContextKey = TerminalContextKeys.shellType.bindTo(this._contextKeyService);
 
 		for (const remoteAuthority of [undefined, environmentService.remoteAuthority]) {
-			const { promise, resolve } = promiseWithResolvers<void>();
+			const { promise, resolve } = promiseWithResolvers<codemavi>();
 			this._backendRegistration.set(remoteAuthority, { promise, resolve });
 		}
 	}

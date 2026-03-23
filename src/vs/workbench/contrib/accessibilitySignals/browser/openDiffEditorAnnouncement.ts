@@ -33,7 +33,7 @@ export class DiffEditorActiveAnnouncementContribution extends Disposable impleme
 		}));
 	}
 
-	private _updateListener(): void {
+	private _updateListener(): codemavi {
 		const announcementEnabled = this._configurationService.getValue(AccessibilityVerbositySettingId.DiffEditorActive);
 		const screenReaderOptimized = this._accessibilityService.isScreenReaderOptimized();
 

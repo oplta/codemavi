@@ -34,8 +34,8 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 
 	public _serviceBrand: undefined;
 
-	protected readonly _onDidUpdateKeybindings: Emitter<void> = this._register(new Emitter<void>());
-	get onDidUpdateKeybindings(): Event<void> {
+	protected readonly _onDidUpdateKeybindings: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	get onDidUpdateKeybindings(): Event<codemavi> {
 		return this._onDidUpdateKeybindings ? this._onDidUpdateKeybindings.event : Event.None; // Sinon stubbing walks properties on prototype
 	}
 
@@ -80,7 +80,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		this._logging = false;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
@@ -89,7 +89,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 	public abstract resolveKeybinding(keybinding: Keybinding): ResolvedKeybinding[];
 	public abstract resolveKeyboardEvent(keyboardEvent: IKeyboardEvent): ResolvedKeybinding;
 	public abstract resolveUserBinding(userBinding: string): ResolvedKeybinding[];
-	public abstract registerSchemaContribution(contribution: KeybindingsSchemaContribution): void;
+	public abstract registerSchemaContribution(contribution: KeybindingsSchemaContribution): codemavi;
 	public abstract _dumpDebugInfo(): string;
 	public abstract _dumpDebugInfoJSON(): string;
 
@@ -102,7 +102,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		return this._logging;
 	}
 
-	protected _log(str: string): void {
+	protected _log(str: string): codemavi {
 		if (this._logging) {
 			this._logService.info(`[KeybindingService]: ${str}`);
 		}
@@ -159,7 +159,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		return this._getResolver().resolve(contextValue, currentChords, firstChord);
 	}
 
-	private _scheduleLeaveChordMode(): void {
+	private _scheduleLeaveChordMode(): codemavi {
 		const chordLastInteractedTime = Date.now();
 		this._currentChordChecker.cancelAndSet(() => {
 
@@ -177,7 +177,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		}, 500);
 	}
 
-	private _expectAnotherChord(firstChord: string, keypressLabel: string | null): void {
+	private _expectAnotherChord(firstChord: string, keypressLabel: string | null): codemavi {
 
 		this._currentChords.push({ keypress: firstChord, label: keypressLabel });
 
@@ -201,7 +201,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		}
 	}
 
-	private _leaveChordMode(): void {
+	private _leaveChordMode(): codemavi {
 		if (this._currentChordStatusMessage) {
 			this._currentChordStatusMessage.dispose();
 			this._currentChordStatusMessage = null;
@@ -211,7 +211,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		IME.enable();
 	}
 
-	public dispatchByUserSettingsLabel(userSettingsLabel: string, target: IContextKeyServiceTarget): void {
+	public dispatchByUserSettingsLabel(userSettingsLabel: string, target: IContextKeyServiceTarget): codemavi {
 		this._log(`/ Dispatching keybinding triggered via menu entry accelerator - ${userSettingsLabel}`);
 		const keybindings = this.resolveUserBinding(userSettingsLabel);
 		if (keybindings.length === 0) {
@@ -385,7 +385,7 @@ export abstract class AbstractKeybindingService extends Disposable implements IK
 		}
 	}
 
-	abstract enableKeybindingHoldMode(commandId: string): Promise<void> | undefined;
+	abstract enableKeybindingHoldMode(commandId: string): Promise<codemavi> | undefined;
 
 	mightProducePrintableCharacter(event: IKeyboardEvent): boolean {
 		if (event.ctrlKey || event.metaKey) {

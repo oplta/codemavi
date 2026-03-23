@@ -19,7 +19,7 @@ export class DownloadService implements IDownloadService {
 		@IFileService private readonly fileService: IFileService
 	) { }
 
-	async download(resource: URI, target: URI, cancellationToken: CancellationToken = CancellationToken.None): Promise<void> {
+	async download(resource: URI, target: URI, cancellationToken: CancellationToken = CancellationToken.None): Promise<codemavi> {
 		if (resource.scheme === Schemas.file || resource.scheme === Schemas.vscodeRemote) {
 			// Intentionally only support this for file|remote<->file|remote scenarios
 			await this.fileService.copy(resource, target);

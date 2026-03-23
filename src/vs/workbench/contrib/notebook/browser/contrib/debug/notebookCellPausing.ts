@@ -35,7 +35,7 @@ class NotebookCellPausing extends Disposable implements IWorkbenchContribution {
 		this._scheduler = this._register(new RunOnceScheduler(() => this.onDidChangeCallStack(false), 2000));
 	}
 
-	private async onDidChangeCallStack(fallBackOnStaleCallstack: boolean): Promise<void> {
+	private async onDidChangeCallStack(fallBackOnStaleCallstack: boolean): Promise<codemavi> {
 		const newPausedCells = new Set<string>();
 
 		for (const session of this._debugService.getModel().getSessions()) {

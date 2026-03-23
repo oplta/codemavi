@@ -23,10 +23,10 @@ import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../base/test/c
 suite('ExtHostDiagnostics', () => {
 
 	class DiagnosticsShape extends mock<MainThreadDiagnosticsShape>() {
-		override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): void {
+		override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): codemavi {
 			//
 		}
-		override $clear(owner: string): void {
+		override $clear(owner: string): codemavi {
 			//
 		}
 	}
@@ -179,7 +179,7 @@ suite('ExtHostDiagnostics', () => {
 
 		let lastEntries!: [UriComponents, IMarkerData[]][];
 		const collection = new DiagnosticCollection('test', 'test', 100, 100, versionProvider, extUri, new class extends DiagnosticsShape {
-			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): void {
+			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): codemavi {
 				lastEntries = entries;
 				return super.$changeMany(owner, entries);
 			}
@@ -279,7 +279,7 @@ suite('ExtHostDiagnostics', () => {
 
 		let lastEntries!: [UriComponents, IMarkerData[]][];
 		const collection = new DiagnosticCollection('test', 'test', 100, 250, versionProvider, extUri, new class extends DiagnosticsShape {
-			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): void {
+			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): codemavi {
 				lastEntries = entries;
 				return super.$changeMany(owner, entries);
 			}
@@ -306,7 +306,7 @@ suite('ExtHostDiagnostics', () => {
 
 		let lastEntries!: [UriComponents, IMarkerData[]][];
 		const collection = new DiagnosticCollection('test', 'test', 2, 1, versionProvider, extUri, new class extends DiagnosticsShape {
-			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): void {
+			override $changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): codemavi {
 				lastEntries = entries;
 				return super.$changeMany(owner, entries);
 			}
@@ -416,7 +416,7 @@ suite('ExtHostDiagnostics', () => {
 		const diags = new ExtHostDiagnostics(new class implements IMainContext {
 			getProxy(id: any): any {
 				return new class DiagnosticsShape {
-					$clear(owner: string): void {
+					$clear(owner: string): codemavi {
 						ownerHistory.push(owner);
 					}
 				};
@@ -425,7 +425,7 @@ suite('ExtHostDiagnostics', () => {
 				return null;
 			}
 			dispose() { }
-			assertRegistered(): void {
+			assertRegistered(): codemavi {
 
 			}
 			drain() {
@@ -510,7 +510,7 @@ suite('ExtHostDiagnostics', () => {
 					return null;
 				}
 				dispose() { }
-				assertRegistered(): void {
+				assertRegistered(): codemavi {
 
 				}
 				drain() {
@@ -556,7 +556,7 @@ suite('ExtHostDiagnostics', () => {
 				return null;
 			}
 			dispose() { }
-			assertRegistered(): void {
+			assertRegistered(): codemavi {
 
 			}
 			drain() {

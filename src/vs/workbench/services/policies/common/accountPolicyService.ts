@@ -31,7 +31,7 @@ export class AccountPolicyService extends AbstractPolicyService implements IPoli
 		}
 	}
 
-	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<void> {
+	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<codemavi> {
 		this.logService.trace(`AccountPolicyService#_updatePolicyDefinitions: Got ${Object.keys(policyDefinitions).length} policy definitions`);
 
 		const update: string[] = [];

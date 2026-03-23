@@ -39,11 +39,11 @@ export class ExtensionSecrets implements vscode.SecretStorage {
 		return this.#secretState.get(this._id, key);
 	}
 
-	store(key: string, value: string): Promise<void> {
+	store(key: string, value: string): Promise<codemavi> {
 		return this.#secretState.store(this._id, key, value);
 	}
 
-	delete(key: string): Promise<void> {
+	delete(key: string): Promise<codemavi> {
 		return this.#secretState.delete(this._id, key);
 	}
 }

@@ -8,7 +8,7 @@ import { join } from '../../common/path.js';
 import { isWindows } from '../../common/platform.js';
 import { URI } from '../../common/uri.js';
 
-export type ValueCallback<T = any> = (value: T | Promise<T>) => void;
+export type ValueCallback<T = any> = (value: T | Promise<T>) => codemavi;
 
 export function toResource(this: any, path: string): URI {
 	if (isWindows) {
@@ -18,19 +18,19 @@ export function toResource(this: any, path: string): URI {
 	return URI.file(join('/', btoa(this.test.fullTitle()), path));
 }
 
-export function suiteRepeat(n: number, description: string, callback: (this: any) => void): void {
+export function suiteRepeat(n: number, description: string, callback: (this: any) => codemavi): codemavi {
 	for (let i = 0; i < n; i++) {
 		suite(`${description} (iteration ${i})`, callback);
 	}
 }
 
-export function testRepeat(n: number, description: string, callback: (this: any) => any): void {
+export function testRepeat(n: number, description: string, callback: (this: any) => any): codemavi {
 	for (let i = 0; i < n; i++) {
 		test(`${description} (iteration ${i})`, callback);
 	}
 }
 
-export async function assertThrowsAsync(block: () => any, message: string | Error = 'Missing expected exception'): Promise<void> {
+export async function assertThrowsAsync(block: () => any, message: string | Error = 'Missing expected exception'): Promise<codemavi> {
 	try {
 		await block();
 	} catch {
@@ -80,7 +80,7 @@ export function ensureNoDisposablesAreLeakedInTestSuite(): Pick<DisposableStore,
 	return testContext;
 }
 
-export function throwIfDisposablesAreLeaked(body: () => void, logToConsole = true): void {
+export function throwIfDisposablesAreLeaked(body: () => codemavi, logToConsole = true): codemavi {
 	const tracker = new DisposableTracker();
 	setDisposableTracker(tracker);
 	body();
@@ -88,7 +88,7 @@ export function throwIfDisposablesAreLeaked(body: () => void, logToConsole = tru
 	computeLeakingDisposables(tracker, logToConsole);
 }
 
-export async function throwIfDisposablesAreLeakedAsync(body: () => Promise<void>): Promise<void> {
+export async function throwIfDisposablesAreLeakedAsync(body: () => Promise<codemavi>): Promise<codemavi> {
 	const tracker = new DisposableTracker();
 	setDisposableTracker(tracker);
 	await body();

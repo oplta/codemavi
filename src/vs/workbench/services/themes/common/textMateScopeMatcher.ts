@@ -14,7 +14,7 @@ export interface Matcher<T> {
 	(matcherInput: T): number;
 }
 
-export function createMatchers<T>(selector: string, matchesName: (names: string[], matcherInput: T) => number, results: MatcherWithPriority<T>[]): void {
+export function createMatchers<T>(selector: string, matchesName: (names: string[], matcherInput: T) => number, results: MatcherWithPriority<T>[]): codemavi {
 	const tokenizer = newTokenizer(selector);
 	let token = tokenizer.next();
 	while (token !== null) {

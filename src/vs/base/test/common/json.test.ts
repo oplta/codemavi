@@ -7,7 +7,7 @@ import { createScanner, Node, parse, ParseError, ParseErrorCode, ParseOptions, p
 import { getParseErrorMessage } from '../../common/jsonErrorMessages.js';
 import { ensureNoDisposablesAreLeakedInTestSuite } from './utils.js';
 
-function assertKinds(text: string, ...kinds: SyntaxKind[]): void {
+function assertKinds(text: string, ...kinds: SyntaxKind[]): codemavi {
 	const scanner = createScanner(text);
 	let kind: SyntaxKind;
 	while ((kind = scanner.scan()) !== SyntaxKind.EOF) {
@@ -15,14 +15,14 @@ function assertKinds(text: string, ...kinds: SyntaxKind[]): void {
 	}
 	assert.strictEqual(kinds.length, 0);
 }
-function assertScanError(text: string, expectedKind: SyntaxKind, scanError: ScanError): void {
+function assertScanError(text: string, expectedKind: SyntaxKind, scanError: ScanError): codemavi {
 	const scanner = createScanner(text);
 	scanner.scan();
 	assert.strictEqual(scanner.getToken(), expectedKind);
 	assert.strictEqual(scanner.getTokenError(), scanError);
 }
 
-function assertValidParse(input: string, expected: any, options?: ParseOptions): void {
+function assertValidParse(input: string, expected: any, options?: ParseOptions): codemavi {
 	const errors: ParseError[] = [];
 	const actual = parse(input, errors, options);
 
@@ -32,7 +32,7 @@ function assertValidParse(input: string, expected: any, options?: ParseOptions):
 	assert.deepStrictEqual(actual, expected);
 }
 
-function assertInvalidParse(input: string, expected: any, options?: ParseOptions): void {
+function assertInvalidParse(input: string, expected: any, options?: ParseOptions): codemavi {
 	const errors: ParseError[] = [];
 	const actual = parse(input, errors, options);
 
@@ -40,7 +40,7 @@ function assertInvalidParse(input: string, expected: any, options?: ParseOptions
 	assert.deepStrictEqual(actual, expected);
 }
 
-function assertTree(input: string, expected: any, expectedErrors: number[] = [], options?: ParseOptions): void {
+function assertTree(input: string, expected: any, expectedErrors: number[] = [], options?: ParseOptions): codemavi {
 	const errors: ParseError[] = [];
 	const actual = parseTree(input, errors, options);
 
@@ -49,7 +49,7 @@ function assertTree(input: string, expected: any, expectedErrors: number[] = [],
 		if (node.children) {
 			for (const child of node.children) {
 				assert.strictEqual(node, child.parent);
-				delete (<any>child).parent; // delete to avoid recursion in deep equal
+				delete (<any>child).parent; // delete to acodemavi recursion in deep equal
 				checkParent(child);
 			}
 		}

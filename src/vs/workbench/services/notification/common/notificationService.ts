@@ -35,7 +35,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.model.onDidChangeNotification(e => {
 			switch (e.kind) {
 				case NotificationChangeType.ADD:
@@ -80,7 +80,7 @@ export class NotificationService extends Disposable implements INotificationServ
 	private static readonly GLOBAL_FILTER_SETTINGS_KEY = 'notifications.doNotDisturbMode';
 	private static readonly PER_SOURCE_FILTER_SETTINGS_KEY = 'notifications.perSourceDoNotDisturbMode';
 
-	private readonly _onDidChangeFilter = this._register(new Emitter<void>());
+	private readonly _onDidChangeFilter = this._register(new Emitter<codemavi>());
 	readonly onDidChangeFilter = this._onDidChangeFilter.event;
 
 	private globalFilterEnabled: boolean;
@@ -95,7 +95,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		return map;
 	})();
 
-	setFilter(filter: NotificationsFilter | INotificationSourceFilter): void {
+	setFilter(filter: NotificationsFilter | INotificationSourceFilter): codemavi {
 		if (typeof filter === 'number') {
 			if (this.globalFilterEnabled === (filter === NotificationsFilter.ERROR)) {
 				return; // no change
@@ -133,7 +133,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		return this.globalFilterEnabled ? NotificationsFilter.ERROR : NotificationsFilter.OFF;
 	}
 
-	private updateSourceFilter(source: INotificationSource): void {
+	private updateSourceFilter(source: INotificationSource): codemavi {
 		const existing = this.mapSourceToFilter.get(source.id);
 		if (!existing) {
 			return; // nothing to do
@@ -146,7 +146,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		}
 	}
 
-	private saveSourceFilters(): void {
+	private saveSourceFilters(): codemavi {
 		this.storageService.store(NotificationService.PER_SOURCE_FILTER_SETTINGS_KEY, JSON.stringify([...this.mapSourceToFilter.values()]), StorageScope.APPLICATION, StorageTarget.MACHINE);
 	}
 
@@ -154,14 +154,14 @@ export class NotificationService extends Disposable implements INotificationServ
 		return [...this.mapSourceToFilter.values()];
 	}
 
-	private updateFilters(): void {
+	private updateFilters(): codemavi {
 		this.model.setFilter({
 			global: this.globalFilterEnabled ? NotificationsFilter.ERROR : NotificationsFilter.OFF,
 			sources: new Map([...this.mapSourceToFilter.values()].map(source => [source.id, source.filter]))
 		});
 	}
 
-	removeFilter(sourceId: string): void {
+	removeFilter(sourceId: string): codemavi {
 		if (this.mapSourceToFilter.delete(sourceId)) {
 
 			// Persist
@@ -174,7 +174,7 @@ export class NotificationService extends Disposable implements INotificationServ
 
 	//#endregion
 
-	info(message: NotificationMessage | NotificationMessage[]): void {
+	info(message: NotificationMessage | NotificationMessage[]): codemavi {
 		if (Array.isArray(message)) {
 			for (const messageEntry of message) {
 				this.info(messageEntry);
@@ -186,7 +186,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		this.model.addNotification({ severity: Severity.Info, message });
 	}
 
-	warn(message: NotificationMessage | NotificationMessage[]): void {
+	warn(message: NotificationMessage | NotificationMessage[]): codemavi {
 		if (Array.isArray(message)) {
 			for (const messageEntry of message) {
 				this.warn(messageEntry);
@@ -198,7 +198,7 @@ export class NotificationService extends Disposable implements INotificationServ
 		this.model.addNotification({ severity: Severity.Warning, message });
 	}
 
-	error(message: NotificationMessage | NotificationMessage[]): void {
+	error(message: NotificationMessage | NotificationMessage[]): codemavi {
 		if (Array.isArray(message)) {
 			for (const messageEntry of message) {
 				this.error(messageEntry);

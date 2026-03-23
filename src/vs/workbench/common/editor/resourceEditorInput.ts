@@ -57,7 +57,7 @@ export abstract class AbstractResourceEditorInput extends EditorInput implements
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Clear our labels on certain label related events
 		this._register(this.labelService.onDidChangeFormatters(e => this.onLabelEvent(e.scheme)));
@@ -67,13 +67,13 @@ export abstract class AbstractResourceEditorInput extends EditorInput implements
 		this._register(this.filesConfigurationService.onDidChangeReadonly(() => this._onDidChangeCapabilities.fire()));
 	}
 
-	private onLabelEvent(scheme: string): void {
+	private onLabelEvent(scheme: string): codemavi {
 		if (scheme === this._preferredResource.scheme) {
 			this.updateLabel();
 		}
 	}
 
-	private updateLabel(): void {
+	private updateLabel(): codemavi {
 
 		// Clear any cached labels from before
 		this._name = undefined;
@@ -88,7 +88,7 @@ export abstract class AbstractResourceEditorInput extends EditorInput implements
 		this._onDidChangeLabel.fire();
 	}
 
-	setPreferredResource(preferredResource: URI): void {
+	setPreferredResource(preferredResource: URI): codemavi {
 		if (!isEqual(preferredResource, this._preferredResource)) {
 			this._preferredResource = preferredResource;
 

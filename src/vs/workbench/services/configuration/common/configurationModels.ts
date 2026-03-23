@@ -49,7 +49,7 @@ export class WorkspaceConfigurationModelParser extends ConfigurationModelParser 
 		return this._tasksModel;
 	}
 
-	reparseWorkspaceSettings(configurationParseOptions: ConfigurationParseOptions): void {
+	reparseWorkspaceSettings(configurationParseOptions: ConfigurationParseOptions): codemavi {
 		this._settingsModelParser.reparse(configurationParseOptions);
 	}
 

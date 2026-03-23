@@ -34,7 +34,7 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		super();
 	}
 
-	protected override async doWatch(requests: INonRecursiveWatchRequest[]): Promise<void> {
+	protected override async doWatch(requests: INonRecursiveWatchRequest[]): Promise<codemavi> {
 
 		// Figure out duplicates to remove from the requests
 		requests = this.removeDuplicateRequests(requests);
@@ -80,7 +80,7 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		return isLinux ? path : path.toLowerCase() /* ignore path casing */;
 	}
 
-	private startWatching(request: INonRecursiveWatchRequest): void {
+	private startWatching(request: INonRecursiveWatchRequest): codemavi {
 
 		// Start via node.js lib
 		const instance = new NodeJSFileWatcherLibrary(request, this.recursiveWatcher, changes => this._onDidChangeFile.fire(changes), () => this._onDidWatchFail.fire(request), msg => this._onDidLogMessage.fire(msg), this.verboseLogging);
@@ -90,7 +90,7 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		this._watchers.set(this.requestToWatcherKey(request), watcher);
 	}
 
-	override async stop(): Promise<void> {
+	override async stop(): Promise<codemavi> {
 		await super.stop();
 
 		for (const watcher of this.watchers) {
@@ -98,7 +98,7 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		}
 	}
 
-	private stopWatching(watcher: INodeJSWatcherInstance): void {
+	private stopWatching(watcher: INodeJSWatcherInstance): codemavi {
 		this.trace(`stopping file watcher`, watcher);
 
 		this._watchers.delete(this.requestToWatcherKey(watcher.request));
@@ -129,7 +129,7 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		return Array.from(mapCorrelationtoRequests.values()).map(requests => Array.from(requests.values())).flat();
 	}
 
-	override async setVerboseLogging(enabled: boolean): Promise<void> {
+	override async setVerboseLogging(enabled: boolean): Promise<codemavi> {
 		super.setVerboseLogging(enabled);
 
 		for (const watcher of this.watchers) {
@@ -137,13 +137,13 @@ export class NodeJSWatcher extends BaseWatcher implements INonRecursiveWatcher {
 		}
 	}
 
-	protected trace(message: string, watcher?: INodeJSWatcherInstance): void {
+	protected trace(message: string, watcher?: INodeJSWatcherInstance): codemavi {
 		if (this.verboseLogging) {
 			this._onDidLogMessage.fire({ type: 'trace', message: this.toMessage(message, watcher) });
 		}
 	}
 
-	protected warn(message: string): void {
+	protected warn(message: string): codemavi {
 		this._onDidLogMessage.fire({ type: 'warn', message: this.toMessage(message) });
 	}
 

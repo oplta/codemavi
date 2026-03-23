@@ -44,13 +44,13 @@ export class HoverWidget extends Disposable {
 		this.containerDomNode.appendChild(this.scrollbar.getDomNode());
 	}
 
-	public onContentsChanged(): void {
+	public onContentsChanged(): codemavi {
 		this.scrollbar.scanDomNode();
 	}
 }
 
 export class HoverAction extends Disposable {
-	public static render(parent: HTMLElement, actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => void; commandId: string }, keybindingLabel: string | null) {
+	public static render(parent: HTMLElement, actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => codemavi; commandId: string }, keybindingLabel: string | null) {
 		return new HoverAction(parent, actionOptions, keybindingLabel);
 	}
 
@@ -62,7 +62,7 @@ export class HoverAction extends Disposable {
 
 	private readonly action: HTMLElement;
 
-	private constructor(parent: HTMLElement, actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => void; commandId: string }, keybindingLabel: string | null) {
+	private constructor(parent: HTMLElement, actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => codemavi; commandId: string }, keybindingLabel: string | null) {
 		super();
 
 		this.actionLabel = actionOptions.label;
@@ -85,7 +85,7 @@ export class HoverAction extends Disposable {
 		this.setEnabled(true);
 	}
 
-	public setEnabled(enabled: boolean): void {
+	public setEnabled(enabled: boolean): codemavi {
 		if (enabled) {
 			this.actionContainer.classList.remove('disabled');
 			this.actionContainer.removeAttribute('aria-disabled');
@@ -101,7 +101,7 @@ export function getHoverAccessibleViewHint(shouldHaveHint?: boolean, keybinding?
 }
 
 export class ClickAction extends Disposable {
-	constructor(container: HTMLElement, run: (container: HTMLElement) => void) {
+	constructor(container: HTMLElement, run: (container: HTMLElement) => codemavi) {
 		super();
 		this._register(dom.addDisposableListener(container, dom.EventType.CLICK, e => {
 			e.stopPropagation();
@@ -112,7 +112,7 @@ export class ClickAction extends Disposable {
 }
 
 export class KeyDownAction extends Disposable {
-	constructor(container: HTMLElement, run: (container: HTMLElement) => void, keyCodes: KeyCode[]) {
+	constructor(container: HTMLElement, run: (container: HTMLElement) => codemavi, keyCodes: KeyCode[]) {
 		super();
 		this._register(dom.addDisposableListener(container, dom.EventType.KEY_DOWN, e => {
 			const event = new StandardKeyboardEvent(e);

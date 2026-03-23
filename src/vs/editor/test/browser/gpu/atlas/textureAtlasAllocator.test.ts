@@ -34,7 +34,7 @@ function createRasterizedGlyph(w: number, h: number, data: ArrayLike<number>): I
 	};
 }
 
-function allocateAndAssert(allocator: ITextureAtlasAllocator, rasterizedGlyph: IRasterizedGlyph, expected: { x: number; y: number; w: number; h: number } | undefined): void {
+function allocateAndAssert(allocator: ITextureAtlasAllocator, rasterizedGlyph: IRasterizedGlyph, expected: { x: number; y: number; w: number; h: number } | undefined): codemavi {
 	const actual = allocator.allocate(rasterizedGlyph);
 	if (!actual) {
 		strictEqual(actual, expected);

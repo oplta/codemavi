@@ -55,7 +55,7 @@ class TerminalLinkContribution extends DisposableStore implements ITerminalContr
 		this._linkResolver = this._instantiationService.createInstance(TerminalLinkResolver);
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
 		const linkManager = this._linkManager = this.add(this._instantiationService.createInstance(TerminalLinkManager, xterm.raw, this._ctx.processManager, this._ctx.instance.capabilities, this._linkResolver));
 
 		// Set widget manager
@@ -80,7 +80,7 @@ class TerminalLinkContribution extends DisposableStore implements ITerminalContr
 		linkManager.add(this._terminalLinkProviderService.onDidRemoveLinkProvider(() => linkManager.externalProvideLinksCb = undefined));
 	}
 
-	async showLinkQuickpick(extended?: boolean): Promise<void> {
+	async showLinkQuickpick(extended?: boolean): Promise<codemavi> {
 		if (!this._terminalLinkQuickpick) {
 			this._terminalLinkQuickpick = this.add(this._instantiationService.createInstance(TerminalLinkQuickpick));
 			this._terminalLinkQuickpick.onDidRequestMoreLinks(() => {
@@ -98,7 +98,7 @@ class TerminalLinkContribution extends DisposableStore implements ITerminalContr
 		return this._linkManager.getLinks();
 	}
 
-	async openRecentLink(type: 'localFile' | 'url'): Promise<void> {
+	async openRecentLink(type: 'localFile' | 'url'): Promise<codemavi> {
 		if (!this._linkManager) {
 			throw new Error('terminal links are not ready, cannot open a link');
 		}

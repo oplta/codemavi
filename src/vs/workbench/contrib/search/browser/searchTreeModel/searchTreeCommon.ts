@@ -85,7 +85,7 @@ export function mergeSearchResultEvents(events: IChangeEvent[]): IChangeEvent {
 }
 
 export interface ISearchModel {
-	readonly onReplaceTermChanged: Event<void>;
+	readonly onReplaceTermChanged: Event<codemavi>;
 	readonly onSearchResultChanged: Event<IChangeEvent>;
 	location: SearchModelLocation;
 	id(): string;
@@ -97,18 +97,18 @@ export interface ISearchModel {
 	replaceString: string;
 	preserveCase: boolean;
 	searchResult: ISearchResult;
-	addAIResults(onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete>;
-	aiSearch(query: IAITextQuery, onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete>;
+	addAIResults(onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete>;
+	aiSearch(query: IAITextQuery, onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete>;
 	hasAIResults: boolean;
 	hasPlainResults: boolean;
-	search(query: ITextQuery, onProgress?: (result: ISearchProgressItem) => void, callerToken?: CancellationToken): {
+	search(query: ITextQuery, onProgress?: (result: ISearchProgressItem) => codemavi, callerToken?: CancellationToken): {
 		asyncResults: Promise<ISearchComplete>;
 		syncResults: IFileMatch<URI>[];
 	};
 	cancelSearch(cancelledForNewSearch?: boolean): boolean;
 	cancelAISearch(cancelledForNewSearch?: boolean): boolean;
-	clearAiSearchResults(): void;
-	dispose(): void;
+	clearAiSearchResults(): codemavi;
+	dispose(): codemavi;
 }
 
 
@@ -122,25 +122,25 @@ export interface ISearchResult {
 	readonly isDirty: boolean;
 	query: ITextQuery | null;
 
-	batchReplace(elementsToReplace: RenderableMatch[]): Promise<void>;
-	batchRemove(elementsToRemove: RenderableMatch[]): void;
+	batchReplace(elementsToReplace: RenderableMatch[]): Promise<codemavi>;
+	batchRemove(elementsToRemove: RenderableMatch[]): codemavi;
 	folderMatches(ai?: boolean): ISearchTreeFolderMatch[];
-	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent?: boolean): void;
-	clear(): void;
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai?: boolean): void;
+	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent?: boolean): codemavi;
+	clear(): codemavi;
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai?: boolean): codemavi;
 	replace(match: ISearchTreeFileMatch): Promise<any>;
 	matches(ai?: boolean): ISearchTreeFileMatch[];
 	isEmpty(): boolean;
 	fileCount(): number;
 	count(): number;
 	id(): string;
-	setCachedSearchComplete(cachedSearchComplete: ISearchComplete | undefined, ai: boolean): void;
+	setCachedSearchComplete(cachedSearchComplete: ISearchComplete | undefined, ai: boolean): codemavi;
 	getCachedSearchComplete(ai: boolean): ISearchComplete | undefined;
-	toggleHighlights(value: boolean, ai?: boolean): void;
+	toggleHighlights(value: boolean, ai?: boolean): codemavi;
 	getRangeHighlightDecorations(ai?: boolean): RangeHighlightDecorations;
 	replaceAll(progress: IProgress<IProgressStep>): Promise<any>;
-	setAIQueryUsingTextQuery(query?: ITextQuery | null): void;
-	dispose(): void;
+	setAIQueryUsingTextQuery(query?: ITextQuery | null): codemavi;
+	dispose(): codemavi;
 }
 
 export interface ITextSearchHeading {
@@ -148,7 +148,7 @@ export interface ITextSearchHeading {
 	resource: URI | null;
 	hidden: boolean;
 	cachedSearchComplete: ISearchComplete | undefined;
-	hide(): void;
+	hide(): codemavi;
 	readonly isAIContributed: boolean;
 	id(): string;
 	parent(): ISearchResult;
@@ -156,8 +156,8 @@ export interface ITextSearchHeading {
 	name(): string;
 	readonly isDirty: boolean;
 	getFolderMatch(resource: URI): ISearchTreeFolderMatch | undefined;
-	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent?: boolean): void;
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai?: boolean): void;
+	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent?: boolean): codemavi;
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai?: boolean): codemavi;
 	groupFilesByFolder(fileMatches: ISearchTreeFileMatch[]): { byFolder: Map<URI, ISearchTreeFileMatch[]>; other: ISearchTreeFileMatch[] };
 	isEmpty(): boolean;
 	findFolderSubstr(resource: URI): ISearchTreeFolderMatch | undefined;
@@ -165,12 +165,12 @@ export interface ITextSearchHeading {
 	folderMatches(): ISearchTreeFolderMatch[];
 	matches(): ISearchTreeFileMatch[];
 	showHighlights: boolean;
-	toggleHighlights(value: boolean): void;
+	toggleHighlights(value: boolean): codemavi;
 	rangeHighlightDecorations: RangeHighlightDecorations;
 	fileCount(): number;
 	count(): number;
-	clear(clearAll: boolean): void;
-	dispose(): void;
+	clear(clearAll: boolean): codemavi;
+	dispose(): codemavi;
 }
 
 export interface IPlainTextSearchHeading extends ITextSearchHeading {
@@ -180,7 +180,7 @@ export interface IPlainTextSearchHeading extends ITextSearchHeading {
 
 export interface ISearchTreeFolderMatch {
 	readonly onChange: Event<IChangeEvent>;
-	readonly onDispose: Event<void>;
+	readonly onDispose: Event<codemavi>;
 	id(): string;
 	resource: URI | null;
 	index(): number;
@@ -190,29 +190,29 @@ export interface ISearchTreeFolderMatch {
 	parent(): ISearchTreeFolderMatch | ITextSearchHeading;
 	matches(): (ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource)[];
 	allDownstreamFileMatches(): ISearchTreeFileMatch[];
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource | (ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource)[]): void;
-	addFileMatch(raw: IFileMatch[], silent: boolean, searchInstanceID: string): void;
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource | (ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource)[]): codemavi;
+	addFileMatch(raw: IFileMatch[], silent: boolean, searchInstanceID: string): codemavi;
 	isEmpty(): boolean;
-	clear(clearingAll?: boolean): void;
+	clear(clearingAll?: boolean): codemavi;
 	showHighlights: boolean;
 	searchModel: ISearchModel;
 	query: ITextSearchQuery | null;
 	replace(match: ISearchTreeFileMatch): Promise<any>;
 	replacingAll: boolean;
-	bindModel(model: ITextModel): void;
+	bindModel(model: ITextModel): codemavi;
 	getDownstreamFileMatch(uri: URI): ISearchTreeFileMatch | null;
 	replaceAll(): Promise<any>;
 	recursiveFileCount(): number;
-	doRemoveFile(fileMatches: ISearchTreeFileMatch[], dispose?: boolean, trigger?: boolean, keepReadonly?: boolean): void;
-	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): void;
-	bindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): Promise<void>;
-	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): void;
+	doRemoveFile(fileMatches: ISearchTreeFileMatch[], dispose?: boolean, trigger?: boolean, keepReadonly?: boolean): codemavi;
+	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): codemavi;
+	bindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): Promise<codemavi>;
+	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): codemavi;
 	hasOnlyReadOnlyMatches(): boolean;
 	fileMatchesIterator(): IterableIterator<ISearchTreeFileMatch>;
 	folderMatchesIterator(): IterableIterator<ISearchTreeFolderMatchWithResource>;
 	recursiveFileCount(): number;
 	recursiveMatchCount(): number;
-	dispose(): void;
+	dispose(): codemavi;
 	isAIContributed(): boolean;
 }
 
@@ -236,28 +236,28 @@ export interface ISearchTreeFileMatch {
 		forceUpdateModel?: boolean;
 	}>;
 	hasChildren: boolean;
-	readonly onDispose: Event<void>;
+	readonly onDispose: Event<codemavi>;
 	name(): string;
 	count(): number;
 	hasOnlyReadOnlyMatches(): boolean;
 	matches(): ISearchTreeMatch[];
-	updateHighlights(): void;
+	updateHighlights(): codemavi;
 	getSelectedMatch(): ISearchTreeMatch | null;
 	parent(): ISearchTreeFolderMatch;
-	bindModel(model: ITextModel): void;
+	bindModel(model: ITextModel): codemavi;
 	hasReadonlyMatches(): boolean;
-	addContext(results: ITextSearchResult[] | undefined): void;
-	add(match: ISearchTreeMatch, trigger?: boolean): void;
-	replace(toReplace: ISearchTreeMatch): Promise<void>;
-	remove(matches: ISearchTreeMatch | (ISearchTreeMatch[])): void;
-	setSelectedMatch(match: ISearchTreeMatch | null): void;
+	addContext(results: ITextSearchResult[] | undefined): codemavi;
+	add(match: ISearchTreeMatch, trigger?: boolean): codemavi;
+	replace(toReplace: ISearchTreeMatch): Promise<codemavi>;
+	remove(matches: ISearchTreeMatch | (ISearchTreeMatch[])): codemavi;
+	setSelectedMatch(match: ISearchTreeMatch | null): codemavi;
 	fileStat: IFileStatWithPartialMetadata | undefined;
-	resolveFileStat(fileService: IFileService): Promise<void>;
+	resolveFileStat(fileService: IFileService): Promise<codemavi>;
 	textMatches(): ISearchTreeMatch[];
 	readonly context: Map<number, string>;
 	readonly closestRoot: ISearchTreeFolderMatchWorkspaceRoot | null;
 	isMatchSelected(match: ISearchTreeMatch): boolean;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface ISearchTreeMatch {

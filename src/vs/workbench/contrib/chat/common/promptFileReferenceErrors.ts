@@ -191,7 +191,7 @@ export class RecursiveReference extends ResolveError {
 		}
 
 		// performance optimization - compare number of paths in the
-		// recursive path chains first to avoid comparison of all strings
+		// recursive path chains first to acodemavi comparison of all strings
 		if (this.recursivePath.length !== other.recursivePath.length) {
 			return false;
 		}

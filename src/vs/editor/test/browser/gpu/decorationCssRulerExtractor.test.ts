@@ -21,13 +21,13 @@ suite('DecorationCssRulerExtractor', () => {
 	let extractor: DecorationCssRuleExtractor;
 	let testClassName: string;
 
-	function addStyleElement(content: string): void {
+	function addStyleElement(content: string): codemavi {
 		const styleElement = $('style');
 		styleElement.textContent = content;
 		container.append(styleElement);
 	}
 
-	function assertStyles(className: string, expectedCssText: string[]): void {
+	function assertStyles(className: string, expectedCssText: string[]): codemavi {
 		deepStrictEqual(extractor.getStyleRules(container, className).map(e => e.cssText), expectedCssText);
 	}
 

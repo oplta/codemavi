@@ -95,7 +95,7 @@ export class McpRegistry extends Disposable implements IMcpRegistry {
 		return this._delegates;
 	}
 
-	private readonly _onDidChangeInputs = this._register(new Emitter<void>());
+	private readonly _onDidChangeInputs = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeInputs = this._onDidChangeInputs.event;
 
 	constructor(
@@ -196,7 +196,7 @@ export class McpRegistry extends Disposable implements IMcpRegistry {
 		this._onDidChangeInputs.fire();
 	}
 
-	public async editSavedInput(inputId: string, folderData: IWorkspaceFolderData | undefined, configSection: string, target: ConfigurationTarget): Promise<void> {
+	public async editSavedInput(inputId: string, folderData: IWorkspaceFolderData | undefined, configSection: string, target: ConfigurationTarget): Promise<codemavi> {
 		const storage = this._getInputStorageInConfigTarget(target);
 		const expr = ConfigurationResolverExpression.parse(inputId);
 
@@ -210,7 +210,7 @@ export class McpRegistry extends Disposable implements IMcpRegistry {
 		return this._getInputStorage(scope).getMap();
 	}
 
-	public resetTrust(): void {
+	public resetTrust(): codemavi {
 		this._trustMemento.value.set({}, undefined);
 	}
 
@@ -261,7 +261,7 @@ export class McpRegistry extends Disposable implements IMcpRegistry {
 		return result.result;
 	}
 
-	private async _updateStorageWithExpressionInputs(inputStorage: McpRegistryInputStorage, expr: ConfigurationResolverExpression<unknown>): Promise<void> {
+	private async _updateStorageWithExpressionInputs(inputStorage: McpRegistryInputStorage, expr: ConfigurationResolverExpression<unknown>): Promise<codemavi> {
 		const secrets: Record<string, IResolvedValue> = {};
 		const inputs: Record<string, IResolvedValue> = {};
 		for (const [replacement, resolved] of expr.resolved()) {
@@ -286,7 +286,7 @@ export class McpRegistry extends Disposable implements IMcpRegistry {
 		const inputStorage = this._getInputStorageInConfigTarget(target);
 		const previouslyStored = await inputStorage.getMap();
 
-		// pre-fill the variables we already resolved to avoid extra prompting
+		// pre-fill the variables we already resolved to acodemavi extra prompting
 		const expr = ConfigurationResolverExpression.parse(launch);
 		for (const replacement of expr.unresolved()) {
 			if (previouslyStored.hasOwnProperty(replacement.id)) {

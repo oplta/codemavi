@@ -57,10 +57,10 @@ export class ConfigurationManager implements IConfigurationManager {
 	private selectedType: string | undefined;
 	private selectedDynamic = false;
 	private toDispose: IDisposable[];
-	private readonly _onDidSelectConfigurationName = new Emitter<void>();
+	private readonly _onDidSelectConfigurationName = new Emitter<codemavi>();
 	private configProviders: IDebugConfigurationProvider[];
 	private debugConfigurationTypeContext: IContextKey<string>;
-	private readonly _onDidChangeConfigurationProviders = new Emitter<void>();
+	private readonly _onDidChangeConfigurationProviders = new Emitter<codemavi>();
 	public readonly onDidChangeConfigurationProviders = this._onDidChangeConfigurationProviders.event;
 
 	constructor(
@@ -105,7 +105,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		};
 	}
 
-	unregisterDebugConfigurationProvider(debugConfigurationProvider: IDebugConfigurationProvider): void {
+	unregisterDebugConfigurationProvider(debugConfigurationProvider: IDebugConfigurationProvider): codemavi {
 		const ix = this.configProviders.indexOf(debugConfigurationProvider);
 		if (ix >= 0) {
 			this.configProviders.splice(ix, 1);
@@ -318,7 +318,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		return JSON.parse(this.storageService.get(DEBUG_RECENT_DYNAMIC_CONFIGURATIONS, StorageScope.WORKSPACE, '[]'));
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this.toDispose.push(Event.any<IWorkspaceFoldersChangeEvent | WorkbenchState>(this.contextService.onDidChangeWorkspaceFolders, this.contextService.onDidChangeWorkbenchState)(() => {
 			this.initLaunches();
 			this.selectConfiguration(undefined);
@@ -336,7 +336,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		}));
 	}
 
-	private initLaunches(): void {
+	private initLaunches(): codemavi {
 		this.launches = this.contextService.getWorkspace().folders.map(folder => this.instantiationService.createInstance(Launch, this, this.adapterManager, folder));
 		if (this.contextService.getWorkbenchState() === WorkbenchState.WORKSPACE) {
 			this.launches.push(this.instantiationService.createInstance(WorkspaceLaunch, this, this.adapterManager));
@@ -348,7 +348,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		}
 	}
 
-	private setCompoundSchemaValues(): void {
+	private setCompoundSchemaValues(): codemavi {
 		const compoundConfigurationsSchema = (<IJSONSchema>launchSchema.properties!['compounds'].items).properties!['configurations'];
 		const launchNames = this.launches.map(l =>
 			l.getConfigurationNames(true)).reduce((first, second) => first.concat(second), []);
@@ -382,7 +382,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		};
 	}
 
-	get onDidSelectConfiguration(): Event<void> {
+	get onDidSelectConfiguration(): Event<codemavi> {
 		return this._onDidSelectConfigurationName.event;
 	}
 
@@ -394,7 +394,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		return undefined;
 	}
 
-	async selectConfiguration(launch: ILaunch | undefined, name?: string, config?: IConfig, dynamicConfig?: { type?: string }): Promise<void> {
+	async selectConfiguration(launch: ILaunch | undefined, name?: string, config?: IConfig, dynamicConfig?: { type?: string }): Promise<codemavi> {
 		if (typeof launch === 'undefined') {
 			const rootUri = this.historyService.getLastActiveWorkspaceRoot();
 			launch = this.getLaunch(rootUri);
@@ -480,7 +480,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		}
 	}
 
-	private setSelectedLaunchName(selectedName: string | undefined): void {
+	private setSelectedLaunchName(selectedName: string | undefined): codemavi {
 		this.selectedName = selectedName;
 
 		if (this.selectedName) {
@@ -490,7 +490,7 @@ export class ConfigurationManager implements IConfigurationManager {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.toDispose = dispose(this.toDispose);
 	}
 }
@@ -673,7 +673,7 @@ class Launch extends AbstractLaunch implements ILaunch {
 		});
 	}
 
-	async writeConfiguration(configuration: IConfig): Promise<void> {
+	async writeConfiguration(configuration: IConfig): Promise<codemavi> {
 		// note: we don't get the deduplicated config since we don't want that to 'leak' into the file
 		const fullConfig: Partial<IGlobalConfig> = this.getConfig() || {};
 		fullConfig.configurations = [...fullConfig.configurations || [], configuration];

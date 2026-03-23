@@ -41,7 +41,7 @@ export async function activate(context: ExtensionContext) {
 	context.subscriptions.push(registerDropOrPasteResourceSupport({ language: 'css', scheme: '*' }));
 }
 
-export async function deactivate(): Promise<void> {
+export async function deactivate(): Promise<codemavi> {
 	if (client) {
 		await client.stop();
 		client = undefined;

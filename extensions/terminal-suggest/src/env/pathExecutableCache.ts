@@ -40,7 +40,7 @@ export class PathExecutableCache implements vscode.Disposable {
 		}
 	}
 
-	refresh(): void {
+	refresh(): codemavi {
 		this._cachedExes = undefined;
 		this._cachedPathValue = undefined;
 	}
@@ -115,7 +115,7 @@ export class PathExecutableCache implements vscode.Disposable {
 	}
 }
 
-export async function watchPathDirectories(context: vscode.ExtensionContext, env: ITerminalEnvironment, pathExecutableCache: PathExecutableCache | undefined): Promise<void> {
+export async function watchPathDirectories(context: vscode.ExtensionContext, env: ITerminalEnvironment, pathExecutableCache: PathExecutableCache | undefined): Promise<codemavi> {
 	const pathDirectories = new Set<string>();
 
 	const envPath = env.PATH;

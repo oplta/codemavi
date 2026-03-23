@@ -15,7 +15,7 @@ declare module 'vscode' {
 		 * @param endTime The time that execution finished, in milliseconds in the Unix epoch.
 		 * @param error Details about an error that occurred during execution if any.
 		 */
-		end(success: boolean | undefined, endTime?: number, error?: CellExecutionError): void;
+		end(success: boolean | undefined, endTime?: number, error?: CellExecutionError): codemavi;
 	}
 
 	export interface CellExecutionError {

@@ -437,7 +437,7 @@ class KeyCodeStrMap {
 		this._strToKeyCode = Object.create(null);
 	}
 
-	define(keyCode: KeyCode, str: string): void {
+	define(keyCode: KeyCode, str: string): codemavi {
 		this._keyCodeToStr[keyCode] = str;
 		this._strToKeyCode[str.toLowerCase()] = keyCode;
 	}

@@ -18,7 +18,7 @@ export function isThenable<T>(obj: unknown): obj is Promise<T> {
 }
 
 export interface CancelablePromise<T> extends Promise<T> {
-	cancel(): void;
+	cancel(): codemavi;
 }
 
 export function createCancelablePromise<T>(callback: (token: CancellationToken) => Promise<T>): CancelablePromise<T> {
@@ -52,7 +52,7 @@ export function createCancelablePromise<T>(callback: (token: CancellationToken) 
 		catch<TResult = never>(reject?: ((reason: any) => TResult | Promise<TResult>) | undefined | null): Promise<T | TResult> {
 			return this.then(undefined, reject);
 		}
-		finally(onfinally?: (() => void) | undefined | null): Promise<T> {
+		finally(onfinally?: (() => codemavi) | undefined | null): Promise<T> {
 			return promise.finally(onfinally);
 		}
 	};
@@ -112,8 +112,8 @@ export async function raceCancellablePromises<T>(cancellablePromises: Cancelable
 	}
 }
 
-export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => void): Promise<T | undefined> {
-	let promiseResolve: ((value: T | undefined) => void) | undefined = undefined;
+export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => codemavi): Promise<T | undefined> {
+	let promiseResolve: ((value: T | undefined) => codemavi) | undefined = undefined;
 
 	const timer = setTimeout(() => {
 		promiseResolve?.(undefined);
@@ -168,9 +168,9 @@ export function asPromise<T>(callback: () => T | Thenable<T>): Promise<T> {
  *
  * Replace with standardized [`Promise.withResolvers`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers) once it is supported
  */
-export function promiseWithResolvers<T>(): { promise: Promise<T>; resolve: (value: T | PromiseLike<T>) => void; reject: (err?: any) => void } {
-	let resolve: (value: T | PromiseLike<T>) => void;
-	let reject: (reason?: any) => void;
+export function promiseWithResolvers<T>(): { promise: Promise<T>; resolve: (value: T | PromiseLike<T>) => codemavi; reject: (err?: any) => codemavi } {
+	let resolve: (value: T | PromiseLike<T>) => codemavi;
+	let reject: (reason?: any) => codemavi;
 	const promise = new Promise<T>((res, rej) => {
 		resolve = res;
 		reject = rej;
@@ -267,7 +267,7 @@ export class Throttler implements IDisposable {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.isDisposed = true;
 	}
 }
@@ -308,7 +308,7 @@ interface IScheduledLater extends IDisposable {
 	isTriggered(): boolean;
 }
 
-const timeoutDeferred = (timeout: number, fn: () => void): IScheduledLater => {
+const timeoutDeferred = (timeout: number, fn: () => codemavi): IScheduledLater => {
 	let scheduled = true;
 	const handle = setTimeout(() => {
 		scheduled = false;
@@ -323,7 +323,7 @@ const timeoutDeferred = (timeout: number, fn: () => void): IScheduledLater => {
 	};
 };
 
-const microtaskDeferred = (fn: () => void): IScheduledLater => {
+const microtaskDeferred = (fn: () => codemavi): IScheduledLater => {
 	let scheduled = true;
 	queueMicrotask(() => {
 		if (scheduled) {
@@ -365,8 +365,8 @@ export class Delayer<T> implements IDisposable {
 
 	private deferred: IScheduledLater | null;
 	private completionPromise: Promise<any> | null;
-	private doResolve: ((value?: any | Promise<any>) => void) | null;
-	private doReject: ((err: any) => void) | null;
+	private doResolve: ((value?: any | Promise<any>) => codemavi) | null;
+	private doReject: ((err: any) => codemavi) | null;
 	private task: ITask<T | Promise<T>> | null;
 
 	constructor(public defaultDelay: number | typeof MicrotaskDelay) {
@@ -411,7 +411,7 @@ export class Delayer<T> implements IDisposable {
 		return !!this.deferred?.isTriggered();
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.cancelTimeout();
 
 		if (this.completionPromise) {
@@ -420,12 +420,12 @@ export class Delayer<T> implements IDisposable {
 		}
 	}
 
-	private cancelTimeout(): void {
+	private cancelTimeout(): codemavi {
 		this.deferred?.dispose();
 		this.deferred = null;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancel();
 	}
 }
@@ -457,11 +457,11 @@ export class ThrottledDelayer<T> {
 		return this.delayer.isTriggered();
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.delayer.cancel();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.delayer.dispose();
 		this.throttler.dispose();
 	}
@@ -473,7 +473,7 @@ export class ThrottledDelayer<T> {
 export class Barrier {
 	private _isOpen: boolean;
 	private _promise: Promise<boolean>;
-	private _completePromise!: (v: boolean) => void;
+	private _completePromise!: (v: boolean) => codemavi;
 
 	constructor() {
 		this._isOpen = false;
@@ -486,7 +486,7 @@ export class Barrier {
 		return this._isOpen;
 	}
 
-	open(): void {
+	open(): codemavi {
 		this._isOpen = true;
 		this._completePromise(true);
 	}
@@ -509,15 +509,15 @@ export class AutoOpenBarrier extends Barrier {
 		this._timeout = setTimeout(() => this.open(), autoOpenTimeMs);
 	}
 
-	override open(): void {
+	override open(): codemavi {
 		clearTimeout(this._timeout);
 		super.open();
 	}
 }
 
-export function timeout(millis: number): CancelablePromise<void>;
-export function timeout(millis: number, token: CancellationToken): Promise<void>;
-export function timeout(millis: number, token?: CancellationToken): CancelablePromise<void> | Promise<void> {
+export function timeout(millis: number): CancelablePromise<codemavi>;
+export function timeout(millis: number, token: CancellationToken): Promise<codemavi>;
+export function timeout(millis: number, token?: CancellationToken): CancelablePromise<codemavi> | Promise<codemavi> {
 	if (!token) {
 		return createCancelablePromise(token => timeout(millis, token));
 	}
@@ -552,7 +552,7 @@ export function timeout(millis: number, token?: CancellationToken): CancelablePr
  *   timeoutDisposable.dispose();
  * }
  */
-export function disposableTimeout(handler: () => void, timeout = 0, store?: DisposableStore): IDisposable {
+export function disposableTimeout(handler: () => codemavi, timeout = 0, store?: DisposableStore): IDisposable {
 	const timer = setTimeout(() => {
 		handler();
 		if (store) {
@@ -662,8 +662,8 @@ export function firstParallel<T>(promiseList: Promise<T>[], shouldStop: (t: T) =
 
 interface ILimitedTaskFactory<T> {
 	factory: ITask<Promise<T>>;
-	c: (value: T | Promise<T>) => void;
-	e: (error?: unknown) => void;
+	c: (value: T | Promise<T>) => codemavi;
+	e: (error?: unknown) => codemavi;
 }
 
 export interface ILimiter<T> {
@@ -672,7 +672,7 @@ export interface ILimiter<T> {
 
 	queue(factory: ITask<Promise<T>>): Promise<T>;
 
-	clear(): void;
+	clear(): codemavi;
 }
 
 /**
@@ -686,13 +686,13 @@ export class Limiter<T> implements ILimiter<T> {
 	private runningPromises: number;
 	private readonly maxDegreeOfParalellism: number;
 	private readonly outstandingPromises: ILimitedTaskFactory<T>[];
-	private readonly _onDrained: Emitter<void>;
+	private readonly _onDrained: Emitter<codemavi>;
 
 	constructor(maxDegreeOfParalellism: number) {
 		this.maxDegreeOfParalellism = maxDegreeOfParalellism;
 		this.outstandingPromises = [];
 		this.runningPromises = 0;
-		this._onDrained = new Emitter<void>();
+		this._onDrained = new Emitter<codemavi>();
 	}
 
 	/**
@@ -700,13 +700,13 @@ export class Limiter<T> implements ILimiter<T> {
 	 * @returns A promise that resolved when all work is done (onDrained) or when
 	 * there is nothing to do
 	 */
-	whenIdle(): Promise<void> {
+	whenIdle(): Promise<codemavi> {
 		return this.size > 0
 			? Event.toPromise(this.onDrained)
 			: Promise.resolve();
 	}
 
-	get onDrained(): Event<void> {
+	get onDrained(): Event<codemavi> {
 		return this._onDrained.event;
 	}
 
@@ -726,7 +726,7 @@ export class Limiter<T> implements ILimiter<T> {
 		});
 	}
 
-	private consume(): void {
+	private consume(): codemavi {
 		while (this.outstandingPromises.length && this.runningPromises < this.maxDegreeOfParalellism) {
 			const iLimitedTask = this.outstandingPromises.shift()!;
 			this.runningPromises++;
@@ -737,7 +737,7 @@ export class Limiter<T> implements ILimiter<T> {
 		}
 	}
 
-	private consumed(): void {
+	private consumed(): codemavi {
 		if (this._isDisposed) {
 			return;
 		}
@@ -751,7 +751,7 @@ export class Limiter<T> implements ILimiter<T> {
 		}
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		if (this._isDisposed) {
 			throw new Error('Object has been disposed');
 		}
@@ -759,7 +759,7 @@ export class Limiter<T> implements ILimiter<T> {
 		this._size = this.runningPromises;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._isDisposed = true;
 		this.outstandingPromises.length = 0; // stop further processing
 		this._size = 0;
@@ -791,7 +791,7 @@ export class LimitedQueue {
 
 	private tasks = 0;
 
-	queue(factory: ITask<Promise<void>>): Promise<void> {
+	queue(factory: ITask<Promise<codemavi>>): Promise<codemavi> {
 		if (!this.sequentializer.isRunning()) {
 			return this.sequentializer.run(this.tasks++, factory());
 		}
@@ -808,19 +808,19 @@ export class LimitedQueue {
  */
 export class ResourceQueue implements IDisposable {
 
-	private readonly queues = new Map<string, Queue<void>>();
+	private readonly queues = new Map<string, Queue<codemavi>>();
 
-	private readonly drainers = new Set<DeferredPromise<void>>();
+	private readonly drainers = new Set<DeferredPromise<codemavi>>();
 
 	private drainListeners: DisposableMap<number> | undefined = undefined;
 	private drainListenerCount = 0;
 
-	async whenDrained(): Promise<void> {
+	async whenDrained(): Promise<codemavi> {
 		if (this.isDrained()) {
 			return;
 		}
 
-		const promise = new DeferredPromise<void>();
+		const promise = new DeferredPromise<codemavi>();
 		this.drainers.add(promise);
 
 		return promise.p;
@@ -842,12 +842,12 @@ export class ResourceQueue implements IDisposable {
 		return this.queues.get(key)?.size ?? 0;
 	}
 
-	queueFor(resource: URI, factory: ITask<Promise<void>>, extUri: IExtUri = defaultExtUri): Promise<void> {
+	queueFor(resource: URI, factory: ITask<Promise<codemavi>>, extUri: IExtUri = defaultExtUri): Promise<codemavi> {
 		const key = extUri.getComparisonKey(resource);
 
 		let queue = this.queues.get(key);
 		if (!queue) {
-			queue = new Queue<void>();
+			queue = new Queue<codemavi>();
 			const drainListenerId = this.drainListenerCount++;
 			const drainListener = Event.once(queue.onDrained)(() => {
 				queue?.dispose();
@@ -873,7 +873,7 @@ export class ResourceQueue implements IDisposable {
 		return queue.queue(factory);
 	}
 
-	private onDidQueueDrain(): void {
+	private onDidQueueDrain(): codemavi {
 		if (!this.isDrained()) {
 			return; // not done yet
 		}
@@ -881,7 +881,7 @@ export class ResourceQueue implements IDisposable {
 		this.releaseDrainers();
 	}
 
-	private releaseDrainers(): void {
+	private releaseDrainers(): codemavi {
 		for (const drainer of this.drainers) {
 			drainer.complete();
 		}
@@ -889,7 +889,7 @@ export class ResourceQueue implements IDisposable {
 		this.drainers.clear();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		for (const [, queue] of this.queues) {
 			queue.dispose();
 		}
@@ -913,8 +913,8 @@ export class TimeoutTimer implements IDisposable {
 	private _isDisposed = false;
 
 	constructor();
-	constructor(runner: () => void, timeout: number);
-	constructor(runner?: () => void, timeout?: number) {
+	constructor(runner: () => codemavi, timeout: number);
+	constructor(runner?: () => codemavi, timeout?: number) {
 		this._token = -1;
 
 		if (typeof runner === 'function' && typeof timeout === 'number') {
@@ -922,19 +922,19 @@ export class TimeoutTimer implements IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancel();
 		this._isDisposed = true;
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		if (this._token !== -1) {
 			clearTimeout(this._token);
 			this._token = -1;
 		}
 	}
 
-	cancelAndSet(runner: () => void, timeout: number): void {
+	cancelAndSet(runner: () => codemavi, timeout: number): codemavi {
 		if (this._isDisposed) {
 			throw new BugIndicatingError(`Calling 'cancelAndSet' on a disposed TimeoutTimer`);
 		}
@@ -946,7 +946,7 @@ export class TimeoutTimer implements IDisposable {
 		}, timeout);
 	}
 
-	setIfNotSet(runner: () => void, timeout: number): void {
+	setIfNotSet(runner: () => codemavi, timeout: number): codemavi {
 		if (this._isDisposed) {
 			throw new BugIndicatingError(`Calling 'setIfNotSet' on a disposed TimeoutTimer`);
 		}
@@ -967,12 +967,12 @@ export class IntervalTimer implements IDisposable {
 	private disposable: IDisposable | undefined = undefined;
 	private isDisposed = false;
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.disposable?.dispose();
 		this.disposable = undefined;
 	}
 
-	cancelAndSet(runner: () => void, interval: number, context = globalThis): void {
+	cancelAndSet(runner: () => codemavi, interval: number, context = globalThis): codemavi {
 		if (this.isDisposed) {
 			throw new BugIndicatingError(`Calling 'cancelAndSet' on a disposed IntervalTimer`);
 		}
@@ -988,7 +988,7 @@ export class IntervalTimer implements IDisposable {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancel();
 		this.isDisposed = true;
 	}
@@ -996,13 +996,13 @@ export class IntervalTimer implements IDisposable {
 
 export class RunOnceScheduler implements IDisposable {
 
-	protected runner: ((...args: unknown[]) => void) | null;
+	protected runner: ((...args: unknown[]) => codemavi) | null;
 
 	private timeoutToken: any;
 	private timeout: number;
-	private timeoutHandler: () => void;
+	private timeoutHandler: () => codemavi;
 
-	constructor(runner: (...args: any[]) => void, delay: number) {
+	constructor(runner: (...args: any[]) => codemavi, delay: number) {
 		this.timeoutToken = -1;
 		this.runner = runner;
 		this.timeout = delay;
@@ -1012,7 +1012,7 @@ export class RunOnceScheduler implements IDisposable {
 	/**
 	 * Dispose RunOnceScheduler
 	 */
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancel();
 		this.runner = null;
 	}
@@ -1020,7 +1020,7 @@ export class RunOnceScheduler implements IDisposable {
 	/**
 	 * Cancel current scheduled runner (if any).
 	 */
-	cancel(): void {
+	cancel(): codemavi {
 		if (this.isScheduled()) {
 			clearTimeout(this.timeoutToken);
 			this.timeoutToken = -1;
@@ -1030,7 +1030,7 @@ export class RunOnceScheduler implements IDisposable {
 	/**
 	 * Cancel previous runner (if any) & schedule a new runner.
 	 */
-	schedule(delay = this.timeout): void {
+	schedule(delay = this.timeout): codemavi {
 		this.cancel();
 		this.timeoutToken = setTimeout(this.timeoutHandler, delay);
 	}
@@ -1050,7 +1050,7 @@ export class RunOnceScheduler implements IDisposable {
 		return this.timeoutToken !== -1;
 	}
 
-	flush(): void {
+	flush(): codemavi {
 		if (this.isScheduled()) {
 			this.cancel();
 			this.doRun();
@@ -1064,7 +1064,7 @@ export class RunOnceScheduler implements IDisposable {
 		}
 	}
 
-	protected doRun(): void {
+	protected doRun(): codemavi {
 		this.runner?.();
 	}
 }
@@ -1079,14 +1079,14 @@ export class RunOnceScheduler implements IDisposable {
  */
 export class ProcessTimeRunOnceScheduler {
 
-	private runner: (() => void) | null;
+	private runner: (() => codemavi) | null;
 	private timeout: number;
 
 	private counter: number;
 	private intervalToken: any;
-	private intervalHandler: () => void;
+	private intervalHandler: () => codemavi;
 
-	constructor(runner: () => void, delay: number) {
+	constructor(runner: () => codemavi, delay: number) {
 		if (delay % 1000 !== 0) {
 			console.warn(`ProcessTimeRunOnceScheduler resolution is 1s, ${delay}ms is not a multiple of 1000ms.`);
 		}
@@ -1097,12 +1097,12 @@ export class ProcessTimeRunOnceScheduler {
 		this.intervalHandler = this.onInterval.bind(this);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancel();
 		this.runner = null;
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		if (this.isScheduled()) {
 			clearInterval(this.intervalToken);
 			this.intervalToken = -1;
@@ -1112,7 +1112,7 @@ export class ProcessTimeRunOnceScheduler {
 	/**
 	 * Cancel previous runner (if any) & schedule a new runner.
 	 */
-	schedule(delay = this.timeout): void {
+	schedule(delay = this.timeout): codemavi {
 		if (delay % 1000 !== 0) {
 			console.warn(`ProcessTimeRunOnceScheduler resolution is 1s, ${delay}ms is not a multiple of 1000ms.`);
 		}
@@ -1146,11 +1146,11 @@ export class RunOnceWorker<T> extends RunOnceScheduler {
 
 	private units: T[] = [];
 
-	constructor(runner: (units: T[]) => void, timeout: number) {
+	constructor(runner: (units: T[]) => codemavi, timeout: number) {
 		super(runner, timeout);
 	}
 
-	work(unit: T): void {
+	work(unit: T): codemavi {
 		this.units.push(unit);
 
 		if (!this.isScheduled()) {
@@ -1158,14 +1158,14 @@ export class RunOnceWorker<T> extends RunOnceScheduler {
 		}
 	}
 
-	protected override doRun(): void {
+	protected override doRun(): codemavi {
 		const units = this.units;
 		this.units = [];
 
 		this.runner?.(units);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.units = [];
 
 		super.dispose();
@@ -1214,7 +1214,7 @@ export class ThrottledWorker<T> extends Disposable {
 
 	constructor(
 		private options: IThrottledWorkerOptions,
-		private readonly handler: (units: T[]) => void
+		private readonly handler: (units: T[]) => codemavi
 	) {
 		super();
 	}
@@ -1279,7 +1279,7 @@ export class ThrottledWorker<T> extends Disposable {
 		return true; // work accepted
 	}
 
-	private doWork(): void {
+	private doWork(): codemavi {
 		this.lastExecutionTime = Date.now();
 
 		// Extract chunk to handle and handle it
@@ -1291,7 +1291,7 @@ export class ThrottledWorker<T> extends Disposable {
 		}
 	}
 
-	private scheduleThrottler(delay = this.options.throttleDelay): void {
+	private scheduleThrottler(delay = this.options.throttleDelay): codemavi {
 		this.throttler.value = new RunOnceScheduler(() => {
 			this.throttler.clear();
 
@@ -1300,7 +1300,7 @@ export class ThrottledWorker<T> extends Disposable {
 		this.throttler.value.schedule();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.disposed = true;
@@ -1338,9 +1338,9 @@ type IdleApi = Pick<typeof globalThis, 'requestIdleCallback' | 'cancelIdleCallba
  * **Note** that there is `dom.ts#runWhenWindowIdle` which is better suited when running inside a browser
  * context
  */
-export let runWhenGlobalIdle: (callback: (idle: IdleDeadline) => void, timeout?: number) => IDisposable;
+export let runWhenGlobalIdle: (callback: (idle: IdleDeadline) => codemavi, timeout?: number) => IDisposable;
 
-export let _runWhenIdle: (targetWindow: IdleApi, callback: (idle: IdleDeadline) => void, timeout?: number) => IDisposable;
+export let _runWhenIdle: (targetWindow: IdleApi, callback: (idle: IdleDeadline) => codemavi, timeout?: number) => IDisposable;
 
 (function () {
 	if (typeof globalThis.requestIdleCallback !== 'function' || typeof globalThis.cancelIdleCallback !== 'function') {
@@ -1388,7 +1388,7 @@ export let _runWhenIdle: (targetWindow: IdleApi, callback: (idle: IdleDeadline) 
 
 export abstract class AbstractIdleValue<T> {
 
-	private readonly _executor: () => void;
+	private readonly _executor: () => codemavi;
 	private readonly _handle: IDisposable;
 
 	private _didRun: boolean = false;
@@ -1408,7 +1408,7 @@ export abstract class AbstractIdleValue<T> {
 		this._handle = _runWhenIdle(targetWindow, () => this._executor());
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._handle.dispose();
 	}
 
@@ -1463,19 +1463,19 @@ export async function retry<T>(task: ITask<Promise<T>>, delay: number, retries: 
 
 interface IRunningTask {
 	readonly taskId: number;
-	readonly cancel: () => void;
-	readonly promise: Promise<void>;
+	readonly cancel: () => codemavi;
+	readonly promise: Promise<codemavi>;
 }
 
 interface IQueuedTask {
-	readonly promise: Promise<void>;
-	readonly promiseResolve: () => void;
-	readonly promiseReject: (error: Error) => void;
-	run: ITask<Promise<void>>;
+	readonly promise: Promise<codemavi>;
+	readonly promiseResolve: () => codemavi;
+	readonly promiseReject: (error: Error) => codemavi;
+	run: ITask<Promise<codemavi>>;
 }
 
 export interface ITaskSequentializerWithRunningTask {
-	readonly running: Promise<void>;
+	readonly running: Promise<codemavi>;
 }
 
 export interface ITaskSequentializerWithQueuedTask {
@@ -1498,15 +1498,15 @@ export class TaskSequentializer {
 		return !!this._running;
 	}
 
-	get running(): Promise<void> | undefined {
+	get running(): Promise<codemavi> | undefined {
 		return this._running?.promise;
 	}
 
-	cancelRunning(): void {
+	cancelRunning(): codemavi {
 		this._running?.cancel();
 	}
 
-	run(taskId: number, promise: Promise<void>, onCancel?: () => void,): Promise<void> {
+	run(taskId: number, promise: Promise<codemavi>, onCancel?: () => codemavi,): Promise<codemavi> {
 		this._running = { taskId, cancel: () => onCancel?.(), promise };
 
 		promise.then(() => this.doneRunning(taskId), () => this.doneRunning(taskId));
@@ -1514,7 +1514,7 @@ export class TaskSequentializer {
 		return promise;
 	}
 
-	private doneRunning(taskId: number): void {
+	private doneRunning(taskId: number): codemavi {
 		if (this._running && taskId === this._running.taskId) {
 
 			// only set running to done if the promise finished that is associated with that taskId
@@ -1525,7 +1525,7 @@ export class TaskSequentializer {
 		}
 	}
 
-	private runQueued(): void {
+	private runQueued(): codemavi {
 		if (this._queued) {
 			const queued = this._queued;
 			this._queued = undefined;
@@ -1541,13 +1541,13 @@ export class TaskSequentializer {
 	 *       even when this task is running. Missing this detail means that
 	 *       suddenly multiple tasks will run in parallel.
 	 */
-	queue(run: ITask<Promise<void>>): Promise<void> {
+	queue(run: ITask<Promise<codemavi>>): Promise<codemavi> {
 
 		// this is our first queued task, so we create associated promise with it
 		// so that we can return a promise that completes when the task has
 		// completed.
 		if (!this._queued) {
-			const { promise, resolve: promiseResolve, reject: promiseReject } = promiseWithResolvers<void>();
+			const { promise, resolve: promiseResolve, reject: promiseReject } = promiseWithResolvers<codemavi>();
 			this._queued = {
 				run,
 				promise,
@@ -1568,7 +1568,7 @@ export class TaskSequentializer {
 		return !!this._queued;
 	}
 
-	async join(): Promise<void> {
+	async join(): Promise<codemavi> {
 		return this._queued?.promise ?? this._running?.promise;
 	}
 }
@@ -1612,7 +1612,7 @@ export class IntervalCounter {
 
 //#region
 
-export type ValueCallback<T = unknown> = (value: T | Promise<T>) => void;
+export type ValueCallback<T = unknown> = (value: T | Promise<T>) => codemavi;
 
 const enum DeferredOutcome {
 	Resolved,
@@ -1625,7 +1625,7 @@ const enum DeferredOutcome {
 export class DeferredPromise<T> {
 
 	private completeCallback!: ValueCallback<T>;
-	private errorCallback!: (err: unknown) => void;
+	private errorCallback!: (err: unknown) => codemavi;
 	private outcome?: { outcome: DeferredOutcome.Rejected; value: any } | { outcome: DeferredOutcome.Resolved; value: T };
 
 	public get isRejected() {
@@ -1654,7 +1654,7 @@ export class DeferredPromise<T> {
 	}
 
 	public complete(value: T) {
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			this.completeCallback(value);
 			this.outcome = { outcome: DeferredOutcome.Resolved, value };
 			resolve();
@@ -1662,7 +1662,7 @@ export class DeferredPromise<T> {
 	}
 
 	public error(err: unknown) {
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			this.errorCallback(err);
 			this.outcome = { outcome: DeferredOutcome.Rejected, value: err };
 			resolve();
@@ -1819,20 +1819,20 @@ export interface AsyncIterableEmitter<T> {
 	 *
 	 * **NOTE** If `reject()` has already been called, this method has no effect.
 	 */
-	emitOne(value: T): void;
+	emitOne(value: T): codemavi;
 	/**
 	 * The values will be appended at the end.
 	 *
 	 * **NOTE** If `reject()` has already been called, this method has no effect.
 	 */
-	emitMany(values: T[]): void;
+	emitMany(values: T[]): codemavi;
 	/**
 	 * Writing an error will permanently invalidate this iterable.
 	 * The current users will receive an error thrown, as will all future users.
 	 *
 	 * **NOTE** If `reject()` have already been called, this method has no effect.
 	 */
-	reject(error: Error): void;
+	reject(error: Error): codemavi;
 }
 
 /**
@@ -1842,7 +1842,7 @@ export interface AsyncIterableExecutor<T> {
 	/**
 	 * @param emitter An object that allows to emit async values valid only for the duration of the executor.
 	 */
-	(emitter: AsyncIterableEmitter<T>): void | Promise<void>;
+	(emitter: AsyncIterableEmitter<T>): codemavi | Promise<codemavi>;
 }
 
 /**
@@ -1883,15 +1883,15 @@ export class AsyncIterableObject<T> implements AsyncIterable<T> {
 	private _state: AsyncIterableSourceState;
 	private _results: T[];
 	private _error: Error | null;
-	private readonly _onReturn?: () => void | Promise<void>;
-	private readonly _onStateChanged: Emitter<void>;
+	private readonly _onReturn?: () => codemavi | Promise<codemavi>;
+	private readonly _onStateChanged: Emitter<codemavi>;
 
-	constructor(executor: AsyncIterableExecutor<T>, onReturn?: () => void | Promise<void>) {
+	constructor(executor: AsyncIterableExecutor<T>, onReturn?: () => codemavi | Promise<codemavi>) {
 		this._state = AsyncIterableSourceState.Initial;
 		this._results = [];
 		this._error = null;
 		this._onReturn = onReturn;
-		this._onStateChanged = new Emitter<void>();
+		this._onStateChanged = new Emitter<codemavi>();
 
 		queueMicrotask(async () => {
 			const writer: AsyncIterableEmitter<T> = {
@@ -1987,7 +1987,7 @@ export class AsyncIterableObject<T> implements AsyncIterable<T> {
 	 *
 	 * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
 	 */
-	private emitOne(value: T): void {
+	private emitOne(value: T): codemavi {
 		if (this._state !== AsyncIterableSourceState.Initial) {
 			return;
 		}
@@ -2002,7 +2002,7 @@ export class AsyncIterableObject<T> implements AsyncIterable<T> {
 	 *
 	 * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
 	 */
-	private emitMany(values: T[]): void {
+	private emitMany(values: T[]): codemavi {
 		if (this._state !== AsyncIterableSourceState.Initial) {
 			return;
 		}
@@ -2018,7 +2018,7 @@ export class AsyncIterableObject<T> implements AsyncIterable<T> {
 	 * **NOTE** `resolve()` must be called, otherwise all consumers of this iterable will hang indefinitely, similar to a non-resolved promise.
 	 * **NOTE** If `resolve()` or `reject()` have already been called, this method has no effect.
 	 */
-	private resolve(): void {
+	private resolve(): codemavi {
 		if (this._state !== AsyncIterableSourceState.Initial) {
 			return;
 		}
@@ -2050,7 +2050,7 @@ export class CancelableAsyncIterableObject<T> extends AsyncIterableObject<T> {
 		super(executor);
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this._source.cancel();
 	}
 }
@@ -2085,11 +2085,11 @@ export function createCancelableAsyncIterable<T>(callback: (token: CancellationT
 
 export class AsyncIterableSource<T> {
 
-	private readonly _deferred = new DeferredPromise<void>();
+	private readonly _deferred = new DeferredPromise<codemavi>();
 	private readonly _asyncIterable: AsyncIterableObject<T>;
 
-	private _errorFn: (error: Error) => void;
-	private _emitFn: (item: T) => void;
+	private _errorFn: (error: Error) => codemavi;
+	private _emitFn: (item: T) => codemavi;
 
 	/**
 	 *
@@ -2097,7 +2097,7 @@ export class AsyncIterableSource<T> {
 	 * has finished by the consumer, e.g the for-await-loop has be existed (break, return) early.
 	 * This is NOT called when resolving this source by its owner.
 	 */
-	constructor(onReturn?: () => Promise<void> | void) {
+	constructor(onReturn?: () => Promise<codemavi> | codemavi) {
 		this._asyncIterable = new AsyncIterableObject(emitter => {
 
 			if (earlyError) {
@@ -2132,16 +2132,16 @@ export class AsyncIterableSource<T> {
 		return this._asyncIterable;
 	}
 
-	resolve(): void {
+	resolve(): codemavi {
 		this._deferred.complete();
 	}
 
-	reject(error: Error): void {
+	reject(error: Error): codemavi {
 		this._errorFn(error);
 		this._deferred.complete();
 	}
 
-	emitOne(item: T): void {
+	emitOne(item: T): codemavi {
 		this._emitFn(item);
 	}
 }

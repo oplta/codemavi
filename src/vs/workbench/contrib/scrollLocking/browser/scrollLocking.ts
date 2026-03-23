@@ -38,17 +38,17 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 		this.registerActions();
 	}
 
-	private registerActiveListeners(): void {
+	private registerActiveListeners(): codemavi {
 		this.syncScrollDispoasbles.add(this.editorService.onDidVisibleEditorsChange(() => this.trackVisiblePanes()));
 	}
 
-	private activate(): void {
+	private activate(): codemavi {
 		this.registerActiveListeners();
 
 		this.trackVisiblePanes();
 	}
 
-	toggle(): void {
+	toggle(): codemavi {
 		if (this.isActive) {
 			this.deactivate();
 		} else {
@@ -63,7 +63,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 	// makes sure that the onDidEditorPaneScroll is not called multiple times for the same event
 	private _reentrancyBarrier = new ReentrancyBarrier();
 
-	private trackVisiblePanes(): void {
+	private trackVisiblePanes(): codemavi {
 		this.paneDisposables.clear();
 		this.paneInitialScrollTop.clear();
 
@@ -150,7 +150,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 		return panes;
 	}
 
-	private deactivate(): void {
+	private deactivate(): codemavi {
 		this.paneDisposables.clear();
 		this.syncScrollDispoasbles.clear();
 		this.paneInitialScrollTop.clear();
@@ -158,7 +158,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 
 	// Actions & Commands
 
-	private toggleStatusbarItem(active: boolean): void {
+	private toggleStatusbarItem(active: boolean): codemavi {
 		if (active) {
 			if (!this.statusBarEntry.value) {
 				const text = localize('mouseScrolllingLocked', 'Scrolling Locked');
@@ -199,7 +199,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 				});
 			}
 
-			run(): void {
+			run(): codemavi {
 				$this.toggle();
 			}
 		}));
@@ -215,7 +215,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 				});
 			}
 
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const keybindingService = accessor.get(IKeybindingService);
 
 				// Enable Sync Scrolling while pressed
@@ -233,7 +233,7 @@ export class SyncScroll extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.deactivate();
 		super.dispose();
 	}

@@ -63,7 +63,7 @@ export class SimpleDecoder extends BaseDecoder<TSimpleToken, TLineToken> {
 		super(new LinesDecoder(stream));
 	}
 
-	protected override onStreamData(token: TLineToken): void {
+	protected override onStreamData(token: TLineToken): codemavi {
 		// re-emit new line tokens immediately
 		if (token instanceof CarriageReturn || token instanceof NewLine) {
 			this._onData.fire(token);

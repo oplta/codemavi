@@ -65,7 +65,7 @@ export class ProcessMainService implements IProcessMainService {
 
 	//#region Register Listeners
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		validatedIpcMain.on('vscode:listProcesses', async event => {
 			const processes = [];
 
@@ -131,7 +131,7 @@ export class ProcessMainService implements IProcessMainService {
 		});
 	}
 
-	async openProcessExplorer(data: ProcessExplorerData): Promise<void> {
+	async openProcessExplorer(data: ProcessExplorerData): Promise<codemavi> {
 		if (!this.processExplorerWindow) {
 			this.processExplorerParentWindow = BrowserWindow.getFocusedWindow();
 			if (this.processExplorerParentWindow) {
@@ -209,7 +209,7 @@ export class ProcessMainService implements IProcessMainService {
 		}
 	}
 
-	private focusWindow(window: BrowserWindow): void {
+	private focusWindow(window: BrowserWindow): codemavi {
 		if (window.isMinimized()) {
 			window.restore();
 		}
@@ -286,7 +286,7 @@ export class ProcessMainService implements IProcessMainService {
 		return state;
 	}
 
-	async stopTracing(): Promise<void> {
+	async stopTracing(): Promise<codemavi> {
 		if (!this.environmentMainService.args.trace) {
 			return; // requires tracing to be on
 		}
@@ -359,13 +359,13 @@ export class ProcessMainService implements IProcessMainService {
 		return window;
 	}
 
-	private safeSend(event: IpcMainEvent, channel: string, ...args: unknown[]): void {
+	private safeSend(event: IpcMainEvent, channel: string, ...args: unknown[]): codemavi {
 		if (!event.sender.isDestroyed()) {
 			event.sender.send(channel, ...args);
 		}
 	}
 
-	async closeProcessExplorer(): Promise<void> {
+	async closeProcessExplorer(): Promise<codemavi> {
 		this.processExplorerWindow?.close();
 	}
 }

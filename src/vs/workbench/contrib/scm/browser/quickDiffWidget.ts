@@ -91,7 +91,7 @@ export class QuickDiffPickerViewItem extends SelectActionViewItem<IQuickDiffSele
 		return this.optionsItems[index];
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		this.setFocusable(true);
 	}
@@ -102,11 +102,11 @@ export class QuickDiffPickerBaseAction extends Action {
 	public static readonly ID = 'quickDiff.base.switch';
 	public static readonly LABEL = nls.localize('quickDiff.base.switch', "Switch Quick Diff Base");
 
-	constructor(private readonly callback: (event?: IQuickDiffSelectItem) => void) {
+	constructor(private readonly callback: (event?: IQuickDiffSelectItem) => codemavi) {
 		super(QuickDiffPickerBaseAction.ID, QuickDiffPickerBaseAction.LABEL, undefined, undefined);
 	}
 
-	override async run(event?: IQuickDiffSelectItem): Promise<void> {
+	override async run(event?: IQuickDiffSelectItem): Promise<codemavi> {
 		return this.callback(event);
 	}
 }
@@ -203,7 +203,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		return visibleRanges.length >= 0 ? visibleRanges[0] : undefined;
 	}
 
-	showChange(index: number, usePosition: boolean = true): void {
+	showChange(index: number, usePosition: boolean = true): codemavi {
 		const labeledChange = this.model.changes[index];
 		const change = labeledChange.change;
 		this._index = index;
@@ -261,7 +261,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		}
 	}
 
-	private renderTitle(label: string): void {
+	private renderTitle(label: string): codemavi {
 		const providerChanges = this.model.quickDiffChanges.get(label)!;
 		const providerIndex = providerChanges.indexOf(this._index);
 
@@ -315,7 +315,7 @@ class QuickDiffWidget extends PeekViewWidget {
 			.filter(quickDiff => quickDiff.changes.length > 0).length > 1;
 	}
 
-	private updateActions(): void {
+	private updateActions(): codemavi {
 		if (!this._actionbarWidget) {
 			return;
 		}
@@ -336,7 +336,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		this._actionbarWidget.push(this._disposables.add(new Action('peekview.close', nls.localize('label.close', "Close"), ThemeIcon.asClassName(Codicon.close), true, () => this.dispose())), { label: false, icon: true });
 	}
 
-	protected override _fillHead(container: HTMLElement): void {
+	protected override _fillHead(container: HTMLElement): codemavi {
 		super._fillHead(container, true);
 
 		const visibleQuickDiffs = this.model.quickDiffs.filter(quickDiff => quickDiff.visible);
@@ -366,7 +366,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		};
 	}
 
-	protected _fillBody(container: HTMLElement): void {
+	protected _fillBody(container: HTMLElement): codemavi {
 		const options: IDiffEditorOptions = {
 			scrollBeyondLastLine: true,
 			scrollbar: {
@@ -391,7 +391,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		this._disposables.add(this.diffEditor);
 	}
 
-	protected override _onWidth(width: number): void {
+	protected override _onWidth(width: number): codemavi {
 		if (typeof this.height === 'undefined') {
 			return;
 		}
@@ -399,7 +399,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		this.diffEditor.layout({ height: this.height, width });
 	}
 
-	protected override _doLayoutBody(height: number, width: number): void {
+	protected override _doLayoutBody(height: number, width: number): codemavi {
 		super._doLayoutBody(height, width);
 		this.diffEditor.layout({ height, width });
 
@@ -410,7 +410,7 @@ class QuickDiffWidget extends PeekViewWidget {
 		this.height = height;
 	}
 
-	private revealChange(change: IChange): void {
+	private revealChange(change: IChange): codemavi {
 		let start: number, end: number;
 
 		if (change.modifiedEndLineNumber === 0) { // deletion
@@ -490,7 +490,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		}
 	}
 
-	private onDidChangeGutterAction(): void {
+	private onDidChangeGutterAction(): codemavi {
 		const gutterAction = this.configurationService.getValue<'diff' | 'none'>('scm.diffDecorationsGutterAction');
 
 		this.gutterActionDisposables.clear();
@@ -524,11 +524,11 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		return !this.widget || (this.widget?.index === -1) || (!!this.model && this.model.changes.length > 1);
 	}
 
-	refresh(): void {
+	refresh(): codemavi {
 		this.widget?.showChange(this.widget.index, false);
 	}
 
-	next(lineNumber?: number): void {
+	next(lineNumber?: number): codemavi {
 		if (!this.assertWidget()) {
 			return;
 		}
@@ -548,7 +548,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		this.widget.showChange(index);
 	}
 
-	previous(lineNumber?: number): void {
+	previous(lineNumber?: number): codemavi {
 		if (!this.assertWidget()) {
 			return;
 		}
@@ -568,7 +568,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		this.widget.showChange(index);
 	}
 
-	close(): void {
+	close(): codemavi {
 		this.session.dispose();
 		this.session = Disposable.None;
 	}
@@ -630,7 +630,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		return true;
 	}
 
-	private onDidModelChange(splices: ISplice<QuickDiffChange>[]): void {
+	private onDidModelChange(splices: ISplice<QuickDiffChange>[]): codemavi {
 		if (!this.model || !this.widget || this.widget.hasFocus()) {
 			return;
 		}
@@ -645,7 +645,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		this.refresh();
 	}
 
-	private onEditorMouseDown(e: IEditorMouseEvent): void {
+	private onEditorMouseDown(e: IEditorMouseEvent): codemavi {
 		this.mouseDownInfo = null;
 
 		const range = e.target.range;
@@ -680,7 +680,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		this.mouseDownInfo = { lineNumber: range.startLineNumber };
 	}
 
-	private onEditorMouseUp(e: IEditorMouseEvent): void {
+	private onEditorMouseUp(e: IEditorMouseEvent): codemavi {
 		if (!this.mouseDownInfo) {
 			return;
 		}
@@ -728,7 +728,7 @@ export class QuickDiffEditorController extends Disposable implements IEditorCont
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.gutterActionDisposables.dispose();
 		super.dispose();
 	}
@@ -745,7 +745,7 @@ export class ShowPreviousChangeAction extends EditorAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const outerEditor = this.outerEditor ?? getOuterEditorFromDiffEditor(accessor);
 
 		if (!outerEditor) {
@@ -778,7 +778,7 @@ export class ShowNextChangeAction extends EditorAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const outerEditor = this.outerEditor ?? getOuterEditorFromDiffEditor(accessor);
 
 		if (!outerEditor) {
@@ -811,7 +811,7 @@ export class GotoPreviousChangeAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const outerEditor = getOuterEditorFromDiffEditor(accessor);
 		const accessibilitySignalService = accessor.get(IAccessibilitySignalService);
 		const accessibilityService = accessor.get(IAccessibilityService);
@@ -851,7 +851,7 @@ export class GotoNextChangeAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const accessibilitySignalService = accessor.get(IAccessibilitySignalService);
 		const outerEditor = getOuterEditorFromDiffEditor(accessor);
 		const accessibilityService = accessor.get(IAccessibilityService);

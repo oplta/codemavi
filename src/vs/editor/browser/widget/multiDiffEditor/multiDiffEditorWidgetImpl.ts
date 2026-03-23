@@ -210,11 +210,11 @@ export class MultiDiffEditorWidgetImpl extends Disposable {
 		})));
 	}
 
-	public setScrollState(scrollState: { top?: number; left?: number }): void {
+	public setScrollState(scrollState: { top?: number; left?: number }): codemavi {
 		this._scrollableElement.setScrollPosition({ scrollLeft: scrollState.left, scrollTop: scrollState.top });
 	}
 
-	public reveal(resource: IMultiDiffResourceId, options?: RevealOptions): void {
+	public reveal(resource: IMultiDiffResourceId, options?: RevealOptions): codemavi {
 		const viewItems = this._viewItems.get();
 		const index = viewItems.findIndex(
 			(item) => item.viewModel.originalUri?.toString() === resource.original?.toString()
@@ -253,7 +253,7 @@ export class MultiDiffEditorWidgetImpl extends Disposable {
 	/** This accounts for documents that are not loaded yet. */
 	private _lastDocStates: IMultiDiffEditorViewState['docStates'] = {};
 
-	public setViewState(viewState: IMultiDiffEditorViewState): void {
+	public setViewState(viewState: IMultiDiffEditorViewState): codemavi {
 		this.setScrollState(viewState.scrollState);
 
 		this._lastDocStates = viewState.docStates;
@@ -383,7 +383,7 @@ class VirtualizedViewItem extends Disposable {
 		public readonly viewModel: DocumentDiffItemViewModel,
 		private readonly _objectPool: ObjectPool<TemplateData, DiffEditorItemTemplate>,
 		private readonly _scrollLeft: IObservable<number>,
-		private readonly _deltaScrollVertical: (delta: number) => void,
+		private readonly _deltaScrollVertical: (delta: number) => codemavi,
 	) {
 		super();
 
@@ -407,7 +407,7 @@ class VirtualizedViewItem extends Disposable {
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._clear();
 		super.dispose();
 	}
@@ -430,7 +430,7 @@ class VirtualizedViewItem extends Disposable {
 		};
 	}
 
-	public setViewState(viewState: IMultiDiffDocState, tx: ITransaction): void {
+	public setViewState(viewState: IMultiDiffDocState, tx: ITransaction): codemavi {
 		this.viewModel.collapsed.set(viewState.collapsed, tx);
 
 		this._updateTemplateData(tx);
@@ -448,7 +448,7 @@ class VirtualizedViewItem extends Disposable {
 		}
 	}
 
-	private _updateTemplateData(tx: ITransaction): void {
+	private _updateTemplateData(tx: ITransaction): codemavi {
 		const ref = this._templateRef.get();
 		if (!ref) { return; }
 		this.viewModel.lastTemplateData.set({
@@ -457,7 +457,7 @@ class VirtualizedViewItem extends Disposable {
 		}, tx);
 	}
 
-	private _clear(): void {
+	private _clear(): codemavi {
 		const ref = this._templateRef.get();
 		if (!ref) { return; }
 		transaction(tx => {
@@ -467,11 +467,11 @@ class VirtualizedViewItem extends Disposable {
 		});
 	}
 
-	public hide(): void {
+	public hide(): codemavi {
 		this._isHidden.set(true, undefined);
 	}
 
-	public render(verticalSpace: OffsetRange, offset: number, width: number, viewPort: OffsetRange): void {
+	public render(verticalSpace: OffsetRange, offset: number, width: number, viewPort: OffsetRange): codemavi {
 		this._isHidden.set(false, undefined);
 
 		let ref = this._templateRef.get();

@@ -26,7 +26,7 @@ export class MainThreadBulkEdits implements MainThreadBulkEditsShape {
 		@IUriIdentityService private readonly _uriIdentService: IUriIdentityService
 	) { }
 
-	dispose(): void { }
+	dispose(): codemavi { }
 
 	$tryApplyWorkspaceEdit(dto: SerializableObjectWithBuffers<IWorkspaceEditDto>, undoRedoGroupId?: number, isRefactoring?: boolean): Promise<boolean> {
 		const edits = reviveWorkspaceEditDto(dto.value, this._uriIdentService);

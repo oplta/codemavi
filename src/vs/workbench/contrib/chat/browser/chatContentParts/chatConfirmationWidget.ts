@@ -31,15 +31,15 @@ abstract class BaseChatConfirmationWidget extends Disposable {
 	private _onDidClick = this._register(new Emitter<IChatConfirmationButton>());
 	get onDidClick(): Event<IChatConfirmationButton> { return this._onDidClick.event; }
 
-	protected _onDidChangeHeight = this._register(new Emitter<void>());
-	get onDidChangeHeight(): Event<void> { return this._onDidChangeHeight.event; }
+	protected _onDidChangeHeight = this._register(new Emitter<codemavi>());
+	get onDidChangeHeight(): Event<codemavi> { return this._onDidChangeHeight.event; }
 
 	private _domNode: HTMLElement;
 	get domNode(): HTMLElement {
 		return this._domNode;
 	}
 
-	setShowButtons(showButton: boolean): void {
+	setShowButtons(showButton: boolean): codemavi {
 		this.domNode.classList.toggle('hideButtons', !showButton);
 	}
 
@@ -118,7 +118,7 @@ abstract class BaseChatConfirmationWidget extends Disposable {
 		});
 	}
 
-	protected renderMessage(element: HTMLElement): void {
+	protected renderMessage(element: HTMLElement): codemavi {
 		this.messageElement.append(element);
 
 		if (this._configurationService.getValue<boolean>('chat.focusWindowOnConfirmation')) {

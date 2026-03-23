@@ -12,11 +12,11 @@ export abstract class TextMateWorkerHost {
 	public static getChannel(workerServer: IWebWorkerServer): TextMateWorkerHost {
 		return workerServer.getChannel<TextMateWorkerHost>(TextMateWorkerHost.CHANNEL_NAME);
 	}
-	public static setChannel(workerClient: IWebWorkerClient<any>, obj: TextMateWorkerHost): void {
+	public static setChannel(workerClient: IWebWorkerClient<any>, obj: TextMateWorkerHost): codemavi {
 		workerClient.setChannel<TextMateWorkerHost>(TextMateWorkerHost.CHANNEL_NAME, obj);
 	}
 
 	abstract $readFile(_resource: UriComponents): Promise<string>;
-	abstract $setTokensAndStates(controllerId: number, versionId: number, tokens: Uint8Array, lineEndStateDeltas: StateDeltas[]): Promise<void>;
-	abstract $reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): void;
+	abstract $setTokensAndStates(controllerId: number, versionId: number, tokens: Uint8Array, lineEndStateDeltas: StateDeltas[]): Promise<codemavi>;
+	abstract $reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): codemavi;
 }

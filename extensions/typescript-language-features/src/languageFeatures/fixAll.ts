@@ -27,7 +27,7 @@ async function buildIndividualFixes(
 	file: string,
 	diagnostics: readonly vscode.Diagnostic[],
 	token: vscode.CancellationToken,
-): Promise<void> {
+): Promise<codemavi> {
 	for (const diagnostic of diagnostics) {
 		for (const { codes, fixName } of fixes) {
 			if (token.isCancellationRequested) {
@@ -64,7 +64,7 @@ async function buildCombinedFix(
 	file: string,
 	diagnostics: readonly vscode.Diagnostic[],
 	token: vscode.CancellationToken,
-): Promise<void> {
+): Promise<codemavi> {
 	for (const diagnostic of diagnostics) {
 		for (const { codes, fixName } of fixes) {
 			if (token.isCancellationRequested) {
@@ -122,7 +122,7 @@ abstract class SourceAction extends vscode.CodeAction {
 		file: string,
 		diagnostics: readonly vscode.Diagnostic[],
 		token: vscode.CancellationToken,
-	): Promise<void>;
+	): Promise<codemavi>;
 }
 
 class SourceFixAll extends SourceAction {
@@ -133,7 +133,7 @@ class SourceFixAll extends SourceAction {
 		super(vscode.l10n.t("Fix all fixable JS/TS issues"), SourceFixAll.kind);
 	}
 
-	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<void> {
+	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<codemavi> {
 		this.edit = new vscode.WorkspaceEdit();
 
 		await buildIndividualFixes([
@@ -155,7 +155,7 @@ class SourceRemoveUnused extends SourceAction {
 		super(vscode.l10n.t("Remove all unused code"), SourceRemoveUnused.kind);
 	}
 
-	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<void> {
+	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<codemavi> {
 		this.edit = new vscode.WorkspaceEdit();
 		await buildCombinedFix([
 			{ codes: errorCodes.variableDeclaredButNeverUsed, fixName: fixNames.unusedIdentifier },
@@ -171,7 +171,7 @@ class SourceAddMissingImports extends SourceAction {
 		super(vscode.l10n.t("Add all missing imports"), SourceAddMissingImports.kind);
 	}
 
-	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<void> {
+	async build(client: ITypeScriptServiceClient, file: string, diagnostics: readonly vscode.Diagnostic[], token: vscode.CancellationToken): Promise<codemavi> {
 		this.edit = new vscode.WorkspaceEdit();
 		await buildCombinedFix([
 			{ codes: errorCodes.cannotFindName, fixName: fixNames.fixImport }

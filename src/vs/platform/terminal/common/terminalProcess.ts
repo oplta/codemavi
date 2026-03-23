@@ -90,7 +90,7 @@ export function chunkInput(data: string): string[] {
 		if (
 			// If the max chunk size is reached
 			i - nextChunkStartIndex + 1 >= Constants.WriteMaxChunkSize ||
-			// If the next character is ESC, send the pending data to avoid splitting the escape
+			// If the next character is ESC, send the pending data to acodemavi splitting the escape
 			// sequence.
 			data[i + 1] === '\x1b'
 		) {

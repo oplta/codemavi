@@ -24,7 +24,7 @@ export const nullExtensionDescription = Object.freeze<IExtensionDescription>({
 	version: '0.0.0',
 	publisher: 'vscode',
 	engines: { vscode: '' },
-	extensionLocation: URI.parse('void:location'),
+	extensionLocation: URI.parse('codemavi:location'),
 	isBuiltin: false,
 	targetPlatform: TargetPlatform.UNDEFINED,
 	isUserBuiltin: false,
@@ -128,8 +128,8 @@ export interface IExtensionHost {
 	start(): Promise<IMessagePassingProtocol>;
 	getInspectPort(): { port: number; host: string } | undefined;
 	enableInspectPort(): Promise<boolean>;
-	disconnect?(): Promise<void>;
-	dispose(): void;
+	disconnect?(): Promise<codemavi>;
+	dispose(): codemavi;
 }
 
 export class ExtensionHostExtensions {
@@ -320,7 +320,7 @@ export function isProposedApiEnabled(extension: IExtensionDescription, proposal:
 	return extension.enabledApiProposals.includes(proposal);
 }
 
-export function checkProposedApiEnabled(extension: IExtensionDescription, proposal: ApiProposalName): void {
+export function checkProposedApiEnabled(extension: IExtensionDescription, proposal: ApiProposalName): codemavi {
 	if (!isProposedApiEnabled(extension, proposal)) {
 		throw new Error(`Extension '${extension.identifier.value}' CANNOT use API proposal: ${proposal}.\nIts package.json#enabledApiProposals-property declares: ${extension.enabledApiProposals?.join(', ') ?? '[]'} but NOT ${proposal}.\n The missing proposal MUST be added and you must start in extension development mode or use the following command line switch: --enable-proposed-api ${extension.identifier.value}`);
 	}
@@ -360,7 +360,7 @@ export class ExtensionPointContribution<T> {
 
 export interface IWillActivateEvent {
 	readonly event: string;
-	readonly activation: Promise<void>;
+	readonly activation: Promise<codemavi>;
 }
 
 export interface IResponsiveStateChangeEvent {
@@ -398,7 +398,7 @@ export interface WillStopExtensionHostsEvent {
 	 * @param reason a human readable reason for vetoing the extension host stop in case
 	 * where the resolved `value: true`.
 	 */
-	veto(value: boolean | Promise<boolean>, reason: string): void;
+	veto(value: boolean | Promise<boolean>, reason: string): codemavi;
 }
 
 export interface IExtensionService {
@@ -411,7 +411,7 @@ export interface IExtensionService {
 	 *
 	 * @returns the extensions that got registered
 	 */
-	onDidRegisterExtensions: Event<void>;
+	onDidRegisterExtensions: Event<codemavi>;
 
 	/**
 	 * @event
@@ -460,13 +460,13 @@ export interface IExtensionService {
 	 * `ActivationKind.Immediate`. Please do not use this flag unless really necessary
 	 * and you understand all consequences.
 	 */
-	activateByEvent(activationEvent: string, activationKind?: ActivationKind): Promise<void>;
+	activateByEvent(activationEvent: string, activationKind?: ActivationKind): Promise<codemavi>;
 
 	/**
 	 * Send an activation ID and activate interested extensions.
 	 *
 	 */
-	activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void>;
+	activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi>;
 
 	/**
 	 * Determine if `activateByEvent(activationEvent)` has resolved already.
@@ -530,21 +530,21 @@ export interface IExtensionService {
 	/**
 	 * Starts the extension hosts. If updates are provided, the extension hosts are started with the given updates.
 	 */
-	startExtensionHosts(updates?: { readonly toAdd: readonly IExtension[]; readonly toRemove: readonly string[] }): Promise<void>;
+	startExtensionHosts(updates?: { readonly toAdd: readonly IExtension[]; readonly toRemove: readonly string[] }): Promise<codemavi>;
 
 	/**
 	 * Modify the environment of the remote extension host
 	 * @param env New properties for the remote extension host
 	 */
-	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void>;
+	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi>;
 }
 
 export interface IInternalExtensionService {
-	_activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void>;
-	_onWillActivateExtension(extensionId: ExtensionIdentifier): void;
-	_onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): void;
-	_onDidActivateExtensionError(extensionId: ExtensionIdentifier, error: Error): void;
-	_onExtensionRuntimeError(extensionId: ExtensionIdentifier, err: Error): void;
+	_activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi>;
+	_onWillActivateExtension(extensionId: ExtensionIdentifier): codemavi;
+	_onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): codemavi;
+	_onDidActivateExtensionError(extensionId: ExtensionIdentifier, error: Error): codemavi;
+	_onExtensionRuntimeError(extensionId: ExtensionIdentifier, err: Error): codemavi;
 }
 
 export interface ProfileSession {
@@ -586,15 +586,15 @@ export function toExtensionDescription(extension: IExtension, isUnderDevelopment
 
 export class NullExtensionService implements IExtensionService {
 	declare readonly _serviceBrand: undefined;
-	onDidRegisterExtensions: Event<void> = Event.None;
+	onDidRegisterExtensions: Event<codemavi> = Event.None;
 	onDidChangeExtensionsStatus: Event<ExtensionIdentifier[]> = Event.None;
 	onDidChangeExtensions = Event.None;
 	onWillActivateByEvent: Event<IWillActivateEvent> = Event.None;
 	onDidChangeResponsiveChange: Event<IResponsiveStateChangeEvent> = Event.None;
 	onWillStop: Event<WillStopExtensionHostsEvent> = Event.None;
 	readonly extensions = [];
-	activateByEvent(_activationEvent: string): Promise<void> { return Promise.resolve(undefined); }
-	activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> { return Promise.resolve(undefined); }
+	activateByEvent(_activationEvent: string): Promise<codemavi> { return Promise.resolve(undefined); }
+	activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> { return Promise.resolve(undefined); }
 	activationEventIsDone(_activationEvent: string): boolean { return false; }
 	whenInstalledExtensionsRegistered(): Promise<boolean> { return Promise.resolve(true); }
 	getExtension() { return Promise.resolve(undefined); }
@@ -602,8 +602,8 @@ export class NullExtensionService implements IExtensionService {
 	getExtensionsStatus(): { [id: string]: IExtensionsStatus } { return Object.create(null); }
 	getInspectPorts(_extensionHostKind: ExtensionHostKind, _tryEnableInspector: boolean): Promise<{ port: number; host: string }[]> { return Promise.resolve([]); }
 	async stopExtensionHosts(): Promise<boolean> { return true; }
-	async startExtensionHosts(): Promise<void> { }
-	async setRemoteEnvironment(_env: { [key: string]: string | null }): Promise<void> { }
+	async startExtensionHosts(): Promise<codemavi> { }
+	async setRemoteEnvironment(_env: { [key: string]: string | null }): Promise<codemavi> { }
 	canAddExtension(): boolean { return false; }
 	canRemoveExtension(): boolean { return false; }
 }

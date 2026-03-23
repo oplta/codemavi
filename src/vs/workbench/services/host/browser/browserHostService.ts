@@ -96,7 +96,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Veto shutdown depending on `window.confirmBeforeClose` setting
 		this._register(this.lifecycleService.onBeforeShutdown(e => this.onBeforeShutdown(e)));
@@ -105,7 +105,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		this._register(ModifierKeyEmitter.getInstance().event(() => this.updateShutdownReasonFromEvent()));
 	}
 
-	private onBeforeShutdown(e: BeforeShutdownEvent): void {
+	private onBeforeShutdown(e: BeforeShutdownEvent): codemavi {
 
 		switch (this.shutdownReason) {
 
@@ -127,7 +127,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		this.shutdownReason = HostShutdownReason.Unknown;
 	}
 
-	private updateShutdownReasonFromEvent(): void {
+	private updateShutdownReasonFromEvent(): codemavi {
 		if (this.shutdownReason === HostShutdownReason.Api) {
 			return; // do not overwrite any explicitly set shutdown reason
 		}
@@ -168,7 +168,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		return true;
 	}
 
-	async focus(targetWindow: Window): Promise<void> {
+	async focus(targetWindow: Window): Promise<codemavi> {
 		targetWindow.focus();
 	}
 
@@ -226,9 +226,9 @@ export class BrowserHostService extends Disposable implements IHostService {
 		return emitter.event;
 	}
 
-	openWindow(options?: IOpenEmptyWindowOptions): Promise<void>;
-	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void>;
-	openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<void> {
+	openWindow(options?: IOpenEmptyWindowOptions): Promise<codemavi>;
+	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi>;
+	openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<codemavi> {
 		if (Array.isArray(arg1)) {
 			return this.doOpenWindow(arg1, arg2);
 		}
@@ -236,7 +236,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		return this.doOpenEmptyWindow(arg1);
 	}
 
-	private async doOpenWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void> {
+	private async doOpenWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi> {
 		const payload = this.preservePayload(false /* not an empty window */, options);
 		const fileOpenables: IFileToOpen[] = [];
 
@@ -397,9 +397,9 @@ export class BrowserHostService extends Disposable implements IHostService {
 		}
 	}
 
-	private withServices(fn: (accessor: ServicesAccessor) => unknown): void {
+	private withServices(fn: (accessor: ServicesAccessor) => unknown): codemavi {
 		// Host service is used in a lot of contexts and some services
-		// need to be resolved dynamically to avoid cyclic dependencies
+		// need to be resolved dynamically to acodemavi cyclic dependencies
 		// (https://github.com/microsoft/vscode/issues/108522)
 		this.instantiationService.invokeFunction(accessor => fn(accessor));
 	}
@@ -458,17 +458,17 @@ export class BrowserHostService extends Disposable implements IHostService {
 		return !openInNewWindow;
 	}
 
-	private async doOpenEmptyWindow(options?: IOpenEmptyWindowOptions): Promise<void> {
+	private async doOpenEmptyWindow(options?: IOpenEmptyWindowOptions): Promise<codemavi> {
 		return this.doOpen(undefined, {
 			reuse: options?.forceReuseWindow,
 			payload: this.preservePayload(true /* empty window */, options)
 		});
 	}
 
-	private async doOpen(workspace: IWorkspace, options?: { reuse?: boolean; payload?: object }): Promise<void> {
+	private async doOpen(workspace: IWorkspace, options?: { reuse?: boolean; payload?: object }): Promise<codemavi> {
 
 		// When we are in a temporary workspace and are asked to open a local folder
-		// we swap that folder into the workspace to avoid a window reload. Access
+		// we swap that folder into the workspace to acodemavi a window reload. Access
 		// to local resources is only possible without a window reload because it
 		// needs user activation.
 		if (workspace && isFolderToOpen(workspace) && workspace.folderUri.scheme === Schemas.file && isTemporaryWorkspace(this.contextService.getWorkspace())) {
@@ -500,7 +500,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		}
 	}
 
-	async toggleFullScreen(targetWindow: Window): Promise<void> {
+	async toggleFullScreen(targetWindow: Window): Promise<codemavi> {
 		const target = this.layoutService.getContainer(targetWindow);
 
 		// Chromium
@@ -534,7 +534,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		}
 	}
 
-	async moveTop(targetWindow: Window): Promise<void> {
+	async moveTop(targetWindow: Window): Promise<codemavi> {
 		// There seems to be no API to bring a window to front in browsers
 	}
 
@@ -546,17 +546,17 @@ export class BrowserHostService extends Disposable implements IHostService {
 
 	//#region Lifecycle
 
-	async restart(): Promise<void> {
+	async restart(): Promise<codemavi> {
 		this.reload();
 	}
 
-	async reload(): Promise<void> {
+	async reload(): Promise<codemavi> {
 		await this.handleExpectedShutdown(ShutdownReason.RELOAD);
 
 		mainWindow.location.reload();
 	}
 
-	async close(): Promise<void> {
+	async close(): Promise<codemavi> {
 		await this.handleExpectedShutdown(ShutdownReason.CLOSE);
 
 		mainWindow.close();
@@ -572,7 +572,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 		}
 	}
 
-	private async handleExpectedShutdown(reason: ShutdownReason): Promise<void> {
+	private async handleExpectedShutdown(reason: ShutdownReason): Promise<codemavi> {
 
 		// Update shutdown reason in a way that we do
 		// not show a dialog because this is a expected
@@ -611,8 +611,8 @@ export class BrowserHostService extends Disposable implements IHostService {
 
 			// Wait for the video to load properly before capturing the screenshot
 			await Promise.all([
-				new Promise<void>(r => store.add(addDisposableListener(video, 'loadedmetadata', () => r()))),
-				new Promise<void>(r => store.add(addDisposableListener(video, 'canplaythrough', () => r())))
+				new Promise<codemavi>(r => store.add(addDisposableListener(video, 'loadedmetadata', () => r()))),
+				new Promise<codemavi>(r => store.add(addDisposableListener(video, 'canplaythrough', () => r())))
 			]);
 
 			const canvas = document.createElement('canvas');

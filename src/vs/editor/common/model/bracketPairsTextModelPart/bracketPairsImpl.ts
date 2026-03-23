@@ -21,7 +21,7 @@ import { LineTokens } from '../../tokens/lineTokens.js';
 export class BracketPairsTextModelPart extends Disposable implements IBracketPairsTextModelPart {
 	private readonly bracketPairsTree = this._register(new MutableDisposable<IReference<BracketPairsTree>>());
 
-	private readonly onDidChangeEmitter = new Emitter<void>();
+	private readonly onDidChangeEmitter = new Emitter<codemavi>();
 	public readonly onDidChange = this.onDidChangeEmitter.event;
 
 	private get canBuildAST() {
@@ -40,19 +40,19 @@ export class BracketPairsTextModelPart extends Disposable implements IBracketPai
 
 	//#region TextModel events
 
-	public handleLanguageConfigurationServiceChange(e: LanguageConfigurationServiceChangeEvent): void {
+	public handleLanguageConfigurationServiceChange(e: LanguageConfigurationServiceChangeEvent): codemavi {
 		if (!e.languageId || this.bracketPairsTree.value?.object.didLanguageChange(e.languageId)) {
 			this.bracketPairsTree.clear();
 			this.updateBracketPairsTree();
 		}
 	}
 
-	public handleDidChangeOptions(e: IModelOptionsChangedEvent): void {
+	public handleDidChangeOptions(e: IModelOptionsChangedEvent): codemavi {
 		this.bracketPairsTree.clear();
 		this.updateBracketPairsTree();
 	}
 
-	public handleDidChangeLanguage(e: IModelLanguageChangedEvent): void {
+	public handleDidChangeLanguage(e: IModelLanguageChangedEvent): codemavi {
 		this.bracketPairsTree.clear();
 		this.updateBracketPairsTree();
 	}
@@ -61,11 +61,11 @@ export class BracketPairsTextModelPart extends Disposable implements IBracketPai
 		this.bracketPairsTree.value?.object.handleContentChanged(change);
 	}
 
-	public handleDidChangeBackgroundTokenizationState(): void {
+	public handleDidChangeBackgroundTokenizationState(): codemavi {
 		this.bracketPairsTree.value?.object.handleDidChangeBackgroundTokenizationState();
 	}
 
-	public handleDidChangeTokens(e: IModelTokensChangedEvent): void {
+	public handleDidChangeTokens(e: IModelTokensChangedEvent): codemavi {
 		this.bracketPairsTree.value?.object.handleDidChangeTokens(e);
 	}
 

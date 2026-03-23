@@ -23,13 +23,13 @@ export async function saveAllFilesAndCloseAll() {
 	await closeAllEditors();
 }
 
-async function withEvent<T>(event: vscode.Event<T>, callback: (e: Promise<T>) => Promise<void>) {
+async function withEvent<T>(event: vscode.Event<T>, callback: (e: Promise<T>) => Promise<codemavi>) {
 	const e = asPromise<T>(event);
 	await callback(e);
 }
 
 
-function sleep(ms: number): Promise<void> {
+function sleep(ms: number): Promise<codemavi> {
 	return new Promise(resolve => {
 		setTimeout(resolve, ms);
 	});
@@ -55,7 +55,7 @@ export class Kernel {
 		});
 	}
 
-	protected async _execute(cells: vscode.NotebookCell[]): Promise<void> {
+	protected async _execute(cells: vscode.NotebookCell[]): Promise<codemavi> {
 		for (const cell of cells) {
 			await this._runCell(cell);
 		}
@@ -76,7 +76,7 @@ export class Kernel {
 }
 
 
-async function assertKernel(kernel: Kernel, notebook: vscode.NotebookDocument): Promise<void> {
+async function assertKernel(kernel: Kernel, notebook: vscode.NotebookDocument): Promise<codemavi> {
 	const success = await vscode.commands.executeCommand('notebook.selectKernel', {
 		extension: 'vscode.vscode-api-tests',
 		id: kernel.controller.id
@@ -196,7 +196,7 @@ const apiTestSerializer: vscode.NotebookSerializer = {
 		let firstCellExecuted = false;
 		let secondCellExecuted = false;
 
-		const def = new DeferredPromise<void>();
+		const def = new DeferredPromise<codemavi>();
 		testDisposables.push(vscode.workspace.onDidChangeNotebookDocument(e => {
 			e.cellChanges.forEach(change => {
 				if (change.cell.index === 0 && change.executionSummary) {
@@ -284,7 +284,7 @@ const apiTestSerializer: vscode.NotebookSerializer = {
 		const cell = editor.notebook.cellAt(0);
 
 		let eventCount = 0;
-		const def = new DeferredPromise<void>();
+		const def = new DeferredPromise<codemavi>();
 		testDisposables.push(vscode.notebooks.onDidChangeNotebookCellExecutionState(e => {
 			try {
 				assert.strictEqual(e.cell.document.uri.toString(), cell.document.uri.toString(), 'event should be fired for the executing cell');

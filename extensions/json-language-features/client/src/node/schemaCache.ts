@@ -47,7 +47,7 @@ export class JSONSchemaCache {
 		return undefined;
 	}
 
-	async putSchema(schemaUri: string, etag: string, schemaContent: string): Promise<void> {
+	async putSchema(schemaUri: string, etag: string, schemaContent: string): Promise<codemavi> {
 		try {
 			const fileName = getCacheFileName(schemaUri);
 			await fs.writeFile(path.join(this.schemaCacheLocation, fileName), schemaContent);
@@ -96,7 +96,7 @@ export class JSONSchemaCache {
 		}
 	}
 
-	private async deleteSchemaFile(schemaUri: string, cacheEntry: CacheEntry): Promise<void> {
+	private async deleteSchemaFile(schemaUri: string, cacheEntry: CacheEntry): Promise<codemavi> {
 		const cacheLocation = path.join(this.schemaCacheLocation, cacheEntry.fileName);
 		delete this.cacheInfo[schemaUri];
 		await this.updateMemento();

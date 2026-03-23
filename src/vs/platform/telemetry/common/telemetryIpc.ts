@@ -37,7 +37,7 @@ export class TelemetryAppenderClient implements ITelemetryAppender {
 		return Promise.resolve(null);
 	}
 
-	flush(): Promise<void> {
+	flush(): Promise<codemavi> {
 		// TODO
 		return Promise.resolve();
 	}

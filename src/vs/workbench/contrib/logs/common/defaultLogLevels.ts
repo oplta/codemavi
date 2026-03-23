@@ -31,20 +31,20 @@ export interface IDefaultLogLevelsService {
 	/**
 	 * An event which fires when default log levels are changed
 	 */
-	readonly onDidChangeDefaultLogLevels: Event<void>;
+	readonly onDidChangeDefaultLogLevels: Event<codemavi>;
 
 	getDefaultLogLevels(): Promise<DefaultLogLevels>;
 
 	getDefaultLogLevel(extensionId?: string): Promise<LogLevel>;
 
-	setDefaultLogLevel(logLevel: LogLevel, extensionId?: string): Promise<void>;
+	setDefaultLogLevel(logLevel: LogLevel, extensionId?: string): Promise<codemavi>;
 }
 
 class DefaultLogLevelsService extends Disposable implements IDefaultLogLevelsService {
 
 	_serviceBrand: undefined;
 
-	private _onDidChangeDefaultLogLevels = this._register(new Emitter<void>);
+	private _onDidChangeDefaultLogLevels = this._register(new Emitter<codemavi>);
 	readonly onDidChangeDefaultLogLevels = this._onDidChangeDefaultLogLevels.event;
 
 	constructor(
@@ -75,7 +75,7 @@ class DefaultLogLevelsService extends Disposable implements IDefaultLogLevelsSer
 		}
 	}
 
-	async setDefaultLogLevel(defaultLogLevel: LogLevel, extensionId?: string): Promise<void> {
+	async setDefaultLogLevel(defaultLogLevel: LogLevel, extensionId?: string): Promise<codemavi> {
 		const argvLogLevel = await this._parseLogLevelsFromArgv() ?? {};
 		if (extensionId) {
 			extensionId = extensionId.toLowerCase();
@@ -115,7 +115,7 @@ class DefaultLogLevelsService extends Disposable implements IDefaultLogLevelsSer
 		return argvLogLevels.default ?? getLogLevel(this.environmentService);
 	}
 
-	private async _writeLogLevelsToArgv(logLevels: ParsedArgvLogLevels): Promise<void> {
+	private async _writeLogLevelsToArgv(logLevels: ParsedArgvLogLevels): Promise<codemavi> {
 		const logLevelsValue: string[] = [];
 		if (!isUndefined(logLevels.default)) {
 			logLevelsValue.push(LogLevelToString(logLevels.default));

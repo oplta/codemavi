@@ -30,7 +30,7 @@ export class NotebookIndentUsingTabs extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): void {
+	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		changeNotebookIndentation(accessor, false, false);
 	}
 }
@@ -46,7 +46,7 @@ export class NotebookIndentUsingSpaces extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): void {
+	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		changeNotebookIndentation(accessor, true, false);
 	}
 }
@@ -62,7 +62,7 @@ export class NotebookChangeTabDisplaySize extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): void {
+	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		changeNotebookIndentation(accessor, true, true);
 	}
 }
@@ -78,7 +78,7 @@ export class NotebookIndentationToSpacesAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): void {
+	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		convertNotebookIndentation(accessor, true);
 	}
 }
@@ -94,7 +94,7 @@ export class NotebookIndentationToTabsAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): void {
+	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		convertNotebookIndentation(accessor, false);
 	}
 }
@@ -156,7 +156,7 @@ function changeNotebookIndentation(accessor: ServicesAccessor, insertSpaces: boo
 	}, 50/* quick input is sensitive to being opened so soon after another */);
 }
 
-function convertNotebookIndentation(accessor: ServicesAccessor, tabsToSpaces: boolean): void {
+function convertNotebookIndentation(accessor: ServicesAccessor, tabsToSpaces: boolean): codemavi {
 	const editorService = accessor.get(IEditorService);
 	const configurationService = accessor.get(IConfigurationService);
 	const logService = accessor.get(ILogService);

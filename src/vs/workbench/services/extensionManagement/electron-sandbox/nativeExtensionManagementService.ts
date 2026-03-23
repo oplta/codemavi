@@ -49,7 +49,7 @@ export class NativeExtensionManagementService extends ProfileAwareExtensionManag
 		}
 	}
 
-	private async downloadVsix(vsix: URI): Promise<{ location: URI; cleanup: () => Promise<void> }> {
+	private async downloadVsix(vsix: URI): Promise<{ location: URI; cleanup: () => Promise<codemavi> }> {
 		if (vsix.scheme === Schemas.file) {
 			return { location: vsix, async cleanup() { } };
 		}

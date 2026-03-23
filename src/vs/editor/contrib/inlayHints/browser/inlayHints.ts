@@ -21,7 +21,7 @@ export class InlayHintAnchor {
 export class InlayHintItem {
 
 	private _isResolved: boolean = false;
-	private _currentResolve?: Promise<void>;
+	private _currentResolve?: Promise<codemavi>;
 
 	constructor(readonly hint: InlayHint, readonly anchor: InlayHintAnchor, readonly provider: InlayHintsProvider) { }
 
@@ -32,7 +32,7 @@ export class InlayHintItem {
 		return result;
 	}
 
-	async resolve(token: CancellationToken): Promise<void> {
+	async resolve(token: CancellationToken): Promise<codemavi> {
 		if (typeof this.provider.resolveInlayHint !== 'function') {
 			return;
 		}
@@ -130,7 +130,7 @@ export class InlayHintsFragments {
 		this.items = items.sort((a, b) => Position.compare(a.hint.position, b.hint.position));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 

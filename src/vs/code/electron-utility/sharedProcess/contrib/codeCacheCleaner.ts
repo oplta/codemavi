@@ -38,7 +38,7 @@ export class CodeCacheCleaner extends Disposable {
 		}
 	}
 
-	private async cleanUpCodeCaches(currentCodeCachePath: string): Promise<void> {
+	private async cleanUpCodeCaches(currentCodeCachePath: string): Promise<codemavi> {
 		this.logService.trace('[code cache cleanup]: Starting to clean up old code cache folders.');
 
 		try {

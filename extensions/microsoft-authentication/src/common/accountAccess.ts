@@ -7,13 +7,13 @@ import { Disposable, Event, EventEmitter, LogOutputChannel, SecretStorage } from
 import { AccountInfo } from '@azure/msal-node';
 
 export interface IAccountAccess {
-	onDidAccountAccessChange: Event<void>;
+	onDidAccountAccessChange: Event<codemavi>;
 	isAllowedAccess(account: AccountInfo): boolean;
-	setAllowedAccess(account: AccountInfo, allowed: boolean): Promise<void>;
+	setAllowedAccess(account: AccountInfo, allowed: boolean): Promise<codemavi>;
 }
 
 export class ScopedAccountAccess implements IAccountAccess, Disposable {
-	private readonly _onDidAccountAccessChangeEmitter = new EventEmitter<void>();
+	private readonly _onDidAccountAccessChangeEmitter = new EventEmitter<codemavi>();
 	readonly onDidAccountAccessChange = this._onDidAccountAccessChangeEmitter.event;
 
 	private value = new Array<string>();
@@ -47,7 +47,7 @@ export class ScopedAccountAccess implements IAccountAccess, Disposable {
 		this._disposable.dispose();
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		await this.update();
 	}
 
@@ -55,7 +55,7 @@ export class ScopedAccountAccess implements IAccountAccess, Disposable {
 		return this.value.includes(account.homeAccountId);
 	}
 
-	async setAllowedAccess(account: AccountInfo, allowed: boolean): Promise<void> {
+	async setAllowedAccess(account: AccountInfo, allowed: boolean): Promise<codemavi> {
 		if (allowed) {
 			if (this.value.includes(account.homeAccountId)) {
 				return;
@@ -79,16 +79,16 @@ export class ScopedAccountAccess implements IAccountAccess, Disposable {
 
 interface IAccountAccessSecretStorage {
 	get(): Promise<string[] | undefined>;
-	store(value: string[]): Thenable<void>;
-	delete(): Thenable<void>;
-	onDidChange: Event<void>;
+	store(value: string[]): Thenable<codemavi>;
+	delete(): Thenable<codemavi>;
+	onDidChange: Event<codemavi>;
 }
 
 class AccountAccessSecretStorage implements IAccountAccessSecretStorage, Disposable {
 	private _disposable: Disposable;
 
-	private readonly _onDidChangeEmitter = new EventEmitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChangeEmitter.event;
+	private readonly _onDidChangeEmitter = new EventEmitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChangeEmitter.event;
 
 	private readonly _key = `accounts-${this._cloudName}`;
 
@@ -122,7 +122,7 @@ class AccountAccessSecretStorage implements IAccountAccessSecretStorage, Disposa
 	/**
 	 * TODO: Remove this method after a release with the migration
 	 */
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		if (!this._migrations) {
 			return;
 		}
@@ -158,11 +158,11 @@ class AccountAccessSecretStorage implements IAccountAccessSecretStorage, Disposa
 		return JSON.parse(value);
 	}
 
-	store(value: string[]): Thenable<void> {
+	store(value: string[]): Thenable<codemavi> {
 		return this._secretStorage.store(this._key, JSON.stringify(value));
 	}
 
-	delete(): Thenable<void> {
+	delete(): Thenable<codemavi> {
 		return this._secretStorage.delete(this._key);
 	}
 

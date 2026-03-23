@@ -433,7 +433,7 @@ suite('Workbench editor utils', () => {
 		return instantiationService.createInstance(TestServiceAccessor);
 	}
 
-	async function testWhenEditorClosed(sideBySide: boolean, custom: boolean, ...resources: URI[]): Promise<void> {
+	async function testWhenEditorClosed(sideBySide: boolean, custom: boolean, ...resources: URI[]): Promise<codemavi> {
 		const accessor = await createServices();
 
 		for (const resource of resources) {

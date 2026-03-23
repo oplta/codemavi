@@ -193,10 +193,10 @@ class TestNotebookKernel implements INotebookKernel {
 	preloadUris: URI[] = [];
 	preloadProvides: string[] = [];
 	supportedLanguages: string[] = [];
-	executeNotebookCellsRequest(): Promise<void> {
+	executeNotebookCellsRequest(): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	cancelNotebookCellExecution(): Promise<void> {
+	cancelNotebookCellExecution(): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
 	provideVariables(notebookUri: URI, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): AsyncIterableObject<VariablesResult> {

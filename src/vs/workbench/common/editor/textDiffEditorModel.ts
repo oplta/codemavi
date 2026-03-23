@@ -32,13 +32,13 @@ export class TextDiffEditorModel extends DiffEditorModel {
 		this.updateTextDiffEditorModel();
 	}
 
-	override async resolve(): Promise<void> {
+	override async resolve(): Promise<codemavi> {
 		await super.resolve();
 
 		this.updateTextDiffEditorModel();
 	}
 
-	private updateTextDiffEditorModel(): void {
+	private updateTextDiffEditorModel(): codemavi {
 		if (this.originalModel?.isResolved() && this.modifiedModel?.isResolved()) {
 
 			// Create new
@@ -65,7 +65,7 @@ export class TextDiffEditorModel extends DiffEditorModel {
 		return !!this.modifiedModel && this.modifiedModel.isReadonly();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 
 		// Free the diff editor model but do not propagate the dispose() call to the two models
 		// inside. We never created the two models (original and modified) so we can not dispose

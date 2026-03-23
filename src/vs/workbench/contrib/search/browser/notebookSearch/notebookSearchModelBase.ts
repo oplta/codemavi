@@ -11,13 +11,13 @@ import { ISearchTreeFileMatch, ISearchTreeMatch, isSearchTreeFileMatch } from '.
 import { INotebookCellMatchWithModel } from './searchNotebookHelpers.js';
 
 export interface INotebookFileInstanceMatch extends ISearchTreeFileMatch {
-	bindNotebookEditorWidget(editor: NotebookEditorWidget): void;
-	updateMatchesForEditorWidget(): Promise<void>;
-	unbindNotebookEditorWidget(editor: NotebookEditorWidget): void;
-	updateNotebookHighlights(): void;
+	bindNotebookEditorWidget(editor: NotebookEditorWidget): codemavi;
+	updateMatchesForEditorWidget(): Promise<codemavi>;
+	unbindNotebookEditorWidget(editor: NotebookEditorWidget): codemavi;
+	updateNotebookHighlights(): codemavi;
 	getCellMatch(cellID: string): ICellMatch | undefined;
-	addCellMatch(rawCell: INotebookCellMatchNoModel | INotebookCellMatchWithModel): void;
-	showMatch(match: IMatchInNotebook): Promise<void>;
+	addCellMatch(rawCell: INotebookCellMatchNoModel | INotebookCellMatchWithModel): codemavi;
+	showMatch(match: IMatchInNotebook): Promise<codemavi>;
 	cellMatches(): ICellMatch[];
 }
 
@@ -55,12 +55,12 @@ export interface ICellMatch {
 	matches(): IMatchInNotebook[];
 	contentMatches: IMatchInNotebook[];
 	webviewMatches: IMatchInNotebook[];
-	remove(matches: IMatchInNotebook | IMatchInNotebook[]): void;
-	clearAllMatches(): void;
-	addContentMatches(textSearchMatches: ITextSearchMatch[]): void;
-	addContext(textSearchMatches: ITextSearchMatch[]): void;
-	addWebviewMatches(textSearchMatches: ITextSearchMatch[]): void;
-	setCellModel(cell: ICellViewModel): void;
+	remove(matches: IMatchInNotebook | IMatchInNotebook[]): codemavi;
+	clearAllMatches(): codemavi;
+	addContentMatches(textSearchMatches: ITextSearchMatch[]): codemavi;
+	addContext(textSearchMatches: ITextSearchMatch[]): codemavi;
+	addWebviewMatches(textSearchMatches: ITextSearchMatch[]): codemavi;
+	setCellModel(cell: ICellViewModel): codemavi;
 	parent: INotebookFileInstanceMatch;
 	id: string;
 	cellIndex: number;

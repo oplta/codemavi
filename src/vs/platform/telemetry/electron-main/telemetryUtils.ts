@@ -10,7 +10,7 @@ import { machineIdKey, sqmIdKey, devDeviceIdKey } from '../common/telemetry.js';
 import { resolveMachineId as resolveNodeMachineId, resolveSqmId as resolveNodeSqmId, resolvedevDeviceId as resolveNodedevDeviceId } from '../node/telemetryUtils.js';
 
 export async function resolveMachineId(stateService: IStateService, logService: ILogService): Promise<string> {
-	// Call the node layers implementation to avoid code duplication
+	// Call the node layers implementation to acodemavi code duplication
 	const machineId = await resolveNodeMachineId(stateService, logService);
 	stateService.setItem(machineIdKey, machineId);
 	return machineId;
@@ -28,7 +28,7 @@ export async function resolvedevDeviceId(stateService: IStateService, logService
 	return devDeviceId;
 }
 
-export async function validatedevDeviceId(stateService: IStateService, logService: ILogService): Promise<void> {
+export async function validatedevDeviceId(stateService: IStateService, logService: ILogService): Promise<codemavi> {
 	const actualDeviceId = await getdevDeviceId(logService.error.bind(logService));
 	const currentDeviceId = await resolveNodedevDeviceId(stateService, logService);
 	if (actualDeviceId !== currentDeviceId) {

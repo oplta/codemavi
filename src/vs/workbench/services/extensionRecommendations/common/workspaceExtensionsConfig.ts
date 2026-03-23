@@ -32,20 +32,20 @@ export const IWorkspaceExtensionsConfigService = createDecorator<IWorkspaceExten
 export interface IWorkspaceExtensionsConfigService {
 	readonly _serviceBrand: undefined;
 
-	onDidChangeExtensionsConfigs: Event<void>;
+	onDidChangeExtensionsConfigs: Event<codemavi>;
 	getExtensionsConfigs(): Promise<IExtensionsConfigContent[]>;
 	getRecommendations(): Promise<string[]>;
 	getUnwantedRecommendations(): Promise<string[]>;
 
-	toggleRecommendation(extensionId: string): Promise<void>;
-	toggleUnwantedRecommendation(extensionId: string): Promise<void>;
+	toggleRecommendation(extensionId: string): Promise<codemavi>;
+	toggleUnwantedRecommendation(extensionId: string): Promise<codemavi>;
 }
 
 export class WorkspaceExtensionsConfigService extends Disposable implements IWorkspaceExtensionsConfigService {
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeExtensionsConfigs = this._register(new Emitter<void>());
+	private readonly _onDidChangeExtensionsConfigs = this._register(new Emitter<codemavi>());
 	readonly onDidChangeExtensionsConfigs = this._onDidChangeExtensionsConfigs.event;
 
 	constructor(
@@ -89,7 +89,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		return distinct(configs.flatMap(c => c.unwantedRecommendations ? c.unwantedRecommendations.map(c => c.toLowerCase()) : []));
 	}
 
-	async toggleRecommendation(extensionId: string): Promise<void> {
+	async toggleRecommendation(extensionId: string): Promise<codemavi> {
 		extensionId = extensionId.toLowerCase();
 		const workspace = this.workspaceContextService.getWorkspace();
 		const workspaceExtensionsConfigContent = workspace.configuration ? await this.resolveWorkspaceExtensionConfig(workspace.configuration) : undefined;
@@ -116,7 +116,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		}
 	}
 
-	async toggleUnwantedRecommendation(extensionId: string): Promise<void> {
+	async toggleUnwantedRecommendation(extensionId: string): Promise<codemavi> {
 		const workspace = this.workspaceContextService.getWorkspace();
 		const workspaceExtensionsConfigContent = workspace.configuration ? await this.resolveWorkspaceExtensionConfig(workspace.configuration) : undefined;
 		const workspaceFolderExtensionsConfigContents = new ResourceMap<IExtensionsConfigContent>();
@@ -142,7 +142,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		}
 	}
 
-	private async addOrRemoveWorkspaceFolderRecommendation(extensionId: string, workspaceFolder: IWorkspaceFolder, extensionsConfigContent: IExtensionsConfigContent, add: boolean): Promise<void> {
+	private async addOrRemoveWorkspaceFolderRecommendation(extensionId: string, workspaceFolder: IWorkspaceFolder, extensionsConfigContent: IExtensionsConfigContent, add: boolean): Promise<codemavi> {
 		const values: IJSONValue[] = [];
 		if (add) {
 			if (Array.isArray(extensionsConfigContent.recommendations)) {
@@ -166,7 +166,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		}
 	}
 
-	private async addOrRemoveWorkspaceRecommendation(extensionId: string, workspace: IWorkspace, extensionsConfigContent: IExtensionsConfigContent | undefined, add: boolean): Promise<void> {
+	private async addOrRemoveWorkspaceRecommendation(extensionId: string, workspace: IWorkspace, extensionsConfigContent: IExtensionsConfigContent | undefined, add: boolean): Promise<codemavi> {
 		const values: IJSONValue[] = [];
 		if (extensionsConfigContent) {
 			if (add) {
@@ -195,7 +195,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		}
 	}
 
-	private async addOrRemoveWorkspaceFolderUnwantedRecommendation(extensionId: string, workspaceFolder: IWorkspaceFolder, extensionsConfigContent: IExtensionsConfigContent, add: boolean): Promise<void> {
+	private async addOrRemoveWorkspaceFolderUnwantedRecommendation(extensionId: string, workspaceFolder: IWorkspaceFolder, extensionsConfigContent: IExtensionsConfigContent, add: boolean): Promise<codemavi> {
 		const values: IJSONValue[] = [];
 		if (add) {
 			const path: JSONPath = ['unwantedRecommendations'];
@@ -219,7 +219,7 @@ export class WorkspaceExtensionsConfigService extends Disposable implements IWor
 		}
 	}
 
-	private async addOrRemoveWorkspaceUnwantedRecommendation(extensionId: string, workspace: IWorkspace, extensionsConfigContent: IExtensionsConfigContent | undefined, add: boolean): Promise<void> {
+	private async addOrRemoveWorkspaceUnwantedRecommendation(extensionId: string, workspace: IWorkspace, extensionsConfigContent: IExtensionsConfigContent | undefined, add: boolean): Promise<codemavi> {
 		const values: IJSONValue[] = [];
 		if (extensionsConfigContent) {
 			if (add) {

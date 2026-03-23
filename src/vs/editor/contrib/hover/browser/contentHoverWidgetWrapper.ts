@@ -32,7 +32,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 	private readonly _participants: IEditorHoverParticipant[];
 	private readonly _hoverOperation: HoverOperation<ContentHoverComputerOptions, IHoverPart>;
 
-	private readonly _onContentsChanged = this._register(new Emitter<void>());
+	private readonly _onContentsChanged = this._register(new Emitter<codemavi>());
 	public readonly onContentsChanged = this._onContentsChanged.event;
 
 	constructor(
@@ -64,7 +64,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return participants;
 	}
 
-	private _registerListeners(): void {
+	private _registerListeners(): codemavi {
 		this._register(this._hoverOperation.onResult((result) => {
 			const messages = (result.hasLoadingMessage ? this._addLoadingMessage(result) : result.value);
 			this._withResult(new ContentHoverResult(messages, result.isComplete, result.options));
@@ -140,7 +140,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return true;
 	}
 
-	private _startHoverOperationIfNecessary(anchor: HoverAnchor, mode: HoverStartMode, source: HoverStartSource, shouldFocus: boolean, insistOnKeepingHoverVisible: boolean): void {
+	private _startHoverOperationIfNecessary(anchor: HoverAnchor, mode: HoverStartMode, source: HoverStartSource, shouldFocus: boolean, insistOnKeepingHoverVisible: boolean): codemavi {
 		const currentAnchorEqualToPreviousHover = this._hoverOperation.options && this._hoverOperation.options.anchor.equals(anchor);
 		if (currentAnchorEqualToPreviousHover) {
 			return;
@@ -155,7 +155,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		this._hoverOperation.start(mode, contentHoverComputerOptions);
 	}
 
-	private _setCurrentResult(hoverResult: ContentHoverResult | null): void {
+	private _setCurrentResult(hoverResult: ContentHoverResult | null): codemavi {
 		let currentHoverResult = hoverResult;
 		const currentResultEqualToPreviousResult = this._currentResult === currentHoverResult;
 		if (currentResultEqualToPreviousResult) {
@@ -187,7 +187,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return hoverResult.value;
 	}
 
-	private _withResult(hoverResult: ContentHoverResult): void {
+	private _withResult(hoverResult: ContentHoverResult): codemavi {
 		const previousHoverIsVisibleWithCompleteResult = this._contentHoverWidget.position && this._currentResult && this._currentResult.isComplete;
 		if (!previousHoverIsVisibleWithCompleteResult) {
 			this._setCurrentResult(hoverResult);
@@ -208,7 +208,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		this._setCurrentResult(hoverResult);
 	}
 
-	private _showHover(hoverResult: ContentHoverResult): void {
+	private _showHover(hoverResult: ContentHoverResult): codemavi {
 		const context = this._getHoverContext();
 		this._renderedContentHover.value = new RenderedContentHover(this._editor, hoverResult, this._participants, context, this._keybindingService, this._hoverService);
 		if (this._renderedContentHover.value.domNodeHasChildren) {
@@ -218,7 +218,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		}
 	}
 
-	private _hideHover(): void {
+	private _hideHover(): codemavi {
 		this._contentHoverWidget.hide();
 		this._participants.forEach(participant => participant.handleHide?.());
 	}
@@ -288,7 +288,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return anchorCandidates;
 	}
 
-	private _onMouseLeave(e: MouseEvent): void {
+	private _onMouseLeave(e: MouseEvent): codemavi {
 		const editorDomNode = this._editor.getDomNode();
 		const isMousePositionOutsideOfEditor = !editorDomNode || !isMousePositionWithinElement(editorDomNode, e.x, e.y);
 		if (isMousePositionOutsideOfEditor) {
@@ -296,7 +296,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		}
 	}
 
-	public startShowingAtRange(range: Range, mode: HoverStartMode, source: HoverStartSource, focus: boolean): void {
+	public startShowingAtRange(range: Range, mode: HoverStartMode, source: HoverStartSource, focus: boolean): codemavi {
 		this._startShowingOrUpdateHover(new HoverRangeAnchor(0, range, undefined, undefined), mode, source, focus, null);
 	}
 
@@ -308,7 +308,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return node.textContent;
 	}
 
-	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<void> {
+	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<codemavi> {
 		this._renderedContentHover.value?.updateHoverVerbosityLevel(action, index, focus);
 	}
 
@@ -332,7 +332,7 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		return (node ? this._contentHoverWidget.getDomNode().contains(node) : false);
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		const hoverPartsCount = this._renderedContentHover.value?.hoverPartsCount;
 		if (hoverPartsCount === 1) {
 			this.focusHoverPartWithIndex(0);
@@ -341,43 +341,43 @@ export class ContentHoverWidgetWrapper extends Disposable implements IHoverWidge
 		this._contentHoverWidget.focus();
 	}
 
-	public focusHoverPartWithIndex(index: number): void {
+	public focusHoverPartWithIndex(index: number): codemavi {
 		this._renderedContentHover.value?.focusHoverPartWithIndex(index);
 	}
 
-	public scrollUp(): void {
+	public scrollUp(): codemavi {
 		this._contentHoverWidget.scrollUp();
 	}
 
-	public scrollDown(): void {
+	public scrollDown(): codemavi {
 		this._contentHoverWidget.scrollDown();
 	}
 
-	public scrollLeft(): void {
+	public scrollLeft(): codemavi {
 		this._contentHoverWidget.scrollLeft();
 	}
 
-	public scrollRight(): void {
+	public scrollRight(): codemavi {
 		this._contentHoverWidget.scrollRight();
 	}
 
-	public pageUp(): void {
+	public pageUp(): codemavi {
 		this._contentHoverWidget.pageUp();
 	}
 
-	public pageDown(): void {
+	public pageDown(): codemavi {
 		this._contentHoverWidget.pageDown();
 	}
 
-	public goToTop(): void {
+	public goToTop(): codemavi {
 		this._contentHoverWidget.goToTop();
 	}
 
-	public goToBottom(): void {
+	public goToBottom(): codemavi {
 		this._contentHoverWidget.goToBottom();
 	}
 
-	public hide(): void {
+	public hide(): codemavi {
 		this._hoverOperation.cancel();
 		this._setCurrentResult(null);
 	}

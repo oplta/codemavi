@@ -38,7 +38,7 @@ let userRegisteredAssociations: ILanguageAssociationItem[] = [];
  * * **NOTE**: This association will lose over associations registered using `registerConfiguredLanguageAssociation`.
  * * **NOTE**: Use `clearPlatformLanguageAssociations` to remove all associations registered using this function.
  */
-export function registerPlatformLanguageAssociation(association: ILanguageAssociation, warnOnOverwrite = false): void {
+export function registerPlatformLanguageAssociation(association: ILanguageAssociation, warnOnOverwrite = false): codemavi {
 	_registerLanguageAssociation(association, false, warnOnOverwrite);
 }
 
@@ -47,11 +47,11 @@ export function registerPlatformLanguageAssociation(association: ILanguageAssoci
  * * **NOTE**: This association will win over associations registered using `registerPlatformLanguageAssociation`.
  * * **NOTE**: Use `clearConfiguredLanguageAssociations` to remove all associations registered using this function.
  */
-export function registerConfiguredLanguageAssociation(association: ILanguageAssociation): void {
+export function registerConfiguredLanguageAssociation(association: ILanguageAssociation): codemavi {
 	_registerLanguageAssociation(association, true, false);
 }
 
-function _registerLanguageAssociation(association: ILanguageAssociation, userConfigured: boolean, warnOnOverwrite: boolean): void {
+function _registerLanguageAssociation(association: ILanguageAssociation, userConfigured: boolean, warnOnOverwrite: boolean): codemavi {
 
 	// Register
 	const associationItem = toLanguageAssociationItem(association, userConfigured);
@@ -107,7 +107,7 @@ function toLanguageAssociationItem(association: ILanguageAssociation, userConfig
 /**
  * Clear language associations from the registry (platform).
  */
-export function clearPlatformLanguageAssociations(): void {
+export function clearPlatformLanguageAssociations(): codemavi {
 	registeredAssociations = registeredAssociations.filter(a => a.userConfigured);
 	nonUserRegisteredAssociations = [];
 }
@@ -115,7 +115,7 @@ export function clearPlatformLanguageAssociations(): void {
 /**
  * Clear language associations from the registry (configured).
  */
-export function clearConfiguredLanguageAssociations(): void {
+export function clearConfiguredLanguageAssociations(): codemavi {
 	registeredAssociations = registeredAssociations.filter(a => !a.userConfigured);
 	userRegisteredAssociations = [];
 }

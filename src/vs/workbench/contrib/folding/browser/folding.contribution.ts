@@ -36,7 +36,7 @@ class DefaultFoldingRangeProvider extends Disposable implements IWorkbenchContri
 		this._updateConfigValues();
 	}
 
-	private async _updateConfigValues(): Promise<void> {
+	private async _updateConfigValues(): Promise<codemavi> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 
 		DefaultFoldingRangeProvider.extensionIds.length = 0;

@@ -250,7 +250,7 @@ suite('vscode API - quick input', function () {
 	});
 });
 
-function createQuickPick(expected: QuickPickExpected, done: (err?: any) => void, record = false) {
+function createQuickPick(expected: QuickPickExpected, done: (err?: any) => codemavi, record = false) {
 	const quickPick = window.createQuickPick();
 	let eventIndex = -1;
 	quickPick.onDidChangeActive(items => {

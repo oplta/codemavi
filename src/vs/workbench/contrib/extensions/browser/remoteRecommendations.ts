@@ -19,7 +19,7 @@ export class RemoteRecommendations extends ExtensionRecommendations {
 		super();
 	}
 
-	protected async doActivate(): Promise<void> {
+	protected async doActivate(): Promise<codemavi> {
 		const extensionTips = { ...this.productService.remoteExtensionTips, ...this.productService.virtualWorkspaceExtensionTips };
 		const currentPlatform = PlatformToString(platform);
 		this._recommendations = Object.values(extensionTips).filter(({ supportedPlatforms }) => !supportedPlatforms || supportedPlatforms.includes(currentPlatform)).map(extension => ({

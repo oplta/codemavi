@@ -47,7 +47,7 @@ export class BrowserWorkspaceEditingService extends AbstractWorkspaceEditingServ
 		super(jsonEditingService, contextService, configurationService, notificationService, commandService, fileService, textFileService, workspacesService, environmentService, fileDialogService, dialogService, hostService, uriIdentityService, workspaceTrustManagementService, userDataProfilesService, userDataProfileService);
 	}
 
-	async enterWorkspace(workspaceUri: URI): Promise<void> {
+	async enterWorkspace(workspaceUri: URI): Promise<codemavi> {
 		const result = await this.doEnterWorkspace(workspaceUri);
 		if (result) {
 

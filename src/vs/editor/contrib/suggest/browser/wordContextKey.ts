@@ -29,13 +29,13 @@ export class WordContextKey {
 		this._update();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._configListener.dispose();
 		this._selectionListener?.dispose();
 		this._ckAtEnd.reset();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		// only update this when tab completions are enabled
 		const enabled = this._editor.getOption(EditorOption.tabCompletion) === 'on';
 		if (this._enabled === enabled) {

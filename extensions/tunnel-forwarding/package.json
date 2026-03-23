@@ -50,7 +50,7 @@
     "printWidth": 100,
     "trailingComma": "all",
     "singleQuote": true,
-    "arrowParens": "avoid"
+    "arrowParens": "acodemavi"
   },
   "repository": {
     "type": "git",

@@ -89,7 +89,7 @@ function _factory(sharedObj: any) {
 
 const perf = _factory(globalThis);
 
-export const mark: (name: string, markOptions?: { startTime?: number }) => void = perf.mark;
+export const mark: (name: string, markOptions?: { startTime?: number }) => codemavi = perf.mark;
 
 export interface PerformanceMark {
 	readonly name: string;

@@ -40,7 +40,7 @@ class DecorationRequestsQueue {
 		return result.finally(() => sub.dispose());
 	}
 
-	private _processQueue(): void {
+	private _processQueue(): codemavi {
 		if (typeof this._timer === 'number') {
 			// already queued
 			return;
@@ -81,7 +81,7 @@ export class MainThreadDecorations implements MainThreadDecorationsShape {
 		this._provider.clear();
 	}
 
-	$registerDecorationProvider(handle: number, label: string): void {
+	$registerDecorationProvider(handle: number, label: string): codemavi {
 		const emitter = new Emitter<URI[]>();
 		const queue = new DecorationRequestsQueue(this._proxy, handle);
 		const registration = this._decorationsService.registerDecorationsProvider({
@@ -105,7 +105,7 @@ export class MainThreadDecorations implements MainThreadDecorationsShape {
 		this._provider.set(handle, [emitter, registration]);
 	}
 
-	$onDidChange(handle: number, resources: UriComponents[]): void {
+	$onDidChange(handle: number, resources: UriComponents[]): codemavi {
 		const provider = this._provider.get(handle);
 		if (provider) {
 			const [emitter] = provider;
@@ -113,7 +113,7 @@ export class MainThreadDecorations implements MainThreadDecorationsShape {
 		}
 	}
 
-	$unregisterDecorationProvider(handle: number): void {
+	$unregisterDecorationProvider(handle: number): codemavi {
 		const provider = this._provider.get(handle);
 		if (provider) {
 			dispose(provider);

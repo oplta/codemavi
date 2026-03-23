@@ -189,7 +189,7 @@ export class TerminalViewPane extends ViewPane {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		if (!this._parentDomElement) {
@@ -237,7 +237,7 @@ export class TerminalViewPane extends ViewPane {
 		this.layoutBody(this._parentDomElement.offsetHeight, this._parentDomElement.offsetWidth);
 	}
 
-	private _createTabsView(): void {
+	private _createTabsView(): codemavi {
 		if (!this._parentDomElement) {
 			return;
 		}
@@ -245,7 +245,7 @@ export class TerminalViewPane extends ViewPane {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this._terminalTabbedView?.layout(width, height);
 	}
@@ -315,7 +315,7 @@ export class TerminalViewPane extends ViewPane {
 		return this._keybindingService.lookupKeybinding(action.id)?.getLabel() ?? undefined;
 	}
 
-	private _updateTabActionBar(profiles: ITerminalProfile[]): void {
+	private _updateTabActionBar(profiles: ITerminalProfile[]): codemavi {
 		const actions = getTerminalActionBarArgs(TerminalLocation.Panel, profiles, this._getDefaultProfileName(), this._terminalProfileService.contributedProfiles, this._terminalService, this._dropdownMenu, this._disposableStore);
 		this._newDropdown.value?.update(actions.dropdownAction, actions.dropdownMenuActions);
 	}
@@ -374,13 +374,13 @@ class SwitchTerminalActionViewItem extends SelectActionViewItem {
 		this._register(_terminalService.onAnyInstancePrimaryStatusChange(() => this._updateItems(), this));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		container.classList.add('switch-terminal');
 		container.style.borderColor = asCssVariable(selectBorder);
 	}
 
-	private _updateItems(): void {
+	private _updateItems(): codemavi {
 		const options = getTerminalSelectOpenItems(this._terminalService, this._terminalGroupService);
 		this.setOptions(options, this._terminalGroupService.activeGroupIndex);
 	}
@@ -451,7 +451,7 @@ class SingleTerminalTabActionViewItem extends MenuEntryActionViewItem {
 		this._register(toDisposable(() => dispose(this._elementDisposables)));
 	}
 
-	override async onClick(event: MouseEvent): Promise<void> {
+	override async onClick(event: MouseEvent): Promise<codemavi> {
 		this._terminalGroupService.lastAccessedMenu = 'inline-tab';
 		if (event.altKey && this._menuItemAction.alt) {
 			this._commandService.executeCommand(this._menuItemAction.alt.id, { location: TerminalLocation.Panel } satisfies ICreateTerminalOptions);
@@ -461,7 +461,7 @@ class SingleTerminalTabActionViewItem extends MenuEntryActionViewItem {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	protected override updateLabel(e?: ITerminalInstance): void {
+	protected override updateLabel(e?: ITerminalInstance): codemavi {
 		// Only update if it's the active instance
 		if (e && e !== this._terminalGroupService.activeInstance) {
 			return;
@@ -599,17 +599,17 @@ class TerminalThemeIconStyle extends Themable {
 		this.updateStyles();
 	}
 
-	private _registerListeners(): void {
+	private _registerListeners(): codemavi {
 		this._register(this._terminalService.onAnyInstanceIconChange(() => this.updateStyles()));
 		this._register(this._terminalService.onDidChangeInstances(() => this.updateStyles()));
 		this._register(this._terminalGroupService.onDidChangeGroups(() => this.updateStyles()));
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		super.updateStyles();
 		const colorTheme = this._themeService.getColorTheme();
 
-		// TODO: add a rule collector to avoid duplication
+		// TODO: add a rule collector to acodemavi duplication
 		let css = '';
 
 		// Add icons

@@ -40,7 +40,7 @@ class SelectionAnchorController implements IEditorContribution {
 		this.modelChangeListener = editor.onDidChangeModel(() => this.selectionAnchorSetContextKey.reset());
 	}
 
-	setSelectionAnchor(): void {
+	setSelectionAnchor(): codemavi {
 		if (this.editor.hasModel()) {
 			const position = this.editor.getPosition();
 			this.editor.changeDecorations((accessor) => {
@@ -62,7 +62,7 @@ class SelectionAnchorController implements IEditorContribution {
 		}
 	}
 
-	goToSelectionAnchor(): void {
+	goToSelectionAnchor(): codemavi {
 		if (this.editor.hasModel() && this.decorationId) {
 			const anchorPosition = this.editor.getModel().getDecorationRange(this.decorationId);
 			if (anchorPosition) {
@@ -71,7 +71,7 @@ class SelectionAnchorController implements IEditorContribution {
 		}
 	}
 
-	selectFromAnchorToCursor(): void {
+	selectFromAnchorToCursor(): codemavi {
 		if (this.editor.hasModel() && this.decorationId) {
 			const start = this.editor.getModel().getDecorationRange(this.decorationId);
 			if (start) {
@@ -82,7 +82,7 @@ class SelectionAnchorController implements IEditorContribution {
 		}
 	}
 
-	cancelSelectionAnchor(): void {
+	cancelSelectionAnchor(): codemavi {
 		if (this.decorationId) {
 			const decorationId = this.decorationId;
 			this.editor.changeDecorations((accessor) => {
@@ -93,7 +93,7 @@ class SelectionAnchorController implements IEditorContribution {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.cancelSelectionAnchor();
 		this.modelChangeListener.dispose();
 	}
@@ -113,7 +113,7 @@ class SetSelectionAnchor extends EditorAction {
 		});
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		SelectionAnchorController.get(editor)?.setSelectionAnchor();
 	}
 }
@@ -127,7 +127,7 @@ class GoToSelectionAnchor extends EditorAction {
 		});
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		SelectionAnchorController.get(editor)?.goToSelectionAnchor();
 	}
 }
@@ -146,7 +146,7 @@ class SelectFromAnchorToCursor extends EditorAction {
 		});
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		SelectionAnchorController.get(editor)?.selectFromAnchorToCursor();
 	}
 }
@@ -165,7 +165,7 @@ class CancelSelectionAnchor extends EditorAction {
 		});
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		SelectionAnchorController.get(editor)?.cancelSelectionAnchor();
 	}
 }

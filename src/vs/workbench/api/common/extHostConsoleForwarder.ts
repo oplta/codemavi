@@ -37,7 +37,7 @@ export abstract class AbstractExtHostConsoleForwarder {
 	 * as well. This is needed since the console methods are "magic" in V8 and
 	 * are the only methods that allow later introspection of logged variables.
 	 *
-	 * The wrapped property is not defined with `writable: false` to avoid
+	 * The wrapped property is not defined with `writable: false` to acodemavi
 	 * throwing errors, but rather a no-op setting. See https://github.com/microsoft/vscode-extension-telemetry/issues/88
 	 */
 	private _wrapConsoleMethod(method: 'log' | 'info' | 'warn' | 'error' | 'debug', severity: 'log' | 'warn' | 'error' | 'debug') {
@@ -52,7 +52,7 @@ export abstract class AbstractExtHostConsoleForwarder {
 		});
 	}
 
-	private _handleConsoleCall(method: 'log' | 'info' | 'warn' | 'error' | 'debug', severity: 'log' | 'warn' | 'error' | 'debug', original: (...args: any[]) => void, args: IArguments): void {
+	private _handleConsoleCall(method: 'log' | 'info' | 'warn' | 'error' | 'debug', severity: 'log' | 'warn' | 'error' | 'debug', original: (...args: any[]) => codemavi, args: IArguments): codemavi {
 		this._mainThreadConsole.$logExtensionHostMessage({
 			type: '__$console',
 			severity,
@@ -63,7 +63,7 @@ export abstract class AbstractExtHostConsoleForwarder {
 		}
 	}
 
-	protected abstract _nativeConsoleLogMessage(method: 'log' | 'info' | 'warn' | 'error' | 'debug', original: (...args: any[]) => void, args: IArguments): void;
+	protected abstract _nativeConsoleLogMessage(method: 'log' | 'info' | 'warn' | 'error' | 'debug', original: (...args: any[]) => codemavi, args: IArguments): codemavi;
 
 }
 

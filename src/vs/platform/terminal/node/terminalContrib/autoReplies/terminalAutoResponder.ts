@@ -19,7 +19,7 @@ export class TerminalAutoResponder extends Disposable {
 	private _paused = false;
 
 	/**
-	 * Each reply is throttled by a second to avoid resource starvation and responding to screen
+	 * Each reply is throttled by a second to acodemavi resource starvation and responding to screen
 	 * reprints on Winodws.
 	 */
 	private _throttled = false;

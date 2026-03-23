@@ -64,16 +64,16 @@ export class McpServerRequestHandler extends Disposable {
 	private readonly _onDidReceiveProgressNotification = this._register(new Emitter<MCP.ProgressNotification>());
 	readonly onDidReceiveProgressNotification = this._onDidReceiveProgressNotification.event;
 
-	private readonly _onDidChangeResourceList = this._register(new Emitter<void>());
+	private readonly _onDidChangeResourceList = this._register(new Emitter<codemavi>());
 	readonly onDidChangeResourceList = this._onDidChangeResourceList.event;
 
 	private readonly _onDidUpdateResource = this._register(new Emitter<MCP.ResourceUpdatedNotification>());
 	readonly onDidUpdateResource = this._onDidUpdateResource.event;
 
-	private readonly _onDidChangeToolList = this._register(new Emitter<void>());
+	private readonly _onDidChangeToolList = this._register(new Emitter<codemavi>());
 	readonly onDidChangeToolList = this._onDidChangeToolList.event;
 
-	private readonly _onDidChangePromptList = this._register(new Emitter<void>());
+	private readonly _onDidChangePromptList = this._register(new Emitter<codemavi>());
 	readonly onDidChangePromptList = this._onDidChangePromptList.event;
 
 	/**
@@ -186,7 +186,7 @@ export class McpServerRequestHandler extends Disposable {
 	}
 
 	private send(mcp: MCP.JSONRPCMessage) {
-		if (canLog(this.logger.getLevel(), LogLevel.Debug)) { // avoid building the string if we don't need to
+		if (canLog(this.logger.getLevel(), LogLevel.Debug)) { // acodemavi building the string if we don't need to
 			this.logger.debug(`[editor -> server] ${JSON.stringify(mcp)}`);
 		}
 
@@ -220,15 +220,15 @@ export class McpServerRequestHandler extends Disposable {
 		return allItems;
 	}
 
-	private sendNotification<N extends MCP.ClientNotification>(notification: N): void {
+	private sendNotification<N extends MCP.ClientNotification>(notification: N): codemavi {
 		this.send({ ...notification, jsonrpc: MCP.JSONRPC_VERSION });
 	}
 
 	/**
 	 * Handle incoming messages from the server
 	 */
-	private handleMessage(message: MCP.JSONRPCMessage): void {
-		if (canLog(this.logger.getLevel(), LogLevel.Debug)) { // avoid building the string if we don't need to
+	private handleMessage(message: MCP.JSONRPCMessage): codemavi {
+		if (canLog(this.logger.getLevel(), LogLevel.Debug)) { // acodemavi building the string if we don't need to
 			this.logger.debug(`[server <- editor] ${JSON.stringify(message)}`);
 		}
 
@@ -255,7 +255,7 @@ export class McpServerRequestHandler extends Disposable {
 	/**
 	 * Handle successful responses
 	 */
-	private handleResult(response: MCP.JSONRPCResponse): void {
+	private handleResult(response: MCP.JSONRPCResponse): codemavi {
 		const request = this._pendingRequests.get(response.id);
 		if (request) {
 			this._pendingRequests.delete(response.id);
@@ -266,7 +266,7 @@ export class McpServerRequestHandler extends Disposable {
 	/**
 	 * Handle error responses
 	 */
-	private handleError(response: MCP.JSONRPCError): void {
+	private handleError(response: MCP.JSONRPCError): codemavi {
 		const request = this._pendingRequests.get(response.id);
 		if (request) {
 			this._pendingRequests.delete(response.id);
@@ -277,7 +277,7 @@ export class McpServerRequestHandler extends Disposable {
 	/**
 	 * Handle incoming server requests
 	 */
-	private handleServerRequest(request: MCP.JSONRPCRequest & MCP.ServerRequest): void {
+	private handleServerRequest(request: MCP.JSONRPCRequest & MCP.ServerRequest): codemavi {
 		switch (request.method) {
 			case 'ping':
 				return this.respondToRequest(request, this.handlePing(request));
@@ -301,7 +301,7 @@ export class McpServerRequestHandler extends Disposable {
 	/**
 	 * Handle incoming server notifications
 	 */
-	private handleServerNotification(request: MCP.JSONRPCNotification & MCP.ServerNotification): void {
+	private handleServerNotification(request: MCP.JSONRPCNotification & MCP.ServerNotification): codemavi {
 		switch (request.method) {
 			case 'notifications/message':
 				return this.handleLoggingNotification(request);
@@ -326,7 +326,7 @@ export class McpServerRequestHandler extends Disposable {
 		}
 	}
 
-	private handleCancelledNotification(request: MCP.CancelledNotification): void {
+	private handleCancelledNotification(request: MCP.CancelledNotification): codemavi {
 		const pendingRequest = this._pendingRequests.get(request.params.requestId);
 		if (pendingRequest) {
 			this._pendingRequests.delete(request.params.requestId);
@@ -334,7 +334,7 @@ export class McpServerRequestHandler extends Disposable {
 		}
 	}
 
-	private handleLoggingNotification(request: MCP.LoggingMessageNotification): void {
+	private handleLoggingNotification(request: MCP.LoggingMessageNotification): codemavi {
 		let contents = typeof request.params.data === 'string' ? request.params.data : JSON.stringify(request.params.data);
 		if (request.params.logger) {
 			contents = `${request.params.logger}: ${contents}`;
@@ -366,7 +366,7 @@ export class McpServerRequestHandler extends Disposable {
 	/**
 	 * Send a generic response to a request
 	 */
-	private respondToRequest(request: MCP.JSONRPCRequest, result: MCP.Result): void {
+	private respondToRequest(request: MCP.JSONRPCRequest, result: MCP.Result): codemavi {
 		const response: MCP.JSONRPCResponse = {
 			jsonrpc: MCP.JSONRPC_VERSION,
 			id: request.id,
@@ -395,7 +395,7 @@ export class McpServerRequestHandler extends Disposable {
 		this._pendingRequests.clear();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.cancelAllRequests();
 		super.dispose();
 	}

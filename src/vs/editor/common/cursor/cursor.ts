@@ -56,18 +56,18 @@ export class CursorsController extends Disposable {
 		this._prevEditOperationType = EditOperationType.Other;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._cursors.dispose();
 		this._autoClosedActions = dispose(this._autoClosedActions);
 		super.dispose();
 	}
 
-	public updateConfiguration(cursorConfig: CursorConfiguration): void {
+	public updateConfiguration(cursorConfig: CursorConfiguration): codemavi {
 		this.context = new CursorContext(this._model, this._viewModel, this._coordinatesConverter, cursorConfig);
 		this._cursors.updateContext(this.context);
 	}
 
-	public onLineMappingChanged(eventsCollector: ViewModelEventsCollector): void {
+	public onLineMappingChanged(eventsCollector: ViewModelEventsCollector): codemavi {
 		if (this._knownModelVersionId !== this._model.getVersionId()) {
 			// There are model change events that I didn't yet receive.
 			//
@@ -82,11 +82,11 @@ export class CursorsController extends Disposable {
 		this.setStates(eventsCollector, 'viewModel', CursorChangeReason.NotSet, this.getCursorStates());
 	}
 
-	public setHasFocus(hasFocus: boolean): void {
+	public setHasFocus(hasFocus: boolean): codemavi {
 		this._hasFocus = hasFocus;
 	}
 
-	private _validateAutoClosedActions(): void {
+	private _validateAutoClosedActions(): codemavi {
 		if (this._autoClosedActions.length > 0) {
 			const selections: Range[] = this._cursors.getSelections();
 			for (let i = 0; i < this._autoClosedActions.length; i++) {
@@ -133,11 +133,11 @@ export class CursorsController extends Disposable {
 		return this._emitStateChangedIfNecessary(eventsCollector, source, reason, oldState, reachedMaxCursorCount);
 	}
 
-	public setCursorColumnSelectData(columnSelectData: IColumnSelectData): void {
+	public setCursorColumnSelectData(columnSelectData: IColumnSelectData): codemavi {
 		this._columnSelectData = columnSelectData;
 	}
 
-	public revealAll(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, minimalReveal: boolean, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): void {
+	public revealAll(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, minimalReveal: boolean, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): codemavi {
 		const viewPositions = this._cursors.getViewPositions();
 
 		let revealViewRange: Range | null = null;
@@ -151,7 +151,7 @@ export class CursorsController extends Disposable {
 		eventsCollector.emitViewEvent(new ViewRevealRangeRequestEvent(source, minimalReveal, revealViewRange, revealViewSelections, verticalType, revealHorizontal, scrollType));
 	}
 
-	public revealPrimary(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, minimalReveal: boolean, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): void {
+	public revealPrimary(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, minimalReveal: boolean, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): codemavi {
 		const primaryCursor = this._cursors.getPrimaryCursor();
 		const revealViewSelections = [primaryCursor.viewState.selection];
 		eventsCollector.emitViewEvent(new ViewRevealRangeRequestEvent(source, minimalReveal, null, revealViewSelections, verticalType, revealHorizontal, scrollType));
@@ -181,7 +181,7 @@ export class CursorsController extends Disposable {
 		return result;
 	}
 
-	public restoreState(eventsCollector: ViewModelEventsCollector, states: editorCommon.ICursorState[]): void {
+	public restoreState(eventsCollector: ViewModelEventsCollector, states: editorCommon.ICursorState[]): codemavi {
 
 		const desiredSelections: ISelection[] = [];
 
@@ -191,7 +191,7 @@ export class CursorsController extends Disposable {
 			let positionLineNumber = 1;
 			let positionColumn = 1;
 
-			// Avoid missing properties on the literal
+			// Acodemavi missing properties on the literal
 			if (state.position && state.position.lineNumber) {
 				positionLineNumber = state.position.lineNumber;
 			}
@@ -202,7 +202,7 @@ export class CursorsController extends Disposable {
 			let selectionStartLineNumber = positionLineNumber;
 			let selectionStartColumn = positionColumn;
 
-			// Avoid missing properties on the literal
+			// Acodemavi missing properties on the literal
 			if (state.selectionStart && state.selectionStart.lineNumber) {
 				selectionStartLineNumber = state.selectionStart.lineNumber;
 			}
@@ -222,7 +222,7 @@ export class CursorsController extends Disposable {
 		this.revealAll(eventsCollector, 'restoreState', false, VerticalRevealType.Simple, true, editorCommon.ScrollType.Immediate);
 	}
 
-	public onModelContentChanged(eventsCollector: ViewModelEventsCollector, event: InternalModelContentChangeEvent | ModelInjectedTextChangedEvent): void {
+	public onModelContentChanged(eventsCollector: ViewModelEventsCollector, event: InternalModelContentChangeEvent | ModelInjectedTextChangedEvent): codemavi {
 		if (event instanceof ModelInjectedTextChangedEvent) {
 			// If injected texts change, the view positions of all cursors need to be updated.
 			if (this._isHandling) {
@@ -305,7 +305,7 @@ export class CursorsController extends Disposable {
 		return this._cursors.getPrimaryCursor().modelState.position;
 	}
 
-	public setSelections(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, selections: readonly ISelection[], reason: CursorChangeReason): void {
+	public setSelections(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, selections: readonly ISelection[], reason: CursorChangeReason): codemavi {
 		this.setStates(eventsCollector, source, reason, CursorState.fromModelSelections(selections));
 	}
 
@@ -313,13 +313,13 @@ export class CursorsController extends Disposable {
 		return this._prevEditOperationType;
 	}
 
-	public setPrevEditOperationType(type: EditOperationType): void {
+	public setPrevEditOperationType(type: EditOperationType): codemavi {
 		this._prevEditOperationType = type;
 	}
 
 	// ------ auxiliary handling logic
 
-	private _pushAutoClosedAction(autoClosedCharactersRanges: Range[], autoClosedEnclosingRanges: Range[]): void {
+	private _pushAutoClosedAction(autoClosedCharactersRanges: Range[], autoClosedEnclosingRanges: Range[]): codemavi {
 		const autoClosedCharactersDeltaDecorations: IModelDeltaDecoration[] = [];
 		const autoClosedEnclosingDeltaDecorations: IModelDeltaDecoration[] = [];
 
@@ -346,7 +346,7 @@ export class CursorsController extends Disposable {
 		this._autoClosedActions.push(new AutoClosedAction(this._model, autoClosedCharactersDecorations, autoClosedEnclosingDecorations));
 	}
 
-	private _executeEditOperation(opResult: EditOperationResult | null): void {
+	private _executeEditOperation(opResult: EditOperationResult | null): codemavi {
 
 		if (!opResult) {
 			// Nothing to execute
@@ -386,7 +386,7 @@ export class CursorsController extends Disposable {
 		}
 	}
 
-	private _interpretCommandResult(cursorState: Selection[] | null): void {
+	private _interpretCommandResult(cursorState: Selection[] | null): codemavi {
 		if (!cursorState || cursorState.length === 0) {
 			cursorState = this._cursors.readSelectionFromMarkers();
 		}
@@ -463,7 +463,7 @@ export class CursorsController extends Disposable {
 		return indices;
 	}
 
-	public executeEdits(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, edits: IIdentifiedSingleEditOperation[], cursorStateComputer: ICursorStateComputer): void {
+	public executeEdits(eventsCollector: ViewModelEventsCollector, source: string | null | undefined, edits: IIdentifiedSingleEditOperation[], cursorStateComputer: ICursorStateComputer): codemavi {
 		let autoClosingIndices: [number, number][] | null = null;
 		if (source === 'snippet') {
 			autoClosingIndices = this._findAutoClosingPairs(edits);
@@ -505,7 +505,7 @@ export class CursorsController extends Disposable {
 		}
 	}
 
-	private _executeEdit(callback: () => void, eventsCollector: ViewModelEventsCollector, source: string | null | undefined, cursorChangeReason: CursorChangeReason = CursorChangeReason.NotSet): void {
+	private _executeEdit(callback: () => codemavi, eventsCollector: ViewModelEventsCollector, source: string | null | undefined, cursorChangeReason: CursorChangeReason = CursorChangeReason.NotSet): codemavi {
 		if (this.context.cursorConfig.readOnly) {
 			// we cannot edit when read only...
 			return;
@@ -534,11 +534,11 @@ export class CursorsController extends Disposable {
 		return AutoClosedAction.getAllAutoClosedCharacters(this._autoClosedActions);
 	}
 
-	public startComposition(eventsCollector: ViewModelEventsCollector): void {
+	public startComposition(eventsCollector: ViewModelEventsCollector): codemavi {
 		this._compositionState = new CompositionState(this._model, this.getSelections());
 	}
 
-	public endComposition(eventsCollector: ViewModelEventsCollector, source?: string | null | undefined): void {
+	public endComposition(eventsCollector: ViewModelEventsCollector, source?: string | null | undefined): codemavi {
 		const compositionOutcome = this._compositionState ? this._compositionState.deduceOutcome(this._model, this.getSelections()) : null;
 		this._compositionState = null;
 
@@ -550,7 +550,7 @@ export class CursorsController extends Disposable {
 		}, eventsCollector, source);
 	}
 
-	public type(eventsCollector: ViewModelEventsCollector, text: string, source?: string | null | undefined): void {
+	public type(eventsCollector: ViewModelEventsCollector, text: string, source?: string | null | undefined): codemavi {
 		this._executeEdit(() => {
 			if (source === 'keyboard') {
 				// If this event is coming straight from the keyboard, look for electric characters and enter
@@ -573,7 +573,7 @@ export class CursorsController extends Disposable {
 		}, eventsCollector, source);
 	}
 
-	public compositionType(eventsCollector: ViewModelEventsCollector, text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number, source?: string | null | undefined): void {
+	public compositionType(eventsCollector: ViewModelEventsCollector, text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number, source?: string | null | undefined): codemavi {
 		if (text.length === 0 && replacePrevCharCnt === 0 && replaceNextCharCnt === 0) {
 			// this edit is a no-op
 			if (positionDelta !== 0) {
@@ -591,19 +591,19 @@ export class CursorsController extends Disposable {
 		}, eventsCollector, source);
 	}
 
-	public paste(eventsCollector: ViewModelEventsCollector, text: string, pasteOnNewLine: boolean, multicursorText?: string[] | null | undefined, source?: string | null | undefined): void {
+	public paste(eventsCollector: ViewModelEventsCollector, text: string, pasteOnNewLine: boolean, multicursorText?: string[] | null | undefined, source?: string | null | undefined): codemavi {
 		this._executeEdit(() => {
 			this._executeEditOperation(TypeOperations.paste(this.context.cursorConfig, this._model, this.getSelections(), text, pasteOnNewLine, multicursorText || []));
 		}, eventsCollector, source, CursorChangeReason.Paste);
 	}
 
-	public cut(eventsCollector: ViewModelEventsCollector, source?: string | null | undefined): void {
+	public cut(eventsCollector: ViewModelEventsCollector, source?: string | null | undefined): codemavi {
 		this._executeEdit(() => {
 			this._executeEditOperation(DeleteOperations.cut(this.context.cursorConfig, this._model, this.getSelections()));
 		}, eventsCollector, source);
 	}
 
-	public executeCommand(eventsCollector: ViewModelEventsCollector, command: editorCommon.ICommand, source?: string | null | undefined): void {
+	public executeCommand(eventsCollector: ViewModelEventsCollector, command: editorCommon.ICommand, source?: string | null | undefined): codemavi {
 		this._executeEdit(() => {
 			this._cursors.killSecondaryCursors();
 
@@ -614,7 +614,7 @@ export class CursorsController extends Disposable {
 		}, eventsCollector, source);
 	}
 
-	public executeCommands(eventsCollector: ViewModelEventsCollector, commands: editorCommon.ICommand[], source?: string | null | undefined): void {
+	public executeCommands(eventsCollector: ViewModelEventsCollector, commands: editorCommon.ICommand[], source?: string | null | undefined): codemavi {
 		this._executeEdit(() => {
 			this._executeEditOperation(new EditOperationResult(EditOperationType.Other, commands, {
 				shouldPushStackElementBefore: false,
@@ -678,7 +678,7 @@ class AutoClosedAction {
 		this._autoClosedEnclosingDecorations = autoClosedEnclosingDecorations;
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._autoClosedCharactersDecorations = this._model.deltaDecorations(this._autoClosedCharactersDecorations, []);
 		this._autoClosedEnclosingDecorations = this._model.deltaDecorations(this._autoClosedEnclosingDecorations, []);
 	}

@@ -41,8 +41,8 @@
 		 * Use polling to track focus of main webview and iframes within the webview
 		 *
 		 * @param {Object} handlers
-		 * @param {() => void} handlers.onFocus
-		 * @param {() => void} handlers.onBlur
+		 * @param {() => codemavi} handlers.onFocus
+		 * @param {() => codemavi} handlers.onBlur
 		 */
 		const trackFocus = ({ onFocus, onBlur }) => {
 			const interval = 250;
@@ -226,7 +226,7 @@
 				`;
 		}
 
-		/** @type {Promise<void>} */
+		/** @type {Promise<codemavi>} */
 		const workerReady = new Promise((resolve, reject) => {
 			if (disableServiceWorker) {
 				return resolve();
@@ -311,7 +311,7 @@
 			constructor() {
 				this.channel = new MessageChannel();
 
-				/** @type {Map<string, Array<(event: MessageEvent, data: any) => void>>} */
+				/** @type {Map<string, Array<(event: MessageEvent, data: any) => codemavi>>} */
 				this.handlers = new Map();
 
 				this.channel.port1.onmessage = (e) => {
@@ -823,7 +823,7 @@
 		}
 
 		/**
-		 * @param {() => void} callback
+		 * @param {() => codemavi} callback
 		 */
 		function onDomReady(callback) {
 			if (document.readyState === 'interactive' || document.readyState === 'complete') {
@@ -984,7 +984,7 @@
 				const frame = getActiveFrame();
 				const wasFirstLoad = firstLoad;
 				// keep current scrollY around and use later
-				/** @type {(body: HTMLElement, window: Window) => void} */
+				/** @type {(body: HTMLElement, window: Window) => codemavi} */
 				let setInitialScrollPosition;
 				if (firstLoad) {
 					firstLoad = false;

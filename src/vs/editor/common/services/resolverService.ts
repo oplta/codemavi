@@ -46,7 +46,7 @@ export interface ITextEditorModel extends IResolvableEditorModel {
 	/**
 	 * Emitted when the text model is about to be disposed.
 	 */
-	readonly onWillDispose: Event<void>;
+	readonly onWillDispose: Event<codemavi>;
 
 	/**
 	 * Provides access to the underlying `ITextModel`.

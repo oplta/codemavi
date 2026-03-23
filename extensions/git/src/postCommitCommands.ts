@@ -11,7 +11,7 @@ import { dispose } from './util';
 import { OperationKind } from './operation';
 
 export interface IPostCommitCommandsProviderRegistry {
-	readonly onDidChangePostCommitCommandsProviders: Event<void>;
+	readonly onDidChangePostCommitCommandsProviders: Event<codemavi>;
 
 	getPostCommitCommandsProviders(): PostCommitCommandsProvider[];
 	registerPostCommitCommandsProvider(provider: PostCommitCommandsProvider): Disposable;
@@ -75,8 +75,8 @@ export class GitPostCommitCommandsProvider implements PostCommitCommandsProvider
 
 export class CommitCommandsCenter {
 
-	private _onDidChange = new EventEmitter<void>();
-	get onDidChange(): Event<void> { return this._onDidChange.event; }
+	private _onDidChange = new EventEmitter<codemavi>();
+	get onDidChange(): Event<codemavi> { return this._onDidChange.event; }
 
 	private disposables: Disposable[] = [];
 
@@ -143,7 +143,7 @@ export class CommitCommandsCenter {
 		return commandGroups;
 	}
 
-	async executePostCommitCommand(command: string | null | undefined): Promise<void> {
+	async executePostCommitCommand(command: string | null | undefined): Promise<codemavi> {
 		try {
 			if (command === null) {
 				// No post-commit command
@@ -219,7 +219,7 @@ export class CommitCommandsCenter {
 		return this.globalState.get<string | null>(this.getGlobalStateKey());
 	}
 
-	private async migratePostCommitCommandStorage(): Promise<void> {
+	private async migratePostCommitCommandStorage(): Promise<codemavi> {
 		const postCommitCommandString = this.globalState.get<string | null>(this.repository.root);
 
 		if (postCommitCommandString !== undefined) {
@@ -233,7 +233,7 @@ export class CommitCommandsCenter {
 		return config.get<boolean>('rememberPostCommitCommand') === true;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables = dispose(this.disposables);
 	}
 }

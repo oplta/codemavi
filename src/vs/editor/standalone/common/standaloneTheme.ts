@@ -29,14 +29,14 @@ export interface IStandaloneTheme extends IColorTheme {
 export interface IStandaloneThemeService extends IThemeService {
 	readonly _serviceBrand: undefined;
 
-	setTheme(themeName: string): void;
+	setTheme(themeName: string): codemavi;
 
-	setAutoDetectHighContrast(autoDetectHighContrast: boolean): void;
+	setAutoDetectHighContrast(autoDetectHighContrast: boolean): codemavi;
 
-	defineTheme(themeName: string, themeData: IStandaloneThemeData): void;
+	defineTheme(themeName: string, themeData: IStandaloneThemeData): codemavi;
 
 	getColorTheme(): IStandaloneTheme;
 
-	setColorMapOverride(colorMapOverride: Color[] | null): void;
+	setColorMapOverride(colorMapOverride: Color[] | null): codemavi;
 
 }

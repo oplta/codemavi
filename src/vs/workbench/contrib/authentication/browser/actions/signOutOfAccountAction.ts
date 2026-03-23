@@ -21,7 +21,7 @@ export class SignOutOfAccountAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, { providerId, accountLabel }: { providerId: string; accountLabel: string }): Promise<void> {
+	override async run(accessor: ServicesAccessor, { providerId, accountLabel }: { providerId: string; accountLabel: string }): Promise<codemavi> {
 		const authenticationService = accessor.get(IAuthenticationService);
 		const authenticationUsageService = accessor.get(IAuthenticationUsageService);
 		const authenticationAccessService = accessor.get(IAuthenticationAccessService);

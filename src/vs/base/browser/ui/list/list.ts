@@ -15,15 +15,15 @@ export interface IListVirtualDelegate<T> {
 	getTemplateId(element: T): string;
 	hasDynamicHeight?(element: T): boolean;
 	getDynamicHeight?(element: T): number | null;
-	setDynamicHeight?(element: T, height: number): void;
+	setDynamicHeight?(element: T, height: number): codemavi;
 }
 
 export interface IListRenderer<T, TTemplateData> {
 	readonly templateId: string;
 	renderTemplate(container: HTMLElement): TTemplateData;
-	renderElement(element: T, index: number, templateData: TTemplateData, height: number | undefined): void;
-	disposeElement?(element: T, index: number, templateData: TTemplateData, height: number | undefined): void;
-	disposeTemplate(templateData: TTemplateData): void;
+	renderElement(element: T, index: number, templateData: TTemplateData, height: number | undefined): codemavi;
+	disposeElement?(element: T, index: number, templateData: TTemplateData, height: number | undefined): codemavi;
+	disposeTemplate(templateData: TTemplateData): codemavi;
 }
 
 export interface IListEvent<T> {
@@ -120,11 +120,11 @@ export const ListDragOverReactions = {
 export interface IListDragAndDrop<T> extends IDisposable {
 	getDragURI(element: T): string | null;
 	getDragLabel?(elements: T[], originalEvent: DragEvent): string | undefined;
-	onDragStart?(data: IDragAndDropData, originalEvent: DragEvent): void;
+	onDragStart?(data: IDragAndDropData, originalEvent: DragEvent): codemavi;
 	onDragOver(data: IDragAndDropData, targetElement: T | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): boolean | IListDragOverReaction;
-	onDragLeave?(data: IDragAndDropData, targetElement: T | undefined, targetIndex: number | undefined, originalEvent: DragEvent): void;
-	drop(data: IDragAndDropData, targetElement: T | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void;
-	onDragEnd?(originalEvent: DragEvent): void;
+	onDragLeave?(data: IDragAndDropData, targetElement: T | undefined, targetIndex: number | undefined, originalEvent: DragEvent): codemavi;
+	drop(data: IDragAndDropData, targetElement: T | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi;
+	onDragEnd?(originalEvent: DragEvent): codemavi;
 }
 
 export class ListError extends Error {
@@ -145,7 +145,7 @@ export abstract class CachedListVirtualDelegate<T extends object> implements ILi
 	protected abstract estimateHeight(element: T): number;
 	abstract getTemplateId(element: T): string;
 
-	setDynamicHeight(element: T, height: number): void {
+	setDynamicHeight(element: T, height: number): codemavi {
 		if (height > 0) {
 			this.cache.set(element, height);
 		}

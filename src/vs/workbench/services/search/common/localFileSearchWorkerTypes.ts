@@ -42,7 +42,7 @@ export interface IWorkerFileSystemFileHandle extends IWorkerFileSystemHandle {
 export interface ILocalFileSearchWorker {
 	_requestHandlerBrand: any;
 
-	$cancelQuery(queryId: number): void;
+	$cancelQuery(queryId: number): codemavi;
 
 	$listDirectory(handle: IWorkerFileSystemDirectoryHandle, queryProps: IFileQueryProps<UriComponents>, folderQuery: IFolderQuery, ignorePathCasing: boolean, queryId: number): Promise<IWorkerFileSearchComplete>;
 	$searchDirectory(handle: IWorkerFileSystemDirectoryHandle, queryProps: ITextQueryProps<UriComponents>, folderQuery: IFolderQuery, ignorePathCasing: boolean, queryId: number): Promise<IWorkerTextSearchComplete>;
@@ -53,9 +53,9 @@ export abstract class LocalFileSearchWorkerHost {
 	public static getChannel(workerServer: IWebWorkerServer): LocalFileSearchWorkerHost {
 		return workerServer.getChannel<LocalFileSearchWorkerHost>(LocalFileSearchWorkerHost.CHANNEL_NAME);
 	}
-	public static setChannel(workerClient: IWebWorkerClient<any>, obj: LocalFileSearchWorkerHost): void {
+	public static setChannel(workerClient: IWebWorkerClient<any>, obj: LocalFileSearchWorkerHost): codemavi {
 		workerClient.setChannel<LocalFileSearchWorkerHost>(LocalFileSearchWorkerHost.CHANNEL_NAME, obj);
 	}
 
-	abstract $sendTextSearchMatch(match: IFileMatch<UriComponents>, queryId: number): void;
+	abstract $sendTextSearchMatch(match: IFileMatch<UriComponents>, queryId: number): codemavi;
 }

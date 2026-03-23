@@ -22,7 +22,7 @@ class ExtHostEditSessionIdentityCreateParticipant implements IEditSessionIdentit
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostWorkspace);
 	}
 
-	async participate(workspaceFolder: WorkspaceFolder, token: CancellationToken): Promise<void> {
+	async participate(workspaceFolder: WorkspaceFolder, token: CancellationToken): Promise<codemavi> {
 		const p = new Promise<any>((resolve, reject) => {
 
 			setTimeout(
@@ -49,7 +49,7 @@ export class EditSessionIdentityCreateParticipant {
 		this._saveParticipantDisposable = this._editSessionIdentityService.addEditSessionIdentityCreateParticipant(instantiationService.createInstance(ExtHostEditSessionIdentityCreateParticipant, extHostContext));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._saveParticipantDisposable.dispose();
 	}
 }

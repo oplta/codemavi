@@ -81,7 +81,7 @@ class TreeNodeListDragAndDrop<T, TFilterData, TRef> implements IListDragAndDrop<
 		return undefined;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
 		this.dnd.onDragStart?.(asTreeDragAndDropData(data), originalEvent);
 	}
 
@@ -139,18 +139,18 @@ class TreeNodeListDragAndDrop<T, TFilterData, TRef> implements IListDragAndDrop<
 		return { ...result, feedback: range(start, start + length) };
 	}
 
-	drop(data: IDragAndDropData, targetNode: ITreeNode<T, TFilterData> | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void {
+	drop(data: IDragAndDropData, targetNode: ITreeNode<T, TFilterData> | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi {
 		this.autoExpandDisposable.dispose();
 		this.autoExpandNode = undefined;
 
 		this.dnd.drop(asTreeDragAndDropData(data), targetNode && targetNode.element, targetIndex, targetSector, originalEvent);
 	}
 
-	onDragEnd(originalEvent: DragEvent): void {
+	onDragEnd(originalEvent: DragEvent): codemavi {
 		this.dnd.onDragEnd?.(originalEvent);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 		this.dnd.dispose();
 	}
@@ -231,7 +231,7 @@ export class ComposedTreeDelegate<T, N extends { element: T }> implements IListV
 		return !!this.delegate.hasDynamicHeight && this.delegate.hasDynamicHeight(element.element);
 	}
 
-	setDynamicHeight(element: N, height: number): void {
+	setDynamicHeight(element: N, height: number): codemavi {
 		this.delegate.setDynamicHeight?.(element.element, height);
 	}
 }
@@ -326,7 +326,7 @@ class EventCollection<T> implements Collection<T>, IDisposable {
 		this.onDidChange = Event.forEach(onDidChange, elements => this._elements = elements, this.disposables);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
@@ -362,7 +362,7 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		renderer.onDidChangeTwistieState?.(this.onDidChangeTwistieState, this, this.disposables);
 	}
 
-	updateOptions(options: ITreeRendererOptions = {}): void {
+	updateOptions(options: ITreeRendererOptions = {}): codemavi {
 		if (typeof options.indent !== 'undefined') {
 			const indent = clamp(options.indent, 0, 40);
 
@@ -412,14 +412,14 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		return { container, indent, twistie, indentGuidesDisposable: Disposable.None, templateData };
 	}
 
-	renderElement(node: ITreeNode<T, TFilterData>, index: number, templateData: ITreeListTemplateData<TTemplateData>, height: number | undefined): void {
+	renderElement(node: ITreeNode<T, TFilterData>, index: number, templateData: ITreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
 		this.renderedNodes.set(node, templateData);
 		this.renderedElements.set(node.element, node);
 		this.renderTreeElement(node, templateData);
 		this.renderer.renderElement(node, index, templateData.templateData, height);
 	}
 
-	disposeElement(node: ITreeNode<T, TFilterData>, index: number, templateData: ITreeListTemplateData<TTemplateData>, height: number | undefined): void {
+	disposeElement(node: ITreeNode<T, TFilterData>, index: number, templateData: ITreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
 		templateData.indentGuidesDisposable.dispose();
 
 		this.renderer.disposeElement?.(node, index, templateData.templateData, height);
@@ -430,11 +430,11 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		}
 	}
 
-	disposeTemplate(templateData: ITreeListTemplateData<TTemplateData>): void {
+	disposeTemplate(templateData: ITreeListTemplateData<TTemplateData>): codemavi {
 		this.renderer.disposeTemplate(templateData.templateData);
 	}
 
-	private onDidChangeTwistieState(element: T): void {
+	private onDidChangeTwistieState(element: T): codemavi {
 		const node = this.renderedElements.get(element);
 
 		if (!node) {
@@ -444,7 +444,7 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		this.onDidChangeNodeTwistieState(node);
 	}
 
-	private onDidChangeNodeTwistieState(node: ITreeNode<T, TFilterData>): void {
+	private onDidChangeNodeTwistieState(node: ITreeNode<T, TFilterData>): codemavi {
 		const templateData = this.renderedNodes.get(node);
 
 		if (!templateData) {
@@ -488,7 +488,7 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		this._renderIndentGuides(node, templateData);
 	}
 
-	private _renderIndentGuides(node: ITreeNode<T, TFilterData>, templateData: ITreeListTemplateData<TTemplateData>): void {
+	private _renderIndentGuides(node: ITreeNode<T, TFilterData>, templateData: ITreeListTemplateData<TTemplateData>): codemavi {
 		clearNode(templateData.indent);
 		templateData.indentGuidesDisposable.dispose();
 
@@ -528,7 +528,7 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		templateData.indentGuidesDisposable = disposableStore;
 	}
 
-	private _onDidChangeActiveNodes(nodes: ITreeNode<T, TFilterData>[]): void {
+	private _onDidChangeActiveNodes(nodes: ITreeNode<T, TFilterData>[]): codemavi {
 		if (!this.shouldRenderIndentGuides) {
 			return;
 		}
@@ -565,7 +565,7 @@ export class TreeRenderer<T, TFilterData, TRef, TTemplateData> implements IListR
 		this.activeIndentNodes = set;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.renderedNodes.clear();
 		this.renderedElements.clear();
 		this.indentGuidesDisposable.dispose();
@@ -683,12 +683,12 @@ export class FindFilter<T> implements IFindFilter<T>, IDisposable {
 		}
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._totalCount = 0;
 		this._matchCount = 0;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.disposables);
 	}
 }
@@ -808,7 +808,7 @@ class FindWidget<T, TFilterData> extends Disposable {
 	private readonly actionbar: ActionBar;
 	private readonly toggles: TreeFindToggle[] = [];
 
-	readonly _onDidDisable = new Emitter<void>();
+	readonly _onDidDisable = new Emitter<codemavi>();
 	readonly onDidDisable = this._onDidDisable.event;
 	readonly onDidChangeValue: Event<string>;
 	readonly onDidToggleChange: Event<ITreeFindToggleChangeEvent>;
@@ -894,14 +894,14 @@ class FindWidget<T, TFilterData> extends Disposable {
 		this.onDidChangeValue = this.findInput.onDidChange;
 	}
 
-	setToggleState(id: string, checked: boolean): void {
+	setToggleState(id: string, checked: boolean): codemavi {
 		const toggle = this.toggles.find(toggle => toggle.id === id);
 		if (toggle) {
 			toggle.checked = checked;
 		}
 	}
 
-	setPlaceHolder(placeHolder: string): void {
+	setPlaceHolder(placeHolder: string): codemavi {
 		this.findInput.inputBox.setPlaceHolder(placeHolder);
 	}
 
@@ -920,15 +920,15 @@ class FindWidget<T, TFilterData> extends Disposable {
 		this.findInput.inputBox.addToHistory(true);
 	}
 
-	showMessage(message: IMessage): void {
+	showMessage(message: IMessage): codemavi {
 		this.findInput.showMessage(message);
 	}
 
-	clearMessage(): void {
+	clearMessage(): codemavi {
 		this.findInput.clearMessage();
 	}
 
-	override async dispose(): Promise<void> {
+	override async dispose(): Promise<codemavi> {
 		this._onDidDisable.fire();
 		this.elements.root.classList.add('disabled');
 		await timeout(300);
@@ -994,7 +994,7 @@ export abstract class AbstractFindController<T, TFilterData> implements IDisposa
 		return !!this.widget;
 	}
 
-	open(): void {
+	open(): codemavi {
 		if (this.widget) {
 			this.widget.focus();
 			this.widget.select();
@@ -1018,7 +1018,7 @@ export abstract class AbstractFindController<T, TFilterData> implements IDisposa
 		this._onDidChangeOpenState.fire(true);
 	}
 
-	close(): void {
+	close(): codemavi {
 		if (!this.widget) {
 			return;
 		}
@@ -1037,7 +1037,7 @@ export abstract class AbstractFindController<T, TFilterData> implements IDisposa
 		this._onDidChangeOpenState.fire(false);
 	}
 
-	protected onDidChangeValue(pattern: string): void {
+	protected onDidChangeValue(pattern: string): codemavi {
 		this._pattern = pattern;
 		this._onDidChangePattern.fire(pattern);
 
@@ -1045,18 +1045,18 @@ export abstract class AbstractFindController<T, TFilterData> implements IDisposa
 		this.applyPattern(pattern);
 	}
 
-	protected abstract applyPattern(pattern: string): void;
+	protected abstract applyPattern(pattern: string): codemavi;
 
-	protected onDidToggleChange(e: ITreeFindToggleChangeEvent): void {
+	protected onDidToggleChange(e: ITreeFindToggleChangeEvent): codemavi {
 		this.toggles.set(e.id, e.isChecked);
 	}
 
-	protected updateToggleState(id: string, checked: boolean): void {
+	protected updateToggleState(id: string, checked: boolean): codemavi {
 		this.toggles.set(id, checked);
 		this.widget?.setToggleState(id, checked);
 	}
 
-	protected renderMessage(showNotFound: boolean, warningMessage?: string): void {
+	protected renderMessage(showNotFound: boolean, warningMessage?: string): codemavi {
 		if (showNotFound) {
 			if (this.tree.options.showNotFoundMessage ?? true) {
 				this.widget?.showMessage({ type: MessageType.WARNING, content: warningMessage ?? localize('not found', "No results found.") });
@@ -1068,7 +1068,7 @@ export abstract class AbstractFindController<T, TFilterData> implements IDisposa
 		}
 	}
 
-	protected alertResults(results: number): void {
+	protected alertResults(results: number): codemavi {
 		if (!results) {
 			alert(localize('replFindNoResults', "No results"));
 		} else {
@@ -1163,7 +1163,7 @@ export class FindController<T, TFilterData> extends AbstractFindController<T, TF
 		this.disposables.add(this.tree.onWillRefilter(() => this.filter.reset()));
 	}
 
-	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): void {
+	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): codemavi {
 		if (optionsUpdate.defaultFindMode !== undefined) {
 			this.mode = optionsUpdate.defaultFindMode;
 		}
@@ -1173,7 +1173,7 @@ export class FindController<T, TFilterData> extends AbstractFindController<T, TF
 		}
 	}
 
-	protected applyPattern(pattern: string): void {
+	protected applyPattern(pattern: string): codemavi {
 		this.tree.refilter();
 
 		if (pattern) {
@@ -1205,7 +1205,7 @@ export class FindController<T, TFilterData> extends AbstractFindController<T, TF
 		return !FuzzyScore.isDefault(node.filterData as any as FuzzyScore);
 	}
 
-	protected override onDidToggleChange(e: ITreeFindToggleChangeEvent): void {
+	protected override onDidToggleChange(e: ITreeFindToggleChangeEvent): codemavi {
 		if (e.id === DefaultTreeToggles.Mode) {
 			this.mode = e.isChecked ? TreeFindMode.Filter : TreeFindMode.Highlight;
 		} else if (e.id === DefaultTreeToggles.MatchType) {
@@ -1213,7 +1213,7 @@ export class FindController<T, TFilterData> extends AbstractFindController<T, TF
 		}
 	}
 
-	protected render(): void {
+	protected render(): codemavi {
 		const noMatches = this.filter.matchCount === 0 && this.filter.totalCount > 0;
 		const showNotFound = noMatches && this.pattern.length > 0;
 
@@ -1602,7 +1602,7 @@ class StickyScrollController<T, TFilterData, TRef> extends Disposable {
 		return this._widget.getFocus();
 	}
 
-	domFocus(): void {
+	domFocus(): codemavi {
 		this._widget.domFocus();
 	}
 
@@ -1611,7 +1611,7 @@ class StickyScrollController<T, TFilterData, TRef> extends Disposable {
 		return this._widget.focusedLast();
 	}
 
-	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): void {
+	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): codemavi {
 		if (optionsUpdate.paddingTop !== undefined) {
 			this.paddingTop = optionsUpdate.paddingTop;
 		}
@@ -1682,7 +1682,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		return this._previousState?.stickyNodes.find(stickyNode => stickyNode.node === node);
 	}
 
-	setState(state: StickyScrollState<T, TFilterData, TRef> | undefined): void {
+	setState(state: StickyScrollState<T, TFilterData, TRef> | undefined): codemavi {
 
 		const wasVisible = !!this._previousState && this._previousState.count > 0;
 		const isVisible = !!state && state.count > 0;
@@ -1721,7 +1721,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		this._rootDomNode.style.height = `${lastStickyNode.position + lastStickyNode.height}px`;
 	}
 
-	private renderState(state: StickyScrollState<T, TFilterData, TRef>): void {
+	private renderState(state: StickyScrollState<T, TFilterData, TRef>): codemavi {
 		this._previousStateDisposables.clear();
 
 		const elements = Array(state.count);
@@ -1740,7 +1740,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		this._previousElements = elements;
 	}
 
-	rerender(): void {
+	rerender(): codemavi {
 		if (this._previousState) {
 			this.renderState(this._previousState);
 		}
@@ -1842,7 +1842,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		return result;
 	}
 
-	private setVisible(visible: boolean): void {
+	private setVisible(visible: boolean): codemavi {
 		this._rootDomNode.classList.toggle('empty', !visible);
 
 		if (!visible) {
@@ -1854,7 +1854,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		return this.stickyScrollFocus.getFocus();
 	}
 
-	domFocus(): void {
+	domFocus(): codemavi {
 		this.stickyScrollFocus.domFocus();
 	}
 
@@ -1862,7 +1862,7 @@ class StickyScrollWidget<T, TFilterData, TRef> implements IDisposable {
 		return this.stickyScrollFocus.focusedLast();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.stickyScrollFocus.dispose();
 		this._previousStateDisposables.dispose();
 		this._rootDomNode.remove();
@@ -1904,7 +1904,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this._register(this.view.onContextMenu((e) => this.handleContextMenu(e)));
 	}
 
-	private handleContextMenu(e: IListContextMenuEvent<ITreeNode<T, TFilterData>>): void {
+	private handleContextMenu(e: IListContextMenuEvent<ITreeNode<T, TFilterData>>): codemavi {
 		const target = e.browserEvent.target as HTMLElement;
 		if (!isStickyScrollContainer(target) && !isStickyScrollElement(target)) {
 			if (this.focusedLast()) {
@@ -1940,7 +1940,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this._onContextMenu.fire({ element, anchor, browserEvent: e.browserEvent, isStickyScroll: true });
 	}
 
-	private onKeyDown(e: KeyboardEvent): void {
+	private onKeyDown(e: KeyboardEvent): codemavi {
 		// Sticky Scroll Navigation
 		if (this.domHasFocus && this.state) {
 			// Move up
@@ -1965,7 +1965,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		}
 	}
 
-	private onMouseDown(e: IListMouseEvent<ITreeNode<T, TFilterData>>): void {
+	private onMouseDown(e: IListMouseEvent<ITreeNode<T, TFilterData>>): codemavi {
 		const target = e.browserEvent.target as HTMLElement;
 		if (!isStickyScrollContainer(target) && !isStickyScrollElement(target)) {
 			return;
@@ -1975,7 +1975,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		e.browserEvent.stopPropagation();
 	}
 
-	updateElements(elements: HTMLElement[], state: StickyScrollState<T, TFilterData, TRef> | undefined): void {
+	updateElements(elements: HTMLElement[], state: StickyScrollState<T, TFilterData, TRef> | undefined): codemavi {
 		if (state && state.count === 0) {
 			throw new Error('Sticky scroll state must be undefined when there are no sticky nodes');
 		}
@@ -2002,7 +2002,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this.container.tabIndex = state ? 0 : -1;
 	}
 
-	private setFocusedElement(stickyIndex: number): void {
+	private setFocusedElement(stickyIndex: number): codemavi {
 		// doesn't imply that the widget has (or will have) focus
 
 		const state = this.state;
@@ -2039,7 +2039,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		return this.state.stickyNodes[this.focusedIndex].node.element;
 	}
 
-	domFocus(): void {
+	domFocus(): codemavi {
 		if (!this.state) {
 			throw new Error('Cannot focus when state is undefined');
 		}
@@ -2054,7 +2054,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		return this.view.getHTMLElement().classList.contains('sticky-scroll-focused');
 	}
 
-	private removeFocus(): void {
+	private removeFocus(): codemavi {
 		if (this.focusedIndex === -1) {
 			return;
 		}
@@ -2062,7 +2062,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this.focusedIndex = -1;
 	}
 
-	private setFocus(newFocusIndex: number): void {
+	private setFocus(newFocusIndex: number): codemavi {
 		if (0 > newFocusIndex) {
 			throw new Error('addFocus() can not remove focus');
 		}
@@ -2083,12 +2083,12 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this.focusedIndex = newFocusIndex;
 	}
 
-	private toggleElementFocus(element: HTMLElement, focused: boolean): void {
+	private toggleElementFocus(element: HTMLElement, focused: boolean): codemavi {
 		this.toggleElementActiveFocus(element, focused && this.domHasFocus);
 		this.toggleElementPassiveFocus(element, focused);
 	}
 
-	private toggleCurrentElementActiveFocus(focused: boolean): void {
+	private toggleCurrentElementActiveFocus(focused: boolean): codemavi {
 		if (this.focusedIndex === -1) {
 			return;
 		}
@@ -2112,7 +2112,7 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		this.view.getHTMLElement().classList.toggle('sticky-scroll-focused', focused);
 	}
 
-	private onFocus(): void {
+	private onFocus(): codemavi {
 		if (!this.state || this.elements.length === 0) {
 			throw new Error('Cannot focus when state is undefined or elements are empty');
 		}
@@ -2124,12 +2124,12 @@ class StickyScrollFocus<T, TFilterData, TRef> extends Disposable {
 		}
 	}
 
-	private onBlur(): void {
+	private onBlur(): codemavi {
 		this.domHasFocus = false;
 		this.toggleCurrentElementActiveFocus(false);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.toggleStickyScrollFocused(false);
 		this._onDidChangeHasFocus.fire(false);
 		super.dispose();
@@ -2184,7 +2184,7 @@ export interface IAbstractTreeOptionsUpdate extends ITreeRendererOptions {
 	readonly paddingTop?: number;
 }
 
-export interface IAbstractTreeOptions<T, TFilterData = void> extends IAbstractTreeOptionsUpdate, IListOptions<T> {
+export interface IAbstractTreeOptions<T, TFilterData = codemavi> extends IAbstractTreeOptionsUpdate, IListOptions<T> {
 	readonly contextViewProvider?: IContextViewProvider;
 	readonly collapseByDefault?: boolean; // defaults to false
 	readonly allowNonCollapsibleParents?: boolean; // defaults to false
@@ -2197,7 +2197,7 @@ export interface IAbstractTreeOptions<T, TFilterData = void> extends IAbstractTr
 	readonly stickyScrollDelegate?: IStickyScrollDelegate<any, TFilterData>;
 }
 
-function dfs<T, TFilterData>(node: ITreeNode<T, TFilterData>, fn: (node: ITreeNode<T, TFilterData>) => void): void {
+function dfs<T, TFilterData>(node: ITreeNode<T, TFilterData>, fn: (node: ITreeNode<T, TFilterData>) => codemavi): codemavi {
 	fn(node);
 	node.children.forEach(child => dfs(child, fn));
 }
@@ -2228,7 +2228,7 @@ class Trait<T> {
 		private identityProvider?: IIdentityProvider<T>
 	) { }
 
-	set(nodes: ITreeNode<T, any>[], browserEvent?: UIEvent): void {
+	set(nodes: ITreeNode<T, any>[], browserEvent?: UIEvent): codemavi {
 		if (!(browserEvent as any)?.__forceEvent && equals(this.nodes, nodes)) {
 			return;
 		}
@@ -2236,7 +2236,7 @@ class Trait<T> {
 		this._set(nodes, false, browserEvent);
 	}
 
-	private _set(nodes: ITreeNode<T, any>[], silent: boolean, browserEvent?: UIEvent): void {
+	private _set(nodes: ITreeNode<T, any>[], silent: boolean, browserEvent?: UIEvent): codemavi {
 		this.nodes = [...nodes];
 		this.elements = undefined;
 		this._nodeSet = undefined;
@@ -2263,7 +2263,7 @@ class Trait<T> {
 		return this.nodeSet.has(node);
 	}
 
-	onDidModelSplice({ insertedNodes, deletedNodes }: ITreeModelSpliceEvent<T, any>): void {
+	onDidModelSplice({ insertedNodes, deletedNodes }: ITreeModelSpliceEvent<T, any>): codemavi {
 		if (!this.identityProvider) {
 			const set = this.createNodeSet();
 			const visit = (node: ITreeNode<T, any>) => set.delete(node);
@@ -2329,7 +2329,7 @@ class TreeNodeListMouseController<T, TFilterData, TRef> extends MouseController<
 		super(list);
 	}
 
-	protected override onViewPointer(e: IListMouseEvent<ITreeNode<T, TFilterData>>): void {
+	protected override onViewPointer(e: IListMouseEvent<ITreeNode<T, TFilterData>>): codemavi {
 		if (isButton(e.browserEvent.target as HTMLElement) ||
 			isEditableElement(e.browserEvent.target as HTMLElement) ||
 			isMonacoEditor(e.browserEvent.target as HTMLElement)) {
@@ -2396,7 +2396,7 @@ class TreeNodeListMouseController<T, TFilterData, TRef> extends MouseController<
 		}
 	}
 
-	private handleStickyScrollMouseEvent(e: IListMouseEvent<ITreeNode<T, TFilterData>>, node: ITreeNode<T, TFilterData>): void {
+	private handleStickyScrollMouseEvent(e: IListMouseEvent<ITreeNode<T, TFilterData>>, node: ITreeNode<T, TFilterData>): codemavi {
 		if (isMonacoCustomToggle(e.browserEvent.target as HTMLElement) || isActionItem(e.browserEvent.target as HTMLElement)) {
 			return;
 		}
@@ -2415,7 +2415,7 @@ class TreeNodeListMouseController<T, TFilterData, TRef> extends MouseController<
 		this.list.setSelection([nodeIndex]);
 	}
 
-	protected override onDoubleClick(e: IListMouseEvent<ITreeNode<T, TFilterData>>): void {
+	protected override onDoubleClick(e: IListMouseEvent<ITreeNode<T, TFilterData>>): codemavi {
 		const onTwistie = (e.browserEvent.target as HTMLElement).classList.contains('monaco-tl-twistie');
 
 		if (onTwistie || !this.tree.expandOnDoubleClick) {
@@ -2430,7 +2430,7 @@ class TreeNodeListMouseController<T, TFilterData, TRef> extends MouseController<
 	}
 
 	// to make sure dom focus is not stolen (for example with context menu)
-	protected override onMouseDown(e: IListMouseEvent<ITreeNode<T, TFilterData>> | IListTouchEvent<ITreeNode<T, TFilterData>>): void {
+	protected override onMouseDown(e: IListMouseEvent<ITreeNode<T, TFilterData>> | IListTouchEvent<ITreeNode<T, TFilterData>>): codemavi {
 		const target = e.browserEvent.target as HTMLElement;
 		if (!isStickyScrollContainer(target) && !isStickyScrollElement(target)) {
 			super.onMouseDown(e);
@@ -2438,7 +2438,7 @@ class TreeNodeListMouseController<T, TFilterData, TRef> extends MouseController<
 		}
 	}
 
-	protected override onContextMenu(e: IListContextMenuEvent<ITreeNode<T, TFilterData>>): void {
+	protected override onContextMenu(e: IListContextMenuEvent<ITreeNode<T, TFilterData>>): codemavi {
 		const target = e.browserEvent.target as HTMLElement;
 		if (!isStickyScrollContainer(target) && !isStickyScrollElement(target)) {
 			super.onContextMenu(e);
@@ -2475,7 +2475,7 @@ class TreeNodeList<T, TFilterData, TRef> extends List<ITreeNode<T, TFilterData>>
 		return new TreeNodeListMouseController(this, options.tree, options.stickyScrollProvider);
 	}
 
-	override splice(start: number, deleteCount: number, elements: readonly ITreeNode<T, TFilterData>[] = []): void {
+	override splice(start: number, deleteCount: number, elements: readonly ITreeNode<T, TFilterData>[] = []): codemavi {
 		super.splice(start, deleteCount, elements);
 
 		if (elements.length === 0) {
@@ -2513,7 +2513,7 @@ class TreeNodeList<T, TFilterData, TRef> extends List<ITreeNode<T, TFilterData>>
 		}
 	}
 
-	override setFocus(indexes: number[], browserEvent?: UIEvent, fromAPI = false): void {
+	override setFocus(indexes: number[], browserEvent?: UIEvent, fromAPI = false): codemavi {
 		super.setFocus(indexes, browserEvent);
 
 		if (!fromAPI) {
@@ -2521,7 +2521,7 @@ class TreeNodeList<T, TFilterData, TRef> extends List<ITreeNode<T, TFilterData>>
 		}
 	}
 
-	override setSelection(indexes: number[], browserEvent?: UIEvent, fromAPI = false): void {
+	override setSelection(indexes: number[], browserEvent?: UIEvent, fromAPI = false): codemavi {
 		super.setSelection(indexes, browserEvent);
 
 		if (!fromAPI) {
@@ -2529,7 +2529,7 @@ class TreeNodeList<T, TFilterData, TRef> extends List<ITreeNode<T, TFilterData>>
 		}
 	}
 
-	override setAnchor(index: number | undefined, fromAPI = false): void {
+	override setAnchor(index: number | undefined, fromAPI = false): codemavi {
 		super.setAnchor(index);
 
 		if (!fromAPI) {
@@ -2583,22 +2583,22 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 	get onKeyUp(): Event<KeyboardEvent> { return this.view.onKeyUp; }
 	get onKeyPress(): Event<KeyboardEvent> { return this.view.onKeyPress; }
 
-	get onDidFocus(): Event<void> { return this.view.onDidFocus; }
-	get onDidBlur(): Event<void> { return this.view.onDidBlur; }
+	get onDidFocus(): Event<codemavi> { return this.view.onDidFocus; }
+	get onDidBlur(): Event<codemavi> { return this.view.onDidBlur; }
 
-	private readonly onDidSwapModel = this.disposables.add(new Emitter<void>());
-	private readonly onDidChangeModelRelay = this.disposables.add(new Relay<void>());
+	private readonly onDidSwapModel = this.disposables.add(new Emitter<codemavi>());
+	private readonly onDidChangeModelRelay = this.disposables.add(new Relay<codemavi>());
 	private readonly onDidSpliceModelRelay = this.disposables.add(new Relay<ITreeModelSpliceEvent<T, TFilterData>>());
 	private readonly onDidChangeCollapseStateRelay = this.disposables.add(new Relay<ICollapseStateChangeEvent<T, TFilterData>>());
 	private readonly onDidChangeRenderNodeCountRelay = this.disposables.add(new Relay<ITreeNode<T, TFilterData>>());
 	private readonly onDidChangeActiveNodesRelay = this.disposables.add(new Relay<ITreeNode<T, TFilterData>[]>());
 
-	get onDidChangeModel(): Event<void> { return Event.any(this.onDidChangeModelRelay.event, this.onDidSwapModel.event); }
+	get onDidChangeModel(): Event<codemavi> { return Event.any(this.onDidChangeModelRelay.event, this.onDidSwapModel.event); }
 	get onDidChangeCollapseState(): Event<ICollapseStateChangeEvent<T, TFilterData>> { return this.onDidChangeCollapseStateRelay.event; }
 	get onDidChangeRenderNodeCount(): Event<ITreeNode<T, TFilterData>> { return this.onDidChangeRenderNodeCountRelay.event; }
 
-	private readonly _onWillRefilter = new Emitter<void>();
-	readonly onWillRefilter: Event<void> = this._onWillRefilter.event;
+	private readonly _onWillRefilter = new Emitter<codemavi>();
+	readonly onWillRefilter: Event<codemavi> = this._onWillRefilter.event;
 
 	get findMode(): TreeFindMode { return this.findController?.mode ?? TreeFindMode.Highlight; }
 	set findMode(findMode: TreeFindMode) { if (this.findController) { this.findController.mode = findMode; } }
@@ -2616,7 +2616,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 	private readonly _onDidUpdateOptions = new Emitter<IAbstractTreeOptions<T, TFilterData>>();
 	readonly onDidUpdateOptions: Event<IAbstractTreeOptions<T, TFilterData>> = this._onDidUpdateOptions.event;
 
-	get onDidDispose(): Event<void> { return this.view.onDidDispose; }
+	get onDidDispose(): Event<codemavi> { return this.view.onDidDispose; }
 
 	constructor(
 		private readonly _user: string,
@@ -2685,7 +2685,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		this.getHTMLElement().classList.toggle('always', this._options.renderIndentGuides === RenderIndentGuides.Always);
 	}
 
-	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): void {
+	updateOptions(optionsUpdate: IAbstractTreeOptionsUpdate = {}): codemavi {
 		this._options = { ...this._options, ...optionsUpdate };
 
 		for (const renderer of this.renderers) {
@@ -2717,7 +2717,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		this.stickyScrollController?.updateOptions(optionsUpdate);
 	}
 
-	updateWidth(element: TRef): void {
+	updateWidth(element: TRef): codemavi {
 		const index = this.model.getListIndex(element);
 
 		if (index === -1) {
@@ -2806,7 +2806,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.selection.getNodes().length;
 	}
 
-	domFocus(): void {
+	domFocus(): codemavi {
 		if (this.stickyScrollController?.focusedLast()) {
 			this.stickyScrollController.domFocus();
 		} else {
@@ -2818,11 +2818,11 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return isActiveElement(this.getHTMLElement());
 	}
 
-	layout(height?: number, width?: number): void {
+	layout(height?: number, width?: number): codemavi {
 		this.view.layout(height, width);
 	}
 
-	style(styles: IListStyles): void {
+	style(styles: IListStyles): codemavi {
 		const suffix = `.${this.view.domId}`;
 		const content: string[] = [];
 
@@ -2910,11 +2910,11 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.model.setCollapsed(location, undefined, recursive);
 	}
 
-	expandAll(): void {
+	expandAll(): codemavi {
 		this.model.setCollapsed(this.model.rootRef, false, true);
 	}
 
-	collapseAll(): void {
+	collapseAll(): codemavi {
 		this.model.setCollapsed(this.model.rootRef, true, true);
 	}
 
@@ -2930,28 +2930,28 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.model.isCollapsed(location);
 	}
 
-	expandTo(location: TRef): void {
+	expandTo(location: TRef): codemavi {
 		this.model.expandTo(location);
 	}
 
-	triggerTypeNavigation(): void {
+	triggerTypeNavigation(): codemavi {
 		this.view.triggerTypeNavigation();
 	}
 
-	openFind(): void {
+	openFind(): codemavi {
 		this.findController?.open();
 	}
 
-	closeFind(): void {
+	closeFind(): codemavi {
 		this.findController?.close();
 	}
 
-	refilter(): void {
+	refilter(): codemavi {
 		this._onWillRefilter.fire(undefined);
 		this.model.refilter();
 	}
 
-	setAnchor(element: TRef | undefined): void {
+	setAnchor(element: TRef | undefined): codemavi {
 		if (typeof element === 'undefined') {
 			return this.view.setAnchor(undefined);
 		}
@@ -2972,7 +2972,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.anchor.get().at(0);
 	}
 
-	setSelection(elements: TRef[], browserEvent?: UIEvent): void {
+	setSelection(elements: TRef[], browserEvent?: UIEvent): codemavi {
 		this.eventBufferer.bufferEvents(() => {
 			const nodes = elements.map(e => this.model.getNode(e));
 			this.selection.set(nodes, browserEvent);
@@ -2986,7 +2986,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.selection.get();
 	}
 
-	setFocus(elements: TRef[], browserEvent?: UIEvent): void {
+	setFocus(elements: TRef[], browserEvent?: UIEvent): codemavi {
 		this.eventBufferer.bufferEvents(() => {
 			const nodes = elements.map(e => this.model.getNode(e));
 			this.focus.set(nodes, browserEvent);
@@ -2996,27 +2996,27 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		});
 	}
 
-	focusNext(n = 1, loop = false, browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): void {
+	focusNext(n = 1, loop = false, browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): codemavi {
 		this.view.focusNext(n, loop, browserEvent, filter);
 	}
 
-	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): void {
+	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): codemavi {
 		this.view.focusPrevious(n, loop, browserEvent, filter);
 	}
 
-	focusNextPage(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): Promise<void> {
+	focusNextPage(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): Promise<codemavi> {
 		return this.view.focusNextPage(browserEvent, filter);
 	}
 
-	focusPreviousPage(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): Promise<void> {
+	focusPreviousPage(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): Promise<codemavi> {
 		return this.view.focusPreviousPage(browserEvent, filter, () => this.stickyScrollController?.height ?? 0);
 	}
 
-	focusLast(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): void {
+	focusLast(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): codemavi {
 		this.view.focusLast(browserEvent, filter);
 	}
 
-	focusFirst(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): void {
+	focusFirst(browserEvent?: UIEvent, filter: ((node: ITreeNode<T, TFilterData>) => boolean) | undefined = (isKeyboardEvent(browserEvent) && browserEvent.altKey) ? undefined : this.focusNavigationFilter): codemavi {
 		this.view.focusFirst(browserEvent, filter);
 	}
 
@@ -3033,7 +3033,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return this.stickyScrollController?.focusedLast() ? AbstractTreePart.StickyScroll : AbstractTreePart.Tree;
 	}
 
-	reveal(location: TRef, relativeTop?: number): void {
+	reveal(location: TRef, relativeTop?: number): codemavi {
 		this.model.expandTo(location);
 
 		const index = this.model.getListIndex(location);
@@ -3097,7 +3097,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 
 	// List
 
-	private onLeftArrow(e: StandardKeyboardEvent): void {
+	private onLeftArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -3125,7 +3125,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		}
 	}
 
-	private onRightArrow(e: StandardKeyboardEvent): void {
+	private onRightArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -3152,7 +3152,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		}
 	}
 
-	private onSpace(e: StandardKeyboardEvent): void {
+	private onSpace(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -3220,7 +3220,7 @@ export abstract class AbstractTree<T, TFilterData, TRef> implements IDisposable 
 		return new TreeNavigator(this.view, this.model, start);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.disposables);
 		this.stickyScrollController?.dispose();
 		this.view.dispose();

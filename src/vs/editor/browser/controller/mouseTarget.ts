@@ -454,7 +454,7 @@ class HitTestRequest extends BareHitTestRequest {
 		);
 	}
 
-	public switchToHitTestTarget(): void {
+	public switchToHitTestTarget(): codemavi {
 		this._useHitTestTarget = true;
 	}
 

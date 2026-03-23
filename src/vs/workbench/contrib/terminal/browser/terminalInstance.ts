@@ -197,7 +197,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	private readonly _scopedContextKeyService: IContextKeyService;
 	private _resizeDebouncer?: TerminalResizeDebouncer;
 	private _pauseInputEventBarrier: Barrier | undefined;
-	pauseInputEvents(barrier: Barrier): void {
+	pauseInputEvents(barrier: Barrier): codemavi {
 		this._pauseInputEventBarrier = barrier;
 	}
 
@@ -262,7 +262,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	get processId(): number | undefined { return this._processManager.shellProcessId; }
 	// TODO: How does this work with detached processes?
 	// TODO: Should this be an event as it can fire twice?
-	get processReady(): Promise<void> { return this._processManager.ptyProcessReady; }
+	get processReady(): Promise<codemavi> { return this._processManager.ptyProcessReady; }
 	get hasChildProcesses(): boolean { return this.shellLaunchConfig.attachPersistentProcess?.hasChildProcesses || this._processManager.hasChildProcesses; }
 	get reconnectionProperties(): IReconnectionProperties | undefined { return this.shellLaunchConfig.attachPersistentProcess?.reconnectionProperties || this.shellLaunchConfig.reconnectionProperties; }
 	get areLinksReady(): boolean { return this._areLinksReady; }
@@ -311,7 +311,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	readonly onDisposed = this._onDisposed.event;
 	private readonly _onProcessIdReady = this._register(new Emitter<ITerminalInstance>());
 	readonly onProcessIdReady = this._onProcessIdReady.event;
-	private readonly _onProcessReplayComplete = this._register(new Emitter<void>());
+	private readonly _onProcessReplayComplete = this._register(new Emitter<codemavi>());
 	readonly onProcessReplayComplete = this._onProcessReplayComplete.event;
 	private readonly _onTitleChanged = this._register(new Emitter<ITerminalInstance>());
 	readonly onTitleChanged = this._onTitleChanged.event;
@@ -325,13 +325,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	readonly onBinary = this._onBinary.event;
 	private readonly _onRequestExtHostProcess = this._register(new Emitter<ITerminalInstance>());
 	readonly onRequestExtHostProcess = this._onRequestExtHostProcess.event;
-	private readonly _onDimensionsChanged = this._register(new Emitter<void>());
+	private readonly _onDimensionsChanged = this._register(new Emitter<codemavi>());
 	readonly onDimensionsChanged = this._onDimensionsChanged.event;
-	private readonly _onMaximumDimensionsChanged = this._register(new Emitter<void>());
+	private readonly _onMaximumDimensionsChanged = this._register(new Emitter<codemavi>());
 	readonly onMaximumDimensionsChanged = this._onMaximumDimensionsChanged.event;
 	private readonly _onDidFocus = this._register(new Emitter<ITerminalInstance>());
 	readonly onDidFocus = this._onDidFocus.event;
-	private readonly _onDidRequestFocus = this._register(new Emitter<void>());
+	private readonly _onDidRequestFocus = this._register(new Emitter<codemavi>());
 	readonly onDidRequestFocus = this._onDidRequestFocus.event;
 	private readonly _onDidBlur = this._register(new Emitter<ITerminalInstance>());
 	readonly onDidBlur = this._onDidBlur.event;
@@ -343,7 +343,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	readonly onRequestAddInstanceToGroup = this._onRequestAddInstanceToGroup.event;
 	private readonly _onDidChangeHasChildProcesses = this._register(new Emitter<boolean>());
 	readonly onDidChangeHasChildProcesses = this._onDidChangeHasChildProcesses.event;
-	private readonly _onDidExecuteText = this._register(new Emitter<void>());
+	private readonly _onDidExecuteText = this._register(new Emitter<codemavi>());
 	readonly onDidExecuteText = this._onDidExecuteText.event;
 	private readonly _onDidChangeTarget = this._register(new Emitter<TerminalLocation | undefined>());
 	readonly onDidChangeTarget = this._onDidChangeTarget.event;
@@ -672,7 +672,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return undefined;
 	}
 
-	private _initDimensions(): void {
+	private _initDimensions(): codemavi {
 		// The terminal panel needs to have been created to get the real view dimensions
 		if (!this._container) {
 			// Set the fallback dimensions if not
@@ -723,7 +723,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return dimension.width;
 	}
 
-	private _setLastKnownColsAndRows(): void {
+	private _setLastKnownColsAndRows(): codemavi {
 		if (TerminalInstance._lastKnownGridDimensions) {
 			this._cols = TerminalInstance._lastKnownGridDimensions.cols;
 			this._rows = TerminalInstance._lastKnownGridDimensions.rows;
@@ -731,7 +731,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	}
 
 	@debounce(50)
-	private _fireMaximumDimensionsChanged(): void {
+	private _fireMaximumDimensionsChanged(): codemavi {
 		this._onMaximumDimensionsChanged.fire();
 	}
 
@@ -817,13 +817,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 				this.layout(this._lastLayoutDimensions);
 			}
 		}));
-		// Write initial text, deferring onLineFeed listener when applicable to avoid firing
+		// Write initial text, deferring onLineFeed listener when applicable to acodemavi firing
 		// onLineData events containing initialText
-		const initialTextWrittenPromise = this._shellLaunchConfig.initialText ? new Promise<void>(r => this._writeInitialText(xterm, r)) : undefined;
+		const initialTextWrittenPromise = this._shellLaunchConfig.initialText ? new Promise<codemavi>(r => this._writeInitialText(xterm, r)) : undefined;
 		const lineDataEventAddon = this._register(new LineDataEventAddon(initialTextWrittenPromise));
 		this._register(lineDataEventAddon.onLineData(e => this._onLineData.fire(e)));
 		this._lineDataEventAddon = lineDataEventAddon;
-		// Delay the creation of the bell listener to avoid showing the bell when the terminal
+		// Delay the creation of the bell listener to acodemavi showing the bell when the terminal
 		// starts up or reconnects
 		disposableTimeout(() => {
 			this._register(xterm.raw.onBell(() => {
@@ -851,7 +851,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		// Init winpty compat and link handler after process creation as they rely on the
 		// underlying process OS
 		this._register(this._processManager.onProcessReady(async (processTraits) => {
-			// Respond to DA1 with basic conformance. Note that including this is required to avoid
+			// Respond to DA1 with basic conformance. Note that including this is required to acodemavi
 			// a long delay in conpty 1.22+ where it waits for the response.
 			// Reference: https://github.com/microsoft/terminal/blob/3760caed97fa9140a40777a8fbc1c95785e6d2ab/src/terminal/adapter/adaptDispatch.cpp#L1471-L1495
 			if (processTraits?.windowsPty?.backend === 'conpty') {
@@ -912,14 +912,14 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return xterm;
 	}
 
-	async runCommand(commandLine: string, shouldExecute: boolean): Promise<void> {
+	async runCommand(commandLine: string, shouldExecute: boolean): Promise<codemavi> {
 		let commandDetection = this.capabilities.get(TerminalCapability.CommandDetection);
 
 		// Await command detection if the terminal is starting up
 		if (!commandDetection && (this._processManager.processState === ProcessState.Uninitialized || this._processManager.processState === ProcessState.Launching)) {
 			const store = new DisposableStore();
 			await Promise.race([
-				new Promise<void>(r => {
+				new Promise<codemavi>(r => {
 					store.add(this.capabilities.onDidAddCapabilityType(e => {
 						if (e === TerminalCapability.CommandDetection) {
 							commandDetection = this.capabilities.get(TerminalCapability.CommandDetection);
@@ -937,7 +937,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		// there is no content in the prompt
 		if (!commandDetection || commandDetection.promptInputModel.value.length > 0) {
 			await this.sendText('\x03', false);
-			// Wait a little before running the command to avoid the sequences being echoed while the ^C
+			// Wait a little before running the command to acodemavi the sequences being echoed while the ^C
 			// is being evaluated
 			await timeout(100);
 		}
@@ -945,12 +945,12 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		await this.sendText(commandLine, shouldExecute, !shouldExecute);
 	}
 
-	detachFromElement(): void {
+	detachFromElement(): codemavi {
 		this._wrapperElement.remove();
 		this._container = undefined;
 	}
 
-	attachToElement(container: HTMLElement): void {
+	attachToElement(container: HTMLElement): codemavi {
 		// The container did not change, do nothing
 		if (this._container === container) {
 			return;
@@ -984,7 +984,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	 * `attachToElement`, you must ensure the parent DOM element is explicitly visible before
 	 * invoking this function as it performs some DOM calculations internally
 	 */
-	private _open(): void {
+	private _open(): codemavi {
 		if (!this.xterm || this.xterm.raw.element) {
 			return;
 		}
@@ -1097,7 +1097,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 				return false;
 			}
 
-			// Prevent default when shift+tab is being sent to the terminal to avoid it bubbling up
+			// Prevent default when shift+tab is being sent to the terminal to acodemavi it bubbling up
 			// and changing focus https://github.com/microsoft/vscode/issues/188329
 			if (event.key === 'Tab' && event.shiftKey) {
 				event.preventDefault();
@@ -1159,7 +1159,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private _setFocus(focused?: boolean): void {
+	private _setFocus(focused?: boolean): codemavi {
 		if (focused) {
 			this._terminalFocusContextKey.set(true);
 			this._setShellIntegrationContextKey();
@@ -1171,13 +1171,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private _setShellIntegrationContextKey(): void {
+	private _setShellIntegrationContextKey(): codemavi {
 		if (this.xterm) {
 			this._terminalShellIntegrationEnabledContextKey.set(this.xterm.shellIntegration.status === ShellIntegrationStatus.VSCode);
 		}
 	}
 
-	resetFocusContextKey(): void {
+	resetFocusContextKey(): codemavi {
 		this._terminalFocusContextKey.reset();
 		this._terminalShellIntegrationEnabledContextKey.reset();
 	}
@@ -1202,7 +1202,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return this.xterm && this.hasSelection() ? this.xterm.raw.getSelection() : undefined;
 	}
 
-	clearSelection(): void {
+	clearSelection(): codemavi {
 		this.xterm?.raw.clearSelection();
 	}
 
@@ -1210,7 +1210,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		this._terminalAltBufferActiveContextKey.set(!!(this.xterm && this.xterm.raw.buffer.active === this.xterm.raw.buffer.alternate));
 	}
 
-	override dispose(reason?: TerminalExitReason): void {
+	override dispose(reason?: TerminalExitReason): codemavi {
 		if (this.shellLaunchConfig.type === 'Task' && reason === TerminalExitReason.Process && this._exitCode !== 0 && !this.shellLaunchConfig.waitOnExit) {
 			return;
 		}
@@ -1266,14 +1266,14 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		super.dispose();
 	}
 
-	async detachProcessAndDispose(reason: TerminalExitReason): Promise<void> {
+	async detachProcessAndDispose(reason: TerminalExitReason): Promise<codemavi> {
 		// Detach the process and dispose the instance, without the instance dispose the terminal
 		// won't go away. Force persist if the detach was requested by the user (not shutdown).
 		await this._processManager.detachFromProcess(reason === TerminalExitReason.User);
 		this.dispose(reason);
 	}
 
-	focus(force?: boolean): void {
+	focus(force?: boolean): codemavi {
 		this._refreshAltBufferContextKey();
 		if (!this.xterm) {
 			return;
@@ -1284,13 +1284,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	async focusWhenReady(force?: boolean): Promise<void> {
+	async focusWhenReady(force?: boolean): Promise<codemavi> {
 		await this._xtermReadyPromise;
 		await this._attachBarrier.wait();
 		this.focus(force);
 	}
 
-	async sendText(text: string, shouldExecute: boolean, bracketedPasteMode?: boolean): Promise<void> {
+	async sendText(text: string, shouldExecute: boolean, bracketedPasteMode?: boolean): Promise<codemavi> {
 		// Apply bracketed paste sequences if the terminal has the mode enabled, this will prevent
 		// the text from triggering keybindings and ensure new lines are handled properly
 		if (bracketedPasteMode && this.xterm?.raw.modes.bracketedPasteMode) {
@@ -1314,7 +1314,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	async sendPath(originalPath: string | URI, shouldExecute: boolean): Promise<void> {
+	async sendPath(originalPath: string | URI, shouldExecute: boolean): Promise<codemavi> {
 		return this.sendText(await this.preparePathForShell(originalPath), shouldExecute);
 	}
 
@@ -1324,7 +1324,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return preparePathForShell(originalPath, this.shellLaunchConfig.executable, this.title, this.shellType, this._processManager.backend, this._processManager.os);
 	}
 
-	setVisible(visible: boolean): void {
+	setVisible(visible: boolean): codemavi {
 		const didChange = this._isVisible !== visible;
 		this._isVisible = visible;
 		this._wrapperElement.classList.toggle('active', visible);
@@ -1342,31 +1342,31 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	scrollDownLine(): void {
+	scrollDownLine(): codemavi {
 		this.xterm?.scrollDownLine();
 	}
 
-	scrollDownPage(): void {
+	scrollDownPage(): codemavi {
 		this.xterm?.scrollDownPage();
 	}
 
-	scrollToBottom(): void {
+	scrollToBottom(): codemavi {
 		this.xterm?.scrollToBottom();
 	}
 
-	scrollUpLine(): void {
+	scrollUpLine(): codemavi {
 		this.xterm?.scrollUpLine();
 	}
 
-	scrollUpPage(): void {
+	scrollUpPage(): codemavi {
 		this.xterm?.scrollUpPage();
 	}
 
-	scrollToTop(): void {
+	scrollToTop(): codemavi {
 		this.xterm?.scrollToTop();
 	}
 
-	clearBuffer(): void {
+	clearBuffer(): codemavi {
 		this._processManager.clearBuffer();
 		this.xterm?.clearBuffer();
 	}
@@ -1484,7 +1484,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return processManager;
 	}
 
-	private async _createProcess(): Promise<void> {
+	private async _createProcess(): Promise<codemavi> {
 		if (this.isDisposed) {
 			return;
 		}
@@ -1532,20 +1532,20 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return this.xterm?.raw.registerMarker(offset);
 	}
 
-	public addBufferMarker(properties: IMarkProperties): void {
+	public addBufferMarker(properties: IMarkProperties): codemavi {
 		this.capabilities.get(TerminalCapability.BufferMarkDetection)?.addMark(properties);
 	}
 
-	public scrollToMark(startMarkId: string, endMarkId?: string, highlight?: boolean): void {
+	public scrollToMark(startMarkId: string, endMarkId?: string, highlight?: boolean): codemavi {
 		this.xterm?.markTracker.scrollToClosestMarker(startMarkId, endMarkId, highlight);
 	}
 
-	public async freePortKillProcess(port: string, command: string): Promise<void> {
+	public async freePortKillProcess(port: string, command: string): Promise<codemavi> {
 		await this._processManager?.freePortKillProcess(port);
 		this.runCommand(command, false);
 	}
 
-	private _onProcessData(ev: IProcessDataEvent): void {
+	private _onProcessData(ev: IProcessDataEvent): codemavi {
 		// Ensure events are split by SI command execute and command finished sequence to ensure the
 		// output of the command can be read by extensions and the output of the command is of a
 		// consistent form respectively. This must be done here as xterm.js does not currently have
@@ -1570,13 +1570,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 			this._writeProcessData(leadingSegmentedData[i]);
 		}
 		if (ev.trackCommit) {
-			ev.writePromise = new Promise<void>(r => this._writeProcessData(lastData, r));
+			ev.writePromise = new Promise<codemavi>(r => this._writeProcessData(lastData, r));
 		} else {
 			this._writeProcessData(lastData);
 		}
 	}
 
-	private _writeProcessData(data: string, cb?: () => void) {
+	private _writeProcessData(data: string, cb?: () => codemavi) {
 		this._onWillData.fire(data);
 		const messageId = ++this._latestXtermWriteData;
 		this.xterm?.raw.write(data, () => {
@@ -1593,7 +1593,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	 * @param exitCode The exit code of the process, this is undefined when the terminal was exited
 	 * through user action.
 	 */
-	private async _onProcessExit(exitCodeOrError?: number | ITerminalLaunchError): Promise<void> {
+	private async _onProcessExit(exitCodeOrError?: number | ITerminalLaunchError): Promise<codemavi> {
 		// Prevent dispose functions being triggered multiple times
 		if (this._isExiting) {
 			return;
@@ -1670,7 +1670,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private _relaunchWithShellIntegrationDisabled(exitMessage: string | undefined): void {
+	private _relaunchWithShellIntegrationDisabled(exitMessage: string | undefined): codemavi {
 		this._shellLaunchConfig.ignoreShellIntegration = true;
 		this.relaunch();
 		this.statusList.add({
@@ -1698,12 +1698,12 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	/**
 	 * Ensure write calls to xterm.js have finished before resolving.
 	 */
-	private _flushXtermData(): Promise<void> {
+	private _flushXtermData(): Promise<codemavi> {
 		if (this._latestXtermWriteData === this._latestXtermParseData) {
 			return Promise.resolve();
 		}
 		let retries = 0;
-		return new Promise<void>(r => {
+		return new Promise<codemavi>(r => {
 			const interval = dom.disposableWindowInterval(dom.getActiveWindow().window, () => {
 				if (this._latestXtermWriteData === this._latestXtermParseData || ++retries === 5) {
 					interval.dispose();
@@ -1726,7 +1726,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private _writeInitialText(xterm: XtermTerminal, callback?: () => void): void {
+	private _writeInitialText(xterm: XtermTerminal, callback?: () => codemavi): codemavi {
 		if (!this._shellLaunchConfig.initialText) {
 			callback?.();
 			return;
@@ -1745,7 +1745,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	async reuseTerminal(shell: IShellLaunchConfig, reset: boolean = false): Promise<void> {
+	async reuseTerminal(shell: IShellLaunchConfig, reset: boolean = false): Promise<codemavi> {
 		// Unsubscribe any key listener we may have.
 		this._pressAnyKeyToCloseListener?.dispose();
 		this._pressAnyKeyToCloseListener = undefined;
@@ -1754,13 +1754,13 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		if (xterm) {
 			if (!reset) {
 				// Ensure new processes' output starts at start of new line
-				await new Promise<void>(r => xterm.raw.write('\n\x1b[G', r));
+				await new Promise<codemavi>(r => xterm.raw.write('\n\x1b[G', r));
 			}
 
 			// Print initialText if specified
 			if (shell.initialText) {
 				this._shellLaunchConfig.initialText = shell.initialText;
-				await new Promise<void>(r => this._writeInitialText(xterm, r));
+				await new Promise<codemavi>(r => this._writeInitialText(xterm, r));
 			}
 
 			// Clean up waitOnExit state
@@ -1798,11 +1798,11 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	}
 
 	@debounce(1000)
-	relaunch(): void {
+	relaunch(): codemavi {
 		this.reuseTerminal(this._shellLaunchConfig, true);
 	}
 
-	private _onTitleChange(title: string): void {
+	private _onTitleChange(title: string): codemavi {
 		if (this.isTitleSetByProcess) {
 			this._setTitle(title, TitleEventSource.Sequence);
 		}
@@ -1816,7 +1816,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 	}
 
 	@debounce(2000)
-	private async _updateProcessCwd(): Promise<void> {
+	private async _updateProcessCwd(): Promise<codemavi> {
 		if (this.isDisposed || this.shellLaunchConfig.customPtyImplementation) {
 			return;
 		}
@@ -1835,27 +1835,27 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	updateConfig(): void {
+	updateConfig(): codemavi {
 		this._setCommandsToSkipShell(this._terminalConfigurationService.config.commandsToSkipShell);
 		this._refreshEnvironmentVariableInfoWidgetState(this._processManager.environmentVariableInfo);
 	}
 
-	private async _updateUnicodeVersion(): Promise<void> {
+	private async _updateUnicodeVersion(): Promise<codemavi> {
 		this._processManager.setUnicodeVersion(this._terminalConfigurationService.config.unicodeVersion);
 	}
 
-	updateAccessibilitySupport(): void {
+	updateAccessibilitySupport(): codemavi {
 		this.xterm!.raw.options.screenReaderMode = this._accessibilityService.isScreenReaderOptimized();
 	}
 
-	private _setCommandsToSkipShell(commands: string[]): void {
+	private _setCommandsToSkipShell(commands: string[]): codemavi {
 		const excludeCommands = commands.filter(command => command[0] === '-').map(command => command.slice(1));
 		this._skipTerminalCommands = DEFAULT_COMMANDS_TO_SKIP_SHELL.filter(defaultCommand => {
 			return !excludeCommands.includes(defaultCommand);
 		}).concat(commands);
 	}
 
-	layout(dimension: dom.Dimension): void {
+	layout(dimension: dom.Dimension): codemavi {
 		this._lastLayoutDimensions = dimension;
 		if (this.disableLayout) {
 			return;
@@ -1894,7 +1894,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private async _resize(immediate?: boolean): Promise<void> {
+	private async _resize(immediate?: boolean): Promise<codemavi> {
 		if (!this.xterm) {
 			return;
 		}
@@ -1938,7 +1938,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		this._resizeDebouncer!.resize(cols, rows, immediate ?? false);
 	}
 
-	private async _updatePtyDimensions(rawXterm: XTermTerminal): Promise<void> {
+	private async _updatePtyDimensions(rawXterm: XTermTerminal): Promise<codemavi> {
 		await this._processManager.setDimensions(rawXterm.cols, rawXterm.rows);
 	}
 
@@ -1953,7 +1953,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private _setAriaLabel(xterm: XTermTerminal | undefined, terminalId: number, title: string | undefined): void {
+	private _setAriaLabel(xterm: XTermTerminal | undefined, terminalId: number, title: string | undefined): codemavi {
 		const labelParts: string[] = [];
 		if (xterm && xterm.textarea) {
 			if (title && title.length > 0) {
@@ -2013,7 +2013,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return title;
 	}
 
-	setOverrideDimensions(dimensions: ITerminalDimensionsOverride | undefined, immediate: boolean = false): void {
+	setOverrideDimensions(dimensions: ITerminalDimensionsOverride | undefined, immediate: boolean = false): codemavi {
 		if (this._dimensionsOverride && this._dimensionsOverride.forceExactSize && !dimensions && this._rows === 0 && this._cols === 0) {
 			// this terminal never had a real size => keep the last dimensions override exact size
 			this._cols = this._dimensionsOverride.cols;
@@ -2027,7 +2027,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	async setFixedDimensions(): Promise<void> {
+	async setFixedDimensions(): Promise<codemavi> {
 		const cols = await this._quickInputService.input({
 			title: nls.localize('setTerminalDimensionsColumn', "Set Fixed Dimensions: Column"),
 			placeHolder: 'Enter a number of columns or leave empty for automatic width',
@@ -2065,7 +2065,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return parsed;
 	}
 
-	async toggleSizeToContentWidth(): Promise<void> {
+	async toggleSizeToContentWidth(): Promise<codemavi> {
 		if (!this.xterm?.raw.buffer.active) {
 			return;
 		}
@@ -2092,14 +2092,14 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		this.focus();
 	}
 
-	private _refreshScrollbar(): Promise<void> {
+	private _refreshScrollbar(): Promise<codemavi> {
 		if (this._fixedCols || this._fixedRows) {
 			return this._addScrollbar();
 		}
 		return this._removeScrollbar();
 	}
 
-	private async _addScrollbar(): Promise<void> {
+	private async _addScrollbar(): Promise<codemavi> {
 		const charWidth = (this.xterm ? this.xterm.getFont() : this._terminalConfigurationService.getFont(dom.getWindow(this.domElement))).charWidth;
 		if (!this.xterm?.raw.element || !this._container || !charWidth || !this._fixedCols) {
 			return;
@@ -2134,7 +2134,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		}
 	}
 
-	private async _removeScrollbar(): Promise<void> {
+	private async _removeScrollbar(): Promise<codemavi> {
 		if (!this._container || !this._horizontalScrollbar) {
 			return;
 		}
@@ -2146,21 +2146,21 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		this._container.appendChild(this._wrapperElement);
 	}
 
-	private _setResolvedShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig): void {
+	private _setResolvedShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig): codemavi {
 		this._shellLaunchConfig.args = shellLaunchConfig.args;
 		this._shellLaunchConfig.cwd = shellLaunchConfig.cwd;
 		this._shellLaunchConfig.executable = shellLaunchConfig.executable;
 		this._shellLaunchConfig.env = shellLaunchConfig.env;
 	}
 
-	private _onEnvironmentVariableInfoChanged(info: IEnvironmentVariableInfo): void {
+	private _onEnvironmentVariableInfoChanged(info: IEnvironmentVariableInfo): codemavi {
 		if (info.requiresAction) {
 			this.xterm?.raw.textarea?.setAttribute('aria-label', nls.localize('terminalStaleTextBoxAriaLabel', "Terminal {0} environment is stale, run the 'Show Environment Information' command for more information", this._instanceId));
 		}
 		this._refreshEnvironmentVariableInfoWidgetState(info);
 	}
 
-	private async _refreshEnvironmentVariableInfoWidgetState(info?: IEnvironmentVariableInfo): Promise<void> {
+	private async _refreshEnvironmentVariableInfoWidgetState(info?: IEnvironmentVariableInfo): Promise<codemavi> {
 		// Check if the status should exist
 		if (!info) {
 			this.statusList.remove(TerminalStatus.RelaunchNeeded);
@@ -2217,7 +2217,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return this._processManager.refreshProperty(type);
 	}
 
-	private async _updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
+	private async _updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
 		return this._processManager.updateProperty(type, value);
 	}
 
@@ -2225,7 +2225,7 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		this._setTitle(title, TitleEventSource.Api);
 	}
 
-	private _setTitle(title: string | undefined, eventSource: TitleEventSource): void {
+	private _setTitle(title: string | undefined, eventSource: TitleEventSource): codemavi {
 		const reset = !title;
 		title = this._updateTitleProperties(title, eventSource);
 		const titleChanged = title !== this._title;
@@ -2307,19 +2307,19 @@ export class TerminalInstance extends Disposable implements ITerminalInstance {
 		return result?.id;
 	}
 
-	forceScrollbarVisibility(): void {
+	forceScrollbarVisibility(): codemavi {
 		this._wrapperElement.classList.add('force-scrollbar');
 	}
 
-	resetScrollbarVisibility(): void {
+	resetScrollbarVisibility(): codemavi {
 		this._wrapperElement.classList.remove('force-scrollbar');
 	}
 
-	setParentContextKeyService(parentContextKeyService: IContextKeyService): void {
+	setParentContextKeyService(parentContextKeyService: IContextKeyService): codemavi {
 		this._scopedContextKeyService.updateParent(parentContextKeyService);
 	}
 
-	async handleMouseEvent(event: MouseEvent, contextMenu: IMenu): Promise<{ cancelContextMenu: boolean } | void> {
+	async handleMouseEvent(event: MouseEvent, contextMenu: IMenu): Promise<{ cancelContextMenu: boolean } | codemavi> {
 		// Don't handle mouse event if it was on the scroll bar
 		if (dom.isHTMLElement(event.target) && (event.target.classList.contains('scrollbar') || event.target.classList.contains('slider'))) {
 			return { cancelContextMenu: true };
@@ -2531,7 +2531,7 @@ export class TerminalLabelComputer extends Disposable {
 		super();
 	}
 
-	refreshLabel(instance: Pick<ITerminalInstance, 'shellLaunchConfig' | 'shellType' | 'cwd' | 'fixedCols' | 'fixedRows' | 'initialCwd' | 'processName' | 'sequence' | 'userHome' | 'workspaceFolder' | 'staticTitle' | 'capabilities' | 'title' | 'description'>, reset?: boolean): void {
+	refreshLabel(instance: Pick<ITerminalInstance, 'shellLaunchConfig' | 'shellType' | 'cwd' | 'fixedCols' | 'fixedRows' | 'initialCwd' | 'processName' | 'sequence' | 'userHome' | 'workspaceFolder' | 'staticTitle' | 'capabilities' | 'title' | 'description'>, reset?: boolean): codemavi {
 		this._title = this.computeLabel(instance, this._terminalConfigurationService.config.tabs.title, TerminalLabelType.Title, reset);
 		this._description = this.computeLabel(instance, this._terminalConfigurationService.config.tabs.description, TerminalLabelType.Description);
 		if (this._title !== instance.title || this._description !== instance.description || reset) {

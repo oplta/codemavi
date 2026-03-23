@@ -117,7 +117,7 @@ export class InteractiveEditorInput extends EditorInput implements ICompositeNot
 		this._registerListeners();
 	}
 
-	private _registerListeners(): void {
+	private _registerListeners(): codemavi {
 		const oncePrimaryDisposed = Event.once(this.primary.onWillDispose);
 		this._register(oncePrimaryDisposed(() => {
 			if (!this.isDisposed()) {
@@ -242,7 +242,7 @@ export class InteractiveEditorInput extends EditorInput implements ICompositeNot
 		return this._editorModelReference?.isModified() ?? false;
 	}
 
-	override async revert(_group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
+	override async revert(_group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
 		if (this._editorModelReference && this._editorModelReference.isDirty()) {
 			await this._editorModelReference.revert(options);
 		}

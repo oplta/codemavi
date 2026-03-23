@@ -30,8 +30,8 @@ import { Disposable } from '../../../base/common/lifecycle.js';
 const telemetryFrom = 'menu';
 
 interface IMenuItemClickHandler {
-	inDevTools: (contents: WebContents) => void;
-	inNoWindow: () => void;
+	inDevTools: (contents: WebContents) => codemavi;
+	inNoWindow: () => codemavi;
 }
 
 type IMenuItemInvocation = (
@@ -63,7 +63,7 @@ export class Menubar extends Disposable {
 
 	private keybindings: { [commandId: string]: IMenubarKeybinding };
 
-	private readonly fallbackMenuHandlers: { [id: string]: (menuItem: MenuItem, browserWindow: BaseWindow | undefined, event: KeyboardEvent) => void } = Object.create(null);
+	private readonly fallbackMenuHandlers: { [id: string]: (menuItem: MenuItem, browserWindow: BaseWindow | undefined, event: KeyboardEvent) => codemavi } = Object.create(null);
 
 	constructor(
 		@IUpdateService private readonly updateService: IUpdateService,
@@ -117,7 +117,7 @@ export class Menubar extends Disposable {
 		}
 	}
 
-	private addFallbackHandlers(): void {
+	private addFallbackHandlers(): codemavi {
 
 		// File Menu Items
 		this.fallbackMenuHandlers['workbench.action.files.newUntitledFile'] = (menuItem, win, event) => {
@@ -169,7 +169,7 @@ export class Menubar extends Disposable {
 		}
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Keep flag when app quits
 		this._register(this.lifecycleMainService.onWillShutdown(() => this.willShutdown = true));
@@ -212,11 +212,11 @@ export class Menubar extends Disposable {
 	}
 
 
-	private scheduleUpdateMenu(): void {
+	private scheduleUpdateMenu(): codemavi {
 		this.menuUpdater.schedule(); // buffer multiple attempts to update the menu
 	}
 
-	private doUpdateMenu(): void {
+	private doUpdateMenu(): codemavi {
 
 		// Due to limitations in Electron, it is not possible to update menu items dynamically. The suggested
 		// workaround from Electron is to set the application menu again.
@@ -232,7 +232,7 @@ export class Menubar extends Disposable {
 		}
 	}
 
-	private onDidChangeWindowsCount(e: IWindowsCountChangedEvent): void {
+	private onDidChangeWindowsCount(e: IWindowsCountChangedEvent): codemavi {
 		if (!isMacintosh) {
 			return;
 		}
@@ -244,7 +244,7 @@ export class Menubar extends Disposable {
 		}
 	}
 
-	private onDidChangeWindowFocus(): void {
+	private onDidChangeWindowFocus(): codemavi {
 		if (!isMacintosh) {
 			return;
 		}
@@ -254,15 +254,15 @@ export class Menubar extends Disposable {
 		this.scheduleUpdateMenu();
 	}
 
-	private install(): void {
-		// Store old menu in our array to avoid GC to collect the menu and crash. See #55347
+	private install(): codemavi {
+		// Store old menu in our array to acodemavi GC to collect the menu and crash. See #55347
 		// TODO@sbatten Remove this when fixed upstream by Electron
 		const oldMenu = Menu.getApplicationMenu();
 		if (oldMenu) {
 			this.oldMenus.push(oldMenu);
 		}
 
-		// If we don't have a menu yet, set it to null to avoid the electron menu.
+		// If we don't have a menu yet, set it to null to acodemavi the electron menu.
 		// This should only happen on the first launch ever
 		if (Object.keys(this.menubarMenus).length === 0) {
 			this.doSetApplicationMenu(isMacintosh ? new Menu() : null);
@@ -377,7 +377,7 @@ export class Menubar extends Disposable {
 		this.menuGC.schedule();
 	}
 
-	private doSetApplicationMenu(menu: (Menu) | (null)): void {
+	private doSetApplicationMenu(menu: (Menu) | (null)): codemavi {
 
 		// Setting the application menu sets it to all opened windows,
 		// but we currently do not support a menu in auxiliary windows,
@@ -399,7 +399,7 @@ export class Menubar extends Disposable {
 		}
 	}
 
-	private setMacApplicationMenu(macApplicationMenu: Menu): void {
+	private setMacApplicationMenu(macApplicationMenu: Menu): codemavi {
 		const about = this.createMenuItem(nls.localize('mAbout', "About {0}", this.productService.nameLong), 'workbench.action.showAboutDialog');
 		const checkForUpdates = this.getUpdateMenuItems();
 
@@ -536,7 +536,7 @@ export class Menubar extends Disposable {
 		});
 	}
 
-	private setMenuById(menu: Menu, menuId: string): void {
+	private setMenuById(menu: Menu, menuId: string): codemavi {
 		if (this.menubarMenus && this.menubarMenus[menuId]) {
 			this.setMenu(menu, this.menubarMenus[menuId].items);
 		}
@@ -595,7 +595,7 @@ export class Menubar extends Disposable {
 		return new MenuItem(this.withKeybinding(commandId, options));
 	}
 
-	private setMacWindowMenu(macWindowMenu: Menu): void {
+	private setMacWindowMenu(macWindowMenu: Menu): codemavi {
 		const minimize = new MenuItem({ label: nls.localize('mMinimize', "Minimize"), role: 'minimize', accelerator: 'Command+M', enabled: this.windowsMainService.getWindowCount() > 0 });
 		const zoom = new MenuItem({ label: nls.localize('mZoom', "Zoom"), role: 'zoom', enabled: this.windowsMainService.getWindowCount() > 0 });
 		const bringAllToFront = new MenuItem({ label: nls.localize('mBringToFront', "Bring All to Front"), role: 'front', enabled: this.windowsMainService.getWindowCount() > 0 });
@@ -674,10 +674,10 @@ export class Menubar extends Disposable {
 	}
 
 	private createMenuItem(label: string, commandId: string | string[], enabled?: boolean, checked?: boolean): MenuItem;
-	private createMenuItem(label: string, click: () => void, enabled?: boolean, checked?: boolean): MenuItem;
+	private createMenuItem(label: string, click: () => codemavi, enabled?: boolean, checked?: boolean): MenuItem;
 	private createMenuItem(arg1: string, arg2: any, arg3?: boolean, arg4?: boolean): MenuItem {
 		const label = this.mnemonicLabel(arg1);
-		const click: () => void = (typeof arg2 === 'function') ? arg2 : (menuItem: MenuItem & IMenuItemWithKeybinding, win: BrowserWindow, event: KeyboardEvent) => {
+		const click: () => codemavi = (typeof arg2 === 'function') ? arg2 : (menuItem: MenuItem & IMenuItemWithKeybinding, win: BrowserWindow, event: KeyboardEvent) => {
 			const userSettingsLabel = menuItem ? menuItem.userSettingsLabel : null;
 			let commandId = arg2;
 			if (Array.isArray(arg2)) {
@@ -744,7 +744,7 @@ export class Menubar extends Disposable {
 		return new MenuItem(this.withKeybinding(commandId, options));
 	}
 
-	private makeContextAwareClickHandler(click: (menuItem: MenuItem, win: BaseWindow, event: KeyboardEvent) => void, contextSpecificHandlers: IMenuItemClickHandler): (menuItem: MenuItem, win: BaseWindow | undefined, event: KeyboardEvent) => void {
+	private makeContextAwareClickHandler(click: (menuItem: MenuItem, win: BaseWindow, event: KeyboardEvent) => codemavi, contextSpecificHandlers: IMenuItemClickHandler): (menuItem: MenuItem, win: BaseWindow | undefined, event: KeyboardEvent) => codemavi {
 		return (menuItem: MenuItem, win: BaseWindow | undefined, event: KeyboardEvent) => {
 
 			// No Active Window
@@ -864,12 +864,12 @@ export class Menubar extends Disposable {
 		return options;
 	}
 
-	private openUrl(url: string, id: string): void {
+	private openUrl(url: string, id: string): codemavi {
 		this.nativeHostMainService.openExternal(undefined, url);
 		this.reportMenuActionTelemetry(id);
 	}
 
-	private reportMenuActionTelemetry(id: string): void {
+	private reportMenuActionTelemetry(id: string): codemavi {
 		this.telemetryService.publicLog2<WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification>('workbenchActionExecuted', { id, from: telemetryFrom });
 	}
 

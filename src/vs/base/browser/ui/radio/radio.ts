@@ -48,7 +48,7 @@ export class Radio extends Widget {
 	private items: ReadonlyArray<IRadioOptionItem> = [];
 	private activeItem: IRadioOptionItem | undefined;
 
-	private readonly buttons = this._register(new DisposableMap<Button, { item: IRadioOptionItem; dispose(): void }>());
+	private readonly buttons = this._register(new DisposableMap<Button, { item: IRadioOptionItem; dispose(): codemavi }>());
 
 	constructor(opts: IRadioOptions) {
 		super();
@@ -61,7 +61,7 @@ export class Radio extends Widget {
 		this.setItems(opts.items);
 	}
 
-	setItems(items: ReadonlyArray<IRadioOptionItem>): void {
+	setItems(items: ReadonlyArray<IRadioOptionItem>): codemavi {
 		this.buttons.clearAndDisposeAll();
 		this.items = items;
 		this.activeItem = this.items.find(item => item.isActive) ?? this.items[0];
@@ -86,7 +86,7 @@ export class Radio extends Widget {
 		this.updateButtons();
 	}
 
-	setActiveItem(index: number): void {
+	setActiveItem(index: number): codemavi {
 		if (index < 0 || index >= this.items.length) {
 			throw new Error('Invalid Index');
 		}
@@ -94,13 +94,13 @@ export class Radio extends Widget {
 		this.updateButtons();
 	}
 
-	setEnabled(enabled: boolean): void {
+	setEnabled(enabled: boolean): codemavi {
 		for (const [button] of this.buttons) {
 			button.enabled = enabled;
 		}
 	}
 
-	private updateButtons(): void {
+	private updateButtons(): codemavi {
 		let isActive = false;
 		for (const [button, { item }] of this.buttons) {
 			const isPreviousActive = isActive;

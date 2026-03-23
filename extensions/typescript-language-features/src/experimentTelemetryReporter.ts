@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 import * as tas from 'vscode-tas-client';
 
 export interface IExperimentationTelemetryReporter extends tas.IExperimentationTelemetry, vscode.Disposable {
-	postEventObj(eventName: string, props: { [prop: string]: string }): void;
+	postEventObj(eventName: string, props: { [prop: string]: string }): codemavi;
 }
 
 /**
@@ -25,11 +25,11 @@ export class ExperimentationTelemetryReporter implements IExperimentationTelemet
 		this._reporter = reporter;
 	}
 
-	setSharedProperty(name: string, value: string): void {
+	setSharedProperty(name: string, value: string): codemavi {
 		this._sharedProperties[name] = value;
 	}
 
-	postEvent(eventName: string, props: Map<string, string>): void {
+	postEvent(eventName: string, props: Map<string, string>): codemavi {
 		const propsObject = {
 			...this._sharedProperties,
 			...Object.fromEntries(props),

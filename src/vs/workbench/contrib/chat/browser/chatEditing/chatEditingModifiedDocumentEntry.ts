@@ -98,7 +98,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 
 	constructor(
 		resourceRef: IReference<IResolvedTextEditorModel>,
-		private readonly _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => void },
+		private readonly _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => codemavi },
 		telemetryInfo: IModifiedEntryTelemetryInfo,
 		kind: ChatEditKind,
 		initialContent: string | undefined,
@@ -142,7 +142,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 			)
 		);
 
-		// Create a reference to this model to avoid it being disposed from under our nose
+		// Create a reference to this model to acodemavi it being disposed from under our nose
 		(async () => {
 			const reference = await textModelService.createModelReference(docSnapshot.uri);
 			if (this._store.isDisposed) {
@@ -223,7 +223,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		return diff ? diff.identical : false;
 	}
 
-	protected override _resetEditsState(tx: ITransaction): void {
+	protected override _resetEditsState(tx: ITransaction): codemavi {
 		super._resetEditsState(tx);
 		this._clearCurrentEditLineDecoration();
 	}
@@ -288,7 +288,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		return new SingleModelEditStackElement(label, 'chat.edit', this.modifiedModel, null);
 	}
 
-	async acceptAgentEdits(resource: URI, textEdits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<void> {
+	async acceptAgentEdits(resource: URI, textEdits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<codemavi> {
 
 		assertType(textEdits.every(TextEdit.isTextEdit), 'INVALID args, can only handle text edits');
 		assert(isEqual(resource, this.modifiedURI), ' INVALID args, can only edit THIS document');
@@ -427,7 +427,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		return undefined;
 	}
 
-	protected override async _doAccept(tx: ITransaction | undefined): Promise<void> {
+	protected override async _doAccept(tx: ITransaction | undefined): Promise<codemavi> {
 		this.originalModel.setValue(this.modifiedModel.createSnapshot());
 		this._diffInfo.set(nullDocumentDiff, tx);
 		this._edit = OffsetEdit.empty;
@@ -449,7 +449,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	protected override async _doReject(tx: ITransaction | undefined): Promise<void> {
+	protected override async _doReject(tx: ITransaction | undefined): Promise<codemavi> {
 		if (this.createdInRequestId === this._telemetryInfo.requestId) {
 			await this.docFileEditorModel.revert({ soft: true });
 			await this._fileService.del(this.modifiedURI);
@@ -465,7 +465,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	private _setDocValue(value: string): void {
+	private _setDocValue(value: string): codemavi {
 		if (this.modifiedModel.getValue() !== value) {
 
 			this.modifiedModel.pushStackElement();
@@ -477,7 +477,7 @@ export class ChatEditingModifiedDocumentEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	private async _collapse(transaction: ITransaction | undefined): Promise<void> {
+	private async _collapse(transaction: ITransaction | undefined): Promise<codemavi> {
 		this._multiDiffEntryDelegate.collapse(transaction);
 	}
 

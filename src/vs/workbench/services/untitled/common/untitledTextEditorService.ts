@@ -158,7 +158,7 @@ export interface IUntitledTextEditorModelManager extends IUntitledTextEditorServ
 	/**
 	 * Internal method: triggers the onDidSave event.
 	 */
-	notifyDidSave(source: URI, target: URI): void;
+	notifyDidSave(source: URI, target: URI): codemavi;
 }
 
 export class UntitledTextEditorService extends Disposable implements IUntitledTextEditorModelManager {
@@ -281,7 +281,7 @@ export class UntitledTextEditorService extends Disposable implements IUntitledTe
 		return model;
 	}
 
-	private registerModel(model: UntitledTextEditorModel): void {
+	private registerModel(model: UntitledTextEditorModel): codemavi {
 
 		// Install model listeners
 		const modelListeners = new DisposableStore();
@@ -340,7 +340,7 @@ export class UntitledTextEditorService extends Disposable implements IUntitledTe
 		return true;
 	}
 
-	notifyDidSave(source: URI, target: URI): void {
+	notifyDidSave(source: URI, target: URI): codemavi {
 		this._onDidSave.fire({ source, target });
 	}
 }

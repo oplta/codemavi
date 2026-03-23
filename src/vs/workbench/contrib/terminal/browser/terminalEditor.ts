@@ -89,7 +89,7 @@ export class TerminalEditor extends EditorPane {
 		}
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 		super.clearInput();
 		if (this._overflowGuardElement && this._editorInput?.terminalInstance?.domElement.parentElement === this._overflowGuardElement) {
 			this._editorInput.terminalInstance?.detachFromElement();
@@ -97,7 +97,7 @@ export class TerminalEditor extends EditorPane {
 		this._editorInput = undefined;
 	}
 
-	private _setActiveInstance(): void {
+	private _setActiveInstance(): codemavi {
 		if (!this._editorInput?.terminalInstance) {
 			return;
 		}
@@ -111,14 +111,14 @@ export class TerminalEditor extends EditorPane {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this._editorInstanceElement = parent;
 		this._overflowGuardElement = dom.$('.terminal-overflow-guard.terminal-editor');
 		this._editorInstanceElement.appendChild(this._overflowGuardElement);
 		this._registerListeners();
 	}
 
-	private _registerListeners(): void {
+	private _registerListeners(): codemavi {
 		if (!this._editorInstanceElement) {
 			return;
 		}
@@ -151,12 +151,12 @@ export class TerminalEditor extends EditorPane {
 		}));
 	}
 
-	private _updateTabActionBar(profiles: ITerminalProfile[]): void {
+	private _updateTabActionBar(profiles: ITerminalProfile[]): codemavi {
 		const actions = getTerminalActionBarArgs(TerminalLocation.Editor, profiles, this._getDefaultProfileName(), this._terminalProfileService.contributedProfiles, this._terminalService, this._dropdownMenu, this._disposableStore);
 		this._newDropdown.value?.update(actions.dropdownAction, actions.dropdownMenuActions);
 	}
 
-	layout(dimension: dom.Dimension): void {
+	layout(dimension: dom.Dimension): codemavi {
 		const instance = this._editorInput?.terminalInstance;
 		if (instance) {
 			instance.attachToElement(this._overflowGuardElement!);
@@ -165,7 +165,7 @@ export class TerminalEditor extends EditorPane {
 		this._lastDimension = dimension;
 	}
 
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): codemavi {
 		super.setVisible(visible);
 		this._editorInput?.terminalInstance?.setVisible(visible && this._workbenchLayoutService.isVisible(Parts.EDITOR_PART, this.window));
 	}

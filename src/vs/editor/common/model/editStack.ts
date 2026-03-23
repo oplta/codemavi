@@ -46,7 +46,7 @@ export class SingleModelEditStackData {
 		public changes: TextChange[]
 	) { }
 
-	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): void {
+	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): codemavi {
 		if (textChanges.length > 0) {
 			this.changes = compressConsecutiveTextChanges(this.changes, textChanges);
 		}
@@ -142,7 +142,7 @@ export class SingleModelEditStackData {
 }
 
 export interface IUndoRedoDelegate {
-	prepareUndoRedo(element: MultiModelEditStackElement): Promise<IDisposable> | IDisposable | void;
+	prepareUndoRedo(element: MultiModelEditStackElement): Promise<IDisposable> | IDisposable | codemavi;
 }
 
 export class SingleModelEditStackElement implements IResourceUndoRedoElement {
@@ -181,7 +181,7 @@ export class SingleModelEditStackElement implements IResourceUndoRedoElement {
 		return (uri.toString() === resource.toString());
 	}
 
-	public setModel(model: ITextModel | URI): void {
+	public setModel(model: ITextModel | URI): codemavi {
 		this.model = model;
 	}
 
@@ -189,25 +189,25 @@ export class SingleModelEditStackElement implements IResourceUndoRedoElement {
 		return (this.model === model && this._data instanceof SingleModelEditStackData);
 	}
 
-	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): void {
+	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): codemavi {
 		if (this._data instanceof SingleModelEditStackData) {
 			this._data.append(model, textChanges, afterEOL, afterVersionId, afterCursorState);
 		}
 	}
 
-	public close(): void {
+	public close(): codemavi {
 		if (this._data instanceof SingleModelEditStackData) {
 			this._data = this._data.serialize();
 		}
 	}
 
-	public open(): void {
+	public open(): codemavi {
 		if (!(this._data instanceof SingleModelEditStackData)) {
 			this._data = SingleModelEditStackData.deserialize(this._data);
 		}
 	}
 
-	public undo(): void {
+	public undo(): codemavi {
 		if (URI.isUri(this.model)) {
 			// don't have a model
 			throw new Error(`Invalid SingleModelEditStackElement`);
@@ -219,7 +219,7 @@ export class SingleModelEditStackElement implements IResourceUndoRedoElement {
 		this.model._applyUndo(data.changes, data.beforeEOL, data.beforeVersionId, data.beforeCursorState);
 	}
 
-	public redo(): void {
+	public redo(): codemavi {
 		if (URI.isUri(this.model)) {
 			// don't have a model
 			throw new Error(`Invalid SingleModelEditStackElement`);
@@ -268,11 +268,11 @@ export class MultiModelEditStackElement implements IWorkspaceUndoRedoElement {
 		this._delegate = null;
 	}
 
-	public setDelegate(delegate: IUndoRedoDelegate): void {
+	public setDelegate(delegate: IUndoRedoDelegate): codemavi {
 		this._delegate = delegate;
 	}
 
-	public prepareUndoRedo(): Promise<IDisposable> | IDisposable | void {
+	public prepareUndoRedo(): Promise<IDisposable> | IDisposable | codemavi {
 		if (this._delegate) {
 			return this._delegate.prepareUndoRedo(this);
 		}
@@ -293,7 +293,7 @@ export class MultiModelEditStackElement implements IWorkspaceUndoRedoElement {
 		return (this._editStackElementsMap.has(key));
 	}
 
-	public setModel(model: ITextModel | URI): void {
+	public setModel(model: ITextModel | URI): codemavi {
 		const key = uriGetComparisonKey(URI.isUri(model) ? model : model.uri);
 		if (this._editStackElementsMap.has(key)) {
 			this._editStackElementsMap.get(key)!.setModel(model);
@@ -312,21 +312,21 @@ export class MultiModelEditStackElement implements IWorkspaceUndoRedoElement {
 		return false;
 	}
 
-	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): void {
+	public append(model: ITextModel, textChanges: TextChange[], afterEOL: EndOfLineSequence, afterVersionId: number, afterCursorState: Selection[] | null): codemavi {
 		const key = uriGetComparisonKey(model.uri);
 		const editStackElement = this._editStackElementsMap.get(key)!;
 		editStackElement.append(model, textChanges, afterEOL, afterVersionId, afterCursorState);
 	}
 
-	public close(): void {
+	public close(): codemavi {
 		this._isOpen = false;
 	}
 
-	public open(): void {
+	public open(): codemavi {
 		// cannot reopen
 	}
 
-	public undo(): void {
+	public undo(): codemavi {
 		this._isOpen = false;
 
 		for (const editStackElement of this._editStackElementsArr) {
@@ -334,7 +334,7 @@ export class MultiModelEditStackElement implements IWorkspaceUndoRedoElement {
 		}
 	}
 
-	public redo(): void {
+	public redo(): codemavi {
 		for (const editStackElement of this._editStackElementsArr) {
 			editStackElement.redo();
 		}
@@ -390,21 +390,21 @@ export class EditStack {
 		this._undoRedoService = undoRedoService;
 	}
 
-	public pushStackElement(): void {
+	public pushStackElement(): codemavi {
 		const lastElement = this._undoRedoService.getLastElement(this._model.uri);
 		if (isEditStackElement(lastElement)) {
 			lastElement.close();
 		}
 	}
 
-	public popStackElement(): void {
+	public popStackElement(): codemavi {
 		const lastElement = this._undoRedoService.getLastElement(this._model.uri);
 		if (isEditStackElement(lastElement)) {
 			lastElement.open();
 		}
 	}
 
-	public clear(): void {
+	public clear(): codemavi {
 		this._undoRedoService.removeElements(this._model.uri);
 	}
 
@@ -418,7 +418,7 @@ export class EditStack {
 		return newElement;
 	}
 
-	public pushEOL(eol: EndOfLineSequence): void {
+	public pushEOL(eol: EndOfLineSequence): codemavi {
 		const editStackElement = this._getOrCreateEditStackElement(null, undefined);
 		this._model.setEOL(eol);
 		editStackElement.append(this._model, [], getModelEOL(this._model), this._model.getAlternativeVersionId(), null);

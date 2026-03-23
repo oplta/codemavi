@@ -54,7 +54,7 @@ export class TextModelContentsProvider extends PromptContentsProviderBase<IModel
 		const linesCount = this.model.getLineCount();
 
 		// provide the changed lines to the stream incrementally and asynchronously
-		// to avoid blocking the main thread and save system resources used
+		// to acodemavi blocking the main thread and save system resources used
 		let i = 1;
 		const interval = setInterval(() => {
 			// if we have written all lines or lines count is zero,

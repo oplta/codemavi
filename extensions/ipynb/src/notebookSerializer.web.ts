@@ -23,7 +23,7 @@ export class NotebookSerializer extends NotebookSerializerBase {
 
 	override dispose() {
 		try {
-			void this.worker?.terminate();
+			codemavi this.worker?.terminate();
 		} catch {
 			//
 		}

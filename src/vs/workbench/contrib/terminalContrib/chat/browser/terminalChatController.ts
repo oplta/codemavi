@@ -74,7 +74,7 @@ export class TerminalChatController extends Disposable implements ITerminalContr
 		}, 'terminal'));
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
 		this._terminalChatWidget = new Lazy(() => {
 			const chatWidget = this._register(this._instantiationService.createInstance(TerminalChatWidget, this._ctx.instance.domElement!, this._ctx.instance, xterm));
 			this._register(chatWidget.focusTracker.onDidFocus(() => {
@@ -97,7 +97,7 @@ export class TerminalChatController extends Disposable implements ITerminalContr
 
 	private _forcedPlaceholder: string | undefined = undefined;
 
-	private _updatePlaceholder(): void {
+	private _updatePlaceholder(): codemavi {
 		const inlineChatWidget = this._terminalChatWidget?.value.inlineChatWidget;
 		if (inlineChatWidget) {
 			inlineChatWidget.placeholder = this._getPlaceholderText();
@@ -108,17 +108,17 @@ export class TerminalChatController extends Disposable implements ITerminalContr
 		return this._forcedPlaceholder ?? '';
 	}
 
-	setPlaceholder(text: string): void {
+	setPlaceholder(text: string): codemavi {
 		this._forcedPlaceholder = text;
 		this._updatePlaceholder();
 	}
 
-	resetPlaceholder(): void {
+	resetPlaceholder(): codemavi {
 		this._forcedPlaceholder = undefined;
 		this._updatePlaceholder();
 	}
 
-	updateInput(text: string, selectAll = true): void {
+	updateInput(text: string, selectAll = true): codemavi {
 		const widget = this._terminalChatWidget?.value.inlineChatWidget;
 		if (widget) {
 			widget.value = text;
@@ -128,7 +128,7 @@ export class TerminalChatController extends Disposable implements ITerminalContr
 		}
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this._terminalChatWidget?.value.focus();
 	}
 
@@ -136,7 +136,7 @@ export class TerminalChatController extends Disposable implements ITerminalContr
 		return this._terminalChatWidget?.rawValue?.hasFocus() ?? false;
 	}
 
-	async viewInChat(): Promise<void> {
+	async viewInChat(): Promise<codemavi> {
 		const chatModel = this.terminalChatWidget?.inlineChatWidget.chatWidget.viewModel?.model;
 		if (chatModel) {
 			await this._instantiationService.invokeFunction(moveToPanelChat, chatModel);

@@ -19,15 +19,15 @@ export class ViewEventHandler extends Disposable {
 		return this._shouldRender;
 	}
 
-	public forceShouldRender(): void {
+	public forceShouldRender(): codemavi {
 		this._shouldRender = true;
 	}
 
-	protected setShouldRender(): void {
+	protected setShouldRender(): codemavi {
 		this._shouldRender = true;
 	}
 
-	public onDidRender(): void {
+	public onDidRender(): codemavi {
 		this._shouldRender = false;
 	}
 
@@ -90,7 +90,7 @@ export class ViewEventHandler extends Disposable {
 
 	// --- end event handlers
 
-	public handleEvents(events: viewEvents.ViewEvent[]): void {
+	public handleEvents(events: viewEvents.ViewEvent[]): codemavi {
 
 		let shouldRender = false;
 

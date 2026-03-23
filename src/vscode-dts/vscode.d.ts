@@ -729,7 +729,7 @@ declare module 'vscode' {
 		/**
 		 * Remove this decoration type and all decorations on all text editors using it.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -1283,7 +1283,7 @@ declare module 'vscode' {
 		 * @param options The undo/redo behavior around this edit. By default, undo stops will be created before and after this edit.
 		 * @returns A promise that resolves with a value indicating if the edits could be applied.
 		 */
-		edit(callback: (editBuilder: TextEditorEdit) => void, options?: {
+		edit(callback: (editBuilder: TextEditorEdit) => codemavi, options?: {
 			/**
 			 * Add undo stop before making the edits.
 			 */
@@ -1331,7 +1331,7 @@ declare module 'vscode' {
 		 * @param decorationType A decoration type.
 		 * @param rangesOrOptions Either {@link Range ranges} or more detailed {@link DecorationOptions options}.
 		 */
-		setDecorations(decorationType: TextEditorDecorationType, rangesOrOptions: readonly Range[] | readonly DecorationOptions[]): void;
+		setDecorations(decorationType: TextEditorDecorationType, rangesOrOptions: readonly Range[] | readonly DecorationOptions[]): codemavi;
 
 		/**
 		 * Scroll as indicated by `revealType` in order to reveal the given range.
@@ -1339,7 +1339,7 @@ declare module 'vscode' {
 		 * @param range A range.
 		 * @param revealType The scrolling strategy for revealing `range`.
 		 */
-		revealRange(range: Range, revealType?: TextEditorRevealType): void;
+		revealRange(range: Range, revealType?: TextEditorRevealType): codemavi;
 
 		/**
 		 * Show the text editor.
@@ -1349,7 +1349,7 @@ declare module 'vscode' {
 		 * @param column The {@link ViewColumn column} in which to show this editor.
 		 * This method shows unexpected behavior and will be removed in the next major update.
 		 */
-		show(column?: ViewColumn): void;
+		show(column?: ViewColumn): codemavi;
 
 		/**
 		 * Hide the text editor.
@@ -1357,7 +1357,7 @@ declare module 'vscode' {
 		 * @deprecated Use the command `workbench.action.closeActiveEditor` instead.
 		 * This method shows unexpected behavior and will be removed in the next major update.
 		 */
-		hide(): void;
+		hide(): codemavi;
 	}
 
 	/**
@@ -1387,7 +1387,7 @@ declare module 'vscode' {
 		 * @param location The range this operation should remove.
 		 * @param value The new text this operation should insert after removing `location`.
 		 */
-		replace(location: Position | Range | Selection, value: string): void;
+		replace(location: Position | Range | Selection, value: string): codemavi;
 
 		/**
 		 * Insert text at a location.
@@ -1397,21 +1397,21 @@ declare module 'vscode' {
 		 * @param location The position where the new text should be inserted.
 		 * @param value The new text this operation should insert.
 		 */
-		insert(location: Position, value: string): void;
+		insert(location: Position, value: string): codemavi;
 
 		/**
 		 * Delete a certain text region.
 		 *
 		 * @param location The range this operation should remove.
 		 */
-		delete(location: Range | Selection): void;
+		delete(location: Range | Selection): codemavi;
 
 		/**
 		 * Set the end of line sequence.
 		 *
 		 * @param endOfLine The new end of line for the {@link TextDocument document}.
 		 */
-		setEndOfLine(endOfLine: EndOfLine): void;
+		setEndOfLine(endOfLine: EndOfLine): codemavi;
 	}
 
 	/**
@@ -1425,7 +1425,7 @@ declare module 'vscode' {
 		 * `file:///usr/home`, or `scheme:with/path`.
 		 *
 		 * *Note* that for a while uris without a `scheme` were accepted. That is not correct
-		 * as all uris should have a scheme. To avoid breakage of existing code the optional
+		 * as all uris should have a scheme. To acodemavi breakage of existing code the optional
 		 * `strict`-argument has been added. We *strongly* advise to use it, e.g. `Uri.parse('my:uri', true)`
 		 *
 		 * @see {@link Uri.toString}
@@ -1664,12 +1664,12 @@ declare module 'vscode' {
 		/**
 		 * Signal cancellation on the token.
 		 */
-		cancel(): void;
+		cancel(): codemavi;
 
 		/**
 		 * Dispose object and free resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -1769,12 +1769,12 @@ declare module 'vscode' {
 		 *
 		 * @param data The event object.
 		 */
-		fire(data: T): void;
+		fire(data: T): codemavi;
 
 		/**
 		 * Dispose this object and free resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -2704,7 +2704,7 @@ declare module 'vscode' {
 		 * {@link Selection selection} if the actions are being requested in the currently active editor.
 		 * @param context Provides additional information about what code actions are being requested. You can use this
 		 * to see what specific type of code actions are being requested by the editor in order to return more relevant
-		 * actions and avoid returning irrelevant code actions that the editor will discard.
+		 * actions and acodemavi returning irrelevant code actions that the editor will discard.
 		 * @param token A cancellation token.
 		 *
 		 * @returns An array of code actions, such as quick fixes or refactorings. The lack of a result can be signaled
@@ -2740,7 +2740,7 @@ declare module 'vscode' {
 		 * List of {@link CodeActionKind CodeActionKinds} that a {@link CodeActionProvider} may return.
 		 *
 		 * This list is used to determine if a given `CodeActionProvider` should be invoked or not.
-		 * To avoid unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
+		 * To acodemavi unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
 		 * list of kinds may either be generic, such as `[CodeActionKind.Refactor]`, or list out every kind provided,
 		 * such as `[CodeActionKind.Refactor.Extract.append('function'), CodeActionKind.Refactor.Extract.append('constant'), ...]`.
 		 */
@@ -2826,7 +2826,7 @@ declare module 'vscode' {
 		/**
 		 * An optional event to signal that the code lenses from this provider have changed.
 		 */
-		onDidChangeCodeLenses?: Event<void>;
+		onDidChangeCodeLenses?: Event<codemavi>;
 
 		/**
 		 * Compute a list of {@link CodeLens lenses}. This call should return as fast as possible and if
@@ -3266,7 +3266,7 @@ declare module 'vscode' {
 		 * An optional event to signal that inline values have changed.
 		 * @see {@link EventEmitter}
 		 */
-		onDidChangeInlineValues?: Event<void> | undefined;
+		onDidChangeInlineValues?: Event<codemavi> | undefined;
 
 		/**
 		 * Provide "inline value" information for a given document and range.
@@ -3930,7 +3930,7 @@ declare module 'vscode' {
 		 * @param newText A string.
 		 * @param metadata Optional metadata for the entry.
 		 */
-		replace(uri: Uri, range: Range, newText: string, metadata?: WorkspaceEditEntryMetadata): void;
+		replace(uri: Uri, range: Range, newText: string, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Insert the given text at the given position.
@@ -3940,7 +3940,7 @@ declare module 'vscode' {
 		 * @param newText A string.
 		 * @param metadata Optional metadata for the entry.
 		 */
-		insert(uri: Uri, position: Position, newText: string, metadata?: WorkspaceEditEntryMetadata): void;
+		insert(uri: Uri, position: Position, newText: string, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Delete the text at the given range.
@@ -3949,7 +3949,7 @@ declare module 'vscode' {
 		 * @param range A range.
 		 * @param metadata Optional metadata for the entry.
 		 */
-		delete(uri: Uri, range: Range, metadata?: WorkspaceEditEntryMetadata): void;
+		delete(uri: Uri, range: Range, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Check if a text edit for a resource exists.
@@ -3965,7 +3965,7 @@ declare module 'vscode' {
 		 * @param uri A resource identifier.
 		 * @param edits An array of edits.
 		 */
-		set(uri: Uri, edits: ReadonlyArray<TextEdit | SnippetTextEdit>): void;
+		set(uri: Uri, edits: ReadonlyArray<TextEdit | SnippetTextEdit>): codemavi;
 
 		/**
 		 * Set (and replace) text edits or snippet edits with metadata for a resource.
@@ -3973,7 +3973,7 @@ declare module 'vscode' {
 		 * @param uri A resource identifier.
 		 * @param edits An array of edits.
 		 */
-		set(uri: Uri, edits: ReadonlyArray<[TextEdit | SnippetTextEdit, WorkspaceEditEntryMetadata | undefined]>): void;
+		set(uri: Uri, edits: ReadonlyArray<[TextEdit | SnippetTextEdit, WorkspaceEditEntryMetadata | undefined]>): codemavi;
 
 		/**
 		 * Set (and replace) notebook edits for a resource.
@@ -3981,7 +3981,7 @@ declare module 'vscode' {
 		 * @param uri A resource identifier.
 		 * @param edits An array of edits.
 		 */
-		set(uri: Uri, edits: readonly NotebookEdit[]): void;
+		set(uri: Uri, edits: readonly NotebookEdit[]): codemavi;
 
 		/**
 		 * Set (and replace) notebook edits with metadata for a resource.
@@ -3989,7 +3989,7 @@ declare module 'vscode' {
 		 * @param uri A resource identifier.
 		 * @param edits An array of edits.
 		 */
-		set(uri: Uri, edits: ReadonlyArray<[NotebookEdit, WorkspaceEditEntryMetadata | undefined]>): void;
+		set(uri: Uri, edits: ReadonlyArray<[NotebookEdit, WorkspaceEditEntryMetadata | undefined]>): codemavi;
 
 		/**
 		 * Get the text edits for a resource.
@@ -4023,10 +4023,10 @@ declare module 'vscode' {
 			 * The initial contents of the new file.
 			 *
 			 * If creating a file from a {@link DocumentDropEditProvider drop operation}, you can
-			 * pass in a {@link DataTransferFile} to improve performance by avoiding extra data copying.
+			 * pass in a {@link DataTransferFile} to improve performance by acodemaviing extra data copying.
 			 */
 			readonly contents?: Uint8Array | DataTransferFile;
-		}, metadata?: WorkspaceEditEntryMetadata): void;
+		}, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Delete a file or folder.
@@ -4043,7 +4043,7 @@ declare module 'vscode' {
 			 * Do nothing if a file with `uri` exists already.
 			 */
 			readonly ignoreIfNotExists?: boolean;
-		}, metadata?: WorkspaceEditEntryMetadata): void;
+		}, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Rename a file or folder.
@@ -4063,7 +4063,7 @@ declare module 'vscode' {
 			 * Do nothing if a file with `uri` exists already.
 			 */
 			readonly ignoreIfExists?: boolean;
-		}, metadata?: WorkspaceEditEntryMetadata): void;
+		}, metadata?: WorkspaceEditEntryMetadata): codemavi;
 
 		/**
 		 * Get all text edits grouped by resource.
@@ -4240,7 +4240,7 @@ declare module 'vscode' {
 		 * @param tokenType The encoded token type.
 		 * @param tokenModifiers The encoded token modifiers.
 		 */
-		push(line: number, char: number, length: number, tokenType: number, tokenModifiers?: number): void;
+		push(line: number, char: number, length: number, tokenType: number, tokenModifiers?: number): codemavi;
 
 		/**
 		 * Add another token. Use only when providing a legend.
@@ -4249,7 +4249,7 @@ declare module 'vscode' {
 		 * @param tokenType The token type.
 		 * @param tokenModifiers The token modifiers.
 		 */
-		push(range: Range, tokenType: string, tokenModifiers?: readonly string[]): void;
+		push(range: Range, tokenType: string, tokenModifiers?: readonly string[]): codemavi;
 
 		/**
 		 * Finish and create a `SemanticTokens` instance.
@@ -4346,7 +4346,7 @@ declare module 'vscode' {
 		/**
 		 * An optional event to signal that the semantic tokens from this provider have changed.
 		 */
-		onDidChangeSemanticTokens?: Event<void>;
+		onDidChangeSemanticTokens?: Event<codemavi>;
 
 		/**
 		 * Tokens in a file are represented as an array of integers. The position of each token is expressed relative to
@@ -5645,7 +5645,7 @@ declare module 'vscode' {
 		/**
 		 * An optional event to signal that inlay hints from this provider have changed.
 		 */
-		onDidChangeInlayHints?: Event<void>;
+		onDidChangeInlayHints?: Event<codemavi>;
 
 		/**
 		 * Provide inlay hints for the given range and document.
@@ -5745,7 +5745,7 @@ declare module 'vscode' {
 		/**
 		 * An optional event to signal that the folding ranges from this provider have changed.
 		 */
-		onDidChangeFoldingRanges?: Event<void>;
+		onDidChangeFoldingRanges?: Event<codemavi>;
 
 		/**
 		 * Returns a list of folding ranges or null and undefined if the provider
@@ -6305,7 +6305,7 @@ declare module 'vscode' {
 		 *
 		 * @return Optional thenable that resolves when all changes to the `dataTransfer` are complete.
 		 */
-		prepareDocumentPaste?(document: TextDocument, ranges: readonly Range[], dataTransfer: DataTransfer, token: CancellationToken): void | Thenable<void>;
+		prepareDocumentPaste?(document: TextDocument, ranges: readonly Range[], dataTransfer: DataTransfer, token: CancellationToken): codemavi | Thenable<codemavi>;
 
 		/**
 		 * Invoked before the user pastes into a {@link TextEditor text editor}.
@@ -6870,7 +6870,7 @@ declare module 'vscode' {
 		 *	- configuration to workspace folder when there is no workspace folder settings.
 		 *	- configuration to workspace folder when {@link WorkspaceConfiguration} is not scoped to a resource.
 		 */
-		update(section: string, value: any, configurationTarget?: ConfigurationTarget | boolean | null, overrideInLanguage?: boolean): Thenable<void>;
+		update(section: string, value: any, configurationTarget?: ConfigurationTarget | boolean | null, overrideInLanguage?: boolean): Thenable<codemavi>;
 
 		/**
 		 * Readable dictionary that backs this configuration.
@@ -7109,7 +7109,7 @@ declare module 'vscode' {
 		 * @param uri A resource identifier.
 		 * @param diagnostics Array of diagnostics or `undefined`
 		 */
-		set(uri: Uri, diagnostics: readonly Diagnostic[] | undefined): void;
+		set(uri: Uri, diagnostics: readonly Diagnostic[] | undefined): codemavi;
 
 		/**
 		 * Replace diagnostics for multiple resources in this collection.
@@ -7121,7 +7121,7 @@ declare module 'vscode' {
 		 *
 		 * @param entries An array of tuples, like `[[file1, [d1, d2]], [file2, [d3, d4, d5]]]`, or `undefined`.
 		 */
-		set(entries: ReadonlyArray<[Uri, readonly Diagnostic[] | undefined]>): void;
+		set(entries: ReadonlyArray<[Uri, readonly Diagnostic[] | undefined]>): codemavi;
 
 		/**
 		 * Remove all diagnostics from this collection that belong
@@ -7129,13 +7129,13 @@ declare module 'vscode' {
 		 *
 		 * @param uri A resource identifier.
 		 */
-		delete(uri: Uri): void;
+		delete(uri: Uri): codemavi;
 
 		/**
 		 * Remove all diagnostics from this collection. The same
 		 * as calling `#set(undefined)`;
 		 */
-		clear(): void;
+		clear(): codemavi;
 
 		/**
 		 * Iterate over each entry in this collection.
@@ -7143,7 +7143,7 @@ declare module 'vscode' {
 		 * @param callback Function to execute for each entry.
 		 * @param thisArg The `this` context used when invoking the handler function.
 		 */
-		forEach(callback: (uri: Uri, diagnostics: readonly Diagnostic[], collection: DiagnosticCollection) => any, thisArg?: any): void;
+		forEach(callback: (uri: Uri, diagnostics: readonly Diagnostic[], collection: DiagnosticCollection) => any, thisArg?: any): codemavi;
 
 		/**
 		 * Get the diagnostics for a given resource. *Note* that you cannot
@@ -7167,7 +7167,7 @@ declare module 'vscode' {
 		 * Dispose and free associated resources. Calls
 		 * {@link DiagnosticCollection.clear clear}.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -7255,7 +7255,7 @@ declare module 'vscode' {
 		/**
 		 * Dispose and free associated resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -7332,7 +7332,7 @@ declare module 'vscode' {
 		 *
 		 * @param value A string, falsy values will not be printed.
 		 */
-		append(value: string): void;
+		append(value: string): codemavi;
 
 		/**
 		 * Append the given value and a line feed character
@@ -7340,46 +7340,46 @@ declare module 'vscode' {
 		 *
 		 * @param value A string, falsy values will be printed.
 		 */
-		appendLine(value: string): void;
+		appendLine(value: string): codemavi;
 
 		/**
 		 * Replaces all output from the channel with the given value.
 		 *
 		 * @param value A string, falsy values will not be printed.
 		 */
-		replace(value: string): void;
+		replace(value: string): codemavi;
 
 		/**
 		 * Removes all output from the channel.
 		 */
-		clear(): void;
+		clear(): codemavi;
 
 		/**
 		 * Reveal this channel in the UI.
 		 *
 		 * @param preserveFocus When `true` the channel will not take focus.
 		 */
-		show(preserveFocus?: boolean): void;
+		show(preserveFocus?: boolean): codemavi;
 
 		/**
 		 * Reveal this channel in the UI.
 		 *
-		 * @deprecated Use the overload with just one parameter (`show(preserveFocus?: boolean): void`).
+		 * @deprecated Use the overload with just one parameter (`show(preserveFocus?: boolean): codemavi`).
 		 *
 		 * @param column This argument is **deprecated** and will be ignored.
 		 * @param preserveFocus When `true` the channel will not take focus.
 		 */
-		show(column?: ViewColumn, preserveFocus?: boolean): void;
+		show(column?: ViewColumn, preserveFocus?: boolean): codemavi;
 
 		/**
 		 * Hide this channel from the UI.
 		 */
-		hide(): void;
+		hide(): codemavi;
 
 		/**
 		 * Dispose and free associated resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -7407,7 +7407,7 @@ declare module 'vscode' {
 		 *
 		 * @param message trace message to log
 		 */
-		trace(message: string, ...args: any[]): void;
+		trace(message: string, ...args: any[]): codemavi;
 
 		/**
 		 * Outputs the given debug message to the channel.
@@ -7416,7 +7416,7 @@ declare module 'vscode' {
 		 *
 		 * @param message debug message to log
 		 */
-		debug(message: string, ...args: any[]): void;
+		debug(message: string, ...args: any[]): codemavi;
 
 		/**
 		 * Outputs the given information message to the channel.
@@ -7425,7 +7425,7 @@ declare module 'vscode' {
 		 *
 		 * @param message info message to log
 		 */
-		info(message: string, ...args: any[]): void;
+		info(message: string, ...args: any[]): codemavi;
 
 		/**
 		 * Outputs the given warning message to the channel.
@@ -7434,7 +7434,7 @@ declare module 'vscode' {
 		 *
 		 * @param message warning message to log
 		 */
-		warn(message: string, ...args: any[]): void;
+		warn(message: string, ...args: any[]): codemavi;
 
 		/**
 		 * Outputs the given error or error message to the channel.
@@ -7443,7 +7443,7 @@ declare module 'vscode' {
 		 *
 		 * @param error Error or error message to log
 		 */
-		error(error: string | Error, ...args: any[]): void;
+		error(error: string | Error, ...args: any[]): codemavi;
 	}
 
 	/**
@@ -7564,18 +7564,18 @@ declare module 'vscode' {
 		/**
 		 * Shows the entry in the status bar.
 		 */
-		show(): void;
+		show(): codemavi;
 
 		/**
 		 * Hide the entry in the status bar.
 		 */
-		hide(): void;
+		hide(): codemavi;
 
 		/**
 		 * Dispose and free associated resources. Call
 		 * {@link StatusBarItem.hide hide}.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -7588,7 +7588,7 @@ declare module 'vscode' {
 		 * @param value A progress item, like a message and/or an
 		 * report on how much work finished
 		 */
-		report(value: T): void;
+		report(value: T): codemavi;
 	}
 
 	/**
@@ -7653,24 +7653,24 @@ declare module 'vscode' {
 		 * @param shouldExecute Indicates that the text being sent should be executed rather than just inserted in the terminal.
 		 * The character(s) added are `\n` or `\r\n`, depending on the platform. This defaults to `true`.
 		 */
-		sendText(text: string, shouldExecute?: boolean): void;
+		sendText(text: string, shouldExecute?: boolean): codemavi;
 
 		/**
 		 * Show the terminal panel and reveal this terminal in the UI.
 		 *
 		 * @param preserveFocus When `true` the terminal will not take focus.
 		 */
-		show(preserveFocus?: boolean): void;
+		show(preserveFocus?: boolean): codemavi;
 
 		/**
 		 * Hide the terminal panel if this terminal is currently showing.
 		 */
-		hide(): void;
+		hide(): codemavi;
 
 		/**
 		 * Dispose and free associated resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -8100,7 +8100,7 @@ declare module 'vscode' {
 		 * Handle an activated terminal link.
 		 * @param link The link to handle.
 		 */
-		handleTerminalLink(link: T): ProviderResult<void>;
+		handleTerminalLink(link: T): ProviderResult<codemavi>;
 	}
 
 	/**
@@ -8377,7 +8377,7 @@ declare module 'vscode' {
 			 *
 			 * @param keys The set of keys whose values are synced.
 			 */
-			setKeysForSync(keys: readonly string[]): void;
+			setKeysForSync(keys: readonly string[]): codemavi;
 		};
 
 		/**
@@ -8541,7 +8541,7 @@ declare module 'vscode' {
 		 * @param key A string.
 		 * @param value A value. MUST not contain cyclic references.
 		 */
-		update(key: string, value: any): Thenable<void>;
+		update(key: string, value: any): Thenable<codemavi>;
 	}
 
 	/**
@@ -8574,13 +8574,13 @@ declare module 'vscode' {
 		 * @param key The key to store the secret under.
 		 * @param value The secret.
 		 */
-		store(key: string, value: string): Thenable<void>;
+		store(key: string, value: string): Thenable<codemavi>;
 
 		/**
 		 * Remove a secret from storage.
 		 * @param key The key the secret was stored under.
 		 */
-		delete(key: string): Thenable<void>;
+		delete(key: string): Thenable<codemavi>;
 
 		/**
 		 * Fires when a secret is stored or deleted.
@@ -9185,7 +9185,7 @@ declare module 'vscode' {
 		/**
 		 * Terminates the task execution.
 		 */
-		terminate(): void;
+		terminate(): codemavi;
 	}
 
 	/**
@@ -9594,7 +9594,7 @@ declare module 'vscode' {
 		 * @throws {@linkcode FileSystemError.FileExists FileExists} when `uri` already exists.
 		 * @throws {@linkcode FileSystemError.NoPermissions NoPermissions} when permissions aren't sufficient.
 		 */
-		createDirectory(uri: Uri): void | Thenable<void>;
+		createDirectory(uri: Uri): codemavi | Thenable<codemavi>;
 
 		/**
 		 * Read the entire contents of a file.
@@ -9625,7 +9625,7 @@ declare module 'vscode' {
 			 * Overwrite the file if it does exist.
 			 */
 			readonly overwrite: boolean;
-		}): void | Thenable<void>;
+		}): codemavi | Thenable<codemavi>;
 
 		/**
 		 * Delete a file.
@@ -9640,7 +9640,7 @@ declare module 'vscode' {
 			 * Delete the content recursively if a folder is denoted.
 			 */
 			readonly recursive: boolean;
-		}): void | Thenable<void>;
+		}): codemavi | Thenable<codemavi>;
 
 		/**
 		 * Rename a file or folder.
@@ -9658,7 +9658,7 @@ declare module 'vscode' {
 			 * Overwrite the file if it does exist.
 			 */
 			readonly overwrite: boolean;
-		}): void | Thenable<void>;
+		}): codemavi | Thenable<codemavi>;
 
 		/**
 		 * Copy files or folders. Implementing this function is optional but it will speedup
@@ -9677,7 +9677,7 @@ declare module 'vscode' {
 			 * Overwrite the file if it does exist.
 			 */
 			readonly overwrite: boolean;
-		}): void | Thenable<void>;
+		}): codemavi | Thenable<codemavi>;
 	}
 
 	/**
@@ -9714,7 +9714,7 @@ declare module 'vscode' {
 		 *
 		 * @param uri The uri of the new folder.
 		 */
-		createDirectory(uri: Uri): Thenable<void>;
+		createDirectory(uri: Uri): Thenable<codemavi>;
 
 		/**
 		 * Read the entire contents of a file.
@@ -9730,7 +9730,7 @@ declare module 'vscode' {
 		 * @param uri The uri of the file.
 		 * @param content The new content of the file.
 		 */
-		writeFile(uri: Uri, content: Uint8Array): Thenable<void>;
+		writeFile(uri: Uri, content: Uint8Array): Thenable<codemavi>;
 
 		/**
 		 * Delete a file.
@@ -9747,7 +9747,7 @@ declare module 'vscode' {
 			 * Use the os's trashcan instead of permanently deleting files whenever possible.
 			 */
 			useTrash?: boolean;
-		}): Thenable<void>;
+		}): Thenable<codemavi>;
 
 		/**
 		 * Rename a file or folder.
@@ -9761,7 +9761,7 @@ declare module 'vscode' {
 			 * Overwrite the file if it does exist.
 			 */
 			overwrite?: boolean;
-		}): Thenable<void>;
+		}): Thenable<codemavi>;
 
 		/**
 		 * Copy files or folders.
@@ -9775,7 +9775,7 @@ declare module 'vscode' {
 			 * Overwrite the file if it does exist.
 			 */
 			overwrite?: boolean;
-		}): Thenable<void>;
+		}): Thenable<codemavi>;
 
 		/**
 		 * Check if a given file system supports writing files.
@@ -10061,7 +10061,7 @@ declare module 'vscode' {
 		 *
 		 * Trying to use the panel after it has been disposed throws an exception.
 		 */
-		readonly onDidDispose: Event<void>;
+		readonly onDidDispose: Event<codemavi>;
 
 		/**
 		 * Show the webview panel in a given column.
@@ -10072,7 +10072,7 @@ declare module 'vscode' {
 		 * @param viewColumn View column to show the panel in. Shows in the current `viewColumn` if undefined.
 		 * @param preserveFocus When `true`, the webview will not take focus.
 		 */
-		reveal(viewColumn?: ViewColumn, preserveFocus?: boolean): void;
+		reveal(viewColumn?: ViewColumn, preserveFocus?: boolean): codemavi;
 
 		/**
 		 * Dispose of the webview panel.
@@ -10139,7 +10139,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Thenable indicating that the webview has been fully restored.
 		 */
-		deserializeWebviewPanel(webviewPanel: WebviewPanel, state: T): Thenable<void>;
+		deserializeWebviewPanel(webviewPanel: WebviewPanel, state: T): Thenable<codemavi>;
 	}
 
 	/**
@@ -10182,7 +10182,7 @@ declare module 'vscode' {
 		 *
 		 * Trying to use the view after it has been disposed throws an exception.
 		 */
-		readonly onDidDispose: Event<void>;
+		readonly onDidDispose: Event<codemavi>;
 
 		/**
 		 * Tracks if the webview is currently visible.
@@ -10201,7 +10201,7 @@ declare module 'vscode' {
 		 *
 		 * Note that hiding a view using the context menu instead disposes of the view and fires `onDidDispose`.
 		 */
-		readonly onDidChangeVisibility: Event<void>;
+		readonly onDidChangeVisibility: Event<codemavi>;
 
 		/**
 		 * Reveal the view in the UI.
@@ -10210,7 +10210,7 @@ declare module 'vscode' {
 		 *
 		 * @param preserveFocus When `true` the view will not take focus.
 		 */
-		show(preserveFocus?: boolean): void;
+		show(preserveFocus?: boolean): codemavi;
 	}
 
 	/**
@@ -10228,7 +10228,7 @@ declare module 'vscode' {
 		 * the view becomes visible again.
 		 *
 		 * You can prevent this behavior by setting `retainContextWhenHidden` in the `WebviewOptions`. However this
-		 * increases resource usage and should be avoided wherever possible. Instead, you can use persisted state to
+		 * increases resource usage and should be acodemavied wherever possible. Instead, you can use persisted state to
 		 * save off a webview's state so that it can be quickly recreated as needed.
 		 *
 		 * To save off a persisted state, inside the webview call `acquireVsCodeApi().setState()` with
@@ -10268,7 +10268,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Optional thenable indicating that the view has been fully resolved.
 		 */
-		resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext, token: CancellationToken): Thenable<void> | void;
+		resolveWebviewView(webviewView: WebviewView, context: WebviewViewResolveContext, token: CancellationToken): Thenable<codemavi> | codemavi;
 	}
 
 	/**
@@ -10299,7 +10299,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Thenable indicating that the custom editor has been resolved.
 		 */
-		resolveCustomTextEditor(document: TextDocument, webviewPanel: WebviewPanel, token: CancellationToken): Thenable<void> | void;
+		resolveCustomTextEditor(document: TextDocument, webviewPanel: WebviewPanel, token: CancellationToken): Thenable<codemavi> | codemavi;
 	}
 
 	/**
@@ -10320,7 +10320,7 @@ declare module 'vscode' {
 		 * This is invoked by the editor when there are no more references to a given `CustomDocument` (for example when
 		 * all editors associated with the document have been closed.)
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -10342,7 +10342,7 @@ declare module 'vscode' {
 		 * extension should restore the document and editor to the state they were in just before this
 		 * edit was added to the editor's internal edit stack by `onDidChangeCustomDocument`.
 		 */
-		undo(): Thenable<void> | void;
+		undo(): Thenable<codemavi> | codemavi;
 
 		/**
 		 * Redo the edit operation.
@@ -10351,7 +10351,7 @@ declare module 'vscode' {
 		 * extension should restore the document and editor to the state they were in just after this
 		 * edit was added to the editor's internal edit stack by `onDidChangeCustomDocument`.
 		 */
-		redo(): Thenable<void> | void;
+		redo(): Thenable<codemavi> | codemavi;
 
 		/**
 		 * Display name describing the edit.
@@ -10391,7 +10391,7 @@ declare module 'vscode' {
 		 * This is called by the editor when it is clear the current backup is no longer needed, such as when a new backup
 		 * is made or when the file is saved.
 		 */
-		delete(): void;
+		delete(): codemavi;
 	}
 
 	/**
@@ -10477,7 +10477,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Optional thenable indicating that the custom editor has been resolved.
 		 */
-		resolveCustomEditor(document: T, webviewPanel: WebviewPanel, token: CancellationToken): Thenable<void> | void;
+		resolveCustomEditor(document: T, webviewPanel: WebviewPanel, token: CancellationToken): Thenable<codemavi> | codemavi;
 	}
 
 	/**
@@ -10529,7 +10529,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Thenable signaling that saving has completed.
 		 */
-		saveCustomDocument(document: T, cancellation: CancellationToken): Thenable<void>;
+		saveCustomDocument(document: T, cancellation: CancellationToken): Thenable<codemavi>;
 
 		/**
 		 * Save a custom document to a different location.
@@ -10545,7 +10545,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Thenable signaling that saving has completed.
 		 */
-		saveCustomDocumentAs(document: T, destination: Uri, cancellation: CancellationToken): Thenable<void>;
+		saveCustomDocumentAs(document: T, destination: Uri, cancellation: CancellationToken): Thenable<codemavi>;
 
 		/**
 		 * Revert a custom document to its last saved state.
@@ -10562,7 +10562,7 @@ declare module 'vscode' {
 		 *
 		 * @returns Thenable signaling that the change has completed.
 		 */
-		revertCustomDocument(document: T, cancellation: CancellationToken): Thenable<void>;
+		revertCustomDocument(document: T, cancellation: CancellationToken): Thenable<codemavi>;
 
 		/**
 		 * Back up a dirty custom document.
@@ -10603,7 +10603,7 @@ declare module 'vscode' {
 		 * Writes text into the clipboard.
 		 * @returns A thenable that resolves when writing happened.
 		 */
-		writeText(value: string): Thenable<void>;
+		writeText(value: string): Thenable<codemavi>;
 	}
 
 	/**
@@ -10814,7 +10814,7 @@ declare module 'vscode' {
 		 * **Example** of an authentication flow:
 		 * ```typescript
 		 * vscode.window.registerUriHandler({
-		 *   handleUri(uri: vscode.Uri): vscode.ProviderResult<void> {
+		 *   handleUri(uri: vscode.Uri): vscode.ProviderResult<codemavi> {
 		 *     if (uri.path === '/did-authenticate') {
 		 *       console.log(uri.toString());
 		 *     }
@@ -10916,7 +10916,7 @@ declare module 'vscode' {
 		 * @param thisArg The `this` context used when invoking the handler function.
 		 * @returns Disposable which unregisters this command on disposal.
 		 */
-		export function registerTextEditorCommand(command: string, callback: (textEditor: TextEditor, edit: TextEditorEdit, ...args: any[]) => void, thisArg?: any): Disposable;
+		export function registerTextEditorCommand(command: string, callback: (textEditor: TextEditor, edit: TextEditorEdit, ...args: any[]) => codemavi, thisArg?: any): Disposable;
 
 		/**
 		 * Executes the command denoted by the given command identifier.
@@ -10973,7 +10973,7 @@ declare module 'vscode' {
 		 *
 		 * @see {@link window.registerUriHandler}.
 		 */
-		handleUri(uri: Uri): ProviderResult<void>;
+		handleUri(uri: Uri): ProviderResult<codemavi>;
 	}
 
 	/**
@@ -11945,7 +11945,7 @@ declare module 'vscode' {
 		 * @param mimeType The mime type to set the data for. Mimes types stored in lower case, with case-insensitive looks up.
 		 * @param value The data transfer item for the given mime type.
 		 */
-		set(mimeType: string, value: DataTransferItem): void;
+		set(mimeType: string, value: DataTransferItem): codemavi;
 
 		/**
 		 * Allows iteration through the data transfer items.
@@ -11953,7 +11953,7 @@ declare module 'vscode' {
 		 * @param callbackfn Callback for iteration through the data transfer items.
 		 * @param thisArg The `this` context used when invoking the handler function.
 		 */
-		forEach(callbackfn: (item: DataTransferItem, mimeType: string, dataTransfer: DataTransfer) => void, thisArg?: any): void;
+		forEach(callbackfn: (item: DataTransferItem, mimeType: string, dataTransfer: DataTransfer) => codemavi, thisArg?: any): codemavi;
 
 		/**
 		 * Get a new iterator with the `[mime, item]` pairs for each element in this data transfer.
@@ -12009,7 +12009,7 @@ declare module 'vscode' {
 		 * @param dataTransfer The data transfer associated with this drag.
 		 * @param token A cancellation token indicating that drag has been cancelled.
 		 */
-		handleDrag?(source: readonly T[], dataTransfer: DataTransfer, token: CancellationToken): Thenable<void> | void;
+		handleDrag?(source: readonly T[], dataTransfer: DataTransfer, token: CancellationToken): Thenable<codemavi> | codemavi;
 
 		/**
 		 * Called when a drag and drop action results in a drop on the tree that this `DragAndDropController` belongs to.
@@ -12020,7 +12020,7 @@ declare module 'vscode' {
 		 * @param dataTransfer The data transfer items of the source of the drag.
 		 * @param token A cancellation token indicating that the drop has been cancelled.
 		 */
-		handleDrop?(target: T | undefined, dataTransfer: DataTransfer, token: CancellationToken): Thenable<void> | void;
+		handleDrop?(target: T | undefined, dataTransfer: DataTransfer, token: CancellationToken): Thenable<codemavi> | codemavi;
 	}
 
 	/**
@@ -12138,7 +12138,7 @@ declare module 'vscode' {
 			 * If true, then the element will be expanded. If a number is passed, then up to that number of levels of children will be expanded
 			 */
 			readonly expand?: boolean | number;
-		}): Thenable<void>;
+		}): Thenable<codemavi>;
 	}
 
 	/**
@@ -12150,7 +12150,7 @@ declare module 'vscode' {
 		 * This will trigger the view to update the changed element/root and its children recursively (if shown).
 		 * To signal that root has changed, do not pass any argument or pass `undefined` or `null`.
 		 */
-		onDidChangeTreeData?: Event<T | T[] | undefined | null | void>;
+		onDidChangeTreeData?: Event<T | T[] | undefined | null | codemavi>;
 
 		/**
 		 * Get {@link TreeItem} representation of the `element`
@@ -12559,7 +12559,7 @@ declare module 'vscode' {
 		 * **Example:** Exit the terminal when "y" is pressed, otherwise show a notification.
 		 * ```typescript
 		 * const writeEmitter = new vscode.EventEmitter<string>();
-		 * const closeEmitter = new vscode.EventEmitter<void>();
+		 * const closeEmitter = new vscode.EventEmitter<codemavi>();
 		 * const pty: vscode.Pseudoterminal = {
 		 *   onDidWrite: writeEmitter.event,
 		 *   onDidClose: closeEmitter.event,
@@ -12576,7 +12576,7 @@ declare module 'vscode' {
 		 * terminal.show(true);
 		 * ```
 		 */
-		onDidClose?: Event<void | number>;
+		onDidClose?: Event<codemavi | number>;
 
 		/**
 		 * An event that when fired allows changing the name of the terminal.
@@ -12604,12 +12604,12 @@ declare module 'vscode' {
 		 * @param initialDimensions The dimensions of the terminal, this will be undefined if the
 		 * terminal panel has not been opened before this is called.
 		 */
-		open(initialDimensions: TerminalDimensions | undefined): void;
+		open(initialDimensions: TerminalDimensions | undefined): codemavi;
 
 		/**
 		 * Implement to handle when the terminal is closed by an act of the user.
 		 */
-		close(): void;
+		close(): codemavi;
 
 		/**
 		 * Implement to handle incoming keystrokes in the terminal or when an extension calls
@@ -12631,7 +12631,7 @@ declare module 'vscode' {
 		 * vscode.window.createTerminal({ name: 'Local echo', pty });
 		 * ```
 		 */
-		handleInput?(data: string): void;
+		handleInput?(data: string): codemavi;
 
 		/**
 		 * Implement to handle when the number of rows and columns that fit into the terminal panel
@@ -12646,7 +12646,7 @@ declare module 'vscode' {
 		 *
 		 * @param dimensions The new dimensions.
 		 */
-		setDimensions?(dimensions: TerminalDimensions): void;
+		setDimensions?(dimensions: TerminalDimensions): codemavi;
 	}
 
 	/**
@@ -12798,7 +12798,7 @@ declare module 'vscode' {
 		 * @param options Options applied to the mutator, when no options are provided this will
 		 * default to `{ applyAtProcessCreation: true }`.
 		 */
-		replace(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): void;
+		replace(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): codemavi;
 
 		/**
 		 * Append a value to an environment variable.
@@ -12811,7 +12811,7 @@ declare module 'vscode' {
 		 * @param options Options applied to the mutator, when no options are provided this will
 		 * default to `{ applyAtProcessCreation: true }`.
 		 */
-		append(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): void;
+		append(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): codemavi;
 
 		/**
 		 * Prepend a value to an environment variable.
@@ -12824,7 +12824,7 @@ declare module 'vscode' {
 		 * @param options Options applied to the mutator, when no options are provided this will
 		 * default to `{ applyAtProcessCreation: true }`.
 		 */
-		prepend(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): void;
+		prepend(variable: string, value: string, options?: EnvironmentVariableMutatorOptions): codemavi;
 
 		/**
 		 * Gets the mutator that this collection applies to a variable, if any.
@@ -12839,19 +12839,19 @@ declare module 'vscode' {
 		 * @param callback Function to execute for each entry.
 		 * @param thisArg The `this` context used when invoking the handler function.
 		 */
-		forEach(callback: (variable: string, mutator: EnvironmentVariableMutator, collection: EnvironmentVariableCollection) => any, thisArg?: any): void;
+		forEach(callback: (variable: string, mutator: EnvironmentVariableMutator, collection: EnvironmentVariableCollection) => any, thisArg?: any): codemavi;
 
 		/**
 		 * Deletes this collection's mutator for a variable.
 		 *
 		 * @param variable The variable to delete the mutator for.
 		 */
-		delete(variable: string): void;
+		delete(variable: string): codemavi;
 
 		/**
 		 * Clears all mutators from this collection.
 		 */
-		clear(): void;
+		clear(): codemavi;
 	}
 
 	/**
@@ -13007,13 +13007,13 @@ declare module 'vscode' {
 		 * Makes the input UI visible in its current configuration. Any other input
 		 * UI will first fire an {@link QuickInput.onDidHide} event.
 		 */
-		show(): void;
+		show(): codemavi;
 
 		/**
 		 * Hides this input UI. This will also fire an {@link QuickInput.onDidHide}
 		 * event.
 		 */
-		hide(): void;
+		hide(): codemavi;
 
 		/**
 		 * An event signaling when this input UI is hidden.
@@ -13023,7 +13023,7 @@ declare module 'vscode' {
 		 * (Examples include: an explicit call to {@link QuickInput.hide},
 		 * the user pressing Esc, some other input UI opening, etc.)
 		 */
-		onDidHide: Event<void>;
+		onDidHide: Event<codemavi>;
 
 		/**
 		 * Dispose of this input UI and any associated resources. If it is still
@@ -13031,7 +13031,7 @@ declare module 'vscode' {
 		 * functional and no additional methods or properties on it should be
 		 * accessed. Instead a new input UI should be created.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -13064,7 +13064,7 @@ declare module 'vscode' {
 		/**
 		 * An event signaling when the user indicated acceptance of the selected item(s).
 		 */
-		readonly onDidAccept: Event<void>;
+		readonly onDidAccept: Event<codemavi>;
 
 		/**
 		 * Buttons for actions in the UI.
@@ -13172,7 +13172,7 @@ declare module 'vscode' {
 		/**
 		 * An event signaling when the user indicated acceptance of the input value.
 		 */
-		readonly onDidAccept: Event<void>;
+		readonly onDidAccept: Event<codemavi>;
 
 		/**
 		 * Buttons for actions in the UI.
@@ -13362,7 +13362,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that resolves to {@link TextEdit pre-save-edits}.
 		 */
-		waitUntil(thenable: Thenable<readonly TextEdit[]>): void;
+		waitUntil(thenable: Thenable<readonly TextEdit[]>): codemavi;
 
 		/**
 		 * Allows to pause the event loop until the provided thenable resolved.
@@ -13371,7 +13371,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): void;
+		waitUntil(thenable: Thenable<any>): codemavi;
 	}
 
 	/**
@@ -13411,7 +13411,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<WorkspaceEdit>): void;
+		waitUntil(thenable: Thenable<WorkspaceEdit>): codemavi;
 
 		/**
 		 * Allows to pause the event until the provided thenable resolves.
@@ -13420,7 +13420,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): void;
+		waitUntil(thenable: Thenable<any>): codemavi;
 	}
 
 	/**
@@ -13471,7 +13471,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<WorkspaceEdit>): void;
+		waitUntil(thenable: Thenable<WorkspaceEdit>): codemavi;
 
 		/**
 		 * Allows to pause the event until the provided thenable resolves.
@@ -13480,7 +13480,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): void;
+		waitUntil(thenable: Thenable<any>): codemavi;
 	}
 
 	/**
@@ -13540,7 +13540,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<WorkspaceEdit>): void;
+		waitUntil(thenable: Thenable<WorkspaceEdit>): codemavi;
 
 		/**
 		 * Allows to pause the event until the provided thenable resolves.
@@ -13549,7 +13549,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): void;
+		waitUntil(thenable: Thenable<any>): codemavi;
 	}
 
 	/**
@@ -14300,7 +14300,7 @@ declare module 'vscode' {
 		/**
 		 * Event that fires when the current workspace has been trusted.
 		 */
-		export const onDidGrantWorkspaceTrust: Event<void>;
+		export const onDidGrantWorkspaceTrust: Event<codemavi>;
 	}
 
 	/**
@@ -15010,7 +15010,7 @@ declare module 'vscode' {
 		 * @param range A range.
 		 * @param revealType The scrolling strategy for revealing `range`.
 		 */
-		revealRange(range: NotebookRange, revealType?: NotebookEditorRevealType): void;
+		revealRange(range: NotebookRange, revealType?: NotebookEditorRevealType): codemavi;
 	}
 
 	/**
@@ -15316,7 +15316,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that resolves to {@link WorkspaceEdit workspace edit}.
 		 */
-		waitUntil(thenable: Thenable<WorkspaceEdit>): void;
+		waitUntil(thenable: Thenable<WorkspaceEdit>): codemavi;
 
 		/**
 		 * Allows to pause the event loop until the provided thenable resolved.
@@ -15325,7 +15325,7 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): void;
+		waitUntil(thenable: Thenable<any>): codemavi;
 	}
 
 	/**
@@ -15758,7 +15758,7 @@ declare module 'vscode' {
 		 * The execute handler is invoked when the run gestures in the UI are selected, e.g Run Cell, Run All,
 		 * Run Selection etc. The execute handler is responsible for creating and managing {@link NotebookCellExecution execution}-objects.
 		 */
-		executeHandler: (cells: NotebookCell[], notebook: NotebookDocument, controller: NotebookController) => void | Thenable<void>;
+		executeHandler: (cells: NotebookCell[], notebook: NotebookDocument, controller: NotebookController) => codemavi | Thenable<codemavi>;
 
 		/**
 		 * Optional interrupt handler.
@@ -15772,7 +15772,7 @@ declare module 'vscode' {
 		 * _Note_ that supporting {@link NotebookCellExecution.token cancellation tokens} is preferred and that interrupt handlers should
 		 * only be used when tokens cannot be supported.
 		 */
-		interruptHandler?: (notebook: NotebookDocument) => void | Thenable<void>;
+		interruptHandler?: (notebook: NotebookDocument) => codemavi | Thenable<codemavi>;
 
 		/**
 		 * An event that fires whenever a controller has been selected or un-selected for a notebook document.
@@ -15802,12 +15802,12 @@ declare module 'vscode' {
 		 * @param notebook The notebook for which a priority is set.
 		 * @param affinity A controller affinity
 		 */
-		updateNotebookAffinity(notebook: NotebookDocument, affinity: NotebookControllerAffinity): void;
+		updateNotebookAffinity(notebook: NotebookDocument, affinity: NotebookControllerAffinity): codemavi;
 
 		/**
 		 * Dispose and free associated resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -15845,7 +15845,7 @@ declare module 'vscode' {
 		 * @param startTime The time that execution began, in milliseconds in the Unix epoch. Used to drive the clock
 		 * that shows for how long a cell has been running. If not given, the clock won't be shown.
 		 */
-		start(startTime?: number): void;
+		start(startTime?: number): codemavi;
 
 		/**
 		 * Signal that execution has ended.
@@ -15855,7 +15855,7 @@ declare module 'vscode' {
 		 * If undefined, no check or X icon is shown.
 		 * @param endTime The time that execution finished, in milliseconds in the Unix epoch.
 		 */
-		end(success: boolean | undefined, endTime?: number): void;
+		end(success: boolean | undefined, endTime?: number): codemavi;
 
 		/**
 		 * Clears the output of the cell that is executing or of another cell that is affected by this execution.
@@ -15864,7 +15864,7 @@ declare module 'vscode' {
 		 * this execution.
 		 * @returns A thenable that resolves when the operation finished.
 		 */
-		clearOutput(cell?: NotebookCell): Thenable<void>;
+		clearOutput(cell?: NotebookCell): Thenable<codemavi>;
 
 		/**
 		 * Replace the output of the cell that is executing or of another cell that is affected by this execution.
@@ -15874,7 +15874,7 @@ declare module 'vscode' {
 		 * this execution.
 		 * @returns A thenable that resolves when the operation finished.
 		 */
-		replaceOutput(out: NotebookCellOutput | readonly NotebookCellOutput[], cell?: NotebookCell): Thenable<void>;
+		replaceOutput(out: NotebookCellOutput | readonly NotebookCellOutput[], cell?: NotebookCell): Thenable<codemavi>;
 
 		/**
 		 * Append to the output of the cell that is executing or to another cell that is affected by this execution.
@@ -15884,7 +15884,7 @@ declare module 'vscode' {
 		 * this execution.
 		 * @returns A thenable that resolves when the operation finished.
 		 */
-		appendOutput(out: NotebookCellOutput | readonly NotebookCellOutput[], cell?: NotebookCell): Thenable<void>;
+		appendOutput(out: NotebookCellOutput | readonly NotebookCellOutput[], cell?: NotebookCell): Thenable<codemavi>;
 
 		/**
 		 * Replace all output items of existing cell output.
@@ -15893,7 +15893,7 @@ declare module 'vscode' {
 		 * @param output Output object that already exists.
 		 * @returns A thenable that resolves when the operation finished.
 		 */
-		replaceOutputItems(items: NotebookCellOutputItem | readonly NotebookCellOutputItem[], output: NotebookCellOutput): Thenable<void>;
+		replaceOutputItems(items: NotebookCellOutputItem | readonly NotebookCellOutputItem[], output: NotebookCellOutput): Thenable<codemavi>;
 
 		/**
 		 * Append output items to existing cell output.
@@ -15902,7 +15902,7 @@ declare module 'vscode' {
 		 * @param output Output object that already exists.
 		 * @returns A thenable that resolves when the operation finished.
 		 */
-		appendOutputItems(items: NotebookCellOutputItem | readonly NotebookCellOutputItem[], output: NotebookCellOutput): Thenable<void>;
+		appendOutputItems(items: NotebookCellOutputItem | readonly NotebookCellOutputItem[], output: NotebookCellOutput): Thenable<codemavi>;
 	}
 
 	/**
@@ -15975,7 +15975,7 @@ declare module 'vscode' {
 		/**
 		 * An optional event to signal that statusbar items have changed. The provide method will be called again.
 		 */
-		onDidChangeCellStatusBarItems?: Event<void>;
+		onDidChangeCellStatusBarItems?: Event<codemavi>;
 
 		/**
 		 * The provider will be called when the cell scrolls into view, when its content, outputs, language, or metadata change, and when it changes execution state.
@@ -16006,7 +16006,7 @@ declare module 'vscode' {
 		 * @param handler The execute-handler of the controller.
 		 * @returns A new notebook controller.
 		 */
-		export function createNotebookController(id: string, notebookType: string, label: string, handler?: (cells: NotebookCell[], notebook: NotebookDocument, controller: NotebookController) => void | Thenable<void>): NotebookController;
+		export function createNotebookController(id: string, notebookType: string, label: string, handler?: (cells: NotebookCell[], notebook: NotebookDocument, controller: NotebookController) => codemavi | Thenable<codemavi>): NotebookController;
 
 		/**
 		 * Register a {@link NotebookCellStatusBarItemProvider cell statusbar item provider} for the given notebook type.
@@ -16216,7 +16216,7 @@ declare module 'vscode' {
 		/**
 		 * Dispose this source control resource group.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -16291,7 +16291,7 @@ declare module 'vscode' {
 		/**
 		 * Dispose this source control.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -16589,7 +16589,7 @@ declare module 'vscode' {
 		 * Results or errors are returned via onSendMessage events.
 		 * @param message A Debug Adapter Protocol message
 		 */
-		handleMessage(message: DebugProtocolMessage): void;
+		handleMessage(message: DebugProtocolMessage): codemavi;
 	}
 
 	/**
@@ -16639,27 +16639,27 @@ declare module 'vscode' {
 		/**
 		 * A session with the debug adapter is about to be started.
 		 */
-		onWillStartSession?(): void;
+		onWillStartSession?(): codemavi;
 		/**
 		 * The debug adapter is about to receive a Debug Adapter Protocol message from the editor.
 		 */
-		onWillReceiveMessage?(message: any): void;
+		onWillReceiveMessage?(message: any): codemavi;
 		/**
 		 * The debug adapter has sent a Debug Adapter Protocol message to the editor.
 		 */
-		onDidSendMessage?(message: any): void;
+		onDidSendMessage?(message: any): codemavi;
 		/**
 		 * The debug adapter session is about to be stopped.
 		 */
-		onWillStopSession?(): void;
+		onWillStopSession?(): codemavi;
 		/**
 		 * An error with the debug adapter has occurred.
 		 */
-		onError?(error: Error): void;
+		onError?(error: Error): codemavi;
 		/**
 		 * The debug adapter has exited with the given exit code or signal.
 		 */
-		onExit?(code: number | undefined, signal: string | undefined): void;
+		onExit?(code: number | undefined, signal: string | undefined): codemavi;
 	}
 
 	/**
@@ -16685,7 +16685,7 @@ declare module 'vscode' {
 		 *
 		 * @param value A string, falsy values will not be printed.
 		 */
-		append(value: string): void;
+		append(value: string): codemavi;
 
 		/**
 		 * Append the given value and a line feed character
@@ -16693,7 +16693,7 @@ declare module 'vscode' {
 		 *
 		 * @param value A string, falsy values will be printed.
 		 */
-		appendLine(value: string): void;
+		appendLine(value: string): codemavi;
 	}
 
 	/**
@@ -17043,19 +17043,19 @@ declare module 'vscode' {
 		 * @param session The {@link DebugSession debug session} to stop; if omitted all sessions are stopped.
 		 * @returns A thenable that resolves when the session(s) have been stopped.
 		 */
-		export function stopDebugging(session?: DebugSession): Thenable<void>;
+		export function stopDebugging(session?: DebugSession): Thenable<codemavi>;
 
 		/**
 		 * Add breakpoints.
 		 * @param breakpoints The breakpoints to add.
 		 */
-		export function addBreakpoints(breakpoints: readonly Breakpoint[]): void;
+		export function addBreakpoints(breakpoints: readonly Breakpoint[]): codemavi;
 
 		/**
 		 * Remove breakpoints.
 		 * @param breakpoints The breakpoints to remove.
 		 */
-		export function removeBreakpoints(breakpoints: readonly Breakpoint[]): void;
+		export function removeBreakpoints(breakpoints: readonly Breakpoint[]): codemavi;
 
 		/**
 		 * Converts a "Source" descriptor object received via the Debug Adapter Protocol into a Uri that can be used to load its contents.
@@ -17122,7 +17122,7 @@ declare module 'vscode' {
 		 * An event which fires when `extensions.all` changes. This can happen when extensions are
 		 * installed, uninstalled, enabled or disabled.
 		 */
-		export const onDidChange: Event<void>;
+		export const onDidChange: Event<codemavi>;
 	}
 
 	/**
@@ -17237,7 +17237,7 @@ declare module 'vscode' {
 		 *
 		 * Once disposed, this comment thread will be removed from visible editors and Comment Panel when appropriate.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -17432,7 +17432,7 @@ declare module 'vscode' {
 		/**
 		 * Optional reaction handler for creating and deleting reactions on a {@link Comment}.
 		 */
-		reactionHandler?: (comment: Comment, reaction: CommentReaction) => Thenable<void>;
+		reactionHandler?: (comment: Comment, reaction: CommentReaction) => Thenable<codemavi>;
 
 		/**
 		 * Dispose this comment controller.
@@ -17440,7 +17440,7 @@ declare module 'vscode' {
 		 * Once disposed, all {@link CommentThread comment threads} created by this comment controller will also be removed from the editor
 		 * and Comments Panel.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	namespace comments {
@@ -17698,7 +17698,7 @@ declare module 'vscode' {
 		 * If a session cannot be removed, the provider should reject with an error message.
 		 * @param sessionId The id of the session to remove.
 		 */
-		removeSession(sessionId: string): Thenable<void>;
+		removeSession(sessionId: string): Thenable<codemavi>;
 	}
 
 
@@ -17981,7 +17981,7 @@ declare module 'vscode' {
 		 * you can take other editor actions, such as showing a quick pick or
 		 * opening a configuration file.
 		 */
-		configureHandler: (() => void) | undefined;
+		configureHandler: (() => codemavi) | undefined;
 
 		/**
 		 * Handler called to start a test run. When invoked, the function should call
@@ -18000,7 +18000,7 @@ declare module 'vscode' {
 		 * instances associated with the request will be
 		 * automatically cancelled as well.
 		 */
-		runHandler: (request: TestRunRequest, token: CancellationToken) => Thenable<void> | void;
+		runHandler: (request: TestRunRequest, token: CancellationToken) => Thenable<codemavi> | codemavi;
 
 		/**
 		 * An extension-provided function that provides detailed statement and
@@ -18039,7 +18039,7 @@ declare module 'vscode' {
 		/**
 		 * Deletes the run profile.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -18086,7 +18086,7 @@ declare module 'vscode' {
 		 * @returns An instance of a {@link TestRunProfile}, which is automatically
 		 * associated with this controller.
 		 */
-		createRunProfile(label: string, kind: TestRunProfileKind, runHandler: (request: TestRunRequest, token: CancellationToken) => Thenable<void> | void, isDefault?: boolean, tag?: TestTag, supportsContinuousRun?: boolean): TestRunProfile;
+		createRunProfile(label: string, kind: TestRunProfileKind, runHandler: (request: TestRunRequest, token: CancellationToken) => Thenable<codemavi> | codemavi, isDefault?: boolean, tag?: TestTag, supportsContinuousRun?: boolean): TestRunProfile;
 
 		/**
 		 * A function provided by the extension that the editor may call to request
@@ -18106,7 +18106,7 @@ declare module 'vscode' {
 		 * @param item An unresolved test item for which children are being
 		 * requested, or `undefined` to resolve the controller's initial {@link TestController.items items}.
 		 */
-		resolveHandler?: (item: TestItem | undefined) => Thenable<void> | void;
+		resolveHandler?: (item: TestItem | undefined) => Thenable<codemavi> | codemavi;
 
 		/**
 		 * If this method is present, a refresh button will be present in the
@@ -18119,7 +18119,7 @@ declare module 'vscode' {
 		 *
 		 * @returns A thenable that resolves when tests have been refreshed.
 		 */
-		refreshHandler: ((token: CancellationToken) => Thenable<void> | void) | undefined;
+		refreshHandler: ((token: CancellationToken) => Thenable<codemavi> | codemavi) | undefined;
 
 		/**
 		 * Creates a {@link TestRun}. This should be called by the
@@ -18172,13 +18172,13 @@ declare module 'vscode' {
 		 *
 		 * @param items Item to mark as outdated. If undefined, all the controller's items are marked outdated.
 		 */
-		invalidateTestResults(items?: TestItem | readonly TestItem[]): void;
+		invalidateTestResults(items?: TestItem | readonly TestItem[]): codemavi;
 
 		/**
 		 * Unregisters the test controller, disposing of its associated tests
 		 * and unpersisted results.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -18270,19 +18270,19 @@ declare module 'vscode' {
 		 * Indicates a test is queued for later execution.
 		 * @param test Test item to update.
 		 */
-		enqueued(test: TestItem): void;
+		enqueued(test: TestItem): codemavi;
 
 		/**
 		 * Indicates a test has started running.
 		 * @param test Test item to update.
 		 */
-		started(test: TestItem): void;
+		started(test: TestItem): codemavi;
 
 		/**
 		 * Indicates a test has been skipped.
 		 * @param test Test item to update.
 		 */
-		skipped(test: TestItem): void;
+		skipped(test: TestItem): codemavi;
 
 		/**
 		 * Indicates a test has failed. You should pass one or more
@@ -18291,7 +18291,7 @@ declare module 'vscode' {
 		 * @param message Messages associated with the test failure.
 		 * @param duration How long the test took to execute, in milliseconds.
 		 */
-		failed(test: TestItem, message: TestMessage | readonly TestMessage[], duration?: number): void;
+		failed(test: TestItem, message: TestMessage | readonly TestMessage[], duration?: number): codemavi;
 
 		/**
 		 * Indicates a test has errored. You should pass one or more
@@ -18302,14 +18302,14 @@ declare module 'vscode' {
 		 * @param message Messages associated with the test failure.
 		 * @param duration How long the test took to execute, in milliseconds.
 		 */
-		errored(test: TestItem, message: TestMessage | readonly TestMessage[], duration?: number): void;
+		errored(test: TestItem, message: TestMessage | readonly TestMessage[], duration?: number): codemavi;
 
 		/**
 		 * Indicates a test has passed.
 		 * @param test Test item to update.
 		 * @param duration How long the test took to execute, in milliseconds.
 		 */
-		passed(test: TestItem, duration?: number): void;
+		passed(test: TestItem, duration?: number): codemavi;
 
 		/**
 		 * Appends raw output from the test runner. On the user's request, the
@@ -18322,24 +18322,24 @@ declare module 'vscode' {
 		 * location.
 		 * @param test Test item to associate the output with.
 		 */
-		appendOutput(output: string, location?: Location, test?: TestItem): void;
+		appendOutput(output: string, location?: Location, test?: TestItem): codemavi;
 
 		/**
 		 * Adds coverage for a file in the run.
 		 */
-		addCoverage(fileCoverage: FileCoverage): void;
+		addCoverage(fileCoverage: FileCoverage): codemavi;
 
 		/**
 		 * Signals the end of the test run. Any tests included in the run whose
 		 * states have not been updated will have their state reset.
 		 */
-		end(): void;
+		end(): codemavi;
 
 		/**
 		 * An event fired when the editor is no longer interested in data
 		 * associated with the test run.
 		 */
-		onDidDispose: Event<void>;
+		onDidDispose: Event<codemavi>;
 	}
 
 	/**
@@ -18356,7 +18356,7 @@ declare module 'vscode' {
 		 * Replaces the items stored by the collection.
 		 * @param items Items to store.
 		 */
-		replace(items: readonly TestItem[]): void;
+		replace(items: readonly TestItem[]): codemavi;
 
 		/**
 		 * Iterate over each entry in this collection.
@@ -18364,20 +18364,20 @@ declare module 'vscode' {
 		 * @param callback Function to execute for each entry.
 		 * @param thisArg The `this` context used when invoking the handler function.
 		 */
-		forEach(callback: (item: TestItem, collection: TestItemCollection) => unknown, thisArg?: any): void;
+		forEach(callback: (item: TestItem, collection: TestItemCollection) => unknown, thisArg?: any): codemavi;
 
 		/**
 		 * Adds the test item to the children. If an item with the same ID already
 		 * exists, it'll be replaced.
 		 * @param item Item to add.
 		 */
-		add(item: TestItem): void;
+		add(item: TestItem): codemavi;
 
 		/**
 		 * Removes a single test item from the collection.
 		 * @param itemId Item ID to delete.
 		 */
-		delete(itemId: string): void;
+		delete(itemId: string): codemavi;
 
 		/**
 		 * Efficiently gets a test item by ID, if it exists, in the children.
@@ -19107,7 +19107,7 @@ declare module 'vscode' {
 		 * @param eventName The event name to log
 		 * @param data The data to log
 		 */
-		logUsage(eventName: string, data?: Record<string, any | TelemetryTrustedValue>): void;
+		logUsage(eventName: string, data?: Record<string, any | TelemetryTrustedValue>): codemavi;
 
 		/**
 		 * Log an error event.
@@ -19117,7 +19117,7 @@ declare module 'vscode' {
 		 * @param eventName The event name to log
 		 * @param data The data to log
 		 */
-		logError(eventName: string, data?: Record<string, any | TelemetryTrustedValue>): void;
+		logError(eventName: string, data?: Record<string, any | TelemetryTrustedValue>): codemavi;
 
 		/**
 		 * Log an error event.
@@ -19128,12 +19128,12 @@ declare module 'vscode' {
 		 * @param error The error object which contains the stack trace cleaned of PII
 		 * @param data Additional data to log alongside the stack trace
 		 */
-		logError(error: Error, data?: Record<string, any | TelemetryTrustedValue>): void;
+		logError(error: Error, data?: Record<string, any | TelemetryTrustedValue>): codemavi;
 
 		/**
 		 * Dispose this object and free resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -19158,7 +19158,7 @@ declare module 'vscode' {
 		 * @param eventName The name of the event which you are logging
 		 * @param data A serializable key value pair that is being logged
 		 */
-		sendEventData(eventName: string, data?: Record<string, any>): void;
+		sendEventData(eventName: string, data?: Record<string, any>): codemavi;
 
 		/**
 		 * Function to send an error. Used within a {@link TelemetryLogger}
@@ -19166,13 +19166,13 @@ declare module 'vscode' {
 		 * @param error The error being logged
 		 * @param data Any additional data to be collected with the exception
 		 */
-		sendErrorData(error: Error, data?: Record<string, any>): void;
+		sendErrorData(error: Error, data?: Record<string, any>): codemavi;
 
 		/**
 		 * Optional flush function which will give this sender a chance to send any remaining events
 		 * as its {@link TelemetryLogger} is being disposed
 		 */
-		flush?(): void | Thenable<void>;
+		flush?(): codemavi | Thenable<codemavi>;
 	}
 
 	/**
@@ -19180,7 +19180,7 @@ declare module 'vscode' {
 	 */
 	export interface TelemetryLoggerOptions {
 		/**
-		 * Whether or not you want to avoid having the built-in common properties such as os, extension name, etc injected into the data object.
+		 * Whether or not you want to acodemavi having the built-in common properties such as os, extension name, etc injected into the data object.
 		 * Defaults to `false` if not defined.
 		 */
 		readonly ignoreBuiltInCommonProperties?: boolean;
@@ -19381,7 +19381,7 @@ declare module 'vscode' {
 	/**
 	 * A chat request handler is a callback that will be invoked when a request is made to a chat participant.
 	 */
-	export type ChatRequestHandler = (request: ChatRequest, context: ChatContext, response: ChatResponseStream, token: CancellationToken) => ProviderResult<ChatResult | void>;
+	export type ChatRequestHandler = (request: ChatRequest, context: ChatContext, response: ChatResponseStream, token: CancellationToken) => ProviderResult<ChatResult | codemavi>;
 
 	/**
 	 * A chat participant can be invoked by the user in a chat session, using the `@` prefix. When it is invoked, it handles the chat request and is solely
@@ -19420,7 +19420,7 @@ declare module 'vscode' {
 		/**
 		 * Dispose this participant and free resources.
 		 */
-		dispose(): void;
+		dispose(): codemavi;
 	}
 
 	/**
@@ -19517,7 +19517,7 @@ declare module 'vscode' {
 		 * @see {@link ChatResponseStream.push}
 		 * @param value A markdown string or a string that should be interpreted as markdown. The boolean form of {@link MarkdownString.isTrusted} is NOT supported.
 		 */
-		markdown(value: string | MarkdownString): void;
+		markdown(value: string | MarkdownString): codemavi;
 
 		/**
 		 * Push an anchor part to this stream. Short-hand for
@@ -19527,7 +19527,7 @@ declare module 'vscode' {
 		 * @param value A uri or location.
 		 * @param title An optional title that is rendered with value.
 		 */
-		anchor(value: Uri | Location, title?: string): void;
+		anchor(value: Uri | Location, title?: string): codemavi;
 
 		/**
 		 * Push a command button part to this stream. Short-hand for
@@ -19535,7 +19535,7 @@ declare module 'vscode' {
 		 *
 		 * @param command A Command that will be executed when the button is clicked.
 		 */
-		button(command: Command): void;
+		button(command: Command): codemavi;
 
 		/**
 		 * Push a filetree part to this stream. Short-hand for
@@ -19544,7 +19544,7 @@ declare module 'vscode' {
 		 * @param value File tree data.
 		 * @param baseUri The base uri to which this file tree is relative.
 		 */
-		filetree(value: ChatResponseFileTree[], baseUri: Uri): void;
+		filetree(value: ChatResponseFileTree[], baseUri: Uri): codemavi;
 
 		/**
 		 * Push a progress part to this stream. Short-hand for
@@ -19552,7 +19552,7 @@ declare module 'vscode' {
 		 *
 		 * @param value A progress message
 		 */
-		progress(value: string): void;
+		progress(value: string): codemavi;
 
 		/**
 		 * Push a reference to this stream. Short-hand for
@@ -19563,14 +19563,14 @@ declare module 'vscode' {
 		 * @param value A uri or location
 		 * @param iconPath Icon for the reference shown in UI
 		 */
-		reference(value: Uri | Location, iconPath?: IconPath): void;
+		reference(value: Uri | Location, iconPath?: IconPath): codemavi;
 
 		/**
 		 * Pushes a part to this stream.
 		 *
 		 * @param part A response part, rendered or metadata
 		 */
-		push(part: ChatResponsePart): void;
+		push(part: ChatResponsePart): codemavi;
 	}
 
 	/**
@@ -20026,7 +20026,7 @@ declare module 'vscode' {
 		/**
 		 * An event that is fired when the set of available chat models changes.
 		 */
-		export const onDidChangeChatModels: Event<void>;
+		export const onDidChangeChatModels: Event<codemavi>;
 
 		/**
 		 * Select chat models by a {@link LanguageModelChatSelector selector}. This can yield multiple or no chat models and
@@ -20106,7 +20106,7 @@ declare module 'vscode' {
 		/**
 		 * An event that fires when access information changes.
 		 */
-		onDidChange: Event<void>;
+		onDidChange: Event<codemavi>;
 
 		/**
 		 * Checks if a request can be made to a language model.

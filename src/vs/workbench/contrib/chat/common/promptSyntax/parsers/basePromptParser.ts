@@ -43,13 +43,13 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 	/**
 	 * The event is fired when lines or their content change.
 	 */
-	private readonly _onUpdate = this._register(new Emitter<void>());
+	private readonly _onUpdate = this._register(new Emitter<codemavi>());
 
 	/**
 	 * Subscribe to the `onUpdate` event that is fired when prompt tokens are updated.
 	 * @param callback The callback function to be called on updates.
 	 */
-	public onUpdate(callback: () => void): this {
+	public onUpdate(callback: () => codemavi): this {
 		this._register(this._onUpdate.event(callback));
 
 		return this;
@@ -197,7 +197,7 @@ export class BasePromptParser<TContentsProvider extends IPromptContentsProvider>
 	private onContentsChanged(
 		streamOrError: VSBufferReadableStream | ResolveError,
 		seenReferences: string[],
-	): void {
+	): codemavi {
 		// dispose and cleanup the previously received stream
 		// object or an error condition, if any received yet
 		this.stream?.dispose();
@@ -634,7 +634,7 @@ export class PromptReference extends ObservableDisposable implements IPromptRefe
 	 * Subscribe to the `onUpdate` event that is fired when prompt tokens are updated.
 	 * @param callback The callback function to be called on updates.
 	 */
-	public onUpdate(callback: () => void): this {
+	public onUpdate(callback: () => codemavi): this {
 		this.parser.onUpdate(callback);
 
 		return this;
@@ -704,7 +704,7 @@ export class PromptReference extends ObservableDisposable implements IPromptRefe
  * A tiny utility object that helps us to track existence
  * of at least one parse result from the content provider.
  */
-class FirstParseResult extends DeferredPromise<void> {
+class FirstParseResult extends DeferredPromise<codemavi> {
 	/**
 	 * Private attribute to track if we have
 	 * received at least one result.
@@ -721,7 +721,7 @@ class FirstParseResult extends DeferredPromise<void> {
 	/**
 	 * Get underlying promise reference.
 	 */
-	public get promise(): Promise<void> {
+	public get promise(): Promise<codemavi> {
 		return this.p;
 	}
 
@@ -730,6 +730,6 @@ class FirstParseResult extends DeferredPromise<void> {
 	 */
 	public override complete() {
 		this._gotResult = true;
-		return super.complete(void 0);
+		return super.complete(codemavi 0);
 	}
 }

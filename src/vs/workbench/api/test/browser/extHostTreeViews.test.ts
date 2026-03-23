@@ -37,20 +37,20 @@ suite('ExtHostTreeView', function () {
 
 		onRefresh = new Emitter<{ [treeItemHandle: string]: ITreeItem }>();
 
-		override async $registerTreeViewDataProvider(treeViewId: string): Promise<void> {
+		override async $registerTreeViewDataProvider(treeViewId: string): Promise<codemavi> {
 		}
 
-		override $refresh(viewId: string, itemsToRefresh: { [treeItemHandle: string]: ITreeItem }): Promise<void> {
+		override $refresh(viewId: string, itemsToRefresh: { [treeItemHandle: string]: ITreeItem }): Promise<codemavi> {
 			return Promise.resolve(null).then(() => {
 				this.onRefresh.fire(itemsToRefresh);
 			});
 		}
 
-		override $reveal(treeViewId: string, itemInfo: { item: ITreeItem; parentChain: ITreeItem[] } | undefined, options: IRevealOptions): Promise<void> {
+		override $reveal(treeViewId: string, itemInfo: { item: ITreeItem; parentChain: ITreeItem[] } | undefined, options: IRevealOptions): Promise<codemavi> {
 			return Promise.resolve();
 		}
 
-		override $disposeTree(treeViewId: string): Promise<void> {
+		override $disposeTree(treeViewId: string): Promise<codemavi> {
 			return Promise.resolve();
 		}
 
@@ -265,9 +265,9 @@ suite('ExtHostTreeView', function () {
 		onDidChangeTreeNode.fire(getNode('bb'));
 	});
 
-	async function runWithEventMerging(action: (resolve: () => void) => void) {
+	async function runWithEventMerging(action: (resolve: () => codemavi) => codemavi) {
 		await runWithFakedTimers({}, async () => {
-			await new Promise<void>((resolve) => {
+			await new Promise<codemavi>((resolve) => {
 				let subscription: IDisposable | undefined = undefined;
 				subscription = target.onRefresh.event(() => {
 					subscription!.dispose();
@@ -275,7 +275,7 @@ suite('ExtHostTreeView', function () {
 				});
 				onDidChangeTreeNode.fire(getNode('b'));
 			});
-			await new Promise<void>(action);
+			await new Promise<codemavi>(action);
 		});
 	}
 

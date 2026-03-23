@@ -85,7 +85,7 @@ export abstract class EditorWorkerService extends Disposable implements IEditorW
 		this._register(languageFeaturesService.completionProvider.register('*', new WordBasedCompletionItemProvider(this._workerManager, configurationService, this._modelService, this._languageConfigurationService)));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
@@ -327,7 +327,7 @@ class WorkerManager extends Disposable {
 		this._register(this._modelService.onModelRemoved(_ => this._checkStopEmptyWorker()));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (this._editorWorkerClient) {
 			this._editorWorkerClient.dispose();
 			this._editorWorkerClient = null;
@@ -338,7 +338,7 @@ class WorkerManager extends Disposable {
 	/**
 	 * Check if the model service has no more models and stop the worker if that is the case.
 	 */
-	private _checkStopEmptyWorker(): void {
+	private _checkStopEmptyWorker(): codemavi {
 		if (!this._editorWorkerClient) {
 			return;
 		}
@@ -354,7 +354,7 @@ class WorkerManager extends Disposable {
 	/**
 	 * Check if the worker has been idle for a while and then stop it.
 	 */
-	private _checkStopIdleWorker(): void {
+	private _checkStopIdleWorker(): codemavi {
 		if (!this._editorWorkerClient) {
 			return;
 		}
@@ -384,11 +384,11 @@ class SynchronousWorkerClient<T extends IDisposable> implements IWebWorkerClient
 		this.proxy = this._instance as Proxied<T>;
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._instance.dispose();
 	}
 
-	public setChannel<T extends object>(channel: string, handler: T): void {
+	public setChannel<T extends object>(channel: string, handler: T): codemavi {
 		throw new Error(`Not supported`);
 	}
 
@@ -484,7 +484,7 @@ export class EditorWorkerClient extends Disposable implements IEditorWorkerClien
 		return proxy.$textualSuggest(resources.map(r => r.toString()), leadingWord, wordDef, wordDefFlags);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._disposed = true;
 	}

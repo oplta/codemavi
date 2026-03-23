@@ -171,7 +171,7 @@ export interface IExpressionValue {
 export interface IExpressionContainer extends ITreeElement, IExpressionValue {
 	readonly hasChildren: boolean;
 	getSession(): IDebugSession | undefined;
-	evaluateLazy(): Promise<void>;
+	evaluateLazy(): Promise<codemavi>;
 	getChildren(): Promise<IExpression[]>;
 	readonly reference?: number;
 	readonly memoryReference?: string;
@@ -388,36 +388,36 @@ export interface IDebugSession extends ITreeElement {
 	/** Test run this debug session was spawned by */
 	readonly correlatedTestRun?: LiveTestResult;
 
-	setSubId(subId: string | undefined): void;
+	setSubId(subId: string | undefined): codemavi;
 
 	getMemory(memoryReference: string): IMemoryRegion;
 
-	setName(name: string): void;
+	setName(name: string): codemavi;
 	readonly onDidChangeName: Event<string>;
 	getLabel(): string;
 
 	getSourceForUri(modelUri: uri): Source | undefined;
 	getSource(raw?: DebugProtocol.Source): Source;
 
-	setConfiguration(configuration: { resolved: IConfig; unresolved: IConfig | undefined }): void;
-	rawUpdate(data: IRawModelUpdate): void;
+	setConfiguration(configuration: { resolved: IConfig; unresolved: IConfig | undefined }): codemavi;
+	rawUpdate(data: IRawModelUpdate): codemavi;
 
 	getThread(threadId: number): IThread | undefined;
 	getAllThreads(): IThread[];
-	clearThreads(removeThreads: boolean, reference?: number): void;
+	clearThreads(removeThreads: boolean, reference?: number): codemavi;
 	getStoppedDetails(): IRawStoppedDetails | undefined;
 
 	getReplElements(): IReplElement[];
 	hasSeparateRepl(): boolean;
-	removeReplExpressions(): void;
-	addReplExpression(stackFrame: IStackFrame | undefined, name: string): Promise<void>;
-	appendToRepl(data: INewReplElementData): void;
+	removeReplExpressions(): codemavi;
+	addReplExpression(stackFrame: IStackFrame | undefined, name: string): Promise<codemavi>;
+	appendToRepl(data: INewReplElementData): codemavi;
 	/** Cancel any associated test run set through the DebugSessionOptions */
-	cancelCorrelatedTestRun(): void;
+	cancelCorrelatedTestRun(): codemavi;
 
 	// session events
 	readonly onDidEndAdapter: Event<AdapterEndEvent | undefined>;
-	readonly onDidChangeState: Event<void>;
+	readonly onDidChangeState: Event<codemavi>;
 	readonly onDidChangeReplElements: Event<IReplElement | undefined>;
 
 	/** DA capabilities. Set only when there is a running session available. */
@@ -436,19 +436,19 @@ export interface IDebugSession extends ITreeElement {
 
 	// DAP request
 
-	initialize(dbgr: IDebugger): Promise<void>;
-	launchOrAttach(config: IConfig): Promise<void>;
-	restart(): Promise<void>;
-	terminate(restart?: boolean /* false */): Promise<void>;
-	disconnect(restart?: boolean /* false */, suspend?: boolean): Promise<void>;
+	initialize(dbgr: IDebugger): Promise<codemavi>;
+	launchOrAttach(config: IConfig): Promise<codemavi>;
+	restart(): Promise<codemavi>;
+	terminate(restart?: boolean /* false */): Promise<codemavi>;
+	disconnect(restart?: boolean /* false */, suspend?: boolean): Promise<codemavi>;
 
-	sendBreakpoints(modelUri: uri, bpts: IBreakpoint[], sourceModified: boolean): Promise<void>;
-	sendFunctionBreakpoints(fbps: IFunctionBreakpoint[]): Promise<void>;
+	sendBreakpoints(modelUri: uri, bpts: IBreakpoint[], sourceModified: boolean): Promise<codemavi>;
+	sendFunctionBreakpoints(fbps: IFunctionBreakpoint[]): Promise<codemavi>;
 	dataBreakpointInfo(name: string, variablesReference?: number): Promise<IDataBreakpointInfoResponse | undefined>;
 	dataBytesBreakpointInfo(address: string, bytes: number): Promise<IDataBreakpointInfoResponse | undefined>;
-	sendDataBreakpoints(dbps: IDataBreakpoint[]): Promise<void>;
-	sendInstructionBreakpoints(dbps: IInstructionBreakpoint[]): Promise<void>;
-	sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<void>;
+	sendDataBreakpoints(dbps: IDataBreakpoint[]): Promise<codemavi>;
+	sendInstructionBreakpoints(dbps: IInstructionBreakpoint[]): Promise<codemavi>;
+	sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<codemavi>;
 	breakpointsLocations(uri: uri, lineNumber: number): Promise<IPosition[]>;
 	getDebugProtocolBreakpoint(breakpointId: string): DebugProtocol.Breakpoint | undefined;
 	resolveLocationReference(locationReference: number): Promise<IDebugLocationReferenced>;
@@ -464,16 +464,16 @@ export interface IDebugSession extends ITreeElement {
 	readMemory(memoryReference: string, offset: number, count: number): Promise<DebugProtocol.ReadMemoryResponse | undefined>;
 	writeMemory(memoryReference: string, offset: number, data: string, allowPartial?: boolean): Promise<DebugProtocol.WriteMemoryResponse | undefined>;
 
-	restartFrame(frameId: number, threadId: number): Promise<void>;
-	next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void>;
-	stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void>;
+	restartFrame(frameId: number, threadId: number): Promise<codemavi>;
+	next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi>;
+	stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi>;
 	stepInTargets(frameId: number): Promise<DebugProtocol.StepInTarget[] | undefined>;
-	stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void>;
-	stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void>;
-	continue(threadId: number): Promise<void>;
-	reverseContinue(threadId: number): Promise<void>;
-	pause(threadId: number): Promise<void>;
-	terminateThreads(threadIds: number[]): Promise<void>;
+	stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi>;
+	stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi>;
+	continue(threadId: number): Promise<codemavi>;
+	reverseContinue(threadId: number): Promise<codemavi>;
+	pause(threadId: number): Promise<codemavi>;
+	terminateThreads(threadIds: number[]): Promise<codemavi>;
 
 	completions(frameId: number | undefined, threadId: number, text: string, position: Position, token: CancellationToken): Promise<DebugProtocol.CompletionsResponse | undefined>;
 	setVariable(variablesReference: number | undefined, name: string, value: string): Promise<DebugProtocol.SetVariableResponse | undefined>;
@@ -529,7 +529,7 @@ export interface IThread extends ITreeElement {
 	/**
 	 * Invalidates the callstack cache
 	 */
-	clearCallStack(): void;
+	clearCallStack(): codemavi;
 
 	/**
 	 * Indicates whether this thread is stopped. The callstack for stopped
@@ -565,7 +565,7 @@ export interface IStackFrame extends ITreeElement {
 	readonly instructionPointerReference?: string;
 	getScopes(): Promise<IScope[]>;
 	getMostSpecificScopes(range: IRange): Promise<ReadonlyArray<IScope>>;
-	forgetScopes(): void;
+	forgetScopes(): codemavi;
 	restart(): Promise<any>;
 	toString(): string;
 	openInEditor(editorService: IEditorService, preserveFocus?: boolean, sideBySide?: boolean, pinned?: boolean): Promise<IEditorPane | undefined>;
@@ -637,7 +637,7 @@ export interface IBreakpoint extends IBaseBreakpoint {
 	readonly pending: boolean;
 
 	/** Marks that a session did trigger the breakpoint. */
-	setSessionDidTrigger(sessionId: string, didTrigger?: boolean): void;
+	setSessionDidTrigger(sessionId: string, didTrigger?: boolean): codemavi;
 	/** Gets whether the `triggeredBy` condition has been met in the given sesison ID. */
 	getSessionDidTrigger(sessionId: string): boolean;
 
@@ -710,12 +710,12 @@ export interface IViewModel extends ITreeElement {
 	 */
 	readonly focusedStackFrame: IStackFrame | undefined;
 
-	setVisualizedExpression(original: IExpression, visualized: IExpression & { treeId: string } | undefined): void;
+	setVisualizedExpression(original: IExpression, visualized: IExpression & { treeId: string } | undefined): codemavi;
 	/** Returns the visualized expression if loaded, or a tree it should be visualized with, or undefined */
 	getVisualizedExpression(expression: IExpression): IExpression | string | undefined;
 	getSelectedExpression(): { expression: IExpression; settingWatch: boolean } | undefined;
-	setSelectedExpression(expression: IExpression | undefined, settingWatch: boolean): void;
-	updateViews(): void;
+	setSelectedExpression(expression: IExpression | undefined, settingWatch: boolean): codemavi;
+	updateViews(): codemavi;
 
 	isMultiSessionView(): boolean;
 
@@ -729,13 +729,13 @@ export interface IViewModel extends ITreeElement {
 	 * rendered as `original` to the `replacement`.
 	 */
 	onDidChangeVisualization: Event<{ original: IExpression; replacement: IExpression }>;
-	onWillUpdateViews: Event<void>;
+	onWillUpdateViews: Event<codemavi>;
 
-	evaluateLazyExpression(expression: IExpressionContainer): void;
+	evaluateLazyExpression(expression: IExpressionContainer): codemavi;
 }
 
 export interface IEvaluate {
-	evaluate(session: IDebugSession, stackFrame: IStackFrame, context: string): Promise<void>;
+	evaluate(session: IDebugSession, stackFrame: IStackFrame, context: string): Promise<codemavi>;
 }
 
 export interface IDebugModel extends ITreeElement {
@@ -759,10 +759,10 @@ export interface IDebugModel extends ITreeElement {
 
 	getInstructionBreakpoints(): ReadonlyArray<IInstructionBreakpoint>;
 	getWatchExpressions(): ReadonlyArray<IExpression & IEvaluate>;
-	registerBreakpointModes(debugType: string, modes: DebugProtocol.BreakpointMode[]): void;
+	registerBreakpointModes(debugType: string, modes: DebugProtocol.BreakpointMode[]): codemavi;
 	getBreakpointModes(forBreakpointType: 'source' | 'exception' | 'data' | 'instruction'): DebugProtocol.BreakpointMode[];
 	onDidChangeBreakpoints: Event<IBreakpointsChangeEvent | undefined>;
-	onDidChangeCallStack: Event<void>;
+	onDidChangeCallStack: Event<codemavi>;
 	/**
 	 * The expression has been added, removed, or repositioned.
 	 */
@@ -772,7 +772,7 @@ export interface IDebugModel extends ITreeElement {
 	 */
 	onDidChangeWatchExpressionValue: Event<IExpression | undefined>;
 
-	fetchCallstack(thread: IThread, levels?: number): Promise<void>;
+	fetchCallstack(thread: IThread, levels?: number): Promise<codemavi>;
 }
 
 /**
@@ -879,13 +879,13 @@ export interface ICompound {
 export interface IDebugAdapter extends IDisposable {
 	readonly onError: Event<Error>;
 	readonly onExit: Event<number | null>;
-	onRequest(callback: (request: DebugProtocol.Request) => void): void;
-	onEvent(callback: (event: DebugProtocol.Event) => void): void;
-	startSession(): Promise<void>;
-	sendMessage(message: DebugProtocol.ProtocolMessage): void;
-	sendResponse(response: DebugProtocol.Response): void;
-	sendRequest(command: string, args: any, clb: (result: DebugProtocol.Response) => void, timeout?: number): number;
-	stopSession(): Promise<void>;
+	onRequest(callback: (request: DebugProtocol.Request) => codemavi): codemavi;
+	onEvent(callback: (event: DebugProtocol.Event) => codemavi): codemavi;
+	startSession(): Promise<codemavi>;
+	sendMessage(message: DebugProtocol.ProtocolMessage): codemavi;
+	sendResponse(response: DebugProtocol.Response): codemavi;
+	sendRequest(command: string, args: any, clb: (result: DebugProtocol.Response) => codemavi, timeout?: number): number;
+	stopSession(): Promise<codemavi>;
 }
 
 export interface IDebugAdapterFactory extends ITerminalLauncher {
@@ -918,7 +918,7 @@ export interface IDebugAdapterNamedPipeServer {
 
 export interface IDebugAdapterInlineImpl extends IDisposable {
 	readonly onDidSendMessage: Event<DebugProtocol.Message>;
-	handleMessage(message: DebugProtocol.Message): void;
+	handleMessage(message: DebugProtocol.Message): codemavi;
 }
 
 export interface IDebugAdapterImpl {
@@ -1007,30 +1007,30 @@ export interface IConfigurationManager {
 		type: string | undefined;
 	};
 
-	selectConfiguration(launch: ILaunch | undefined, name?: string, config?: IConfig, dynamicConfigOptions?: { type?: string }): Promise<void>;
+	selectConfiguration(launch: ILaunch | undefined, name?: string, config?: IConfig, dynamicConfigOptions?: { type?: string }): Promise<codemavi>;
 
 	getLaunches(): ReadonlyArray<ILaunch>;
 	getLaunch(workspaceUri: uri | undefined): ILaunch | undefined;
 	getAllConfigurations(): { launch: ILaunch; name: string; presentation?: IConfigPresentation }[];
-	removeRecentDynamicConfigurations(name: string, type: string): void;
+	removeRecentDynamicConfigurations(name: string, type: string): codemavi;
 	getRecentDynamicConfigurations(): { name: string; type: string }[];
 
 	/**
 	 * Allows to register on change of selected debug configuration.
 	 */
-	onDidSelectConfiguration: Event<void>;
+	onDidSelectConfiguration: Event<codemavi>;
 
 	/**
 	 * Allows to register on change of selected debug configuration.
 	 */
-	onDidChangeConfigurationProviders: Event<void>;
+	onDidChangeConfigurationProviders: Event<codemavi>;
 
 	hasDebugConfigurationProvider(debugType: string, triggerKind?: DebugConfigurationProviderTriggerKind): boolean;
 	getDynamicProviders(): Promise<{ label: string; type: string; pick: () => Promise<{ launch: ILaunch; config: IConfig; label: string } | undefined> }[]>;
 	getDynamicConfigurationsByType(type: string, token?: CancellationToken): Promise<{ launch: ILaunch; config: IConfig; label: string }[]>;
 
 	registerDebugConfigurationProvider(debugConfigurationProvider: IDebugConfigurationProvider): IDisposable;
-	unregisterDebugConfigurationProvider(debugConfigurationProvider: IDebugConfigurationProvider): void;
+	unregisterDebugConfigurationProvider(debugConfigurationProvider: IDebugConfigurationProvider): codemavi;
 
 	resolveConfigurationByProviders(folderUri: uri | undefined, type: string | undefined, debugConfiguration: any, token: CancellationToken): Promise<any>;
 }
@@ -1041,7 +1041,7 @@ export enum DebuggerString {
 
 export interface IAdapterManager {
 
-	onDidRegisterDebugger: Event<void>;
+	onDidRegisterDebugger: Event<codemavi>;
 
 	hasEnabledDebuggers(): boolean;
 	getDebugAdapterDescriptor(session: IDebugSession): Promise<IAdapterDescriptor | undefined>;
@@ -1049,18 +1049,18 @@ export interface IAdapterManager {
 	someDebuggerInterestedInLanguage(language: string): boolean;
 	getDebugger(type: string): IDebuggerMetadata | undefined;
 
-	activateDebuggers(activationEvent: string, debugType?: string): Promise<void>;
+	activateDebuggers(activationEvent: string, debugType?: string): Promise<codemavi>;
 	registerDebugAdapterFactory(debugTypes: string[], debugAdapterFactory: IDebugAdapterFactory): IDisposable;
 	createDebugAdapter(session: IDebugSession): IDebugAdapter | undefined;
 	registerDebugAdapterDescriptorFactory(debugAdapterDescriptorFactory: IDebugAdapterDescriptorFactory): IDisposable;
-	unregisterDebugAdapterDescriptorFactory(debugAdapterDescriptorFactory: IDebugAdapterDescriptorFactory): void;
+	unregisterDebugAdapterDescriptorFactory(debugAdapterDescriptorFactory: IDebugAdapterDescriptorFactory): codemavi;
 
 	substituteVariables(debugType: string, folder: IWorkspaceFolder | undefined, config: IConfig): Promise<IConfig>;
 	runInTerminal(debugType: string, args: DebugProtocol.RunInTerminalRequestArguments, sessionId: string): Promise<number | undefined>;
 	getEnabledDebugger(type: string): (IDebugger & IDebuggerMetadata) | undefined;
 	guessDebugger(gettingConfigurations: boolean): Promise<IGuessedDebugger | undefined>;
 
-	get onDidDebuggersExtPointRead(): Event<void>;
+	get onDidDebuggersExtPointRead(): Event<codemavi>;
 }
 
 export interface IGuessedDebugger {
@@ -1170,7 +1170,7 @@ export interface IDebugService {
 	/**
 	 * Sets the focused stack frame and evaluates all expressions against the newly focused stack frame,
 	 */
-	focusStackFrame(focusedStackFrame: IStackFrame | undefined, thread?: IThread, session?: IDebugSession, options?: { explicit?: boolean; preserveFocus?: boolean; sideBySide?: boolean; pinned?: boolean }): Promise<void>;
+	focusStackFrame(focusedStackFrame: IStackFrame | undefined, thread?: IThread, session?: IDebugSession, options?: { explicit?: boolean; preserveFocus?: boolean; sideBySide?: boolean; pinned?: boolean }): Promise<codemavi>;
 
 	/**
 	 * Returns true if breakpoints can be set for a given editor model. Depends on mode.
@@ -1185,19 +1185,19 @@ export interface IDebugService {
 	/**
 	 * Updates the breakpoints.
 	 */
-	updateBreakpoints(originalUri: uri, data: Map<string, IBreakpointUpdateData>, sendOnResourceSaved: boolean): Promise<void>;
+	updateBreakpoints(originalUri: uri, data: Map<string, IBreakpointUpdateData>, sendOnResourceSaved: boolean): Promise<codemavi>;
 
 	/**
 	 * Enables or disables all breakpoints. If breakpoint is passed only enables or disables the passed breakpoint.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	enableOrDisableBreakpoints(enable: boolean, breakpoint?: IEnablement): Promise<void>;
+	enableOrDisableBreakpoints(enable: boolean, breakpoint?: IEnablement): Promise<codemavi>;
 
 	/**
 	 * Sets the global activated property for all breakpoints.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	setBreakpointsActivated(activated: boolean): Promise<void>;
+	setBreakpointsActivated(activated: boolean): Promise<codemavi>;
 
 	/**
 	 * Removes all breakpoints. If id is passed only removes the breakpoint associated with that id.
@@ -1208,57 +1208,57 @@ export interface IDebugService {
 	/**
 	 * Adds a new function breakpoint for the given name.
 	 */
-	addFunctionBreakpoint(opts?: IFunctionBreakpointOptions, id?: string): void;
+	addFunctionBreakpoint(opts?: IFunctionBreakpointOptions, id?: string): codemavi;
 
 	/**
 	 * Updates an already existing function breakpoint.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): Promise<void>;
+	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): Promise<codemavi>;
 
 	/**
 	 * Removes all function breakpoints. If id is passed only removes the function breakpoint with the passed id.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	removeFunctionBreakpoints(id?: string): Promise<void>;
+	removeFunctionBreakpoints(id?: string): Promise<codemavi>;
 
 	/**
 	 * Adds a new data breakpoint.
 	 */
-	addDataBreakpoint(opts: IDataBreakpointOptions): Promise<void>;
+	addDataBreakpoint(opts: IDataBreakpointOptions): Promise<codemavi>;
 
 	/**
 	 * Updates an already existing data breakpoint.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): Promise<void>;
+	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): Promise<codemavi>;
 
 	/**
 	 * Removes all data breakpoints. If id is passed only removes the data breakpoint with the passed id.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	removeDataBreakpoints(id?: string): Promise<void>;
+	removeDataBreakpoints(id?: string): Promise<codemavi>;
 
 	/**
 	 * Adds a new instruction breakpoint.
 	 */
-	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): Promise<void>;
+	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): Promise<codemavi>;
 
 	/**
 	 * Removes all instruction breakpoints. If address is passed only removes the instruction breakpoint with the passed address.
 	 * The address should be the address string supplied by the debugger from the "Disassemble" request.
 	 * Notifies debug adapter of breakpoint changes.
 	 */
-	removeInstructionBreakpoints(instructionReference?: string, offset?: number): Promise<void>;
+	removeInstructionBreakpoints(instructionReference?: string, offset?: number): Promise<codemavi>;
 
-	setExceptionBreakpointCondition(breakpoint: IExceptionBreakpoint, condition: string | undefined): Promise<void>;
+	setExceptionBreakpointCondition(breakpoint: IExceptionBreakpoint, condition: string | undefined): Promise<codemavi>;
 
 	/**
 	 * Creates breakpoints based on the sesison filter options. This will create
 	 * disabled breakpoints (or enabled, if the filter indicates it's a default)
 	 * for each filter provided in the session.
 	 */
-	setExceptionBreakpointsForSession(session: IDebugSession, filters: DebugProtocol.ExceptionBreakpointsFilter[]): void;
+	setExceptionBreakpointsForSession(session: IDebugSession, filters: DebugProtocol.ExceptionBreakpointsFilter[]): codemavi;
 
 	/**
 	 * Sends all breakpoints to the passed session.
@@ -1274,22 +1274,22 @@ export interface IDebugService {
 	/**
 	 * Adds a new watch expression and evaluates it against the debug adapter.
 	 */
-	addWatchExpression(name?: string): void;
+	addWatchExpression(name?: string): codemavi;
 
 	/**
 	 * Renames a watch expression and evaluates it against the debug adapter.
 	 */
-	renameWatchExpression(id: string, newName: string): void;
+	renameWatchExpression(id: string, newName: string): codemavi;
 
 	/**
 	 * Moves a watch expression to a new possition. Used for reordering watch expressions.
 	 */
-	moveWatchExpression(id: string, position: number): void;
+	moveWatchExpression(id: string, position: number): codemavi;
 
 	/**
 	 * Removes all watch expressions. If id is passed only removes the watch expression with the passed id.
 	 */
-	removeWatchExpressions(id?: string): void;
+	removeWatchExpressions(id?: string): codemavi;
 
 	/**
 	 * Starts debugging. If the configOrName is not passed uses the selected configuration in the debug dropdown.
@@ -1314,7 +1314,7 @@ export interface IDebugService {
 	/**
 	 * Makes unavailable all sources with the passed uri. Source will appear as grayed out in callstack view.
 	 */
-	sourceIsNotAvailable(uri: uri): void;
+	sourceIsNotAvailable(uri: uri): codemavi;
 
 	/**
 	 * Gets the current debug model.
@@ -1329,7 +1329,7 @@ export interface IDebugService {
 	/**
 	 * Resumes execution and pauses until the given position is reached.
 	 */
-	runTo(uri: uri, lineNumber: number, column?: number): Promise<void>;
+	runTo(uri: uri, lineNumber: number, column?: number): Promise<codemavi>;
 }
 
 // Editor interfaces
@@ -1341,14 +1341,14 @@ export const enum BreakpointWidgetContext {
 }
 
 export interface IDebugEditorContribution extends editorCommon.IEditorContribution {
-	showHover(range: Position, focus: boolean): Promise<void>;
+	showHover(range: Position, focus: boolean): Promise<codemavi>;
 	addLaunchConfiguration(): Promise<any>;
-	closeExceptionWidget(): void;
+	closeExceptionWidget(): codemavi;
 }
 
 export interface IBreakpointEditorContribution extends editorCommon.IEditorContribution {
-	showBreakpointWidget(lineNumber: number, column: number | undefined, context?: BreakpointWidgetContext): void;
-	closeBreakpointWidget(): void;
+	showBreakpointWidget(lineNumber: number, column: number | undefined, context?: BreakpointWidgetContext): codemavi;
+	closeBreakpointWidget(): codemavi;
 	getContextMenuActionsAtPosition(lineNumber: number, model: EditorIModel): IAction[];
 }
 

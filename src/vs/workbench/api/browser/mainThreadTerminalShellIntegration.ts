@@ -107,7 +107,7 @@ export class MainThreadTerminalShellIntegration extends Disposable implements Ma
 		this._store.add(this._terminalService.onDidDisposeInstance(e => this._proxy.$closeTerminal(e.instanceId)));
 	}
 
-	$executeCommand(terminalId: number, commandLine: string): void {
+	$executeCommand(terminalId: number, commandLine: string): codemavi {
 		this._terminalService.getInstanceFromId(terminalId)?.runCommand(commandLine, true);
 	}
 
@@ -115,7 +115,7 @@ export class MainThreadTerminalShellIntegration extends Disposable implements Ma
 		return cwd ? URI.file(cwd) : undefined;
 	}
 
-	private _enableShellIntegration(instance: ITerminalInstance): void {
+	private _enableShellIntegration(instance: ITerminalInstance): codemavi {
 		this._proxy.$shellIntegrationChange(instance.instanceId);
 		const cwdDetection = instance.capabilities.get(TerminalCapability.CwdDetection);
 		if (cwdDetection) {

@@ -30,7 +30,7 @@ export class FoldedCellHint extends CellContentPart {
 		super();
 	}
 
-	override didRenderCell(element: MarkupCellViewModel): void {
+	override didRenderCell(element: MarkupCellViewModel): codemavi {
 		this.update(element);
 	}
 

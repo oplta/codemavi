@@ -159,7 +159,7 @@ export class GettingStartedPage extends EditorPane {
 	private stepMediaComponent!: HTMLElement;
 	private webview!: IWebviewElement;
 
-	private layoutMarkdown: (() => void) | undefined;
+	private layoutMarkdown: (() => codemavi) | undefined;
 
 	private detailsRenderer: GettingStartedDetailsRenderer;
 

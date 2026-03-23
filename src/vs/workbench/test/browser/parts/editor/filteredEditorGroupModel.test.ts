@@ -78,11 +78,11 @@ suite('FilteredEditorGroupModel', () => {
 			return other && this.id === other.id && other instanceof TestEditorInput;
 		}
 
-		setDirty(): void {
+		setDirty(): codemavi {
 			this._onDidChangeDirty.fire();
 		}
 
-		setLabel(): void {
+		setLabel(): codemavi {
 			this._onDidChangeLabel.fire();
 		}
 	}
@@ -113,14 +113,14 @@ suite('FilteredEditorGroupModel', () => {
 		override get typeId() { return 'testFileEditorInputForGroups'; }
 		override get editorId() { return this.id; }
 		override async resolve(): Promise<IDisposable | null> { return null; }
-		setPreferredName(name: string): void { }
-		setPreferredDescription(description: string): void { }
-		setPreferredResource(resource: URI): void { }
+		setPreferredName(name: string): codemavi { }
+		setPreferredDescription(description: string): codemavi { }
+		setPreferredResource(resource: URI): codemavi { }
 		async setEncoding(encoding: string) { }
 		getEncoding() { return undefined; }
 		setPreferredEncoding(encoding: string) { }
-		setForceOpenAsBinary(): void { }
-		setPreferredContents(contents: string): void { }
+		setForceOpenAsBinary(): codemavi { }
+		setPreferredContents(contents: string): codemavi { }
 		setLanguageId(languageId: string) { }
 		setPreferredLanguageId(languageId: string) { }
 		isResolved(): boolean { return false; }
@@ -146,7 +146,7 @@ suite('FilteredEditorGroupModel', () => {
 		return nonSerializable ? disposables.add(new NonSerializableTestEditorInput(id)) : disposables.add(new TestEditorInput(id));
 	}
 
-	function closeAllEditors(group: EditorGroupModel): void {
+	function closeAllEditors(group: EditorGroupModel): codemavi {
 		for (const editor of group.getEditors(EditorsOrder.SEQUENTIAL)) {
 			group.closeEditor(editor, undefined, false);
 		}

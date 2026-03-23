@@ -116,7 +116,7 @@ async function doSetupNLS(): Promise<INLSConfiguration | undefined> {
 
 //#endregion
 
-export async function bootstrapESM(): Promise<void> {
+export async function bootstrapESM(): Promise<codemavi> {
 
 	// NLS
 	await setupNLS();

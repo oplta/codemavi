@@ -27,7 +27,7 @@ export class ContiguousTokensStore {
 		this._languageIdCodec = languageIdCodec;
 	}
 
-	public flush(): void {
+	public flush(): codemavi {
 		this._lineTokens = [];
 		this._len = 0;
 	}
@@ -84,14 +84,14 @@ export class ContiguousTokensStore {
 		return tokens;
 	}
 
-	private _ensureLine(lineIndex: number): void {
+	private _ensureLine(lineIndex: number): codemavi {
 		while (lineIndex >= this._len) {
 			this._lineTokens[this._len] = null;
 			this._len++;
 		}
 	}
 
-	private _deleteLines(start: number, deleteCount: number): void {
+	private _deleteLines(start: number, deleteCount: number): codemavi {
 		if (deleteCount === 0) {
 			return;
 		}
@@ -102,7 +102,7 @@ export class ContiguousTokensStore {
 		this._len -= deleteCount;
 	}
 
-	private _insertLines(insertIndex: number, insertCount: number): void {
+	private _insertLines(insertIndex: number, insertCount: number): codemavi {
 		if (insertCount === 0) {
 			return;
 		}
@@ -147,12 +147,12 @@ export class ContiguousTokensStore {
 
 	//#region Editing
 
-	public acceptEdit(range: IRange, eolCount: number, firstLineLength: number): void {
+	public acceptEdit(range: IRange, eolCount: number, firstLineLength: number): codemavi {
 		this._acceptDeleteRange(range);
 		this._acceptInsertText(new Position(range.startLineNumber, range.startColumn), eolCount, firstLineLength);
 	}
 
-	private _acceptDeleteRange(range: IRange): void {
+	private _acceptDeleteRange(range: IRange): codemavi {
 
 		const firstLineIndex = range.startLineNumber - 1;
 		if (firstLineIndex >= this._len) {
@@ -184,7 +184,7 @@ export class ContiguousTokensStore {
 		this._deleteLines(range.startLineNumber, range.endLineNumber - range.startLineNumber);
 	}
 
-	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number): void {
+	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number): codemavi {
 
 		if (eolCount === 0 && firstLineLength === 0) {
 			// Nothing to insert

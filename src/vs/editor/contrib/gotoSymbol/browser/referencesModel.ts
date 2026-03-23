@@ -29,7 +29,7 @@ export class OneReference {
 		readonly isProviderFirst: boolean,
 		readonly parent: FileReferences,
 		readonly link: LocationLink,
-		private _rangeCallback: (ref: OneReference) => void
+		private _rangeCallback: (ref: OneReference) => codemavi
 	) { }
 
 	get uri() {
@@ -69,7 +69,7 @@ export class FilePreview implements IDisposable {
 		private readonly _modelReference: IReference<ITextEditorModel>
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._modelReference.dispose();
 	}
 
@@ -107,7 +107,7 @@ export class FileReferences implements IDisposable {
 		readonly uri: URI
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this._previews.values());
 		this._previews.clear();
 	}
@@ -186,7 +186,7 @@ export class ReferencesModel implements IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.groups);
 		this._onDidChangeReferenceRange.dispose();
 		this.groups.length = 0;

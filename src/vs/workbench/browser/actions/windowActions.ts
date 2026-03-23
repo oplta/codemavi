@@ -68,7 +68,7 @@ abstract class BaseOpenRecentAction extends Action2 {
 
 	protected abstract isQuickNavigate(): boolean;
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const workspacesService = accessor.get(IWorkspacesService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const contextService = accessor.get(IWorkspaceContextService);
@@ -304,7 +304,7 @@ class ToggleFullScreenAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		const hostService = accessor.get(IHostService);
 
 		return hostService.toggleFullScreen(getActiveWindow());
@@ -329,7 +329,7 @@ export class ReloadWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const hostService = accessor.get(IHostService);
 
 		return hostService.reload();
@@ -356,7 +356,7 @@ class ShowAboutDialogAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 
 		return dialogService.about();
@@ -386,7 +386,7 @@ class NewWindowAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		const hostService = accessor.get(IHostService);
 
 		return hostService.openWindow({ remoteAuthority: null });
@@ -402,7 +402,7 @@ class BlurAction extends Action2 {
 		});
 	}
 
-	run(): void {
+	run(): codemavi {
 		const activeElement = getActiveElement();
 		if (isHTMLElement(activeElement)) {
 			activeElement.blur();

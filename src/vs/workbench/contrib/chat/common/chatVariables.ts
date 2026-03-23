@@ -39,7 +39,7 @@ export type IChatVariableResolverProgress =
 	| IChatProgressMessage;
 
 export interface IChatVariableResolver {
-	(messageText: string, arg: string | undefined, model: IChatModel, progress: (part: IChatVariableResolverProgress) => void, token: CancellationToken): Promise<IChatRequestVariableValue | undefined>;
+	(messageText: string, arg: string | undefined, model: IChatModel, progress: (part: IChatVariableResolverProgress) => codemavi, token: CancellationToken): Promise<IChatRequestVariableValue | undefined>;
 }
 
 export const IChatVariablesService = createDecorator<IChatVariablesService>('IChatVariablesService');
@@ -47,7 +47,7 @@ export const IChatVariablesService = createDecorator<IChatVariablesService>('ICh
 export interface IChatVariablesService {
 	_serviceBrand: undefined;
 	getDynamicVariables(sessionId: string): ReadonlyArray<IDynamicVariable>;
-	attachContext(name: string, value: string | URI | Location | unknown, location: ChatAgentLocation): void;
+	attachContext(name: string, value: string | URI | Location | unknown, location: ChatAgentLocation): codemavi;
 
 	/**
 	 * Resolves all variables that occur in `prompt`

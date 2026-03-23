@@ -34,7 +34,7 @@ export class ExtHostFileSystemInfo implements ExtHostFileSystemInfoShape {
 		});
 	}
 
-	$acceptProviderInfos(uri: UriComponents, capabilities: number | null): void {
+	$acceptProviderInfos(uri: UriComponents, capabilities: number | null): codemavi {
 		if (capabilities === null) {
 			this._providerInfo.delete(uri.scheme);
 		} else {

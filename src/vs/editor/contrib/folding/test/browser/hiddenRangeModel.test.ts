@@ -34,7 +34,7 @@ suite('Hidden Range Model', () => {
 		/* 2*/	' * Comment',
 		/* 3*/	' */',
 		/* 4*/	'class A {',
-		/* 5*/	'  void foo() {',
+		/* 5*/	'  codemavi foo() {',
 		/* 6*/	'    if (true) {',
 		/* 7*/	'      //hello',
 		/* 8*/	'    }',

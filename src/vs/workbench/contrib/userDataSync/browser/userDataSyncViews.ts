@@ -47,7 +47,7 @@ export class UserDataSyncDataViews extends Disposable {
 		this.registerViews(container);
 	}
 
-	private registerViews(container: ViewContainer): void {
+	private registerViews(container: ViewContainer): codemavi {
 		this.registerConflictsView(container);
 
 		this.registerActivityView(container, true);
@@ -58,7 +58,7 @@ export class UserDataSyncDataViews extends Disposable {
 		this.registerExternalActivityView(container);
 	}
 
-	private registerConflictsView(container: ViewContainer): void {
+	private registerConflictsView(container: ViewContainer): codemavi {
 		const viewsRegistry = Registry.as<IViewsRegistry>(Extensions.ViewsRegistry);
 		const viewName = localize2('conflicts', "Conflicts");
 		const viewDescriptor: ITreeViewDescriptor = {
@@ -75,7 +75,7 @@ export class UserDataSyncDataViews extends Disposable {
 		viewsRegistry.registerViews([viewDescriptor], container);
 	}
 
-	private registerMachinesView(container: ViewContainer): void {
+	private registerMachinesView(container: ViewContainer): codemavi {
 		const id = `workbench.views.sync.machines`;
 		const name = localize2('synced machines', "Synced Machines");
 		const treeView = this.instantiationService.createInstance(TreeView, id, name.value);
@@ -112,7 +112,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const changed = await dataProvider.rename(handle.$treeItemHandle);
 				if (changed) {
 					await treeView.refresh();
@@ -131,7 +131,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg, selected?: TreeViewItemHandleArg[]): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg, selected?: TreeViewItemHandleArg[]): Promise<codemavi> {
 				if (await dataProvider.disable((selected || [handle]).map(handle => handle.$treeItemHandle))) {
 					await treeView.refresh();
 				}
@@ -140,7 +140,7 @@ export class UserDataSyncDataViews extends Disposable {
 
 	}
 
-	private registerActivityView(container: ViewContainer, remote: boolean): void {
+	private registerActivityView(container: ViewContainer, remote: boolean): codemavi {
 		const id = `workbench.views.sync.${remote ? 'remote' : 'local'}Activity`;
 		const name = remote ? localize2('remote sync activity title', "Sync Activity (Remote)") : localize2('local sync activity title', "Sync Activity (Local)");
 		const treeView = this.instantiationService.createInstance(TreeView, id, name.value);
@@ -171,7 +171,7 @@ export class UserDataSyncDataViews extends Disposable {
 		this.registerDataViewActions(id);
 	}
 
-	private registerExternalActivityView(container: ViewContainer): void {
+	private registerExternalActivityView(container: ViewContainer): codemavi {
 		const id = `workbench.views.sync.externalActivity`;
 		const name = localize2('downloaded sync activity title', "Sync Activity (Developer)");
 		const dataProvider = this.instantiationService.createInstance(ExtractedUserDataSyncActivityViewDataProvider, undefined);
@@ -207,7 +207,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const fileDialogService = accessor.get(IFileDialogService);
 				const result = await fileDialogService.showOpenDialog({
 					title: localize('select sync activity file', "Select Sync Activity File or Folder"),
@@ -236,7 +236,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const { resource } = <{ resource: string }>JSON.parse(handle.$treeItemHandle);
 				const editorService = accessor.get(IEditorService);
 				await editorService.openEditor({ resource: URI.parse(resource), options: { pinned: true } });
@@ -254,7 +254,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const commandService = accessor.get(ICommandService);
 				const { resource, comparableResource } = <{ resource: string; comparableResource: string }>JSON.parse(handle.$treeItemHandle);
 				const remoteResource = URI.parse(resource);
@@ -281,7 +281,7 @@ export class UserDataSyncDataViews extends Disposable {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const dialogService = accessor.get(IDialogService);
 				const userDataSyncService = accessor.get(IUserDataSyncService);
 				const { syncResourceHandle, syncResource } = <{ syncResourceHandle: UriDto<ISyncResourceHandle>; syncResource: SyncResource }>JSON.parse(handle.$treeItemHandle);
@@ -298,7 +298,7 @@ export class UserDataSyncDataViews extends Disposable {
 
 	}
 
-	private registerTroubleShootView(container: ViewContainer): void {
+	private registerTroubleShootView(container: ViewContainer): codemavi {
 		const id = `workbench.views.sync.troubleshoot`;
 		const name = localize2('troubleshoot', "Troubleshoot");
 		const treeView = this.instantiationService.createInstance(TreeView, id, name.value);

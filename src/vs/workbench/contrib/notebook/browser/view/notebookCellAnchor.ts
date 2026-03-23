@@ -71,7 +71,7 @@ export class NotebookCellAnchor implements IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.executionWatcher?.dispose();
 		this.scrollWatcher?.dispose();
 	}

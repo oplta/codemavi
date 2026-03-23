@@ -103,12 +103,12 @@ export interface IWorkingCopyHistoryService {
 	/**
 	 * An event when entries are moved in history.
 	 */
-	onDidMoveEntries: Event<void>;
+	onDidMoveEntries: Event<codemavi>;
 
 	/**
 	 * An event when all entries are removed from the history.
 	 */
-	onDidRemoveEntries: Event<void>;
+	onDidRemoveEntries: Event<codemavi>;
 
 	/**
 	 * Adds a new entry to the history for the given working copy
@@ -119,7 +119,7 @@ export interface IWorkingCopyHistoryService {
 	/**
 	 * Updates an entry in the local history if found.
 	 */
-	updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<void>;
+	updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<codemavi>;
 
 	/**
 	 * Removes an entry from the local history if found.
@@ -147,7 +147,7 @@ export interface IWorkingCopyHistoryService {
 	/**
 	 * Removes all entries from all of local history.
 	 */
-	removeAll(token: CancellationToken): Promise<void>;
+	removeAll(token: CancellationToken): Promise<codemavi>;
 }
 
 /**

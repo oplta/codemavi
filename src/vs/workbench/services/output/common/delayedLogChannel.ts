@@ -17,7 +17,7 @@ export class DelayedLogChannel {
 		this.logger = loggerService.createLogger(file, { name, id, hidden: true });
 	}
 
-	log(level: LogLevel, message: string): void {
+	log(level: LogLevel, message: string): codemavi {
 		this.loggerService.setVisibility(this.file, true);
 		log(this.logger, level, message);
 	}

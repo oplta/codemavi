@@ -22,15 +22,15 @@ class UserDataAutoSyncService implements IUserDataAutoSyncService {
 		this.channel = sharedProcessService.getChannel('userDataAutoSync');
 	}
 
-	triggerSync(sources: string[], options?: SyncOptions): Promise<void> {
+	triggerSync(sources: string[], options?: SyncOptions): Promise<codemavi> {
 		return this.channel.call('triggerSync', [sources, options]);
 	}
 
-	turnOn(): Promise<void> {
+	turnOn(): Promise<codemavi> {
 		return this.channel.call('turnOn');
 	}
 
-	turnOff(everywhere: boolean): Promise<void> {
+	turnOff(everywhere: boolean): Promise<codemavi> {
 		return this.channel.call('turnOff', [everywhere]);
 	}
 

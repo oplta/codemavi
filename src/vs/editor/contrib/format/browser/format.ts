@@ -112,7 +112,7 @@ export async function formatDocumentRangesWithSelectedProvider(
 	progress: IProgress<DocumentRangeFormattingEditProvider>,
 	token: CancellationToken,
 	userGesture: boolean
-): Promise<void> {
+): Promise<codemavi> {
 
 	const instaService = accessor.get(IInstantiationService);
 	const { documentRangeFormattingEditProvider: documentRangeFormattingEditProviderRegistry } = accessor.get(ILanguageFeaturesService);
@@ -290,7 +290,7 @@ export async function formatDocumentWithSelectedProvider(
 	progress: IProgress<DocumentFormattingEditProvider>,
 	token: CancellationToken,
 	userGesture?: boolean
-): Promise<void> {
+): Promise<codemavi> {
 
 	const instaService = accessor.get(IInstantiationService);
 	const languageFeaturesService = accessor.get(ILanguageFeaturesService);

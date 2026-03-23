@@ -35,7 +35,7 @@ declare module 'vscode' {
 		 *
 		 * @see {@link Extension.isFromDifferentExtensionHost}
 		 */
-		export const allAcrossExtensionHosts: readonly Extension<void>[];
+		export const allAcrossExtensionHosts: readonly Extension<codemavi>[];
 
 	}
 }

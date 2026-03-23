@@ -23,7 +23,7 @@ import { CancellationError, isCancellationError } from '../../../../base/common/
 import { getClosestPreviousNodes, gotoNthChild, gotoParent, nextSiblingOrParentSibling } from './cursorUtils.js';
 
 export interface TextModelTreeSitterItem {
-	dispose(): void;
+	dispose(): codemavi;
 	textModelTreeSitter: TextModelTreeSitter;
 	disposables: DisposableStore;
 }
@@ -191,7 +191,7 @@ export class TextModelTreeSitter extends Disposable implements ITextModelTreeSit
 		while (hasNext) {
 			hasNext = await this._processNode(cursor, query, injections);
 			// Yield periodically
-			await new Promise<void>(resolve => setTimeout0(resolve));
+			await new Promise<codemavi>(resolve => setTimeout0(resolve));
 		}
 
 		return this._mergeAdjacentRanges(injections);
@@ -201,7 +201,7 @@ export class TextModelTreeSitter extends Disposable implements ITextModelTreeSit
 		const node = cursor.currentNode;
 		const nodeLineCount = node.endPosition.row - node.startPosition.row;
 
-		// We check the node line count to avoid processing large nodes in one go as that can cause performance issues.
+		// We check the node line count to acodemavi processing large nodes in one go as that can cause performance issues.
 		if (nodeLineCount <= 1000) {
 			this._processCaptures(query, node, injections);
 			// Move to next sibling or up and over
@@ -212,7 +212,7 @@ export class TextModelTreeSitter extends Disposable implements ITextModelTreeSit
 		}
 	}
 
-	private _processCaptures(query: Parser.Query, node: Parser.Node, injections: Map<string, Parser.Range[]>): void {
+	private _processCaptures(query: Parser.Query, node: Parser.Node, injections: Map<string, Parser.Range[]>): codemavi {
 		const captures = query.captures(node);
 		for (const capture of captures) {
 			const injectionLanguage = capture.setProperties?.['injection.language'];
@@ -277,7 +277,7 @@ export class TextModelTreeSitter extends Disposable implements ITextModelTreeSit
 		parentTree: ITreeSitterParseResult,
 		parentLanguage: string,
 		modelChanges: IModelContentChangedEvent[] | undefined
-	): Promise<void> {
+	): Promise<codemavi> {
 		for (const [languageId, ranges] of injections) {
 			const language = await this._treeSitterLanguages.getLanguage(languageId);
 			if (!language) {
@@ -359,7 +359,7 @@ export class TreeSitterParseResult implements IDisposable, ITreeSitterParseResul
 		private readonly _telemetryService: ITelemetryService) {
 		this.parser.setLanguage(language);
 	}
-	dispose(): void {
+	dispose(): codemavi {
 		this._isDisposed = true;
 		this._onDidUpdate.dispose();
 		this._tree?.delete();
@@ -460,7 +460,7 @@ export class TreeSitterParseResult implements IDisposable, ITreeSitterParseResul
 
 			let nodesInRange: Parser.Node[];
 			// It's possible we end up with a really large range if the parent node is big
-			// Try to avoid this large range by finding several smaller nodes that together encompass the range of the changed node.
+			// Try to acodemavi this large range by finding several smaller nodes that together encompass the range of the changed node.
 			const foundNodeSize = cursor.endIndex - cursor.startIndex;
 			if (foundNodeSize > 5000) {
 				// Try to find 3 consecutive nodes that together encompass the changed node.
@@ -569,7 +569,7 @@ export class TreeSitterParseResult implements IDisposable, ITreeSitterParseResul
 
 	private _unfiredChanges: IModelContentChangedEvent[] | undefined;
 	private _onDidChangeContentQueue: LimitedQueue = new LimitedQueue();
-	public onDidChangeContent(model: ITextModel, changes: IModelContentChangedEvent[] | undefined, ranges?: Parser.Range[]): void {
+	public onDidChangeContent(model: ITextModel, changes: IModelContentChangedEvent[] | undefined, ranges?: Parser.Range[]): codemavi {
 		const version = model.getVersionId();
 		if (version === this._editVersion) {
 			return;
@@ -689,7 +689,7 @@ export class TreeSitterParseResult implements IDisposable, ITreeSitterParseResul
 			}
 
 			// So long as this isn't the initial parse, even if the model changes and edits are applied, the tree parsing will continue correctly after the await.
-			await new Promise<void>(resolve => setTimeout0(resolve));
+			await new Promise<codemavi>(resolve => setTimeout0(resolve));
 
 		} while (!model.isDisposed() && !this.isDisposed && !newTree && inProgressVersion === model.getVersionId());
 		this.sendParseTimeTelemetry(parseType, time, passes);
@@ -749,7 +749,7 @@ export class TreeSitterParseResult implements IDisposable, ITreeSitterParseResul
 		return this._ranges;
 	}
 
-	private sendParseTimeTelemetry(parseType: TelemetryParseType, time: number, passes: number): void {
+	private sendParseTimeTelemetry(parseType: TelemetryParseType, time: number, passes: number): codemavi {
 		this._logService.debug(`Tree parsing (${parseType}) took ${time} ms and ${passes} passes.`);
 		type ParseTimeClassification = {
 			owner: 'alexr00';

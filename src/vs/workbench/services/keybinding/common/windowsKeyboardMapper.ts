@@ -15,7 +15,7 @@ import { toEmptyArrayIfContainsNull } from '../../../../platform/keybinding/comm
 import { IWindowsKeyboardMapping } from '../../../../platform/keyboardLayout/common/keyboardLayout.js';
 
 const LOG = false;
-function log(str: string): void {
+function log(str: string): codemavi {
 	if (LOG) {
 		console.info(str);
 	}
@@ -267,7 +267,7 @@ export class WindowsKeyboardMapper implements IKeyboardMapper {
 		}
 
 		// Handle keyboard layouts where latin characters are not produced e.g. Cyrillic
-		const _registerLetterIfMissing = (charCode: CharCode, keyCode: KeyCode): void => {
+		const _registerLetterIfMissing = (charCode: CharCode, keyCode: KeyCode): codemavi => {
 			if (!producesLetter[charCode]) {
 				this._keyCodeToLabel[keyCode] = String.fromCharCode(charCode);
 			}
@@ -303,7 +303,7 @@ export class WindowsKeyboardMapper implements IKeyboardMapper {
 			// Since this keyboard layout produces no latin letters at all, most of the UI will use the
 			// US kb layout equivalent for UI labels, so also try to render other keys with the US labels
 			// for consistency...
-			const _registerLabel = (keyCode: KeyCode, charCode: CharCode): void => {
+			const _registerLabel = (keyCode: KeyCode, charCode: CharCode): codemavi => {
 				// const existingLabel = this._keyCodeToLabel[keyCode];
 				// const existingCharCode = (existingLabel ? existingLabel.charCodeAt(0) : CharCode.Null);
 				// if (existingCharCode < 32 || existingCharCode > 126) {

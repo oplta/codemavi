@@ -135,7 +135,7 @@ export class ExtHostDebugService extends ExtHostDebugServiceBase {
 				}
 
 				const ds = new DisposableStore();
-				await new Promise<void>(resolve => {
+				await new Promise<codemavi>(resolve => {
 					const scheduler = ds.add(new RunOnceScheduler(resolve, Timing.DataDebounce));
 					ds.add(this._terminalService.onDidWriteTerminalData(e => {
 						if (e.terminal === terminal) {
@@ -173,7 +173,7 @@ export class ExtHostDebugService extends ExtHostDebugServiceBase {
 					if (terminal.shellIntegration) {
 						const ds = new DisposableStore();
 						const execution = terminal.shellIntegration.executeCommand(clearCommand);
-						await new Promise<void>(resolve => {
+						await new Promise<codemavi>(resolve => {
 							ds.add(this._terminalShellIntegrationService.onDidEndTerminalShellExecution(e => {
 								if (e.execution === execution) {
 									resolve();

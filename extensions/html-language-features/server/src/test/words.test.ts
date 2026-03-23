@@ -19,7 +19,7 @@ suite('HTML Language Configuration', () => {
 
 	const wordRegex = createRegex(config.wordPattern);
 
-	function assertWord(value: string, expected: string): void {
+	function assertWord(value: string, expected: string): codemavi {
 		const offset = value.indexOf('|');
 		value = value.substr(0, offset) + value.substring(offset + 1);
 
@@ -52,7 +52,7 @@ suite('HTML Language Configuration', () => {
 
 	const onEnterBeforeRules: RegExp[] = config.onEnterRules.map((r: any) => createRegex(r.beforeText));
 
-	function assertBeforeRule(text: string, expectedMatch: boolean): void {
+	function assertBeforeRule(text: string, expectedMatch: boolean): codemavi {
 		for (const reg of onEnterBeforeRules) {
 			const start = new Date().getTime();
 			assert.strictEqual(reg.test(text), expectedMatch);

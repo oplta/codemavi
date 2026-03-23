@@ -79,7 +79,7 @@ registerAction2(class EditCellAction extends NotebookCellAction {
 			});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		if (!context.notebookEditor.hasModel()) {
 			return;
 		}
@@ -245,7 +245,7 @@ registerAction2(class ClearCellOutputsAction extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const notebookExecutionStateService = accessor.get(INotebookExecutionStateService);
 		const editor = context.notebookEditor;
 		if (!editor.hasModel() || !editor.textModel.length) {
@@ -307,7 +307,7 @@ registerAction2(class ClearAllCellOutputsAction extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const notebookExecutionStateService = accessor.get(INotebookExecutionStateService);
 		const editor = context.notebookEditor;
 		if (!editor.hasModel() || !editor.textModel.length) {
@@ -418,7 +418,7 @@ registerAction2(class ChangeCellLanguageAction extends NotebookCellAction<ICellR
 	}
 
 
-	async runWithContext(accessor: ServicesAccessor, context: IChangeCellContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: IChangeCellContext): Promise<codemavi> {
 		if (context.language) {
 			await this.setLanguage(context, context.language);
 		} else {
@@ -541,7 +541,7 @@ registerAction2(class DetectCellLanguageAction extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const languageDetectionService = accessor.get(ILanguageDetectionService);
 		const notificationService = accessor.get(INotificationService);
 		const kernelService = accessor.get(INotebookKernelService);
@@ -587,7 +587,7 @@ registerAction2(class SelectNotebookIndentation extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		await this.showNotebookIndentationPicker(accessor, context);
 	}
 
@@ -605,7 +605,7 @@ registerAction2(class SelectNotebookIndentation extends NotebookAction {
 			return quickInputService.pick([{ label: localize('noWritableCodeEditor', "The active notebook editor is read-only.") }]);
 		}
 
-		const picks: QuickPickInput<IQuickPickItem & { run(): void }>[] = [
+		const picks: QuickPickInput<IQuickPickItem & { run(): codemavi }>[] = [
 			new NotebookIndentUsingTabs(), // indent using tabs
 			new NotebookIndentUsingSpaces(), // indent using spaces
 			new NotebookChangeTabDisplaySize(), // change tab size
@@ -651,7 +651,7 @@ registerAction2(class CommentSelectedCellsAction extends NotebookMultiCellAction
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext): Promise<codemavi> {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		context.selectedCells.forEach(async cellViewModel => {

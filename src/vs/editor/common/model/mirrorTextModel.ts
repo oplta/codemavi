@@ -55,7 +55,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 		this._cachedTextValue = null;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._lines.length = 0;
 	}
 
@@ -70,7 +70,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 		return this._cachedTextValue;
 	}
 
-	onEvents(e: IModelChangedEvent): void {
+	onEvents(e: IModelChangedEvent): codemavi {
 		if (e.eol && e.eol !== this._eol) {
 			this._eol = e.eol;
 			this._lineStarts = null;
@@ -87,7 +87,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 		this._cachedTextValue = null;
 	}
 
-	protected _ensureLineStarts(): void {
+	protected _ensureLineStarts(): codemavi {
 		if (!this._lineStarts) {
 			const eolLength = this._eol.length;
 			const linesLength = this._lines.length;
@@ -102,7 +102,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 	/**
 	 * All changes to a line's text go through this method
 	 */
-	private _setLineText(lineIndex: number, newValue: string): void {
+	private _setLineText(lineIndex: number, newValue: string): codemavi {
 		this._lines[lineIndex] = newValue;
 		if (this._lineStarts) {
 			// update prefix sum
@@ -110,7 +110,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 		}
 	}
 
-	private _acceptDeleteRange(range: IRange): void {
+	private _acceptDeleteRange(range: IRange): codemavi {
 
 		if (range.startLineNumber === range.endLineNumber) {
 			if (range.startColumn === range.endColumn) {
@@ -139,7 +139,7 @@ export class MirrorTextModel implements IMirrorTextModel {
 		}
 	}
 
-	private _acceptInsertText(position: Position, insertText: string): void {
+	private _acceptInsertText(position: Position, insertText: string): codemavi {
 		if (insertText.length === 0) {
 			// Nothing to insert
 			return;

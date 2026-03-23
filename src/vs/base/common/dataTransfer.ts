@@ -105,7 +105,7 @@ export class VSDataTransfer implements IReadonlyVSDataTransfer {
 	 *
 	 * This does not replace existing entries for `mimeType`.
 	 */
-	public append(mimeType: string, value: IDataTransferItem): void {
+	public append(mimeType: string, value: IDataTransferItem): codemavi {
 		const existing = this._entries.get(mimeType);
 		if (existing) {
 			existing.push(value);
@@ -119,7 +119,7 @@ export class VSDataTransfer implements IReadonlyVSDataTransfer {
 	 *
 	 * This replaces all existing entries for `mimeType`.
 	 */
-	public replace(mimeType: string, value: IDataTransferItem): void {
+	public replace(mimeType: string, value: IDataTransferItem): codemavi {
 		this._entries.set(this.toKey(mimeType), [value]);
 	}
 

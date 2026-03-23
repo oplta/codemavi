@@ -113,7 +113,7 @@ registerAction2(class FocusNextCellAction extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		const activeCell = context.cell;
 
@@ -189,7 +189,7 @@ registerAction2(class FocusPreviousCellAction extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		const activeCell = context.cell;
 
@@ -237,7 +237,7 @@ registerAction2(class extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		if (editor.getLength() === 0) {
 			return;
@@ -269,7 +269,7 @@ registerAction2(class extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		if (!editor.hasModel() || editor.getLength() === 0) {
 			return;
@@ -303,7 +303,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		const activeCell = context.cell;
 		return timeout(0).then(() => editor.focusNotebookCell(activeCell, 'output'));
@@ -324,7 +324,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		const editor = context.notebookEditor;
 		const activeCell = context.cell;
 		await editor.focusNotebookCell(activeCell, 'editor');
@@ -347,7 +347,7 @@ registerAction2(class CenterActiveCellAction extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		return context.notebookEditor.revealInCenter(context.cell);
 	}
 });
@@ -371,7 +371,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		EditorExtensionsRegistry.getEditorCommand('cursorPageUp').runCommand(accessor, { pageSize: getPageSize(context) });
 	}
 });
@@ -396,7 +396,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		EditorExtensionsRegistry.getEditorCommand('cursorPageUpSelect').runCommand(accessor, { pageSize: getPageSize(context) });
 	}
 });
@@ -420,7 +420,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		EditorExtensionsRegistry.getEditorCommand('cursorPageDown').runCommand(accessor, { pageSize: getPageSize(context) });
 	}
 });
@@ -445,7 +445,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		EditorExtensionsRegistry.getEditorCommand('cursorPageDownSelect').runCommand(accessor, { pageSize: getPageSize(context) });
 	}
 });

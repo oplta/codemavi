@@ -256,7 +256,7 @@ export class LanguageDetectionWorkerClient extends Disposable {
 		return this._regexpModelUri;
 	}
 
-	async sendTelemetryEvent(languages: string[], confidences: number[], timeSpent: number): Promise<void> {
+	async sendTelemetryEvent(languages: string[], confidences: number[], timeSpent: number): Promise<codemavi> {
 		this._telemetryService.publicLog2<ILanguageDetectionStats, LanguageDetectionStatsClassification>(LanguageDetectionStatsId, {
 			languages: languages.join(','),
 			confidences: confidences.join(','),

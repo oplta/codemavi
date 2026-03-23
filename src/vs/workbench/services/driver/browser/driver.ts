@@ -33,7 +33,7 @@ export class BrowserWindowDriver implements IWindowDriver {
 		return getLogs(this.fileService, this.environmentService);
 	}
 
-	async whenWorkbenchRestored(): Promise<void> {
+	async whenWorkbenchRestored(): Promise<codemavi> {
 		this.logService.info('[driver] Waiting for restored lifecycle phase...');
 		await this.lifecycleService.when(LifecyclePhase.Restored);
 		this.logService.info('[driver] Restored lifecycle phase reached. Waiting for contributions...');
@@ -41,7 +41,7 @@ export class BrowserWindowDriver implements IWindowDriver {
 		this.logService.info('[driver] Workbench contributions created.');
 	}
 
-	async setValue(selector: string, text: string): Promise<void> {
+	async setValue(selector: string, text: string): Promise<codemavi> {
 		const element = mainWindow.document.querySelector(selector);
 
 		if (!element) {
@@ -127,7 +127,7 @@ export class BrowserWindowDriver implements IWindowDriver {
 		return this._getElementXY(selector, offset);
 	}
 
-	async typeInEditor(selector: string, text: string): Promise<void> {
+	async typeInEditor(selector: string, text: string): Promise<codemavi> {
 		const element = mainWindow.document.querySelector(selector);
 
 		if (!element) {
@@ -204,7 +204,7 @@ export class BrowserWindowDriver implements IWindowDriver {
 		return lines;
 	}
 
-	async writeInTerminal(selector: string, text: string): Promise<void> {
+	async writeInTerminal(selector: string, text: string): Promise<codemavi> {
 		const element = mainWindow.document.querySelector(selector);
 
 		if (!element) {
@@ -260,12 +260,12 @@ export class BrowserWindowDriver implements IWindowDriver {
 		return { x, y };
 	}
 
-	async exitApplication(): Promise<void> {
+	async exitApplication(): Promise<codemavi> {
 		// No-op in web
 	}
 
 }
 
-export function registerWindowDriver(instantiationService: IInstantiationService): void {
+export function registerWindowDriver(instantiationService: IInstantiationService): codemavi {
 	Object.assign(mainWindow, { driver: instantiationService.createInstance(BrowserWindowDriver) });
 }

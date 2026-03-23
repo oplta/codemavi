@@ -208,7 +208,7 @@ export class MarkupCellRenderer extends AbstractCellRenderer implements IListRen
 		return templateData;
 	}
 
-	renderElement(element: MarkupCellViewModel, index: number, templateData: MarkdownCellRenderTemplate, height: number | undefined): void {
+	renderElement(element: MarkupCellViewModel, index: number, templateData: MarkdownCellRenderTemplate, height: number | undefined): codemavi {
 		if (!this.notebookEditor.hasModel()) {
 			throw new Error('The notebook editor is not attached with view model yet.');
 		}
@@ -225,11 +225,11 @@ export class MarkupCellRenderer extends AbstractCellRenderer implements IListRen
 		templateData.elementDisposables.add(templateData.instantiationService.createInstance(MarkupCell, this.notebookEditor, element, templateData, this.renderedEditors));
 	}
 
-	disposeTemplate(templateData: MarkdownCellRenderTemplate): void {
+	disposeTemplate(templateData: MarkdownCellRenderTemplate): codemavi {
 		templateData.templateDisposables.dispose();
 	}
 
-	disposeElement(_element: ICellViewModel, _index: number, templateData: MarkdownCellRenderTemplate): void {
+	disposeElement(_element: ICellViewModel, _index: number, templateData: MarkdownCellRenderTemplate): codemavi {
 		templateData.elementDisposables.clear();
 	}
 }
@@ -378,7 +378,7 @@ export class CodeCellRenderer extends AbstractCellRenderer implements IListRende
 		return templateData;
 	}
 
-	renderElement(element: CodeCellViewModel, index: number, templateData: CodeCellRenderTemplate, height: number | undefined): void {
+	renderElement(element: CodeCellViewModel, index: number, templateData: CodeCellRenderTemplate, height: number | undefined): codemavi {
 		if (!this.notebookEditor.hasModel()) {
 			throw new Error('The notebook editor is not attached with view model yet.');
 		}
@@ -396,11 +396,11 @@ export class CodeCellRenderer extends AbstractCellRenderer implements IListRende
 		this.renderedEditors.set(element, templateData.editor);
 	}
 
-	disposeTemplate(templateData: CodeCellRenderTemplate): void {
+	disposeTemplate(templateData: CodeCellRenderTemplate): codemavi {
 		templateData.templateDisposables.dispose();
 	}
 
-	disposeElement(element: ICellViewModel, index: number, templateData: CodeCellRenderTemplate, height: number | undefined): void {
+	disposeElement(element: ICellViewModel, index: number, templateData: CodeCellRenderTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 		this.renderedEditors.delete(element);
 	}

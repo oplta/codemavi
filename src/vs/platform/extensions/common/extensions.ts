@@ -365,7 +365,7 @@ export class ExtensionIdentifier {
 	public readonly value: string;
 
 	/**
-	 * Do not use directly. This is public to avoid mangling and thus
+	 * Do not use directly. This is public to acodemavi mangling and thus
 	 * allow compatibility between running from source and a built version.
 	 */
 	readonly _lower: string;
@@ -421,7 +421,7 @@ export class ExtensionIdentifierSet {
 		}
 	}
 
-	public add(id: ExtensionIdentifier | string): void {
+	public add(id: ExtensionIdentifier | string): codemavi {
 		this._set.add(ExtensionIdentifier.toKey(id));
 	}
 
@@ -438,11 +438,11 @@ export class ExtensionIdentifierMap<T> {
 
 	private readonly _map = new Map<string, T>();
 
-	public clear(): void {
+	public clear(): codemavi {
 		this._map.clear();
 	}
 
-	public delete(id: ExtensionIdentifier | string): void {
+	public delete(id: ExtensionIdentifier | string): codemavi {
 		this._map.delete(ExtensionIdentifier.toKey(id));
 	}
 
@@ -454,7 +454,7 @@ export class ExtensionIdentifierMap<T> {
 		return this._map.has(ExtensionIdentifier.toKey(id));
 	}
 
-	public set(id: ExtensionIdentifier | string, value: T): void {
+	public set(id: ExtensionIdentifier | string, value: T): codemavi {
 		this._map.set(ExtensionIdentifier.toKey(id), value);
 	}
 
@@ -462,7 +462,7 @@ export class ExtensionIdentifierMap<T> {
 		return this._map.values();
 	}
 
-	forEach(callbackfn: (value: T, key: string, map: Map<string, T>) => void): void {
+	forEach(callbackfn: (value: T, key: string, map: Map<string, T>) => codemavi): codemavi {
 		this._map.forEach(callbackfn);
 	}
 

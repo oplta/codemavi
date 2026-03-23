@@ -11,7 +11,7 @@ import { ILogService } from '../../log/common/log.js';
 // These APIs are currently only supported in our custom build of electron so
 // we need to guard against them not being available.
 interface ISafeStorageAdditionalAPIs {
-	setUsePlainTextEncryption(usePlainText: boolean): void;
+	setUsePlainTextEncryption(usePlainText: boolean): codemavi;
 	getSelectedStorageBackend(): string;
 }
 
@@ -24,7 +24,7 @@ export class EncryptionMainService implements IEncryptionMainService {
 		@ILogService private readonly logService: ILogService
 	) {
 
-		// Void added this as a nice default for linux so you don't need to specify encryption provider
+		// Code Mavi added this as a nice default for linux so you don't need to specify encryption provider
 		if (isLinux && !app.commandLine.getSwitchValue('password-store')) {
 			this.logService.trace('[EncryptionMainService] No password-store switch, defaulting to basic...');
 			app.commandLine.appendSwitch('password-store', PasswordStoreCLIOption.basic);
@@ -96,7 +96,7 @@ export class EncryptionMainService implements IEncryptionMainService {
 		return Promise.resolve(KnownStorageProvider.unknown);
 	}
 
-	async setUsePlainTextEncryption(): Promise<void> {
+	async setUsePlainTextEncryption(): Promise<codemavi> {
 		if (isWindows) {
 			throw new Error('Setting plain text encryption is not supported on Windows.');
 		}

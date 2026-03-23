@@ -39,14 +39,14 @@ export class SuggestWidgetStatus {
 		this._rightActions.domNode.classList.add('right');
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._menuDisposables.dispose();
 		this._leftActions.dispose();
 		this._rightActions.dispose();
 		this.element.remove();
 	}
 
-	show(): void {
+	show(): codemavi {
 		const menu = this._menuService.createMenu(this._menuId, this._contextKeyService);
 		const renderMenu = () => {
 			const left: IAction[] = [];
@@ -67,7 +67,7 @@ export class SuggestWidgetStatus {
 		this._menuDisposables.add(menu);
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		this._menuDisposables.clear();
 	}
 }

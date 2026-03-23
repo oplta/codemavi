@@ -71,7 +71,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		};
 	}
 
-	async pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -85,7 +85,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		return this.nativeHostService.pickFileFolderAndOpen(this.toNativeOpenDialogOptions(options));
 	}
 
-	async pickFileAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFileAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -99,7 +99,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		return this.nativeHostService.pickFileAndOpen(this.toNativeOpenDialogOptions(options));
 	}
 
-	async pickFolderAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -112,7 +112,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		return this.nativeHostService.pickFolderAndOpen(this.toNativeOpenDialogOptions(options));
 	}
 
-	async pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		options.availableFileSystems = this.getWorkspaceAvailableFileSystems(options);
 		const schema = this.getFileSystemSchema(options);
 

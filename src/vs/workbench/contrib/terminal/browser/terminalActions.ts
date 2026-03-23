@@ -145,7 +145,7 @@ export class TerminalLaunchHelpAction extends Action {
 		super('workbench.action.terminal.launchHelp', localize('terminalLaunchHelp', "Open Help"));
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		this._openerService.open('https://aka.ms/vscode-troubleshoot-terminal-launch');
 	}
 }
@@ -159,7 +159,7 @@ export class TerminalLaunchHelpAction extends Action {
  * - `precondition`: TerminalContextKeys.processSupported
  */
 export function registerTerminalAction(
-	options: IAction2Options & { run: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown, args2?: unknown) => void | Promise<unknown> }
+	options: IAction2Options & { run: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown, args2?: unknown) => codemavi | Promise<unknown> }
 ): IDisposable {
 	// Set defaults
 	options.f1 = options.f1 ?? true;
@@ -167,8 +167,8 @@ export function registerTerminalAction(
 	options.precondition = options.precondition ?? TerminalContextKeys.processSupported;
 	// Remove run function from options so it's not passed through to registerAction2
 	const runFunc = options.run;
-	const strictOptions: IAction2Options & { run?: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => void | Promise<unknown> } = options;
-	delete (strictOptions as IAction2Options & { run?: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => void | Promise<unknown> })['run'];
+	const strictOptions: IAction2Options & { run?: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => codemavi | Promise<unknown> } = options;
+	delete (strictOptions as IAction2Options & { run?: (c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => codemavi | Promise<unknown> })['run'];
 	// Register
 	return registerAction2(class extends Action2 {
 		constructor() {
@@ -202,12 +202,12 @@ export function registerContextualInstanceAction(
 		 * contextual instances.
 		 */
 		activeInstanceType?: 'view' | 'editor';
-		run: (instance: ITerminalInstance, c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => void | Promise<unknown>;
+		run: (instance: ITerminalInstance, c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => codemavi | Promise<unknown>;
 		/**
 		 * A callback to run after the `run` callbacks have completed.
 		 * @param instances The selected instance(s) that the command was run on.
 		 */
-		runAfter?: (instances: ITerminalInstance[], c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => void | Promise<unknown>;
+		runAfter?: (instances: ITerminalInstance[], c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => codemavi | Promise<unknown>;
 	}
 ): IDisposable {
 	const originalRun = options.run;
@@ -228,7 +228,7 @@ export function registerContextualInstanceAction(
 				}
 				instances = [activeInstance];
 			}
-			const results: (Promise<unknown> | void)[] = [];
+			const results: (Promise<unknown> | codemavi)[] = [];
 			for (const instance of instances) {
 				results.push(originalRun(instance, c, accessor, focusedInstanceArgs));
 			}
@@ -245,7 +245,7 @@ export function registerContextualInstanceAction(
  * provides it to the run function.
  */
 export function registerActiveInstanceAction(
-	options: IAction2Options & { run: (activeInstance: ITerminalInstance, c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => void | Promise<unknown> }
+	options: IAction2Options & { run: (activeInstance: ITerminalInstance, c: ITerminalServicesCollection, accessor: ServicesAccessor, args?: unknown) => codemavi | Promise<unknown> }
 ): IDisposable {
 	const originalRun = options.run;
 	return registerTerminalAction({
@@ -266,7 +266,7 @@ export function registerActiveInstanceAction(
  * This includes detached xterm terminals that are not managed by an {@link ITerminalInstance}.
  */
 export function registerActiveXtermAction(
-	options: IAction2Options & { run: (activeTerminal: IXtermTerminal, accessor: ServicesAccessor, instance: ITerminalInstance | IDetachedTerminalInstance, args?: unknown) => void | Promise<unknown> }
+	options: IAction2Options & { run: (activeTerminal: IXtermTerminal, accessor: ServicesAccessor, instance: ITerminalInstance | IDetachedTerminalInstance, args?: unknown) => codemavi | Promise<unknown> }
 ): IDisposable {
 	const originalRun = options.run;
 	return registerTerminalAction({
@@ -787,7 +787,7 @@ export function registerTerminalActions() {
 					c.service.setEditable(firstInstance, null);
 					c.service.setEditingTerminal(undefined);
 					if (success) {
-						const promises: Promise<void>[] = [];
+						const promises: Promise<codemavi>[] = [];
 						for (const instance of instances) {
 							promises.push((async () => {
 								await instance.rename(value);
@@ -1093,7 +1093,7 @@ export function registerTerminalActions() {
 		run: async (c, accessor) => {
 			const instances = getSelectedInstances(accessor);
 			if (instances) {
-				const promises: Promise<void>[] = [];
+				const promises: Promise<codemavi>[] = [];
 				for (const t of instances) {
 					promises.push((async () => {
 						await c.service.createTerminal({ location: { parentTerminal: t } });
@@ -1254,7 +1254,7 @@ export function registerTerminalActions() {
 		}
 	});
 
-	async function killInstance(c: ITerminalServicesCollection, instance: ITerminalInstance | undefined): Promise<void> {
+	async function killInstance(c: ITerminalServicesCollection, instance: ITerminalInstance | undefined): Promise<codemavi> {
 		if (!instance) {
 			return;
 		}
@@ -1284,7 +1284,7 @@ export function registerTerminalActions() {
 		precondition: ContextKeyExpr.or(sharedWhenClause.terminalAvailable, TerminalContextKeys.isOpen),
 		icon: Codicon.trash,
 		run: async (c) => {
-			const disposePromises: Promise<void>[] = [];
+			const disposePromises: Promise<codemavi>[] = [];
 			for (const instance of c.service.instances) {
 				disposePromises.push(c.service.safeDisposeTerminal(instance));
 			}
@@ -1320,7 +1320,7 @@ export function registerTerminalActions() {
 			when: TerminalContextKeys.tabsFocus
 		},
 		run: async (c, accessor) => {
-			const disposePromises: Promise<void>[] = [];
+			const disposePromises: Promise<codemavi>[] = [];
 			for (const terminal of getSelectedInstances(accessor, true) ?? []) {
 				disposePromises.push(c.service.safeDisposeTerminal(terminal));
 			}
@@ -1704,7 +1704,7 @@ export function shrinkWorkspaceFolderCwdPairs(pairs: WorkspaceFolderCwdPair[]): 
 	return selectedPairsInOrder;
 }
 
-async function focusActiveTerminal(instance: ITerminalInstance, c: ITerminalServicesCollection): Promise<void> {
+async function focusActiveTerminal(instance: ITerminalInstance, c: ITerminalServicesCollection): Promise<codemavi> {
 	if (instance.target === TerminalLocation.Editor) {
 		await c.editorService.revealActiveEditor();
 		await instance.focusWhenReady(true);

@@ -176,7 +176,7 @@ export class RemoteExtensionsScannerService implements IRemoteExtensionsScannerS
 		return scannedExtensions.map(e => toExtensionDescription(e, false));
 	}
 
-	private async _ensureLanguagePackIsInstalled(language: string, languagePackId: string | undefined): Promise<void> {
+	private async _ensureLanguagePackIsInstalled(language: string, languagePackId: string | undefined): Promise<codemavi> {
 		if (
 			// No need to install language packs for the default language
 			language === platform.LANGUAGE_DEFAULT ||
@@ -211,7 +211,7 @@ export class RemoteExtensionsScannerService implements IRemoteExtensionsScannerS
 		}
 	}
 
-	private _massageWhenConditions(extensions: IExtensionDescription[]): void {
+	private _massageWhenConditions(extensions: IExtensionDescription[]): codemavi {
 		// Massage "when" conditions which mention `resourceScheme`
 
 		interface WhenUser { when?: string }

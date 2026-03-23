@@ -12,7 +12,7 @@ import { SelectedLines } from './folding.js';
 export interface IDecorationProvider {
 	getDecorationOption(isCollapsed: boolean, isHidden: boolean, isManual: boolean): IModelDecorationOptions;
 	changeDecorations<T>(callback: (changeAccessor: IModelDecorationsChangeAccessor) => T): T | null;
-	removeDecorations(decorationIds: string[]): void;
+	removeDecorations(decorationIds: string[]): codemavi;
 }
 
 export interface FoldingModelChangeEvent {
@@ -112,7 +112,7 @@ export class FoldingModel {
 		this.updatePost(FoldingRegions.fromFoldRanges(newFoldingRanges));
 	}
 
-	public update(newRegions: FoldingRegions, selection?: SelectedLines): void {
+	public update(newRegions: FoldingRegions, selection?: SelectedLines): codemavi {
 		const foldedOrManualRanges = this._currentFoldedOrManualRanges(selection);
 		const newRanges = FoldingRegions.sanitizeAndMerge(newRegions, foldedOrManualRanges, this._textModel.getLineCount(), selection);
 		this.updatePost(FoldingRegions.fromFoldRanges(newRanges));
@@ -328,7 +328,7 @@ export function toggleCollapseState(foldingModel: FoldingModel, levels: number, 
  * @param levels The number of levels. Use 1 to only impact the regions at the location, use Number.MAX_VALUE for all levels.
  * @param lineNumbers the location of the regions to collapse or expand, or if not set, all regions in the model.
  */
-export function setCollapseStateLevelsDown(foldingModel: FoldingModel, doCollapse: boolean, levels = Number.MAX_VALUE, lineNumbers?: number[]): void {
+export function setCollapseStateLevelsDown(foldingModel: FoldingModel, doCollapse: boolean, levels = Number.MAX_VALUE, lineNumbers?: number[]): codemavi {
 	const toToggle: FoldingRegion[] = [];
 	if (lineNumbers && lineNumbers.length > 0) {
 		for (const lineNumber of lineNumbers) {
@@ -356,7 +356,7 @@ export function setCollapseStateLevelsDown(foldingModel: FoldingModel, doCollaps
  * @param levels The number of levels. Use 1 to only impact the regions at the location, use Number.MAX_VALUE for all levels.
  * @param lineNumbers the location of the regions to collapse or expand.
  */
-export function setCollapseStateLevelsUp(foldingModel: FoldingModel, doCollapse: boolean, levels: number, lineNumbers: number[]): void {
+export function setCollapseStateLevelsUp(foldingModel: FoldingModel, doCollapse: boolean, levels: number, lineNumbers: number[]): codemavi {
 	const toToggle: FoldingRegion[] = [];
 	for (const lineNumber of lineNumbers) {
 		const regions = foldingModel.getAllRegionsAtLine(lineNumber, (region, level) => region.isCollapsed !== doCollapse && level <= levels);
@@ -370,7 +370,7 @@ export function setCollapseStateLevelsUp(foldingModel: FoldingModel, doCollapse:
  * @param doCollapse Whether to collapse or expand
  * @param lineNumbers the location of the regions to collapse or expand.
  */
-export function setCollapseStateUp(foldingModel: FoldingModel, doCollapse: boolean, lineNumbers: number[]): void {
+export function setCollapseStateUp(foldingModel: FoldingModel, doCollapse: boolean, lineNumbers: number[]): codemavi {
 	const toToggle: FoldingRegion[] = [];
 	for (const lineNumber of lineNumbers) {
 		const regions = foldingModel.getAllRegionsAtLine(lineNumber, (region,) => region.isCollapsed !== doCollapse);
@@ -386,7 +386,7 @@ export function setCollapseStateUp(foldingModel: FoldingModel, doCollapse: boole
  * @param foldLevel level. Level == 1 is the top level
  * @param doCollapse Whether to collapse or expand
 */
-export function setCollapseStateAtLevel(foldingModel: FoldingModel, foldLevel: number, doCollapse: boolean, blockedLineNumbers: number[]): void {
+export function setCollapseStateAtLevel(foldingModel: FoldingModel, foldLevel: number, doCollapse: boolean, blockedLineNumbers: number[]): codemavi {
 	const filter = (region: FoldingRegion, level: number) => level === foldLevel && region.isCollapsed !== doCollapse && !blockedLineNumbers.some(line => region.containsLine(line));
 	const toToggle = foldingModel.getRegionsInside(null, filter);
 	foldingModel.toggleCollapseState(toToggle);
@@ -397,7 +397,7 @@ export function setCollapseStateAtLevel(foldingModel: FoldingModel, foldLevel: n
  * @param doCollapse Whether to collapse or expand
  * @param blockedLineNumbers the location of regions to not collapse or expand
  */
-export function setCollapseStateForRest(foldingModel: FoldingModel, doCollapse: boolean, blockedLineNumbers: number[]): void {
+export function setCollapseStateForRest(foldingModel: FoldingModel, doCollapse: boolean, blockedLineNumbers: number[]): codemavi {
 	const filteredRegions: FoldingRegion[] = [];
 	for (const lineNumber of blockedLineNumbers) {
 		const regions = foldingModel.getAllRegionsAtLine(lineNumber, undefined);
@@ -414,7 +414,7 @@ export function setCollapseStateForRest(foldingModel: FoldingModel, doCollapse: 
  * Folds all regions for which the lines start with a given regex
  * @param foldingModel the folding model
  */
-export function setCollapseStateForMatchingLines(foldingModel: FoldingModel, regExp: RegExp, doCollapse: boolean): void {
+export function setCollapseStateForMatchingLines(foldingModel: FoldingModel, regExp: RegExp, doCollapse: boolean): codemavi {
 	const editorModel = foldingModel.textModel;
 	const regions = foldingModel.regions;
 	const toToggle: FoldingRegion[] = [];
@@ -433,7 +433,7 @@ export function setCollapseStateForMatchingLines(foldingModel: FoldingModel, reg
  * Folds all regions of the given type
  * @param foldingModel the folding model
  */
-export function setCollapseStateForType(foldingModel: FoldingModel, type: string, doCollapse: boolean): void {
+export function setCollapseStateForType(foldingModel: FoldingModel, type: string, doCollapse: boolean): codemavi {
 	const regions = foldingModel.regions;
 	const toToggle: FoldingRegion[] = [];
 	for (let i = regions.length - 1; i >= 0; i--) {

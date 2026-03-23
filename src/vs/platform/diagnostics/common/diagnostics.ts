@@ -19,7 +19,7 @@ export interface IDiagnosticsService {
 	getSystemInfo(mainProcessInfo: IMainProcessDiagnostics, remoteInfo: (IRemoteDiagnosticInfo | IRemoteDiagnosticError)[]): Promise<SystemInfo>;
 	getDiagnostics(mainProcessInfo: IMainProcessDiagnostics, remoteInfo: (IRemoteDiagnosticInfo | IRemoteDiagnosticError)[]): Promise<string>;
 	getWorkspaceFileExtensions(workspace: IWorkspace): Promise<{ extensions: string[] }>;
-	reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<void>;
+	reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<codemavi>;
 }
 
 export interface IMachineInfo {
@@ -125,7 +125,7 @@ export class NullDiagnosticsService implements IDiagnosticsService {
 		return { extensions: [] };
 	}
 
-	async reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<void> { }
+	async reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<codemavi> { }
 
 }
 

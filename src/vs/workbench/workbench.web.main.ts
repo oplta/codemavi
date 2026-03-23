@@ -25,32 +25,32 @@
 	};
 
 	interface ILoaderPlugin {
-		load: (pluginParam: string, parentRequire: IRelativeRequire, loadCallback: IPluginLoadCallback, options: IConfigurationOptions) => void;
-		write?: (pluginName: string, moduleName: string, write: IPluginWriteCallback) => void;
-		writeFile?: (pluginName: string, moduleName: string, req: IRelativeRequire, write: IPluginWriteFileCallback, config: IConfigurationOptions) => void;
-		finishBuild?: (write: (filename: string, contents: string) => void) => void;
+		load: (pluginParam: string, parentRequire: IRelativeRequire, loadCallback: IPluginLoadCallback, options: IConfigurationOptions) => codemavi;
+		write?: (pluginName: string, moduleName: string, write: IPluginWriteCallback) => codemavi;
+		writeFile?: (pluginName: string, moduleName: string, req: IRelativeRequire, write: IPluginWriteFileCallback, config: IConfigurationOptions) => codemavi;
+		finishBuild?: (write: (filename: string, contents: string) => codemavi) => codemavi;
 	}
 	interface IRelativeRequire {
-		(dependencies: string[], callback: Function, errorback?: (error: Error) => void): void;
+		(dependencies: string[], callback: Function, errorback?: (error: Error) => codemavi): codemavi;
 		toUrl(id: string): string;
 	}
 	interface IPluginLoadCallback {
-		(value: any): void;
-		error(err: any): void;
+		(value: any): codemavi;
+		error(err: any): codemavi;
 	}
 	interface IConfigurationOptions {
 		isBuild: boolean | undefined;
 		[key: string]: any;
 	}
 	interface IPluginWriteCallback {
-		(contents: string): void;
+		(contents: string): codemavi;
 		getEntryPoint(): string;
-		asModule(moduleId: string, contents: string): void;
+		asModule(moduleId: string, contents: string): codemavi;
 	}
 	interface IPluginWriteFileCallback {
-		(filename: string, contents: string): void;
+		(filename: string, contents: string): codemavi;
 		getEntryPoint(): string;
-		asModule(moduleId: string, contents: string): void;
+		asModule(moduleId: string, contents: string): codemavi;
 	}
 
 	//#endregion

@@ -37,12 +37,12 @@ export interface IMouseDispatchData {
 }
 
 export interface ICommandDelegate {
-	paste(text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null): void;
-	type(text: string): void;
-	compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): void;
-	startComposition(): void;
-	endComposition(): void;
-	cut(): void;
+	paste(text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null): codemavi;
+	type(text: string): codemavi;
+	compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): codemavi;
+	startComposition(): codemavi;
+	endComposition(): codemavi;
+	cut(): codemavi;
 }
 
 export class ViewController {
@@ -64,31 +64,31 @@ export class ViewController {
 		this.commandDelegate = commandDelegate;
 	}
 
-	public paste(text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null): void {
+	public paste(text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null): codemavi {
 		this.commandDelegate.paste(text, pasteOnNewLine, multicursorText, mode);
 	}
 
-	public type(text: string): void {
+	public type(text: string): codemavi {
 		this.commandDelegate.type(text);
 	}
 
-	public compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): void {
+	public compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): codemavi {
 		this.commandDelegate.compositionType(text, replacePrevCharCnt, replaceNextCharCnt, positionDelta);
 	}
 
-	public compositionStart(): void {
+	public compositionStart(): codemavi {
 		this.commandDelegate.startComposition();
 	}
 
-	public compositionEnd(): void {
+	public compositionEnd(): codemavi {
 		this.commandDelegate.endComposition();
 	}
 
-	public cut(): void {
+	public cut(): codemavi {
 		this.commandDelegate.cut();
 	}
 
-	public setSelection(modelSelection: Selection): void {
+	public setSelection(modelSelection: Selection): codemavi {
 		CoreNavigationCommands.SetSelection.runCoreEditorCommand(this.viewModel, {
 			source: 'keyboard',
 			selection: modelSelection
@@ -129,7 +129,7 @@ export class ViewController {
 		}
 	}
 
-	public dispatchMouse(data: IMouseDispatchData): void {
+	public dispatchMouse(data: IMouseDispatchData): codemavi {
 		const options = this.configuration.options;
 		const selectionClipboardIsOn = (platform.isLinux && options.get(EditorOption.selectionClipboard));
 		const columnSelection = options.get(EditorOption.columnSelection);
@@ -220,15 +220,15 @@ export class ViewController {
 		};
 	}
 
-	public moveTo(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	public moveTo(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.MoveTo.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _moveToSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _moveToSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.MoveToSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _columnSelect(viewPosition: Position, mouseColumn: number, doColumnSelect: boolean): void {
+	private _columnSelect(viewPosition: Position, mouseColumn: number, doColumnSelect: boolean): codemavi {
 		viewPosition = this._validateViewColumn(viewPosition);
 		CoreNavigationCommands.ColumnSelect.runCoreEditorCommand(this.viewModel, {
 			source: 'mouse',
@@ -239,7 +239,7 @@ export class ViewController {
 		});
 	}
 
-	private _createCursor(viewPosition: Position, wholeLine: boolean): void {
+	private _createCursor(viewPosition: Position, wholeLine: boolean): codemavi {
 		viewPosition = this._validateViewColumn(viewPosition);
 		CoreNavigationCommands.CreateCursor.runCoreEditorCommand(this.viewModel, {
 			source: 'mouse',
@@ -249,39 +249,39 @@ export class ViewController {
 		});
 	}
 
-	private _lastCursorMoveToSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lastCursorMoveToSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LastCursorMoveToSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _wordSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _wordSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.WordSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _wordSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _wordSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.WordSelectDrag.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _lastCursorWordSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lastCursorWordSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LastCursorWordSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _lineSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lineSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LineSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _lineSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lineSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LineSelectDrag.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _lastCursorLineSelect(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lastCursorLineSelect(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LastCursorLineSelect.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _lastCursorLineSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): void {
+	private _lastCursorLineSelectDrag(viewPosition: Position, revealType: NavigationCommandRevealType): codemavi {
 		CoreNavigationCommands.LastCursorLineSelectDrag.runCoreEditorCommand(this.viewModel, this._usualArgs(viewPosition, revealType));
 	}
 
-	private _selectAll(): void {
+	private _selectAll(): codemavi {
 		CoreNavigationCommands.SelectAll.runCoreEditorCommand(this.viewModel, { source: 'mouse' });
 	}
 
@@ -291,47 +291,47 @@ export class ViewController {
 		return this.viewModel.coordinatesConverter.convertViewPositionToModelPosition(viewPosition);
 	}
 
-	public emitKeyDown(e: IKeyboardEvent): void {
+	public emitKeyDown(e: IKeyboardEvent): codemavi {
 		this.userInputEvents.emitKeyDown(e);
 	}
 
-	public emitKeyUp(e: IKeyboardEvent): void {
+	public emitKeyUp(e: IKeyboardEvent): codemavi {
 		this.userInputEvents.emitKeyUp(e);
 	}
 
-	public emitContextMenu(e: IEditorMouseEvent): void {
+	public emitContextMenu(e: IEditorMouseEvent): codemavi {
 		this.userInputEvents.emitContextMenu(e);
 	}
 
-	public emitMouseMove(e: IEditorMouseEvent): void {
+	public emitMouseMove(e: IEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseMove(e);
 	}
 
-	public emitMouseLeave(e: IPartialEditorMouseEvent): void {
+	public emitMouseLeave(e: IPartialEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseLeave(e);
 	}
 
-	public emitMouseUp(e: IEditorMouseEvent): void {
+	public emitMouseUp(e: IEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseUp(e);
 	}
 
-	public emitMouseDown(e: IEditorMouseEvent): void {
+	public emitMouseDown(e: IEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseDown(e);
 	}
 
-	public emitMouseDrag(e: IEditorMouseEvent): void {
+	public emitMouseDrag(e: IEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseDrag(e);
 	}
 
-	public emitMouseDrop(e: IPartialEditorMouseEvent): void {
+	public emitMouseDrop(e: IPartialEditorMouseEvent): codemavi {
 		this.userInputEvents.emitMouseDrop(e);
 	}
 
-	public emitMouseDropCanceled(): void {
+	public emitMouseDropCanceled(): codemavi {
 		this.userInputEvents.emitMouseDropCanceled();
 	}
 
-	public emitMouseWheel(e: IMouseWheelEvent): void {
+	public emitMouseWheel(e: IMouseWheelEvent): codemavi {
 		this.userInputEvents.emitMouseWheel(e);
 	}
 }

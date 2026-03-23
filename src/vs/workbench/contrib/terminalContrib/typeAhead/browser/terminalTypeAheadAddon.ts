@@ -642,7 +642,7 @@ export class PredictionStats extends Disposable {
 	private readonly _stats: [latency: number, correct: boolean][] = [];
 	private _index = 0;
 	private readonly _addedAtTime = new WeakMap<IPrediction, number>();
-	private readonly _changeEmitter = new Emitter<void>();
+	private readonly _changeEmitter = new Emitter<codemavi>();
 	readonly onChange = this._changeEmitter.event;
 
 	/**
@@ -971,7 +971,7 @@ export class PredictionTimeline {
 	 * after this one will only be displayed after the give prediction matches
 	 * pty output/
 	 */
-	addBoundary(): void;
+	addBoundary(): codemavi;
 	addBoundary(buffer: IBuffer, prediction: IPrediction): boolean;
 	addBoundary(buffer?: IBuffer, prediction?: IPrediction) {
 		let applied = false;
@@ -1311,7 +1311,7 @@ export class TypeAheadAddon extends Disposable implements ITerminalAddon {
 		this._register(toDisposable(() => this._clearPredictionDebounce?.dispose()));
 	}
 
-	activate(terminal: Terminal): void {
+	activate(terminal: Terminal): codemavi {
 		const style = this._typeaheadStyle = this._register(new TypeAheadStyle(this._configurationService.getValue<ITerminalTypeAheadConfiguration>(TERMINAL_CONFIG_SECTION).localEchoStyle, terminal));
 		const timeline = this._timeline = new PredictionTimeline(terminal, this._typeaheadStyle);
 		const stats = this.stats = this._register(new PredictionStats(this._timeline));
@@ -1434,7 +1434,7 @@ export class TypeAheadAddon extends Disposable implements ITerminalAddon {
 		});
 	}
 
-	private _onUserData(data: string): void {
+	private _onUserData(data: string): codemavi {
 		if (this._timeline?.terminal.buffer.active.type !== 'normal') {
 			return;
 		}
@@ -1452,7 +1452,7 @@ export class TypeAheadAddon extends Disposable implements ITerminalAddon {
 			}
 		}
 
-		// the following code guards the terminal prompt to avoid being able to
+		// the following code guards the terminal prompt to acodemavi being able to
 		// arrow or backspace-into the prompt. Record the lowest X value at which
 		// the user gave input, and mark all additions before that as tentative.
 		const actualY = buffer.baseY + buffer.cursorY;
@@ -1553,7 +1553,7 @@ export class TypeAheadAddon extends Disposable implements ITerminalAddon {
 		}
 	}
 
-	private _onBeforeProcessData(event: IBeforeProcessDataEvent): void {
+	private _onBeforeProcessData(event: IBeforeProcessDataEvent): codemavi {
 		if (!this._timeline) {
 			return;
 		}

@@ -90,7 +90,7 @@ export abstract class ParserBase<TToken extends BaseToken, TNextObject> {
 	 *
 	 * @throws if the parser object is already consumed.
 	 */
-	protected assertNotConsumed(): void {
+	protected assertNotConsumed(): codemavi {
 		assert(
 			this.isConsumed === false,
 			`The parser object is already consumed and should not be used anymore.`,

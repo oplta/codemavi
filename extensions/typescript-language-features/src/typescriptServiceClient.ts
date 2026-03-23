@@ -44,7 +44,7 @@ export interface TsDiagnostics {
 
 interface ToCancelOnResourceChanged {
 	readonly resource: vscode.Uri;
-	cancel(): void;
+	cancel(): codemavi;
 }
 
 namespace ServerState {
@@ -109,7 +109,7 @@ interface WatchEvent {
 export default class TypeScriptServiceClient extends Disposable implements ITypeScriptServiceClient {
 
 
-	private readonly _onReady?: { promise: Promise<void>; resolve: () => void; reject: () => void };
+	private readonly _onReady?: { promise: Promise<codemavi>; resolve: () => codemavi; reject: () => codemavi };
 	private _configuration: TypeScriptServiceConfiguration;
 	private readonly pluginPathsProvider: TypeScriptPluginPathsProvider;
 	private readonly _versionManager: TypeScriptVersionManager;
@@ -171,9 +171,9 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 
 		this.lastStart = Date.now();
 
-		let resolve: () => void;
-		let reject: () => void;
-		const p = new Promise<void>((res, rej) => {
+		let resolve: () => codemavi;
+		let reject: () => codemavi;
+		const p = new Promise<codemavi>((res, rej) => {
 			resolve = res;
 			reject = rej;
 		});
@@ -280,14 +280,14 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 			ClientCapability.Semantic);
 	}
 
-	private readonly _onDidChangeCapabilities = this._register(new vscode.EventEmitter<void>());
+	private readonly _onDidChangeCapabilities = this._register(new vscode.EventEmitter<codemavi>());
 	readonly onDidChangeCapabilities = this._onDidChangeCapabilities.event;
 
 	private isProjectWideIntellisenseOnWebEnabled(): boolean {
 		return isWebAndHasSharedArrayBuffers() && this._configuration.webProjectWideIntellisenseEnabled;
 	}
 
-	private cancelInflightRequestsForResource(resource: vscode.Uri): void {
+	private cancelInflightRequestsForResource(resource: vscode.Uri): codemavi {
 		if (this.serverState.type !== ServerState.Type.Running) {
 			return;
 		}
@@ -317,7 +317,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		this.resetWatchers();
 	}
 
-	public restartTsServer(fromUserAction = false): void {
+	public restartTsServer(fromUserAction = false): codemavi {
 		if (this.serverState.type === ServerState.Type.Running) {
 			this.logger.info('Killing TS Server');
 			this.isRestarting = true;
@@ -343,7 +343,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 	private readonly _onConfigDiagnosticsReceived = this._register(new vscode.EventEmitter<Proto.ConfigFileDiagnosticEvent>());
 	public readonly onConfigDiagnosticsReceived = this._onConfigDiagnosticsReceived.event;
 
-	private readonly _onResendModelsRequested = this._register(new vscode.EventEmitter<void>());
+	private readonly _onResendModelsRequested = this._register(new vscode.EventEmitter<codemavi>());
 	public readonly onResendModelsRequested = this._onResendModelsRequested.event;
 
 	private readonly _onProjectLanguageServiceStateChanged = this._register(new vscode.EventEmitter<Proto.ProjectLanguageServiceStateEventBody>());
@@ -368,7 +368,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		return API.defaultVersion;
 	}
 
-	public onReady(f: () => void): Promise<void> {
+	public onReady(f: () => codemavi): Promise<codemavi> {
 		return this._onReady!.promise.then(f);
 	}
 
@@ -526,7 +526,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		disposeAll(Array.from(this.watches.values()));
 	}
 
-	public async showVersionPicker(): Promise<void> {
+	public async showVersionPicker(): Promise<codemavi> {
 		this._versionManager.promptUserForVersion();
 	}
 
@@ -578,7 +578,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		}
 	}
 
-	private serviceStarted(resendModels: boolean): void {
+	private serviceStarted(resendModels: boolean): codemavi {
 		this.bufferSyncSupport.reset();
 
 		const watchOptions = this.apiVersion.gte(API.v380)
@@ -609,7 +609,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		}
 	}
 
-	private setCompilerOptionsForInferredProjects(configuration: TypeScriptServiceConfiguration): void {
+	private setCompilerOptionsForInferredProjects(configuration: TypeScriptServiceConfiguration): codemavi {
 		const args: Proto.SetCompilerOptionsForInferredProjectsArgs = {
 			options: this.getCompilerOptionsForInferredProjects(configuration)
 		};
@@ -626,7 +626,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		};
 	}
 
-	private serviceExited(restart: boolean, tsVersion: API): void {
+	private serviceExited(restart: boolean, tsVersion: API): codemavi {
 		this.resetWatchers();
 		this.loadingIndicator.reset();
 
@@ -904,7 +904,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		return executions[0]!;
 	}
 
-	public executeWithoutWaitingForResponse(command: keyof TypeScriptRequests, args: any): void {
+	public executeWithoutWaitingForResponse(command: keyof TypeScriptRequests, args: any): codemavi {
 		this.executeImpl(command, args, {
 			isAsync: false,
 			token: undefined,
@@ -934,7 +934,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		return this.bufferSyncSupport.interruptGetErr(f);
 	}
 
-	private fatalError(command: string, error: unknown): void {
+	private fatalError(command: string, error: unknown): codemavi {
 		/* __GDPR__
 			"fatalError" : {
 				"owner": "mjbvz",
@@ -1173,7 +1173,7 @@ export default class TypeScriptServiceClient extends Disposable implements IType
 		existing?.dispose();
 	}
 
-	private dispatchTelemetryEvent(telemetryData: Proto.TelemetryEventBody): void {
+	private dispatchTelemetryEvent(telemetryData: Proto.TelemetryEventBody): codemavi {
 		const properties: { [key: string]: string } = Object.create(null);
 		switch (telemetryData.telemetryEventName) {
 			case 'typingsInstalled': {
@@ -1244,7 +1244,7 @@ function getDiagnosticsKind(event: Proto.Event) {
 
 class ServerInitializingIndicator extends Disposable {
 
-	private _task?: { project: string; resolve: () => void };
+	private _task?: { project: string; resolve: () => codemavi };
 
 	constructor(
 		private readonly client: ITypeScriptServiceClient,
@@ -1252,7 +1252,7 @@ class ServerInitializingIndicator extends Disposable {
 		super();
 	}
 
-	public reset(): void {
+	public reset(): codemavi {
 		if (this._task) {
 			this._task.resolve();
 			this._task = undefined;
@@ -1262,7 +1262,7 @@ class ServerInitializingIndicator extends Disposable {
 	/**
 	 * Signal that a project has started loading.
 	 */
-	public startedLoadingProject(projectName: string): void {
+	public startedLoadingProject(projectName: string): codemavi {
 		// TS projects are loaded sequentially. Cancel existing task because it should always be resolved before
 		// the incoming project loading task is.
 		this.reset();
@@ -1272,7 +1272,7 @@ class ServerInitializingIndicator extends Disposable {
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Window,
 			title: vscode.l10n.t("Initializing '{0}'", projectDisplayName),
-		}, () => new Promise<void>(resolve => {
+		}, () => new Promise<codemavi>(resolve => {
 			this._task = { project: projectName, resolve };
 		}));
 	}
@@ -1289,7 +1289,7 @@ class ServerInitializingIndicator extends Disposable {
 		return relPath;
 	}
 
-	public startedLoadingFile(fileName: string, task: Promise<unknown>): void {
+	public startedLoadingFile(fileName: string, task: Promise<unknown>): codemavi {
 		if (!this._task) {
 			vscode.window.withProgress({
 				location: vscode.ProgressLocation.Window,
@@ -1298,7 +1298,7 @@ class ServerInitializingIndicator extends Disposable {
 		}
 	}
 
-	public finishedLoadingProject(projectName: string): void {
+	public finishedLoadingProject(projectName: string): codemavi {
 		if (this._task && this._task.project === projectName) {
 			this._task.resolve();
 			this._task = undefined;

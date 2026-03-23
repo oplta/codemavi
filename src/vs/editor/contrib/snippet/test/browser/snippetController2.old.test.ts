@@ -31,7 +31,7 @@ class TestSnippetController extends SnippetController2 {
 		this._testLanguageConfigurationService = testLanguageConfigurationService;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._testLanguageConfigurationService.dispose();
 	}
@@ -45,7 +45,7 @@ suite('SnippetController', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function snippetTest(cb: (editor: ITestCodeEditor, template: string, snippetController: TestSnippetController) => void, lines?: string[]): void {
+	function snippetTest(cb: (editor: ITestCodeEditor, template: string, snippetController: TestSnippetController) => codemavi, lines?: string[]): codemavi {
 
 		if (!lines) {
 			lines = [

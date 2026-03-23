@@ -33,7 +33,7 @@ export interface MarkedOptions extends marked.MarkedOptions {
 export interface MarkdownRenderOptions extends FormattedTextRenderOptions {
 	readonly codeBlockRenderer?: (languageId: string, value: string) => Promise<HTMLElement>;
 	readonly codeBlockRendererSync?: (languageId: string, value: string, raw?: string) => HTMLElement;
-	readonly asyncRenderCallback?: () => void;
+	readonly asyncRenderCallback?: () => codemavi;
 	readonly fillInIncompleteTokens?: boolean;
 	readonly remoteImageIsAllowed?: (uri: URI) => boolean;
 	readonly sanitizerOptions?: ISanitizerOptions;
@@ -99,7 +99,7 @@ const defaultMarkedRenderers = Object.freeze({
  * **Note** that for most cases you should be using {@link import('../../editor/browser/widget/markdownRenderer/browser/markdownRenderer.js').MarkdownRenderer MarkdownRenderer}
  * which comes with support for pretty code block rendering and which uses the default way of handling links.
  */
-export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRenderOptions = {}, markedOptions: Readonly<MarkedOptions> = {}): { element: HTMLElement; dispose: () => void } {
+export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRenderOptions = {}, markedOptions: Readonly<MarkedOptions> = {}): { element: HTMLElement; dispose: () => codemavi } {
 	const disposables = new DisposableStore();
 	let isDisposed = false;
 
@@ -300,7 +300,7 @@ function preprocessMarkdownString(markdown: IMarkdownString) {
 	return value;
 }
 
-function activateLink(markdown: IMarkdownString, options: MarkdownRenderOptions, event: StandardMouseEvent | StandardKeyboardEvent): void {
+function activateLink(markdown: IMarkdownString, options: MarkdownRenderOptions, event: StandardMouseEvent | StandardKeyboardEvent): codemavi {
 	const target = event.target.closest('a[data-href]');
 	if (!DOM.isHTMLElement(target)) {
 		return;
@@ -958,11 +958,11 @@ function completeTable(tokens: marked.Token[]): marked.Token[] | undefined {
 
 function addDompurifyHook(
 	hook: 'uponSanitizeElement',
-	cb: (currentNode: Element, data: dompurify.SanitizeElementHookEvent, config: dompurify.Config) => void,
+	cb: (currentNode: Element, data: dompurify.SanitizeElementHookEvent, config: dompurify.Config) => codemavi,
 ): IDisposable;
 function addDompurifyHook(
 	hook: 'uponSanitizeAttribute',
-	cb: (currentNode: Element, data: dompurify.SanitizeAttributeHookEvent, config: dompurify.Config) => void,
+	cb: (currentNode: Element, data: dompurify.SanitizeAttributeHookEvent, config: dompurify.Config) => codemavi,
 ): IDisposable;
 function addDompurifyHook(hook: 'uponSanitizeElement' | 'uponSanitizeAttribute', cb: any): IDisposable {
 	dompurify.addHook(hook, cb);

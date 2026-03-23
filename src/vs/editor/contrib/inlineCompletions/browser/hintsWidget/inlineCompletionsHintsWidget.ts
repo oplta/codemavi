@@ -200,7 +200,7 @@ export class InlineSuggestionHintsContentWidget extends Disposable implements IC
 		private readonly _suggestionCount: IObservable<number | undefined>,
 		private readonly _extraCommands: IObservable<Command[]>,
 		private readonly _warning: IObservable<InlineCompletionWarning | undefined>,
-		private readonly _relayout: () => void,
+		private readonly _relayout: () => codemavi,
 		@ICommandService private readonly _commandService: ICommandService,
 		@IInstantiationService instantiationService: IInstantiationService,
 		@IKeybindingService private readonly keybindingService: IKeybindingService,
@@ -317,18 +317,18 @@ export class InlineSuggestionHintsContentWidget extends Disposable implements IC
 class ActionViewItemWithClassName extends ActionViewItem {
 	private _className: string | undefined = undefined;
 
-	setClass(className: string | undefined): void {
+	setClass(className: string | undefined): codemavi {
 		this._className = className;
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		if (this._className) {
 			container.classList.add(this._className);
 		}
 	}
 
-	protected override updateTooltip(): void {
+	protected override updateTooltip(): codemavi {
 		// NOOP, disable tooltip
 	}
 }
@@ -350,7 +350,7 @@ class StatusBarViewItem extends MenuEntryActionViewItem {
 		}
 	}
 
-	protected override updateTooltip(): void {
+	protected override updateTooltip(): codemavi {
 		// NOOP, disable tooltip
 	}
 }
@@ -378,7 +378,7 @@ export class CustomizedMenuWorkbenchToolBar extends WorkbenchToolBar {
 		this.updateToolbar();
 	}
 
-	private updateToolbar(): void {
+	private updateToolbar(): codemavi {
 		const { primary, secondary } = getActionBarActions(
 			this.menu.getActions(this.options2?.menuOptions),
 			this.options2?.toolbarOptions?.primaryGroup, this.options2?.toolbarOptions?.shouldInlineSubmenu, this.options2?.toolbarOptions?.useSeparatorsInPrimaryActions
@@ -390,7 +390,7 @@ export class CustomizedMenuWorkbenchToolBar extends WorkbenchToolBar {
 		this.setActions(primary, secondary);
 	}
 
-	setPrependedPrimaryActions(actions: IAction[]): void {
+	setPrependedPrimaryActions(actions: IAction[]): codemavi {
 		if (equals(this.prependedPrimaryActions, actions, (a, b) => a === b)) {
 			return;
 		}
@@ -399,7 +399,7 @@ export class CustomizedMenuWorkbenchToolBar extends WorkbenchToolBar {
 		this.updateToolbar();
 	}
 
-	setAdditionalPrimaryActions(actions: IAction[]): void {
+	setAdditionalPrimaryActions(actions: IAction[]): codemavi {
 		if (equals(this.additionalPrimaryActions, actions, (a, b) => a === b)) {
 			return;
 		}
@@ -408,7 +408,7 @@ export class CustomizedMenuWorkbenchToolBar extends WorkbenchToolBar {
 		this.updateToolbar();
 	}
 
-	setAdditionalSecondaryActions(actions: IAction[]): void {
+	setAdditionalSecondaryActions(actions: IAction[]): codemavi {
 		if (equals(this.additionalActions, actions, (a, b) => a === b)) {
 			return;
 		}

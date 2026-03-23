@@ -49,7 +49,7 @@ export class PromptAttachmentWidget extends Disposable {
 	 *
 	 * See {@linkcode onDispose}.
 	 */
-	protected _onDispose = this._register(new Emitter<void>());
+	protected _onDispose = this._register(new Emitter<codemavi>());
 	/**
 	 * Subscribe to the `onDispose` event.
 	 * @param callback Function to invoke on dispose.
@@ -187,7 +187,7 @@ export class PromptAttachmentWidget extends Disposable {
 		}));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._onDispose.fire();
 
 		super.dispose();

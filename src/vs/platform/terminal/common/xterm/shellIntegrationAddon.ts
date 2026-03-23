@@ -352,7 +352,7 @@ export class ShellIntegrationAddon extends Disposable implements IShellIntegrati
 		}));
 	}
 
-	private _disposeCommonProtocol(): void {
+	private _disposeCommonProtocol(): codemavi {
 		dispose(this._commonProtocolDisposables);
 		this._commonProtocolDisposables.length = 0;
 	}
@@ -436,7 +436,7 @@ export class ShellIntegrationAddon extends Disposable implements IShellIntegrati
 		return didHandle;
 	}
 
-	private async _ensureCapabilitiesOrAddFailureTelemetry(): Promise<void> {
+	private async _ensureCapabilitiesOrAddFailureTelemetry(): Promise<codemavi> {
 		if (!this._telemetryService || this._disableTelemetry) {
 			return;
 		}
@@ -449,7 +449,7 @@ export class ShellIntegrationAddon extends Disposable implements IShellIntegrati
 		}, 10000);
 	}
 
-	private _clearActivationTimeout(): void {
+	private _clearActivationTimeout(): codemavi {
 		if (this._activationTimeout !== undefined) {
 			clearTimeout(this._activationTimeout);
 			this._activationTimeout = undefined;
@@ -716,7 +716,7 @@ export class ShellIntegrationAddon extends Disposable implements IShellIntegrati
 		return result;
 	}
 
-	deserialize(serialized: ISerializedCommandDetectionCapability): void {
+	deserialize(serialized: ISerializedCommandDetectionCapability): codemavi {
 		if (!this._terminal) {
 			throw new Error('Cannot restore commands before addon is activated');
 		}

@@ -97,13 +97,13 @@ export class McpServerConnection extends Disposable implements IMcpServerConnect
 		return { dispose: () => store.dispose(), object: launch };
 	}
 
-	public async stop(): Promise<void> {
+	public async stop(): Promise<codemavi> {
 		this._logger.info(localize('mcpServer.stopping', 'Stopping server {0}', this.definition.label));
 		this._launch.value?.object.stop();
 		await this._waitForState(McpConnectionState.Kind.Stopped, McpConnectionState.Kind.Error);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._requestHandler.get()?.dispose();
 		super.dispose();
 		this._state.set({ state: McpConnectionState.Kind.Stopped }, undefined);

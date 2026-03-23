@@ -168,7 +168,7 @@ export class ReplacePattern {
 	 * $0 => $& (see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_string_as_a_parameter)
 	 * everything else stays untouched
 	 */
-	private parseReplaceString(replaceString: string): void {
+	private parseReplaceString(replaceString: string): codemavi {
 		if (!replaceString || replaceString.length === 0) {
 			return;
 		}

@@ -209,7 +209,7 @@ export const languageModelExtensionPoint = ExtensionsRegistry.registerExtensionP
 			}
 		]
 	},
-	activationEventsGenerator: (contribs: IUserFriendlyLanguageModel[], result: { push(item: string): void }) => {
+	activationEventsGenerator: (contribs: IUserFriendlyLanguageModel[], result: { push(item: string): codemavi }) => {
 		for (const contrib of contribs) {
 			result.push(`onLanguageModelChat:${contrib.vendor}`);
 		}

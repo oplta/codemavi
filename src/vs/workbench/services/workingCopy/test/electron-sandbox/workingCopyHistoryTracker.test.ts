@@ -116,7 +116,7 @@ suite('WorkingCopyHistoryTracker', () => {
 		disposables.add(workingCopyService.registerWorkingCopy(workingCopy1));
 		disposables.add(workingCopyService.registerWorkingCopy(workingCopy2));
 
-		const saveResult = new DeferredPromise<void>();
+		const saveResult = new DeferredPromise<codemavi>();
 		let addedCounter = 0;
 		disposables.add(workingCopyHistoryService.onDidAddEntry(e => {
 			if (isEqual(e.entry.workingCopy.resource, workingCopy1.resource) || isEqual(e.entry.workingCopy.resource, workingCopy2.resource)) {
@@ -156,7 +156,7 @@ suite('WorkingCopyHistoryTracker', () => {
 		return assertNoLocalHistoryEntryAddedWithSettingsConfigured();
 	});
 
-	async function assertNoLocalHistoryEntryAddedWithSettingsConfigured(): Promise<void> {
+	async function assertNoLocalHistoryEntryAddedWithSettingsConfigured(): Promise<codemavi> {
 		const workingCopy1 = disposables.add(new TestWorkingCopy(testFile1Path));
 		const workingCopy2 = disposables.add(new TestWorkingCopy(testFile2Path));
 
@@ -166,7 +166,7 @@ suite('WorkingCopyHistoryTracker', () => {
 		disposables.add(workingCopyService.registerWorkingCopy(workingCopy1));
 		disposables.add(workingCopyService.registerWorkingCopy(workingCopy2));
 
-		const saveResult = new DeferredPromise<void>();
+		const saveResult = new DeferredPromise<codemavi>();
 		disposables.add(workingCopyHistoryService.onDidAddEntry(e => {
 			if (isEqual(e.entry.workingCopy.resource, workingCopy1.resource)) {
 				assert.fail('Unexpected working copy history entry: ' + e.entry.workingCopy.resource.toString());

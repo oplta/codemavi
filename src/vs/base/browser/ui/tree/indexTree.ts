@@ -10,9 +10,9 @@ import { ITreeElement, ITreeModel, ITreeRenderer, TreeError } from './tree.js';
 import { Iterable } from '../../../common/iterator.js';
 import './media/tree.css';
 
-export interface IIndexTreeOptions<T, TFilterData = void> extends IAbstractTreeOptions<T, TFilterData> { }
+export interface IIndexTreeOptions<T, TFilterData = codemavi> extends IAbstractTreeOptions<T, TFilterData> { }
 
-export class IndexTree<T, TFilterData = void> extends AbstractTree<T, TFilterData, number[]> {
+export class IndexTree<T, TFilterData = codemavi> extends AbstractTree<T, TFilterData, number[]> {
 
 	protected declare model: IndexTreeModel<T, TFilterData>;
 
@@ -27,11 +27,11 @@ export class IndexTree<T, TFilterData = void> extends AbstractTree<T, TFilterDat
 		super(user, container, delegate, renderers, options);
 	}
 
-	splice(location: number[], deleteCount: number, toInsert: Iterable<ITreeElement<T>> = Iterable.empty()): void {
+	splice(location: number[], deleteCount: number, toInsert: Iterable<ITreeElement<T>> = Iterable.empty()): codemavi {
 		this.model.splice(location, deleteCount, toInsert);
 	}
 
-	rerender(location?: number[]): void {
+	rerender(location?: number[]): codemavi {
 		if (location === undefined) {
 			this.view.rerender();
 			return;
@@ -40,7 +40,7 @@ export class IndexTree<T, TFilterData = void> extends AbstractTree<T, TFilterDat
 		this.model.rerender(location);
 	}
 
-	updateElementHeight(location: number[], height: number): void {
+	updateElementHeight(location: number[], height: number): codemavi {
 		if (location.length === 0) {
 			throw new TreeError(this.user, `Update element height failed: invalid location`);
 		}

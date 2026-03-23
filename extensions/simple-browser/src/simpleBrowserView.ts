@@ -33,7 +33,7 @@ export class SimpleBrowserView extends Disposable {
 
 	private readonly _webviewPanel: vscode.WebviewPanel;
 
-	private readonly _onDidDispose = this._register(new vscode.EventEmitter<void>());
+	private readonly _onDidDispose = this._register(new vscode.EventEmitter<codemavi>());
 	public readonly onDispose = this._onDidDispose.event;
 
 	public static create(

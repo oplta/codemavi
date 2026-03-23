@@ -92,11 +92,11 @@ export class SettingsFileSystemProvider extends Disposable implements IFileSyste
 
 	watch(resource: URI, opts: IWatchOptions): IDisposable { return Disposable.None; }
 
-	async mkdir(resource: URI): Promise<void> { }
+	async mkdir(resource: URI): Promise<codemavi> { }
 	async readdir(resource: URI): Promise<[string, FileType][]> { return []; }
 
-	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> { }
-	async delete(resource: URI, opts: IFileDeleteOptions): Promise<void> { }
+	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> { }
+	async delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> { }
 
 	async writeFile() {
 		throw new NotSupportedError();

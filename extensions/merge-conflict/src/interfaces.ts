@@ -25,7 +25,7 @@ export interface IExtensionConfiguration {
 
 export interface IDocumentMergeConflict extends IDocumentMergeConflictDescriptor {
 	commitEdit(type: CommitType, editor: vscode.TextEditor, edit?: vscode.TextEditorEdit): Thenable<boolean>;
-	applyEdit(type: CommitType, document: vscode.TextDocument, edit: { replace(range: vscode.Range, newText: string): void }): void;
+	applyEdit(type: CommitType, document: vscode.TextDocument, edit: { replace(range: vscode.Range, newText: string): codemavi }): codemavi;
 }
 
 export interface IDocumentMergeConflictDescriptor {
@@ -39,10 +39,10 @@ export interface IDocumentMergeConflictDescriptor {
 export interface IDocumentMergeConflictTracker {
 	getConflicts(document: vscode.TextDocument): PromiseLike<IDocumentMergeConflict[]>;
 	isPending(document: vscode.TextDocument): boolean;
-	forget(document: vscode.TextDocument): void;
+	forget(document: vscode.TextDocument): codemavi;
 }
 
 export interface IDocumentMergeConflictTrackerService {
 	createTracker(origin: string): IDocumentMergeConflictTracker;
-	forget(document: vscode.TextDocument): void;
+	forget(document: vscode.TextDocument): codemavi;
 }

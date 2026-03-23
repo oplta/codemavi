@@ -45,8 +45,8 @@ export class PatternInputWidget extends Widget {
 	private _onSubmit = this._register(new Emitter<boolean>());
 	onSubmit: CommonEvent<boolean /* triggeredOnType */> = this._onSubmit.event;
 
-	private _onCancel = this._register(new Emitter<void>());
-	onCancel: CommonEvent<void> = this._onCancel.event;
+	private _onCancel = this._register(new Emitter<codemavi>());
+	onCancel: CommonEvent<codemavi> = this._onCancel.event;
 
 	constructor(parent: HTMLElement, private contextViewProvider: IContextViewProvider, options: IOptions,
 		@IContextKeyService private readonly contextKeyService: IContextKeyService,
@@ -67,12 +67,12 @@ export class PatternInputWidget extends Widget {
 		parent.appendChild(this.domNode);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.inputFocusTracker?.dispose();
 	}
 
-	setWidth(newWidth: number): void {
+	setWidth(newWidth: number): codemavi {
 		this.width = newWidth;
 		this.contextViewProvider.layout();
 		this.setInputWidth();
@@ -82,18 +82,18 @@ export class PatternInputWidget extends Widget {
 		return this.inputBox.value;
 	}
 
-	setValue(value: string): void {
+	setValue(value: string): codemavi {
 		if (this.inputBox.value !== value) {
 			this.inputBox.value = value;
 		}
 	}
 
 
-	select(): void {
+	select(): codemavi {
 		this.inputBox.select();
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.inputBox.focus();
 	}
 
@@ -101,7 +101,7 @@ export class PatternInputWidget extends Widget {
 		return this.inputBox.hasFocus();
 	}
 
-	private setInputWidth(): void {
+	private setInputWidth(): codemavi {
 		this.inputBox.width = this.width - this.getSubcontrolsWidth() - 2; // 2 for input box border
 	}
 
@@ -113,19 +113,19 @@ export class PatternInputWidget extends Widget {
 		return this.inputBox.getHistory();
 	}
 
-	clearHistory(): void {
+	clearHistory(): codemavi {
 		this.inputBox.clearHistory();
 	}
 
-	prependHistory(history: string[]): void {
+	prependHistory(history: string[]): codemavi {
 		this.inputBox.prependHistory(history);
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this.setValue('');
 	}
 
-	onSearchSubmit(): void {
+	onSearchSubmit(): codemavi {
 		this.inputBox.addToHistory();
 	}
 
@@ -137,7 +137,7 @@ export class PatternInputWidget extends Widget {
 		this.inputBox.showPreviousValue();
 	}
 
-	private render(options: IOptions): void {
+	private render(options: IOptions): codemavi {
 		this.domNode = document.createElement('div');
 		this.domNode.classList.add('monaco-findInput');
 		const history = options.history || [];
@@ -167,7 +167,7 @@ export class PatternInputWidget extends Widget {
 		this.setInputWidth();
 	}
 
-	protected renderSubcontrols(_controlsDiv: HTMLDivElement): void {
+	protected renderSubcontrols(_controlsDiv: HTMLDivElement): codemavi {
 	}
 
 	private onInputKeyUp(keyboardEvent: IKeyboardEvent) {
@@ -185,7 +185,7 @@ export class PatternInputWidget extends Widget {
 
 export class IncludePatternInputWidget extends PatternInputWidget {
 
-	private _onChangeSearchInEditorsBoxEmitter = this._register(new Emitter<void>());
+	private _onChangeSearchInEditorsBoxEmitter = this._register(new Emitter<codemavi>());
 	onChangeSearchInEditorsBox = this._onChangeSearchInEditorsBoxEmitter.event;
 
 	constructor(parent: HTMLElement, contextViewProvider: IContextViewProvider, options: IOptions,
@@ -198,7 +198,7 @@ export class IncludePatternInputWidget extends PatternInputWidget {
 
 	private useSearchInEditorsBox!: Toggle;
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.useSearchInEditorsBox.dispose();
 	}
@@ -216,7 +216,7 @@ export class IncludePatternInputWidget extends PatternInputWidget {
 		return super.getSubcontrolsWidth() + this.useSearchInEditorsBox.width();
 	}
 
-	protected override renderSubcontrols(controlsDiv: HTMLDivElement): void {
+	protected override renderSubcontrols(controlsDiv: HTMLDivElement): codemavi {
 		this.useSearchInEditorsBox = this._register(new Toggle({
 			icon: Codicon.book,
 			title: nls.localize('onlySearchInOpenEditors', "Search only in Open Editors"),
@@ -237,7 +237,7 @@ export class IncludePatternInputWidget extends PatternInputWidget {
 
 export class ExcludePatternInputWidget extends PatternInputWidget {
 
-	private _onChangeIgnoreBoxEmitter = this._register(new Emitter<void>());
+	private _onChangeIgnoreBoxEmitter = this._register(new Emitter<codemavi>());
 	onChangeIgnoreBox = this._onChangeIgnoreBoxEmitter.event;
 
 	constructor(parent: HTMLElement, contextViewProvider: IContextViewProvider, options: IOptions,
@@ -250,7 +250,7 @@ export class ExcludePatternInputWidget extends PatternInputWidget {
 
 	private useExcludesAndIgnoreFilesBox!: Toggle;
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.useExcludesAndIgnoreFilesBox.dispose();
 	}
@@ -268,7 +268,7 @@ export class ExcludePatternInputWidget extends PatternInputWidget {
 		return super.getSubcontrolsWidth() + this.useExcludesAndIgnoreFilesBox.width();
 	}
 
-	protected override renderSubcontrols(controlsDiv: HTMLDivElement): void {
+	protected override renderSubcontrols(controlsDiv: HTMLDivElement): codemavi {
 		this.useExcludesAndIgnoreFilesBox = this._register(new Toggle({
 			icon: Codicon.exclude,
 			actionClassName: 'useExcludesAndIgnoreFiles',

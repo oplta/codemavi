@@ -90,8 +90,8 @@ export class RemoteTerminalChannel extends Disposable implements IServerChannel<
 
 	private _lastReqId = 0;
 	private readonly _pendingCommands = new Map<number, {
-		resolve: (data: any) => void;
-		reject: (err: any) => void;
+		resolve: (data: any) => codemavi;
+		reject: (err: any) => codemavi;
 		uriTransformer: IURITransformer;
 	}>();
 
@@ -298,7 +298,7 @@ export class RemoteTerminalChannel extends Disposable implements IServerChannel<
 		return promise;
 	}
 
-	private _sendCommandResult(reqId: number, isError: boolean, serializedPayload: any): void {
+	private _sendCommandResult(reqId: number, isError: boolean, serializedPayload: any): codemavi {
 		const data = this._pendingCommands.get(reqId);
 		if (!data) {
 			return;
@@ -335,7 +335,7 @@ export class RemoteTerminalChannel extends Disposable implements IServerChannel<
 	}
 
 
-	private _reduceConnectionGraceTime(): Promise<void> {
+	private _reduceConnectionGraceTime(): Promise<codemavi> {
 		return this._ptyHostService.reduceConnectionGraceTime();
 	}
 }

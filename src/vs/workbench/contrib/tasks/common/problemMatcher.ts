@@ -348,7 +348,7 @@ abstract class AbstractLineMatcher implements ILineMatcher {
 		}
 	}
 
-	private appendProperty(data: IProblemData, property: keyof IProblemData, pattern: IProblemPattern, matches: RegExpExecArray, trim: boolean = false): void {
+	private appendProperty(data: IProblemData, property: keyof IProblemData, pattern: IProblemPattern, matches: RegExpExecArray, trim: boolean = false): codemavi {
 		const patternProperty = pattern[property];
 		if (Types.isUndefined(data[property])) {
 			this.fillProperty(data, property, pattern, matches, trim);
@@ -362,7 +362,7 @@ abstract class AbstractLineMatcher implements ILineMatcher {
 		}
 	}
 
-	private fillProperty(data: IProblemData, property: keyof IProblemData, pattern: IProblemPattern, matches: RegExpExecArray, trim: boolean = false): void {
+	private fillProperty(data: IProblemData, property: keyof IProblemData, pattern: IProblemPattern, matches: RegExpExecArray, trim: boolean = false): codemavi {
 		const patternAtProperty = pattern[property];
 		if (Types.isUndefined(data[property]) && !Types.isUndefined(patternAtProperty) && patternAtProperty < matches.length) {
 			let value = matches[patternAtProperty];
@@ -1080,22 +1080,22 @@ export class ExtensionRegistryReporter implements IProblemReporter {
 	constructor(private _collector: ExtensionMessageCollector, private _validationStatus: ValidationStatus = new ValidationStatus()) {
 	}
 
-	public info(message: string): void {
+	public info(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Info;
 		this._collector.info(message);
 	}
 
-	public warn(message: string): void {
+	public warn(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Warning;
 		this._collector.warn(message);
 	}
 
-	public error(message: string): void {
+	public error(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Error;
 		this._collector.error(message);
 	}
 
-	public fatal(message: string): void {
+	public fatal(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Fatal;
 		this._collector.error(message);
 	}
@@ -1418,7 +1418,7 @@ const problemPatternExtPoint = ExtensionsRegistry.registerExtensionPoint<Config.
 });
 
 export interface IProblemPatternRegistry {
-	onReady(): Promise<void>;
+	onReady(): Promise<codemavi>;
 
 	get(key: string): IProblemPattern | MultiLineProblemPattern;
 }
@@ -1426,12 +1426,12 @@ export interface IProblemPatternRegistry {
 class ProblemPatternRegistryImpl implements IProblemPatternRegistry {
 
 	private patterns: IStringDictionary<IProblemPattern | IProblemPattern[]>;
-	private readyPromise: Promise<void>;
+	private readyPromise: Promise<codemavi>;
 
 	constructor() {
 		this.patterns = Object.create(null);
 		this.fillDefaults();
-		this.readyPromise = new Promise<void>((resolve, reject) => {
+		this.readyPromise = new Promise<codemavi>((resolve, reject) => {
 			problemPatternExtPoint.setHandler((extensions, delta) => {
 				// We get all statically know extension during startup in one batch
 				try {
@@ -1476,11 +1476,11 @@ class ProblemPatternRegistryImpl implements IProblemPatternRegistry {
 		});
 	}
 
-	public onReady(): Promise<void> {
+	public onReady(): Promise<codemavi> {
 		return this.readyPromise;
 	}
 
-	public add(key: string, value: IProblemPattern | IProblemPattern[]): void {
+	public add(key: string, value: IProblemPattern | IProblemPattern[]): codemavi {
 		this.patterns[key] = value;
 	}
 
@@ -1488,7 +1488,7 @@ class ProblemPatternRegistryImpl implements IProblemPatternRegistry {
 		return this.patterns[key];
 	}
 
-	private fillDefaults(): void {
+	private fillDefaults(): codemavi {
 		this.add('msCompile', {
 			regexp: /^(?:\s*\d+>)?(\S.*)\((\d+|\d+,\d+|\d+,\d+,\d+,\d+)\)\s*:\s+((?:fatal +)?error|warning|info)\s+(\w+\d+)\s*:\s*(.*)$/,
 			kind: ProblemLocationKind.Location,
@@ -1772,7 +1772,7 @@ export class ProblemMatcherParser extends Parser {
 		return null;
 	}
 
-	private addWatchingMatcher(external: Config.ProblemMatcher, internal: ProblemMatcher): void {
+	private addWatchingMatcher(external: Config.ProblemMatcher, internal: ProblemMatcher): codemavi {
 		const oldBegins = this.createRegularExpression(external.watchedTaskBeginsRegExp);
 		const oldEnds = this.createRegularExpression(external.watchedTaskEndsRegExp);
 		if (oldBegins && oldEnds) {
@@ -1847,24 +1847,24 @@ const problemMatchersExtPoint = ExtensionsRegistry.registerExtensionPoint<Config
 });
 
 export interface IProblemMatcherRegistry {
-	onReady(): Promise<void>;
+	onReady(): Promise<codemavi>;
 	get(name: string): INamedProblemMatcher;
 	keys(): string[];
-	readonly onMatcherChanged: Event<void>;
+	readonly onMatcherChanged: Event<codemavi>;
 }
 
 class ProblemMatcherRegistryImpl implements IProblemMatcherRegistry {
 
 	private matchers: IStringDictionary<INamedProblemMatcher>;
-	private readyPromise: Promise<void>;
-	private readonly _onMatchersChanged: Emitter<void> = new Emitter<void>();
-	public readonly onMatcherChanged: Event<void> = this._onMatchersChanged.event;
+	private readyPromise: Promise<codemavi>;
+	private readonly _onMatchersChanged: Emitter<codemavi> = new Emitter<codemavi>();
+	public readonly onMatcherChanged: Event<codemavi> = this._onMatchersChanged.event;
 
 
 	constructor() {
 		this.matchers = Object.create(null);
 		this.fillDefaults();
-		this.readyPromise = new Promise<void>((resolve, reject) => {
+		this.readyPromise = new Promise<codemavi>((resolve, reject) => {
 			problemMatchersExtPoint.setHandler((extensions, delta) => {
 				try {
 					delta.removed.forEach(extension => {
@@ -1899,12 +1899,12 @@ class ProblemMatcherRegistryImpl implements IProblemMatcherRegistry {
 		});
 	}
 
-	public onReady(): Promise<void> {
+	public onReady(): Promise<codemavi> {
 		ProblemPatternRegistry.onReady();
 		return this.readyPromise;
 	}
 
-	public add(matcher: INamedProblemMatcher): void {
+	public add(matcher: INamedProblemMatcher): codemavi {
 		this.matchers[matcher.name] = matcher;
 	}
 
@@ -1916,7 +1916,7 @@ class ProblemMatcherRegistryImpl implements IProblemMatcherRegistry {
 		return Object.keys(this.matchers);
 	}
 
-	private fillDefaults(): void {
+	private fillDefaults(): codemavi {
 		this.add({
 			name: 'msCompile',
 			label: localize('msCompile', 'Microsoft compiler problems'),

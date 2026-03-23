@@ -313,7 +313,7 @@ export class InlineCompletionsController extends Disposable {
 		this._playAccessibilitySignal.trigger(tx);
 	}
 
-	private _provideScreenReaderUpdate(content: string): void {
+	private _provideScreenReaderUpdate(content: string): codemavi {
 		const accessibleViewShowing = this._contextKeyService.getContextKeyValue<boolean>('accessibleViewIsShown');
 		const accessibleViewKeybinding = this._keybindingService.lookupKeybinding('editor.action.accessibleView');
 		let hint: string | undefined;
@@ -335,7 +335,7 @@ export class InlineCompletionsController extends Disposable {
 		return this._view.shouldShowHoverAtViewZone(viewZoneId);
 	}
 
-	public reject(): void {
+	public reject(): codemavi {
 		transaction(tx => {
 			const m = this.model.get();
 			if (m) {
@@ -344,7 +344,7 @@ export class InlineCompletionsController extends Disposable {
 		});
 	}
 
-	public jump(): void {
+	public jump(): codemavi {
 		const m = this.model.get();
 		if (m) {
 			m.jump();

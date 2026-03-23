@@ -129,12 +129,12 @@ export class VSBuffer {
 		return new VSBuffer(this.buffer.subarray(start, end));
 	}
 
-	set(array: VSBuffer, offset?: number): void;
-	set(array: Uint8Array, offset?: number): void;
-	set(array: ArrayBuffer, offset?: number): void;
-	set(array: ArrayBufferView, offset?: number): void;
-	set(array: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView, offset?: number): void;
-	set(array: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView, offset?: number): void {
+	set(array: VSBuffer, offset?: number): codemavi;
+	set(array: Uint8Array, offset?: number): codemavi;
+	set(array: ArrayBuffer, offset?: number): codemavi;
+	set(array: ArrayBufferView, offset?: number): codemavi;
+	set(array: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView, offset?: number): codemavi;
+	set(array: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView, offset?: number): codemavi {
 		if (array instanceof VSBuffer) {
 			this.buffer.set(array.buffer, offset);
 		} else if (array instanceof Uint8Array) {
@@ -152,7 +152,7 @@ export class VSBuffer {
 		return readUInt32BE(this.buffer, offset);
 	}
 
-	writeUInt32BE(value: number, offset: number): void {
+	writeUInt32BE(value: number, offset: number): codemavi {
 		writeUInt32BE(this.buffer, value, offset);
 	}
 
@@ -160,7 +160,7 @@ export class VSBuffer {
 		return readUInt32LE(this.buffer, offset);
 	}
 
-	writeUInt32LE(value: number, offset: number): void {
+	writeUInt32LE(value: number, offset: number): codemavi {
 		writeUInt32LE(this.buffer, value, offset);
 	}
 
@@ -168,7 +168,7 @@ export class VSBuffer {
 		return readUInt8(this.buffer, offset);
 	}
 
-	writeUInt8(value: number, offset: number): void {
+	writeUInt8(value: number, offset: number): codemavi {
 		writeUInt8(this.buffer, value, offset);
 	}
 
@@ -244,7 +244,7 @@ export function readUInt16LE(source: Uint8Array, offset: number): number {
 	);
 }
 
-export function writeUInt16LE(destination: Uint8Array, value: number, offset: number): void {
+export function writeUInt16LE(destination: Uint8Array, value: number, offset: number): codemavi {
 	destination[offset + 0] = (value & 0b11111111);
 	value = value >>> 8;
 	destination[offset + 1] = (value & 0b11111111);
@@ -259,7 +259,7 @@ export function readUInt32BE(source: Uint8Array, offset: number): number {
 	);
 }
 
-export function writeUInt32BE(destination: Uint8Array, value: number, offset: number): void {
+export function writeUInt32BE(destination: Uint8Array, value: number, offset: number): codemavi {
 	destination[offset + 3] = value;
 	value = value >>> 8;
 	destination[offset + 2] = value;
@@ -278,7 +278,7 @@ export function readUInt32LE(source: Uint8Array, offset: number): number {
 	);
 }
 
-export function writeUInt32LE(destination: Uint8Array, value: number, offset: number): void {
+export function writeUInt32LE(destination: Uint8Array, value: number, offset: number): codemavi {
 	destination[offset + 0] = (value & 0b11111111);
 	value = value >>> 8;
 	destination[offset + 1] = (value & 0b11111111);
@@ -292,7 +292,7 @@ export function readUInt8(source: Uint8Array, offset: number): number {
 	return source[offset];
 }
 
-export function writeUInt8(destination: Uint8Array, value: number, offset: number): void {
+export function writeUInt8(destination: Uint8Array, value: number, offset: number): codemavi {
 	destination[offset] = value;
 }
 

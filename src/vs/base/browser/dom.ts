@@ -125,7 +125,7 @@ export const {
 
 //#endregion
 
-export function clearNode(node: HTMLElement): void {
+export function clearNode(node: HTMLElement): codemavi {
 	while (node.firstChild) {
 		node.firstChild.remove();
 	}
@@ -133,12 +133,12 @@ export function clearNode(node: HTMLElement): void {
 
 class DomListener implements IDisposable {
 
-	private _handler: (e: any) => void;
+	private _handler: (e: any) => codemavi;
 	private _node: EventTarget;
 	private readonly _type: string;
 	private readonly _options: boolean | AddEventListenerOptions;
 
-	constructor(node: EventTarget, type: string, handler: (e: any) => void, options?: boolean | AddEventListenerOptions) {
+	constructor(node: EventTarget, type: string, handler: (e: any) => codemavi, options?: boolean | AddEventListenerOptions) {
 		this._node = node;
 		this._type = type;
 		this._handler = handler;
@@ -146,7 +146,7 @@ class DomListener implements IDisposable {
 		this._node.addEventListener(this._type, this._handler, this._options);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (!this._handler) {
 			// Already disposed
 			return;
@@ -160,35 +160,35 @@ class DomListener implements IDisposable {
 	}
 }
 
-export function addDisposableListener<K extends keyof GlobalEventHandlersEventMap>(node: EventTarget, type: K, handler: (event: GlobalEventHandlersEventMap[K]) => void, useCapture?: boolean): IDisposable;
-export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => void, useCapture?: boolean): IDisposable;
-export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => void, options: AddEventListenerOptions): IDisposable;
-export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => void, useCaptureOrOptions?: boolean | AddEventListenerOptions): IDisposable {
+export function addDisposableListener<K extends keyof GlobalEventHandlersEventMap>(node: EventTarget, type: K, handler: (event: GlobalEventHandlersEventMap[K]) => codemavi, useCapture?: boolean): IDisposable;
+export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable;
+export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => codemavi, options: AddEventListenerOptions): IDisposable;
+export function addDisposableListener(node: EventTarget, type: string, handler: (event: any) => codemavi, useCaptureOrOptions?: boolean | AddEventListenerOptions): IDisposable {
 	return new DomListener(node, type, handler, useCaptureOrOptions);
 }
 
 export interface IAddStandardDisposableListenerSignature {
-	(node: HTMLElement, type: 'click', handler: (event: IMouseEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'mousedown', handler: (event: IMouseEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'keydown', handler: (event: IKeyboardEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'keypress', handler: (event: IKeyboardEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'keyup', handler: (event: IKeyboardEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'pointerdown', handler: (event: PointerEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'pointermove', handler: (event: PointerEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: 'pointerup', handler: (event: PointerEvent) => void, useCapture?: boolean): IDisposable;
-	(node: HTMLElement, type: string, handler: (event: any) => void, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'click', handler: (event: IMouseEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'mousedown', handler: (event: IMouseEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'keydown', handler: (event: IKeyboardEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'keypress', handler: (event: IKeyboardEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'keyup', handler: (event: IKeyboardEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'pointerdown', handler: (event: PointerEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'pointermove', handler: (event: PointerEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: 'pointerup', handler: (event: PointerEvent) => codemavi, useCapture?: boolean): IDisposable;
+	(node: HTMLElement, type: string, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable;
 }
-function _wrapAsStandardMouseEvent(targetWindow: Window, handler: (e: IMouseEvent) => void): (e: MouseEvent) => void {
+function _wrapAsStandardMouseEvent(targetWindow: Window, handler: (e: IMouseEvent) => codemavi): (e: MouseEvent) => codemavi {
 	return function (e: MouseEvent) {
 		return handler(new StandardMouseEvent(targetWindow, e));
 	};
 }
-function _wrapAsStandardKeyboardEvent(handler: (e: IKeyboardEvent) => void): (e: KeyboardEvent) => void {
+function _wrapAsStandardKeyboardEvent(handler: (e: IKeyboardEvent) => codemavi): (e: KeyboardEvent) => codemavi {
 	return function (e: KeyboardEvent) {
 		return handler(new StandardKeyboardEvent(e));
 	};
 }
-export const addStandardDisposableListener: IAddStandardDisposableListenerSignature = function addStandardDisposableListener(node: HTMLElement, type: string, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export const addStandardDisposableListener: IAddStandardDisposableListenerSignature = function addStandardDisposableListener(node: HTMLElement, type: string, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	let wrapHandler = handler;
 
 	if (type === 'click' || type === 'mousedown' || type === 'contextmenu') {
@@ -200,26 +200,26 @@ export const addStandardDisposableListener: IAddStandardDisposableListenerSignat
 	return addDisposableListener(node, type, wrapHandler, useCapture);
 };
 
-export const addStandardDisposableGenericMouseDownListener = function addStandardDisposableListener(node: HTMLElement, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export const addStandardDisposableGenericMouseDownListener = function addStandardDisposableListener(node: HTMLElement, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	const wrapHandler = _wrapAsStandardMouseEvent(getWindow(node), handler);
 
 	return addDisposableGenericMouseDownListener(node, wrapHandler, useCapture);
 };
 
-export const addStandardDisposableGenericMouseUpListener = function addStandardDisposableListener(node: HTMLElement, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export const addStandardDisposableGenericMouseUpListener = function addStandardDisposableListener(node: HTMLElement, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	const wrapHandler = _wrapAsStandardMouseEvent(getWindow(node), handler);
 
 	return addDisposableGenericMouseUpListener(node, wrapHandler, useCapture);
 };
-export function addDisposableGenericMouseDownListener(node: EventTarget, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export function addDisposableGenericMouseDownListener(node: EventTarget, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	return addDisposableListener(node, platform.isIOS && BrowserFeatures.pointerEvents ? EventType.POINTER_DOWN : EventType.MOUSE_DOWN, handler, useCapture);
 }
 
-export function addDisposableGenericMouseMoveListener(node: EventTarget, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export function addDisposableGenericMouseMoveListener(node: EventTarget, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	return addDisposableListener(node, platform.isIOS && BrowserFeatures.pointerEvents ? EventType.POINTER_MOVE : EventType.MOUSE_MOVE, handler, useCapture);
 }
 
-export function addDisposableGenericMouseUpListener(node: EventTarget, handler: (event: any) => void, useCapture?: boolean): IDisposable {
+export function addDisposableGenericMouseUpListener(node: EventTarget, handler: (event: any) => codemavi, useCapture?: boolean): IDisposable {
 	return addDisposableListener(node, platform.isIOS && BrowserFeatures.pointerEvents ? EventType.POINTER_UP : EventType.MOUSE_UP, handler, useCapture);
 }
 
@@ -242,7 +242,7 @@ export function addDisposableGenericMouseUpListener(node: EventTarget, handler: 
  * [requestIdleCallback]: https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
  * [setTimeout]: https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout
  */
-export function runWhenWindowIdle(targetWindow: Window | typeof globalThis, callback: (idle: IdleDeadline) => void, timeout?: number): IDisposable {
+export function runWhenWindowIdle(targetWindow: Window | typeof globalThis, callback: (idle: IdleDeadline) => codemavi, timeout?: number): IDisposable {
 	return _runWhenIdle(targetWindow, callback, timeout);
 }
 
@@ -262,16 +262,16 @@ export class WindowIdleValue<T> extends AbstractIdleValue<T> {
  * If currently in an animation frame, `runner` will be executed immediately.
  * @return token that can be used to cancel the scheduled runner (only if `runner` was not executed immediately).
  */
-export let runAtThisOrScheduleAtNextAnimationFrame: (targetWindow: Window, runner: () => void, priority?: number) => IDisposable;
+export let runAtThisOrScheduleAtNextAnimationFrame: (targetWindow: Window, runner: () => codemavi, priority?: number) => IDisposable;
 /**
  * Schedule a callback to be run at the next animation frame.
  * This allows multiple parties to register callbacks that should run at the next animation frame.
  * If currently in an animation frame, `runner` will be executed at the next animation frame.
  * @return token that can be used to cancel the scheduled runner.
  */
-export let scheduleAtNextAnimationFrame: (targetWindow: Window, runner: () => void, priority?: number) => IDisposable;
+export let scheduleAtNextAnimationFrame: (targetWindow: Window, runner: () => codemavi, priority?: number) => IDisposable;
 
-export function disposableWindowInterval(targetWindow: Window, handler: () => void | boolean /* stop interval */ | Promise<unknown>, interval: number, iterations?: number): IDisposable {
+export function disposableWindowInterval(targetWindow: Window, handler: () => codemavi | boolean /* stop interval */ | Promise<unknown>, interval: number, iterations?: number): IDisposable {
 	let iteration = 0;
 	const timer = targetWindow.setInterval(() => {
 		iteration++;
@@ -298,28 +298,28 @@ export class WindowIntervalTimer extends IntervalTimer {
 		this.defaultTarget = node && getWindow(node);
 	}
 
-	override cancelAndSet(runner: () => void, interval: number, targetWindow?: Window & typeof globalThis): void {
+	override cancelAndSet(runner: () => codemavi, interval: number, targetWindow?: Window & typeof globalThis): codemavi {
 		return super.cancelAndSet(runner, interval, targetWindow ?? this.defaultTarget);
 	}
 }
 
 class AnimationFrameQueueItem implements IDisposable {
 
-	private _runner: () => void;
+	private _runner: () => codemavi;
 	public priority: number;
 	private _canceled: boolean;
 
-	constructor(runner: () => void, priority: number = 0) {
+	constructor(runner: () => codemavi, priority: number = 0) {
 		this._runner = runner;
 		this.priority = priority;
 		this._canceled = false;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._canceled = true;
 	}
 
-	execute(): void {
+	execute(): codemavi {
 		if (this._canceled) {
 			return;
 		}
@@ -371,7 +371,7 @@ class AnimationFrameQueueItem implements IDisposable {
 		inAnimationFrameRunner.set(targetWindowId, false);
 	};
 
-	scheduleAtNextAnimationFrame = (targetWindow: Window, runner: () => void, priority: number = 0) => {
+	scheduleAtNextAnimationFrame = (targetWindow: Window, runner: () => codemavi, priority: number = 0) => {
 		const targetWindowId = getWindowId(targetWindow);
 		const item = new AnimationFrameQueueItem(runner, priority);
 
@@ -390,7 +390,7 @@ class AnimationFrameQueueItem implements IDisposable {
 		return item;
 	};
 
-	runAtThisOrScheduleAtNextAnimationFrame = (targetWindow: Window, runner: () => void, priority?: number) => {
+	runAtThisOrScheduleAtNextAnimationFrame = (targetWindow: Window, runner: () => codemavi, priority?: number) => {
 		const targetWindowId = getWindowId(targetWindow);
 		if (inAnimationFrameRunner.get(targetWindowId)) {
 			const item = new AnimationFrameQueueItem(runner, priority);
@@ -407,11 +407,11 @@ class AnimationFrameQueueItem implements IDisposable {
 	};
 })();
 
-export function measure(targetWindow: Window, callback: () => void): IDisposable {
+export function measure(targetWindow: Window, callback: () => codemavi): IDisposable {
 	return scheduleAtNextAnimationFrame(targetWindow, callback, 10000 /* must be early */);
 }
 
-export function modify(targetWindow: Window, callback: () => void): IDisposable {
+export function modify(targetWindow: Window, callback: () => codemavi): IDisposable {
 	return scheduleAtNextAnimationFrame(targetWindow, callback, -10000 /* must be late */);
 }
 
@@ -429,7 +429,7 @@ const DEFAULT_EVENT_MERGER: IEventMerger<Event, Event> = function (lastEvent: Ev
 
 class TimeoutThrottledDomListener<R, E extends Event> extends Disposable {
 
-	constructor(node: any, type: string, handler: (event: R) => void, eventMerger: IEventMerger<R, E> = <any>DEFAULT_EVENT_MERGER, minimumTimeMs: number = MINIMUM_TIME_MS) {
+	constructor(node: any, type: string, handler: (event: R) => codemavi, eventMerger: IEventMerger<R, E> = <any>DEFAULT_EVENT_MERGER, minimumTimeMs: number = MINIMUM_TIME_MS) {
 		super();
 
 		let lastEvent: R | null = null;
@@ -457,7 +457,7 @@ class TimeoutThrottledDomListener<R, E extends Event> extends Disposable {
 	}
 }
 
-export function addDisposableThrottledListener<R, E extends Event = Event>(node: any, type: string, handler: (event: R) => void, eventMerger?: IEventMerger<R, E>, minimumTimeMs?: number): IDisposable {
+export function addDisposableThrottledListener<R, E extends Event = Event>(node: any, type: string, handler: (event: R) => codemavi, eventMerger?: IEventMerger<R, E>, minimumTimeMs?: number): IDisposable {
 	return new TimeoutThrottledDomListener<R, E>(node, type, handler, eventMerger, minimumTimeMs);
 }
 
@@ -652,7 +652,7 @@ export interface IDomNodePagePosition {
 	height: number;
 }
 
-export function size(element: HTMLElement, width: number | null, height: number | null): void {
+export function size(element: HTMLElement, width: number | null, height: number | null): codemavi {
 	if (typeof width === 'number') {
 		element.style.width = `${width}px`;
 	}
@@ -662,7 +662,7 @@ export function size(element: HTMLElement, width: number | null, height: number 
 	}
 }
 
-export function position(element: HTMLElement, top: number, right?: number, bottom?: number, left?: number, position: string = 'absolute'): void {
+export function position(element: HTMLElement, top: number, right?: number, bottom?: number, left?: number, position: string = 'absolute'): codemavi {
 	if (typeof top === 'number') {
 		element.style.top = `${top}px`;
 	}
@@ -779,7 +779,7 @@ const parentFlowToDataKey = 'parentFlowToElementId';
  * Set an explicit parent to use for nodes that are not part of the
  * regular dom structure.
  */
-export function setParentFlowTo(fromChildElement: HTMLElement, toParentElement: Element): void {
+export function setParentFlowTo(fromChildElement: HTMLElement, toParentElement: Element): codemavi {
 	fromChildElement.dataset[parentFlowToDataKey] = toParentElement.id;
 }
 
@@ -1118,8 +1118,8 @@ export const EventType = {
 } as const;
 
 export interface EventLike {
-	preventDefault(): void;
-	stopPropagation(): void;
+	preventDefault(): codemavi;
+	stopPropagation(): codemavi;
 }
 
 export function isEventLike(obj: unknown): obj is EventLike {
@@ -1139,9 +1139,9 @@ export const EventHelper = {
 };
 
 export interface IFocusTracker extends Disposable {
-	readonly onDidFocus: event.Event<void>;
-	readonly onDidBlur: event.Event<void>;
-	refreshState(): void;
+	readonly onDidFocus: event.Event<codemavi>;
+	readonly onDidBlur: event.Event<codemavi>;
+	refreshState(): codemavi;
 }
 
 export function saveParentsScrollTop(node: Element): number[] {
@@ -1153,7 +1153,7 @@ export function saveParentsScrollTop(node: Element): number[] {
 	return r;
 }
 
-export function restoreParentsScrollTop(node: Element, state: number[]): void {
+export function restoreParentsScrollTop(node: Element, state: number[]): codemavi {
 	for (let i = 0; node && node.nodeType === node.ELEMENT_NODE; i++) {
 		if (node.scrollTop !== state[i]) {
 			node.scrollTop = state[i];
@@ -1164,13 +1164,13 @@ export function restoreParentsScrollTop(node: Element, state: number[]): void {
 
 class FocusTracker extends Disposable implements IFocusTracker {
 
-	private readonly _onDidFocus = this._register(new event.Emitter<void>());
+	private readonly _onDidFocus = this._register(new event.Emitter<codemavi>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onDidBlur = this._register(new event.Emitter<void>());
+	private readonly _onDidBlur = this._register(new event.Emitter<codemavi>());
 	readonly onDidBlur = this._onDidBlur.event;
 
-	private _refreshStateHandler: () => void;
+	private _refreshStateHandler: () => codemavi;
 
 	private static hasFocusWithin(element: HTMLElement | Window): boolean {
 		if (isHTMLElement(element)) {
@@ -1250,8 +1250,8 @@ export function after<T extends Node>(sibling: HTMLElement, child: T): T {
 }
 
 export function append<T extends Node>(parent: HTMLElement, child: T): T;
-export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): void;
-export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): T | void {
+export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): codemavi;
+export function append<T extends Node>(parent: HTMLElement, ...children: (T | string)[]): T | codemavi {
 	parent.append(...children);
 	if (children.length === 1 && typeof children[0] !== 'string') {
 		return <T>children[0];
@@ -1266,7 +1266,7 @@ export function prepend<T extends Node>(parent: HTMLElement, child: T): T {
 /**
  * Removes all children from `parent` and appends `children`
  */
-export function reset(parent: HTMLElement, ...children: Array<Node | string>): void {
+export function reset(parent: HTMLElement, ...children: Array<Node | string>): codemavi {
 	parent.innerText = '';
 	append(parent, ...children);
 }
@@ -1351,7 +1351,7 @@ export function join(nodes: Node[], separator: Node | string): Node[] {
 	return result;
 }
 
-export function setVisibility(visible: boolean, ...elements: HTMLElement[]): void {
+export function setVisibility(visible: boolean, ...elements: HTMLElement[]): codemavi {
 	if (visible) {
 		show(...elements);
 	} else {
@@ -1359,14 +1359,14 @@ export function setVisibility(visible: boolean, ...elements: HTMLElement[]): voi
 	}
 }
 
-export function show(...elements: HTMLElement[]): void {
+export function show(...elements: HTMLElement[]): codemavi {
 	for (const element of elements) {
 		element.style.display = '';
 		element.removeAttribute('aria-hidden');
 	}
 }
 
-export function hide(...elements: HTMLElement[]): void {
+export function hide(...elements: HTMLElement[]): codemavi {
 	for (const element of elements) {
 		element.style.display = 'none';
 		element.setAttribute('aria-hidden', 'true');
@@ -1385,7 +1385,7 @@ function findParentWithAttribute(node: Node | null, attribute: string): HTMLElem
 	return null;
 }
 
-export function removeTabIndexAndUpdateFocus(node: HTMLElement): void {
+export function removeTabIndexAndUpdateFocus(node: HTMLElement): codemavi {
 	if (!node || !node.hasAttribute('tabIndex')) {
 		return;
 	}
@@ -1410,8 +1410,8 @@ export function finalHandler<T extends Event>(fn: (event: T) => unknown): (event
 	};
 }
 
-export function domContentLoaded(targetWindow: Window): Promise<void> {
-	return new Promise<void>(resolve => {
+export function domContentLoaded(targetWindow: Window): Promise<codemavi> {
+	return new Promise<codemavi>(resolve => {
 		const readyState = targetWindow.document.readyState;
 		if (readyState === 'complete' || (targetWindow.document && targetWindow.document.body !== null)) {
 			resolve(undefined);
@@ -1450,7 +1450,7 @@ export function computeScreenAwareSize(window: Window, cssPx: number): number {
  * to change the location of the current page.
  * See https://mathiasbynens.github.io/rel-noopener/
  */
-export function windowOpenNoOpener(url: string): void {
+export function windowOpenNoOpener(url: string): codemavi {
 	// By using 'noopener' in the `windowFeatures` argument, the newly created window will
 	// not be able to use `window.opener` to reach back to the current page.
 	// See https://stackoverflow.com/a/46958731
@@ -1472,7 +1472,7 @@ export function windowOpenNoOpener(url: string): void {
  * In otherwords, you should almost always use {@link windowOpenNoOpener} instead of this function.
  */
 const popupWidth = 780, popupHeight = 640;
-export function windowOpenPopup(url: string): void {
+export function windowOpenPopup(url: string): codemavi {
 	const left = Math.floor(mainWindow.screenLeft + mainWindow.innerWidth / 2 - popupWidth / 2);
 	const top = Math.floor(mainWindow.screenTop + mainWindow.innerHeight / 2 - popupHeight / 2);
 	mainWindow.open(
@@ -1510,7 +1510,7 @@ export function windowOpenWithSuccess(url: string, noOpener = true): boolean {
 	return false;
 }
 
-export function animate(targetWindow: Window, fn: () => void): IDisposable {
+export function animate(targetWindow: Window, fn: () => codemavi): IDisposable {
 	const step = () => {
 		fn();
 		stepDisposable = scheduleAtNextAnimationFrame(targetWindow, step);
@@ -1522,7 +1522,7 @@ export function animate(targetWindow: Window, fn: () => void): IDisposable {
 
 RemoteAuthorities.setPreferredWebSchema(/^https:/.test(mainWindow.location.href) ? 'https' : 'http');
 
-export function triggerDownload(dataOrUri: Uint8Array | URI, name: string): void {
+export function triggerDownload(dataOrUri: Uint8Array | URI, name: string): codemavi {
 
 	// If the data is provided as Buffer, we create a
 	// blob URL out of it to produce a valid link
@@ -1768,7 +1768,7 @@ const defaultDomPurifyConfig = Object.freeze<dompurify.Config & { RETURN_TRUSTED
 /**
  * Sanitizes the given `value` and reset the given `node` with it.
  */
-export function safeInnerHtml(node: HTMLElement, value: string, extraDomPurifyConfig?: dompurify.Config): void {
+export function safeInnerHtml(node: HTMLElement, value: string, extraDomPurifyConfig?: dompurify.Config): codemavi {
 	const hook = hookDomPurifyHrefAndSrcSanitizer(defaultSafeProtocols);
 	try {
 		const html = dompurify.sanitize(value, { ...defaultDomPurifyConfig, ...extraDomPurifyConfig });
@@ -1835,7 +1835,7 @@ export class ModifierKeyEmitter extends event.Emitter<IModifierKeyStatus> {
 		this._subscriptions.add(event.Event.runAndSubscribe(onDidRegisterWindow, ({ window, disposables }) => this.registerListeners(window, disposables), { window: mainWindow, disposables: this._subscriptions }));
 	}
 
-	private registerListeners(window: Window, disposables: DisposableStore): void {
+	private registerListeners(window: Window, disposables: DisposableStore): codemavi {
 		disposables.add(addDisposableListener(window, 'keydown', e => {
 			if (e.defaultPrevented) {
 				return;
@@ -1935,12 +1935,12 @@ export class ModifierKeyEmitter extends event.Emitter<IModifierKeyStatus> {
 	/**
 	 * Allows to explicitly reset the key status based on more knowledge (#109062)
 	 */
-	resetKeyStatus(): void {
+	resetKeyStatus(): codemavi {
 		this.doResetKeyStatus();
 		this.fire(this._keyStatus);
 	}
 
-	private doResetKeyStatus(): void {
+	private doResetKeyStatus(): codemavi {
 		this._keyStatus = {
 			altKey: false,
 			shiftKey: false,
@@ -1970,13 +1970,13 @@ export function getCookieValue(name: string): string | undefined {
 }
 
 export interface IDragAndDropObserverCallbacks {
-	readonly onDragEnter?: (e: DragEvent) => void;
-	readonly onDragLeave?: (e: DragEvent) => void;
-	readonly onDrop?: (e: DragEvent) => void;
-	readonly onDragEnd?: (e: DragEvent) => void;
-	readonly onDragStart?: (e: DragEvent) => void;
-	readonly onDrag?: (e: DragEvent) => void;
-	readonly onDragOver?: (e: DragEvent, dragDuration: number) => void;
+	readonly onDragEnter?: (e: DragEvent) => codemavi;
+	readonly onDragLeave?: (e: DragEvent) => codemavi;
+	readonly onDrop?: (e: DragEvent) => codemavi;
+	readonly onDragEnd?: (e: DragEvent) => codemavi;
+	readonly onDragStart?: (e: DragEvent) => codemavi;
+	readonly onDrag?: (e: DragEvent) => codemavi;
+	readonly onDragOver?: (e: DragEvent, dragDuration: number) => codemavi;
 }
 
 export class DragAndDropObserver extends Disposable {
@@ -1996,7 +1996,7 @@ export class DragAndDropObserver extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		if (this.callbacks.onDragStart) {
 			this._register(addDisposableListener(this.element, EventType.DRAG_START, (e: DragEvent) => {
 				this.callbacks.onDragStart?.(e);
@@ -2051,7 +2051,7 @@ export class DragAndDropObserver extends Disposable {
 type HTMLElementAttributeKeys<T> = Partial<{ [K in keyof T]: T[K] extends Function ? never : T[K] extends object ? HTMLElementAttributeKeys<T[K]> : T[K] }>;
 type ElementAttributes<T> = HTMLElementAttributeKeys<T> & Record<string, any>;
 type RemoveHTMLElement<T> = T extends HTMLElement ? never : T;
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+type UnionToIntersection<U> = (U extends any ? (k: U) => codemavi : never) extends ((k: infer I) => codemavi) ? I : never;
 type ArrayToObj<T extends readonly any[]> = UnionToIntersection<RemoveHTMLElement<T[number]>>;
 type HHTMLElementTagNameMap = HTMLElementTagNameMap & { '': HTMLDivElement };
 
@@ -2301,7 +2301,7 @@ function camelCaseToHyphenCase(str: string) {
 	return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
-export function copyAttributes(from: Element, to: Element, filter?: string[]): void {
+export function copyAttributes(from: Element, to: Element, filter?: string[]): codemavi {
 	for (const { name, value } of from.attributes) {
 		if (!filter || filter.includes(name)) {
 			to.setAttribute(name, value);
@@ -2309,7 +2309,7 @@ export function copyAttributes(from: Element, to: Element, filter?: string[]): v
 	}
 }
 
-function copyAttribute(from: Element, to: Element, name: string): void {
+function copyAttribute(from: Element, to: Element, name: string): codemavi {
 	const value = from.getAttribute(name);
 	if (value) {
 		to.setAttribute(name, value);
@@ -2339,7 +2339,7 @@ export function isEditableElement(element: Element): boolean {
 }
 
 /**
- * Helper for calculating the "safe triangle" occluded by hovers to avoid early dismissal.
+ * Helper for calculating the "safe triangle" occluded by hovers to acodemavi early dismissal.
  * @see https://www.smashingmagazine.com/2023/08/better-context-menus-safe-triangles/ for example
  */
 export class SafeTriangle {

@@ -81,7 +81,7 @@ function createKeywordMatcher(arr: string[], caseInsensitive: boolean = false): 
 /**
  * Compiles a regular expression string, adding the 'i' flag if 'ignoreCase' is set, and the 'u' flag if 'unicode' is set.
  * Also replaces @\w+ or sequences with the content of the specified attribute
- * @\w+ replacement can be avoided by escaping `@` signs with another `@` sign.
+ * @\w+ replacement can be acodemavied by escaping `@` signs with another `@` sign.
  * @example /@attr/ will be replaced with the value of lexer[attr]
  * @example /@@text/ will not be replaced and will become /@text/.
  */
@@ -350,7 +350,7 @@ function compileAction(lexer: monarchCommon.ILexerMin, ruleName: string, action:
 					cases.push({ test: function (id, matches, state, eos) { return eos; }, value: val, name: tkey });
 				}
 				else {
-					cases.push(createGuard(lexer, ruleName, tkey, val));  // call separate function to avoid local variable capture
+					cases.push(createGuard(lexer, ruleName, tkey, val));  // call separate function to acodemavi local variable capture
 				}
 			}
 		}
@@ -389,7 +389,7 @@ class Rule implements monarchCommon.IRule {
 		this.name = name;
 	}
 
-	public setRegex(lexer: monarchCommon.ILexerMin, re: string | RegExp): void {
+	public setRegex(lexer: monarchCommon.ILexerMin, re: string | RegExp): codemavi {
 		let sregex: string;
 		if (typeof (re) === 'string') {
 			sregex = re;

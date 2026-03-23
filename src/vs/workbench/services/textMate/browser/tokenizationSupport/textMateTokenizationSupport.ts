@@ -22,7 +22,7 @@ export class TextMateTokenizationSupport extends Disposable implements ITokeniza
 		private readonly _containsEmbeddedLanguages: boolean,
 		private readonly _createBackgroundTokenizer: ((textModel: ITextModel, tokenStore: IBackgroundTokenizationStore) => IBackgroundTokenizer | undefined) | undefined,
 		private readonly _backgroundTokenizerShouldOnlyVerifyTokens: () => boolean,
-		private readonly _reportTokenizationTime: (timeMs: number, lineLength: number, isRandomSample: boolean) => void,
+		private readonly _reportTokenizationTime: (timeMs: number, lineLength: number, isRandomSample: boolean) => codemavi,
 		private readonly _reportSlowTokenization: boolean,
 	) {
 		super();

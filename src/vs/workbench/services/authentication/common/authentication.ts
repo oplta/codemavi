@@ -79,7 +79,7 @@ export interface IAuthenticationService {
 	/**
 	 * Fires when the list of declaredProviders has changed
 	 */
-	readonly onDidChangeDeclaredProviders: Event<void>;
+	readonly onDidChangeDeclaredProviders: Event<codemavi>;
 
 	/**
 	 * All providers that have been statically declared by extensions. These may not actually be registered or active yet.
@@ -90,13 +90,13 @@ export interface IAuthenticationService {
 	 * Registers that an extension has declared an authentication provider in their package.json
 	 * @param provider The provider information to register
 	 */
-	registerDeclaredAuthenticationProvider(provider: AuthenticationProviderInformation): void;
+	registerDeclaredAuthenticationProvider(provider: AuthenticationProviderInformation): codemavi;
 
 	/**
 	 * Unregisters a declared authentication provider
 	 * @param id The id of the provider to unregister
 	 */
-	unregisterDeclaredAuthenticationProvider(id: string): void;
+	unregisterDeclaredAuthenticationProvider(id: string): codemavi;
 
 	/**
 	 * Checks if an authentication provider has been registered
@@ -109,13 +109,13 @@ export interface IAuthenticationService {
 	 * @param id The id of the provider
 	 * @param provider The implementation of the provider
 	 */
-	registerAuthenticationProvider(id: string, provider: IAuthenticationProvider): void;
+	registerAuthenticationProvider(id: string, provider: IAuthenticationProvider): codemavi;
 
 	/**
 	 * Unregisters an authentication provider
 	 * @param id The id of the provider to unregister
 	 */
-	unregisterAuthenticationProvider(id: string): void;
+	unregisterAuthenticationProvider(id: string): codemavi;
 
 	/**
 	 * Gets the provider ids of all registered authentication providers
@@ -157,7 +157,7 @@ export interface IAuthenticationService {
 	 * @param providerId The id of the provider
 	 * @param sessionId The id of the session to remove
 	 */
-	removeSession(providerId: string, sessionId: string): Promise<void>;
+	removeSession(providerId: string, sessionId: string): Promise<codemavi>;
 }
 
 // TODO: Move this into MainThreadAuthentication
@@ -185,20 +185,20 @@ export interface IAuthenticationExtensionsService {
 	 * @param extensionId The extension id to set the preference for
 	 * @param account The account to set the preference to
 	 */
-	updateAccountPreference(extensionId: string, providerId: string, account: AuthenticationSessionAccount): void;
+	updateAccountPreference(extensionId: string, providerId: string, account: AuthenticationSessionAccount): codemavi;
 	/**
 	 * Removes the account preference for the given provider and extension
 	 * @param providerId The authentication provider id
 	 * @param extensionId The extension id to remove the preference for
 	 */
-	removeAccountPreference(extensionId: string, providerId: string): void;
+	removeAccountPreference(extensionId: string, providerId: string): codemavi;
 	/**
 	 * @deprecated Sets the session preference for the given provider and extension
 	 * @param providerId
 	 * @param extensionId
 	 * @param session
 	 */
-	updateSessionPreference(providerId: string, extensionId: string, session: AuthenticationSession): void;
+	updateSessionPreference(providerId: string, extensionId: string, session: AuthenticationSession): codemavi;
 	/**
 	 * @deprecated Gets the session preference for the given provider and extension
 	 * @param providerId
@@ -212,10 +212,10 @@ export interface IAuthenticationExtensionsService {
 	 * @param extensionId
 	 * @param scopes
 	 */
-	removeSessionPreference(providerId: string, extensionId: string, scopes: string[]): void;
+	removeSessionPreference(providerId: string, extensionId: string, scopes: string[]): codemavi;
 	selectSession(providerId: string, extensionId: string, extensionName: string, scopes: string[], possibleSessions: readonly AuthenticationSession[]): Promise<AuthenticationSession>;
-	requestSessionAccess(providerId: string, extensionId: string, extensionName: string, scopes: string[], possibleSessions: readonly AuthenticationSession[]): void;
-	requestNewSession(providerId: string, scopes: string[], extensionId: string, extensionName: string): Promise<void>;
+	requestSessionAccess(providerId: string, extensionId: string, extensionName: string, scopes: string[], possibleSessions: readonly AuthenticationSession[]): codemavi;
+	requestNewSession(providerId: string, scopes: string[], extensionId: string, extensionName: string): Promise<codemavi>;
 }
 
 export interface IAuthenticationProviderSessionOptions {
@@ -276,5 +276,5 @@ export interface IAuthenticationProvider {
 	 * If a session cannot be removed, the provider should reject with an error message.
 	 * @param sessionId - The ID of the session to remove.
 	 */
-	removeSession(sessionId: string): Promise<void>;
+	removeSession(sessionId: string): Promise<codemavi>;
 }

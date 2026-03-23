@@ -140,7 +140,7 @@ export class ConfigurationEditing {
 
 	public _serviceBrand: undefined;
 
-	private queue: Queue<void>;
+	private queue: Queue<codemavi>;
 
 	constructor(
 		private readonly remoteSettingsResource: URI | null,
@@ -157,10 +157,10 @@ export class ConfigurationEditing {
 		@IUriIdentityService private readonly uriIdentityService: IUriIdentityService,
 		@IFilesConfigurationService private readonly filesConfigurationService: IFilesConfigurationService
 	) {
-		this.queue = new Queue<void>();
+		this.queue = new Queue<codemavi>();
 	}
 
-	async writeConfiguration(target: EditableConfigurationTarget, value: IConfigurationValue, options: IConfigurationEditingOptions = {}): Promise<void> {
+	async writeConfiguration(target: EditableConfigurationTarget, value: IConfigurationValue, options: IConfigurationEditingOptions = {}): Promise<codemavi> {
 		const operation = this.getConfigurationEditOperation(target, value, options.scopes || {});
 		// queue up writes to prevent race conditions
 		return this.queue.queue(async () => {
@@ -175,7 +175,7 @@ export class ConfigurationEditing {
 		});
 	}
 
-	private async doWriteConfiguration(operation: IConfigurationEditOperation, options: IConfigurationEditingOptions): Promise<void> {
+	private async doWriteConfiguration(operation: IConfigurationEditOperation, options: IConfigurationEditingOptions): Promise<codemavi> {
 		await this.validate(operation.target, operation, !options.handleDirtyFile, options.scopes || {});
 		const resource: URI = operation.resource!;
 		const reference = await this.resolveModelReference(resource);
@@ -187,7 +187,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private async updateConfiguration(operation: IConfigurationEditOperation, model: ITextModel, formattingOptions: FormattingOptions, options: IConfigurationEditingOptions): Promise<void> {
+	private async updateConfiguration(operation: IConfigurationEditOperation, model: ITextModel, formattingOptions: FormattingOptions, options: IConfigurationEditingOptions): Promise<codemavi> {
 		if (this.hasParseErrors(model.getValue(), operation)) {
 			throw this.toConfigurationEditingError(ConfigurationEditingErrorCode.ERROR_INVALID_CONFIGURATION, operation.target, operation);
 		}
@@ -206,7 +206,7 @@ export class ConfigurationEditing {
 				// Optimization: we apply edits to a text model and save it
 				// right after. Use the files config service to signal this
 				// to the workbench to optimise the UI during this operation.
-				// For example, avoids to briefly show dirty indicators.
+				// For example, acodemavis to briefly show dirty indicators.
 				disposable = this.filesConfigurationService.enableAutoSaveAfterShortDelay(model.uri);
 				if (this.applyEditsToBuffer(edit, model)) {
 					await this.save(model, operation);
@@ -217,7 +217,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private async save(model: ITextModel, operation: IConfigurationEditOperation): Promise<void> {
+	private async save(model: ITextModel, operation: IConfigurationEditOperation): Promise<codemavi> {
 		try {
 			await this.textFileService.save(model.uri, { ignoreErrorHandler: true });
 		} catch (error) {
@@ -261,7 +261,7 @@ export class ConfigurationEditing {
 		return { insertSpaces, tabSize, eol };
 	}
 
-	private async onError(error: ConfigurationEditingError, operation: IConfigurationEditOperation, scopes: IConfigurationUpdateOverrides | undefined): Promise<void> {
+	private async onError(error: ConfigurationEditingError, operation: IConfigurationEditOperation, scopes: IConfigurationUpdateOverrides | undefined): Promise<codemavi> {
 		switch (error.code) {
 			case ConfigurationEditingErrorCode.ERROR_INVALID_CONFIGURATION:
 				this.onInvalidConfigurationError(error, operation);
@@ -276,7 +276,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private onInvalidConfigurationError(error: ConfigurationEditingError, operation: IConfigurationEditOperation,): void {
+	private onInvalidConfigurationError(error: ConfigurationEditingError, operation: IConfigurationEditOperation,): codemavi {
 		const openStandAloneConfigurationActionLabel = operation.workspaceStandAloneConfigurationKey === TASKS_CONFIGURATION_KEY ? nls.localize('openTasksConfiguration', "Open Tasks Configuration")
 			: operation.workspaceStandAloneConfigurationKey === LAUNCH_CONFIGURATION_KEY ? nls.localize('openLaunchConfiguration', "Open Launch Configuration")
 				: operation.workspaceStandAloneConfigurationKey === MCP_CONFIGURATION_KEY ? nls.localize('openMcpConfiguration', "Open MCP Configuration")
@@ -298,7 +298,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private onConfigurationFileDirtyError(error: ConfigurationEditingError, operation: IConfigurationEditOperation, scopes: IConfigurationUpdateOverrides | undefined): void {
+	private onConfigurationFileDirtyError(error: ConfigurationEditingError, operation: IConfigurationEditOperation, scopes: IConfigurationUpdateOverrides | undefined): codemavi {
 		const openStandAloneConfigurationActionLabel = operation.workspaceStandAloneConfigurationKey === TASKS_CONFIGURATION_KEY ? nls.localize('openTasksConfiguration', "Open Tasks Configuration")
 			: operation.workspaceStandAloneConfigurationKey === LAUNCH_CONFIGURATION_KEY ? nls.localize('openLaunchConfiguration', "Open Launch Configuration")
 				: null;
@@ -330,7 +330,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private openSettings(operation: IConfigurationEditOperation): void {
+	private openSettings(operation: IConfigurationEditOperation): codemavi {
 		const options: IOpenSettingsOptions = { jsonEditor: true };
 		switch (operation.target) {
 			case EditableConfigurationTarget.USER_LOCAL:
@@ -353,7 +353,7 @@ export class ConfigurationEditing {
 		}
 	}
 
-	private openFile(resource: URI): void {
+	private openFile(resource: URI): codemavi {
 		this.editorService.openEditor({ resource, options: { pinned: true } });
 	}
 
@@ -507,7 +507,7 @@ export class ConfigurationEditing {
 		return parseErrors.length > 0;
 	}
 
-	private async validate(target: EditableConfigurationTarget, operation: IConfigurationEditOperation, checkDirty: boolean, overrides: IConfigurationUpdateOverrides): Promise<void> {
+	private async validate(target: EditableConfigurationTarget, operation: IConfigurationEditOperation, checkDirty: boolean, overrides: IConfigurationUpdateOverrides): Promise<codemavi> {
 
 		if (this.configurationService.inspect(operation.key).policyValue !== undefined) {
 			throw this.toConfigurationEditingError(ConfigurationEditingErrorCode.ERROR_POLICY_CONFIGURATION, target, operation);

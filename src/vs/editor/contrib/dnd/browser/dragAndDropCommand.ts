@@ -24,7 +24,7 @@ export class DragAndDropCommand implements ICommand {
 		this.targetSelection = null;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		const text = model.getValueInRange(this.selection);
 		if (!this.copy) {
 			builder.addEditOperation(this.selection, null);

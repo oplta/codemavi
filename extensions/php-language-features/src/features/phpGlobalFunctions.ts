@@ -14,15 +14,15 @@ export const globalfunctions: IEntries = {
 	},
 	debug_print_backtrace: {
 		description: 'Prints a backtrace',
-		signature: '([ int $options = 0 [, int $limit = 0 ]]): void'
+		signature: '([ int $options = 0 [, int $limit = 0 ]]): codemavi'
 	},
 	error_clear_last: {
 		description: 'Clear the most recent error',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	error_get_last: {
 		description: 'Get the last occurred error',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	error_log: {
 		description: 'Send an error message to the defined error handling routines',
@@ -34,11 +34,11 @@ export const globalfunctions: IEntries = {
 	},
 	restore_error_handler: {
 		description: 'Restores the previous error handler function',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	restore_exception_handler: {
 		description: 'Restores the previously defined exception handler function',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	set_error_handler: {
 		description: 'Sets a user-defined error handler function',
@@ -61,7 +61,7 @@ export const globalfunctions: IEntries = {
 	},
 	opcache_get_configuration: {
 		description: 'Get configuration information about the cache',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	opcache_get_status: {
 		description: 'Get status information about the cache',
@@ -77,47 +77,47 @@ export const globalfunctions: IEntries = {
 	},
 	opcache_reset: {
 		description: 'Resets the contents of the opcode cache',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	flush: {
 		description: 'Flush system output buffer',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	ob_clean: {
 		description: 'Clean (erase) the output buffer',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	ob_end_clean: {
 		description: 'Clean (erase) the output buffer and turn off output buffering',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	ob_end_flush: {
 		description: 'Flush (send) the output buffer and turn off output buffering',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	ob_flush: {
 		description: 'Flush (send) the output buffer',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	ob_get_clean: {
 		description: 'Get current buffer contents and delete current output buffer',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	ob_get_contents: {
 		description: 'Return the contents of the output buffer',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	ob_get_flush: {
 		description: 'Flush the output buffer, return it as a string and turn off output buffering',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	ob_get_length: {
 		description: 'Return the length of the output buffer',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	ob_get_level: {
 		description: 'Return the nesting level of the output buffering mechanism',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	ob_get_status: {
 		description: 'Get status of output buffers',
@@ -129,11 +129,11 @@ export const globalfunctions: IEntries = {
 	},
 	ob_implicit_flush: {
 		description: 'Turn implicit flush on/off',
-		signature: '([ int $flag = 1 ]): void'
+		signature: '([ int $flag = 1 ]): codemavi'
 	},
 	ob_list_handlers: {
 		description: 'List all output handlers in use',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	ob_start: {
 		description: 'Turn on output buffering',
@@ -145,7 +145,7 @@ export const globalfunctions: IEntries = {
 	},
 	output_reset_rewrite_vars: {
 		description: 'Reset URL rewriter values',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	assert_options: {
 		description: 'Set/get the various assert flags',
@@ -157,7 +157,7 @@ export const globalfunctions: IEntries = {
 	},
 	cli_get_process_title: {
 		description: 'Returns the current process title',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	cli_set_process_title: {
 		description: 'Sets the process title',
@@ -173,27 +173,27 @@ export const globalfunctions: IEntries = {
 	},
 	gc_collect_cycles: {
 		description: 'Forces collection of any existing garbage cycles',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	gc_disable: {
 		description: 'Deactivates the circular reference collector',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	gc_enable: {
 		description: 'Activates the circular reference collector',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	gc_enabled: {
 		description: 'Returns status of the circular reference collector',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	gc_mem_caches: {
 		description: 'Reclaims memory used by the Zend Engine memory manager',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	gc_status: {
 		description: 'Gets information about the garbage collector',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_cfg_var: {
 		description: 'Gets the value of a PHP configuration option',
@@ -201,7 +201,7 @@ export const globalfunctions: IEntries = {
 	},
 	get_current_user: {
 		description: 'Gets the name of the owner of the current PHP script',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	get_defined_constants: {
 		description: 'Returns an associative array with the names of all the constants and their values',
@@ -213,11 +213,11 @@ export const globalfunctions: IEntries = {
 	},
 	get_include_path: {
 		description: 'Gets the current include_path configuration option',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	get_included_files: {
 		description: 'Returns an array with the names of included or required files',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_loaded_extensions: {
 		description: 'Returns an array with the names of all modules compiled and loaded',
@@ -225,11 +225,11 @@ export const globalfunctions: IEntries = {
 	},
 	get_magic_quotes_gpc: {
 		description: 'Gets the current configuration setting of magic_quotes_gpc',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	get_magic_quotes_runtime: {
 		description: 'Gets the current active configuration setting of magic_quotes_runtime',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	get_required_files: {
 		description: 'Alias of get_included_files',
@@ -244,23 +244,23 @@ export const globalfunctions: IEntries = {
 	},
 	getlastmod: {
 		description: 'Gets time of last page modification',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	getmygid: {
 		description: 'Get PHP script owner\'s GID',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	getmyinode: {
 		description: 'Gets the inode of the current script',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	getmypid: {
 		description: 'Gets PHP\'s process ID',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	getmyuid: {
 		description: 'Gets PHP script owner\'s UID',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	getopt: {
 		description: 'Gets options from the command line argument list',
@@ -283,7 +283,7 @@ export const globalfunctions: IEntries = {
 	},
 	ini_restore: {
 		description: 'Restores the value of a configuration option',
-		signature: '( string $varname ): void'
+		signature: '( string $varname ): codemavi'
 	},
 	ini_set: {
 		description: 'Sets the value of a configuration option',
@@ -305,19 +305,19 @@ export const globalfunctions: IEntries = {
 	},
 	php_ini_loaded_file: {
 		description: 'Retrieve a path to the loaded php.ini file',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	php_ini_scanned_files: {
 		description: 'Return a list of .ini files parsed from the additional ini dir',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	php_logo_guid: {
 		description: 'Gets the logo guid',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	php_sapi_name: {
 		description: 'Returns the type of interface between web server and PHP',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	php_uname: {
 		description: 'Returns information about the operating system PHP is running on',
@@ -341,7 +341,7 @@ export const globalfunctions: IEntries = {
 	},
 	restore_include_path: {
 		description: 'Restores the value of the include_path configuration option',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	set_include_path: {
 		description: 'Sets the include_path configuration option',
@@ -357,7 +357,7 @@ export const globalfunctions: IEntries = {
 	},
 	sys_get_temp_dir: {
 		description: 'Returns directory path used for temporary files',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	version_compare: {
 		description: 'Compares two "PHP-standardized" version number strings',
@@ -365,15 +365,15 @@ export const globalfunctions: IEntries = {
 	},
 	zend_logo_guid: {
 		description: 'Gets the Zend guid',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	zend_thread_id: {
 		description: 'Returns a unique identifier for the current thread',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	zend_version: {
 		description: 'Gets the version of the current Zend engine',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	bzclose: {
 		description: 'Close a bzip2 file',
@@ -420,7 +420,7 @@ export const globalfunctions: IEntries = {
 	},
 	zip_close: {
 		description: 'Close a ZIP file archive',
-		signature: '( resource $zip ): void'
+		signature: '( resource $zip ): codemavi'
 	},
 	zip_entry_close: {
 		description: 'Close a directory entry',
@@ -575,7 +575,7 @@ export const globalfunctions: IEntries = {
 	},
 	zlib_get_coding_type: {
 		description: 'Returns the coding type used for output compression',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	random_bytes: {
 		description: 'Generates cryptographically secure pseudo-random bytes',
@@ -587,7 +587,7 @@ export const globalfunctions: IEntries = {
 	},
 	hash_algos: {
 		description: 'Return a list of registered hashing algorithms',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	hash_copy: {
 		description: 'Copy hashing context',
@@ -611,7 +611,7 @@ export const globalfunctions: IEntries = {
 	},
 	hash_hmac_algos: {
 		description: 'Return a list of registered hashing algorithms suitable for hash_hmac',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	hash_hmac_file: {
 		description: 'Generate a keyed hash value using the HMAC method and the contents of a given file',
@@ -691,15 +691,15 @@ export const globalfunctions: IEntries = {
 	},
 	openssl_error_string: {
 		description: 'Return openSSL error message',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	openssl_free_key: {
 		description: 'Free key resource',
-		signature: '( resource $key_identifier ): void'
+		signature: '( resource $key_identifier ): codemavi'
 	},
 	openssl_get_cert_locations: {
 		description: 'Retrieve the available certificate locations',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	openssl_get_cipher_methods: {
 		description: 'Gets available cipher methods',
@@ -707,7 +707,7 @@ export const globalfunctions: IEntries = {
 	},
 	openssl_get_curve_names: {
 		description: 'Gets list of available curve names for ECC',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	openssl_get_md_methods: {
 		description: 'Gets available digest methods',
@@ -769,7 +769,7 @@ export const globalfunctions: IEntries = {
 	},
 	openssl_pkey_free: {
 		description: 'Frees a private key',
-		signature: '( resource $key ): void'
+		signature: '( resource $key ): codemavi'
 	},
 	openssl_pkey_get_details: {
 		description: 'Returns an array with the key details',
@@ -857,7 +857,7 @@ export const globalfunctions: IEntries = {
 	},
 	openssl_x509_free: {
 		description: 'Free certificate resource',
-		signature: '( resource $x509cert ): void'
+		signature: '( resource $x509cert ): codemavi'
 	},
 	openssl_x509_parse: {
 		description: 'Parse an X509 certificate and return the information as an array',
@@ -885,7 +885,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_add: {
 		description: 'Add large numbers',
-		signature: '( string $val , string $addv ): void'
+		signature: '( string $val , string $addv ): codemavi'
 	},
 	sodium_base642bin: {
 		description: 'Description',
@@ -913,11 +913,11 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_aead_aes256gcm_is_available: {
 		description: 'Check if hardware supports AES256-GCM',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	sodium_crypto_aead_aes256gcm_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_aead_chacha20poly1305_decrypt: {
 		description: 'Verify that the ciphertext includes a valid tag',
@@ -937,11 +937,11 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_aead_chacha20poly1305_ietf_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_aead_chacha20poly1305_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_aead_xchacha20poly1305_ietf_decrypt: {
 		description: 'Description',
@@ -953,11 +953,11 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_aead_xchacha20poly1305_ietf_keygen: {
 		description: 'Description',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_auth_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_auth_verify: {
 		description: 'Verifies that the tag is valid for the message',
@@ -973,7 +973,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_box_keypair: {
 		description: 'Randomly generate a secret key and a corresponding public key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_box_open: {
 		description: 'Verify and decrypt a ciphertext',
@@ -1017,7 +1017,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_generichash_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_generichash_update: {
 		description: 'Add message to a hash',
@@ -1033,7 +1033,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_kdf_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_kx_client_session_keys: {
 		description: 'Description',
@@ -1041,7 +1041,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_kx_keypair: {
 		description: 'Creates a new sodium keypair',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_kx_publickey: {
 		description: 'Description',
@@ -1096,7 +1096,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_secretbox_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_secretbox_open: {
 		description: 'Verify and decrypt a ciphertext',
@@ -1116,7 +1116,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_secretstream_xchacha20poly1305_keygen: {
 		description: 'Description',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_secretstream_xchacha20poly1305_pull: {
 		description: 'Description',
@@ -1128,11 +1128,11 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_secretstream_xchacha20poly1305_rekey: {
 		description: 'Description',
-		signature: '( string $state ): void'
+		signature: '( string $state ): codemavi'
 	},
 	sodium_crypto_shorthash_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_shorthash: {
 		description: 'Compute a fixed-size fingerprint for the message',
@@ -1156,7 +1156,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_sign_keypair: {
 		description: 'Randomly generate a secret key and a corresponding public key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_sign_open: {
 		description: 'Check that the signed message has a valid signature',
@@ -1188,7 +1188,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_crypto_stream_keygen: {
 		description: 'Get random bytes for key',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	sodium_crypto_stream_xor: {
 		description: 'Encrypt a message',
@@ -1204,7 +1204,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_increment: {
 		description: 'Increment large number',
-		signature: '( string $val ): void'
+		signature: '( string $val ): codemavi'
 	},
 	sodium_memcmp: {
 		description: 'Test for equality in constant-time',
@@ -1212,7 +1212,7 @@ export const globalfunctions: IEntries = {
 	},
 	sodium_memzero: {
 		description: 'Overwrite buf with zeros',
-		signature: '( string $buf ): void'
+		signature: '( string $buf ): codemavi'
 	},
 	sodium_pad: {
 		description: 'Add padding data',
@@ -1224,7 +1224,7 @@ export const globalfunctions: IEntries = {
 	},
 	dba_close: {
 		description: 'Close a DBA database',
-		signature: '( resource $handle ): void'
+		signature: '( resource $handle ): codemavi'
 	},
 	dba_delete: {
 		description: 'Delete DBA entry specified by key',
@@ -1256,7 +1256,7 @@ export const globalfunctions: IEntries = {
 	},
 	dba_list: {
 		description: 'List all open database files',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	dba_nextkey: {
 		description: 'Fetch next key',
@@ -1284,7 +1284,7 @@ export const globalfunctions: IEntries = {
 	},
 	pdo_drivers: {
 		description: 'Return an array of available PDO drivers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	cal_days_in_month: {
 		description: 'Return the number of days in a month for a given year and calendar',
@@ -1372,7 +1372,7 @@ export const globalfunctions: IEntries = {
 	},
 	date_get_last_errors: {
 		description: 'Returns the warnings and errors',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	date_modify: {
 		description: 'Alters the timestamp',
@@ -1452,7 +1452,7 @@ export const globalfunctions: IEntries = {
 	},
 	timezone_abbreviations_list: {
 		description: 'Returns associative array containing dst, offset and the timezone name',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	timezone_identifiers_list: {
 		description: 'Returns a numerically indexed array containing all defined timezone identifiers',
@@ -1464,7 +1464,7 @@ export const globalfunctions: IEntries = {
 	},
 	date_default_timezone_get: {
 		description: 'Gets the default timezone used by all date/time functions in a script',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	date_default_timezone_set: {
 		description: 'Sets the default timezone used by all date/time functions in a script',
@@ -1550,7 +1550,7 @@ export const globalfunctions: IEntries = {
 	},
 	time: {
 		description: 'Return current Unix timestamp',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	timezone_name_from_abbr: {
 		description: 'Returns the timezone name from abbreviation',
@@ -1558,7 +1558,7 @@ export const globalfunctions: IEntries = {
 	},
 	timezone_version_get: {
 		description: 'Gets the version of the timezonedb',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	chdir: {
 		description: 'Change directory',
@@ -1570,7 +1570,7 @@ export const globalfunctions: IEntries = {
 	},
 	closedir: {
 		description: 'Close directory handle',
-		signature: '([ resource $dir_handle ]): void'
+		signature: '([ resource $dir_handle ]): codemavi'
 	},
 	dir: {
 		description: 'Return an instance of the Directory class',
@@ -1578,7 +1578,7 @@ export const globalfunctions: IEntries = {
 	},
 	getcwd: {
 		description: 'Gets the current working directory',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	opendir: {
 		description: 'Open directory handle',
@@ -1590,7 +1590,7 @@ export const globalfunctions: IEntries = {
 	},
 	rewinddir: {
 		description: 'Rewind directory handle',
-		signature: '([ resource $dir_handle ]): void'
+		signature: '([ resource $dir_handle ]): codemavi'
 	},
 	scandir: {
 		description: 'List files and directories inside the specified path',
@@ -1638,7 +1638,7 @@ export const globalfunctions: IEntries = {
 	},
 	clearstatcache: {
 		description: 'Clears file status cache',
-		signature: '([ bool $clear_realpath_cache [, string $filename ]]): void'
+		signature: '([ bool $clear_realpath_cache [, string $filename ]]): codemavi'
 	},
 	copy: {
 		description: 'Copies file',
@@ -1886,11 +1886,11 @@ export const globalfunctions: IEntries = {
 	},
 	realpath_cache_get: {
 		description: 'Get realpath cache entries',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	realpath_cache_size: {
 		description: 'Get realpath cache size',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	realpath: {
 		description: 'Returns canonicalized absolute pathname',
@@ -1925,7 +1925,7 @@ export const globalfunctions: IEntries = {
 	},
 	tmpfile: {
 		description: 'Creates a temporary file',
-		signature: '(void): resource'
+		signature: '(codemavi): resource'
 	},
 	touch: {
 		description: 'Sets access and modification time of file',
@@ -2121,7 +2121,7 @@ export const globalfunctions: IEntries = {
 	},
 	locale_get_default: {
 		description: 'Gets the default locale value from the INTL global \'default_locale\'',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	locale_get_display_language: {
 		description: 'Returns an appropriately localized display name for language of the inputlocale',
@@ -2233,11 +2233,11 @@ export const globalfunctions: IEntries = {
 	},
 	intltz_get_error_code: {
 		description: 'Get last error code on the object',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	intltz_get_error_message: {
 		description: 'Get last error message on the object',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	datefmt_create: {
 		description: 'Create a date formatter',
@@ -2285,11 +2285,11 @@ export const globalfunctions: IEntries = {
 	},
 	datefmt_get_calendar_object: {
 		description: 'Get copy of formatterʼs calendar object',
-		signature: '(void): IntlCalendar'
+		signature: '(codemavi): IntlCalendar'
 	},
 	datefmt_get_timezone: {
 		description: 'Get formatterʼs timezone',
-		signature: '(void): IntlTimeZone'
+		signature: '(codemavi): IntlTimeZone'
 	},
 	datefmt_is_lenient: {
 		description: 'Get the lenient used for the IntlDateFormatter',
@@ -2357,19 +2357,19 @@ export const globalfunctions: IEntries = {
 	},
 	transliterator_create_inverse: {
 		description: 'Create an inverse transliterator',
-		signature: '(void): Transliterator'
+		signature: '(codemavi): Transliterator'
 	},
 	transliterator_get_error_code: {
 		description: 'Get last error code',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	transliterator_get_error_message: {
 		description: 'Get last error message',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	transliterator_list_ids: {
 		description: 'Get transliterator IDs',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	transliterator_transliterate: {
 		description: 'Transliterate a string',
@@ -2377,11 +2377,11 @@ export const globalfunctions: IEntries = {
 	},
 	intl_get_error_code: {
 		description: 'Get the last error code',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	intl_get_error_message: {
 		description: 'Get description of the last error',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	grapheme_extract: {
 		description: 'Function to extract a sequence of default grapheme clusters from a text buffer, which must be encoded in UTF-8',
@@ -2501,11 +2501,11 @@ export const globalfunctions: IEntries = {
 	},
 	mb_ereg_search_getpos: {
 		description: 'Returns start point for next regular expression match',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	mb_ereg_search_getregs: {
 		description: 'Retrieve the result from the last multibyte regular expression match',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	mb_ereg_search_init: {
 		description: 'Setup string and regular expression for a multibyte regular expression match',
@@ -2561,7 +2561,7 @@ export const globalfunctions: IEntries = {
 	},
 	mb_list_encodings: {
 		description: 'Returns an array of all supported encodings',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	mb_ord: {
 		description: 'Get code point of character',
@@ -2820,7 +2820,7 @@ export const globalfunctions: IEntries = {
 	},
 	getrandmax: {
 		description: 'Show largest possible random value',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	hexdec: {
 		description: 'Hexadecimal to decimal',
@@ -2848,7 +2848,7 @@ export const globalfunctions: IEntries = {
 	},
 	lcg_value: {
 		description: 'Combined linear congruential generator',
-		signature: '(void): float'
+		signature: '(codemavi): float'
 	},
 	log10: {
 		description: 'Base-10 logarithm',
@@ -2872,7 +2872,7 @@ export const globalfunctions: IEntries = {
 	},
 	mt_getrandmax: {
 		description: 'Show largest possible random value',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	mt_rand: {
 		description: 'Generate a random value via the Mersenne Twister Random Number Generator',
@@ -2880,7 +2880,7 @@ export const globalfunctions: IEntries = {
 	},
 	mt_srand: {
 		description: 'Seeds the Mersenne Twister Random Number Generator',
-		signature: '([ int $seed [, int $mode = MT_RAND_MT19937 ]]): void'
+		signature: '([ int $seed [, int $mode = MT_RAND_MT19937 ]]): codemavi'
 	},
 	octdec: {
 		description: 'Octal to decimal',
@@ -2888,7 +2888,7 @@ export const globalfunctions: IEntries = {
 	},
 	pi: {
 		description: 'Get value of pi',
-		signature: '(void): float'
+		signature: '(codemavi): float'
 	},
 	pow: {
 		description: 'Exponential expression',
@@ -2920,7 +2920,7 @@ export const globalfunctions: IEntries = {
 	},
 	srand: {
 		description: 'Seed the random number generator',
-		signature: '([ int $seed ]): void'
+		signature: '([ int $seed ]): codemavi'
 	},
 	tan: {
 		description: 'Tangent',
@@ -2943,15 +2943,15 @@ export const globalfunctions: IEntries = {
 	},
 	pcntl_exec: {
 		description: 'Executes specified program in current process space',
-		signature: '( string $path [, array $args [, array $envs ]]): void'
+		signature: '( string $path [, array $args [, array $envs ]]): codemavi'
 	},
 	pcntl_fork: {
 		description: 'Forks the currently running process',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	pcntl_get_last_error: {
 		description: 'Retrieve the error number set by the last pcntl function which failed',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	pcntl_getpriority: {
 		description: 'Get the priority of any process',
@@ -2963,7 +2963,7 @@ export const globalfunctions: IEntries = {
 	},
 	pcntl_signal_dispatch: {
 		description: 'Calls signal handlers for pending signals',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	pcntl_signal_get_handler: {
 		description: 'Get the current handler for specified signal',
@@ -3027,30 +3027,30 @@ export const globalfunctions: IEntries = {
 	},
 	posix_ctermid: {
 		description: 'Get path name of controlling terminal',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	posix_errno: {
 		description: 'Alias of posix_get_last_error',
 	},
 	posix_get_last_error: {
 		description: 'Retrieve the error number set by the last posix function that failed',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getcwd: {
 		description: 'Pathname of current directory',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	posix_getegid: {
 		description: 'Return the effective group ID of the current process',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_geteuid: {
 		description: 'Return the effective user ID of the current process',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getgid: {
 		description: 'Return the real group ID of the current process',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getgrgid: {
 		description: 'Return info about a group by group id',
@@ -3062,11 +3062,11 @@ export const globalfunctions: IEntries = {
 	},
 	posix_getgroups: {
 		description: 'Return the group set of the current process',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	posix_getlogin: {
 		description: 'Return login name',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	posix_getpgid: {
 		description: 'Get process group id for job control',
@@ -3074,15 +3074,15 @@ export const globalfunctions: IEntries = {
 	},
 	posix_getpgrp: {
 		description: 'Return the current process group identifier',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getpid: {
 		description: 'Return the current process identifier',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getppid: {
 		description: 'Return the parent process identifier',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_getpwnam: {
 		description: 'Return info about a user by username',
@@ -3094,7 +3094,7 @@ export const globalfunctions: IEntries = {
 	},
 	posix_getrlimit: {
 		description: 'Return info about system resource limits',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	posix_getsid: {
 		description: 'Get the current sid of the process',
@@ -3102,7 +3102,7 @@ export const globalfunctions: IEntries = {
 	},
 	posix_getuid: {
 		description: 'Return the real user ID of the current process',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_initgroups: {
 		description: 'Calculate the group access list',
@@ -3146,7 +3146,7 @@ export const globalfunctions: IEntries = {
 	},
 	posix_setsid: {
 		description: 'Make the current process a session leader',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	posix_setuid: {
 		description: 'Set the UID of the current process',
@@ -3158,7 +3158,7 @@ export const globalfunctions: IEntries = {
 	},
 	posix_times: {
 		description: 'Get process times',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	posix_ttyname: {
 		description: 'Determine terminal device name',
@@ -3166,7 +3166,7 @@ export const globalfunctions: IEntries = {
 	},
 	posix_uname: {
 		description: 'Get system name',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	escapeshellarg: {
 		description: 'Escape a string to be used as a shell argument',
@@ -3182,7 +3182,7 @@ export const globalfunctions: IEntries = {
 	},
 	passthru: {
 		description: 'Execute an external program and display raw output',
-		signature: '( string $command [, int $return_var ]): void'
+		signature: '( string $command [, int $return_var ]): codemavi'
 	},
 	proc_close: {
 		description: 'Close a process opened by proc_open and return the exit code of that process',
@@ -3290,7 +3290,7 @@ export const globalfunctions: IEntries = {
 	},
 	shmop_close: {
 		description: 'Close shared memory block',
-		signature: '( resource $shmid ): void'
+		signature: '( resource $shmid ): codemavi'
 	},
 	shmop_delete: {
 		description: 'Delete shared memory block',
@@ -3322,19 +3322,19 @@ export const globalfunctions: IEntries = {
 	},
 	json_last_error_msg: {
 		description: 'Returns the error string of the last json_encode() or json_decode() call',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	json_last_error: {
 		description: 'Returns the last error occurred',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	connection_aborted: {
 		description: 'Check whether client disconnected',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	connection_status: {
 		description: 'Returns connection status bitfield',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	constant: {
 		description: 'Returns the value of a constant',
@@ -3357,7 +3357,7 @@ export const globalfunctions: IEntries = {
 	},
 	exit: {
 		description: 'Output a message and terminate the current script',
-		signature: '( int $status ): void'
+		signature: '( int $status ): codemavi'
 	},
 	get_browser: {
 		description: 'Tells what the user\'s browser is capable of',
@@ -3365,7 +3365,7 @@ export const globalfunctions: IEntries = {
 	},
 	__halt_compiler: {
 		description: 'Halts the compiler execution',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	highlight_file: {
 		description: 'Syntax highlighting of a file',
@@ -3405,7 +3405,7 @@ export const globalfunctions: IEntries = {
 	},
 	sapi_windows_cp_is_utf8: {
 		description: 'Indicates whether the codepage is UTF-8 compatible',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	sapi_windows_cp_set: {
 		description: 'Set process codepage',
@@ -3424,7 +3424,7 @@ export const globalfunctions: IEntries = {
 	},
 	sys_getloadavg: {
 		description: 'Gets system load average',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	time_nanosleep: {
 		description: 'Delay for a number of seconds and nanoseconds',
@@ -3444,7 +3444,7 @@ export const globalfunctions: IEntries = {
 	},
 	usleep: {
 		description: 'Delay execution in microseconds',
-		signature: '( int $micro_seconds ): void'
+		signature: '( int $micro_seconds ): codemavi'
 	},
 	class_implements: {
 		description: 'Return the interfaces which are implemented by the given class or interface',
@@ -3472,7 +3472,7 @@ export const globalfunctions: IEntries = {
 	},
 	spl_autoload_call: {
 		description: 'Try all registered __autoload() functions to load the requested class',
-		signature: '( string $class_name ): void'
+		signature: '( string $class_name ): codemavi'
 	},
 	spl_autoload_extensions: {
 		description: 'Register and return default file extensions for spl_autoload',
@@ -3480,7 +3480,7 @@ export const globalfunctions: IEntries = {
 	},
 	spl_autoload_functions: {
 		description: 'Return all registered __autoload() functions',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	spl_autoload_register: {
 		description: 'Register given function as __autoload() implementation',
@@ -3492,11 +3492,11 @@ export const globalfunctions: IEntries = {
 	},
 	spl_autoload: {
 		description: 'Default implementation for __autoload()',
-		signature: '( string $class_name [, string $file_extensions = spl_autoload_extensions() ]): void'
+		signature: '( string $class_name [, string $file_extensions = spl_autoload_extensions() ]): codemavi'
 	},
 	spl_classes: {
 		description: 'Return available SPL classes',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	spl_object_hash: {
 		description: 'Return hash id for given object',
@@ -3511,7 +3511,7 @@ export const globalfunctions: IEntries = {
 	},
 	stream_bucket_append: {
 		description: 'Append bucket to brigade',
-		signature: '( resource $brigade , object $bucket ): void'
+		signature: '( resource $brigade , object $bucket ): codemavi'
 	},
 	stream_bucket_make_writeable: {
 		description: 'Return a bucket object from the brigade for operating on',
@@ -3523,7 +3523,7 @@ export const globalfunctions: IEntries = {
 	},
 	stream_bucket_prepend: {
 		description: 'Prepend bucket to brigade',
-		signature: '( resource $brigade , object $bucket ): void'
+		signature: '( resource $brigade , object $bucket ): codemavi'
 	},
 	stream_context_create: {
 		description: 'Creates a stream context',
@@ -3579,7 +3579,7 @@ export const globalfunctions: IEntries = {
 	},
 	stream_get_filters: {
 		description: 'Retrieve list of registered filters',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	stream_get_line: {
 		description: 'Gets line from stream resource up to a given delimiter',
@@ -3591,11 +3591,11 @@ export const globalfunctions: IEntries = {
 	},
 	stream_get_transports: {
 		description: 'Retrieve list of registered socket transports',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	stream_get_wrappers: {
 		description: 'Retrieve list of registered streams',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	stream_is_local: {
 		description: 'Checks if a stream is a local stream',
@@ -3742,7 +3742,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_close: {
 		description: 'Close a cURL session',
-		signature: '( resource $ch ): void'
+		signature: '( resource $ch ): codemavi'
 	},
 	curl_copy_handle: {
 		description: 'Copy a cURL handle along with all of its preferences',
@@ -3782,7 +3782,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_multi_close: {
 		description: 'Close a set of cURL handles',
-		signature: '( resource $mh ): void'
+		signature: '( resource $mh ): codemavi'
 	},
 	curl_multi_errno: {
 		description: 'Return the last multi curl error number',
@@ -3802,7 +3802,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_multi_init: {
 		description: 'Returns a new cURL multi handle',
-		signature: '(void): resource'
+		signature: '(codemavi): resource'
 	},
 	curl_multi_remove_handle: {
 		description: 'Remove a multi handle from a set of cURL handles',
@@ -3826,7 +3826,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_reset: {
 		description: 'Reset all options of a libcurl session handle',
-		signature: '( resource $ch ): void'
+		signature: '( resource $ch ): codemavi'
 	},
 	curl_setopt_array: {
 		description: 'Set multiple options for a cURL transfer',
@@ -3838,7 +3838,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_share_close: {
 		description: 'Close a cURL share handle',
-		signature: '( resource $sh ): void'
+		signature: '( resource $sh ): codemavi'
 	},
 	curl_share_errno: {
 		description: 'Return the last share curl error number',
@@ -3846,7 +3846,7 @@ export const globalfunctions: IEntries = {
 	},
 	curl_share_init: {
 		description: 'Initialize a cURL share handle',
-		signature: '(void): resource'
+		signature: '(codemavi): resource'
 	},
 	curl_share_setopt: {
 		description: 'Set an option for a cURL share handle',
@@ -4017,11 +4017,11 @@ export const globalfunctions: IEntries = {
 	},
 	closelog: {
 		description: 'Close connection to system logger',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	define_syslog_variables: {
 		description: 'Initializes all syslog related variables',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	dns_check_record: {
 		description: 'Alias of checkdnsrr',
@@ -4051,7 +4051,7 @@ export const globalfunctions: IEntries = {
 	},
 	gethostname: {
 		description: 'Gets the host name',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	getmxrr: {
 		description: 'Get MX records corresponding to a given Internet host name',
@@ -4079,15 +4079,15 @@ export const globalfunctions: IEntries = {
 	},
 	header_remove: {
 		description: 'Remove previously set headers',
-		signature: '([ string $name ]): void'
+		signature: '([ string $name ]): codemavi'
 	},
 	header: {
 		description: 'Send a raw HTTP header',
-		signature: '( string $header [, bool $replace [, int $http_response_code ]]): void'
+		signature: '( string $header [, bool $replace [, int $http_response_code ]]): codemavi'
 	},
 	headers_list: {
 		description: 'Returns a list of response headers sent (or ready to send)',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	headers_sent: {
 		description: 'Checks if or where headers have been sent',
@@ -4168,11 +4168,11 @@ export const globalfunctions: IEntries = {
 	},
 	socket_clear_error: {
 		description: 'Clears the error on the socket or the last error code',
-		signature: '([ resource $socket ]): void'
+		signature: '([ resource $socket ]): codemavi'
 	},
 	socket_close: {
 		description: 'Closes a socket resource',
-		signature: '( resource $socket ): void'
+		signature: '( resource $socket ): codemavi'
 	},
 	socket_cmsg_space: {
 		description: 'Calculate message buffer size',
@@ -4286,15 +4286,15 @@ export const globalfunctions: IEntries = {
 	},
 	apache_child_terminate: {
 		description: 'Terminate apache process after this request',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	apache_get_modules: {
 		description: 'Get a list of loaded Apache modules',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	apache_get_version: {
 		description: 'Fetch Apache version',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	apache_getenv: {
 		description: 'Get an Apache subprocess_env variable',
@@ -4310,15 +4310,15 @@ export const globalfunctions: IEntries = {
 	},
 	apache_request_headers: {
 		description: 'Fetch all HTTP request headers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	apache_reset_timeout: {
 		description: 'Reset the Apache write timer',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	apache_response_headers: {
 		description: 'Fetch all HTTP response headers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	apache_setenv: {
 		description: 'Set an Apache subprocess_env variable',
@@ -4326,7 +4326,7 @@ export const globalfunctions: IEntries = {
 	},
 	getallheaders: {
 		description: 'Fetch all HTTP request headers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	virtual: {
 		description: 'Perform an Apache sub-request',
@@ -4334,11 +4334,11 @@ export const globalfunctions: IEntries = {
 	},
 	nsapi_request_headers: {
 		description: 'Fetch all HTTP request headers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	nsapi_response_headers: {
 		description: 'Fetch all HTTP response headers',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	nsapi_virtual: {
 		description: 'Perform an NSAPI sub-request',
@@ -4346,7 +4346,7 @@ export const globalfunctions: IEntries = {
 	},
 	session_abort: {
 		description: 'Discard session array changes and finish session',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	session_cache_expire: {
 		description: 'Return current cache expire',
@@ -4369,19 +4369,19 @@ export const globalfunctions: IEntries = {
 	},
 	session_destroy: {
 		description: 'Destroys all data registered to a session',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	session_encode: {
 		description: 'Encodes the current session data as a session encoded string',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	session_gc: {
 		description: 'Perform session data garbage collection',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	session_get_cookie_params: {
 		description: 'Get the session cookie parameters',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	session_id: {
 		description: 'Get and/or set the current session id',
@@ -4405,7 +4405,7 @@ export const globalfunctions: IEntries = {
 	},
 	session_register_shutdown: {
 		description: 'Session shutdown function',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	session_register: {
 		description: 'Register one or more global variables with the current session',
@@ -4413,7 +4413,7 @@ export const globalfunctions: IEntries = {
 	},
 	session_reset: {
 		description: 'Re-initialize session array with original values',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	session_save_path: {
 		description: 'Get and/or set the current session save path',
@@ -4433,7 +4433,7 @@ export const globalfunctions: IEntries = {
 	},
 	session_status: {
 		description: 'Returns the current session status',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	session_unregister: {
 		description: 'Unregister a global variable from the current session',
@@ -4441,11 +4441,11 @@ export const globalfunctions: IEntries = {
 	},
 	session_unset: {
 		description: 'Free all session variables',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	session_write_close: {
 		description: 'Write session data and end session',
-		signature: '(void): bool'
+		signature: '(codemavi): bool'
 	},
 	preg_filter: {
 		description: 'Perform a regular expression search and replace',
@@ -4457,7 +4457,7 @@ export const globalfunctions: IEntries = {
 	},
 	preg_last_error: {
 		description: 'Returns the error code of the last PCRE regex execution',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	preg_match_all: {
 		description: 'Perform a global regular expression match',
@@ -4536,7 +4536,7 @@ export const globalfunctions: IEntries = {
 	},
 	echo: {
 		description: 'Output one or more strings',
-		signature: '( string $arg1 [, string $... ]): void'
+		signature: '( string $arg1 [, string $... ]): codemavi'
 	},
 	explode: {
 		description: 'Split a string by a string',
@@ -4595,7 +4595,7 @@ export const globalfunctions: IEntries = {
 	},
 	localeconv: {
 		description: 'Get numeric formatting information',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	ltrim: {
 		description: 'Strip whitespace (or other characters) from the beginning of a string',
@@ -4635,7 +4635,7 @@ export const globalfunctions: IEntries = {
 	},
 	parse_str: {
 		description: 'Parses the string into variables',
-		signature: '( string $encoded_string [, array $result ]): void'
+		signature: '( string $encoded_string [, array $result ]): codemavi'
 	},
 	print: {
 		description: 'Output a string',
@@ -5199,7 +5199,7 @@ export const globalfunctions: IEntries = {
 	},
 	__autoload: {
 		description: 'Attempt to load undefined class',
-		signature: '( string $class ): void'
+		signature: '( string $class ): codemavi'
 	},
 	call_user_method_array: {
 		description: 'Call a user method given with an array of parameters',
@@ -5219,7 +5219,7 @@ export const globalfunctions: IEntries = {
 	},
 	get_called_class: {
 		description: 'The "Late Static Binding" class name',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	get_class_methods: {
 		description: 'Gets the class methods\' names',
@@ -5235,15 +5235,15 @@ export const globalfunctions: IEntries = {
 	},
 	get_declared_classes: {
 		description: 'Returns an array with the name of the defined classes',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_declared_interfaces: {
 		description: 'Returns an array of all declared interfaces',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_declared_traits: {
 		description: 'Returns an array of all declared traits',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_object_vars: {
 		description: 'Gets the properties of the given object',
@@ -5339,7 +5339,7 @@ export const globalfunctions: IEntries = {
 	},
 	filter_list: {
 		description: 'Returns a list of all supported filters',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	filter_var_array: {
 		description: 'Gets multiple variables and optionally filters them',
@@ -5375,11 +5375,11 @@ export const globalfunctions: IEntries = {
 	},
 	func_get_args: {
 		description: 'Returns an array comprising a function\'s argument list',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	func_num_args: {
 		description: 'Returns the number of arguments passed to the function',
-		signature: '(void): int'
+		signature: '(codemavi): int'
 	},
 	function_exists: {
 		description: 'Return TRUE if the given function has been defined',
@@ -5391,7 +5391,7 @@ export const globalfunctions: IEntries = {
 	},
 	register_shutdown_function: {
 		description: 'Register a function for execution on shutdown',
-		signature: '( callable $callback [, mixed $... ]): void'
+		signature: '( callable $callback [, mixed $... ]): codemavi'
 	},
 	register_tick_function: {
 		description: 'Register a function for execution on each tick',
@@ -5399,7 +5399,7 @@ export const globalfunctions: IEntries = {
 	},
 	unregister_tick_function: {
 		description: 'De-register a function for execution on each tick',
-		signature: '( callable $function ): void'
+		signature: '( callable $function ): codemavi'
 	},
 	boolval: {
 		description: 'Get the boolean value of a variable',
@@ -5407,7 +5407,7 @@ export const globalfunctions: IEntries = {
 	},
 	debug_zval_dump: {
 		description: 'Dumps a string representation of an internal zend value to output',
-		signature: '( mixed $variable [, mixed $... ]): void'
+		signature: '( mixed $variable [, mixed $... ]): codemavi'
 	},
 	doubleval: {
 		description: 'Alias of floatval',
@@ -5422,7 +5422,7 @@ export const globalfunctions: IEntries = {
 	},
 	get_defined_vars: {
 		description: 'Returns an array of all defined variables',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	get_resource_type: {
 		description: 'Returns the resource type',
@@ -5530,7 +5530,7 @@ export const globalfunctions: IEntries = {
 	},
 	unset: {
 		description: 'Unset a given variable',
-		signature: '( mixed $var [, mixed $... ]): void'
+		signature: '( mixed $var [, mixed $... ]): codemavi'
 	},
 	var_dump: {
 		description: 'Dumps information about a variable',
@@ -5578,7 +5578,7 @@ export const globalfunctions: IEntries = {
 	},
 	xmlrpc_server_create: {
 		description: 'Creates an xmlrpc server',
-		signature: '(void): resource'
+		signature: '(codemavi): resource'
 	},
 	xmlrpc_server_destroy: {
 		description: 'Destroys server resources',
@@ -5598,7 +5598,7 @@ export const globalfunctions: IEntries = {
 	},
 	com_create_guid: {
 		description: 'Generate a globally unique identifier (GUID)',
-		signature: '(void): string'
+		signature: '(codemavi): string'
 	},
 	com_event_sink: {
 		description: 'Connect events from a COM object to a PHP object',
@@ -5710,11 +5710,11 @@ export const globalfunctions: IEntries = {
 	},
 	variant_set_type: {
 		description: 'Convert a variant into another type "in-place"',
-		signature: '( variant $variant , int $type ): void'
+		signature: '( variant $variant , int $type ): codemavi'
 	},
 	variant_set: {
 		description: 'Assigns a new value for a variant object',
-		signature: '( variant $variant , mixed $value ): void'
+		signature: '( variant $variant , mixed $value ): codemavi'
 	},
 	variant_sub: {
 		description: 'Subtracts the value of the right variant from the left variant value',
@@ -5726,7 +5726,7 @@ export const globalfunctions: IEntries = {
 	},
 	libxml_clear_errors: {
 		description: 'Clear libxml error buffer',
-		signature: '(void): void'
+		signature: '(codemavi): codemavi'
 	},
 	libxml_disable_entity_loader: {
 		description: 'Disable the ability to load external entities',
@@ -5734,11 +5734,11 @@ export const globalfunctions: IEntries = {
 	},
 	libxml_get_errors: {
 		description: 'Retrieve array of errors',
-		signature: '(void): array'
+		signature: '(codemavi): array'
 	},
 	libxml_get_last_error: {
 		description: 'Retrieve last error from libxml',
-		signature: '(void): LibXMLError'
+		signature: '(codemavi): LibXMLError'
 	},
 	libxml_set_external_entity_loader: {
 		description: 'Changes the default external entity loader',
@@ -5746,7 +5746,7 @@ export const globalfunctions: IEntries = {
 	},
 	libxml_set_streams_context: {
 		description: 'Set the streams context for the next libxml document load or write',
-		signature: '( resource $streams_context ): void'
+		signature: '( resource $streams_context ): codemavi'
 	},
 	libxml_use_internal_errors: {
 		description: 'Disable libxml errors and allow user to fetch error information as needed',
@@ -5910,7 +5910,7 @@ export const globalfunctions: IEntries = {
 	},
 	xmlwriter_open_memory: {
 		description: 'Create new xmlwriter using memory for string output',
-		signature: '(void): resource'
+		signature: '(codemavi): resource'
 	},
 	xmlwriter_open_uri: {
 		description: 'Create new xmlwriter using source uri for output',

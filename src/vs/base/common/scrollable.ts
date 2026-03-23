@@ -41,7 +41,7 @@ export interface ScrollEvent {
 }
 
 export class ScrollState implements IScrollDimensions, IScrollPosition {
-	_scrollStateBrand: void = undefined;
+	_scrollStateBrand: codemavi = undefined;
 
 	public readonly rawScrollLeft: number;
 	public readonly rawScrollTop: number;
@@ -219,15 +219,15 @@ export interface IScrollableOptions {
 	/**
 	 * A function to schedule an update at the next frame (used for smooth scroll animations).
 	 */
-	scheduleAtNextAnimationFrame: (callback: () => void) => IDisposable;
+	scheduleAtNextAnimationFrame: (callback: () => codemavi) => IDisposable;
 }
 
 export class Scrollable extends Disposable {
 
-	_scrollableBrand: void = undefined;
+	_scrollableBrand: codemavi = undefined;
 
 	private _smoothScrollDuration: number;
-	private readonly _scheduleAtNextAnimationFrame: (callback: () => void) => IDisposable;
+	private readonly _scheduleAtNextAnimationFrame: (callback: () => codemavi) => IDisposable;
 	private _state: ScrollState;
 	private _smoothScrolling: SmoothScrollingOperation | null;
 
@@ -243,7 +243,7 @@ export class Scrollable extends Disposable {
 		this._smoothScrolling = null;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (this._smoothScrolling) {
 			this._smoothScrolling.dispose();
 			this._smoothScrolling = null;
@@ -251,7 +251,7 @@ export class Scrollable extends Disposable {
 		super.dispose();
 	}
 
-	public setSmoothScrollDuration(smoothScrollDuration: number): void {
+	public setSmoothScrollDuration(smoothScrollDuration: number): codemavi {
 		this._smoothScrollDuration = smoothScrollDuration;
 	}
 
@@ -263,7 +263,7 @@ export class Scrollable extends Disposable {
 		return this._state;
 	}
 
-	public setScrollDimensions(dimensions: INewScrollDimensions, useRawScrollPositions: boolean): void {
+	public setScrollDimensions(dimensions: INewScrollDimensions, useRawScrollPositions: boolean): codemavi {
 		const newState = this._state.withScrollDimensions(dimensions, useRawScrollPositions);
 		this._setState(newState, Boolean(this._smoothScrolling));
 
@@ -290,7 +290,7 @@ export class Scrollable extends Disposable {
 		return this._state;
 	}
 
-	public setScrollPositionNow(update: INewScrollPosition): void {
+	public setScrollPositionNow(update: INewScrollPosition): codemavi {
 		// no smooth scrolling requested
 		const newState = this._state.withScrollPosition(update);
 
@@ -303,7 +303,7 @@ export class Scrollable extends Disposable {
 		this._setState(newState, false);
 	}
 
-	public setScrollPositionSmooth(update: INewScrollPosition, reuseAnimation?: boolean): void {
+	public setScrollPositionSmooth(update: INewScrollPosition, reuseAnimation?: boolean): codemavi {
 		if (this._smoothScrollDuration === 0) {
 			// Smooth scrolling not supported.
 			return this.setScrollPositionNow(update);
@@ -352,7 +352,7 @@ export class Scrollable extends Disposable {
 		return Boolean(this._smoothScrolling);
 	}
 
-	private _performSmoothScrolling(): void {
+	private _performSmoothScrolling(): codemavi {
 		if (!this._smoothScrolling) {
 			return;
 		}
@@ -383,7 +383,7 @@ export class Scrollable extends Disposable {
 		});
 	}
 
-	private _setState(newState: ScrollState, inSmoothScrolling: boolean): void {
+	private _setState(newState: ScrollState, inSmoothScrolling: boolean): codemavi {
 		const oldState = this._state;
 		if (oldState.equals(newState)) {
 			// no change
@@ -450,7 +450,7 @@ export class SmoothScrollingOperation {
 		this._initAnimations();
 	}
 
-	private _initAnimations(): void {
+	private _initAnimations(): codemavi {
 		this.scrollLeft = this._initAnimation(this.from.scrollLeft, this.to.scrollLeft, this.to.width);
 		this.scrollTop = this._initAnimation(this.from.scrollTop, this.to.scrollTop, this.to.height);
 	}
@@ -472,14 +472,14 @@ export class SmoothScrollingOperation {
 		return createEaseOutCubic(from, to);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this.animationFrameDisposable !== null) {
 			this.animationFrameDisposable.dispose();
 			this.animationFrameDisposable = null;
 		}
 	}
 
-	public acceptScrollDimensions(state: ScrollState): void {
+	public acceptScrollDimensions(state: ScrollState): codemavi {
 		this.to = state.withScrollPosition(this.to);
 		this._initAnimations();
 	}

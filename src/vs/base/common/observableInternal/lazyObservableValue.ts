@@ -11,7 +11,7 @@ import { getLogger } from './logging/logging.js';
 /**
  * Holds off updating observers until the value is actually read.
 */
-export class LazyObservableValue<T, TChange = void>
+export class LazyObservableValue<T, TChange = codemavi>
 	extends BaseObservable<T, TChange>
 	implements ISettableObservable<T, TChange> {
 	protected _value: T;
@@ -36,7 +36,7 @@ export class LazyObservableValue<T, TChange = void>
 		return this._value;
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		if (this._isUpToDate) {
 			return;
 		}
@@ -60,7 +60,7 @@ export class LazyObservableValue<T, TChange = void>
 
 	private _updateCounter = 0;
 
-	private _beginUpdate(): void {
+	private _beginUpdate(): codemavi {
 		this._updateCounter++;
 		if (this._updateCounter === 1) {
 			for (const observer of this._observers) {
@@ -69,7 +69,7 @@ export class LazyObservableValue<T, TChange = void>
 		}
 	}
 
-	private _endUpdate(): void {
+	private _endUpdate(): codemavi {
 		this._updateCounter--;
 		if (this._updateCounter === 0) {
 			this._update();
@@ -82,7 +82,7 @@ export class LazyObservableValue<T, TChange = void>
 		}
 	}
 
-	public override addObserver(observer: IObserver): void {
+	public override addObserver(observer: IObserver): codemavi {
 		const shouldCallBeginUpdate = !this._observers.has(observer) && this._updateCounter > 0;
 		super.addObserver(observer);
 
@@ -91,7 +91,7 @@ export class LazyObservableValue<T, TChange = void>
 		}
 	}
 
-	public override removeObserver(observer: IObserver): void {
+	public override removeObserver(observer: IObserver): codemavi {
 		const shouldCallEndUpdate = this._observers.has(observer) && this._updateCounter > 0;
 		super.removeObserver(observer);
 
@@ -101,7 +101,7 @@ export class LazyObservableValue<T, TChange = void>
 		}
 	}
 
-	public set(value: T, tx: ITransaction | undefined, change: TChange): void {
+	public set(value: T, tx: ITransaction | undefined, change: TChange): codemavi {
 		if (change === undefined && this._equalityComparator(this._value, value)) {
 			return;
 		}
@@ -142,7 +142,7 @@ export class LazyObservableValue<T, TChange = void>
 		return `${this.debugName}: ${this._value}`;
 	}
 
-	protected _setValue(newValue: T): void {
+	protected _setValue(newValue: T): codemavi {
 		this._value = newValue;
 	}
 }

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export function onceDocumentLoaded(f: () => void) {
+export function onceDocumentLoaded(f: () => codemavi) {
 	if (document.readyState === 'loading' || document.readyState as string === 'uninitialized') {
 		document.addEventListener('DOMContentLoaded', f);
 	} else {

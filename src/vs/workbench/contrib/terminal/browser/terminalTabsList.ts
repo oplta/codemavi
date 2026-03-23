@@ -135,7 +135,7 @@ export class TerminalTabList extends WorkbenchList<ITerminalInstance> {
 			this._storageService.onDidChangeValue(StorageScope.APPLICATION, TerminalStorageKeys.TabsShowDetailed, this.disposables)(() => this.refresh()),
 		];
 
-		// Dispose of instance listeners on shutdown to avoid extra work and so tabs don't disappear
+		// Dispose of instance listeners on shutdown to acodemavi extra work and so tabs don't disappear
 		// briefly
 		this.disposables.add(lifecycleService.onWillShutdown(e => {
 			dispose(instanceDisposables);
@@ -219,7 +219,7 @@ export class TerminalTabList extends WorkbenchList<ITerminalInstance> {
 		return this._configurationService.getValue<'singleClick' | 'doubleClick'>(TerminalSettingId.TabsFocusMode);
 	}
 
-	refresh(cancelEditing: boolean = true): void {
+	refresh(cancelEditing: boolean = true): codemavi {
 		if (cancelEditing && this._terminalService.isEditable(undefined)) {
 			this.domFocus();
 		}
@@ -227,7 +227,7 @@ export class TerminalTabList extends WorkbenchList<ITerminalInstance> {
 		this.splice(0, this.length, this._terminalGroupService.instances.slice());
 	}
 
-	focusHover(): void {
+	focusHover(): codemavi {
 		const instance = this.getSelectedElements()[0];
 		if (!instance) {
 			return;
@@ -321,7 +321,7 @@ class TerminalTabsRenderer extends Disposable implements IListRenderer<ITerminal
 		return this._container ? this._container.clientWidth <= TerminalTabsListSizes.ActionbarMinimumWidth : false;
 	}
 
-	renderElement(instance: ITerminalInstance, index: number, template: ITerminalTabEntryTemplate): void {
+	renderElement(instance: ITerminalInstance, index: number, template: ITerminalTabEntryTemplate): codemavi {
 		const hasText = !this.shouldHideText();
 
 		const group = this._terminalGroupService.getGroupForInstance(instance);
@@ -489,18 +489,18 @@ class TerminalTabsRenderer extends Disposable implements IListRenderer<ITerminal
 		});
 	}
 
-	disposeElement(instance: ITerminalInstance, index: number, templateData: ITerminalTabEntryTemplate): void {
+	disposeElement(instance: ITerminalInstance, index: number, templateData: ITerminalTabEntryTemplate): codemavi {
 		templateData.elementDisposables.clear();
 		templateData.actionBar.clear();
 	}
 
-	disposeTemplate(templateData: ITerminalTabEntryTemplate): void {
+	disposeTemplate(templateData: ITerminalTabEntryTemplate): codemavi {
 		templateData.elementDisposables.dispose();
 		templateData.label.dispose();
 		templateData.actionBar.dispose();
 	}
 
-	fillActionBar(instance: ITerminalInstance, template: ITerminalTabEntryTemplate): void {
+	fillActionBar(instance: ITerminalInstance, template: ITerminalTabEntryTemplate): codemavi {
 		// If the instance is within the selection, split all selected
 		const actions = [
 			this._register(new Action(TerminalCommandId.SplitActiveTab, terminalStrings.split.short, ThemeIcon.asClassName(Codicon.splitHorizontal), true, async () => {
@@ -526,7 +526,7 @@ class TerminalTabsRenderer extends Disposable implements IListRenderer<ITerminal
 		}
 	}
 
-	private _runForSelectionOrInstance(instance: ITerminalInstance, callback: (instance: ITerminalInstance) => void) {
+	private _runForSelectionOrInstance(instance: ITerminalInstance, callback: (instance: ITerminalInstance) => codemavi) {
 		const selection = this._getSelection();
 		if (selection.includes(instance)) {
 			for (const s of selection) {
@@ -621,7 +621,7 @@ class TerminalTabsDragAndDrop extends Disposable implements IListDragAndDrop<ITe
 		this._autoFocusDisposable = Disposable.None;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
 		if (!originalEvent.dataTransfer) {
 			return;
 		}
@@ -667,7 +667,7 @@ class TerminalTabsDragAndDrop extends Disposable implements IListDragAndDrop<ITe
 		};
 	}
 
-	async drop(data: IDragAndDropData, targetInstance: ITerminalInstance | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<void> {
+	async drop(data: IDragAndDropData, targetInstance: ITerminalInstance | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<codemavi> {
 		this._autoFocusDisposable.dispose();
 		this._autoFocusInstance = undefined;
 

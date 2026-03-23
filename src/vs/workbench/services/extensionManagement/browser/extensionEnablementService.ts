@@ -46,7 +46,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 	protected readonly extensionsManager: ExtensionsManager;
 	private readonly storageManager: StorageManager;
 	private extensionsDisabledExtensions: IExtension[] = [];
-	private readonly delayer = this._register(new Delayer<void>(0));
+	private readonly delayer = this._register(new Delayer<codemavi>(0));
 
 	constructor(
 		@IStorageService private readonly storageService: IStorageService,
@@ -146,7 +146,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		}
 	}
 
-	private throwErrorIfCannotChangeEnablement(extension: IExtension, donotCheckDependencies?: boolean): void {
+	private throwErrorIfCannotChangeEnablement(extension: IExtension, donotCheckDependencies?: boolean): codemavi {
 		if (isLanguagePackExtension(extension.manifest)) {
 			throw new Error(localize('cannot disable language pack extension', "Cannot change enablement of {0} extension because it contributes language packs.", extension.manifest.displayName || extension.identifier.id));
 		}
@@ -163,7 +163,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		this.throwErrorIfEnablementStateCannotBeChanged(extension, this.getEnablementState(extension), donotCheckDependencies);
 	}
 
-	private throwErrorIfEnablementStateCannotBeChanged(extension: IExtension, enablementStateOfExtension: EnablementState, donotCheckDependencies?: boolean): void {
+	private throwErrorIfEnablementStateCannotBeChanged(extension: IExtension, enablementStateOfExtension: EnablementState, donotCheckDependencies?: boolean): codemavi {
 		switch (enablementStateOfExtension) {
 			case EnablementState.DisabledByEnvironment:
 				throw new Error(localize('cannot change disablement environment', "Cannot change enablement of {0} extension because it is disabled in environment", extension.manifest.displayName || extension.identifier.id));
@@ -191,7 +191,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		}
 	}
 
-	private throwErrorIfCannotChangeWorkspaceEnablement(extension: IExtension): void {
+	private throwErrorIfCannotChangeWorkspaceEnablement(extension: IExtension): codemavi {
 		if (!this.hasWorkspace) {
 			throw new Error(localize('noWorkspace', "No workspace."));
 		}
@@ -551,12 +551,12 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		return this.globalExtensionEnablementService.disableExtension(identifier, SOURCE);
 	}
 
-	private _enableExtensionInWorkspace(identifier: IExtensionIdentifier): void {
+	private _enableExtensionInWorkspace(identifier: IExtensionIdentifier): codemavi {
 		this._removeFromWorkspaceDisabledExtensions(identifier);
 		this._addToWorkspaceEnabledExtensions(identifier);
 	}
 
-	private _disableExtensionInWorkspace(identifier: IExtensionIdentifier): void {
+	private _disableExtensionInWorkspace(identifier: IExtensionIdentifier): codemavi {
 		this._addToWorkspaceDisabledExtensions(identifier);
 		this._removeFromWorkspaceEnabledExtensions(identifier);
 	}
@@ -623,7 +623,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		return this._getExtensions(ENABLED_EXTENSIONS_STORAGE_PATH);
 	}
 
-	private _setEnabledExtensions(enabledExtensions: IExtensionIdentifier[]): void {
+	private _setEnabledExtensions(enabledExtensions: IExtensionIdentifier[]): codemavi {
 		this._setExtensions(ENABLED_EXTENSIONS_STORAGE_PATH, enabledExtensions);
 	}
 
@@ -631,7 +631,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		return this._getExtensions(DISABLED_EXTENSIONS_STORAGE_PATH);
 	}
 
-	private _setDisabledExtensions(disabledExtensions: IExtensionIdentifier[]): void {
+	private _setDisabledExtensions(disabledExtensions: IExtensionIdentifier[]): codemavi {
 		this._setExtensions(DISABLED_EXTENSIONS_STORAGE_PATH, disabledExtensions);
 	}
 
@@ -642,11 +642,11 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		return this.storageManager.get(storageId, StorageScope.WORKSPACE);
 	}
 
-	private _setExtensions(storageId: string, extensions: IExtensionIdentifier[]): void {
+	private _setExtensions(storageId: string, extensions: IExtensionIdentifier[]): codemavi {
 		this.storageManager.set(storageId, extensions, StorageScope.WORKSPACE);
 	}
 
-	private async _onDidChangeGloballyDisabledExtensions(extensionIdentifiers: ReadonlyArray<IExtensionIdentifier>, source?: string): Promise<void> {
+	private async _onDidChangeGloballyDisabledExtensions(extensionIdentifiers: ReadonlyArray<IExtensionIdentifier>, source?: string): Promise<codemavi> {
 		if (source !== SOURCE) {
 			await this.extensionsManager.whenInitialized();
 			const extensions = this.extensionsManager.extensions.filter(installedExtension => extensionIdentifiers.some(identifier => areSameExtensions(identifier, installedExtension.identifier)));
@@ -654,7 +654,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		}
 	}
 
-	private _onDidChangeExtensions(added: ReadonlyArray<IExtension>, removed: ReadonlyArray<IExtension>, isProfileSwitch: boolean): void {
+	private _onDidChangeExtensions(added: ReadonlyArray<IExtension>, removed: ReadonlyArray<IExtension>, isProfileSwitch: boolean): codemavi {
 		const changedExtensions: IExtension[] = added.filter(e => !this.isEnabledEnablementState(this.getEnablementState(e)));
 		const existingDisabledExtensions = this.extensionsDisabledExtensions;
 		this.extensionsDisabledExtensions = this.extensionsManager.extensions.filter(extension => {
@@ -679,7 +679,7 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		}
 	}
 
-	public async updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<void> {
+	public async updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<codemavi> {
 		await this.extensionsManager.whenInitialized();
 
 		const computeEnablementStates = (workspaceType: WorkspaceType): [IExtension, EnablementState][] => {
@@ -707,13 +707,13 @@ export class ExtensionEnablementService extends Disposable implements IWorkbench
 		this.globalExtensionEnablementService.enableExtension(extension);
 	}
 
-	private loopCheckForMaliciousExtensions(): void {
+	private loopCheckForMaliciousExtensions(): codemavi {
 		this.checkForMaliciousExtensions()
 			.then(() => this.delayer.trigger(() => { }, 1000 * 60 * 5)) // every five minutes
 			.then(() => this.loopCheckForMaliciousExtensions());
 	}
 
-	private async checkForMaliciousExtensions(): Promise<void> {
+	private async checkForMaliciousExtensions(): Promise<codemavi> {
 		try {
 			const extensionsControlManifest = await this.extensionManagementService.getExtensionsControlManifest();
 			const changed = this.storeMaliciousExtensions(extensionsControlManifest.malicious);
@@ -760,11 +760,11 @@ class ExtensionsManager extends Disposable {
 		this.initializePromise = this.initialize();
 	}
 
-	whenInitialized(): Promise<void> {
+	whenInitialized(): Promise<codemavi> {
 		return this.initializePromise;
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		try {
 			this._extensions = [
 				...await this.extensionManagementService.getInstalled(),
@@ -787,7 +787,7 @@ class ExtensionsManager extends Disposable {
 		}));
 	}
 
-	private updateExtensions(added: IExtension[], identifiers: IExtensionIdentifier[], server: IExtensionManagementServer | undefined, isProfileSwitch: boolean): void {
+	private updateExtensions(added: IExtension[], identifiers: IExtensionIdentifier[], server: IExtensionManagementServer | undefined, isProfileSwitch: boolean): codemavi {
 		if (added.length) {
 			for (const extension of added) {
 				const extensionServer = this.extensionManagementServerService.getExtensionManagementServer(extension);

@@ -64,7 +64,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		}
 	}
 
-	private handleActionChangeEvent(event: IActionChangeEvent): void {
+	private handleActionChangeEvent(event: IActionChangeEvent): codemavi {
 		if (event.enabled !== undefined) {
 			this.updateEnabled();
 		}
@@ -103,11 +103,11 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		return this._action.enabled;
 	}
 
-	setActionContext(newContext: unknown): void {
+	setActionContext(newContext: unknown): codemavi {
 		this._context = newContext;
 	}
 
-	render(container: HTMLElement): void {
+	render(container: HTMLElement): codemavi {
 		const element = this.element = container;
 		this._register(Gesture.addTarget(container));
 
@@ -166,7 +166,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		});
 	}
 
-	onClick(event: EventLike, preserveFocus = false): void {
+	onClick(event: EventLike, preserveFocus = false): codemavi {
 		EventHelper.stop(event, true);
 
 		const context = types.isUndefinedOrNull(this._context) ? this.options?.useEventAsContext ? event : { preserveFocus } : this._context;
@@ -175,7 +175,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 
 	// Only set the tabIndex on the element once it is about to get focused
 	// That way this element wont be a tab stop when it is not needed #106441
-	focus(): void {
+	focus(): codemavi {
 		if (this.element) {
 			this.element.tabIndex = 0;
 			this.element.focus();
@@ -187,7 +187,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		return !!this.element?.classList.contains('focused');
 	}
 
-	blur(): void {
+	blur(): codemavi {
 		if (this.element) {
 			this.element.blur();
 			this.element.tabIndex = -1;
@@ -195,7 +195,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		}
 	}
 
-	setFocusable(focusable: boolean): void {
+	setFocusable(focusable: boolean): codemavi {
 		if (this.element) {
 			this.element.tabIndex = focusable ? 0 : -1;
 		}
@@ -205,11 +205,11 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		return false;
 	}
 
-	protected updateEnabled(): void {
+	protected updateEnabled(): codemavi {
 		// implement in subclass
 	}
 
-	protected updateLabel(): void {
+	protected updateLabel(): codemavi {
 		// implement in subclass
 	}
 
@@ -221,7 +221,7 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		return this.action.tooltip;
 	}
 
-	protected updateTooltip(): void {
+	protected updateTooltip(): codemavi {
 		if (!this.element) {
 			return;
 		}
@@ -241,22 +241,22 @@ export class BaseActionViewItem extends Disposable implements IActionViewItem {
 		}
 	}
 
-	protected updateAriaLabel(): void {
+	protected updateAriaLabel(): codemavi {
 		if (this.element) {
 			const title = this.getTooltip() ?? '';
 			this.element.setAttribute('aria-label', title);
 		}
 	}
 
-	protected updateClass(): void {
+	protected updateClass(): codemavi {
 		// implement in subclass
 	}
 
-	protected updateChecked(): void {
+	protected updateChecked(): codemavi {
 		// implement in subclass
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		if (this.element) {
 			this.element.remove();
 			this.element = undefined;
@@ -290,7 +290,7 @@ export class ActionViewItem extends BaseActionViewItem {
 		this.cssClass = '';
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		types.assertType(this.element);
 
@@ -331,7 +331,7 @@ export class ActionViewItem extends BaseActionViewItem {
 
 	// Only set the tabIndex on the element once it is about to get focused
 	// That way this element wont be a tab stop when it is not needed #106441
-	override focus(): void {
+	override focus(): codemavi {
 		if (this.label) {
 			this.label.tabIndex = 0;
 			this.label.focus();
@@ -342,19 +342,19 @@ export class ActionViewItem extends BaseActionViewItem {
 		return !!this.label && this.label?.tabIndex === 0;
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		if (this.label) {
 			this.label.tabIndex = -1;
 		}
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		if (this.label) {
 			this.label.tabIndex = focusable ? 0 : -1;
 		}
 	}
 
-	protected override updateLabel(): void {
+	protected override updateLabel(): codemavi {
 		if (this.options.label && this.label) {
 			this.label.textContent = this.action.label;
 		}
@@ -375,7 +375,7 @@ export class ActionViewItem extends BaseActionViewItem {
 		return title ?? undefined;
 	}
 
-	protected override updateClass(): void {
+	protected override updateClass(): codemavi {
 		if (this.cssClass && this.label) {
 			this.label.classList.remove(...this.cssClass.split(' '));
 		}
@@ -395,7 +395,7 @@ export class ActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateEnabled(): void {
+	protected override updateEnabled(): codemavi {
 		if (this.action.enabled) {
 			if (this.label) {
 				this.label.removeAttribute('aria-disabled');
@@ -413,14 +413,14 @@ export class ActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateAriaLabel(): void {
+	protected override updateAriaLabel(): codemavi {
 		if (this.label) {
 			const title = this.getTooltip() ?? '';
 			this.label.setAttribute('aria-label', title);
 		}
 	}
 
-	protected override updateChecked(): void {
+	protected override updateChecked(): codemavi {
 		if (this.label) {
 			if (this.action.checked !== undefined) {
 				this.label.classList.toggle('checked', this.action.checked);
@@ -452,19 +452,19 @@ export class SelectActionViewItem<T = string> extends BaseActionViewItem {
 		this.registerListeners();
 	}
 
-	setOptions(options: ISelectOptionItem[], selected?: number): void {
+	setOptions(options: ISelectOptionItem[], selected?: number): codemavi {
 		this.selectBox.setOptions(options, selected);
 	}
 
-	select(index: number): void {
+	select(index: number): codemavi {
 		this.selectBox.select(index);
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.selectBox.onDidSelect(e => this.runAction(e.selected, e.index)));
 	}
 
-	protected runAction(option: string, index: number): void {
+	protected runAction(option: string, index: number): codemavi {
 		this.actionRunner.run(this._action, this.getActionContext(option, index));
 	}
 
@@ -472,19 +472,19 @@ export class SelectActionViewItem<T = string> extends BaseActionViewItem {
 		return option;
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		this.selectBox.setFocusable(focusable);
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		this.selectBox?.focus();
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		this.selectBox?.blur();
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this.selectBox.render(container);
 	}
 }

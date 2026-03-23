@@ -39,7 +39,7 @@ suite('Notebook Statusbar', () => {
 					private _onProvideCalled = this._register(new Emitter<number>());
 					public onProvideCalled = this._onProvideCalled.event;
 
-					public _onDidChangeStatusBarItems = this._register(new Emitter<void>());
+					public _onDidChangeStatusBarItems = this._register(new Emitter<codemavi>());
 					public onDidChangeStatusBarItems = this._onDidChangeStatusBarItems.event;
 
 					async provideCellStatusBarItems(_uri: URI, index: number, _token: CancellationToken) {

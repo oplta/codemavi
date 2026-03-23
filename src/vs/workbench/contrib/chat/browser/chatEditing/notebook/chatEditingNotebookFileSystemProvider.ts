@@ -64,19 +64,19 @@ export class ChatEditingNotebookFileSystemProvider implements IFileSystemProvide
 			size: 0
 		};
 	}
-	mkdir(_resource: URI): Promise<void> {
+	mkdir(_resource: URI): Promise<codemavi> {
 		throw new Error('Method not implemented1.');
 	}
 	readdir(_resource: URI): Promise<[string, FileType][]> {
 		throw new Error('Method not implemented2.');
 	}
-	delete(_resource: URI, _opts: IFileDeleteOptions): Promise<void> {
+	delete(_resource: URI, _opts: IFileDeleteOptions): Promise<codemavi> {
 		throw new Error('Method not implemented3.');
 	}
-	rename(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<void> {
+	rename(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<codemavi> {
 		throw new Error('Method not implemented4.');
 	}
-	copy?(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<void> {
+	copy?(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<codemavi> {
 		throw new Error('Method not implemented5.');
 	}
 	async readFile(resource: URI): Promise<Uint8Array> {
@@ -102,7 +102,7 @@ export class ChatEditingNotebookFileSystemProvider implements IFileSystemProvide
 		return serializer.notebookToData(data).then(s => s.buffer);
 	}
 
-	writeFile?(__resource: URI, _content: Uint8Array, _opts: IFileWriteOptions): Promise<void> {
+	writeFile?(__resource: URI, _content: Uint8Array, _opts: IFileWriteOptions): Promise<codemavi> {
 		throw new Error('Method not implemented7.');
 	}
 	readFileStream?(__resource: URI, _opts: IFileReadStreamOptions, _token: CancellationToken): ReadableStreamEvents<Uint8Array> {
@@ -111,7 +111,7 @@ export class ChatEditingNotebookFileSystemProvider implements IFileSystemProvide
 	open?(__resource: URI, _opts: IFileOpenOptions): Promise<number> {
 		throw new Error('Method not implemented9.');
 	}
-	close?(_fd: number): Promise<void> {
+	close?(_fd: number): Promise<codemavi> {
 		throw new Error('Method not implemented10.');
 	}
 	read?(_fd: number, _pos: number, _data: Uint8Array, _offset: number, _length: number): Promise<number> {
@@ -120,7 +120,7 @@ export class ChatEditingNotebookFileSystemProvider implements IFileSystemProvide
 	write?(_fd: number, _pos: number, _data: Uint8Array, _offset: number, _length: number): Promise<number> {
 		throw new Error('Method not implemented12.');
 	}
-	cloneFile?(_from: URI, __to: URI): Promise<void> {
+	cloneFile?(_from: URI, __to: URI): Promise<codemavi> {
 		throw new Error('Method not implemented13.');
 	}
 }

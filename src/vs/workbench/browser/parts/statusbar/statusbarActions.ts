@@ -26,7 +26,7 @@ export class ToggleStatusbarEntryVisibilityAction extends Action {
 		this.checked = !model.isHidden(id);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		if (this.model.isHidden(this.id)) {
 			this.model.show(this.id);
 		} else {
@@ -41,7 +41,7 @@ export class HideStatusbarEntryAction extends Action {
 		super(id, localize('hide', "Hide '{0}'", name), undefined, true);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		this.model.hide(this.id);
 	}
 }
@@ -55,7 +55,7 @@ export class ManageExtensionAction extends Action {
 		super('statusbar.manage.extension', localize('manageExtension', "Manage Extension"));
 	}
 
-	override run(): Promise<void> {
+	override run(): Promise<codemavi> {
 		return this.commandService.executeCommand('_extensions.manage', this.extensionId);
 	}
 }
@@ -135,7 +135,7 @@ class FocusStatusBarAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		layoutService.focusPart(Parts.STATUSBAR_PART, getActiveWindow());
 	}

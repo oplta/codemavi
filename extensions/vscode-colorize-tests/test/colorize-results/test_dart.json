@@ -70,7 +70,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.dart storage.type.primitive.dart",
 		"r": {
 			"dark_plus": "storage.type: #569CD6",

@@ -75,7 +75,7 @@ export class WindowsStateHandler extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// When a window looses focus, save all windows state. This allows to
 		// prevent loss of window-state data when OS is restarted without properly
@@ -139,13 +139,13 @@ export class WindowsStateHandler extends Disposable {
 	// 	-    close(1): onBeforeCloseWindow(1, false), onBeforeShutdown(0)[last window]
 	// 	- closeAll(2): onBeforeCloseWindow(2, false), onBeforeCloseWindow(2, false), onBeforeShutdown(0)
 	//
-	private onBeforeShutdown(): void {
+	private onBeforeShutdown(): codemavi {
 		this.shuttingDown = true;
 
 		this.saveWindowsState();
 	}
 
-	private saveWindowsState(): void {
+	private saveWindowsState(): codemavi {
 
 		// TODO@electron workaround for Electron not being able to restore
 		// multiple (native) fullscreen windows on the same display at once
@@ -224,7 +224,7 @@ export class WindowsStateHandler extends Disposable {
 	}
 
 	// See note on #onBeforeShutdown() for details how these events are flowing
-	private onBeforeCloseWindow(window: ICodeWindow): void {
+	private onBeforeCloseWindow(window: ICodeWindow): codemavi {
 		if (this.lifecycleMainService.quitRequested) {
 			return; // during quit, many windows close in parallel so let it be handled in the before-quit handler
 		}

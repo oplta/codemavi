@@ -23,7 +23,7 @@ export class ChatAgentCommandContentPart extends Disposable implements IChatCont
 
 	constructor(
 		cmd: IChatAgentCommand,
-		onClick: () => void,
+		onClick: () => codemavi,
 		@IHoverService private readonly _hoverService: IHoverService,
 	) {
 		super();

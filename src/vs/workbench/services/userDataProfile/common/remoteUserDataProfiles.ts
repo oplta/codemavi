@@ -30,7 +30,7 @@ class RemoteUserDataProfilesService extends Disposable implements IRemoteUserDat
 
 	readonly _serviceBrand: undefined;
 
-	private readonly initPromise: Promise<void>;
+	private readonly initPromise: Promise<codemavi>;
 
 	private remoteUserDataProfilesService: IUserDataProfilesService | undefined;
 
@@ -46,7 +46,7 @@ class RemoteUserDataProfilesService extends Disposable implements IRemoteUserDat
 		this.initPromise = this.init();
 	}
 
-	private async init(): Promise<void> {
+	private async init(): Promise<codemavi> {
 		const connection = this.remoteAgentService.getConnection();
 		if (!connection) {
 			return;
@@ -69,7 +69,7 @@ class RemoteUserDataProfilesService extends Disposable implements IRemoteUserDat
 		this.cleanUp();
 	}
 
-	private async onDidChangeLocalProfiles(e: DidChangeProfilesEvent): Promise<void> {
+	private async onDidChangeLocalProfiles(e: DidChangeProfilesEvent): Promise<codemavi> {
 		for (const profile of e.removed) {
 			const remoteProfile = this.remoteUserDataProfilesService?.profiles.find(p => p.id === profile.id);
 			if (remoteProfile) {
@@ -123,7 +123,7 @@ class RemoteUserDataProfilesService extends Disposable implements IRemoteUserDat
 		return [];
 	}
 
-	private setAssociatedRemoteProfiles(profiles: string[]): void {
+	private setAssociatedRemoteProfiles(profiles: string[]): codemavi {
 		if (this.environmentService.remoteAuthority) {
 			const remotes = this.parseAssociatedRemoteProfiles();
 			profiles = distinct(profiles);
@@ -152,7 +152,7 @@ class RemoteUserDataProfilesService extends Disposable implements IRemoteUserDat
 		return {};
 	}
 
-	private async cleanUp(): Promise<void> {
+	private async cleanUp(): Promise<codemavi> {
 		const associatedRemoteProfiles: string[] = [];
 		for (const profileId of this.getAssociatedRemoteProfiles()) {
 			const remoteProfile = this.remoteUserDataProfilesService?.profiles.find(p => p.id === profileId);

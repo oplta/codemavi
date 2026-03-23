@@ -309,7 +309,7 @@ suite('CompressedObjectTree', function () {
 		 * Calls that test function twice, once with an empty options and
 		 * once with `diffIdentityProvider`.
 		 */
-		function withSmartSplice(fn: (options: IObjectTreeModelSetChildrenOptions<number, any>) => void) {
+		function withSmartSplice(fn: (options: IObjectTreeModelSetChildrenOptions<number, any>) => codemavi) {
 			fn({});
 			fn({ diffIdentityProvider: { getId: n => String(n) } });
 		}

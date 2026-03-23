@@ -252,7 +252,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		return this.getContextMenuActions(breakpoints, model.uri, lineNumber);
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this.toDispose.push(this.editor.onMouseDown(async (e: IEditorMouseEvent) => {
 			if (!this.debugService.getAdapterManager().hasEnabledDebuggers()) {
 				return;
@@ -514,7 +514,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		return true;
 	}
 
-	private ensureBreakpointHintDecoration(showBreakpointHintAtLineNumber: number): void {
+	private ensureBreakpointHintDecoration(showBreakpointHintAtLineNumber: number): codemavi {
 		this.editor.changeDecorations((accessor) => {
 			if (this.breakpointHintDecoration) {
 				accessor.removeDecoration(this.breakpointHintDecoration);
@@ -532,7 +532,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		});
 	}
 
-	private async setDecorations(): Promise<void> {
+	private async setDecorations(): Promise<codemavi> {
 		if (!this.editor.hasModel()) {
 			return;
 		}
@@ -566,7 +566,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		const desiredBreakpointDecorations = this.instantiationService.invokeFunction(accessor => createBreakpointDecorations(accessor, model, breakpoints, this.debugService.state, this.debugService.getModel().areBreakpointsActivated(), debugSettings.showBreakpointsInOverviewRuler));
 
 		// try to set breakpoint location candidates in the same changeDecorations()
-		// call to avoid flickering, if the DA responds reasonably quickly.
+		// call to acodemavi flickering, if the DA responds reasonably quickly.
 		const session = this.debugService.getViewModel().focusedSession;
 		const desiredCandidatePositions = debugSettings.showInlineBreakpointCandidates && session ? requestBreakpointCandidateLocations(this.editor.getModel(), desiredBreakpointDecorations.map(bp => bp.range.startLineNumber), session) : Promise.resolve([]);
 		const desiredCandidatePositionsRaced = await Promise.race([desiredCandidatePositions, timeout(500).then(() => undefined)]);
@@ -614,7 +614,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		}
 	}
 
-	private async onModelDecorationsChanged(): Promise<void> {
+	private async onModelDecorationsChanged(): Promise<codemavi> {
 		if (this.breakpointDecorations.length === 0 || this.ignoreDecorationsChangedEvent || !this.editor.hasModel()) {
 			// I have no decorations
 			return;
@@ -661,7 +661,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 	}
 
 	// breakpoint widget
-	showBreakpointWidget(lineNumber: number, column: number | undefined, context?: BreakpointWidgetContext): void {
+	showBreakpointWidget(lineNumber: number, column: number | undefined, context?: BreakpointWidgetContext): codemavi {
 		this.breakpointWidget?.dispose();
 
 		this.breakpointWidget = this.instantiationService.createInstance(BreakpointWidget, this.editor, lineNumber, column, context);
@@ -669,7 +669,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		this.breakpointWidgetVisible.set(true);
 	}
 
-	closeBreakpointWidget(): void {
+	closeBreakpointWidget(): codemavi {
 		if (this.breakpointWidget) {
 			this.breakpointWidget.dispose();
 			this.breakpointWidget = undefined;
@@ -678,7 +678,7 @@ export class BreakpointEditorContribution implements IBreakpointEditorContributi
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.breakpointWidget?.dispose();
 		this.editor.removeDecorations(this.breakpointDecorations.map(bpd => bpd.decorationId));
 		dispose(this.toDispose);
@@ -738,7 +738,7 @@ class InlineBreakpointWidget implements IContentWidget, IDisposable {
 		this.editor.layoutContentWidget(this);
 	}
 
-	private create(cssClass: string | null | undefined): void {
+	private create(cssClass: string | null | undefined): codemavi {
 		this.domNode = $('.inline-breakpoint-widget');
 		if (cssClass) {
 			this.domNode.classList.add(...cssClass.split(' '));
@@ -804,7 +804,7 @@ class InlineBreakpointWidget implements IContentWidget, IDisposable {
 		};
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.editor.removeContentWidget(this);
 		dispose(this.toDispose);
 	}

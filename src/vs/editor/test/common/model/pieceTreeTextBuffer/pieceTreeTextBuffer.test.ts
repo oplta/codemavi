@@ -161,7 +161,7 @@ function createTextBuffer(val: string[], normalizeEOL: boolean = true): PieceTre
 	return (<PieceTreeTextBuffer>factory.create(DefaultEndOfLine.LF).textBuffer);
 }
 
-function assertTreeInvariants(T: PieceTreeBase): void {
+function assertTreeInvariants(T: PieceTreeBase): codemavi {
 	assert(SENTINEL.color === NodeColor.Black);
 	assert(SENTINEL.parent === SENTINEL);
 	assert(SENTINEL.left === SENTINEL);
@@ -201,7 +201,7 @@ function assertValidNode(n: TreeNode): { size: number; lf_cnt: number } {
 	return { size: n.size_left + n.piece.length + actualRight.size, lf_cnt: n.lf_left + n.piece.lineFeedCnt + actualRight.lf_cnt };
 }
 
-function assertValidTree(T: PieceTreeBase): void {
+function assertValidTree(T: PieceTreeBase): codemavi {
 	if (T.root === SENTINEL) {
 		return;
 	}

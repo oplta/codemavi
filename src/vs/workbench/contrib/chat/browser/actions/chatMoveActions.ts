@@ -118,7 +118,7 @@ async function executeMoveToAction(accessor: ServicesAccessor, moveTo: MoveToNew
 	await editorService.openEditor({ resource: ChatEditorInput.getNewEditorUri(), options }, moveTo === MoveToNewLocation.Window ? AUX_WINDOW_GROUP : ACTIVE_GROUP);
 }
 
-async function moveToSidebar(accessor: ServicesAccessor): Promise<void> {
+async function moveToSidebar(accessor: ServicesAccessor): Promise<codemavi> {
 	const viewsService = accessor.get(IViewsService);
 	const editorService = accessor.get(IEditorService);
 	const editorGroupService = accessor.get(IEditorGroupsService);

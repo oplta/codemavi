@@ -91,7 +91,7 @@ registerAction2(class Reply extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, marshalledCommentThread: MarshalledCommentThreadInternal): void {
+	override run(accessor: ServicesAccessor, marshalledCommentThread: MarshalledCommentThreadInternal): codemavi {
 		const commentService = accessor.get(ICommentService);
 		const editorService = accessor.get(IEditorService);
 		const uriIdentityService = accessor.get(IUriIdentityService);
@@ -164,7 +164,7 @@ export class UnresolvedCommentsBadge extends Disposable implements IWorkbenchCon
 
 	}
 
-	private onAllCommentsChanged(e: IWorkspaceCommentThreadsEvent): void {
+	private onAllCommentsChanged(e: IWorkspaceCommentThreadsEvent): codemavi {
 		let unresolved = 0;
 		for (const thread of e.commentThreads) {
 			if (thread.state === CommentThreadState.Unresolved) {
@@ -174,7 +174,7 @@ export class UnresolvedCommentsBadge extends Disposable implements IWorkbenchCon
 		this.updateBadge(unresolved);
 	}
 
-	private onCommentsUpdated(): void {
+	private onCommentsUpdated(): codemavi {
 		let unresolved = 0;
 		for (const resource of this._commentService.commentsModel.resourceCommentThreads) {
 			for (const thread of resource.commentThreads) {

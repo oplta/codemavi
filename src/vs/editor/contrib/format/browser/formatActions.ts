@@ -53,12 +53,12 @@ export class FormatOnType implements IEditorContribution {
 		this._update();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._sessionDisposables.dispose();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 
 		// clean up
 		this._sessionDisposables.clear();
@@ -94,7 +94,7 @@ export class FormatOnType implements IEditorContribution {
 		}));
 	}
 
-	private _trigger(ch: string): void {
+	private _trigger(ch: string): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -170,12 +170,12 @@ class FormatOnPaste implements IEditorContribution {
 		this._callOnDispose.add(_languageFeaturesService.documentRangeFormattingEditProvider.onDidChange(this._update, this));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._callOnDispose.dispose();
 		this._callOnModel.dispose();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 
 		// clean up
 		this._callOnModel.clear();
@@ -198,7 +198,7 @@ class FormatOnPaste implements IEditorContribution {
 		this._callOnModel.add(this.editor.onDidPaste(({ range }) => this._trigger(range)));
 	}
 
-	private _trigger(range: Range): void {
+	private _trigger(range: Range): codemavi {
 		if (!this.editor.hasModel()) {
 			return;
 		}
@@ -229,7 +229,7 @@ class FormatDocumentAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		if (editor.hasModel()) {
 			const instaService = accessor.get(IInstantiationService);
 			const progressService = accessor.get(IEditorProgressService);
@@ -261,7 +261,7 @@ class FormatSelectionAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		if (!editor.hasModel()) {
 			return;
 		}

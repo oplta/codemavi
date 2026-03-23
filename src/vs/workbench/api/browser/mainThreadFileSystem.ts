@@ -34,20 +34,20 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		this._disposables.add(_fileService.onDidChangeFileSystemProviderCapabilities(e => infoProxy.$acceptProviderInfos(URI.from({ scheme: e.scheme, path: '/dummy' }), e.provider.capabilities)));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._fileProvider.dispose();
 	}
 
-	async $registerFileSystemProvider(handle: number, scheme: string, capabilities: FileSystemProviderCapabilities, readonlyMessage?: IMarkdownString): Promise<void> {
+	async $registerFileSystemProvider(handle: number, scheme: string, capabilities: FileSystemProviderCapabilities, readonlyMessage?: IMarkdownString): Promise<codemavi> {
 		this._fileProvider.set(handle, new RemoteFileSystemProvider(this._fileService, scheme, capabilities, readonlyMessage, handle, this._proxy));
 	}
 
-	$unregisterProvider(handle: number): void {
+	$unregisterProvider(handle: number): codemavi {
 		this._fileProvider.deleteAndDispose(handle);
 	}
 
-	$onFileSystemChange(handle: number, changes: IFileChangeDto[]): void {
+	$onFileSystemChange(handle: number, changes: IFileChangeDto[]): codemavi {
 		const fileProvider = this._fileProvider.get(handle);
 		if (!fileProvider) {
 			throw new Error('Unknown file provider');
@@ -110,7 +110,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		}
 	}
 
-	async $writeFile(uri: UriComponents, content: VSBuffer): Promise<void> {
+	async $writeFile(uri: UriComponents, content: VSBuffer): Promise<codemavi> {
 		try {
 			await this._fileService.writeFile(URI.revive(uri), content);
 		} catch (err) {
@@ -118,7 +118,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		}
 	}
 
-	async $rename(source: UriComponents, target: UriComponents, opts: IFileOverwriteOptions): Promise<void> {
+	async $rename(source: UriComponents, target: UriComponents, opts: IFileOverwriteOptions): Promise<codemavi> {
 		try {
 			await this._fileService.move(URI.revive(source), URI.revive(target), opts.overwrite);
 		} catch (err) {
@@ -126,7 +126,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		}
 	}
 
-	async $copy(source: UriComponents, target: UriComponents, opts: IFileOverwriteOptions): Promise<void> {
+	async $copy(source: UriComponents, target: UriComponents, opts: IFileOverwriteOptions): Promise<codemavi> {
 		try {
 			await this._fileService.copy(URI.revive(source), URI.revive(target), opts.overwrite);
 		} catch (err) {
@@ -134,7 +134,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		}
 	}
 
-	async $mkdir(uri: UriComponents): Promise<void> {
+	async $mkdir(uri: UriComponents): Promise<codemavi> {
 		try {
 			await this._fileService.createFolder(URI.revive(uri));
 		} catch (err) {
@@ -142,7 +142,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		}
 	}
 
-	async $delete(uri: UriComponents, opts: IFileDeleteOptions): Promise<void> {
+	async $delete(uri: UriComponents, opts: IFileDeleteOptions): Promise<codemavi> {
 		try {
 			return await this._fileService.del(URI.revive(uri), opts);
 		} catch (err) {
@@ -176,7 +176,7 @@ export class MainThreadFileSystem implements MainThreadFileSystemShape {
 		throw err;
 	}
 
-	$ensureActivation(scheme: string): Promise<void> {
+	$ensureActivation(scheme: string): Promise<codemavi> {
 		return this._fileService.activateProvider(scheme);
 	}
 }
@@ -189,7 +189,7 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 	readonly onDidChangeFile: Event<readonly IFileChange[]> = this._onDidChange.event;
 
 	readonly capabilities: FileSystemProviderCapabilities;
-	readonly onDidChangeCapabilities: Event<void> = Event.None;
+	readonly onDidChangeCapabilities: Event<codemavi> = Event.None;
 
 	constructor(
 		fileService: IFileService,
@@ -203,7 +203,7 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 		this._registration = fileService.registerProvider(scheme, this);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._registration.dispose();
 		this._onDidChange.dispose();
 	}
@@ -216,7 +216,7 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 		});
 	}
 
-	$onFileSystemChange(changes: IFileChangeDto[]): void {
+	$onFileSystemChange(changes: IFileChangeDto[]): codemavi {
 		this._onDidChange.fire(changes.map(RemoteFileSystemProvider._createFileChange));
 	}
 
@@ -239,15 +239,15 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 		return buffer.buffer;
 	}
 
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
 		return this._proxy.$writeFile(this._handle, resource, VSBuffer.wrap(content), opts);
 	}
 
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
 		return this._proxy.$delete(this._handle, resource, opts);
 	}
 
-	mkdir(resource: URI): Promise<void> {
+	mkdir(resource: URI): Promise<codemavi> {
 		return this._proxy.$mkdir(this._handle, resource);
 	}
 
@@ -255,11 +255,11 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 		return this._proxy.$readdir(this._handle, resource);
 	}
 
-	rename(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<void> {
+	rename(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
 		return this._proxy.$rename(this._handle, resource, target, opts);
 	}
 
-	copy(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<void> {
+	copy(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
 		return this._proxy.$copy(this._handle, resource, target, opts);
 	}
 
@@ -267,7 +267,7 @@ class RemoteFileSystemProvider implements IFileSystemProviderWithFileReadWriteCa
 		return this._proxy.$open(this._handle, resource, opts);
 	}
 
-	close(fd: number): Promise<void> {
+	close(fd: number): Promise<codemavi> {
 		return this._proxy.$close(this._handle, fd);
 	}
 

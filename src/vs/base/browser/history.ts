@@ -9,12 +9,12 @@ export interface IHistoryNavigationWidget {
 
 	readonly element: HTMLElement;
 
-	showPreviousValue(): void;
+	showPreviousValue(): codemavi;
 
-	showNextValue(): void;
+	showNextValue(): codemavi;
 
-	onDidFocus: Event<void>;
+	onDidFocus: Event<codemavi>;
 
-	onDidBlur: Event<void>;
+	onDidBlur: Event<codemavi>;
 
 }

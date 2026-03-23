@@ -22,7 +22,7 @@ import { ViewContext } from '../../../common/viewModel/viewContext.js';
  * This can end up producing multiple `LineDecorationToRender`.
  */
 export class DecorationToRender {
-	public readonly _decorationToRenderBrand: void = undefined;
+	public readonly _decorationToRenderBrand: codemavi = undefined;
 
 	public readonly zIndex: number;
 
@@ -102,7 +102,7 @@ export abstract class DedupOverlay extends DynamicViewOverlay {
 			const endLineIndex = Math.min(d.endLineNumber, visibleEndLineNumber) - visibleStartLineNumber;
 
 			if (prevClassName === className) {
-				// Here we avoid rendering the same className multiple times on the same line
+				// Here we acodemavi rendering the same className multiple times on the same line
 				startLineIndex = Math.max(prevEndLineIndex + 1, startLineIndex);
 				prevEndLineIndex = Math.max(prevEndLineIndex, endLineIndex);
 			} else {
@@ -155,7 +155,7 @@ export class GlyphMarginWidgets extends ViewPart {
 		this._decorationGlyphsToRender = [];
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._managedDomNodes = [];
 		this._decorationGlyphsToRender = [];
 		this._widgets = {};
@@ -204,7 +204,7 @@ export class GlyphMarginWidgets extends ViewPart {
 
 	// --- begin widget management
 
-	public addWidget(widget: IGlyphMarginWidget): void {
+	public addWidget(widget: IGlyphMarginWidget): codemavi {
 		const domNode = createFastDomNode(widget.getDomNode());
 
 		this._widgets[widget.getId()] = {
@@ -236,7 +236,7 @@ export class GlyphMarginWidgets extends ViewPart {
 		return true;
 	}
 
-	public removeWidget(widget: IGlyphMarginWidget): void {
+	public removeWidget(widget: IGlyphMarginWidget): codemavi {
 		const widgetId = widget.getId();
 		if (this._widgets[widgetId]) {
 			const widgetData = this._widgets[widgetId];
@@ -250,7 +250,7 @@ export class GlyphMarginWidgets extends ViewPart {
 
 	// --- end widget management
 
-	private _collectDecorationBasedGlyphRenderRequest(ctx: RenderingContext, requests: GlyphRenderRequest[]): void {
+	private _collectDecorationBasedGlyphRenderRequest(ctx: RenderingContext, requests: GlyphRenderRequest[]): codemavi {
 		const visibleStartLineNumber = ctx.visibleRange.startLineNumber;
 		const visibleEndLineNumber = ctx.visibleRange.endLineNumber;
 		const decorations = ctx.getDecorationsInViewport();
@@ -274,7 +274,7 @@ export class GlyphMarginWidgets extends ViewPart {
 		}
 	}
 
-	private _collectWidgetBasedGlyphRenderRequest(ctx: RenderingContext, requests: GlyphRenderRequest[]): void {
+	private _collectWidgetBasedGlyphRenderRequest(ctx: RenderingContext, requests: GlyphRenderRequest[]): codemavi {
 		const visibleStartLineNumber = ctx.visibleRange.startLineNumber;
 		const visibleEndLineNumber = ctx.visibleRange.endLineNumber;
 
@@ -328,7 +328,7 @@ export class GlyphMarginWidgets extends ViewPart {
 	/**
 	 * Will store render information in each widget's renderInfo and in `_decorationGlyphsToRender`.
 	 */
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		if (!this._glyphMargin) {
 			this._decorationGlyphsToRender = [];
 			return;
@@ -381,7 +381,7 @@ export class GlyphMarginWidgets extends ViewPart {
 		this._decorationGlyphsToRender = decorationGlyphsToRender;
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		if (!this._glyphMargin) {
 			for (const widget of Object.values(this._widgets)) {
 				widget.domNode.setDisplay('none');

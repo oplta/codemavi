@@ -65,12 +65,12 @@ export class ToggleActionViewItem extends BaseActionViewItem {
 		this._register(this.toggle.onChange(() => this._action.checked = !!this.toggle && this.toggle.checked));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this.element = container;
 		this.element.appendChild(this.toggle.domNode);
 	}
 
-	protected override updateEnabled(): void {
+	protected override updateEnabled(): codemavi {
 		if (this.toggle) {
 			if (this.isEnabled()) {
 				this.toggle.enable();
@@ -80,21 +80,21 @@ export class ToggleActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateChecked(): void {
+	protected override updateChecked(): codemavi {
 		this.toggle.checked = !!this._action.checked;
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		this.toggle.domNode.tabIndex = 0;
 		this.toggle.focus();
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		this.toggle.domNode.tabIndex = -1;
 		this.toggle.domNode.blur();
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		this.toggle.domNode.tabIndex = focusable ? 0 : -1;
 	}
 
@@ -172,7 +172,7 @@ export class Toggle extends Widget {
 		return this.domNode.getAttribute('aria-disabled') !== 'true';
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.domNode.focus();
 	}
 
@@ -189,7 +189,7 @@ export class Toggle extends Widget {
 		this.applyStyles();
 	}
 
-	setIcon(icon: ThemeIcon | undefined): void {
+	setIcon(icon: ThemeIcon | undefined): codemavi {
 		if (this._icon) {
 			this.domNode.classList.remove(...ThemeIcon.asClassNameArray(this._icon));
 		}
@@ -203,7 +203,7 @@ export class Toggle extends Widget {
 		return 2 /*margin left*/ + 2 /*border*/ + 2 /*padding*/ + 16 /* icon width */;
 	}
 
-	protected applyStyles(): void {
+	protected applyStyles(): codemavi {
 		if (this.domNode) {
 			this.domNode.style.borderColor = (this._checked && this._opts.inputActiveOptionBorder) || '';
 			this.domNode.style.color = (this._checked && this._opts.inputActiveOptionForeground) || 'inherit';
@@ -211,15 +211,15 @@ export class Toggle extends Widget {
 		}
 	}
 
-	enable(): void {
+	enable(): codemavi {
 		this.domNode.setAttribute('aria-disabled', String(false));
 	}
 
-	disable(): void {
+	disable(): codemavi {
 		this.domNode.setAttribute('aria-disabled', String(true));
 	}
 
-	setTitle(newTitle: string): void {
+	setTitle(newTitle: string): codemavi {
 		this._hover.update(newTitle);
 		this.domNode.setAttribute('aria-label', newTitle);
 	}
@@ -276,7 +276,7 @@ export class Checkbox extends Widget {
 		this.applyStyles();
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.domNode.focus();
 	}
 
@@ -284,15 +284,15 @@ export class Checkbox extends Widget {
 		return isActiveElement(this.domNode);
 	}
 
-	enable(): void {
+	enable(): codemavi {
 		this.checkbox.enable();
 	}
 
-	disable(): void {
+	disable(): codemavi {
 		this.checkbox.disable();
 	}
 
-	protected applyStyles(): void {
+	protected applyStyles(): codemavi {
 		this.domNode.style.color = this.styles.checkboxForeground || '';
 		this.domNode.style.backgroundColor = this.styles.checkboxBackground || '';
 		this.domNode.style.borderColor = this.styles.checkboxBorder || '';
@@ -315,7 +315,7 @@ export class CheckboxActionViewItem extends BaseActionViewItem {
 		this._register(this.toggle.onChange(() => this.onChange()));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this.element = container;
 		this.element.classList.add('checkbox-action-item');
 		this.element.appendChild(this.toggle.domNode);
@@ -334,12 +334,12 @@ export class CheckboxActionViewItem extends BaseActionViewItem {
 		this.updateChecked();
 	}
 
-	private onChange(): void {
+	private onChange(): codemavi {
 		this._action.checked = !!this.toggle && this.toggle.checked;
 		this.actionRunner.run(this._action, this._context);
 	}
 
-	protected override updateEnabled(): void {
+	protected override updateEnabled(): codemavi {
 		if (this.isEnabled()) {
 			this.toggle.enable();
 		} else {
@@ -352,11 +352,11 @@ export class CheckboxActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateChecked(): void {
+	protected override updateChecked(): codemavi {
 		this.toggle.checked = !!this._action.checked;
 	}
 
-	protected override updateClass(): void {
+	protected override updateClass(): codemavi {
 		if (this.cssClass) {
 			this.toggle.domNode.classList.remove(...this.cssClass.split(' '));
 		}
@@ -366,17 +366,17 @@ export class CheckboxActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		this.toggle.domNode.tabIndex = 0;
 		this.toggle.focus();
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		this.toggle.domNode.tabIndex = -1;
 		this.toggle.domNode.blur();
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		this.toggle.domNode.tabIndex = focusable ? 0 : -1;
 	}
 

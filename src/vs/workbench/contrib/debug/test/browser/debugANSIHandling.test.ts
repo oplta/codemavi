@@ -100,7 +100,7 @@ suite('Debug - ANSI Handling', () => {
 	 * only, and should not include actual text content as it is provided by this function.
 	 * @param assertion The function used to verify the output.
 	 */
-	function assertSingleSequenceElement(sequence: string, assertion: (child: HTMLSpanElement) => void): void {
+	function assertSingleSequenceElement(sequence: string, assertion: (child: HTMLSpanElement) => codemavi): codemavi {
 		const child: HTMLSpanElement = getSequenceOutput(sequence + 'content');
 		assert.strictEqual('content', child.textContent);
 		assertion(child);
@@ -120,7 +120,7 @@ suite('Debug - ANSI Handling', () => {
 	 * (for testing changes to theme colors where we need color to have changed but we don't know exact color it should have
 	 * changed to (but we do know the color it should NO LONGER BE))
 	 */
-	function assertInlineColor(element: HTMLSpanElement, colorType: 'background' | 'foreground' | 'underline', color?: RGBA | undefined, message?: string, colorShouldMatch: boolean = true): void {
+	function assertInlineColor(element: HTMLSpanElement, colorType: 'background' | 'foreground' | 'underline', color?: RGBA | undefined, message?: string, colorShouldMatch: boolean = true): codemavi {
 		if (color !== undefined) {
 			const cssColor = Color.Format.CSS.formatRGB(
 				new Color(color)
@@ -391,7 +391,7 @@ suite('Debug - ANSI Handling', () => {
 	 * @param sequence The ANSI sequence to verify.
 	 * @param assertions A set of assertions to run on the resulting children.
 	 */
-	function assertMultipleSequenceElements(sequence: string, assertions: Array<(child: HTMLSpanElement) => void>, elementsExpected?: number): void {
+	function assertMultipleSequenceElements(sequence: string, assertions: Array<(child: HTMLSpanElement) => codemavi>, elementsExpected?: number): codemavi {
 		if (elementsExpected === undefined) {
 			elementsExpected = assertions.length;
 		}
@@ -950,7 +950,7 @@ suite('Debug - ANSI Handling', () => {
 	 *
 	 * @param sequence The ANSI sequence to verify.
 	 */
-	function assertSequencestrictEqualToContent(sequence: string): void {
+	function assertSequencestrictEqualToContent(sequence: string): codemavi {
 		const child: HTMLSpanElement = getSequenceOutput(sequence);
 		assert(child.textContent === sequence);
 	}

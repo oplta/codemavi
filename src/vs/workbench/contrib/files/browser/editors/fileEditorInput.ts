@@ -135,7 +135,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		}
 	}
 
-	private onDidCreateTextFileModel(model: ITextFileEditorModel): void {
+	private onDidCreateTextFileModel(model: ITextFileEditorModel): codemavi {
 
 		// Once the text file model is created, we keep it inside
 		// the input to be able to implement some methods properly
@@ -146,7 +146,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		}
 	}
 
-	private registerModelListeners(model: ITextFileEditorModel): void {
+	private registerModelListeners(model: ITextFileEditorModel): codemavi {
 
 		// Clear any old
 		this.modelListeners.clear();
@@ -171,7 +171,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		return this.preferredName || super.getName();
 	}
 
-	setPreferredName(name: string): void {
+	setPreferredName(name: string): codemavi {
 		if (!this.allowLabelOverride()) {
 			return; // block for specific schemes we consider to be owning
 		}
@@ -202,7 +202,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		return this.preferredDescription || super.getDescription(verbosity);
 	}
 
-	setPreferredDescription(description: string): void {
+	setPreferredDescription(description: string): codemavi {
 		if (!this.allowLabelOverride()) {
 			return; // block for specific schemes we consider to be owning
 		}
@@ -253,13 +253,13 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		return this.preferredEncoding;
 	}
 
-	async setEncoding(encoding: string, mode: EncodingMode): Promise<void> {
+	async setEncoding(encoding: string, mode: EncodingMode): Promise<codemavi> {
 		this.setPreferredEncoding(encoding);
 
 		return this.model?.setEncoding(encoding, mode);
 	}
 
-	setPreferredEncoding(encoding: string): void {
+	setPreferredEncoding(encoding: string): codemavi {
 		this.preferredEncoding = encoding;
 
 		// encoding is a good hint to open the file as text
@@ -278,31 +278,31 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		return this.preferredLanguageId;
 	}
 
-	setLanguageId(languageId: string, source?: string): void {
+	setLanguageId(languageId: string, source?: string): codemavi {
 		this.setPreferredLanguageId(languageId);
 
 		this.model?.setLanguageId(languageId, source);
 	}
 
-	setPreferredLanguageId(languageId: string): void {
+	setPreferredLanguageId(languageId: string): codemavi {
 		this.preferredLanguageId = languageId;
 
 		// languages are a good hint to open the file as text
 		this.setForceOpenAsText();
 	}
 
-	setPreferredContents(contents: string): void {
+	setPreferredContents(contents: string): codemavi {
 		this.preferredContents = contents;
 
 		// contents is a good hint to open the file as text
 		this.setForceOpenAsText();
 	}
 
-	setForceOpenAsText(): void {
+	setForceOpenAsText(): codemavi {
 		this.forceOpenAs = ForceOpenAs.Text;
 	}
 
-	setForceOpenAsBinary(): void {
+	setForceOpenAsBinary(): codemavi {
 		this.forceOpenAs = ForceOpenAs.Binary;
 	}
 
@@ -466,7 +466,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 
 		// Model
 		this.model = undefined;
@@ -477,7 +477,7 @@ export class FileEditorInput extends AbstractTextResourceEditorInput implements 
 		super.dispose();
 	}
 
-	private disposeModelReference(): void {
+	private disposeModelReference(): codemavi {
 		dispose(this.cachedTextFileModelReference);
 		this.cachedTextFileModelReference = undefined;
 	}

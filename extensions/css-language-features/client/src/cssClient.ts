@@ -105,7 +105,7 @@ export async function startClient(context: ExtensionContext, newLanguageClient: 
 		client.sendNotification(CustomDataChangedNotification.type, customDataSource.uris);
 	});
 
-	// manually register / deregister format provider based on the `css/less/scss.format.enable` setting avoiding issues with late registration. See #71652.
+	// manually register / deregister format provider based on the `css/less/scss.format.enable` setting acodemaviing issues with late registration. See #71652.
 	for (const registration of formatterRegistrations) {
 		updateFormatterRegistration(registration);
 		context.subscriptions.push({ dispose: () => registration.provider?.dispose() });

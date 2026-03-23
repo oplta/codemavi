@@ -16,7 +16,7 @@ export class TextAreaSyncAddon extends Disposable implements ITerminalAddon {
 	private _terminal: Terminal | undefined;
 	private readonly _listeners = this._register(new MutableDisposable());
 
-	activate(terminal: Terminal): void {
+	activate(terminal: Terminal): codemavi {
 		this._terminal = terminal;
 		this._refreshListeners();
 	}
@@ -38,7 +38,7 @@ export class TextAreaSyncAddon extends Disposable implements ITerminalAddon {
 		}));
 	}
 
-	private _refreshListeners(): void {
+	private _refreshListeners(): codemavi {
 		const commandDetection = this._capabilities.get(TerminalCapability.CommandDetection);
 		if (this._shouldBeActive() && commandDetection) {
 			if (!this._listeners.value) {
@@ -57,7 +57,7 @@ export class TextAreaSyncAddon extends Disposable implements ITerminalAddon {
 	}
 
 	@debounce(50)
-	private _sync(textArea: HTMLTextAreaElement): void {
+	private _sync(textArea: HTMLTextAreaElement): codemavi {
 		const commandCapability = this._capabilities.get(TerminalCapability.CommandDetection);
 		if (!commandCapability) {
 			return;

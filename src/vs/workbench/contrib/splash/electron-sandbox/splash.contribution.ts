@@ -14,7 +14,7 @@ class SplashStorageService implements ISplashStorageService {
 
 	_serviceBrand: undefined;
 
-	readonly saveWindowSplash: (splash: IPartsSplash) => Promise<void>;
+	readonly saveWindowSplash: (splash: IPartsSplash) => Promise<codemavi>;
 
 	constructor(@INativeHostService nativeHostService: INativeHostService) {
 		this.saveWindowSplash = nativeHostService.saveWindowSplash.bind(nativeHostService);

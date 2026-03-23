@@ -36,7 +36,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 
 	private static readonly MAX_NOTIFICATION_SOURCES = 10; // maximum number of notification sources to show in configure dropdown
 
-	private readonly _onDidChangeVisibility = this._register(new Emitter<void>());
+	private readonly _onDidChangeVisibility = this._register(new Emitter<codemavi>());
 	readonly onDidChangeVisibility = this._onDidChangeVisibility.event;
 
 	private notificationsCenterContainer: HTMLElement | undefined;
@@ -69,13 +69,13 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.model.onDidChangeNotification(e => this.onDidChangeNotification(e)));
 		this._register(this.layoutService.onDidLayoutMainContainer(dimension => this.layout(Dimension.lift(dimension))));
 		this._register(this.notificationService.onDidChangeFilter(() => this.onDidChangeFilter()));
 	}
 
-	private onDidChangeFilter(): void {
+	private onDidChangeFilter(): codemavi {
 		if (this.notificationService.getFilter() === NotificationsFilter.ERROR) {
 			this.hide(); // hide the notification center when we have a error filter enabled
 		}
@@ -85,7 +85,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		return !!this._isVisible;
 	}
 
-	show(): void {
+	show(): codemavi {
 		if (this._isVisible) {
 			const notificationsList = assertIsDefined(this.notificationsList);
 
@@ -134,7 +134,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		this._onDidChangeVisibility.fire();
 	}
 
-	private updateTitle(): void {
+	private updateTitle(): codemavi {
 		const [notificationsCenterTitle, clearAllAction] = assertAllDefined(this.notificationsCenterTitle, this.clearAllAction);
 
 		if (this.model.notifications.length === 0) {
@@ -146,7 +146,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		}
 	}
 
-	private create(): void {
+	private create(): codemavi {
 
 		// Container
 		this.notificationsCenterContainer = $('.notifications-center');
@@ -237,7 +237,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		return keybinding ? keybinding.getLabel() : null;
 	}
 
-	private onDidChangeNotification(e: INotificationChangeEvent): void {
+	private onDidChangeNotification(e: INotificationChangeEvent): codemavi {
 		if (!this._isVisible) {
 			return; // only if visible
 		}
@@ -291,7 +291,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		if (!this._isVisible || !this.notificationsCenterContainer || !this.notificationsList) {
 			return; // already hidden
 		}
@@ -318,7 +318,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		}
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		if (this.notificationsCenterContainer && this.notificationsCenterHeader) {
 			const widgetShadowColor = this.getColor(widgetShadow);
 			this.notificationsCenterContainer.style.boxShadow = widgetShadowColor ? `0 0 8px 2px ${widgetShadowColor}` : '';
@@ -335,7 +335,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		}
 	}
 
-	layout(dimension: Dimension | undefined): void {
+	layout(dimension: Dimension | undefined): codemavi {
 		this.workbenchDimensions = dimension;
 
 		if (this._isVisible && this.notificationsCenterContainer) {
@@ -370,7 +370,7 @@ export class NotificationsCenter extends Themable implements INotificationsCente
 		}
 	}
 
-	clearAll(): void {
+	clearAll(): codemavi {
 
 		// Hide notifications center first
 		this.hide();

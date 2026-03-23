@@ -39,17 +39,17 @@ export interface ITestingPeekOpener {
 	/**
 	 * Opens the currently selected message in an editor.
 	 */
-	openCurrentInEditor(): void;
+	openCurrentInEditor(): codemavi;
 
 	/**
 	 * Opens the peek. Shows any available message.
 	 */
-	open(): void;
+	open(): codemavi;
 
 	/**
 	 * Closes peeks for all visible editors.
 	 */
-	closeAllPeeks(): void;
+	closeAllPeeks(): codemavi;
 }
 
 export const ITestingPeekOpener = createDecorator<ITestingPeekOpener>('testingPeekOpener');

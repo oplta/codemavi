@@ -33,8 +33,8 @@ export class BaseCellEditorOptions extends Disposable implements IBaseCellEditor
 	};
 
 	private readonly _localDisposableStore = this._register(new DisposableStore());
-	private readonly _onDidChange = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 	private _value: IEditorOptions;
 
 	get value(): Readonly<IEditorOptions> {
@@ -76,7 +76,7 @@ export class BaseCellEditorOptions extends Disposable implements IBaseCellEditor
 		this._value = this._computeEditorOptions();
 	}
 
-	private _recomputeOptions(): void {
+	private _recomputeOptions(): codemavi {
 		this._value = this._computeEditorOptions();
 		this._onDidChange.fire();
 	}

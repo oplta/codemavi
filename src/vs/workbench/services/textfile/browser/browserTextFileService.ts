@@ -51,7 +51,7 @@ export class BrowserTextFileService extends AbstractTextFileService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Lifecycle
 		this._register(this.lifecycleService.onBeforeShutdown(event => event.veto(this.onBeforeShutdown(), 'veto.textFiles')));

@@ -40,21 +40,21 @@ class CustomDocumentStoreEntry {
 		return this._edits.add([item]);
 	}
 
-	async undo(editId: number, isDirty: boolean): Promise<void> {
+	async undo(editId: number, isDirty: boolean): Promise<codemavi> {
 		await this.getEdit(editId).undo();
 		if (!isDirty) {
 			this.disposeBackup();
 		}
 	}
 
-	async redo(editId: number, isDirty: boolean): Promise<void> {
+	async redo(editId: number, isDirty: boolean): Promise<codemavi> {
 		await this.getEdit(editId).redo();
 		if (!isDirty) {
 			this.disposeBackup();
 		}
 	}
 
-	disposeEdits(editIds: number[]): void {
+	disposeEdits(editIds: number[]): codemavi {
 		for (const id of editIds) {
 			this._edits.delete(id);
 		}
@@ -68,12 +68,12 @@ class CustomDocumentStoreEntry {
 		return joinPath(this._storagePath, fileName);
 	}
 
-	updateBackup(backup: vscode.CustomDocumentBackup): void {
+	updateBackup(backup: vscode.CustomDocumentBackup): codemavi {
 		this._backup?.delete();
 		this._backup = backup;
 	}
 
-	disposeBackup(): void {
+	disposeBackup(): codemavi {
 		this._backup?.delete();
 		this._backup = undefined;
 	}
@@ -230,7 +230,7 @@ export class ExtHostCustomEditors implements extHostProtocol.ExtHostCustomEditor
 		return { editable: isCustomEditorProviderWithEditingCapability(entry.provider) };
 	}
 
-	async $disposeCustomDocument(resource: UriComponents, viewType: string): Promise<void> {
+	async $disposeCustomDocument(resource: UriComponents, viewType: string): Promise<codemavi> {
 		const entry = this._editorProviders.get(viewType);
 		if (!entry) {
 			throw new Error(`No provider found for '${viewType}'`);
@@ -258,7 +258,7 @@ export class ExtHostCustomEditors implements extHostProtocol.ExtHostCustomEditor
 		},
 		position: EditorGroupColumn,
 		cancellation: CancellationToken,
-	): Promise<void> {
+	): Promise<codemavi> {
 		const entry = this._editorProviders.get(viewType);
 		if (!entry) {
 			throw new Error(`No provider found for '${viewType}'`);
@@ -286,12 +286,12 @@ export class ExtHostCustomEditors implements extHostProtocol.ExtHostCustomEditor
 		}
 	}
 
-	$disposeEdits(resourceComponents: UriComponents, viewType: string, editIds: number[]): void {
+	$disposeEdits(resourceComponents: UriComponents, viewType: string, editIds: number[]): codemavi {
 		const document = this.getCustomDocumentEntry(viewType, resourceComponents);
 		document.disposeEdits(editIds);
 	}
 
-	async $onMoveCustomEditor(handle: string, newResourceComponents: UriComponents, viewType: string): Promise<void> {
+	async $onMoveCustomEditor(handle: string, newResourceComponents: UriComponents, viewType: string): Promise<codemavi> {
 		const entry = this._editorProviders.get(viewType);
 		if (!entry) {
 			throw new Error(`No provider found for '${viewType}'`);
@@ -311,31 +311,31 @@ export class ExtHostCustomEditors implements extHostProtocol.ExtHostCustomEditor
 		await (entry.provider as vscode.CustomTextEditorProvider).moveCustomTextEditor!(document, webview, CancellationToken.None);
 	}
 
-	async $undo(resourceComponents: UriComponents, viewType: string, editId: number, isDirty: boolean): Promise<void> {
+	async $undo(resourceComponents: UriComponents, viewType: string, editId: number, isDirty: boolean): Promise<codemavi> {
 		const entry = this.getCustomDocumentEntry(viewType, resourceComponents);
 		return entry.undo(editId, isDirty);
 	}
 
-	async $redo(resourceComponents: UriComponents, viewType: string, editId: number, isDirty: boolean): Promise<void> {
+	async $redo(resourceComponents: UriComponents, viewType: string, editId: number, isDirty: boolean): Promise<codemavi> {
 		const entry = this.getCustomDocumentEntry(viewType, resourceComponents);
 		return entry.redo(editId, isDirty);
 	}
 
-	async $revert(resourceComponents: UriComponents, viewType: string, cancellation: CancellationToken): Promise<void> {
+	async $revert(resourceComponents: UriComponents, viewType: string, cancellation: CancellationToken): Promise<codemavi> {
 		const entry = this.getCustomDocumentEntry(viewType, resourceComponents);
 		const provider = this.getCustomEditorProvider(viewType);
 		await provider.revertCustomDocument(entry.document, cancellation);
 		entry.disposeBackup();
 	}
 
-	async $onSave(resourceComponents: UriComponents, viewType: string, cancellation: CancellationToken): Promise<void> {
+	async $onSave(resourceComponents: UriComponents, viewType: string, cancellation: CancellationToken): Promise<codemavi> {
 		const entry = this.getCustomDocumentEntry(viewType, resourceComponents);
 		const provider = this.getCustomEditorProvider(viewType);
 		await provider.saveCustomDocument(entry.document, cancellation);
 		entry.disposeBackup();
 	}
 
-	async $onSaveAs(resourceComponents: UriComponents, viewType: string, targetResource: UriComponents, cancellation: CancellationToken): Promise<void> {
+	async $onSaveAs(resourceComponents: UriComponents, viewType: string, targetResource: UriComponents, cancellation: CancellationToken): Promise<codemavi> {
 		const entry = this.getCustomDocumentEntry(viewType, resourceComponents);
 		const provider = this.getCustomEditorProvider(viewType);
 		return provider.saveCustomDocumentAs(entry.document, URI.revive(targetResource), cancellation);

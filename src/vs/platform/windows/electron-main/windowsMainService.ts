@@ -243,7 +243,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Signal a window is ready after having entered a workspace
 		this._register(this.workspacesManagementMainService.onDidEnterWorkspace(event => this._onDidSignalReadyWindow.fire(event.window)));
@@ -279,7 +279,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return this.open({ ...openConfig, cli, forceEmpty, forceNewWindow, forceReuseWindow, remoteAuthority, forceTempProfile: options?.forceTempProfile, forceProfile: options?.forceProfile });
 	}
 
-	openExistingWindow(window: ICodeWindow, openConfig: IOpenConfiguration): void {
+	openExistingWindow(window: ICodeWindow, openConfig: IOpenConfiguration): codemavi {
 
 		// Bring window to front
 		window.focus();
@@ -449,7 +449,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return usedWindows;
 	}
 
-	private handleWaitMarkerFile(openConfig: IOpenConfiguration, usedWindows: ICodeWindow[]): void {
+	private handleWaitMarkerFile(openConfig: IOpenConfiguration, usedWindows: ICodeWindow[]): codemavi {
 
 		// If we got started with --wait from the CLI, we need to signal to the outside when the window
 		// used for the edit operation is closed or loaded to a different folder so that the waiting
@@ -483,7 +483,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		// if files have been opened in one of them
 		const usedWindows: ICodeWindow[] = [];
 		let filesOpenedInWindow: ICodeWindow | undefined = undefined;
-		function addUsedWindow(window: ICodeWindow, openedFiles?: boolean): void {
+		function addUsedWindow(window: ICodeWindow, openedFiles?: boolean): codemavi {
 			usedWindows.push(window);
 
 			if (openedFiles) {
@@ -673,7 +673,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return window;
 	}
 
-	private focusMainOrChildWindow(mainWindow: ICodeWindow): void {
+	private focusMainOrChildWindow(mainWindow: ICodeWindow): codemavi {
 		let windowToFocus: ICodeWindow | IAuxiliaryWindow = mainWindow;
 
 		const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -1605,7 +1605,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return window;
 	}
 
-	private async doOpenInBrowserWindow(window: ICodeWindow, configuration: INativeWindowConfiguration, options: IOpenBrowserWindowOptions, defaultProfile: IUserDataProfile): Promise<void> {
+	private async doOpenInBrowserWindow(window: ICodeWindow, configuration: INativeWindowConfiguration, options: IOpenBrowserWindowOptions, defaultProfile: IUserDataProfile): Promise<codemavi> {
 
 		// Register window for backups unless the window
 		// is for extension development, where we do not
@@ -1666,7 +1666,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return this.userDataProfilesMainService.getProfileForWorkspace(workspace) ?? defaultProfile;
 	}
 
-	private onWindowClosed(window: ICodeWindow, disposables: IDisposable): void {
+	private onWindowClosed(window: ICodeWindow, disposables: IDisposable): codemavi {
 
 		// Remove from our list so that Electron can clean it up
 		this.windows.delete(window.id);
@@ -1678,7 +1678,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		disposables.dispose();
 	}
 
-	private onWindowDestroyed(window: ICodeWindow): void {
+	private onWindowDestroyed(window: ICodeWindow): codemavi {
 
 		// Remove from our list so that Electron can clean it up
 		this.windows.delete(window.id);
@@ -1708,19 +1708,19 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 		return getLastFocused(windows);
 	}
 
-	sendToFocused(channel: string, ...args: any[]): void {
+	sendToFocused(channel: string, ...args: any[]): codemavi {
 		const focusedWindow = this.getFocusedWindow() || this.getLastActiveWindow();
 
 		focusedWindow?.sendWhenReady(channel, CancellationToken.None, ...args);
 	}
 
-	sendToOpeningWindow(channel: string, ...args: any[]): void {
+	sendToOpeningWindow(channel: string, ...args: any[]): codemavi {
 		this._register(Event.once(this.onDidSignalReadyWindow)(window => {
 			window.sendWhenReady(channel, CancellationToken.None, ...args);
 		}));
 	}
 
-	sendToAll(channel: string, payload?: any, windowIdsToIgnore?: number[]): void {
+	sendToAll(channel: string, payload?: any, windowIdsToIgnore?: number[]): codemavi {
 		for (const window of this.getWindows()) {
 			if (windowIdsToIgnore && windowIdsToIgnore.indexOf(window.id) >= 0) {
 				continue; // do not send if we are instructed to ignore it

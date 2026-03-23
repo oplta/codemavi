@@ -66,7 +66,7 @@ export class SnippetController2 implements IEditorContribution {
 	private _modelVersionId: number = -1;
 	private _currentChoice?: Choice;
 
-	private _choiceCompletions?: { provider: CompletionItemProvider; enable(): void; disable(): void };
+	private _choiceCompletions?: { provider: CompletionItemProvider; enable(): codemavi; disable(): codemavi };
 
 	constructor(
 		private readonly _editor: ICodeEditor,
@@ -80,7 +80,7 @@ export class SnippetController2 implements IEditorContribution {
 		this._hasPrevTabstop = SnippetController2.HasPrevTabstop.bindTo(contextKeyService);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._inSnippet.reset();
 		this._hasPrevTabstop.reset();
 		this._hasNextTabstop.reset();
@@ -104,7 +104,7 @@ export class SnippetController2 implements IEditorContribution {
 	insert(
 		template: string,
 		opts?: Partial<ISnippetInsertOptions>
-	): void {
+	): codemavi {
 		// this is here to find out more about the yet-not-understood
 		// error that sometimes happens when we fail to inserted a nested
 		// snippet
@@ -123,7 +123,7 @@ export class SnippetController2 implements IEditorContribution {
 	private _doInsert(
 		template: string | ISnippetEdit[],
 		opts: ISnippetInsertOptions
-	): void {
+	): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -218,7 +218,7 @@ export class SnippetController2 implements IEditorContribution {
 		this._snippetListener.add(this._editor.onDidChangeCursorSelection(() => this._updateState()));
 	}
 
-	private _updateState(): void {
+	private _updateState(): codemavi {
 		if (!this._session || !this._editor.hasModel()) {
 			// canceled in the meanwhile
 			return;
@@ -248,7 +248,7 @@ export class SnippetController2 implements IEditorContribution {
 		this._handleChoice();
 	}
 
-	private _handleChoice(): void {
+	private _handleChoice(): codemavi {
 		if (!this._session || !this._editor.hasModel()) {
 			this._currentChoice = undefined;
 			return;
@@ -273,13 +273,13 @@ export class SnippetController2 implements IEditorContribution {
 		}
 	}
 
-	finish(): void {
+	finish(): codemavi {
 		while (this._inSnippet.get()) {
 			this.next();
 		}
 	}
 
-	cancel(resetSelection: boolean = false): void {
+	cancel(resetSelection: boolean = false): codemavi {
 		this._inSnippet.reset();
 		this._hasPrevTabstop.reset();
 		this._hasNextTabstop.reset();
@@ -298,12 +298,12 @@ export class SnippetController2 implements IEditorContribution {
 		}
 	}
 
-	prev(): void {
+	prev(): codemavi {
 		this._session?.prev();
 		this._updateState();
 	}
 
-	next(): void {
+	next(): codemavi {
 		this._session?.next();
 		this._updateState();
 	}

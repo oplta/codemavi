@@ -18,7 +18,7 @@ export class MainThreadTestCollection extends AbstractIncrementalTestCollection<
 	private expandPromises = new WeakMap<IncrementalTestCollectionItem, {
 		pendingLvl: number;
 		doneLvl: number;
-		prom: Promise<void>;
+		prom: Promise<codemavi>;
 	}>();
 
 	/**
@@ -48,20 +48,20 @@ export class MainThreadTestCollection extends AbstractIncrementalTestCollection<
 
 	public readonly onBusyProvidersChange = this.busyProvidersChangeEmitter.event;
 
-	constructor(uriIdentityService: ITestUriCanonicalizer, private readonly expandActual: (id: string, levels: number) => Promise<void>) {
+	constructor(uriIdentityService: ITestUriCanonicalizer, private readonly expandActual: (id: string, levels: number) => Promise<codemavi>) {
 		super(uriIdentityService);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public expand(testId: string, levels: number): Promise<void> {
+	public expand(testId: string, levels: number): Promise<codemavi> {
 		const test = this.items.get(testId);
 		if (!test) {
 			return Promise.resolve();
 		}
 
-		// simple cache to avoid duplicate/unnecessary expansion calls
+		// simple cache to acodemavi duplicate/unnecessary expansion calls
 		const existing = this.expandPromises.get(test);
 		if (existing && existing.pendingLvl >= levels) {
 			return existing.prom;

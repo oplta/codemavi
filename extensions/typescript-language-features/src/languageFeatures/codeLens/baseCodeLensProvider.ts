@@ -23,7 +23,7 @@ export class ReferencesCodeLens extends vscode.CodeLens {
 }
 
 export abstract class TypeScriptBaseCodeLensProvider extends Disposable implements vscode.CodeLensProvider<ReferencesCodeLens> {
-	protected changeEmitter = this._register(new vscode.EventEmitter<void>());
+	protected changeEmitter = this._register(new vscode.EventEmitter<codemavi>());
 	public onDidChangeCodeLenses = this.changeEmitter.event;
 
 	public static readonly cancelledCommand: vscode.Command = {
@@ -71,7 +71,7 @@ export abstract class TypeScriptBaseCodeLensProvider extends Disposable implemen
 		item: Proto.NavigationTree,
 		parent: Proto.NavigationTree | undefined,
 		results: vscode.Range[]
-	): void {
+	): codemavi {
 		const range = this.extractSymbol(document, item, parent);
 		if (range) {
 			results.push(range);

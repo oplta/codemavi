@@ -38,7 +38,7 @@ export class MenubarMainService extends Disposable implements IMenubarMainServic
 		return this._register(this.instantiationService.createInstance(Menubar));
 	}
 
-	async updateMenubar(windowId: number, menus: IMenubarData): Promise<void> {
+	async updateMenubar(windowId: number, menus: IMenubarData): Promise<codemavi> {
 		this.logService.trace('menubarService#updateMenubar', windowId);
 
 		const menubar = await this.menubar;

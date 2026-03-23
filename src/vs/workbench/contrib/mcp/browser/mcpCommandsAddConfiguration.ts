@@ -354,7 +354,7 @@ export class McpAddConfigurationCommand {
 		return this._configurationService.updateValue(mcpConfigurationSection, settings, target);
 	}
 
-	public async run(): Promise<void> {
+	public async run(): Promise<codemavi> {
 		// Step 1: Choose server type
 		const serverType = await this.getServerType();
 		if (serverType === undefined) {
@@ -431,7 +431,7 @@ export class McpAddConfigurationCommand {
 		this.showOnceDiscovered(serverId);
 	}
 
-	public async pickForUrlHandler(resource: URI, showIsPrimary = false): Promise<void> {
+	public async pickForUrlHandler(resource: URI, showIsPrimary = false): Promise<codemavi> {
 		const name = decodeURIComponent(basename(resource)).replace(/\.json$/, '');
 		const placeHolder = localize('install.title', 'Install MCP server {0}', name);
 

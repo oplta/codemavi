@@ -20,7 +20,7 @@ suite('BulkCellEdits', function () {
 	const store = ensureNoDisposablesAreLeakedInTestSuite();
 
 	async function runTest(inputUri: URI, resolveUri: URI) {
-		const progress: IProgress<void> = { report: _ => { } };
+		const progress: IProgress<codemavi> = { report: _ => { } };
 		const editorService = store.add(new TestEditorService());
 
 		const notebook = mockObject<NotebookTextModel>()();

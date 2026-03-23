@@ -34,7 +34,7 @@ export class FileWatcherManager implements IDisposable {
 		private readonly logger: Logger,
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		for (const entry of this._fileWatchers.values()) {
 			entry.watcher.dispose();
 		}
@@ -46,7 +46,7 @@ export class FileWatcherManager implements IDisposable {
 		this._dirWatchers.clear();
 	}
 
-	create(id: number, uri: vscode.Uri, watchParentDirs: boolean, isRecursive: boolean, listeners: { create?: (uri: vscode.Uri) => void; change?: (uri: vscode.Uri) => void; delete?: (uri: vscode.Uri) => void }): void {
+	create(id: number, uri: vscode.Uri, watchParentDirs: boolean, isRecursive: boolean, listeners: { create?: (uri: vscode.Uri) => codemavi; change?: (uri: vscode.Uri) => codemavi; delete?: (uri: vscode.Uri) => codemavi }): codemavi {
 		this.logger.trace(`Creating file watcher for ${uri.toString()}`);
 
 		// Non-writable file systems do not support file watching
@@ -103,7 +103,7 @@ export class FileWatcherManager implements IDisposable {
 	}
 
 
-	delete(id: number): void {
+	delete(id: number): codemavi {
 		const entry = this._fileWatchers.get(id);
 		if (entry) {
 			this.logger.trace(`Deleting file watcher for ${entry.uri}`);

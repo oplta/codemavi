@@ -44,7 +44,7 @@ suite('Files - TextFileEditorModel (integration)', () => {
 		return testBackupAndRestore(toResource.call(this, '/path/index_async.txt'), toResource.call(this, '/path/index_async2.txt'), largeContent);
 	});
 
-	async function testBackupAndRestore(resourceA: URI, resourceB: URI, contents: string): Promise<void> {
+	async function testBackupAndRestore(resourceA: URI, resourceB: URI, contents: string): Promise<codemavi> {
 		const originalModel: TextFileEditorModel = disposables.add(instantiationService.createInstance(TextFileEditorModel, resourceA, 'utf8', undefined));
 		await originalModel.resolve({
 			contents: await createTextBufferFactoryFromStream(await accessor.textFileService.getDecodedStream(resourceA, bufferToStream(VSBuffer.fromString(contents))))

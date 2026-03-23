@@ -25,7 +25,7 @@ export const enum OutlineTarget {
 
 export interface IOutlineService {
 	_serviceBrand: undefined;
-	onDidChange: Event<void>;
+	onDidChange: Event<codemavi>;
 	canCreateOutline(editor: IEditorPane): boolean;
 	createOutline(editor: IEditorPane, target: OutlineTarget, token: CancellationToken): Promise<IOutline<any> | undefined>;
 	registerOutlineCreator(creator: IOutlineCreator<any, any>): IDisposable;
@@ -83,10 +83,10 @@ export interface IOutline<E> {
 	readonly activeElement: E | undefined;
 	readonly onDidChange: Event<OutlineChangeEvent>;
 
-	reveal(entry: E, options: IEditorOptions, sideBySide: boolean, select: boolean): Promise<void> | void;
+	reveal(entry: E, options: IEditorOptions, sideBySide: boolean, select: boolean): Promise<codemavi> | codemavi;
 	preview(entry: E): IDisposable;
 	captureViewState(): IDisposable;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 

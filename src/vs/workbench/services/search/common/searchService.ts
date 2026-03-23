@@ -79,7 +79,7 @@ export class SearchService extends Disposable implements ISearchService {
 		});
 	}
 
-	async textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => void): Promise<ISearchComplete> {
+	async textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => codemavi): Promise<ISearchComplete> {
 		const results = this.textSearchSplitSyncAsync(query, token, onProgress);
 		const openEditorResults = results.syncResults;
 		const otherResults = await results.asyncResults;
@@ -90,7 +90,7 @@ export class SearchService extends Disposable implements ISearchService {
 		};
 	}
 
-	async aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => void): Promise<ISearchComplete> {
+	async aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => codemavi): Promise<ISearchComplete> {
 		const onProviderProgress = (progress: ISearchProgressItem) => {
 			// Match
 			if (onProgress) { // don't override open editor results
@@ -116,7 +116,7 @@ export class SearchService extends Disposable implements ISearchService {
 	textSearchSplitSyncAsync(
 		query: ITextQuery,
 		token?: CancellationToken | undefined,
-		onProgress?: ((result: ISearchProgressItem) => void) | undefined,
+		onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined,
 		notebookFilesToIgnore?: ResourceSet,
 		asyncNotebookFilesToIgnore?: Promise<ResourceSet>
 	): {
@@ -170,7 +170,7 @@ export class SearchService extends Disposable implements ISearchService {
 		return this.fileSearchProviders.has(scheme);
 	}
 
-	private doSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => void): Promise<ISearchComplete> {
+	private doSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (item: ISearchProgressItem) => codemavi): Promise<ISearchComplete> {
 		this.logService.trace('SearchService#search', JSON.stringify(query));
 
 		const schemesInQuery = this.getSchemesInQuery(query);
@@ -267,7 +267,7 @@ export class SearchService extends Disposable implements ISearchService {
 		}
 	}
 
-	private async searchWithProviders(query: ISearchQuery, onProviderProgress: (progress: ISearchProgressItem) => void, token?: CancellationToken) {
+	private async searchWithProviders(query: ISearchQuery, onProviderProgress: (progress: ISearchProgressItem) => codemavi, token?: CancellationToken) {
 		const e2eSW = StopWatch.create(false);
 
 		const searchPs: Promise<ISearchComplete>[] = [];
@@ -355,7 +355,7 @@ export class SearchService extends Disposable implements ISearchService {
 		return queries;
 	}
 
-	private sendTelemetry(query: ISearchQuery, endToEndTime: number, complete?: ISearchComplete, err?: SearchError): void {
+	private sendTelemetry(query: ISearchQuery, endToEndTime: number, complete?: ISearchComplete, err?: SearchError): codemavi {
 		if (!randomChance(5 / 100)) {
 			// Noisy events, only send 5% of them
 			return;
@@ -576,7 +576,7 @@ export class SearchService extends Disposable implements ISearchService {
 		return pathIncludedInQuery(query, resource.fsPath);
 	}
 
-	async clearCache(cacheKey: string): Promise<void> {
+	async clearCache(cacheKey: string): Promise<codemavi> {
 		const clearPs = Array.from(this.fileSearchProviders.values())
 			.map(provider => provider && provider.clearCache(cacheKey));
 		await Promise.all(clearPs);

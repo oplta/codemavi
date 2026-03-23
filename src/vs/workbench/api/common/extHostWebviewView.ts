@@ -60,10 +60,10 @@ class ExtHostWebviewView extends Disposable implements vscode.WebviewView {
 		super.dispose();
 	}
 
-	readonly #onDidChangeVisibility = this._register(new Emitter<void>());
+	readonly #onDidChangeVisibility = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeVisibility = this.#onDidChangeVisibility.event;
 
-	readonly #onDidDispose = this._register(new Emitter<void>());
+	readonly #onDidDispose = this._register(new Emitter<codemavi>());
 	public readonly onDidDispose = this.#onDidDispose.event;
 
 	public get title(): string | undefined {
@@ -124,7 +124,7 @@ class ExtHostWebviewView extends Disposable implements vscode.WebviewView {
 		this.#proxy.$setWebviewViewBadge(this.#handle, badge);
 	}
 
-	public show(preserveFocus?: boolean): void {
+	public show(preserveFocus?: boolean): codemavi {
 		this.assertNotDisposed();
 		this.#proxy.$show(this.#handle, !!preserveFocus);
 	}
@@ -184,7 +184,7 @@ export class ExtHostWebviewViews implements extHostProtocol.ExtHostWebviewViewsS
 		title: string | undefined,
 		state: any,
 		cancellation: CancellationToken,
-	): Promise<void> {
+	): Promise<codemavi> {
 		const entry = this._viewProviders.get(viewType);
 		if (!entry) {
 			throw new Error(`No view provider found for '${viewType}'`);

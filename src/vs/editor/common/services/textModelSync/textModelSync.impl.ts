@@ -50,7 +50,7 @@ export class WorkerTextModelSyncClient extends Disposable {
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		for (const modelUrl in this._syncedModels) {
 			dispose(this._syncedModels[modelUrl]);
 		}
@@ -59,7 +59,7 @@ export class WorkerTextModelSyncClient extends Disposable {
 		super.dispose();
 	}
 
-	public ensureSyncedResources(resources: URI[], forceLargeModels: boolean = false): void {
+	public ensureSyncedResources(resources: URI[], forceLargeModels: boolean = false): codemavi {
 		for (const resource of resources) {
 			const resourceStr = resource.toString();
 
@@ -72,7 +72,7 @@ export class WorkerTextModelSyncClient extends Disposable {
 		}
 	}
 
-	private _checkStopModelSync(): void {
+	private _checkStopModelSync(): codemavi {
 		const currentTime = (new Date()).getTime();
 
 		const toRemove: string[] = [];
@@ -88,7 +88,7 @@ export class WorkerTextModelSyncClient extends Disposable {
 		}
 	}
 
-	private _beginModelSync(resource: URI, forceLargeModels: boolean): void {
+	private _beginModelSync(resource: URI, forceLargeModels: boolean): codemavi {
 		const model = this._modelService.getModel(resource);
 		if (!model) {
 			return;
@@ -120,7 +120,7 @@ export class WorkerTextModelSyncClient extends Disposable {
 		this._syncedModels[modelUrl] = toDispose;
 	}
 
-	private _stopModelSync(modelUrl: string): void {
+	private _stopModelSync(modelUrl: string): codemavi {
 		const toDispose = this._syncedModels[modelUrl];
 		delete this._syncedModels[modelUrl];
 		delete this._syncedModelsLastUsedTime[modelUrl];
@@ -136,7 +136,7 @@ export class WorkerTextModelSyncServer implements IWorkerTextModelSyncChannelSer
 		this._models = Object.create(null);
 	}
 
-	public bindToServer(workerServer: IWebWorkerServer): void {
+	public bindToServer(workerServer: IWebWorkerServer): codemavi {
 		workerServer.setChannel(WORKER_TEXT_MODEL_SYNC_CHANNEL, this);
 	}
 
@@ -150,11 +150,11 @@ export class WorkerTextModelSyncServer implements IWorkerTextModelSyncChannelSer
 		return all;
 	}
 
-	$acceptNewModel(data: IRawModelData): void {
+	$acceptNewModel(data: IRawModelData): codemavi {
 		this._models[data.url] = new MirrorModel(URI.parse(data.url), data.lines, data.EOL, data.versionId);
 	}
 
-	$acceptModelChanged(uri: string, e: IModelChangedEvent): void {
+	$acceptModelChanged(uri: string, e: IModelChangedEvent): codemavi {
 		if (!this._models[uri]) {
 			return;
 		}
@@ -162,7 +162,7 @@ export class WorkerTextModelSyncServer implements IWorkerTextModelSyncChannelSer
 		model.onEvents(e);
 	}
 
-	$acceptRemovedModel(uri: string): void {
+	$acceptRemovedModel(uri: string): codemavi {
 		if (!this._models[uri]) {
 			return;
 		}

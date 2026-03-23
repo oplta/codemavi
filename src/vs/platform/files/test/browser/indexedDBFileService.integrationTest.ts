@@ -206,7 +206,7 @@ flakySuite('IndexedDBFileSystemProvider', function () {
 		return assertCreateFile(contents => bufferToStream(VSBuffer.fromString(contents)));
 	});
 
-	async function assertCreateFile(converter: (content: string) => VSBuffer | VSBufferReadable | VSBufferReadableStream): Promise<void> {
+	async function assertCreateFile(converter: (content: string) => VSBuffer | VSBufferReadable | VSBufferReadableStream): Promise<codemavi> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 

@@ -74,7 +74,7 @@ export class DynamicProgrammingDiffing implements IDiffAlgorithm {
 		let lastAligningPosS1: number = sequence1.length;
 		let lastAligningPosS2: number = sequence2.length;
 
-		function reportDecreasingAligningPositions(s1: number, s2: number): void {
+		function reportDecreasingAligningPositions(s1: number, s2: number): codemavi {
 			if (s1 + 1 !== lastAligningPosS1 || s2 + 1 !== lastAligningPosS2) {
 				result.push(new SequenceDiff(
 					new OffsetRange(s1 + 1, lastAligningPosS1),

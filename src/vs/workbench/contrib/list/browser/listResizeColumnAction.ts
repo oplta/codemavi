@@ -21,7 +21,7 @@ export class ListResizeColumnAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const listService = accessor.get(IListService);
 		const instantiationService = accessor.get(IInstantiationService);
 

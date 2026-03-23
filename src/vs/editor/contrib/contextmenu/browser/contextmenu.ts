@@ -78,7 +78,7 @@ export class ContextMenuController implements IEditorContribution {
 		}));
 	}
 
-	private _onContextMenu(e: IEditorMouseEvent): void {
+	private _onContextMenu(e: IEditorMouseEvent): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -138,7 +138,7 @@ export class ContextMenuController implements IEditorContribution {
 		this.showContextMenu(anchor);
 	}
 
-	public showContextMenu(anchor?: IMouseEvent | null): void {
+	public showContextMenu(anchor?: IMouseEvent | null): codemavi {
 		if (!this._editor.getOption(EditorOption.contextmenu)) {
 			return; // Context menu is turned off through configuration
 		}
@@ -191,7 +191,7 @@ export class ContextMenuController implements IEditorContribution {
 		return result;
 	}
 
-	private _doShowContextMenu(actions: IAction[], event: IMouseEvent | null = null): void {
+	private _doShowContextMenu(actions: IAction[], event: IMouseEvent | null = null): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -258,7 +258,7 @@ export class ContextMenuController implements IEditorContribution {
 		});
 	}
 
-	private _showScrollbarContextMenu(anchor: IMouseEvent): void {
+	private _showScrollbarContextMenu(anchor: IMouseEvent): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -271,7 +271,7 @@ export class ContextMenuController implements IEditorContribution {
 		const minimapOptions = this._editor.getOption(EditorOption.minimap);
 
 		let lastId = 0;
-		const createAction = (opts: { label: string; enabled?: boolean; checked?: boolean; run: () => void }): IAction => {
+		const createAction = (opts: { label: string; enabled?: boolean; checked?: boolean; run: () => codemavi }): IAction => {
 			return {
 				id: `menu-action-${++lastId}`,
 				label: opts.label,
@@ -377,7 +377,7 @@ export class ContextMenuController implements IEditorContribution {
 		return this._keybindingService.lookupKeybinding(action.id);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this._contextMenuIsBeingShownCount > 0) {
 			this._contextViewService.hideContextView();
 		}
@@ -401,7 +401,7 @@ class ShowContextMenu extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		ContextMenuController.get(editor)?.showContextMenu();
 	}
 }

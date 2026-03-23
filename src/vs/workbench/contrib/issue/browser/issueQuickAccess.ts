@@ -110,7 +110,7 @@ export class IssueQuickAccess extends PickerQuickAccessProvider<IPickerQuickAcce
 
 		let label: string;
 		let trigger: () => TriggerAction;
-		let accept: () => void;
+		let accept: () => codemavi;
 		if (action && 'source' in action.item && action.item.source) {
 			label = action.item.source?.title;
 			trigger = () => {

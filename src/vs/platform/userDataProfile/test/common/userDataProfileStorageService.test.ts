@@ -18,7 +18,7 @@ class TestStorageDatabase extends InMemoryStorageDatabase {
 	private readonly _onDidChangeItemsExternal = new Emitter<IStorageItemsChangeEvent>();
 	override readonly onDidChangeItemsExternal = this._onDidChangeItemsExternal.event;
 
-	override async updateItems(request: IUpdateRequest): Promise<void> {
+	override async updateItems(request: IUpdateRequest): Promise<codemavi> {
 		await super.updateItems(request);
 		if (request.insert || request.delete) {
 			this._onDidChangeItemsExternal.fire({ changed: request.insert, deleted: request.delete });
@@ -59,13 +59,13 @@ suite('ProfileStorageService', () => {
 	});
 
 
-	test('read empty storage', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('read empty storage', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const actual = await testObject.readStorageData(profile);
 
 		assert.strictEqual(actual.size, 0);
 	}));
 
-	test('read storage with data', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('read storage with data', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storage.set('foo', 'bar');
 		storage.set(TARGET_KEY, JSON.stringify({ foo: StorageTarget.USER }));
 		await storage.flush();
@@ -76,7 +76,7 @@ suite('ProfileStorageService', () => {
 		assert.deepStrictEqual(actual.get('foo'), { 'value': 'bar', 'target': StorageTarget.USER });
 	}));
 
-	test('write in empty storage', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('write in empty storage', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const data = new Map<string, string>();
 		data.set('foo', 'bar');
 		await testObject.updateStorageData(profile, data, StorageTarget.USER);
@@ -86,7 +86,7 @@ suite('ProfileStorageService', () => {
 		assert.strictEqual(storage.get('foo'), 'bar');
 	}));
 
-	test('write in storage with data', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('write in storage with data', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storage.set('foo', 'bar');
 		storage.set(TARGET_KEY, JSON.stringify({ foo: StorageTarget.USER }));
 		await storage.flush();
@@ -101,7 +101,7 @@ suite('ProfileStorageService', () => {
 		assert.strictEqual(storage.get('abc'), 'xyz');
 	}));
 
-	test('write in storage with data (insert, update, remove)', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('write in storage with data (insert, update, remove)', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storage.set('foo', 'bar');
 		storage.set('abc', 'xyz');
 		storage.set(TARGET_KEY, JSON.stringify({ foo: StorageTarget.USER, abc: StorageTarget.MACHINE }));

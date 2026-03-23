@@ -13,10 +13,10 @@ class TestLine implements ILine {
 	constructor(public id: string) {
 	}
 
-	onContentChanged(): void {
+	onContentChanged(): codemavi {
 		this._pinged = true;
 	}
-	onTokensChanged(): void {
+	onTokensChanged(): codemavi {
 		this._pinged = true;
 	}
 }
@@ -27,7 +27,7 @@ interface ILinesCollectionState {
 	pinged: boolean[];
 }
 
-function assertState(col: RenderedLinesCollection<TestLine>, state: ILinesCollectionState): void {
+function assertState(col: RenderedLinesCollection<TestLine>, state: ILinesCollectionState): codemavi {
 	const actualState: ILinesCollectionState = {
 		startLineNumber: col.getStartLineNumber(),
 		lines: [],
@@ -44,7 +44,7 @@ suite('RenderedLinesCollection onLinesDeleted', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testOnModelLinesDeleted(deleteFromLineNumber: number, deleteToLineNumber: number, expectedDeleted: string[], expectedState: ILinesCollectionState): void {
+	function testOnModelLinesDeleted(deleteFromLineNumber: number, deleteToLineNumber: number, expectedDeleted: string[], expectedState: ILinesCollectionState): codemavi {
 		const col = new RenderedLinesCollection<TestLine>({ createLine: () => new TestLine('new') });
 		col._set(6, [
 			new TestLine('old6'),
@@ -321,7 +321,7 @@ suite('RenderedLinesCollection onLineChanged', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testOnModelLineChanged(changedLineNumber: number, expectedPinged: boolean, expectedState: ILinesCollectionState): void {
+	function testOnModelLineChanged(changedLineNumber: number, expectedPinged: boolean, expectedState: ILinesCollectionState): codemavi {
 		const col = new RenderedLinesCollection<TestLine>({ createLine: () => new TestLine('new') });
 		col._set(6, [
 			new TestLine('old6'),
@@ -404,7 +404,7 @@ suite('RenderedLinesCollection onLinesInserted', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testOnModelLinesInserted(insertFromLineNumber: number, insertToLineNumber: number, expectedDeleted: string[], expectedState: ILinesCollectionState): void {
+	function testOnModelLinesInserted(insertFromLineNumber: number, insertToLineNumber: number, expectedDeleted: string[], expectedState: ILinesCollectionState): codemavi {
 		const col = new RenderedLinesCollection<TestLine>({ createLine: () => new TestLine('new') });
 		col._set(6, [
 			new TestLine('old6'),
@@ -682,7 +682,7 @@ suite('RenderedLinesCollection onTokensChanged', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testOnModelTokensChanged(changedFromLineNumber: number, changedToLineNumber: number, expectedPinged: boolean, expectedState: ILinesCollectionState): void {
+	function testOnModelTokensChanged(changedFromLineNumber: number, changedToLineNumber: number, expectedPinged: boolean, expectedState: ILinesCollectionState): codemavi {
 		const col = new RenderedLinesCollection<TestLine>({ createLine: () => new TestLine('new') });
 		col._set(6, [
 			new TestLine('old6'),

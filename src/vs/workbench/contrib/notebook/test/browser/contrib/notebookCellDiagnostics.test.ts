@@ -55,7 +55,7 @@ suite('notebookCellDiagnostics', () => {
 
 	interface ITestMarkerService extends IMarkerService {
 		markers: ResourceMap<IMarkerData[]>;
-		onMarkersUpdated: Event<void>;
+		onMarkersUpdated: Event<codemavi>;
 	}
 
 	setup(function () {
@@ -89,7 +89,7 @@ suite('notebookCellDiagnostics', () => {
 		instantiationService.stub(IChatAgentService, chatAgentService);
 
 		markerService = new class extends mock<ITestMarkerService>() {
-			private _onMarkersUpdated = new Emitter<void>();
+			private _onMarkersUpdated = new Emitter<codemavi>();
 			override onMarkersUpdated = this._onMarkersUpdated.event;
 			override markers: ResourceMap<IMarkerData[]> = new ResourceMap();
 			override changeOne(owner: string, resource: URI, markers: IMarkerData[]) {
@@ -120,7 +120,7 @@ suite('notebookCellDiagnostics', () => {
 				location: { startColumn: 1, endColumn: 5, startLineNumber: 1, endLineNumber: 1 }
 			};
 			testExecutionService.fireExecutionChanged(editor.textModel.uri, cell.handle);
-			await new Promise<void>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
+			await new Promise<codemavi>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
 
 			assert.strictEqual(cell?.executionErrorDiagnostic.get()?.message, 'something bad happened');
 			assert.equal(markerService.markers.get(cell.uri)?.length, 1);
@@ -156,13 +156,13 @@ suite('notebookCellDiagnostics', () => {
 			testExecutionService.fireExecutionChanged(editor.textModel.uri, cell.handle);
 			testExecutionService.fireExecutionChanged(editor.textModel.uri, cell2.handle);
 
-			await new Promise<void>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
+			await new Promise<codemavi>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
 			cell.model.internalMetadata.error = undefined;
 
 			// on NotebookCellExecution value will make it look like its currently running
 			testExecutionService.fireExecutionChanged(editor.textModel.uri, cell.handle, {} as INotebookCellExecution);
 
-			await new Promise<void>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
+			await new Promise<codemavi>(resolve => Event.once(markerService.onMarkersUpdated)(resolve));
 
 			assert.strictEqual(cell?.executionErrorDiagnostic.get(), undefined);
 			assert.strictEqual(cell2?.executionErrorDiagnostic.get()?.message, 'another bad thing happened', 'cell that was not executed should still have an error');

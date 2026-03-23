@@ -69,7 +69,7 @@ export class LocalFileSearchWorkerClient extends Disposable implements ISearchRe
 		return undefined;
 	}
 
-	sendTextSearchMatch(match: IFileMatch<UriComponents>, queryId: number): void {
+	sendTextSearchMatch(match: IFileMatch<UriComponents>, queryId: number): codemavi {
 		this._onDidReceiveTextSearchMatch.fire({ match, queryId });
 	}
 
@@ -83,7 +83,7 @@ export class LocalFileSearchWorkerClient extends Disposable implements ISearchRe
 		proxy.$cancelQuery(queryId);
 	}
 
-	async textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => void, token?: CancellationToken): Promise<ISearchComplete> {
+	async textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => codemavi, token?: CancellationToken): Promise<ISearchComplete> {
 		try {
 			const queryDisposables = new DisposableStore();
 
@@ -180,7 +180,7 @@ export class LocalFileSearchWorkerClient extends Disposable implements ISearchRe
 		}
 	}
 
-	async clearCache(cacheKey: string): Promise<void> {
+	async clearCache(cacheKey: string): Promise<codemavi> {
 		if (this.cache?.key === cacheKey) { this.cache = undefined; }
 	}
 

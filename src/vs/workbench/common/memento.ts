@@ -63,13 +63,13 @@ export class Memento {
 		return this.storageService.onDidChangeValue(scope, this.id, disposables);
 	}
 
-	saveMemento(): void {
+	saveMemento(): codemavi {
 		Memento.workspaceMementos.get(this.id)?.save();
 		Memento.profileMementos.get(this.id)?.save();
 		Memento.applicationMementos.get(this.id)?.save();
 	}
 
-	reloadMemento(scope: StorageScope): void {
+	reloadMemento(scope: StorageScope): codemavi {
 		let memento: ScopedMemento | undefined;
 		switch (scope) {
 			case StorageScope.APPLICATION:
@@ -86,7 +86,7 @@ export class Memento {
 		memento?.reload();
 	}
 
-	static clear(scope: StorageScope): void {
+	static clear(scope: StorageScope): codemavi {
 		switch (scope) {
 			case StorageScope.WORKSPACE:
 				Memento.workspaceMementos.clear();
@@ -127,7 +127,7 @@ class ScopedMemento {
 		return this.mementoObj;
 	}
 
-	reload(): void {
+	reload(): codemavi {
 
 		// Clear old
 		for (const name of Object.getOwnPropertyNames(this.mementoObj)) {
@@ -138,7 +138,7 @@ class ScopedMemento {
 		Object.assign(this.mementoObj, this.doLoad());
 	}
 
-	save(): void {
+	save(): codemavi {
 		if (!isEmptyObject(this.mementoObj)) {
 			this.storageService.store(this.id, this.mementoObj, this.scope, this.target);
 		} else {

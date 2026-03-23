@@ -49,7 +49,7 @@ export interface INotebookOutlineEntryFactory {
 	readonly _serviceBrand: undefined;
 
 	getOutlineEntries(cell: ICellViewModel, index: number): OutlineEntry[];
-	cacheSymbols(cell: ICellViewModel, cancelToken: CancellationToken): Promise<void>;
+	cacheSymbols(cell: ICellViewModel, cancelToken: CancellationToken): Promise<codemavi>;
 }
 
 export class NotebookOutlineEntryFactory implements INotebookOutlineEntryFactory {

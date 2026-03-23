@@ -16,7 +16,7 @@ export class OutlineViewState implements IOutlineViewState {
 	private readonly _onDidChange = new Emitter<{ followCursor?: boolean; sortBy?: boolean; filterOnType?: boolean }>();
 	readonly onDidChange = this._onDidChange.event;
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._onDidChange.dispose();
 	}
 
@@ -53,7 +53,7 @@ export class OutlineViewState implements IOutlineViewState {
 		return this._sortBy;
 	}
 
-	persist(storageService: IStorageService): void {
+	persist(storageService: IStorageService): codemavi {
 		storageService.store('outline/state', JSON.stringify({
 			followCursor: this.followCursor,
 			sortBy: this.sortBy,
@@ -61,7 +61,7 @@ export class OutlineViewState implements IOutlineViewState {
 		}), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	restore(storageService: IStorageService): void {
+	restore(storageService: IStorageService): codemavi {
 		const raw = storageService.get('outline/state', StorageScope.WORKSPACE);
 		if (!raw) {
 			return;

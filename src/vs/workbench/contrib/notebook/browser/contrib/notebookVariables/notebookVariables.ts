@@ -95,7 +95,7 @@ export class NotebookVariables extends Disposable implements IWorkbenchContribut
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.listeners.forEach(listener => listener.dispose());
 		this.configListener.dispose();

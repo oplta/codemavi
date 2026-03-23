@@ -35,8 +35,8 @@ declare module 'vscode' {
 
 	export interface Tunnel extends TunnelDescription {
 		// Implementers of Tunnel should fire onDidDispose when dispose is called.
-		onDidDispose: Event<void>;
-		dispose(): void | Thenable<void>;
+		onDidDispose: Event<codemavi>;
+		dispose(): codemavi | Thenable<codemavi>;
 	}
 
 	export namespace workspace {
@@ -59,6 +59,6 @@ declare module 'vscode' {
 		/**
 		 * Fired when the list of tunnels has changed.
 		 */
-		export const onDidChangeTunnels: Event<void>;
+		export const onDidChangeTunnels: Event<codemavi>;
 	}
 }

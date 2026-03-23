@@ -39,7 +39,7 @@ export class ConflictActionsFactory extends Disposable {
 		this._updateLensStyle();
 	}
 
-	private _updateLensStyle(): void {
+	private _updateLensStyle(): codemavi {
 		const { codeLensHeight, fontSize } = this._getLayoutInfo();
 		const fontFamily = this._editor.getOption(EditorOption.codeLensFontFamily);
 		const editorFontInfo = this._editor.getOption(EditorOption.fontInfo);
@@ -326,7 +326,7 @@ export class ActionsSource {
 	});
 }
 
-function command(title: string, action: () => Promise<void>, tooltip?: string): IContentWidgetAction {
+function command(title: string, action: () => Promise<codemavi>, tooltip?: string): IContentWidgetAction {
 	return {
 		text: title,
 		action,
@@ -337,7 +337,7 @@ function command(title: string, action: () => Promise<void>, tooltip?: string): 
 export interface IContentWidgetAction {
 	text: string;
 	tooltip?: string;
-	action?: () => Promise<void>;
+	action?: () => Promise<codemavi>;
 }
 
 class ActionsContentWidget extends FixedZoneWidget {

@@ -111,7 +111,7 @@ function getBoxBoundary(box: Box, direction: Direction): Boundary {
 function findAdjacentBoxLeafNodes<T extends IView>(boxNode: GridNode<T>, direction: Direction, boundary: Boundary): GridLeafNode<T>[] {
 	const result: GridLeafNode<T>[] = [];
 
-	function _(boxNode: GridNode<T>, direction: Direction, boundary: Boundary): void {
+	function _(boxNode: GridNode<T>, direction: Direction, boundary: Boundary): codemavi {
 		if (isGridBranchNode(boxNode)) {
 			for (const child of boxNode.children) {
 				_(child, direction, boundary);
@@ -269,7 +269,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * Fires whenever the user scrolls a {@link SplitView} within
 	 * the grid.
 	 */
-	readonly onDidScroll: Event<void>;
+	readonly onDidScroll: Event<codemavi>;
 
 	/**
 	 * A collection of sashes perpendicular to each edge of the grid.
@@ -319,7 +319,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 		this.onDidChangeViewMaximized = this.gridview.onDidChangeViewMaximized;
 	}
 
-	style(styles: IGridStyles): void {
+	style(styles: IGridStyles): codemavi {
 		this.gridview.style(styles);
 	}
 
@@ -334,7 +334,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param top Optional, the top location of the {@link Grid}.
 	 * @param left Optional, the left location of the {@link Grid}.
 	 */
-	layout(width: number, height: number, top: number = 0, left: number = 0): void {
+	layout(width: number, height: number, top: number = 0, left: number = 0): codemavi {
 		this.gridview.layout(width, height, top, left);
 		this.didLayout = true;
 	}
@@ -384,7 +384,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param referenceView Another view to place this new view next to.
 	 * @param direction The direction the new view should be placed next to the reference view.
 	 */
-	addView(newView: T, size: number | Sizing, referenceView: T, direction: Direction): void {
+	addView(newView: T, size: number | Sizing, referenceView: T, direction: Direction): codemavi {
 		if (this.views.has(newView)) {
 			throw new Error('Can\'t add same view twice');
 		}
@@ -417,7 +417,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 		this._addView(newView, viewSize, location);
 	}
 
-	private addViewAt(newView: T, size: number | DistributeSizing | InvisibleSizing, location: GridLocation): void {
+	private addViewAt(newView: T, size: number | DistributeSizing | InvisibleSizing, location: GridLocation): codemavi {
 		if (this.views.has(newView)) {
 			throw new Error('Can\'t add same view twice');
 		}
@@ -435,7 +435,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 		this._addView(newView, viewSize, location);
 	}
 
-	protected _addView(newView: T, size: number | GridViewSizing, location: GridLocation): void {
+	protected _addView(newView: T, size: number | GridViewSizing, location: GridLocation): codemavi {
 		this.views.set(newView, newView.element);
 		this.gridview.addView(newView, size, location);
 	}
@@ -446,7 +446,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param view The {@link IView view} to remove.
 	 * @param sizing Whether to distribute other {@link IView view}'s sizes.
 	 */
-	removeView(view: T, sizing?: Sizing): void {
+	removeView(view: T, sizing?: Sizing): codemavi {
 		if (this.views.size === 1) {
 			throw new Error('Can\'t remove last view');
 		}
@@ -476,7 +476,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param referenceView Another view to place the view next to.
 	 * @param direction The direction the view should be placed next to the reference view.
 	 */
-	moveView(view: T, sizing: number | Sizing, referenceView: T, direction: Direction): void {
+	moveView(view: T, sizing: number | Sizing, referenceView: T, direction: Direction): codemavi {
 		const sourceLocation = this.getViewLocation(view);
 		const [sourceParentLocation, from] = tail(sourceLocation);
 
@@ -501,7 +501,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param view The {@link IView view} to move.
 	 * @param location The {@link GridLocation location} to insert the view on.
 	 */
-	moveViewTo(view: T, location: GridLocation): void {
+	moveViewTo(view: T, location: GridLocation): codemavi {
 		const sourceLocation = this.getViewLocation(view);
 		const [sourceParentLocation, from] = tail(sourceLocation);
 		const [targetParentLocation, to] = tail(location);
@@ -527,7 +527,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param from One {@link IView view}.
 	 * @param to Another {@link IView view}.
 	 */
-	swapViews(from: T, to: T): void {
+	swapViews(from: T, to: T): codemavi {
 		const fromLocation = this.getViewLocation(from);
 		const toLocation = this.getViewLocation(to);
 		return this.gridview.swapViews(fromLocation, toLocation);
@@ -539,7 +539,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * @param view The {@link IView view} to resize.
 	 * @param size The size the view should be.
 	 */
-	resizeView(view: T, size: IViewSize): void {
+	resizeView(view: T, size: IViewSize): codemavi {
 		const location = this.getViewLocation(view);
 		return this.gridview.resizeView(location, size);
 	}
@@ -611,7 +611,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 		this.gridview.maximizeView(location);
 	}
 
-	exitMaximizedView(): void {
+	exitMaximizedView(): codemavi {
 		this.gridview.exitMaximizedView();
 	}
 
@@ -621,7 +621,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 *
 	 * @param view The {@link IView view}.
 	 */
-	expandView(view: T): void {
+	expandView(view: T): codemavi {
 		const location = this.getViewLocation(view);
 		this.gridview.expandView(location);
 	}
@@ -630,7 +630,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 * Distribute the size among all {@link IView views} within the entire
 	 * grid or within a single {@link SplitView}.
 	 */
-	distributeViewSizes(): void {
+	distributeViewSizes(): codemavi {
 		this.gridview.distributeViewSizes();
 	}
 
@@ -649,7 +649,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 	 *
 	 * @param view The {@link IView view}.
 	 */
-	setViewVisible(view: T, visible: boolean): void {
+	setViewVisible(view: T, visible: boolean): codemavi {
 		const location = this.getViewLocation(view);
 		this.gridview.setViewVisible(location, visible);
 	}
@@ -705,7 +705,7 @@ export class Grid<T extends IView = IView> extends Disposable {
 		return getGridLocation(element);
 	}
 
-	private onDidSashReset(location: GridLocation): void {
+	private onDidSashReset(location: GridLocation): codemavi {
 		const resizeToPreferredSize = (location: GridLocation): boolean => {
 			const node = this.gridview.getView(location) as GridNode<T>;
 
@@ -849,7 +849,7 @@ export class SerializableGrid<T extends ISerializableView> extends Grid<T> {
 		};
 	}
 
-	override layout(width: number, height: number, top: number = 0, left: number = 0): void {
+	override layout(width: number, height: number, top: number = 0, left: number = 0): codemavi {
 		super.layout(width, height, top, left);
 
 		if (this.initialLayoutContext) {
@@ -868,7 +868,7 @@ function isGridBranchNodeDescriptor<T>(nodeDescriptor: GridNodeDescriptor<T>): n
 	return !!(nodeDescriptor as GridBranchNodeDescriptor<T>).groups;
 }
 
-export function sanitizeGridNodeDescriptor<T>(nodeDescriptor: GridNodeDescriptor<T>, rootNode: boolean): void {
+export function sanitizeGridNodeDescriptor<T>(nodeDescriptor: GridNodeDescriptor<T>, rootNode: boolean): codemavi {
 	if (!rootNode && (nodeDescriptor as any).groups && (nodeDescriptor as any).groups.length <= 1) {
 		(nodeDescriptor as any).groups = undefined;
 	}

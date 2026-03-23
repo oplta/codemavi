@@ -57,7 +57,7 @@ export type TreeFilterResult<TFilterData> = boolean | TreeVisibility | ITreeFilt
  * A tree filter is responsible for controlling the visibility of
  * elements in a tree.
  */
-export interface ITreeFilter<T, TFilterData = void> {
+export interface ITreeFilter<T, TFilterData = codemavi> {
 
 	/**
 	 * Returns whether this elements should be visible and, if affirmative,
@@ -102,7 +102,7 @@ export interface IObjectTreeElement<T> {
 	readonly collapsed?: boolean | ObjectTreeElementCollapseState;
 }
 
-export interface ITreeNode<T, TFilterData = void> {
+export interface ITreeNode<T, TFilterData = codemavi> {
 	readonly element: T;
 	readonly children: ITreeNode<T, TFilterData>[];
 	readonly depth: number;
@@ -153,13 +153,13 @@ export interface ITreeModel<T, TFilterData, TRef> {
 	setCollapsible(location: TRef, collapsible?: boolean): boolean;
 	isCollapsed(location: TRef): boolean;
 	setCollapsed(location: TRef, collapsed?: boolean, recursive?: boolean): boolean;
-	expandTo(location: TRef): void;
+	expandTo(location: TRef): codemavi;
 
-	rerender(location: TRef): void;
-	refilter(): void;
+	rerender(location: TRef): codemavi;
+	refilter(): codemavi;
 }
 
-export interface ITreeRenderer<T, TFilterData = void, TTemplateData = void> extends IListRenderer<ITreeNode<T, TFilterData>, TTemplateData> {
+export interface ITreeRenderer<T, TFilterData = codemavi, TTemplateData = codemavi> extends IListRenderer<ITreeNode<T, TFilterData>, TTemplateData> {
 	renderTwistie?(element: T, twistieElement: HTMLElement): boolean;
 	onDidChangeTwistieState?: Event<T>;
 }

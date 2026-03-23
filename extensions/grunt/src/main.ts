@@ -100,7 +100,7 @@ class FolderDetector {
 		return vscode.workspace.getConfiguration('grunt', this._workspaceFolder.uri).get<AutoDetect>('autoDetect') === 'on';
 	}
 
-	public start(): void {
+	public start(): codemavi {
 		const pattern = path.join(this._workspaceFolder.uri.fsPath, '{node_modules,[Gg]runtfile.js}');
 		this.fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
 		this.fileWatcher.onDidChange(() => this.promise = undefined);
@@ -235,7 +235,7 @@ class TaskDetector {
 	constructor() {
 	}
 
-	public start(): void {
+	public start(): codemavi {
 		const folders = vscode.workspace.workspaceFolders;
 		if (folders) {
 			this.updateWorkspaceFolders(folders, []);
@@ -244,7 +244,7 @@ class TaskDetector {
 		vscode.workspace.onDidChangeConfiguration(this.updateConfiguration, this);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this.taskProvider) {
 			this.taskProvider.dispose();
 			this.taskProvider = undefined;
@@ -252,7 +252,7 @@ class TaskDetector {
 		this.detectors.clear();
 	}
 
-	private updateWorkspaceFolders(added: readonly vscode.WorkspaceFolder[], removed: readonly vscode.WorkspaceFolder[]): void {
+	private updateWorkspaceFolders(added: readonly vscode.WorkspaceFolder[], removed: readonly vscode.WorkspaceFolder[]): codemavi {
 		for (const remove of removed) {
 			const detector = this.detectors.get(remove.uri.toString());
 			if (detector) {
@@ -270,7 +270,7 @@ class TaskDetector {
 		this.updateProvider();
 	}
 
-	private updateConfiguration(): void {
+	private updateConfiguration(): codemavi {
 		for (const detector of this.detectors.values()) {
 			detector.dispose();
 			this.detectors.delete(detector.workspaceFolder.uri.toString());
@@ -290,7 +290,7 @@ class TaskDetector {
 		this.updateProvider();
 	}
 
-	private updateProvider(): void {
+	private updateProvider(): codemavi {
 		if (!this.taskProvider && this.detectors.size > 0) {
 			const thisCapture = this;
 			this.taskProvider = vscode.tasks.registerTaskProvider('grunt', {
@@ -354,11 +354,11 @@ class TaskDetector {
 }
 
 let detector: TaskDetector;
-export function activate(_context: vscode.ExtensionContext): void {
+export function activate(_context: vscode.ExtensionContext): codemavi {
 	detector = new TaskDetector();
 	detector.start();
 }
 
-export function deactivate(): void {
+export function deactivate(): codemavi {
 	detector.dispose();
 }

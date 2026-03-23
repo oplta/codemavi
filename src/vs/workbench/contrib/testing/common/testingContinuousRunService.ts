@@ -68,18 +68,18 @@ export interface ITestingContinuousRunService {
 	 * default profiles in a group. Globally if no test is given,
 	 * for a specific test otherwise.
 	 */
-	start(profile: ITestRunProfile[] | TestRunProfileBitset, testId?: string): void;
+	start(profile: ITestRunProfile[] | TestRunProfileBitset, testId?: string): codemavi;
 
 	/**
 	 * Stops a continuous run for the given test profile.
 	 */
-	stopProfile(profile: ITestRunProfile): void;
+	stopProfile(profile: ITestRunProfile): codemavi;
 
 	/**
 	 * Stops any continuous run
 	 * Globally if no test is given, for a specific test otherwise.
 	 */
-	stop(testId?: string): void;
+	stop(testId?: string): codemavi;
 }
 
 type RunningRef = { path: readonly string[]; profiles: ISettableObservable<ITestRunProfile[]>; autoSetDefault?: boolean; handle: DisposableStore };
@@ -157,7 +157,7 @@ export class TestingContinuousRunService extends Disposable implements ITestingC
 	}
 
 	/** @inheritdoc */
-	public start(profiles: ITestRunProfile[] | TestRunProfileBitset, testId?: string): void {
+	public start(profiles: ITestRunProfile[] | TestRunProfileBitset, testId?: string): codemavi {
 		const store = new DisposableStore();
 
 		let actualProfiles: ISettableObservable<ITestRunProfile[]>;
@@ -229,7 +229,7 @@ export class TestingContinuousRunService extends Disposable implements ITestingC
 	}
 
 	/** Stops a continuous run for the profile across all test items that are running it. */
-	stopProfile({ profileId, controllerId }: ITestRunProfile): void {
+	stopProfile({ profileId, controllerId }: ITestRunProfile): codemavi {
 		const toDelete: RunningRef[] = [];
 		for (const node of this.running.values()) {
 			const profs = node.profiles.get();
@@ -252,7 +252,7 @@ export class TestingContinuousRunService extends Disposable implements ITestingC
 	}
 
 	/** @inheritdoc */
-	public stop(testId?: string): void {
+	public stop(testId?: string): codemavi {
 		const cancellations = [...this.running.deleteRecursive(testId ? TestId.fromString(testId).path : [])];
 		// deleteRecursive returns a BFS order, reverse it so children are cancelled before parents
 		for (let i = cancellations.length - 1; i >= 0; i--) {

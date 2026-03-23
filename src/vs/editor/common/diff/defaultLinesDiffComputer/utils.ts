@@ -18,7 +18,7 @@ export class Array2D<T> {
 		return this.array[x + y * this.width];
 	}
 
-	set(x: number, y: number, value: T): void {
+	set(x: number, y: number, value: T): codemavi {
 		this.array[x + y * this.width] = value;
 	}
 }

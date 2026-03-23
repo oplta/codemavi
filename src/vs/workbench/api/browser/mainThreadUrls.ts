@@ -48,7 +48,7 @@ export class MainThreadUrls extends Disposable implements MainThreadUrlsShape {
 		this.proxy = context.getProxy(ExtHostContext.ExtHostUrls);
 	}
 
-	async $registerUriHandler(handle: number, extensionId: ExtensionIdentifier, extensionDisplayName: string): Promise<void> {
+	async $registerUriHandler(handle: number, extensionId: ExtensionIdentifier, extensionDisplayName: string): Promise<codemavi> {
 		const handler = new ExtensionUrlHandler(this.proxy, handle, extensionId, extensionDisplayName);
 		const disposable = this.urlService.registerHandler(handler);
 
@@ -58,7 +58,7 @@ export class MainThreadUrls extends Disposable implements MainThreadUrlsShape {
 		return undefined;
 	}
 
-	async $unregisterUriHandler(handle: number): Promise<void> {
+	async $unregisterUriHandler(handle: number): Promise<codemavi> {
 		const tuple = this.handlers.get(handle);
 
 		if (!tuple) {
@@ -78,7 +78,7 @@ export class MainThreadUrls extends Disposable implements MainThreadUrlsShape {
 		return this.urlService.create(uri);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.handlers.forEach(({ disposable }) => disposable.dispose());

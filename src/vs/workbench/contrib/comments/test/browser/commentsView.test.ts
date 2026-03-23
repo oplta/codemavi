@@ -54,16 +54,16 @@ class TestCommentController implements ICommentController {
 	label: string = 'Test Comments';
 	owner: string = 'test';
 	features = {};
-	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined): Promise<void> {
+	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	updateCommentThreadTemplate(threadHandle: number, range: IRange): Promise<void> {
+	updateCommentThreadTemplate(threadHandle: number, range: IRange): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	deleteCommentThreadMain(commentThreadId: string): void {
+	deleteCommentThreadMain(commentThreadId: string): codemavi {
 		throw new Error('Method not implemented.');
 	}
-	toggleReaction(uri: URI, thread: CommentThread<IRange>, comment: Comment, reaction: CommentReaction, token: CancellationToken): Promise<void> {
+	toggleReaction(uri: URI, thread: CommentThread<IRange>, comment: Comment, reaction: CommentReaction, token: CancellationToken): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
 	getDocumentComments(resource: URI, token: CancellationToken): Promise<ICommentInfo> {
@@ -72,7 +72,7 @@ class TestCommentController implements ICommentController {
 	getNotebookComments(resource: URI, token: CancellationToken): Promise<INotebookCommentInfo> {
 		throw new Error('Method not implemented.');
 	}
-	setActiveCommentAndThread(commentInfo: { thread: CommentThread; comment: Comment } | undefined): Promise<void> {
+	setActiveCommentAndThread(commentInfo: { thread: CommentThread; comment: Comment } | undefined): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
 

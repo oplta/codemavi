@@ -103,11 +103,11 @@ export class EditorScrollbar extends ViewPart {
 		this._register(dom.addDisposableListener(this.scrollbarDomNode.domNode, 'scroll', (e: Event) => onBrowserDesperateReveal(this.scrollbarDomNode.domNode, true, false)));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 
-	private _setLayout(): void {
+	private _setLayout(): codemavi {
 		const options = this._context.configuration.options;
 		const layoutInfo = options.get(EditorOption.layoutInfo);
 
@@ -131,7 +131,7 @@ export class EditorScrollbar extends ViewPart {
 		return this.scrollbarDomNode;
 	}
 
-	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): void {
+	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): codemavi {
 		this.scrollbar.delegateVerticalScrollbarPointerDown(browserEvent);
 	}
 
@@ -180,11 +180,11 @@ export class EditorScrollbar extends ViewPart {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		// Nothing to do
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		this.scrollbar.renderNow();
 	}
 }

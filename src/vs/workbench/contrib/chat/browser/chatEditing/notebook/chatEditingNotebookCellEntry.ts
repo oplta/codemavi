@@ -179,7 +179,7 @@ export class ChatEditingNotebookCellEntry extends ObservableDisposable {
 		}
 	}
 
-	acceptAgentEdits(textEdits: TextEdit[], isLastEdits: boolean, responseModel: IChatResponseModel): void {
+	acceptAgentEdits(textEdits: TextEdit[], isLastEdits: boolean, responseModel: IChatResponseModel): codemavi {
 		const notebookEditor = this.notebookEditorService.retrieveExistingWidgetFromURI(this.notebookUri)?.value;
 		if (notebookEditor) {
 			const vm = notebookEditor.getCellByHandle(this.cell.handle);
@@ -229,7 +229,7 @@ export class ChatEditingNotebookCellEntry extends ObservableDisposable {
 		this._editDecorationClear.schedule();
 	}
 
-	protected _resetEditsState(tx: ITransaction): void {
+	protected _resetEditsState(tx: ITransaction): codemavi {
 		this._isCurrentlyBeingModifiedByObs.set(undefined, tx);
 		this._maxModifiedLineNumber.set(0, tx);
 	}
@@ -313,7 +313,7 @@ export class ChatEditingNotebookCellEntry extends ObservableDisposable {
 		}
 	}
 
-	private async _updateDiffInfo(): Promise<void> {
+	private async _updateDiffInfo(): Promise<codemavi> {
 
 		if (this.originalModel.isDisposed() || this.modifiedModel.isDisposed()) {
 			return;

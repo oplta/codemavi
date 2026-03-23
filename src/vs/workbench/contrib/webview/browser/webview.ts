@@ -62,7 +62,7 @@ export interface IWebviewService {
 	/**
 	 * Create a lazily created webview element that is overlaid on top of another element.
 	 *
-	 * Allows us to avoid re-parenting the webview (which destroys its contents) when
+	 * Allows us to acodemavi re-parenting the webview (which destroys its contents) when
 	 * moving webview around the workbench.
 	 */
 	createWebviewOverlay(initInfo: WebviewInitInfo): IOverlayWebview;
@@ -191,12 +191,12 @@ export interface IWebview extends IDisposable {
 	/**
 	 * Set html content of the webview.
 	 */
-	setHtml(html: string): void;
+	setHtml(html: string): codemavi;
 
 	/**
 	 * Set the title of the webview. This is set on the webview's iframe element.
 	 */
-	setTitle(title: string): void;
+	setTitle(title: string): codemavi;
 
 	/**
 	 * Control what content is allowed/blocked inside the webview.
@@ -220,20 +220,20 @@ export interface IWebview extends IDisposable {
 
 	readonly isFocused: boolean;
 
-	readonly onDidFocus: Event<void>;
-	readonly onDidBlur: Event<void>;
+	readonly onDidFocus: Event<codemavi>;
+	readonly onDidBlur: Event<codemavi>;
 
 	/**
 	 * Fired when the webview is disposed of.
 	 */
-	readonly onDidDispose: Event<void>;
+	readonly onDidDispose: Event<codemavi>;
 
 	readonly onDidClickLink: Event<string>;
 	readonly onDidScroll: Event<{ readonly scrollYPercentage: number }>;
 	readonly onDidWheel: Event<IMouseWheelEvent>;
 
 	readonly onDidUpdateState: Event<string | undefined>;
-	readonly onDidReload: Event<void>;
+	readonly onDidReload: Event<codemavi>;
 
 	/**
 	 * Fired when the webview cannot be loaded or is now in a non-functional state.
@@ -245,24 +245,24 @@ export interface IWebview extends IDisposable {
 
 	postMessage(message: any, transfer?: readonly ArrayBuffer[]): Promise<boolean>;
 
-	focus(): void;
-	reload(): void;
+	focus(): codemavi;
+	reload(): codemavi;
 
-	showFind(animated?: boolean): void;
-	hideFind(animated?: boolean): void;
-	runFindAction(previous: boolean): void;
+	showFind(animated?: boolean): codemavi;
+	hideFind(animated?: boolean): codemavi;
+	runFindAction(previous: boolean): codemavi;
 
-	selectAll(): void;
-	copy(): void;
-	paste(): void;
-	cut(): void;
-	undo(): void;
-	redo(): void;
+	selectAll(): codemavi;
+	copy(): codemavi;
+	paste(): codemavi;
+	cut(): codemavi;
+	undo(): codemavi;
+	redo(): codemavi;
 
-	windowDidDragStart(): void;
-	windowDidDragEnd(): void;
+	windowDidDragStart(): codemavi;
+	windowDidDragEnd(): codemavi;
 
-	setContextKeyService(scopedContextKeyService: IContextKeyService): void;
+	setContextKeyService(scopedContextKeyService: IContextKeyService): codemavi;
 }
 
 /**
@@ -273,17 +273,17 @@ export interface IWebviewElement extends IWebview {
 	 * Append the webview to a HTML element.
 	 *
 	 * Note that the webview content will be destroyed if any part of the parent hierarchy
-	 * changes. You can avoid this by using a {@link IOverlayWebview} instead.
+	 * changes. You can acodemavi this by using a {@link IOverlayWebview} instead.
 	 *
 	 * @param parent Element to append the webview to.
 	 */
-	mountTo(parent: HTMLElement, targetWindow: CodeWindow): void;
+	mountTo(parent: HTMLElement, targetWindow: CodeWindow): codemavi;
 }
 
 /**
  * Lazily created {@link IWebview} that is absolutely positioned over another element.
  *
- * Absolute positioning lets us avoid having the webview be re-parented, which would destroy the
+ * Absolute positioning lets us acodemavi having the webview be re-parented, which would destroy the
  * webview's content.
  *
  * Note that the underlying webview owned by a `WebviewOverlay` can be dynamically created
@@ -307,7 +307,7 @@ export interface IOverlayWebview extends IWebview {
 	 * @param claimant Identifier for the object claiming the webview.
 	 *   This must match the `claimant` passed to {@link IOverlayWebview.release}.
 	 */
-	claim(claimant: any, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): void;
+	claim(claimant: any, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): codemavi;
 
 	/**
 	 * Release ownership of the webview.
@@ -318,7 +318,7 @@ export interface IOverlayWebview extends IWebview {
 	 * @param claimant Identifier for the object releasing its claim on the webview.
 	 *   This must match the `claimant` passed to {@link IOverlayWebview.claim}.
 	 */
-	release(claimant: any): void;
+	release(claimant: any): codemavi;
 
 	/**
 	 * Absolutely position the webview on top of another element in the DOM.
@@ -328,7 +328,7 @@ export interface IOverlayWebview extends IWebview {
 	 * @param dimension Optional explicit dimensions to use for sizing the webview.
 	 * @param clippingContainer Optional container to clip the webview to. This should generally be a parent of `element`.
 	 */
-	layoutWebviewOverElement(element: HTMLElement, dimension?: Dimension, clippingContainer?: HTMLElement): void;
+	layoutWebviewOverElement(element: HTMLElement, dimension?: Dimension, clippingContainer?: HTMLElement): codemavi;
 }
 
 /**

@@ -75,23 +75,23 @@ export interface IProblemsWidget {
 	get onDidChangeSelection(): Event<ITreeEvent<MarkerElement | null>> | Event<ITableEvent<MarkerTableItem>>;
 	get onDidOpen(): Event<IOpenEvent<MarkerElement | MarkerTableItem | undefined>>;
 
-	collapseMarkers(): void;
-	dispose(): void;
-	domFocus(): void;
-	filterMarkers(resourceMarkers: ResourceMarkers[], filterOptions: FilterOptions): void;
+	collapseMarkers(): codemavi;
+	dispose(): codemavi;
+	domFocus(): codemavi;
+	filterMarkers(resourceMarkers: ResourceMarkers[], filterOptions: FilterOptions): codemavi;
 	getFocus(): (MarkerElement | MarkerTableItem | null)[];
 	getHTMLElement(): HTMLElement;
 	getRelativeTop(location: MarkerElement | MarkerTableItem | null): number | null;
 	getSelection(): (MarkerElement | MarkerTableItem | null)[];
 	getVisibleItemCount(): number;
-	layout(height: number, width: number): void;
-	reset(resourceMarkers: ResourceMarkers[]): void;
-	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): void;
-	setAriaLabel(label: string): void;
-	setMarkerSelection(selection?: Marker[], focus?: Marker[]): void;
-	toggleVisibility(hide: boolean): void;
-	update(resourceMarkers: ResourceMarkers[]): void;
-	updateMarker(marker: Marker): void;
+	layout(height: number, width: number): codemavi;
+	reset(resourceMarkers: ResourceMarkers[]): codemavi;
+	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): codemavi;
+	setAriaLabel(label: string): codemavi;
+	setMarkerSelection(selection?: Marker[], focus?: Marker[]): codemavi;
+	toggleVisibility(hide: boolean): codemavi;
+	update(resourceMarkers: ResourceMarkers[]): codemavi;
+	updateMarker(marker: Marker): codemavi;
 }
 
 export class MarkersView extends FilterViewPane implements IMarkersView {
@@ -187,7 +187,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}));
 	}
 
-	override render(): void {
+	override render(): codemavi {
 		super.render();
 		this._register(registerNavigableContainer({
 			name: 'markersView',
@@ -205,7 +205,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}));
 	}
 
-	protected override renderBody(parent: HTMLElement): void {
+	protected override renderBody(parent: HTMLElement): codemavi {
 		super.renderBody(parent);
 
 		parent.classList.add('markers-panel');
@@ -238,7 +238,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return Messages.MARKERS_PANEL_TITLE_PROBLEMS.value;
 	}
 
-	protected layoutBodyContent(height: number = this.currentHeight, width: number = this.currentWidth): void {
+	protected layoutBodyContent(height: number = this.currentHeight, width: number = this.currentWidth): codemavi {
 		if (this.messageBoxContainer) {
 			this.messageBoxContainer.style.height = `${height}px`;
 		}
@@ -248,7 +248,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		this.currentWidth = width;
 	}
 
-	public override focus(): void {
+	public override focus(): codemavi {
 		super.focus();
 		if (dom.isActiveElement(this.widget.getHTMLElement())) {
 			return;
@@ -262,23 +262,23 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}
 	}
 
-	public focusFilter(): void {
+	public focusFilter(): codemavi {
 		this.filterWidget.focus();
 	}
 
-	public updateBadge(total: number, filtered: number): void {
+	public updateBadge(total: number, filtered: number): codemavi {
 		this.filterWidget.updateBadge(total === filtered || total === 0 ? undefined : localize('showing filtered problems', "Showing {0} of {1}", filtered, total));
 	}
 
-	public checkMoreFilters(): void {
+	public checkMoreFilters(): codemavi {
 		this.filterWidget.checkMoreFilters(!this.filters.showErrors || !this.filters.showWarnings || !this.filters.showInfos || this.filters.excludedFiles || this.filters.activeFile);
 	}
 
-	public clearFilterText(): void {
+	public clearFilterText(): codemavi {
 		this.filterWidget.setFilterText('');
 	}
 
-	public showQuickFixes(marker: Marker): void {
+	public showQuickFixes(marker: Marker): codemavi {
 		const viewModel = this.markersViewModel.getViewModel(marker);
 		if (viewModel) {
 			viewModel.quickFixAction.run();
@@ -313,7 +313,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return false;
 	}
 
-	private refreshPanel(markerOrChange?: Marker | MarkerChangesEvent): void {
+	private refreshPanel(markerOrChange?: Marker | MarkerChangesEvent): codemavi {
 		if (this.isVisible()) {
 			const hasSelection = this.widget.getSelection().length > 0;
 
@@ -348,11 +348,11 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}
 	}
 
-	private onDidChangeViewState(marker?: Marker): void {
+	private onDidChangeViewState(marker?: Marker): codemavi {
 		this.refreshPanel(marker);
 	}
 
-	private resetWidget(): void {
+	private resetWidget(): codemavi {
 		this.widget.reset(this.getResourceMarkers());
 	}
 
@@ -411,17 +411,17 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return resourceMarkers;
 	}
 
-	private createMessageBox(parent: HTMLElement): void {
+	private createMessageBox(parent: HTMLElement): codemavi {
 		this.messageBoxContainer = dom.append(parent, dom.$('.message-box-container'));
 		this.messageBoxContainer.setAttribute('aria-labelledby', 'markers-panel-arialabel');
 	}
 
-	private createArialLabelElement(parent: HTMLElement): void {
+	private createArialLabelElement(parent: HTMLElement): codemavi {
 		this.ariaLabelElement = dom.append(parent, dom.$(''));
 		this.ariaLabelElement.setAttribute('id', 'markers-panel-arialabel');
 	}
 
-	private createWidget(parent: HTMLElement): void {
+	private createWidget(parent: HTMLElement): codemavi {
 		this.widget = this.markersViewModel.viewMode === MarkersViewMode.Table ? this.createTable(parent) : this.createTree(parent);
 		this.widgetDisposables.add(this.widget);
 
@@ -508,19 +508,19 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return tree;
 	}
 
-	collapseAll(): void {
+	collapseAll(): codemavi {
 		this.widget.collapseMarkers();
 	}
 
-	setMultiline(multiline: boolean): void {
+	setMultiline(multiline: boolean): codemavi {
 		this.markersViewModel.multiline = multiline;
 	}
 
-	setViewMode(viewMode: MarkersViewMode): void {
+	setViewMode(viewMode: MarkersViewMode): codemavi {
 		this.markersViewModel.viewMode = viewMode;
 	}
 
-	private onDidChangeMarkersViewVisibility(visible: boolean): void {
+	private onDidChangeMarkersViewVisibility(visible: boolean): codemavi {
 		this.onVisibleDisposables.clear();
 		if (visible) {
 			for (const disposable of this.reInitialize()) {
@@ -543,7 +543,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}, 64)(resourcesMap => {
 			this.markersModel.setResourceMarkers([...resourcesMap.values()].map(resource => [resource, readMarkers(resource)]));
 		}));
-		disposables.push(Event.any<MarkerChangesEvent | void>(this.markersModel.onDidChange, this.editorService.onDidActiveEditorChange)(changes => {
+		disposables.push(Event.any<MarkerChangesEvent | codemavi>(this.markersModel.onDidChange, this.editorService.onDidActiveEditorChange)(changes => {
 			if (changes) {
 				this.onDidChangeModel(changes);
 			} else {
@@ -573,7 +573,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return disposables;
 	}
 
-	private onDidChangeModel(change: MarkerChangesEvent): void {
+	private onDidChangeModel(change: MarkerChangesEvent): codemavi {
 		const resourceMarkers = [...change.added, ...change.removed, ...change.updated];
 		const resources: URI[] = [];
 		for (const { resource } of resourceMarkers) {
@@ -595,7 +595,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}
 	}
 
-	private onDidChangeViewMode(): void {
+	private onDidChangeViewMode(): codemavi {
 		if (this.widgetContainer && this.widget) {
 			this.widgetContainer.textContent = '';
 			this.widgetDisposables.clear();
@@ -642,7 +642,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return changedResources.some(r => r.toString() === currentlyActiveResource.toString());
 	}
 
-	private onActiveEditorChanged(): void {
+	private onActiveEditorChanged(): codemavi {
 		this.setCurrentActiveEditor();
 		if (this.filters.activeFile) {
 			this.refreshPanel();
@@ -650,12 +650,12 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		this.autoReveal();
 	}
 
-	private setCurrentActiveEditor(): void {
+	private setCurrentActiveEditor(): codemavi {
 		const activeEditor = this.editorService.activeEditor;
 		this.currentActiveResource = activeEditor ? EditorResourceAccessor.getOriginalUri(activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY }) ?? null : null;
 	}
 
-	private onSelected(): void {
+	private onSelected(): codemavi {
 		const selection = this.widget.getSelection();
 		if (selection && selection.length > 0) {
 			this.lastSelectedRelativeTop = this.widget.getRelativeTop(selection[0]) || 0;
@@ -667,14 +667,14 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return total === 0 || filtered === 0;
 	}
 
-	private renderContent(): void {
+	private renderContent(): codemavi {
 		this.cachedFilterStats = undefined;
 		this.resetWidget();
 		this.toggleVisibility(this.hasNoProblems());
 		this.renderMessage();
 	}
 
-	private renderMessage(): void {
+	private renderMessage(): codemavi {
 		if (!this.messageBoxContainer || !this.ariaLabelElement) {
 			return;
 		}
@@ -704,7 +704,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		}
 	}
 
-	private renderFilterMessageForActiveFile(container: HTMLElement): void {
+	private renderFilterMessageForActiveFile(container: HTMLElement): codemavi {
 		if (this.currentActiveResource && this.markersModel.getResourceMarkers(this.currentActiveResource)) {
 			this.renderFilteredByFilterMessage(container);
 		} else {
@@ -742,12 +742,12 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		this.setAriaLabel(Messages.MARKERS_PANEL_NO_PROBLEMS_BUILT);
 	}
 
-	private setAriaLabel(label: string): void {
+	private setAriaLabel(label: string): codemavi {
 		this.widget.setAriaLabel(label);
 		this.ariaLabelElement!.setAttribute('aria-label', label);
 	}
 
-	private clearFilters(): void {
+	private clearFilters(): codemavi {
 		this.filterWidget.setFilterText('');
 		this.filters.excludedFiles = false;
 		this.filters.showErrors = true;
@@ -755,7 +755,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		this.filters.showInfos = true;
 	}
 
-	private autoReveal(focus: boolean = false): void {
+	private autoReveal(focus: boolean = false): codemavi {
 		// No need to auto reveal if active file filter is on
 		if (this.filters.activeFile) {
 			return;
@@ -794,7 +794,7 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		this.rangeHighlightDecorations.highlightRange(selection);
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<MarkerElement | null> | ITableContextMenuEvent<MarkerTableItem>): void {
+	private onContextMenu(e: ITreeContextMenuEvent<MarkerElement | null> | ITableContextMenuEvent<MarkerTableItem>): codemavi {
 		const element = e.element;
 		if (!element) {
 			return;
@@ -878,12 +878,12 @@ export class MarkersView extends FilterViewPane implements IMarkersView {
 		return this.cachedFilterStats;
 	}
 
-	private toggleVisibility(hide: boolean): void {
+	private toggleVisibility(hide: boolean): codemavi {
 		this.widget.toggleVisibility(hide);
 		this.layoutBodyContent();
 	}
 
-	override saveState(): void {
+	override saveState(): codemavi {
 		this.panelState['filter'] = this.filterWidget.getFilterText();
 		this.panelState['filterHistory'] = this.filters.filterHistory;
 		this.panelState['showErrors'] = this.filters.showErrors;
@@ -924,7 +924,7 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		this.visibilityContextKey = MarkersContextKeys.MarkersTreeVisibilityContextKey.bindTo(contextKeyService);
 	}
 
-	collapseMarkers(): void {
+	collapseMarkers(): codemavi {
 		this.collapseAll();
 		this.setSelection([]);
 		this.setFocus([]);
@@ -932,7 +932,7 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		this.focusFirst();
 	}
 
-	filterMarkers(): void {
+	filterMarkers(): codemavi {
 		this.refilter();
 	}
 
@@ -955,16 +955,16 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		return !this.container.classList.contains('hidden');
 	}
 
-	toggleVisibility(hide: boolean): void {
+	toggleVisibility(hide: boolean): codemavi {
 		this.visibilityContextKey.set(!hide);
 		this.container.classList.toggle('hidden', hide);
 	}
 
-	reset(resourceMarkers: ResourceMarkers[]): void {
+	reset(resourceMarkers: ResourceMarkers[]): codemavi {
 		this.setChildren(null, Iterable.map(resourceMarkers, m => ({ element: m, children: createResourceMarkersIterator(m) })));
 	}
 
-	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): void {
+	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): codemavi {
 		if (activeResource) {
 			if (this.hasElement(activeResource)) {
 				if (!this.isCollapsed(activeResource) && this.hasSelectedMarkerFor(activeResource)) {
@@ -988,11 +988,11 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		}
 	}
 
-	setAriaLabel(label: string): void {
+	setAriaLabel(label: string): codemavi {
 		this.ariaLabel = label;
 	}
 
-	setMarkerSelection(selection?: Marker[], focus?: Marker[]): void {
+	setMarkerSelection(selection?: Marker[], focus?: Marker[]): codemavi {
 		if (this.isVisible()) {
 			if (selection && selection.length > 0) {
 				this.setSelection(selection.map(m => this.findMarkerNode(m)));
@@ -1020,7 +1020,7 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		}
 	}
 
-	update(resourceMarkers: ResourceMarkers[]): void {
+	update(resourceMarkers: ResourceMarkers[]): codemavi {
 		for (const resourceMarker of resourceMarkers) {
 			if (this.hasElement(resourceMarker)) {
 				this.setChildren(resourceMarker, createResourceMarkersIterator(resourceMarker));
@@ -1029,7 +1029,7 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		}
 	}
 
-	updateMarker(marker: Marker): void {
+	updateMarker(marker: Marker): codemavi {
 		this.rerender(marker);
 	}
 
@@ -1058,11 +1058,11 @@ class MarkersTree extends WorkbenchObjectTree<MarkerElement, FilterData> impleme
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 	}
 
-	override layout(height: number, width: number): void {
+	override layout(height: number, width: number): codemavi {
 		this.container.style.height = `${height}px`;
 		super.layout(height, width);
 	}

@@ -17,7 +17,7 @@ export interface Tokenizer {
 
 	read(): Token | null;
 	peek(): Token | null;
-	skip(length: Length): void;
+	skip(length: Length): codemavi;
 
 	getText(): string;
 }
@@ -88,7 +88,7 @@ export class TextBufferTokenizer implements Tokenizer {
 		return this.textModel.getValue();
 	}
 
-	skip(length: Length): void {
+	skip(length: Length): codemavi {
 		this.didPeek = false;
 		this._offset = lengthAdd(this._offset, length);
 		const obj = lengthToObj(this._offset);
@@ -139,7 +139,7 @@ class NonPeekableTextBufferTokenizer {
 	private lineTokens: IViewLineTokens | null = null;
 	private lineTokenOffset = 0;
 
-	public setPosition(lineIdx: number, column: number): void {
+	public setPosition(lineIdx: number, column: number): codemavi {
 		// We must not jump into a token!
 		if (lineIdx === this.lineIdx) {
 			this.lineCharOffset = column;
@@ -382,7 +382,7 @@ export class FastTokenizer implements Tokenizer {
 		return this.tokens[this.idx] || null;
 	}
 
-	skip(length: Length): void {
+	skip(length: Length): codemavi {
 		throw new NotSupportedError();
 	}
 

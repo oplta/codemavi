@@ -60,11 +60,11 @@ export interface IUntypedEditorOptions {
  */
 export abstract class EditorInput extends AbstractEditorInput {
 
-	protected readonly _onDidChangeDirty = this._register(new Emitter<void>());
-	protected readonly _onDidChangeLabel = this._register(new Emitter<void>());
-	protected readonly _onDidChangeCapabilities = this._register(new Emitter<void>());
+	protected readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
+	protected readonly _onDidChangeLabel = this._register(new Emitter<codemavi>());
+	protected readonly _onDidChangeCapabilities = this._register(new Emitter<codemavi>());
 
-	private readonly _onWillDispose = this._register(new Emitter<void>());
+	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
 
 	/**
 	 * Triggered when this input changes its dirty state.
@@ -266,7 +266,7 @@ export abstract class EditorInput extends AbstractEditorInput {
 	/**
 	 * Reverts this input from the provided group.
 	 */
-	async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> { }
+	async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> { }
 
 	/**
 	 * Called to determine how to handle a resource that is renamed that matches
@@ -350,7 +350,7 @@ export abstract class EditorInput extends AbstractEditorInput {
 		return this._store.isDisposed;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		if (!this.isDisposed()) {
 			this._onWillDispose.fire();
 		}

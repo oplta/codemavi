@@ -87,7 +87,7 @@ export class EditTool implements IToolImpl {
 		// Undo stops mark groups of response data in the output. Operations, such
 		// as text edits, that happen between undo stops are all done or undone together.
 		if (request.response?.response.getMarkdown().length) {
-			// slightly hacky way to avoid an extra 'no-op' undo stop at the start of responses that are just edits
+			// slightly hacky way to acodemavi an extra 'no-op' undo stop at the start of responses that are just edits
 			model.acceptResponseProgress(request, {
 				kind: 'undoStop',
 				id: generateUuid(),

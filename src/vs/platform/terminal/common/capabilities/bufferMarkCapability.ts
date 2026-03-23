@@ -37,7 +37,7 @@ export class BufferMarkCapability extends Disposable implements IBufferMarkCapab
 		}
 	}
 
-	addMark(properties?: IMarkProperties): void {
+	addMark(properties?: IMarkProperties): codemavi {
 		const marker = properties?.marker || this._terminal.registerMarker();
 		const id = properties?.id;
 		if (!marker) {

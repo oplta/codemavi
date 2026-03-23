@@ -12,7 +12,7 @@ export interface IVsdaSigner {
 export interface IVsdaValidator {
 	createNewMessage(arg: string): string;
 	validate(arg: string): 'ok' | 'error';
-	dispose?(): void;
+	dispose?(): codemavi;
 }
 
 export abstract class AbstractSignService implements ISignService {

@@ -74,7 +74,7 @@ class SCMRepositoryActionViewItem extends ActionViewItem {
 		super(null, action, { ...options, icon: false, label: true });
 	}
 
-	protected override updateLabel(): void {
+	protected override updateLabel(): codemavi {
 		if (this.options.label && this.label) {
 			this.label.classList.add('scm-graph-repository-picker');
 
@@ -104,7 +104,7 @@ class SCMHistoryItemRefsActionViewItem extends ActionViewItem {
 		super(null, action, { ...options, icon: false, label: true });
 	}
 
-	protected override updateLabel(): void {
+	protected override updateLabel(): codemavi {
 		if (this.options.label && this.label) {
 			this.label.classList.add('scm-graph-history-item-picker');
 
@@ -161,7 +161,7 @@ registerAction2(class extends ViewAction<SCMHistoryViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<codemavi> {
 		view.pickRepository();
 	}
 });
@@ -183,7 +183,7 @@ registerAction2(class extends ViewAction<SCMHistoryViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<codemavi> {
 		view.pickHistoryItemRef();
 	}
 });
@@ -207,7 +207,7 @@ registerAction2(class extends ViewAction<SCMHistoryViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<codemavi> {
 		view.revealCurrentHistoryItem();
 	}
 });
@@ -228,7 +228,7 @@ registerAction2(class extends ViewAction<SCMHistoryViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMHistoryViewPane): Promise<codemavi> {
 		view.refresh();
 	}
 });
@@ -346,7 +346,7 @@ class HistoryItemRenderer implements ITreeRenderer<SCMHistoryItemViewModelTreeEl
 		return { element, graphContainer, label: iconLabel, labelContainer, elementDisposables: new DisposableStore(), disposables: new DisposableStore() };
 	}
 
-	renderElement(node: ITreeNode<SCMHistoryItemViewModelTreeElement, LabelFuzzyScore>, index: number, templateData: HistoryItemTemplate, height: number | undefined): void {
+	renderElement(node: ITreeNode<SCMHistoryItemViewModelTreeElement, LabelFuzzyScore>, index: number, templateData: HistoryItemTemplate, height: number | undefined): codemavi {
 		const provider = node.element.repository.provider;
 		const historyItemViewModel = node.element.historyItemViewModel;
 		const historyItem = historyItemViewModel.historyItem;
@@ -368,7 +368,7 @@ class HistoryItemRenderer implements ITreeRenderer<SCMHistoryItemViewModelTreeEl
 		this._renderBadges(historyItem, templateData);
 	}
 
-	private _renderBadges(historyItem: ISCMHistoryItem, templateData: HistoryItemTemplate): void {
+	private _renderBadges(historyItem: ISCMHistoryItem, templateData: HistoryItemTemplate): codemavi {
 		templateData.elementDisposables.add(autorun(reader => {
 			const labelConfig = this._badgesConfig.read(reader);
 
@@ -410,7 +410,7 @@ class HistoryItemRenderer implements ITreeRenderer<SCMHistoryItemViewModelTreeEl
 		}));
 	}
 
-	private _renderBadge(historyItemRefs: ISCMHistoryItemRef[], showDescription: boolean, templateData: HistoryItemTemplate): void {
+	private _renderBadge(historyItemRefs: ISCMHistoryItemRef[], showDescription: boolean, templateData: HistoryItemTemplate): codemavi {
 		if (historyItemRefs.length === 0 || !ThemeIcon.isThemeIcon(historyItemRefs[0].icon)) {
 			return;
 		}
@@ -547,11 +547,11 @@ class HistoryItemRenderer implements ITreeRenderer<SCMHistoryItemViewModelTreeEl
 		];
 	}
 
-	disposeElement(element: ITreeNode<SCMHistoryItemViewModelTreeElement, LabelFuzzyScore>, index: number, templateData: HistoryItemTemplate, height: number | undefined): void {
+	disposeElement(element: ITreeNode<SCMHistoryItemViewModelTreeElement, LabelFuzzyScore>, index: number, templateData: HistoryItemTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: HistoryItemTemplate): void {
+	disposeTemplate(templateData: HistoryItemTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 }
@@ -565,14 +565,14 @@ interface LoadMoreTemplate {
 	readonly disposables: IDisposable;
 }
 
-class HistoryItemLoadMoreRenderer implements ITreeRenderer<SCMHistoryItemLoadMoreTreeElement, void, LoadMoreTemplate> {
+class HistoryItemLoadMoreRenderer implements ITreeRenderer<SCMHistoryItemLoadMoreTreeElement, codemavi, LoadMoreTemplate> {
 
 	static readonly TEMPLATE_ID = 'historyItemLoadMore';
 	get templateId(): string { return HistoryItemLoadMoreRenderer.TEMPLATE_ID; }
 
 	constructor(
 		private readonly _isLoadingMore: IObservable<boolean>,
-		private readonly _loadMoreCallback: () => void,
+		private readonly _loadMoreCallback: () => codemavi,
 		@IConfigurationService private readonly _configurationService: IConfigurationService
 	) { }
 
@@ -588,7 +588,7 @@ class HistoryItemLoadMoreRenderer implements ITreeRenderer<SCMHistoryItemLoadMor
 		return { element, graphPlaceholder, historyItemPlaceholderContainer, historyItemPlaceholderLabel, elementDisposables: new DisposableStore(), disposables: new DisposableStore() };
 	}
 
-	renderElement(element: ITreeNode<SCMHistoryItemLoadMoreTreeElement, void>, index: number, templateData: LoadMoreTemplate, height: number | undefined): void {
+	renderElement(element: ITreeNode<SCMHistoryItemLoadMoreTreeElement, codemavi>, index: number, templateData: LoadMoreTemplate, height: number | undefined): codemavi {
 		templateData.graphPlaceholder.textContent = '';
 		templateData.graphPlaceholder.style.width = `${SWIMLANE_WIDTH * (element.element.graphColumns.length + 1)}px`;
 		templateData.graphPlaceholder.appendChild(renderSCMHistoryGraphPlaceholder(element.element.graphColumns));
@@ -609,11 +609,11 @@ class HistoryItemLoadMoreRenderer implements ITreeRenderer<SCMHistoryItemLoadMor
 		}
 	}
 
-	disposeElement(element: ITreeNode<SCMHistoryItemLoadMoreTreeElement, void>, index: number, templateData: LoadMoreTemplate, height: number | undefined): void {
+	disposeElement(element: ITreeNode<SCMHistoryItemLoadMoreTreeElement, codemavi>, index: number, templateData: LoadMoreTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: LoadMoreTemplate): void {
+	disposeTemplate(templateData: LoadMoreTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 }
@@ -650,7 +650,7 @@ class SCMHistoryViewPaneActionRunner extends ActionRunner {
 		super();
 	}
 
-	protected override runAction(action: IAction, context?: unknown): Promise<void> {
+	protected override runAction(action: IAction, context?: unknown): Promise<codemavi> {
 		return this._progressService.withProgress({ location: HISTORY_VIEW_PANE_ID },
 			async () => await super.runAction(action, context));
 	}
@@ -819,7 +819,7 @@ class SCMHistoryViewModel extends Disposable {
 		}));
 	}
 
-	clearRepositoryState(): void {
+	clearRepositoryState(): codemavi {
 		const repository = this.repository.get();
 		if (!repository) {
 			return;
@@ -861,7 +861,7 @@ class SCMHistoryViewModel extends Disposable {
 			.find(viewModel => viewModel.historyItemViewModel.historyItem.id === historyItemRef?.revision);
 	}
 
-	loadMore(cursor?: string): void {
+	loadMore(cursor?: string): codemavi {
 		const repository = this.repository.get();
 		if (!repository) {
 			return;
@@ -924,11 +924,11 @@ class SCMHistoryViewModel extends Disposable {
 		return state.viewModels;
 	}
 
-	setRepository(repository: ISCMRepository | 'auto'): void {
+	setRepository(repository: ISCMRepository | 'auto'): codemavi {
 		this._selectedRepository.set(repository, undefined);
 	}
 
-	setHistoryItemsFilter(filter: HistoryItemRefsFilter): void {
+	setHistoryItemsFilter(filter: HistoryItemRefsFilter): codemavi {
 		const repository = this.repository.get();
 		if (!repository) {
 			return;
@@ -1031,12 +1031,12 @@ class SCMHistoryViewModel extends Disposable {
 		return new Map<string, HistoryItemRefsFilter>();
 	}
 
-	private _saveHistoryItemsFilterState(): void {
+	private _saveHistoryItemsFilterState(): codemavi {
 		const filter = Array.from(this._repositoryFilterState.entries());
 		this._storageService.store('scm.graphView.referencesFilter', JSON.stringify(filter), StorageScope.WORKSPACE, StorageTarget.USER);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._repositoryState.clear();
 		super.dispose();
 	}
@@ -1265,7 +1265,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		this._register(this._updateChildrenThrottler);
 	}
 
-	protected override renderHeaderTitle(container: HTMLElement): void {
+	protected override renderHeaderTitle(container: HTMLElement): codemavi {
 		super.renderHeaderTitle(container, this.title);
 
 		const element = h('div.scm-graph-view-badge-container', [
@@ -1289,7 +1289,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		}));
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		this._treeContainer = append(container, $('.scm-view.scm-history-view'));
@@ -1397,7 +1397,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		}, this, this._store);
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this._tree.layout(height, width);
 	}
@@ -1427,7 +1427,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		return super.createActionViewItem(action, options);
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		const fakeKeyboardEvent = new KeyboardEvent('keydown');
@@ -1439,7 +1439,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		return this._treeViewModel?.isViewModelEmpty.get() === true;
 	}
 
-	async refresh(): Promise<void> {
+	async refresh(): Promise<codemavi> {
 		this._treeViewModel.clearRepositoryState();
 		await this._updateChildren();
 
@@ -1448,7 +1448,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		this._tree.scrollTop = 0;
 	}
 
-	async pickRepository(): Promise<void> {
+	async pickRepository(): Promise<codemavi> {
 		const picker = this._instantiationService.createInstance(RepositoryPicker);
 		const result = await picker.pickRepository();
 
@@ -1457,7 +1457,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		}
 	}
 
-	async pickHistoryItemRef(): Promise<void> {
+	async pickHistoryItemRef(): Promise<codemavi> {
 		const repository = this._treeViewModel.repository.get();
 		const historyProvider = repository?.provider.historyProvider.get();
 		const historyItemsFilter = this._treeViewModel.getHistoryItemsFilter();
@@ -1474,7 +1474,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		}
 	}
 
-	async revealCurrentHistoryItem(): Promise<void> {
+	async revealCurrentHistoryItem(): Promise<codemavi> {
 		const repository = this._treeViewModel.repository.get();
 		const historyProvider = repository?.provider.historyProvider.get();
 		const historyItemRef = historyProvider?.historyItemRef.get();
@@ -1511,7 +1511,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		revealTreeNode();
 	}
 
-	private _createTree(container: HTMLElement): void {
+	private _createTree(container: HTMLElement): codemavi {
 		this._treeIdentityProvider = new SCMHistoryTreeIdentityProvider();
 
 		const historyItemHoverDelegate = this.instantiationService.createInstance(HistoryItemHoverDelegate, this.viewDescriptorService.getViewLocationById(this.id));
@@ -1561,7 +1561,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		return Array.isArray(historyItemFilter) && !!historyItemFilter.find(ref => ref.id === historyItemRefId);
 	}
 
-	private async _onDidOpen(e: IOpenEvent<TreeElement | undefined>): Promise<void> {
+	private async _onDidOpen(e: IOpenEvent<TreeElement | undefined>): Promise<codemavi> {
 		if (!e.element) {
 			return;
 		} else if (isSCMHistoryItemViewModelTreeElement(e.element)) {
@@ -1587,7 +1587,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		}
 	}
 
-	private _onContextMenu(e: ITreeContextMenuEvent<TreeElement | null>): void {
+	private _onContextMenu(e: ITreeContextMenuEvent<TreeElement | null>): codemavi {
 		const element = e.element;
 
 		if (!element || !isSCMHistoryItemViewModelTreeElement(element)) {
@@ -1649,7 +1649,7 @@ export class SCMHistoryViewPane extends ViewPane {
 								}
 							});
 						}
-						override run(accessor: ServicesAccessor, ...args: any[]): void {
+						override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 							const commandService = accessor.get(ICommandService);
 							commandService.executeCommand(actionId, ...args, historyItemRef.id);
 						}
@@ -1671,7 +1671,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		});
 	}
 
-	private async _loadMore(cursor?: string): Promise<void> {
+	private async _loadMore(cursor?: string): Promise<codemavi> {
 		return this._treeLoadMoreSequencer.queue(async () => {
 			if (this._repositoryIsLoadingMore.get()) {
 				return;
@@ -1685,7 +1685,7 @@ export class SCMHistoryViewPane extends ViewPane {
 		});
 	}
 
-	private _updateChildren(): Promise<void> {
+	private _updateChildren(): Promise<codemavi> {
 		return this._updateChildrenThrottler.queue(
 			() => this._treeOperationSequencer.queue(
 				async () => {
@@ -1698,7 +1698,7 @@ export class SCMHistoryViewPane extends ViewPane {
 				}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._contextMenuDisposables.dispose();
 		this._visibilityDisposables.dispose();
 		super.dispose();

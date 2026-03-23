@@ -14,7 +14,7 @@ import { LanguagesRegistry } from '../../../editor/common/services/languagesRegi
  *
  * @skipMangle
  */
-export function assertCleanState(): void {
+export function assertCleanState(): codemavi {
 	// If this test fails, it is a clear indication that
 	// your test or suite is leaking services (e.g. via leaking text models)
 	// assert.strictEqual(LanguageService.instanceCount, 0, 'No leaking ILanguageService');

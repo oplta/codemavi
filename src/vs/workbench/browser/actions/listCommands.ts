@@ -24,7 +24,7 @@ import { IConfigurationService } from '../../../platform/configuration/common/co
 import { localize, localize2 } from '../../../nls.js';
 import { IHoverService } from '../../../platform/hover/browser/hover.js';
 
-function ensureDOMFocus(widget: ListWidget | undefined): void {
+function ensureDOMFocus(widget: ListWidget | undefined): codemavi {
 	// it can happen that one of the commands is executed while
 	// DOM focus is within another focusable control within the
 	// list/tree item. therefor we should ensure that the
@@ -35,7 +35,7 @@ function ensureDOMFocus(widget: ListWidget | undefined): void {
 	}
 }
 
-async function updateFocus(widget: WorkbenchListWidget, updateFocusFn: (widget: WorkbenchListWidget) => void | Promise<void>): Promise<void> {
+async function updateFocus(widget: WorkbenchListWidget, updateFocusFn: (widget: WorkbenchListWidget) => codemavi | Promise<codemavi>): Promise<codemavi> {
 	if (!WorkbenchListSelectionNavigation.getValue(widget.contextKeyService)) {
 		return updateFocusFn(widget);
 	}
@@ -55,7 +55,7 @@ async function updateFocus(widget: WorkbenchListWidget, updateFocusFn: (widget: 
 	widget.setSelection(newFocus, fakeKeyboardEvent);
 }
 
-async function navigate(widget: WorkbenchListWidget | undefined, updateFocusFn: (widget: WorkbenchListWidget) => void | Promise<void>): Promise<void> {
+async function navigate(widget: WorkbenchListWidget | undefined, updateFocusFn: (widget: WorkbenchListWidget) => codemavi | Promise<codemavi>): Promise<codemavi> {
 	if (!widget) {
 		return;
 	}
@@ -218,7 +218,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 	}
 });
 
-function expandMultiSelection(focused: WorkbenchListWidget, previousFocus: unknown): void {
+function expandMultiSelection(focused: WorkbenchListWidget, previousFocus: unknown): codemavi {
 
 	// List
 	if (focused instanceof List || focused instanceof PagedList || focused instanceof Table) {
@@ -256,7 +256,7 @@ function expandMultiSelection(focused: WorkbenchListWidget, previousFocus: unkno
 	}
 }
 
-function revealFocusedStickyScroll(tree: ObjectTree<any, any> | DataTree<any, any> | AsyncDataTree<any, any>, postRevealAction?: (focus: any) => void): void {
+function revealFocusedStickyScroll(tree: ObjectTree<any, any> | DataTree<any, any> | AsyncDataTree<any, any>, postRevealAction?: (focus: any) => codemavi): codemavi {
 	const focus = tree.getStickyScrollFocus();
 
 	if (focus.length === 0) {
@@ -522,7 +522,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 	}
 });
 
-function selectElement(accessor: ServicesAccessor, retainCurrentFocus: boolean): void {
+function selectElement(accessor: ServicesAccessor, retainCurrentFocus: boolean): codemavi {
 	const focused = accessor.get(IListService).lastFocusedList;
 	const fakeKeyboardEvent = getSelectionKeyboardEvent('keydown', retainCurrentFocus);
 	// List

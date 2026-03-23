@@ -42,7 +42,7 @@ export abstract class SettingsTreeElement extends Disposable {
 	parent?: SettingsTreeGroupElement;
 
 	private _tabbable = false;
-	protected readonly _onDidChangeTabbable = this._register(new Emitter<void>());
+	protected readonly _onDidChangeTabbable = this._register(new Emitter<codemavi>());
 	readonly onDidChangeTabbable = this._onDidChangeTabbable.event;
 
 	constructor(_id: string) {
@@ -201,7 +201,7 @@ export class SettingsTreeSettingElement extends SettingsTreeElement {
 		return this._displayLabel!;
 	}
 
-	private initLabels(): void {
+	private initLabels(): codemavi {
 		if (this.setting.title) {
 			this._displayLabel = this.setting.title;
 			this._displayCategory = this.setting.categoryLabel ?? null;
@@ -290,7 +290,7 @@ export class SettingsTreeSettingElement extends SettingsTreeElement {
 		return this.settingsTarget;
 	}
 
-	private update(inspectResult: IInspectResult, isWorkspaceTrusted: boolean): void {
+	private update(inspectResult: IInspectResult, isWorkspaceTrusted: boolean): codemavi {
 		let { isConfigured, inspected, targetSelector, inspectedLanguageOverrides, languageSelector } = inspectResult;
 
 		switch (targetSelector) {
@@ -529,7 +529,7 @@ export class SettingsTreeModel implements IDisposable {
 		return this._root;
 	}
 
-	update(newTocRoot = this._tocRoot): void {
+	update(newTocRoot = this._tocRoot): codemavi {
 		this._treeElementsBySettingName.clear();
 
 		const newRoot = this.createSettingsTreeGroupElement(newTocRoot);
@@ -546,7 +546,7 @@ export class SettingsTreeModel implements IDisposable {
 		}
 	}
 
-	updateWorkspaceTrust(workspaceTrusted: boolean): void {
+	updateWorkspaceTrust(workspaceTrusted: boolean): codemavi {
 		this._isWorkspaceTrusted = workspaceTrusted;
 		this.updateRequireTrustedTargetElements();
 	}
@@ -569,7 +569,7 @@ export class SettingsTreeModel implements IDisposable {
 		return this._treeElementsBySettingName.get(name) ?? null;
 	}
 
-	updateElementsByName(name: string): void {
+	updateElementsByName(name: string): codemavi {
 		if (!this._treeElementsBySettingName.has(name)) {
 			return;
 		}
@@ -577,11 +577,11 @@ export class SettingsTreeModel implements IDisposable {
 		this.reinspectSettings(this._treeElementsBySettingName.get(name)!);
 	}
 
-	private updateRequireTrustedTargetElements(): void {
+	private updateRequireTrustedTargetElements(): codemavi {
 		this.reinspectSettings([...this._treeElementsBySettingName.values()].flat().filter(s => s.isUntrusted));
 	}
 
-	private reinspectSettings(settings: SettingsTreeSettingElement[]): void {
+	private reinspectSettings(settings: SettingsTreeSettingElement[]): codemavi {
 		for (const element of settings) {
 			element.inspectSelf();
 		}
@@ -1036,7 +1036,7 @@ export class SearchResultModel extends SettingsTreeModel {
 		return this.rawSearchResults ?? [];
 	}
 
-	setResult(order: SearchResultIdx, result: ISearchResult | null): void {
+	setResult(order: SearchResultIdx, result: ISearchResult | null): codemavi {
 		this.cachedUniqueSearchResults = null;
 		this.newExtensionSearchResults = null;
 
@@ -1050,7 +1050,7 @@ export class SearchResultModel extends SettingsTreeModel {
 		this.updateChildren();
 	}
 
-	updateChildren(): void {
+	updateChildren(): codemavi {
 		this.update({
 			id: 'searchResultModel',
 			label: 'searchResultModel',

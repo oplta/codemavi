@@ -22,7 +22,7 @@ function getPick<T extends vscode.QuickPickItem>(quickpick: vscode.QuickPick<T>)
 	]);
 }
 
-export async function publishRepository(gitAPI: GitAPI, repository?: Repository): Promise<void> {
+export async function publishRepository(gitAPI: GitAPI, repository?: Repository): Promise<codemavi> {
 	if (!vscode.workspace.workspaceFolders?.length) {
 		return;
 	}

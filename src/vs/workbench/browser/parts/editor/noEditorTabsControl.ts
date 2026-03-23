@@ -45,35 +45,35 @@ export class NoEditorTabsControl extends EditorTabsControl {
 		return false;
 	}
 
-	beforeCloseEditor(editor: EditorInput): void { }
+	beforeCloseEditor(editor: EditorInput): codemavi { }
 
-	closeEditor(editor: EditorInput): void {
+	closeEditor(editor: EditorInput): codemavi {
 		this.handleClosedEditors();
 	}
 
-	closeEditors(editors: EditorInput[]): void {
+	closeEditors(editors: EditorInput[]): codemavi {
 		this.handleClosedEditors();
 	}
 
-	private handleClosedEditors(): void {
+	private handleClosedEditors(): codemavi {
 		this.activeEditor = this.tabsModel.activeEditor;
 	}
 
-	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): void { }
+	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): codemavi { }
 
-	pinEditor(editor: EditorInput): void { }
+	pinEditor(editor: EditorInput): codemavi { }
 
-	stickEditor(editor: EditorInput): void { }
+	stickEditor(editor: EditorInput): codemavi { }
 
-	unstickEditor(editor: EditorInput): void { }
+	unstickEditor(editor: EditorInput): codemavi { }
 
-	setActive(isActive: boolean): void { }
+	setActive(isActive: boolean): codemavi { }
 
-	updateEditorSelections(): void { }
+	updateEditorSelections(): codemavi { }
 
-	updateEditorLabel(editor: EditorInput): void { }
+	updateEditorLabel(editor: EditorInput): codemavi { }
 
-	updateEditorDirty(editor: EditorInput): void { }
+	updateEditorDirty(editor: EditorInput): codemavi { }
 
 	getHeight(): number {
 		return 0;

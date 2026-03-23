@@ -37,7 +37,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		return localize('textEditor', "Text Editor");
 	}
 
-	protected createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): void {
+	protected createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): codemavi {
 		this.editorControl = this._register(this.instantiationService.createInstance(CodeEditorWidget, parent, initialOptions, this.getCodeEditorWidgetOptions()));
 	}
 
@@ -45,7 +45,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		return Object.create(null);
 	}
 
-	protected updateEditorControlOptions(options: ICodeEditorOptions): void {
+	protected updateEditorControlOptions(options: ICodeEditorOptions): codemavi {
 		this.editorControl?.updateOptions(options);
 	}
 
@@ -79,7 +79,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		return this.editorControl.saveViewState() as unknown as T ?? undefined;
 	}
 
-	override setOptions(options: ITextEditorOptions | undefined): void {
+	override setOptions(options: ITextEditorOptions | undefined): codemavi {
 		super.setOptions(options);
 
 		if (options) {
@@ -87,7 +87,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		}
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		this.editorControl?.focus();
@@ -97,7 +97,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		return this.editorControl?.hasTextFocus() || super.hasFocus();
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		super.setEditorVisible(visible);
 
 		if (visible) {
@@ -107,7 +107,7 @@ export abstract class AbstractTextCodeEditor<T extends IEditorViewState> extends
 		}
 	}
 
-	override layout(dimension: Dimension): void {
+	override layout(dimension: Dimension): codemavi {
 		this.editorControl?.layout(dimension);
 	}
 }

@@ -34,7 +34,7 @@ import { TerminalMultiLineLinkDetector } from './terminalMultiLineLinkDetector.j
 import { INotificationService, Severity } from '../../../../../platform/notification/common/notification.js';
 import type { IHoverAction } from '../../../../../base/browser/ui/hover/hover.js';
 
-export type XtermLinkMatcherHandler = (event: MouseEvent | undefined, link: string) => Promise<void>;
+export type XtermLinkMatcherHandler = (event: MouseEvent | undefined, link: string) => Promise<codemavi>;
 
 /**
  * An object responsible for managing registration of link matchers and link providers.
@@ -185,7 +185,7 @@ export class TerminalLinkManager extends DisposableStore {
 		return detectorAdapter;
 	}
 
-	private async _openLink(link: ITerminalSimpleLink): Promise<void> {
+	private async _openLink(link: ITerminalSimpleLink): Promise<codemavi> {
 		this._logService.debug('Opening link', link);
 		const opener = this._openers.get(link.type);
 		if (!opener) {
@@ -324,7 +324,7 @@ export class TerminalLinkManager extends DisposableStore {
 		}
 	}
 
-	private _tooltipCallback(link: TerminalLink, viewportRange: IViewportRange, modifierDownCallback?: () => void, modifierUpCallback?: () => void) {
+	private _tooltipCallback(link: TerminalLink, viewportRange: IViewportRange, modifierDownCallback?: () => codemavi, modifierUpCallback?: () => codemavi) {
 		if (!this._widgetManager) {
 			return;
 		}
@@ -339,7 +339,7 @@ export class TerminalLinkManager extends DisposableStore {
 			height: this._xterm.rows
 		};
 
-		// Don't pass the mouse event as this avoids the modifier check
+		// Don't pass the mouse event as this acodemavis the modifier check
 		this._showHover({
 			viewportRange,
 			cellDimensions,
@@ -353,7 +353,7 @@ export class TerminalLinkManager extends DisposableStore {
 		targetOptions: ILinkHoverTargetOptions,
 		text: IMarkdownString,
 		actions: IHoverAction[] | undefined,
-		linkHandler: (url: string) => void,
+		linkHandler: (url: string) => codemavi,
 		link?: TerminalLink
 	): IDisposable | undefined {
 		if (this._widgetManager) {
@@ -367,16 +367,16 @@ export class TerminalLinkManager extends DisposableStore {
 		return undefined;
 	}
 
-	setWidgetManager(widgetManager: TerminalWidgetManager): void {
+	setWidgetManager(widgetManager: TerminalWidgetManager): codemavi {
 		this._widgetManager = widgetManager;
 	}
 
-	private _clearLinkProviders(): void {
+	private _clearLinkProviders(): codemavi {
 		dispose(this._linkProvidersDisposables);
 		this._linkProvidersDisposables.length = 0;
 	}
 
-	private _registerStandardLinkProviders(): void {
+	private _registerStandardLinkProviders(): codemavi {
 		// Forward any external link provider requests to the registered provider if it exists. This
 		// helps maintain the relative priority of the link providers as it's defined by the order
 		// in which they're registered in xterm.js.

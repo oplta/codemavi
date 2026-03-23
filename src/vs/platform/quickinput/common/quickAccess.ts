@@ -21,7 +21,7 @@ export interface IQuickAccessProviderRunOptions {
 	 * this particular showing of the quick access.
 	 * @param item The item that was accepted.
 	 */
-	readonly handleAccept?: (item: IQuickPickItem, isBackgroundAccept: boolean) => void;
+	readonly handleAccept?: (item: IQuickPickItem, isBackgroundAccept: boolean) => codemavi;
 }
 
 /**
@@ -79,7 +79,7 @@ export interface IQuickAccessController {
 	/**
 	 * Open the quick access picker with the optional value prefilled.
 	 */
-	show(value?: string, options?: IQuickAccessOptions): void;
+	show(value?: string, options?: IQuickAccessOptions): codemavi;
 
 	/**
 	 * Same as `show()` but instead of executing the selected pick item,

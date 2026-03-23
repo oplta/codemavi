@@ -14,7 +14,7 @@ export const enum LinePartMetadata {
 }
 
 export class LinePart {
-	_linePartBrand: void = undefined;
+	_linePartBrand: codemavi = undefined;
 
 	constructor(
 		/**

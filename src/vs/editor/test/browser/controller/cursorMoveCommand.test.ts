@@ -25,7 +25,7 @@ suite('Cursor move command test', () => {
 		'1'
 	].join('\n');
 
-	function executeTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => void): void {
+	function executeTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => codemavi): codemavi {
 		withTestCodeEditor(TEXT, {}, (editor, viewModel) => {
 			callback(editor, viewModel);
 		});
@@ -437,7 +437,7 @@ suite('Cursor move by blankline test', () => {
 		'b',
 	].join('\n');
 
-	function executeTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => void): void {
+	function executeTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => codemavi): codemavi {
 		withTestCodeEditor(TEXT, {}, (editor, viewModel) => {
 			callback(editor, viewModel);
 		});

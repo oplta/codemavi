@@ -202,25 +202,25 @@ export class InlineCompletionsSource extends Disposable {
 		return promise;
 	}
 
-	public clear(tx: ITransaction): void {
+	public clear(tx: ITransaction): codemavi {
 		this._updateOperation.clear();
 		this.inlineCompletions.set(undefined, tx);
 		this.suggestWidgetInlineCompletions.set(undefined, tx);
 	}
 
-	public clearSuggestWidgetInlineCompletions(tx: ITransaction): void {
+	public clearSuggestWidgetInlineCompletions(tx: ITransaction): codemavi {
 		if (this._updateOperation.value?.request.context.selectedSuggestionInfo) {
 			this._updateOperation.clear();
 		}
 		this.suggestWidgetInlineCompletions.set(undefined, tx);
 	}
 
-	public cancelUpdate(): void {
+	public cancelUpdate(): codemavi {
 		this._updateOperation.clear();
 	}
 }
 
-function wait(ms: number, cancellationToken?: CancellationToken): Promise<void> {
+function wait(ms: number, cancellationToken?: CancellationToken): Promise<codemavi> {
 	return new Promise(resolve => {
 		let d: IDisposable | undefined = undefined;
 		const handle = setTimeout(() => {
@@ -294,7 +294,7 @@ export class UpToDateInlineCompletions implements IDisposable {
 		return this;
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._refCount--;
 		if (this._refCount === 0) {
 			this.inlineCompletionProviderResult.dispose();
@@ -305,7 +305,7 @@ export class UpToDateInlineCompletions implements IDisposable {
 		}
 	}
 
-	public prepend(inlineCompletion: InlineCompletionItem, range: Range, addRefToSource: boolean): void {
+	public prepend(inlineCompletion: InlineCompletionItem, range: Range, addRefToSource: boolean): codemavi {
 		if (addRefToSource) {
 			inlineCompletion.source.addRef();
 		}
@@ -416,7 +416,7 @@ export class InlineCompletionWithUpdatedRange extends Disposable {
 			&& !!matchesSubString(originalValueAfter, filterTextAfter);
 	}
 
-	public reuse(): void {
+	public reuse(): codemavi {
 		this._updatedEditObj.reuse();
 	}
 
@@ -599,7 +599,7 @@ class UpdatedEdit extends Disposable {
 		return edits;
 	}
 
-	reuse(): void {
+	reuse(): codemavi {
 		this._inlineEditModelVersion = this._modelVersion.get() ?? -1;
 	}
 }

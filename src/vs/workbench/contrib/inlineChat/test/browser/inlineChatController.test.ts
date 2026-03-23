@@ -176,7 +176,7 @@ suite('InlineChatController', function () {
 				}
 			}],
 			[IChatAccessibilityService, new class extends mock<IChatAccessibilityService>() {
-				override acceptResponse(response: IChatResponseViewModel | undefined, requestId: number): void { }
+				override acceptResponse(response: IChatResponseViewModel | undefined, requestId: number): codemavi { }
 				override acceptRequest(): number { return -1; }
 			}],
 			[IAccessibleViewService, new class extends mock<IAccessibleViewService>() {
@@ -660,7 +660,7 @@ suite('InlineChatController', function () {
 		let count = 0;
 		const commandDetection: (boolean | undefined)[] = [];
 
-		const onDidInvoke = new Emitter<void>();
+		const onDidInvoke = new Emitter<codemavi>();
 
 		store.add(chatAgentService.registerDynamicAgent({
 			id: 'testEditorAgent2',
@@ -749,7 +749,7 @@ suite('InlineChatController', function () {
 
 		const attempts: (number | undefined)[] = [];
 
-		const deferred = new DeferredPromise<void>();
+		const deferred = new DeferredPromise<codemavi>();
 
 		store.add(chatAgentService.registerDynamicAgent({
 			id: 'testEditorAgent2',
@@ -792,8 +792,8 @@ suite('InlineChatController', function () {
 
 		model.setValue('World');
 
-		const deferred = new DeferredPromise<void>();
-		let progress: ((part: IChatProgress) => void) | undefined;
+		const deferred = new DeferredPromise<codemavi>();
+		let progress: ((part: IChatProgress) => codemavi) | undefined;
 
 		store.add(chatAgentService.registerDynamicAgent({
 			id: 'testEditorAgent2',
@@ -817,7 +817,7 @@ suite('InlineChatController', function () {
 
 		assertType(progress);
 
-		const modelChange = new Promise<void>(resolve => model.onDidChangeContent(() => resolve()));
+		const modelChange = new Promise<codemavi>(resolve => model.onDidChangeContent(() => resolve()));
 
 		progress({ kind: 'textEdit', uri: model.uri, edits: [{ range: new Range(1, 1, 1, 1), text: 'Hello-Hello' }] });
 
@@ -922,7 +922,7 @@ suite('InlineChatController', function () {
 
 		model.setValue('World');
 
-		const deferred = new DeferredPromise<void>();
+		const deferred = new DeferredPromise<codemavi>();
 
 		store.add(chatAgentService.registerDynamicAgent({
 			id: 'testEditorAgent2',

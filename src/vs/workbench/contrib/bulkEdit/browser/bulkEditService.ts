@@ -113,7 +113,7 @@ class BulkEdit {
 		const increment = this._edits.length > 1 ? 0 : undefined;
 		this._progress.report({ increment, total: 100 });
 		// Increment by percentage points since progress API expects that
-		const progress: IProgress<void> = { report: _ => this._progress.report({ increment: 100 / this._edits.length }) };
+		const progress: IProgress<codemavi> = { report: _ => this._progress.report({ increment: 100 / this._edits.length }) };
 
 		const resources: (readonly URI[])[] = [];
 		let index = 0;
@@ -139,25 +139,25 @@ class BulkEdit {
 		return resources.flat();
 	}
 
-	private async _performFileEdits(edits: ResourceFileEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, confirmBeforeUndo: boolean, progress: IProgress<void>): Promise<readonly URI[]> {
+	private async _performFileEdits(edits: ResourceFileEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, confirmBeforeUndo: boolean, progress: IProgress<codemavi>): Promise<readonly URI[]> {
 		this._logService.debug('_performFileEdits', JSON.stringify(edits));
 		const model = this._instaService.createInstance(BulkFileEdits, this._label || localize('workspaceEdit', "Workspace Edit"), this._code || 'undoredo.workspaceEdit', undoRedoGroup, undoRedoSource, confirmBeforeUndo, progress, this._token, edits);
 		return await model.apply();
 	}
 
-	private async _performTextEdits(edits: ResourceTextEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<void>): Promise<readonly URI[]> {
+	private async _performTextEdits(edits: ResourceTextEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<codemavi>): Promise<readonly URI[]> {
 		this._logService.debug('_performTextEdits', JSON.stringify(edits));
 		const model = this._instaService.createInstance(BulkTextEdits, this._label || localize('workspaceEdit', "Workspace Edit"), this._code || 'undoredo.workspaceEdit', this._editor, undoRedoGroup, undoRedoSource, progress, this._token, edits);
 		return await model.apply();
 	}
 
-	private async _performCellEdits(edits: ResourceNotebookCellEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<void>): Promise<readonly URI[]> {
+	private async _performCellEdits(edits: ResourceNotebookCellEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<codemavi>): Promise<readonly URI[]> {
 		this._logService.debug('_performCellEdits', JSON.stringify(edits));
 		const model = this._instaService.createInstance(BulkCellEdits, undoRedoGroup, undoRedoSource, progress, this._token, edits);
 		return await model.apply();
 	}
 
-	private async _performOpaqueEdits(edits: ResourceAttachmentEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<void>): Promise<readonly URI[]> {
+	private async _performOpaqueEdits(edits: ResourceAttachmentEdit[], undoRedoGroup: UndoRedoGroup, undoRedoSource: UndoRedoSource | undefined, progress: IProgress<codemavi>): Promise<readonly URI[]> {
 		this._logService.debug('_performOpaqueEdits', JSON.stringify(edits));
 		const model = this._instaService.createInstance(OpaqueEdits, undoRedoGroup, undoRedoSource, progress, this._token, edits);
 		return await model.apply();

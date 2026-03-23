@@ -63,14 +63,14 @@ class SimpleDiffEditorModel extends EditorModel {
 
 
 export interface IPeekOutputRenderer extends IDisposable {
-	onDidContentSizeChange?: Event<void>;
-	onScrolled?(evt: ScrollEvent): void;
+	onDidContentSizeChange?: Event<codemavi>;
+	onScrolled?(evt: ScrollEvent): codemavi;
 	/** Updates the displayed test. Should clear if it cannot display the test. */
 	update(subject: InspectSubject): Promise<boolean>;
 	/** Recalculate content layout. Returns the height it should be rendered at. */
 	layout(dimension: dom.IDimension, hasMultipleFrames: boolean): number | undefined;
 	/** Dispose the content provider. */
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 const commonEditorOptions: IEditorOptions = {
@@ -192,7 +192,7 @@ export class DiffContentProvider extends Disposable implements IPeekOutputRender
 		return height;
 	}
 
-	public onScrolled(evt: ScrollEvent): void {
+	public onScrolled(evt: ScrollEvent): codemavi {
 		this.helper?.onScrolled(evt, this.widget.value?.getDomNode(), this.widget.value?.getOriginalEditor());
 	}
 
@@ -338,7 +338,7 @@ export class PlainTextMessagePeek extends Disposable implements IPeekOutputRende
 		this.model.clear();
 	}
 
-	onScrolled(evt: ScrollEvent): void {
+	onScrolled(evt: ScrollEvent): codemavi {
 		this.helper?.onScrolled(evt, this.widget.value?.getDomNode(), this.widget.value);
 	}
 
@@ -488,7 +488,7 @@ export class TerminalMessagePeek extends Disposable implements IPeekOutputRender
 		noOutputMessage: string;
 		getTarget: (result: ITestResult) => T | undefined;
 		doInitialWrite: (target: T, result: LiveTestResult) => Iterable<VSBuffer>;
-		doListenForMoreData: (target: T, result: LiveTestResult, write: (s: Uint8Array) => void) => IDisposable;
+		doListenForMoreData: (target: T, result: LiveTestResult, write: (s: Uint8Array) => codemavi) => IDisposable;
 	}) {
 		const result = opts.subject.result;
 		const target = opts.getTarget(result);
@@ -535,7 +535,7 @@ export class TerminalMessagePeek extends Disposable implements IPeekOutputRender
 		// Ensure pending writes finish, otherwise the selection in `updateForTestSubject`
 		// can happen before the markers are processed.
 		if (pendingWrites.value > 0) {
-			await new Promise<void>(resolve => {
+			await new Promise<codemavi>(resolve => {
 				const l = pendingWrites.onDidChange(() => {
 					if (pendingWrites.value === 0) {
 						l.dispose();

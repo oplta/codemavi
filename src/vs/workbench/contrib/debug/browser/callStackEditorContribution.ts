@@ -180,7 +180,7 @@ export class CallStackEditorContribution extends Disposable implements IEditorCo
 		return distinct(decorations, d => `${d.options.className} ${d.options.glyphMarginClassName} ${d.range.startLineNumber} ${d.range.startColumn}`);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.decorations.clear();
 	}

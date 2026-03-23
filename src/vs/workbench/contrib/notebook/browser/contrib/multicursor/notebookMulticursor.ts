@@ -97,8 +97,8 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 	} | undefined;
 	private trackedCells: TrackedCell[] = [];
 
-	private readonly _onDidChangeAnchorCell = this._register(new Emitter<void>());
-	readonly onDidChangeAnchorCell: Event<void> = this._onDidChangeAnchorCell.event;
+	private readonly _onDidChangeAnchorCell = this._register(new Emitter<codemavi>());
+	readonly onDidChangeAnchorCell: Event<codemavi> = this._onDidChangeAnchorCell.event;
 	private anchorCell: [ICellViewModel, ICodeEditor] | undefined;
 
 	private readonly anchorDisposables = this._register(new DisposableStore());
@@ -472,7 +472,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		this.word = '';
 	}
 
-	public async findAndTrackNextSelection(focusedCell: ICellViewModel): Promise<void> {
+	public async findAndTrackNextSelection(focusedCell: ICellViewModel): Promise<codemavi> {
 		if (this.state === NotebookMultiCursorState.Idle) { // move cursor to end of the symbol + track it, transition to selecting state
 			const textModel = focusedCell.textModel;
 			if (!textModel) {
@@ -579,7 +579,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		}
 	}
 
-	public async selectAllMatches(focusedCell: ICellViewModel, matches?: CellFindMatchWithIndex[]): Promise<void> {
+	public async selectAllMatches(focusedCell: ICellViewModel, matches?: CellFindMatchWithIndex[]): Promise<codemavi> {
 		const notebookTextModel = this.notebookEditor.textModel;
 		if (!notebookTextModel) {
 			return; // should not happen
@@ -695,7 +695,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		let trackedMatch = this.trackedCells.find(trackedCell => trackedCell.cellViewModel.handle === cellViewModel.handle);
 
 		if (trackedMatch) {
-			this.clearDecorations(trackedMatch); // need this to avoid leaking decorations -- TODO: just optimize the lazy decorations fn
+			this.clearDecorations(trackedMatch); // need this to acodemavi leaking decorations -- TODO: just optimize the lazy decorations fn
 			trackedMatch.matchSelections = selections;
 		} else {
 			const initialSelection = cellViewModel.getSelections()[0];
@@ -724,7 +724,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		return trackedMatch;
 	}
 
-	public async deleteLeft(): Promise<void> {
+	public async deleteLeft(): Promise<codemavi> {
 		this.trackedCells.forEach(cell => {
 			const controller = this.cursorsControllers.get(cell.cellViewModel.uri);
 			if (!controller) {
@@ -749,7 +749,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		this.updateLazyDecorations();
 	}
 
-	public async deleteRight(): Promise<void> {
+	public async deleteRight(): Promise<codemavi> {
 		this.trackedCells.forEach(cell => {
 			const controller = this.cursorsControllers.get(cell.cellViewModel.uri);
 			if (!controller) {
@@ -967,7 +967,7 @@ export class NotebookMultiCursorController extends Disposable implements INotebo
 		return result;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.anchorDisposables.dispose();
 		this.cursorsDisposables.dispose();
@@ -1006,7 +1006,7 @@ class NotebookSelectAllFindMatches extends NotebookAction {
 		});
 	}
 
-	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
@@ -1053,7 +1053,7 @@ class NotebookAddMatchToMultiSelectionAction extends NotebookAction {
 		});
 	}
 
-	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 
@@ -1092,7 +1092,7 @@ class NotebookExitMultiSelectionAction extends NotebookAction {
 		});
 	}
 
-	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 
@@ -1135,7 +1135,7 @@ class NotebookDeleteLeftMultiSelectionAction extends NotebookAction {
 		});
 	}
 
-	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 
@@ -1178,7 +1178,7 @@ class NotebookDeleteRightMultiSelectionAction extends NotebookAction {
 		});
 	}
 
-	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	override async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const nbEditor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 		if (!nbEditor) {

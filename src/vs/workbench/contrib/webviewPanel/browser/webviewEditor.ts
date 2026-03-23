@@ -46,7 +46,7 @@ export class WebviewEditor extends EditorPane {
 	private readonly _webviewVisibleDisposables = this._register(new DisposableStore());
 	private readonly _onFocusWindowHandler = this._register(new MutableDisposable());
 
-	private readonly _onDidFocusWebview = this._register(new Emitter<void>());
+	private readonly _onDidFocusWebview = this._register(new Emitter<codemavi>());
 	public override get onDidFocus(): Event<any> { return this._onDidFocusWebview.event; }
 
 	private readonly _scopedContextKeyService = this._register(new MutableDisposable<IScopedContextKeyService>());
@@ -80,7 +80,7 @@ export class WebviewEditor extends EditorPane {
 		return this._scopedContextKeyService.value;
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		const element = document.createElement('div');
 		this._element = element;
 		this._element.id = `webview-editor-element-${generateUuid()}`;
@@ -89,7 +89,7 @@ export class WebviewEditor extends EditorPane {
 		this._scopedContextKeyService.value = this._register(this._contextKeyService.createScoped(element));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._isDisposed = true;
 
 		this._element?.remove();
@@ -98,14 +98,14 @@ export class WebviewEditor extends EditorPane {
 		super.dispose();
 	}
 
-	public override layout(dimension: DOM.Dimension): void {
+	public override layout(dimension: DOM.Dimension): codemavi {
 		this._dimension = dimension;
 		if (this.webview && this._visible) {
 			this.synchronizeWebviewContainerDimensions(this.webview, dimension);
 		}
 	}
 
-	public override focus(): void {
+	public override focus(): codemavi {
 		super.focus();
 		if (!this._onFocusWindowHandler.value && !isWeb) {
 			// Make sure we restore focus when switching back to a VS Code window
@@ -118,7 +118,7 @@ export class WebviewEditor extends EditorPane {
 		this.webview?.focus();
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		this._visible = visible;
 		if (this.input instanceof WebviewInput && this.webview) {
 			if (visible) {
@@ -139,7 +139,7 @@ export class WebviewEditor extends EditorPane {
 		super.clearInput();
 	}
 
-	public override async setInput(input: EditorInput, options: IEditorOptions, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	public override async setInput(input: EditorInput, options: IEditorOptions, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		if (this.input && input.matches(this.input)) {
 			return;
 		}
@@ -168,7 +168,7 @@ export class WebviewEditor extends EditorPane {
 		}
 	}
 
-	private claimWebview(input: WebviewInput): void {
+	private claimWebview(input: WebviewInput): codemavi {
 		input.claim(this, this.window, this.scopedContextKeyService);
 
 		if (this._element) {

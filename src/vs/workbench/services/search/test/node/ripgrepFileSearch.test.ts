@@ -10,7 +10,7 @@ import { fixDriveC, getAbsoluteGlob } from '../../node/ripgrepFileSearch.js';
 
 suite('RipgrepFileSearch - etc', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
-	function testGetAbsGlob(params: string[]): void {
+	function testGetAbsGlob(params: string[]): codemavi {
 		const [folder, glob, expectedResult] = params;
 		assert.strictEqual(fixDriveC(getAbsoluteGlob(folder, glob)), expectedResult, JSON.stringify(params));
 	}

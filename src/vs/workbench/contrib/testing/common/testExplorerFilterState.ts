@@ -25,7 +25,7 @@ export interface ITestExplorerFilterState {
 	readonly onDidSelectTestInExplorer: Event<string | undefined>;
 
 	/** Event that fires when {@link focusInput} is invoked. */
-	readonly onDidRequestInputFocus: Event<void>;
+	readonly onDidRequestInputFocus: Event<codemavi>;
 
 	/**
 	 * Glob list to filter for based on the {@link text}
@@ -50,12 +50,12 @@ export interface ITestExplorerFilterState {
 	/**
 	 * Focuses the filter input in the test explorer view.
 	 */
-	focusInput(): void;
+	focusInput(): codemavi;
 
 	/**
 	 * Replaces the filter {@link text}.
 	 */
-	setText(text: string): void;
+	setText(text: string): codemavi;
 
 	/**
 	 * Sets whether the {@link text} is filtering for a special term.
@@ -65,12 +65,12 @@ export interface ITestExplorerFilterState {
 	/**
 	 * Sets whether the {@link text} includes a special filter term.
 	 */
-	toggleFilteringFor(term: TestFilterTerm, shouldFilter?: boolean): void;
+	toggleFilteringFor(term: TestFilterTerm, shouldFilter?: boolean): codemavi;
 
 	/**
 	 * Called when a test in the test explorer is selected.
 	 */
-	didSelectTestInExplorer(testId: string): void;
+	didSelectTestInExplorer(testId: string): codemavi;
 }
 
 export const ITestExplorerFilterState = createDecorator<ITestExplorerFilterState>('testingFilterState');
@@ -80,7 +80,7 @@ const trimExtraWhitespace = (str: string) => str.replace(/\s\s+/g, ' ').trim();
 
 export class TestExplorerFilterState extends Disposable implements ITestExplorerFilterState {
 	declare _serviceBrand: undefined;
-	private readonly focusEmitter = new Emitter<void>();
+	private readonly focusEmitter = new Emitter<codemavi>();
 	/**
 	 * Mapping of terms to whether they're included in the text.
 	 */

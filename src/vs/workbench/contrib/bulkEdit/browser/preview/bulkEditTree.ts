@@ -36,7 +36,7 @@ import * as css from '../../../../../base/browser/cssValue.js';
 
 export interface ICheckable {
 	isChecked(): boolean;
-	setChecked(value: boolean): void;
+	setChecked(value: boolean): codemavi;
 }
 
 export class CategoryElement implements ICheckable {
@@ -57,7 +57,7 @@ export class CategoryElement implements ICheckable {
 		return checked;
 	}
 
-	setChecked(value: boolean): void {
+	setChecked(value: boolean): codemavi {
 		const model = this.parent;
 		for (const file of this.category.fileOperations) {
 			for (const edit of file.originalEdits.values()) {
@@ -109,7 +109,7 @@ export class FileElement implements ICheckable {
 		return checked;
 	}
 
-	setChecked(value: boolean): void {
+	setChecked(value: boolean): codemavi {
 		const model = this.parent instanceof CategoryElement ? this.parent.parent : this.parent;
 		for (const edit of this.edit.originalEdits.values()) {
 			model.checked.updateChecked(edit, value);
@@ -167,7 +167,7 @@ export class TextEditElement implements ICheckable {
 		return model.checked.isChecked(this.edit.textEdit);
 	}
 
-	setChecked(value: boolean): void {
+	setChecked(value: boolean): codemavi {
 		let model = this.parent.parent;
 		if (model instanceof CategoryElement) {
 			model = model.parent;
@@ -420,7 +420,7 @@ export class CategoryElementRenderer implements ITreeRenderer<CategoryElement, F
 		return new CategoryElementTemplate(container);
 	}
 
-	renderElement(node: ITreeNode<CategoryElement, FuzzyScore>, _index: number, template: CategoryElementTemplate): void {
+	renderElement(node: ITreeNode<CategoryElement, FuzzyScore>, _index: number, template: CategoryElementTemplate): codemavi {
 
 		template.icon.style.setProperty('--background-dark', null);
 		template.icon.style.setProperty('--background-light', null);
@@ -452,7 +452,7 @@ export class CategoryElementRenderer implements ITreeRenderer<CategoryElement, F
 		});
 	}
 
-	disposeTemplate(template: CategoryElementTemplate): void {
+	disposeTemplate(template: CategoryElementTemplate): codemavi {
 		template.label.dispose();
 	}
 }
@@ -485,7 +485,7 @@ class FileElementTemplate {
 		container.appendChild(this._details);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._localDisposables.dispose();
 		this._disposables.dispose();
 		this._label.dispose();
@@ -547,11 +547,11 @@ export class FileElementRenderer implements ITreeRenderer<FileElement, FuzzyScor
 		return new FileElementTemplate(container, this._resourceLabels, this._labelService);
 	}
 
-	renderElement(node: ITreeNode<FileElement, FuzzyScore>, _index: number, template: FileElementTemplate): void {
+	renderElement(node: ITreeNode<FileElement, FuzzyScore>, _index: number, template: FileElementTemplate): codemavi {
 		template.set(node.element, node.filterData);
 	}
 
-	disposeTemplate(template: FileElementTemplate): void {
+	disposeTemplate(template: FileElementTemplate): codemavi {
 		template.dispose();
 	}
 }
@@ -580,7 +580,7 @@ class TextEditElementTemplate {
 		this._label = this._disposables.add(new HighlightedLabel(container));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._localDisposables.dispose();
 		this._disposables.dispose();
 	}
@@ -664,11 +664,11 @@ export class TextEditElementRenderer implements ITreeRenderer<TextEditElement, F
 		return new TextEditElementTemplate(container, this._themeService);
 	}
 
-	renderElement({ element }: ITreeNode<TextEditElement, FuzzyScore>, _index: number, template: TextEditElementTemplate): void {
+	renderElement({ element }: ITreeNode<TextEditElement, FuzzyScore>, _index: number, template: TextEditElementTemplate): codemavi {
 		template.set(element);
 	}
 
-	disposeTemplate(_template: TextEditElementTemplate): void { }
+	disposeTemplate(_template: TextEditElementTemplate): codemavi { }
 }
 
 export class BulkEditDelegate implements IListVirtualDelegate<BulkEditElement> {

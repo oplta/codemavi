@@ -100,8 +100,8 @@ export class InlineChatWidget {
 
 	private readonly _chatWidget: ChatWidget;
 
-	protected readonly _onDidChangeHeight = this._store.add(new Emitter<void>());
-	readonly onDidChangeHeight: Event<void> = Event.filter(this._onDidChangeHeight.event, _ => !this._isLayouting);
+	protected readonly _onDidChangeHeight = this._store.add(new Emitter<codemavi>());
+	readonly onDidChangeHeight: Event<codemavi> = Event.filter(this._onDidChangeHeight.event, _ => !this._isLayouting);
 
 	private readonly _requestInProgress = observableValue(this, false);
 	readonly requestInProgress: IObservable<boolean> = this._requestInProgress;
@@ -279,7 +279,7 @@ export class InlineChatWidget {
 		}));
 	}
 
-	private _updateAriaLabel(): void {
+	private _updateAriaLabel(): codemavi {
 
 		this._elements.root.ariaLabel = this._accessibleViewService.getOpenAriaHint(AccessibilityVerbositySettingId.InlineChat);
 
@@ -295,7 +295,7 @@ export class InlineChatWidget {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._store.dispose();
 	}
 
@@ -325,7 +325,7 @@ export class InlineChatWidget {
 		}
 	}
 
-	protected _doLayout(dimension: Dimension): void {
+	protected _doLayout(dimension: Dimension): codemavi {
 		const extraHeight = this._getExtraHeight();
 		const statusHeight = getTotalHeight(this._elements.status);
 
@@ -435,7 +435,7 @@ export class InlineChatWidget {
 		this._chatWidget.setModel(chatModel, { ...state, inputValue: undefined });
 	}
 
-	updateInfo(message: string): void {
+	updateInfo(message: string): codemavi {
 		this._elements.infoLabel.classList.toggle('hidden', !message);
 		const renderedMessage = renderLabelWithIcons(message);
 		reset(this._elements.infoLabel, ...renderedMessage);
@@ -542,7 +542,7 @@ export class EditorBasedInlineChatWidget extends InlineChatWidget {
 		return result;
 	}
 
-	protected override _doLayout(dimension: Dimension): void {
+	protected override _doLayout(dimension: Dimension): codemavi {
 
 		let newHeight = dimension.height;
 
@@ -564,7 +564,7 @@ export class EditorBasedInlineChatWidget extends InlineChatWidget {
 
 	// --- accessible viewer
 
-	showAccessibleHunk(session: Session, hunkData: HunkInformation): void {
+	showAccessibleHunk(session: Session, hunkData: HunkInformation): codemavi {
 
 		this._elements.accessibleViewer.classList.remove('hidden');
 		this._accessibleViewer.clear();
@@ -647,17 +647,17 @@ class AccessibleHunk implements IAccessibleDiffViewerModel {
 	getModifiedOptions(): IComputedEditorOptions {
 		return this._editor.getOptions();
 	}
-	originalReveal(range: Range): void {
+	originalReveal(range: Range): codemavi {
 		// throw new Error('Method not implemented.');
 	}
-	modifiedReveal(range?: Range | undefined): void {
+	modifiedReveal(range?: Range | undefined): codemavi {
 		this._editor.revealRangeInCenterIfOutsideViewport(range || this._hunk.getRangesN()[0], ScrollType.Smooth);
 	}
-	modifiedSetSelection(range: Range): void {
+	modifiedSetSelection(range: Range): codemavi {
 		// this._editor.revealRangeInCenterIfOutsideViewport(range, ScrollType.Smooth);
 		// this._editor.setSelection(range);
 	}
-	modifiedFocus(): void {
+	modifiedFocus(): codemavi {
 		this._editor.focus();
 	}
 	getModifiedPosition(): Position | undefined {

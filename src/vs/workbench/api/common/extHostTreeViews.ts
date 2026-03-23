@@ -142,7 +142,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 					treeView.badge = undefined;
 				}
 			},
-			reveal: (element: T, options?: IRevealOptions): Promise<void> => {
+			reveal: (element: T, options?: IRevealOptions): Promise<codemavi> => {
 				return treeView.reveal(element, options);
 			},
 			dispose: async () => {
@@ -179,7 +179,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 	}
 
 	async $handleDrop(destinationViewId: string, requestId: number, treeDataTransferDTO: DataTransferDTO, targetItemHandle: string | undefined, token: CancellationToken,
-		operationUuid?: string, sourceViewId?: string, sourceTreeItemHandles?: string[]): Promise<void> {
+		operationUuid?: string, sourceViewId?: string, sourceTreeItemHandles?: string[]): Promise<codemavi> {
 		const treeView = this.treeViews.get(destinationViewId);
 		if (!treeView) {
 			return Promise.reject(new NoTreeViewError(destinationViewId));
@@ -241,7 +241,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 		return treeView.resolveTreeItem(treeItemHandle, token);
 	}
 
-	$setExpanded(treeViewId: string, treeItemHandle: string, expanded: boolean): void {
+	$setExpanded(treeViewId: string, treeItemHandle: string, expanded: boolean): codemavi {
 		const treeView = this.treeViews.get(treeViewId);
 		if (!treeView) {
 			throw new NoTreeViewError(treeViewId);
@@ -257,7 +257,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 		treeView.setSelectionAndFocus(selectedHandles, focusedHandle);
 	}
 
-	$setVisible(treeViewId: string, isVisible: boolean): void {
+	$setVisible(treeViewId: string, isVisible: boolean): codemavi {
 		const treeView = this.treeViews.get(treeViewId);
 		if (!treeView) {
 			if (!isVisible) {
@@ -268,7 +268,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 		treeView.setVisible(isVisible);
 	}
 
-	$changeCheckboxState(treeViewId: string, checkboxUpdate: CheckboxUpdate[]): void {
+	$changeCheckboxState(treeViewId: string, checkboxUpdate: CheckboxUpdate[]): codemavi {
 		const treeView = this.treeViews.get(treeViewId);
 		if (!treeView) {
 			throw new NoTreeViewError(treeViewId);
@@ -294,7 +294,7 @@ export class ExtHostTreeViews extends Disposable implements ExtHostTreeViewsShap
 	}
 }
 
-type Root = null | undefined | void;
+type Root = null | undefined | codemavi;
 type TreeData<T> = { message: boolean; element: T | T[] | Root | false };
 
 interface TreeNode extends IDisposable {
@@ -346,8 +346,8 @@ class ExtHostTreeView<T> extends Disposable {
 
 	private _onDidChangeData: Emitter<TreeData<T>> = this._register(new Emitter<TreeData<T>>());
 
-	private refreshPromise: Promise<void> = Promise.resolve();
-	private refreshQueue: Promise<void> = Promise.resolve();
+	private refreshPromise: Promise<codemavi> = Promise.resolve();
+	private refreshQueue: Promise<codemavi> = Promise.resolve();
 
 	constructor(
 		private viewId: string, options: vscode.TreeViewOptions<T>,
@@ -377,8 +377,8 @@ class ExtHostTreeView<T> extends Disposable {
 			}));
 		}
 
-		let refreshingPromise: Promise<void> | null;
-		let promiseCallback: () => void;
+		let refreshingPromise: Promise<codemavi> | null;
+		let promiseCallback: () => codemavi;
 		const onDidChangeData = Event.debounce<TreeData<T>, { message: boolean; elements: (T | Root)[] }>(this._onDidChangeData.event, (result, current) => {
 			if (!result) {
 				result = { message: false, elements: [] };
@@ -434,7 +434,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return this.elements.get(treeItemHandle);
 	}
 
-	reveal(element: T | undefined, options?: IRevealOptions): Promise<void> {
+	reveal(element: T | undefined, options?: IRevealOptions): Promise<codemavi> {
 		options = options ? options : { select: true, focus: false };
 		const select = isUndefinedOrNull(options.select) ? true : options.select;
 		const focus = isUndefinedOrNull(options.focus) ? false : options.focus;
@@ -499,7 +499,7 @@ class ExtHostTreeView<T> extends Disposable {
 		this.proxy.$setBadge(this.viewId, badge);
 	}
 
-	setExpanded(treeItemHandle: TreeItemHandle, expanded: boolean): void {
+	setExpanded(treeItemHandle: TreeItemHandle, expanded: boolean): codemavi {
 		const element = this.getExtensionElement(treeItemHandle);
 		if (element) {
 			if (expanded) {
@@ -510,7 +510,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	setSelectionAndFocus(selectedHandles: TreeItemHandle[], focusedHandle: string): void {
+	setSelectionAndFocus(selectedHandles: TreeItemHandle[], focusedHandle: string): codemavi {
 		const changedSelection = !equals(this._selectedHandles, selectedHandles);
 		this._selectedHandles = selectedHandles;
 
@@ -526,7 +526,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	setVisible(visible: boolean): void {
+	setVisible(visible: boolean): codemavi {
 		if (visible !== this._visible) {
 			this._visible = visible;
 			this._onDidChangeVisibility.fire(Object.freeze({ visible: this._visible }));
@@ -574,7 +574,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return !!this.dndController?.handleDrag;
 	}
 
-	async onDrop(treeDataTransfer: vscode.DataTransfer, targetHandleOrNode: TreeItemHandle | undefined, token: CancellationToken): Promise<void> {
+	async onDrop(treeDataTransfer: vscode.DataTransfer, targetHandleOrNode: TreeItemHandle | undefined, token: CancellationToken): Promise<codemavi> {
 		const target = targetHandleOrNode ? this.getExtensionElement(targetHandleOrNode) : undefined;
 		if ((!target && targetHandleOrNode) || !this.dndController?.handleDrop) {
 			return;
@@ -696,7 +696,7 @@ class ExtHostTreeView<T> extends Disposable {
 
 	private _refreshCancellationSource = new CancellationTokenSource();
 
-	private refresh(elements: (T | Root)[]): Promise<void> {
+	private refresh(elements: (T | Root)[]): Promise<codemavi> {
 		const hasRoot = elements.some(element => !element);
 		if (hasRoot) {
 			// Cancel any pending children fetches
@@ -746,7 +746,7 @@ class ExtHostTreeView<T> extends Disposable {
 		return handlesToUpdate;
 	}
 
-	private refreshHandles(itemHandles: TreeItemHandle[]): Promise<void> {
+	private refreshHandles(itemHandles: TreeItemHandle[]): Promise<codemavi> {
 		const itemsToRefresh: { [treeItemHandle: string]: ITreeItem } = {};
 		return Promise.all(itemHandles.map(treeItemHandle =>
 			this.refreshNode(treeItemHandle)
@@ -851,7 +851,7 @@ class ExtHostTreeView<T> extends Disposable {
 			parent,
 			children: undefined,
 			disposableStore,
-			dispose(): void { disposableStore.dispose(); }
+			dispose(): codemavi { disposableStore.dispose(); }
 		};
 	}
 
@@ -912,12 +912,12 @@ class ExtHostTreeView<T> extends Disposable {
 		return URI.file(iconPath);
 	}
 
-	private addNodeToCache(element: T, node: TreeNode): void {
+	private addNodeToCache(element: T, node: TreeNode): codemavi {
 		this.elements.set(node.item.handle, element);
 		this.nodes.set(element, node);
 	}
 
-	private updateNodeCache(element: T, newNode: TreeNode, existing: TreeNode, parentNode: TreeNode | Root): void {
+	private updateNodeCache(element: T, newNode: TreeNode, existing: TreeNode, parentNode: TreeNode | Root): codemavi {
 		// Remove from the cache
 		this.elements.delete(newNode.item.handle);
 		this.nodes.delete(element);
@@ -936,7 +936,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	private addNodeToParentCache(node: TreeNode, parentNode: TreeNode | Root): void {
+	private addNodeToParentCache(node: TreeNode, parentNode: TreeNode | Root): codemavi {
 		if (parentNode) {
 			if (!parentNode.children) {
 				parentNode.children = [];
@@ -950,7 +950,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	private clearChildren(parentElement?: T): void {
+	private clearChildren(parentElement?: T): codemavi {
 		if (parentElement) {
 			const node = this.nodes.get(parentElement);
 			if (node) {
@@ -969,7 +969,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	private clear(element: T): void {
+	private clear(element: T): codemavi {
 		const node = this.nodes.get(element);
 		if (node) {
 			if (node.children) {
@@ -986,7 +986,7 @@ class ExtHostTreeView<T> extends Disposable {
 		}
 	}
 
-	private clearAll(): void {
+	private clearAll(): codemavi {
 		this.roots = undefined;
 		this.elements.clear();
 		this.nodes.forEach(node => node.dispose());

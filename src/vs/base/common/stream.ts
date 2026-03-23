@@ -25,19 +25,19 @@ export interface ReadableStreamEvents<T> {
 	 * Use `listenStream` as a helper method to listen to
 	 * stream events in the right order.
 	 */
-	on(event: 'data', callback: (data: T) => void): void;
+	on(event: 'data', callback: (data: T) => codemavi): codemavi;
 
 	/**
 	 * Emitted when any error occurs.
 	 */
-	on(event: 'error', callback: (err: Error) => void): void;
+	on(event: 'error', callback: (err: Error) => codemavi): codemavi;
 
 	/**
 	 * The 'end' event is emitted when there is no more data
 	 * to be consumed from the stream. The 'end' event will
 	 * not be emitted unless the data is completely consumed.
 	 */
-	on(event: 'end', callback: () => void): void;
+	on(event: 'end', callback: () => codemavi): codemavi;
 }
 
 /**
@@ -49,22 +49,22 @@ export interface ReadableStream<T> extends ReadableStreamEvents<T> {
 	/**
 	 * Stops emitting any events until resume() is called.
 	 */
-	pause(): void;
+	pause(): codemavi;
 
 	/**
 	 * Starts emitting events again after pause() was called.
 	 */
-	resume(): void;
+	resume(): codemavi;
 
 	/**
 	 * Destroys the stream and stops emitting any event.
 	 */
-	destroy(): void;
+	destroy(): codemavi;
 
 	/**
 	 * Allows to remove a listener that was previously added.
 	 */
-	removeListener(event: string, callback: Function): void;
+	removeListener(event: string, callback: Function): codemavi;
 }
 
 /**
@@ -106,7 +106,7 @@ export interface WriteableStream<T> extends ReadableStream<T> {
 	 * Otherwise there is a risk of buffering a large number
 	 * of data chunks without consumer.
 	 */
-	write(data: T): void | Promise<void>;
+	write(data: T): codemavi | Promise<codemavi>;
 
 	/**
 	 * Signals an error to the consumer of the stream via the
@@ -115,7 +115,7 @@ export interface WriteableStream<T> extends ReadableStream<T> {
 	 * NOTE: call `end` to signal that the stream has ended,
 	 * this DOES NOT happen automatically from `error`.
 	 */
-	error(error: Error): void;
+	error(error: Error): codemavi;
 
 	/**
 	 * Signals the end of the stream to the consumer. If the
@@ -123,7 +123,7 @@ export interface WriteableStream<T> extends ReadableStream<T> {
 	 * listener if the stream is flowing and buffer the data
 	 * otherwise until the stream is flowing.
 	 */
-	end(result?: T): void;
+	end(result?: T): codemavi;
 }
 
 /**
@@ -214,9 +214,9 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 	};
 
 	private readonly listeners = {
-		data: [] as { (data: T): void }[],
-		error: [] as { (error: Error): void }[],
-		end: [] as { (): void }[]
+		data: [] as { (data: T): codemavi }[],
+		error: [] as { (error: Error): codemavi }[],
+		end: [] as { (): codemavi }[]
 	};
 
 	private readonly pendingWritePromises: Function[] = [];
@@ -229,7 +229,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 	 */
 	constructor(private reducer: IReducer<T> | null, private options?: WriteableStreamOptions) { }
 
-	pause(): void {
+	pause(): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -237,7 +237,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		this.state.flowing = false;
 	}
 
-	resume(): void {
+	resume(): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -252,7 +252,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	write(data: T): void | Promise<void> {
+	write(data: T): codemavi | Promise<codemavi> {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -273,7 +273,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	error(error: Error): void {
+	error(error: Error): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -289,7 +289,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	end(result?: T): void {
+	end(result?: T): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -312,26 +312,26 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	private emitData(data: T): void {
-		this.listeners.data.slice(0).forEach(listener => listener(data)); // slice to avoid listener mutation from delivering event
+	private emitData(data: T): codemavi {
+		this.listeners.data.slice(0).forEach(listener => listener(data)); // slice to acodemavi listener mutation from delivering event
 	}
 
-	private emitError(error: Error): void {
+	private emitError(error: Error): codemavi {
 		if (this.listeners.error.length === 0) {
 			onUnexpectedError(error); // nobody listened to this error so we log it as unexpected
 		} else {
-			this.listeners.error.slice(0).forEach(listener => listener(error)); // slice to avoid listener mutation from delivering event
+			this.listeners.error.slice(0).forEach(listener => listener(error)); // slice to acodemavi listener mutation from delivering event
 		}
 	}
 
-	private emitEnd(): void {
-		this.listeners.end.slice(0).forEach(listener => listener()); // slice to avoid listener mutation from delivering event
+	private emitEnd(): codemavi {
+		this.listeners.end.slice(0).forEach(listener => listener()); // slice to acodemavi listener mutation from delivering event
 	}
 
-	on(event: 'data', callback: (data: T) => void): void;
-	on(event: 'error', callback: (err: Error) => void): void;
-	on(event: 'end', callback: () => void): void;
-	on(event: 'data' | 'error' | 'end', callback: (arg0?: any) => void): void {
+	on(event: 'data', callback: (data: T) => codemavi): codemavi;
+	on(event: 'error', callback: (err: Error) => codemavi): codemavi;
+	on(event: 'end', callback: () => codemavi): codemavi;
+	on(event: 'data' | 'error' | 'end', callback: (arg0?: any) => codemavi): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -372,7 +372,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	removeListener(event: string, callback: Function): void {
+	removeListener(event: string, callback: Function): codemavi {
 		if (this.state.destroyed) {
 			return;
 		}
@@ -401,7 +401,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		}
 	}
 
-	private flowData(): void {
+	private flowData(): codemavi {
 		// if buffer is empty, nothing to do
 		if (this.buffer.data.length === 0) {
 			return;
@@ -428,7 +428,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		pendingWritePromises.forEach(pendingWritePromise => pendingWritePromise());
 	}
 
-	private flowErrors(): void {
+	private flowErrors(): codemavi {
 		if (this.listeners.error.length > 0) {
 			for (const error of this.buffer.error) {
 				this.emitError(error);
@@ -448,7 +448,7 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 		return false;
 	}
 
-	destroy(): void {
+	destroy(): codemavi {
 		if (!this.state.destroyed) {
 			this.state.destroyed = true;
 			this.state.ended = true;
@@ -568,25 +568,25 @@ export interface IStreamListener<T> {
 	 * The 'data' event is emitted whenever the stream is
 	 * relinquishing ownership of a chunk of data to a consumer.
 	 */
-	onData(data: T): void;
+	onData(data: T): codemavi;
 
 	/**
 	 * Emitted when any error occurs.
 	 */
-	onError(err: Error): void;
+	onError(err: Error): codemavi;
 
 	/**
 	 * The 'end' event is emitted when there is no more data
 	 * to be consumed from the stream. The 'end' event will
 	 * not be emitted unless the data is completely consumed.
 	 */
-	onEnd(): void;
+	onEnd(): codemavi;
 }
 
 /**
  * Helper to listen to all events of a T stream in proper order.
  */
-export function listenStream<T>(stream: ReadableStreamEvents<T>, listener: IStreamListener<T>, token?: CancellationToken): void {
+export function listenStream<T>(stream: ReadableStreamEvents<T>, listener: IStreamListener<T>, token?: CancellationToken): codemavi {
 
 	stream.on('error', error => {
 		if (!token?.isCancellationRequested) {

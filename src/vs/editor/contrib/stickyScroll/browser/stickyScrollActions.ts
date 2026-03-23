@@ -41,7 +41,7 @@ export class ToggleStickyScroll extends EditorAction2 {
 		});
 	}
 
-	async runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const configurationService = accessor.get(IConfigurationService);
 		const newValue = !configurationService.getValue('editor.stickyScroll.enabled');
 		const isFocused = StickyScrollController.get(editor)?.isFocused();

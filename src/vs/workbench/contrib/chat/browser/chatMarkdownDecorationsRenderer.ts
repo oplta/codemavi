@@ -238,7 +238,7 @@ export class ChatMarkdownDecorationsRenderer {
 		return container;
 	}
 
-	private renderFileWidget(content: IChatMarkdownContent, href: string, a: HTMLAnchorElement, store: DisposableStore): void {
+	private renderFileWidget(content: IChatMarkdownContent, href: string, a: HTMLAnchorElement, store: DisposableStore): codemavi {
 		// TODO this can be a nicer FileLabel widget with an icon. Do a simple link for now.
 		const fullUri = URI.parse(href);
 
@@ -264,7 +264,7 @@ export class ChatMarkdownDecorationsRenderer {
 	}
 
 
-	private injectKeybindingHint(a: HTMLAnchorElement, href: string, keybindingService: IKeybindingService): void {
+	private injectKeybindingHint(a: HTMLAnchorElement, href: string, keybindingService: IKeybindingService): codemavi {
 		const command = href.match(/command:([^\)]+)/)?.[1];
 		if (command) {
 			const kb = keybindingService.lookupKeybinding(command);

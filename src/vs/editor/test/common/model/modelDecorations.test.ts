@@ -426,7 +426,7 @@ suite('Decorations and editing', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function _runTest(decRange: Range, stickiness: TrackedRangeStickiness, editRange: Range, editText: string, editForceMoveMarkers: boolean, expectedDecRange: Range, msg: string): void {
+	function _runTest(decRange: Range, stickiness: TrackedRangeStickiness, editRange: Range, editText: string, editForceMoveMarkers: boolean, expectedDecRange: Range, msg: string): codemavi {
 		const model = createTextModel([
 			'My First Line',
 			'My Second Line',
@@ -445,7 +445,7 @@ suite('Decorations and editing', () => {
 		model.dispose();
 	}
 
-	function runTest(decRange: Range, editRange: Range, editText: string, expectedDecRange: Range[][]): void {
+	function runTest(decRange: Range, editRange: Range, editText: string, expectedDecRange: Range[][]): codemavi {
 		_runTest(decRange, 0, editRange, editText, false, expectedDecRange[0][0], 'no-0-AlwaysGrowsWhenTypingAtEdges');
 		_runTest(decRange, 1, editRange, editText, false, expectedDecRange[0][1], 'no-1-NeverGrowsWhenTypingAtEdges');
 		_runTest(decRange, 2, editRange, editText, false, expectedDecRange[0][2], 'no-2-GrowsOnlyWhenTypingBefore');
@@ -1161,7 +1161,7 @@ suite('deltaDecorations', () => {
 		});
 	}
 
-	function testDeltaDecorations(text: string[], decorations: ILightWeightDecoration[], newDecorations: ILightWeightDecoration[]): void {
+	function testDeltaDecorations(text: string[], decorations: ILightWeightDecoration[], newDecorations: ILightWeightDecoration[]): codemavi {
 
 		const model = createTextModel(text.join('\n'));
 

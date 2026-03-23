@@ -21,7 +21,7 @@ export class TableColumnResizeQuickPick extends Disposable {
 		super();
 	}
 
-	async show(): Promise<void> {
+	async show(): Promise<codemavi> {
 		const items: IColumnResizeQuickPickItem[] = [];
 		this._table.getColumnLabels().forEach((label, index) => {
 			if (label) {

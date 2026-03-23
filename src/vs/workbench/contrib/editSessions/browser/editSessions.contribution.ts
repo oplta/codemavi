@@ -99,7 +99,7 @@ registerAction2(class extends Action2 {
 		super({ ...installAdditionalContinueOnOptionsCommand, f1: false });
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(IExtensionsWorkbenchService).openSearch('@tag:continueOn');
 	}
 });
@@ -303,7 +303,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 
 			run(accessor: ServicesAccessor, ...args: any[]) {
 				const outputChannel = accessor.get(IOutputService);
-				void outputChannel.showChannel(editSessionsLogId);
+				codemavi outputChannel.showChannel(editSessionsLogId);
 			}
 		}));
 	}
@@ -335,7 +335,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 				super(continueWorkingOnCommand);
 			}
 
-			async run(accessor: ServicesAccessor, workspaceUri: URI | undefined, destination: string | undefined): Promise<void> {
+			async run(accessor: ServicesAccessor, workspaceUri: URI | undefined, destination: string | undefined): Promise<codemavi> {
 				type ContinueOnEventOutcome = { outcome: string; hashedId?: string };
 				type ContinueOnClassificationOutcome = {
 					owner: 'joyceerhl'; comment: 'Reporting the outcome of invoking the Continue On action.';
@@ -417,7 +417,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 		}));
 	}
 
-	private registerResumeLatestEditSessionAction(): void {
+	private registerResumeLatestEditSessionAction(): codemavi {
 		const that = this;
 		this._register(registerAction2(class ResumeLatestEditSessionAction extends Action2 {
 			constructor() {
@@ -429,7 +429,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 				});
 			}
 
-			async run(accessor: ServicesAccessor, editSessionId?: string, forceApplyUnrelatedChange?: boolean): Promise<void> {
+			async run(accessor: ServicesAccessor, editSessionId?: string, forceApplyUnrelatedChange?: boolean): Promise<codemavi> {
 				await that.progressService.withProgress({ ...resumeProgressOptions, title: resumeProgressOptionsTitle }, async () => await that.resumeEditSession(editSessionId, undefined, forceApplyUnrelatedChange));
 			}
 		}));
@@ -443,7 +443,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 				});
 			}
 
-			async run(accessor: ServicesAccessor, editSessionId?: string): Promise<void> {
+			async run(accessor: ServicesAccessor, editSessionId?: string): Promise<codemavi> {
 				const data = await that.quickInputService.input({ prompt: 'Enter serialized data' });
 				if (data) {
 					that.editSessionsStorageService.lastReadResources.set('editSessions', { content: data, ref: '' });
@@ -453,7 +453,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 		}));
 	}
 
-	private registerStoreLatestEditSessionAction(): void {
+	private registerStoreLatestEditSessionAction(): codemavi {
 		const that = this;
 		this._register(registerAction2(class StoreLatestEditSessionAction extends Action2 {
 			constructor() {
@@ -465,7 +465,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 				});
 			}
 
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const cancellationTokenSource = new CancellationTokenSource();
 				await that.progressService.withProgress({
 					location: ProgressLocation.Notification,
@@ -486,7 +486,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 		}));
 	}
 
-	async resumeEditSession(ref?: string, silent?: boolean, forceApplyUnrelatedChange?: boolean, applyPartialMatch?: boolean, progress?: IProgress<IProgressStep>, serializedData?: string): Promise<void> {
+	async resumeEditSession(ref?: string, silent?: boolean, forceApplyUnrelatedChange?: boolean, applyPartialMatch?: boolean, progress?: IProgress<IProgressStep>, serializedData?: string): Promise<codemavi> {
 		// Wait for the remote environment to become available, if any
 		await this.remoteAgentService.getEnvironment();
 
@@ -915,7 +915,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 					super(command);
 				}
 
-				async run(accessor: ServicesAccessor): Promise<void> {
+				async run(accessor: ServicesAccessor): Promise<codemavi> {
 					return accessor.get(ICommandService).executeCommand(continueWorkingOnCommand.id, undefined, commandId);
 				}
 			}));
@@ -930,7 +930,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 		}
 	}
 
-	private registerContinueInLocalFolderAction(): void {
+	private registerContinueInLocalFolderAction(): codemavi {
 		const that = this;
 		this._register(registerAction2(class ContinueInLocalFolderAction extends Action2 {
 			constructor() {
@@ -982,7 +982,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 				const selection = quickPick.activeItems[0].command;
 
 				if (selection === installAdditionalContinueOnOptionsCommand.id) {
-					void this.commandService.executeCommand(installAdditionalContinueOnOptionsCommand.id);
+					codemavi this.commandService.executeCommand(installAdditionalContinueOnOptionsCommand.id);
 				} else {
 					resolve(selection);
 					quickPick.hide();
@@ -994,7 +994,7 @@ export class EditSessionsContribution extends Disposable implements IWorkbenchCo
 			disposables.add(quickPick.onDidTriggerItemButton(async (e) => {
 				if (e.item.documentation !== undefined) {
 					const uri = URI.isUri(e.item.documentation) ? URI.parse(e.item.documentation) : await this.commandService.executeCommand(e.item.documentation);
-					void this.openerService.open(uri, { openExternal: true });
+					codemavi this.openerService.open(uri, { openExternal: true });
 				}
 			}));
 		});

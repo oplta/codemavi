@@ -37,26 +37,26 @@ export interface IWorkspaceTrustManagementService {
 	readonly _serviceBrand: undefined;
 
 	onDidChangeTrust: Event<boolean>;
-	onDidChangeTrustedFolders: Event<void>;
+	onDidChangeTrustedFolders: Event<codemavi>;
 
-	readonly workspaceResolved: Promise<void>;
-	readonly workspaceTrustInitialized: Promise<void>;
+	readonly workspaceResolved: Promise<codemavi>;
+	readonly workspaceTrustInitialized: Promise<codemavi>;
 	acceptsOutOfWorkspaceFiles: boolean;
 
 	isWorkspaceTrusted(): boolean;
 	isWorkspaceTrustForced(): boolean;
 
 	canSetParentFolderTrust(): boolean;
-	setParentFolderTrust(trusted: boolean): Promise<void>;
+	setParentFolderTrust(trusted: boolean): Promise<codemavi>;
 
 	canSetWorkspaceTrust(): boolean;
-	setWorkspaceTrust(trusted: boolean): Promise<void>;
+	setWorkspaceTrust(trusted: boolean): Promise<codemavi>;
 
 	getUriTrustInfo(uri: URI): Promise<IWorkspaceTrustUriInfo>;
-	setUrisTrust(uri: URI[], trusted: boolean): Promise<void>;
+	setUrisTrust(uri: URI[], trusted: boolean): Promise<codemavi>;
 
 	getTrustedUris(): URI[];
-	setTrustedUris(uris: URI[]): Promise<void>;
+	setTrustedUris(uris: URI[]): Promise<codemavi>;
 
 	addWorkspaceTrustTransitionParticipant(participant: IWorkspaceTrustTransitionParticipant): IDisposable;
 }
@@ -72,21 +72,21 @@ export const IWorkspaceTrustRequestService = createDecorator<IWorkspaceTrustRequ
 export interface IWorkspaceTrustRequestService {
 	readonly _serviceBrand: undefined;
 
-	readonly onDidInitiateOpenFilesTrustRequest: Event<void>;
+	readonly onDidInitiateOpenFilesTrustRequest: Event<codemavi>;
 	readonly onDidInitiateWorkspaceTrustRequest: Event<WorkspaceTrustRequestOptions | undefined>;
-	readonly onDidInitiateWorkspaceTrustRequestOnStartup: Event<void>;
+	readonly onDidInitiateWorkspaceTrustRequestOnStartup: Event<codemavi>;
 
-	completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse?: boolean): Promise<void>;
+	completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse?: boolean): Promise<codemavi>;
 	requestOpenFilesTrust(openFiles: URI[]): Promise<WorkspaceTrustUriResponse>;
 
-	cancelWorkspaceTrustRequest(): void;
-	completeWorkspaceTrustRequest(trusted?: boolean): Promise<void>;
+	cancelWorkspaceTrustRequest(): codemavi;
+	completeWorkspaceTrustRequest(trusted?: boolean): Promise<codemavi>;
 	requestWorkspaceTrust(options?: WorkspaceTrustRequestOptions): Promise<boolean | undefined>;
-	requestWorkspaceTrustOnStartup(): void;
+	requestWorkspaceTrustOnStartup(): codemavi;
 }
 
 export interface IWorkspaceTrustTransitionParticipant {
-	participate(trusted: boolean): Promise<void>;
+	participate(trusted: boolean): Promise<codemavi>;
 }
 
 export interface IWorkspaceTrustUriInfo {

@@ -37,7 +37,7 @@ import { ExtHostChatAgentsShape2, ExtHostContext, IChatNotebookEditDto, IChatPar
 import { NotebookDto } from './mainThreadNotebookDto.js';
 
 interface AgentData {
-	dispose: () => void;
+	dispose: () => codemavi;
 	id: string;
 	extensionId: ExtensionIdentifier;
 	hasFollowups?: boolean;
@@ -46,7 +46,7 @@ interface AgentData {
 export class MainThreadChatTask implements IChatTask {
 	public readonly kind = 'progressTask';
 
-	public readonly deferred = new DeferredPromise<string | void>();
+	public readonly deferred = new DeferredPromise<string | codemavi>();
 
 	private readonly _onDidAddProgress = new Emitter<IChatWarningMessage | IChatContentReference>();
 	public get onDidAddProgress(): Event<IChatWarningMessage | IChatContentReference> { return this._onDidAddProgress.event; }
@@ -63,11 +63,11 @@ export class MainThreadChatTask implements IChatTask {
 		return this.deferred.isSettled;
 	}
 
-	complete(v: string | void) {
+	complete(v: string | codemavi) {
 		this.deferred.complete(v);
 	}
 
-	add(progress: IChatWarningMessage | IChatContentReference): void {
+	add(progress: IChatWarningMessage | IChatContentReference): codemavi {
 		this.progress.push(progress);
 		this._onDidAddProgress.fire(progress);
 	}
@@ -84,7 +84,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 
 	private readonly _chatRelatedFilesProviders = this._register(new DisposableMap<number, IDisposable>());
 
-	private readonly _pendingProgress = new Map<string, (part: IChatProgress) => void>();
+	private readonly _pendingProgress = new Map<string, (part: IChatProgress) => codemavi>();
 	private readonly _proxy: ExtHostChatAgentsShape2;
 
 	private _responsePartHandlePool = 0;
@@ -125,11 +125,11 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		}));
 	}
 
-	$unregisterAgent(handle: number): void {
+	$unregisterAgent(handle: number): codemavi {
 		this._agents.deleteAndDispose(handle);
 	}
 
-	$transferActiveChatSession(toWorkspace: UriComponents): void {
+	$transferActiveChatSession(toWorkspace: UriComponents): codemavi {
 		const widget = this._chatWidgetService.lastFocusedWidget;
 		const sessionId = widget?.viewModel?.model.sessionId;
 		if (!sessionId) {
@@ -143,7 +143,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		this._chatService.transferChatSession({ sessionId, inputValue, location, mode }, URI.revive(toWorkspace));
 	}
 
-	async $registerAgent(handle: number, extension: ExtensionIdentifier, id: string, metadata: IExtensionChatAgentMetadata, dynamicProps: IDynamicChatAgentProps | undefined): Promise<void> {
+	async $registerAgent(handle: number, extension: ExtensionIdentifier, id: string, metadata: IExtensionChatAgentMetadata, dynamicProps: IDynamicChatAgentProps | undefined): Promise<codemavi> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 		const staticAgentRegistration = this._chatAgentService.getAgent(id, true);
 		if (!staticAgentRegistration && !dynamicProps) {
@@ -214,7 +214,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		});
 	}
 
-	async $updateAgent(handle: number, metadataUpdate: IExtensionChatAgentMetadata): Promise<void> {
+	async $updateAgent(handle: number, metadataUpdate: IExtensionChatAgentMetadata): Promise<codemavi> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 		const data = this._agents.get(handle);
 		if (!data) {
@@ -225,7 +225,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		this._chatAgentService.updateAgent(data.id, revive(metadataUpdate));
 	}
 
-	async $handleProgressChunk(requestId: string, progress: IChatProgressDto, responsePartHandle?: number): Promise<number | void> {
+	async $handleProgressChunk(requestId: string, progress: IChatProgressDto, responsePartHandle?: number): Promise<number | codemavi> {
 		const revivedProgress = progress.kind === 'notebookEdit' ? ChatNotebookEdit.fromChatEdit(revive(progress)) : revive(progress) as IChatProgress;
 		if (revivedProgress.kind === 'progressTask') {
 			const handle = ++this._responsePartHandlePool;
@@ -263,7 +263,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		this._pendingProgress.get(requestId)?.(revivedProgress);
 	}
 
-	$handleAnchorResolve(requestId: string, handle: string, resolveAnchor: Dto<IChatContentInlineReference> | undefined): void {
+	$handleAnchorResolve(requestId: string, handle: string, resolveAnchor: Dto<IChatContentInlineReference> | undefined): codemavi {
 		const anchor = this._unresolvedAnchors.get(requestId)?.get(handle);
 		if (!anchor) {
 			return;
@@ -276,7 +276,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		}
 	}
 
-	$registerAgentCompletionsProvider(handle: number, id: string, triggerCharacters: string[]): void {
+	$registerAgentCompletionsProvider(handle: number, id: string, triggerCharacters: string[]): codemavi {
 		const provide = async (query: string, token: CancellationToken) => {
 			const completions = await this._proxy.$invokeCompletionProvider(handle, query, token);
 			return completions.map((c) => ({ ...c, icon: c.icon ? ThemeIcon.fromId(c.icon) : undefined }));
@@ -334,12 +334,12 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		}));
 	}
 
-	$unregisterAgentCompletionsProvider(handle: number, id: string): void {
+	$unregisterAgentCompletionsProvider(handle: number, id: string): codemavi {
 		this._agentCompletionProviders.deleteAndDispose(handle);
 		this._agentIdsToCompletionProviders.deleteAndDispose(id);
 	}
 
-	$registerChatParticipantDetectionProvider(handle: number): void {
+	$registerChatParticipantDetectionProvider(handle: number): codemavi {
 		this._chatParticipantDetectionProviders.set(handle, this._chatAgentService.registerChatParticipantDetectionProvider(handle,
 			{
 				provideParticipantDetection: async (request: IChatAgentRequest, history: IChatAgentHistoryEntry[], options: { location: ChatAgentLocation; participants: IChatParticipantMetadata[] }, token: CancellationToken) => {
@@ -349,11 +349,11 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		));
 	}
 
-	$unregisterChatParticipantDetectionProvider(handle: number): void {
+	$unregisterChatParticipantDetectionProvider(handle: number): codemavi {
 		this._chatParticipantDetectionProviders.deleteAndDispose(handle);
 	}
 
-	$registerRelatedFilesProvider(handle: number, metadata: IChatRelatedFileProviderMetadata): void {
+	$registerRelatedFilesProvider(handle: number, metadata: IChatRelatedFileProviderMetadata): codemavi {
 		this._chatRelatedFilesProviders.set(handle, this._chatEditingService.registerRelatedFilesProvider(handle, {
 			description: metadata.description,
 			provideRelatedFiles: async (request, token) => {
@@ -362,7 +362,7 @@ export class MainThreadChatAgents2 extends Disposable implements MainThreadChatA
 		}));
 	}
 
-	$unregisterRelatedFilesProvider(handle: number): void {
+	$unregisterRelatedFilesProvider(handle: number): codemavi {
 		this._chatRelatedFilesProviders.deleteAndDispose(handle);
 	}
 }

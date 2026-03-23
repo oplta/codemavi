@@ -41,7 +41,7 @@ export interface IBaseFileWorkingCopyManager<M extends IFileWorkingCopyModel, W 
 	 * Callers should make sure to e.g. close any editors associated with the
 	 * working copy.
 	 */
-	destroy(): Promise<void>;
+	destroy(): Promise<codemavi>;
 }
 
 export abstract class BaseFileWorkingCopyManager<M extends IFileWorkingCopyModel, W extends IFileWorkingCopy<M>> extends Disposable implements IBaseFileWorkingCopyManager<M, W> {
@@ -64,7 +64,7 @@ export abstract class BaseFileWorkingCopyManager<M extends IFileWorkingCopyModel
 		return this.mapResourceToWorkingCopy.has(resource);
 	}
 
-	protected add(resource: URI, workingCopy: W): void {
+	protected add(resource: URI, workingCopy: W): codemavi {
 		const knownWorkingCopy = this.get(resource);
 		if (knownWorkingCopy === workingCopy) {
 			return; // already cached
@@ -108,7 +108,7 @@ export abstract class BaseFileWorkingCopyManager<M extends IFileWorkingCopyModel
 
 	//#region Lifecycle
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		// Clear working copy caches
@@ -126,7 +126,7 @@ export abstract class BaseFileWorkingCopyManager<M extends IFileWorkingCopyModel
 		this.mapResourceToDisposeListener.clear();
 	}
 
-	async destroy(): Promise<void> {
+	async destroy(): Promise<codemavi> {
 
 		// Make sure all dirty working copies are saved to disk
 		try {
@@ -146,7 +146,7 @@ export abstract class BaseFileWorkingCopyManager<M extends IFileWorkingCopyModel
 		this.dispose();
 	}
 
-	private async saveWithFallback(workingCopy: W): Promise<void> {
+	private async saveWithFallback(workingCopy: W): Promise<codemavi> {
 
 		// First try regular save
 		let saveSuccess = false;

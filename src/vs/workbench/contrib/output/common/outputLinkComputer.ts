@@ -32,7 +32,7 @@ export class OutputLinkComputer implements IWebWorkerServerRequestHandler {
 		this.computePatterns(workspaceFolders);
 	}
 
-	private computePatterns(_workspaceFolders: string[]): void {
+	private computePatterns(_workspaceFolders: string[]): codemavi {
 
 		// Produce patterns for each workspace root we are configured with
 		// This means that we will be able to detect links for paths that

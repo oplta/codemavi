@@ -14,7 +14,7 @@ class SpacesDiffResult {
 /**
  * Compute the diff in spaces between two line's indentation.
  */
-function spacesDiff(a: string, aLength: number, b: string, bLength: number, result: SpacesDiffResult): void {
+function spacesDiff(a: string, aLength: number, b: string, bLength: number, result: SpacesDiffResult): codemavi {
 
 	result.spacesDiff = 0;
 	result.looksLikeAlignment = false;

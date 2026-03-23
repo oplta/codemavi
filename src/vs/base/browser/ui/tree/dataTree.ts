@@ -9,11 +9,11 @@ import { ObjectTreeModel } from './objectTreeModel.js';
 import { IDataSource, ITreeElement, ITreeModel, ITreeNode, ITreeRenderer, ITreeSorter, TreeError } from './tree.js';
 import { Iterable } from '../../../common/iterator.js';
 
-export interface IDataTreeOptions<T, TFilterData = void> extends IAbstractTreeOptions<T, TFilterData> {
+export interface IDataTreeOptions<T, TFilterData = codemavi> extends IAbstractTreeOptions<T, TFilterData> {
 	readonly sorter?: ITreeSorter<T>;
 }
 
-export class DataTree<TInput, T, TFilterData = void> extends AbstractTree<T | null, TFilterData, T | null> {
+export class DataTree<TInput, T, TFilterData = codemavi> extends AbstractTree<T | null, TFilterData, T | null> {
 
 	protected declare model: ObjectTreeModel<T, TFilterData>;
 	private input: TInput | undefined;
@@ -39,7 +39,7 @@ export class DataTree<TInput, T, TFilterData = void> extends AbstractTree<T | nu
 		return this.input;
 	}
 
-	setInput(input: TInput | undefined, viewState?: AbstractTreeViewState): void {
+	setInput(input: TInput | undefined, viewState?: AbstractTreeViewState): codemavi {
 		if (viewState && !this.identityProvider) {
 			throw new TreeError(this.user, 'Can\'t restore tree view state without an identity provider');
 		}
@@ -86,7 +86,7 @@ export class DataTree<TInput, T, TFilterData = void> extends AbstractTree<T | nu
 		}
 	}
 
-	updateChildren(element: TInput | T = this.input!): void {
+	updateChildren(element: TInput | T = this.input!): codemavi {
 		if (typeof this.input === 'undefined') {
 			throw new TreeError(this.user, 'Tree input not set');
 		}
@@ -109,13 +109,13 @@ export class DataTree<TInput, T, TFilterData = void> extends AbstractTree<T | nu
 		this._refresh(element, isCollapsed);
 	}
 
-	resort(element: T | TInput = this.input!, recursive = true): void {
+	resort(element: T | TInput = this.input!, recursive = true): codemavi {
 		this.model.resort((element === this.input ? null : element) as T, recursive);
 	}
 
 	// View
 
-	refresh(element?: T): void {
+	refresh(element?: T): codemavi {
 		if (element === undefined) {
 			this.view.rerender();
 			return;
@@ -126,8 +126,8 @@ export class DataTree<TInput, T, TFilterData = void> extends AbstractTree<T | nu
 
 	// Implementation
 
-	private _refresh(element: TInput | T, isCollapsed?: (el: T) => boolean | undefined, onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => void): void {
-		let onDidDeleteNode: ((node: ITreeNode<T, TFilterData>) => void) | undefined;
+	private _refresh(element: TInput | T, isCollapsed?: (el: T) => boolean | undefined, onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => codemavi): codemavi {
+		let onDidDeleteNode: ((node: ITreeNode<T, TFilterData>) => codemavi) | undefined;
 
 		if (this.identityProvider) {
 			const insertedElements = new Set<string>();

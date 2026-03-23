@@ -255,9 +255,9 @@ export class ChatAttachmentsContentPart extends Disposable {
 		return hoverElement;
 	}
 
-	private openResource(resource: URI, isDirectory: true): void;
-	private openResource(resource: URI, isDirectory: false, range: IRange | undefined): void;
-	private openResource(resource: URI, isDirectory?: boolean, range?: IRange): void {
+	private openResource(resource: URI, isDirectory: true): codemavi;
+	private openResource(resource: URI, isDirectory: false, range: IRange | undefined): codemavi;
+	private openResource(resource: URI, isDirectory?: boolean, range?: IRange): codemavi {
 		if (isDirectory) {
 			// Reveal Directory in explorer
 			this.commandService.executeCommand(revealInSideBarCommand.id, resource);
@@ -390,7 +390,7 @@ function setResourceContext(accessor: ServicesAccessor, scopedContextKeyService:
 	return resourceContextKey;
 }
 
-function addBasicContextMenu(accessor: ServicesAccessor, widget: HTMLElement, scopedContextKeyService: IScopedContextKeyService, menuId: MenuId, arg: any, updateContextKeys?: () => Promise<void>): IDisposable {
+function addBasicContextMenu(accessor: ServicesAccessor, widget: HTMLElement, scopedContextKeyService: IScopedContextKeyService, menuId: MenuId, arg: any, updateContextKeys?: () => Promise<codemavi>): IDisposable {
 	const contextMenuService = accessor.get(IContextMenuService);
 	const menuService = accessor.get(IMenuService);
 

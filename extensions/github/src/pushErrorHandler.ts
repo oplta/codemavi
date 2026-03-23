@@ -82,11 +82,11 @@ class CommandErrorOutputTextDocumentContentProvider implements TextDocumentConte
 
 	private items = new Map<string, string>();
 
-	set(uri: Uri, contents: string): void {
+	set(uri: Uri, contents: string): codemavi {
 		this.items.set(uri.path, contents);
 	}
 
-	delete(uri: Uri): void {
+	delete(uri: Uri): codemavi {
 		this.items.delete(uri.path);
 	}
 
@@ -165,7 +165,7 @@ export class GithubPushErrorHandler implements PushErrorHandler {
 		return false;
 	}
 
-	private async handlePermissionDeniedError(repository: Repository, remote: Remote, refspec: string, owner: string, repo: string): Promise<void> {
+	private async handlePermissionDeniedError(repository: Repository, remote: Remote, refspec: string, owner: string, repo: string): Promise<codemavi> {
 		const yes = l10n.t('Create Fork');
 		const no = l10n.t('No');
 		const askFork = l10n.t('You don\'t have permissions to push to "{0}/{1}" on GitHub. Would you like to create a fork and push to it instead?', owner, repo);
@@ -295,7 +295,7 @@ export class GithubPushErrorHandler implements PushErrorHandler {
 		})();
 	}
 
-	private async handlePushProtectionError(owner: string, repo: string, stderr: string): Promise<void> {
+	private async handlePushProtectionError(owner: string, repo: string, stderr: string): Promise<codemavi> {
 		// Open command output in an editor
 		const timestamp = new Date().getTime();
 		const uri = Uri.parse(`github-output:/github-error-${timestamp}`);

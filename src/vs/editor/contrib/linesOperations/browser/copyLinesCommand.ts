@@ -29,7 +29,7 @@ export class CopyLinesCommand implements ICommand {
 		this._endLineNumberDelta = 0;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		let s = this._selection;
 
 		this._startLineNumberDelta = 0;

@@ -206,7 +206,7 @@ export class KeybindingsEditorModel extends EditorModel {
 		return result;
 	}
 
-	override async resolve(actionLabels = new Map<string, string>()): Promise<void> {
+	override async resolve(actionLabels = new Map<string, string>()): Promise<codemavi> {
 		const extensions = this.getExtensionsMapping();
 
 		this._keybindingItemsSortedByPrecedence = [];

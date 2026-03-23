@@ -40,7 +40,7 @@ export interface JSONScanner {
 	/**
 	 * Sets the scan position to a new offset. A call to 'scan' is needed to get the first token.
 	 */
-	setPosition(pos: number): void;
+	setPosition(pos: number): codemavi;
 	/**
 	 * Read the next token. Returns the token code.
 	 */
@@ -151,47 +151,47 @@ export interface JSONVisitor {
 	/**
 	 * Invoked when an open brace is encountered and an object is started. The offset and length represent the location of the open brace.
 	 */
-	onObjectBegin?: (offset: number, length: number) => void;
+	onObjectBegin?: (offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when a property is encountered. The offset and length represent the location of the property name.
 	 */
-	onObjectProperty?: (property: string, offset: number, length: number) => void;
+	onObjectProperty?: (property: string, offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when a closing brace is encountered and an object is completed. The offset and length represent the location of the closing brace.
 	 */
-	onObjectEnd?: (offset: number, length: number) => void;
+	onObjectEnd?: (offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when an open bracket is encountered. The offset and length represent the location of the open bracket.
 	 */
-	onArrayBegin?: (offset: number, length: number) => void;
+	onArrayBegin?: (offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when a closing bracket is encountered. The offset and length represent the location of the closing bracket.
 	 */
-	onArrayEnd?: (offset: number, length: number) => void;
+	onArrayEnd?: (offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when a literal value is encountered. The offset and length represent the location of the literal value.
 	 */
-	onLiteralValue?: (value: any, offset: number, length: number) => void;
+	onLiteralValue?: (value: any, offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked when a comma or colon separator is encountered. The offset and length represent the location of the separator.
 	 */
-	onSeparator?: (character: string, offset: number, length: number) => void;
+	onSeparator?: (character: string, offset: number, length: number) => codemavi;
 
 	/**
 	 * When comments are allowed, invoked when a line or block comment is encountered. The offset and length represent the location of the comment.
 	 */
-	onComment?: (offset: number, length: number) => void;
+	onComment?: (offset: number, length: number) => codemavi;
 
 	/**
 	 * Invoked on an error.
 	 */
-	onError?: (error: ParseErrorCode, offset: number, length: number) => void;
+	onError?: (error: ParseErrorCode, offset: number, length: number) => codemavi;
 }
 
 /**
@@ -1070,10 +1070,10 @@ export function visit(text: string, visitor: JSONVisitor, options: ParseOptions 
 
 	const _scanner = createScanner(text, false);
 
-	function toNoArgVisit(visitFunction?: (offset: number, length: number) => void): () => void {
+	function toNoArgVisit(visitFunction?: (offset: number, length: number) => codemavi): () => codemavi {
 		return visitFunction ? () => visitFunction(_scanner.getTokenOffset(), _scanner.getTokenLength()) : () => true;
 	}
-	function toOneArgVisit<T>(visitFunction?: (arg: T, offset: number, length: number) => void): (arg: T) => void {
+	function toOneArgVisit<T>(visitFunction?: (arg: T, offset: number, length: number) => codemavi): (arg: T) => codemavi {
 		return visitFunction ? (arg: T) => visitFunction(arg, _scanner.getTokenOffset(), _scanner.getTokenLength()) : () => true;
 	}
 
@@ -1135,7 +1135,7 @@ export function visit(text: string, visitor: JSONVisitor, options: ParseOptions 
 		}
 	}
 
-	function handleError(error: ParseErrorCode, skipUntilAfter: SyntaxKind[] = [], skipUntil: SyntaxKind[] = []): void {
+	function handleError(error: ParseErrorCode, skipUntilAfter: SyntaxKind[] = [], skipUntil: SyntaxKind[] = []): codemavi {
 		onError(error);
 		if (skipUntilAfter.length + skipUntil.length > 0) {
 			let token = _scanner.getToken();

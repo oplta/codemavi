@@ -83,7 +83,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		const customWindowControls = getWindowControlsStyle(this.configurationService) === WindowControlsStyle.CUSTOM;
 
 		// Do not allow the widget to overflow or underflow window controls.
-		// Use CSS calculations to avoid having to force layout with `.clientWidth`
+		// Use CSS calculations to acodemavi having to force layout with `.clientWidth`
 		const controlsOnLeft = customWindowControls && platform === Platform.Mac;
 		const controlsOnRight = customWindowControls && (platform === Platform.Windows || platform === Platform.Linux);
 		this.$el.style.transform = `translate(
@@ -145,7 +145,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		this.hide();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.debugService.onDidChangeState(() => this.updateScheduler.schedule()));
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('debug.toolBarLocation')) {
@@ -209,7 +209,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 			this._yRange = undefined;
 
 			// note: we intentionally don't keep the activeContainer before the
-			// `await` clause to avoid any races due to quickly switching windows.
+			// `await` clause to acodemavi any races due to quickly switching windows.
 			await this.layoutService.whenContainerStylesLoaded(dom.getWindow(this.layoutService.activeContainer));
 			if (this.isBuilt) {
 				this.doShowInActiveContainer();
@@ -239,7 +239,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		return parseInt(this.$el.style.getPropertyValue('--y-position'));
 	}
 
-	private storePosition(): void {
+	private storePosition(): codemavi {
 		const activeWindow = dom.getWindow(this.layoutService.activeContainer);
 		const isMainWindow = this.layoutService.activeContainer === this.layoutService.mainContainer;
 
@@ -253,7 +253,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		}
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		super.updateStyles();
 
 		if (this.$el) {
@@ -293,7 +293,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		return storedY ?? this.yDefault;
 	}
 
-	private setCoordinates(x?: number, y?: number): void {
+	private setCoordinates(x?: number, y?: number): codemavi {
 		if (!this.isVisible) {
 			return;
 		}
@@ -334,7 +334,7 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		return this._yRange;
 	}
 
-	private show(): void {
+	private show(): codemavi {
 		if (this.isVisible) {
 			this.setCoordinates();
 			return;
@@ -349,19 +349,19 @@ export class DebugToolBar extends Themable implements IWorkbenchContribution {
 		this.setCoordinates();
 	}
 
-	private doShowInActiveContainer(): void {
+	private doShowInActiveContainer(): codemavi {
 		this.layoutService.activeContainer.appendChild(this.$el);
 		this.trackPixelRatioListener.value = PixelRatio.getInstance(dom.getWindow(this.$el)).onDidChange(
 			() => this.setCoordinates()
 		);
 	}
 
-	private hide(): void {
+	private hide(): codemavi {
 		this.isVisible = false;
 		dom.hide(this.$el);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.$el?.remove();

@@ -271,7 +271,7 @@ export class PackageJSONContribution implements IJSONContribution {
 
 	private async fetchPackageInfo(pack: string, resource: Uri | undefined): Promise<ViewPackageInfo | undefined> {
 		if (!this.isValidNPMName(pack)) {
-			return undefined; // avoid unnecessary lookups
+			return undefined; // acodemavi unnecessary lookups
 		}
 		let info: ViewPackageInfo | undefined;
 		if (this.npmCommandPath) {

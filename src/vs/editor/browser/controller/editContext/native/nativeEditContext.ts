@@ -181,7 +181,7 @@ export class NativeEditContext extends AbstractEditContext {
 
 	// --- Public methods ---
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		// Force blue the dom node so can write in pane with no native edit context after disposal
 		this.domNode.domNode.blur();
 		this.domNode.domNode.remove();
@@ -189,7 +189,7 @@ export class NativeEditContext extends AbstractEditContext {
 		super.dispose();
 	}
 
-	public setAriaOptions(options: IEditorAriaOptions): void {
+	public setAriaOptions(options: IEditorAriaOptions): codemavi {
 		this._screenReaderSupport.setAriaOptions(options);
 	}
 
@@ -199,13 +199,13 @@ export class NativeEditContext extends AbstractEditContext {
 		return this._primarySelection.getPosition();
 	}
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		this._screenReaderSupport.prepareRender(ctx);
 		this._updateEditContext();
 		this._updateSelectionAndControlBounds(ctx);
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		this._screenReaderSupport.render(ctx);
 	}
 
@@ -273,11 +273,11 @@ export class NativeEditContext extends AbstractEditContext {
 		}
 	}
 
-	private _onWillPaste(): void {
+	private _onWillPaste(): codemavi {
 		this._screenReaderSupport.setIgnoreSelectionChangeTime('onWillPaste');
 	}
 
-	public writeScreenReaderContent(): void {
+	public writeScreenReaderContent(): codemavi {
 		this._screenReaderSupport.writeScreenReaderContent();
 	}
 
@@ -285,20 +285,20 @@ export class NativeEditContext extends AbstractEditContext {
 		return this._focusTracker.isFocused;
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		this._focusTracker.focus();
 
 		// If the editor is off DOM, focus cannot be really set, so let's double check that we have managed to set the focus
 		this.refreshFocusState();
 	}
 
-	public refreshFocusState(): void {
+	public refreshFocusState(): codemavi {
 		this._focusTracker.refreshFocusState();
 	}
 
 	// TODO: added as a workaround fix for https://github.com/microsoft/vscode/issues/229825
 	// When this issue will be fixed the following should be removed.
-	public setEditContextOnDomNode(): void {
+	public setEditContextOnDomNode(): codemavi {
 		const targetWindow = getWindow(this.domNode.domNode);
 		const targetWindowId = getWindowId(targetWindow);
 		if (this._targetWindowId !== targetWindowId) {
@@ -309,12 +309,12 @@ export class NativeEditContext extends AbstractEditContext {
 
 	// --- Private methods ---
 
-	private _updateDomAttributes(): void {
+	private _updateDomAttributes(): codemavi {
 		const options = this._context.configuration.options;
 		this.domNode.domNode.setAttribute('tabindex', String(options.get(EditorOption.tabIndex)));
 	}
 
-	private _updateEditContext(): void {
+	private _updateEditContext(): codemavi {
 		const editContextState = this._getNewEditContextState();
 		if (!editContextState) {
 			return;
@@ -324,7 +324,7 @@ export class NativeEditContext extends AbstractEditContext {
 		this._editContextPrimarySelection = editContextState.editContextPrimarySelection;
 	}
 
-	private _emitTypeEvent(viewController: ViewController, e: TextUpdateEvent): void {
+	private _emitTypeEvent(viewController: ViewController, e: TextUpdateEvent): codemavi {
 		if (!this._editContext) {
 			return;
 		}
@@ -373,7 +373,7 @@ export class NativeEditContext extends AbstractEditContext {
 		this._updateEditContext();
 	}
 
-	private _onType(viewController: ViewController, typeInput: ITypeData): void {
+	private _onType(viewController: ViewController, typeInput: ITypeData): codemavi {
 		if (typeInput.replacePrevCharCnt || typeInput.replaceNextCharCnt || typeInput.positionDelta) {
 			viewController.compositionType(typeInput.text, typeInput.replacePrevCharCnt, typeInput.replaceNextCharCnt, typeInput.positionDelta);
 		} else {
@@ -406,7 +406,7 @@ export class NativeEditContext extends AbstractEditContext {
 		return new Position(this._editContextPrimarySelection.startLineNumber, 1);
 	}
 
-	private _handleTextFormatUpdate(e: TextFormatUpdateEvent): void {
+	private _handleTextFormatUpdate(e: TextFormatUpdateEvent): codemavi {
 		if (!this._editContext) {
 			return;
 		}
@@ -472,7 +472,7 @@ export class NativeEditContext extends AbstractEditContext {
 		this._editContext.updateControlBounds(selectionBounds);
 	}
 
-	private _updateCharacterBounds(e: CharacterBoundsUpdateEvent): void {
+	private _updateCharacterBounds(e: CharacterBoundsUpdateEvent): codemavi {
 		if (!this._parent) {
 			return;
 		}
@@ -509,7 +509,7 @@ export class NativeEditContext extends AbstractEditContext {
 		this._editContext.updateCharacterBounds(e.rangeStart, characterBounds);
 	}
 
-	private _ensureClipboardGetsEditorSelection(e: ClipboardEvent): void {
+	private _ensureClipboardGetsEditorSelection(e: ClipboardEvent): codemavi {
 		const options = this._context.configuration.options;
 		const emptySelectionClipboard = options.get(EditorOption.emptySelectionClipboard);
 		const copyWithSyntaxHighlighting = options.get(EditorOption.copyWithSyntaxHighlighting);

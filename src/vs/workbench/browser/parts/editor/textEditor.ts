@@ -53,7 +53,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 	protected readonly _onDidChangeSelection = this._register(new Emitter<IEditorPaneSelectionChangeEvent>());
 	readonly onDidChangeSelection = this._onDidChangeSelection.event;
 
-	protected readonly _onDidChangeScroll = this._register(new Emitter<void>());
+	protected readonly _onDidChangeScroll = this._register(new Emitter<codemavi>());
 	readonly onDidChangeScroll = this._onDidChangeScroll.event;
 
 	private editorContainer: HTMLElement | undefined;
@@ -95,7 +95,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		this._register(this.fileService.onDidChangeFileSystemProviderRegistrations(e => this.onDidChangeFileSystemProvider(e.scheme)));
 	}
 
-	private handleConfigurationChangeEvent(e: ITextResourceConfigurationChangeEvent): void {
+	private handleConfigurationChangeEvent(e: ITextResourceConfigurationChangeEvent): codemavi {
 		const resource = this.getActiveResource();
 		if (!this.shouldHandleConfigurationChangeEvent(e, resource)) {
 			return;
@@ -112,7 +112,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		return e.affectsConfiguration(resource, 'editor') || e.affectsConfiguration(resource, 'problems.visibility');
 	}
 
-	private consumePendingConfigurationChangeEvent(): void {
+	private consumePendingConfigurationChangeEvent(): codemavi {
 		if (this.hasPendingConfigurationChange) {
 			this.updateEditorConfiguration();
 			this.hasPendingConfigurationChange = false;
@@ -135,7 +135,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		return this.input ? computeEditorAriaLabel(this.input, undefined, this.group, this.editorGroupService.count) : localize('editor', "Editor");
 	}
 
-	private onDidChangeFileSystemProvider(scheme: string): void {
+	private onDidChangeFileSystemProvider(scheme: string): codemavi {
 		if (!this.input) {
 			return;
 		}
@@ -145,13 +145,13 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		}
 	}
 
-	private onDidChangeInputCapabilities(input: EditorInput): void {
+	private onDidChangeInputCapabilities(input: EditorInput): codemavi {
 		if (this.input === input) {
 			this.updateReadonly(input);
 		}
 	}
 
-	protected updateReadonly(input: EditorInput): void {
+	protected updateReadonly(input: EditorInput): codemavi {
 		this.updateEditorControlOptions({ ...this.getReadonlyConfiguration(input.isReadonly()) });
 	}
 
@@ -172,7 +172,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		};
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 
 		// Create editor control
 		this.editorContainer = parent;
@@ -182,7 +182,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		this.registerCodeEditorListeners();
 	}
 
-	private registerCodeEditorListeners(): void {
+	private registerCodeEditorListeners(): codemavi {
 		const mainControl = this.getMainControl();
 		if (mainControl) {
 			this._register(mainControl.onDidChangeModelLanguage(() => this.updateEditorConfiguration()));
@@ -222,13 +222,13 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 	 * The passed in configuration object should be passed to the editor
 	 * control when creating it.
 	 */
-	protected abstract createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): void;
+	protected abstract createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): codemavi;
 
 	/**
 	 * The method asks to update the editor control options and is called
 	 * whenever there is change to the options.
 	 */
-	protected abstract updateEditorControlOptions(options: ICodeEditorOptions): void;
+	protected abstract updateEditorControlOptions(options: ICodeEditorOptions): codemavi;
 
 	/**
 	 * This method returns the main, dominant instance of `ICodeEditor`
@@ -237,7 +237,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 	 */
 	protected abstract getMainControl(): ICodeEditor | undefined;
 
-	override async setInput(input: EditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: EditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		await super.setInput(input, options, context, token);
 
 		// Update our listener for input capabilities
@@ -252,7 +252,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		editorContainer.setAttribute('aria-label', this.computeAriaLabel());
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 
 		// Clear input listener
 		this.inputListener.clear();
@@ -273,7 +273,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		};
 	}
 
-	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): void {
+	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): codemavi {
 		const editor = this.getMainControl();
 		if (!editor) {
 			throw new Error('Control has not yet been initialized');
@@ -285,7 +285,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		}
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		if (visible) {
 			this.consumePendingConfigurationChangeEvent();
 		}
@@ -297,7 +297,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		return input.resource;
 	}
 
-	private updateEditorConfiguration(resource = this.getActiveResource()): void {
+	private updateEditorConfiguration(resource = this.getActiveResource()): codemavi {
 		let configuration: IEditorConfiguration | undefined = undefined;
 		if (resource) {
 			configuration = this.textResourceConfigurationService.getValue<IEditorConfiguration>(resource);
@@ -340,7 +340,7 @@ export abstract class AbstractTextEditor<T extends IEditorViewState> extends Abs
 		return undefined;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.lastAppliedEditorOptions = undefined;
 
 		super.dispose();

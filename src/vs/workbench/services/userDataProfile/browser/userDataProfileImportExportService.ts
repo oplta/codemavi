@@ -97,13 +97,13 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		return toDisposable(() => this.unregisterProfileContentHandler(id));
 	}
 
-	unregisterProfileContentHandler(id: string): void {
+	unregisterProfileContentHandler(id: string): codemavi {
 		this.profileContentHandlers.delete(id);
 	}
 
 	async createFromProfile(from: IUserDataProfile, options: IUserDataProfileCreateOptions, token: CancellationToken): Promise<IUserDataProfile | undefined> {
 		const disposables = new DisposableStore();
-		let creationPromise: CancelablePromise<void>;
+		let creationPromise: CancelablePromise<codemavi>;
 		disposables.add(token.onCancellationRequested(() => creationPromise.cancel()));
 		let profile: IUserDataProfile | undefined;
 		return this.progressService.withProgress({
@@ -144,7 +144,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 
 	async createProfileFromTemplate(profileTemplate: IUserDataProfileTemplate, options: IUserDataProfileCreateOptions, token: CancellationToken): Promise<IUserDataProfile | undefined> {
 		const disposables = new DisposableStore();
-		let creationPromise: CancelablePromise<void>;
+		let creationPromise: CancelablePromise<codemavi>;
 		disposables.add(token.onCancellationRequested(() => creationPromise.cancel()));
 		let profile: IUserDataProfile | undefined;
 		return this.progressService.withProgress({
@@ -176,7 +176,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		}, () => creationPromise.cancel()).finally(() => disposables.dispose());
 	}
 
-	private async applyProfileTemplate(profileTemplate: IUserDataProfileTemplate, profile: IUserDataProfile, options: IUserDataProfileCreateOptions, reportProgress: (message: string) => void, token: CancellationToken): Promise<void> {
+	private async applyProfileTemplate(profileTemplate: IUserDataProfileTemplate, profile: IUserDataProfile, options: IUserDataProfileCreateOptions, reportProgress: (message: string) => codemavi, token: CancellationToken): Promise<codemavi> {
 		if (profileTemplate.settings && (options.resourceTypeFlags?.settings ?? true) && !profile.useDefaultFlags?.settings) {
 			reportProgress(localize('creating settings', "Creating Settings..."));
 			await this.instantiationService.createInstance(SettingsResource).apply(profileTemplate.settings, profile);
@@ -218,7 +218,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		}
 	}
 
-	async exportProfile(profile: IUserDataProfile, exportFlags?: ProfileResourceTypeFlags): Promise<void> {
+	async exportProfile(profile: IUserDataProfile, exportFlags?: ProfileResourceTypeFlags): Promise<codemavi> {
 		const disposables = new DisposableStore();
 		try {
 			const userDataProfilesExportState = disposables.add(this.instantiationService.createInstance(UserDataProfileExportState, profile, exportFlags));
@@ -228,7 +228,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		}
 	}
 
-	async createTroubleshootProfile(): Promise<void> {
+	async createTroubleshootProfile(): Promise<codemavi> {
 		const userDataProfilesExportState = this.instantiationService.createInstance(UserDataProfileExportState, this.userDataProfileService.currentProfile, undefined);
 		try {
 			const profileTemplate = await userDataProfilesExportState.getProfileTemplate(localize('troubleshoot issue', "Troubleshoot Issue"), undefined);
@@ -252,7 +252,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		}
 	}
 
-	private async doExportProfile(userDataProfilesExportState: UserDataProfileExportState, location: ProgressLocation | string): Promise<void> {
+	private async doExportProfile(userDataProfilesExportState: UserDataProfileExportState, location: ProgressLocation | string): Promise<codemavi> {
 		const profile = await userDataProfilesExportState.getProfileToExport();
 		if (!profile) {
 			return;
@@ -279,7 +279,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 				}
 				const message = localize('export success', "Profile '{0}' was exported successfully.", profile.name);
 				if (profileContentHandler.extensionId) {
-					const buttons: IPromptButton<void>[] = [];
+					const buttons: IPromptButton<codemavi>[] = [];
 					const link = this.productService.webUrl ? `${this.productService.webUrl}/${PROFILE_URL_AUTHORITY}/${id}/${saveResult.id}` : toUserDataProfileUri(`/${id}/${saveResult.id}`, this.productService).toString();
 					buttons.push({
 						label: localize({ key: 'copy', comment: ['&& denotes a mnemonic'] }, "&&Copy Link"),
@@ -368,7 +368,7 @@ export class UserDataProfileImportExportService extends Disposable implements IU
 		return profileTemplate;
 	}
 
-	private async doCreateProfile(profileTemplate: IUserDataProfileTemplate, temporaryProfile: boolean, extensions: boolean, options: IUserDataProfileOptions | undefined, progress: (message: string) => void): Promise<IUserDataProfile | undefined> {
+	private async doCreateProfile(profileTemplate: IUserDataProfileTemplate, temporaryProfile: boolean, extensions: boolean, options: IUserDataProfileOptions | undefined, progress: (message: string) => codemavi): Promise<IUserDataProfile | undefined> {
 		const profile = await this.getProfileToImport(profileTemplate, temporaryProfile, options);
 		if (!profile) {
 			return undefined;
@@ -546,7 +546,7 @@ const USER_DATA_PROFILE_EXPORT_PREVIEW_SCHEME = 'userdataprofileexportpreview';
 
 abstract class UserDataProfileImportExportState extends Disposable implements ITreeViewDataProvider {
 
-	private readonly _onDidChangeRoots = this._register(new Emitter<void>());
+	private readonly _onDidChangeRoots = this._register(new Emitter<codemavi>());
 	readonly onDidChangeRoots = this._onDidChangeRoots.event;
 
 	constructor(

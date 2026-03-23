@@ -30,7 +30,7 @@ class AutoAcceptControl {
 	constructor(
 		readonly total: number,
 		readonly remaining: number,
-		readonly cancel: () => void
+		readonly cancel: () => codemavi
 	) { }
 }
 
@@ -47,7 +47,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 
 	readonly entryId = `${AbstractChatEditingModifiedFileEntry.scheme}::${++AbstractChatEditingModifiedFileEntry.lastEntryId}`;
 
-	protected readonly _onDidDelete = this._register(new Emitter<void>());
+	protected readonly _onDidDelete = this._register(new Emitter<codemavi>());
 	readonly onDidDelete = this._onDidDelete.event;
 
 	protected readonly _stateObs = observableValue<WorkingSetEntryState>(this, WorkingSetEntryState.Attached);
@@ -129,7 +129,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		if (--this._refCounter === 0) {
 			super.dispose();
 		}
@@ -140,7 +140,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 		return this;
 	}
 
-	enableReviewModeUntilSettled(): void {
+	enableReviewModeUntilSettled(): codemavi {
 
 		this._reviewModeTempObs.set(true, undefined);
 
@@ -160,7 +160,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 		this._telemetryInfo = telemetryInfo;
 	}
 
-	async accept(tx: ITransaction | undefined): Promise<void> {
+	async accept(tx: ITransaction | undefined): Promise<codemavi> {
 		if (this._stateObs.get() !== WorkingSetEntryState.Modified) {
 			// already accepted or rejected
 			return;
@@ -173,9 +173,9 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 		this._notifyAction('accepted');
 	}
 
-	protected abstract _doAccept(tx: ITransaction | undefined): Promise<void>;
+	protected abstract _doAccept(tx: ITransaction | undefined): Promise<codemavi>;
 
-	async reject(tx: ITransaction | undefined): Promise<void> {
+	async reject(tx: ITransaction | undefined): Promise<codemavi> {
 		if (this._stateObs.get() !== WorkingSetEntryState.Modified) {
 			// already accepted or rejected
 			return;
@@ -187,7 +187,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 		this._notifyAction('rejected');
 	}
 
-	protected abstract _doReject(tx: ITransaction | undefined): Promise<void>;
+	protected abstract _doReject(tx: ITransaction | undefined): Promise<codemavi>;
 
 	private _notifyAction(outcome: 'accepted' | 'rejected') {
 		this._chatService.notifyUserAction({
@@ -234,7 +234,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 
 	protected abstract _createUndoRedoElement(response: IChatResponseModel): IUndoRedoElement | undefined;
 
-	abstract acceptAgentEdits(uri: URI, edits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<void>;
+	abstract acceptAgentEdits(uri: URI, edits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<codemavi>;
 
 	async acceptStreamingEditsEnd(tx: ITransaction) {
 		this._resetEditsState(tx);
@@ -274,7 +274,7 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 
 	protected abstract _areOriginalAndModifiedIdentical(): Promise<boolean>;
 
-	protected _resetEditsState(tx: ITransaction): void {
+	protected _resetEditsState(tx: ITransaction): codemavi {
 		this._isCurrentlyBeingModifiedByObs.set(undefined, tx);
 		this._rewriteRatioObs.set(0, tx);
 	}
@@ -285,11 +285,11 @@ export abstract class AbstractChatEditingModifiedFileEntry extends Disposable im
 
 	abstract equalsSnapshot(snapshot: ISnapshotEntry | undefined): boolean;
 
-	abstract restoreFromSnapshot(snapshot: ISnapshotEntry, restoreToDisk?: boolean): void;
+	abstract restoreFromSnapshot(snapshot: ISnapshotEntry, restoreToDisk?: boolean): codemavi;
 
 	// --- inital content
 
-	abstract resetToInitialContent(): void;
+	abstract resetToInitialContent(): codemavi;
 
 	abstract initialContent: string;
 }

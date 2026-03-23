@@ -150,7 +150,7 @@ export class SearchResultImpl extends Disposable implements ISearchResult {
 		this.aiTextSearchResult.query = aiTextQueryFromTextQuery(query);
 	}
 
-	private onDidAddNotebookEditorWidget(widget: NotebookEditorWidget): void {
+	private onDidAddNotebookEditorWidget(widget: NotebookEditorWidget): codemavi {
 
 		this._onWillChangeModelListener?.dispose();
 		this._onWillChangeModelListener = widget.onWillChangeModel(
@@ -179,23 +179,23 @@ export class SearchResultImpl extends Disposable implements ISearchResult {
 		return this._plainTextSearchResult.folderMatches();
 	}
 
-	private onModelAdded(model: ITextModel): void {
+	private onModelAdded(model: ITextModel): codemavi {
 		const folderMatch = this._plainTextSearchResult.findFolderSubstr(model.uri);
 		folderMatch?.bindModel(model);
 	}
 
-	private async onNotebookEditorWidgetAdded(editor: NotebookEditorWidget, resource: URI): Promise<void> {
+	private async onNotebookEditorWidgetAdded(editor: NotebookEditorWidget, resource: URI): Promise<codemavi> {
 		const folderMatch = this._plainTextSearchResult.findFolderSubstr(resource);
 		await folderMatch?.bindNotebookEditorWidget(editor, resource);
 	}
 
-	private onNotebookEditorWidgetRemoved(editor: NotebookEditorWidget, resource: URI): void {
+	private onNotebookEditorWidgetRemoved(editor: NotebookEditorWidget, resource: URI): codemavi {
 		const folderMatch = this._plainTextSearchResult.findFolderSubstr(resource);
 		folderMatch?.unbindNotebookEditorWidget(editor, resource);
 	}
 
 
-	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent: boolean = false): void {
+	add(allRaw: IFileMatch[], searchInstanceID: string, ai: boolean, silent: boolean = false): codemavi {
 		this._plainTextSearchResult.hidden = false;
 		if (ai) {
 			this._aiTextSearchResult.hidden = false;
@@ -208,12 +208,12 @@ export class SearchResultImpl extends Disposable implements ISearchResult {
 		}
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._plainTextSearchResult.clear();
 		this._aiTextSearchResult.clear();
 	}
 
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai = false): void {
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai = false): codemavi {
 		if (ai) {
 			this._aiTextSearchResult.remove(matches, ai);
 		}
@@ -261,7 +261,7 @@ export class SearchResultImpl extends Disposable implements ISearchResult {
 		return this._plainTextSearchResult.cachedSearchComplete;
 	}
 
-	toggleHighlights(value: boolean, ai: boolean = false): void {
+	toggleHighlights(value: boolean, ai: boolean = false): codemavi {
 		if (ai) {
 			this._aiTextSearchResult.toggleHighlights(value);
 		} else {
@@ -280,7 +280,7 @@ export class SearchResultImpl extends Disposable implements ISearchResult {
 		return this._plainTextSearchResult.replaceAll(progress);
 	}
 
-	override async dispose(): Promise<void> {
+	override async dispose(): Promise<codemavi> {
 		this._aiTextSearchResult?.dispose();
 		this._plainTextSearchResult?.dispose();
 		this._onWillChangeModelListener?.dispose();

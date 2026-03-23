@@ -76,7 +76,7 @@ export class BrowserDialogHandler extends AbstractDialogHandler {
 		return { confirmed: button === 0, checkboxChecked, values };
 	}
 
-	async about(): Promise<void> {
+	async about(): Promise<codemavi> {
 		const detailString = (useAgo: boolean): string => {
 			return localize('aboutDetail',
 				"Version: {0}\nCommit: {1}\nDate: {2}\nBrowser: {3}",

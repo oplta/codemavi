@@ -319,7 +319,7 @@ class CollapsedCodeOverlayWidget extends ViewZoneOverlayWidget {
 		private readonly _unchangedRegionRange: LineRange,
 		private readonly _hide: boolean,
 		private readonly _modifiedOutlineSource: IDiffEditorBreadcrumbsSource,
-		private readonly _revealModifiedHiddenLine: (lineNumber: number) => void,
+		private readonly _revealModifiedHiddenLine: (lineNumber: number) => codemavi,
 		private readonly _options: DiffEditorOptions,
 	) {
 		const root = h('div.diff-hidden-lines-widget');

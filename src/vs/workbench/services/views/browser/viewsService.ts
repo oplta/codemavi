@@ -48,7 +48,7 @@ export class ViewsService extends Disposable implements IViewsService {
 	private readonly _onDidChangeViewContainerVisibility = this._register(new Emitter<{ id: string; visible: boolean; location: ViewContainerLocation }>());
 	readonly onDidChangeViewContainerVisibility = this._onDidChangeViewContainerVisibility.event;
 
-	private readonly _onDidChangeFocusedView = this._register(new Emitter<void>());
+	private readonly _onDidChangeFocusedView = this._register(new Emitter<codemavi>());
 	readonly onDidChangeFocusedView = this._onDidChangeFocusedView.event;
 
 	private readonly viewContainerDisposables = this._register(new DisposableMap());
@@ -86,18 +86,18 @@ export class ViewsService extends Disposable implements IViewsService {
 		this.focusedViewContextKey = FocusedViewContext.bindTo(contextKeyService);
 	}
 
-	private onViewsAdded(added: IView[]): void {
+	private onViewsAdded(added: IView[]): codemavi {
 		for (const view of added) {
 			this.onViewsVisibilityChanged(view, view.isBodyVisible());
 		}
 	}
 
-	private onViewsVisibilityChanged(view: IView, visible: boolean): void {
+	private onViewsVisibilityChanged(view: IView, visible: boolean): codemavi {
 		this.getOrCreateActiveViewContextKey(view).set(visible);
 		this._onDidChangeViewVisibility.fire({ id: view.id, visible: visible });
 	}
 
-	private onViewsRemoved(removed: IView[]): void {
+	private onViewsRemoved(removed: IView[]): codemavi {
 		for (const view of removed) {
 			this.onViewsVisibilityChanged(view, false);
 		}
@@ -113,7 +113,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		return contextKey;
 	}
 
-	private onDidChangeContainers(added: ReadonlyArray<{ container: ViewContainer; location: ViewContainerLocation }>, removed: ReadonlyArray<{ container: ViewContainer; location: ViewContainerLocation }>): void {
+	private onDidChangeContainers(added: ReadonlyArray<{ container: ViewContainer; location: ViewContainerLocation }>, removed: ReadonlyArray<{ container: ViewContainer; location: ViewContainerLocation }>): codemavi {
 		for (const { container, location } of removed) {
 			this.onDidDeregisterViewContainer(container, location);
 		}
@@ -122,7 +122,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		}
 	}
 
-	private onDidRegisterViewContainer(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): void {
+	private onDidRegisterViewContainer(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): codemavi {
 		this.registerPaneComposite(viewContainer, viewContainerLocation);
 		const disposables = new DisposableStore();
 
@@ -139,12 +139,12 @@ export class ViewsService extends Disposable implements IViewsService {
 		this.viewContainerDisposables.set(viewContainer.id, disposables);
 	}
 
-	private onDidDeregisterViewContainer(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): void {
+	private onDidDeregisterViewContainer(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): codemavi {
 		this.deregisterPaneComposite(viewContainer, viewContainerLocation);
 		this.viewContainerDisposables.deleteAndDispose(viewContainer.id);
 	}
 
-	private onDidChangeContainerLocation(viewContainer: ViewContainer, from: ViewContainerLocation, to: ViewContainerLocation): void {
+	private onDidChangeContainerLocation(viewContainer: ViewContainer, from: ViewContainerLocation, to: ViewContainerLocation): codemavi {
 		this.deregisterPaneComposite(viewContainer, from);
 		this.registerPaneComposite(viewContainer, to);
 
@@ -157,7 +157,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		}
 	}
 
-	private onViewDescriptorsAdded(views: ReadonlyArray<IViewDescriptor>, container: ViewContainer): void {
+	private onViewDescriptorsAdded(views: ReadonlyArray<IViewDescriptor>, container: ViewContainer): codemavi {
 		const location = this.viewDescriptorService.getViewContainerLocation(container);
 		if (location === null) {
 			return;
@@ -172,7 +172,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		}
 	}
 
-	private onViewDescriptorsRemoved(views: ReadonlyArray<IViewDescriptor>): void {
+	private onViewDescriptorsRemoved(views: ReadonlyArray<IViewDescriptor>): codemavi {
 		for (const view of views) {
 			const disposable = this.viewDisposable.get(view);
 			if (disposable) {
@@ -182,7 +182,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		}
 	}
 
-	private updateViewContainerEnablementContextKey(viewContainer: ViewContainer): void {
+	private updateViewContainerEnablementContextKey(viewContainer: ViewContainer): codemavi {
 		let contextKey = this.enabledViewContainersContextKeys.get(viewContainer.id);
 		if (!contextKey) {
 			contextKey = this.contextKeyService.createKey(getEnabledViewContainerContextKey(viewContainer.id), false);
@@ -251,7 +251,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		return null;
 	}
 
-	async closeViewContainer(id: string): Promise<void> {
+	async closeViewContainer(id: string): Promise<codemavi> {
 		const viewContainer = this.viewDescriptorService.getViewContainerById(id);
 		if (viewContainer) {
 			const viewContainerLocation = this.viewDescriptorService.getViewContainerLocation(viewContainer);
@@ -323,7 +323,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		return null;
 	}
 
-	closeView(id: string): void {
+	closeView(id: string): codemavi {
 		const viewContainer = this.viewDescriptorService.getViewContainerByViewId(id);
 		if (viewContainer) {
 			const activeViewPaneContainer = this.getActiveViewPaneContainer(viewContainer);
@@ -579,7 +579,7 @@ export class ViewsService extends Disposable implements IViewsService {
 					}
 				});
 			}
-			run(accessor: ServicesAccessor, options?: { preserveFocus?: boolean }): void {
+			run(accessor: ServicesAccessor, options?: { preserveFocus?: boolean }): codemavi {
 				accessor.get(IViewsService).openView(viewDescriptor.id, !options?.preserveFocus);
 			}
 		});
@@ -604,7 +604,7 @@ export class ViewsService extends Disposable implements IViewsService {
 					}],
 				});
 			}
-			run(accessor: ServicesAccessor): void {
+			run(accessor: ServicesAccessor): codemavi {
 				const viewDescriptorService = accessor.get(IViewDescriptorService);
 				const defaultContainer = viewDescriptorService.getDefaultContainerById(viewDescriptor.id)!;
 				const containerModel = viewDescriptorService.getViewContainerModel(defaultContainer)!;
@@ -621,7 +621,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		});
 	}
 
-	private registerPaneComposite(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): void {
+	private registerPaneComposite(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): codemavi {
 		const that = this;
 		class PaneContainer extends PaneComposite {
 			constructor(
@@ -665,7 +665,7 @@ export class ViewsService extends Disposable implements IViewsService {
 		));
 	}
 
-	private deregisterPaneComposite(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): void {
+	private deregisterPaneComposite(viewContainer: ViewContainer, viewContainerLocation: ViewContainerLocation): codemavi {
 		Registry.as<PaneCompositeRegistry>(getPaneCompositeExtension(viewContainerLocation)).deregisterPaneComposite(viewContainer.id);
 	}
 

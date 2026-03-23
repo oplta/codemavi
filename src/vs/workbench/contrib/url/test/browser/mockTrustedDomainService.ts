@@ -14,7 +14,7 @@ export class MockTrustedDomainService implements ITrustedDomainService {
 	constructor(private readonly _trustedDomains: string[] = []) {
 	}
 
-	onDidChangeTrustedDomains: Event<void> = Event.None;
+	onDidChangeTrustedDomains: Event<codemavi> = Event.None;
 
 	isValid(resource: URI): boolean {
 		return isURLDomainTrusted(resource, this._trustedDomains);

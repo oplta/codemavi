@@ -31,7 +31,7 @@ export interface IRangeHighlightDecoration {
 
 export class RangeHighlightDecorations extends Disposable {
 
-	private readonly _onHighlightRemoved = this._register(new Emitter<void>());
+	private readonly _onHighlightRemoved = this._register(new Emitter<codemavi>());
 	readonly onHighlightRemoved = this._onHighlightRemoved.event;
 
 	private rangeHighlightDecorationId: string | null = null;
@@ -161,7 +161,7 @@ export class FloatingEditorClickWidget extends FloatingClickWidget implements IO
 		this.editor.addOverlayWidget(this);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.editor.removeOverlayWidget(this);
 		super.dispose();
 	}

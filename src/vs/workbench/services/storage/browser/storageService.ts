@@ -55,11 +55,11 @@ export class BrowserStorageService extends AbstractStorageService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.userDataProfileService.onDidChangeCurrentProfile(e => e.join(this.switchToProfile(e.profile))));
 	}
 
-	protected async doInitialize(): Promise<void> {
+	protected async doInitialize(): Promise<codemavi> {
 
 		// Init storages
 		await Promises.settled([
@@ -69,7 +69,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		]);
 	}
 
-	private async createApplicationStorage(): Promise<void> {
+	private async createApplicationStorage(): Promise<codemavi> {
 		const applicationStorageIndexedDB = await IndexedDBStorageDatabase.createApplicationStorage(this.logService);
 
 		this.applicationStorageDatabase = this._register(applicationStorageIndexedDB);
@@ -84,7 +84,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		this.applicationStoragePromise.complete({ indexedDb: applicationStorageIndexedDB, storage: this.applicationStorage });
 	}
 
-	private async createProfileStorage(profile: IUserDataProfile): Promise<void> {
+	private async createProfileStorage(profile: IUserDataProfile): Promise<codemavi> {
 
 		// First clear any previously associated disposables
 		this.profileStorageDisposables.clear();
@@ -96,7 +96,7 @@ export class BrowserStorageService extends AbstractStorageService {
 
 			// If we are using default profile storage, the profile storage is
 			// actually the same as application storage. As such we
-			// avoid creating the storage library a second time on
+			// acodemavi creating the storage library a second time on
 			// the same DB.
 
 			const { indexedDb: applicationStorageIndexedDB, storage: applicationStorage } = await this.applicationStoragePromise.p;
@@ -119,7 +119,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		}
 	}
 
-	private async createWorkspaceStorage(): Promise<void> {
+	private async createWorkspaceStorage(): Promise<codemavi> {
 		const workspaceStorageIndexedDB = await IndexedDBStorageDatabase.createWorkspaceStorage(this.workspace.id, this.logService);
 
 		this.workspaceStorageDatabase = this._register(workspaceStorageIndexedDB);
@@ -132,7 +132,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		this.updateIsNew(this.workspaceStorage);
 	}
 
-	private updateIsNew(storage: IStorage): void {
+	private updateIsNew(storage: IStorage): codemavi {
 		const firstOpen = storage.getBoolean(IS_NEW_KEY);
 		if (firstOpen === undefined) {
 			storage.set(IS_NEW_KEY, true);
@@ -163,7 +163,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		}
 	}
 
-	protected async switchToProfile(toProfile: IUserDataProfile): Promise<void> {
+	protected async switchToProfile(toProfile: IUserDataProfile): Promise<codemavi> {
 		if (!this.canSwitchProfile(this.profileStorageProfile, toProfile)) {
 			return;
 		}
@@ -184,7 +184,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		this.switchData(oldItems, assertIsDefined(this.profileStorage), StorageScope.PROFILE);
 	}
 
-	protected async switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier, preserveData: boolean): Promise<void> {
+	protected async switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier, preserveData: boolean): Promise<codemavi> {
 		throw new Error('Migrating storage is currently unsupported in Web');
 	}
 
@@ -201,7 +201,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		return getActiveWindow().document.hasFocus() && !this.hasPendingUpdate;
 	}
 
-	close(): void {
+	close(): codemavi {
 
 		// Safari: there is an issue where the page can hang on load when
 		// a previous session has kept IndexedDB transactions running.
@@ -221,7 +221,7 @@ export class BrowserStorageService extends AbstractStorageService {
 		this.dispose();
 	}
 
-	async clear(): Promise<void> {
+	async clear(): Promise<codemavi> {
 
 		// Clear key/values
 		for (const scope of [StorageScope.APPLICATION, StorageScope.PROFILE, StorageScope.WORKSPACE]) {
@@ -267,7 +267,7 @@ interface IIndexedDBStorageDatabase extends IStorageDatabase, IDisposable {
 	/**
 	 * For testing only.
 	 */
-	clear(): Promise<void>;
+	clear(): Promise<codemavi>;
 }
 
 class InMemoryIndexedDBStorageDatabase extends InMemoryStorageDatabase implements IIndexedDBStorageDatabase {
@@ -275,11 +275,11 @@ class InMemoryIndexedDBStorageDatabase extends InMemoryStorageDatabase implement
 	readonly hasPendingUpdate = false;
 	readonly name = 'in-memory-indexedb-storage';
 
-	async clear(): Promise<void> {
+	async clear(): Promise<codemavi> {
 		(await this.getItems()).clear();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		// No-op
 	}
 }
@@ -344,7 +344,7 @@ export class IndexedDBStorageDatabase extends Disposable implements IIndexedDBSt
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Check for storage change events from other
 		// windows/tabs via `BroadcastChannel` mechanisms.
@@ -377,7 +377,7 @@ export class IndexedDBStorageDatabase extends Disposable implements IIndexedDBSt
 		return db.getKeyValues<string>(IndexedDBStorageDatabase.STORAGE_OBJECT_STORE, isValid);
 	}
 
-	async updateItems(request: IUpdateRequest): Promise<void> {
+	async updateItems(request: IUpdateRequest): Promise<codemavi> {
 
 		// Run the update
 		let didUpdate = false;
@@ -435,11 +435,11 @@ export class IndexedDBStorageDatabase extends Disposable implements IIndexedDBSt
 		return true;
 	}
 
-	async optimize(): Promise<void> {
+	async optimize(): Promise<codemavi> {
 		// not suported in IndexedDB
 	}
 
-	async close(): Promise<void> {
+	async close(): Promise<codemavi> {
 		const db = await this.whenConnected;
 
 		// Wait for pending updates to having finished
@@ -449,7 +449,7 @@ export class IndexedDBStorageDatabase extends Disposable implements IIndexedDBSt
 		return db.close();
 	}
 
-	async clear(): Promise<void> {
+	async clear(): Promise<codemavi> {
 		const db = await this.whenConnected;
 
 		await db.runInTransaction(IndexedDBStorageDatabase.STORAGE_OBJECT_STORE, 'readwrite', objectStore => objectStore.clear());

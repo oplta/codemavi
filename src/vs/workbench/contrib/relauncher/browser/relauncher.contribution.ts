@@ -89,7 +89,7 @@ export class SettingsChangeRelauncher extends Disposable implements IWorkbenchCo
 		this._register(userDataSyncWorkbenchService.onDidTurnOnSync(e => this.update(true)));
 	}
 
-	private onConfigurationChange(e: IConfigurationChangeEvent): void {
+	private onConfigurationChange(e: IConfigurationChangeEvent): codemavi {
 		if (e && !SettingsChangeRelauncher.SETTINGS.some(key => e.affectsConfiguration(key))) {
 			return;
 		}
@@ -106,7 +106,7 @@ export class SettingsChangeRelauncher extends Disposable implements IWorkbenchCo
 		return !this.userDataSyncEnablementService.isEnabled() && this.userDataSyncService.status === SyncStatus.Syncing;
 	}
 
-	private update(askToRelaunch: boolean): void {
+	private update(askToRelaunch: boolean): codemavi {
 		let changed = false;
 
 		function processChanged(didChange: boolean) {
@@ -180,7 +180,7 @@ export class SettingsChangeRelauncher extends Disposable implements IWorkbenchCo
 		}
 	}
 
-	private async doConfirm(message: string, detail: string, primaryButton: string, confirmedFn: () => void): Promise<void> {
+	private async doConfirm(message: string, detail: string, primaryButton: string, confirmedFn: () => codemavi): Promise<codemavi> {
 		const { confirmed } = await this.dialogService.confirm({ message, detail, primaryButton });
 		if (confirmed) {
 			confirmedFn();
@@ -258,7 +258,7 @@ export class WorkspaceChangeExtHostRelauncher extends Disposable implements IWor
 		}));
 	}
 
-	private handleWorkbenchState(): void {
+	private handleWorkbenchState(): codemavi {
 
 		// React to folder changes when we are in workspace state
 		if (this.contextService.getWorkbenchState() === WorkbenchState.WORKSPACE) {
@@ -280,7 +280,7 @@ export class WorkspaceChangeExtHostRelauncher extends Disposable implements IWor
 		}
 	}
 
-	private onDidChangeWorkspaceFolders(): void {
+	private onDidChangeWorkspaceFolders(): codemavi {
 		const workspace = this.contextService.getWorkspace();
 
 		// Restart extension host if first root folder changed (impact on deprecated workspace.rootPath API)

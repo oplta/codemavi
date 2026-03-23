@@ -77,7 +77,7 @@ const enum ActionOrder {
 	Sort,
 	GoToTest,
 	HideTest,
-	ContinuousRunTest = -1 >>> 1, // max int, always at the end to avoid shifting on hover
+	ContinuousRunTest = -1 >>> 1, // max int, always at the end to acodemavi shifting on hover
 }
 
 const hasAnyTestProvider = ContextKeyGreaterExpr.create(TestingContextKeys.providerCount.key, 0);
@@ -405,7 +405,7 @@ class StopContinuousRunAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		accessor.get(ITestingContinuousRunService).stop();
 	}
 }
@@ -494,7 +494,7 @@ class StartContinuousRunAction extends Action2 {
 			menu: continuousMenus(false),
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const crs = accessor.get(ITestingContinuousRunService);
 		const profileService = accessor.get(ITestProfileService);
 

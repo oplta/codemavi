@@ -34,20 +34,20 @@ export interface IUserDataSyncWorkbenchService {
 	readonly accountStatus: AccountStatus;
 	readonly onDidChangeAccountStatus: Event<AccountStatus>;
 
-	readonly onDidTurnOnSync: Event<void>;
+	readonly onDidTurnOnSync: Event<codemavi>;
 
-	turnOn(): Promise<void>;
-	turnoff(everyWhere: boolean): Promise<void>;
-	signIn(): Promise<void>;
+	turnOn(): Promise<codemavi>;
+	turnoff(everyWhere: boolean): Promise<codemavi>;
+	signIn(): Promise<codemavi>;
 
-	resetSyncedData(): Promise<void>;
-	showSyncActivity(): Promise<void>;
-	syncNow(): Promise<void>;
+	resetSyncedData(): Promise<codemavi>;
+	showSyncActivity(): Promise<codemavi>;
+	syncNow(): Promise<codemavi>;
 
-	synchroniseUserDataSyncStoreType(): Promise<void>;
+	synchroniseUserDataSyncStoreType(): Promise<codemavi>;
 
-	showConflicts(conflictToOpen?: IResourcePreview): Promise<void>;
-	accept(resource: IUserDataSyncResource, conflictResource: URI, content: string | null | undefined, apply: boolean): Promise<void>;
+	showConflicts(conflictToOpen?: IResourcePreview): Promise<codemavi>;
+	accept(resource: IUserDataSyncResource, conflictResource: URI, content: string | null | undefined, apply: boolean): Promise<codemavi>;
 
 	getAllLogResources(): Promise<URI[]>;
 	downloadSyncActivity(): Promise<URI | undefined>;
@@ -74,7 +74,7 @@ export const enum AccountStatus {
 }
 
 export interface IUserDataSyncConflictsView extends IView {
-	open(conflict: IResourcePreview): Promise<void>;
+	open(conflict: IResourcePreview): Promise<codemavi>;
 }
 
 export const SYNC_TITLE: ILocalizedString = localize2('sync category', "Settings Sync");

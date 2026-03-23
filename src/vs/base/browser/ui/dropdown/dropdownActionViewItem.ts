@@ -68,7 +68,7 @@ export class DropdownMenuActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this.actionItem = container;
 
 		const labelRenderer: ILabelRenderer = (el: HTMLElement): IDisposable | null => {
@@ -137,7 +137,7 @@ export class DropdownMenuActionViewItem extends BaseActionViewItem {
 		return null;
 	}
 
-	protected setAriaLabelAttributes(element: HTMLElement): void {
+	protected setAriaLabelAttributes(element: HTMLElement): codemavi {
 		element.setAttribute('role', 'button');
 		element.setAttribute('aria-haspopup', 'true');
 		element.setAttribute('aria-expanded', 'false');
@@ -156,7 +156,7 @@ export class DropdownMenuActionViewItem extends BaseActionViewItem {
 		return title ?? undefined;
 	}
 
-	override setActionContext(newContext: unknown): void {
+	override setActionContext(newContext: unknown): codemavi {
 		super.setActionContext(newContext);
 
 		if (this.dropdownMenu) {
@@ -168,11 +168,11 @@ export class DropdownMenuActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	show(): void {
+	show(): codemavi {
 		this.dropdownMenu?.show();
 	}
 
-	protected override updateEnabled(): void {
+	protected override updateEnabled(): codemavi {
 		const disabled = !this.action.enabled;
 		this.actionItem?.classList.toggle('disabled', disabled);
 		this.element?.classList.toggle('disabled', disabled);
@@ -197,7 +197,7 @@ export class ActionWithDropdownActionViewItem extends ActionViewItem {
 		super(context, action, options);
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		if (this.element) {
 			this.element.classList.add('action-dropdown-item');
@@ -240,12 +240,12 @@ export class ActionWithDropdownActionViewItem extends ActionViewItem {
 		}
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		super.blur();
 		this.dropdownMenuActionViewItem?.blur();
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		super.setFocusable(focusable);
 		this.dropdownMenuActionViewItem?.setFocusable(focusable);
 	}

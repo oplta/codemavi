@@ -45,7 +45,7 @@ abstract class AbstractSettingsModel extends EditorModel {
 	/**
 	 * Remove duplicates between result groups, preferring results in earlier groups
 	 */
-	private removeDuplicateResults(): void {
+	private removeDuplicateResults(): codemavi {
 		const settingKeys = new Set<string>();
 		[...this._currentResultGroups.keys()]
 			.sort((a, b) => this._currentResultGroups.get(a)!.order - this._currentResultGroups.get(b)!.order)
@@ -124,8 +124,8 @@ export class SettingsEditorModel extends AbstractSettingsModel implements ISetti
 	private _settingsGroups: ISettingsGroup[] | undefined;
 	protected settingsModel: ITextModel;
 
-	private readonly _onDidChangeGroups: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeGroups: Event<void> = this._onDidChangeGroups.event;
+	private readonly _onDidChangeGroups: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeGroups: Event<codemavi> = this._onDidChangeGroups.event;
 
 	constructor(reference: IReference<ITextEditorModel>, private _configurationTarget: ConfigurationTarget) {
 		super();
@@ -160,7 +160,7 @@ export class SettingsEditorModel extends AbstractSettingsModel implements ISetti
 		return previousParents.length === 0; // Settings is root
 	}
 
-	protected parse(): void {
+	protected parse(): codemavi {
 		this._settingsGroups = parse(this.settingsModel, (property: string, previousParents: string[]): boolean => this.isSettingsProperty(property, previousParents));
 	}
 
@@ -209,8 +209,8 @@ export class SettingsEditorModel extends AbstractSettingsModel implements ISetti
 }
 
 export class Settings2EditorModel extends AbstractSettingsModel implements ISettingsEditorModel {
-	private readonly _onDidChangeGroups: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeGroups: Event<void> = this._onDidChangeGroups.event;
+	private readonly _onDidChangeGroups: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeGroups: Event<codemavi> = this._onDidChangeGroups.event;
 
 	private additionalGroups: ISettingsGroup[] = [];
 	private dirty = false;
@@ -433,7 +433,7 @@ export class WorkspaceConfigurationEditorModel extends SettingsEditorModel {
 		return this._configurationGroups;
 	}
 
-	protected override parse(): void {
+	protected override parse(): codemavi {
 		super.parse();
 		this._configurationGroups = parse(this.settingsModel, (property: string, previousParents: string[]): boolean => previousParents.length === 0);
 	}
@@ -451,8 +451,8 @@ export class DefaultSettings extends Disposable {
 	private _contentWithoutMostCommonlyUsed: string | undefined;
 	private _settingsByName = new Map<string, ISetting>();
 
-	private readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	constructor(
 		private _mostCommonlyUsedSettingsKeys: string[],
@@ -492,13 +492,13 @@ export class DefaultSettings extends Disposable {
 		return this._allSettingsGroups!;
 	}
 
-	private initialize(): void {
+	private initialize(): codemavi {
 		this._allSettingsGroups = this.parse();
 		this._content = this.toContent(this._allSettingsGroups, 0);
 		this._contentWithoutMostCommonlyUsed = this.toContent(this._allSettingsGroups, 1);
 	}
 
-	private reset(): void {
+	private reset(): codemavi {
 		this._content = undefined;
 		this._contentWithoutMostCommonlyUsed = undefined;
 		this._allSettingsGroups = undefined;
@@ -529,7 +529,7 @@ export class DefaultSettings extends Disposable {
 		return groups;
 	}
 
-	private initAllSettingsMap(allSettingsGroups: ISettingsGroup[]): void {
+	private initAllSettingsMap(allSettingsGroups: ISettingsGroup[]): codemavi {
 		this._settingsByName = new Map<string, ISetting>();
 		for (const group of allSettingsGroups) {
 			for (const section of group.sections) {
@@ -788,8 +788,8 @@ export class DefaultSettingsEditorModel extends AbstractSettingsModel implements
 
 	private _model: ITextModel;
 
-	private readonly _onDidChangeGroups: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeGroups: Event<void> = this._onDidChangeGroups.event;
+	private readonly _onDidChangeGroups: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeGroups: Event<codemavi> = this._onDidChangeGroups.event;
 
 	constructor(
 		private _uri: URI,
@@ -983,11 +983,11 @@ class SettingsContentBuilder {
 		this._contentByLines = [];
 	}
 
-	pushLine(...lineText: string[]): void {
+	pushLine(...lineText: string[]): codemavi {
 		this._contentByLines.push(...lineText);
 	}
 
-	pushGroup(settingsGroups: ISettingsGroup, isFirst?: boolean, isLast?: boolean): void {
+	pushGroup(settingsGroups: ISettingsGroup, isFirst?: boolean, isLast?: boolean): codemavi {
 		this._contentByLines.push(isFirst ? '[{' : '{');
 		const lastSetting = this._pushGroup(settingsGroups, '  ');
 
@@ -1027,7 +1027,7 @@ class SettingsContentBuilder {
 		return this._contentByLines.join('\n');
 	}
 
-	private pushSetting(setting: ISetting, indent: string): void {
+	private pushSetting(setting: ISetting, indent: string): codemavi {
 		const settingStart = this.lineCountWithOffset + 1;
 
 		this.pushSettingDescription(setting, indent);
@@ -1047,7 +1047,7 @@ class SettingsContentBuilder {
 		setting.range = { startLineNumber: settingStart, startColumn: 1, endLineNumber: this.lineCountWithOffset, endColumn: this.lastLine.length };
 	}
 
-	private pushSettingDescription(setting: ISetting, indent: string): void {
+	private pushSettingDescription(setting: ISetting, indent: string): codemavi {
 		const fixSettingLink = (line: string) => line.replace(/`#(.*)#`/g, (match, settingName) => `\`${settingName}\``);
 
 		setting.descriptionRanges = [];
@@ -1076,7 +1076,7 @@ class SettingsContentBuilder {
 		}
 	}
 
-	private pushValue(setting: ISetting, preValueConent: string, indent: string): void {
+	private pushValue(setting: ISetting, preValueConent: string, indent: string): codemavi {
 		const valueString = JSON.stringify(setting.value, null, indent);
 		if (valueString && (typeof setting.value === 'object')) {
 			if (setting.overrides && setting.overrides.length) {
@@ -1114,7 +1114,7 @@ class RawSettingsContentBuilder extends SettingsContentBuilder {
 		super(0);
 	}
 
-	override pushGroup(settingsGroups: ISettingsGroup): void {
+	override pushGroup(settingsGroups: ISettingsGroup): codemavi {
 		this._pushGroup(settingsGroups, this.indent);
 	}
 
@@ -1124,7 +1124,7 @@ export class DefaultRawSettingsEditorModel extends Disposable {
 
 	private _content: string | null = null;
 
-	private readonly _onDidContentChanged = this._register(new Emitter<void>());
+	private readonly _onDidContentChanged = this._register(new Emitter<codemavi>());
 	readonly onDidContentChanged = this._onDidContentChanged.event;
 
 	constructor(private defaultSettings: DefaultSettings) {
@@ -1183,7 +1183,7 @@ export class DefaultKeybindingsEditorModel implements IKeybindingsEditorModel<an
 		return null;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		// Not disposable
 	}
 }

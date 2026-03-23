@@ -87,22 +87,22 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	//#region Events
 
-	private readonly _onDidClose = this._register(new Emitter<void>());
+	private readonly _onDidClose = this._register(new Emitter<codemavi>());
 	readonly onDidClose = this._onDidClose.event;
 
-	private readonly _onDidMaximize = this._register(new Emitter<void>());
+	private readonly _onDidMaximize = this._register(new Emitter<codemavi>());
 	readonly onDidMaximize = this._onDidMaximize.event;
 
-	private readonly _onDidUnmaximize = this._register(new Emitter<void>());
+	private readonly _onDidUnmaximize = this._register(new Emitter<codemavi>());
 	readonly onDidUnmaximize = this._onDidUnmaximize.event;
 
 	private readonly _onDidTriggerSystemContextMenu = this._register(new Emitter<{ x: number; y: number }>());
 	readonly onDidTriggerSystemContextMenu = this._onDidTriggerSystemContextMenu.event;
 
-	private readonly _onDidEnterFullScreen = this._register(new Emitter<void>());
+	private readonly _onDidEnterFullScreen = this._register(new Emitter<codemavi>());
 	readonly onDidEnterFullScreen = this._onDidEnterFullScreen.event;
 
-	private readonly _onDidLeaveFullScreen = this._register(new Emitter<void>());
+	private readonly _onDidLeaveFullScreen = this._register(new Emitter<codemavi>());
 	readonly onDidLeaveFullScreen = this._onDidLeaveFullScreen.event;
 
 	//#endregion
@@ -114,7 +114,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	protected _win: electron.BrowserWindow | null = null;
 	get win() { return this._win; }
-	protected setWin(win: electron.BrowserWindow, options?: BrowserWindowConstructorOptions): void {
+	protected setWin(win: electron.BrowserWindow, options?: BrowserWindowConstructorOptions): codemavi {
 		this._win = win;
 
 		// Window Events
@@ -219,7 +219,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 		super();
 	}
 
-	protected applyState(state: IWindowState, hasMultipleDisplays = electron.screen.getAllDisplays().length > 0): void {
+	protected applyState(state: IWindowState, hasMultipleDisplays = electron.screen.getAllDisplays().length > 0): codemavi {
 
 		// TODO@electron (Electron 4 regression): when running on multiple displays where the target display
 		// to open the window has a larger resolution than the primary display, the window will not size
@@ -264,7 +264,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	private representedFilename: string | undefined;
 
-	setRepresentedFilename(filename: string): void {
+	setRepresentedFilename(filename: string): codemavi {
 		if (isMacintosh) {
 			this.win?.setRepresentedFilename(filename);
 		} else {
@@ -282,7 +282,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	private documentEdited: boolean | undefined;
 
-	setDocumentEdited(edited: boolean): void {
+	setDocumentEdited(edited: boolean): codemavi {
 		if (isMacintosh) {
 			this.win?.setDocumentEdited(edited);
 		}
@@ -298,7 +298,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 		return !!this.documentEdited;
 	}
 
-	focus(options?: { force: boolean }): void {
+	focus(options?: { force: boolean }): codemavi {
 		if (isMacintosh && options?.force) {
 			electron.app.focus({ steal: true });
 		}
@@ -319,7 +319,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	private static readonly windowControlHeightStateStorageKey = 'windowControlHeight';
 
-	updateWindowControls(options: { height?: number; backgroundColor?: string; foregroundColor?: string }): void {
+	updateWindowControls(options: { height?: number; backgroundColor?: string; foregroundColor?: string }): codemavi {
 		const win = this.win;
 		if (!win) {
 			return;
@@ -362,11 +362,11 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 	private transientIsNativeFullScreen: boolean | undefined = undefined;
 	private joinNativeFullScreenTransition: DeferredPromise<boolean> | undefined = undefined;
 
-	toggleFullScreen(): void {
+	toggleFullScreen(): codemavi {
 		this.setFullScreen(!this.isFullScreen, false);
 	}
 
-	protected setFullScreen(fullscreen: boolean, fromRestore: boolean): void {
+	protected setFullScreen(fullscreen: boolean, fromRestore: boolean): codemavi {
 
 		// Set fullscreen state
 		if (useNativeFullScreen(this.configurationService)) {
@@ -388,7 +388,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 		return Boolean(isFullScreen || isSimpleFullScreen);
 	}
 
-	private setNativeFullScreen(fullscreen: boolean, fromRestore: boolean): void {
+	private setNativeFullScreen(fullscreen: boolean, fromRestore: boolean): codemavi {
 		const win = this.win;
 		if (win?.isSimpleFullScreen()) {
 			win?.setSimpleFullScreen(false);
@@ -397,7 +397,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 		this.doSetNativeFullScreen(fullscreen, fromRestore);
 	}
 
-	private doSetNativeFullScreen(fullscreen: boolean, fromRestore: boolean): void {
+	private doSetNativeFullScreen(fullscreen: boolean, fromRestore: boolean): codemavi {
 		if (isMacintosh) {
 
 			// macOS: Electron windows report `false` for `isFullScreen()` for as long
@@ -451,7 +451,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 		win?.setFullScreen(fullscreen);
 	}
 
-	private setSimpleFullScreen(fullscreen: boolean): void {
+	private setSimpleFullScreen(fullscreen: boolean): codemavi {
 		const win = this.win;
 		if (win?.isFullScreen()) {
 			this.doSetNativeFullScreen(false, false);
@@ -465,7 +465,7 @@ export abstract class BaseWindow extends Disposable implements IBaseWindow {
 
 	abstract matches(webContents: electron.WebContents): boolean;
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this._win = null!; // Important to dereference the window object to allow for GC
@@ -479,10 +479,10 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 	private readonly _onWillLoad = this._register(new Emitter<ILoadEvent>());
 	readonly onWillLoad = this._onWillLoad.event;
 
-	private readonly _onDidSignalReady = this._register(new Emitter<void>());
+	private readonly _onDidSignalReady = this._register(new Emitter<codemavi>());
 	readonly onDidSignalReady = this._onDidSignalReady.event;
 
-	private readonly _onDidDestroy = this._register(new Emitter<void>());
+	private readonly _onDidDestroy = this._register(new Emitter<codemavi>());
 	readonly onDidDestroy = this._onDidDestroy.event;
 
 	//#endregion
@@ -528,7 +528,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 	private readonly windowState: IWindowState;
 	private currentMenuBarVisibility: MenuBarVisibility | undefined;
 
-	private readonly whenReadyCallbacks: { (window: ICodeWindow): void }[] = [];
+	private readonly whenReadyCallbacks: { (window: ICodeWindow): codemavi }[] = [];
 
 	private readonly touchBarGroups: electron.TouchBarSegmentedControl[] = [];
 
@@ -543,7 +543,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 
 	private readonly jsCallStackMap: Map<string, number>;
 	private readonly jsCallStackEffectiveSampleCount: number;
-	private readonly jsCallStackCollector: Delayer<void>;
+	private readonly jsCallStackCollector: Delayer<codemavi>;
 	private readonly jsCallStackCollectorStopScheduler: RunOnceScheduler;
 
 	constructor(
@@ -613,7 +613,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 
 		this.jsCallStackMap = new Map<string, number>();
 		this.jsCallStackEffectiveSampleCount = Math.round(sampleInterval / samplePeriod);
-		this.jsCallStackCollector = this._register(new Delayer<void>(sampleInterval));
+		this.jsCallStackCollector = this._register(new Delayer<codemavi>(sampleInterval));
 		this.jsCallStackCollectorStopScheduler = this._register(new RunOnceScheduler(() => {
 			this.stopCollectingJScallStacks(); // Stop collecting after 15s max
 		}, samplePeriod));
@@ -632,7 +632,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 
 	private readyState = ReadyState.NONE;
 
-	setReady(): void {
+	setReady(): codemavi {
 		this.logService.trace(`window#load: window reported ready (id: ${this._id})`);
 
 		this.readyState = ReadyState.READY;
@@ -661,8 +661,8 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return this.readyState === ReadyState.READY;
 	}
 
-	get whenClosedOrLoaded(): Promise<void> {
-		return new Promise<void>(resolve => {
+	get whenClosedOrLoaded(): Promise<codemavi> {
+		return new Promise<codemavi>(resolve => {
 
 			function handle() {
 				closeListener.dispose();
@@ -676,7 +676,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		});
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Window error conditions to handle
 		this._register(Event.fromNodeEventEmitter(this._win, 'unresponsive')(() => this.onWindowError(WindowError.UNRESPONSIVE)));
@@ -755,11 +755,11 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return this.marketplaceHeadersPromise;
 	}
 
-	private async onWindowError(error: WindowError.UNRESPONSIVE): Promise<void>;
-	private async onWindowError(error: WindowError.RESPONSIVE): Promise<void>;
-	private async onWindowError(error: WindowError.PROCESS_GONE, details: { reason: string; exitCode: number }): Promise<void>;
-	private async onWindowError(error: WindowError.LOAD, details: { reason: string; exitCode: number }): Promise<void>;
-	private async onWindowError(type: WindowError, details?: { reason?: string; exitCode?: number }): Promise<void> {
+	private async onWindowError(error: WindowError.UNRESPONSIVE): Promise<codemavi>;
+	private async onWindowError(error: WindowError.RESPONSIVE): Promise<codemavi>;
+	private async onWindowError(error: WindowError.PROCESS_GONE, details: { reason: string; exitCode: number }): Promise<codemavi>;
+	private async onWindowError(error: WindowError.LOAD, details: { reason: string; exitCode: number }): Promise<codemavi>;
+	private async onWindowError(type: WindowError, details?: { reason?: string; exitCode?: number }): Promise<codemavi> {
 
 		switch (type) {
 			case WindowError.PROCESS_GONE:
@@ -892,7 +892,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	private async destroyWindow(reopen: boolean, skipRestoreEditors: boolean): Promise<void> {
+	private async destroyWindow(reopen: boolean, skipRestoreEditors: boolean): Promise<codemavi> {
 		const workspace = this._config?.workspace;
 
 		// check to discard editor state first
@@ -948,7 +948,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	private onDidDeleteUntitledWorkspace(workspace: IWorkspaceIdentifier): void {
+	private onDidDeleteUntitledWorkspace(workspace: IWorkspaceIdentifier): codemavi {
 
 		// Make sure to update our workspace config if we detect that it
 		// was deleted
@@ -957,7 +957,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	private onConfigurationUpdated(e?: IConfigurationChangeEvent): void {
+	private onConfigurationUpdated(e?: IConfigurationChangeEvent): codemavi {
 
 		// Menubar
 		if (!e || e.affectsConfiguration('window.menuBarVisibility')) {
@@ -1002,13 +1002,13 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	addTabbedWindow(window: ICodeWindow): void {
+	addTabbedWindow(window: ICodeWindow): codemavi {
 		if (isMacintosh && window.win) {
 			this._win.addTabbedWindow(window.win);
 		}
 	}
 
-	load(configuration: INativeWindowConfiguration, options: ILoadOptions = Object.create(null)): void {
+	load(configuration: INativeWindowConfiguration, options: ILoadOptions = Object.create(null)): codemavi {
 		this.logService.trace(`window#load: attempt to load window (id: ${this._id})`);
 
 		// Clear Document Edited if needed
@@ -1071,7 +1071,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		this._onWillLoad.fire({ workspace: configuration.workspace, reason: options.isReload ? LoadReason.RELOAD : wasLoaded ? LoadReason.LOAD : LoadReason.INITIAL });
 	}
 
-	private updateConfiguration(configuration: INativeWindowConfiguration, options: ILoadOptions): void {
+	private updateConfiguration(configuration: INativeWindowConfiguration, options: ILoadOptions): codemavi {
 
 		// If this window was loaded before from the command line
 		// (as indicated by VSCODE_CLI environment), make sure to
@@ -1128,7 +1128,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		this.configObjectUrl.update(configuration);
 	}
 
-	async reload(cli?: NativeParsedArgs): Promise<void> {
+	async reload(cli?: NativeParsedArgs): Promise<codemavi> {
 
 		// Copy our current config for reuse
 		const configuration = Object.assign({}, this._config);
@@ -1301,7 +1301,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return { x, y, width, height };
 	}
 
-	protected override setFullScreen(fullscreen: boolean, fromRestore: boolean): void {
+	protected override setFullScreen(fullscreen: boolean, fromRestore: boolean): codemavi {
 		super.setFullScreen(fullscreen, fromRestore);
 
 		// Events
@@ -1322,7 +1322,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return menuBarVisibility;
 	}
 
-	private setMenuBarVisibility(visibility: MenuBarVisibility, notify: boolean = true): void {
+	private setMenuBarVisibility(visibility: MenuBarVisibility, notify: boolean = true): codemavi {
 		if (isMacintosh) {
 			return; // ignore for macOS platform
 		}
@@ -1347,7 +1347,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	private doSetMenuBarVisibility(visibility: MenuBarVisibility): void {
+	private doSetMenuBarVisibility(visibility: MenuBarVisibility): codemavi {
 		const isFullscreen = this.isFullScreen;
 
 		switch (visibility) {
@@ -1373,7 +1373,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	notifyZoomLevel(zoomLevel: number | undefined): void {
+	notifyZoomLevel(zoomLevel: number | undefined): codemavi {
 		this.customZoomLevel = zoomLevel;
 	}
 
@@ -1386,11 +1386,11 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return windowSettings?.zoomLevel;
 	}
 
-	close(): void {
+	close(): codemavi {
 		this._win?.close();
 	}
 
-	sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): void {
+	sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): codemavi {
 		if (this.isReady) {
 			this.send(channel, ...args);
 		} else {
@@ -1402,7 +1402,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	send(channel: string, ...args: any[]): void {
+	send(channel: string, ...args: any[]): codemavi {
 		if (this._win) {
 			if (this._win.isDestroyed() || this._win.webContents.isDestroyed()) {
 				this.logService.warn(`Sending IPC message to channel '${channel}' for window that is destroyed`);
@@ -1417,7 +1417,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	updateTouchBar(groups: ISerializableCommandAction[][]): void {
+	updateTouchBar(groups: ISerializableCommandAction[][]): codemavi {
 		if (!isMacintosh) {
 			return; // only supported on macOS
 		}
@@ -1430,12 +1430,12 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		});
 	}
 
-	private createTouchBar(): void {
+	private createTouchBar(): codemavi {
 		if (!isMacintosh) {
 			return; // only supported on macOS
 		}
 
-		// To avoid flickering, we try to reuse the touch bar group
+		// To acodemavi flickering, we try to reuse the touch bar group
 		// as much as possible by creating a large number of groups
 		// for reusing later.
 		for (let i = 0; i < 10; i++) {
@@ -1491,7 +1491,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return segments;
 	}
 
-	private async startCollectingJScallStacks(): Promise<void> {
+	private async startCollectingJScallStacks(): Promise<codemavi> {
 		if (!this.jsCallStackCollector.isTriggered()) {
 			const stack = await this._win.webContents.mainFrame.collectJavaScriptCallStack();
 
@@ -1505,7 +1505,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		}
 	}
 
-	private stopCollectingJScallStacks(): void {
+	private stopCollectingJScallStacks(): codemavi {
 		this.jsCallStackCollectorStopScheduler.cancel();
 		this.jsCallStackCollector.cancel();
 
@@ -1539,7 +1539,7 @@ export class CodeWindow extends BaseWindow implements ICodeWindow {
 		return this._win?.webContents.id === webContents.id;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		// Deregister the loggers for this window
@@ -1551,7 +1551,7 @@ class UnresponsiveError extends Error {
 
 	constructor(sample: string, windowId: number, pid: number = 0) {
 		// Since the stacks are available via the sample
-		// we can avoid collecting them when constructing the error.
+		// we can acodemavi collecting them when constructing the error.
 		const stackTraceLimit = Error.stackTraceLimit;
 		Error.stackTraceLimit = 0;
 		super(`UnresponsiveSampleError: from window with ID ${windowId} belonging to process with pid ${pid}`);

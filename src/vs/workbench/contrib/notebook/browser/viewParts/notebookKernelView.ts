@@ -135,7 +135,7 @@ export class NotebooKernelActionViewItem extends ActionViewItem {
 
 	constructor(
 		actualAction: IAction,
-		private readonly _editor: { onDidChangeModel: Event<void>; textModel: NotebookTextModel | undefined; scopedContextKeyService?: IContextKeyService } | INotebookEditor,
+		private readonly _editor: { onDidChangeModel: Event<codemavi>; textModel: NotebookTextModel | undefined; scopedContextKeyService?: IContextKeyService } | INotebookEditor,
 		options: IActionViewItemOptions,
 		@INotebookKernelService private readonly _notebookKernelService: INotebookKernelService,
 		@INotebookKernelHistoryService private readonly _notebookKernelHistoryService: INotebookKernelHistoryService,
@@ -156,7 +156,7 @@ export class NotebooKernelActionViewItem extends ActionViewItem {
 		this._register(_notebookKernelService.onDidChangeKernelDetectionTasks(this._update, this));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this._update();
 		super.render(container);
 		container.classList.add('kernel-action-view-item');
@@ -172,7 +172,7 @@ export class NotebooKernelActionViewItem extends ActionViewItem {
 		}
 	}
 
-	protected _update(): void {
+	protected _update(): codemavi {
 		const notebook = this._editor.textModel;
 
 		if (!notebook) {
@@ -185,7 +185,7 @@ export class NotebooKernelActionViewItem extends ActionViewItem {
 		this.updateClass();
 	}
 
-	private _resetAction(): void {
+	private _resetAction(): codemavi {
 		this._action.enabled = false;
 		this._action.label = '';
 		this._action.class = '';

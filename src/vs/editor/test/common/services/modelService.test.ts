@@ -401,7 +401,7 @@ suite('ModelService', () => {
 	});
 });
 
-function assertComputeEdits(lines1: string[], lines2: string[]): void {
+function assertComputeEdits(lines1: string[], lines2: string[]): codemavi {
 	const model = createTextModel(lines1.join('\n'));
 	const { disposable, textBuffer } = createTextBuffer(lines2.join('\n'), DefaultEndOfLine.LF);
 

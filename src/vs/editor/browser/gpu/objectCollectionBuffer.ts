@@ -46,12 +46,12 @@ export interface IObjectCollectionBuffer<T extends ObjectCollectionBufferPropert
 	/**
 	 * Fires when the buffer is modified.
 	 */
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	/**
 	 * Fires when the buffer is recreated.
 	 */
-	readonly onDidChangeBuffer: Event<void>;
+	readonly onDidChangeBuffer: Event<codemavi>;
 
 	/**
 	 * Creates an entry in the collection. This will return a managed object that can be modified
@@ -66,9 +66,9 @@ export interface IObjectCollectionBuffer<T extends ObjectCollectionBufferPropert
  * their values will be updated automatically in the buffer.
  */
 export interface IObjectCollectionBufferEntry<T extends ObjectCollectionBufferPropertySpec[]> extends IDisposable {
-	set(propertyName: T[number]['name'], value: number): void;
+	set(propertyName: T[number]['name'], value: number): codemavi;
 	get(propertyName: T[number]['name']): number;
-	setRaw(data: ArrayLike<number>): void;
+	setRaw(data: ArrayLike<number>): codemavi;
 }
 
 export function createObjectCollectionBuffer<T extends ObjectCollectionBufferPropertySpec[]>(
@@ -99,9 +99,9 @@ class ObjectCollectionBuffer<T extends ObjectCollectionBufferPropertySpec[]> ext
 	private readonly _entrySize: number;
 	private readonly _entries: LinkedList<ObjectCollectionBufferEntry<T>> = new LinkedList();
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
-	private readonly _onDidChangeBuffer = this._register(new Emitter<void>());
+	private readonly _onDidChangeBuffer = this._register(new Emitter<codemavi>());
 	readonly onDidChangeBuffer = this._onDidChangeBuffer.event;
 
 	constructor(
@@ -163,9 +163,9 @@ class ObjectCollectionBuffer<T extends ObjectCollectionBufferPropertySpec[]> ext
 
 class ObjectCollectionBufferEntry<T extends ObjectCollectionBufferPropertySpec[]> extends Disposable implements IObjectCollectionBufferEntry<T> {
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
-	private readonly _onWillDispose = this._register(new Emitter<void>());
+	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	constructor(
@@ -187,7 +187,7 @@ class ObjectCollectionBufferEntry<T extends ObjectCollectionBufferPropertySpec[]
 		super.dispose();
 	}
 
-	set(propertyName: T[number]['name'], value: number): void {
+	set(propertyName: T[number]['name'], value: number): codemavi {
 		const i = this.i * this._propertySpecsMap.size + this._propertySpecsMap.get(propertyName)!.offset;
 		this._view[this._dirtyTracker.flag(i)] = value;
 		this._onDidChange.fire();
@@ -197,7 +197,7 @@ class ObjectCollectionBufferEntry<T extends ObjectCollectionBufferPropertySpec[]
 		return this._view[this.i * this._propertySpecsMap.size + this._propertySpecsMap.get(propertyName)!.offset];
 	}
 
-	setRaw(data: ArrayLike<number>): void {
+	setRaw(data: ArrayLike<number>): codemavi {
 		if (data.length !== this._propertySpecsMap.size) {
 			throw new Error(`Data length ${data.length} does not match the number of properties in the collection (${this._propertySpecsMap.size})`);
 		}

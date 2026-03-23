@@ -96,7 +96,7 @@ export class InlineChatZoneWidget extends ZoneWidget {
 		});
 		this._disposables.add(this.widget);
 
-		let revealFn: (() => void) | undefined;
+		let revealFn: (() => codemavi) | undefined;
 		this._disposables.add(this.widget.chatWidget.onWillMaybeChangeHeight(() => {
 			if (this.position) {
 				revealFn = this._createZoneAndScrollRestoreFn(this.position);
@@ -144,14 +144,14 @@ export class InlineChatZoneWidget extends ZoneWidget {
 		updateCursorIsAboveContextKey();
 	}
 
-	protected override _fillContainer(container: HTMLElement): void {
+	protected override _fillContainer(container: HTMLElement): codemavi {
 
 		container.style.setProperty('--vscode-inlineChat-background', 'var(--vscode-editor-background)');
 
 		container.appendChild(this.widget.domNode);
 	}
 
-	protected override _doLayout(heightInPixel: number): void {
+	protected override _doLayout(heightInPixel: number): codemavi {
 
 		this._updatePadding();
 
@@ -185,13 +185,13 @@ export class InlineChatZoneWidget extends ZoneWidget {
 		};
 	}
 
-	protected override _onWidth(_widthInPixel: number): void {
+	protected override _onWidth(_widthInPixel: number): codemavi {
 		if (this._dimension) {
 			this._doLayout(this._dimension.height);
 		}
 	}
 
-	override show(position: Position): void {
+	override show(position: Position): codemavi {
 		assertType(this.container);
 
 		this._updatePadding();
@@ -221,13 +221,13 @@ export class InlineChatZoneWidget extends ZoneWidget {
 		this.updatePositionAndHeight(position);
 	}
 
-	override updatePositionAndHeight(position: Position): void {
+	override updatePositionAndHeight(position: Position): codemavi {
 		const revealZone = this._createZoneAndScrollRestoreFn(position);
 		super.updatePositionAndHeight(position, !this._usesResizeHeight ? this._computeHeight().linesValue : undefined);
 		revealZone();
 	}
 
-	private _createZoneAndScrollRestoreFn(position: Position): () => void {
+	private _createZoneAndScrollRestoreFn(position: Position): () => codemavi {
 
 		const scrollState = StableEditorBottomScrollState.capture(this.editor);
 
@@ -274,11 +274,11 @@ export class InlineChatZoneWidget extends ZoneWidget {
 		});
 	}
 
-	protected override revealRange(range: Range, isLastLine: boolean): void {
+	protected override revealRange(range: Range, isLastLine: boolean): codemavi {
 		// noop
 	}
 
-	override hide(): void {
+	override hide(): codemavi {
 		const scrollState = StableEditorBottomScrollState.capture(this.editor);
 		this._scrollUp.disable();
 		this._ctxCursorPosition.reset();
@@ -299,15 +299,15 @@ class ScrollUpState {
 
 	constructor(private readonly _editor: ICodeEditor) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._listener.dispose();
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._didScrollUpOrDown = undefined;
 	}
 
-	enable(): void {
+	enable(): codemavi {
 		this._didScrollUpOrDown = undefined;
 		this._listener.value = this._editor.onDidScrollChange(e => {
 			if (!e.scrollTopChanged || this._ignoreEvents) {
@@ -318,12 +318,12 @@ class ScrollUpState {
 		});
 	}
 
-	disable(): void {
+	disable(): codemavi {
 		this._listener.clear();
 		this._didScrollUpOrDown = undefined;
 	}
 
-	runIgnored(callback: () => void): () => void {
+	runIgnored(callback: () => codemavi): () => codemavi {
 		return () => {
 			this._ignoreEvents = true;
 			try {

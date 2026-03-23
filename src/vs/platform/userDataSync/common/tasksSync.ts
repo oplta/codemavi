@@ -183,7 +183,7 @@ export class TasksSynchroniser extends AbstractFileSynchroniser implements IUser
 		throw new Error(`Invalid Resource: ${resource.toString()}`);
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ITasksResourcePreview, IAcceptResult][], force: boolean): Promise<void> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ITasksResourcePreview, IAcceptResult][], force: boolean): Promise<codemavi> {
 		const { fileContent } = resourcePreviews[0][0];
 		const { content, localChange, remoteChange } = resourcePreviews[0][1];
 
@@ -260,7 +260,7 @@ export class TasksInitializer extends AbstractInitializer {
 		super(SyncResource.Tasks, userDataProfilesService, environmentService, logService, fileService, storageService, uriIdentityService);
 	}
 
-	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
+	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
 		const tasksContent = remoteUserData.syncData ? getTasksContentFromSyncContent(remoteUserData.syncData.content, this.logService) : null;
 		if (!tasksContent) {
 			this.logService.info('Skipping initializing tasks because remote tasks does not exist.');

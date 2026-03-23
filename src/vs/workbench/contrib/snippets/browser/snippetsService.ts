@@ -152,7 +152,7 @@ class SnippetEnablement {
 		return this._ignored.has(id);
 	}
 
-	updateIgnored(id: string, value: boolean): void {
+	updateIgnored(id: string, value: boolean): codemavi {
 		let changed = false;
 		if (this._ignored.has(id) && !value) {
 			this._ignored.delete(id);
@@ -192,7 +192,7 @@ class SnippetUsageTimestamps {
 		return this._usages.get(id);
 	}
 
-	updateUsageTimestamp(id: string): void {
+	updateUsageTimestamp(id: string): codemavi {
 		// map uses insertion order, we want most recent at the end
 		this._usages.delete(id);
 		this._usages.set(id, Date.now());
@@ -238,7 +238,7 @@ export class SnippetsService implements ISnippetsService {
 		this._usageTimestamps = instantiationService.createInstance(SnippetUsageTimestamps);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
@@ -246,11 +246,11 @@ export class SnippetsService implements ISnippetsService {
 		return !this._enablement.isIgnored(snippet.snippetIdentifier);
 	}
 
-	updateEnablement(snippet: Snippet, enabled: boolean): void {
+	updateEnablement(snippet: Snippet, enabled: boolean): codemavi {
 		this._enablement.updateIgnored(snippet.snippetIdentifier, !enabled);
 	}
 
-	updateUsageTimestamp(snippet: Snippet): void {
+	updateUsageTimestamp(snippet: Snippet): codemavi {
 		this._usageTimestamps.updateUsageTimestamp(snippet.snippetIdentifier);
 	}
 
@@ -360,7 +360,7 @@ export class SnippetsService implements ISnippetsService {
 
 	// --- loading, watching
 
-	private _initExtensionSnippets(): void {
+	private _initExtensionSnippets(): codemavi {
 		snippetExt.point.setHandler(extensions => {
 
 			for (const [key, value] of this._files) {
@@ -413,7 +413,7 @@ export class SnippetsService implements ISnippetsService {
 		});
 	}
 
-	private _initWorkspaceSnippets(): void {
+	private _initWorkspaceSnippets(): codemavi {
 		// workspace stuff
 		const disposables = new DisposableStore();
 		const updateWorkspaceSnippets = () => {

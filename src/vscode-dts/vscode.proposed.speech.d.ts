@@ -44,7 +44,7 @@ declare module 'vscode' {
 	export interface TextToSpeechSession {
 		readonly onDidChange: Event<TextToSpeechEvent>;
 
-		synthesize(text: string): void;
+		synthesize(text: string): codemavi;
 	}
 
 	export enum KeywordRecognitionStatus {

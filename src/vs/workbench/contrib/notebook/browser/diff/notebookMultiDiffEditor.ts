@@ -84,7 +84,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 
 		return this._fontInfo;
 	}
-	override layout(dimension: DOM.Dimension, position?: DOM.IDomPosition): void {
+	override layout(dimension: DOM.Dimension, position?: DOM.IDomPosition): codemavi {
 		this._multiDiffEditorWidget!.layout(dimension);
 	}
 
@@ -93,7 +93,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 		return FontMeasurements.readFontInfo(this.window, BareFontInfo.createFromRawSettings(editorOptions, PixelRatio.getInstance(this.window).value));
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this._multiDiffEditorWidget = this._register(this.instantiationService.createInstance(
 			MultiDiffEditorWidget,
 			parent,
@@ -104,7 +104,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 			this._onDidChangeControl.fire();
 		}));
 	}
-	override async setInput(input: NotebookMultiDiffEditorInput, options: IMultiDiffEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: NotebookMultiDiffEditorInput, options: IMultiDiffEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		super.setInput(input, options, context, token);
 		const model = await input.resolve();
 		if (this._model !== model) {
@@ -161,7 +161,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 	_generateFontFamily(): string {
 		return this.fontInfo.fontFamily ?? `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`;
 	}
-	override setOptions(options: IMultiDiffEditorOptions | undefined): void {
+	override setOptions(options: IMultiDiffEditorOptions | undefined): codemavi {
 		super.setOptions(options);
 	}
 
@@ -169,7 +169,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 		return this._multiDiffEditorWidget!.getActiveControl();
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		this._multiDiffEditorWidget?.getActiveControl()?.focus();
@@ -179,7 +179,7 @@ export class NotebookMultiTextDiffEditor extends EditorPane {
 		return this._multiDiffEditorWidget?.getActiveControl()?.hasTextFocus() || super.hasFocus();
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 		super.clearInput();
 		this._multiDiffEditorWidget!.setViewModel(undefined);
 		this.modelSpecificResources.clear();

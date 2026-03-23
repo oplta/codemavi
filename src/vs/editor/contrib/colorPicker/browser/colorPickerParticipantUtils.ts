@@ -57,7 +57,7 @@ export function updateEditorModel(editor: IActiveCodeEditor, range: Range, model
 	return editor.getModel()._getTrackedRange(trackedRange) ?? replaceRange;
 }
 
-export async function updateColorPresentations(editorModel: ITextModel, colorPickerModel: ColorPickerModel, color: Color, range: Range, colorHover: BaseColor): Promise<void> {
+export async function updateColorPresentations(editorModel: ITextModel, colorPickerModel: ColorPickerModel, color: Color, range: Range, colorHover: BaseColor): Promise<codemavi> {
 	const colorPresentations = await getColorPresentations(editorModel, {
 		range: range,
 		color: {

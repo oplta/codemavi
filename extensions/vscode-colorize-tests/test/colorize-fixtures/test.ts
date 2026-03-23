@@ -49,7 +49,7 @@ module Conway {
 			});
 		}
 
-		public circleOfLife() : void {
+		public circleOfLife() : codemavi {
 			this.world = this.travelWorld( (cell: Cell) => {
 				cell = this.world[cell.row][cell.col];
 				this.draw(cell);

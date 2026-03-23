@@ -64,7 +64,7 @@ export class DebugStorage extends Disposable {
 		return this.storageService.get(DEBUG_UX_STATE_KEY, StorageScope.WORKSPACE, 'default') as 'simple' | 'default';
 	}
 
-	storeDebugUxState(value: 'simple' | 'default'): void {
+	storeDebugUxState(value: 'simple' | 'default'): codemavi {
 		this.storageService.store(DEBUG_UX_STATE_KEY, value, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
@@ -130,11 +130,11 @@ export class DebugStorage extends Disposable {
 		return mapValues(obj, (value): IChosenEnvironment => typeof value === 'string' ? { type: value } : value);
 	}
 
-	storeChosenEnvironments(environments: Record<string, IChosenEnvironment>): void {
+	storeChosenEnvironments(environments: Record<string, IChosenEnvironment>): codemavi {
 		this.storageService.store(DEBUG_CHOSEN_ENVIRONMENTS_KEY, JSON.stringify(environments), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	storeWatchExpressions(watchExpressions: (IExpression & IEvaluate)[]): void {
+	storeWatchExpressions(watchExpressions: (IExpression & IEvaluate)[]): codemavi {
 		if (watchExpressions.length) {
 			this.storageService.store(DEBUG_WATCH_EXPRESSIONS_KEY, JSON.stringify(watchExpressions.map(we => ({ name: we.name, id: we.getId() }))), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 		} else {
@@ -142,7 +142,7 @@ export class DebugStorage extends Disposable {
 		}
 	}
 
-	storeBreakpoints(debugModel: IDebugModel): void {
+	storeBreakpoints(debugModel: IDebugModel): codemavi {
 		const breakpoints = debugModel.getBreakpoints();
 		if (breakpoints.length) {
 			this.storageService.store(DEBUG_BREAKPOINTS_KEY, JSON.stringify(breakpoints), StorageScope.WORKSPACE, StorageTarget.MACHINE);

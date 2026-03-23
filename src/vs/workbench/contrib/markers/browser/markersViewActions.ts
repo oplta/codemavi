@@ -115,8 +115,8 @@ export class QuickFixAction extends Action {
 	private static readonly CLASS: string = 'markers-panel-action-quickfix ' + ThemeIcon.asClassName(Codicon.lightBulb);
 	private static readonly AUTO_FIX_CLASS: string = QuickFixAction.CLASS + ' autofixable';
 
-	private readonly _onShowQuickFixes = this._register(new Emitter<void>());
-	readonly onShowQuickFixes: Event<void> = this._onShowQuickFixes.event;
+	private readonly _onShowQuickFixes = this._register(new Emitter<codemavi>());
+	readonly onShowQuickFixes: Event<codemavi> = this._onShowQuickFixes.event;
 
 	private _quickFixes: IAction[] = [];
 	get quickFixes(): IAction[] {
@@ -137,7 +137,7 @@ export class QuickFixAction extends Action {
 		super(QuickFixAction.ID, Messages.MARKERS_PANEL_ACTION_TOOLTIP_QUICKFIX, QuickFixAction.CLASS, false);
 	}
 
-	override run(): Promise<void> {
+	override run(): Promise<codemavi> {
 		this._onShowQuickFixes.fire();
 		return Promise.resolve();
 	}
@@ -153,12 +153,12 @@ export class QuickFixActionViewItem extends ActionViewItem {
 		super(null, action, { ...options, icon: true, label: false });
 	}
 
-	public override onClick(event: DOM.EventLike): void {
+	public override onClick(event: DOM.EventLike): codemavi {
 		DOM.EventHelper.stop(event, true);
 		this.showQuickFixes();
 	}
 
-	public showQuickFixes(): void {
+	public showQuickFixes(): codemavi {
 		if (!this.element) {
 			return;
 		}

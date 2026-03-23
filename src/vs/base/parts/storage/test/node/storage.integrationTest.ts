@@ -141,7 +141,7 @@ flakySuite('Storage Library', function () {
 				private readonly _onDidChangeItemsExternal = new Emitter<IStorageItemsChangeEvent>();
 				override get onDidChangeItemsExternal(): Event<IStorageItemsChangeEvent> { return this._onDidChangeItemsExternal.event; }
 
-				fireDidChangeItemsExternal(event: IStorageItemsChangeEvent): void {
+				fireDidChangeItemsExternal(event: IStorageItemsChangeEvent): codemavi {
 					this._onDidChangeItemsExternal.fire(event);
 				}
 			}
@@ -361,7 +361,7 @@ flakySuite('SQLite Storage Library', function () {
 		return Promises.rm(testdir);
 	});
 
-	async function testDBBasics(path: string, logError?: (error: Error | string) => void) {
+	async function testDBBasics(path: string, logError?: (error: Error | string) => codemavi) {
 		let options!: ISQLiteStorageDatabaseOptions;
 		if (logError) {
 			options = {

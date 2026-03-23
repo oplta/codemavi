@@ -20,7 +20,7 @@ export class ScrollSynchronizer extends Disposable {
 
 	private readonly reentrancyBarrier = new ReentrancyBarrier();
 
-	public readonly updateScrolling: () => void;
+	public readonly updateScrolling: () => codemavi;
 
 	private get shouldAlignResult() { return this.layout.get().kind === 'columns'; }
 	private get shouldAlignBase() { return this.layout.get().kind === 'mixed' && !this.layout.get().showBaseAtTop; }

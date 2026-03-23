@@ -60,7 +60,7 @@ export abstract class Part extends Component implements ISerializableView {
 		this._register(layoutService.registerPart(this));
 	}
 
-	protected override onThemeChange(theme: IColorTheme): void {
+	protected override onThemeChange(theme: IColorTheme): codemavi {
 
 		// only call if our create() method has been called
 		if (this.parent) {
@@ -74,7 +74,7 @@ export abstract class Part extends Component implements ISerializableView {
 	 *
 	 * Called to create title and content area of the part.
 	 */
-	create(parent: HTMLElement, options?: object): void {
+	create(parent: HTMLElement, options?: object): codemavi {
 		this.parent = parent;
 		this.titleArea = this.createTitleArea(parent, options);
 		this.contentArea = this.createContentArea(parent, options);
@@ -122,7 +122,7 @@ export abstract class Part extends Component implements ISerializableView {
 	/**
 	 * Sets the header area
 	 */
-	protected setHeaderArea(headerContainer: HTMLElement): void {
+	protected setHeaderArea(headerContainer: HTMLElement): codemavi {
 		if (this.headerArea) {
 			throw new Error('Header already exists');
 		}
@@ -143,7 +143,7 @@ export abstract class Part extends Component implements ISerializableView {
 	/**
 	 * Sets the footer area
 	 */
-	protected setFooterArea(footerContainer: HTMLElement): void {
+	protected setFooterArea(footerContainer: HTMLElement): codemavi {
 		if (this.footerArea) {
 			throw new Error('Footer already exists');
 		}
@@ -164,7 +164,7 @@ export abstract class Part extends Component implements ISerializableView {
 	/**
 	 * removes the header area
 	 */
-	protected removeHeaderArea(): void {
+	protected removeHeaderArea(): codemavi {
 		if (this.headerArea) {
 			this.headerArea.remove();
 			this.headerArea = undefined;
@@ -176,7 +176,7 @@ export abstract class Part extends Component implements ISerializableView {
 	/**
 	 * removes the footer area
 	 */
-	protected removeFooterArea(): void {
+	protected removeFooterArea(): codemavi {
 		if (this.footerArea) {
 			this.footerArea.remove();
 			this.footerArea = undefined;
@@ -211,7 +211,7 @@ export abstract class Part extends Component implements ISerializableView {
 	abstract minimumHeight: number;
 	abstract maximumHeight: number;
 
-	layout(width: number, height: number, top: number, left: number): void {
+	layout(width: number, height: number, top: number, left: number): codemavi {
 		this._dimension = new Dimension(width, height);
 		this._contentPosition = { top, left };
 	}
@@ -278,11 +278,11 @@ class PartLayout {
 		return { headerSize, titleSize, contentSize, footerSize };
 	}
 
-	setFooterVisibility(visible: boolean): void {
+	setFooterVisibility(visible: boolean): codemavi {
 		this.footerVisible = visible;
 	}
 
-	setHeaderVisibility(visible: boolean): void {
+	setHeaderVisibility(visible: boolean): codemavi {
 		this.headerVisible = visible;
 	}
 }
@@ -304,7 +304,7 @@ export abstract class MultiWindowParts<T extends IMultiWindowPart> extends Compo
 		return toDisposable(() => this.unregisterPart(part));
 	}
 
-	protected unregisterPart(part: T): void {
+	protected unregisterPart(part: T): codemavi {
 		this._parts.delete(part);
 	}
 

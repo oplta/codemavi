@@ -64,7 +64,7 @@ suite('SuggestController', function () {
 				}
 			}],
 			[ISuggestMemoryService, new class extends mock<ISuggestMemoryService>() {
-				override memorize(): void { }
+				override memorize(): codemavi { }
 				override select(): number { return 0; }
 			}],
 			[IMenuService, new class extends mock<IMenuService>() {

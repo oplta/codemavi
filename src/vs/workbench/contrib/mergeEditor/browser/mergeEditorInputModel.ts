@@ -47,12 +47,12 @@ export interface IMergeEditorInputModel extends IDisposable {
 	readonly model: MergeEditorModel;
 	readonly isDirty: IObservable<boolean>;
 
-	save(options?: ITextFileSaveOptions): Promise<void>;
+	save(options?: ITextFileSaveOptions): Promise<codemavi>;
 
 	/**
 	 * If save resets the dirty state, revert must do so too.
 	*/
-	revert(options?: IRevertOptions): Promise<void>;
+	revert(options?: IRevertOptions): Promise<codemavi>;
 
 	shouldConfirmClose(): boolean;
 
@@ -61,7 +61,7 @@ export interface IMergeEditorInputModel extends IDisposable {
 	/**
 	 * Marks the merge as done. The merge editor must be closed afterwards.
 	*/
-	accept(): Promise<void>;
+	accept(): Promise<codemavi>;
 }
 
 /* ================ Temp File ================ */
@@ -150,12 +150,12 @@ class TempFileMergeEditorInputModel extends EditorModel implements IMergeEditorI
 		super();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.disposable.dispose();
 		super.dispose();
 	}
 
-	async accept(): Promise<void> {
+	async accept(): Promise<codemavi> {
 		const value = await this.model.resultTextModel.getValue();
 		this.result.textEditorModel.setValue(value);
 		this.savedAltVersionId.set(this.model.resultTextModel.getAlternativeVersionId(), undefined);
@@ -163,7 +163,7 @@ class TempFileMergeEditorInputModel extends EditorModel implements IMergeEditorI
 		this.finished = true;
 	}
 
-	private async _discard(): Promise<void> {
+	private async _discard(): Promise<codemavi> {
 		await this.textFileService.revert(this.model.resultTextModel.uri);
 		this.savedAltVersionId.set(this.model.resultTextModel.getAlternativeVersionId(), undefined);
 		this.finished = true;
@@ -234,7 +234,7 @@ class TempFileMergeEditorInputModel extends EditorModel implements IMergeEditorI
 		return choice;
 	}
 
-	public async save(options?: ITextFileSaveOptions): Promise<void> {
+	public async save(options?: ITextFileSaveOptions): Promise<codemavi> {
 		if (this.finished) {
 			return;
 		}
@@ -262,7 +262,7 @@ class TempFileMergeEditorInputModel extends EditorModel implements IMergeEditorI
 		})();
 	}
 
-	public async revert(options?: IRevertOptions): Promise<void> {
+	public async revert(options?: IRevertOptions): Promise<codemavi> {
 		// no op
 	}
 }
@@ -378,14 +378,14 @@ class WorkspaceMergeEditorInputModel extends EditorModel implements IMergeEditor
 		super();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.disposableStore.dispose();
 		super.dispose();
 
 		this.reportClose(false);
 	}
 
-	private reportClose(accepted: boolean): void {
+	private reportClose(accepted: boolean): codemavi {
 		if (!this.reported) {
 			const remainingConflictCount = this.model.unhandledConflictsCount.get();
 			const durationOpenedMs = new Date().getTime() - this.dateTimeOpened.getTime();
@@ -417,7 +417,7 @@ class WorkspaceMergeEditorInputModel extends EditorModel implements IMergeEditor
 		}
 	}
 
-	public async accept(): Promise<void> {
+	public async accept(): Promise<codemavi> {
 		this.reportClose(true);
 		await this.resultTextFileModel.save();
 	}
@@ -426,14 +426,14 @@ class WorkspaceMergeEditorInputModel extends EditorModel implements IMergeEditor
 		return this.resultTextFileModel.resource;
 	}
 
-	async save(options?: ITextFileSaveOptions): Promise<void> {
+	async save(options?: ITextFileSaveOptions): Promise<codemavi> {
 		await this.resultTextFileModel.save(options);
 	}
 
 	/**
 	 * If save resets the dirty state, revert must do so too.
 	*/
-	async revert(options?: IRevertOptions): Promise<void> {
+	async revert(options?: IRevertOptions): Promise<codemavi> {
 		await this.resultTextFileModel.revert(options);
 	}
 

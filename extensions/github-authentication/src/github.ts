@@ -33,7 +33,7 @@ export enum AuthProviderType {
 
 export class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements vscode.UriHandler {
 	private readonly _pendingNonces = new Map<string, string[]>();
-	private readonly _codeExchangePromises = new Map<string, { promise: Promise<string>; cancel: vscode.EventEmitter<void> }>();
+	private readonly _codeExchangePromises = new Map<string, { promise: Promise<string>; cancel: vscode.EventEmitter<codemavi> }>();
 
 	public handleUri(uri: vscode.Uri) {
 		this.fire(uri);
@@ -53,7 +53,7 @@ export class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements 
 			return await Promise.race([
 				codeExchangePromise.promise,
 				new Promise<string>((_, reject) => setTimeout(() => reject(TIMED_OUT_ERROR), 300_000)), // 5min timeout
-				promiseFromEvent<void, string>(token.onCancellationRequested, (_, __, reject) => { reject(USER_CANCELLATION_ERROR); }).promise
+				promiseFromEvent<codemavi, string>(token.onCancellationRequested, (_, __, reject) => { reject(USER_CANCELLATION_ERROR); }).promise
 			]);
 		} finally {
 			this._pendingNonces.delete(scopes);
@@ -166,7 +166,7 @@ export class GitHubAuthenticationProvider implements vscode.AuthenticationProvid
 		return finalSessions;
 	}
 
-	private async afterSessionLoad(session: vscode.AuthenticationSession): Promise<void> {
+	private async afterSessionLoad(session: vscode.AuthenticationSession): Promise<codemavi> {
 		// We only want to fire a telemetry if we haven't seen this account yet in this session.
 		if (!this._accountsSeen.has(session.account.id)) {
 			this._accountsSeen.add(session.account.id);
@@ -289,7 +289,7 @@ export class GitHubAuthenticationProvider implements vscode.AuthenticationProvid
 		return verifiedSessions;
 	}
 
-	private async storeSessions(sessions: vscode.AuthenticationSession[]): Promise<void> {
+	private async storeSessions(sessions: vscode.AuthenticationSession[]): Promise<codemavi> {
 		this._logger.info(`Storing ${sessions.length} sessions...`);
 		this._sessionsPromise = Promise.resolve(sessions);
 		await this._keychain.setToken(JSON.stringify(sessions));

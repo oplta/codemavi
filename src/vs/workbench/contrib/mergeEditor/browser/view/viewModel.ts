@@ -181,7 +181,7 @@ export class MergeEditorViewModel extends Disposable {
 		}
 	);
 
-	public setActiveModifiedBaseRange(range: ModifiedBaseRange | undefined, tx: ITransaction): void {
+	public setActiveModifiedBaseRange(range: ModifiedBaseRange | undefined, tx: ITransaction): codemavi {
 		this.manuallySetActiveModifiedBaseRange.set({ range, counter: this.counter++ }, tx);
 	}
 
@@ -190,13 +190,13 @@ export class MergeEditorViewModel extends Disposable {
 		state: ModifiedBaseRangeState,
 		tx: ITransaction,
 		inputNumber: InputNumber,
-	): void {
+	): codemavi {
 		this.manuallySetActiveModifiedBaseRange.set({ range: baseRange, counter: this.counter++ }, tx);
 		this.model.setState(baseRange, state, inputNumber, tx);
 		this.lastFocusedEditor.clearCache(tx);
 	}
 
-	private goToConflict(getModifiedBaseRange: (editor: CodeEditorView, curLineNumber: number) => ModifiedBaseRange | undefined): void {
+	private goToConflict(getModifiedBaseRange: (editor: CodeEditorView, curLineNumber: number) => ModifiedBaseRange | undefined): codemavi {
 		let editor = this.lastFocusedEditor.get().view;
 		if (!editor) {
 			editor = this.resultCodeEditorView;
@@ -227,7 +227,7 @@ export class MergeEditorViewModel extends Disposable {
 		}
 	}
 
-	public goToNextModifiedBaseRange(predicate: (m: ModifiedBaseRange) => boolean): void {
+	public goToNextModifiedBaseRange(predicate: (m: ModifiedBaseRange) => boolean): codemavi {
 		this.goToConflict(
 			(e, l) =>
 				this.model.modifiedBaseRanges
@@ -243,7 +243,7 @@ export class MergeEditorViewModel extends Disposable {
 		);
 	}
 
-	public goToPreviousModifiedBaseRange(predicate: (m: ModifiedBaseRange) => boolean): void {
+	public goToPreviousModifiedBaseRange(predicate: (m: ModifiedBaseRange) => boolean): codemavi {
 		this.goToConflict(
 			(e, l) =>
 				findLast(
@@ -259,7 +259,7 @@ export class MergeEditorViewModel extends Disposable {
 		);
 	}
 
-	public toggleActiveConflict(inputNumber: 1 | 2): void {
+	public toggleActiveConflict(inputNumber: 1 | 2): codemavi {
 		const activeModifiedBaseRange = this.activeModifiedBaseRange.get();
 		if (!activeModifiedBaseRange) {
 			this.notificationService.error(localize('noConflictMessage', "There is currently no conflict focused that can be toggled."));
@@ -276,7 +276,7 @@ export class MergeEditorViewModel extends Disposable {
 		});
 	}
 
-	public acceptAll(inputNumber: 1 | 2): void {
+	public acceptAll(inputNumber: 1 | 2): codemavi {
 		transaction(tx => {
 			/** @description Toggle Active Conflict */
 			for (const range of this.model.modifiedBaseRanges.get()) {
@@ -334,12 +334,12 @@ class AttachedHistory extends Disposable {
 	 * Pushes an history item that is tied to the last text edit (or an extension of it).
 	 * When the last text edit is undone/redone, so is is this history item.
 	 */
-	public pushAttachedHistoryElement(element: IAttachedHistoryElement): void {
+	public pushAttachedHistoryElement(element: IAttachedHistoryElement): codemavi {
 		this.attachedHistory.push({ altId: this.model.getAlternativeVersionId(), element });
 	}
 }
 
 interface IAttachedHistoryElement {
-	undo(): void;
-	redo(): void;
+	undo(): codemavi;
+	redo(): codemavi;
 }

@@ -32,7 +32,7 @@ export class GlyphMarginLanesModel implements IGlyphMarginLanesModel {
 		return this._requiredLanes;
 	}
 
-	public push(lane: GlyphMarginLane, range: Range, persist?: boolean): void {
+	public push(lane: GlyphMarginLane, range: Range, persist?: boolean): codemavi {
 		if (persist) {
 			this.persist |= (1 << (lane - 1));
 		}

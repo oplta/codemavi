@@ -155,7 +155,7 @@ export interface IViewContainersRegistry {
 	 * Deregisters the given view container
 	 * No op if the view container is not registered
 	 */
-	deregisterViewContainer(viewContainer: ViewContainer): void;
+	deregisterViewContainer(viewContainer: ViewContainer): codemavi;
 
 	/**
 	 * Returns the view container with given id.
@@ -223,7 +223,7 @@ class ViewContainersRegistryImpl extends Disposable implements IViewContainersRe
 		return viewContainer;
 	}
 
-	deregisterViewContainer(viewContainer: ViewContainer): void {
+	deregisterViewContainer(viewContainer: ViewContainer): codemavi {
 		for (const viewContainerLocation of this.viewContainers.keys()) {
 			const viewContainers = this.viewContainers.get(viewContainerLocation)!;
 			const index = viewContainers?.indexOf(viewContainer);
@@ -346,15 +346,15 @@ export interface IViewContainerModel {
 	readonly onDidMoveVisibleViewDescriptors: Event<{ from: IViewDescriptorRef; to: IViewDescriptorRef }>;
 
 	isVisible(id: string): boolean;
-	setVisible(id: string, visible: boolean): void;
+	setVisible(id: string, visible: boolean): codemavi;
 
 	isCollapsed(id: string): boolean;
-	setCollapsed(id: string, collapsed: boolean): void;
+	setCollapsed(id: string, collapsed: boolean): codemavi;
 
 	getSize(id: string): number | undefined;
-	setSizes(newSizes: readonly { id: string; size: number }[]): void;
+	setSizes(newSizes: readonly { id: string; size: number }[]): codemavi;
 
-	move(from: string, to: string): void;
+	move(from: string, to: string): codemavi;
 }
 
 export enum ViewContentGroups {
@@ -385,13 +385,13 @@ export interface IViewsRegistry {
 
 	readonly onDidChangeContainer: Event<{ views: IViewDescriptor[]; from: ViewContainer; to: ViewContainer }>;
 
-	registerViews(views: IViewDescriptor[], viewContainer: ViewContainer): void;
+	registerViews(views: IViewDescriptor[], viewContainer: ViewContainer): codemavi;
 
-	registerViews2(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): void;
+	registerViews2(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): codemavi;
 
-	deregisterViews(views: IViewDescriptor[], viewContainer: ViewContainer): void;
+	deregisterViews(views: IViewDescriptor[], viewContainer: ViewContainer): codemavi;
 
-	moveViews(views: IViewDescriptor[], viewContainer: ViewContainer): void;
+	moveViews(views: IViewDescriptor[], viewContainer: ViewContainer): codemavi;
 
 	getViews(viewContainer: ViewContainer): IViewDescriptor[];
 
@@ -432,23 +432,23 @@ class ViewsRegistry extends Disposable implements IViewsRegistry {
 	private _views: Map<ViewContainer, IViewDescriptor[]> = new Map<ViewContainer, IViewDescriptor[]>();
 	private _viewWelcomeContents = new SetMap<string, IViewContentDescriptor>();
 
-	registerViews(views: IViewDescriptor[], viewContainer: ViewContainer): void {
+	registerViews(views: IViewDescriptor[], viewContainer: ViewContainer): codemavi {
 		this.registerViews2([{ views, viewContainer }]);
 	}
 
-	registerViews2(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): void {
+	registerViews2(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): codemavi {
 		views.forEach(({ views, viewContainer }) => this.addViews(views, viewContainer));
 		this._onViewsRegistered.fire(views);
 	}
 
-	deregisterViews(viewDescriptors: IViewDescriptor[], viewContainer: ViewContainer): void {
+	deregisterViews(viewDescriptors: IViewDescriptor[], viewContainer: ViewContainer): codemavi {
 		const views = this.removeViews(viewDescriptors, viewContainer);
 		if (views.length) {
 			this._onViewsDeregistered.fire({ views, viewContainer });
 		}
 	}
 
-	moveViews(viewsToMove: IViewDescriptor[], viewContainer: ViewContainer): void {
+	moveViews(viewsToMove: IViewDescriptor[], viewContainer: ViewContainer): codemavi {
 		for (const container of this._views.keys()) {
 			if (container !== viewContainer) {
 				const views = this.removeViews(viewsToMove, container);
@@ -516,7 +516,7 @@ class ViewsRegistry extends Disposable implements IViewsRegistry {
 		return result.sort(compareViewContentDescriptors);
 	}
 
-	private addViews(viewDescriptors: IViewDescriptor[], viewContainer: ViewContainer): void {
+	private addViews(viewDescriptors: IViewDescriptor[], viewContainer: ViewContainer): codemavi {
 		let views = this._views.get(viewContainer);
 		if (!views) {
 			views = [];
@@ -563,7 +563,7 @@ export interface IView {
 
 	readonly id: string;
 
-	focus(): void;
+	focus(): codemavi;
 
 	isVisible(): boolean;
 
@@ -598,10 +598,10 @@ export interface IViewDescriptorService {
 	getViewContainerModel(viewContainer: ViewContainer): IViewContainerModel;
 
 	readonly onDidChangeContainerLocation: Event<{ viewContainer: ViewContainer; from: ViewContainerLocation; to: ViewContainerLocation }>;
-	moveViewContainerToLocation(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number, reason?: string): void;
+	moveViewContainerToLocation(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number, reason?: string): codemavi;
 
 	getViewContainerBadgeEnablementState(id: string): boolean;
-	setViewContainerBadgeEnablementState(id: string, badgesEnabled: boolean): void;
+	setViewContainerBadgeEnablementState(id: string, badgesEnabled: boolean): codemavi;
 
 	// Views
 	getViewDescriptorById(id: string): IViewDescriptor | null;
@@ -610,12 +610,12 @@ export interface IViewDescriptorService {
 	getViewLocationById(id: string): ViewContainerLocation | null;
 
 	readonly onDidChangeContainer: Event<{ views: IViewDescriptor[]; from: ViewContainer; to: ViewContainer }>;
-	moveViewsToContainer(views: IViewDescriptor[], viewContainer: ViewContainer, visibilityState?: ViewVisibilityState, reason?: string): void;
+	moveViewsToContainer(views: IViewDescriptor[], viewContainer: ViewContainer, visibilityState?: ViewVisibilityState, reason?: string): codemavi;
 
 	readonly onDidChangeLocation: Event<{ views: IViewDescriptor[]; from: ViewContainerLocation; to: ViewContainerLocation }>;
-	moveViewToLocation(view: IViewDescriptor, location: ViewContainerLocation, reason?: string): void;
+	moveViewToLocation(view: IViewDescriptor, location: ViewContainerLocation, reason?: string): codemavi;
 
-	reset(): void;
+	reset(): codemavi;
 }
 
 // Custom views
@@ -650,42 +650,42 @@ export interface ITreeView extends IDisposable {
 
 	readonly onDidChangeVisibility: Event<boolean>;
 
-	readonly onDidChangeActions: Event<void>;
+	readonly onDidChangeActions: Event<codemavi>;
 
 	readonly onDidChangeTitle: Event<string>;
 
 	readonly onDidChangeDescription: Event<string | undefined>;
 
-	readonly onDidChangeWelcomeState: Event<void>;
+	readonly onDidChangeWelcomeState: Event<codemavi>;
 
 	readonly onDidChangeCheckboxState: Event<readonly ITreeItem[]>;
 
 	readonly container: any | undefined;
 
 	// checkboxesChanged is a subset of treeItems
-	refresh(treeItems?: readonly ITreeItem[], checkboxesChanged?: readonly ITreeItem[]): Promise<void>;
+	refresh(treeItems?: readonly ITreeItem[], checkboxesChanged?: readonly ITreeItem[]): Promise<codemavi>;
 
-	setVisibility(visible: boolean): void;
+	setVisibility(visible: boolean): codemavi;
 
-	focus(): void;
+	focus(): codemavi;
 
-	layout(height: number, width: number): void;
+	layout(height: number, width: number): codemavi;
 
 	getOptimalWidth(): number;
 
-	reveal(item: ITreeItem): Promise<void>;
+	reveal(item: ITreeItem): Promise<codemavi>;
 
-	expand(itemOrItems: ITreeItem | ITreeItem[]): Promise<void>;
+	expand(itemOrItems: ITreeItem | ITreeItem[]): Promise<codemavi>;
 
 	isCollapsed(item: ITreeItem): boolean;
 
-	setSelection(items: ITreeItem[]): void;
+	setSelection(items: ITreeItem[]): codemavi;
 
 	getSelection(): ITreeItem[];
 
-	setFocus(item?: ITreeItem): void;
+	setFocus(item?: ITreeItem): codemavi;
 
-	show(container: any): void;
+	show(container: any): codemavi;
 }
 
 export interface IRevealOptions {
@@ -787,7 +787,7 @@ export class ResolvableTreeItem implements ITreeItem {
 	command?: Command & { originalId?: string };
 	children?: ITreeItem[];
 	accessibilityInformation?: IAccessibilityInformation;
-	resolve: (token: CancellationToken) => Promise<void>;
+	resolve: (token: CancellationToken) => Promise<codemavi>;
 	private resolved: boolean = false;
 	private _hasResolve: boolean = false;
 	constructor(treeItem: ITreeItem, resolve?: ((token: CancellationToken) => Promise<ITreeItem | undefined>)) {
@@ -845,7 +845,7 @@ export class NoTreeViewError extends Error {
 
 export interface ITreeViewDataProvider {
 	readonly isTreeEmpty?: boolean;
-	onDidChangeEmpty?: Event<void>;
+	onDidChangeEmpty?: Event<codemavi>;
 	getChildren(element?: ITreeItem): Promise<ITreeItem[] | undefined>;
 	getChildrenBatch?(element?: ITreeItem[]): Promise<ITreeItem[][] | undefined>;
 }
@@ -854,14 +854,14 @@ export interface ITreeViewDragAndDropController {
 	readonly dropMimeTypes: string[];
 	readonly dragMimeTypes: string[];
 	handleDrag(sourceTreeItemHandles: string[], operationUuid: string, token: CancellationToken): Promise<VSDataTransfer | undefined>;
-	handleDrop(elements: VSDataTransfer, target: ITreeItem | undefined, token: CancellationToken, operationUuid?: string, sourceTreeId?: string, sourceTreeItemHandles?: string[]): Promise<void>;
+	handleDrop(elements: VSDataTransfer, target: ITreeItem | undefined, token: CancellationToken, operationUuid?: string, sourceTreeId?: string, sourceTreeItemHandles?: string[]): Promise<codemavi>;
 }
 
 export interface IEditableData {
 	validationMessage: (value: string) => { content: string; severity: Severity } | null;
 	placeholder?: string | null;
 	startingValue?: string | null;
-	onFinish: (value: string, success: boolean) => Promise<void>;
+	onFinish: (value: string, success: boolean) => Promise<codemavi>;
 }
 
 export interface IViewPaneContainer {
@@ -871,12 +871,12 @@ export interface IViewPaneContainer {
 
 	readonly views: IView[];
 
-	setVisible(visible: boolean): void;
+	setVisible(visible: boolean): codemavi;
 	isVisible(): boolean;
-	focus(): void;
+	focus(): codemavi;
 	getActionsContext(): unknown;
 	getView(viewId: string): IView | undefined;
-	toggleViewVisibility(viewId: string): void;
+	toggleViewVisibility(viewId: string): codemavi;
 }
 
 export interface IViewBadge {

@@ -18,7 +18,7 @@ export class LanguageRecommendations extends ExtensionRecommendations {
 		super();
 	}
 
-	protected async doActivate(): Promise<void> {
+	protected async doActivate(): Promise<codemavi> {
 		if (this.productService.languageExtensionTips) {
 			this._recommendations = this.productService.languageExtensionTips.map((extensionId): ExtensionRecommendation => ({
 				extension: extensionId.toLowerCase(),

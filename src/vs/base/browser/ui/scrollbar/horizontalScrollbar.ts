@@ -68,12 +68,12 @@ export class HorizontalScrollbar extends AbstractScrollbar {
 		this._createSlider(Math.floor((options.horizontalScrollbarSize - options.horizontalSliderSize) / 2), 0, undefined, options.horizontalSliderSize);
 	}
 
-	protected _updateSlider(sliderSize: number, sliderPosition: number): void {
+	protected _updateSlider(sliderSize: number, sliderPosition: number): codemavi {
 		this.slider.setWidth(sliderSize);
 		this.slider.setLeft(sliderPosition);
 	}
 
-	protected _renderDomNode(largeSize: number, smallSize: number): void {
+	protected _renderDomNode(largeSize: number, smallSize: number): codemavi {
 		this.domNode.setWidth(largeSize);
 		this.domNode.setHeight(smallSize);
 		this.domNode.setLeft(0);
@@ -99,15 +99,15 @@ export class HorizontalScrollbar extends AbstractScrollbar {
 		return e.pageY;
 	}
 
-	protected _updateScrollbarSize(size: number): void {
+	protected _updateScrollbarSize(size: number): codemavi {
 		this.slider.setHeight(size);
 	}
 
-	public writeScrollPosition(target: INewScrollPosition, scrollPosition: number): void {
+	public writeScrollPosition(target: INewScrollPosition, scrollPosition: number): codemavi {
 		target.scrollLeft = scrollPosition;
 	}
 
-	public updateOptions(options: ScrollableElementResolvedOptions): void {
+	public updateOptions(options: ScrollableElementResolvedOptions): codemavi {
 		this.updateScrollbarSize(options.horizontal === ScrollbarVisibility.Hidden ? 0 : options.horizontalScrollbarSize);
 		this._scrollbarState.setOppositeScrollbarSize(options.vertical === ScrollbarVisibility.Hidden ? 0 : options.verticalScrollbarSize);
 		this._visibilityController.setVisibility(options.horizontal);

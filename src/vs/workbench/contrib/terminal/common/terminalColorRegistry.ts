@@ -246,7 +246,7 @@ export const ansiColorMap: { [key: string]: { index: number; defaults: ColorDefa
 	}
 };
 
-export function registerColors(): void {
+export function registerColors(): codemavi {
 	for (const id in ansiColorMap) {
 		const entry = ansiColorMap[id];
 		const colorName = id.substring(13);

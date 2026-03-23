@@ -91,7 +91,7 @@ export interface IResolvedVariables {
 export interface ITaskSystemInfo {
 	platform: Platform;
 	context: any;
-	uriProvider: (this: void, path: string) => URI;
+	uriProvider: (this: codemavi, path: string) => URI;
 	resolveVariables(workspaceFolder: IWorkspaceFolder, toResolve: IResolveSet, target: ConfigurationTarget): Promise<IResolvedVariables | undefined>;
 	findExecutable(command: string, cwd?: string, paths?: string[]): Promise<string | undefined>;
 }
@@ -114,7 +114,7 @@ export interface ITaskSystem {
 	terminate(task: Task): Promise<ITaskTerminateResponse>;
 	terminateAll(): Promise<ITaskTerminateResponse[]>;
 	revealTask(task: Task): boolean;
-	customExecutionComplete(task: Task, result: number): Promise<void>;
+	customExecutionComplete(task: Task, result: number): Promise<codemavi>;
 	isTaskVisible(task: Task): boolean;
 	getTaskForTerminal(instanceId: number): Task | undefined;
 }

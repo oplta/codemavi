@@ -56,7 +56,7 @@ export class EditorCommandsContextActionRunner extends ActionRunner {
 		super();
 	}
 
-	override run(action: IAction, context?: { preserveFocus?: boolean }): Promise<void> {
+	override run(action: IAction, context?: { preserveFocus?: boolean }): Promise<codemavi> {
 
 		// Even though we have a fixed context for editor commands,
 		// allow to preserve the context that is given to us in case
@@ -75,20 +75,20 @@ export class EditorCommandsContextActionRunner extends ActionRunner {
 }
 
 export interface IEditorTabsControl extends IDisposable {
-	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void;
+	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi;
 	openEditor(editor: EditorInput, options?: IInternalEditorOpenOptions): boolean;
 	openEditors(editors: EditorInput[]): boolean;
-	beforeCloseEditor(editor: EditorInput): void;
-	closeEditor(editor: EditorInput): void;
-	closeEditors(editors: EditorInput[]): void;
-	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): void;
-	pinEditor(editor: EditorInput): void;
-	stickEditor(editor: EditorInput): void;
-	unstickEditor(editor: EditorInput): void;
-	setActive(isActive: boolean): void;
-	updateEditorSelections(): void;
-	updateEditorLabel(editor: EditorInput): void;
-	updateEditorDirty(editor: EditorInput): void;
+	beforeCloseEditor(editor: EditorInput): codemavi;
+	closeEditor(editor: EditorInput): codemavi;
+	closeEditors(editors: EditorInput[]): codemavi;
+	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): codemavi;
+	pinEditor(editor: EditorInput): codemavi;
+	stickEditor(editor: EditorInput): codemavi;
+	unstickEditor(editor: EditorInput): codemavi;
+	setActive(isActive: boolean): codemavi;
+	updateEditorSelections(): codemavi;
+	updateEditorLabel(editor: EditorInput): codemavi;
+	updateEditorDirty(editor: EditorInput): codemavi;
 	layout(dimensions: IEditorTitleControlDimensions): Dimension;
 	getHeight(): number;
 }
@@ -176,7 +176,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return this.groupsView.partOptions.editorActionsLocation === 'default' && this.groupsView.partOptions.showTabs !== 'none';
 	}
 
-	protected createEditorActionsToolBar(parent: HTMLElement, classes: string[]): void {
+	protected createEditorActionsToolBar(parent: HTMLElement, classes: string[]): codemavi {
 		this.editorActionsToolbarContainer = $('div');
 		this.editorActionsToolbarContainer.classList.add(...classes);
 		parent.appendChild(this.editorActionsToolbarContainer);
@@ -184,7 +184,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		this.handleEditorActionToolBarVisibility(this.editorActionsToolbarContainer);
 	}
 
-	private handleEditorActionToolBarVisibility(container: HTMLElement): void {
+	private handleEditorActionToolBarVisibility(container: HTMLElement): codemavi {
 		const editorActionsEnabled = this.editorActionsEnabled;
 		const editorActionsVisible = !!this.editorActionsToolbar;
 
@@ -203,7 +203,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		container.classList.toggle('hidden', !editorActionsEnabled);
 	}
 
-	private doCreateEditorActionsToolBar(container: HTMLElement): void {
+	private doCreateEditorActionsToolBar(container: HTMLElement): codemavi {
 		const context: IEditorCommandsContext = { groupId: this.groupView.id };
 
 		// Toolbar Widget
@@ -250,7 +250,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return createActionViewItem(this.instantiationService, action, { ...options, menuAsChild: this.renderDropdownAsChildElement });
 	}
 
-	protected updateEditorActionsToolbar(): void {
+	protected updateEditorActionsToolbar(): codemavi {
 		if (!this.editorActionsEnabled) {
 			return;
 		}
@@ -270,7 +270,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return this.groupView.activeEditorPane?.scopedContextKeyService ?? this.contextKeyService;
 	}
 
-	protected clearEditorActionsToolbar(): void {
+	protected clearEditorActionsToolbar(): codemavi {
 		if (!this.editorActionsEnabled) {
 			return;
 		}
@@ -323,7 +323,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return isNewWindowOperation;
 	}
 
-	protected async onGroupDragEnd(e: DragEvent, previousDragEvent: DragEvent | undefined, element: HTMLElement, isNewWindowOperation: boolean): Promise<void> {
+	protected async onGroupDragEnd(e: DragEvent, previousDragEvent: DragEvent | undefined, element: HTMLElement, isNewWindowOperation: boolean): Promise<codemavi> {
 		this.groupTransfer.clearData(DraggedEditorGroupIdentifier.prototype);
 
 		if (
@@ -405,7 +405,7 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return false;
 	}
 
-	protected onTabContextMenu(editor: EditorInput, e: Event, node: HTMLElement): void {
+	protected onTabContextMenu(editor: EditorInput, e: Event, node: HTMLElement): codemavi {
 
 		// Update contexts based on editor picked and remember previous to restore
 		this.resourceContext.set(EditorResourceAccessor.getOriginalUri(editor, { supportSideBySide: SideBySideEditor.PRIMARY }));
@@ -463,11 +463,11 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 		return title;
 	}
 
-	protected updateTabHeight(): void {
+	protected updateTabHeight(): codemavi {
 		this.parent.style.setProperty('--editor-group-tab-height', `${this.tabHeight}px`);
 	}
 
-	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {
+	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi {
 
 		// Update tab height
 		if (oldOptions.tabHeight !== newOptions.tabHeight) {
@@ -490,27 +490,27 @@ export abstract class EditorTabsControl extends Themable implements IEditorTabsC
 
 	abstract openEditors(editors: EditorInput[]): boolean;
 
-	abstract beforeCloseEditor(editor: EditorInput): void;
+	abstract beforeCloseEditor(editor: EditorInput): codemavi;
 
-	abstract closeEditor(editor: EditorInput): void;
+	abstract closeEditor(editor: EditorInput): codemavi;
 
-	abstract closeEditors(editors: EditorInput[]): void;
+	abstract closeEditors(editors: EditorInput[]): codemavi;
 
-	abstract moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): void;
+	abstract moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number): codemavi;
 
-	abstract pinEditor(editor: EditorInput): void;
+	abstract pinEditor(editor: EditorInput): codemavi;
 
-	abstract stickEditor(editor: EditorInput): void;
+	abstract stickEditor(editor: EditorInput): codemavi;
 
-	abstract unstickEditor(editor: EditorInput): void;
+	abstract unstickEditor(editor: EditorInput): codemavi;
 
-	abstract setActive(isActive: boolean): void;
+	abstract setActive(isActive: boolean): codemavi;
 
-	abstract updateEditorSelections(): void;
+	abstract updateEditorSelections(): codemavi;
 
-	abstract updateEditorLabel(editor: EditorInput): void;
+	abstract updateEditorLabel(editor: EditorInput): codemavi;
 
-	abstract updateEditorDirty(editor: EditorInput): void;
+	abstract updateEditorDirty(editor: EditorInput): codemavi;
 
 	abstract layout(dimensions: IEditorTitleControlDimensions): Dimension;
 

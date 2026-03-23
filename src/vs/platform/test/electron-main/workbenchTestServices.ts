@@ -20,8 +20,8 @@ export class TestLifecycleMainService implements ILifecycleMainService {
 	private readonly _onWillShutdown = new Emitter<ShutdownEvent>();
 	readonly onWillShutdown = this._onWillShutdown.event;
 
-	async fireOnWillShutdown(): Promise<void> {
-		const joiners: Promise<void>[] = [];
+	async fireOnWillShutdown(): Promise<codemavi> {
+		const joiners: Promise<codemavi>[] = [];
 
 		this._onWillShutdown.fire({
 			reason: ShutdownReason.QUIT,
@@ -41,15 +41,15 @@ export class TestLifecycleMainService implements ILifecycleMainService {
 
 	phase = LifecycleMainPhase.Ready;
 
-	registerWindow(window: ICodeWindow): void { }
-	registerAuxWindow(auxWindow: IAuxiliaryWindow): void { }
-	async reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<void> { }
+	registerWindow(window: ICodeWindow): codemavi { }
+	registerAuxWindow(auxWindow: IAuxiliaryWindow): codemavi { }
+	async reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<codemavi> { }
 	async unload(window: ICodeWindow, reason: UnloadReason): Promise<boolean> { return true; }
-	setRelaunchHandler(handler: IRelaunchHandler): void { }
-	async relaunch(options?: { addArgs?: string[] | undefined; removeArgs?: string[] | undefined }): Promise<void> { }
+	setRelaunchHandler(handler: IRelaunchHandler): codemavi { }
+	async relaunch(options?: { addArgs?: string[] | undefined; removeArgs?: string[] | undefined }): Promise<codemavi> { }
 	async quit(willRestart?: boolean): Promise<boolean> { return true; }
-	async kill(code?: number): Promise<void> { }
-	async when(phase: LifecycleMainPhase): Promise<void> { }
+	async kill(code?: number): Promise<codemavi> { }
+	async when(phase: LifecycleMainPhase): Promise<codemavi> { }
 }
 
 export class InMemoryTestStateMainService implements IStateService {
@@ -58,11 +58,11 @@ export class InMemoryTestStateMainService implements IStateService {
 
 	private readonly data = new Map<string, object | string | number | boolean | undefined | null>();
 
-	setItem(key: string, data?: object | string | number | boolean | undefined | null): void {
+	setItem(key: string, data?: object | string | number | boolean | undefined | null): codemavi {
 		this.data.set(key, data);
 	}
 
-	setItems(items: readonly { key: string; data?: object | string | number | boolean | undefined | null }[]): void {
+	setItems(items: readonly { key: string; data?: object | string | number | boolean | undefined | null }[]): codemavi {
 		for (const { key, data } of items) {
 			this.data.set(key, data);
 		}
@@ -72,9 +72,9 @@ export class InMemoryTestStateMainService implements IStateService {
 		return this.data.get(key) as T | undefined;
 	}
 
-	removeItem(key: string): void {
+	removeItem(key: string): codemavi {
 		this.data.delete(key);
 	}
 
-	async close(): Promise<void> { }
+	async close(): Promise<codemavi> { }
 }

@@ -24,7 +24,7 @@ export class ExtHostConsoleForwarder extends AbstractExtHostConsoleForwarder {
 		this._wrapStream('stdout', 'log');
 	}
 
-	protected override _nativeConsoleLogMessage(method: 'log' | 'info' | 'warn' | 'error' | 'debug', original: (...args: any[]) => void, args: IArguments) {
+	protected override _nativeConsoleLogMessage(method: 'log' | 'info' | 'warn' | 'error' | 'debug', original: (...args: any[]) => codemavi, args: IArguments) {
 		const stream = method === 'error' || method === 'warn' ? process.stderr : process.stdout;
 		this._isMakingConsoleCall = true;
 		stream.write(`\n${NativeLogMarkers.Start}\n`);
@@ -47,7 +47,7 @@ export class ExtHostConsoleForwarder extends AbstractExtHostConsoleForwarder {
 
 		Object.defineProperty(stream, 'write', {
 			set: () => { },
-			get: () => (chunk: Uint8Array | string, encoding?: BufferEncoding, callback?: (err?: Error) => void) => {
+			get: () => (chunk: Uint8Array | string, encoding?: BufferEncoding, callback?: (err?: Error) => codemavi) => {
 				if (!this._isMakingConsoleCall) {
 					buf += (chunk as any).toString(encoding);
 					const eol = buf.length > MAX_STREAM_BUFFER_LENGTH ? buf.length : buf.lastIndexOf('\n');

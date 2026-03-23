@@ -99,8 +99,8 @@ abstract class MainThreadKernel implements INotebookKernel {
 		this._onDidChange.fire(event);
 	}
 
-	abstract executeNotebookCellsRequest(uri: URI, cellHandles: number[]): Promise<void>;
-	abstract cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<void>;
+	abstract executeNotebookCellsRequest(uri: URI, cellHandles: number[]): Promise<codemavi>;
+	abstract cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<codemavi>;
 	abstract provideVariables(notebookUri: URI, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): AsyncIterableObject<VariablesResult>;
 }
 
@@ -163,7 +163,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		for (const [, registration] of this._kernels.values()) {
 			registration.dispose();
@@ -243,13 +243,13 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 
 	// --- kernel adding/updating/removal
 
-	async $addKernel(handle: number, data: INotebookKernelDto2): Promise<void> {
+	async $addKernel(handle: number, data: INotebookKernelDto2): Promise<codemavi> {
 		const that = this;
 		const kernel = new class extends MainThreadKernel {
-			async executeNotebookCellsRequest(uri: URI, handles: number[]): Promise<void> {
+			async executeNotebookCellsRequest(uri: URI, handles: number[]): Promise<codemavi> {
 				await that._proxy.$executeCells(handle, uri, handles);
 			}
-			async cancelNotebookCellExecution(uri: URI, handles: number[]): Promise<void> {
+			async cancelNotebookCellExecution(uri: URI, handles: number[]): Promise<codemavi> {
 				await that._proxy.$cancelCells(handle, uri, handles);
 			}
 			provideVariables(notebookUri: URI, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): AsyncIterableObject<VariablesResult> {
@@ -278,14 +278,14 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		disposables.add(this._notebookKernelService.registerKernel(kernel));
 	}
 
-	$updateKernel(handle: number, data: Partial<INotebookKernelDto2>): void {
+	$updateKernel(handle: number, data: Partial<INotebookKernelDto2>): codemavi {
 		const tuple = this._kernels.get(handle);
 		if (tuple) {
 			tuple[0].update(data);
 		}
 	}
 
-	$removeKernel(handle: number): void {
+	$removeKernel(handle: number): codemavi {
 		const tuple = this._kernels.get(handle);
 		if (tuple) {
 			tuple[1].dispose();
@@ -293,7 +293,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		}
 	}
 
-	$updateNotebookPriority(handle: number, notebook: UriComponents, value: number | undefined): void {
+	$updateNotebookPriority(handle: number, notebook: UriComponents, value: number | undefined): codemavi {
 		const tuple = this._kernels.get(handle);
 		if (tuple) {
 			this._notebookKernelService.updateKernelNotebookAffinity(tuple[0], URI.revive(notebook), value);
@@ -302,7 +302,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 
 	// --- Cell execution
 
-	$createExecution(handle: number, controllerId: string, rawUri: UriComponents, cellHandle: number): void {
+	$createExecution(handle: number, controllerId: string, rawUri: UriComponents, cellHandle: number): codemavi {
 		const uri = URI.revive(rawUri);
 		const notebook = this._notebookService.getNotebookTextModel(uri);
 		if (!notebook) {
@@ -318,7 +318,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		this._executions.set(handle, execution);
 	}
 
-	$updateExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecuteUpdateDto[]>): void {
+	$updateExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecuteUpdateDto[]>): codemavi {
 		const updates = data.value;
 		try {
 			const execution = this._executions.get(handle);
@@ -328,7 +328,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		}
 	}
 
-	$completeExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecutionCompleteDto>): void {
+	$completeExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecutionCompleteDto>): codemavi {
 		try {
 			const execution = this._executions.get(handle);
 			execution?.complete(NotebookDto.fromCellExecuteCompleteDto(data.value));
@@ -341,7 +341,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 
 	// --- Notebook execution
 
-	$createNotebookExecution(handle: number, controllerId: string, rawUri: UriComponents): void {
+	$createNotebookExecution(handle: number, controllerId: string, rawUri: UriComponents): codemavi {
 		const uri = URI.revive(rawUri);
 		const notebook = this._notebookService.getNotebookTextModel(uri);
 		if (!notebook) {
@@ -357,7 +357,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		this._notebookExecutions.set(handle, execution);
 	}
 
-	$beginNotebookExecution(handle: number): void {
+	$beginNotebookExecution(handle: number): codemavi {
 		try {
 			const execution = this._notebookExecutions.get(handle);
 			execution?.begin();
@@ -366,7 +366,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		}
 	}
 
-	$completeNotebookExecution(handle: number): void {
+	$completeNotebookExecution(handle: number): codemavi {
 		try {
 			const execution = this._notebookExecutions.get(handle);
 			execution?.complete();
@@ -378,13 +378,13 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 	}
 
 	// --- notebook kernel detection task
-	async $addKernelDetectionTask(handle: number, notebookType: string): Promise<void> {
+	async $addKernelDetectionTask(handle: number, notebookType: string): Promise<codemavi> {
 		const kernelDetectionTask = new MainThreadKernelDetectionTask(notebookType);
 		const registration = this._notebookKernelService.registerNotebookKernelDetectionTask(kernelDetectionTask);
 		this._kernelDetectionTasks.set(handle, [kernelDetectionTask, registration]);
 	}
 
-	$removeKernelDetectionTask(handle: number): void {
+	$removeKernelDetectionTask(handle: number): codemavi {
 		const tuple = this._kernelDetectionTasks.get(handle);
 		if (tuple) {
 			tuple[1].dispose();
@@ -394,7 +394,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 
 	// --- notebook kernel source action provider
 
-	async $addKernelSourceActionProvider(handle: number, eventHandle: number, notebookType: string): Promise<void> {
+	async $addKernelSourceActionProvider(handle: number, eventHandle: number, notebookType: string): Promise<codemavi> {
 		const kernelSourceActionProvider: IKernelSourceActionProvider = {
 			viewType: notebookType,
 			provideKernelSourceActions: async () => {
@@ -418,7 +418,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		};
 
 		if (typeof eventHandle === 'number') {
-			const emitter = new Emitter<void>();
+			const emitter = new Emitter<codemavi>();
 			this._kernelSourceActionProvidersEventRegistrations.set(eventHandle, emitter);
 			kernelSourceActionProvider.onDidChangeSourceActions = emitter.event;
 		}
@@ -427,7 +427,7 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		this._kernelSourceActionProviders.set(handle, [kernelSourceActionProvider, registration]);
 	}
 
-	$removeKernelSourceActionProvider(handle: number, eventHandle: number): void {
+	$removeKernelSourceActionProvider(handle: number, eventHandle: number): codemavi {
 		const tuple = this._kernelSourceActionProviders.get(handle);
 		if (tuple) {
 			tuple[1].dispose();
@@ -438,14 +438,14 @@ export class MainThreadNotebookKernels implements MainThreadNotebookKernelsShape
 		}
 	}
 
-	$emitNotebookKernelSourceActionsChangeEvent(eventHandle: number): void {
+	$emitNotebookKernelSourceActionsChangeEvent(eventHandle: number): codemavi {
 		const emitter = this._kernelSourceActionProvidersEventRegistrations.get(eventHandle);
 		if (emitter instanceof Emitter) {
 			emitter.fire(undefined);
 		}
 	}
 
-	$variablesUpdated(notebookUri: UriComponents): void {
+	$variablesUpdated(notebookUri: UriComponents): codemavi {
 		this._notebookKernelService.notifyVariablesChange(URI.revive(notebookUri));
 	}
 }

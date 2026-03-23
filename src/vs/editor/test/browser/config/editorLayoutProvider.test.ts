@@ -42,7 +42,7 @@ suite('Editor ViewLayout - EditorLayoutProvider', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function doTest(input: IEditorLayoutProviderOpts, expected: EditorLayoutInfo): void {
+	function doTest(input: IEditorLayoutProviderOpts, expected: EditorLayoutInfo): codemavi {
 		const options = new ComputedEditorOptions();
 		options._write(EditorOption.glyphMargin, input.showGlyphMargin);
 		options._write(EditorOption.lineNumbersMinChars, input.lineNumbersMinChars);

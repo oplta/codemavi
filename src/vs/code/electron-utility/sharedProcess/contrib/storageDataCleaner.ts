@@ -33,7 +33,7 @@ export class UnusedWorkspaceStorageDataCleaner extends Disposable {
 		scheduler.schedule();
 	}
 
-	private async cleanUpStorage(): Promise<void> {
+	private async cleanUpStorage(): Promise<codemavi> {
 		this.logService.trace('[storage cleanup]: Starting to clean up workspace storage folders for unused empty workspaces.');
 
 		try {

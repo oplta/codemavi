@@ -5,7 +5,7 @@
 
 import * as vscode from 'vscode';
 
-export function disposeAll(disposables: vscode.Disposable[]): void {
+export function disposeAll(disposables: vscode.Disposable[]): codemavi {
 	while (disposables.length) {
 		const item = disposables.pop();
 		if (item) {

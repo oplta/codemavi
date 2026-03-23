@@ -71,13 +71,13 @@ class CallHierarchyController implements IEditorContribution {
 		this._dispoables.add(this._sessionDisposables);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._ctxHasProvider.reset();
 		this._ctxIsVisible.reset();
 		this._dispoables.dispose();
 	}
 
-	async startCallHierarchyFromEditor(): Promise<void> {
+	async startCallHierarchyFromEditor(): Promise<codemavi> {
 		this._sessionDisposables.clear();
 
 		if (!this._editor.hasModel()) {
@@ -97,7 +97,7 @@ class CallHierarchyController implements IEditorContribution {
 		this._showCallHierarchyWidget(position, direction, model, cts);
 	}
 
-	async startCallHierarchyFromCallHierarchy(): Promise<void> {
+	async startCallHierarchyFromCallHierarchy(): Promise<codemavi> {
 		if (!this._widget) {
 			return;
 		}
@@ -155,17 +155,17 @@ class CallHierarchyController implements IEditorContribution {
 		});
 	}
 
-	showOutgoingCalls(): void {
+	showOutgoingCalls(): codemavi {
 		this._widget?.updateDirection(CallHierarchyDirection.CallsFrom);
 		this._ctxDirection.set(CallHierarchyDirection.CallsFrom);
 	}
 
-	showIncomingCalls(): void {
+	showIncomingCalls(): codemavi {
 		this._widget?.updateDirection(CallHierarchyDirection.CallsTo);
 		this._ctxDirection.set(CallHierarchyDirection.CallsTo);
 	}
 
-	endCallHierarchy(): void {
+	endCallHierarchy(): codemavi {
 		this._sessionDisposables.clear();
 		this._ctxIsVisible.set(false);
 		this._editor.focus();
@@ -203,7 +203,7 @@ registerAction2(class PeekCallHierarchyAction extends EditorAction2 {
 		});
 	}
 
-	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		return CallHierarchyController.get(editor)?.startCallHierarchyFromEditor();
 	}
 });
@@ -273,7 +273,7 @@ registerAction2(class extends EditorAction2 {
 		});
 	}
 
-	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		return CallHierarchyController.get(editor)?.startCallHierarchyFromCallHierarchy();
 	}
 });
@@ -299,7 +299,7 @@ registerAction2(class extends EditorAction2 {
 		});
 	}
 
-	runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		return CallHierarchyController.get(editor)?.endCallHierarchy();
 	}
 });

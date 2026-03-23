@@ -19,7 +19,7 @@ export class AsyncDecoder<T extends NonNullable<unknown>, K extends NonNullable<
 	 * data avaialble and decoder stream did not finish yet,
 	 * hence we need to wait until new event is received.
 	 */
-	private resolveOnNewEvent?: (value: void) => void;
+	private resolveOnNewEvent?: (value: codemavi) => codemavi;
 
 	/**
 	 * @param decoder The decoder instance to wrap.

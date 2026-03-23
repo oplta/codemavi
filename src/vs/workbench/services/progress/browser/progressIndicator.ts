@@ -81,7 +81,7 @@ export class EditorProgressIndicator extends Disposable implements IProgressIndi
 		};
 	}
 
-	async showWhile(promise: Promise<unknown>, delay?: number): Promise<void> {
+	async showWhile(promise: Promise<unknown>, delay?: number): Promise<codemavi> {
 
 		// No editor open: ignore any progress reporting
 		if (this.group.isEmpty) {
@@ -95,7 +95,7 @@ export class EditorProgressIndicator extends Disposable implements IProgressIndi
 		return this.doShowWhile(promise, delay);
 	}
 
-	private async doShowWhile(promise: Promise<unknown>, delay?: number): Promise<void> {
+	private async doShowWhile(promise: Promise<unknown>, delay?: number): Promise<codemavi> {
 		try {
 			this.progressBar.infinite().show(delay);
 
@@ -156,7 +156,7 @@ export interface IProgressScope {
 	/**
 	 * Fired whenever `isActive` value changed.
 	 */
-	readonly onDidChangeActive: Event<void>;
+	readonly onDidChangeActive: Event<codemavi>;
 
 	/**
 	 * Whether progress should be active or not.
@@ -187,7 +187,7 @@ export class ScopedProgressIndicator extends Disposable implements IProgressIndi
 		}));
 	}
 
-	private onDidScopeActivate(): void {
+	private onDidScopeActivate(): codemavi {
 
 		// Return early if progress state indicates that progress is done
 		if (this.progressState.type === ProgressIndicatorState.Done.type) {
@@ -224,7 +224,7 @@ export class ScopedProgressIndicator extends Disposable implements IProgressIndi
 		}
 	}
 
-	private onDidScopeDeactivate(): void {
+	private onDidScopeDeactivate(): codemavi {
 		this.progressBar.stop().hide();
 	}
 
@@ -294,7 +294,7 @@ export class ScopedProgressIndicator extends Disposable implements IProgressIndi
 		};
 	}
 
-	async showWhile(promise: Promise<unknown>, delay?: number): Promise<void> {
+	async showWhile(promise: Promise<unknown>, delay?: number): Promise<codemavi> {
 
 		// Join with existing running promise to ensure progress is accurate
 		if (this.progressState.type === ProgressIndicatorState.Type.While) {
@@ -325,7 +325,7 @@ export class ScopedProgressIndicator extends Disposable implements IProgressIndi
 		}
 	}
 
-	private doShowWhile(delay?: number): void {
+	private doShowWhile(delay?: number): codemavi {
 
 		// Show Progress when active
 		if (this.scope.isActive) {
@@ -336,7 +336,7 @@ export class ScopedProgressIndicator extends Disposable implements IProgressIndi
 
 export abstract class AbstractProgressScope extends Disposable implements IProgressScope {
 
-	private readonly _onDidChangeActive = this._register(new Emitter<void>());
+	private readonly _onDidChangeActive = this._register(new Emitter<codemavi>());
 	readonly onDidChangeActive = this._onDidChangeActive.event;
 
 	get isActive() { return this._isActive; }

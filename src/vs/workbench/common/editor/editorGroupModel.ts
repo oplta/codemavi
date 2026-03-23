@@ -196,7 +196,7 @@ interface IEditorGroupModel extends IReadonlyEditorGroupModel {
 	closeEditor(editor: EditorInput, context?: EditorCloseContext, openNext?: boolean): IEditorCloseResult | undefined;
 	moveEditor(editor: EditorInput, toIndex: number): EditorInput | undefined;
 	setActive(editor: EditorInput | undefined): EditorInput | undefined;
-	setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): void;
+	setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): codemavi;
 }
 
 export class EditorGroupModel extends Disposable implements IEditorGroupModel {
@@ -250,11 +250,11 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.onConfigurationUpdated(e)));
 	}
 
-	private onConfigurationUpdated(e?: IConfigurationChangeEvent): void {
+	private onConfigurationUpdated(e?: IConfigurationChangeEvent): codemavi {
 		if (e && !e.affectsConfiguration('workbench.editor.openPositioning') && !e.affectsConfiguration('workbench.editor.focusRecentEditorAfterClose')) {
 			return;
 		}
@@ -452,7 +452,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		}
 	}
 
-	private registerEditorListeners(editor: EditorInput): void {
+	private registerEditorListeners(editor: EditorInput): codemavi {
 		const listeners = new DisposableStore();
 		this.editorListeners.add(listeners);
 
@@ -508,7 +508,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		}));
 	}
 
-	private replaceEditor(toReplace: EditorInput, replaceWith: EditorInput, replaceIndex: number, openNext = true): void {
+	private replaceEditor(toReplace: EditorInput, replaceWith: EditorInput, replaceIndex: number, openNext = true): codemavi {
 		const closeResult = this.doCloseEditor(toReplace, EditorCloseContext.REPLACE, openNext); // optimization to prevent multiple setActive() in one call
 
 		// We want to first add the new editor into our model before emitting the close event because
@@ -668,7 +668,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return result;
 	}
 
-	private setGroupActive(): void {
+	private setGroupActive(): codemavi {
 		// We do not really keep the `active` state in our model because
 		// it has no special meaning to us here. But for consistency
 		// we emit a `onDidModelChange` event so that components can
@@ -708,7 +708,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return this.selection.includes(editor);
 	}
 
-	setSelection(activeSelectedEditorCandidate: EditorInput, inactiveSelectedEditorCandidates: EditorInput[]): void {
+	setSelection(activeSelectedEditorCandidate: EditorInput, inactiveSelectedEditorCandidates: EditorInput[]): codemavi {
 		const res = this.findEditor(activeSelectedEditorCandidate);
 		if (!res) {
 			return; // not found
@@ -734,7 +734,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		this.doSetSelection(activeSelectedEditor, activeSelectedEditorIndex, Array.from(inactiveSelectedEditors));
 	}
 
-	private doSetSelection(activeSelectedEditor: EditorInput | null, activeSelectedEditorIndex: number | undefined, inactiveSelectedEditors: EditorInput[]): void {
+	private doSetSelection(activeSelectedEditor: EditorInput | null, activeSelectedEditorIndex: number | undefined, inactiveSelectedEditors: EditorInput[]): codemavi {
 		const previousActiveEditor = this.activeEditor;
 		const previousSelection = this.selection;
 
@@ -808,7 +808,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return editor;
 	}
 
-	private doPin(editor: EditorInput, editorIndex: number): void {
+	private doPin(editor: EditorInput, editorIndex: number): codemavi {
 		if (this.isPinned(editor)) {
 			return; // can only pin a preview editor
 		}
@@ -841,7 +841,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return editor;
 	}
 
-	private doUnpin(editor: EditorInput, editorIndex: number): void {
+	private doUnpin(editor: EditorInput, editorIndex: number): codemavi {
 		if (!this.isPinned(editor)) {
 			return; // can only unpin a pinned editor
 		}
@@ -888,7 +888,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return editor;
 	}
 
-	private doStick(editor: EditorInput, editorIndex: number): void {
+	private doStick(editor: EditorInput, editorIndex: number): codemavi {
 		if (this.isSticky(editorIndex)) {
 			return; // can only stick a non-sticky editor
 		}
@@ -925,7 +925,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return editor;
 	}
 
-	private doUnstick(editor: EditorInput, editorIndex: number): void {
+	private doUnstick(editor: EditorInput, editorIndex: number): codemavi {
 		if (!this.isSticky(editorIndex)) {
 			return; // can only unstick a sticky editor
 		}
@@ -982,7 +982,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return editor;
 	}
 
-	private doSetTransient(editor: EditorInput, editorIndex: number, transient: boolean): void {
+	private doSetTransient(editor: EditorInput, editorIndex: number, transient: boolean): codemavi {
 		if (transient) {
 			if (this.transient.has(editor)) {
 				return;
@@ -1021,7 +1021,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return !!editor && this.transient.has(editor);
 	}
 
-	private splice(index: number, del: boolean, editor?: EditorInput): void {
+	private splice(index: number, del: boolean, editor?: EditorInput): codemavi {
 		const editorToDeleteOrReplace = this.editors[index];
 
 		// Perform on sticky index
@@ -1151,7 +1151,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return this.locked;
 	}
 
-	lock(locked: boolean): void {
+	lock(locked: boolean): codemavi {
 		if (this.isLocked !== locked) {
 			this.locked = locked;
 
@@ -1281,7 +1281,7 @@ export class EditorGroupModel extends Disposable implements IEditorGroupModel {
 		return this._id;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		dispose(Array.from(this.editorListeners));
 		this.editorListeners.clear();
 

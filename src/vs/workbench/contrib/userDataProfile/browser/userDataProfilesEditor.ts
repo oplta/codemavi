@@ -120,7 +120,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		super(UserDataProfilesEditor.ID, group, telemetryService, themeService, storageService);
 	}
 
-	layout(dimension: Dimension, position?: IDomPosition | undefined): void {
+	layout(dimension: Dimension, position?: IDomPosition | undefined): codemavi {
 		if (this.container && this.splitView) {
 			const height = dimension.height - 20;
 			this.splitView.layout(this.container?.clientWidth, height);
@@ -128,7 +128,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		}
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this.container = append(parent, $('.profiles-editor'));
 
 		const sidebarView = append(this.container, $('.sidebar-view'));
@@ -175,12 +175,12 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		this.updateStyles();
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		const borderColor = this.theme.getColor(profilesSashBorder)!;
 		this.splitView?.style({ separatorBorder: borderColor });
 	}
 
-	private renderSidebar(parent: HTMLElement): void {
+	private renderSidebar(parent: HTMLElement): codemavi {
 		// render New Profile Button
 		this.renderNewProfileButton(append(parent, $('.new-profile-button')));
 
@@ -216,7 +216,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 			}));
 	}
 
-	private renderNewProfileButton(parent: HTMLElement): void {
+	private renderNewProfileButton(parent: HTMLElement): codemavi {
 		const button = this._register(new ButtonWithDropdown(parent, {
 			actions: {
 				getActions: () => {
@@ -251,7 +251,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 			}));
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		if (this.profilesList) {
 			this._register(this.profilesList.onDidChangeSelection(e => {
 				const [element] = e.elements;
@@ -303,7 +303,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		return actions;
 	}
 
-	private async importProfile(): Promise<void> {
+	private async importProfile(): Promise<codemavi> {
 		const disposables = new DisposableStore();
 		const quickPick = disposables.add(this.quickInputService.createQuickPick());
 
@@ -338,11 +338,11 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		quickPick.show();
 	}
 
-	async createNewProfile(copyFrom?: URI | IUserDataProfile): Promise<void> {
+	async createNewProfile(copyFrom?: URI | IUserDataProfile): Promise<codemavi> {
 		await this.model?.createNewProfile(copyFrom);
 	}
 
-	selectProfile(profile: IUserDataProfile): void {
+	selectProfile(profile: IUserDataProfile): codemavi {
 		const index = this.model?.profiles.findIndex(p => p instanceof UserDataProfileElement && p.profile.id === profile.id);
 		if (index !== undefined && index >= 0) {
 			this.profilesList?.setSelection([index]);
@@ -363,7 +363,7 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 		return profileLocation[0];
 	}
 
-	override async setInput(input: UserDataProfilesEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: UserDataProfilesEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		await super.setInput(input, options, context, token);
 		this.model = await input.resolve();
 		this.model.getTemplates().then(templates => {
@@ -377,12 +377,12 @@ export class UserDataProfilesEditor extends EditorPane implements IUserDataProfi
 			this.updateProfilesList(element)));
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this.profilesList?.domFocus();
 	}
 
-	private updateProfilesList(elementToSelect?: AbstractUserDataProfileElement): void {
+	private updateProfilesList(elementToSelect?: AbstractUserDataProfileElement): codemavi {
 		if (!this.model) {
 			return;
 		}
@@ -496,11 +496,11 @@ class ProfileElementRenderer implements IListRenderer<AbstractUserDataProfileEle
 
 	}
 
-	disposeElement(element: AbstractUserDataProfileElement, index: number, templateData: IProfileElementTemplateData, height: number | undefined): void {
+	disposeElement(element: AbstractUserDataProfileElement, index: number, templateData: IProfileElementTemplateData, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IProfileElementTemplateData): void {
+	disposeTemplate(templateData: IProfileElementTemplateData): codemavi {
 		templateData.disposables.dispose();
 		templateData.elementDisposables.dispose();
 	}
@@ -516,7 +516,7 @@ class ProfileWidget extends Disposable {
 	private readonly copyFromProfileRenderer: CopyFromProfileRenderer;
 	private readonly _profileElement = this._register(new MutableDisposable<{ element: AbstractUserDataProfileElement } & IDisposable>());
 
-	private readonly layoutParticipants: { layout: () => void }[] = [];
+	private readonly layoutParticipants: { layout: () => codemavi }[] = [];
 
 	public set templates(templates: readonly IProfileTemplateInfo[]) {
 		this.copyFromProfileRenderer.setTemplates(templates);
@@ -608,7 +608,7 @@ class ProfileWidget extends Disposable {
 	}
 
 	private dimension: Dimension | undefined;
-	layout(dimension: Dimension): void {
+	layout(dimension: Dimension): codemavi {
 		this.dimension = dimension;
 		const treeContentHeight = this.profileTree.contentHeight;
 		const height = Math.min(treeContentHeight, dimension.height - (this._profileElement.value?.element instanceof NewProfileElement ? 116 : 54));
@@ -619,7 +619,7 @@ class ProfileWidget extends Disposable {
 		}
 	}
 
-	render(profileElement: AbstractUserDataProfileElement): void {
+	render(profileElement: AbstractUserDataProfileElement): codemavi {
 		if (this._profileElement.value?.element === profileElement) {
 			return;
 		}
@@ -887,21 +887,21 @@ class AbstractProfileResourceTreeRenderer extends Disposable {
 		return '';
 	}
 
-	disposeElement(element: ITreeNode<ProfileContentTreeElement | ProfileTreeElement, void>, index: number, templateData: IProfileRendererTemplate, height: number | undefined): void {
+	disposeElement(element: ITreeNode<ProfileContentTreeElement | ProfileTreeElement, codemavi>, index: number, templateData: IProfileRendererTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IProfileRendererTemplate): void {
+	disposeTemplate(templateData: IProfileRendererTemplate): codemavi {
 		templateData.disposables.dispose();
 	}
 }
 
-abstract class ProfilePropertyRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileTreeElement, void, IProfilePropertyRendererTemplate> {
+abstract class ProfilePropertyRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileTreeElement, codemavi, IProfilePropertyRendererTemplate> {
 
 	abstract templateId: ProfileProperty;
 	abstract renderTemplate(parent: HTMLElement): IProfilePropertyRendererTemplate;
 
-	renderElement({ element }: ITreeNode<ProfileTreeElement, void>, index: number, templateData: IProfilePropertyRendererTemplate, height: number | undefined): void {
+	renderElement({ element }: ITreeNode<ProfileTreeElement, codemavi>, index: number, templateData: IProfilePropertyRendererTemplate, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 		templateData.element = element;
 	}
@@ -1302,7 +1302,7 @@ class CopyFromProfileRenderer extends ProfilePropertyRenderer {
 		};
 	}
 
-	setTemplates(templates: readonly IProfileTemplateInfo[]): void {
+	setTemplates(templates: readonly IProfileTemplateInfo[]): codemavi {
 		this.templates = templates;
 	}
 
@@ -1504,7 +1504,7 @@ class ContentsProfileRenderer extends ProfilePropertyRenderer {
 		};
 	}
 
-	clearSelection(): void {
+	clearSelection(): codemavi {
 		if (this.profilesContentTree) {
 			this.profilesContentTree.setSelection([]);
 			this.profilesContentTree.setFocus([]);
@@ -1685,13 +1685,13 @@ class ProfileWorkspacesRenderer extends ProfilePropertyRenderer {
 		};
 	}
 
-	layout(): void {
+	layout(): codemavi {
 		if (this.workspacesTable) {
 			this.workspacesTable.layout((this.workspacesTable.length * 24) + 30, undefined);
 		}
 	}
 
-	clearSelection(): void {
+	clearSelection(): codemavi {
 		if (this.workspacesTable) {
 			this.workspacesTable.setSelection([]);
 			this.workspacesTable.setFocus([]);
@@ -1699,7 +1699,7 @@ class ProfileWorkspacesRenderer extends ProfilePropertyRenderer {
 	}
 }
 
-class ExistingProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, void, IExistingProfileResourceTemplateData> {
+class ExistingProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, codemavi, IExistingProfileResourceTemplateData> {
 
 	static readonly TEMPLATE_ID = 'ExistingProfileResourceTemplate';
 
@@ -1731,7 +1731,7 @@ class ExistingProfileResourceTreeRenderer extends AbstractProfileResourceTreeRen
 		return { label, radio, actionBar, disposables, elementDisposables: disposables.add(new DisposableStore()) };
 	}
 
-	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, void>, index: number, templateData: IExistingProfileResourceTemplateData, height: number | undefined): void {
+	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, codemavi>, index: number, templateData: IExistingProfileResourceTemplateData, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 		const { element, root } = profileResourceTreeElement;
 		if (!(root instanceof UserDataProfileElement)) {
@@ -1782,7 +1782,7 @@ class ExistingProfileResourceTreeRenderer extends AbstractProfileResourceTreeRen
 
 }
 
-class NewProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, void, INewProfileResourceTemplateData> {
+class NewProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, codemavi, INewProfileResourceTemplateData> {
 
 	static readonly TEMPLATE_ID = 'NewProfileResourceTemplate';
 
@@ -1816,7 +1816,7 @@ class NewProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer
 		return { label, radio, actionBar, disposables, elementDisposables: disposables.add(new DisposableStore()) };
 	}
 
-	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, void>, index: number, templateData: INewProfileResourceTemplateData, height: number | undefined): void {
+	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, codemavi>, index: number, templateData: INewProfileResourceTemplateData, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 		const { element, root } = profileResourceTreeElement;
 		if (!(root instanceof NewProfileElement)) {
@@ -1889,7 +1889,7 @@ class NewProfileResourceTreeRenderer extends AbstractProfileResourceTreeRenderer
 	}
 }
 
-class ProfileResourceChildTreeItemRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, void, IProfileResourceChildTreeItemTemplateData> {
+class ProfileResourceChildTreeItemRenderer extends AbstractProfileResourceTreeRenderer implements ITreeRenderer<ProfileContentTreeElement, codemavi, IProfileResourceChildTreeItemTemplateData> {
 
 	static readonly TEMPLATE_ID = 'ProfileResourceChildTreeItemTemplate';
 
@@ -1924,7 +1924,7 @@ class ProfileResourceChildTreeItemRenderer extends AbstractProfileResourceTreeRe
 		return { checkbox, resourceLabel, actionBar, disposables, elementDisposables: disposables.add(new DisposableStore()) };
 	}
 
-	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, void>, index: number, templateData: IProfileResourceChildTreeItemTemplateData, height: number | undefined): void {
+	renderElement({ element: profileResourceTreeElement }: ITreeNode<ProfileContentTreeElement, codemavi>, index: number, templateData: IProfileResourceChildTreeItemTemplateData, height: number | undefined): codemavi {
 		templateData.elementDisposables.clear();
 		const { element } = profileResourceTreeElement;
 
@@ -1977,10 +1977,10 @@ class WorkspaceUriEmptyColumnRenderer implements ITableRenderer<WorkspaceTableEl
 		return {};
 	}
 
-	renderElement(item: WorkspaceTableElement, index: number, templateData: {}, height: number | undefined): void {
+	renderElement(item: WorkspaceTableElement, index: number, templateData: {}, height: number | undefined): codemavi {
 	}
 
-	disposeTemplate(): void {
+	disposeTemplate(): codemavi {
 	}
 
 }
@@ -2020,7 +2020,7 @@ class WorkspaceUriHostColumnRenderer implements ITableRenderer<WorkspaceTableEle
 		};
 	}
 
-	renderElement(item: WorkspaceTableElement, index: number, templateData: IWorkspaceUriHostColumnTemplateData, height: number | undefined): void {
+	renderElement(item: WorkspaceTableElement, index: number, templateData: IWorkspaceUriHostColumnTemplateData, height: number | undefined): codemavi {
 		templateData.renderDisposables.clear();
 		templateData.renderDisposables.add({ dispose: () => { clearNode(templateData.buttonBarContainer); } });
 
@@ -2031,7 +2031,7 @@ class WorkspaceUriHostColumnRenderer implements ITableRenderer<WorkspaceTableEle
 		templateData.buttonBarContainer.style.display = 'none';
 	}
 
-	disposeTemplate(templateData: IWorkspaceUriHostColumnTemplateData): void {
+	disposeTemplate(templateData: IWorkspaceUriHostColumnTemplateData): codemavi {
 		templateData.disposables.dispose();
 	}
 
@@ -2075,7 +2075,7 @@ class WorkspaceUriPathColumnRenderer implements ITableRenderer<WorkspaceTableEle
 		};
 	}
 
-	renderElement(item: WorkspaceTableElement, index: number, templateData: IWorkspaceUriPathColumnTemplateData, height: number | undefined): void {
+	renderElement(item: WorkspaceTableElement, index: number, templateData: IWorkspaceUriPathColumnTemplateData, height: number | undefined): codemavi {
 		templateData.renderDisposables.clear();
 		const stringValue = this.formatPath(item.workspace);
 		templateData.pathLabel.innerText = stringValue;
@@ -2083,7 +2083,7 @@ class WorkspaceUriPathColumnRenderer implements ITableRenderer<WorkspaceTableEle
 		templateData.pathHover.update(stringValue);
 	}
 
-	disposeTemplate(templateData: IWorkspaceUriPathColumnTemplateData): void {
+	disposeTemplate(templateData: IWorkspaceUriPathColumnTemplateData): codemavi {
 		templateData.disposables.dispose();
 		templateData.renderDisposables.dispose();
 	}
@@ -2177,7 +2177,7 @@ class WorkspaceUriActionsColumnRenderer implements ITableRenderer<WorkspaceTable
 		return { actionBar, disposables };
 	}
 
-	renderElement(item: WorkspaceTableElement, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): void {
+	renderElement(item: WorkspaceTableElement, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): codemavi {
 		templateData.actionBar.clear();
 		const actions: IAction[] = [];
 		actions.push(this.createOpenAction(item));
@@ -2208,7 +2208,7 @@ class WorkspaceUriActionsColumnRenderer implements ITableRenderer<WorkspaceTable
 		};
 	}
 
-	disposeTemplate(templateData: IActionsColumnTemplateData): void {
+	disposeTemplate(templateData: IActionsColumnTemplateData): codemavi {
 		templateData.disposables.dispose();
 	}
 
@@ -2259,13 +2259,13 @@ export class UserDataProfilesEditorInput extends EditorInput {
 		return this;
 	}
 
-	override async revert(): Promise<void> {
+	override async revert(): Promise<codemavi> {
 		this.model.revert();
 	}
 
 	override matches(otherInput: EditorInput | IUntypedEditorInput): boolean { return otherInput instanceof UserDataProfilesEditorInput; }
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		for (const profile of this.model.profiles) {
 			if (profile instanceof UserDataProfileElement) {
 				profile.reset();

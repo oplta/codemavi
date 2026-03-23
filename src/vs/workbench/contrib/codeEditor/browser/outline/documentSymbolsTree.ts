@@ -97,7 +97,7 @@ export class DocumentSymbolDragAndDrop implements ITreeDragAndDrop<DocumentSymbo
 		return element instanceof OutlineElement ? element.symbol.name : element.label;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
 		const elements = (data as ElementsDragAndDropData<DocumentSymbolItem, DocumentSymbolItem[]>).elements;
 		const item = elements[0];
 		if (!item || !originalEvent.dataTransfer) {
@@ -125,8 +125,8 @@ export class DocumentSymbolDragAndDrop implements ITreeDragAndDrop<DocumentSymbo
 	}
 
 	onDragOver(): boolean | ITreeDragOverReaction { return false; }
-	drop(): void { }
-	dispose(): void { }
+	drop(): codemavi { }
+	dispose(): codemavi { }
 }
 
 function symbolRangeUri(resource: URI, symbol: DocumentSymbol): URI {
@@ -179,11 +179,11 @@ export class DocumentSymbolGroupRenderer implements ITreeRenderer<OutlineGroup, 
 		return new DocumentSymbolGroupTemplate(labelContainer, new HighlightedLabel(labelContainer));
 	}
 
-	renderElement(node: ITreeNode<OutlineGroup, FuzzyScore>, _index: number, template: DocumentSymbolGroupTemplate): void {
+	renderElement(node: ITreeNode<OutlineGroup, FuzzyScore>, _index: number, template: DocumentSymbolGroupTemplate): codemavi {
 		template.label.set(node.element.label, createMatches(node.filterData));
 	}
 
-	disposeTemplate(_template: DocumentSymbolGroupTemplate): void {
+	disposeTemplate(_template: DocumentSymbolGroupTemplate): codemavi {
 		_template.dispose();
 	}
 }
@@ -209,7 +209,7 @@ export class DocumentSymbolRenderer implements ITreeRenderer<OutlineElement, Fuz
 		return new DocumentSymbolTemplate(container, iconLabel, iconClass, decoration);
 	}
 
-	renderElement(node: ITreeNode<OutlineElement, FuzzyScore>, _index: number, template: DocumentSymbolTemplate): void {
+	renderElement(node: ITreeNode<OutlineElement, FuzzyScore>, _index: number, template: DocumentSymbolTemplate): codemavi {
 		const { element } = node;
 		const extraClasses = ['nowrap'];
 		const options: IIconLabelValueOptions = {
@@ -234,7 +234,7 @@ export class DocumentSymbolRenderer implements ITreeRenderer<OutlineElement, Fuz
 		}
 	}
 
-	private _renderMarkerInfo(element: OutlineElement, template: DocumentSymbolTemplate): void {
+	private _renderMarkerInfo(element: OutlineElement, template: DocumentSymbolTemplate): codemavi {
 
 		if (!element.marker) {
 			dom.hide(template.decoration);
@@ -280,7 +280,7 @@ export class DocumentSymbolRenderer implements ITreeRenderer<OutlineElement, Fuz
 		}
 	}
 
-	disposeTemplate(_template: DocumentSymbolTemplate): void {
+	disposeTemplate(_template: DocumentSymbolTemplate): codemavi {
 		_template.iconLabel.dispose();
 	}
 }

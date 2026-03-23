@@ -20,7 +20,7 @@ export class SurroundSelectionCommand implements ICommand {
 		this._charAfterSelection = charAfterSelection;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		builder.addTrackedEditOperation(new Range(
 			this._range.startLineNumber,
 			this._range.startColumn,
@@ -61,7 +61,7 @@ export class CompositionSurroundSelectionCommand implements ICommand {
 		private readonly _charAfter: string
 	) { }
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		builder.addTrackedEditOperation(new Range(
 			this._position.lineNumber,
 			this._position.column,

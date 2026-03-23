@@ -38,7 +38,7 @@ suite.skip('File Watcher (node.js)', function () {
 
 		protected override readonly suspendedWatchRequestPollingInterval = 100;
 
-		private readonly _onDidWatch = this._register(new Emitter<void>());
+		private readonly _onDidWatch = this._register(new Emitter<codemavi>());
 		readonly onDidWatch = this._onDidWatch.event;
 
 		readonly onWatchFail = this._onDidWatchFail.event;
@@ -47,7 +47,7 @@ suite.skip('File Watcher (node.js)', function () {
 			return 0;
 		}
 
-		protected override async doWatch(requests: INonRecursiveWatchRequest[]): Promise<void> {
+		protected override async doWatch(requests: INonRecursiveWatchRequest[]): Promise<codemavi> {
 			await super.doWatch(requests);
 			for (const watcher of this.watchers) {
 				await watcher.instance.ready;
@@ -122,13 +122,13 @@ suite.skip('File Watcher (node.js)', function () {
 		}
 	}
 
-	async function awaitEvent(service: TestNodeJSWatcher, path: string, type: FileChangeType, correlationId?: number | null, expectedCount?: number): Promise<void> {
+	async function awaitEvent(service: TestNodeJSWatcher, path: string, type: FileChangeType, correlationId?: number | null, expectedCount?: number): Promise<codemavi> {
 		if (loggingEnabled) {
 			console.log(`Awaiting change type '${toMsg(type)}' on file '${path}'`);
 		}
 
 		// Await the event
-		await new Promise<void>(resolve => {
+		await new Promise<codemavi>(resolve => {
 			let counter = 0;
 			const disposable = service.onDidChangeFile(events => {
 				for (const event of events) {
@@ -458,7 +458,7 @@ suite.skip('File Watcher (node.js)', function () {
 		return basicCrudTest(join(link, 'newFile.txt'));
 	});
 
-	async function basicCrudTest(filePath: string, skipAdd?: boolean, correlationId?: number | null, expectedCount?: number, awaitWatchAfterAdd?: boolean): Promise<void> {
+	async function basicCrudTest(filePath: string, skipAdd?: boolean, correlationId?: number | null, expectedCount?: number, awaitWatchAfterAdd?: boolean): Promise<codemavi> {
 		let changeFuture: Promise<unknown>;
 
 		// New file
@@ -540,8 +540,8 @@ suite.skip('File Watcher (node.js)', function () {
 
 		const cts = new CancellationTokenSource();
 
-		const readyPromise = new DeferredPromise<void>();
-		const chunkPromise = new DeferredPromise<void>();
+		const readyPromise = new DeferredPromise<codemavi>();
+		const chunkPromise = new DeferredPromise<codemavi>();
 		const watchPromise = watchFileContents(watchedPath, () => chunkPromise.complete(), () => readyPromise.complete(), cts.token);
 
 		await readyPromise.p;

@@ -66,7 +66,7 @@ class TestTerminalChildProcess extends Disposable implements ITerminalChildProce
 	) {
 		super();
 	}
-	updateProperty(property: any, value: any): Promise<void> {
+	updateProperty(property: any, value: any): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -81,15 +81,15 @@ class TestTerminalChildProcess extends Disposable implements ITerminalChildProce
 	onProcessTitleChanged = Event.None;
 	onProcessShellTypeChanged = Event.None;
 	async start(): Promise<undefined> { return undefined; }
-	shutdown(immediate: boolean): void { }
-	input(data: string): void { }
-	resize(cols: number, rows: number): void { }
-	clearBuffer(): void { }
-	acknowledgeDataEvent(charCount: number): void { }
-	async setUnicodeVersion(version: '6' | '11'): Promise<void> { }
+	shutdown(immediate: boolean): codemavi { }
+	input(data: string): codemavi { }
+	resize(cols: number, rows: number): codemavi { }
+	clearBuffer(): codemavi { }
+	acknowledgeDataEvent(charCount: number): codemavi { }
+	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> { }
 	async getInitialCwd(): Promise<string> { return ''; }
 	async getCwd(): Promise<string> { return ''; }
-	async processBinary(data: string): Promise<void> { }
+	async processBinary(data: string): Promise<codemavi> { }
 	refreshProperty(property: any): Promise<any> { return Promise.resolve(''); }
 }
 

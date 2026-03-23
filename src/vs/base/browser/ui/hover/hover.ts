@@ -104,13 +104,13 @@ export interface IHoverDelegate2 {
 	 * Hides the hover if it was visible. This call will be ignored if the hover is currently
 	 * "locked" via the alt/option key unless `force` is set.
 	 */
-	hideHover(force?: boolean): void;
+	hideHover(force?: boolean): codemavi;
 
 	/**
 	 * This should only be used until we have the ability to show multiple context views
 	 * simultaneously. #188822
 	 */
-	showAndFocusLastHover(): void;
+	showAndFocusLastHover(): codemavi;
 
 	/**
 	 * Sets up a managed hover for the given element. A managed hover will set up listeners for
@@ -138,7 +138,7 @@ export interface IHoverDelegate2 {
 	 * @deprecated Use {@link setupDelayedHover} or {@link setupDelayedHoverAtMouse} instead where
 	 * possible.
 	 */
-	showManagedHover(targetElement: HTMLElement): void;
+	showManagedHover(targetElement: HTMLElement): codemavi;
 }
 
 export interface IHoverWidget extends IDisposable {
@@ -195,7 +195,7 @@ export interface IHoverOptions {
 	 * An optional link handler for markdown links, if this is not provided the IOpenerService will
 	 * be used to open the links using its default options.
 	 */
-	linkHandler?(url: string): void;
+	linkHandler?(url: string): codemavi;
 
 	/**
 	 * Whether to trap focus in the following ways:
@@ -348,7 +348,7 @@ export interface IHoverAction {
 	 * The callback to run the action.
 	 * @param target The action element that was activated.
 	 */
-	run(target: HTMLElement): void;
+	run(target: HTMLElement): codemavi;
 }
 
 /**
@@ -407,17 +407,17 @@ export interface IManagedHover extends IDisposable {
 	/**
 	 * Allows to programmatically open the hover.
 	 */
-	show(focus?: boolean): void;
+	show(focus?: boolean): codemavi;
 
 	/**
 	 * Allows to programmatically hide the hover.
 	 */
-	hide(): void;
+	hide(): codemavi;
 
 	/**
 	 * Updates the contents of the hover.
 	 */
-	update(tooltip: IManagedHoverContent, options?: IManagedHoverOptions): void;
+	update(tooltip: IManagedHoverContent, options?: IManagedHoverOptions): codemavi;
 }
 
 // #endregion Managed hover

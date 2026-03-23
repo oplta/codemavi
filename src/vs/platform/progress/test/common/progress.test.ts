@@ -16,7 +16,7 @@ suite('Progress', () => {
 		await runWithFakedTimers({ useFakeTimers: true, maxTaskCount: 100 }, async () => {
 			const executionOrder: string[] = [];
 			const timeout = (time: number) => {
-				return new Promise<void>(resolve => setTimeout(resolve, time));
+				return new Promise<codemavi>(resolve => setTimeout(resolve, time));
 			};
 			const executor = async (value: number) => {
 				executionOrder.push(`start ${value}`);

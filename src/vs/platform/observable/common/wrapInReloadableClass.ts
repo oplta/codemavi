@@ -24,7 +24,7 @@ class BaseClass {
 		public readonly instantiationService: IInstantiationService,
 	) { }
 
-	public init(...params: any[]): void { }
+	public init(...params: any[]): codemavi { }
 }
 
 function createWrapper<T extends any[]>(getClass: () => any, B: new (...args: T) => BaseClass) {
@@ -38,7 +38,7 @@ function createWrapper<T extends any[]>(getClass: () => any, B: new (...args: T)
 			});
 		}
 
-		dispose(): void {
+		dispose(): codemavi {
 			this._autorun?.dispose();
 		}
 	}) as any;

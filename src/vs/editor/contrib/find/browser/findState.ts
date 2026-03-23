@@ -35,7 +35,7 @@ export const enum FindOptionOverride {
 	False = 2
 }
 
-export interface INewFindReplaceState<T extends { update: (value: T) => void } = { update: () => {} }> {
+export interface INewFindReplaceState<T extends { update: (value: T) => codemavi } = { update: () => {} }> {
 	searchString?: string;
 	replaceString?: string;
 	isRevealed?: boolean;
@@ -64,7 +64,7 @@ function effectiveOptionValue(override: FindOptionOverride, value: boolean): boo
 	return value;
 }
 
-export class FindReplaceState<T extends { update: (value: T) => void } = { update: () => {} }> extends Disposable {
+export class FindReplaceState<T extends { update: (value: T) => codemavi } = { update: () => {} }> extends Disposable {
 	private _searchString: string;
 	private _replaceString: string;
 	private _isRevealed: boolean;
@@ -131,7 +131,7 @@ export class FindReplaceState<T extends { update: (value: T) => void } = { updat
 		this._filters = null;
 	}
 
-	public changeMatchInfo(matchesPosition: number, matchesCount: number, currentMatch: Range | undefined): void {
+	public changeMatchInfo(matchesPosition: number, matchesCount: number, currentMatch: Range | undefined): codemavi {
 		const changeEvent: FindReplaceStateChangedEvent = {
 			moveCursor: false,
 			updateHistory: false,
@@ -184,7 +184,7 @@ export class FindReplaceState<T extends { update: (value: T) => void } = { updat
 		}
 	}
 
-	public change(newState: INewFindReplaceState<T>, moveCursor: boolean, updateHistory: boolean = true): void {
+	public change(newState: INewFindReplaceState<T>, moveCursor: boolean, updateHistory: boolean = true): codemavi {
 		const changeEvent: FindReplaceStateChangedEvent = {
 			moveCursor: moveCursor,
 			updateHistory: updateHistory,

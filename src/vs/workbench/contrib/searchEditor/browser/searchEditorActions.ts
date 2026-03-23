@@ -75,7 +75,7 @@ export const selectAllSearchEditorMatchesCommand = (accessor: ServicesAccessor) 
 	}
 };
 
-export async function openSearchEditor(accessor: ServicesAccessor): Promise<void> {
+export async function openSearchEditor(accessor: ServicesAccessor): Promise<codemavi> {
 	const viewsService = accessor.get(IViewsService);
 	const instantiationService = accessor.get(IInstantiationService);
 	const searchView = getSearchView(viewsService);

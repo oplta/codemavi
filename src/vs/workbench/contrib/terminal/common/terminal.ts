@@ -50,8 +50,8 @@ export interface ITerminalProfileResolverService {
 	/**
 	 * Resolves the icon of a shell launch config if this will use the default profile
 	 */
-	resolveIcon(shellLaunchConfig: IShellLaunchConfig, os: OperatingSystem): void;
-	resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<void>;
+	resolveIcon(shellLaunchConfig: IShellLaunchConfig, os: OperatingSystem): codemavi;
+	resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<codemavi>;
 	getDefaultProfile(options: IShellLaunchConfigResolveOptions): Promise<ITerminalProfile>;
 	getDefaultShell(options: IShellLaunchConfigResolveOptions): Promise<string>;
 	getDefaultShellArgs(options: IShellLaunchConfigResolveOptions): Promise<string | string[]>;
@@ -74,20 +74,20 @@ export interface ITerminalProfileService {
 	readonly _serviceBrand: undefined;
 	readonly availableProfiles: ITerminalProfile[];
 	readonly contributedProfiles: IExtensionTerminalProfile[];
-	readonly profilesReady: Promise<void>;
+	readonly profilesReady: Promise<codemavi>;
 	getPlatformKey(): Promise<string>;
-	refreshAvailableProfiles(): void;
+	refreshAvailableProfiles(): codemavi;
 	getDefaultProfileName(): string | undefined;
 	getDefaultProfile(os?: OperatingSystem): ITerminalProfile | undefined;
 	onDidChangeAvailableProfiles: Event<ITerminalProfile[]>;
 	getContributedDefaultProfile(shellLaunchConfig: IShellLaunchConfig): Promise<IExtensionTerminalProfile | undefined>;
-	registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<void>;
+	registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<codemavi>;
 	getContributedProfileProvider(extensionIdentifier: string, id: string): ITerminalProfileProvider | undefined;
 	registerTerminalProfileProvider(extensionIdentifier: string, id: string, profileProvider: ITerminalProfileProvider): IDisposable;
 }
 
 export interface ITerminalProfileProvider {
-	createContributedTerminalProfile(options: ICreateContributedTerminalProfileOptions): Promise<void>;
+	createContributedTerminalProfile(options: ICreateContributedTerminalProfileOptions): Promise<codemavi>;
 }
 
 export interface IShellLaunchConfigResolveOptions {
@@ -251,13 +251,13 @@ export interface IBeforeProcessDataEvent {
 
 export interface IDefaultShellAndArgsRequest {
 	useAutomationShell: boolean;
-	callback: (shell: string, args: string[] | string | undefined) => void;
+	callback: (shell: string, args: string[] | string | undefined) => codemavi;
 }
 
 /** Read-only process information that can apply to detached terminals. */
 export interface ITerminalProcessInfo {
 	readonly processState: ProcessState;
-	readonly ptyProcessReady: Promise<void>;
+	readonly ptyProcessReady: Promise<codemavi>;
 	readonly shellProcessId: number | undefined;
 	readonly remoteAuthority: string | undefined;
 	readonly os: OperatingSystem | undefined;
@@ -279,35 +279,35 @@ export const isTerminalProcessManager = (t: ITerminalProcessInfo | ITerminalProc
 export interface ITerminalProcessManager extends IDisposable, ITerminalProcessInfo {
 	readonly processTraits: IProcessReadyEvent | undefined;
 
-	readonly onPtyDisconnect: Event<void>;
-	readonly onPtyReconnect: Event<void>;
+	readonly onPtyDisconnect: Event<codemavi>;
+	readonly onPtyReconnect: Event<codemavi>;
 
 	readonly onProcessReady: Event<IProcessReadyEvent>;
 	readonly onBeforeProcessData: Event<IBeforeProcessDataEvent>;
 	readonly onProcessData: Event<IProcessDataEvent>;
-	readonly onProcessReplayComplete: Event<void>;
+	readonly onProcessReplayComplete: Event<codemavi>;
 	readonly onEnvironmentVariableInfoChanged: Event<IEnvironmentVariableInfo>;
 	readonly onDidChangeProperty: Event<IProcessProperty<any>>;
 	readonly onProcessExit: Event<number | undefined>;
 	readonly onRestoreCommands: Event<ISerializedCommandDetectionCapability>;
 
-	dispose(immediate?: boolean): void;
-	detachFromProcess(forcePersist?: boolean): Promise<void>;
+	dispose(immediate?: boolean): codemavi;
+	detachFromProcess(forcePersist?: boolean): Promise<codemavi>;
 	createProcess(shellLaunchConfig: IShellLaunchConfig, cols: number, rows: number): Promise<ITerminalLaunchError | { injectedArgs: string[] } | undefined>;
 	relaunch(shellLaunchConfig: IShellLaunchConfig, cols: number, rows: number, reset: boolean): Promise<ITerminalLaunchError | { injectedArgs: string[] } | undefined>;
-	write(data: string): Promise<void>;
-	setDimensions(cols: number, rows: number): Promise<void>;
-	setDimensions(cols: number, rows: number, sync: false): Promise<void>;
-	setDimensions(cols: number, rows: number, sync: true): void;
-	clearBuffer(): Promise<void>;
-	setUnicodeVersion(version: '6' | '11'): Promise<void>;
-	acknowledgeDataEvent(charCount: number): void;
-	processBinary(data: string): void;
+	write(data: string): Promise<codemavi>;
+	setDimensions(cols: number, rows: number): Promise<codemavi>;
+	setDimensions(cols: number, rows: number, sync: false): Promise<codemavi>;
+	setDimensions(cols: number, rows: number, sync: true): codemavi;
+	clearBuffer(): Promise<codemavi>;
+	setUnicodeVersion(version: '6' | '11'): Promise<codemavi>;
+	acknowledgeDataEvent(charCount: number): codemavi;
+	processBinary(data: string): codemavi;
 
 	refreshProperty<T extends ProcessPropertyType>(type: T): Promise<IProcessPropertyMap[T]>;
-	updateProperty<T extends ProcessPropertyType>(property: T, value: IProcessPropertyMap[T]): Promise<void>;
+	updateProperty<T extends ProcessPropertyType>(property: T, value: IProcessPropertyMap[T]): Promise<codemavi>;
 	getBackendOS(): Promise<OperatingSystem>;
-	freePortKillProcess(port: string): Promise<void>;
+	freePortKillProcess(port: string): Promise<codemavi>;
 }
 
 export const enum ProcessState {
@@ -332,25 +332,25 @@ export const enum ProcessState {
 export interface ITerminalProcessExtHostProxy extends IDisposable {
 	readonly instanceId: number;
 
-	emitData(data: string): void;
-	emitProcessProperty(property: IProcessProperty<any>): void;
-	emitReady(pid: number, cwd: string, windowsPty: IProcessReadyWindowsPty | undefined): void;
-	emitExit(exitCode: number | undefined): void;
+	emitData(data: string): codemavi;
+	emitProcessProperty(property: IProcessProperty<any>): codemavi;
+	emitReady(pid: number, cwd: string, windowsPty: IProcessReadyWindowsPty | undefined): codemavi;
+	emitExit(exitCode: number | undefined): codemavi;
 
 	onInput: Event<string>;
 	onBinary: Event<string>;
 	onResize: Event<{ cols: number; rows: number }>;
 	onAcknowledgeDataEvent: Event<number>;
 	onShutdown: Event<boolean>;
-	onRequestInitialCwd: Event<void>;
-	onRequestCwd: Event<void>;
+	onRequestInitialCwd: Event<codemavi>;
+	onRequestCwd: Event<codemavi>;
 }
 
 export interface IStartExtensionTerminalRequest {
 	proxy: ITerminalProcessExtHostProxy;
 	cols: number;
 	rows: number;
-	callback: (error: ITerminalLaunchError | undefined) => void;
+	callback: (error: ITerminalLaunchError | undefined) => codemavi;
 }
 
 export interface ITerminalStatus {
@@ -383,7 +383,7 @@ export interface ITerminalStatus {
 export interface ITerminalStatusHoverAction {
 	label: string;
 	commandId: string;
-	run: () => void;
+	run: () => codemavi;
 }
 
 /**
@@ -630,7 +630,7 @@ export const DEFAULT_COMMANDS_TO_SKIP_SHELL: string[] = [
 export const terminalContributionsDescriptor: IExtensionPointDescriptor<ITerminalContributions> = {
 	extensionPoint: 'terminal',
 	defaultExtensionKind: ['workspace'],
-	activationEventsGenerator: (contribs: ITerminalContributions[], result: { push(item: string): void }) => {
+	activationEventsGenerator: (contribs: ITerminalContributions[], result: { push(item: string): codemavi }) => {
 		for (const contrib of contribs) {
 			for (const profileContrib of (contrib.profiles ?? [])) {
 				result.push(`onTerminalProfile:${profileContrib.id}`);

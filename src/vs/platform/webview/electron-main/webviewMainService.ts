@@ -24,7 +24,7 @@ export class WebviewMainService extends Disposable implements IWebviewManagerSer
 		this._register(new WebviewProtocolProvider());
 	}
 
-	public async setIgnoreMenuShortcuts(id: WebviewWebContentsId | WebviewWindowId, enabled: boolean): Promise<void> {
+	public async setIgnoreMenuShortcuts(id: WebviewWebContentsId | WebviewWindowId, enabled: boolean): Promise<codemavi> {
 		let contents: WebContents | undefined;
 
 		if (typeof (id as WebviewWindowId).windowId === 'number') {
@@ -47,11 +47,11 @@ export class WebviewMainService extends Disposable implements IWebviewManagerSer
 		}
 	}
 
-	public async findInFrame(windowId: WebviewWindowId, frameName: string, text: string, options: { findNext?: boolean; forward?: boolean }): Promise<void> {
+	public async findInFrame(windowId: WebviewWindowId, frameName: string, text: string, options: { findNext?: boolean; forward?: boolean }): Promise<codemavi> {
 		const initialFrame = this.getFrameByName(windowId, frameName);
 
 		type WebFrameMainWithFindSupport = WebFrameMain & {
-			findInFrame?(text: string, findOptions: FindInFrameOptions): void;
+			findInFrame?(text: string, findOptions: FindInFrameOptions): codemavi;
 			on(event: 'found-in-frame', listener: Function): WebFrameMain;
 			removeListener(event: 'found-in-frame', listener: Function): WebFrameMain;
 		};
@@ -71,11 +71,11 @@ export class WebviewMainService extends Disposable implements IWebviewManagerSer
 		}
 	}
 
-	public async stopFindInFrame(windowId: WebviewWindowId, frameName: string, options: { keepSelection?: boolean }): Promise<void> {
+	public async stopFindInFrame(windowId: WebviewWindowId, frameName: string, options: { keepSelection?: boolean }): Promise<codemavi> {
 		const initialFrame = this.getFrameByName(windowId, frameName);
 
 		type WebFrameMainWithFindSupport = WebFrameMain & {
-			stopFindInFrame?(stopOption: 'keepSelection' | 'clearSelection'): void;
+			stopFindInFrame?(stopOption: 'keepSelection' | 'clearSelection'): codemavi;
 		};
 
 		const frame = initialFrame as unknown as WebFrameMainWithFindSupport;

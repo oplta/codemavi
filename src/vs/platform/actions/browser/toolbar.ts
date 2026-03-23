@@ -118,7 +118,7 @@ export class WorkbenchToolBar extends ToolBar {
 		}
 	}
 
-	override setActions(_primary: readonly IAction[], _secondary: readonly IAction[] = [], menuIds?: readonly MenuId[]): void {
+	override setActions(_primary: readonly IAction[], _secondary: readonly IAction[] = [], menuIds?: readonly MenuId[]): codemavi {
 
 		this._sessionDisposables.clear();
 		const primary: Array<IAction | undefined> = _primary.slice(); // for hiding and overflow we set some items to undefined
@@ -388,7 +388,7 @@ export class MenuWorkbenchToolBar extends WorkbenchToolBar {
 	/**
 	 * @deprecated The WorkbenchToolBar does not support this method because it works with menus.
 	 */
-	override setActions(): void {
+	override setActions(): codemavi {
 		throw new BugIndicatingError('This toolbar is populated from a menu.');
 	}
 }

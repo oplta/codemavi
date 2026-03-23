@@ -155,7 +155,7 @@ export class ReplInputHintContentWidget extends Disposable implements IContentWi
 		return keybindings?.[0];
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.editor.removeContentWidget(this);
 	}

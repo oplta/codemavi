@@ -30,7 +30,7 @@ export class MockChatService implements IChatService {
 	startSession(location: ChatAgentLocation, token: CancellationToken): ChatModel {
 		throw new Error('Method not implemented.');
 	}
-	addSession(session: IChatModel): void {
+	addSession(session: IChatModel): codemavi {
 		this.sessions.set(session.sessionId, session);
 	}
 	getSession(sessionId: string): IChatModel | undefined {
@@ -49,22 +49,22 @@ export class MockChatService implements IChatService {
 	sendRequest(sessionId: string, message: string): Promise<IChatSendRequestData | undefined> {
 		throw new Error('Method not implemented.');
 	}
-	resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions | undefined): Promise<void> {
+	resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions | undefined): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	adoptRequest(sessionId: string, request: IChatRequestModel): Promise<void> {
+	adoptRequest(sessionId: string, request: IChatRequestModel): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	removeRequest(sessionid: string, requestId: string): Promise<void> {
+	removeRequest(sessionid: string, requestId: string): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	cancelCurrentRequestForSession(sessionId: string): void {
+	cancelCurrentRequestForSession(sessionId: string): codemavi {
 		throw new Error('Method not implemented.');
 	}
-	clearSession(sessionId: string): Promise<void> {
+	clearSession(sessionId: string): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
-	addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): void {
+	addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): codemavi {
 		throw new Error('Method not implemented.');
 	}
 	async getHistory(): Promise<IChatDetail[]> {
@@ -78,16 +78,16 @@ export class MockChatService implements IChatService {
 	}
 
 	onDidPerformUserAction: Event<IChatUserActionEvent> = undefined!;
-	notifyUserAction(event: IChatUserActionEvent): void {
+	notifyUserAction(event: IChatUserActionEvent): codemavi {
 		throw new Error('Method not implemented.');
 	}
 	onDidDisposeSession: Event<{ sessionId: string; reason: 'initializationFailed' | 'cleared' }> = undefined!;
 
-	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): void {
+	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	setChatSessionTitle(sessionId: string, title: string): void {
+	setChatSessionTitle(sessionId: string, title: string): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
@@ -100,7 +100,7 @@ export class MockChatService implements IChatService {
 		throw new Error('Method not implemented.');
 	}
 
-	logChatIndex(): void {
+	logChatIndex(): codemavi {
 		throw new Error('Method not implemented.');
 	}
 

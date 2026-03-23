@@ -14,10 +14,10 @@ import {
 } from 'vscode';
 
 export interface ISuggestionsCollector {
-	add(suggestion: CompletionItem): void;
-	error(message: string): void;
-	log(message: string): void;
-	setAsIncomplete(): void;
+	add(suggestion: CompletionItem): codemavi;
+	error(message: string): codemavi;
+	log(message: string): codemavi;
+	setAsIncomplete(): codemavi;
 }
 
 export interface IJSONContribution {

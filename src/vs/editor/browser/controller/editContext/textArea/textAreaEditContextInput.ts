@@ -59,13 +59,13 @@ export interface ICompleteTextAreaWrapper extends ITextAreaWrapper {
 	readonly onPaste: Event<ClipboardEvent>;
 	readonly onFocus: Event<FocusEvent>;
 	readonly onBlur: Event<FocusEvent>;
-	readonly onSyntheticTap: Event<void>;
+	readonly onSyntheticTap: Event<codemavi>;
 
 	readonly ownerDocument: Document;
 
-	setIgnoreSelectionChangeTime(reason: string): void;
+	setIgnoreSelectionChangeTime(reason: string): codemavi;
 	getIgnoreSelectionChangeTime(): number;
-	resetSelectionChangeTime(): void;
+	resetSelectionChangeTime(): codemavi;
 
 	hasFocus(): boolean;
 }
@@ -108,11 +108,11 @@ class CompositionContext {
  */
 export class TextAreaInput extends Disposable {
 
-	private _onFocus = this._register(new Emitter<void>());
-	public readonly onFocus: Event<void> = this._onFocus.event;
+	private _onFocus = this._register(new Emitter<codemavi>());
+	public readonly onFocus: Event<codemavi> = this._onFocus.event;
 
-	private _onBlur = this._register(new Emitter<void>());
-	public readonly onBlur: Event<void> = this._onBlur.event;
+	private _onBlur = this._register(new Emitter<codemavi>());
+	public readonly onBlur: Event<codemavi> = this._onBlur.event;
 
 	private _onKeyDown = this._register(new Emitter<IKeyboardEvent>());
 	public readonly onKeyDown: Event<IKeyboardEvent> = this._onKeyDown.event;
@@ -120,8 +120,8 @@ export class TextAreaInput extends Disposable {
 	private _onKeyUp = this._register(new Emitter<IKeyboardEvent>());
 	public readonly onKeyUp: Event<IKeyboardEvent> = this._onKeyUp.event;
 
-	private _onCut = this._register(new Emitter<void>());
-	public readonly onCut: Event<void> = this._onCut.event;
+	private _onCut = this._register(new Emitter<codemavi>());
+	public readonly onCut: Event<codemavi> = this._onCut.event;
 
 	private _onPaste = this._register(new Emitter<IPasteData>());
 	public readonly onPaste: Event<IPasteData> = this._onPaste.event;
@@ -135,8 +135,8 @@ export class TextAreaInput extends Disposable {
 	private _onCompositionUpdate = this._register(new Emitter<ICompositionData>());
 	public readonly onCompositionUpdate: Event<ICompositionData> = this._onCompositionUpdate.event;
 
-	private _onCompositionEnd = this._register(new Emitter<void>());
-	public readonly onCompositionEnd: Event<void> = this._onCompositionEnd.event;
+	private _onCompositionEnd = this._register(new Emitter<codemavi>());
+	public readonly onCompositionEnd: Event<codemavi> = this._onCompositionEnd.event;
 
 	private _onSelectionChangeRequest = this._register(new Emitter<Selection>());
 	public readonly onSelectionChangeRequest: Event<Selection> = this._onSelectionChangeRequest.event;
@@ -409,7 +409,7 @@ export class TextAreaInput extends Disposable {
 				// Clear the flag to be able to write to the textarea
 				this._currentComposition = null;
 
-				// Clear the textarea to avoid an unwanted cursor type
+				// Clear the textarea to acodemavi an unwanted cursor type
 				this.writeNativeTextAreaContent('blurWithoutCompositionEnd');
 
 				// Fire artificial composition end
@@ -425,7 +425,7 @@ export class TextAreaInput extends Disposable {
 				// Clear the flag to be able to write to the textarea
 				this._currentComposition = null;
 
-				// Clear the textarea to avoid an unwanted cursor type
+				// Clear the textarea to acodemavi an unwanted cursor type
 				this.writeNativeTextAreaContent('tapWithoutCompositionEnd');
 
 				// Fire artificial composition end
@@ -434,7 +434,7 @@ export class TextAreaInput extends Disposable {
 		}));
 	}
 
-	_initializeFromTest(): void {
+	_initializeFromTest(): codemavi {
 		this._hasFocus = true;
 		this._textAreaState = TextAreaState.readFromTextArea(this._textArea, null);
 	}
@@ -524,7 +524,7 @@ export class TextAreaInput extends Disposable {
 		});
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		if (this._selectionChangeListener) {
 			this._selectionChangeListener.dispose();
@@ -532,7 +532,7 @@ export class TextAreaInput extends Disposable {
 		}
 	}
 
-	public focusTextArea(): void {
+	public focusTextArea(): codemavi {
 		// Setting this._hasFocus and writing the screen reader content
 		// will result in a focus() and setSelectionRange() in the textarea
 		this._setHasFocus(true);
@@ -545,11 +545,11 @@ export class TextAreaInput extends Disposable {
 		return this._hasFocus;
 	}
 
-	public refreshFocusState(): void {
+	public refreshFocusState(): codemavi {
 		this._setHasFocus(this._textArea.hasFocus());
 	}
 
-	private _setHasFocus(newHasFocus: boolean): void {
+	private _setHasFocus(newHasFocus: boolean): codemavi {
 		if (this._hasFocus === newHasFocus) {
 			// no change
 			return;
@@ -575,7 +575,7 @@ export class TextAreaInput extends Disposable {
 		}
 	}
 
-	private _setAndWriteTextAreaState(reason: string, textAreaState: TextAreaState): void {
+	private _setAndWriteTextAreaState(reason: string, textAreaState: TextAreaState): codemavi {
 		if (!this._hasFocus) {
 			textAreaState = textAreaState.collapseSelection();
 		}
@@ -586,7 +586,7 @@ export class TextAreaInput extends Disposable {
 		this._textAreaState = textAreaState;
 	}
 
-	public writeNativeTextAreaContent(reason: string): void {
+	public writeNativeTextAreaContent(reason: string): codemavi {
 		if ((!this._accessibilityService.isScreenReaderOptimized() && reason === 'render') || this._currentComposition) {
 			// Do not write to the text on render unless a screen reader is being used #192278
 			// Do not write to the text area when doing composition
@@ -595,7 +595,7 @@ export class TextAreaInput extends Disposable {
 		this._setAndWriteTextAreaState(reason, this._host.getScreenReaderContent());
 	}
 
-	private _ensureClipboardGetsEditorSelection(e: ClipboardEvent): void {
+	private _ensureClipboardGetsEditorSelection(e: ClipboardEvent): codemavi {
 		const dataToCopy = this._host.getDataToCopy();
 		const storedMetadata: ClipboardStoredMetadata = {
 			version: 1,
@@ -637,8 +637,8 @@ export class TextAreaWrapper extends Disposable implements ICompleteTextAreaWrap
 		return this._actual.ownerDocument;
 	}
 
-	private _onSyntheticTap = this._register(new Emitter<void>());
-	public readonly onSyntheticTap: Event<void> = this._onSyntheticTap.event;
+	private _onSyntheticTap = this._register(new Emitter<codemavi>());
+	public readonly onSyntheticTap: Event<codemavi> = this._onSyntheticTap.event;
 
 	private _ignoreSelectionChangeTime: number;
 
@@ -667,7 +667,7 @@ export class TextAreaWrapper extends Disposable implements ICompleteTextAreaWrap
 		}
 	}
 
-	public setIgnoreSelectionChangeTime(reason: string): void {
+	public setIgnoreSelectionChangeTime(reason: string): codemavi {
 		this._ignoreSelectionChangeTime = Date.now();
 	}
 
@@ -675,7 +675,7 @@ export class TextAreaWrapper extends Disposable implements ICompleteTextAreaWrap
 		return this._ignoreSelectionChangeTime;
 	}
 
-	public resetSelectionChangeTime(): void {
+	public resetSelectionChangeTime(): codemavi {
 		this._ignoreSelectionChangeTime = 0;
 	}
 
@@ -684,7 +684,7 @@ export class TextAreaWrapper extends Disposable implements ICompleteTextAreaWrap
 		return this._actual.value;
 	}
 
-	public setValue(reason: string, value: string): void {
+	public setValue(reason: string, value: string): codemavi {
 		const textArea = this._actual;
 		if (textArea.value === value) {
 			// No change
@@ -703,7 +703,7 @@ export class TextAreaWrapper extends Disposable implements ICompleteTextAreaWrap
 		return this._actual.selectionDirection === 'backward' ? this._actual.selectionStart : this._actual.selectionEnd;
 	}
 
-	public setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): void {
+	public setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): codemavi {
 		const textArea = this._actual;
 
 		let activeElement: Element | null = null;

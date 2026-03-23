@@ -22,7 +22,7 @@ class VideoPreviewProvider implements vscode.CustomReadonlyEditorProvider {
 		return { uri, dispose: () => { } };
 	}
 
-	public async resolveCustomEditor(document: vscode.CustomDocument, webviewEditor: vscode.WebviewPanel): Promise<void> {
+	public async resolveCustomEditor(document: vscode.CustomDocument, webviewEditor: vscode.WebviewPanel): Promise<codemavi> {
 		new VideoPreview(this.extensionRoot, document.uri, webviewEditor, this.binarySizeStatusBarEntry);
 	}
 }
@@ -100,7 +100,7 @@ class VideoPreview extends MediaPreview {
 			}
 		}
 
-		// Avoid adding cache busting if there is already a query string
+		// Acodemavi adding cache busting if there is already a query string
 		if (resource.query) {
 			return webviewEditor.webview.asWebviewUri(resource).toString();
 		}

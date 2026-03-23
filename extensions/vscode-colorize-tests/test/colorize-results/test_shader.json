@@ -420,7 +420,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.shaderlab meta.cgblock storage.type.basic.hlsl",
 		"r": {
 			"dark_plus": "storage.type: #569CD6",

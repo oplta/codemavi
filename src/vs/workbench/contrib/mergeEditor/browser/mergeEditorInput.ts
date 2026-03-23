@@ -69,7 +69,7 @@ export class MergeEditorInput extends AbstractTextResourceEditorInput implements
 		super(result, undefined, editorService, textFileService, labelService, fileService, filesConfigurationService, textResourceConfigurationService, customEditorLabelService);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 	}
 
@@ -122,7 +122,7 @@ export class MergeEditorInput extends AbstractTextResourceEditorInput implements
 		return this._inputModel;
 	}
 
-	public async accept(): Promise<void> {
+	public async accept(): Promise<codemavi> {
 		await this._inputModel?.accept();
 	}
 
@@ -164,7 +164,7 @@ export class MergeEditorInput extends AbstractTextResourceEditorInput implements
 		return false;
 	}
 
-	override async revert(group: number, options?: IRevertOptions): Promise<void> {
+	override async revert(group: number, options?: IRevertOptions): Promise<codemavi> {
 		return this._inputModel?.revert(options);
 	}
 
@@ -174,7 +174,7 @@ export class MergeEditorInput extends AbstractTextResourceEditorInput implements
 		return this._inputModel?.isDirty.get() ?? false;
 	}
 
-	setLanguageId(languageId: string, source?: string): void {
+	setLanguageId(languageId: string, source?: string): codemavi {
 		this._inputModel?.model.setLanguageId(languageId, source);
 	}
 

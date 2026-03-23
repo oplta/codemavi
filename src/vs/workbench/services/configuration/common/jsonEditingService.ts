@@ -25,7 +25,7 @@ export class JSONEditingService implements IJSONEditingService {
 
 	public _serviceBrand: undefined;
 
-	private queue: Queue<void>;
+	private queue: Queue<codemavi>;
 
 	constructor(
 		@IFileService private readonly fileService: IFileService,
@@ -33,14 +33,14 @@ export class JSONEditingService implements IJSONEditingService {
 		@ITextFileService private readonly textFileService: ITextFileService,
 		@IFilesConfigurationService private readonly filesConfigurationService: IFilesConfigurationService
 	) {
-		this.queue = new Queue<void>();
+		this.queue = new Queue<codemavi>();
 	}
 
-	write(resource: URI, values: IJSONValue[]): Promise<void> {
+	write(resource: URI, values: IJSONValue[]): Promise<codemavi> {
 		return Promise.resolve(this.queue.queue(() => this.doWriteConfiguration(resource, values))); // queue up writes to prevent race conditions
 	}
 
-	private async doWriteConfiguration(resource: URI, values: IJSONValue[]): Promise<void> {
+	private async doWriteConfiguration(resource: URI, values: IJSONValue[]): Promise<codemavi> {
 		const reference = await this.resolveAndValidate(resource, true);
 		try {
 			await this.writeToBuffer(reference.object.textEditorModel, values);
@@ -55,7 +55,7 @@ export class JSONEditingService implements IJSONEditingService {
 			// Optimization: we apply edits to a text model and save it
 			// right after. Use the files config service to signal this
 			// to the workbench to optimise the UI during this operation.
-			// For example, avoids to briefly show dirty indicators.
+			// For example, acodemavis to briefly show dirty indicators.
 			disposable = this.filesConfigurationService.enableAutoSaveAfterShortDelay(model.uri);
 
 			let hasEdits: boolean = false;

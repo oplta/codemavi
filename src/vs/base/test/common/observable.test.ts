@@ -427,11 +427,11 @@ suite('observables', () => {
 
 	suite('from event', () => {
 
-		function init(): { log: Log; setValue: (value: number | undefined) => void; observable: IObservable<number | undefined> } {
+		function init(): { log: Log; setValue: (value: number | undefined) => codemavi; observable: IObservable<number | undefined> } {
 			const log = new Log();
 
 			let value: number | undefined = 0;
-			const eventEmitter = new Emitter<void>();
+			const eventEmitter = new Emitter<codemavi>();
 
 			let id = 0;
 			const observable = observableFromEvent(
@@ -610,7 +610,7 @@ suite('observables', () => {
 		assert.deepStrictEqual(log.getAndClearEntries(), (["myAutorun: 1"]));
 	});
 
-	test('avoid recomputation of deriveds that are no longer read', () => {
+	test('acodemavi recomputation of deriveds that are no longer read', () => {
 		const log = new Log();
 
 		const myObsShouldRead = new LoggingObservableValue('myObsShouldRead', true, log);
@@ -1451,7 +1451,7 @@ suite('observables', () => {
 	suite('prevent invalid usage', () => {
 		suite('reading outside of compute function', () => {
 			test('derived', () => {
-				let fn: () => void = () => { };
+				let fn: () => codemavi = () => { };
 
 				const obs = observableValue('obs', 0);
 				const d = derived(reader => {
@@ -1471,7 +1471,7 @@ suite('observables', () => {
 			});
 
 			test('autorun', () => {
-				let fn: () => void = () => { };
+				let fn: () => codemavi = () => { };
 
 				const obs = observableValue('obs', 0);
 				const disp = autorun(reader => {
@@ -1535,23 +1535,23 @@ export class LoggingObserver implements IObserver {
 	constructor(public readonly debugName: string, private readonly log: Log) {
 	}
 
-	beginUpdate<T>(observable: IObservable<T>): void {
+	beginUpdate<T>(observable: IObservable<T>): codemavi {
 		this.count++;
 		this.log.log(`${this.debugName}.beginUpdate (count ${this.count})`);
 	}
-	endUpdate<T>(observable: IObservable<T>): void {
+	endUpdate<T>(observable: IObservable<T>): codemavi {
 		this.log.log(`${this.debugName}.endUpdate (count ${this.count})`);
 		this.count--;
 	}
-	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): void {
+	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): codemavi {
 		this.log.log(`${this.debugName}.handleChange (count ${this.count})`);
 	}
-	handlePossibleChange<T>(observable: IObservable<T>): void {
+	handlePossibleChange<T>(observable: IObservable<T>): codemavi {
 		this.log.log(`${this.debugName}.handlePossibleChange`);
 	}
 }
 
-export class LoggingObservableValue<T, TChange = void>
+export class LoggingObservableValue<T, TChange = codemavi>
 	extends BaseObservable<T, TChange>
 	implements ISettableObservable<T, TChange> {
 	private value: T;
@@ -1561,11 +1561,11 @@ export class LoggingObservableValue<T, TChange = void>
 		this.value = initialValue;
 	}
 
-	protected override onFirstObserverAdded(): void {
+	protected override onFirstObserverAdded(): codemavi {
 		this.logger.log(`${this.debugName}.firstObserverAdded`);
 	}
 
-	protected override onLastObserverRemoved(): void {
+	protected override onLastObserverRemoved(): codemavi {
 		this.logger.log(`${this.debugName}.lastObserverRemoved`);
 	}
 
@@ -1574,7 +1574,7 @@ export class LoggingObservableValue<T, TChange = void>
 		return this.value;
 	}
 
-	public set(value: T, tx: ITransaction | undefined, change: TChange): void {
+	public set(value: T, tx: ITransaction | undefined, change: TChange): codemavi {
 		if (this.value === value) {
 			return;
 		}
@@ -1603,7 +1603,7 @@ export class LoggingObservableValue<T, TChange = void>
 
 class Log {
 	private readonly entries: string[] = [];
-	public log(message: string): void {
+	public log(message: string): codemavi {
 		this.entries.push(message);
 	}
 

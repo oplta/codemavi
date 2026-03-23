@@ -39,7 +39,7 @@ export class ToggleDevToolsAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const nativeHostService = accessor.get(INativeHostService);
 
 		return nativeHostService.toggleDevTools({ targetWindowId: getActiveWindow().vscodeWindowId });
@@ -57,7 +57,7 @@ export class ConfigureRuntimeArgumentsAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const environmentService = accessor.get(IWorkbenchEnvironmentService);
 
@@ -79,7 +79,7 @@ export class ReloadWindowWithExtensionsDisabledAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(INativeHostService).reload({ disableExtensions: true });
 	}
 }
@@ -95,7 +95,7 @@ export class OpenUserDataFolderAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const nativeHostService = accessor.get(INativeHostService);
 		const environmentService = accessor.get(INativeWorkbenchEnvironmentService);
 

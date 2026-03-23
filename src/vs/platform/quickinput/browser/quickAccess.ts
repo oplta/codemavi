@@ -36,13 +36,13 @@ export class QuickAccessController extends Disposable implements IQuickAccessCon
 		return this.doShowOrPick(value, true, options);
 	}
 
-	show(value = '', options?: IQuickAccessOptions): void {
+	show(value = '', options?: IQuickAccessOptions): codemavi {
 		this.doShowOrPick(value, false, options);
 	}
 
 	private doShowOrPick(value: string, pick: true, options?: IQuickAccessOptions): Promise<IQuickPickItem[] | undefined>;
-	private doShowOrPick(value: string, pick: false, options?: IQuickAccessOptions): void;
-	private doShowOrPick(value: string, pick: boolean, options?: IQuickAccessOptions): Promise<IQuickPickItem[] | undefined> | void {
+	private doShowOrPick(value: string, pick: false, options?: IQuickAccessOptions): codemavi;
+	private doShowOrPick(value: string, pick: boolean, options?: IQuickAccessOptions): Promise<IQuickPickItem[] | undefined> | codemavi {
 
 		// Find provider for the value to show
 		const [provider, descriptor] = this.getOrInstantiateProvider(value, options?.enabledProviderPrefixes);
@@ -163,7 +163,7 @@ export class QuickAccessController extends Disposable implements IQuickAccessCon
 		}
 	}
 
-	private adjustValueSelection(picker: IQuickPick<IQuickPickItem, { useSeparators: true }>, descriptor?: IQuickAccessProviderDescriptor, options?: IQuickAccessOptions): void {
+	private adjustValueSelection(picker: IQuickPick<IQuickPickItem, { useSeparators: true }>, descriptor?: IQuickAccessProviderDescriptor, options?: IQuickAccessOptions): codemavi {
 		let valueSelection: [number, number];
 
 		// Preserve: just always put the cursor at the end

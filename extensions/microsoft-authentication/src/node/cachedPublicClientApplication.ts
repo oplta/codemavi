@@ -34,7 +34,7 @@ export class CachedPublicClientApplication implements ICachedPublicClientApplica
 	private readonly _onDidAccountsChangeEmitter = new EventEmitter<{ added: AccountInfo[]; changed: AccountInfo[]; deleted: AccountInfo[] }>;
 	readonly onDidAccountsChange = this._onDidAccountsChangeEmitter.event;
 
-	private readonly _onDidRemoveLastAccountEmitter = new EventEmitter<void>();
+	private readonly _onDidRemoveLastAccountEmitter = new EventEmitter<codemavi>();
 	readonly onDidRemoveLastAccount = this._onDidRemoveLastAccountEmitter.event;
 
 	//#endregion
@@ -82,11 +82,11 @@ export class CachedPublicClientApplication implements ICachedPublicClientApplica
 		return app;
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		await this._sequencer.queue(() => this._update());
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposable.dispose();
 	}
 
@@ -205,7 +205,7 @@ export class CachedPublicClientApplication implements ICachedPublicClientApplica
 		return result;
 	}
 
-	removeAccount(account: AccountInfo): Promise<void> {
+	removeAccount(account: AccountInfo): Promise<codemavi> {
 		if (this._isBrokerAvailable) {
 			return this._accountAccess.setAllowedAccess(account, false);
 		}

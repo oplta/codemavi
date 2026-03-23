@@ -18,7 +18,7 @@ class ScanTask {
 		this.delayTask = new Delayer<interfaces.IDocumentMergeConflict[]>(delayTime);
 	}
 
-	public addOrigin(name: string): void {
+	public addOrigin(name: string): codemavi {
 		this.origins.add(name);
 	}
 

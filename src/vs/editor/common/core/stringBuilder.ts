@@ -69,7 +69,7 @@ export class StringBuilder {
 		this._bufferLength = 0;
 	}
 
-	public reset(): void {
+	public reset(): codemavi {
 		this._completedStrings = null;
 		this._bufferLength = 0;
 	}
@@ -91,7 +91,7 @@ export class StringBuilder {
 		return getPlatformTextDecoder().decode(view);
 	}
 
-	private _flushBuffer(): void {
+	private _flushBuffer(): codemavi {
 		const bufferString = this._buildBuffer();
 		this._bufferLength = 0;
 
@@ -105,7 +105,7 @@ export class StringBuilder {
 	/**
 	 * Append a char code (<2^16)
 	 */
-	public appendCharCode(charCode: number): void {
+	public appendCharCode(charCode: number): codemavi {
 		const remainingSpace = this._capacity - this._bufferLength;
 
 		if (remainingSpace <= 1) {
@@ -120,7 +120,7 @@ export class StringBuilder {
 	/**
 	 * Append an ASCII char code (<2^8)
 	 */
-	public appendASCIICharCode(charCode: number): void {
+	public appendASCIICharCode(charCode: number): codemavi {
 		if (this._bufferLength === this._capacity) {
 			// buffer is full
 			this._flushBuffer();
@@ -128,7 +128,7 @@ export class StringBuilder {
 		this._buffer[this._bufferLength++] = charCode;
 	}
 
-	public appendString(str: string): void {
+	public appendString(str: string): codemavi {
 		const strLen = str.length;
 
 		if (this._bufferLength + strLen >= this._capacity) {

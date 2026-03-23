@@ -492,7 +492,7 @@ export async function createTocTreeForExtensionSettings(extensionService: IExten
 		const extensionName = extension?.displayName ?? extension?.name ?? extensionId;
 
 		// There could be multiple groups with the same extension id that all belong to the same extension.
-		// To avoid highlighting all groups upon expanding the extension's ToC entry,
+		// To acodemavi highlighting all groups upon expanding the extension's ToC entry,
 		// use the group ID only if it is non-empty and isn't the extension ID.
 		// Ref https://github.com/microsoft/vscode/issues/241521.
 		const settingGroupId = (group.id && group.id !== extensionId) ? group.id : group.title;
@@ -652,7 +652,7 @@ interface IDisposableTemplate {
 }
 
 interface ISettingItemTemplate<T = any> extends IDisposableTemplate {
-	onChange?: (value: T) => void;
+	onChange?: (value: T) => codemavi;
 
 	context?: SettingsTreeSettingElement;
 	containerElement: HTMLElement;
@@ -688,7 +688,7 @@ interface ISettingEnumItemTemplate extends ISettingItemTemplate<number> {
 	enumDescriptionElement: HTMLElement;
 }
 
-interface ISettingComplexItemTemplate extends ISettingItemTemplate<void> {
+interface ISettingComplexItemTemplate extends ISettingItemTemplate<codemavi> {
 	button: HTMLElement;
 	validationErrorMessageElement: HTMLElement;
 }
@@ -702,7 +702,7 @@ interface ISettingListItemTemplate extends ISettingItemTemplate<string[] | undef
 	validationErrorMessageElement: HTMLElement;
 }
 
-interface ISettingIncludeExcludeItemTemplate extends ISettingItemTemplate<void> {
+interface ISettingIncludeExcludeItemTemplate extends ISettingItemTemplate<codemavi> {
 	includeExcludeWidget: ListSettingWidget<IIncludeExcludeDataItem>;
 }
 
@@ -751,7 +751,7 @@ export interface ISettingLinkClickEvent {
 	targetKey: string;
 }
 
-function removeChildrenFromTabOrder(node: Element): void {
+function removeChildrenFromTabOrder(node: Element): codemavi {
 	const focusableElements = node.querySelectorAll(`
 		[tabindex="0"],
 		input:not([tabindex="-1"]),
@@ -768,7 +768,7 @@ function removeChildrenFromTabOrder(node: Element): void {
 	});
 }
 
-function addChildrenToTabOrder(node: Element): void {
+function addChildrenToTabOrder(node: Element): codemavi {
 	const focusableElements = node.querySelectorAll(
 		`[${AbstractSettingRenderer.ELEMENT_FOCUSABLE_ATTR}="true"]`
 	);
@@ -814,8 +814,8 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 	readonly onDidFocusSetting: Event<SettingsTreeSettingElement> = this._onDidFocusSetting.event;
 
 	private ignoredSettings: string[];
-	private readonly _onDidChangeIgnoredSettings = this._register(new Emitter<void>());
-	readonly onDidChangeIgnoredSettings: Event<void> = this._onDidChangeIgnoredSettings.event;
+	private readonly _onDidChangeIgnoredSettings = this._register(new Emitter<codemavi>());
+	readonly onDidChangeIgnoredSettings: Event<codemavi> = this._onDidChangeIgnoredSettings.event;
 
 	protected readonly _onDidChangeSettingHeight = this._register(new Emitter<HeightChangeParams>());
 	readonly onDidChangeSettingHeight: Event<HeightChangeParams> = this._onDidChangeSettingHeight.event;
@@ -855,7 +855,7 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 
 	abstract renderTemplate(container: HTMLElement): any;
 
-	abstract renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: any): void;
+	abstract renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: any): codemavi;
 
 	protected renderCommonTemplate(tree: any, _container: HTMLElement, typeClass: string): ISettingItemTemplate {
 		_container.classList.add('setting-item');
@@ -909,7 +909,7 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 		return template;
 	}
 
-	protected addSettingElementFocusHandler(template: ISettingItemTemplate): void {
+	protected addSettingElementFocusHandler(template: ISettingItemTemplate): codemavi {
 		const focusTracker = DOM.trackFocus(template.containerElement);
 		template.toDispose.add(focusTracker);
 		template.toDispose.add(focusTracker.onDidBlur(() => {
@@ -942,7 +942,7 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 		return toolbar;
 	}
 
-	protected renderSettingElement(node: ITreeNode<SettingsTreeSettingElement, never>, index: number, template: ISettingItemTemplate | ISettingBoolItemTemplate): void {
+	protected renderSettingElement(node: ITreeNode<SettingsTreeSettingElement, never>, index: number, template: ISettingItemTemplate | ISettingBoolItemTemplate): codemavi {
 		const element = node.element;
 
 		// The element must inspect itself to get information for
@@ -1016,7 +1016,7 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 		}));
 	}
 
-	private updateSettingTabbable(element: SettingsTreeSettingElement, template: ISettingItemTemplate | ISettingBoolItemTemplate): void {
+	private updateSettingTabbable(element: SettingsTreeSettingElement, template: ISettingItemTemplate | ISettingBoolItemTemplate): codemavi {
 		if (element.tabbable) {
 			addChildrenToTabOrder(template.containerElement);
 		} else {
@@ -1057,13 +1057,13 @@ export abstract class AbstractSettingRenderer extends Disposable implements ITre
 		return renderedMarkdown.element;
 	}
 
-	protected abstract renderValue(dataElement: SettingsTreeSettingElement, template: ISettingItemTemplate, onChange: (value: any) => void): void;
+	protected abstract renderValue(dataElement: SettingsTreeSettingElement, template: ISettingItemTemplate, onChange: (value: any) => codemavi): codemavi;
 
-	disposeTemplate(template: IDisposableTemplate): void {
+	disposeTemplate(template: IDisposableTemplate): codemavi {
 		template.toDispose.dispose();
 	}
 
-	disposeElement(_element: ITreeNode<SettingsTreeElement>, _index: number, template: IDisposableTemplate, _height: number | undefined): void {
+	disposeElement(_element: ITreeNode<SettingsTreeElement>, _index: number, template: IDisposableTemplate, _height: number | undefined): codemavi {
 		(template as ISettingItemTemplate).elementDisposables?.clear();
 	}
 }
@@ -1082,7 +1082,7 @@ class SettingGroupRenderer implements ITreeRenderer<SettingsTreeGroupElement, ne
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeGroupElement, never>, index: number, templateData: IGroupTitleTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeGroupElement, never>, index: number, templateData: IGroupTitleTemplate): codemavi {
 		templateData.parent.innerText = '';
 		const labelElement = DOM.append(templateData.parent, $('div.settings-group-title-label.settings-row-inner-container'));
 		labelElement.classList.add(`settings-group-level-${element.element.level}`);
@@ -1093,7 +1093,7 @@ class SettingGroupRenderer implements ITreeRenderer<SettingsTreeGroupElement, ne
 		}
 	}
 
-	disposeTemplate(templateData: IGroupTitleTemplate): void {
+	disposeTemplate(templateData: IGroupTitleTemplate): codemavi {
 		templateData.toDispose.dispose();
 	}
 }
@@ -1129,11 +1129,11 @@ export class SettingNewExtensionsRenderer implements ITreeRenderer<SettingsTreeN
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeNewExtensionsElement, never>, index: number, templateData: ISettingNewExtensionsTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeNewExtensionsElement, never>, index: number, templateData: ISettingNewExtensionsTemplate): codemavi {
 		templateData.context = element.element;
 	}
 
-	disposeTemplate(template: IDisposableTemplate): void {
+	disposeTemplate(template: IDisposableTemplate): codemavi {
 		template.toDispose.dispose();
 	}
 }
@@ -1164,11 +1164,11 @@ export class SettingComplexRenderer extends AbstractSettingRenderer implements I
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingComplexItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingComplexItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingComplexItemTemplate, onChange: (value: string) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingComplexItemTemplate, onChange: (value: string) => codemavi): codemavi {
 		const plainKey = getLanguageTagSettingPlainKey(dataElement.setting.key);
 		const editLanguageSettingLabel = localize('editLanguageSettingLabel', "Edit settings for {0}", plainKey);
 		const isLanguageTagSetting = dataElement.setting.isLanguageTagSetting;
@@ -1245,7 +1245,7 @@ class SettingComplexObjectRenderer extends SettingComplexRenderer implements ITr
 		return template;
 	}
 
-	protected override renderValue(dataElement: SettingsTreeSettingElement, template: ISettingComplexObjectItemTemplate, onChange: (value: string) => void): void {
+	protected override renderValue(dataElement: SettingsTreeSettingElement, template: ISettingComplexObjectItemTemplate, onChange: (value: string) => codemavi): codemavi {
 		const items = getObjectDisplayValue(dataElement);
 		template.objectSettingWidget.setValue(items, {
 			settingKey: dataElement.setting.key,
@@ -1335,11 +1335,11 @@ class SettingArrayRenderer extends AbstractSettingRenderer implements ITreeRende
 		return undefined;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingListItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingListItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingListItemTemplate, onChange: (value: string[] | number[] | undefined) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingListItemTemplate, onChange: (value: string[] | number[] | undefined) => codemavi): codemavi {
 		const value = getListDisplayValue(dataElement);
 		const keySuggester = dataElement.setting.enum ? createArraySuggester(dataElement) : undefined;
 		template.listWidget.setValue(value, {
@@ -1392,7 +1392,7 @@ abstract class AbstractSettingObjectRenderer extends AbstractSettingRenderer imp
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingObjectItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingObjectItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 }
@@ -1410,7 +1410,7 @@ class SettingObjectRenderer extends AbstractSettingObjectRenderer implements ITr
 		return template;
 	}
 
-	private onDidChangeObject(template: ISettingObjectItemTemplate, e: SettingListEvent<IObjectDataItem>): void {
+	private onDidChangeObject(template: ISettingObjectItemTemplate, e: SettingListEvent<IObjectDataItem>): codemavi {
 		const widget = template.objectDropdownWidget!;
 		if (template.context) {
 			const settingSupportsRemoveDefault = objectSettingSupportsRemoveDefaultValue(template.context.setting.key);
@@ -1483,7 +1483,7 @@ class SettingObjectRenderer extends AbstractSettingObjectRenderer implements ITr
 		}
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingObjectItemTemplate, onChange: (value: Record<string, unknown> | undefined) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingObjectItemTemplate, onChange: (value: Record<string, unknown> | undefined) => codemavi): codemavi {
 		const items = getObjectDisplayValue(dataElement);
 		const { key, objectProperties, objectPatternProperties, objectAdditionalProperties } = dataElement.setting;
 
@@ -1532,7 +1532,7 @@ class SettingBoolObjectRenderer extends AbstractSettingObjectRenderer implements
 		return template;
 	}
 
-	protected onDidChangeObject(template: ISettingObjectItemTemplate, e: SettingListEvent<IBoolObjectDataItem>): void {
+	protected onDidChangeObject(template: ISettingObjectItemTemplate, e: SettingListEvent<IBoolObjectDataItem>): codemavi {
 		if (template.context) {
 			const widget = template.objectCheckboxWidget!;
 			const defaultValue: Record<string, unknown> = typeof template.context.defaultValue === 'object'
@@ -1582,7 +1582,7 @@ class SettingBoolObjectRenderer extends AbstractSettingObjectRenderer implements
 		}
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingObjectItemTemplate, onChange: (value: Record<string, unknown> | undefined) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingObjectItemTemplate, onChange: (value: Record<string, unknown> | undefined) => codemavi): codemavi {
 		const items = getBoolObjectDisplayValue(dataElement);
 		const { key } = dataElement.setting;
 
@@ -1620,7 +1620,7 @@ abstract class SettingIncludeExcludeRenderer extends AbstractSettingRenderer imp
 		return template;
 	}
 
-	private onDidChangeIncludeExclude(template: ISettingIncludeExcludeItemTemplate, e: SettingListEvent<IListDataItem>): void {
+	private onDidChangeIncludeExclude(template: ISettingIncludeExcludeItemTemplate, e: SettingListEvent<IListDataItem>): codemavi {
 		if (template.context) {
 			const newValue = { ...template.context.scopeValue };
 
@@ -1665,11 +1665,11 @@ abstract class SettingIncludeExcludeRenderer extends AbstractSettingRenderer imp
 		}
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingIncludeExcludeItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingIncludeExcludeItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingIncludeExcludeItemTemplate, onChange: (value: string) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingIncludeExcludeItemTemplate, onChange: (value: string) => codemavi): codemavi {
 		const value = getIncludeExcludeDisplayValue(dataElement);
 		template.includeExcludeWidget.setValue(value);
 		template.context = dataElement;
@@ -1735,11 +1735,11 @@ abstract class AbstractSettingTextRenderer extends AbstractSettingRenderer imple
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingTextItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingTextItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingTextItemTemplate, onChange: (value: string) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingTextItemTemplate, onChange: (value: string) => codemavi): codemavi {
 		template.onChange = undefined;
 		template.inputBox.value = dataElement.value;
 		template.inputBox.setAriaLabel(dataElement.setting.key);
@@ -1778,7 +1778,7 @@ class SettingMultilineTextRenderer extends AbstractSettingTextRenderer implement
 		return super.renderTemplate(_container, true);
 	}
 
-	protected override renderValue(dataElement: SettingsTreeSettingElement, template: ISettingTextItemTemplate, onChange: (value: string) => void) {
+	protected override renderValue(dataElement: SettingsTreeSettingElement, template: ISettingTextItemTemplate, onChange: (value: string) => codemavi) {
 		const onChangeOverride = (value: string) => {
 			// Ensure the model is up to date since a different value will be rendered as different height when probing the height.
 			dataElement.value = value;
@@ -1846,11 +1846,11 @@ class SettingEnumRenderer extends AbstractSettingRenderer implements ITreeRender
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingEnumItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingEnumItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingEnumItemTemplate, onChange: (value: string) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingEnumItemTemplate, onChange: (value: string) => codemavi): codemavi {
 		// Make shallow copies here so that we don't modify the actual dataElement later
 		const enumItemLabels = dataElement.setting.enumItemLabels ? [...dataElement.setting.enumItemLabels] : [];
 		const enumDescriptions = dataElement.setting.enumDescriptions ? [...dataElement.setting.enumDescriptions] : [];
@@ -1947,11 +1947,11 @@ class SettingNumberRenderer extends AbstractSettingRenderer implements ITreeRend
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingNumberItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingNumberItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingNumberItemTemplate, onChange: (value: number | null) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingNumberItemTemplate, onChange: (value: number | null) => codemavi): codemavi {
 		const numParseFn = (dataElement.valueType === 'integer' || dataElement.valueType === 'nullable-integer')
 			? parseInt : parseFloat;
 
@@ -2052,11 +2052,11 @@ class SettingBoolRenderer extends AbstractSettingRenderer implements ITreeRender
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingBoolItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingBoolItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingBoolItemTemplate, onChange: (value: boolean) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingBoolItemTemplate, onChange: (value: boolean) => codemavi): codemavi {
 		template.onChange = undefined;
 		template.checkbox.checked = dataElement.value;
 		template.checkbox.setTitle(dataElement.setting.key);
@@ -2105,11 +2105,11 @@ class SettingsExtensionToggleRenderer extends AbstractSettingRenderer implements
 		return template;
 	}
 
-	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingExtensionToggleItemTemplate): void {
+	renderElement(element: ITreeNode<SettingsTreeSettingElement, never>, index: number, templateData: ISettingExtensionToggleItemTemplate): codemavi {
 		super.renderSettingElement(element, index, templateData);
 	}
 
-	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingExtensionToggleItemTemplate, onChange: (_: undefined) => void): void {
+	protected renderValue(dataElement: SettingsTreeSettingElement, template: ISettingExtensionToggleItemTemplate, onChange: (_: undefined) => codemavi): codemavi {
 		template.elementDisposables.clear();
 
 		const extensionId = dataElement.setting.displayExtensionId!;
@@ -2230,7 +2230,7 @@ export class SettingTreeRenderers extends Disposable {
 		this._contextViewService.hideContextView();
 	}
 
-	showContextMenu(element: SettingsTreeSettingElement, settingDOMElement: HTMLElement): void {
+	showContextMenu(element: SettingsTreeSettingElement, settingDOMElement: HTMLElement): codemavi {
 		const toolbarElement = settingDOMElement.querySelector('.monaco-toolbar');
 		if (toolbarElement) {
 			this._contextMenuService.showContextMenu({
@@ -2264,7 +2264,7 @@ export class SettingTreeRenderers extends Disposable {
 		return settingElement && settingElement.getAttribute(AbstractSettingRenderer.SETTING_ID_ATTR);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.settingActions.forEach(action => {
 			if (isDisposable(action)) {
@@ -2327,7 +2327,7 @@ function renderArrayValidations(
 	return false;
 }
 
-function cleanRenderedMarkdown(element: Node): void {
+function cleanRenderedMarkdown(element: Node): codemavi {
 	for (let i = 0; i < element.childNodes.length; i++) {
 		const child = element.childNodes.item(i);
 
@@ -2364,7 +2364,7 @@ export class SettingsTreeFilter implements ITreeFilter<SettingsTreeElement> {
 		@IWorkbenchEnvironmentService private environmentService: IWorkbenchEnvironmentService,
 	) { }
 
-	filter(element: SettingsTreeElement, parentVisibility: TreeVisibility): TreeFilterResult<void> {
+	filter(element: SettingsTreeElement, parentVisibility: TreeVisibility): TreeFilterResult<codemavi> {
 		// Filter during search
 		if (this.viewState.filterToCategory && element instanceof SettingsTreeSettingElement) {
 			if (!this.settingContainedInGroup(element.setting, this.viewState.filterToCategory)) {
@@ -2553,7 +2553,7 @@ export class SettingsTree extends WorkbenchObjectTree<SettingsTreeElement> {
 	constructor(
 		container: HTMLElement,
 		viewState: ISettingsEditorViewState,
-		renderers: ITreeRenderer<any, void, any>[],
+		renderers: ITreeRenderer<any, codemavi, any>[],
 		@IContextKeyService contextKeyService: IContextKeyService,
 		@IListService listService: IListService,
 		@IWorkbenchConfigurationService configurationService: IWorkbenchConfigurationService,
@@ -2619,7 +2619,7 @@ export class SettingsTree extends WorkbenchObjectTree<SettingsTreeElement> {
 		}));
 	}
 
-	protected override createModel(user: string, options: IObjectTreeOptions<SettingsTreeGroupChild>): ITreeModel<SettingsTreeGroupChild | null, void, SettingsTreeGroupChild | null> {
+	protected override createModel(user: string, options: IObjectTreeOptions<SettingsTreeGroupChild>): ITreeModel<SettingsTreeGroupChild | null, codemavi, SettingsTreeGroupChild | null> {
 		return new NonCollapsibleObjectTreeModel<SettingsTreeGroupChild>(user, options);
 	}
 }
@@ -2634,7 +2634,7 @@ class CopySettingIdAction extends Action {
 		super(CopySettingIdAction.ID, CopySettingIdAction.LABEL);
 	}
 
-	override async run(context: SettingsTreeSettingElement): Promise<void> {
+	override async run(context: SettingsTreeSettingElement): Promise<codemavi> {
 		if (context) {
 			await this.clipboardService.writeText(context.setting.key);
 		}
@@ -2653,7 +2653,7 @@ class CopySettingAsJSONAction extends Action {
 		super(CopySettingAsJSONAction.ID, CopySettingAsJSONAction.LABEL);
 	}
 
-	override async run(context: SettingsTreeSettingElement): Promise<void> {
+	override async run(context: SettingsTreeSettingElement): Promise<codemavi> {
 		if (context) {
 			const jsonResult = `"${context.setting.key}": ${JSON.stringify(context.value, undefined, '  ')}`;
 			await this.clipboardService.writeText(jsonResult);
@@ -2674,7 +2674,7 @@ class CopySettingAsURLAction extends Action {
 		super(CopySettingAsURLAction.ID, CopySettingAsURLAction.LABEL);
 	}
 
-	override async run(context: SettingsTreeSettingElement): Promise<void> {
+	override async run(context: SettingsTreeSettingElement): Promise<codemavi> {
 		if (context) {
 			const settingKey = context.setting.key;
 			const product = this.productService.urlProtocol;
@@ -2704,7 +2704,7 @@ class SyncSettingAction extends Action {
 		this.checked = !ignoredSettings.includes(this.setting.key);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		// first remove the current setting completely from ignored settings
 		let currentValue = [...this.configService.getValue<string[]>('settingsSync.ignoredSettings')];
 		currentValue = currentValue.filter(v => v !== this.setting.key && v !== `-${this.setting.key}`);
@@ -2748,7 +2748,7 @@ class ApplySettingToAllProfilesAction extends Action {
 		this.checked = allProfilesSettings.includes(this.setting.key);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		// first remove the current setting completely from ignored settings
 		const value = this.configService.getValue<string[]>(APPLY_ALL_PROFILES_SETTING) ?? [];
 

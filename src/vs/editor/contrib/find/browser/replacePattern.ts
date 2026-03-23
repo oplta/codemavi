@@ -175,24 +175,24 @@ class ReplacePieceBuilder {
 		this._currentStaticPiece = '';
 	}
 
-	public emitUnchanged(toCharIndex: number): void {
+	public emitUnchanged(toCharIndex: number): codemavi {
 		this._emitStatic(this._source.substring(this._lastCharIndex, toCharIndex));
 		this._lastCharIndex = toCharIndex;
 	}
 
-	public emitStatic(value: string, toCharIndex: number): void {
+	public emitStatic(value: string, toCharIndex: number): codemavi {
 		this._emitStatic(value);
 		this._lastCharIndex = toCharIndex;
 	}
 
-	private _emitStatic(value: string): void {
+	private _emitStatic(value: string): codemavi {
 		if (value.length === 0) {
 			return;
 		}
 		this._currentStaticPiece += value;
 	}
 
-	public emitMatchIndex(index: number, toCharIndex: number, caseOps: string[]): void {
+	public emitMatchIndex(index: number, toCharIndex: number, caseOps: string[]): codemavi {
 		if (this._currentStaticPiece.length !== 0) {
 			this._result[this._resultLen++] = ReplacePiece.staticValue(this._currentStaticPiece);
 			this._currentStaticPiece = '';

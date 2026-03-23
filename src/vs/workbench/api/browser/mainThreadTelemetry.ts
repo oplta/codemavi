@@ -48,13 +48,13 @@ export class MainThreadTelemetry extends Disposable implements MainThreadTelemet
 		return this._telemetryService.telemetryLevel;
 	}
 
-	$publicLog(eventName: string, data: any = Object.create(null)): void {
+	$publicLog(eventName: string, data: any = Object.create(null)): codemavi {
 		// __GDPR__COMMON__ "pluginHostTelemetry" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true }
 		data[MainThreadTelemetry._name] = true;
 		this._telemetryService.publicLog(eventName, data);
 	}
 
-	$publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void {
+	$publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi {
 		this.$publicLog(eventName, data as any);
 	}
 }

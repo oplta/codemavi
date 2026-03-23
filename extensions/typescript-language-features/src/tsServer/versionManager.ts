@@ -14,7 +14,7 @@ const useWorkspaceTsdkStorageKey = 'typescript.useWorkspaceTsdk';
 const suppressPromptWorkspaceTsdkStorageKey = 'typescript.suppressPromptWorkspaceTsdk';
 
 interface QuickPickItem extends vscode.QuickPickItem {
-	run(): void;
+	run(): codemavi;
 }
 
 export class TypeScriptVersionManager extends Disposable {
@@ -53,7 +53,7 @@ export class TypeScriptVersionManager extends Disposable {
 
 	}
 
-	private readonly _onDidPickNewVersion = this._register(new vscode.EventEmitter<void>());
+	private readonly _onDidPickNewVersion = this._register(new vscode.EventEmitter<codemavi>());
 	public readonly onDidPickNewVersion = this._onDidPickNewVersion.event;
 
 	public updateConfiguration(nextConfiguration: TypeScriptServiceConfiguration) {
@@ -72,11 +72,11 @@ export class TypeScriptVersionManager extends Disposable {
 		return this._currentVersion;
 	}
 
-	public reset(): void {
+	public reset(): codemavi {
 		this._currentVersion = this.versionProvider.bundledVersion;
 	}
 
-	public async promptUserForVersion(): Promise<void> {
+	public async promptUserForVersion(): Promise<codemavi> {
 		const selected = await vscode.window.showQuickPick<QuickPickItem>([
 			this.getBundledPickItem(),
 			...this.getLocalPickItems(),
@@ -129,7 +129,7 @@ export class TypeScriptVersionManager extends Disposable {
 		});
 	}
 
-	private async promptUseWorkspaceTsdk(): Promise<void> {
+	private async promptUseWorkspaceTsdk(): Promise<codemavi> {
 		const workspaceVersion = this.versionProvider.localVersion;
 
 		if (workspaceVersion === undefined) {

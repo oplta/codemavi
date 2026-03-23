@@ -101,7 +101,7 @@ function patchProcess(allowExit: boolean) {
 	// Refs https://github.com/microsoft/vscode/issues/151012#issuecomment-1156593228
 	process.env['ELECTRON_RUN_AS_NODE'] = '1';
 
-	process.on = <any>function (event: string, listener: (...args: any[]) => void) {
+	process.on = <any>function (event: string, listener: (...args: any[]) => codemavi) {
 		if (event === 'uncaughtException') {
 			const actualListener = listener;
 			listener = function (...args: any[]) {
@@ -269,13 +269,13 @@ async function createExtHostProtocol(): Promise<IMessagePassingProtocol> {
 			});
 		}
 
-		send(msg: any): void {
+		send(msg: any): codemavi {
 			if (!this._terminating) {
 				protocol.send(msg);
 			}
 		}
 
-		async drain(): Promise<void> {
+		async drain(): Promise<codemavi> {
 			if (protocol.drain) {
 				return protocol.drain();
 			}
@@ -348,7 +348,7 @@ function connectToRenderer(protocol: IMessagePassingProtocol): Promise<IRenderer
 	});
 }
 
-async function startExtensionHostProcess(): Promise<void> {
+async function startExtensionHostProcess(): Promise<codemavi> {
 
 	// Print a console message when rejection isn't handled within N seconds. For details:
 	// see https://nodejs.org/api/process.html#process_event_unhandledrejection

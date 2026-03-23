@@ -86,7 +86,7 @@ class MutableToken implements CancellationToken {
 		return this._emitter.event;
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this._emitter) {
 			this._emitter.dispose();
 			this._emitter = null;
@@ -112,7 +112,7 @@ export class CancellationTokenSource {
 		return this._token;
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		if (!this._token) {
 			// save an object by returning the default
 			// cancelled token when cancellation happens
@@ -125,7 +125,7 @@ export class CancellationTokenSource {
 		}
 	}
 
-	dispose(cancel: boolean = false): void {
+	dispose(cancel: boolean = false): codemavi {
 		if (cancel) {
 			this.cancel();
 		}

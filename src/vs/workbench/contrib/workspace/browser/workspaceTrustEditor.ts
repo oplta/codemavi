@@ -209,7 +209,7 @@ class WorkspaceTrustedUrisTable extends Disposable {
 		return index;
 	}
 
-	private selectTrustedUriEntry(item: ITrustedUriItem, focus: boolean = true): void {
+	private selectTrustedUriEntry(item: ITrustedUriItem, focus: boolean = true): codemavi {
 		const index = this.getIndexOfTrustedUriEntry(item);
 		if (index !== -1) {
 			if (focus) {
@@ -275,11 +275,11 @@ class WorkspaceTrustedUrisTable extends Disposable {
 		return sortedEntries;
 	}
 
-	layout(): void {
+	layout(): codemavi {
 		this.table.layout((this.trustedUriEntries.length * TrustedUriTableVirtualDelegate.ROW_HEIGHT) + TrustedUriTableVirtualDelegate.HEADER_ROW_HEIGHT, undefined);
 	}
 
-	updateTable(): void {
+	updateTable(): codemavi {
 		const entries = this.trustedUriEntries;
 		this.container.classList.toggle('empty', entries.length === 0);
 
@@ -411,7 +411,7 @@ class TrustedUriActionsColumnRenderer implements ITableRenderer<ITrustedUriItem,
 		return { actionBar };
 	}
 
-	renderElement(item: ITrustedUriItem, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): void {
+	renderElement(item: ITrustedUriItem, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): codemavi {
 		templateData.actionBar.clear();
 
 		const canUseOpenDialog = item.uri.scheme === Schemas.file ||
@@ -469,7 +469,7 @@ class TrustedUriActionsColumnRenderer implements ITableRenderer<ITrustedUriItem,
 		};
 	}
 
-	disposeTemplate(templateData: IActionsColumnTemplateData): void {
+	disposeTemplate(templateData: IActionsColumnTemplateData): codemavi {
 		templateData.actionBar.dispose();
 	}
 
@@ -518,7 +518,7 @@ class TrustedUriPathColumnRenderer implements ITableRenderer<ITrustedUriItem, IT
 		};
 	}
 
-	renderElement(item: ITrustedUriItem, index: number, templateData: ITrustedUriPathColumnTemplateData, height: number | undefined): void {
+	renderElement(item: ITrustedUriItem, index: number, templateData: ITrustedUriPathColumnTemplateData, height: number | undefined): codemavi {
 		templateData.renderDisposables.clear();
 
 		this.currentItem = item;
@@ -585,7 +585,7 @@ class TrustedUriPathColumnRenderer implements ITableRenderer<ITrustedUriItem, IT
 		templateData.element.classList.toggle('current-workspace-parent', item.parentOfWorkspaceItem);
 	}
 
-	disposeTemplate(templateData: ITrustedUriPathColumnTemplateData): void {
+	disposeTemplate(templateData: ITrustedUriPathColumnTemplateData): codemavi {
 		templateData.disposables.dispose();
 		templateData.renderDisposables.dispose();
 	}
@@ -649,7 +649,7 @@ class TrustedUriHostColumnRenderer implements ITableRenderer<ITrustedUriItem, IT
 		};
 	}
 
-	renderElement(item: ITrustedUriItem, index: number, templateData: ITrustedUriHostColumnTemplateData, height: number | undefined): void {
+	renderElement(item: ITrustedUriItem, index: number, templateData: ITrustedUriHostColumnTemplateData, height: number | undefined): codemavi {
 		templateData.renderDisposables.clear();
 		templateData.renderDisposables.add({ dispose: () => { clearNode(templateData.buttonBarContainer); } });
 
@@ -660,7 +660,7 @@ class TrustedUriHostColumnRenderer implements ITableRenderer<ITrustedUriItem, IT
 		templateData.buttonBarContainer.style.display = 'none';
 	}
 
-	disposeTemplate(templateData: ITrustedUriHostColumnTemplateData): void {
+	disposeTemplate(templateData: ITrustedUriHostColumnTemplateData): codemavi {
 		templateData.disposables.dispose();
 	}
 
@@ -704,7 +704,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		@IKeybindingService private readonly keybindingService: IKeybindingService,
 	) { super(WorkspaceTrustEditor.ID, group, telemetryService, themeService, storageService); }
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this.rootElement = append(parent, $('.workspace-trust-editor', { tabindex: '0' }));
 
 		this.createHeaderElement(this.rootElement);
@@ -767,7 +767,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		this.rootElement.focus();
 	}
 
-	override async setInput(input: WorkspaceTrustEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: WorkspaceTrustEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 
 		await super.setInput(input, options, context, token);
 		if (token.isCancellationRequested) { return; }
@@ -777,7 +777,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		await this.render();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.extensionWorkbenchService.onChange(() => this.render()));
 		this._register(this.configurationService.onDidChangeRestrictedSettings(() => this.render()));
 		this._register(this.workspaceTrustManagementService.onDidChangeTrust(() => this.render()));
@@ -953,7 +953,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		return set.size;
 	}
 
-	private createHeaderElement(parent: HTMLElement): void {
+	private createHeaderElement(parent: HTMLElement): codemavi {
 		this.headerContainer = append(parent, $('.workspace-trust-header', { tabIndex: '0' }));
 		this.headerTitleContainer = append(this.headerContainer, $('.workspace-trust-title'));
 		this.headerTitleIcon = append(this.headerTitleContainer, $('.workspace-trust-title-icon'));
@@ -961,7 +961,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		this.headerDescription = append(this.headerContainer, $('.workspace-trust-description'));
 	}
 
-	private createConfigurationElement(parent: HTMLElement): void {
+	private createConfigurationElement(parent: HTMLElement): codemavi {
 		this.configurationContainer = append(parent, $('.workspace-trust-settings', { tabIndex: '0' }));
 		const configurationTitle = append(this.configurationContainer, $('.workspace-trusted-folders-title'));
 		configurationTitle.innerText = localize('trustedFoldersAndWorkspaces', "Trusted Folders & Workspaces");
@@ -969,13 +969,13 @@ export class WorkspaceTrustEditor extends EditorPane {
 		this.workspaceTrustedUrisTable = this._register(this.instantiationService.createInstance(WorkspaceTrustedUrisTable, this.configurationContainer));
 	}
 
-	private createAffectedFeaturesElement(parent: HTMLElement): void {
+	private createAffectedFeaturesElement(parent: HTMLElement): codemavi {
 		this.affectedFeaturesContainer = append(parent, $('.workspace-trust-features'));
 		this.trustedContainer = append(this.affectedFeaturesContainer, $('.workspace-trust-limitations.trusted', { tabIndex: '0' }));
 		this.untrustedContainer = append(this.affectedFeaturesContainer, $('.workspace-trust-limitations.untrusted', { tabIndex: '0' }));
 	}
 
-	private async renderAffectedFeatures(numSettings: number, numExtensions: number): Promise<void> {
+	private async renderAffectedFeatures(numSettings: number, numExtensions: number): Promise<codemavi> {
 		clearNode(this.trustedContainer);
 		clearNode(this.untrustedContainer);
 
@@ -1028,7 +1028,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		}
 	}
 
-	private createButtonRow(parent: HTMLElement, buttonInfo: { action: Action; keybinding: ResolvedKeybinding }[], enabled?: boolean): void {
+	private createButtonRow(parent: HTMLElement, buttonInfo: { action: Action; keybinding: ResolvedKeybinding }[], enabled?: boolean): codemavi {
 		const buttonRow = append(parent, $('.workspace-trust-buttons-row'));
 		const buttonContainer = append(buttonRow, $('.workspace-trust-buttons'));
 		const buttonBar = this.rerenderDisposables.add(new ButtonBar(buttonContainer));
@@ -1051,7 +1051,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		}
 	}
 
-	private addTrustButtonToElement(parent: HTMLElement): void {
+	private addTrustButtonToElement(parent: HTMLElement): codemavi {
 		const trustAction = this.rerenderDisposables.add(new Action('workspace.trust.button.action.grant', localize('trustButton', "Trust"), undefined, true, async () => {
 			await this.workspaceTrustManagementService.setWorkspaceTrust(true);
 		}));
@@ -1075,7 +1075,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		this.createButtonRow(parent, trustActions);
 	}
 
-	private addDontTrustButtonToElement(parent: HTMLElement): void {
+	private addDontTrustButtonToElement(parent: HTMLElement): codemavi {
 		this.createButtonRow(parent, [{
 			action: this.rerenderDisposables.add(new Action('workspace.trust.button.action.deny', localize('dontTrustButton', "Don't Trust"), undefined, true, async () => {
 				await this.workspaceTrustManagementService.setWorkspaceTrust(false);
@@ -1084,7 +1084,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		}]);
 	}
 
-	private addTrustedTextToElement(parent: HTMLElement): void {
+	private addTrustedTextToElement(parent: HTMLElement): codemavi {
 		if (this.workspaceService.getWorkbenchState() === WorkbenchState.EMPTY) {
 			return;
 		}
@@ -1097,7 +1097,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		}
 	}
 
-	private renderLimitationsHeaderElement(parent: HTMLElement, headerText: string, subtitleText: string): void {
+	private renderLimitationsHeaderElement(parent: HTMLElement, headerText: string, subtitleText: string): codemavi {
 		const limitationsHeaderContainer = append(parent, $('.workspace-trust-limitations-header'));
 		const titleElement = append(limitationsHeaderContainer, $('.workspace-trust-limitations-title'));
 		const textElement = append(titleElement, $('.workspace-trust-limitations-title-text'));
@@ -1107,7 +1107,7 @@ export class WorkspaceTrustEditor extends EditorPane {
 		subtitleElement.innerText = subtitleText;
 	}
 
-	private renderLimitationsListElement(parent: HTMLElement, limitations: string[], iconClassNames: string[]): void {
+	private renderLimitationsListElement(parent: HTMLElement, limitations: string[], iconClassNames: string[]): codemavi {
 		const listContainer = append(parent, $('.workspace-trust-limitations-list-container'));
 		const limitationsList = append(listContainer, $('ul'));
 		for (const limitation of limitations) {
@@ -1128,8 +1128,8 @@ export class WorkspaceTrustEditor extends EditorPane {
 		}
 	}
 
-	private layoutParticipants: { layout: () => void }[] = [];
-	layout(dimension: Dimension): void {
+	private layoutParticipants: { layout: () => codemavi }[] = [];
+	layout(dimension: Dimension): codemavi {
 		if (!this.isVisible()) {
 			return;
 		}

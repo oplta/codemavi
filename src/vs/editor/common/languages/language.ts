@@ -71,7 +71,7 @@ export interface ILanguageService {
 	/**
 	 * An event emitted when languages have changed.
 	 */
-	onDidChange: Event<void>;
+	onDidChange: Event<codemavi>;
 
 	/**
 	 * Register a language.
@@ -158,11 +158,11 @@ export interface ILanguageService {
 	/**
 	 * Request basic language features for a language.
 	 */
-	requestBasicLanguageFeatures(languageId: string): void;
+	requestBasicLanguageFeatures(languageId: string): codemavi;
 
 	/**
 	 * Request rich language features for a language.
 	 */
-	requestRichLanguageFeatures(languageId: string): void;
+	requestRichLanguageFeatures(languageId: string): codemavi;
 
 }

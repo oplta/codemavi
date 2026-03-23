@@ -68,7 +68,7 @@ export class EditorTextPropertySignalsContribution extends Disposable implements
 		}));
 	}
 
-	private _registerAccessibilitySignalsForEditor(editor: ICodeEditor, editorModel: ITextModel, store: DisposableStore): void {
+	private _registerAccessibilitySignalsForEditor(editor: ICodeEditor, editorModel: ITextModel, store: DisposableStore): codemavi {
 		let lastLine = -1;
 		const ignoredLineSignalsForCurrentLine = new Set<TextProperty>();
 

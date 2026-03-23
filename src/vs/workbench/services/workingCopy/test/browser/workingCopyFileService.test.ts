@@ -313,7 +313,7 @@ suite('WorkingCopyFileService', () => {
 		return eventCounter;
 	}
 
-	async function testMoveOrCopy(files: { source: URI; target: URI }[], move: boolean, targetDirty?: boolean): Promise<void> {
+	async function testMoveOrCopy(files: { source: URI; target: URI }[], move: boolean, targetDirty?: boolean): Promise<codemavi> {
 
 		let eventCounter = 0;
 		const models = await Promise.all(files.map(async ({ source, target }, i) => {

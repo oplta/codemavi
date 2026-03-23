@@ -208,7 +208,7 @@ export class OperationManager implements IOperationManager {
 
 	constructor(private readonly logger: LogOutputChannel) { }
 
-	start(operation: Operation): void {
+	start(operation: Operation): codemavi {
 		if (this.operations.has(operation.kind)) {
 			this.operations.get(operation.kind)!.add(operation);
 		} else {
@@ -218,7 +218,7 @@ export class OperationManager implements IOperationManager {
 		this.logger.trace(`[OperationManager][start] ${operation.kind} (blocking: ${operation.blocking}, readOnly: ${operation.readOnly}; retry: ${operation.retry}; showProgress: ${operation.showProgress})`);
 	}
 
-	end(operation: Operation): void {
+	end(operation: Operation): codemavi {
 		const operationSet = this.operations.get(operation.kind);
 		if (operationSet) {
 			operationSet.delete(operation);

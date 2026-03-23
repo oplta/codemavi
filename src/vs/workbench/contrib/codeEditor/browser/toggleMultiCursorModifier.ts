@@ -28,7 +28,7 @@ export class ToggleMultiCursorModifierAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		const editorConf = configurationService.getValue<{ multiCursorModifier: 'ctrlCmd' | 'alt' }>('editor');
@@ -59,7 +59,7 @@ class MultiCursorModifierContextKeyController extends Disposable implements IWor
 		}));
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		const editorConf = this.configurationService.getValue<{ multiCursorModifier: 'ctrlCmd' | 'alt' }>('editor');
 		const value = (editorConf.multiCursorModifier === 'ctrlCmd' ? 'ctrlCmd' : 'altKey');
 		this._multiCursorModifier.set(value);

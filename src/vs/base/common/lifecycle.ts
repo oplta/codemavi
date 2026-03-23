@@ -25,23 +25,23 @@ export interface IDisposableTracker {
 	/**
 	 * Is called on construction of a disposable.
 	*/
-	trackDisposable(disposable: IDisposable): void;
+	trackDisposable(disposable: IDisposable): codemavi;
 
 	/**
 	 * Is called when a disposable is registered as child of another disposable (e.g. {@link DisposableStore}).
 	 * If parent is `null`, the disposable is removed from its former parent.
 	*/
-	setParent(child: IDisposable, parent: IDisposable | null): void;
+	setParent(child: IDisposable, parent: IDisposable | null): codemavi;
 
 	/**
 	 * Is called after a disposable is disposed.
 	*/
-	markAsDisposed(disposable: IDisposable): void;
+	markAsDisposed(disposable: IDisposable): codemavi;
 
 	/**
 	 * Indicates that the given object is a singleton which does not need to be disposed.
 	*/
-	markAsSingleton(disposable: IDisposable): void;
+	markAsSingleton(disposable: IDisposable): codemavi;
 }
 
 export class GCBasedDisposableTracker implements IDisposableTracker {
@@ -50,12 +50,12 @@ export class GCBasedDisposableTracker implements IDisposableTracker {
 		console.warn(`[LEAKED DISPOSABLE] ${heldValue}`);
 	});
 
-	trackDisposable(disposable: IDisposable): void {
+	trackDisposable(disposable: IDisposable): codemavi {
 		const stack = new Error('CREATED via:').stack!;
 		this._registry.register(disposable, stack, disposable);
 	}
 
-	setParent(child: IDisposable, parent: IDisposable | null): void {
+	setParent(child: IDisposable, parent: IDisposable | null): codemavi {
 		if (parent) {
 			this._registry.unregister(child);
 		} else {
@@ -63,11 +63,11 @@ export class GCBasedDisposableTracker implements IDisposableTracker {
 		}
 	}
 
-	markAsDisposed(disposable: IDisposable): void {
+	markAsDisposed(disposable: IDisposable): codemavi {
 		this._registry.unregister(disposable);
 	}
 
-	markAsSingleton(disposable: IDisposable): void {
+	markAsSingleton(disposable: IDisposable): codemavi {
 		this._registry.unregister(disposable);
 	}
 }
@@ -94,7 +94,7 @@ export class DisposableTracker implements IDisposableTracker {
 		return val;
 	}
 
-	trackDisposable(d: IDisposable): void {
+	trackDisposable(d: IDisposable): codemavi {
 		const data = this.getDisposableData(d);
 		if (!data.source) {
 			data.source =
@@ -102,16 +102,16 @@ export class DisposableTracker implements IDisposableTracker {
 		}
 	}
 
-	setParent(child: IDisposable, parent: IDisposable | null): void {
+	setParent(child: IDisposable, parent: IDisposable | null): codemavi {
 		const data = this.getDisposableData(child);
 		data.parent = parent;
 	}
 
-	markAsDisposed(x: IDisposable): void {
+	markAsDisposed(x: IDisposable): codemavi {
 		this.livingDisposables.delete(x);
 	}
 
-	markAsSingleton(disposable: IDisposable): void {
+	markAsSingleton(disposable: IDisposable): codemavi {
 		this.getDisposableData(disposable).isSingleton = true;
 	}
 
@@ -222,14 +222,14 @@ export class DisposableTracker implements IDisposableTracker {
 	}
 }
 
-export function setDisposableTracker(tracker: IDisposableTracker | null): void {
+export function setDisposableTracker(tracker: IDisposableTracker | null): codemavi {
 	disposableTracker = tracker;
 }
 
 if (TRACK_DISPOSABLES) {
 	const __is_disposable_tracked__ = '__is_disposable_tracked__';
 	setDisposableTracker(new class implements IDisposableTracker {
-		trackDisposable(x: IDisposable): void {
+		trackDisposable(x: IDisposable): codemavi {
 			const stack = new Error('Potentially leaked disposable').stack!;
 			setTimeout(() => {
 				if (!(x as any)[__is_disposable_tracked__]) {
@@ -238,7 +238,7 @@ if (TRACK_DISPOSABLES) {
 			}, 3000);
 		}
 
-		setParent(child: IDisposable, parent: IDisposable | null): void {
+		setParent(child: IDisposable, parent: IDisposable | null): codemavi {
 			if (child && child !== Disposable.None) {
 				try {
 					(child as any)[__is_disposable_tracked__] = true;
@@ -248,7 +248,7 @@ if (TRACK_DISPOSABLES) {
 			}
 		}
 
-		markAsDisposed(disposable: IDisposable): void {
+		markAsDisposed(disposable: IDisposable): codemavi {
 			if (disposable && disposable !== Disposable.None) {
 				try {
 					(disposable as any)[__is_disposable_tracked__] = true;
@@ -257,7 +257,7 @@ if (TRACK_DISPOSABLES) {
 				}
 			}
 		}
-		markAsSingleton(disposable: IDisposable): void { }
+		markAsSingleton(disposable: IDisposable): codemavi { }
 	});
 }
 
@@ -266,15 +266,15 @@ export function trackDisposable<T extends IDisposable>(x: T): T {
 	return x;
 }
 
-export function markAsDisposed(disposable: IDisposable): void {
+export function markAsDisposed(disposable: IDisposable): codemavi {
 	disposableTracker?.markAsDisposed(disposable);
 }
 
-function setParentOfDisposable(child: IDisposable, parent: IDisposable | null): void {
+function setParentOfDisposable(child: IDisposable, parent: IDisposable | null): codemavi {
 	disposableTracker?.setParent(child, parent);
 }
 
-function setParentOfDisposables(children: IDisposable[], parent: IDisposable | null): void {
+function setParentOfDisposables(children: IDisposable[], parent: IDisposable | null): codemavi {
 	if (!disposableTracker) {
 		return;
 	}
@@ -303,7 +303,7 @@ export function markAsSingleton<T extends IDisposable>(singleton: T): T {
  * - The return value from registering a provider. When `.dispose()` is called, the provider is unregistered.
  */
 export interface IDisposable {
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 /**
@@ -371,7 +371,7 @@ export function combinedDisposable(...disposables: IDisposable[]): IDisposable {
  *
  * @param fn Clean up function, guaranteed to be called only **once**.
  */
-export function toDisposable(fn: () => void): IDisposable {
+export function toDisposable(fn: () => codemavi): IDisposable {
 	const self = trackDisposable({
 		dispose: createSingleCallFunction(() => {
 			markAsDisposed(self);
@@ -404,7 +404,7 @@ export class DisposableStore implements IDisposable {
 	 *
 	 * Any future disposables added to this object will be disposed of on `add`.
 	 */
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this._isDisposed) {
 			return;
 		}
@@ -424,7 +424,7 @@ export class DisposableStore implements IDisposable {
 	/**
 	 * Dispose of all registered disposables but do not mark this object as disposed.
 	 */
-	public clear(): void {
+	public clear(): codemavi {
 		if (this._toDispose.size === 0) {
 			return;
 		}
@@ -463,7 +463,7 @@ export class DisposableStore implements IDisposable {
 	 * Deletes a disposable from store and disposes of it. This will not throw or warn and proceed to dispose the
 	 * disposable even when the disposable is not part in the store.
 	 */
-	public delete<T extends IDisposable>(o: T): void {
+	public delete<T extends IDisposable>(o: T): codemavi {
 		if (!o) {
 			return;
 		}
@@ -477,7 +477,7 @@ export class DisposableStore implements IDisposable {
 	/**
 	 * Deletes the value from the store, but does not dispose it.
 	 */
-	public deleteAndLeak<T extends IDisposable>(o: T): void {
+	public deleteAndLeak<T extends IDisposable>(o: T): codemavi {
 		if (!o) {
 			return;
 		}
@@ -509,7 +509,7 @@ export abstract class Disposable implements IDisposable {
 		setParentOfDisposable(this._store, this);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		markAsDisposed(this);
 
 		this._store.dispose();
@@ -559,11 +559,11 @@ export class MutableDisposable<T extends IDisposable> implements IDisposable {
 	/**
 	 * Resets the stored value and disposed of the previously stored value.
 	 */
-	clear(): void {
+	clear(): codemavi {
 		this.value = undefined;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._isDisposed = true;
 		markAsDisposed(this);
 		this._value?.dispose();
@@ -640,8 +640,8 @@ export class RefCountedDisposable {
  */
 export class SafeDisposable implements IDisposable {
 
-	dispose: () => void = () => { };
-	unset: () => void = () => { };
+	dispose: () => codemavi = () => { };
+	unset: () => codemavi = () => { };
 	isset: () => boolean = () => false;
 
 	constructor() {
@@ -693,7 +693,7 @@ export abstract class ReferenceCollection<T> {
 	}
 
 	protected abstract createReferencedObject(key: string, ...args: any[]): T;
-	protected abstract destroyReferencedObject(key: string, object: T): void;
+	protected abstract destroyReferencedObject(key: string, object: T): codemavi;
 }
 
 /**
@@ -723,10 +723,10 @@ export class AsyncReferenceCollection<T> {
 
 export class ImmortalReference<T> implements IReference<T> {
 	constructor(public object: T) { }
-	dispose(): void { /* noop */ }
+	dispose(): codemavi { /* noop */ }
 }
 
-export function disposeOnReturn(fn: (store: DisposableStore) => void): void {
+export function disposeOnReturn(fn: (store: DisposableStore) => codemavi): codemavi {
 	const store = new DisposableStore();
 	try {
 		fn(store);
@@ -752,7 +752,7 @@ export class DisposableMap<K, V extends IDisposable = IDisposable> implements ID
 	 *
 	 * Trying to use this object after it has been disposed of is an error.
 	 */
-	dispose(): void {
+	dispose(): codemavi {
 		markAsDisposed(this);
 		this._isDisposed = true;
 		this.clearAndDisposeAll();
@@ -761,7 +761,7 @@ export class DisposableMap<K, V extends IDisposable = IDisposable> implements ID
 	/**
 	 * Disposes of all stored values and clear the map, but DO NOT mark this object as disposed.
 	 */
-	clearAndDisposeAll(): void {
+	clearAndDisposeAll(): codemavi {
 		if (!this._store.size) {
 			return;
 		}
@@ -785,7 +785,7 @@ export class DisposableMap<K, V extends IDisposable = IDisposable> implements ID
 		return this._store.get(key);
 	}
 
-	set(key: K, value: V, skipDisposeOnOverwrite = false): void {
+	set(key: K, value: V, skipDisposeOnOverwrite = false): codemavi {
 		if (this._isDisposed) {
 			console.warn(new Error('Trying to add a disposable to a DisposableMap that has already been disposed of. The added object will be leaked!').stack);
 		}
@@ -800,7 +800,7 @@ export class DisposableMap<K, V extends IDisposable = IDisposable> implements ID
 	/**
 	 * Delete the value stored for `key` from this map and also dispose of it.
 	 */
-	deleteAndDispose(key: K): void {
+	deleteAndDispose(key: K): codemavi {
 		this._store.get(key)?.dispose();
 		this._store.delete(key);
 	}
@@ -831,7 +831,7 @@ export class DisposableMap<K, V extends IDisposable = IDisposable> implements ID
 /**
  * Call `then` on a Promise, unless the returned disposable is disposed.
  */
-export function thenIfNotDisposed<T>(promise: Promise<T>, then: (result: T) => void): IDisposable {
+export function thenIfNotDisposed<T>(promise: Promise<T>, then: (result: T) => codemavi): IDisposable {
 	let disposed = false;
 	promise.then(result => {
 		if (disposed) {

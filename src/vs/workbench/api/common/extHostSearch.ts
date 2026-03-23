@@ -24,7 +24,7 @@ export interface IExtHostSearch extends ExtHostSearchShape {
 	registerTextSearchProvider(scheme: string, provider: vscode.TextSearchProvider2): IDisposable;
 	registerAITextSearchProvider(scheme: string, provider: vscode.AITextSearchProvider): IDisposable;
 	registerFileSearchProvider(scheme: string, provider: vscode.FileSearchProvider2): IDisposable;
-	doInternalFileSearchWithCustomCallback(query: IFileQuery, token: CancellationToken, handleFileMatch: (data: URI[]) => void): Promise<ISearchCompleteStats>;
+	doInternalFileSearchWithCustomCallback(query: IFileQuery, token: CancellationToken, handleFileMatch: (data: URI[]) => codemavi): Promise<ISearchCompleteStats>;
 }
 
 export const IExtHostSearch = createDecorator<IExtHostSearch>('IExtHostSearch');
@@ -147,11 +147,11 @@ export class ExtHostSearch implements IExtHostSearch {
 		}
 	}
 
-	async doInternalFileSearchWithCustomCallback(query: IFileQuery, token: CancellationToken, handleFileMatch: (data: URI[]) => void): Promise<ISearchCompleteStats> {
+	async doInternalFileSearchWithCustomCallback(query: IFileQuery, token: CancellationToken, handleFileMatch: (data: URI[]) => codemavi): Promise<ISearchCompleteStats> {
 		return { messages: [] };
 	}
 
-	$clearCache(cacheKey: string): Promise<void> {
+	$clearCache(cacheKey: string): Promise<codemavi> {
 		this._fileSearchManager.clearCache(cacheKey);
 
 		return Promise.resolve(undefined);
@@ -179,7 +179,7 @@ export class ExtHostSearch implements IExtHostSearch {
 		return engine.search(progress => this._proxy.$handleTextMatch(handle, session, progress), token);
 	}
 
-	$enableExtensionHostSearch(): void { }
+	$enableExtensionHostSearch(): codemavi { }
 
 	async $getAIName(handle: number): Promise<string | undefined> {
 		const provider = this._aiTextSearchProvider.get(handle);

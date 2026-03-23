@@ -48,7 +48,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 	private readonly _encounteredLanguages: boolean[] = [];
 
 	private _debugMode: boolean = false;
-	private _debugModePrintFunc: (str: string) => void = () => { };
+	private _debugModePrintFunc: (str: string) => codemavi = () => { };
 
 	private _grammarDefinitions: IValidGrammarDefinition[] | null = null;
 	private _grammarFactory: TMGrammarFactory | null = null;
@@ -98,7 +98,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		return !!this._configurationService.getValue<boolean>('editor.experimental.asyncTokenizationVerification');
 	}
 
-	private _handleGrammarsExtPoint(extensions: readonly IExtensionPointUser<ITMSyntaxExtensionPoint[]>[]): void {
+	private _handleGrammarsExtPoint(extensions: readonly IExtensionPointUser<ITMSyntaxExtensionPoint[]>[]): codemavi {
 		this._grammarDefinitions = null;
 		if (this._grammarFactory) {
 			this._grammarFactory.dispose();
@@ -196,7 +196,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		};
 	}
 
-	public startDebugMode(printFn: (str: string) => void, onStop: () => void): void {
+	public startDebugMode(printFn: (str: string) => codemavi, onStop: () => codemavi): codemavi {
 		if (this._debugMode) {
 			this._notificationService.error(nls.localize('alreadyDebugging', "Already Logging."));
 			return;
@@ -221,7 +221,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 						progress.report({
 							message: nls.localize('progress2', "Now logging TM Grammar parsing. Press Stop when finished.")
 						});
-						return new Promise<void>((resolve, reject) => { });
+						return new Promise<codemavi>((resolve, reject) => { });
 					});
 				},
 				(choice) => {
@@ -251,7 +251,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 			createOnigString: (str: string) => vscodeOniguruma.createOnigString(str)
 		});
 
-		// Avoid duplicate instantiations
+		// Acodemavi duplicate instantiations
 		if (this._grammarFactory) {
 			return this._grammarFactory;
 		}
@@ -322,7 +322,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		}
 	}
 
-	private _updateTheme(colorTheme: IWorkbenchColorTheme, forceUpdate: boolean): void {
+	private _updateTheme(colorTheme: IWorkbenchColorTheme, forceUpdate: boolean): codemavi {
 		if (!forceUpdate && this._currentTheme && this._currentTokenColorMap && equalsTokenRules(this._currentTheme.settings, colorTheme.tokenColors)
 			&& equalArray(this._currentTokenColorMap, colorTheme.tokenColorMap)) {
 			return;
@@ -386,7 +386,7 @@ export class TextMateTokenizationFeature extends Disposable implements ITextMate
 		}
 	}
 
-	private _reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, fromWorker: boolean, isRandomSample: boolean): void {
+	private _reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, fromWorker: boolean, isRandomSample: boolean): codemavi {
 		const key = fromWorker ? 'async' : 'sync';
 
 		// 50 events per hour (one event has a low probability)

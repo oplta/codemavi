@@ -27,7 +27,7 @@ export interface IChatContentPart extends IDisposable {
 	 */
 	hasSameContent(other: IChatRendererContent, followingContent: IChatRendererContent[], element: ChatTreeItem): boolean;
 
-	addDisposable?(disposable: IDisposable): void;
+	addDisposable?(disposable: IDisposable): codemavi;
 }
 
 export interface IChatContentPartRenderContext {

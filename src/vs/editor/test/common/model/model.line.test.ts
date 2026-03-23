@@ -21,7 +21,7 @@ interface ILineEdit {
 	text: string;
 }
 
-function assertLineTokens(__actual: LineTokens, _expected: TestToken[]): void {
+function assertLineTokens(__actual: LineTokens, _expected: TestToken[]): codemavi {
 	const tmp = TestToken.toTokens(_expected);
 	LineTokens.convertToEndOffset(tmp, __actual.getLineContent().length);
 	const expected = TestLineTokenFactory.inflateArr(tmp);
@@ -50,7 +50,7 @@ suite('ModelLine - getIndentLevel', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertIndentLevel(text: string, expected: number, tabSize: number = 4): void {
+	function assertIndentLevel(text: string, expected: number, tabSize: number = 4): codemavi {
 		const actual = computeIndentLevel(text, tabSize);
 		assert.strictEqual(actual, expected, text);
 	}
@@ -104,7 +104,7 @@ class ManualTokenizationSupport implements ITokenizationSupport {
 	private readonly tokens = new Map<number, Uint32Array>();
 	private readonly stores = new Set<IBackgroundTokenizationStore>();
 
-	public setLineTokens(lineNumber: number, tokens: Uint32Array): void {
+	public setLineTokens(lineNumber: number, tokens: Uint32Array): codemavi {
 		const b = new ContiguousMultilineTokensBuilder();
 		b.add(lineNumber, tokens);
 		for (const s of this.stores) {
@@ -164,7 +164,7 @@ suite('ModelLinesTokens', () => {
 		text: string;
 	}
 
-	function testApplyEdits(initial: IBufferLineState[], edits: IEdit[], expected: IBufferLineState[]): void {
+	function testApplyEdits(initial: IBufferLineState[], edits: IEdit[], expected: IBufferLineState[]): codemavi {
 		const initialText = initial.map(el => el.text).join('\n');
 
 		const s = new ManualTokenizationSupport();
@@ -492,7 +492,7 @@ suite('ModelLinesTokens', () => {
 		);
 	});
 
-	function testLineEditTokens(initialText: string, initialTokens: TestToken[], edits: ILineEdit[], expectedText: string, expectedTokens: TestToken[]): void {
+	function testLineEditTokens(initialText: string, initialTokens: TestToken[], edits: ILineEdit[], expectedText: string, expectedTokens: TestToken[]): codemavi {
 		testApplyEdits(
 			[{
 				text: initialText,
@@ -1059,7 +1059,7 @@ suite('ModelLinesTokens', () => {
 		);
 	});
 
-	function testLineSplitTokens(initialText: string, initialTokens: TestToken[], splitColumn: number, expectedText1: string, expectedText2: string, expectedTokens: TestToken[]): void {
+	function testLineSplitTokens(initialText: string, initialTokens: TestToken[], splitColumn: number, expectedText1: string, expectedText2: string, expectedTokens: TestToken[]): codemavi {
 		testApplyEdits(
 			[{
 				text: initialText,
@@ -1150,7 +1150,7 @@ suite('ModelLinesTokens', () => {
 		);
 	});
 
-	function testLineAppendTokens(aText: string, aTokens: TestToken[], bText: string, bTokens: TestToken[], expectedText: string, expectedTokens: TestToken[]): void {
+	function testLineAppendTokens(aText: string, aTokens: TestToken[], bText: string, bTokens: TestToken[], expectedText: string, expectedTokens: TestToken[]): codemavi {
 		testApplyEdits(
 			[{
 				text: aText,

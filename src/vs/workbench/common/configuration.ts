@@ -64,7 +64,7 @@ export type ConfigurationMigrationFn = (value: any, valueAccessor: (key: string)
 export type ConfigurationMigration = { key: string; migrateFn: ConfigurationMigrationFn };
 
 export interface IConfigurationMigrationRegistry {
-	registerConfigurationMigrations(configurationMigrations: ConfigurationMigration[]): void;
+	registerConfigurationMigrations(configurationMigrations: ConfigurationMigration[]): codemavi;
 }
 
 class ConfigurationMigrationRegistry implements IConfigurationMigrationRegistry {
@@ -74,7 +74,7 @@ class ConfigurationMigrationRegistry implements IConfigurationMigrationRegistry 
 	private readonly _onDidRegisterConfigurationMigrations = new Emitter<ConfigurationMigration[]>();
 	readonly onDidRegisterConfigurationMigration = this._onDidRegisterConfigurationMigrations.event;
 
-	registerConfigurationMigrations(configurationMigrations: ConfigurationMigration[]): void {
+	registerConfigurationMigrations(configurationMigrations: ConfigurationMigration[]): codemavi {
 		this.migrations.push(...configurationMigrations);
 	}
 
@@ -101,18 +101,18 @@ export class ConfigurationMigrationWorkbenchContribution extends Disposable impl
 		this._register(configurationMigrationRegistry.onDidRegisterConfigurationMigration(migration => this.migrateConfigurations(migration)));
 	}
 
-	private async migrateConfigurations(migrations: ConfigurationMigration[]): Promise<void> {
+	private async migrateConfigurations(migrations: ConfigurationMigration[]): Promise<codemavi> {
 		await this.migrateConfigurationsForFolder(undefined, migrations);
 		for (const folder of this.workspaceService.getWorkspace().folders) {
 			await this.migrateConfigurationsForFolder(folder, migrations);
 		}
 	}
 
-	private async migrateConfigurationsForFolder(folder: IWorkspaceFolder | undefined, migrations: ConfigurationMigration[]): Promise<void> {
+	private async migrateConfigurationsForFolder(folder: IWorkspaceFolder | undefined, migrations: ConfigurationMigration[]): Promise<codemavi> {
 		await Promise.all([migrations.map(migration => this.migrateConfigurationsForFolderAndOverride(migration, folder?.uri))]);
 	}
 
-	private async migrateConfigurationsForFolderAndOverride(migration: ConfigurationMigration, resource?: URI): Promise<void> {
+	private async migrateConfigurationsForFolderAndOverride(migration: ConfigurationMigration, resource?: URI): Promise<codemavi> {
 		const inspectData = this.configurationService.inspect(migration.key, { resource });
 
 		const targetPairs: [keyof IConfigurationValue<any>, ConfigurationTarget][] = this.workspaceService.getWorkbenchState() === WorkbenchState.WORKSPACE ? [
@@ -180,7 +180,7 @@ export class DynamicWorkbenchSecurityConfiguration extends Disposable implements
 
 	static readonly ID = 'workbench.contrib.dynamicWorkbenchSecurityConfiguration';
 
-	private readonly _ready = new DeferredPromise<void>();
+	private readonly _ready = new DeferredPromise<codemavi>();
 	readonly ready = this._ready.p;
 
 	constructor(
@@ -191,7 +191,7 @@ export class DynamicWorkbenchSecurityConfiguration extends Disposable implements
 		this.create();
 	}
 
-	private async create(): Promise<void> {
+	private async create(): Promise<codemavi> {
 		try {
 			await this.doCreate();
 		} finally {
@@ -199,7 +199,7 @@ export class DynamicWorkbenchSecurityConfiguration extends Disposable implements
 		}
 	}
 
-	private async doCreate(): Promise<void> {
+	private async doCreate(): Promise<codemavi> {
 		if (!isWindows) {
 			const remoteEnvironment = await this.remoteAgentService.getEnvironment();
 			if (remoteEnvironment?.os !== OperatingSystem.Windows) {
@@ -262,7 +262,7 @@ export class DynamicWindowConfiguration extends Disposable implements IWorkbench
 		this._register(this.userDataProfilesService.onDidChangeProfiles(() => this.checkAndResetNewWindowProfileConfig()));
 	}
 
-	private registerNewWindowProfileConfiguration(): void {
+	private registerNewWindowProfileConfiguration(): codemavi {
 		const registry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration);
 		const configurationNode: IConfigurationNode = {
 			...windowConfigurationNodeBase,
@@ -285,12 +285,12 @@ export class DynamicWindowConfiguration extends Disposable implements IWorkbench
 		this.configurationNode = configurationNode;
 	}
 
-	private setNewWindowProfile(): void {
+	private setNewWindowProfile(): codemavi {
 		const newWindowProfileName = this.configurationService.getValue(CONFIG_NEW_WINDOW_PROFILE);
 		this.newWindowProfile = newWindowProfileName ? this.userDataProfilesService.profiles.find(profile => profile.name === newWindowProfileName) : undefined;
 	}
 
-	private checkAndResetNewWindowProfileConfig(): void {
+	private checkAndResetNewWindowProfileConfig(): codemavi {
 		const newWindowProfileName = this.configurationService.getValue(CONFIG_NEW_WINDOW_PROFILE);
 		if (!newWindowProfileName) {
 			return;

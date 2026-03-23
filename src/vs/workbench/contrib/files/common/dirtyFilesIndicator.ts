@@ -32,13 +32,13 @@ export class DirtyFilesIndicator extends Disposable implements IWorkbenchContrib
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Working copy dirty indicator
 		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.onWorkingCopyDidChangeDirty(workingCopy)));
 	}
 
-	private onWorkingCopyDidChangeDirty(workingCopy: IWorkingCopy): void {
+	private onWorkingCopyDidChangeDirty(workingCopy: IWorkingCopy): codemavi {
 		const gotDirty = workingCopy.isDirty();
 		if (gotDirty && !(workingCopy.capabilities & WorkingCopyCapabilities.Untitled) && this.filesConfigurationService.hasShortAutoSaveDelay(workingCopy.resource)) {
 			return; // do not indicate dirty of working copies that are auto saved after short delay
@@ -49,7 +49,7 @@ export class DirtyFilesIndicator extends Disposable implements IWorkbenchContrib
 		}
 	}
 
-	private updateActivityBadge(): void {
+	private updateActivityBadge(): codemavi {
 		const dirtyCount = this.lastKnownDirtyCount = this.workingCopyService.dirtyCount;
 
 		// Indicate dirty count in badge if any

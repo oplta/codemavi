@@ -41,8 +41,8 @@ interface ActionButtonState {
 }
 
 export class ActionButton {
-	private _onDidChange = new EventEmitter<void>();
-	get onDidChange(): Event<void> { return this._onDidChange.event; }
+	private _onDidChange = new EventEmitter<codemavi>();
+	get onDidChange(): Event<codemavi> { return this._onDidChange.event; }
 
 	private _state: ActionButtonState;
 	private get state() { return this._state; }
@@ -254,7 +254,7 @@ export class ActionButton {
 		};
 	}
 
-	private onDidChangeOperations(): void {
+	private onDidChangeOperations(): codemavi {
 		const isCheckoutInProgress
 			= this.repository.operations.isRunning(OperationKind.Checkout) ||
 			this.repository.operations.isRunning(OperationKind.CheckoutTracking);
@@ -272,14 +272,14 @@ export class ActionButton {
 		this.state = { ...this.state, isCheckoutInProgress, isCommitInProgress, isSyncInProgress };
 	}
 
-	private onDidChangeSmartCommitSettings(): void {
+	private onDidChangeSmartCommitSettings(): codemavi {
 		this.state = {
 			...this.state,
 			repositoryHasChangesToCommit: this.repositoryHasChangesToCommit()
 		};
 	}
 
-	private onDidRunGitStatus(): void {
+	private onDidRunGitStatus(): codemavi {
 		this.state = {
 			...this.state,
 			HEAD: this.repository.HEAD,
@@ -315,7 +315,7 @@ export class ActionButton {
 		return resources.length !== 0;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables = dispose(this.disposables);
 	}
 }

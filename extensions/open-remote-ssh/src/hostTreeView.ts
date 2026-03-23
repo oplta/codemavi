@@ -30,7 +30,7 @@ type DataTreeItem = HostItem | HostLocationItem;
 
 export class HostTreeDataProvider extends Disposable implements vscode.TreeDataProvider<DataTreeItem> {
 
-	private readonly _onDidChangeTreeData = this._register(new vscode.EventEmitter<DataTreeItem | DataTreeItem[] | void>());
+	private readonly _onDidChangeTreeData = this._register(new vscode.EventEmitter<DataTreeItem | DataTreeItem[] | codemavi>());
 	public readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
 	constructor(

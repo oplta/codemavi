@@ -63,7 +63,7 @@ export class WindowTitle extends Disposable {
 	private readonly activeEditorListeners = this._register(new DisposableStore());
 	private readonly titleUpdater = this._register(new RunOnceScheduler(() => this.doUpdateTitle(), 0));
 
-	private readonly onDidChangeEmitter = new Emitter<void>();
+	private readonly onDidChangeEmitter = new Emitter<codemavi>();
 	readonly onDidChange = this.onDidChangeEmitter.event;
 
 	get value() { return this.title ?? ''; }
@@ -112,7 +112,7 @@ export class WindowTitle extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.onConfigurationChanged(e)));
 		this._register(this.editorService.onDidActiveEditorChange(() => this.onActiveEditorChange()));
 		this._register(this.contextService.onDidChangeWorkspaceFolders(() => this.titleUpdater.schedule()));
@@ -133,7 +133,7 @@ export class WindowTitle extends Disposable {
 		this._register(this.accessibilityService.onDidChangeScreenReaderOptimized(() => this.titleUpdater.schedule()));
 	}
 
-	private onConfigurationChanged(event: IConfigurationChangeEvent): void {
+	private onConfigurationChanged(event: IConfigurationChangeEvent): codemavi {
 		const affectsTitleConfiguration = event.affectsConfiguration(WindowSettingNames.title);
 		if (affectsTitleConfiguration) {
 			this.checkTitleVariables();
@@ -144,7 +144,7 @@ export class WindowTitle extends Disposable {
 		}
 	}
 
-	private checkTitleVariables(): void {
+	private checkTitleVariables(): codemavi {
 		const titleTemplate = this.configurationService.getValue<unknown>(WindowSettingNames.title);
 		if (typeof titleTemplate === 'string') {
 			this.titleIncludesFocusedView = titleTemplate.includes('${focusedView}');
@@ -152,7 +152,7 @@ export class WindowTitle extends Disposable {
 		}
 	}
 
-	private onActiveEditorChange(): void {
+	private onActiveEditorChange(): codemavi {
 
 		// Dispose old listeners
 		this.activeEditorListeners.clear();
@@ -189,7 +189,7 @@ export class WindowTitle extends Disposable {
 		}
 	}
 
-	private doUpdateTitle(): void {
+	private doUpdateTitle(): codemavi {
 		const title = this.getFullWindowTitle();
 		if (title !== this.title) {
 
@@ -255,7 +255,7 @@ export class WindowTitle extends Disposable {
 		return { prefix, suffix };
 	}
 
-	updateProperties(properties: ITitleProperties): void {
+	updateProperties(properties: ITitleProperties): codemavi {
 		const isAdmin = typeof properties.isAdmin === 'boolean' ? properties.isAdmin : this.properties.isAdmin;
 		const isPure = typeof properties.isPure === 'boolean' ? properties.isPure : this.properties.isPure;
 		const prefix = typeof properties.prefix === 'string' ? properties.prefix : this.properties.prefix;
@@ -269,7 +269,7 @@ export class WindowTitle extends Disposable {
 		}
 	}
 
-	registerVariables(variables: ITitleVariable[]): void {
+	registerVariables(variables: ITitleVariable[]): codemavi {
 		let changed = false;
 
 		for (const { name, contextKey } of variables) {

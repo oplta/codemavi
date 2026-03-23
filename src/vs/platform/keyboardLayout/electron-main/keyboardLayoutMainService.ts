@@ -22,7 +22,7 @@ export class KeyboardLayoutMainService extends Disposable implements INativeKeyb
 	private readonly _onDidChangeKeyboardLayout = this._register(new Emitter<IKeyboardLayoutData>());
 	readonly onDidChangeKeyboardLayout = this._onDidChangeKeyboardLayout.event;
 
-	private _initPromise: Promise<void> | null;
+	private _initPromise: Promise<codemavi> | null;
 	private _keyboardLayoutData: IKeyboardLayoutData | null;
 
 	constructor(
@@ -38,14 +38,14 @@ export class KeyboardLayoutMainService extends Disposable implements INativeKeyb
 		lifecycleMainService.when(LifecycleMainPhase.AfterWindowOpen).then(() => this._initialize());
 	}
 
-	private _initialize(): Promise<void> {
+	private _initialize(): Promise<codemavi> {
 		if (!this._initPromise) {
 			this._initPromise = this._doInitialize();
 		}
 		return this._initPromise;
 	}
 
-	private async _doInitialize(): Promise<void> {
+	private async _doInitialize(): Promise<codemavi> {
 		const nativeKeymapMod = await import('native-keymap');
 
 		this._keyboardLayoutData = readKeyboardLayoutData(nativeKeymapMod);

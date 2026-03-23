@@ -64,7 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
 		};
 	}
 
-	function maybeSlowdown(): Promise<void> | void {
+	function maybeSlowdown(): Promise<codemavi> | codemavi {
 		if (connectionSlowedDown) {
 			return new Promise(resolve => {
 				const handle = setTimeout(() => {
@@ -211,7 +211,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const remoteSocket = net.createConnection({ port: serverAddr.port });
 					const dataEmitter = new vscode.EventEmitter<Uint8Array>();
 					const closeEmitter = new vscode.EventEmitter<Error | undefined>();
-					const endEmitter = new vscode.EventEmitter<void>();
+					const endEmitter = new vscode.EventEmitter<codemavi>();
 
 					await new Promise((res, rej) => {
 						remoteSocket.on('data', d => dataEmitter.fire(d))
@@ -438,7 +438,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.executeCommand('setContext', 'forwardedPortsViewEnabled', true);
 }
 
-type ActionItem = (vscode.MessageItem & { execute: () => void });
+type ActionItem = (vscode.MessageItem & { execute: () => codemavi });
 
 function getActions(): ActionItem[] {
 	const actions: ActionItem[] = [];
@@ -488,7 +488,7 @@ function getNewEnv(): { [x: string]: string | undefined } {
 	return env;
 }
 
-function sleep(ms: number): Promise<void> {
+function sleep(ms: number): Promise<codemavi> {
 	return new Promise(resolve => {
 		setTimeout(resolve, ms);
 	});
@@ -513,7 +513,7 @@ async function tunnelFactory(tunnelOptions: vscode.TunnelOptions, tunnelCreation
 	return createTunnelService();
 
 	function newTunnel(localAddress: { host: string; port: number }): vscode.Tunnel {
-		const onDidDispose: vscode.EventEmitter<void> = new vscode.EventEmitter();
+		const onDidDispose: vscode.EventEmitter<codemavi> = new vscode.EventEmitter();
 		let isDisposed = false;
 		return {
 			localAddress,

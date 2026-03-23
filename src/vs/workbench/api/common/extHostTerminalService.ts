@@ -47,7 +47,7 @@ export interface IExtHostTerminalService extends ExtHostTerminalServiceShape, ID
 	createTerminal(name?: string, shellPath?: string, shellArgs?: readonly string[] | string): vscode.Terminal;
 	createTerminalFromOptions(options: vscode.TerminalOptions, internalOptions?: ITerminalInternalOptions): vscode.Terminal;
 	createExtensionTerminal(options: vscode.ExtensionTerminalOptions): vscode.Terminal;
-	attachPtyToTerminal(id: number, pty: vscode.Pseudoterminal): void;
+	attachPtyToTerminal(id: number, pty: vscode.Pseudoterminal): codemavi;
 	getDefaultShell(useAutomationShell: boolean): string;
 	getDefaultShellArgs(useAutomationShell: boolean): string[] | string;
 	registerLinkProvider(provider: vscode.TerminalLinkProvider): vscode.Disposable;
@@ -94,7 +94,7 @@ export class ExtHostTerminal extends Disposable {
 
 	readonly value: vscode.Terminal;
 
-	protected readonly _onWillDispose = this._register(new Emitter<void>());
+	protected readonly _onWillDispose = this._register(new Emitter<codemavi>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	constructor(
@@ -131,19 +131,19 @@ export class ExtHostTerminal extends Disposable {
 			get shellIntegration(): vscode.TerminalShellIntegration | undefined {
 				return that.shellIntegration;
 			},
-			sendText(text: string, shouldExecute: boolean = true): void {
+			sendText(text: string, shouldExecute: boolean = true): codemavi {
 				that._checkDisposed();
 				that._proxy.$sendText(that._id, text, shouldExecute);
 			},
-			show(preserveFocus: boolean): void {
+			show(preserveFocus: boolean): codemavi {
 				that._checkDisposed();
 				that._proxy.$show(that._id, preserveFocus);
 			},
-			hide(): void {
+			hide(): codemavi {
 				that._checkDisposed();
 				that._proxy.$hide(that._id);
 			},
-			dispose(): void {
+			dispose(): codemavi {
 				if (!that._disposed) {
 					that._disposed = true;
 					that._proxy.$dispose(that._id);
@@ -161,7 +161,7 @@ export class ExtHostTerminal extends Disposable {
 		};
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._onWillDispose.fire();
 		super.dispose();
 	}
@@ -169,7 +169,7 @@ export class ExtHostTerminal extends Disposable {
 	public async create(
 		options: vscode.TerminalOptions,
 		internalOptions?: ITerminalInternalOptions,
-	): Promise<void> {
+	): Promise<codemavi> {
 		if (typeof this._id !== 'string') {
 			throw new Error('Terminal has already been created');
 		}
@@ -279,11 +279,11 @@ export class ExtHostTerminal extends Disposable {
 		return false;
 	}
 
-	public setSelection(selection: string | undefined): void {
+	public setSelection(selection: string | undefined): codemavi {
 		this._selection = selection;
 	}
 
-	public _setProcessId(processId: number | undefined): void {
+	public _setProcessId(processId: number | undefined): codemavi {
 		// The event may fire 2 times when the panel is restored
 		if (this._pidPromiseComplete) {
 			this._pidPromiseComplete(processId);
@@ -318,7 +318,7 @@ class ExtHostPseudoterminal implements ITerminalChildProcess {
 		throw new Error(`refreshProperty is not suppported in extension owned terminals. property: ${property}`);
 	}
 
-	updateProperty<T extends ProcessPropertyType>(property: ProcessPropertyType, value: IProcessPropertyMap[T]): Promise<void> {
+	updateProperty<T extends ProcessPropertyType>(property: ProcessPropertyType, value: IProcessPropertyMap[T]): Promise<codemavi> {
 		throw new Error(`updateProperty is not suppported in extension owned terminals. property: ${property}, value: ${value}`);
 	}
 
@@ -326,32 +326,32 @@ class ExtHostPseudoterminal implements ITerminalChildProcess {
 		return undefined;
 	}
 
-	shutdown(): void {
+	shutdown(): codemavi {
 		this._pty.close();
 	}
 
-	input(data: string): void {
+	input(data: string): codemavi {
 		this._pty.handleInput?.(data);
 	}
 
-	resize(cols: number, rows: number): void {
+	resize(cols: number, rows: number): codemavi {
 		this._pty.setDimensions?.({ columns: cols, rows });
 	}
 
-	clearBuffer(): void | Promise<void> {
+	clearBuffer(): codemavi | Promise<codemavi> {
 		// no-op
 	}
 
-	async processBinary(data: string): Promise<void> {
+	async processBinary(data: string): Promise<codemavi> {
 		// No-op, processBinary is not supported in extension owned terminals.
 	}
 
-	acknowledgeDataEvent(charCount: number): void {
+	acknowledgeDataEvent(charCount: number): codemavi {
 		// No-op, flow control is not supported in extension owned terminals. If this is ever
 		// implemented it will need new pause and resume VS Code APIs.
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
 		// No-op, xterm-headless isn't used for extension owned terminals.
 	}
 
@@ -363,11 +363,11 @@ class ExtHostPseudoterminal implements ITerminalChildProcess {
 		return Promise.resolve('');
 	}
 
-	startSendingEvents(initialDimensions: ITerminalDimensionsDto | undefined): void {
+	startSendingEvents(initialDimensions: ITerminalDimensionsDto | undefined): codemavi {
 		// Attach the listeners
 		this._pty.onDidWrite(e => this._onProcessData.fire(e));
-		this._pty.onDidClose?.((e: number | void = undefined) => {
-			this._onProcessExit.fire(e === void 0 ? undefined : e);
+		this._pty.onDidClose?.((e: number | codemavi = undefined) => {
+			this._onProcessExit.fire(e === codemavi 0 ? undefined : e);
 		});
 		this._pty.onDidOverrideDimensions?.(e => {
 			if (e) {
@@ -531,7 +531,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return internalOptions;
 	}
 
-	public attachPtyToTerminal(id: number, pty: vscode.Pseudoterminal): void {
+	public attachPtyToTerminal(id: number, pty: vscode.Pseudoterminal): codemavi {
 		const terminal = this.getTerminalById(id);
 		if (!terminal) {
 			throw new Error(`Cannot resolve terminal with id ${id} for virtual process`);
@@ -541,7 +541,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		this._terminalProcessDisposables[id] = disposable;
 	}
 
-	public async $acceptActiveTerminalChanged(id: number | null): Promise<void> {
+	public async $acceptActiveTerminalChanged(id: number | null): Promise<codemavi> {
 		const original = this._activeTerminal;
 		if (id === null) {
 			this._activeTerminal = undefined;
@@ -559,14 +559,14 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		}
 	}
 
-	public async $acceptTerminalProcessData(id: number, data: string): Promise<void> {
+	public async $acceptTerminalProcessData(id: number, data: string): Promise<codemavi> {
 		const terminal = this.getTerminalById(id);
 		if (terminal) {
 			this._onDidWriteTerminalData.fire({ terminal: terminal.value, data });
 		}
 	}
 
-	public async $acceptTerminalDimensions(id: number, cols: number, rows: number): Promise<void> {
+	public async $acceptTerminalDimensions(id: number, cols: number, rows: number): Promise<codemavi> {
 		const terminal = this.getTerminalById(id);
 		if (terminal) {
 			if (terminal.setDimensions(cols, rows)) {
@@ -578,27 +578,27 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		}
 	}
 
-	public async $acceptDidExecuteCommand(id: number, command: ITerminalCommandDto): Promise<void> {
+	public async $acceptDidExecuteCommand(id: number, command: ITerminalCommandDto): Promise<codemavi> {
 		const terminal = this.getTerminalById(id);
 		if (terminal) {
 			this._onDidExecuteCommand.fire({ terminal: terminal.value, ...command });
 		}
 	}
 
-	public async $acceptTerminalMaximumDimensions(id: number, cols: number, rows: number): Promise<void> {
+	public async $acceptTerminalMaximumDimensions(id: number, cols: number, rows: number): Promise<codemavi> {
 		// Extension pty terminal only - when virtual process resize fires it means that the
 		// terminal's maximum dimensions changed
 		this._terminalProcesses.get(id)?.resize(cols, rows);
 	}
 
-	public async $acceptTerminalTitleChange(id: number, name: string): Promise<void> {
+	public async $acceptTerminalTitleChange(id: number, name: string): Promise<codemavi> {
 		const terminal = this.getTerminalById(id);
 		if (terminal) {
 			terminal.name = name;
 		}
 	}
 
-	public async $acceptTerminalClosed(id: number, exitCode: number | undefined, exitReason: TerminalExitReason): Promise<void> {
+	public async $acceptTerminalClosed(id: number, exitCode: number | undefined, exitReason: TerminalExitReason): Promise<codemavi> {
 		const index = this._getTerminalObjectIndexById(this._terminals, id);
 		if (index !== null) {
 			const terminal = this._terminals.splice(index, 1)[0];
@@ -607,7 +607,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		}
 	}
 
-	public $acceptTerminalOpened(id: number, extHostTerminalId: string | undefined, name: string, shellLaunchConfigDto: IShellLaunchConfigDto): void {
+	public $acceptTerminalOpened(id: number, extHostTerminalId: string | undefined, name: string, shellLaunchConfigDto: IShellLaunchConfigDto): codemavi {
 		if (extHostTerminalId) {
 			// Resolve with the renderer generated id
 			const index = this._getTerminalObjectIndexById(this._terminals, extHostTerminalId);
@@ -634,7 +634,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		terminal.isOpen = true;
 	}
 
-	public async $acceptTerminalProcessId(id: number, processId: number): Promise<void> {
+	public async $acceptTerminalProcessId(id: number, processId: number): Promise<codemavi> {
 		const terminal = this.getTerminalById(id);
 		terminal?._setProcessId(processId);
 	}
@@ -649,7 +649,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 
 		// Wait for onDidOpenTerminal to fire
 		if (!terminal.isOpen) {
-			await new Promise<void>(r => {
+			await new Promise<codemavi>(r => {
 				// Ensure open is called after onDidOpenTerminal
 				const listener = this.onDidOpenTerminal(async e => {
 					if (e === terminal.value) {
@@ -690,26 +690,26 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return disposables;
 	}
 
-	public $acceptProcessAckDataEvent(id: number, charCount: number): void {
+	public $acceptProcessAckDataEvent(id: number, charCount: number): codemavi {
 		this._terminalProcesses.get(id)?.acknowledgeDataEvent(charCount);
 	}
 
-	public $acceptProcessInput(id: number, data: string): void {
+	public $acceptProcessInput(id: number, data: string): codemavi {
 		this._terminalProcesses.get(id)?.input(data);
 	}
 
-	public $acceptTerminalInteraction(id: number): void {
+	public $acceptTerminalInteraction(id: number): codemavi {
 		const terminal = this.getTerminalById(id);
 		if (terminal?.setInteractedWith()) {
 			this._onDidChangeTerminalState.fire(terminal.value);
 		}
 	}
 
-	public $acceptTerminalSelection(id: number, selection: string | undefined): void {
+	public $acceptTerminalSelection(id: number, selection: string | undefined): codemavi {
 		this.getTerminalById(id)?.setSelection(selection);
 	}
 
-	public $acceptProcessResize(id: number, cols: number, rows: number): void {
+	public $acceptProcessResize(id: number, cols: number, rows: number): codemavi {
 		try {
 			this._terminalProcesses.get(id)?.resize(cols, rows);
 		} catch (error) {
@@ -720,15 +720,15 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		}
 	}
 
-	public $acceptProcessShutdown(id: number, immediate: boolean): void {
+	public $acceptProcessShutdown(id: number, immediate: boolean): codemavi {
 		this._terminalProcesses.get(id)?.shutdown(immediate);
 	}
 
-	public $acceptProcessRequestInitialCwd(id: number): void {
+	public $acceptProcessRequestInitialCwd(id: number): codemavi {
 		this._terminalProcesses.get(id)?.getInitialCwd().then(initialCwd => this._proxy.$sendProcessProperty(id, { type: ProcessPropertyType.InitialCwd, value: initialCwd }));
 	}
 
-	public $acceptProcessRequestCwd(id: number): void {
+	public $acceptProcessRequestCwd(id: number): codemavi {
 		this._terminalProcesses.get(id)?.getCwd().then(cwd => this._proxy.$sendProcessProperty(id, { type: ProcessPropertyType.Cwd, value: cwd }));
 	}
 
@@ -779,7 +779,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return TerminalCompletionList.from(completions);
 	}
 
-	public $acceptTerminalShellType(id: number, shellType: TerminalShellType | undefined): void {
+	public $acceptTerminalShellType(id: number, shellType: TerminalShellType | undefined): codemavi {
 		const terminal = this.getTerminalById(id);
 		if (terminal?.setShellType(shellType)) {
 			this._onDidChangeTerminalState.fire(terminal.value);
@@ -831,7 +831,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return result;
 	}
 
-	public async $createContributedProfileTerminal(id: string, options: ICreateContributedTerminalProfileOptions): Promise<void> {
+	public async $createContributedProfileTerminal(id: string, options: ICreateContributedTerminalProfileOptions): Promise<codemavi> {
 		const token = new CancellationTokenSource().token;
 		let profile = await this._profileProviders.get(id)?.provideTerminalProfile(token);
 		if (token.isCancellationRequested) {
@@ -924,7 +924,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return result;
 	}
 
-	$activateLink(terminalId: number, linkId: number): void {
+	$activateLink(terminalId: number, linkId: number): codemavi {
 		const cachedLink = this._terminalLinkCache.get(terminalId)?.get(linkId);
 		if (!cachedLink) {
 			return;
@@ -932,7 +932,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		cachedLink.provider.handleTerminalLink(cachedLink.link);
 	}
 
-	private _onProcessExit(id: number, exitCode: number | undefined): void {
+	private _onProcessExit(id: number, exitCode: number | undefined): codemavi {
 		this._bufferer.stopBuffering(id);
 
 		// Remove process reference
@@ -981,13 +981,13 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		return collection.getScopedEnvironmentVariableCollection(undefined);
 	}
 
-	private _syncEnvironmentVariableCollection(extensionIdentifier: string, collection: UnifiedEnvironmentVariableCollection): void {
+	private _syncEnvironmentVariableCollection(extensionIdentifier: string, collection: UnifiedEnvironmentVariableCollection): codemavi {
 		const serialized = serializeEnvironmentVariableCollection(collection.map);
 		const serializedDescription = serializeEnvironmentDescriptionMap(collection.descriptionMap);
 		this._proxy.$setEnvironmentVariableCollection(extensionIdentifier, collection.persistent, serialized.length === 0 ? undefined : serialized, serializedDescription);
 	}
 
-	public $initEnvironmentVariableCollections(collections: [string, ISerializableEnvironmentVariableCollection][]): void {
+	public $initEnvironmentVariableCollections(collections: [string, ISerializableEnvironmentVariableCollection][]): codemavi {
 		collections.forEach(entry => {
 			const extensionIdentifier = entry[0];
 			const collection = this._register(new UnifiedEnvironmentVariableCollection(entry[1]));
@@ -995,7 +995,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		});
 	}
 
-	public $acceptDefaultProfile(profile: ITerminalProfile, automationProfile: ITerminalProfile): void {
+	public $acceptDefaultProfile(profile: ITerminalProfile, automationProfile: ITerminalProfile): codemavi {
 		const oldProfile = this._defaultProfile;
 		this._defaultProfile = profile;
 		this._defaultAutomationProfile = automationProfile;
@@ -1004,7 +1004,7 @@ export abstract class BaseExtHostTerminalService extends Disposable implements I
 		}
 	}
 
-	private _setEnvironmentVariableCollection(extensionIdentifier: string, collection: UnifiedEnvironmentVariableCollection): void {
+	private _setEnvironmentVariableCollection(extensionIdentifier: string, collection: UnifiedEnvironmentVariableCollection): codemavi {
 		this._environmentVariableCollections.set(extensionIdentifier, collection);
 		this._register(collection.onDidChangeCollection(() => {
 			// When any collection value changes send this immediately, this is done to ensure
@@ -1031,8 +1031,8 @@ class UnifiedEnvironmentVariableCollection extends Disposable {
 		this._onDidChangeCollection.fire();
 	}
 
-	protected readonly _onDidChangeCollection: Emitter<void> = new Emitter<void>();
-	get onDidChangeCollection(): Event<void> { return this._onDidChangeCollection && this._onDidChangeCollection.event; }
+	protected readonly _onDidChangeCollection: Emitter<codemavi> = new Emitter<codemavi>();
+	get onDidChangeCollection(): Event<codemavi> { return this._onDidChangeCollection && this._onDidChangeCollection.event; }
 
 	constructor(
 		serialized?: ISerializableEnvironmentVariableCollection
@@ -1052,19 +1052,19 @@ class UnifiedEnvironmentVariableCollection extends Disposable {
 		return scopedCollection;
 	}
 
-	replace(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): void {
+	replace(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		this._setIfDiffers(variable, { value, type: EnvironmentVariableMutatorType.Replace, options: options ?? { applyAtProcessCreation: true }, scope });
 	}
 
-	append(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): void {
+	append(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		this._setIfDiffers(variable, { value, type: EnvironmentVariableMutatorType.Append, options: options ?? { applyAtProcessCreation: true }, scope });
 	}
 
-	prepend(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): void {
+	prepend(variable: string, value: string, options: vscode.EnvironmentVariableMutatorOptions | undefined, scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		this._setIfDiffers(variable, { value, type: EnvironmentVariableMutatorType.Prepend, options: options ?? { applyAtProcessCreation: true }, scope });
 	}
 
-	private _setIfDiffers(variable: string, mutator: vscode.EnvironmentVariableMutator & { scope: vscode.EnvironmentVariableScope | undefined }): void {
+	private _setIfDiffers(variable: string, mutator: vscode.EnvironmentVariableMutator & { scope: vscode.EnvironmentVariableScope | undefined }): codemavi {
 		if (mutator.options && mutator.options.applyAtProcessCreation === false && !mutator.options.applyAtShellIntegration) {
 			throw new Error('EnvironmentVariableMutatorOptions must apply at either process creation or shell integration');
 		}
@@ -1125,13 +1125,13 @@ class UnifiedEnvironmentVariableCollection extends Disposable {
 		return map;
 	}
 
-	delete(variable: string, scope: vscode.EnvironmentVariableScope | undefined): void {
+	delete(variable: string, scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		const key = this.getKey(variable, scope);
 		this.map.delete(key);
 		this._onDidChangeCollection.fire();
 	}
 
-	clear(scope: vscode.EnvironmentVariableScope | undefined): void {
+	clear(scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		if (scope?.workspaceFolder) {
 			for (const [key, mutator] of this.map) {
 				if (mutator.scope?.workspaceFolder?.index === scope.workspaceFolder.index) {
@@ -1146,7 +1146,7 @@ class UnifiedEnvironmentVariableCollection extends Disposable {
 		this._onDidChangeCollection.fire();
 	}
 
-	setDescription(description: string | vscode.MarkdownString | undefined, scope: vscode.EnvironmentVariableScope | undefined): void {
+	setDescription(description: string | vscode.MarkdownString | undefined, scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		const key = this.getScopeKey(scope);
 		const current = this.descriptionMap.get(key);
 		if (!current || current.description !== description) {
@@ -1168,7 +1168,7 @@ class UnifiedEnvironmentVariableCollection extends Disposable {
 		return this.descriptionMap.get(key)?.description;
 	}
 
-	private clearDescription(scope: vscode.EnvironmentVariableScope | undefined): void {
+	private clearDescription(scope: vscode.EnvironmentVariableScope | undefined): codemavi {
 		const key = this.getScopeKey(scope);
 		this.descriptionMap.delete(key);
 	}
@@ -1180,8 +1180,8 @@ class ScopedEnvironmentVariableCollection implements IEnvironmentVariableCollect
 		this.collection.persistent = value;
 	}
 
-	protected readonly _onDidChangeCollection = new Emitter<void>();
-	get onDidChangeCollection(): Event<void> { return this._onDidChangeCollection && this._onDidChangeCollection.event; }
+	protected readonly _onDidChangeCollection = new Emitter<codemavi>();
+	get onDidChangeCollection(): Event<codemavi> { return this._onDidChangeCollection && this._onDidChangeCollection.event; }
 
 	constructor(
 		private readonly collection: UnifiedEnvironmentVariableCollection,
@@ -1193,15 +1193,15 @@ class ScopedEnvironmentVariableCollection implements IEnvironmentVariableCollect
 		return this.collection.getScopedEnvironmentVariableCollection(scope);
 	}
 
-	replace(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): void {
+	replace(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): codemavi {
 		this.collection.replace(variable, value, options, this.scope);
 	}
 
-	append(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): void {
+	append(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): codemavi {
 		this.collection.append(variable, value, options, this.scope);
 	}
 
-	prepend(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): void {
+	prepend(variable: string, value: string, options?: vscode.EnvironmentVariableMutatorOptions | undefined): codemavi {
 		this.collection.prepend(variable, value, options, this.scope);
 	}
 
@@ -1209,7 +1209,7 @@ class ScopedEnvironmentVariableCollection implements IEnvironmentVariableCollect
 		return this.collection.get(variable, this.scope);
 	}
 
-	forEach(callback: (variable: string, mutator: vscode.EnvironmentVariableMutator, collection: vscode.EnvironmentVariableCollection) => any, thisArg?: any): void {
+	forEach(callback: (variable: string, mutator: vscode.EnvironmentVariableMutator, collection: vscode.EnvironmentVariableCollection) => any, thisArg?: any): codemavi {
 		this.collection.getVariableMap(this.scope).forEach((value, variable) => callback.call(thisArg, variable, value, this), this.scope);
 	}
 
@@ -1217,12 +1217,12 @@ class ScopedEnvironmentVariableCollection implements IEnvironmentVariableCollect
 		return this.collection.getVariableMap(this.scope).entries();
 	}
 
-	delete(variable: string): void {
+	delete(variable: string): codemavi {
 		this.collection.delete(variable, this.scope);
 		this._onDidChangeCollection.fire(undefined);
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this.collection.clear(this.scope);
 	}
 

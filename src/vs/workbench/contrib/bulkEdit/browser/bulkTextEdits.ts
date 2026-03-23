@@ -56,7 +56,7 @@ class ModelEditTask implements IDisposable {
 		return true;
 	}
 
-	addEdit(resourceEdit: ResourceTextEdit): void {
+	addEdit(resourceEdit: ResourceTextEdit): codemavi {
 		this._expectedModelVersionId = resourceEdit.versionId;
 		const { textEdit } = resourceEdit;
 
@@ -94,7 +94,7 @@ class ModelEditTask implements IDisposable {
 		return null;
 	}
 
-	apply(): void {
+	apply(): codemavi {
 		if (this._edits.length > 0) {
 			this._edits = this._edits
 				.map(this._transformSnippetStringToInsertText, this) // no editor -> no snippet mode
@@ -134,7 +134,7 @@ class EditorEditTask extends ModelEditTask {
 		return this._canUseEditor() ? this._editor.getSelections() : null;
 	}
 
-	override apply(): void {
+	override apply(): codemavi {
 
 		// Check that the editor is still for the wanted model. It might have changed in the
 		// meantime and that means we cannot use the editor anymore (instead we perform the edit through the model)
@@ -189,7 +189,7 @@ export class BulkTextEdits {
 		private readonly _editor: ICodeEditor | undefined,
 		private readonly _undoRedoGroup: UndoRedoGroup,
 		private readonly _undoRedoSource: UndoRedoSource | undefined,
-		private readonly _progress: IProgress<void>,
+		private readonly _progress: IProgress<codemavi>,
 		private readonly _token: CancellationToken,
 		edits: ResourceTextEdit[],
 		@IEditorWorkerService private readonly _editorWorker: IEditorWorkerService,
@@ -208,7 +208,7 @@ export class BulkTextEdits {
 		}
 	}
 
-	private _validateBeforePrepare(): void {
+	private _validateBeforePrepare(): codemavi {
 		// First check if loaded models were not changed in the meantime
 		for (const array of this._edits.values()) {
 			for (const edit of array) {

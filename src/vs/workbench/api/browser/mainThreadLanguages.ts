@@ -38,12 +38,12 @@ export class MainThreadLanguages implements MainThreadLanguagesShape {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._status.dispose();
 	}
 
-	async $changeLanguage(resource: UriComponents, languageId: string): Promise<void> {
+	async $changeLanguage(resource: UriComponents, languageId: string): Promise<codemavi> {
 
 		if (!this._languageService.isRegisteredLanguageId(languageId)) {
 			return Promise.reject(new Error(`Unknown language id: ${languageId}`));
@@ -75,12 +75,12 @@ export class MainThreadLanguages implements MainThreadLanguagesShape {
 
 	// --- language status
 
-	$setLanguageStatus(handle: number, status: ILanguageStatus): void {
+	$setLanguageStatus(handle: number, status: ILanguageStatus): codemavi {
 		this._status.get(handle)?.dispose();
 		this._status.set(handle, this._languageStatusService.addStatus(status));
 	}
 
-	$removeLanguageStatus(handle: number): void {
+	$removeLanguageStatus(handle: number): codemavi {
 		this._status.get(handle)?.dispose();
 	}
 }

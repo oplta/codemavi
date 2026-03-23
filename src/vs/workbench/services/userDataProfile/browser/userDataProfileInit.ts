@@ -42,7 +42,7 @@ export class UserDataProfileInitializer implements IUserDataInitializer {
 	) {
 	}
 
-	async whenInitializationFinished(): Promise<void> {
+	async whenInitializationFinished(): Promise<codemavi> {
 		await this.initializationFinished.wait();
 	}
 
@@ -56,7 +56,7 @@ export class UserDataProfileInitializer implements IUserDataInitializer {
 		return true;
 	}
 
-	async initializeRequiredResources(): Promise<void> {
+	async initializeRequiredResources(): Promise<codemavi> {
 		this.logService.trace(`UserDataProfileInitializer#initializeRequiredResources`);
 		const promises = [];
 		const profileTemplate = await this.getProfileTemplate();
@@ -69,7 +69,7 @@ export class UserDataProfileInitializer implements IUserDataInitializer {
 		await Promise.all(promises);
 	}
 
-	async initializeOtherResources(instantiationService: IInstantiationService): Promise<void> {
+	async initializeOtherResources(instantiationService: IInstantiationService): Promise<codemavi> {
 		try {
 			this.logService.trace(`UserDataProfileInitializer#initializeOtherResources`);
 			const promises = [];
@@ -90,8 +90,8 @@ export class UserDataProfileInitializer implements IUserDataInitializer {
 		}
 	}
 
-	private initializeInstalledExtensionsPromise: Promise<void> | undefined;
-	async initializeInstalledExtensions(instantiationService: IInstantiationService): Promise<void> {
+	private initializeInstalledExtensionsPromise: Promise<codemavi> | undefined;
+	async initializeInstalledExtensions(instantiationService: IInstantiationService): Promise<codemavi> {
 		if (!this.initializeInstalledExtensionsPromise) {
 			const profileTemplate = await this.getProfileTemplate();
 			if (profileTemplate?.extensions) {
@@ -138,7 +138,7 @@ export class UserDataProfileInitializer implements IUserDataInitializer {
 		return null;
 	}
 
-	private async initialize(initializer: IProfileResourceInitializer, content: string, profileResource: ProfileResourceType): Promise<void> {
+	private async initialize(initializer: IProfileResourceInitializer, content: string, profileResource: ProfileResourceType): Promise<codemavi> {
 		try {
 			if (this.initialized.includes(profileResource)) {
 				this.logService.info(`UserDataProfileInitializer: ${profileResource} initialized already.`);

@@ -34,10 +34,10 @@ export class CustomTextEditorModel extends Disposable implements ICustomEditorMo
 
 	private readonly _textFileModel: ITextFileEditorModel | undefined;
 
-	private readonly _onDidChangeOrphaned = this._register(new Emitter<void>());
+	private readonly _onDidChangeOrphaned = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeOrphaned = this._onDidChangeOrphaned.event;
 
-	private readonly _onDidChangeReadonly = this._register(new Emitter<void>());
+	private readonly _onDidChangeReadonly = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeReadonly = this._onDidChangeReadonly.event;
 
 	constructor(
@@ -98,11 +98,11 @@ export class CustomTextEditorModel extends Disposable implements ICustomEditorMo
 		return !!this._textFileModel?.hasState(TextFileEditorModelState.ORPHAN);
 	}
 
-	private readonly _onDidChangeDirty: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeDirty: Event<void> = this._onDidChangeDirty.event;
+	private readonly _onDidChangeDirty: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeDirty: Event<codemavi> = this._onDidChangeDirty.event;
 
-	private readonly _onDidChangeContent: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
+	private readonly _onDidChangeContent: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
 
 	public async revert(options?: IRevertOptions) {
 		return this.textFileService.revert(this.resource, options);

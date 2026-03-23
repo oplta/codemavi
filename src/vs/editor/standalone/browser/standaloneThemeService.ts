@@ -303,7 +303,7 @@ export class StandaloneThemeService extends Disposable implements IStandaloneThe
 		};
 	}
 
-	public defineTheme(themeName: string, themeData: IStandaloneThemeData): void {
+	public defineTheme(themeName: string, themeData: IStandaloneThemeData): codemavi {
 		if (!/^[a-z0-9\-]+$/i.test(themeName)) {
 			throw new Error('Illegal theme name!');
 		}
@@ -329,12 +329,12 @@ export class StandaloneThemeService extends Disposable implements IStandaloneThe
 		return this._theme;
 	}
 
-	public setColorMapOverride(colorMapOverride: Color[] | null): void {
+	public setColorMapOverride(colorMapOverride: Color[] | null): codemavi {
 		this._colorMapOverride = colorMapOverride;
 		this._updateThemeOrColorMap();
 	}
 
-	public setTheme(themeName: string): void {
+	public setTheme(themeName: string): codemavi {
 		let theme: StandaloneTheme | undefined;
 		if (this._knownThemes.has(themeName)) {
 			theme = this._knownThemes.get(themeName);
@@ -344,7 +344,7 @@ export class StandaloneThemeService extends Disposable implements IStandaloneThe
 		this._updateActualTheme(theme);
 	}
 
-	private _updateActualTheme(desiredTheme: IStandaloneTheme | undefined): void {
+	private _updateActualTheme(desiredTheme: IStandaloneTheme | undefined): codemavi {
 		if (!desiredTheme || this._theme === desiredTheme) {
 			// Nothing to do
 			return;
@@ -369,12 +369,12 @@ export class StandaloneThemeService extends Disposable implements IStandaloneThe
 		}
 	}
 
-	public setAutoDetectHighContrast(autoDetectHighContrast: boolean): void {
+	public setAutoDetectHighContrast(autoDetectHighContrast: boolean): codemavi {
 		this._autoDetectHighContrast = autoDetectHighContrast;
 		this._onOSSchemeChanged();
 	}
 
-	private _updateThemeOrColorMap(): void {
+	private _updateThemeOrColorMap(): codemavi {
 		const cssRules: string[] = [];
 		const hasRule: { [rule: string]: boolean } = {};
 		const ruleCollector: ICssStyleCollector = {
@@ -406,7 +406,7 @@ export class StandaloneThemeService extends Disposable implements IStandaloneThe
 		this._onColorThemeChange.fire(this._theme);
 	}
 
-	private _updateCSS(): void {
+	private _updateCSS(): codemavi {
 		this._allCSS = `${this._codiconCSS}\n${this._themeCSS}`;
 		this._styleElements.forEach(styleElement => styleElement.textContent = this._allCSS);
 	}

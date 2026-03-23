@@ -55,19 +55,19 @@ export class UpdateChannelClient implements IUpdateService {
 		this.channel.call<State>('_getInitialState').then(state => this.state = state);
 	}
 
-	checkForUpdates(explicit: boolean): Promise<void> {
+	checkForUpdates(explicit: boolean): Promise<codemavi> {
 		return this.channel.call('checkForUpdates', explicit);
 	}
 
-	downloadUpdate(): Promise<void> {
+	downloadUpdate(): Promise<codemavi> {
 		return this.channel.call('downloadUpdate');
 	}
 
-	applyUpdate(): Promise<void> {
+	applyUpdate(): Promise<codemavi> {
 		return this.channel.call('applyUpdate');
 	}
 
-	quitAndInstall(): Promise<void> {
+	quitAndInstall(): Promise<codemavi> {
 		return this.channel.call('quitAndInstall');
 	}
 
@@ -75,11 +75,11 @@ export class UpdateChannelClient implements IUpdateService {
 		return this.channel.call('isLatestVersion');
 	}
 
-	_applySpecificUpdate(packagePath: string): Promise<void> {
+	_applySpecificUpdate(packagePath: string): Promise<codemavi> {
 		return this.channel.call('_applySpecificUpdate', packagePath);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }

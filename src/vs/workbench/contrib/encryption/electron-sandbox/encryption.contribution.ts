@@ -28,7 +28,7 @@ class EncryptionContribution implements IWorkbenchContribution {
 	 * TODO@TylerLeonhardt: This migration can be removed in 3 months or so and then storage
 	 * can be cleaned up.
 	 */
-	private async migrateToGnomeLibsecret(): Promise<void> {
+	private async migrateToGnomeLibsecret(): Promise<codemavi> {
 		if (!isLinux || this.storageService.getBoolean('encryption.migratedToGnomeLibsecret', StorageScope.APPLICATION, false)) {
 			return;
 		}

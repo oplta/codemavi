@@ -44,7 +44,7 @@ export function setARIAContainer(parent: HTMLElement) {
 /**
  * Given the provided message, will make sure that it is read as alert to screen readers.
  */
-export function alert(msg: string): void {
+export function alert(msg: string): codemavi {
 	if (!ariaContainer) {
 		return;
 	}
@@ -62,7 +62,7 @@ export function alert(msg: string): void {
 /**
  * Given the provided message, will make sure that it is read as status to screen readers.
  */
-export function status(msg: string): void {
+export function status(msg: string): codemavi {
 	if (!ariaContainer) {
 		return;
 	}
@@ -76,7 +76,7 @@ export function status(msg: string): void {
 	}
 }
 
-function insertMessage(target: HTMLElement, msg: string): void {
+function insertMessage(target: HTMLElement, msg: string): codemavi {
 	dom.clearNode(target);
 	if (msg.length > MAX_MESSAGE_LENGTH) {
 		msg = msg.substr(0, MAX_MESSAGE_LENGTH);

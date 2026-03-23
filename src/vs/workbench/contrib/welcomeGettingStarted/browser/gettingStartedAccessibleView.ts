@@ -158,7 +158,7 @@ class GettingStartedAccessibleProvider extends Disposable implements IAccessible
 		return this._getContent(this._walkthrough, this._activeWalkthroughSteps[this._currentStepIndex]);
 	}
 
-	onClose(): void {
+	onClose(): codemavi {
 		if (this._currentStepIndex > -1) {
 			const currentStep = this._activeWalkthroughSteps[this._currentStepIndex];
 			this._gettingStartedPage.makeCategoryVisibleWhenAvailable(this._walkthrough.id, currentStep.id);

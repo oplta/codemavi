@@ -30,7 +30,7 @@ export class LargeFileOptimizationsWarner extends Disposable implements IEditorC
 		this._update();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		const model = this._editor.getModel();
 		if (!model) {
 			return;
@@ -44,7 +44,7 @@ export class LargeFileOptimizationsWarner extends Disposable implements IEditorC
 						'Variable 0 will be a file name.'
 					]
 				},
-				"{0}: tokenization, wrapping, folding, codelens, word highlighting and sticky scroll have been turned off for this large file in order to reduce memory usage and avoid freezing or crashing.",
+				"{0}: tokenization, wrapping, folding, codelens, word highlighting and sticky scroll have been turned off for this large file in order to reduce memory usage and acodemavi freezing or crashing.",
 				path.basename(model.uri.path)
 			);
 

@@ -26,7 +26,7 @@ export class EncryptionService implements IEncryptionService {
 		return Promise.resolve(KnownStorageProvider.basicText);
 	}
 
-	setUsePlainTextEncryption(): Promise<void> {
+	setUsePlainTextEncryption(): Promise<codemavi> {
 		return Promise.resolve(undefined);
 	}
 }

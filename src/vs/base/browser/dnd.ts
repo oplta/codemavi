@@ -14,7 +14,7 @@ import { Mimes } from '../common/mime.js';
 export class DelayedDragHandler extends Disposable {
 	private timeout: any;
 
-	constructor(container: HTMLElement, callback: () => void) {
+	constructor(container: HTMLElement, callback: () => codemavi) {
 		super();
 
 		this._register(addDisposableListener(container, 'dragover', e => {
@@ -36,14 +36,14 @@ export class DelayedDragHandler extends Disposable {
 		});
 	}
 
-	private clearDragTimeout(): void {
+	private clearDragTimeout(): codemavi {
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 			this.timeout = null;
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.clearDragTimeout();
@@ -82,6 +82,6 @@ export const DataTransfers = {
 };
 
 export interface IDragAndDropData {
-	update(dataTransfer: DataTransfer): void;
+	update(dataTransfer: DataTransfer): codemavi;
 	getData(): unknown;
 }

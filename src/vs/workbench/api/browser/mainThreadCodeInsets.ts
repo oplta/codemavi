@@ -28,8 +28,8 @@ class EditorWebviewZone implements IViewZone {
 	// heightInPx?: number | undefined;
 	// minWidthInPx?: number | undefined;
 	// marginDomNode?: HTMLElement | null | undefined;
-	// onDomNodeTop?: ((top: number) => void) | undefined;
-	// onComputedHeight?: ((height: number) => void) | undefined;
+	// onDomNodeTop?: ((top: number) => codemavi) | undefined;
+	// onComputedHeight?: ((height: number) => codemavi) | undefined;
 
 	constructor(
 		readonly editor: IActiveCodeEditor,
@@ -47,7 +47,7 @@ class EditorWebviewZone implements IViewZone {
 		webview.mountTo(this.domNode, getWindow(editor.getDomNode()));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.editor.changeViewZones(accessor => this._id && accessor.removeZone(this._id));
 	}
 }
@@ -67,11 +67,11 @@ export class MainThreadEditorInsets implements MainThreadEditorInsetsShape {
 		this._proxy = context.getProxy(ExtHostContext.ExtHostEditorInsets);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
-	async $createEditorInset(handle: number, id: string, uri: UriComponents, line: number, height: number, options: IWebviewContentOptions, extensionId: ExtensionIdentifier, extensionLocation: UriComponents): Promise<void> {
+	async $createEditorInset(handle: number, id: string, uri: UriComponents, line: number, height: number, options: IWebviewContentOptions, extensionId: ExtensionIdentifier, extensionLocation: UriComponents): Promise<codemavi> {
 
 		let editor: IActiveCodeEditor | undefined;
 		id = id.substr(0, id.indexOf(',')); //todo@jrieken HACK
@@ -116,18 +116,18 @@ export class MainThreadEditorInsets implements MainThreadEditorInsetsShape {
 		this._insets.set(handle, webviewZone);
 	}
 
-	$disposeEditorInset(handle: number): void {
+	$disposeEditorInset(handle: number): codemavi {
 		const inset = this.getInset(handle);
 		this._insets.delete(handle);
 		inset.dispose();
 	}
 
-	$setHtml(handle: number, value: string): void {
+	$setHtml(handle: number, value: string): codemavi {
 		const inset = this.getInset(handle);
 		inset.webview.setHtml(value);
 	}
 
-	$setOptions(handle: number, options: IWebviewContentOptions): void {
+	$setOptions(handle: number, options: IWebviewContentOptions): codemavi {
 		const inset = this.getInset(handle);
 		inset.webview.contentOptions = reviveWebviewContentOptions(options);
 	}

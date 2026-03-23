@@ -79,13 +79,13 @@ class CliMain extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Dispose on exit
 		process.once('exit', () => this.dispose());
 	}
 
-	async run(): Promise<void> {
+	async run(): Promise<codemavi> {
 
 		// Services
 		const [instantiationService, appenders] = await this.initServices();
@@ -259,7 +259,7 @@ class CliMain extends Disposable {
 		return path;
 	}
 
-	private registerErrorHandler(logService: ILogService): void {
+	private registerErrorHandler(logService: ILogService): codemavi {
 
 		// Install handler for unexpected errors
 		setUnexpectedErrorHandler(error => {
@@ -280,7 +280,7 @@ class CliMain extends Disposable {
 		process.on('unhandledRejection', (reason: unknown) => onUnexpectedError(reason));
 	}
 
-	private async doRun(environmentService: INativeEnvironmentService, fileService: IFileService, userDataProfilesService: IUserDataProfilesService, instantiationService: IInstantiationService): Promise<void> {
+	private async doRun(environmentService: INativeEnvironmentService, fileService: IFileService, userDataProfilesService: IUserDataProfilesService, instantiationService: IInstantiationService): Promise<codemavi> {
 		let profile: IUserDataProfile | undefined = undefined;
 		if (environmentService.args.profile) {
 			profile = userDataProfilesService.profiles.find(p => p.name === environmentService.args.profile);
@@ -331,7 +331,7 @@ class CliMain extends Disposable {
 	}
 }
 
-export async function main(argv: NativeParsedArgs): Promise<void> {
+export async function main(argv: NativeParsedArgs): Promise<codemavi> {
 	const cliMain = new CliMain(argv);
 
 	try {

@@ -51,23 +51,23 @@ export class MainThreadSecretState extends Disposable implements MainThreadSecre
 		return password;
 	}
 
-	$setPassword(extensionId: string, key: string, value: string): Promise<void> {
+	$setPassword(extensionId: string, key: string, value: string): Promise<codemavi> {
 		this.logService.trace(`[mainThreadSecretState] Setting password for ${extensionId} extension: `, key);
 		return this._sequencer.queue(extensionId, () => this.doSetPassword(extensionId, key, value));
 	}
 
-	private async doSetPassword(extensionId: string, key: string, value: string): Promise<void> {
+	private async doSetPassword(extensionId: string, key: string, value: string): Promise<codemavi> {
 		const fullKey = this.getKey(extensionId, key);
 		await this.secretStorageService.set(fullKey, value);
 		this.logService.trace('[mainThreadSecretState] Password set for: ', extensionId, key);
 	}
 
-	$deletePassword(extensionId: string, key: string): Promise<void> {
+	$deletePassword(extensionId: string, key: string): Promise<codemavi> {
 		this.logService.trace(`[mainThreadSecretState] Deleting password for ${extensionId} extension: `, key);
 		return this._sequencer.queue(extensionId, () => this.doDeletePassword(extensionId, key));
 	}
 
-	private async doDeletePassword(extensionId: string, key: string): Promise<void> {
+	private async doDeletePassword(extensionId: string, key: string): Promise<codemavi> {
 		const fullKey = this.getKey(extensionId, key);
 		await this.secretStorageService.delete(fullKey);
 		this.logService.trace('[mainThreadSecretState] Password deleted for: ', extensionId, key);

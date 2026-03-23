@@ -43,19 +43,19 @@ export class NotebookViewZones extends Disposable {
 		this.listView.containerDomNode.appendChild(this.domNode.domNode);
 	}
 
-	changeViewZones(callback: (changeAccessor: INotebookViewZoneChangeAccessor) => void): boolean {
+	changeViewZones(callback: (changeAccessor: INotebookViewZoneChangeAccessor) => codemavi): boolean {
 		let zonesHaveChanged = false;
 		const changeAccessor: INotebookViewZoneChangeAccessor = {
 			addZone: (zone: INotebookViewZone): string => {
 				zonesHaveChanged = true;
 				return this._addZone(zone);
 			},
-			removeZone: (id: string): void => {
+			removeZone: (id: string): codemavi => {
 				zonesHaveChanged = true;
 				// TODO: validate if zones have changed layout
 				this._removeZone(id);
 			},
-			layoutZone: (id: string): void => {
+			layoutZone: (id: string): codemavi => {
 				zonesHaveChanged = true;
 				// TODO: validate if zones have changed layout
 				this._layoutZone(id);
@@ -82,7 +82,7 @@ export class NotebookViewZones extends Disposable {
 		return { height: height, top: top };
 	}
 
-	onCellsChanged(e: INotebookViewCellsUpdateEvent): void {
+	onCellsChanged(e: INotebookViewCellsUpdateEvent): codemavi {
 		const splices = e.splices.slice().reverse();
 		splices.forEach(splice => {
 			const [start, deleted, newCells] = splice;
@@ -155,7 +155,7 @@ export class NotebookViewZones extends Disposable {
 		return whitespaceId;
 	}
 
-	private _removeZone(id: string): void {
+	private _removeZone(id: string): codemavi {
 		this.listView.removeWhitespace(id);
 		const zoneWidget = this._zones[id];
 		if (zoneWidget) {
@@ -170,7 +170,7 @@ export class NotebookViewZones extends Disposable {
 		delete this._zones[id];
 	}
 
-	private _layoutZone(id: string): void {
+	private _layoutZone(id: string): codemavi {
 		const zoneWidget = this._zones[id];
 		if (!zoneWidget) {
 			return;
@@ -199,13 +199,13 @@ export class NotebookViewZones extends Disposable {
 
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._zones = {};
 	}
 }
 
-function safeInvoke1Arg(func: Function, arg1: any): void {
+function safeInvoke1Arg(func: Function, arg1: any): codemavi {
 	try {
 		func(arg1);
 	} catch (e) {
@@ -225,7 +225,7 @@ class ToggleNotebookViewZoneDeveloperAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 

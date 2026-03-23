@@ -60,7 +60,7 @@ class OutlineItem extends BreadcrumbsItem {
 		super();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
@@ -73,7 +73,7 @@ class OutlineItem extends BreadcrumbsItem {
 			this.options.showSymbolIcons === other.options.showSymbolIcons;
 	}
 
-	render(container: HTMLElement): void {
+	render(container: HTMLElement): codemavi {
 		const { element, outline } = this.element;
 
 		if (element === outline) {
@@ -125,7 +125,7 @@ class FileItem extends BreadcrumbsItem {
 		super();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
@@ -139,7 +139,7 @@ class FileItem extends BreadcrumbsItem {
 
 	}
 
-	render(container: HTMLElement): void {
+	render(container: HTMLElement): codemavi {
 		// file/folder
 		const label = this._labels.create(container, { hoverDelegate: this._hoverDelegate });
 		label.setFile(this.element.uri, {
@@ -243,7 +243,7 @@ export class BreadcrumbsControl {
 
 	private readonly _hoverDelegate: IHoverDelegate;
 
-	private readonly _onDidVisibilityChange = this._disposables.add(new Emitter<void>());
+	private readonly _onDidVisibilityChange = this._disposables.add(new Emitter<codemavi>());
 	get onDidVisibilityChange() { return this._onDidVisibilityChange.event; }
 
 	constructor(
@@ -287,7 +287,7 @@ export class BreadcrumbsControl {
 		this.hide();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._breadcrumbsDisposables.dispose();
 		this._ckBreadcrumbsPossible.reset();
@@ -304,7 +304,7 @@ export class BreadcrumbsControl {
 		return this._model.value;
 	}
 
-	layout(dim: dom.Dimension | undefined): void {
+	layout(dim: dom.Dimension | undefined): codemavi {
 		this._widget.layout(dim);
 	}
 
@@ -312,7 +312,7 @@ export class BreadcrumbsControl {
 		return this.domNode.classList.contains('hidden');
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		const wasHidden = this.isHidden();
 
 		this._breadcrumbsDisposables.clear();
@@ -324,7 +324,7 @@ export class BreadcrumbsControl {
 		}
 	}
 
-	private show(): void {
+	private show(): codemavi {
 		const wasHidden = this.isHidden();
 
 		this._ckBreadcrumbsVisible.set(true);
@@ -335,7 +335,7 @@ export class BreadcrumbsControl {
 		}
 	}
 
-	revealLast(): void {
+	revealLast(): codemavi {
 		this._widget.revealLast();
 	}
 
@@ -386,13 +386,13 @@ export class BreadcrumbsControl {
 			if (items.length === 0) {
 				this._widget.setEnabled(false);
 				this._widget.setItems([new class extends BreadcrumbsItem {
-					render(container: HTMLElement): void {
+					render(container: HTMLElement): codemavi {
 						container.innerText = localize('empty', "no elements");
 					}
 					equals(other: BreadcrumbsItem): boolean {
 						return other === this;
 					}
-					dispose(): void {
+					dispose(): codemavi {
 
 					}
 				}]);
@@ -431,14 +431,14 @@ export class BreadcrumbsControl {
 		return wasHidden !== this.isHidden();
 	}
 
-	private _onFocusEvent(event: IBreadcrumbsItemEvent): void {
+	private _onFocusEvent(event: IBreadcrumbsItemEvent): codemavi {
 		if (event.item && this._breadcrumbsPickerShowing) {
 			this._breadcrumbsPickerIgnoreOnceItem = undefined;
 			this._widget.setSelection(event.item);
 		}
 	}
 
-	private _onSelectEvent(event: IBreadcrumbsItemEvent): void {
+	private _onSelectEvent(event: IBreadcrumbsItemEvent): codemavi {
 		if (!event.item) {
 			return;
 		}
@@ -553,12 +553,12 @@ export class BreadcrumbsControl {
 		});
 	}
 
-	private _updateCkBreadcrumbsActive(): void {
+	private _updateCkBreadcrumbsActive(): codemavi {
 		const value = this._widget.isDOMFocused() || this._breadcrumbsPickerShowing;
 		this._ckBreadcrumbsActive.set(value);
 	}
 
-	private async _revealInEditor(event: IBreadcrumbsItemEvent, element: FileElement | OutlineElement2, group: SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | undefined, pinned: boolean = false): Promise<void> {
+	private async _revealInEditor(event: IBreadcrumbsItemEvent, element: FileElement | OutlineElement2, group: SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | undefined, pinned: boolean = false): Promise<codemavi> {
 
 		if (element instanceof FileElement) {
 			if (element.kind === FileKind.FILE) {
@@ -594,10 +594,10 @@ export class BreadcrumbsControlFactory {
 	private _control: BreadcrumbsControl | undefined;
 	get control() { return this._control; }
 
-	private readonly _onDidEnablementChange = this._disposables.add(new Emitter<void>());
+	private readonly _onDidEnablementChange = this._disposables.add(new Emitter<codemavi>());
 	get onDidEnablementChange() { return this._onDidEnablementChange.event; }
 
-	private readonly _onDidVisibilityChange = this._disposables.add(new Emitter<void>());
+	private readonly _onDidVisibilityChange = this._disposables.add(new Emitter<codemavi>());
 	get onDidVisibilityChange() { return this._onDidVisibilityChange.event; }
 
 	constructor(
@@ -644,7 +644,7 @@ export class BreadcrumbsControlFactory {
 		return control;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._controlDisposables.dispose();
 	}
@@ -679,7 +679,7 @@ registerAction2(class ToggleBreadcrumb extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const config = accessor.get(IConfigurationService);
 		const value = BreadcrumbsConfig.IsEnabled.bindTo(config).getValue();
 		BreadcrumbsConfig.IsEnabled.bindTo(config).updateValue(!value);
@@ -688,7 +688,7 @@ registerAction2(class ToggleBreadcrumb extends Action2 {
 });
 
 // focus/focus-and-select
-function focusAndSelectHandler(accessor: ServicesAccessor, select: boolean): void {
+function focusAndSelectHandler(accessor: ServicesAccessor, select: boolean): codemavi {
 	// find widget and focus/select
 	const groups = accessor.get(IEditorGroupsService);
 	const breadcrumbs = accessor.get(IBreadcrumbsService);
@@ -715,7 +715,7 @@ registerAction2(class FocusAndSelectBreadcrumbs extends Action2 {
 			f1: true
 		});
 	}
-	run(accessor: ServicesAccessor, ...args: any[]): void {
+	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		focusAndSelectHandler(accessor, true);
 	}
 });
@@ -734,7 +734,7 @@ registerAction2(class FocusBreadcrumbs extends Action2 {
 			f1: true
 		});
 	}
-	run(accessor: ServicesAccessor, ...args: any[]): void {
+	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
 		focusAndSelectHandler(accessor, false);
 	}
 });

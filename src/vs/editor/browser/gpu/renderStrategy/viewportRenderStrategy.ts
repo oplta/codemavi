@@ -76,7 +76,7 @@ export class ViewportRenderStrategy extends BaseRenderStrategy {
 		];
 	}
 
-	private readonly _onDidChangeBindGroupEntries = this._register(new Emitter<void>());
+	private readonly _onDidChangeBindGroupEntries = this._register(new Emitter<codemavi>());
 	readonly onDidChangeBindGroupEntries = this._onDidChangeBindGroupEntries.event;
 
 	constructor(
@@ -187,7 +187,7 @@ export class ViewportRenderStrategy extends BaseRenderStrategy {
 	update(viewportData: ViewportData, viewLineOptions: ViewLineOptions): number {
 		// IMPORTANT: This is a hot function. Variables are pre-allocated and shared within the
 		// loop. This is done so we don't need to trust the JIT compiler to do this optimization to
-		// avoid potential additional blocking time in garbage collector which is a common cause of
+		// acodemavi potential additional blocking time in garbage collector which is a common cause of
 		// dropped frames.
 
 		let chars = '';
@@ -281,7 +281,7 @@ export class ViewportRenderStrategy extends BaseRenderStrategy {
 					// Apply supported inline decoration styles to the cell metadata
 					for (decoration of lineData.inlineDecorations) {
 						// This is Range.strictContainsPosition except it works at the cell level,
-						// it's also inlined to avoid overhead.
+						// it's also inlined to acodemavi overhead.
 						if (
 							(y < decoration.range.startLineNumber || y > decoration.range.endLineNumber) ||
 							(y === decoration.range.startLineNumber && x < decoration.range.startColumn - 1) ||
@@ -398,7 +398,7 @@ export class ViewportRenderStrategy extends BaseRenderStrategy {
 		return visibleObjectCount;
 	}
 
-	draw(pass: GPURenderPassEncoder, viewportData: ViewportData): void {
+	draw(pass: GPURenderPassEncoder, viewportData: ViewportData): codemavi {
 		if (this._visibleObjectCount <= 0) {
 			throw new BugIndicatingError('Attempt to draw 0 objects');
 		}

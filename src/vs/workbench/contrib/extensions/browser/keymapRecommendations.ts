@@ -18,7 +18,7 @@ export class KeymapRecommendations extends ExtensionRecommendations {
 		super();
 	}
 
-	protected async doActivate(): Promise<void> {
+	protected async doActivate(): Promise<codemavi> {
 		if (this.productService.keymapExtensionTips) {
 			this._recommendations = this.productService.keymapExtensionTips.map(extensionId => ({
 				extension: extensionId.toLowerCase(),

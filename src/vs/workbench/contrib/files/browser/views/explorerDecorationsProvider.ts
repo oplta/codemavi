@@ -75,7 +75,7 @@ export class ExplorerDecorationsProvider implements IDecorationsProvider {
 		return provideDecorations(fileStat);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.toDispose.dispose();
 	}
 }

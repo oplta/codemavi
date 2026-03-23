@@ -91,7 +91,7 @@ export class SelectBoxNative extends Disposable implements ISelectBoxDelegate {
 		return this._onDidSelect.event;
 	}
 
-	public setOptions(options: ISelectOptionItem[], selected?: number): void {
+	public setOptions(options: ISelectOptionItem[], selected?: number): codemavi {
 
 		if (!this.options || !arrays.equals(this.options, options)) {
 			this.options = options;
@@ -108,7 +108,7 @@ export class SelectBoxNative extends Disposable implements ISelectBoxDelegate {
 		}
 	}
 
-	public select(index: number): void {
+	public select(index: number): codemavi {
 		if (this.options.length === 0) {
 			this.selected = 0;
 		} else if (index >= 0 && index < this.options.length) {
@@ -129,46 +129,46 @@ export class SelectBoxNative extends Disposable implements ISelectBoxDelegate {
 		}
 	}
 
-	public setAriaLabel(label: string): void {
+	public setAriaLabel(label: string): codemavi {
 		this.selectBoxOptions.ariaLabel = label;
 		this.selectElement.setAttribute('aria-label', label);
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		if (this.selectElement) {
 			this.selectElement.tabIndex = 0;
 			this.selectElement.focus();
 		}
 	}
 
-	public blur(): void {
+	public blur(): codemavi {
 		if (this.selectElement) {
 			this.selectElement.tabIndex = -1;
 			this.selectElement.blur();
 		}
 	}
 
-	public setEnabled(enable: boolean): void {
+	public setEnabled(enable: boolean): codemavi {
 		this.selectElement.disabled = !enable;
 	}
 
-	public setFocusable(focusable: boolean): void {
+	public setFocusable(focusable: boolean): codemavi {
 		this.selectElement.tabIndex = focusable ? 0 : -1;
 	}
 
-	public render(container: HTMLElement): void {
+	public render(container: HTMLElement): codemavi {
 		container.classList.add('select-container');
 		container.appendChild(this.selectElement);
 		this.setOptions(this.options, this.selected);
 		this.applyStyles();
 	}
 
-	public style(styles: ISelectBoxStyles): void {
+	public style(styles: ISelectBoxStyles): codemavi {
 		this.styles = styles;
 		this.applyStyles();
 	}
 
-	public applyStyles(): void {
+	public applyStyles(): codemavi {
 
 		// Style native select
 		if (this.selectElement) {

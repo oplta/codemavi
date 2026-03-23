@@ -239,7 +239,7 @@ export class AttachmentCleaner implements vscode.CodeActionProvider {
 		return;
 	}
 
-	private analyzeMissingAttachments(document: vscode.TextDocument): void {
+	private analyzeMissingAttachments(document: vscode.TextDocument): codemavi {
 		if (document.uri.scheme !== 'vscode-notebook-cell') {
 			// not notebook
 			return;
@@ -299,7 +299,7 @@ export class AttachmentCleaner implements vscode.CodeActionProvider {
 	 * @param currFilename filename of the image being pulled into the cell
 	 * @param metadata metadata of the cell currently being edited
 	 */
-	private saveAttachmentToCache(notebookUri: string, cellFragment: string, currFilename: string, metadata: { [key: string]: any }): void {
+	private saveAttachmentToCache(notebookUri: string, cellFragment: string, currFilename: string, metadata: { [key: string]: any }): codemavi {
 		const documentCache = this._attachmentCache.get(notebookUri);
 		if (!documentCache) {
 			// no cache for this notebook yet
@@ -345,7 +345,7 @@ export class AttachmentCleaner implements vscode.CodeActionProvider {
 	 * @param notebookUri uri for the notebook being edited
 	 * @param cellFragment fragment of cell being edited
 	 */
-	private saveAllAttachmentsToCache(metadata: { [key: string]: unknown }, notebookUri: string, cellFragment: string): void {
+	private saveAllAttachmentsToCache(metadata: { [key: string]: unknown }, notebookUri: string, cellFragment: string): codemavi {
 		const documentCache = this._attachmentCache.get(notebookUri) ?? new Map();
 		this._attachmentCache.set(notebookUri, documentCache);
 		const cellCache = documentCache.get(cellFragment) ?? new Map<string, IAttachmentData>();

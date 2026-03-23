@@ -45,13 +45,13 @@ export namespace WebFileSystemObserver {
 }
 
 export interface FileSystemObserver {
-	new(callback: (records: FileSystemObserverRecord[], observer: FileSystemObserver) => void): FileSystemObserver;
+	new(callback: (records: FileSystemObserverRecord[], observer: FileSystemObserver) => codemavi): FileSystemObserver;
 
-	observe(handle: FileSystemHandle): Promise<void>;
-	observe(handle: FileSystemDirectoryHandle, options?: { recursive: boolean }): Promise<void>;
+	observe(handle: FileSystemHandle): Promise<codemavi>;
+	observe(handle: FileSystemDirectoryHandle, options?: { recursive: boolean }): Promise<codemavi>;
 
-	unobserve(handle: FileSystemHandle): void;
-	disconnect(): void;
+	unobserve(handle: FileSystemHandle): codemavi;
+	disconnect(): codemavi;
 }
 
 export interface FileSystemObserverRecord {

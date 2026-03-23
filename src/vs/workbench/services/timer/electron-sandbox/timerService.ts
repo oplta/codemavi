@@ -51,7 +51,7 @@ export class TimerService extends AbstractTimerService {
 		return this._nativeHostService.getWindowCount();
 	}
 
-	protected async _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<void> {
+	protected async _extendStartupInfo(info: Writeable<IStartupMetrics>): Promise<codemavi> {
 		try {
 			const [osProperties, osStatistics, virtualMachineHint, isARM64Emulated] = await Promise.all([
 				this._nativeHostService.getOSProperties(),

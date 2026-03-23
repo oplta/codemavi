@@ -74,7 +74,7 @@ export class MainThreadWorkspace implements MainThreadWorkspaceShape {
 		this._workspaceTrustManagementService.onDidChangeTrust(this._onDidGrantWorkspaceTrust, this, this._toDispose);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._toDispose.dispose();
 
 		for (const requestId in this._activeCancelTokens) {
@@ -85,7 +85,7 @@ export class MainThreadWorkspace implements MainThreadWorkspaceShape {
 
 	// --- workspace ---
 
-	$updateWorkspaceFolders(extensionName: string, index: number, deleteCount: number, foldersToAdd: { uri: UriComponents; name?: string }[]): Promise<void> {
+	$updateWorkspaceFolders(extensionName: string, index: number, deleteCount: number, foldersToAdd: { uri: UriComponents; name?: string }[]): Promise<codemavi> {
 		const workspaceFoldersToAdd = foldersToAdd.map(f => ({ uri: URI.revive(f.uri), name: f.name }));
 
 		// Indicate in status message
@@ -126,7 +126,7 @@ export class MainThreadWorkspace implements MainThreadWorkspaceShape {
 		return message;
 	}
 
-	private _onDidChangeWorkspace(): void {
+	private _onDidChangeWorkspace(): codemavi {
 		this._proxy.$acceptWorkspaceData(this.getWorkspaceData(this._contextService.getWorkspace()));
 	}
 
@@ -251,7 +251,7 @@ export class MainThreadWorkspace implements MainThreadWorkspaceShape {
 		return this._workspaceTrustManagementService.isWorkspaceTrusted();
 	}
 
-	private _onDidGrantWorkspaceTrust(): void {
+	private _onDidGrantWorkspaceTrust(): codemavi {
 		this._proxy.$onDidGrantWorkspaceTrust();
 	}
 

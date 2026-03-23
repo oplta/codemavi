@@ -60,7 +60,7 @@ export class TextInputActionsProvider extends Disposable implements IWorkbenchCo
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Context menu support in input/textarea
 		this._register(BaseEvent.runAndSubscribe(this.layoutService.onDidAddContainer, ({ container, disposables }) => {
@@ -68,7 +68,7 @@ export class TextInputActionsProvider extends Disposable implements IWorkbenchCo
 		}, { container: this.layoutService.mainContainer, disposables: this._store }));
 	}
 
-	private onContextMenu(targetWindow: Window, e: MouseEvent): void {
+	private onContextMenu(targetWindow: Window, e: MouseEvent): codemavi {
 		if (e.defaultPrevented) {
 			return; // make sure to not show these actions by accident if component indicated to prevent
 		}

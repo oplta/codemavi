@@ -45,7 +45,7 @@ interface IToolEntry {
 export class LanguageModelToolsService extends Disposable implements ILanguageModelToolsService {
 	_serviceBrand: undefined;
 
-	private _onDidChangeTools = new Emitter<void>();
+	private _onDidChangeTools = new Emitter<codemavi>();
 	readonly onDidChangeTools = this._onDidChangeTools.event;
 
 	/** Throttle tools updates because it sends all tools and runs on context key updates */
@@ -180,7 +180,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		return undefined;
 	}
 
-	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile' | 'memory', autoConfirm = true): void {
+	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile' | 'memory', autoConfirm = true): codemavi {
 		if (scope === 'workspace') {
 			this._workspaceToolConfirmStore.value.setAutoConfirm(toolId, autoConfirm);
 		} else if (scope === 'profile') {
@@ -190,7 +190,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		}
 	}
 
-	resetToolAutoConfirmation(): void {
+	resetToolAutoConfirmation(): codemavi {
 		this._workspaceToolConfirmStore.value.reset();
 		this._profileToolConfirmStore.value.reset();
 		this._memoryToolConfirmStore.clear();
@@ -361,7 +361,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		return prepared;
 	}
 
-	private ensureToolDetails(dto: IToolInvocation, toolResult: IToolResult, toolData: IToolData): void {
+	private ensureToolDetails(dto: IToolInvocation, toolResult: IToolResult, toolData: IToolData): codemavi {
 		if (!toolResult.toolResultDetails && toolData.alwaysDisplayInputOutput) {
 			toolResult.toolResultDetails = {
 				input: JSON.stringify(dto.parameters, undefined, 2),
@@ -402,7 +402,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		return value === true || (typeof value === 'object' && value.hasOwnProperty(toolId) && value[toolId] === true);
 	}
 
-	private cleanupCallDisposables(requestId: string, store: DisposableStore): void {
+	private cleanupCallDisposables(requestId: string, store: DisposableStore): codemavi {
 		const disposables = this._callsByRequestId.get(requestId);
 		if (disposables) {
 			const index = disposables.indexOf(store);
@@ -416,7 +416,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		store.dispose();
 	}
 
-	cancelToolCallsForRequest(requestId: string): void {
+	cancelToolCallsForRequest(requestId: string): codemavi {
 		const calls = this._callsByRequestId.get(requestId);
 		if (calls) {
 			calls.forEach(call => call.dispose());
@@ -424,7 +424,7 @@ export class LanguageModelToolsService extends Disposable implements ILanguageMo
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 
 		this._callsByRequestId.forEach(calls => dispose(calls));
@@ -491,7 +491,7 @@ class ToolConfirmStore extends Disposable {
 		return false;
 	}
 
-	public setAutoConfirm(toolId: string, autoConfirm: boolean): void {
+	public setAutoConfirm(toolId: string, autoConfirm: boolean): codemavi {
 		if (autoConfirm) {
 			this._autoConfirmTools.set(toolId, true);
 		} else {

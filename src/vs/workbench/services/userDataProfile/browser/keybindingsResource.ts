@@ -29,7 +29,7 @@ export class KeybindingsResourceInitializer implements IProfileResourceInitializ
 	) {
 	}
 
-	async initialize(content: string): Promise<void> {
+	async initialize(content: string): Promise<codemavi> {
 		const keybindingsContent: IKeybindingsResourceContent = JSON.parse(content);
 		if (keybindingsContent.keybindings === null) {
 			this.logService.info(`Initializing Profile: No keybindings to apply...`);
@@ -57,7 +57,7 @@ export class KeybindingsResource implements IProfileResource {
 		return { keybindings, platform };
 	}
 
-	async apply(content: string, profile: IUserDataProfile): Promise<void> {
+	async apply(content: string, profile: IUserDataProfile): Promise<codemavi> {
 		const keybindingsContent: IKeybindingsResourceContent = JSON.parse(content);
 		if (keybindingsContent.keybindings === null) {
 			this.logService.info(`Importing Profile (${profile.name}): No keybindings to apply...`);

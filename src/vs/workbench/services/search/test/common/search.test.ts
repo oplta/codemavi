@@ -13,7 +13,7 @@ suite('TextSearchResult', () => {
 		charsPerLine: 100
 	};
 
-	function assertOneLinePreviewRangeText(text: string, result: TextSearchMatch): void {
+	function assertOneLinePreviewRangeText(text: string, result: TextSearchMatch): codemavi {
 		assert.strictEqual(result.rangeLocations.length, 1);
 		assert.strictEqual(
 			result.previewText.substring((result.rangeLocations[0].preview).startColumn, (result.rangeLocations[0].preview).endColumn),

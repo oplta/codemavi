@@ -37,7 +37,7 @@ export class ConfigureLanguageBasedSettingsAction extends Action {
 		super(id, label);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		const languages = this.languageService.getSortedRegisteredLanguageNames();
 		const picks: IQuickPickItem[] = languages.map(({ languageName, languageId }): IQuickPickItem => {
 			const description: string = nls.localize('languageDescriptionConfigured', "({0})", languageId);

@@ -8,7 +8,7 @@ import { ResolvedKeybinding } from '../../../base/common/keybindings.js';
 import { ContextKeyExpression } from '../../contextkey/common/contextkey.js';
 
 export class ResolvedKeybindingItem {
-	_resolvedKeybindingItemBrand: void = undefined;
+	_resolvedKeybindingItemBrand: codemavi = undefined;
 
 	public readonly resolvedKeybinding: ResolvedKeybinding | undefined;
 	public readonly chords: string[];

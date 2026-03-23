@@ -94,10 +94,10 @@ class MainThreadSCMResourceGroup implements ISCMResourceGroup {
 		return this._resourceTree;
 	}
 
-	private readonly _onDidChange = new Emitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
-	private readonly _onDidChangeResources = new Emitter<void>();
+	private readonly _onDidChangeResources = new Emitter<codemavi>();
 	readonly onDidChangeResources = this._onDidChangeResources.event;
 
 	get hideWhenEmpty(): boolean { return !!this.features.hideWhenEmpty; }
@@ -130,12 +130,12 @@ class MainThreadSCMResourceGroup implements ISCMResourceGroup {
 		this._onDidChangeResources.fire();
 	}
 
-	$updateGroup(features: SCMGroupFeatures): void {
+	$updateGroup(features: SCMGroupFeatures): codemavi {
 		this.features = { ...this.features, ...features };
 		this._onDidChange.fire();
 	}
 
-	$updateGroupLabel(label: string): void {
+	$updateGroupLabel(label: string): codemavi {
 		this.label = label;
 		this._onDidChange.fire();
 	}
@@ -157,7 +157,7 @@ class MainThreadSCMResource implements ISCMResource {
 		readonly multiDiffEditorModifiedUri: URI | undefined,
 	) { }
 
-	open(preserveFocus: boolean): Promise<void> {
+	open(preserveFocus: boolean): Promise<codemavi> {
 		return this.proxy.$executeResourceCommand(this.sourceControlHandle, this.groupHandle, this.handle, preserveFocus);
 	}
 
@@ -218,7 +218,7 @@ class MainThreadSCMHistoryProvider implements ISCMHistoryProvider {
 		}));
 	}
 
-	$onDidChangeCurrentHistoryItemRefs(historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): void {
+	$onDidChangeCurrentHistoryItemRefs(historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): codemavi {
 		transaction(tx => {
 			this._historyItemRef.set(toISCMHistoryItemRef(historyItemRef, historyItemRefColor), tx);
 			this._historyItemRemoteRef.set(toISCMHistoryItemRef(historyItemRemoteRef, historyItemRemoteRefColor), tx);
@@ -226,7 +226,7 @@ class MainThreadSCMHistoryProvider implements ISCMHistoryProvider {
 		});
 	}
 
-	$onDidChangeHistoryItemRefs(historyItemRefs: SCMHistoryItemRefsChangeEventDto): void {
+	$onDidChangeHistoryItemRefs(historyItemRefs: SCMHistoryItemRefsChangeEventDto): codemavi {
 		const added = historyItemRefs.added.map(ref => toISCMHistoryItemRef(ref)!);
 		const modified = historyItemRefs.modified.map(ref => toISCMHistoryItemRef(ref)!);
 		const removed = historyItemRefs.removed.map(ref => toISCMHistoryItemRef(ref)!);
@@ -242,10 +242,10 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 	get id(): string { return this._id; }
 
 	readonly groups: MainThreadSCMResourceGroup[] = [];
-	private readonly _onDidChangeResourceGroups = new Emitter<void>();
+	private readonly _onDidChangeResourceGroups = new Emitter<codemavi>();
 	readonly onDidChangeResourceGroups = this._onDidChangeResourceGroups.event;
 
-	private readonly _onDidChangeResources = new Emitter<void>();
+	private readonly _onDidChangeResources = new Emitter<codemavi>();
 	readonly onDidChangeResources = this._onDidChangeResources.event;
 
 	private readonly _groupsByHandle: { [handle: number]: MainThreadSCMResourceGroup } = Object.create(null);
@@ -314,7 +314,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		}
 	}
 
-	$updateSourceControl(features: SCMProviderFeatures): void {
+	$updateSourceControl(features: SCMProviderFeatures): codemavi {
 		this.features = { ...this.features, ...features };
 
 		if (typeof features.commitTemplate !== 'undefined') {
@@ -354,7 +354,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		}
 	}
 
-	$registerGroups(_groups: [number /*handle*/, string /*id*/, string /*label*/, SCMGroupFeatures, /* multiDiffEditorEnableViewChanges */ boolean][]): void {
+	$registerGroups(_groups: [number /*handle*/, string /*id*/, string /*label*/, SCMGroupFeatures, /* multiDiffEditorEnableViewChanges */ boolean][]): codemavi {
 		const groups = _groups.map(([handle, id, label, features, multiDiffEditorEnableViewChanges]) => {
 			const group = new MainThreadSCMResourceGroup(
 				this.handle,
@@ -375,7 +375,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		this._onDidChangeResourceGroups.fire();
 	}
 
-	$updateGroup(handle: number, features: SCMGroupFeatures): void {
+	$updateGroup(handle: number, features: SCMGroupFeatures): codemavi {
 		const group = this._groupsByHandle[handle];
 
 		if (!group) {
@@ -385,7 +385,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		group.$updateGroup(features);
 	}
 
-	$updateGroupLabel(handle: number, label: string): void {
+	$updateGroupLabel(handle: number, label: string): codemavi {
 		const group = this._groupsByHandle[handle];
 
 		if (!group) {
@@ -395,7 +395,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		group.$updateGroupLabel(label);
 	}
 
-	$spliceGroupResourceStates(splices: SCMRawResourceSplices[]): void {
+	$spliceGroupResourceStates(splices: SCMRawResourceSplices[]): codemavi {
 		for (const [groupHandle, groupSlices] of splices) {
 			const group = this._groupsByHandle[groupHandle];
 
@@ -445,7 +445,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		this._onDidChangeResources.fire();
 	}
 
-	$unregisterGroup(handle: number): void {
+	$unregisterGroup(handle: number): codemavi {
 		const group = this._groupsByHandle[handle];
 
 		if (!group) {
@@ -466,7 +466,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		return result && URI.revive(result);
 	}
 
-	$onDidChangeHistoryProviderCurrentHistoryItemRefs(historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): void {
+	$onDidChangeHistoryProviderCurrentHistoryItemRefs(historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): codemavi {
 		if (!this.historyProvider.get()) {
 			return;
 		}
@@ -474,7 +474,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		this._historyProvider.get()?.$onDidChangeCurrentHistoryItemRefs(historyItemRef, historyItemRemoteRef, historyItemBaseRef);
 	}
 
-	$onDidChangeHistoryProviderHistoryItemRefs(historyItemRefs: SCMHistoryItemRefsChangeEventDto): void {
+	$onDidChangeHistoryProviderHistoryItemRefs(historyItemRefs: SCMHistoryItemRefsChangeEventDto): codemavi {
 		if (!this.historyProvider.get()) {
 			return;
 		}
@@ -489,7 +489,7 @@ class MainThreadSCMProvider implements ISCMProvider, QuickDiffProvider {
 		};
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._quickDiff?.dispose();
 	}
 }
@@ -519,7 +519,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		this._disposables.add(new SCMInputBoxContentProvider(this.textModelService, this.modelService, this.languageService));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this._repositories.values());
 		this._repositories.clear();
 
@@ -529,7 +529,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		this._disposables.dispose();
 	}
 
-	async $registerSourceControl(handle: number, id: string, label: string, rootUri: UriComponents | undefined, inputBoxDocumentUri: UriComponents): Promise<void> {
+	async $registerSourceControl(handle: number, id: string, label: string, rootUri: UriComponents | undefined, inputBoxDocumentUri: UriComponents): Promise<codemavi> {
 		this._repositoryBarriers.set(handle, new Barrier());
 
 		const inputBoxTextModelRef = await this.textModelService.createModelReference(URI.revive(inputBoxDocumentUri));
@@ -555,7 +555,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		this._repositoryBarriers.get(handle)?.open();
 	}
 
-	async $updateSourceControl(handle: number, features: SCMProviderFeatures): Promise<void> {
+	async $updateSourceControl(handle: number, features: SCMProviderFeatures): Promise<codemavi> {
 		await this._repositoryBarriers.get(handle)?.wait();
 		const repository = this._repositories.get(handle);
 
@@ -567,7 +567,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$updateSourceControl(features);
 	}
 
-	async $unregisterSourceControl(handle: number): Promise<void> {
+	async $unregisterSourceControl(handle: number): Promise<codemavi> {
 		await this._repositoryBarriers.get(handle)?.wait();
 		const repository = this._repositories.get(handle);
 
@@ -582,7 +582,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		this._repositories.delete(handle);
 	}
 
-	async $registerGroups(sourceControlHandle: number, groups: [number /*handle*/, string /*id*/, string /*label*/, SCMGroupFeatures, /* multiDiffEditorEnableViewChanges */ boolean][], splices: SCMRawResourceSplices[]): Promise<void> {
+	async $registerGroups(sourceControlHandle: number, groups: [number /*handle*/, string /*id*/, string /*label*/, SCMGroupFeatures, /* multiDiffEditorEnableViewChanges */ boolean][], splices: SCMRawResourceSplices[]): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -595,7 +595,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$spliceGroupResourceStates(splices);
 	}
 
-	async $updateGroup(sourceControlHandle: number, groupHandle: number, features: SCMGroupFeatures): Promise<void> {
+	async $updateGroup(sourceControlHandle: number, groupHandle: number, features: SCMGroupFeatures): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -607,7 +607,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$updateGroup(groupHandle, features);
 	}
 
-	async $updateGroupLabel(sourceControlHandle: number, groupHandle: number, label: string): Promise<void> {
+	async $updateGroupLabel(sourceControlHandle: number, groupHandle: number, label: string): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -619,7 +619,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$updateGroupLabel(groupHandle, label);
 	}
 
-	async $spliceResourceStates(sourceControlHandle: number, splices: SCMRawResourceSplices[]): Promise<void> {
+	async $spliceResourceStates(sourceControlHandle: number, splices: SCMRawResourceSplices[]): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -631,7 +631,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$spliceGroupResourceStates(splices);
 	}
 
-	async $unregisterGroup(sourceControlHandle: number, handle: number): Promise<void> {
+	async $unregisterGroup(sourceControlHandle: number, handle: number): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -643,7 +643,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$unregisterGroup(handle);
 	}
 
-	async $setInputBoxValue(sourceControlHandle: number, value: string): Promise<void> {
+	async $setInputBoxValue(sourceControlHandle: number, value: string): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -654,7 +654,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		repository.input.setValue(value, false);
 	}
 
-	async $setInputBoxPlaceholder(sourceControlHandle: number, placeholder: string): Promise<void> {
+	async $setInputBoxPlaceholder(sourceControlHandle: number, placeholder: string): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -665,7 +665,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		repository.input.placeholder = placeholder;
 	}
 
-	async $setInputBoxEnablement(sourceControlHandle: number, enabled: boolean): Promise<void> {
+	async $setInputBoxEnablement(sourceControlHandle: number, enabled: boolean): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -676,7 +676,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		repository.input.enabled = enabled;
 	}
 
-	async $setInputBoxVisibility(sourceControlHandle: number, visible: boolean): Promise<void> {
+	async $setInputBoxVisibility(sourceControlHandle: number, visible: boolean): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -687,7 +687,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		repository.input.visible = visible;
 	}
 
-	async $showValidationMessage(sourceControlHandle: number, message: string | IMarkdownString, type: InputValidationType): Promise<void> {
+	async $showValidationMessage(sourceControlHandle: number, message: string | IMarkdownString, type: InputValidationType): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 		if (!repository) {
@@ -697,7 +697,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		repository.input.showValidationMessage(message, type);
 	}
 
-	async $setValidationProviderIsEnabled(sourceControlHandle: number, enabled: boolean): Promise<void> {
+	async $setValidationProviderIsEnabled(sourceControlHandle: number, enabled: boolean): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -715,7 +715,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		}
 	}
 
-	async $onDidChangeHistoryProviderCurrentHistoryItemRefs(sourceControlHandle: number, historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): Promise<void> {
+	async $onDidChangeHistoryProviderCurrentHistoryItemRefs(sourceControlHandle: number, historyItemRef?: SCMHistoryItemRefDto, historyItemRemoteRef?: SCMHistoryItemRefDto, historyItemBaseRef?: SCMHistoryItemRefDto): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 
@@ -727,7 +727,7 @@ export class MainThreadSCM implements MainThreadSCMShape {
 		provider.$onDidChangeHistoryProviderCurrentHistoryItemRefs(historyItemRef, historyItemRemoteRef, historyItemBaseRef);
 	}
 
-	async $onDidChangeHistoryProviderHistoryItemRefs(sourceControlHandle: number, historyItemRefs: SCMHistoryItemRefsChangeEventDto): Promise<void> {
+	async $onDidChangeHistoryProviderHistoryItemRefs(sourceControlHandle: number, historyItemRefs: SCMHistoryItemRefsChangeEventDto): Promise<codemavi> {
 		await this._repositoryBarriers.get(sourceControlHandle)?.wait();
 		const repository = this._repositories.get(sourceControlHandle);
 

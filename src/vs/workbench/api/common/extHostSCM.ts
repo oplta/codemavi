@@ -373,11 +373,11 @@ export class ExtHostSCMInputBox implements vscode.SourceControlInputBox {
 		this.#proxy.$showValidationMessage(this._sourceControlHandle, message, type as any);
 	}
 
-	$onInputBoxValueChange(value: string): void {
+	$onInputBoxValueChange(value: string): codemavi {
 		this.updateValue(value);
 	}
 
-	private updateValue(value: string): void {
+	private updateValue(value: string): codemavi {
 		this._value = value;
 		this._onDidChange.fire(value);
 	}
@@ -393,12 +393,12 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 	private _resourceStatesCommandsMap = new Map<ResourceStateHandle, vscode.Command>();
 	private _resourceStatesDisposablesMap = new Map<ResourceStateHandle, IDisposable>();
 
-	private readonly _onDidUpdateResourceStates = new Emitter<void>();
+	private readonly _onDidUpdateResourceStates = new Emitter<codemavi>();
 	readonly onDidUpdateResourceStates = this._onDidUpdateResourceStates.event;
 
 	private _disposed = false;
 	get disposed(): boolean { return this._disposed; }
-	private readonly _onDidDispose = new Emitter<void>();
+	private readonly _onDidDispose = new Emitter<codemavi>();
 	readonly onDidDispose = this._onDidDispose.event;
 
 	private _handlesSnapshot: number[] = [];
@@ -457,7 +457,7 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 		return this._resourceStatesMap.get(handle);
 	}
 
-	$executeResourceCommand(handle: number, preserveFocus: boolean): Promise<void> {
+	$executeResourceCommand(handle: number, preserveFocus: boolean): Promise<codemavi> {
 		const command = this._resourceStatesCommandsMap.get(handle);
 
 		if (!command) {
@@ -532,7 +532,7 @@ class ExtHostSourceControlResourceGroup implements vscode.SourceControlResourceG
 		return rawResourceSplices;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposed = true;
 		this._onDidDispose.fire();
 	}
@@ -761,7 +761,7 @@ class ExtHostSourceControl implements vscode.SourceControl {
 	}
 
 	@debounce(100)
-	eventuallyAddResourceGroups(): void {
+	eventuallyAddResourceGroups(): codemavi {
 		const groups: [number /*handle*/, string /*id*/, string /*label*/, SCMGroupFeatures, /*multiDiffEditorEnableViewChanges*/ boolean][] = [];
 		const splices: SCMRawResourceSplices[] = [];
 
@@ -796,7 +796,7 @@ class ExtHostSourceControl implements vscode.SourceControl {
 	}
 
 	@debounce(100)
-	eventuallyUpdateResourceStates(): void {
+	eventuallyUpdateResourceStates(): codemavi {
 		const splices: SCMRawResourceSplices[] = [];
 
 		this.updatedResourceGroups.forEach(group => {
@@ -820,12 +820,12 @@ class ExtHostSourceControl implements vscode.SourceControl {
 		return this._groups.get(handle);
 	}
 
-	setSelectionState(selected: boolean): void {
+	setSelectionState(selected: boolean): codemavi {
 		this._selected = selected;
 		this._onDidChangeSelection.fire(selected);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._acceptInputDisposables.dispose();
 		this._actionButtonDisposables.dispose();
 		this._statusBarDisposables.dispose();
@@ -944,7 +944,7 @@ export class ExtHostSCM implements ExtHostSCMShape {
 			.then<UriComponents | null>(r => r || null);
 	}
 
-	$onInputBoxValueChange(sourceControlHandle: number, value: string): Promise<void> {
+	$onInputBoxValueChange(sourceControlHandle: number, value: string): Promise<codemavi> {
 		this.logService.trace('ExtHostSCM#$onInputBoxValueChange', sourceControlHandle);
 
 		const sourceControl = this._sourceControls.get(sourceControlHandle);
@@ -957,7 +957,7 @@ export class ExtHostSCM implements ExtHostSCMShape {
 		return Promise.resolve(undefined);
 	}
 
-	$executeResourceCommand(sourceControlHandle: number, groupHandle: number, handle: number, preserveFocus: boolean): Promise<void> {
+	$executeResourceCommand(sourceControlHandle: number, groupHandle: number, handle: number, preserveFocus: boolean): Promise<codemavi> {
 		this.logService.trace('ExtHostSCM#$executeResourceCommand', sourceControlHandle, groupHandle, handle);
 
 		const sourceControl = this._sourceControls.get(sourceControlHandle);
@@ -1002,7 +1002,7 @@ export class ExtHostSCM implements ExtHostSCMShape {
 		});
 	}
 
-	$setSelectedSourceControl(selectedSourceControlHandle: number | undefined): Promise<void> {
+	$setSelectedSourceControl(selectedSourceControlHandle: number | undefined): Promise<codemavi> {
 		this.logService.trace('ExtHostSCM#$setSelectedSourceControl', selectedSourceControlHandle);
 
 		if (selectedSourceControlHandle !== undefined) {

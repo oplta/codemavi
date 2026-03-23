@@ -34,14 +34,14 @@ export class TestMcpMessageTransport extends Disposable implements IMcpMessageTr
 	/**
 	 * Send a message through the transport.
 	 */
-	public send(message: MCP.JSONRPCMessage): void {
+	public send(message: MCP.JSONRPCMessage): codemavi {
 		this._sentMessages.push(message);
 	}
 
 	/**
 	 * Stop the transport.
 	 */
-	public stop(): void {
+	public stop(): codemavi {
 		this._stateValue.set({ state: McpConnectionState.Kind.Stopped }, undefined);
 	}
 
@@ -50,7 +50,7 @@ export class TestMcpMessageTransport extends Disposable implements IMcpMessageTr
 	/**
 	 * Simulate receiving a message from the server.
 	 */
-	public simulateReceiveMessage(message: MCP.JSONRPCMessage): void {
+	public simulateReceiveMessage(message: MCP.JSONRPCMessage): codemavi {
 		this._onDidReceiveMessage.fire(message);
 	}
 
@@ -81,14 +81,14 @@ export class TestMcpMessageTransport extends Disposable implements IMcpMessageTr
 	/**
 	 * Simulate a log event.
 	 */
-	public simulateLog(message: string): void {
+	public simulateLog(message: string): codemavi {
 		this._onDidLog.fire({ level: LogLevel.Info, message });
 	}
 
 	/**
 	 * Set the connection state.
 	 */
-	public setConnectionState(state: McpConnectionState): void {
+	public setConnectionState(state: McpConnectionState): codemavi {
 		this._stateValue.set(state, undefined);
 	}
 
@@ -102,7 +102,7 @@ export class TestMcpMessageTransport extends Disposable implements IMcpMessageTr
 	/**
 	 * Clear the sent messages history.
 	 */
-	public clearSentMessages(): void {
+	public clearSentMessages(): codemavi {
 		this._sentMessages.length = 0;
 	}
 }

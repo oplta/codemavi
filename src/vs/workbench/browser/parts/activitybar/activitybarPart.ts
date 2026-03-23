@@ -122,11 +122,11 @@ export class ActivitybarPart extends Part {
 		return this.compositeBar.value?.getPaneCompositeIds() ?? [];
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.compositeBar.value?.focus();
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		super.updateStyles();
 
 		const container = assertIsDefined(this.getContainer());
@@ -138,7 +138,7 @@ export class ActivitybarPart extends Part {
 		container.style.borderColor = borderColor ? borderColor : '';
 	}
 
-	show(focus?: boolean): void {
+	show(focus?: boolean): codemavi {
 		if (!this.content) {
 			return;
 		}
@@ -157,7 +157,7 @@ export class ActivitybarPart extends Part {
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		if (!this.compositeBar.value) {
 			return;
 		}
@@ -169,7 +169,7 @@ export class ActivitybarPart extends Part {
 		}
 	}
 
-	override layout(width: number, height: number): void {
+	override layout(width: number, height: number): codemavi {
 		super.layout(width, height, 0, 0);
 
 		if (!this.compositeBar.value) {
@@ -291,7 +291,7 @@ export class ActivityBarCompositeBar extends PaneCompositeBar {
 
 	}
 
-	private registerKeyboardNavigationListeners(): void {
+	private registerKeyboardNavigationListeners(): codemavi {
 		this.keyboardNavigationDisposables.clear();
 
 		// Up/Down or Left/Right arrow on compact menu
@@ -349,7 +349,7 @@ export class ActivityBarCompositeBar extends PaneCompositeBar {
 		return this.compositeBarContainer;
 	}
 
-	override layout(width: number, height: number): void {
+	override layout(width: number, height: number): codemavi {
 		if (this.menuBarContainer) {
 			if (this.options.orientation === ActionsOrientation.VERTICAL) {
 				height -= this.menuBarContainer.clientHeight;
@@ -404,7 +404,7 @@ registerAction2(class extends Action2 {
 			}]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const configurationService = accessor.get(IConfigurationService);
 		configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, ActivityBarPosition.DEFAULT);
 	}
@@ -430,7 +430,7 @@ registerAction2(class extends Action2 {
 			}]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const configurationService = accessor.get(IConfigurationService);
 		configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, ActivityBarPosition.TOP);
 	}
@@ -456,7 +456,7 @@ registerAction2(class extends Action2 {
 			}]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const configurationService = accessor.get(IConfigurationService);
 		configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, ActivityBarPosition.BOTTOM);
 	}
@@ -482,7 +482,7 @@ registerAction2(class extends Action2 {
 			}]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const configurationService = accessor.get(IConfigurationService);
 		configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, ActivityBarPosition.HIDDEN);
 	}
@@ -539,7 +539,7 @@ registerAction2(
 			});
 		}
 
-		async run(accessor: ServicesAccessor): Promise<void> {
+		async run(accessor: ServicesAccessor): Promise<codemavi> {
 			const layoutService = accessor.get(IWorkbenchLayoutService);
 			layoutService.focusPart(Parts.ACTIVITYBAR_PART);
 		}

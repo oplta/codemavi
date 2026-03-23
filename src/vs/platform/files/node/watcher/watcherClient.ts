@@ -13,8 +13,8 @@ import { AbstractUniversalWatcherClient, ILogMessage, IUniversalWatcher } from '
 export class UniversalWatcherClient extends AbstractUniversalWatcherClient {
 
 	constructor(
-		onFileChanges: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onFileChanges: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean
 	) {
 		super(onFileChanges, onLogMessage, verboseLogging);

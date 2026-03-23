@@ -261,7 +261,7 @@ function certSettingV2(configProvider: ExtHostConfigProvider, isRemote: boolean)
 }
 
 const modulesCache = new Map<IExtensionDescription | undefined, { http?: typeof http; https?: typeof https; undici?: typeof undiciType }>();
-function configureModuleLoading(extensionService: ExtHostExtensionService, lookup: ReturnType<typeof createPatchedModules>): Promise<void> {
+function configureModuleLoading(extensionService: ExtHostExtensionService, lookup: ReturnType<typeof createPatchedModules>): Promise<codemavi> {
 	return extensionService.getExtensionPathIndex()
 		.then(extensionPaths => {
 			const node_module = require('module');

@@ -43,7 +43,7 @@ export class NotificationAccessibleView implements IAccessibleViewImplementation
 				return;
 			}
 
-			function focusList(): void {
+			function focusList(): codemavi {
 				commandService.executeCommand('notifications.showList');
 				if (list && notificationIndex !== undefined) {
 					list.domFocus();

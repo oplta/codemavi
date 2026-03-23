@@ -257,7 +257,7 @@ export class GitHubSourceControlHistoryItemDetailsProvider implements SourceCont
 	}
 
 	@sequentialize
-	private async _loadAssignableUsers(descriptor: { owner: string; repo: string }): Promise<void> {
+	private async _loadAssignableUsers(descriptor: { owner: string; repo: string }): Promise<codemavi> {
 		if (this._store.has(this._getRepositoryKey(descriptor))) {
 			return;
 		}
@@ -326,7 +326,7 @@ export class GitHubSourceControlHistoryItemDetailsProvider implements SourceCont
 		return `${descriptor.owner}/${descriptor.repo}`;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 }

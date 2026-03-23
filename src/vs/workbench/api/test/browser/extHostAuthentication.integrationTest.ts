@@ -92,7 +92,7 @@ class TestAuthProvider implements AuthenticationProvider {
 		this.id++;
 		return session;
 	}
-	async removeSession(sessionId: string): Promise<void> {
+	async removeSession(sessionId: string): Promise<codemavi> {
 		this.sessions.delete(sessionId);
 	}
 

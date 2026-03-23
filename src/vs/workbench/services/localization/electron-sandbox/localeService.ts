@@ -26,8 +26,8 @@ import { InstantiationType, registerSingleton } from '../../../../platform/insta
 // duplicate of IExtensionsViewPaneContainer in contrib
 interface IExtensionsViewPaneContainer extends IViewPaneContainer {
 	readonly searchValue: string | undefined;
-	search(text: string): void;
-	refresh(): Promise<void>;
+	search(text: string): codemavi;
+	refresh(): Promise<codemavi>;
 }
 
 // duplicate of VIEWLET_ID in contrib/extensions
@@ -85,7 +85,7 @@ class NativeLocaleService implements ILocaleService {
 		return true;
 	}
 
-	async setLocale(languagePackItem: ILanguagePackItem, skipDialog = false): Promise<void> {
+	async setLocale(languagePackItem: ILanguagePackItem, skipDialog = false): Promise<codemavi> {
 		const locale = languagePackItem.id;
 		if (locale === Language.value() || (!locale && Language.isDefaultVariant())) {
 			return;
@@ -128,7 +128,7 @@ class NativeLocaleService implements ILocaleService {
 		}
 	}
 
-	async clearLocalePreference(): Promise<void> {
+	async clearLocalePreference(): Promise<codemavi> {
 		try {
 			await this.writeLocaleValue(undefined);
 			if (!Language.isDefaultVariant()) {

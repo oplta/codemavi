@@ -27,13 +27,13 @@ export class UserDataProfileService extends Disposable implements IUserDataProfi
 		this._currentProfile = currentProfile;
 	}
 
-	async updateCurrentProfile(userDataProfile: IUserDataProfile): Promise<void> {
+	async updateCurrentProfile(userDataProfile: IUserDataProfile): Promise<codemavi> {
 		if (equals(this._currentProfile, userDataProfile)) {
 			return;
 		}
 		const previous = this._currentProfile;
 		this._currentProfile = userDataProfile;
-		const joiners: Promise<void>[] = [];
+		const joiners: Promise<codemavi>[] = [];
 		this._onDidChangeCurrentProfile.fire({
 			previous,
 			profile: userDataProfile,

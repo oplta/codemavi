@@ -21,10 +21,10 @@ export interface IServerConfig {
 	version: string;
 	commit: string;
 	quality: string;
-	release?: string; // void-like specific
+	release?: string; // codemavi-like specific
 	serverApplicationName: string;
 	serverDataFolderName: string;
-	serverDownloadUrlTemplate?: string; // void-like specific
+	serverDownloadUrlTemplate?: string; // codemavi-like specific
 }
 
 export async function getVSCodeServerConfig(): Promise<IServerConfig> {

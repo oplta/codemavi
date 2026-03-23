@@ -40,7 +40,7 @@ export class MoveLinesCommand implements ICommand {
 		this._moveEndLineSelectionShrink = false;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 
 		const getLanguageId = () => {
 			return model.getLanguageId();

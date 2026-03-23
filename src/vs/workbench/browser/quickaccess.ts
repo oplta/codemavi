@@ -69,7 +69,7 @@ export class PickerEditorState extends Disposable {
 		super();
 	}
 
-	set(): void {
+	set(): codemavi {
 		if (this._editorViewState) {
 			return; // return early if already done
 		}
@@ -99,7 +99,7 @@ export class PickerEditorState extends Disposable {
 		return editorPane;
 	}
 
-	async restore(): Promise<void> {
+	async restore(): Promise<codemavi> {
 		if (this._editorViewState) {
 			for (const editor of this.openedTransientEditors) {
 				if (editor.isDirty()) {
@@ -127,7 +127,7 @@ export class PickerEditorState extends Disposable {
 		this.openedTransientEditors.clear();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.reset();

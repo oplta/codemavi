@@ -58,8 +58,8 @@ export const findPreviousMatchIcon = registerIcon('find-previous-match', Codicon
 export const findNextMatchIcon = registerIcon('find-next-match', Codicon.arrowDown, nls.localize('findNextMatchIcon', 'Icon for \'Find Next\' in the editor find widget.'));
 
 export interface IFindController {
-	replace(): void;
-	replaceAll(): void;
+	replace(): codemavi;
+	replaceAll(): codemavi;
 	getGlobalBufferTerm(): Promise<string>;
 }
 
@@ -161,7 +161,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 
 	private _resizeSash!: Sash;
 	private _resized!: boolean;
-	private readonly _updateHistoryDelayer: Delayer<void>;
+	private readonly _updateHistoryDelayer: Delayer<codemavi>;
 
 	constructor(
 		codeEditor: ICodeEditor,
@@ -193,7 +193,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		this._isReplaceVisible = false;
 		this._ignoreChangeEvent = false;
 
-		this._updateHistoryDelayer = new Delayer<void>(500);
+		this._updateHistoryDelayer = new Delayer<codemavi>(500);
 		this._register(toDisposable(() => this._updateHistoryDelayer.cancel()));
 		this._register(this._state.onFindReplaceStateChange((e) => this._onStateChanged(e)));
 		this._buildDomNode();
@@ -284,7 +284,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 				return;
 			}
 
-			// for other scroll changes, layout the viewzone in next tick to avoid ruining current rendering.
+			// for other scroll changes, layout the viewzone in next tick to acodemavi ruining current rendering.
 			setTimeout(() => {
 				this._layoutViewZone();
 			}, 0);
@@ -312,7 +312,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 
 	// ----- React to state changes
 
-	private _onStateChanged(e: FindReplaceStateChangedEvent): void {
+	private _onStateChanged(e: FindReplaceStateChangedEvent): codemavi {
 		if (e.searchString) {
 			try {
 				this._ignoreChangeEvent = true;
@@ -404,7 +404,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}
 	}
 
-	private _updateMatchesCount(): void {
+	private _updateMatchesCount(): codemavi {
 		this._matchesCount.style.minWidth = MAX_MATCHES_COUNT_WIDTH + 'px';
 		if (this._state.matchesCount >= MATCHES_LIMIT) {
 			this._matchesCount.title = NLS_MATCHES_COUNT_LIMIT_TITLE;
@@ -462,7 +462,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 	 * If 'selection find' is ON we should not disable the button (its function is to cancel 'selection find').
 	 * If 'selection find' is OFF we enable the button only if there is a selection.
 	 */
-	private _updateToggleSelectionFindButton(): void {
+	private _updateToggleSelectionFindButton(): codemavi {
 		const selection = this._codeEditor.getSelection();
 		const isSelection = selection ? (selection.startLineNumber !== selection.endLineNumber || selection.startColumn !== selection.endColumn) : false;
 		const isChecked = this._toggleSelectionFind.checked;
@@ -474,7 +474,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}
 	}
 
-	private _updateButtons(): void {
+	private _updateButtons(): codemavi {
 		this._findInput.setEnabled(this._isVisible);
 		this._replaceInput.setEnabled(this._isVisible && this._isReplaceVisible);
 		this._updateToggleSelectionFindButton();
@@ -496,7 +496,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 
 	private _revealTimeouts: any[] = [];
 
-	private _reveal(): void {
+	private _reveal(): codemavi {
 		this._revealTimeouts.forEach(e => {
 			clearTimeout(e);
 		});
@@ -569,7 +569,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}
 	}
 
-	private _hide(focusTheEditor: boolean): void {
+	private _hide(focusTheEditor: boolean): codemavi {
 		this._revealTimeouts.forEach(e => {
 			clearTimeout(e);
 		});
@@ -783,23 +783,23 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 
 	// ----- Public
 
-	public focusFindInput(): void {
+	public focusFindInput(): codemavi {
 		this._findInput.select();
 		// Edge browser requires focus() in addition to select()
 		this._findInput.focus();
 	}
 
-	public focusReplaceInput(): void {
+	public focusReplaceInput(): codemavi {
 		this._replaceInput.select();
 		// Edge browser requires focus() in addition to select()
 		this._replaceInput.focus();
 	}
 
-	public highlightFindOptions(): void {
+	public highlightFindOptions(): codemavi {
 		this._findInput.highlightFindOptions();
 	}
 
-	private _updateSearchScope(): void {
+	private _updateSearchScope(): codemavi {
 		if (!this._codeEditor.hasModel()) {
 			return;
 		}
@@ -829,14 +829,14 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}
 	}
 
-	private _onFindInputMouseDown(e: IMouseEvent): void {
+	private _onFindInputMouseDown(e: IMouseEvent): codemavi {
 		// on linux, middle key does pasting.
 		if (e.middleButton) {
 			e.stopPropagation();
 		}
 	}
 
-	private _onFindInputKeyDown(e: IKeyboardEvent): void {
+	private _onFindInputKeyDown(e: IKeyboardEvent): codemavi {
 		if (e.equals(ctrlKeyMod | KeyCode.Enter)) {
 			if (this._keybindingService.dispatchEvent(e, e.target)) {
 				e.preventDefault();
@@ -873,7 +873,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}
 	}
 
-	private _onReplaceInputKeyDown(e: IKeyboardEvent): void {
+	private _onReplaceInputKeyDown(e: IKeyboardEvent): codemavi {
 		if (e.equals(ctrlKeyMod | KeyCode.Enter)) {
 			if (this._keybindingService.dispatchEvent(e, e.target)) {
 				e.preventDefault();
@@ -938,7 +938,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		return ` (${kb.getLabel()})`;
 	}
 
-	private _buildDomNode(): void {
+	private _buildDomNode(): codemavi {
 		const flexibleHeight = true;
 		const flexibleWidth = true;
 		// Find input
@@ -1286,7 +1286,7 @@ export class FindWidget extends Widget implements IOverlayWidget, IVerticalSashL
 		}));
 	}
 
-	private updateAccessibilitySupport(): void {
+	private updateAccessibilitySupport(): codemavi {
 		const value = this._codeEditor.getOption(EditorOption.accessibilitySupport);
 		this._findInput.setFocusInputOnOptionClick(value !== AccessibilitySupport.Enabled);
 	}
@@ -1320,8 +1320,8 @@ export interface ISimpleButtonOpts {
 	readonly className?: string;
 	readonly icon?: ThemeIcon;
 	readonly hoverDelegate?: IHoverDelegate;
-	readonly onTrigger: () => void;
-	readonly onKeyDown?: (e: IKeyboardEvent) => void;
+	readonly onTrigger: () => codemavi;
+	readonly onKeyDown?: (e: IKeyboardEvent) => codemavi;
 }
 
 export class SimpleButton extends Widget {
@@ -1374,17 +1374,17 @@ export class SimpleButton extends Widget {
 		return (this._domNode.tabIndex >= 0);
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		this._domNode.focus();
 	}
 
-	public setEnabled(enabled: boolean): void {
+	public setEnabled(enabled: boolean): codemavi {
 		this._domNode.classList.toggle('disabled', !enabled);
 		this._domNode.setAttribute('aria-disabled', String(!enabled));
 		this._domNode.tabIndex = enabled ? 0 : -1;
 	}
 
-	public setExpanded(expanded: boolean): void {
+	public setExpanded(expanded: boolean): codemavi {
 		this._domNode.setAttribute('aria-expanded', String(!!expanded));
 		if (expanded) {
 			this._domNode.classList.remove(...ThemeIcon.asClassNameArray(findCollapsedIcon));

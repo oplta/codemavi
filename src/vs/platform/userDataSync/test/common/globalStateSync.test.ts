@@ -40,7 +40,7 @@ suite('GlobalStateSync', () => {
 		await client2.setUp(true);
 	});
 
-	test('when global state does not exist', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when global state does not exist', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		assert.deepStrictEqual(await testObject.getLastSyncUserData(), null);
 		let manifest = await testClient.getResourceManifest();
 		server.reset();
@@ -67,7 +67,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(server.requests, []);
 	}));
 
-	test('when global state is created after first sync', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when global state is created after first sync', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await testObject.sync(await testClient.getResourceManifest());
 		updateUserStorage('a', 'value1', testClient);
 
@@ -87,7 +87,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(JSON.parse(lastSyncUserData!.syncData!.content).storage, { 'a': { version: 1, value: 'value1' } });
 	}));
 
-	test('first time sync - outgoing to server (no state)', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('first time sync - outgoing to server (no state)', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', testClient);
 		updateMachineStorage('b', 'value1', testClient);
 		await updateLocale(testClient);
@@ -102,7 +102,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'globalState.argv.locale': { version: 1, value: 'en' }, 'a': { version: 1, value: 'value1' } });
 	}));
 
-	test('first time sync - incoming from server (no state)', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('first time sync - incoming from server (no state)', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', client2);
 		await updateLocale(client2);
 		await client2.sync();
@@ -115,7 +115,7 @@ suite('GlobalStateSync', () => {
 		assert.strictEqual(await readLocale(testClient), 'en');
 	}));
 
-	test('first time sync when storage exists', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('first time sync when storage exists', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', client2);
 		await client2.sync();
 
@@ -133,7 +133,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'a': { version: 1, value: 'value1' }, 'b': { version: 1, value: 'value2' } });
 	}));
 
-	test('first time sync when storage exists - has conflicts', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('first time sync when storage exists - has conflicts', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', client2);
 		await client2.sync();
 
@@ -151,7 +151,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'a': { version: 1, value: 'value1' } });
 	}));
 
-	test('sync adding a storage value', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync adding a storage value', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', testClient);
 		await testObject.sync(await testClient.getResourceManifest());
 
@@ -169,7 +169,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'a': { version: 1, value: 'value1' }, 'b': { version: 1, value: 'value2' } });
 	}));
 
-	test('sync updating a storage value', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync updating a storage value', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', testClient);
 		await testObject.sync(await testClient.getResourceManifest());
 
@@ -186,7 +186,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'a': { version: 1, value: 'value2' } });
 	}));
 
-	test('sync removing a storage value', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync removing a storage value', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		updateUserStorage('a', 'value1', testClient);
 		updateUserStorage('b', 'value2', testClient);
 		await testObject.sync(await testClient.getResourceManifest());
@@ -205,7 +205,7 @@ suite('GlobalStateSync', () => {
 		assert.deepStrictEqual(actual.storage, { 'a': { version: 1, value: 'value1' } });
 	}));
 
-	test('sync profile state', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync profile state', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const client2 = disposableStore.add(new UserDataSyncClient(server));
 		await client2.setUp(true);
 		const profile = await client2.instantiationService.get(IUserDataProfilesService).createNamedProfile('profile1');
@@ -231,30 +231,30 @@ suite('GlobalStateSync', () => {
 		return JSON.parse(syncData.content);
 	}
 
-	async function updateLocale(client: UserDataSyncClient): Promise<void> {
+	async function updateLocale(client: UserDataSyncClient): Promise<codemavi> {
 		const fileService = client.instantiationService.get(IFileService);
 		const environmentService = client.instantiationService.get(IEnvironmentService);
 		await fileService.writeFile(environmentService.argvResource, VSBuffer.fromString(JSON.stringify({ 'locale': 'en' })));
 	}
 
-	function updateUserStorage(key: string, value: string, client: UserDataSyncClient, profile?: IUserDataProfile): void {
+	function updateUserStorage(key: string, value: string, client: UserDataSyncClient, profile?: IUserDataProfile): codemavi {
 		const storageService = client.instantiationService.get(IStorageService);
 		storageService.store(key, value, StorageScope.PROFILE, StorageTarget.USER);
 	}
 
-	async function updateUserStorageForProfile(key: string, value: string, profile: IUserDataProfile, client: UserDataSyncClient): Promise<void> {
+	async function updateUserStorageForProfile(key: string, value: string, profile: IUserDataProfile, client: UserDataSyncClient): Promise<codemavi> {
 		const storageService = client.instantiationService.get(IUserDataProfileStorageService);
 		const data = new Map<string, string>();
 		data.set(key, value);
 		await storageService.updateStorageData(profile, data, StorageTarget.USER);
 	}
 
-	function updateMachineStorage(key: string, value: string, client: UserDataSyncClient): void {
+	function updateMachineStorage(key: string, value: string, client: UserDataSyncClient): codemavi {
 		const storageService = client.instantiationService.get(IStorageService);
 		storageService.store(key, value, StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
-	function removeStorage(key: string, client: UserDataSyncClient): void {
+	function removeStorage(key: string, client: UserDataSyncClient): codemavi {
 		const storageService = client.instantiationService.get(IStorageService);
 		storageService.remove(key, StorageScope.PROFILE);
 	}

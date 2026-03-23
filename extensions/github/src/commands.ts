@@ -34,7 +34,7 @@ async function openVscodeDevLink(gitAPI: GitAPI): Promise<vscode.Uri | undefined
 	}
 }
 
-async function openOnGitHub(repository: Repository, commit: string): Promise<void> {
+async function openOnGitHub(repository: Repository, commit: string): Promise<codemavi> {
 	// Get the unique remotes that contain the commit
 	const branches = await repository.getBranches({ contains: commit, remote: true });
 	const remoteNames = new Set(branches.filter(b => b.type === RefType.RemoteHead && b.remote).map(b => b.remote!));

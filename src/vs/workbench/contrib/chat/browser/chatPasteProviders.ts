@@ -146,7 +146,7 @@ export class PasteImageProvider implements DocumentPasteEditProvider {
 		return fileUri;
 	}
 
-	private async cleanupOldImages(): Promise<void> {
+	private async cleanupOldImages(): Promise<codemavi> {
 		const exists = await this.fileService.exists(this.imagesFolder);
 		if (!exists) {
 			return;

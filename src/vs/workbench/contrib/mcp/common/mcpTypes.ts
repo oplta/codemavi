@@ -49,9 +49,9 @@ export interface McpCollectionDefinition {
 		/** True if `serverDefinitions` were loaded from the cache */
 		isCached: boolean;
 		/** Triggers a load of the real server definition, which should be pushed to the IMcpRegistry. If not this definition will be removed. */
-		load(): Promise<void>;
+		load(): Promise<codemavi>;
 		/** Called after `load()` if the extension is not found. */
-		removed?(): void;
+		removed?(): codemavi;
 	};
 
 	readonly presentation?: {
@@ -171,12 +171,12 @@ export interface IMcpService {
 	readonly servers: IObservable<readonly IMcpServer[]>;
 
 	/** Resets the cached tools. */
-	resetCaches(): void;
+	resetCaches(): codemavi;
 
 	/** Set if there are extensions that register MCP servers that have never been activated. */
 	readonly lazyCollectionState: IObservable<LazyCollectionState>;
 	/** Activatese extensions and runs their MCP servers. */
-	activateCollections(): Promise<void>;
+	activateCollections(): Promise<codemavi>;
 }
 
 export const enum LazyCollectionState {
@@ -209,7 +209,7 @@ export interface IMcpServer extends IDisposable {
 	 */
 	readonly trusted: IObservable<boolean | undefined>;
 
-	showOutput(): void;
+	showOutput(): codemavi;
 	/**
 	 * Starts the server and returns its resulting state. One of:
 	 * - Running, if all good
@@ -217,7 +217,7 @@ export interface IMcpServer extends IDisposable {
 	 * - Stopped, if the server was disposed or the user cancelled the launch
 	 */
 	start(isFromInteraction?: boolean): Promise<McpConnectionState>;
-	stop(): Promise<void>;
+	stop(): Promise<codemavi>;
 
 	readonly toolsState: IObservable<McpServerToolsState>;
 	readonly tools: IObservable<readonly IMcpTool[]>;
@@ -329,7 +329,7 @@ export interface IMcpServerConnection extends IDisposable {
 	/**
 	 * Stops the server.
 	 */
-	stop(): Promise<void>;
+	stop(): Promise<codemavi>;
 }
 
 /**

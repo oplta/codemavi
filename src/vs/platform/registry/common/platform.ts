@@ -14,7 +14,7 @@ export interface IRegistry {
 	 * @param id a unique identifier
 	 * @param data a contribution
 	 */
-	add(id: string, data: any): void;
+	add(id: string, data: any): codemavi;
 
 	/**
 	 * Returns true iff there is an extension with the provided id.
@@ -33,7 +33,7 @@ class RegistryImpl implements IRegistry {
 
 	private readonly data = new Map<string, any>();
 
-	public add(id: string, data: any): void {
+	public add(id: string, data: any): codemavi {
 		Assert.ok(Types.isString(id));
 		Assert.ok(Types.isObject(data));
 		Assert.ok(!this.data.has(id), 'There is already an extension with this id');

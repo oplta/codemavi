@@ -159,7 +159,7 @@ suite('Event', function () {
 
 	test('Emitter, dispose listener during emission', () => {
 		for (let keepFirstMod = 1; keepFirstMod < 4; keepFirstMod++) {
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 			const calls: number[] = [];
 			const disposables = Array.from({ length: 25 }, (_, n) => ds.add(emitter.event(() => {
 				if (n % keepFirstMod === 0) {
@@ -174,7 +174,7 @@ suite('Event', function () {
 	});
 
 	test('Emitter, dispose emitter during emission', () => {
-		const emitter = ds.add(new Emitter<void>());
+		const emitter = ds.add(new Emitter<codemavi>());
 		const calls: number[] = [];
 		const disposables = Array.from({ length: 25 }, (_, n) => ds.add(emitter.event(() => {
 			if (n === 10) {
@@ -467,7 +467,7 @@ suite('Event', function () {
 	test('Microtask Emitter', (done) => {
 		let count = 0;
 		assert.strictEqual(count, 0);
-		const emitter = new MicrotaskEmitter<void>();
+		const emitter = new MicrotaskEmitter<codemavi>();
 		const listener = emitter.event(() => {
 			count++;
 		});
@@ -832,7 +832,7 @@ suite('Event utils', () => {
 		test('should not buffer when not wrapped', () => {
 			const bufferer = new EventBufferer();
 			const counter = new Samples.EventCounter();
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 			const event = bufferer.wrapEvent(emitter.event);
 			const listener = event(counter.onEvent, counter);
 
@@ -850,7 +850,7 @@ suite('Event utils', () => {
 		test('should buffer when wrapped', () => {
 			const bufferer = new EventBufferer();
 			const counter = new Samples.EventCounter();
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 			const event = bufferer.wrapEvent(emitter.event);
 			const listener = event(counter.onEvent, counter);
 
@@ -873,7 +873,7 @@ suite('Event utils', () => {
 		});
 
 		test('once', () => {
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 
 			let counter1 = 0, counter2 = 0, counter3 = 0;
 
@@ -1383,7 +1383,7 @@ suite('Event utils', () => {
 	});
 
 	suite('debounce', () => {
-		test('simple', function (done: () => void) {
+		test('simple', function (done: () => codemavi) {
 			const doc = ds.add(new Samples.Document3());
 
 			const onDocDidChange = Event.debounce(doc.onDidChange, (prev: string[] | undefined, cur) => {
@@ -1415,7 +1415,7 @@ suite('Event utils', () => {
 		});
 
 
-		test('microtask', function (done: () => void) {
+		test('microtask', function (done: () => codemavi) {
 			const doc = ds.add(new Samples.Document3());
 
 			const onDocDidChange = Event.debounce(doc.onDidChange, (prev: string[] | undefined, cur) => {
@@ -1448,7 +1448,7 @@ suite('Event utils', () => {
 
 
 		test('leading', async function () {
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 			const debounced = Event.debounce(emitter.event, (l, e) => e, 0, /*leading=*/true);
 
 			let calls = 0;
@@ -1464,7 +1464,7 @@ suite('Event utils', () => {
 		});
 
 		test('leading (2)', async function () {
-			const emitter = ds.add(new Emitter<void>());
+			const emitter = ds.add(new Emitter<codemavi>());
 			const debounced = Event.debounce(emitter.event, (l, e) => e, 0, /*leading=*/true);
 
 			let calls = 0;
@@ -1543,7 +1543,7 @@ suite('Event utils', () => {
 
 	test('issue #230401', () => {
 		let count = 0;
-		const emitter = ds.add(new Emitter<void>());
+		const emitter = ds.add(new Emitter<codemavi>());
 		const disposables = ds.add(new DisposableStore());
 		ds.add(emitter.event(() => {
 			count++;

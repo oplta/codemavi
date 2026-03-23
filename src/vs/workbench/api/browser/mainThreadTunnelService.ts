@@ -48,7 +48,7 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 			&& (this.configurationService.getValue(PORT_AUTO_SOURCE_SETTING) !== PORT_AUTO_SOURCE_SETTING_OUTPUT);
 	}
 
-	async $setRemoteTunnelService(processId: number): Promise<void> {
+	async $setRemoteTunnelService(processId: number): Promise<codemavi> {
 		this.remoteExplorerService.namedProcesses.set(processId, 'Code Extension Host');
 		if (this.remoteExplorerService.portsFeaturesEnabled === PortsEnablement.AdditionalFeatures) {
 			this._proxy.$registerCandidateFinder(this.processFindingEnabled());
@@ -68,7 +68,7 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 	}
 
 	private _alreadyRegistered: boolean = false;
-	async $registerPortsAttributesProvider(selector: PortAttributesSelector, providerHandle: number): Promise<void> {
+	async $registerPortsAttributesProvider(selector: PortAttributesSelector, providerHandle: number): Promise<codemavi> {
 		this.portsAttributesProviders.set(providerHandle, selector);
 		if (!this._alreadyRegistered) {
 			this.remoteExplorerService.tunnelModel.addAttributesProvider(this);
@@ -76,7 +76,7 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 		}
 	}
 
-	async $unregisterPortsAttributesProvider(providerHandle: number): Promise<void> {
+	async $unregisterPortsAttributesProvider(providerHandle: number): Promise<codemavi> {
 		this.portsAttributesProviders.delete(providerHandle);
 	}
 
@@ -149,7 +149,7 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 			}]);
 	}
 
-	async $closeTunnel(remote: { host: string; port: number }): Promise<void> {
+	async $closeTunnel(remote: { host: string; port: number }): Promise<codemavi> {
 		return this.remoteExplorerService.close(remote, TunnelCloseReason.Other);
 	}
 
@@ -164,11 +164,11 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 		});
 	}
 
-	async $onFoundNewCandidates(candidates: CandidatePort[]): Promise<void> {
+	async $onFoundNewCandidates(candidates: CandidatePort[]): Promise<codemavi> {
 		this.remoteExplorerService.onFoundNewCandidates(candidates);
 	}
 
-	async $setTunnelProvider(features: TunnelProviderFeatures | undefined, isResolver: boolean): Promise<void> {
+	async $setTunnelProvider(features: TunnelProviderFeatures | undefined, isResolver: boolean): Promise<codemavi> {
 		const tunnelProvider: ITunnelProvider = {
 			forwardPort: (tunnelOptions: TunnelOptions, tunnelCreationOptions: TunnelCreationOptions) => {
 				const forward = this._proxy.$forwardPort(tunnelOptions, tunnelCreationOptions);
@@ -207,13 +207,13 @@ export class MainThreadTunnelService extends Disposable implements MainThreadTun
 		}
 	}
 
-	async $setCandidateFilter(): Promise<void> {
+	async $setCandidateFilter(): Promise<codemavi> {
 		this.remoteExplorerService.setCandidateFilter((candidates: CandidatePort[]): Promise<CandidatePort[]> => {
 			return this._proxy.$applyCandidateFilter(candidates);
 		});
 	}
 
-	async $setCandidatePortSource(source: CandidatePortSource): Promise<void> {
+	async $setCandidatePortSource(source: CandidatePortSource): Promise<codemavi> {
 		// Must wait for the remote environment before trying to set settings there.
 		this.remoteAgentService.getEnvironment().then(() => {
 			switch (source) {

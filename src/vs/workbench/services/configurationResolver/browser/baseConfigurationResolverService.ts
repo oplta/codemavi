@@ -243,7 +243,7 @@ export abstract class BaseConfigurationResolverService extends AbstractVariableR
 		return lru;
 	}
 
-	private storeInputLru(lru: LRUCache<string, string>): void {
+	private storeInputLru(lru: LRUCache<string, string>): codemavi {
 		this.storageService.store(LAST_INPUT_STORAGE_KEY, JSON.stringify(lru.toJSON()), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 

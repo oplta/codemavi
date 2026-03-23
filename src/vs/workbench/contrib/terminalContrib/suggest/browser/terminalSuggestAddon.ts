@@ -41,12 +41,12 @@ import { terminalSymbolAliasIcon, terminalSymbolArgumentIcon, terminalSymbolEnum
 
 export interface ISuggestController {
 	isPasting: boolean;
-	selectPreviousSuggestion(): void;
-	selectPreviousPageSuggestion(): void;
-	selectNextSuggestion(): void;
-	selectNextPageSuggestion(): void;
-	acceptSelectedSuggestion(suggestion?: Pick<ISimpleSelectedSuggestion<TerminalCompletionItem>, 'item' | 'model'>): void;
-	hideSuggestWidget(cancelAnyRequests: boolean, wasClosedByUser?: boolean): void;
+	selectPreviousSuggestion(): codemavi;
+	selectPreviousPageSuggestion(): codemavi;
+	selectNextSuggestion(): codemavi;
+	selectNextPageSuggestion(): codemavi;
+	acceptSelectedSuggestion(suggestion?: Pick<ISimpleSelectedSuggestion<TerminalCompletionItem>, 'item' | 'model'>): codemavi;
+	hideSuggestWidget(cancelAnyRequests: boolean, wasClosedByUser?: boolean): codemavi;
 }
 export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggestController {
 	private _terminal?: Terminal;
@@ -79,15 +79,15 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 
 	isPasting: boolean = false;
 	shellType: TerminalShellType | undefined;
-	private readonly _shellTypeInit: Promise<void>;
+	private readonly _shellTypeInit: Promise<codemavi>;
 
-	private readonly _onBell = this._register(new Emitter<void>());
+	private readonly _onBell = this._register(new Emitter<codemavi>());
 	readonly onBell = this._onBell.event;
 	private readonly _onAcceptedCompletion = this._register(new Emitter<string>());
 	readonly onAcceptedCompletion = this._onAcceptedCompletion.event;
-	private readonly _onDidReceiveCompletions = this._register(new Emitter<void>());
+	private readonly _onDidReceiveCompletions = this._register(new Emitter<codemavi>());
 	readonly onDidReceiveCompletions = this._onDidReceiveCompletions.event;
-	private readonly _onDidFontConfigurationChange = this._register(new Emitter<void>());
+	private readonly _onDidFontConfigurationChange = this._register(new Emitter<codemavi>());
 	readonly onDidFontConfigurationChange = this._onDidFontConfigurationChange.event;
 
 	private _kindToIconMap = new Map<number, ThemeIcon>([
@@ -156,7 +156,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		} else {
 			const intervalTimer = this._register(new IntervalTimer());
 			const timeoutTimer = this._register(new TimeoutTimer());
-			this._shellTypeInit = new Promise<void>(r => {
+			this._shellTypeInit = new Promise<codemavi>(r => {
 				intervalTimer.cancelAndSet(() => {
 					if (this.shellType) {
 						r();
@@ -214,7 +214,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		}));
 	}
 
-	activate(xterm: Terminal): void {
+	activate(xterm: Terminal): codemavi {
 		this._terminal = xterm;
 		this._register(xterm.onKey(async e => {
 			this._lastUserData = e.key;
@@ -223,7 +223,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		this._register(xterm.onScroll(() => this.hideSuggestWidget(true)));
 	}
 
-	private async _handleCompletionProviders(terminal: Terminal | undefined, token: CancellationToken, explicitlyInvoked?: boolean): Promise<void> {
+	private async _handleCompletionProviders(terminal: Terminal | undefined, token: CancellationToken, explicitlyInvoked?: boolean): Promise<codemavi> {
 		// Nothing to handle if the terminal is not attached
 		if (!terminal?.element || !this._enableWidget || !this._promptInputModel) {
 			return;
@@ -327,31 +327,31 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		this._showCompletions(model, explicitlyInvoked);
 	}
 
-	setContainerWithOverflow(container: HTMLElement): void {
+	setContainerWithOverflow(container: HTMLElement): codemavi {
 		this._container = container;
 	}
 
-	setScreen(screen: HTMLElement): void {
+	setScreen(screen: HTMLElement): codemavi {
 		this._screen = screen;
 	}
 
-	toggleExplainMode(): void {
+	toggleExplainMode(): codemavi {
 		this._suggestWidget?.toggleExplainMode();
 	}
 
-	toggleSuggestionFocus(): void {
+	toggleSuggestionFocus(): codemavi {
 		this._suggestWidget?.toggleDetailsFocus();
 	}
 
-	toggleSuggestionDetails(): void {
+	toggleSuggestionDetails(): codemavi {
 		this._suggestWidget?.toggleDetails();
 	}
 
-	resetWidgetSize(): void {
+	resetWidgetSize(): codemavi {
 		this._suggestWidget?.resetWidgetSize();
 	}
 
-	async requestCompletions(explicitlyInvoked?: boolean): Promise<void> {
+	async requestCompletions(explicitlyInvoked?: boolean): Promise<codemavi> {
 		if (!this._promptInputModel) {
 			this._shouldSyncWhenReady = true;
 			return;
@@ -369,7 +369,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		await this._handleCompletionProviders(this._terminal, token, explicitlyInvoked);
 	}
 
-	private _addPropertiesToInlineCompletionItem(completions: ITerminalCompletion[]): void {
+	private _addPropertiesToInlineCompletionItem(completions: ITerminalCompletion[]): codemavi {
 		const inlineCompletionLabel = (typeof this._inlineCompletionItem.completion.label === 'string' ? this._inlineCompletionItem.completion.label : this._inlineCompletionItem.completion.label.label).trim();
 		const inlineCompletionMatchIndex = completions.findIndex(c => typeof c.label === 'string' ? c.label === inlineCompletionLabel : c.label.label === inlineCompletionLabel);
 		if (inlineCompletionMatchIndex !== -1) {
@@ -419,7 +419,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		return !!this._lastUserData?.match(/^\x1b[\[O]?[A-D]$/);
 	}
 
-	private _sync(promptInputState: IPromptInputModelState): void {
+	private _sync(promptInputState: IPromptInputModelState): codemavi {
 		const config = this._configurationService.getValue<ITerminalSuggestConfiguration>(terminalSuggestConfigSection);
 		{
 			let sent = false;
@@ -555,7 +555,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		});
 	}
 
-	private _refreshInlineCompletion(completions: ITerminalCompletion[]): void {
+	private _refreshInlineCompletion(completions: ITerminalCompletion[]): codemavi {
 		const oldIsInvalid = this._inlineCompletionItem.isInvalid;
 		if (!this._currentPromptInputState || this._currentPromptInputState.ghostTextIndex === -1) {
 			this._inlineCompletionItem.isInvalid = true;
@@ -645,7 +645,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		return `promptInputModel: ${this._promptInputModel?.getCombinedString()}`;
 	}
 
-	private _showCompletions(model: TerminalCompletionModel, explicitlyInvoked?: boolean): void {
+	private _showCompletions(model: TerminalCompletionModel, explicitlyInvoked?: boolean): codemavi {
 		if (!this._terminal?.element) {
 			return;
 		}
@@ -721,23 +721,23 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		return this._suggestWidget;
 	}
 
-	selectPreviousSuggestion(): void {
+	selectPreviousSuggestion(): codemavi {
 		this._suggestWidget?.selectPrevious();
 	}
 
-	selectPreviousPageSuggestion(): void {
+	selectPreviousPageSuggestion(): codemavi {
 		this._suggestWidget?.selectPreviousPage();
 	}
 
-	selectNextSuggestion(): void {
+	selectNextSuggestion(): codemavi {
 		this._suggestWidget?.selectNext();
 	}
 
-	selectNextPageSuggestion(): void {
+	selectNextPageSuggestion(): codemavi {
 		this._suggestWidget?.selectNextPage();
 	}
 
-	acceptSelectedSuggestion(suggestion?: Pick<ISimpleSelectedSuggestion<TerminalCompletionItem>, 'item' | 'model'>, respectRunOnEnter?: boolean): void {
+	acceptSelectedSuggestion(suggestion?: Pick<ISimpleSelectedSuggestion<TerminalCompletionItem>, 'item' | 'model'>, respectRunOnEnter?: boolean): codemavi {
 		if (!suggestion) {
 			suggestion = this._suggestWidget?.getFocusedItem();
 		}
@@ -833,7 +833,7 @@ export class SuggestAddon extends Disposable implements ITerminalAddon, ISuggest
 		this.hideSuggestWidget(true);
 	}
 
-	hideSuggestWidget(cancelAnyRequest: boolean): void {
+	hideSuggestWidget(cancelAnyRequest: boolean): codemavi {
 		if (cancelAnyRequest) {
 			this._cancellationTokenSource?.cancel();
 			this._cancellationTokenSource = undefined;
@@ -870,7 +870,7 @@ class PersistedWidgetSize {
 		this._storageService.store(this._key, JSON.stringify(size), StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._storageService.remove(this._key, StorageScope.PROFILE);
 	}
 }

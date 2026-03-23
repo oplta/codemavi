@@ -102,7 +102,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 			viewId: COMMENTS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<codemavi> {
 		commentsView.focus();
 	}
 });
@@ -120,7 +120,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 			viewId: COMMENTS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<codemavi> {
 		commentsView.clearFilterText();
 	}
 });
@@ -138,7 +138,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 			viewId: COMMENTS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, commentsView: ICommentsView): Promise<codemavi> {
 		commentsView.focusFilter();
 	}
 });
@@ -163,7 +163,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<codemavi> {
 		view.filters.showUnresolved = !view.filters.showUnresolved;
 	}
 });
@@ -188,7 +188,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<codemavi> {
 		view.filters.showResolved = !view.filters.showResolved;
 	}
 });
@@ -223,7 +223,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<codemavi> {
 		view.filters.sortBy = CommentsSortOrder.UpdatedAtDescending;
 	}
 });
@@ -249,7 +249,7 @@ registerAction2(class extends ViewAction<ICommentsView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<void> {
+	async runInView(serviceAccessor: ServicesAccessor, view: ICommentsView): Promise<codemavi> {
 		view.filters.sortBy = CommentsSortOrder.ResourceAscending;
 	}
 });

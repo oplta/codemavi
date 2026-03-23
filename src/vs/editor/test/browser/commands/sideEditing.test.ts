@@ -11,7 +11,7 @@ import { Range } from '../../../common/core/range.js';
 import { Selection } from '../../../common/core/selection.js';
 import { withTestCodeEditor } from '../testCodeEditor.js';
 
-function testCommand(lines: string[], selections: Selection[], edits: ISingleEditOperation[], expectedLines: string[], expectedSelections: Selection[]): void {
+function testCommand(lines: string[], selections: Selection[], edits: ISingleEditOperation[], expectedLines: string[], expectedSelections: Selection[]): codemavi {
 	withTestCodeEditor(lines, {}, (editor, viewModel) => {
 		const model = editor.getModel()!;
 
@@ -197,7 +197,7 @@ suite('SideEditing', () => {
 		'Third Line'
 	];
 
-	function _runTest(selection: Selection, editRange: Range, editText: string, editForceMoveMarkers: boolean, expected: Selection, msg: string): void {
+	function _runTest(selection: Selection, editRange: Range, editText: string, editForceMoveMarkers: boolean, expected: Selection, msg: string): codemavi {
 		withTestCodeEditor(LINES.join('\n'), {}, (editor, viewModel) => {
 			viewModel.setSelections('tests', [selection]);
 			editor.getModel().applyEdits([{
@@ -210,7 +210,7 @@ suite('SideEditing', () => {
 		});
 	}
 
-	function runTest(selection: Range, editRange: Range, editText: string, expected: Selection[][]): void {
+	function runTest(selection: Range, editRange: Range, editText: string, expected: Selection[][]): codemavi {
 		const sel1 = new Selection(selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
 		_runTest(sel1, editRange, editText, false, expected[0][0], '0-0-regular-no-force');
 		_runTest(sel1, editRange, editText, true, expected[1][0], '1-0-regular-force');

@@ -29,8 +29,8 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 	private readonly _proxy: ExtHostQuickOpenShape;
 	private readonly _quickInputService: IQuickInputService;
 	private readonly _items: Record<number, {
-		resolve(items: TransferQuickPickItemOrSeparator[]): void;
-		reject(error: Error): void;
+		resolve(items: TransferQuickPickItemOrSeparator[]): codemavi;
+		reject(error: Error): codemavi;
 	}> = {};
 
 	constructor(
@@ -41,7 +41,7 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 		this._quickInputService = quickInputService;
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		for (const [_id, session] of this.sessions) {
 			session.store.dispose();
 		}
@@ -78,7 +78,7 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 		}
 	}
 
-	$setItems(instance: number, items: TransferQuickPickItemOrSeparator[]): Promise<void> {
+	$setItems(instance: number, items: TransferQuickPickItemOrSeparator[]): Promise<codemavi> {
 		if (this._items[instance]) {
 			this._items[instance].resolve(items);
 			delete this._items[instance];
@@ -86,7 +86,7 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 		return Promise.resolve();
 	}
 
-	$setError(instance: number, error: Error): Promise<void> {
+	$setError(instance: number, error: Error): Promise<codemavi> {
 		if (this._items[instance]) {
 			this._items[instance].reject(error);
 			delete this._items[instance];
@@ -122,7 +122,7 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 
 	private sessions = new Map<number, QuickInputSession>();
 
-	$createOrUpdate(params: TransferQuickInput): Promise<void> {
+	$createOrUpdate(params: TransferQuickInput): Promise<codemavi> {
 		const sessionId = params.id;
 		let session = this.sessions.get(sessionId);
 		if (!session) {
@@ -216,7 +216,7 @@ export class MainThreadQuickOpen implements MainThreadQuickOpenShape {
 		return Promise.resolve(undefined);
 	}
 
-	$dispose(sessionId: number): Promise<void> {
+	$dispose(sessionId: number): Promise<codemavi> {
 		const session = this.sessions.get(sessionId);
 		if (session) {
 			session.store.dispose();

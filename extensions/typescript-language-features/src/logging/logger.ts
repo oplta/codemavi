@@ -17,15 +17,15 @@ export class Logger {
 		return this.output.logLevel;
 	}
 
-	public info(message: string, ...args: any[]): void {
+	public info(message: string, ...args: any[]): codemavi {
 		this.output.info(message, ...args);
 	}
 
-	public trace(message: string, ...args: any[]): void {
+	public trace(message: string, ...args: any[]): codemavi {
 		this.output.trace(message, ...args);
 	}
 
-	public error(message: string, data?: any): void {
+	public error(message: string, data?: any): codemavi {
 		// See https://github.com/microsoft/TypeScript/issues/10496
 		if (data && data.message === 'No content available.') {
 			return;

@@ -47,11 +47,11 @@ export interface IStorageDatabase {
 	readonly onDidChangeItemsExternal: Event<IStorageItemsChangeEvent>;
 
 	getItems(): Promise<Map<string, string>>;
-	updateItems(request: IUpdateRequest): Promise<void>;
+	updateItems(request: IUpdateRequest): Promise<codemavi>;
 
-	optimize(): Promise<void>;
+	optimize(): Promise<codemavi>;
 
-	close(recovery?: () => Map<string, string>): Promise<void>;
+	close(recovery?: () => Map<string, string>): Promise<codemavi>;
 }
 
 export interface IStorageChangeEvent {
@@ -81,7 +81,7 @@ export interface IStorage extends IDisposable {
 	readonly items: Map<string, string>;
 	readonly size: number;
 
-	init(): Promise<void>;
+	init(): Promise<codemavi>;
 
 	get(key: string, fallbackValue: string): string;
 	get(key: string, fallbackValue?: string): string | undefined;
@@ -95,15 +95,15 @@ export interface IStorage extends IDisposable {
 	getObject<T extends object>(key: string, fallbackValue: T): T;
 	getObject<T extends object>(key: string, fallbackValue?: T): T | undefined;
 
-	set(key: string, value: StorageValue, external?: boolean): Promise<void>;
-	delete(key: string, external?: boolean): Promise<void>;
+	set(key: string, value: StorageValue, external?: boolean): Promise<codemavi>;
+	delete(key: string, external?: boolean): Promise<codemavi>;
 
-	flush(delay?: number): Promise<void>;
-	whenFlushed(): Promise<void>;
+	flush(delay?: number): Promise<codemavi>;
+	whenFlushed(): Promise<codemavi>;
 
-	optimize(): Promise<void>;
+	optimize(): Promise<codemavi>;
 
-	close(): Promise<void>;
+	close(): Promise<codemavi>;
 }
 
 export enum StorageState {
@@ -123,12 +123,12 @@ export class Storage extends Disposable implements IStorage {
 
 	private cache = new Map<string, string>();
 
-	private readonly flushDelayer = this._register(new ThrottledDelayer<void>(Storage.DEFAULT_FLUSH_DELAY));
+	private readonly flushDelayer = this._register(new ThrottledDelayer<codemavi>(Storage.DEFAULT_FLUSH_DELAY));
 
 	private pendingDeletes = new Set<string>();
 	private pendingInserts = new Map<string, string>();
 
-	private pendingClose: Promise<void> | undefined = undefined;
+	private pendingClose: Promise<codemavi> | undefined = undefined;
 
 	private readonly whenFlushedCallbacks: Function[] = [];
 
@@ -141,11 +141,11 @@ export class Storage extends Disposable implements IStorage {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.database.onDidChangeItemsExternal(e => this.onDidChangeItemsExternal(e)));
 	}
 
-	private onDidChangeItemsExternal(e: IStorageItemsChangeEvent): void {
+	private onDidChangeItemsExternal(e: IStorageItemsChangeEvent): codemavi {
 		this._onDidChangeStorage.pause();
 
 		try {
@@ -161,7 +161,7 @@ export class Storage extends Disposable implements IStorage {
 		}
 	}
 
-	private acceptExternal(key: string, value: string | undefined): void {
+	private acceptExternal(key: string, value: string | undefined): codemavi {
 		if (this.state === StorageState.Closed) {
 			return; // Return early if we are already closed
 		}
@@ -196,7 +196,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.cache.size;
 	}
 
-	async init(): Promise<void> {
+	async init(): Promise<codemavi> {
 		if (this.state !== StorageState.None) {
 			return; // either closed or already initialized
 		}
@@ -261,7 +261,7 @@ export class Storage extends Disposable implements IStorage {
 		return parse(value);
 	}
 
-	async set(key: string, value: string | boolean | number | null | undefined | object, external = false): Promise<void> {
+	async set(key: string, value: string | boolean | number | null | undefined | object, external = false): Promise<codemavi> {
 		if (this.state === StorageState.Closed) {
 			return; // Return early if we are already closed
 		}
@@ -292,7 +292,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.doFlush();
 	}
 
-	async delete(key: string, external = false): Promise<void> {
+	async delete(key: string, external = false): Promise<codemavi> {
 		if (this.state === StorageState.Closed) {
 			return; // Return early if we are already closed
 		}
@@ -316,7 +316,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.doFlush();
 	}
 
-	async optimize(): Promise<void> {
+	async optimize(): Promise<codemavi> {
 		if (this.state === StorageState.Closed) {
 			return; // Return early if we are already closed
 		}
@@ -328,7 +328,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.database.optimize();
 	}
 
-	async close(): Promise<void> {
+	async close(): Promise<codemavi> {
 		if (!this.pendingClose) {
 			this.pendingClose = this.doClose();
 		}
@@ -336,14 +336,14 @@ export class Storage extends Disposable implements IStorage {
 		return this.pendingClose;
 	}
 
-	private async doClose(): Promise<void> {
+	private async doClose(): Promise<codemavi> {
 
 		// Update state
 		this.state = StorageState.Closed;
 
 		// Trigger new flush to ensure data is persisted and then close
 		// even if there is an error flushing. We must always ensure
-		// the DB is closed to avoid corruption.
+		// the DB is closed to acodemavi corruption.
 		//
 		// Recovery: we pass our cache over as recovery option in case
 		// the DB is not healthy.
@@ -360,7 +360,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.pendingInserts.size > 0 || this.pendingDeletes.size > 0;
 	}
 
-	private async flushPending(): Promise<void> {
+	private async flushPending(): Promise<codemavi> {
 		if (!this.hasPending) {
 			return; // return early if nothing to do
 		}
@@ -383,7 +383,7 @@ export class Storage extends Disposable implements IStorage {
 		});
 	}
 
-	async flush(delay?: number): Promise<void> {
+	async flush(delay?: number): Promise<codemavi> {
 		if (
 			this.state === StorageState.Closed || 	// Return early if we are already closed
 			this.pendingClose 						// return early if nothing to do
@@ -394,7 +394,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.doFlush(delay);
 	}
 
-	private async doFlush(delay?: number): Promise<void> {
+	private async doFlush(delay?: number): Promise<codemavi> {
 		if (this.options.hint === StorageHint.STORAGE_IN_MEMORY) {
 			return this.flushPending(); // return early if in-memory
 		}
@@ -402,7 +402,7 @@ export class Storage extends Disposable implements IStorage {
 		return this.flushDelayer.trigger(() => this.flushPending(), delay);
 	}
 
-	async whenFlushed(): Promise<void> {
+	async whenFlushed(): Promise<codemavi> {
 		if (!this.hasPending) {
 			return; // return early if nothing to do
 		}
@@ -425,12 +425,12 @@ export class InMemoryStorageDatabase implements IStorageDatabase {
 		return this.items;
 	}
 
-	async updateItems(request: IUpdateRequest): Promise<void> {
+	async updateItems(request: IUpdateRequest): Promise<codemavi> {
 		request.insert?.forEach((value, key) => this.items.set(key, value));
 
 		request.delete?.forEach(key => this.items.delete(key));
 	}
 
-	async optimize(): Promise<void> { }
-	async close(): Promise<void> { }
+	async optimize(): Promise<codemavi> { }
+	async close(): Promise<codemavi> { }
 }

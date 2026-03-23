@@ -104,21 +104,21 @@ export class SemanticTokensProviderStyling {
 		return metadata;
 	}
 
-	public warnOverlappingSemanticTokens(lineNumber: number, startColumn: number): void {
+	public warnOverlappingSemanticTokens(lineNumber: number, startColumn: number): codemavi {
 		if (!this._hasWarnedOverlappingTokens) {
 			this._hasWarnedOverlappingTokens = true;
 			this._logService.warn(`Overlapping semantic tokens detected at lineNumber ${lineNumber}, column ${startColumn}`);
 		}
 	}
 
-	public warnInvalidLengthSemanticTokens(lineNumber: number, startColumn: number): void {
+	public warnInvalidLengthSemanticTokens(lineNumber: number, startColumn: number): codemavi {
 		if (!this._hasWarnedInvalidLengthTokens) {
 			this._hasWarnedInvalidLengthTokens = true;
 			this._logService.warn(`Semantic token with invalid length detected at lineNumber ${lineNumber}, column ${startColumn}`);
 		}
 	}
 
-	public warnInvalidEditStart(previousResultId: string | undefined, resultId: string | undefined, editIndex: number, editStart: number, maxExpectedStart: number): void {
+	public warnInvalidEditStart(previousResultId: string | undefined, resultId: string | undefined, editIndex: number, editStart: number, maxExpectedStart: number): codemavi {
 		if (!this._hasWarnedInvalidEditStart) {
 			this._hasWarnedInvalidEditStart = true;
 			this._logService.warn(`Invalid semantic tokens edit detected (previousResultId: ${previousResultId}, resultId: ${resultId}) at edit #${editIndex}: The provided start offset ${editStart} is outside the previous data (length ${maxExpectedStart}).`);
@@ -267,7 +267,7 @@ class HashTable {
 		HashTable._nullOutEntries(this._elements, this._currentLength);
 	}
 
-	private static _nullOutEntries(entries: (HashTableEntry | null)[], length: number): void {
+	private static _nullOutEntries(entries: (HashTableEntry | null)[], length: number): codemavi {
 		for (let i = 0; i < length; i++) {
 			entries[i] = null;
 		}
@@ -295,7 +295,7 @@ class HashTable {
 		return null;
 	}
 
-	public add(tokenTypeIndex: number, tokenModifierSet: number, languageId: number, metadata: number): void {
+	public add(tokenTypeIndex: number, tokenModifierSet: number, languageId: number, metadata: number): codemavi {
 		this._elementsCount++;
 		if (this._growCount !== 0 && this._elementsCount >= this._growCount) {
 			// expand!
@@ -320,7 +320,7 @@ class HashTable {
 		this._add(new HashTableEntry(tokenTypeIndex, tokenModifierSet, languageId, metadata));
 	}
 
-	private _add(element: HashTableEntry): void {
+	private _add(element: HashTableEntry): codemavi {
 		const hash = this._hashFunc(element.tokenTypeIndex, element.tokenModifierSet, element.languageId);
 		element.next = this._elements[hash];
 		this._elements[hash] = element;

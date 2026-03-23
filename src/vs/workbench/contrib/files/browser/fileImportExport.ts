@@ -61,12 +61,12 @@ interface IWebkitDataTransferItemEntry {
 	isFile: boolean;
 	isDirectory: boolean;
 
-	file(resolve: (file: File) => void, reject: () => void): void;
+	file(resolve: (file: File) => codemavi, reject: () => codemavi): codemavi;
 	createReader(): IWebkitDataTransferItemEntryReader;
 }
 
 interface IWebkitDataTransferItemEntryReader {
-	readEntries(resolve: (file: IWebkitDataTransferItemEntry[]) => void, reject: () => void): void;
+	readEntries(resolve: (file: IWebkitDataTransferItemEntry[]) => codemavi, reject: () => codemavi): codemavi;
 }
 
 export class BrowserFileUpload {
@@ -82,7 +82,7 @@ export class BrowserFileUpload {
 	) {
 	}
 
-	upload(target: ExplorerItem, source: DragEvent | FileList): Promise<void> {
+	upload(target: ExplorerItem, source: DragEvent | FileList): Promise<codemavi> {
 		const cts = new CancellationTokenSource();
 
 		// Indicate progress globally
@@ -131,7 +131,7 @@ export class BrowserFileUpload {
 		return transfer;
 	}
 
-	private async doUpload(target: ExplorerItem, source: IWebkitDataTransfer, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
+	private async doUpload(target: ExplorerItem, source: IWebkitDataTransfer, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
 		const items = source.items;
 
 		// Somehow the items thing is being modified at random, maybe as a security
@@ -203,7 +203,7 @@ export class BrowserFileUpload {
 
 		// Report progress
 		let fileBytesUploaded = 0;
-		const reportProgress = (fileSize: number, bytesUploaded: number): void => {
+		const reportProgress = (fileSize: number, bytesUploaded: number): codemavi => {
 			fileBytesUploaded += bytesUploaded;
 			operation.totalBytesUploaded += bytesUploaded;
 
@@ -306,7 +306,7 @@ export class BrowserFileUpload {
 		}
 	}
 
-	private async doUploadFileBuffered(resource: URI, file: File, progressReporter: (fileSize: number, bytesUploaded: number) => void, token: CancellationToken): Promise<void> {
+	private async doUploadFileBuffered(resource: URI, file: File, progressReporter: (fileSize: number, bytesUploaded: number) => codemavi, token: CancellationToken): Promise<codemavi> {
 		const writeableStream = newWriteableBufferStream({
 			// Set a highWaterMark to prevent the stream
 			// for file upload to produce large buffers
@@ -353,8 +353,8 @@ export class BrowserFileUpload {
 		await writeFilePromise;
 	}
 
-	private doUploadFileUnbuffered(resource: URI, file: File, progressReporter: (fileSize: number, bytesUploaded: number) => void): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
+	private doUploadFileUnbuffered(resource: URI, file: File, progressReporter: (fileSize: number, bytesUploaded: number) => codemavi): Promise<codemavi> {
+		return new Promise<codemavi>((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onload = async event => {
 				try {
@@ -401,7 +401,7 @@ export class ExternalFileImport {
 	) {
 	}
 
-	async import(target: ExplorerItem, source: DragEvent, targetWindow: Window): Promise<void> {
+	async import(target: ExplorerItem, source: DragEvent, targetWindow: Window): Promise<codemavi> {
 		const cts = new CancellationTokenSource();
 
 		// Indicate progress globally
@@ -422,7 +422,7 @@ export class ExternalFileImport {
 		return importPromise;
 	}
 
-	private async doImport(target: ExplorerItem, source: DragEvent, targetWindow: Window, token: CancellationToken): Promise<void> {
+	private async doImport(target: ExplorerItem, source: DragEvent, targetWindow: Window, token: CancellationToken): Promise<codemavi> {
 
 		// Activate all providers for the resources dropped
 		const candidateFiles = coalesce((await this.instantiationService.invokeFunction(accessor => extractEditorsAndFilesDropData(accessor, source))).map(editor => editor.resource));
@@ -500,7 +500,7 @@ export class ExternalFileImport {
 		}
 	}
 
-	private async importResources(target: ExplorerItem, resources: URI[], token: CancellationToken): Promise<void> {
+	private async importResources(target: ExplorerItem, resources: URI[], token: CancellationToken): Promise<codemavi> {
 		if (resources && resources.length > 0) {
 
 			// Resolve target to check for name collisions and ask user
@@ -603,7 +603,7 @@ export class FileDownload {
 	) {
 	}
 
-	download(source: ExplorerItem[]): Promise<void> {
+	download(source: ExplorerItem[]): Promise<codemavi> {
 		const cts = new CancellationTokenSource();
 
 		// Indicate progress globally
@@ -624,7 +624,7 @@ export class FileDownload {
 		return downloadPromise;
 	}
 
-	private async doDownload(sources: ExplorerItem[], progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<void> {
+	private async doDownload(sources: ExplorerItem[], progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<codemavi> {
 		for (const source of sources) {
 			if (cts.token.isCancellationRequested) {
 				return;
@@ -643,14 +643,14 @@ export class FileDownload {
 		}
 	}
 
-	private async doDownloadBrowser(resource: URI, progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<void> {
+	private async doDownloadBrowser(resource: URI, progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<codemavi> {
 		const stat = await this.fileService.resolve(resource, { resolveMetadata: true });
 
 		if (cts.token.isCancellationRequested) {
 			return;
 		}
 
-		const maxBlobDownloadSize = 32 * ByteSize.MB; // avoid to download via blob-trick >32MB to avoid memory pressure
+		const maxBlobDownloadSize = 32 * ByteSize.MB; // acodemavi to download via blob-trick >32MB to acodemavi memory pressure
 		const preferFileSystemAccessWebApis = stat.isDirectory || stat.size > maxBlobDownloadSize;
 
 		// Folder: use FS APIs to download files and folders if available and preferred
@@ -698,14 +698,14 @@ export class FileDownload {
 		}
 	}
 
-	private async downloadFileBufferedBrowser(resource: URI, target: FileSystemWritableFileStream, operation: IDownloadOperation, token: CancellationToken): Promise<void> {
+	private async downloadFileBufferedBrowser(resource: URI, target: FileSystemWritableFileStream, operation: IDownloadOperation, token: CancellationToken): Promise<codemavi> {
 		const contents = await this.fileService.readFileStream(resource, undefined, token);
 		if (token.isCancellationRequested) {
 			target.close();
 			return;
 		}
 
-		return new Promise<void>((resolve, reject) => {
+		return new Promise<codemavi>((resolve, reject) => {
 			const sourceStream = contents.value;
 
 			const disposables = new DisposableStore();
@@ -733,7 +733,7 @@ export class FileDownload {
 		});
 	}
 
-	private async downloadFileUnbufferedBrowser(resource: URI, target: FileSystemWritableFileStream, operation: IDownloadOperation, token: CancellationToken): Promise<void> {
+	private async downloadFileUnbufferedBrowser(resource: URI, target: FileSystemWritableFileStream, operation: IDownloadOperation, token: CancellationToken): Promise<codemavi> {
 		const contents = await this.fileService.readFile(resource, undefined, token);
 		if (!token.isCancellationRequested) {
 			target.write(contents.value.buffer);
@@ -743,7 +743,7 @@ export class FileDownload {
 		target.close();
 	}
 
-	private async downloadFileBrowser(targetFolder: FileSystemDirectoryHandle, file: IFileStatWithMetadata, operation: IDownloadOperation, token: CancellationToken): Promise<void> {
+	private async downloadFileBrowser(targetFolder: FileSystemDirectoryHandle, file: IFileStatWithMetadata, operation: IDownloadOperation, token: CancellationToken): Promise<codemavi> {
 
 		// Report progress
 		operation.filesDownloaded++;
@@ -763,7 +763,7 @@ export class FileDownload {
 		return this.downloadFileUnbufferedBrowser(file.resource, targetFileWriter, operation, token);
 	}
 
-	private async downloadFolderBrowser(folder: IFileStatWithMetadata, targetFolder: FileSystemDirectoryHandle, operation: IDownloadOperation, token: CancellationToken): Promise<void> {
+	private async downloadFolderBrowser(folder: IFileStatWithMetadata, targetFolder: FileSystemDirectoryHandle, operation: IDownloadOperation, token: CancellationToken): Promise<codemavi> {
 		if (folder.children) {
 			operation.filesTotal += (folder.children.map(child => child.isFile)).length;
 
@@ -784,7 +784,7 @@ export class FileDownload {
 		}
 	}
 
-	private reportProgress(name: string, fileSize: number, bytesDownloaded: number, operation: IDownloadOperation): void {
+	private reportProgress(name: string, fileSize: number, bytesDownloaded: number, operation: IDownloadOperation): codemavi {
 		operation.fileBytesDownloaded += bytesDownloaded;
 		operation.totalBytesDownloaded += bytesDownloaded;
 
@@ -809,7 +809,7 @@ export class FileDownload {
 		operation.progressScheduler.work({ message });
 	}
 
-	private async doDownloadNative(explorerItem: ExplorerItem, progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<void> {
+	private async doDownloadNative(explorerItem: ExplorerItem, progress: IProgress<IProgressStep>, cts: CancellationTokenSource): Promise<codemavi> {
 		progress.report({ message: explorerItem.name });
 
 		let defaultUri: URI;

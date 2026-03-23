@@ -89,11 +89,11 @@ export interface IViewZone {
 	/**
 	 * Callback which gives the relative top of the view zone as it appears (taking scrolling into account).
 	 */
-	onDomNodeTop?: (top: number) => void;
+	onDomNodeTop?: (top: number) => codemavi;
 	/**
 	 * Callback which gives the height in pixels of the view zone.
 	 */
-	onComputedHeight?: (height: number) => void;
+	onComputedHeight?: (height: number) => codemavi;
 }
 /**
  * An accessor that allows for zones to be added or removed.
@@ -109,12 +109,12 @@ export interface IViewZoneChangeAccessor {
 	 * Remove a zone
 	 * @param id A unique identifier to the view zone, as returned by the `addZone` call.
 	 */
-	removeZone(id: string): void;
+	removeZone(id: string): codemavi;
 	/**
 	 * Change a zone's position.
 	 * The editor will rescan the `afterLineNumber` and `afterColumn` properties of a view zone.
 	 */
-	layoutZone(id: string): void;
+	layoutZone(id: string): codemavi;
 }
 
 /**
@@ -204,7 +204,7 @@ export interface IContentWidget {
 	 * widget. Is being invoked with the selected position preference
 	 * or `null` if not rendered.
 	 */
-	afterRender?(position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): void;
+	afterRender?(position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): codemavi;
 }
 
 /**
@@ -279,7 +279,7 @@ export interface IOverlayWidget {
 	/**
 	 * Event fired when the widget layout changes.
 	 */
-	onDidLayout?: Event<void>;
+	onDidLayout?: Event<codemavi>;
 	/**
 	 * Render this overlay widget in a location where it could overflow the editor's view dom node.
 	 */
@@ -556,9 +556,9 @@ export interface PastePayload {
  */
 export interface IOverviewRuler {
 	getDomNode(): HTMLElement;
-	dispose(): void;
-	setZones(zones: OverviewRulerZone[]): void;
-	setLayout(position: OverviewRulerPosition): void;
+	dispose(): codemavi;
+	setZones(zones: OverviewRulerZone[]): codemavi;
+	setLayout(position: OverviewRulerPosition): codemavi;
 }
 
 /**
@@ -666,22 +666,22 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * An event emitted when the text inside this editor gained focus (i.e. cursor starts blinking).
 	 * @event
 	 */
-	readonly onDidFocusEditorText: Event<void>;
+	readonly onDidFocusEditorText: Event<codemavi>;
 	/**
 	 * An event emitted when the text inside this editor lost focus (i.e. cursor stops blinking).
 	 * @event
 	 */
-	readonly onDidBlurEditorText: Event<void>;
+	readonly onDidBlurEditorText: Event<codemavi>;
 	/**
 	 * An event emitted when the text inside this editor or an editor widget gained focus.
 	 * @event
 	 */
-	readonly onDidFocusEditorWidget: Event<void>;
+	readonly onDidFocusEditorWidget: Event<codemavi>;
 	/**
 	 * An event emitted when the text inside this editor or an editor widget lost focus.
 	 * @event
 	 */
-	readonly onDidBlurEditorWidget: Event<void>;
+	readonly onDidBlurEditorWidget: Event<codemavi>;
 	/**
 	 * An event emitted before interpreting typed characters (on the keyboard).
 	 * @event
@@ -701,16 +701,16 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * An event emitted after composition has started.
 	 */
-	readonly onDidCompositionStart: Event<void>;
+	readonly onDidCompositionStart: Event<codemavi>;
 	/**
 	 * An event emitted after composition has ended.
 	 */
-	readonly onDidCompositionEnd: Event<void>;
+	readonly onDidCompositionEnd: Event<codemavi>;
 	/**
 	 * An event emitted when editing failed because the editor is read-only.
 	 * @event
 	 */
-	readonly onDidAttemptReadOnlyEdit: Event<void>;
+	readonly onDidAttemptReadOnlyEdit: Event<codemavi>;
 	/**
 	 * An event emitted when users paste text in the editor.
 	 * @event
@@ -743,7 +743,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * @internal
 	 * @event
 	 */
-	readonly onMouseDropCanceled: Event<void>;
+	readonly onMouseDropCanceled: Event<codemavi>;
 	/**
 	 * An event emitted when content is dropped into the editor.
 	 * @internal
@@ -801,7 +801,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * An event emitted when hidden areas change in the editor (e.g. due to folding).
 	 * @event
 	 */
-	readonly onDidChangeHiddenAreas: Event<void>;
+	readonly onDidChangeHiddenAreas: Event<codemavi>;
 
 	/**
 	 * An event emitted before an editor
@@ -816,12 +816,12 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * Whenever the editor fires `onBeginUpdate`, it will also fire `onEndUpdate` once the operation finishes.
 	 * Note that not all operations are bracketed by `onBeginUpdate` and `onEndUpdate`.
 	*/
-	readonly onBeginUpdate: Event<void>;
+	readonly onBeginUpdate: Event<codemavi>;
 
 	/**
 	 * Fires after the editor completes the operation it fired `onBeginUpdate` for.
 	*/
-	readonly onEndUpdate: Event<void>;
+	readonly onEndUpdate: Event<codemavi>;
 
 	/**
 	 * Saves current view state of the editor in a serializable object.
@@ -831,7 +831,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Restores the view state of the editor from a serializable object generated by `saveViewState`.
 	 */
-	restoreViewState(state: editorCommon.ICodeEditorViewState | null): void;
+	restoreViewState(state: editorCommon.ICodeEditorViewState | null): codemavi;
 
 	/**
 	 * Returns true if the text inside this editor or an editor widget has focus.
@@ -864,7 +864,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * will not be destroyed.
 	 * It is safe to call setModel(null) to simply detach the current model from the editor.
 	 */
-	setModel(model: ITextModel | null): void;
+	setModel(model: ITextModel | null): codemavi;
 
 	/**
 	 * Gets all the editor computed options.
@@ -901,7 +901,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * Set the value of the current model attached to this editor.
 	 * @see {@link ITextModel.setValue}
 	 */
-	setValue(newValue: string): void;
+	setValue(newValue: string): codemavi;
 
 	/**
 	 * Get the width of the editor's content.
@@ -934,15 +934,15 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Change the scrollLeft of the editor's viewport.
 	 */
-	setScrollLeft(newScrollLeft: number, scrollType?: editorCommon.ScrollType): void;
+	setScrollLeft(newScrollLeft: number, scrollType?: editorCommon.ScrollType): codemavi;
 	/**
 	 * Change the scrollTop of the editor's viewport.
 	 */
-	setScrollTop(newScrollTop: number, scrollType?: editorCommon.ScrollType): void;
+	setScrollTop(newScrollTop: number, scrollType?: editorCommon.ScrollType): codemavi;
 	/**
 	 * Change the scroll position of the editor's viewport.
 	 */
-	setScrollPosition(position: editorCommon.INewScrollPosition, scrollType?: editorCommon.ScrollType): void;
+	setScrollPosition(position: editorCommon.INewScrollPosition, scrollType?: editorCommon.ScrollType): codemavi;
 	/**
 	 * Check if the editor is currently scrolling towards a different scroll position.
 	 */
@@ -961,7 +961,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * @param source The source of the call.
 	 * @param command The command to execute
 	 */
-	executeCommand(source: string | null | undefined, command: editorCommon.ICommand): void;
+	executeCommand(source: string | null | undefined, command: editorCommon.ICommand): codemavi;
 
 	/**
 	 * Create an "undo stop" in the undo-redo stack.
@@ -987,7 +987,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * @param source The source of the call.
 	 * @param command The commands to execute
 	 */
-	executeCommands(source: string | null | undefined, commands: (editorCommon.ICommand | null)[]): void;
+	executeCommands(source: string | null | undefined, commands: (editorCommon.ICommand | null)[]): codemavi;
 
 	/**
 	 * @internal
@@ -1014,22 +1014,22 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Remove previously added decorations.
 	 */
-	removeDecorations(decorationIds: string[]): void;
+	removeDecorations(decorationIds: string[]): codemavi;
 
 	/**
 	 * @internal
 	 */
-	setDecorationsByType(description: string, decorationTypeKey: string, ranges: editorCommon.IDecorationOptions[]): void;
+	setDecorationsByType(description: string, decorationTypeKey: string, ranges: editorCommon.IDecorationOptions[]): codemavi;
 
 	/**
 	 * @internal
 	 */
-	setDecorationsByTypeFast(decorationTypeKey: string, ranges: IRange[]): void;
+	setDecorationsByTypeFast(decorationTypeKey: string, ranges: IRange[]): codemavi;
 
 	/**
 	 * @internal
 	 */
-	removeDecorationsByType(decorationTypeKey: string): void;
+	removeDecorationsByType(decorationTypeKey: string): codemavi;
 
 	/**
 	 * Get the layout info for the editor.
@@ -1073,18 +1073,18 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 * Hidden areas are stored per source.
 	 * @internal
 	 */
-	setHiddenAreas(ranges: IRange[], source?: unknown): void;
+	setHiddenAreas(ranges: IRange[], source?: unknown): codemavi;
 
 	/**
 	 * Sets the editor aria options, primarily the active descendent.
 	 * @internal
 	 */
-	setAriaOptions(options: IEditorAriaOptions): void;
+	setAriaOptions(options: IEditorAriaOptions): codemavi;
 
 	/**
 	 * Write the screen reader content to be the current selection
 	 */
-	writeScreenReaderContent(reason: string): void;
+	writeScreenReaderContent(reason: string): codemavi;
 
 	/**
 	 * @internal
@@ -1104,49 +1104,49 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Add a content widget. Widgets must have unique ids, otherwise they will be overwritten.
 	 */
-	addContentWidget(widget: IContentWidget): void;
+	addContentWidget(widget: IContentWidget): codemavi;
 	/**
 	 * Layout/Reposition a content widget. This is a ping to the editor to call widget.getPosition()
 	 * and update appropriately.
 	 */
-	layoutContentWidget(widget: IContentWidget): void;
+	layoutContentWidget(widget: IContentWidget): codemavi;
 	/**
 	 * Remove a content widget.
 	 */
-	removeContentWidget(widget: IContentWidget): void;
+	removeContentWidget(widget: IContentWidget): codemavi;
 
 	/**
 	 * Add an overlay widget. Widgets must have unique ids, otherwise they will be overwritten.
 	 */
-	addOverlayWidget(widget: IOverlayWidget): void;
+	addOverlayWidget(widget: IOverlayWidget): codemavi;
 	/**
 	 * Layout/Reposition an overlay widget. This is a ping to the editor to call widget.getPosition()
 	 * and update appropriately.
 	 */
-	layoutOverlayWidget(widget: IOverlayWidget): void;
+	layoutOverlayWidget(widget: IOverlayWidget): codemavi;
 	/**
 	 * Remove an overlay widget.
 	 */
-	removeOverlayWidget(widget: IOverlayWidget): void;
+	removeOverlayWidget(widget: IOverlayWidget): codemavi;
 
 	/**
 	 * Add a glyph margin widget. Widgets must have unique ids, otherwise they will be overwritten.
 	 */
-	addGlyphMarginWidget(widget: IGlyphMarginWidget): void;
+	addGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
 	/**
 	 * Layout/Reposition a glyph margin widget. This is a ping to the editor to call widget.getPosition()
 	 * and update appropriately.
 	 */
-	layoutGlyphMarginWidget(widget: IGlyphMarginWidget): void;
+	layoutGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
 	/**
 	 * Remove a glyph margin widget.
 	 */
-	removeGlyphMarginWidget(widget: IGlyphMarginWidget): void;
+	removeGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
 
 	/**
 	 * Change the view zones. View zones are lost when a new model is attached to the editor.
 	 */
-	changeViewZones(callback: (accessor: IViewZoneChangeAccessor) => void): void;
+	changeViewZones(callback: (accessor: IViewZoneChangeAccessor) => codemavi): codemavi;
 
 	/**
 	 * Get the horizontal position (left offset) for the column w.r.t to the beginning of the line.
@@ -1158,7 +1158,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Force an editor render now.
 	 */
-	render(forceRedraw?: boolean): void;
+	render(forceRedraw?: boolean): codemavi;
 
 	/**
 	 * Get the hit test target at coordinates `clientX` and `clientY`.
@@ -1180,7 +1180,7 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	/**
 	 * Apply the same font settings as the editor to `target`.
 	 */
-	applyFontInfo(target: HTMLElement): void;
+	applyFontInfo(target: HTMLElement): codemavi;
 
 	/**
 	 * Check if the current instance has a model attached.
@@ -1188,13 +1188,13 @@ export interface ICodeEditor extends editorCommon.IEditor {
 	 */
 	hasModel(): this is IActiveCodeEditor;
 
-	setBanner(bannerDomNode: HTMLElement | null, height: number): void;
+	setBanner(bannerDomNode: HTMLElement | null, height: number): codemavi;
 
 	/**
 	 * Is called when the model has been set, view state was restored and options are updated.
 	 * This is the best place to compute data for the viewport (such as tokens).
 	 */
-	handleInitialized?(): void;
+	handleInitialized?(): codemavi;
 }
 
 /**
@@ -1290,13 +1290,13 @@ export interface IDiffEditor extends editorCommon.IEditor {
 	 * An event emitted when the diff information computed by this diff editor has been updated.
 	 * @event
 	 */
-	readonly onDidUpdateDiff: Event<void>;
+	readonly onDidUpdateDiff: Event<codemavi>;
 
 	/**
 	 * An event emitted when the diff model is changed (i.e. the diff editor shows new content).
 	 * @event
 	 */
-	readonly onDidChangeModel: Event<void>;
+	readonly onDidChangeModel: Event<codemavi>;
 
 	/**
 	 * Saves current view state of the editor in a serializable object.
@@ -1306,7 +1306,7 @@ export interface IDiffEditor extends editorCommon.IEditor {
 	/**
 	 * Restores the view state of the editor from a serializable object generated by `saveViewState`.
 	 */
-	restoreViewState(state: editorCommon.IDiffEditorViewState | null): void;
+	restoreViewState(state: editorCommon.IDiffEditorViewState | null): codemavi;
 
 	/**
 	 * Type the getModel() of IEditor.
@@ -1323,7 +1323,7 @@ export interface IDiffEditor extends editorCommon.IEditor {
 	 * will not be destroyed.
 	 * It is safe to call setModel(null) to simply detach the current model from the editor.
 	 */
-	setModel(model: editorCommon.IDiffEditorModel | editorCommon.IDiffEditorViewModel | null): void;
+	setModel(model: editorCommon.IDiffEditorModel | editorCommon.IDiffEditorViewModel | null): codemavi;
 
 	/**
 	 * Get the `original` editor.
@@ -1349,17 +1349,17 @@ export interface IDiffEditor extends editorCommon.IEditor {
 	/**
 	 * Update the editor's options after the editor has been created.
 	 */
-	updateOptions(newOptions: IDiffEditorOptions): void;
+	updateOptions(newOptions: IDiffEditorOptions): codemavi;
 
 	/**
 	 * @internal
 	 */
-	setBoundarySashes(sashes: IBoundarySashes): void;
+	setBoundarySashes(sashes: IBoundarySashes): codemavi;
 
 	/**
 	 * Jumps to the next or previous diff.
 	 */
-	goToDiff(target: 'next' | 'previous'): void;
+	goToDiff(target: 'next' | 'previous'): codemavi;
 
 	/**
 	 * Scrolls to the first diff.
@@ -1367,11 +1367,11 @@ export interface IDiffEditor extends editorCommon.IEditor {
 	 */
 	revealFirstDiff(): unknown;
 
-	accessibleDiffViewerNext(): void;
+	accessibleDiffViewerNext(): codemavi;
 
-	accessibleDiffViewerPrev(): void;
+	accessibleDiffViewerPrev(): codemavi;
 
-	handleInitialized(): void;
+	handleInitialized(): codemavi;
 }
 
 /**

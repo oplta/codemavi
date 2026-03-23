@@ -102,7 +102,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		this.registerActions();
 	}
 
-	private registerActions(): void {
+	private registerActions(): codemavi {
 		this.registerSwitchOutputAction();
 		this.registerAddCompoundLogAction();
 		this.registerRemoveLogAction();
@@ -121,7 +121,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		this.registerImportLogAction();
 	}
 
-	private registerSwitchOutputAction(): void {
+	private registerSwitchOutputAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -129,7 +129,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					title: nls.localize('switchBetweenOutputs.label', "Switch Output"),
 				});
 			}
-			async run(accessor: ServicesAccessor, channelId: string): Promise<void> {
+			async run(accessor: ServicesAccessor, channelId: string): Promise<codemavi> {
 				if (channelId) {
 					accessor.get(IOutputService).showChannel(channelId, true);
 				}
@@ -162,7 +162,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 							}
 						});
 					}
-					async run(accessor: ServicesAccessor): Promise<void> {
+					async run(accessor: ServicesAccessor): Promise<codemavi> {
 						return accessor.get(IOutputService).showChannel(channel.id, true);
 					}
 				}));
@@ -182,7 +182,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerAddCompoundLogAction(): void {
+	private registerAddCompoundLogAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -197,7 +197,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					}],
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 
@@ -229,7 +229,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerRemoveLogAction(): void {
+	private registerRemoveLogAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -239,7 +239,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					f1: true
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 				const notificationService = accessor.get(INotificationService);
@@ -260,7 +260,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerShowOutputChannelsAction(): void {
+	private registerShowOutputChannelsAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -270,7 +270,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					f1: true
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 				const extensionChannels = [], coreChannels = [];
@@ -299,7 +299,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerClearOutputAction(): void {
+	private registerClearOutputAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -320,7 +320,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					icon: Codicon.clearAll
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const accessibilitySignalService = accessor.get(IAccessibilitySignalService);
 				const activeChannel = outputService.getActiveChannel();
@@ -332,7 +332,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerToggleAutoScrollAction(): void {
+	private registerToggleAutoScrollAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -353,14 +353,14 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					}
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputView = accessor.get(IViewsService).getActiveViewWithId<OutputViewPane>(OUTPUT_VIEW_ID)!;
 				outputView.scrollLock = !outputView.scrollLock;
 			}
 		}));
 	}
 
-	private registerOpenActiveOutputFileAction(): void {
+	private registerOpenActiveOutputFileAction(): codemavi {
 		const that = this;
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
@@ -377,13 +377,13 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					icon: Codicon.goToFile,
 				});
 			}
-			async run(): Promise<void> {
+			async run(): Promise<codemavi> {
 				that.openActiveOutput();
 			}
 		}));
 	}
 
-	private registerOpenActiveOutputFileInAuxWindowAction(): void {
+	private registerOpenActiveOutputFileInAuxWindowAction(): codemavi {
 		const that = this;
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
@@ -400,13 +400,13 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					icon: Codicon.emptyWindow,
 				});
 			}
-			async run(): Promise<void> {
+			async run(): Promise<codemavi> {
 				that.openActiveOutput(AUX_WINDOW_GROUP);
 			}
 		}));
 	}
 
-	private registerSaveActiveOutputAsAction(): void {
+	private registerSaveActiveOutputAsAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -420,7 +420,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					}],
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const channel = outputService.getActiveChannel();
 				if (channel) {
@@ -433,7 +433,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private async openActiveOutput(group?: AUX_WINDOW_GROUP_TYPE): Promise<void> {
+	private async openActiveOutput(group?: AUX_WINDOW_GROUP_TYPE): Promise<codemavi> {
 		const channel = this.outputService.getActiveChannel();
 		if (channel) {
 			await this.editorService.openEditor({
@@ -445,7 +445,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}
 	}
 
-	private registerConfigureActiveOutputLogLevelAction(): void {
+	private registerConfigureActiveOutputLogLevelAction(): codemavi {
 		const logLevelMenu = new MenuId('workbench.output.menu.logLevel');
 		this._register(MenuRegistry.appendMenuItem(MenuId.ViewTitle, {
 			submenu: logLevelMenu,
@@ -471,7 +471,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 						}
 					});
 				}
-				async run(accessor: ServicesAccessor): Promise<void> {
+				async run(accessor: ServicesAccessor): Promise<codemavi> {
 					const outputService = accessor.get(IOutputService);
 					const channel = outputService.getActiveChannel();
 					if (channel) {
@@ -504,7 +504,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					precondition: CONTEXT_ACTIVE_OUTPUT_LEVEL_IS_DEFAULT.negate()
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const loggerService = accessor.get(ILoggerService);
 				const defaultLogLevelsService = accessor.get(IDefaultLogLevelsService);
@@ -520,7 +520,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerShowLogsAction(): void {
+	private registerShowLogsAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -532,7 +532,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 				const extensionLogs = [], logs = [];
@@ -563,7 +563,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerOpenLogFileAction(): void {
+	private registerOpenLogFileAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -585,7 +585,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, args?: unknown): Promise<void> {
+			async run(accessor: ServicesAccessor, args?: unknown): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 				const editorService = accessor.get(IEditorService);
@@ -629,7 +629,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerLogLevelFilterActions(): void {
+	private registerLogLevelFilterActions(): codemavi {
 		let order = 0;
 		const registerLogLevel = (logLevel: LogLevel, toggled: ContextKeyExpression) => {
 			this._register(registerAction2(class extends ViewAction<OutputViewPane> {
@@ -650,10 +650,10 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 						viewId: OUTPUT_VIEW_ID
 					});
 				}
-				async runInView(serviceAccessor: ServicesAccessor, view: OutputViewPane): Promise<void> {
+				async runInView(serviceAccessor: ServicesAccessor, view: OutputViewPane): Promise<codemavi> {
 					this.toggleLogLevelFilter(serviceAccessor.get(IOutputService), logLevel);
 				}
-				private toggleLogLevelFilter(outputService: IOutputService, logLevel: LogLevel): void {
+				private toggleLogLevelFilter(outputService: IOutputService, logLevel: LogLevel): codemavi {
 					switch (logLevel) {
 						case LogLevel.Trace:
 							outputService.filters.trace = !outputService.filters.trace;
@@ -682,7 +682,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		registerLogLevel(LogLevel.Error, SHOW_ERROR_FILTER_CONTEXT);
 	}
 
-	private registerClearFilterActions(): void {
+	private registerClearFilterActions(): codemavi {
 		this._register(registerAction2(class extends ViewAction<OutputViewPane> {
 			constructor() {
 				super({
@@ -696,13 +696,13 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					viewId: OUTPUT_VIEW_ID
 				});
 			}
-			async runInView(serviceAccessor: ServicesAccessor, outputView: OutputViewPane): Promise<void> {
+			async runInView(serviceAccessor: ServicesAccessor, outputView: OutputViewPane): Promise<codemavi> {
 				outputView.clearFilterText();
 			}
 		}));
 	}
 
-	private registerExportLogsAction(): void {
+	private registerExportLogsAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -718,7 +718,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					}],
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const quickInputService = accessor.get(IQuickInputService);
 				const extensionLogs: IOutputChannelDescriptor[] = [], logs: IOutputChannelDescriptor[] = [], userLogs: IOutputChannelDescriptor[] = [];
@@ -757,7 +757,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 		}));
 	}
 
-	private registerImportLogAction(): void {
+	private registerImportLogAction(): codemavi {
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
 				super({
@@ -773,7 +773,7 @@ class OutputContribution extends Disposable implements IWorkbenchContribution {
 					}],
 				});
 			}
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const outputService = accessor.get(IOutputService);
 				const fileDialogService = accessor.get(IFileDialogService);
 				const result = await fileDialogService.showOpenDialog({

@@ -50,7 +50,7 @@ export abstract class RequireInterceptor {
 		this._alternatives = [];
 	}
 
-	async install(): Promise<void> {
+	async install(): Promise<codemavi> {
 
 		this._installInterceptor();
 
@@ -66,9 +66,9 @@ export abstract class RequireInterceptor {
 		}
 	}
 
-	protected abstract _installInterceptor(): void;
+	protected abstract _installInterceptor(): codemavi;
 
-	public register(interceptor: INodeModuleFactory | IAlternativeModuleProvider): void {
+	public register(interceptor: INodeModuleFactory | IAlternativeModuleProvider): codemavi {
 		if ('nodeModuleName' in interceptor) {
 			if (Array.isArray(interceptor.nodeModuleName)) {
 				for (const moduleName of interceptor.nodeModuleName) {
@@ -197,7 +197,7 @@ interface IOriginalOpen {
 }
 
 interface IOpenModule {
-	(target: string, options?: OpenOptions): Thenable<void>;
+	(target: string, options?: OpenOptions): Thenable<codemavi>;
 }
 
 class OpenNodeModuleFactory implements INodeModuleFactory {
@@ -250,7 +250,7 @@ class OpenNodeModuleFactory implements INodeModuleFactory {
 		return this._original!(target, options);
 	}
 
-	private sendShimmingTelemetry(): void {
+	private sendShimmingTelemetry(): codemavi {
 		if (!this._extensionId) {
 			return;
 		}
@@ -262,7 +262,7 @@ class OpenNodeModuleFactory implements INodeModuleFactory {
 		this._mainThreadTelemetry.$publicLog2<{ extension: string }, ShimmingOpenClassification>('shimming.open', { extension: this._extensionId });
 	}
 
-	private sendNoForwardTelemetry(): void {
+	private sendNoForwardTelemetry(): codemavi {
 		if (!this._extensionId) {
 			return;
 		}

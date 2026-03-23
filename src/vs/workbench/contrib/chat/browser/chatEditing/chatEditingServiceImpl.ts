@@ -130,7 +130,7 @@ export class ChatEditingService extends Disposable implements IChatEditingServic
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		dispose(this._sessionsObs.get());
 		super.dispose();
 	}
@@ -220,7 +220,7 @@ export class ChatEditingService extends Disposable implements IChatEditingServic
 		// multiple times during the process of response streaming.
 		const editsSeen: ({ seen: number; streaming: IStreamingEdits } | undefined)[] = [];
 
-		const editedFilesExist = new ResourceMap<Promise<void>>();
+		const editedFilesExist = new ResourceMap<Promise<codemavi>>();
 		const ensureEditorOpen = (partUri: URI) => {
 			const uri = CellUri.parse(partUri)?.notebook ?? partUri;
 			if (editedFilesExist.has(uri)) {

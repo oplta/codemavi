@@ -60,7 +60,7 @@ export abstract class InsertCellCommand extends NotebookAction {
 		super(desc);
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const newCell = await insertNewCell(accessor, context, this.kind, this.direction, this.focusEditor);
 
 		if (newCell) {
@@ -187,14 +187,14 @@ registerAction2(class InsertCodeCellAtTopAction extends NotebookAction {
 			});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: INotebookActionContext): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: INotebookActionContext): Promise<codemavi> {
 		context = context ?? this.getEditorContextFromArgsOrActive(accessor);
 		if (context) {
 			this.runWithContext(accessor, context);
 		}
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const languageService = accessor.get(ILanguageService);
 		const kernelHistoryService = accessor.get(INotebookKernelHistoryService);
 		const newCell = insertCell(languageService, context.notebookEditor, 0, CellKind.Code, 'above', undefined, true, kernelHistoryService);
@@ -215,14 +215,14 @@ registerAction2(class InsertMarkdownCellAtTopAction extends NotebookAction {
 			});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: INotebookActionContext): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: INotebookActionContext): Promise<codemavi> {
 		context = context ?? this.getEditorContextFromArgsOrActive(accessor);
 		if (context) {
 			this.runWithContext(accessor, context);
 		}
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		const languageService = accessor.get(ILanguageService);
 		const kernelHistoryService = accessor.get(INotebookKernelHistoryService);
 

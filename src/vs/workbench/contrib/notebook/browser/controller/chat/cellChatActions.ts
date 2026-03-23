@@ -530,7 +530,7 @@ registerAction2(class extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		NotebookChatController.get(context.notebookEditor)?.focus();
 	}
 });
@@ -554,7 +554,7 @@ registerAction2(class extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		NotebookChatController.get(context.notebookEditor)?.focusNext();
 	}
 });
@@ -578,7 +578,7 @@ registerAction2(class extends NotebookAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookActionContext): Promise<codemavi> {
 		NotebookChatController.get(context.notebookEditor)?.focusAbove();
 	}
 });

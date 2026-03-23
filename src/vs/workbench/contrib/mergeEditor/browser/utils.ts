@@ -19,7 +19,7 @@ export function setStyle(
 		left?: number | string;
 		top?: number | string;
 	}
-): void {
+): codemavi {
 	Object.entries(style).forEach(([key, value]) => {
 		element.style.setProperty(key, toSize(value));
 	});
@@ -130,7 +130,7 @@ export class PersistentStore<T> {
 		return this.value;
 	}
 
-	public set(newValue: T | undefined): void {
+	public set(newValue: T | undefined): codemavi {
 		this.value = newValue;
 
 		this.storageService.store(

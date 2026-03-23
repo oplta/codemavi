@@ -215,23 +215,23 @@ export class ExtensionManagementChannelClient extends CommontExtensionManagement
 		this._register(this.channel.listen<DidUpdateExtensionMetadata>('onDidUpdateExtensionMetadata')(e => this.onDidUpdateExtensionMetadataEvent({ profileLocation: URI.revive(e.profileLocation), local: transformIncomingExtension(e.local, null) })));
 	}
 
-	protected onInstallExtensionEvent(event: InstallExtensionEvent): void {
+	protected onInstallExtensionEvent(event: InstallExtensionEvent): codemavi {
 		this._onInstallExtension.fire(event);
 	}
 
-	protected onDidInstallExtensionsEvent(results: readonly InstallExtensionResult[]): void {
+	protected onDidInstallExtensionsEvent(results: readonly InstallExtensionResult[]): codemavi {
 		this._onDidInstallExtensions.fire(results);
 	}
 
-	protected onUninstallExtensionEvent(event: UninstallExtensionEvent): void {
+	protected onUninstallExtensionEvent(event: UninstallExtensionEvent): codemavi {
 		this._onUninstallExtension.fire(event);
 	}
 
-	protected onDidUninstallExtensionEvent(event: DidUninstallExtensionEvent): void {
+	protected onDidUninstallExtensionEvent(event: DidUninstallExtensionEvent): codemavi {
 		this._onDidUninstallExtension.fire(event);
 	}
 
-	protected onDidUpdateExtensionMetadataEvent(event: DidUpdateExtensionMetadata): void {
+	protected onDidUpdateExtensionMetadataEvent(event: DidUpdateExtensionMetadata): codemavi {
 		this._onDidUpdateExtensionMetadata.fire(event);
 	}
 
@@ -281,18 +281,18 @@ export class ExtensionManagementChannelClient extends CommontExtensionManagement
 		return results.map(e => ({ ...e, local: e.local ? transformIncomingExtension(e.local, null) : e.local, source: this.isUriComponents(e.source) ? URI.revive(e.source) : e.source, profileLocation: URI.revive(e.profileLocation) }));
 	}
 
-	uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<void> {
+	uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<codemavi> {
 		if (extension.isWorkspaceScoped) {
 			throw new Error('Cannot uninstall a workspace extension');
 		}
-		return Promise.resolve(this.channel.call<void>('uninstall', [extension, options]));
+		return Promise.resolve(this.channel.call<codemavi>('uninstall', [extension, options]));
 	}
 
-	uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void> {
+	uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi> {
 		if (extensions.some(e => e.extension.isWorkspaceScoped)) {
 			throw new Error('Cannot uninstall a workspace extension');
 		}
-		return Promise.resolve(this.channel.call<void>('uninstallExtensions', [extensions]));
+		return Promise.resolve(this.channel.call<codemavi>('uninstallExtensions', [extensions]));
 
 	}
 
@@ -306,8 +306,8 @@ export class ExtensionManagementChannelClient extends CommontExtensionManagement
 			.then(extension => transformIncomingExtension(extension, null));
 	}
 
-	resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<void> {
-		return this.channel.call<void>('resetPinnedStateForAllUserExtensions', [pinned]);
+	resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<codemavi> {
+		return this.channel.call<codemavi>('resetPinnedStateForAllUserExtensions', [pinned]);
 	}
 
 	toggleAppliationScope(local: ILocalExtension, fromProfileLocation: URI): Promise<ILocalExtension> {
@@ -315,8 +315,8 @@ export class ExtensionManagementChannelClient extends CommontExtensionManagement
 			.then(extension => transformIncomingExtension(extension, null));
 	}
 
-	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<void> {
-		return this.channel.call<void>('copyExtensions', [fromProfileLocation, toProfileLocation]);
+	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<codemavi> {
+		return this.channel.call<codemavi>('copyExtensions', [fromProfileLocation, toProfileLocation]);
 	}
 
 	getExtensionsControlManifest(): Promise<IExtensionsControlManifest> {
@@ -328,7 +328,7 @@ export class ExtensionManagementChannelClient extends CommontExtensionManagement
 		return URI.revive(result);
 	}
 
-	async cleanUp(): Promise<void> {
+	async cleanUp(): Promise<codemavi> {
 		return this.channel.call('cleanUp');
 	}
 

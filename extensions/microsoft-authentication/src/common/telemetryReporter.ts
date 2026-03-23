@@ -23,11 +23,11 @@ export class MicrosoftAuthenticationTelemetryReporter implements IExperimentatio
 		return this._telemetryReporter;
 	}
 
-	setSharedProperty(name: string, value: string): void {
+	setSharedProperty(name: string, value: string): codemavi {
 		this.sharedProperties[name] = value;
 	}
 
-	postEvent(eventName: string, props: Map<string, string>): void {
+	postEvent(eventName: string, props: Map<string, string>): codemavi {
 		const eventProperties: TelemetryEventProperties = { ...this.sharedProperties, ...Object.fromEntries(props) };
 		this._telemetryReporter.sendTelemetryEvent(
 			eventName,
@@ -35,7 +35,7 @@ export class MicrosoftAuthenticationTelemetryReporter implements IExperimentatio
 		);
 	}
 
-	sendLoginEvent(scopes: readonly string[]): void {
+	sendLoginEvent(scopes: readonly string[]): codemavi {
 		/* __GDPR__
 			"login" : {
 				"owner": "TylerLeonhardt",
@@ -48,19 +48,19 @@ export class MicrosoftAuthenticationTelemetryReporter implements IExperimentatio
 			scopes: JSON.stringify(this._scrubGuids(scopes)),
 		});
 	}
-	sendLoginFailedEvent(): void {
+	sendLoginFailedEvent(): codemavi {
 		/* __GDPR__
 			"loginFailed" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often users run into issues with the login flow." }
 		*/
 		this._telemetryReporter.sendTelemetryEvent('loginFailed');
 	}
-	sendLogoutEvent(): void {
+	sendLogoutEvent(): codemavi {
 		/* __GDPR__
 			"logout" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often users log out." }
 		*/
 		this._telemetryReporter.sendTelemetryEvent('logout');
 	}
-	sendLogoutFailedEvent(): void {
+	sendLogoutFailedEvent(): codemavi {
 		/* __GDPR__
 			"logoutFailed" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often fail to log out." }
 		*/
@@ -72,7 +72,7 @@ export class MicrosoftAuthenticationTelemetryReporter implements IExperimentatio
 	 * @param accountType The account type for the session
 	 * @todo Remove the scopes since we really don't care about them.
 	 */
-	sendAccountEvent(scopes: string[], accountType: MicrosoftAccountType): void {
+	sendAccountEvent(scopes: string[], accountType: MicrosoftAccountType): codemavi {
 		/* __GDPR__
 			"login" : {
 				"owner": "TylerLeonhardt",
@@ -94,7 +94,7 @@ export class MicrosoftAuthenticationTelemetryReporter implements IExperimentatio
 }
 
 export class MicrosoftSovereignCloudAuthenticationTelemetryReporter extends MicrosoftAuthenticationTelemetryReporter {
-	override sendLoginEvent(scopes: string[]): void {
+	override sendLoginEvent(scopes: string[]): codemavi {
 		/* __GDPR__
 			"loginMicrosoftSovereignCloud" : {
 				"owner": "TylerLeonhardt",
@@ -107,19 +107,19 @@ export class MicrosoftSovereignCloudAuthenticationTelemetryReporter extends Micr
 			scopes: JSON.stringify(this._scrubGuids(scopes)),
 		});
 	}
-	override sendLoginFailedEvent(): void {
+	override sendLoginFailedEvent(): codemavi {
 		/* __GDPR__
 			"loginMicrosoftSovereignCloudFailed" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often users run into issues with the login flow." }
 		*/
 		this._telemetryReporter.sendTelemetryEvent('loginMicrosoftSovereignCloudFailed');
 	}
-	override sendLogoutEvent(): void {
+	override sendLogoutEvent(): codemavi {
 		/* __GDPR__
 			"logoutMicrosoftSovereignCloud" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often users log out." }
 		*/
 		this._telemetryReporter.sendTelemetryEvent('logoutMicrosoftSovereignCloud');
 	}
-	override sendLogoutFailedEvent(): void {
+	override sendLogoutFailedEvent(): codemavi {
 		/* __GDPR__
 			"logoutMicrosoftSovereignCloudFailed" : { "owner": "TylerLeonhardt", "comment": "Used to determine how often fail to log out." }
 		*/

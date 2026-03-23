@@ -70,11 +70,11 @@ export interface WorkingSetDisplayMetadata {
 }
 
 export interface IStreamingEdits {
-	pushText(edits: TextEdit[]): void;
-	pushNotebookCellText(cell: URI, edits: TextEdit[]): void;
-	pushNotebook(edits: ICellEditOperation[]): void;
+	pushText(edits: TextEdit[]): codemavi;
+	pushNotebookCellText(cell: URI, edits: TextEdit[]): codemavi;
+	pushNotebook(edits: ICellEditOperation[]): codemavi;
 	/** Marks edits as done, idempotent */
-	complete(): void;
+	complete(): codemavi;
 }
 
 export const chatEditingSnapshotScheme = 'chat-editing-snapshot-text-model';
@@ -83,17 +83,17 @@ export interface IChatEditingSession extends IDisposable {
 	readonly isGlobalEditingSession: boolean;
 	readonly chatSessionId: string;
 	readonly onDidChange: Event<ChatEditingSessionChangeType>;
-	readonly onDidDispose: Event<void>;
+	readonly onDidDispose: Event<codemavi>;
 	readonly state: IObservable<ChatEditingSessionState>;
 	readonly entries: IObservable<readonly IModifiedFileEntry[]>;
-	show(): Promise<void>;
-	remove(reason: WorkingSetEntryRemovalReason, ...uris: URI[]): void;
-	accept(...uris: URI[]): Promise<void>;
-	reject(...uris: URI[]): Promise<void>;
+	show(): Promise<codemavi>;
+	remove(reason: WorkingSetEntryRemovalReason, ...uris: URI[]): codemavi;
+	accept(...uris: URI[]): Promise<codemavi>;
+	reject(...uris: URI[]): Promise<codemavi>;
 	getEntry(uri: URI): IModifiedFileEntry | undefined;
 	readEntry(uri: URI, reader?: IReader): IModifiedFileEntry | undefined;
 
-	restoreSnapshot(requestId: string, stopId: string | undefined): Promise<void>;
+	restoreSnapshot(requestId: string, stopId: string | undefined): Promise<codemavi>;
 
 	/**
 	 * Gets the snapshot URI of a file at the request and _after_ changes made in the undo stop.
@@ -104,7 +104,7 @@ export interface IChatEditingSession extends IDisposable {
 	/**
 	 * Will lead to this object getting disposed
 	 */
-	stop(clearState?: boolean): Promise<void>;
+	stop(clearState?: boolean): Promise<codemavi>;
 
 	/**
 	 * Starts making edits to the resource.
@@ -123,8 +123,8 @@ export interface IChatEditingSession extends IDisposable {
 
 	readonly canUndo: IObservable<boolean>;
 	readonly canRedo: IObservable<boolean>;
-	undoInteraction(): Promise<void>;
-	redoInteraction(): Promise<void>;
+	undoInteraction(): Promise<codemavi>;
+	redoInteraction(): Promise<codemavi>;
 }
 
 export interface IEditSessionEntryDiff {
@@ -179,7 +179,7 @@ export interface IModifiedFileEntryEditorIntegration extends IDisposable {
 	/**
 	 * Reveal the first (`true`) or last (`false`) change
 	 */
-	reveal(firstOrLast: boolean): void;
+	reveal(firstOrLast: boolean): codemavi;
 
 	/**
 	 * Go to next change and increate `currentIndex`
@@ -196,23 +196,23 @@ export interface IModifiedFileEntryEditorIntegration extends IDisposable {
 	/**
 	 * Enable the accessible diff viewer for this editor
 	 */
-	enableAccessibleDiffView(): void;
+	enableAccessibleDiffView(): codemavi;
 
 	/**
 	 * Accept the change given or the nearest
 	 * @param change An opaque change object
 	 */
-	acceptNearestChange(change: IModifiedFileEntryChangeHunk): void;
+	acceptNearestChange(change: IModifiedFileEntryChangeHunk): codemavi;
 
 	/**
 	 * @see `acceptNearestChange`
 	 */
-	rejectNearestChange(change: IModifiedFileEntryChangeHunk): void;
+	rejectNearestChange(change: IModifiedFileEntryChangeHunk): codemavi;
 
 	/**
 	 * Toggle between diff-editor and normal editor
 	 */
-	toggleDiff(change: IModifiedFileEntryChangeHunk | undefined): Promise<void>;
+	toggleDiff(change: IModifiedFileEntryChangeHunk | undefined): Promise<codemavi>;
 }
 
 export interface IModifiedFileEntry {
@@ -226,12 +226,12 @@ export interface IModifiedFileEntry {
 	readonly isCurrentlyBeingModifiedBy: IObservable<IChatResponseModel | undefined>;
 	readonly rewriteRatio: IObservable<number>;
 
-	accept(transaction: ITransaction | undefined): Promise<void>;
-	reject(transaction: ITransaction | undefined): Promise<void>;
+	accept(transaction: ITransaction | undefined): Promise<codemavi>;
+	reject(transaction: ITransaction | undefined): Promise<codemavi>;
 
 	reviewMode: IObservable<boolean>;
-	autoAcceptController: IObservable<{ total: number; remaining: number; cancel(): void } | undefined>;
-	enableReviewModeUntilSettled(): void;
+	autoAcceptController: IObservable<{ total: number; remaining: number; cancel(): codemavi } | undefined>;
+	enableReviewModeUntilSettled(): codemavi;
 
 	/**
 	 * Number of changes for this file
@@ -242,8 +242,8 @@ export interface IModifiedFileEntry {
 }
 
 export interface IChatEditingSessionStream {
-	textEdits(resource: URI, textEdits: TextEdit[], isLastEdits: boolean, responseModel: IChatResponseModel): void;
-	notebookEdits(resource: URI, edits: ICellEditOperation[], isLastEdits: boolean, responseModel: IChatResponseModel): void;
+	textEdits(resource: URI, textEdits: TextEdit[], isLastEdits: boolean, responseModel: IChatResponseModel): codemavi;
+	notebookEdits(resource: URI, edits: ICellEditOperation[], isLastEdits: boolean, responseModel: IChatResponseModel): codemavi;
 }
 
 export const enum ChatEditingSessionState {

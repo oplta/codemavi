@@ -14,7 +14,7 @@ export class BrowserHostColorSchemeService extends Disposable implements IHostCo
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidSchemeChangeEvent = this._register(new Emitter<void>());
+	private readonly _onDidSchemeChangeEvent = this._register(new Emitter<codemavi>());
 
 	constructor(
 	) {
@@ -23,7 +23,7 @@ export class BrowserHostColorSchemeService extends Disposable implements IHostCo
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		addMatchMediaChangeListener(mainWindow, '(prefers-color-scheme: dark)', () => {
 			this._onDidSchemeChangeEvent.fire();
@@ -33,7 +33,7 @@ export class BrowserHostColorSchemeService extends Disposable implements IHostCo
 		});
 	}
 
-	get onDidChangeColorScheme(): Event<void> {
+	get onDidChangeColorScheme(): Event<codemavi> {
 		return this._onDidSchemeChangeEvent.event;
 	}
 

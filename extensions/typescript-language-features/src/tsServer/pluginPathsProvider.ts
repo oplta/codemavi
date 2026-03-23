@@ -14,7 +14,7 @@ export class TypeScriptPluginPathsProvider {
 		private configuration: TypeScriptServiceConfiguration
 	) { }
 
-	public updateConfiguration(configuration: TypeScriptServiceConfiguration): void {
+	public updateConfiguration(configuration: TypeScriptServiceConfiguration): codemavi {
 		this.configuration = configuration;
 	}
 

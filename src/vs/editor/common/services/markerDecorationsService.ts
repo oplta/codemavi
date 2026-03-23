@@ -81,7 +81,7 @@ export class MarkerDecorationsService extends Disposable implements IMarkerDecor
 		});
 	}
 
-	private _handleMarkerChange(changedResources: readonly URI[]): void {
+	private _handleMarkerChange(changedResources: readonly URI[]): codemavi {
 		changedResources.forEach((resource) => {
 			const markerDecorations = this._markerDecorations.get(resource);
 			if (markerDecorations) {
@@ -90,13 +90,13 @@ export class MarkerDecorationsService extends Disposable implements IMarkerDecor
 		});
 	}
 
-	private _onModelAdded(model: ITextModel): void {
+	private _onModelAdded(model: ITextModel): codemavi {
 		const markerDecorations = new MarkerDecorations(model);
 		this._markerDecorations.set(model.uri, markerDecorations);
 		this._updateDecorations(markerDecorations);
 	}
 
-	private _onModelRemoved(model: ITextModel): void {
+	private _onModelRemoved(model: ITextModel): codemavi {
 		const markerDecorations = this._markerDecorations.get(model.uri);
 		if (markerDecorations) {
 			markerDecorations.dispose();
@@ -111,7 +111,7 @@ export class MarkerDecorationsService extends Disposable implements IMarkerDecor
 		}
 	}
 
-	private _updateDecorations(markerDecorations: MarkerDecorations): void {
+	private _updateDecorations(markerDecorations: MarkerDecorations): codemavi {
 		// Limit to the first 500 errors/warnings
 		let markers = this._markerService.read({ resource: markerDecorations.model.uri, take: 500 });
 

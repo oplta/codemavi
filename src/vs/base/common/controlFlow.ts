@@ -18,7 +18,7 @@ export class ReentrancyBarrier {
 	 * Calls `runner` if the barrier is not occupied.
 	 * During the call, the barrier becomes occupied.
 	 */
-	public runExclusivelyOrSkip(runner: () => void): void {
+	public runExclusivelyOrSkip(runner: () => codemavi): codemavi {
 		if (this._isOccupied) {
 			return;
 		}
@@ -34,7 +34,7 @@ export class ReentrancyBarrier {
 	 * Calls `runner`. If the barrier is occupied, throws an error.
 	 * During the call, the barrier becomes active.
 	 */
-	public runExclusivelyOrThrow(runner: () => void): void {
+	public runExclusivelyOrThrow(runner: () => codemavi): codemavi {
 		if (this._isOccupied) {
 			throw new BugIndicatingError(`ReentrancyBarrier: reentrant call detected!`);
 		}

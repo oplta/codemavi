@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 import { IPCClient } from './ipc/ipcClient';
 
-function fatal(err: any): void {
+function fatal(err: any): codemavi {
 	console.error(err);
 	process.exit(1);
 }
 
-function main(argv: string[]): void {
+function main(argv: string[]): codemavi {
 	const ipcClient = new IPCClient('git-editor');
 	const commitMessagePath = argv[argv.length - 1];
 

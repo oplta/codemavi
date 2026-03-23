@@ -205,7 +205,7 @@ export class MainThreadFileSystemEventService implements MainThreadFileSystemEve
 		this._listener.add(workingCopyFileService.onDidRunWorkingCopyFileOperation(e => this._proxy.$onDidRunFileOperation(e.operation, e.files)));
 	}
 
-	async $watch(extensionId: string, session: number, resource: UriComponents, unvalidatedOpts: IWatchOptions, correlate: boolean): Promise<void> {
+	async $watch(extensionId: string, session: number, resource: UriComponents, unvalidatedOpts: IWatchOptions, correlate: boolean): Promise<codemavi> {
 		const uri = URI.revive(resource);
 
 		const opts: IWatchOptions = {
@@ -255,14 +255,14 @@ export class MainThreadFileSystemEventService implements MainThreadFileSystemEve
 		}
 	}
 
-	$unwatch(session: number): void {
+	$unwatch(session: number): codemavi {
 		if (this._watches.has(session)) {
 			this._logService.trace(`MainThreadFileSystemEventService#$unwatch(): request to stop watching (session: ${session})`);
 			this._watches.deleteAndDispose(session);
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._listener.dispose();
 		this._watches.dispose();
 	}

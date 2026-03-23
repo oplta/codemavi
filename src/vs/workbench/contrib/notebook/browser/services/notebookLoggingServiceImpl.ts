@@ -24,19 +24,19 @@ export class NotebookLoggingService extends Disposable implements INotebookLoggi
 		this._logger = this._register(loggerService.createLogger(logChannelId, { name: nls.localize('renderChannelName', "Notebook"), group: windowLogGroup }));
 	}
 
-	debug(category: string, output: string): void {
+	debug(category: string, output: string): codemavi {
 		this._logger.debug(`[${category}] ${output}`);
 	}
 
-	info(category: string, output: string): void {
+	info(category: string, output: string): codemavi {
 		this._logger.info(`[${category}] ${output}`);
 	}
 
-	warn(category: string, output: string): void {
+	warn(category: string, output: string): codemavi {
 		this._logger.warn(`[${category}] ${output}`);
 	}
 
-	error(category: string, output: string): void {
+	error(category: string, output: string): codemavi {
 		this._logger.error(`[${category}] ${output}`);
 	}
 }

@@ -67,7 +67,7 @@ export class GitEditSessionIdentityProvider implements vscode.EditSessionIdentit
 		}
 	}
 
-	private async _onWillCreateEditSessionIdentity(workspaceFolder: vscode.WorkspaceFolder): Promise<void> {
+	private async _onWillCreateEditSessionIdentity(workspaceFolder: vscode.WorkspaceFolder): Promise<codemavi> {
 		await this._doPublish(workspaceFolder);
 	}
 

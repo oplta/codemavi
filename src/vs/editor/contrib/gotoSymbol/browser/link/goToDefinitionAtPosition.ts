@@ -108,7 +108,7 @@ export class GotoDefinitionAtPositionEditorContribution implements IEditorContri
 		}));
 	}
 
-	private startFindDefinitionFromMouse(mouseEvent: ClickLinkMouseEvent, withKey?: ClickLinkKeyboardEvent): void {
+	private startFindDefinitionFromMouse(mouseEvent: ClickLinkMouseEvent, withKey?: ClickLinkKeyboardEvent): codemavi {
 
 		// check if we are active and on a content widget
 		if (mouseEvent.target.type === MouseTargetType.CONTENT_WIDGET && this.linkDecorations.length > 0) {
@@ -126,7 +126,7 @@ export class GotoDefinitionAtPositionEditorContribution implements IEditorContri
 		this.startFindDefinition(position);
 	}
 
-	private async startFindDefinition(position: Position): Promise<void> {
+	private async startFindDefinition(position: Position): Promise<codemavi> {
 
 		// Dispose listeners for updating decorations when using keyboard to show definition hover
 		this.toUnhookForKeyboard.clear();
@@ -263,7 +263,7 @@ export class GotoDefinitionAtPositionEditorContribution implements IEditorContri
 		return new Range(startLineNumber, 1, endLineNumber + 1, 1);
 	}
 
-	private addDecoration(range: Range, hoverMessage: MarkdownString | undefined): void {
+	private addDecoration(range: Range, hoverMessage: MarkdownString | undefined): codemavi {
 
 		const newDecorations: IModelDeltaDecoration = {
 			range: range,
@@ -277,7 +277,7 @@ export class GotoDefinitionAtPositionEditorContribution implements IEditorContri
 		this.linkDecorations.set([newDecorations]);
 	}
 
-	private removeLinkDecorations(): void {
+	private removeLinkDecorations(): codemavi {
 		this.linkDecorations.clear();
 	}
 
@@ -314,7 +314,7 @@ export class GotoDefinitionAtPositionEditorContribution implements IEditorContri
 		return PeekContext.inPeekEditor.getValue(contextKeyService);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.toUnhook.dispose();
 		this.toUnhookForKeyboard.dispose();
 	}

@@ -54,7 +54,7 @@ export function saveAllEditors(): Thenable<any> {
 	return vscode.commands.executeCommand('workbench.action.files.saveAll');
 }
 
-export async function revertAllDirty(): Promise<void> {
+export async function revertAllDirty(): Promise<codemavi> {
 	return vscode.commands.executeCommand('_workbench.revertAllDirty');
 }
 
@@ -66,8 +66,8 @@ export function delay(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function withLogLevel(level: string, runnable: () => Promise<any>): () => Promise<void> {
-	return async (): Promise<void> => {
+function withLogLevel(level: string, runnable: () => Promise<any>): () => Promise<codemavi> {
+	return async (): Promise<codemavi> => {
 		const logLevel = await vscode.commands.executeCommand('_extensionTests.getLogLevel');
 		await vscode.commands.executeCommand('_extensionTests.setLogLevel', level);
 
@@ -79,11 +79,11 @@ function withLogLevel(level: string, runnable: () => Promise<any>): () => Promis
 	};
 }
 
-export function withLogDisabled(runnable: () => Promise<any>): () => Promise<void> {
+export function withLogDisabled(runnable: () => Promise<any>): () => Promise<codemavi> {
 	return withLogLevel('off', runnable);
 }
 
-export function withVerboseLogs(runnable: () => Promise<any>): () => Promise<void> {
+export function withVerboseLogs(runnable: () => Promise<any>): () => Promise<codemavi> {
 	return withLogLevel('trace', runnable);
 }
 
@@ -149,13 +149,13 @@ export async function asPromise<T>(event: vscode.Event<T>, timeout = vscode.env.
 	});
 }
 
-export function testRepeat(n: number, description: string, callback: (this: any) => any): void {
+export function testRepeat(n: number, description: string, callback: (this: any) => any): codemavi {
 	for (let i = 0; i < n; i++) {
 		test(`${description} (iteration ${i})`, callback);
 	}
 }
 
-export function suiteRepeat(n: number, description: string, callback: (this: any) => any): void {
+export function suiteRepeat(n: number, description: string, callback: (this: any) => any): codemavi {
 	for (let i = 0; i < n; i++) {
 		suite(`${description} (iteration ${i})`, callback);
 	}
@@ -193,7 +193,7 @@ export async function poll<T>(
 	}
 }
 
-export type ValueCallback<T = unknown> = (value: T | Promise<T>) => void;
+export type ValueCallback<T = unknown> = (value: T | Promise<T>) => codemavi;
 
 /**
  * Creates a promise whose resolution or rejection can be controlled imperatively.
@@ -201,7 +201,7 @@ export type ValueCallback<T = unknown> = (value: T | Promise<T>) => void;
 export class DeferredPromise<T> {
 
 	private completeCallback!: ValueCallback<T>;
-	private errorCallback!: (err: unknown) => void;
+	private errorCallback!: (err: unknown) => codemavi;
 	private rejected = false;
 	private resolved = false;
 
@@ -227,7 +227,7 @@ export class DeferredPromise<T> {
 	}
 
 	public complete(value: T) {
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			this.completeCallback(value);
 			this.resolved = true;
 			resolve();
@@ -235,7 +235,7 @@ export class DeferredPromise<T> {
 	}
 
 	public error(err: unknown) {
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			this.errorCallback(err);
 			this.rejected = true;
 			resolve();
@@ -243,7 +243,7 @@ export class DeferredPromise<T> {
 	}
 
 	public cancel() {
-		new Promise<void>(resolve => {
+		new Promise<codemavi>(resolve => {
 			this.errorCallback(new Error('Canceled'));
 			this.rejected = true;
 			resolve();

@@ -42,7 +42,7 @@ export class AuxiliaryWindowsMainService extends Disposable implements IAuxiliar
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// We have to ensure that an auxiliary window gets to know its
 		// containing `BrowserWindow` so that it can apply listeners to it
@@ -136,7 +136,7 @@ export class AuxiliaryWindowsMainService extends Disposable implements IAuxiliar
 		return { state, overrides };
 	}
 
-	registerWindow(webContents: WebContents): void {
+	registerWindow(webContents: WebContents): codemavi {
 		const disposables = new DisposableStore();
 
 		const auxiliaryWindow = this.instantiationService.createInstance(AuxiliaryWindow, webContents);

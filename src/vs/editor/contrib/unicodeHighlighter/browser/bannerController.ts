@@ -149,5 +149,5 @@ export interface IBannerItem {
 	readonly message: string | MarkdownString;
 	readonly actions?: ILinkDescriptor[];
 	readonly ariaLabel?: string;
-	readonly onClose?: () => void;
+	readonly onClose?: () => codemavi;
 }

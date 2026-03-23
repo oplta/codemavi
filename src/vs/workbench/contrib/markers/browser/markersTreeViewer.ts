@@ -173,7 +173,7 @@ export class ResourceMarkersRenderer implements ITreeRenderer<ResourceMarkers, R
 		return { count, resourceLabel };
 	}
 
-	renderElement(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, _: number, templateData: IResourceMarkersTemplateData): void {
+	renderElement(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, _: number, templateData: IResourceMarkersTemplateData): codemavi {
 		const resourceMarkers = node.element;
 		const uriMatches = node.filterData && node.filterData.uriMatches || [];
 
@@ -184,7 +184,7 @@ export class ResourceMarkersRenderer implements ITreeRenderer<ResourceMarkers, R
 		this.renderedNodes.set(resourceMarkers, [...nodeRenders, templateData]);
 	}
 
-	disposeElement(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, index: number, templateData: IResourceMarkersTemplateData): void {
+	disposeElement(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, index: number, templateData: IResourceMarkersTemplateData): codemavi {
 		const nodeRenders = this.renderedNodes.get(node.element) ?? [];
 		const nodeRenderIndex = nodeRenders.findIndex(nodeRender => templateData === nodeRender);
 
@@ -199,12 +199,12 @@ export class ResourceMarkersRenderer implements ITreeRenderer<ResourceMarkers, R
 		}
 	}
 
-	disposeTemplate(templateData: IResourceMarkersTemplateData): void {
+	disposeTemplate(templateData: IResourceMarkersTemplateData): codemavi {
 		templateData.resourceLabel.dispose();
 		templateData.count.dispose();
 	}
 
-	private onDidChangeRenderNodeCount(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>): void {
+	private onDidChangeRenderNodeCount(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>): codemavi {
 		const nodeRenders = this.renderedNodes.get(node.element);
 
 		if (!nodeRenders) {
@@ -214,11 +214,11 @@ export class ResourceMarkersRenderer implements ITreeRenderer<ResourceMarkers, R
 		nodeRenders.forEach(nodeRender => this.updateCount(node, nodeRender));
 	}
 
-	private updateCount(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, templateData: IResourceMarkersTemplateData): void {
+	private updateCount(node: ITreeNode<ResourceMarkers, ResourceMarkersFilterData>, templateData: IResourceMarkersTemplateData): codemavi {
 		templateData.count.setCount(node.children.reduce((r, n) => r + (n.visible ? 1 : 0), 0));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
@@ -243,11 +243,11 @@ export class MarkerRenderer implements ITreeRenderer<Marker, MarkerFilterData, I
 		return data;
 	}
 
-	renderElement(node: ITreeNode<Marker, MarkerFilterData>, _: number, templateData: IMarkerTemplateData): void {
+	renderElement(node: ITreeNode<Marker, MarkerFilterData>, _: number, templateData: IMarkerTemplateData): codemavi {
 		templateData.markerWidget.render(node.element, node.filterData);
 	}
 
-	disposeTemplate(templateData: IMarkerTemplateData): void {
+	disposeTemplate(templateData: IMarkerTemplateData): codemavi {
 		templateData.markerWidget.dispose();
 	}
 
@@ -260,17 +260,17 @@ const toggleMultilineAction = 'problems.action.toggleMultiline';
 
 class ToggleMultilineActionViewItem extends ActionViewItem {
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		this.updateExpandedAttribute();
 	}
 
-	protected override updateClass(): void {
+	protected override updateClass(): codemavi {
 		super.updateClass();
 		this.updateExpandedAttribute();
 	}
 
-	private updateExpandedAttribute(): void {
+	private updateExpandedAttribute(): codemavi {
 		this.element?.setAttribute('aria-expanded', `${this._action.class === ThemeIcon.asClassName(expandedIcon)}`);
 	}
 
@@ -306,7 +306,7 @@ class MarkerWidget extends Disposable {
 		this.messageAndDetailsContainerHover = this._register(this._hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), this.messageAndDetailsContainer, ''));
 	}
 
-	render(element: Marker, filterData: MarkerFilterData | undefined): void {
+	render(element: Marker, filterData: MarkerFilterData | undefined): codemavi {
 		this.actionBar.clear();
 		this.disposables.clear();
 		dom.clearNode(this.messageAndDetailsContainer);
@@ -320,7 +320,7 @@ class MarkerWidget extends Disposable {
 		this.disposables.add(dom.addDisposableListener(this.parent, dom.EventType.MOUSE_LEAVE, () => this.markersViewModel.onMarkerMouseLeave(element)));
 	}
 
-	private renderQuickfixActionbar(marker: Marker): void {
+	private renderQuickfixActionbar(marker: Marker): codemavi {
 		const viewModel = this.markersViewModel.getViewModel(marker);
 		if (viewModel) {
 			const quickFixAction = viewModel.quickFixAction;
@@ -340,7 +340,7 @@ class MarkerWidget extends Disposable {
 		}
 	}
 
-	private renderMultilineActionbar(marker: Marker, parent: HTMLElement): void {
+	private renderMultilineActionbar(marker: Marker, parent: HTMLElement): codemavi {
 		const multilineActionbar = this.disposables.add(new ActionBar(dom.append(parent, dom.$('.multiline-actions')), {
 			actionViewItemProvider: (action, options) => {
 				if (action.id === toggleMultilineAction) {
@@ -361,7 +361,7 @@ class MarkerWidget extends Disposable {
 		multilineActionbar.push([action], { icon: true, label: false });
 	}
 
-	private renderMessageAndDetails(element: Marker, filterData: MarkerFilterData | undefined): void {
+	private renderMessageAndDetails(element: Marker, filterData: MarkerFilterData | undefined): codemavi {
 		const { marker, lines } = element;
 		const viewState = this.markersViewModel.getViewModel(element);
 		const multiline = !viewState || viewState.multiline;
@@ -383,7 +383,7 @@ class MarkerWidget extends Disposable {
 		this.renderMultilineActionbar(element, lineElements[0]);
 	}
 
-	private renderDetails(marker: IMarker, filterData: MarkerFilterData | undefined, parent: HTMLElement): void {
+	private renderDetails(marker: IMarker, filterData: MarkerFilterData | undefined, parent: HTMLElement): codemavi {
 		parent.classList.add('details-container');
 
 		if (marker.source || marker.code) {
@@ -438,7 +438,7 @@ export class RelatedInformationRenderer implements ITreeRenderer<RelatedInformat
 		return data;
 	}
 
-	renderElement(node: ITreeNode<RelatedInformation, RelatedInformationFilterData>, _: number, templateData: IRelatedInformationTemplateData): void {
+	renderElement(node: ITreeNode<RelatedInformation, RelatedInformationFilterData>, _: number, templateData: IRelatedInformationTemplateData): codemavi {
 		const relatedInformation = node.element.raw;
 		const uriMatches = node.filterData && node.filterData.uriMatches || [];
 		const messageMatches = node.filterData && node.filterData.messageMatches || [];
@@ -449,7 +449,7 @@ export class RelatedInformationRenderer implements ITreeRenderer<RelatedInformat
 		templateData.description.set(relatedInformation.message, messageMatches, relatedInformation.message);
 	}
 
-	disposeTemplate(templateData: IRelatedInformationTemplateData): void {
+	disposeTemplate(templateData: IRelatedInformationTemplateData): codemavi {
 		templateData.resourceLabel.dispose();
 		templateData.description.dispose();
 	}
@@ -568,8 +568,8 @@ export class Filter implements ITreeFilter<MarkerElement, FilterData> {
 
 export class MarkerViewModel extends Disposable {
 
-	private readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private modelPromise: CancelablePromise<ITextModel> | null = null;
 	private codeActionsPromise: CancelablePromise<CodeActionSet> | null = null;
@@ -612,11 +612,11 @@ export class MarkerViewModel extends Disposable {
 		return this._quickFixAction;
 	}
 
-	showLightBulb(): void {
+	showLightBulb(): codemavi {
 		this.setQuickFixes(true);
 	}
 
-	private async setQuickFixes(waitForModel: boolean): Promise<void> {
+	private async setQuickFixes(waitForModel: boolean): Promise<codemavi> {
 		const codeActions = await this.getCodeActions(waitForModel);
 		this.quickFixAction.quickFixes = codeActions ? this.toActions(codeActions) : [];
 		this.quickFixAction.autoFixable(!!codeActions && codeActions.hasAutoFix);
@@ -655,7 +655,7 @@ export class MarkerViewModel extends Disposable {
 		}));
 	}
 
-	private openFileAtMarker(element: Marker): Promise<void> {
+	private openFileAtMarker(element: Marker): Promise<codemavi> {
 		const { resource, selection } = { resource: element.resource, selection: element.range };
 		return this.editorService.openEditor({
 			resource,
@@ -706,7 +706,7 @@ export class MarkersViewModel extends Disposable {
 	private bulkUpdate: boolean = false;
 
 	private hoveredMarker: Marker | null = null;
-	private hoverDelayer: Delayer<void> = new Delayer<void>(300);
+	private hoverDelayer: Delayer<codemavi> = new Delayer<codemavi>(300);
 	private viewModeContextKey: IContextKey<MarkersViewMode>;
 
 	constructor(
@@ -723,7 +723,7 @@ export class MarkersViewModel extends Disposable {
 		this.viewModeContextKey.set(viewMode);
 	}
 
-	add(marker: Marker): void {
+	add(marker: Marker): codemavi {
 		if (!this.markersViewStates.has(marker.id)) {
 			const viewModel = this.instantiationService.createInstance(MarkerViewModel, marker);
 			const disposables: IDisposable[] = [viewModel];
@@ -741,7 +741,7 @@ export class MarkersViewModel extends Disposable {
 		}
 	}
 
-	remove(resource: URI): void {
+	remove(resource: URI): codemavi {
 		const markers = this.markersPerResource.get(resource.toString()) || [];
 		for (const marker of markers) {
 			const value = this.markersViewStates.get(marker.id);
@@ -761,7 +761,7 @@ export class MarkersViewModel extends Disposable {
 		return value ? value.viewModel : null;
 	}
 
-	onMarkerMouseHover(marker: Marker): void {
+	onMarkerMouseHover(marker: Marker): codemavi {
 		this.hoveredMarker = marker;
 		this.hoverDelayer.trigger(() => {
 			if (this.hoveredMarker) {
@@ -773,7 +773,7 @@ export class MarkersViewModel extends Disposable {
 		});
 	}
 
-	onMarkerMouseLeave(marker: Marker): void {
+	onMarkerMouseLeave(marker: Marker): codemavi {
 		if (this.hoveredMarker === marker) {
 			this.hoveredMarker = null;
 		}
@@ -818,7 +818,7 @@ export class MarkersViewModel extends Disposable {
 		this.viewModeContextKey.set(value);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.markersViewStates.forEach(({ disposables }) => dispose(disposables));
 		this.markersViewStates.clear();
 		this.markersPerResource.clear();

@@ -41,7 +41,7 @@ class TestSearchEngine implements ISearchEngine<IRawFileMatch> {
 		TestSearchEngine.last = this;
 	}
 
-	search(onResult: (match: IRawFileMatch) => void, onProgress: (progress: IProgressMessage) => void, done: (error: Error, complete: ISearchEngineSuccess) => void): void {
+	search(onResult: (match: IRawFileMatch) => codemavi, onProgress: (progress: IProgressMessage) => codemavi, done: (error: Error, complete: ISearchEngineSuccess) => codemavi): codemavi {
 		const self = this;
 		(function next() {
 			process.nextTick(() => {
@@ -68,7 +68,7 @@ class TestSearchEngine implements ISearchEngine<IRawFileMatch> {
 		})();
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.isCanceled = true;
 	}
 }
@@ -97,7 +97,7 @@ flakySuite('RawSearchService', () => {
 		const service = new RawSearchService();
 
 		let results = 0;
-		const cb: (p: ISerializedSearchProgressItem) => void = value => {
+		const cb: (p: ISerializedSearchProgressItem) => codemavi = value => {
 			if (!!(<IProgressMessage>value).message) {
 				return;
 			}
@@ -119,7 +119,7 @@ flakySuite('RawSearchService', () => {
 		const service = new RawSearchService();
 
 		const results: number[] = [];
-		const cb: (p: ISerializedSearchProgressItem) => void = value => {
+		const cb: (p: ISerializedSearchProgressItem) => codemavi = value => {
 			if (!!(<IProgressMessage>value).message) {
 				return;
 			}
@@ -144,7 +144,7 @@ flakySuite('RawSearchService', () => {
 		const service = new RawSearchService();
 
 		function fileSearch(config: IFileQuery, batchSize: number): Event<ISerializedSearchProgressItem | ISerializedSearchComplete> {
-			let promise: CancelablePromise<ISerializedSearchSuccess | void>;
+			let promise: CancelablePromise<ISerializedSearchSuccess | codemavi>;
 
 			const emitter = new Emitter<ISerializedSearchProgressItem | ISerializedSearchComplete>({
 				onWillAddFirstListener: () => {

@@ -52,13 +52,13 @@ export class NotebookStatusBarController extends Disposable {
 		this._updateEverything();
 	}
 
-	private _updateEverything(): void {
+	private _updateEverything(): codemavi {
 		this._visibleCells.forEach(dispose);
 		this._visibleCells.clear();
 		this._updateVisibleCells({ added: this._observer.visibleCells, removed: [] });
 	}
 
-	private _updateVisibleCells(e: ICellVisibilityChangeEvent): void {
+	private _updateVisibleCells(e: ICellVisibilityChangeEvent): codemavi {
 		const vm = this._notebookEditor.getViewModel();
 		if (!vm) {
 			return;
@@ -74,7 +74,7 @@ export class NotebookStatusBarController extends Disposable {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this._visibleCells.forEach(dispose);

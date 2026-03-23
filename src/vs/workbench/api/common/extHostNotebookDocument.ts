@@ -98,7 +98,7 @@ export class ExtHostCell {
 		return this._apiCell;
 	}
 
-	setOutputs(newOutputs: extHostProtocol.NotebookOutputDto[]): void {
+	setOutputs(newOutputs: extHostProtocol.NotebookOutputDto[]): codemavi {
 		this._outputs = newOutputs.map(extHostTypeConverters.NotebookCellOutput.to);
 	}
 
@@ -139,11 +139,11 @@ export class ExtHostCell {
 		}
 	}
 
-	setMetadata(newMetadata: notebookCommon.NotebookCellMetadata): void {
+	setMetadata(newMetadata: notebookCommon.NotebookCellMetadata): codemavi {
 		this._metadata = Object.freeze(newMetadata);
 	}
 
-	setInternalMetadata(newInternalMetadata: notebookCommon.NotebookCellInternalMetadata): void {
+	setInternalMetadata(newInternalMetadata: notebookCommon.NotebookCellInternalMetadata): codemavi {
 		this._internalMetadata = newInternalMetadata;
 		this._previousResult = Object.freeze(extHostTypeConverters.NotebookCellExecutionSummary.to(newInternalMetadata));
 	}
@@ -228,7 +228,7 @@ export class ExtHostNotebookDocument {
 		}
 	}
 
-	acceptDirty(isDirty: boolean): void {
+	acceptDirty(isDirty: boolean): codemavi {
 		this._isDirty = isDirty;
 	}
 
@@ -353,7 +353,7 @@ export class ExtHostNotebookDocument {
 		return this._proxy.$trySaveNotebook(this.uri);
 	}
 
-	private _spliceNotebookCells(splices: notebookCommon.NotebookCellTextModelSplice<extHostProtocol.NotebookCellDto>[], initialization: boolean, bucket: vscode.NotebookDocumentContentChange[] | undefined): void {
+	private _spliceNotebookCells(splices: notebookCommon.NotebookCellTextModelSplice<extHostProtocol.NotebookCellDto>[], initialization: boolean, bucket: vscode.NotebookDocumentContentChange[] | undefined): codemavi {
 		if (this._disposed) {
 			return;
 		}
@@ -394,7 +394,7 @@ export class ExtHostNotebookDocument {
 		}
 	}
 
-	private _moveCells(index: number, length: number, newIdx: number, bucket: vscode.NotebookDocumentContentChange[]): void {
+	private _moveCells(index: number, length: number, newIdx: number, bucket: vscode.NotebookDocumentContentChange[]): codemavi {
 		const cells = this._cells.splice(index, length);
 		this._cells.splice(newIdx, 0, ...cells);
 		const changes = [
@@ -406,34 +406,34 @@ export class ExtHostNotebookDocument {
 		}
 	}
 
-	private _setCellOutputs(index: number, outputs: extHostProtocol.NotebookOutputDto[]): void {
+	private _setCellOutputs(index: number, outputs: extHostProtocol.NotebookOutputDto[]): codemavi {
 		const cell = this._cells[index];
 		cell.setOutputs(outputs);
 	}
 
-	private _setCellOutputItems(index: number, outputId: string, append: boolean, outputItems: extHostProtocol.NotebookOutputItemDto[]): void {
+	private _setCellOutputItems(index: number, outputId: string, append: boolean, outputItems: extHostProtocol.NotebookOutputItemDto[]): codemavi {
 		const cell = this._cells[index];
 		cell.setOutputItems(outputId, append, outputItems);
 	}
 
-	private _changeCellLanguage(index: number, newLanguageId: string): void {
+	private _changeCellLanguage(index: number, newLanguageId: string): codemavi {
 		const cell = this._cells[index];
 		if (cell.apiCell.document.languageId !== newLanguageId) {
 			this._textDocuments.$acceptModelLanguageChanged(cell.uri, newLanguageId);
 		}
 	}
 
-	private _changeCellMime(index: number, newMime: string | undefined): void {
+	private _changeCellMime(index: number, newMime: string | undefined): codemavi {
 		const cell = this._cells[index];
 		cell.apiCell.mime = newMime;
 	}
 
-	private _changeCellMetadata(index: number, newMetadata: notebookCommon.NotebookCellMetadata): void {
+	private _changeCellMetadata(index: number, newMetadata: notebookCommon.NotebookCellMetadata): codemavi {
 		const cell = this._cells[index];
 		cell.setMetadata(newMetadata);
 	}
 
-	private _changeCellInternalMetadata(index: number, newInternalMetadata: notebookCommon.NotebookCellInternalMetadata): void {
+	private _changeCellInternalMetadata(index: number, newInternalMetadata: notebookCommon.NotebookCellInternalMetadata): codemavi {
 		const cell = this._cells[index];
 		cell.setInternalMetadata(newInternalMetadata);
 	}

@@ -38,7 +38,7 @@ export class MockObjectTree<T, TRef> implements IDisposable {
 
 	constructor(private elements: any[]) { }
 
-	domFocus(): void { }
+	domFocus(): codemavi { }
 
 	collapse(location: TRef, recursive: boolean = false): boolean {
 		return true;
@@ -59,7 +59,7 @@ export class MockObjectTree<T, TRef> implements IDisposable {
 		return elem.parent();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 	}
 }
 

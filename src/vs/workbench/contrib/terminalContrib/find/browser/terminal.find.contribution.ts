@@ -77,12 +77,12 @@ class TerminalFindContribution extends Disposable implements ITerminalContributi
 		});
 	}
 
-	layout(_xterm: IXtermTerminal & { raw: RawXtermTerminal }, dimension: IDimension): void {
+	layout(_xterm: IXtermTerminal & { raw: RawXtermTerminal }, dimension: IDimension): codemavi {
 		this._lastLayoutDimensions = dimension;
 		this._findWidget.rawValue?.layout(dimension.width);
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
 		this._register(xterm.onDidChangeFindResults(() => this._findWidget.rawValue?.updateResultCount()));
 	}
 

@@ -15,7 +15,7 @@ import { toAction } from '../../../base/common/actions.js';
 export class MainThreadProgress implements MainThreadProgressShape {
 
 	private readonly _progressService: IProgressService;
-	private _progress = new Map<number, { resolve: () => void; progress: IProgress<IProgressStep> }>();
+	private _progress = new Map<number, { resolve: () => codemavi; progress: IProgress<IProgressStep> }>();
 	private readonly _proxy: ExtHostProgressShape;
 
 	constructor(
@@ -27,12 +27,12 @@ export class MainThreadProgress implements MainThreadProgressShape {
 		this._progressService = progressService;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._progress.forEach(handle => handle.resolve());
 		this._progress.clear();
 	}
 
-	async $startProgress(handle: number, options: IProgressOptions, extensionId?: string): Promise<void> {
+	async $startProgress(handle: number, options: IProgressOptions, extensionId?: string): Promise<codemavi> {
 		const task = this._createTask(handle);
 
 		if (options.location === ProgressLocation.Notification && extensionId) {
@@ -58,12 +58,12 @@ export class MainThreadProgress implements MainThreadProgressShape {
 		}
 	}
 
-	$progressReport(handle: number, message: IProgressStep): void {
+	$progressReport(handle: number, message: IProgressStep): codemavi {
 		const entry = this._progress.get(handle);
 		entry?.progress.report(message);
 	}
 
-	$progressEnd(handle: number): void {
+	$progressEnd(handle: number): codemavi {
 		const entry = this._progress.get(handle);
 		if (entry) {
 			entry.resolve();
@@ -73,7 +73,7 @@ export class MainThreadProgress implements MainThreadProgressShape {
 
 	private _createTask(handle: number) {
 		return (progress: IProgress<IProgressStep>) => {
-			return new Promise<void>(resolve => {
+			return new Promise<codemavi>(resolve => {
 				this._progress.set(handle, { resolve, progress });
 			});
 		};

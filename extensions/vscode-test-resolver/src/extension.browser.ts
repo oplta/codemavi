@@ -26,7 +26,7 @@ export function activate(_context: vscode.ExtensionContext) {
 class InitialManagedMessagePassing implements vscode.ManagedMessagePassing {
 	private readonly dataEmitter = new vscode.EventEmitter<Uint8Array>();
 	private readonly closeEmitter = new vscode.EventEmitter<Error | undefined>();
-	private readonly endEmitter = new vscode.EventEmitter<void>();
+	private readonly endEmitter = new vscode.EventEmitter<codemavi>();
 
 	public readonly onDidReceiveMessage = this.dataEmitter.event;
 	public readonly onDidClose = this.closeEmitter.event;
@@ -35,7 +35,7 @@ class InitialManagedMessagePassing implements vscode.ManagedMessagePassing {
 	private _actual: OpeningManagedMessagePassing | null = null;
 	private _isDisposed = false;
 
-	public send(d: Uint8Array): void {
+	public send(d: Uint8Array): codemavi {
 		if (this._actual) {
 			// we already got the HTTP headers
 			this._actual.send(d);
@@ -67,7 +67,7 @@ class InitialManagedMessagePassing implements vscode.ManagedMessagePassing {
 		this._actual = new OpeningManagedMessagePassing(parsedUrl, this.dataEmitter, this.closeEmitter, this.endEmitter);
 	}
 
-	public end(): void {
+	public end(): codemavi {
 		if (this._actual) {
 			this._actual.end();
 			return;
@@ -86,7 +86,7 @@ class OpeningManagedMessagePassing {
 		url: URL,
 		dataEmitter: vscode.EventEmitter<Uint8Array>,
 		closeEmitter: vscode.EventEmitter<Error | undefined>,
-		_endEmitter: vscode.EventEmitter<void>
+		_endEmitter: vscode.EventEmitter<codemavi>
 	) {
 		this.socket = new WebSocket(`ws://localhost:9888${url.pathname}${url.search.replace(/skipWebSocketFrames=true/, 'skipWebSocketFrames=false')}`);
 		this.socket.addEventListener('close', () => closeEmitter.fire(undefined));
@@ -119,7 +119,7 @@ class OpeningManagedMessagePassing {
 		});
 	}
 
-	public send(d: Uint8Array): void {
+	public send(d: Uint8Array): codemavi {
 		if (!this.isOpen) {
 			this.bufferedData.push(d);
 			return;
@@ -127,7 +127,7 @@ class OpeningManagedMessagePassing {
 		this.socket.send(d);
 	}
 
-	public end(): void {
+	public end(): codemavi {
 		this.socket.close();
 	}
 }

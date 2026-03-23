@@ -40,7 +40,7 @@ export class ObjectPool<TData extends IObjectData, T extends IPooledObject<TData
 		};
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		for (const obj of this._used) {
 			obj.dispose();
 		}
@@ -57,5 +57,5 @@ export interface IObjectData {
 }
 
 export interface IPooledObject<TData> extends IDisposable {
-	setData(data: TData): void;
+	setData(data: TData): codemavi;
 }

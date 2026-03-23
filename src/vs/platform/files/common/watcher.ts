@@ -119,21 +119,21 @@ export interface IWatcher {
 	 * in the array, will be removed from watching and
 	 * any new path will be added to watching.
 	 */
-	watch(requests: IWatchRequest[]): Promise<void>;
+	watch(requests: IWatchRequest[]): Promise<codemavi>;
 
 	/**
 	 * Enable verbose logging in the watcher.
 	 */
-	setVerboseLogging(enabled: boolean): Promise<void>;
+	setVerboseLogging(enabled: boolean): Promise<codemavi>;
 
 	/**
 	 * Stop all watchers.
 	 */
-	stop(): Promise<void>;
+	stop(): Promise<codemavi>;
 }
 
 export interface IRecursiveWatcher extends IWatcher {
-	watch(requests: IRecursiveWatchRequest[]): Promise<void>;
+	watch(requests: IRecursiveWatchRequest[]): Promise<codemavi>;
 }
 
 export interface IRecursiveWatcherWithSubscribe extends IRecursiveWatcher {
@@ -147,7 +147,7 @@ export interface IRecursiveWatcherWithSubscribe extends IRecursiveWatcher {
 	 * if no events can be watched for the path given the current set of
 	 * recursive watch requests.
 	 */
-	subscribe(path: string, callback: (error: true | null, change?: IFileChange) => void): IDisposable | undefined;
+	subscribe(path: string, callback: (error: true | null, change?: IFileChange) => codemavi): IDisposable | undefined;
 }
 
 export interface IRecursiveWatcherOptions {
@@ -172,11 +172,11 @@ export interface IRecursiveWatcherOptions {
 }
 
 export interface INonRecursiveWatcher extends IWatcher {
-	watch(requests: INonRecursiveWatchRequest[]): Promise<void>;
+	watch(requests: INonRecursiveWatchRequest[]): Promise<codemavi>;
 }
 
 export interface IUniversalWatcher extends IWatcher {
-	watch(requests: IUniversalWatchRequest[]): Promise<void>;
+	watch(requests: IUniversalWatchRequest[]): Promise<codemavi>;
 }
 
 export abstract class AbstractWatcherClient extends Disposable {
@@ -191,8 +191,8 @@ export abstract class AbstractWatcherClient extends Disposable {
 	private restartCounter = 0;
 
 	constructor(
-		private readonly onFileChanges: (changes: IFileChange[]) => void,
-		private readonly onLogMessage: (msg: ILogMessage) => void,
+		private readonly onFileChanges: (changes: IFileChange[]) => codemavi,
+		private readonly onLogMessage: (msg: ILogMessage) => codemavi,
 		private verboseLogging: boolean,
 		private options: {
 			readonly type: string;
@@ -204,7 +204,7 @@ export abstract class AbstractWatcherClient extends Disposable {
 
 	protected abstract createWatcher(disposables: DisposableStore): IWatcher;
 
-	protected init(): void {
+	protected init(): codemavi {
 
 		// Associate disposables to the watcher
 		const disposables = new DisposableStore();
@@ -220,7 +220,7 @@ export abstract class AbstractWatcherClient extends Disposable {
 		disposables.add(this.watcher.onDidError(e => this.onError(e.error, e.request)));
 	}
 
-	protected onError(error: string, failedRequest?: IUniversalWatchRequest): void {
+	protected onError(error: string, failedRequest?: IUniversalWatchRequest): codemavi {
 
 		// Restart on error (up to N times, if possible)
 		if (this.canRestart(error, failedRequest)) {
@@ -264,20 +264,20 @@ export abstract class AbstractWatcherClient extends Disposable {
 		return true;
 	}
 
-	private restart(requests: IUniversalWatchRequest[]): void {
+	private restart(requests: IUniversalWatchRequest[]): codemavi {
 		this.restartCounter++;
 
 		this.init();
 		this.watch(requests);
 	}
 
-	async watch(requests: IUniversalWatchRequest[]): Promise<void> {
+	async watch(requests: IUniversalWatchRequest[]): Promise<codemavi> {
 		this.requests = requests;
 
 		await this.watcher?.watch(requests);
 	}
 
-	async setVerboseLogging(verboseLogging: boolean): Promise<void> {
+	async setVerboseLogging(verboseLogging: boolean): Promise<codemavi> {
 		this.verboseLogging = verboseLogging;
 
 		await this.watcher?.setVerboseLogging(verboseLogging);
@@ -291,7 +291,7 @@ export abstract class AbstractWatcherClient extends Disposable {
 		this.onLogMessage({ type: 'trace', message: `[File Watcher (${this.options.type})] ${message}` });
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 
 		// Render the watcher invalid from here
 		this.watcher = undefined;
@@ -303,8 +303,8 @@ export abstract class AbstractWatcherClient extends Disposable {
 export abstract class AbstractNonRecursiveWatcherClient extends AbstractWatcherClient {
 
 	constructor(
-		onFileChanges: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onFileChanges: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean
 	) {
 		super(onFileChanges, onLogMessage, verboseLogging, { type: 'node.js', restartOnError: false });
@@ -316,8 +316,8 @@ export abstract class AbstractNonRecursiveWatcherClient extends AbstractWatcherC
 export abstract class AbstractUniversalWatcherClient extends AbstractWatcherClient {
 
 	constructor(
-		onFileChanges: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onFileChanges: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean
 	) {
 		super(onFileChanges, onLogMessage, verboseLogging, { type: 'universal', restartOnError: true });
@@ -388,7 +388,7 @@ class EventCoalescer {
 		return event.resource.fsPath.toLowerCase(); // normalise to file system case sensitivity
 	}
 
-	processEvent(event: IFileChange): void {
+	processEvent(event: IFileChange): codemavi {
 		const existingEvent = this.mapPathToChange.get(this.toKey(event));
 
 		let keepEvent = false;

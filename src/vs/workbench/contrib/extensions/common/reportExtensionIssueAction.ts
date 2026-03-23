@@ -23,7 +23,7 @@ export class ReportExtensionIssueAction extends Action {
 		this.enabled = extension.isBuiltin || (!!extension.repository && !!extension.repository.url);
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		await this.issueService.openReporter({
 			extensionId: this.extension.identifier.value,
 		});

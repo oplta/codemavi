@@ -31,7 +31,7 @@ export class AutoFetcher {
 		onFirstGoodRemoteOperation(this.onFirstGoodRemoteOperation, this, this.disposables);
 	}
 
-	private async onFirstGoodRemoteOperation(): Promise<void> {
+	private async onFirstGoodRemoteOperation(): Promise<codemavi> {
 		const didInformUser = !this.globalState.get<boolean>(AutoFetcher.DidInformUser);
 
 		if (this.enabled && !didInformUser) {
@@ -61,7 +61,7 @@ export class AutoFetcher {
 		this.globalState.update(AutoFetcher.DidInformUser, true);
 	}
 
-	private onConfiguration(e?: ConfigurationChangeEvent): void {
+	private onConfiguration(e?: ConfigurationChangeEvent): codemavi {
 		if (e !== undefined && !e.affectsConfiguration('git.autofetch')) {
 			return;
 		}
@@ -84,7 +84,7 @@ export class AutoFetcher {
 		}
 	}
 
-	enable(): void {
+	enable(): codemavi {
 		if (this.enabled) {
 			return;
 		}
@@ -93,11 +93,11 @@ export class AutoFetcher {
 		this.run();
 	}
 
-	disable(): void {
+	disable(): codemavi {
 		this.enabled = false;
 	}
 
-	private async run(): Promise<void> {
+	private async run(): Promise<codemavi> {
 		while (this.enabled) {
 			await this.repository.whenIdleAndFocused();
 
@@ -129,7 +129,7 @@ export class AutoFetcher {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disable();
 		this.disposables.forEach(d => d.dispose());
 	}

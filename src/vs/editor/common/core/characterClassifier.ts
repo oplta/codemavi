@@ -35,7 +35,7 @@ export class CharacterClassifier<T extends number> {
 		return asciiMap;
 	}
 
-	public set(charCode: number, _value: T): void {
+	public set(charCode: number, _value: T): codemavi {
 		const value = toUint8(_value);
 
 		if (charCode >= 0 && charCode < 256) {
@@ -72,7 +72,7 @@ export class CharacterSet {
 		this._actual = new CharacterClassifier<Boolean>(Boolean.False);
 	}
 
-	public add(charCode: number): void {
+	public add(charCode: number): codemavi {
 		this._actual.set(charCode, Boolean.True);
 	}
 
@@ -80,7 +80,7 @@ export class CharacterSet {
 		return (this._actual.get(charCode) === Boolean.True);
 	}
 
-	public clear(): void {
+	public clear(): codemavi {
 		return this._actual.clear();
 	}
 }

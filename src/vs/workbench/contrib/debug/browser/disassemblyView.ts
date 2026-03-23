@@ -85,7 +85,7 @@ export class DisassemblyView extends EditorPane {
 	// Used in instruction renderer
 	private _fontInfo: BareFontInfo | undefined;
 	private _disassembledInstructions: WorkbenchTable<IDisassembledInstructionEntry> | undefined;
-	private _onDidChangeStackFrame: Emitter<void>;
+	private _onDidChangeStackFrame: Emitter<codemavi>;
 	private _previousDebuggingState: State;
 	private _instructionBpList: readonly IInstructionBreakpoint[] = [];
 	private _enableSourceCodeRender: boolean = true;
@@ -104,7 +104,7 @@ export class DisassemblyView extends EditorPane {
 		super(DISASSEMBLY_VIEW_ID, group, telemetryService, themeService, storageService);
 
 		this._disassembledInstructions = undefined;
-		this._onDidChangeStackFrame = this._register(new Emitter<void>({ leakWarningThreshold: 1000 }));
+		this._onDidChangeStackFrame = this._register(new Emitter<codemavi>({ leakWarningThreshold: 1000 }));
 		this._previousDebuggingState = _debugService.state;
 		this._register(_configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('debug')) {
@@ -185,7 +185,7 @@ export class DisassemblyView extends EditorPane {
 		return { reference, offset, address: element.address };
 	}
 
-	protected createEditor(parent: HTMLElement): void {
+	protected createEditor(parent: HTMLElement): codemavi {
 		this._enableSourceCodeRender = this._configurationService.getValue<IDebugConfiguration>('debug').disassemblyView.showSourceCode;
 		const lineHeight = this.fontInfo.lineHeight;
 		const thisOM = this;
@@ -347,7 +347,7 @@ export class DisassemblyView extends EditorPane {
 		}));
 	}
 
-	layout(dimension: Dimension): void {
+	layout(dimension: Dimension): codemavi {
 		this._disassembledInstructions?.layout(dimension.height);
 	}
 
@@ -701,12 +701,12 @@ class BreakpointRenderer implements ITableRenderer<IDisassembledInstructionEntry
 		return { currentElement, icon, disposables };
 	}
 
-	renderElement(element: IDisassembledInstructionEntry, index: number, templateData: IBreakpointColumnTemplateData, height: number | undefined): void {
+	renderElement(element: IDisassembledInstructionEntry, index: number, templateData: IBreakpointColumnTemplateData, height: number | undefined): codemavi {
 		templateData.currentElement.element = element;
 		this.rerenderDebugStackframe(templateData.icon, element);
 	}
 
-	disposeTemplate(templateData: IBreakpointColumnTemplateData): void {
+	disposeTemplate(templateData: IBreakpointColumnTemplateData): codemavi {
 		dispose(templateData.disposables);
 		templateData.disposables = [];
 	}
@@ -796,11 +796,11 @@ class InstructionRenderer extends Disposable implements ITableRenderer<IDisassem
 		return { currentElement, instruction, sourcecode, cellDisposable, disposables };
 	}
 
-	renderElement(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): void {
+	renderElement(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): codemavi {
 		this.renderElementInner(element, index, templateData, height);
 	}
 
-	private async renderElementInner(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): Promise<void> {
+	private async renderElementInner(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): Promise<codemavi> {
 		templateData.currentElement.element = element;
 		const instruction = element.instruction;
 		templateData.sourcecode.innerText = '';
@@ -814,7 +814,7 @@ class InstructionRenderer extends Disposable implements ITableRenderer<IDisassem
 				const sourceSB = new StringBuilder(10000);
 				const ref = await this.textModelService.createModelReference(sourceURI);
 				if (templateData.currentElement.element !== element) {
-					return; // avoid a race, #192831
+					return; // acodemavi a race, #192831
 				}
 				textModel = ref.object.textEditorModel;
 				templateData.cellDisposable.push(ref);
@@ -870,12 +870,12 @@ class InstructionRenderer extends Disposable implements ITableRenderer<IDisassem
 		this.rerenderBackground(templateData.instruction, templateData.sourcecode, element);
 	}
 
-	disposeElement(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): void {
+	disposeElement(element: IDisassembledInstructionEntry, index: number, templateData: IInstructionColumnTemplateData, height: number | undefined): codemavi {
 		dispose(templateData.cellDisposable);
 		templateData.cellDisposable = [];
 	}
 
-	disposeTemplate(templateData: IInstructionColumnTemplateData): void {
+	disposeTemplate(templateData: IInstructionColumnTemplateData): codemavi {
 		dispose(templateData.disposables);
 		templateData.disposables = [];
 	}
@@ -1001,7 +1001,7 @@ export class DisassemblyViewContribution implements IWorkbenchContribution {
 		this._onDidActiveEditorChangeListener = editorService.onDidActiveEditorChange(onDidActiveEditorChangeListener);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._onDidActiveEditorChangeListener.dispose();
 		this._onDidChangeModelLanguage?.dispose();
 	}

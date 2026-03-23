@@ -76,7 +76,7 @@ export class UnicodeHighlighter extends Disposable implements IEditorContributio
 		this._updateHighlighter();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (this._highlighter) {
 			this._highlighter.dispose();
 			this._highlighter = null;
@@ -84,7 +84,7 @@ export class UnicodeHighlighter extends Disposable implements IEditorContributio
 		super.dispose();
 	}
 
-	private readonly _updateState = (state: IUnicodeHighlightsResult | null): void => {
+	private readonly _updateState = (state: IUnicodeHighlightsResult | null): codemavi => {
 		if (state && state.hasMore) {
 			if (this._bannerClosed) {
 				return;
@@ -132,7 +132,7 @@ export class UnicodeHighlighter extends Disposable implements IEditorContributio
 		}
 	};
 
-	private _updateHighlighter(): void {
+	private _updateHighlighter(): codemavi {
 		this._updateState(null);
 
 		if (this._highlighter) {
@@ -220,7 +220,7 @@ class DocumentUnicodeHighlighter extends Disposable {
 	constructor(
 		private readonly _editor: IActiveCodeEditor,
 		private readonly _options: UnicodeHighlighterOptions,
-		private readonly _updateState: (state: IUnicodeHighlightsResult | null) => void,
+		private readonly _updateState: (state: IUnicodeHighlightsResult | null) => codemavi,
 		@IEditorWorkerService private readonly _editorWorkerService: IEditorWorkerService,
 	) {
 		super();
@@ -238,7 +238,7 @@ class DocumentUnicodeHighlighter extends Disposable {
 		super.dispose();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		if (this._model.isDisposed()) {
 			return;
 		}
@@ -304,7 +304,7 @@ class ViewportUnicodeHighlighter extends Disposable {
 	constructor(
 		private readonly _editor: IActiveCodeEditor,
 		private readonly _options: UnicodeHighlighterOptions,
-		private readonly _updateState: (state: IUnicodeHighlightsResult | null) => void,
+		private readonly _updateState: (state: IUnicodeHighlightsResult | null) => codemavi,
 	) {
 		super();
 
@@ -331,7 +331,7 @@ class ViewportUnicodeHighlighter extends Disposable {
 		super.dispose();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		if (this._model.isDisposed()) {
 			return;
 		}
@@ -584,14 +584,14 @@ export class DisableHighlightingInCommentsAction extends EditorAction implements
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const configurationService = accessor?.get(IConfigurationService);
 		if (configurationService) {
 			this.runAction(configurationService);
 		}
 	}
 
-	public async runAction(configurationService: IConfigurationService): Promise<void> {
+	public async runAction(configurationService: IConfigurationService): Promise<codemavi> {
 		await configurationService.updateValue(unicodeHighlightConfigKeys.includeComments, false, ConfigurationTarget.USER);
 	}
 }
@@ -607,14 +607,14 @@ export class DisableHighlightingInStringsAction extends EditorAction implements 
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const configurationService = accessor?.get(IConfigurationService);
 		if (configurationService) {
 			this.runAction(configurationService);
 		}
 	}
 
-	public async runAction(configurationService: IConfigurationService): Promise<void> {
+	public async runAction(configurationService: IConfigurationService): Promise<codemavi> {
 		await configurationService.updateValue(unicodeHighlightConfigKeys.includeStrings, false, ConfigurationTarget.USER);
 	}
 }
@@ -631,14 +631,14 @@ export class DisableHighlightingOfAmbiguousCharactersAction extends Action2 impl
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const configurationService = accessor?.get(IConfigurationService);
 		if (configurationService) {
 			this.runAction(configurationService);
 		}
 	}
 
-	public async runAction(configurationService: IConfigurationService): Promise<void> {
+	public async runAction(configurationService: IConfigurationService): Promise<codemavi> {
 		await configurationService.updateValue(unicodeHighlightConfigKeys.ambiguousCharacters, false, ConfigurationTarget.USER);
 	}
 }
@@ -655,14 +655,14 @@ export class DisableHighlightingOfInvisibleCharactersAction extends Action2 impl
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const configurationService = accessor?.get(IConfigurationService);
 		if (configurationService) {
 			this.runAction(configurationService);
 		}
 	}
 
-	public async runAction(configurationService: IConfigurationService): Promise<void> {
+	public async runAction(configurationService: IConfigurationService): Promise<codemavi> {
 		await configurationService.updateValue(unicodeHighlightConfigKeys.invisibleCharacters, false, ConfigurationTarget.USER);
 	}
 }
@@ -679,14 +679,14 @@ export class DisableHighlightingOfNonBasicAsciiCharactersAction extends Action2 
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const configurationService = accessor?.get(IConfigurationService);
 		if (configurationService) {
 			this.runAction(configurationService);
 		}
 	}
 
-	public async runAction(configurationService: IConfigurationService): Promise<void> {
+	public async runAction(configurationService: IConfigurationService): Promise<codemavi> {
 		await configurationService.updateValue(unicodeHighlightConfigKeys.nonBasicASCII, false, ConfigurationTarget.USER);
 	}
 }
@@ -709,7 +709,7 @@ export class ShowExcludeOptions extends Action2 {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, args: any): Promise<codemavi> {
 		const { codePoint, reason, inString, inComment } = args as ShowExcludeOptionsArgs;
 
 		const char = String.fromCodePoint(codePoint);
@@ -718,7 +718,7 @@ export class ShowExcludeOptions extends Action2 {
 		const configurationService = accessor!.get(IConfigurationService);
 
 		interface ExtendedOptions extends IQuickPickItem {
-			run(): Promise<void>;
+			run(): Promise<codemavi>;
 		}
 
 		function getExcludeCharFromBeingHighlightedLabel(codePoint: number) {

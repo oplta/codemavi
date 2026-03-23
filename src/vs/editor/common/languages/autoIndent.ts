@@ -19,7 +19,7 @@ export interface IVirtualModel {
 		getLineTokens(lineNumber: number): IViewLineTokens;
 		getLanguageId(): string;
 		getLanguageIdAtPosition(lineNumber: number, column: number): string;
-		forceTokenization?(lineNumber: number): void;
+		forceTokenization?(lineNumber: number): codemavi;
 	};
 	getLineContent(lineNumber: number): string;
 }

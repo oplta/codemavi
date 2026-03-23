@@ -25,11 +25,11 @@ export class MainThreadConsole implements MainThreadConsoleShape {
 		this._isExtensionDevTestFromCli = devOpts.isExtensionDevTestFromCli;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		//
 	}
 
-	$logExtensionHostMessage(entry: IRemoteConsoleLog): void {
+	$logExtensionHostMessage(entry: IRemoteConsoleLog): codemavi {
 		if (this._isExtensionDevTestFromCli) {
 			// If running tests from cli, log to the log service everything
 			logRemoteEntry(this._logService, entry);

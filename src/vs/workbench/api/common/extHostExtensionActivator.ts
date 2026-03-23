@@ -17,7 +17,7 @@ import { Barrier } from '../../../base/common/async.js';
  */
 export interface IExtensionModule {
 	activate?(ctx: vscode.ExtensionContext): Promise<IExtensionAPI>;
-	deactivate?(): void;
+	deactivate?(): codemavi;
 }
 
 /**
@@ -87,27 +87,27 @@ export class ExtensionActivationTimesBuilder {
 		);
 	}
 
-	public codeLoadingStart(): void {
+	public codeLoadingStart(): codemavi {
 		this._codeLoadingStart = Date.now();
 	}
 
-	public codeLoadingStop(): void {
+	public codeLoadingStop(): codemavi {
 		this._codeLoadingStop = Date.now();
 	}
 
-	public activateCallStart(): void {
+	public activateCallStart(): codemavi {
 		this._activateCallStart = Date.now();
 	}
 
-	public activateCallStop(): void {
+	public activateCallStop(): codemavi {
 		this._activateCallStop = Date.now();
 	}
 
-	public activateResolveStart(): void {
+	public activateResolveStart(): codemavi {
 		this._activateResolveStart = Date.now();
 	}
 
-	public activateResolveStop(): void {
+	public activateResolveStop(): codemavi {
 		this._activateResolveStop = Date.now();
 	}
 }
@@ -157,7 +157,7 @@ class FailedExtension extends ActivatedExtension {
 }
 
 export interface IExtensionsActivatorHost {
-	onExtensionActivationError(extensionId: ExtensionIdentifier, error: Error | null, missingExtensionDependency: MissingExtensionDependency | null): void;
+	onExtensionActivationError(extensionId: ExtensionIdentifier, error: Error | null, missingExtensionDependency: MissingExtensionDependency | null): codemavi;
 	actualActivateExtension(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<ActivatedExtension>;
 }
 
@@ -187,13 +187,13 @@ export class ExtensionsActivator implements IDisposable {
 		this._alreadyActivatedEvents = Object.create(null);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		for (const [_, op] of this._operations) {
 			op.dispose();
 		}
 	}
 
-	public async waitForActivatingExtensions(): Promise<void> {
+	public async waitForActivatingExtensions(): Promise<codemavi> {
 		const res: Promise<boolean>[] = [];
 		for (const [_, op] of this._operations) {
 			res.push(op.wait());
@@ -214,7 +214,7 @@ export class ExtensionsActivator implements IDisposable {
 		return op.value;
 	}
 
-	public async activateByEvent(activationEvent: string, startup: boolean): Promise<void> {
+	public async activateByEvent(activationEvent: string, startup: boolean): Promise<codemavi> {
 		if (this._alreadyActivatedEvents[activationEvent]) {
 			return;
 		}
@@ -228,7 +228,7 @@ export class ExtensionsActivator implements IDisposable {
 		this._alreadyActivatedEvents[activationEvent] = true;
 	}
 
-	public activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
+	public activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
 		const desc = this._registry.getExtensionDescription(extensionId);
 		if (!desc) {
 			throw new Error(`Extension '${extensionId.value}' is not known`);
@@ -236,7 +236,7 @@ export class ExtensionsActivator implements IDisposable {
 		return this._activateExtensions([{ id: desc.identifier, reason }]);
 	}
 
-	private async _activateExtensions(extensions: ActivationIdAndReason[]): Promise<void> {
+	private async _activateExtensions(extensions: ActivationIdAndReason[]): Promise<codemavi> {
 		const operations = extensions
 			.filter((p) => !this.isActivated(p.id))
 			.map(ext => this._handleActivationRequest(ext));
@@ -368,7 +368,7 @@ class ActivationOperation {
 		this._initialize();
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._isDisposed = true;
 	}
 
@@ -376,12 +376,12 @@ class ActivationOperation {
 		return this._barrier.wait();
 	}
 
-	private async _initialize(): Promise<void> {
+	private async _initialize(): Promise<codemavi> {
 		await this._waitForDepsThenActivate();
 		this._barrier.open();
 	}
 
-	private async _waitForDepsThenActivate(): Promise<void> {
+	private async _waitForDepsThenActivate(): Promise<codemavi> {
 		if (this._value) {
 			// this operation is already finished
 			return;
@@ -418,7 +418,7 @@ class ActivationOperation {
 		await this._activate();
 	}
 
-	private async _activate(): Promise<void> {
+	private async _activate(): Promise<codemavi> {
 		try {
 			this._value = await this._host.actualActivateExtension(this._id, this._reason);
 		} catch (err) {

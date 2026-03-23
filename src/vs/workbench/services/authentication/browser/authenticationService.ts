@@ -89,8 +89,8 @@ export class AuthenticationService extends Disposable implements IAuthentication
 	private _onDidChangeSessions: Emitter<{ providerId: string; label: string; event: AuthenticationSessionsChangeEvent }> = this._register(new Emitter<{ providerId: string; label: string; event: AuthenticationSessionsChangeEvent }>());
 	readonly onDidChangeSessions: Event<{ providerId: string; label: string; event: AuthenticationSessionsChangeEvent }> = this._onDidChangeSessions.event;
 
-	private _onDidChangeDeclaredProviders: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeDeclaredProviders: Event<void> = this._onDidChangeDeclaredProviders.event;
+	private _onDidChangeDeclaredProviders: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeDeclaredProviders: Event<codemavi> = this._onDidChangeDeclaredProviders.event;
 
 	private _authenticationProviders: Map<string, IAuthenticationProvider> = new Map<string, IAuthenticationProvider>();
 	private _authenticationProviderDisposables: DisposableMap<string, IDisposable> = this._register(new DisposableMap<string, IDisposable>());
@@ -126,7 +126,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		return this._declaredProviders;
 	}
 
-	private _registerEnvContributedAuthenticationProviders(): void {
+	private _registerEnvContributedAuthenticationProviders(): codemavi {
 		if (!this._environmentService.options?.authenticationProviders?.length) {
 			return;
 		}
@@ -136,7 +136,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		}
 	}
 
-	private _registerAuthenticationExtentionPointHandler(): void {
+	private _registerAuthenticationExtentionPointHandler(): codemavi {
 		this._register(authenticationExtPoint.setHandler((_extensions, { added, removed }) => {
 			this._logService.debug(`Found authentication providers. added: ${added.length}, removed: ${removed.length}`);
 			added.forEach(point => {
@@ -171,7 +171,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		}));
 	}
 
-	registerDeclaredAuthenticationProvider(provider: AuthenticationProviderInformation): void {
+	registerDeclaredAuthenticationProvider(provider: AuthenticationProviderInformation): codemavi {
 		if (isFalsyOrWhitespace(provider.id)) {
 			throw new Error(localize('authentication.missingId', 'An authentication contribution must specify an id.'));
 		}
@@ -185,7 +185,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		this._onDidChangeDeclaredProviders.fire();
 	}
 
-	unregisterDeclaredAuthenticationProvider(id: string): void {
+	unregisterDeclaredAuthenticationProvider(id: string): codemavi {
 		const index = this.declaredProviders.findIndex(provider => provider.id === id);
 		if (index > -1) {
 			this.declaredProviders.splice(index, 1);
@@ -197,7 +197,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		return this._authenticationProviders.has(id);
 	}
 
-	registerAuthenticationProvider(id: string, authenticationProvider: IAuthenticationProvider): void {
+	registerAuthenticationProvider(id: string, authenticationProvider: IAuthenticationProvider): codemavi {
 		this._authenticationProviders.set(id, authenticationProvider);
 		const disposableStore = new DisposableStore();
 		disposableStore.add(authenticationProvider.onDidChangeSessions(e => this._onDidChangeSessions.fire({
@@ -212,7 +212,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		this._onDidRegisterAuthenticationProvider.fire({ id, label: authenticationProvider.label });
 	}
 
-	unregisterAuthenticationProvider(id: string): void {
+	unregisterAuthenticationProvider(id: string): codemavi {
 		const provider = this._authenticationProviders.get(id);
 		if (provider) {
 			this._authenticationProviders.delete(id);
@@ -270,7 +270,7 @@ export class AuthenticationService extends Disposable implements IAuthentication
 		}
 	}
 
-	async removeSession(id: string, sessionId: string): Promise<void> {
+	async removeSession(id: string, sessionId: string): Promise<codemavi> {
 		const authProvider = this._authenticationProviders.get(id);
 		if (authProvider) {
 			return authProvider.removeSession(sessionId);

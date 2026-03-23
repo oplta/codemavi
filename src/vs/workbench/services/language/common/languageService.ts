@@ -291,7 +291,7 @@ export class WorkbenchLanguageService extends LanguageService {
 		}));
 	}
 
-	private updateMime(): void {
+	private updateMime(): codemavi {
 		const configuration = this._configurationService.getValue<IFilesConfiguration>();
 
 		// Clear user configured mime associations

@@ -55,7 +55,7 @@ export function create(domElement: HTMLElement, options?: IStandaloneEditorConst
  * Creating a diff editor might cause this listener to be invoked with the two editors.
  * @event
  */
-export function onDidCreateEditor(listener: (codeEditor: ICodeEditor) => void): IDisposable {
+export function onDidCreateEditor(listener: (codeEditor: ICodeEditor) => codemavi): IDisposable {
 	const codeEditorService = StandaloneServices.get(ICodeEditorService);
 	return codeEditorService.onCodeEditorAdd((editor) => {
 		listener(<ICodeEditor>editor);
@@ -66,7 +66,7 @@ export function onDidCreateEditor(listener: (codeEditor: ICodeEditor) => void): 
  * Emitted when an diff editor is created.
  * @event
  */
-export function onDidCreateDiffEditor(listener: (diffEditor: IDiffEditor) => void): IDisposable {
+export function onDidCreateDiffEditor(listener: (diffEditor: IDiffEditor) => codemavi): IDisposable {
 	const codeEditorService = StandaloneServices.get(ICodeEditorService);
 	return codeEditorService.onDiffEditorAdd((editor) => {
 		listener(<IDiffEditor>editor);
@@ -137,7 +137,7 @@ export function addEditorAction(descriptor: IActionDescriptor): IDisposable {
 	}
 
 	const precondition = ContextKeyExpr.deserialize(descriptor.precondition);
-	const run = (accessor: ServicesAccessor, ...args: any[]): void | Promise<void> => {
+	const run = (accessor: ServicesAccessor, ...args: any[]): codemavi | Promise<codemavi> => {
 		return EditorCommand.runEditorCommand(accessor, args, precondition, (accessor, editor, args) => Promise.resolve(descriptor.run(editor, ...args)));
 	};
 
@@ -236,7 +236,7 @@ export function createModel(value: string, language?: string, uri?: URI): ITextM
 /**
  * Change the language for a model.
  */
-export function setModelLanguage(model: ITextModel, mimeTypeOrLanguageId: string): void {
+export function setModelLanguage(model: ITextModel, mimeTypeOrLanguageId: string): codemavi {
 	const languageService = StandaloneServices.get(ILanguageService);
 	const languageId = languageService.getLanguageIdByMimeType(mimeTypeOrLanguageId) || mimeTypeOrLanguageId || PLAINTEXT_LANGUAGE_ID;
 	model.setLanguage(languageService.createById(languageId));
@@ -245,7 +245,7 @@ export function setModelLanguage(model: ITextModel, mimeTypeOrLanguageId: string
 /**
  * Set the markers for a model.
  */
-export function setModelMarkers(model: ITextModel, owner: string, markers: IMarkerData[]): void {
+export function setModelMarkers(model: ITextModel, owner: string, markers: IMarkerData[]): codemavi {
 	if (model) {
 		const markerService = StandaloneServices.get(IMarkerService);
 		markerService.changeOne(owner, model.uri, markers);
@@ -274,7 +274,7 @@ export function getModelMarkers(filter: { owner?: string; resource?: URI; take?:
  * Emitted when markers change for a model.
  * @event
  */
-export function onDidChangeMarkers(listener: (e: readonly URI[]) => void): IDisposable {
+export function onDidChangeMarkers(listener: (e: readonly URI[]) => codemavi): IDisposable {
 	const markerService = StandaloneServices.get(IMarkerService);
 	return markerService.onMarkerChanged(listener);
 }
@@ -299,7 +299,7 @@ export function getModels(): ITextModel[] {
  * Emitted when a model is created.
  * @event
  */
-export function onDidCreateModel(listener: (model: ITextModel) => void): IDisposable {
+export function onDidCreateModel(listener: (model: ITextModel) => codemavi): IDisposable {
 	const modelService = StandaloneServices.get(IModelService);
 	return modelService.onModelAdded(listener);
 }
@@ -308,7 +308,7 @@ export function onDidCreateModel(listener: (model: ITextModel) => void): IDispos
  * Emitted right before a model is disposed.
  * @event
  */
-export function onWillDisposeModel(listener: (model: ITextModel) => void): IDisposable {
+export function onWillDisposeModel(listener: (model: ITextModel) => codemavi): IDisposable {
 	const modelService = StandaloneServices.get(IModelService);
 	return modelService.onModelRemoved(listener);
 }
@@ -317,7 +317,7 @@ export function onWillDisposeModel(listener: (model: ITextModel) => void): IDisp
  * Emitted when a different language is set to a model.
  * @event
  */
-export function onDidChangeModelLanguage(listener: (e: { readonly model: ITextModel; readonly oldLanguage: string }) => void): IDisposable {
+export function onDidChangeModelLanguage(listener: (e: { readonly model: ITextModel; readonly oldLanguage: string }) => codemavi): IDisposable {
 	const modelService = StandaloneServices.get(IModelService);
 	return modelService.onModelLanguageChanged((e) => {
 		listener({
@@ -338,7 +338,7 @@ export function createWebWorker<T extends object>(opts: IInternalWebWorkerOption
 /**
  * Colorize the contents of `domNode` using attribute `data-lang`.
  */
-export function colorizeElement(domNode: HTMLElement, options: IColorizerElementOptions): Promise<void> {
+export function colorizeElement(domNode: HTMLElement, options: IColorizerElementOptions): Promise<codemavi> {
 	const languageService = StandaloneServices.get(ILanguageService);
 	const themeService = <StandaloneThemeService>StandaloneServices.get(IStandaloneThemeService);
 	return Colorizer.colorizeElement(themeService, languageService, domNode, options).then(() => {
@@ -403,7 +403,7 @@ export function tokenize(text: string, languageId: string): languages.Token[][] 
 /**
  * Define a new theme or update an existing theme.
  */
-export function defineTheme(themeName: string, themeData: IStandaloneThemeData): void {
+export function defineTheme(themeName: string, themeData: IStandaloneThemeData): codemavi {
 	const standaloneThemeService = StandaloneServices.get(IStandaloneThemeService);
 	standaloneThemeService.defineTheme(themeName, themeData);
 }
@@ -411,7 +411,7 @@ export function defineTheme(themeName: string, themeData: IStandaloneThemeData):
 /**
  * Switches to a theme.
  */
-export function setTheme(themeName: string): void {
+export function setTheme(themeName: string): codemavi {
 	const standaloneThemeService = StandaloneServices.get(IStandaloneThemeService);
 	standaloneThemeService.setTheme(themeName);
 }
@@ -419,14 +419,14 @@ export function setTheme(themeName: string): void {
 /**
  * Clears all cached font measurements and triggers re-measurement.
  */
-export function remeasureFonts(): void {
+export function remeasureFonts(): codemavi {
 	FontMeasurements.clearAllFontInfos();
 }
 
 /**
  * Register a command.
  */
-export function registerCommand(id: string, handler: (accessor: any, ...args: any[]) => void): IDisposable {
+export function registerCommand(id: string, handler: (accessor: any, ...args: any[]) => codemavi): IDisposable {
 	return CommandsRegistry.registerCommand({ id, handler });
 }
 

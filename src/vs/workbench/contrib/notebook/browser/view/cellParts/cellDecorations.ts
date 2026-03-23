@@ -16,7 +16,7 @@ export class CellDecorations extends CellContentPart {
 		super();
 	}
 
-	override didRenderCell(element: ICellViewModel): void {
+	override didRenderCell(element: ICellViewModel): codemavi {
 		const removedClassNames: string[] = [];
 		this.rootContainer.classList.forEach(className => {
 			if (/^nb\-.*$/.test(className)) {

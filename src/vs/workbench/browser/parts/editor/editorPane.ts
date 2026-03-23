@@ -53,7 +53,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 
 	readonly onDidChangeSizeConstraints = Event.None;
 
-	protected readonly _onDidChangeControl = this._register(new Emitter<void>());
+	protected readonly _onDidChangeControl = this._register(new Emitter<codemavi>());
 	readonly onDidChangeControl = this._onDidChangeControl.event;
 
 	//#endregion
@@ -88,7 +88,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 		super(id, telemetryService, themeService, storageService);
 	}
 
-	override create(parent: HTMLElement): void {
+	override create(parent: HTMLElement): codemavi {
 		super.create(parent);
 
 		// Create Editor
@@ -99,7 +99,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 	 * Called to create the editor in the parent HTMLElement. Subclasses implement
 	 * this method to construct the editor widget.
 	 */
-	protected abstract createEditor(parent: HTMLElement): void;
+	protected abstract createEditor(parent: HTMLElement): codemavi;
 
 	/**
 	 * Note: Clients should not call this method, the workbench calls this
@@ -114,7 +114,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 	 * The provided cancellation token should be used to test if the operation
 	 * was cancelled.
 	 */
-	async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		this._input = input;
 		this._options = options;
 	}
@@ -130,7 +130,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 	 * To monitor the lifecycle of editor inputs, you should not rely on this
 	 * method, rather refer to the listeners on `IEditorGroup` via `IEditorGroupsService`.
 	 */
-	clearInput(): void {
+	clearInput(): codemavi {
 		this._input = undefined;
 		this._options = undefined;
 	}
@@ -142,11 +142,11 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 	 * Sets the given options to the editor. Clients should apply the options
 	 * to the current input.
 	 */
-	setOptions(options: IEditorOptions | undefined): void {
+	setOptions(options: IEditorOptions | undefined): codemavi {
 		this._options = options;
 	}
 
-	override setVisible(visible: boolean): void {
+	override setVisible(visible: boolean): codemavi {
 		super.setVisible(visible);
 
 		// Propagate to Editor
@@ -158,7 +158,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 	 *
 	 * @param visible the state of visibility of this editor
 	 */
-	protected setEditorVisible(visible: boolean): void {
+	protected setEditorVisible(visible: boolean): codemavi {
 		// Subclasses can implement
 	}
 
@@ -184,7 +184,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 		return undefined;
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 
 		// Save all editor memento for this editor type
 		for (const [, editorMemento] of EditorPane.EDITOR_MEMENTOS) {
@@ -196,7 +196,7 @@ export abstract class EditorPane extends Composite implements IEditorPane {
 		super.saveState();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._input = undefined;
 		this._options = undefined;
 
@@ -231,19 +231,19 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.updateConfiguration(e)));
 	}
 
-	private updateConfiguration(e: ITextResourceConfigurationChangeEvent | undefined): void {
+	private updateConfiguration(e: ITextResourceConfigurationChangeEvent | undefined): codemavi {
 		if (!e || e.affectsConfiguration(undefined, 'workbench.editor.sharedViewState')) {
 			this.shareEditorState = this.configurationService.getValue(undefined, 'workbench.editor.sharedViewState') === true;
 		}
 	}
 
-	saveEditorState(group: IEditorGroup, resource: URI, state: T): void;
-	saveEditorState(group: IEditorGroup, editor: EditorInput, state: T): void;
-	saveEditorState(group: IEditorGroup, resourceOrEditor: URI | EditorInput, state: T): void {
+	saveEditorState(group: IEditorGroup, resource: URI, state: T): codemavi;
+	saveEditorState(group: IEditorGroup, editor: EditorInput, state: T): codemavi;
+	saveEditorState(group: IEditorGroup, resourceOrEditor: URI | EditorInput, state: T): codemavi {
 		const resource = this.doGetResource(resourceOrEditor);
 		if (!resource || !group) {
 			return; // we are not in a good state to save any state for a resource
@@ -300,9 +300,9 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		return undefined;
 	}
 
-	clearEditorState(resource: URI, group?: IEditorGroup): void;
-	clearEditorState(editor: EditorInput, group?: IEditorGroup): void;
-	clearEditorState(resourceOrEditor: URI | EditorInput, group?: IEditorGroup): void {
+	clearEditorState(resource: URI, group?: IEditorGroup): codemavi;
+	clearEditorState(editor: EditorInput, group?: IEditorGroup): codemavi;
+	clearEditorState(resourceOrEditor: URI | EditorInput, group?: IEditorGroup): codemavi {
 		if (isEditorInput(resourceOrEditor)) {
 			this.editorDisposables?.delete(resourceOrEditor);
 		}
@@ -330,7 +330,7 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		}
 	}
 
-	clearEditorStateOnDispose(resource: URI, editor: EditorInput): void {
+	clearEditorStateOnDispose(resource: URI, editor: EditorInput): codemavi {
 		if (!this.editorDisposables) {
 			this.editorDisposables = new Map<EditorInput, IDisposable>();
 		}
@@ -343,7 +343,7 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		}
 	}
 
-	moveEditorState(source: URI, target: URI, comparer: IExtUri): void {
+	moveEditorState(source: URI, target: URI, comparer: IExtUri): codemavi {
 		const cache = this.doLoad();
 
 		// We need a copy of the keys to not iterate over
@@ -396,7 +396,7 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		return this.cache;
 	}
 
-	saveState(): void {
+	saveState(): codemavi {
 		const cache = this.doLoad();
 
 		// Cleanup once during session
@@ -408,7 +408,7 @@ export class EditorMemento<T> extends Disposable implements IEditorMemento<T> {
 		this.memento[this.key] = cache.toJSON();
 	}
 
-	private cleanUp(): void {
+	private cleanUp(): codemavi {
 		const cache = this.doLoad();
 
 		// Remove groups from states that no longer exist. Since we modify the

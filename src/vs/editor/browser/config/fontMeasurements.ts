@@ -40,10 +40,10 @@ export class FontMeasurementsImpl extends Disposable {
 
 	private _evictUntrustedReadingsTimeout = -1;
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	public readonly onDidChange = this._onDidChange.event;
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (this._evictUntrustedReadingsTimeout !== -1) {
 			clearTimeout(this._evictUntrustedReadingsTimeout);
 			this._evictUntrustedReadingsTimeout = -1;
@@ -54,7 +54,7 @@ export class FontMeasurementsImpl extends Disposable {
 	/**
 	 * Clear all cached font information and trigger a change event.
 	 */
-	public clearAllFontInfos(): void {
+	public clearAllFontInfos(): codemavi {
 		this._cache.clear();
 		this._onDidChange.fire();
 	}
@@ -69,7 +69,7 @@ export class FontMeasurementsImpl extends Disposable {
 		return cache;
 	}
 
-	private _writeToCache(targetWindow: Window, item: BareFontInfo, value: FontInfo): void {
+	private _writeToCache(targetWindow: Window, item: BareFontInfo, value: FontInfo): codemavi {
 		const cache = this._ensureCache(targetWindow);
 		cache.put(item, value);
 
@@ -82,7 +82,7 @@ export class FontMeasurementsImpl extends Disposable {
 		}
 	}
 
-	private _evictUntrustedReadings(targetWindow: Window): void {
+	private _evictUntrustedReadings(targetWindow: Window): codemavi {
 		const cache = this._ensureCache(targetWindow);
 		const values = cache.getValues();
 		let somethingRemoved = false;
@@ -109,7 +109,7 @@ export class FontMeasurementsImpl extends Disposable {
 	/**
 	 * Restore previously serialized font informations.
 	 */
-	public restoreFontInfo(targetWindow: Window, savedFontInfos: ISerializedFontInfo[]): void {
+	public restoreFontInfo(targetWindow: Window, savedFontInfos: ISerializedFontInfo[]): codemavi {
 		// Take all the saved font info and insert them in the cache without the trusted flag.
 		// The reason for this is that a font might have been installed on the OS in the meantime.
 		for (const savedFontInfo of savedFontInfos) {
@@ -265,13 +265,13 @@ class FontMeasurementsCache {
 		return this._values[itemId];
 	}
 
-	public put(item: BareFontInfo, value: FontInfo): void {
+	public put(item: BareFontInfo, value: FontInfo): codemavi {
 		const itemId = item.getId();
 		this._keys[itemId] = item;
 		this._values[itemId] = value;
 	}
 
-	public remove(item: BareFontInfo): void {
+	public remove(item: BareFontInfo): codemavi {
 		const itemId = item.getId();
 		delete this._keys[itemId];
 		delete this._values[itemId];

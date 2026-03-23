@@ -134,7 +134,7 @@ export class SearchWidget extends Widget {
 	private replaceAllAction: ReplaceAllAction | undefined;
 	private replaceActive: IContextKey<boolean>;
 	private replaceActionBar: ActionBar | undefined;
-	private _replaceHistoryDelayer: Delayer<void>;
+	private _replaceHistoryDelayer: Delayer<codemavi>;
 	private ignoreGlobalFindBufferOnNextFocus = false;
 	private previousGlobalFindBufferValue: string | null = null;
 
@@ -144,8 +144,8 @@ export class SearchWidget extends Widget {
 	private _onSearchCancel = this._register(new Emitter<{ focus: boolean }>());
 	readonly onSearchCancel: Event<{ focus: boolean }> = this._onSearchCancel.event;
 
-	private _onReplaceToggled = this._register(new Emitter<void>());
-	readonly onReplaceToggled: Event<void> = this._onReplaceToggled.event;
+	private _onReplaceToggled = this._register(new Emitter<codemavi>());
+	readonly onReplaceToggled: Event<codemavi> = this._onReplaceToggled.event;
 
 	private _onReplaceStateChange = this._register(new Emitter<boolean>());
 	readonly onReplaceStateChange: Event<boolean> = this._onReplaceStateChange.event;
@@ -153,20 +153,20 @@ export class SearchWidget extends Widget {
 	private _onPreserveCaseChange = this._register(new Emitter<boolean>());
 	readonly onPreserveCaseChange: Event<boolean> = this._onPreserveCaseChange.event;
 
-	private _onReplaceValueChanged = this._register(new Emitter<void>());
-	readonly onReplaceValueChanged: Event<void> = this._onReplaceValueChanged.event;
+	private _onReplaceValueChanged = this._register(new Emitter<codemavi>());
+	readonly onReplaceValueChanged: Event<codemavi> = this._onReplaceValueChanged.event;
 
-	private _onReplaceAll = this._register(new Emitter<void>());
-	readonly onReplaceAll: Event<void> = this._onReplaceAll.event;
+	private _onReplaceAll = this._register(new Emitter<codemavi>());
+	readonly onReplaceAll: Event<codemavi> = this._onReplaceAll.event;
 
-	private _onBlur = this._register(new Emitter<void>());
-	readonly onBlur: Event<void> = this._onBlur.event;
+	private _onBlur = this._register(new Emitter<codemavi>());
+	readonly onBlur: Event<codemavi> = this._onBlur.event;
 
-	private _onDidHeightChange = this._register(new Emitter<void>());
-	readonly onDidHeightChange: Event<void> = this._onDidHeightChange.event;
+	private _onDidHeightChange = this._register(new Emitter<codemavi>());
+	readonly onDidHeightChange: Event<codemavi> = this._onDidHeightChange.event;
 
-	private readonly _onDidToggleContext = new Emitter<void>();
-	readonly onDidToggleContext: Event<void> = this._onDidToggleContext.event;
+	private readonly _onDidToggleContext = new Emitter<codemavi>();
+	readonly onDidToggleContext: Event<codemavi> = this._onDidToggleContext.event;
 
 	private showContextToggle!: Toggle;
 	public contextLinesInput!: InputBox;
@@ -222,7 +222,7 @@ export class SearchWidget extends Widget {
 			}
 		}));
 
-		this._replaceHistoryDelayer = new Delayer<void>(500);
+		this._replaceHistoryDelayer = new Delayer<codemavi>(500);
 		this._toggleReplaceButtonListener = this._register(new MutableDisposable<IDisposable>());
 
 		this.render(container, options);
@@ -246,7 +246,7 @@ export class SearchWidget extends Widget {
 		return this._notebookFilters;
 	}
 
-	focus(select: boolean = true, focusReplace: boolean = false, suppressGlobalSearchBuffer = false): void {
+	focus(select: boolean = true, focusReplace: boolean = false, suppressGlobalSearchBuffer = false): codemavi {
 		this.ignoreGlobalFindBufferOnNextFocus = suppressGlobalSearchBuffer;
 
 		if (focusReplace && this.isReplaceShown()) {
@@ -292,7 +292,7 @@ export class SearchWidget extends Widget {
 		return this.replaceInput?.getValue() ?? '';
 	}
 
-	toggleReplace(show?: boolean): void {
+	toggleReplace(show?: boolean): codemavi {
 		if (show === undefined || show !== this.isReplaceShown()) {
 			this.onToggleReplaceButton();
 		}
@@ -306,15 +306,15 @@ export class SearchWidget extends Widget {
 		return this.replaceInput?.inputBox.getHistory() ?? [];
 	}
 
-	prependSearchHistory(history: string[]): void {
+	prependSearchHistory(history: string[]): codemavi {
 		this.searchInput?.inputBox.prependHistory(history);
 	}
 
-	prependReplaceHistory(history: string[]): void {
+	prependReplaceHistory(history: string[]): codemavi {
 		this.replaceInput?.inputBox.prependHistory(history);
 	}
 
-	clearHistory(): void {
+	clearHistory(): codemavi {
 		this.searchInput?.inputBox.clearHistory();
 		this.replaceInput?.inputBox.clearHistory();
 	}
@@ -343,11 +343,11 @@ export class SearchWidget extends Widget {
 		return !!this.replaceInput?.inputBox.hasFocus();
 	}
 
-	focusReplaceAllAction(): void {
+	focusReplaceAllAction(): codemavi {
 		this.replaceActionBar?.focus(true);
 	}
 
-	focusRegexAction(): void {
+	focusRegexAction(): codemavi {
 		this.searchInput?.focusOnRegex();
 	}
 
@@ -357,7 +357,7 @@ export class SearchWidget extends Widget {
 		}
 	}
 
-	private render(container: HTMLElement, options: ISearchWidgetOptions): void {
+	private render(container: HTMLElement, options: ISearchWidgetOptions): codemavi {
 		this.domNode = dom.append(container, dom.$('.search-widget'));
 		this.domNode.style.position = 'relative';
 
@@ -369,11 +369,11 @@ export class SearchWidget extends Widget {
 		this.renderReplaceInput(this.domNode, options);
 	}
 
-	private updateAccessibilitySupport(): void {
+	private updateAccessibilitySupport(): codemavi {
 		this.searchInput?.setFocusInputOnOptionClick(!this.accessibilityService.isScreenReaderOptimized());
 	}
 
-	private renderToggleReplaceButton(parent: HTMLElement): void {
+	private renderToggleReplaceButton(parent: HTMLElement): codemavi {
 		const opts: IButtonOptions = {
 			buttonBackground: undefined,
 			buttonBorder: undefined,
@@ -393,7 +393,7 @@ export class SearchWidget extends Widget {
 		this._toggleReplaceButtonListener.value = this.toggleReplaceButton.onDidClick(() => this.onToggleReplaceButton());
 	}
 
-	private renderSearchInput(parent: HTMLElement, options: ISearchWidgetOptions): void {
+	private renderSearchInput(parent: HTMLElement, options: ISearchWidgetOptions): codemavi {
 		const history = options.searchHistory || [];
 		const inputOptions: IFindInputOptions = {
 			label: nls.localize('label.Search', 'Search: Type Search Term and press Enter to search'),
@@ -504,7 +504,7 @@ export class SearchWidget extends Widget {
 		}
 	}
 
-	private renderReplaceInput(parent: HTMLElement, options: ISearchWidgetOptions): void {
+	private renderReplaceInput(parent: HTMLElement, options: ISearchWidgetOptions): codemavi {
 		this.replaceContainer = dom.append(parent, dom.$('.replace-container.disabled'));
 		const replaceBox = dom.append(this.replaceContainer, dom.$('.replace-input'));
 
@@ -550,7 +550,7 @@ export class SearchWidget extends Widget {
 		return Promise.resolve(null);
 	}
 
-	private onToggleReplaceButton(): void {
+	private onToggleReplaceButton(): codemavi {
 		this.replaceContainer?.classList.toggle('disabled');
 		if (this.isReplaceShown()) {
 			this.toggleReplaceButton?.element.classList.remove(...ThemeIcon.asClassNameArray(searchHideReplaceIcon));
@@ -568,7 +568,7 @@ export class SearchWidget extends Widget {
 		this.searchInput?.setValue(value);
 	}
 
-	setReplaceAllActionState(enabled: boolean): void {
+	setReplaceAllActionState(enabled: boolean): codemavi {
 		if (this.replaceAllAction && (this.replaceAllAction.enabled !== enabled)) {
 			this.replaceAllAction.enabled = enabled;
 			this.replaceAllAction.label = enabled ? SearchWidget.REPLACE_ALL_ENABLED_LABEL(this.keybindingService) : SearchWidget.REPLACE_ALL_DISABLED_LABEL;
@@ -576,7 +576,7 @@ export class SearchWidget extends Widget {
 		}
 	}
 
-	private updateReplaceActiveState(): void {
+	private updateReplaceActiveState(): codemavi {
 		const currentState = this.isReplaceActive();
 		const newState = this.isReplaceShown() && !!this.replaceAllAction?.enabled;
 		if (currentState !== newState) {
@@ -602,7 +602,7 @@ export class SearchWidget extends Widget {
 		return null;
 	}
 
-	private onSearchInputChanged(): void {
+	private onSearchInputChanged(): codemavi {
 		this.searchInput?.clearMessage();
 		this.setReplaceAllActionState(false);
 
@@ -760,7 +760,7 @@ export class SearchWidget extends Widget {
 		}
 	}
 
-	private async submitSearch(triggeredOnType = false, delay: number = 0): Promise<void> {
+	private async submitSearch(triggeredOnType = false, delay: number = 0): Promise<codemavi> {
 		this.searchInput?.validate();
 		if (!this.searchInput?.inputBox.isInputValid()) {
 			return;
@@ -790,7 +790,7 @@ export class SearchWidget extends Widget {
 		this.onContextLinesChanged();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.setReplaceAllActionState(false);
 		super.dispose();
 	}

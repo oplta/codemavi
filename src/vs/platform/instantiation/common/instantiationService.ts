@@ -47,7 +47,7 @@ export class InstantiationService implements IInstantiationService {
 		this._globalGraph = _enableTracing ? _parent?._globalGraph ?? new Graph(e => e) : undefined;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (!this._isDisposed) {
 			this._isDisposed = true;
 			// dispose all child services
@@ -64,7 +64,7 @@ export class InstantiationService implements IInstantiationService {
 		}
 	}
 
-	private _throwIfDisposed(): void {
+	private _throwIfDisposed(): codemavi {
 		if (this._isDisposed) {
 			throw new Error('InstantiationService has been disposed');
 		}
@@ -75,7 +75,7 @@ export class InstantiationService implements IInstantiationService {
 
 		const that = this;
 		const result = new class extends InstantiationService {
-			override dispose(): void {
+			override dispose(): codemavi {
 				that._children.delete(result);
 				super.dispose();
 			}
@@ -162,7 +162,7 @@ export class InstantiationService implements IInstantiationService {
 		return Reflect.construct<any, T>(ctor, args.concat(serviceArgs));
 	}
 
-	private _setCreatedServiceInstance<T>(id: ServiceIdentifier<T>, instance: T): void {
+	private _setCreatedServiceInstance<T>(id: ServiceIdentifier<T>, instance: T): codemavi {
 		if (this._services.get(id) instanceof SyncDescriptor) {
 			this._services.set(id, instance);
 		} else if (this._parent) {
@@ -383,7 +383,7 @@ export class InstantiationService implements IInstantiationService {
 		}
 	}
 
-	private _throwIfStrict(msg: string, printWarning: boolean): void {
+	private _throwIfStrict(msg: string, printWarning: boolean): codemavi {
 		if (printWarning) {
 			console.warn(msg);
 		}

@@ -154,7 +154,7 @@ async function isGitRepository(folder: WorkspaceFolder): Promise<boolean> {
 	}
 }
 
-async function warnAboutMissingGit(): Promise<void> {
+async function warnAboutMissingGit(): Promise<codemavi> {
 	const config = workspace.getConfiguration('git');
 	const shouldIgnore = config.get<boolean>('ignoreMissingGitWarning') === true;
 
@@ -256,7 +256,7 @@ export async function activate(context: ExtensionContext): Promise<GitExtension>
 	return result;
 }
 
-async function checkGitv1(info: IGit): Promise<void> {
+async function checkGitv1(info: IGit): Promise<codemavi> {
 	const config = workspace.getConfiguration('git');
 	const shouldIgnore = config.get<boolean>('ignoreLegacyWarning') === true;
 
@@ -284,7 +284,7 @@ async function checkGitv1(info: IGit): Promise<void> {
 	}
 }
 
-async function checkGitWindows(info: IGit): Promise<void> {
+async function checkGitWindows(info: IGit): Promise<codemavi> {
 	if (!/^2\.(25|26)\./.test(info.version)) {
 		return;
 	}
@@ -311,7 +311,7 @@ async function checkGitWindows(info: IGit): Promise<void> {
 	}
 }
 
-async function checkGitVersion(info: IGit): Promise<void> {
+async function checkGitVersion(info: IGit): Promise<codemavi> {
 	await checkGitv1(info);
 
 	if (process.platform === 'win32') {

@@ -76,7 +76,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/** Whether we terminated the correlated run yet. Used so a 2nd terminate request goes through to the underlying session. */
 	private didTerminateTestRun?: boolean;
 
-	private readonly _onDidChangeState = new Emitter<void>();
+	private readonly _onDidChangeState = new Emitter<codemavi>();
 	private readonly _onDidEndAdapter = new Emitter<AdapterEndEvent | undefined>();
 
 	private readonly _onDidLoadedSource = new Emitter<LoadedSourceEvent>();
@@ -240,7 +240,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 
 
 	get autoExpandLazyVariables(): boolean {
-		// This tiny helper avoids converting the entire debug model to use service injection
+		// This tiny helper acodemavis converting the entire debug model to use service injection
 		const screenReaderOptimized = this.accessibilityService.isScreenReaderOptimized();
 		const value = this.configurationService.getValue<IDebugConfiguration>('debug').autoExpandLazyVariables;
 		return value === 'auto' && screenReaderOptimized || value === 'on';
@@ -255,7 +255,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return includeRoot && this.root ? `${this.name} (${resources.basenameOrAuthority(this.root.uri)})` : this.name;
 	}
 
-	setName(name: string): void {
+	setName(name: string): codemavi {
 		this._name = name;
 		this._onDidChangeName.fire(name);
 	}
@@ -288,7 +288,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	}
 
 	//---- events
-	get onDidChangeState(): Event<void> {
+	get onDidChangeState(): Event<codemavi> {
 		return this._onDidChangeState.event;
 	}
 
@@ -335,7 +335,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/**
 	 * create and initialize a new debug adapter for this session
 	 */
-	async initialize(dbgr: IDebugger): Promise<void> {
+	async initialize(dbgr: IDebugger): Promise<codemavi> {
 
 		if (this.raw) {
 			// if there was already a connection make sure to remove old listeners
@@ -384,7 +384,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/**
 	 * launch or attach to the debuggee
 	 */
-	async launchOrAttach(config: IConfig): Promise<void> {
+	async launchOrAttach(config: IConfig): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'launch or attach'));
 		}
@@ -415,7 +415,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/**
 	 * terminate the current debug adapter session
 	 */
-	async terminate(restart = false): Promise<void> {
+	async terminate(restart = false): Promise<codemavi> {
 		if (!this.raw) {
 			// Adapter went down but it did not send a 'terminated' event, simulate like the event has been sent
 			this.onDidExitAdapter();
@@ -442,7 +442,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/**
 	 * end the current debug adapter session
 	 */
-	async disconnect(restart = false, suspend = false): Promise<void> {
+	async disconnect(restart = false, suspend = false): Promise<codemavi> {
 		if (!this.raw) {
 			// Adapter went down but it did not send a 'terminated' event, simulate like the event has been sent
 			this.onDidExitAdapter();
@@ -464,7 +464,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	/**
 	 * restart debug adapter session
 	 */
-	async restart(): Promise<void> {
+	async restart(): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'restart'));
 		}
@@ -477,7 +477,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	async sendBreakpoints(modelUri: URI, breakpointsToSend: IBreakpoint[], sourceModified: boolean): Promise<void> {
+	async sendBreakpoints(modelUri: URI, breakpointsToSend: IBreakpoint[], sourceModified: boolean): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'breakpoints'));
 		}
@@ -511,7 +511,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	async sendFunctionBreakpoints(fbpts: IFunctionBreakpoint[]): Promise<void> {
+	async sendFunctionBreakpoints(fbpts: IFunctionBreakpoint[]): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'function breakpoints'));
 		}
@@ -528,7 +528,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	async sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<void> {
+	async sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'exception breakpoints'));
 		}
@@ -581,7 +581,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return response?.body;
 	}
 
-	async sendDataBreakpoints(dataBreakpoints: IDataBreakpoint[]): Promise<void> {
+	async sendDataBreakpoints(dataBreakpoints: IDataBreakpoint[]): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'data breakpoints'));
 		}
@@ -611,7 +611,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	async sendInstructionBreakpoints(instructionBreakpoints: IInstructionBreakpoint[]): Promise<void> {
+	async sendInstructionBreakpoints(instructionBreakpoints: IInstructionBreakpoint[]): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'instruction breakpoints'));
 		}
@@ -709,7 +709,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return this.raw.evaluate({ expression, frameId, context, line: location?.line, column: location?.column, source: location?.source });
 	}
 
-	async restartFrame(frameId: number, threadId: number): Promise<void> {
+	async restartFrame(frameId: number, threadId: number): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'restartFrame'));
@@ -725,7 +725,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	async next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
+	async next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'next'));
@@ -735,7 +735,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.next({ threadId, granularity });
 	}
 
-	async stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
+	async stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'stepIn'));
@@ -745,7 +745,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.stepIn({ threadId, targetId, granularity });
 	}
 
-	async stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
+	async stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'stepOut'));
@@ -755,7 +755,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.stepOut({ threadId, granularity });
 	}
 
-	async stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
+	async stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'stepBack'));
@@ -765,7 +765,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.stepBack({ threadId, granularity });
 	}
 
-	async continue(threadId: number): Promise<void> {
+	async continue(threadId: number): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'continue'));
@@ -774,7 +774,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.continue({ threadId });
 	}
 
-	async reverseContinue(threadId: number): Promise<void> {
+	async reverseContinue(threadId: number): Promise<codemavi> {
 		await this.waitForTriggeredBreakpoints();
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'reverse continue'));
@@ -783,7 +783,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.reverseContinue({ threadId });
 	}
 
-	async pause(threadId: number): Promise<void> {
+	async pause(threadId: number): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'pause'));
 		}
@@ -791,7 +791,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		await this.raw.pause({ threadId });
 	}
 
-	async terminateThreads(threadIds?: number[]): Promise<void> {
+	async terminateThreads(threadIds?: number[]): Promise<codemavi> {
 		if (!this.raw) {
 			throw new Error(localize('noDebugAdapter', "No debugger available, can not send '{0}'", 'terminateThreads'));
 		}
@@ -949,7 +949,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return result;
 	}
 
-	clearThreads(removeThreads: boolean, reference: number | undefined = undefined): void {
+	clearThreads(removeThreads: boolean, reference: number | undefined = undefined): codemavi {
 		if (reference !== undefined && reference !== null) {
 			const thread = this.threads.get(reference);
 			if (thread) {
@@ -980,7 +980,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return this.stoppedDetails.length >= 1 ? this.stoppedDetails[0] : undefined;
 	}
 
-	rawUpdate(data: IRawModelUpdate): void {
+	rawUpdate(data: IRawModelUpdate): codemavi {
 		this.threadIds = [];
 		data.threads.forEach(thread => {
 			this.threadIds.push(thread.id);
@@ -1035,7 +1035,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		);
 	}
 
-	private async fetchThreads(stoppedDetails?: IRawStoppedDetails): Promise<void> {
+	private async fetchThreads(stoppedDetails?: IRawStoppedDetails): Promise<codemavi> {
 		if (this.raw) {
 			const response = await this.raw.threads();
 			if (response?.body && response.body.threads) {
@@ -1048,14 +1048,14 @@ export class DebugSession implements IDebugSession, IDisposable {
 		}
 	}
 
-	initializeForTest(raw: RawDebugSession): void {
+	initializeForTest(raw: RawDebugSession): codemavi {
 		this.raw = raw;
 		this.registerListeners();
 	}
 
 	//---- private
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		if (!this.raw) {
 			return;
 		}
@@ -1150,7 +1150,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 			this._onDidChangeState.fire();
 		}));
 
-		const outputQueue = new Queue<void>();
+		const outputQueue = new Queue<codemavi>();
 		this.rawListeners.add(this.raw.onDidOutput(async event => {
 			const outputSeverity = event.body.category === 'stderr' ? Severity.Error : event.body.category === 'console' ? Severity.Warning : Severity.Info;
 
@@ -1458,7 +1458,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		});
 	}
 
-	private onDidExitAdapter(event?: AdapterEndEvent): void {
+	private onDidExitAdapter(event?: AdapterEndEvent): codemavi {
 		this.initialized = true;
 		this.model.setBreakpointSessionData(this.getId(), this.capabilities, undefined);
 		this.shutdown();
@@ -1466,7 +1466,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 	}
 
 	// Disconnects and clears state. Session can be initialized again for a new connection.
-	private shutdown(): void {
+	private shutdown(): codemavi {
 		this.rawListeners.clear();
 		if (this.raw) {
 			// Send out disconnect and immediatly dispose (do not wait for response) #127418
@@ -1532,7 +1532,7 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return tokenSource.token;
 	}
 
-	private cancelAllRequests(): void {
+	private cancelAllRequests(): codemavi {
 		this.cancellationMap.forEach(tokens => tokens.forEach(t => t.dispose(true)));
 		this.cancellationMap.clear();
 	}
@@ -1547,17 +1547,17 @@ export class DebugSession implements IDebugSession, IDisposable {
 		return !this.parentSession || this._options.repl !== 'mergeWithParent';
 	}
 
-	removeReplExpressions(): void {
+	removeReplExpressions(): codemavi {
 		this.repl.removeReplExpressions();
 	}
 
-	async addReplExpression(stackFrame: IStackFrame | undefined, expression: string): Promise<void> {
+	async addReplExpression(stackFrame: IStackFrame | undefined, expression: string): Promise<codemavi> {
 		await this.repl.addReplExpression(this, stackFrame, expression);
 		// Evaluate all watch expressions and fetch variables again since repl evaluation might have changed some.
 		this.debugService.getViewModel().updateViews();
 	}
 
-	appendToRepl(data: INewReplElementData, isImportant?: boolean): void {
+	appendToRepl(data: INewReplElementData, isImportant?: boolean): codemavi {
 		this.repl.appendToRepl(this, data);
 		if (isImportant) {
 			this.notificationService.notify({ message: data.output.toString(), severity: data.sev, source: this.name });

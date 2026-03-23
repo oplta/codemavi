@@ -224,11 +224,11 @@ export class ResourceContextKey {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
-	private _setLangId(): void {
+	private _setLangId(): codemavi {
 		const value = this.get();
 		if (!value) {
 			this._langIdKey.set(null);
@@ -265,7 +265,7 @@ export class ResourceContextKey {
 		return uri.path;
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._value = undefined;
 		this._contextKeyService.bufferChangeEvents(() => {
 			this._resourceKey.reset();
@@ -287,7 +287,7 @@ export class ResourceContextKey {
 
 //#endregion
 
-export function applyAvailableEditorIds(contextKey: IContextKey<string>, editor: EditorInput | undefined | null, editorResolverService: IEditorResolverService): void {
+export function applyAvailableEditorIds(contextKey: IContextKey<string>, editor: EditorInput | undefined | null, editorResolverService: IEditorResolverService): codemavi {
 	if (!editor) {
 		contextKey.set('');
 		return;

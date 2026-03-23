@@ -113,7 +113,7 @@ export class ExtensionService extends AbstractExtensionService implements IExten
 		this._initFetchFileSystem();
 	}
 
-	private _initFetchFileSystem(): void {
+	private _initFetchFileSystem(): codemavi {
 		const provider = new FetchFileSystemProvider();
 		this._register(this._fileService.registerProvider(Schemas.http, provider));
 		this._register(this._fileService.registerProvider(Schemas.https, provider));
@@ -155,7 +155,7 @@ export class ExtensionService extends AbstractExtensionService implements IExten
 		return new AsyncIterableObject(emitter => this._doResolveExtensions(emitter));
 	}
 
-	private async _doResolveExtensions(emitter: AsyncIterableEmitter<ResolvedExtensions>): Promise<void> {
+	private async _doResolveExtensions(emitter: AsyncIterableEmitter<ResolvedExtensions>): Promise<codemavi> {
 		if (!this._browserEnvironmentService.expectsResolverExtension) {
 			return this._resolveExtensionsDefault(emitter);
 		}
@@ -204,7 +204,7 @@ export class ExtensionService extends AbstractExtensionService implements IExten
 		return this._resolveExtensionsDefault(emitter);
 	}
 
-	protected async _onExtensionHostExit(code: number): Promise<void> {
+	protected async _onExtensionHostExit(code: number): Promise<codemavi> {
 		// Dispose everything associated with the extension host
 		await this._doStopExtensionHosts();
 

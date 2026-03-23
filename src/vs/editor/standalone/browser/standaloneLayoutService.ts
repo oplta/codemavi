@@ -51,7 +51,7 @@ class StandaloneLayoutService implements ILayoutService {
 
 	whenContainerStylesLoaded() { return undefined; }
 
-	focus(): void {
+	focus(): codemavi {
 		this._codeEditorService.getFocusedCodeEditor()?.focus();
 	}
 

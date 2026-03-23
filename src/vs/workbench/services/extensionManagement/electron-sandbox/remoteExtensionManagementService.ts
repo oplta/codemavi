@@ -155,7 +155,7 @@ export class NativeRemoteExtensionManagementService extends RemoteExtensionManag
 		return compatibleExtension;
 	}
 
-	private async installUIDependenciesAndPackedExtensions(local: ILocalExtension): Promise<void> {
+	private async installUIDependenciesAndPackedExtensions(local: ILocalExtension): Promise<codemavi> {
 		const uiExtensions = await this.getAllUIDependenciesAndPackedExtensions(local.manifest, CancellationToken.None);
 		const installed = await this.localExtensionManagementServer.extensionManagementService.getInstalled();
 		const toInstall = uiExtensions.filter(e => installed.every(i => !areSameExtensions(i.identifier, e.identifier)));
@@ -184,7 +184,7 @@ export class NativeRemoteExtensionManagementService extends RemoteExtensionManag
 		return [...result.values()];
 	}
 
-	private async getDependenciesAndPackedExtensionsRecursively(toGet: string[], result: Map<string, IGalleryExtension>, uiExtension: boolean, token: CancellationToken): Promise<void> {
+	private async getDependenciesAndPackedExtensionsRecursively(toGet: string[], result: Map<string, IGalleryExtension>, uiExtension: boolean, token: CancellationToken): Promise<codemavi> {
 		if (toGet.length === 0) {
 			return Promise.resolve();
 		}

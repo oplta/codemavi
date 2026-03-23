@@ -142,7 +142,7 @@ registerAction2(class QuickAccessAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, prefix: undefined): void {
+	run(accessor: ServicesAccessor, prefix: undefined): codemavi {
 		const quickInputService = accessor.get(IQuickInputService);
 		quickInputService.quickAccess.show(typeof prefix === 'string' ? prefix : undefined, { preserveValue: typeof prefix === 'string' /* preserve as is if provided */ });
 	}
@@ -161,7 +161,7 @@ registerAction2(class QuickAccessAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const quickInputService = accessor.get(IQuickInputService);
 		const providerOptions: AnythingQuickAccessProviderRunOptions = {
 			includeHelp: true,
@@ -196,7 +196,7 @@ class BaseQuickAccessNavigateAction extends Action2 {
 		super({ id, title, f1: true, keybinding });
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const keybindingService = accessor.get(IKeybindingService);
 		const quickInputService = accessor.get(IQuickInputService);
 

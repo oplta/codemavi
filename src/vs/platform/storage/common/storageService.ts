@@ -68,7 +68,7 @@ export class RemoteStorageService extends AbstractStorageService {
 
 			// If we are using default profile storage, the profile storage is
 			// actually the same as application storage. As such we
-			// avoid creating the storage library a second time on
+			// acodemavi creating the storage library a second time on
 			// the same DB.
 
 			profileStorage = this.applicationStorage;
@@ -103,7 +103,7 @@ export class RemoteStorageService extends AbstractStorageService {
 		return workspaceStorage;
 	}
 
-	protected async doInitialize(): Promise<void> {
+	protected async doInitialize(): Promise<codemavi> {
 
 		// Init all storage locations
 		await Promises.settled([
@@ -135,7 +135,7 @@ export class RemoteStorageService extends AbstractStorageService {
 		}
 	}
 
-	async close(): Promise<void> {
+	async close(): Promise<codemavi> {
 
 		// Stop periodic scheduler and idle runner as we now collect state normally
 		this.stopFlushWhenIdle();
@@ -151,7 +151,7 @@ export class RemoteStorageService extends AbstractStorageService {
 		]);
 	}
 
-	protected async switchToProfile(toProfile: IUserDataProfile): Promise<void> {
+	protected async switchToProfile(toProfile: IUserDataProfile): Promise<codemavi> {
 		if (!this.canSwitchProfile(this.profileStorageProfile, toProfile)) {
 			return;
 		}
@@ -173,7 +173,7 @@ export class RemoteStorageService extends AbstractStorageService {
 		this.switchData(oldItems, this.profileStorage, StorageScope.PROFILE);
 	}
 
-	protected async switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier, preserveData: boolean): Promise<void> {
+	protected async switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier, preserveData: boolean): Promise<codemavi> {
 		const oldWorkspaceStorage = this.workspaceStorage;
 		const oldItems = oldWorkspaceStorage?.items ?? new Map();
 

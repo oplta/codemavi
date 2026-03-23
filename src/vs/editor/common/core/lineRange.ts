@@ -190,7 +190,7 @@ export class LineRange {
 		return result;
 	}
 
-	public forEach(f: (lineNumber: number) => void): void {
+	public forEach(f: (lineNumber: number) => codemavi): codemavi {
 		for (let lineNumber = this.startLineNumber; lineNumber < this.endLineNumberExclusive; lineNumber++) {
 			f(lineNumber);
 		}
@@ -260,7 +260,7 @@ export class LineRangeSet {
 		return this._normalizedRanges;
 	}
 
-	addRange(range: LineRange): void {
+	addRange(range: LineRange): codemavi {
 		if (range.length === 0) {
 			return;
 		}

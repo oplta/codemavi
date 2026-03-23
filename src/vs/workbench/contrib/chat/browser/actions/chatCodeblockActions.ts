@@ -112,7 +112,7 @@ export class CodeBlockActionRendering extends Disposable implements IWorkbenchCo
 					}
 					return super.getTooltip();
 				}
-				override setActionContext(newContext: unknown): void {
+				override setActionContext(newContext: unknown): codemavi {
 					super.setActionContext(newContext);
 					this.updateTooltip();
 				}
@@ -436,7 +436,7 @@ export function registerChatCodeBlockActions() {
 		}
 	});
 
-	function navigateCodeBlocks(accessor: ServicesAccessor, reverse?: boolean): void {
+	function navigateCodeBlocks(accessor: ServicesAccessor, reverse?: boolean): codemavi {
 		const codeEditorService = accessor.get(ICodeEditorService);
 		const chatWidgetService = accessor.get(IChatWidgetService);
 		const widget = chatWidgetService.lastFocusedWidget;

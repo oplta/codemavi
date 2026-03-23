@@ -27,7 +27,7 @@ export class DebugProgressContribution implements IWorkbenchContribution {
 			}
 			if (session) {
 				progressListener = session.onDidProgressStart(async progressStartEvent => {
-					const promise = new Promise<void>(r => {
+					const promise = new Promise<codemavi>(r => {
 						// Show progress until a progress end event comes or the session ends
 						const listener = Event.any(Event.filter(session.onDidProgressEnd, e => e.body.progressId === progressStartEvent.body.progressId),
 							session.onDidEndAdapter)(() => {
@@ -84,7 +84,7 @@ export class DebugProgressContribution implements IWorkbenchContribution {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.toDispose);
 	}
 }

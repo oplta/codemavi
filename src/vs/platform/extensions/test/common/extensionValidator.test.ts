@@ -33,7 +33,7 @@ suite('Extension Version Validator', () => {
 	});
 
 	test('parseVersion', () => {
-		function assertParseVersion(version: string, hasCaret: boolean, hasGreaterEquals: boolean, majorBase: number, majorMustEqual: boolean, minorBase: number, minorMustEqual: boolean, patchBase: number, patchMustEqual: boolean, preRelease: string | null): void {
+		function assertParseVersion(version: string, hasCaret: boolean, hasGreaterEquals: boolean, majorBase: number, majorMustEqual: boolean, minorBase: number, minorMustEqual: boolean, patchBase: number, patchMustEqual: boolean, preRelease: string | null): codemavi {
 			const actual = parseVersion(version);
 			const expected: IParsedVersion = { hasCaret, hasGreaterEquals, majorBase, majorMustEqual, minorBase, minorMustEqual, patchBase, patchMustEqual, preRelease };
 
@@ -59,7 +59,7 @@ suite('Extension Version Validator', () => {
 	});
 
 	test('normalizeVersion', () => {
-		function assertNormalizeVersion(version: string, majorBase: number, majorMustEqual: boolean, minorBase: number, minorMustEqual: boolean, patchBase: number, patchMustEqual: boolean, isMinimum: boolean, notBefore = 0): void {
+		function assertNormalizeVersion(version: string, majorBase: number, majorMustEqual: boolean, minorBase: number, minorMustEqual: boolean, patchBase: number, patchMustEqual: boolean, isMinimum: boolean, notBefore = 0): codemavi {
 			const actual = normalizeVersion(parseVersion(version));
 			const expected: INormalizedVersion = { majorBase, majorMustEqual, minorBase, minorMustEqual, patchBase, patchMustEqual, isMinimum, notBefore };
 			assert.deepStrictEqual(actual, expected, 'parseVersion for ' + version);
@@ -88,7 +88,7 @@ suite('Extension Version Validator', () => {
 	});
 
 	test('isValidVersion', () => {
-		function testIsValidVersion(version: string, desiredVersion: string, expectedResult: boolean): void {
+		function testIsValidVersion(version: string, desiredVersion: string, expectedResult: boolean): codemavi {
 			const actual = isValidVersion(version, productVersion, desiredVersion);
 			assert.strictEqual(actual, expectedResult, 'extension - vscode: ' + version + ', desiredVersion: ' + desiredVersion + ' should be ' + expectedResult);
 		}
@@ -212,7 +212,7 @@ suite('Extension Version Validator', () => {
 
 	test('isValidExtensionVersion', () => {
 
-		function testExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean, expectedResult: boolean): void {
+		function testExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean, expectedResult: boolean): codemavi {
 			const manifest: IExtensionManifest = {
 				name: 'test',
 				publisher: 'test',
@@ -228,15 +228,15 @@ suite('Extension Version Validator', () => {
 			assert.strictEqual(actual, expectedResult, 'version: ' + version + ', desiredVersion: ' + desiredVersion + ', desc: ' + JSON.stringify(manifest) + ', reasons: ' + JSON.stringify(reasons));
 		}
 
-		function testIsInvalidExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean): void {
+		function testIsInvalidExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean): codemavi {
 			testExtensionVersion(version, desiredVersion, isBuiltin, hasMain, false);
 		}
 
-		function testIsValidExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean): void {
+		function testIsValidExtensionVersion(version: string, desiredVersion: string, isBuiltin: boolean, hasMain: boolean): codemavi {
 			testExtensionVersion(version, desiredVersion, isBuiltin, hasMain, true);
 		}
 
-		function testIsValidVersion(version: string, desiredVersion: string, expectedResult: boolean): void {
+		function testIsValidVersion(version: string, desiredVersion: string, expectedResult: boolean): codemavi {
 			testExtensionVersion(version, desiredVersion, false, true, expectedResult);
 		}
 

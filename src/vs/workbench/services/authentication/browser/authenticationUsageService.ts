@@ -25,7 +25,7 @@ export interface IAuthenticationUsageService {
 	/**
 	 * Initializes the cache of extensions that use authentication. Ideally used in a contribution that can be run eventually after the workspace is loaded.
 	 */
-	initializeExtensionUsageCache(): Promise<void>;
+	initializeExtensionUsageCache(): Promise<codemavi>;
 	/**
 	 * Checks if an extension uses authentication
 	 * @param extensionId The id of the extension to check
@@ -42,7 +42,7 @@ export interface IAuthenticationUsageService {
 	 * @param providerId The id of the authentication provider to get usages for
 	 * @param accountName The name of the account to get usages for
 	 */
-	removeAccountUsage(providerId: string, accountName: string): void;
+	removeAccountUsage(providerId: string, accountName: string): codemavi;
 	/**
 	 * Adds a usage for an account
 	 * @param providerId The id of the authentication provider to get usages for
@@ -50,7 +50,7 @@ export interface IAuthenticationUsageService {
 	 * @param extensionId The id of the extension to add a usage for
 	 * @param extensionName The name of the extension to add a usage for
 	 */
-	addAccountUsage(providerId: string, accountName: string, scopes: ReadonlyArray<string>, extensionId: string, extensionName: string): void;
+	addAccountUsage(providerId: string, accountName: string, scopes: ReadonlyArray<string>, extensionId: string, extensionName: string): codemavi;
 }
 
 export class AuthenticationUsageService extends Disposable implements IAuthenticationUsageService {
@@ -88,7 +88,7 @@ export class AuthenticationUsageService extends Disposable implements IAuthentic
 		));
 	}
 
-	async initializeExtensionUsageCache(): Promise<void> {
+	async initializeExtensionUsageCache(): Promise<codemavi> {
 		await this._queue.queue(() => Promise.all(this._authenticationService.getProviderIds().map(providerId => this._addExtensionsToCache(providerId))));
 	}
 
@@ -112,12 +112,12 @@ export class AuthenticationUsageService extends Disposable implements IAuthentic
 		return usages;
 	}
 
-	removeAccountUsage(providerId: string, accountName: string): void {
+	removeAccountUsage(providerId: string, accountName: string): codemavi {
 		const accountKey = `${providerId}-${accountName}-usages`;
 		this._storageService.remove(accountKey, StorageScope.APPLICATION);
 	}
 
-	addAccountUsage(providerId: string, accountName: string, scopes: string[], extensionId: string, extensionName: string): void {
+	addAccountUsage(providerId: string, accountName: string, scopes: string[], extensionId: string, extensionName: string): codemavi {
 		const accountKey = `${providerId}-${accountName}-usages`;
 		const usages = this.readAccountUsages(providerId, accountName);
 

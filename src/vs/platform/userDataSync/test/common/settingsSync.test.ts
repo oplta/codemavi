@@ -49,7 +49,7 @@ suite('SettingsSync - Auto', () => {
 		testObject = client.getSynchronizer(SyncResource.Settings) as SettingsSynchroniser;
 	});
 
-	test('when settings file does not exist', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when settings file does not exist', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const fileService = client.instantiationService.get(IFileService);
 		const settingResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.settingsResource;
 
@@ -80,7 +80,7 @@ suite('SettingsSync - Auto', () => {
 		assert.deepStrictEqual(server.requests, []);
 	}));
 
-	test('when settings file is empty and remote has no changes', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when settings file is empty and remote has no changes', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const fileService = client.instantiationService.get(IFileService);
 		const settingsResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.settingsResource;
 		await fileService.writeFile(settingsResource, VSBuffer.fromString(''));
@@ -94,7 +94,7 @@ suite('SettingsSync - Auto', () => {
 		assert.strictEqual((await fileService.readFile(settingsResource)).value.toString(), '');
 	}));
 
-	test('when settings file is empty and remote has changes', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when settings file is empty and remote has changes', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const client2 = disposableStore.add(new UserDataSyncClient(server));
 		await client2.setUp(true);
 		const content =
@@ -135,7 +135,7 @@ suite('SettingsSync - Auto', () => {
 		assert.strictEqual((await fileService.readFile(settingsResource)).value.toString(), content);
 	}));
 
-	test('when settings file is created after first sync', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when settings file is created after first sync', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const fileService = client.instantiationService.get(IFileService);
 
 		const settingsResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.settingsResource;
@@ -158,7 +158,7 @@ suite('SettingsSync - Auto', () => {
 		assert.strictEqual(parseSettingsSyncContent(lastSyncUserData!.syncData!.content)?.settings, '{}');
 	}));
 
-	test('sync for first time to the server', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync for first time to the server', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const expected =
 			`{
 	// Always
@@ -191,7 +191,7 @@ suite('SettingsSync - Auto', () => {
 		assert.deepStrictEqual(actual, expected);
 	}));
 
-	test('do not sync machine settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync machine settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -222,7 +222,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('do not sync machine settings when spread across file', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync machine settings when spread across file', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -253,7 +253,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('do not sync machine settings when spread across file - 2', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync machine settings when spread across file - 2', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -284,7 +284,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('sync when all settings are machine settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync when all settings are machine settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Machine
@@ -302,7 +302,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('sync when all settings are machine settings with trailing comma', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync when all settings are machine settings with trailing comma', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Machine
@@ -321,7 +321,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('local change event is triggered when settings are changed', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('local change event is triggered when settings are changed', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const content =
 			`{
 	"files.autoSave": "afterDelay",
@@ -339,7 +339,7 @@ suite('SettingsSync - Auto', () => {
 		await promise;
 	}));
 
-	test('do not sync ignored settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync ignored settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -384,7 +384,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('do not sync ignored and machine settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync ignored and machine settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -432,7 +432,7 @@ suite('SettingsSync - Auto', () => {
 }`);
 	}));
 
-	test('sync throws invalid content error', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync throws invalid content error', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const expected =
 			`{
 	// Always
@@ -467,7 +467,7 @@ suite('SettingsSync - Auto', () => {
 		}
 	}));
 
-	test('sync throws invalid content error - content is an array', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync throws invalid content error - content is an array', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await updateSettings('[]', client);
 		try {
 			await testObject.sync(await client.getResourceManifest());
@@ -478,7 +478,7 @@ suite('SettingsSync - Auto', () => {
 		}
 	}));
 
-	test('sync when there are conflicts', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync when there are conflicts', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const client2 = disposableStore.add(new UserDataSyncClient(server));
 		await client2.setUp(true);
 		await updateSettings(JSON.stringify({
@@ -503,7 +503,7 @@ suite('SettingsSync - Auto', () => {
 		assert.strictEqual(mergeContent, '');
 	}));
 
-	test('sync profile settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('sync profile settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const client2 = disposableStore.add(new UserDataSyncClient(server));
 		await client2.setUp(true);
 		const profile = await client2.instantiationService.get(IUserDataProfilesService).createNamedProfile('profile1');
@@ -545,7 +545,7 @@ suite('SettingsSync - Manual', () => {
 		testObject = client.getSynchronizer(SyncResource.Settings) as SettingsSynchroniser;
 	});
 
-	test('do not sync ignored settings', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('do not sync ignored settings', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const settingsContent =
 			`{
 	// Always
@@ -601,7 +601,7 @@ function parseSettings(content: string): string {
 	return settingsSyncContent.settings;
 }
 
-async function updateSettings(content: string, client: UserDataSyncClient, profile?: IUserDataProfile): Promise<void> {
+async function updateSettings(content: string, client: UserDataSyncClient, profile?: IUserDataProfile): Promise<codemavi> {
 	await client.instantiationService.get(IFileService).writeFile((profile ?? client.instantiationService.get(IUserDataProfilesService).defaultProfile).settingsResource, VSBuffer.fromString(content));
 	await client.instantiationService.get(IConfigurationService).reloadConfiguration();
 }

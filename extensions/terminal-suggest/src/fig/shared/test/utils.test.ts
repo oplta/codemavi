@@ -12,7 +12,7 @@ import {
 	fieldsAreEqual,
 } from '../utils';
 
-function expect<T>(a: T): { toEqual: (b: T) => void } {
+function expect<T>(a: T): { toEqual: (b: T) => codemavi } {
 	return {
 		toEqual: (b: T) => {
 			deepStrictEqual(a, b);

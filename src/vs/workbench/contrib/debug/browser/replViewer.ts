@@ -81,12 +81,12 @@ export class ReplEvaluationInputsRenderer implements ITreeRenderer<ReplEvaluatio
 		return { label };
 	}
 
-	renderElement(element: ITreeNode<ReplEvaluationInput, FuzzyScore>, index: number, templateData: IReplEvaluationInputTemplateData): void {
+	renderElement(element: ITreeNode<ReplEvaluationInput, FuzzyScore>, index: number, templateData: IReplEvaluationInputTemplateData): codemavi {
 		const evaluation = element.element;
 		templateData.label.set(evaluation.value, createMatches(element.filterData));
 	}
 
-	disposeTemplate(templateData: IReplEvaluationInputTemplateData): void {
+	disposeTemplate(templateData: IReplEvaluationInputTemplateData): codemavi {
 		templateData.label.dispose();
 	}
 }
@@ -111,7 +111,7 @@ export class ReplGroupRenderer implements ITreeRenderer<ReplGroup, FuzzyScore, I
 		return { label, source };
 	}
 
-	renderElement(element: ITreeNode<ReplGroup, FuzzyScore>, _index: number, templateData: IReplGroupTemplateData): void {
+	renderElement(element: ITreeNode<ReplGroup, FuzzyScore>, _index: number, templateData: IReplGroupTemplateData): codemavi {
 
 		templateData.elementDisposable?.dispose();
 		const replGroup = element.element;
@@ -120,7 +120,7 @@ export class ReplGroupRenderer implements ITreeRenderer<ReplGroup, FuzzyScore, I
 		templateData.source.setSource(replGroup.sourceData);
 	}
 
-	disposeTemplate(templateData: IReplGroupTemplateData): void {
+	disposeTemplate(templateData: IReplGroupTemplateData): codemavi {
 		templateData.elementDisposable?.dispose();
 		templateData.source.dispose();
 	}
@@ -144,7 +144,7 @@ export class ReplEvaluationResultsRenderer implements ITreeRenderer<ReplEvaluati
 		return { value, elementStore: new DisposableStore() };
 	}
 
-	renderElement(element: ITreeNode<ReplEvaluationResult | Variable, FuzzyScore>, index: number, templateData: IReplEvaluationResultTemplateData): void {
+	renderElement(element: ITreeNode<ReplEvaluationResult | Variable, FuzzyScore>, index: number, templateData: IReplEvaluationResultTemplateData): codemavi {
 		templateData.elementStore.clear();
 		const expression = element.element;
 		templateData.elementStore.add(this.expressionRenderer.renderValue(templateData.value, expression, {
@@ -154,7 +154,7 @@ export class ReplEvaluationResultsRenderer implements ITreeRenderer<ReplEvaluati
 		}));
 	}
 
-	disposeTemplate(templateData: IReplEvaluationResultTemplateData): void {
+	disposeTemplate(templateData: IReplEvaluationResultTemplateData): codemavi {
 		templateData.elementStore.dispose();
 	}
 }
@@ -186,7 +186,7 @@ export class ReplOutputElementRenderer implements ITreeRenderer<ReplOutputElemen
 		return data;
 	}
 
-	renderElement({ element }: ITreeNode<ReplOutputElement, FuzzyScore>, index: number, templateData: IOutputReplElementTemplateData): void {
+	renderElement({ element }: ITreeNode<ReplOutputElement, FuzzyScore>, index: number, templateData: IOutputReplElementTemplateData): codemavi {
 		templateData.elementDisposable.clear();
 		this.setElementCount(element, templateData);
 		templateData.elementDisposable.add(element.onDidChangeCount(() => this.setElementCount(element, templateData)));
@@ -208,7 +208,7 @@ export class ReplOutputElementRenderer implements ITreeRenderer<ReplOutputElemen
 		templateData.getReplElementSource = () => element.sourceData;
 	}
 
-	private setElementCount(element: ReplOutputElement, templateData: IOutputReplElementTemplateData): void {
+	private setElementCount(element: ReplOutputElement, templateData: IOutputReplElementTemplateData): codemavi {
 		if (element.count >= 2) {
 			templateData.count.setCount(element.count);
 			templateData.countContainer.hidden = false;
@@ -217,13 +217,13 @@ export class ReplOutputElementRenderer implements ITreeRenderer<ReplOutputElemen
 		}
 	}
 
-	disposeTemplate(templateData: IOutputReplElementTemplateData): void {
+	disposeTemplate(templateData: IOutputReplElementTemplateData): codemavi {
 		templateData.source.dispose();
 		templateData.elementDisposable.dispose();
 		templateData.count.dispose();
 	}
 
-	disposeElement(_element: ITreeNode<ReplOutputElement, FuzzyScore>, _index: number, templateData: IOutputReplElementTemplateData): void {
+	disposeElement(_element: ITreeNode<ReplOutputElement, FuzzyScore>, _index: number, templateData: IOutputReplElementTemplateData): codemavi {
 		templateData.elementDisposable.clear();
 	}
 }
@@ -245,13 +245,13 @@ export class ReplVariablesRenderer extends AbstractExpressionsRenderer<IExpressi
 		super(debugService, contextViewService, hoverService);
 	}
 
-	public renderElement(node: ITreeNode<IExpression | ReplVariableElement, FuzzyScore>, _index: number, data: IExpressionTemplateData): void {
+	public renderElement(node: ITreeNode<IExpression | ReplVariableElement, FuzzyScore>, _index: number, data: IExpressionTemplateData): codemavi {
 		const element = node.element;
 		data.elementDisposable.clear();
 		super.renderExpressionElement(element instanceof ReplVariableElement ? element.expression : element, node, data);
 	}
 
-	protected renderExpression(expression: IExpression | ReplVariableElement, data: IExpressionTemplateData, highlights: IHighlight[]): void {
+	protected renderExpression(expression: IExpression | ReplVariableElement, data: IExpressionTemplateData, highlights: IHighlight[]): codemavi {
 		const isReplVariable = expression instanceof ReplVariableElement;
 		if (isReplVariable || !expression.name) {
 			data.label.set('');
@@ -291,7 +291,7 @@ export class ReplRawObjectsRenderer implements ITreeRenderer<RawObjectReplElemen
 		return { container, expression, name, label, value, elementStore: new DisposableStore() };
 	}
 
-	renderElement(node: ITreeNode<RawObjectReplElement, FuzzyScore>, index: number, templateData: IRawObjectReplTemplateData): void {
+	renderElement(node: ITreeNode<RawObjectReplElement, FuzzyScore>, index: number, templateData: IRawObjectReplTemplateData): codemavi {
 		templateData.elementStore.clear();
 
 		// key
@@ -310,7 +310,7 @@ export class ReplRawObjectsRenderer implements ITreeRenderer<RawObjectReplElemen
 		}));
 	}
 
-	disposeTemplate(templateData: IRawObjectReplTemplateData): void {
+	disposeTemplate(templateData: IRawObjectReplTemplateData): codemavi {
 		templateData.elementStore.dispose();
 		templateData.label.dispose();
 	}

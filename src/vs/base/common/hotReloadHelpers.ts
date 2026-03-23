@@ -11,7 +11,7 @@ export function readHotReloadableExport<T>(value: T, reader: IReader | undefined
 	return value;
 }
 
-export function observeHotReloadableExports(values: any[], reader: IReader | undefined): void {
+export function observeHotReloadableExports(values: any[], reader: IReader | undefined): codemavi {
 	if (isHotReloadEnabled()) {
 		const o = observableSignalFromEvent(
 			'reload',

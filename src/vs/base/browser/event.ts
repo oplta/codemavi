@@ -44,7 +44,7 @@ export class DomEmitter<K extends keyof DOMEventMap> implements IDisposable {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.emitter.dispose();
 	}
 }

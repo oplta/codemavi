@@ -64,7 +64,7 @@ export class UserDataProfileManagementService extends Disposable implements IUse
 		}));
 	}
 
-	private async onDidChangeCurrentProfile(e: DidChangeUserDataProfileEvent): Promise<void> {
+	private async onDidChangeCurrentProfile(e: DidChangeUserDataProfileEvent): Promise<codemavi> {
 		if (e.previous.isTransient) {
 			await this.userDataProfilesService.cleanUpTransientProfiles();
 		}
@@ -130,7 +130,7 @@ export class UserDataProfileManagementService extends Disposable implements IUse
 		return updatedProfile;
 	}
 
-	async removeProfile(profile: IUserDataProfile): Promise<void> {
+	async removeProfile(profile: IUserDataProfile): Promise<codemavi> {
 		if (!this.userDataProfilesService.profiles.some(p => p.id === profile.id)) {
 			throw new Error(`Profile ${profile.name} does not exist`);
 		}
@@ -140,7 +140,7 @@ export class UserDataProfileManagementService extends Disposable implements IUse
 		await this.userDataProfilesService.removeProfile(profile);
 	}
 
-	async switchProfile(profile: IUserDataProfile): Promise<void> {
+	async switchProfile(profile: IUserDataProfile): Promise<codemavi> {
 		if (!this.userDataProfilesService.profiles.some(p => p.id === profile.id)) {
 			throw new Error(`Profile ${profile.name} does not exist`);
 		}
@@ -174,7 +174,7 @@ export class UserDataProfileManagementService extends Disposable implements IUse
 		return [];
 	}
 
-	private async changeCurrentProfile(profile: IUserDataProfile, reloadMessage?: string): Promise<void> {
+	private async changeCurrentProfile(profile: IUserDataProfile, reloadMessage?: string): Promise<codemavi> {
 		const isRemoteWindow = !!this.environmentService.remoteAuthority;
 
 		const shouldRestartExtensionHosts = this.userDataProfileService.currentProfile.id !== profile.id || !equals(this.userDataProfileService.currentProfile.useDefaultFlags, profile.useDefaultFlags);

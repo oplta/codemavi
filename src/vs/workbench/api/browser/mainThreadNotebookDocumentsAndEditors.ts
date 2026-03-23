@@ -126,7 +126,7 @@ export class MainThreadNotebooksAndEditors {
 		this._editorListeners.dispose();
 	}
 
-	private _handleEditorAdd(editor: INotebookEditor): void {
+	private _handleEditorAdd(editor: INotebookEditor): codemavi {
 		this._editorListeners.set(editor.getId(), combinedDisposable(
 			editor.onDidChangeModel(() => this._updateState()),
 			editor.onDidFocusWidget(() => this._updateState(editor)),
@@ -134,12 +134,12 @@ export class MainThreadNotebooksAndEditors {
 		this._updateState();
 	}
 
-	private _handleEditorRemove(editor: INotebookEditor): void {
+	private _handleEditorRemove(editor: INotebookEditor): codemavi {
 		this._editorListeners.deleteAndDispose(editor.getId());
 		this._updateState();
 	}
 
-	private _updateState(focusedEditor?: INotebookEditor): void {
+	private _updateState(focusedEditor?: INotebookEditor): codemavi {
 
 		const editors = new Map<string, IActiveNotebookEditor>();
 		const visibleEditorsMap = new Map<string, IActiveNotebookEditor>();
@@ -174,7 +174,7 @@ export class MainThreadNotebooksAndEditors {
 		this._currentState = newState;
 	}
 
-	private _onDelta(delta: INotebookAndEditorDelta): void {
+	private _onDelta(delta: INotebookAndEditorDelta): codemavi {
 		if (MainThreadNotebooksAndEditors._isDeltaEmpty(delta)) {
 			return;
 		}

@@ -26,11 +26,11 @@ class TestFileWatcher extends Disposable {
 		return this._onDidFilesChange.event;
 	}
 
-	report(changes: IFileChange[]): void {
+	report(changes: IFileChange[]): codemavi {
 		this.onRawFileEvents(changes);
 	}
 
-	private onRawFileEvents(events: IFileChange[]): void {
+	private onRawFileEvents(events: IFileChange[]): codemavi {
 
 		// Coalesce
 		const coalescedEvents = coalesceEvents(events);

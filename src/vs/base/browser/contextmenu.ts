@@ -39,7 +39,7 @@ export interface IContextMenuDelegate {
 	getActionsContext?(event?: IContextMenuEvent): unknown;
 	getKeyBinding?(action: IAction): ResolvedKeybinding | undefined;
 	getMenuClassName?(): string;
-	onHide?(didCancel: boolean): void;
+	onHide?(didCancel: boolean): codemavi;
 	actionRunner?: IActionRunner;
 	skipTelemetry?: boolean;
 	autoSelectFirstItem?: boolean;
@@ -53,5 +53,5 @@ export interface IContextMenuDelegate {
 }
 
 export interface IContextMenuProvider {
-	showContextMenu(delegate: IContextMenuDelegate): void;
+	showContextMenu(delegate: IContextMenuDelegate): codemavi;
 }

@@ -30,7 +30,7 @@ export class NativeLifecycleService extends AbstractLifecycleService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		const windowId = this.nativeHostService.windowId;
 
 		// Main side indicates that window is about to unload, check for vetos
@@ -147,17 +147,17 @@ export class NativeLifecycleService extends AbstractLifecycleService {
 		}
 	}
 
-	private handleBeforeShutdownError(error: Error, reason: ShutdownReason): void {
+	private handleBeforeShutdownError(error: Error, reason: ShutdownReason): codemavi {
 		this.logService.error(`[lifecycle]: Error during before-shutdown phase (error: ${toErrorMessage(error)})`);
 
 		this._onBeforeShutdownError.fire({ reason, error });
 	}
 
-	protected async handleWillShutdown(reason: ShutdownReason): Promise<void> {
+	protected async handleWillShutdown(reason: ShutdownReason): Promise<codemavi> {
 		this._willShutdown = true;
 
-		const joiners: Promise<void>[] = [];
-		const lastJoiners: (() => Promise<void>)[] = [];
+		const joiners: Promise<codemavi>[] = [];
+		const lastJoiners: (() => Promise<codemavi>)[] = [];
 		const pendingJoiners = new Set<IWillShutdownEventJoiner>();
 		const cts = new CancellationTokenSource();
 		this._onWillShutdown.fire({
@@ -200,7 +200,7 @@ export class NativeLifecycleService extends AbstractLifecycleService {
 		longRunningWillShutdownWarning.dispose();
 	}
 
-	shutdown(): Promise<void> {
+	shutdown(): Promise<codemavi> {
 		return this.nativeHostService.closeWindow();
 	}
 }

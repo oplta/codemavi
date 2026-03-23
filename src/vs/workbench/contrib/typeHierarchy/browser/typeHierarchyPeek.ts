@@ -43,7 +43,7 @@ const enum State {
 
 class LayoutInfo {
 
-	static store(info: LayoutInfo, storageService: IStorageService): void {
+	static store(info: LayoutInfo, storageService: IStorageService): codemavi {
 		storageService.store('typeHierarchyPeekLayout', JSON.stringify(info), StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
@@ -101,7 +101,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		this._disposables.add(this._previewDisposable);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		LayoutInfo.store(this._layoutInfo, this._storageService);
 		this._splitView.dispose();
 		this._tree.dispose();
@@ -124,7 +124,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		});
 	}
 
-	protected override _fillHead(container: HTMLElement): void {
+	protected override _fillHead(container: HTMLElement): codemavi {
 		super._fillHead(container, true);
 
 		const menu = this._menuService.createMenu(TypeHierarchyTreePeekWidget.TitleMenu, this._contextKeyService);
@@ -138,7 +138,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		updateToolbar();
 	}
 
-	protected _fillBody(parent: HTMLElement): void {
+	protected _fillBody(parent: HTMLElement): codemavi {
 
 		this._layoutInfo = LayoutInfo.retrieve(this._storageService);
 		this._dim = new Dimension(0, 0);
@@ -340,13 +340,13 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		this.setTitle(title);
 	}
 
-	showLoading(): void {
+	showLoading(): codemavi {
 		this._parent.dataset['state'] = State.Loading;
 		this.setTitle(localize('title.loading', "Loading..."));
 		this._show();
 	}
 
-	showMessage(message: string): void {
+	showMessage(message: string): codemavi {
 		this._parent.dataset['state'] = State.Message;
 		this.setTitle('');
 		this.setMetaTitle('');
@@ -355,7 +355,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		this._message.focus();
 	}
 
-	async showModel(model: TypeHierarchyModel): Promise<void> {
+	async showModel(model: TypeHierarchyModel): Promise<codemavi> {
 
 		this._show();
 		const viewState = this._treeViewStates.get(this._direction);
@@ -388,7 +388,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		return this._tree.getFocus()[0];
 	}
 
-	async updateDirection(newDirection: TypeHierarchyDirection): Promise<void> {
+	async updateDirection(newDirection: TypeHierarchyDirection): Promise<codemavi> {
 		const model = this._tree.getInput();
 		if (model && newDirection !== this._direction) {
 			this._treeViewStates.set(this._direction, this._tree.getViewState());
@@ -410,7 +410,7 @@ export class TypeHierarchyTreePeekWidget extends peekView.PeekViewWidget {
 		}
 	}
 
-	protected override _doLayoutBody(height: number, width: number): void {
+	protected override _doLayoutBody(height: number, width: number): codemavi {
 		if (this._dim.height !== height || this._dim.width !== width) {
 			super._doLayoutBody(height, width);
 			this._dim = new Dimension(width, height);

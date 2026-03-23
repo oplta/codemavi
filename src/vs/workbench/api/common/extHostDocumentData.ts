@@ -15,7 +15,7 @@ import type * as vscode from 'vscode';
 import { equals } from '../../../base/common/arrays.js';
 
 const _languageId2WordDefinition = new Map<string, RegExp>();
-export function setWordDefinitionFor(languageId: string, wordDefinition: RegExp | undefined): void {
+export function setWordDefinitionFor(languageId: string, wordDefinition: RegExp | undefined): codemavi {
 	if (!wordDefinition) {
 		_languageId2WordDefinition.delete(languageId);
 	} else {
@@ -43,7 +43,7 @@ export class ExtHostDocumentData extends MirrorTextModel {
 	}
 
 	// eslint-disable-next-line local/code-must-use-super-dispose
-	override dispose(): void {
+	override dispose(): codemavi {
 		// we don't really dispose documents but let
 		// extensions still read from them. some
 		// operations, live saving, will now error tho
@@ -86,17 +86,17 @@ export class ExtHostDocumentData extends MirrorTextModel {
 		return Object.freeze(this._document);
 	}
 
-	_acceptLanguageId(newLanguageId: string): void {
+	_acceptLanguageId(newLanguageId: string): codemavi {
 		ok(!this._isDisposed);
 		this._languageId = newLanguageId;
 	}
 
-	_acceptIsDirty(isDirty: boolean): void {
+	_acceptIsDirty(isDirty: boolean): codemavi {
 		ok(!this._isDisposed);
 		this._isDirty = isDirty;
 	}
 
-	_acceptEncoding(encoding: string): void {
+	_acceptEncoding(encoding: string): codemavi {
 		ok(!this._isDisposed);
 		this._encoding = encoding;
 	}

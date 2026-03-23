@@ -70,7 +70,7 @@ export interface IStoredFileWorkingCopyModel extends IFileWorkingCopyModel {
 	 * save is triggered so that the user can always undo back
 	 * to the state before saving.
 	 */
-	pushStackElement(): void;
+	pushStackElement(): codemavi;
 
 	/**
 	 * Optionally allows a stored file working copy model to
@@ -106,7 +106,7 @@ export interface IStoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> e
 	/**
 	 * An event for when a stored file working copy was resolved.
 	 */
-	readonly onDidResolve: Event<void>;
+	readonly onDidResolve: Event<codemavi>;
 
 	/**
 	 * An event for when a stored file working copy was saved successfully.
@@ -116,22 +116,22 @@ export interface IStoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> e
 	/**
 	 * An event indicating that a stored file working copy save operation failed.
 	 */
-	readonly onDidSaveError: Event<void>;
+	readonly onDidSaveError: Event<codemavi>;
 
 	/**
 	 * An event for when the readonly state of the stored file working copy changes.
 	 */
-	readonly onDidChangeReadonly: Event<void>;
+	readonly onDidChangeReadonly: Event<codemavi>;
 
 	/**
 	 * Resolves a stored file working copy.
 	 */
-	resolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<void>;
+	resolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<codemavi>;
 
 	/**
 	 * Explicitly sets the working copy to be modified.
 	 */
-	markModified(): void;
+	markModified(): codemavi;
 
 	/**
 	 * Whether the stored file working copy is in the provided `state`
@@ -147,7 +147,7 @@ export interface IStoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> e
 	 * @param state currently only `FileWorkingCopyState.PENDING_SAVE`
 	 * can be awaited on to resolve.
 	 */
-	joinState(state: StoredFileWorkingCopyState.PENDING_SAVE): Promise<void>;
+	joinState(state: StoredFileWorkingCopyState.PENDING_SAVE): Promise<codemavi>;
 
 	/**
 	 * Whether we have a resolved model or not.
@@ -262,7 +262,7 @@ export interface IStoredFileWorkingCopyResolver {
 	 * working copy manager that can make sure multiple parallel
 	 * resolves execute properly.
 	 */
-	(options?: IStoredFileWorkingCopyResolveOptions): Promise<void>;
+	(options?: IStoredFileWorkingCopyResolveOptions): Promise<codemavi>;
 }
 
 export interface IStoredFileWorkingCopyResolveOptions {
@@ -323,25 +323,25 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 	//#region events
 
-	private readonly _onDidChangeContent = this._register(new Emitter<void>());
+	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
-	private readonly _onDidResolve = this._register(new Emitter<void>());
+	private readonly _onDidResolve = this._register(new Emitter<codemavi>());
 	readonly onDidResolve = this._onDidResolve.event;
 
-	private readonly _onDidChangeDirty = this._register(new Emitter<void>());
+	private readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
-	private readonly _onDidSaveError = this._register(new Emitter<void>());
+	private readonly _onDidSaveError = this._register(new Emitter<codemavi>());
 	readonly onDidSaveError = this._onDidSaveError.event;
 
 	private readonly _onDidSave = this._register(new Emitter<IStoredFileWorkingCopySaveEvent>());
 	readonly onDidSave = this._onDidSave.event;
 
-	private readonly _onDidRevert = this._register(new Emitter<void>());
+	private readonly _onDidRevert = this._register(new Emitter<codemavi>());
 	readonly onDidRevert = this._onDidRevert.event;
 
-	private readonly _onDidChangeReadonly = this._register(new Emitter<void>());
+	private readonly _onDidChangeReadonly = this._register(new Emitter<codemavi>());
 	readonly onDidChangeReadonly = this._onDidChangeReadonly.event;
 
 	//#endregion
@@ -372,7 +372,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.filesConfigurationService.onDidChangeReadonly(() => this._onDidChangeReadonly.fire()));
 	}
 
@@ -385,11 +385,11 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return this.dirty;
 	}
 
-	markModified(): void {
+	markModified(): codemavi {
 		this.setDirty(true); // stored file working copy tracks modified via dirty
 	}
 
-	private setDirty(dirty: boolean): void {
+	private setDirty(dirty: boolean): codemavi {
 		if (!this.isResolved()) {
 			return; // only resolved working copies can be marked dirty
 		}
@@ -404,7 +404,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		}
 	}
 
-	private doSetDirty(dirty: boolean): () => void {
+	private doSetDirty(dirty: boolean): () => codemavi {
 		const wasDirty = this.dirty;
 		const wasInConflictMode = this.inConflictMode;
 		const wasInErrorMode = this.inErrorMode;
@@ -446,7 +446,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return !!this.model;
 	}
 
-	async resolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<void> {
+	async resolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<codemavi> {
 		this.trace('resolve() - enter');
 
 		// Return early if we are disposed
@@ -468,7 +468,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return this.doResolve(options);
 	}
 
-	private async doResolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<void> {
+	private async doResolve(options?: IStoredFileWorkingCopyResolveOptions): Promise<codemavi> {
 
 		// First check if we have contents to use for the working copy
 		if (options?.contents) {
@@ -488,7 +488,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return this.resolveFromFile(options);
 	}
 
-	private async resolveFromBuffer(buffer: VSBufferReadableStream): Promise<void> {
+	private async resolveFromBuffer(buffer: VSBufferReadableStream): Promise<codemavi> {
 		this.trace('resolveFromBuffer()');
 
 		// Try to resolve metdata from disk
@@ -555,7 +555,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return false;
 	}
 
-	private async doResolveFromBackup(backup: IResolvedWorkingCopyBackup<IStoredFileWorkingCopyBackupMetaData>): Promise<void> {
+	private async doResolveFromBackup(backup: IResolvedWorkingCopyBackup<IStoredFileWorkingCopyBackupMetaData>): Promise<codemavi> {
 		this.trace('doResolveFromBackup()');
 
 		// Resolve with backup
@@ -577,7 +577,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		}
 	}
 
-	private async resolveFromFile(options?: IStoredFileWorkingCopyResolveOptions): Promise<void> {
+	private async resolveFromFile(options?: IStoredFileWorkingCopyResolveOptions): Promise<codemavi> {
 		this.trace('resolveFromFile()');
 
 		const forceReadFromFile = options?.forceReadFromFile;
@@ -644,7 +644,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		}
 	}
 
-	private async resolveFromContent(content: IFileStreamContent, dirty: boolean): Promise<void> {
+	private async resolveFromContent(content: IFileStreamContent, dirty: boolean): Promise<codemavi> {
 		this.trace('resolveFromContent() - enter');
 
 		// Return early if we are disposed
@@ -691,7 +691,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._onDidResolve.fire();
 	}
 
-	private async doCreateModel(contents: VSBufferReadableStream): Promise<void> {
+	private async doCreateModel(contents: VSBufferReadableStream): Promise<codemavi> {
 		this.trace('doCreateModel()');
 
 		// Create model and dispose it when we get disposed
@@ -703,7 +703,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 	private ignoreDirtyOnModelContentChange = false;
 
-	private async doUpdateModel(contents: VSBufferReadableStream): Promise<void> {
+	private async doUpdateModel(contents: VSBufferReadableStream): Promise<codemavi> {
 		this.trace('doUpdateModel()');
 
 		// Update model value in a block that ignores content change events for dirty tracking
@@ -715,7 +715,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		}
 	}
 
-	private installModelListeners(model: M): void {
+	private installModelListeners(model: M): codemavi {
 
 		// See https://github.com/microsoft/vscode/issues/30189
 		// This code has been extracted to a different method because it caused a memory leak
@@ -728,7 +728,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._register(model.onWillDispose(() => this.dispose()));
 	}
 
-	private onModelContentChanged(model: M, isUndoingOrRedoing: boolean): void {
+	private onModelContentChanged(model: M, isUndoingOrRedoing: boolean): codemavi {
 		this.trace(`onModelContentChanged() - enter`);
 
 		// In any case increment the version id because it tracks the content state of the model at all times
@@ -775,7 +775,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._onDidChangeContent.fire();
 	}
 
-	private async forceResolveFromFile(): Promise<void> {
+	private async forceResolveFromFile(): Promise<codemavi> {
 		if (this.isDisposed()) {
 			return; // return early when the working copy is invalid
 		}
@@ -863,7 +863,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return this.hasState(StoredFileWorkingCopyState.SAVED);
 	}
 
-	private async doSave(options: IStoredFileWorkingCopySaveAsOptions): Promise<void> {
+	private async doSave(options: IStoredFileWorkingCopySaveAsOptions): Promise<codemavi> {
 		if (typeof options.reason !== 'number') {
 			options.reason = SaveReason.EXPLICIT;
 		}
@@ -946,7 +946,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		});
 	}
 
-	private doSaveSequential(versionId: number, options: IStoredFileWorkingCopySaveAsOptions, progress: IProgress<IProgressStep>, saveCancellation: CancellationTokenSource): Promise<void> {
+	private doSaveSequential(versionId: number, options: IStoredFileWorkingCopySaveAsOptions, progress: IProgress<IProgressStep>, saveCancellation: CancellationTokenSource): Promise<codemavi> {
 		return this.saveSequentializer.run(versionId, (async () => {
 
 			// A save participant can still change the working copy now
@@ -1088,7 +1088,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		})(), () => saveCancellation.cancel());
 	}
 
-	private handleSaveSuccess(stat: IFileStatWithMetadata, versionId: number, options: IStoredFileWorkingCopySaveAsOptions): void {
+	private handleSaveSuccess(stat: IFileStatWithMetadata, versionId: number, options: IStoredFileWorkingCopySaveAsOptions): codemavi {
 
 		// Updated resolved stat with updated stat
 		this.updateLastResolvedFileStat(stat);
@@ -1108,7 +1108,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._onDidSave.fire({ reason: options.reason, stat, source: options.source });
 	}
 
-	private handleSaveError(error: Error, versionId: number, options: IStoredFileWorkingCopySaveAsOptions): void {
+	private handleSaveError(error: Error, versionId: number, options: IStoredFileWorkingCopySaveAsOptions): codemavi {
 		(options.ignoreErrorHandler ? this.logService.trace : this.logService.error).apply(this.logService, [`[stored file working copy] handleSaveError(${versionId}) - exit - resulted in a save error: ${error.toString()}`, this.resource.toString(), this.typeId]);
 
 		// Return early if the save() call was made asking to
@@ -1138,7 +1138,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._onDidSaveError.fire();
 	}
 
-	private doHandleSaveError(error: Error, options: IStoredFileWorkingCopySaveAsOptions): void {
+	private doHandleSaveError(error: Error, options: IStoredFileWorkingCopySaveAsOptions): codemavi {
 		const fileOperationError = error as FileOperationError;
 		const primaryActions: IAction[] = [];
 
@@ -1231,7 +1231,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		this._register(Event.once(handle.onDidClose)(() => listener.dispose()));
 	}
 
-	private updateLastResolvedFileStat(newFileStat: IFileStatWithMetadata): void {
+	private updateLastResolvedFileStat(newFileStat: IFileStatWithMetadata): codemavi {
 		const oldReadonly = this.isReadonly();
 
 		// First resolve - just take
@@ -1263,7 +1263,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 	//#region Revert
 
-	async revert(options?: IRevertOptions): Promise<void> {
+	async revert(options?: IRevertOptions): Promise<codemavi> {
 		if (!this.isResolved() || (!this.dirty && !options?.force)) {
 			return; // ignore if not resolved or not dirty and not enforced
 		}
@@ -1325,7 +1325,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		}
 	}
 
-	async joinState(state: StoredFileWorkingCopyState.PENDING_SAVE): Promise<void> {
+	async joinState(state: StoredFileWorkingCopyState.PENDING_SAVE): Promise<codemavi> {
 		return this.saveSequentializer.running;
 	}
 
@@ -1337,7 +1337,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 		return this.filesConfigurationService.isReadonly(this.resource, this.lastResolvedFileStat);
 	}
 
-	private trace(msg: string): void {
+	private trace(msg: string): codemavi {
 		this.logService.trace(`[stored file working copy] ${msg}`, this.resource.toString(), this.typeId);
 	}
 
@@ -1345,7 +1345,7 @@ export class StoredFileWorkingCopy<M extends IStoredFileWorkingCopyModel> extend
 
 	//#region Dispose
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.trace('dispose()');
 
 		// State

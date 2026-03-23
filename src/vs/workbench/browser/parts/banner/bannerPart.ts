@@ -93,7 +93,7 @@ export class BannerPart extends Part implements IBannerService {
 		return this.element;
 	}
 
-	private close(item: IBannerItem): void {
+	private close(item: IBannerItem): codemavi {
 		// Hide banner
 		this.setVisibility(false);
 
@@ -108,7 +108,7 @@ export class BannerPart extends Part implements IBannerService {
 		this.item = undefined;
 	}
 
-	private focusActionLink(): void {
+	private focusActionLink(): codemavi {
 		const length = this.item?.actions?.length ?? 0;
 
 		if (this.focusedActionIndex < length) {
@@ -143,7 +143,7 @@ export class BannerPart extends Part implements IBannerService {
 		return this.markdownRenderer.render(message).element;
 	}
 
-	private setVisibility(visible: boolean): void {
+	private setVisibility(visible: boolean): codemavi {
 		if (visible !== this.visible) {
 			this.visible = visible;
 			this.focusedActionIndex = -1;
@@ -153,26 +153,26 @@ export class BannerPart extends Part implements IBannerService {
 		}
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.focusedActionIndex = -1;
 		this.element.focus();
 	}
 
-	focusNextAction(): void {
+	focusNextAction(): codemavi {
 		const length = this.item?.actions?.length ?? 0;
 		this.focusedActionIndex = this.focusedActionIndex < length ? this.focusedActionIndex + 1 : 0;
 
 		this.focusActionLink();
 	}
 
-	focusPreviousAction(): void {
+	focusPreviousAction(): codemavi {
 		const length = this.item?.actions?.length ?? 0;
 		this.focusedActionIndex = this.focusedActionIndex > 0 ? this.focusedActionIndex - 1 : length;
 
 		this.focusActionLink();
 	}
 
-	hide(id: string): void {
+	hide(id: string): codemavi {
 		if (this.item?.id !== id) {
 			return;
 		}
@@ -180,7 +180,7 @@ export class BannerPart extends Part implements IBannerService {
 		this.setVisibility(false);
 	}
 
-	show(item: IBannerItem): void {
+	show(item: IBannerItem): codemavi {
 		if (item.id === this.item?.id) {
 			this.setVisibility(true);
 			return;
@@ -298,7 +298,7 @@ class FocusBannerAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		layoutService.focusPart(Parts.BANNER_PART);
 	}

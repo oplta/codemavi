@@ -40,7 +40,7 @@ export class QuickInputBox extends Disposable {
 		return this.findInput.onMouseDown;
 	}
 
-	onDidChange = (handler: (event: string) => void): IDisposable => {
+	onDidChange = (handler: (event: string) => codemavi): IDisposable => {
 		return this.findInput.onDidChange(handler);
 	};
 
@@ -52,7 +52,7 @@ export class QuickInputBox extends Disposable {
 		this.findInput.setValue(value);
 	}
 
-	select(range: IRange | null = null): void {
+	select(range: IRange | null = null): codemavi {
 		this.findInput.inputBox.select(range);
 	}
 
@@ -64,7 +64,7 @@ export class QuickInputBox extends Disposable {
 		return this.findInput.inputBox.isSelectionAtEnd();
 	}
 
-	setPlaceholder(placeholder: string): void {
+	setPlaceholder(placeholder: string): codemavi {
 		this.findInput.inputBox.setPlaceHolder(placeholder);
 	}
 
@@ -104,15 +104,15 @@ export class QuickInputBox extends Disposable {
 		return this.findInput.inputBox.hasFocus();
 	}
 
-	setAttribute(name: string, value: string): void {
+	setAttribute(name: string, value: string): codemavi {
 		this.findInput.inputBox.inputElement.setAttribute(name, value);
 	}
 
-	removeAttribute(name: string): void {
+	removeAttribute(name: string): codemavi {
 		this.findInput.inputBox.inputElement.removeAttribute(name);
 	}
 
-	showDecoration(decoration: Severity): void {
+	showDecoration(decoration: Severity): codemavi {
 		if (decoration === Severity.Ignore) {
 			this.findInput.clearMessage();
 		} else {
@@ -124,11 +124,11 @@ export class QuickInputBox extends Disposable {
 		return this.findInput.inputBox.stylesForType(decoration === Severity.Info ? MessageType.INFO : decoration === Severity.Warning ? MessageType.WARNING : MessageType.ERROR);
 	}
 
-	setFocus(): void {
+	setFocus(): codemavi {
 		this.findInput.focus();
 	}
 
-	layout(): void {
+	layout(): codemavi {
 		this.findInput.inputBox.layout();
 	}
 }

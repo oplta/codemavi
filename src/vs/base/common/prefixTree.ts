@@ -43,17 +43,17 @@ export class WellDefinedPrefixTree<V> {
 	 * @param onNode - called for each node as we descend to the insertion point,
 	 * including the insertion point itself.
 	 */
-	insert(key: Iterable<string>, value: V, onNode?: (n: IPrefixTreeNode<V>) => void): void {
+	insert(key: Iterable<string>, value: V, onNode?: (n: IPrefixTreeNode<V>) => codemavi): codemavi {
 		this.opNode(key, n => n._value = value, onNode);
 	}
 
 	/** Mutates a value in the prefix tree. */
-	mutate(key: Iterable<string>, mutate: (value?: V) => V): void {
+	mutate(key: Iterable<string>, mutate: (value?: V) => V): codemavi {
 		this.opNode(key, n => n._value = mutate(n._value === unset ? undefined : n._value));
 	}
 
 	/** Mutates nodes along the path in the prefix tree. */
-	mutatePath(key: Iterable<string>, mutate: (node: IPrefixTreeNode<V>) => void): void {
+	mutatePath(key: Iterable<string>, mutate: (node: IPrefixTreeNode<V>) => codemavi): codemavi {
 		this.opNode(key, () => { }, n => mutate(n));
 	}
 
@@ -197,7 +197,7 @@ export class WellDefinedPrefixTree<V> {
 		return path;
 	}
 
-	private opNode(key: Iterable<string>, fn: (node: Node<V>) => void, onDescend?: (node: Node<V>) => void): void {
+	private opNode(key: Iterable<string>, fn: (node: Node<V>) => codemavi, onDescend?: (node: Node<V>) => codemavi): codemavi {
 		let node = this.root;
 		for (const part of key) {
 			if (!node.children) {

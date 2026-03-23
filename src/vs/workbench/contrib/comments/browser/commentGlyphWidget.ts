@@ -65,7 +65,7 @@ export class CommentGlyphWidget extends Disposable {
 		return ModelDecorationOptions.createDynamic(decorationOptions);
 	}
 
-	setThreadState(state: CommentThreadState | undefined): void {
+	setThreadState(state: CommentThreadState | undefined): codemavi {
 		if (this._threadState !== state) {
 			this._threadState = state;
 			this._commentsOptions = this.createDecorationOptions();
@@ -73,7 +73,7 @@ export class CommentGlyphWidget extends Disposable {
 		}
 	}
 
-	private _updateDecorations(): void {
+	private _updateDecorations(): codemavi {
 		const commentsDecorations = [{
 			range: {
 				startLineNumber: this._lineNumber, startColumn: 1,
@@ -85,7 +85,7 @@ export class CommentGlyphWidget extends Disposable {
 		this._commentsDecorations.set(commentsDecorations);
 	}
 
-	setLineNumber(lineNumber: number): void {
+	setLineNumber(lineNumber: number): codemavi {
 		this._lineNumber = lineNumber;
 		this._updateDecorations();
 	}

@@ -34,14 +34,14 @@ export const IUserDataSyncMachinesService = createDecorator<IUserDataSyncMachine
 export interface IUserDataSyncMachinesService {
 	_serviceBrand: any;
 
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	getMachines(manifest?: IUserDataManifest): Promise<IUserDataSyncMachine[]>;
 
-	addCurrentMachine(manifest?: IUserDataManifest): Promise<void>;
-	removeCurrentMachine(manifest?: IUserDataManifest): Promise<void>;
-	renameMachine(machineId: string, name: string): Promise<void>;
-	setEnablements(enbalements: [string, boolean][]): Promise<void>;
+	addCurrentMachine(manifest?: IUserDataManifest): Promise<codemavi>;
+	removeCurrentMachine(manifest?: IUserDataManifest): Promise<codemavi>;
+	renameMachine(machineId: string, name: string): Promise<codemavi>;
+	setEnablements(enbalements: [string, boolean][]): Promise<codemavi>;
 }
 
 const currentMachineNameKey = 'sync.currentMachineName';
@@ -81,7 +81,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 
 	_serviceBrand: any;
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private readonly currentMachineIdPromise: Promise<string>;
@@ -105,7 +105,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 		return machineData.machines.map<IUserDataSyncMachine>(machine => ({ ...machine, ...{ isCurrent: machine.id === currentMachineId } }));
 	}
 
-	async addCurrentMachine(manifest?: IUserDataManifest): Promise<void> {
+	async addCurrentMachine(manifest?: IUserDataManifest): Promise<codemavi> {
 		const currentMachineId = await this.currentMachineIdPromise;
 		const machineData = await this.readMachinesData(manifest);
 		if (!machineData.machines.some(({ id }) => id === currentMachineId)) {
@@ -114,7 +114,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 		}
 	}
 
-	async removeCurrentMachine(manifest?: IUserDataManifest): Promise<void> {
+	async removeCurrentMachine(manifest?: IUserDataManifest): Promise<codemavi> {
 		const currentMachineId = await this.currentMachineIdPromise;
 		const machineData = await this.readMachinesData(manifest);
 		const updatedMachines = machineData.machines.filter(({ id }) => id !== currentMachineId);
@@ -124,7 +124,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 		}
 	}
 
-	async renameMachine(machineId: string, name: string, manifest?: IUserDataManifest): Promise<void> {
+	async renameMachine(machineId: string, name: string, manifest?: IUserDataManifest): Promise<codemavi> {
 		const machineData = await this.readMachinesData(manifest);
 		const machine = machineData.machines.find(({ id }) => id === machineId);
 		if (machine) {
@@ -137,7 +137,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 		}
 	}
 
-	async setEnablements(enablements: [string, boolean][]): Promise<void> {
+	async setEnablements(enablements: [string, boolean][]): Promise<codemavi> {
 		const machineData = await this.readMachinesData();
 		for (const [machineId, enabled] of enablements) {
 			const machine = machineData.machines.find(machine => machine.id === machineId);
@@ -177,7 +177,7 @@ export class UserDataSyncMachinesService extends Disposable implements IUserData
 		return machinesData;
 	}
 
-	private async writeMachinesData(machinesData: IMachinesData): Promise<void> {
+	private async writeMachinesData(machinesData: IMachinesData): Promise<codemavi> {
 		const content = JSON.stringify(machinesData);
 		const ref = await this.userDataSyncStoreService.writeResource(UserDataSyncMachinesService.RESOURCE, content, this.userData?.ref || null);
 		this.userData = { ref, content };

@@ -230,7 +230,7 @@ suite('Reference Collection', () => {
 		private _count = 0;
 		get count() { return this._count; }
 		protected createReferencedObject(key: string): number { this._count++; return key.length; }
-		protected destroyReferencedObject(key: string, object: number): void { this._count--; }
+		protected destroyReferencedObject(key: string, object: number): codemavi { this._count--; }
 	}
 
 	test('simple', () => {
@@ -263,7 +263,7 @@ suite('Reference Collection', () => {
 	});
 });
 
-function assertThrows(fn: () => void, test: (error: any) => void) {
+function assertThrows(fn: () => codemavi, test: (error: any) => codemavi) {
 	try {
 		fn();
 		assert.fail('Expected function to throw, but it did not.');

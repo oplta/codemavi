@@ -21,7 +21,7 @@ export class NotebookCellEditorPool extends Disposable {
 	private readonly _editorDisposable = this._register(new MutableDisposable());
 	private _editorContextKeyService!: IScopedContextKeyService;
 	private _editor!: CodeEditorWidget;
-	private _focusEditorCancellablePromise: CancelablePromise<void> | undefined;
+	private _focusEditorCancellablePromise: CancelablePromise<codemavi> | undefined;
 	private _isInitialized = false;
 	private _isDisposed = false;
 
@@ -68,7 +68,7 @@ export class NotebookCellEditorPool extends Disposable {
 		this._isInitialized = true;
 	}
 
-	preserveFocusedEditor(cell: ICellViewModel): void {
+	preserveFocusedEditor(cell: ICellViewModel): codemavi {
 		if (!this._isInitialized) {
 			this._initializeEditor(cell);
 		}

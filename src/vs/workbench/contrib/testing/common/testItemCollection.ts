@@ -81,7 +81,7 @@ export type ExtHostTestItemEvent =
 export interface ITestItemApi<T> {
 	controllerId: string;
 	parent?: T;
-	listener?: (evt: ExtHostTestItemEvent) => void;
+	listener?: (evt: ExtHostTestItemEvent) => codemavi;
 }
 
 export interface ITestItemCollectionOptions<T> {
@@ -148,7 +148,7 @@ const diffTestItems = (a: ITestItem, b: ITestItem) => {
 
 export interface ITestChildrenLike<T> extends Iterable<[string, T]> {
 	get(id: string): T | undefined;
-	delete(id: string): void;
+	delete(id: string): codemavi;
 }
 
 export interface ITestItemLike {
@@ -164,7 +164,7 @@ export interface ITestItemLike {
 export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 	private readonly debounceSendDiff = this._register(new RunOnceScheduler(() => this.flushDiff(), 200));
 	private readonly diffOpEmitter = this._register(new Emitter<TestsDiff>());
-	private _resolveHandler?: (item: T | undefined) => Promise<void> | void;
+	private _resolveHandler?: (item: T | undefined) => Promise<codemavi> | codemavi;
 
 	public get root() {
 		return this.options.root;
@@ -184,7 +184,7 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 	/**
 	 * Handler used for expanding test items.
 	 */
-	public set resolveHandler(handler: undefined | ((item: T | undefined) => void)) {
+	public set resolveHandler(handler: undefined | ((item: T | undefined) => codemavi)) {
 		this._resolveHandler = handler;
 		for (const test of this.tree.values()) {
 			this.updateExpandability(test);
@@ -254,7 +254,7 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 	 * is < 0, then all children will be expanded. If it's 0, then only this
 	 * item will be expanded.
 	 */
-	public expand(testId: string, levels: number): Promise<void> | void {
+	public expand(testId: string, levels: number): Promise<codemavi> | codemavi {
 		const internal = this.tree.get(testId);
 		if (!internal) {
 			return;
@@ -264,7 +264,7 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 			internal.expandLevels = levels;
 		}
 
-		// try to avoid awaiting things if the provider returns synchronously in
+		// try to acodemavi awaiting things if the provider returns synchronously in
 		// order to keep everything in a single diff and DOM update.
 		if (internal.expand === TestItemExpandState.Expandable) {
 			const r = this.resolveChildren(internal);
@@ -341,7 +341,7 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 		}
 	}
 
-	private upsertItem(actual: T, parent: CollectionItem<T> | undefined): void {
+	private upsertItem(actual: T, parent: CollectionItem<T> | undefined): codemavi {
 		const fullId = TestId.fromExtHostTestItem(actual, this.root.id, parent?.actual);
 
 		// If this test item exists elsewhere in the tree already (exists at an
@@ -529,12 +529,12 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 	 * the children will be expanded. If it's 1, the children and their children
 	 * will be expanded. If it's <0, it's a no-op.
 	 */
-	private expandChildren(internal: CollectionItem<T>, levels: number): Promise<void> | void {
+	private expandChildren(internal: CollectionItem<T>, levels: number): Promise<codemavi> | codemavi {
 		if (levels < 0) {
 			return;
 		}
 
-		const expandRequests: Promise<void>[] = [];
+		const expandRequests: Promise<codemavi>[] = [];
 		for (const [_, child] of this.options.getChildren(internal.actual)) {
 			const promise = this.expand(TestId.joinToString(internal.fullId, child.id), levels);
 			if (isThenable(promise)) {
@@ -569,7 +569,7 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 			console.error(`Unhandled error in resolveHandler of test controller "${this.options.controllerId}"`, err);
 		};
 
-		let r: Thenable<void> | undefined | void;
+		let r: Thenable<codemavi> | undefined | codemavi;
 		try {
 			r = this._resolveHandler(internal.actual === this.root ? undefined : internal.actual);
 		} catch (err) {
@@ -635,10 +635,10 @@ export class TestItemCollection<T extends ITestItemLike> extends Disposable {
 /** Implementation of vscode.TestItemCollection */
 export interface ITestItemChildren<T extends ITestItemLike> extends Iterable<[string, T]> {
 	readonly size: number;
-	replace(items: readonly T[]): void;
-	forEach(callback: (item: T, collection: this) => unknown, thisArg?: unknown): void;
-	add(item: T): void;
-	delete(itemId: string): void;
+	replace(items: readonly T[]): codemavi;
+	forEach(callback: (item: T, collection: this) => unknown, thisArg?: unknown): codemavi;
+	add(item: T): codemavi;
+	delete(itemId: string): codemavi;
 	get(itemId: string): T | undefined;
 
 	toJSON(): readonly T[];

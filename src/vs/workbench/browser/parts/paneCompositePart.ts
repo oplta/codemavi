@@ -82,7 +82,7 @@ export interface IPaneCompositePart extends IView {
 	/**
 	 * Hide the active viewlet.
 	 */
-	hideActivePaneComposite(): void;
+	hideActivePaneComposite(): codemavi;
 
 	/**
 	 * Return the last active viewlet id.
@@ -194,7 +194,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.onDidPaneCompositeOpen(composite => this.onDidOpen(composite)));
 		this._register(this.onDidPaneCompositeClose(this.onDidClose, this));
 		this._register(this.globalActions.onDidChange(() => this.updateGlobalToolbarActions()));
@@ -222,18 +222,18 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		}));
 	}
 
-	private onDidOpen(composite: IComposite): void {
+	private onDidOpen(composite: IComposite): codemavi {
 		this.activePaneContextKey.set(composite.getId());
 	}
 
-	private onDidClose(composite: IComposite): void {
+	private onDidClose(composite: IComposite): codemavi {
 		const id = composite.getId();
 		if (this.activePaneContextKey.get() === id) {
 			this.activePaneContextKey.reset();
 		}
 	}
 
-	protected override showComposite(composite: Composite): void {
+	protected override showComposite(composite: Composite): codemavi {
 		super.showComposite(composite);
 		this.layoutCompositeBar();
 		this.layoutEmptyMessage();
@@ -246,7 +246,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return composite;
 	}
 
-	override create(parent: HTMLElement): void {
+	override create(parent: HTMLElement): codemavi {
 		this.element = parent;
 		this.element.classList.add('pane-composite-part');
 
@@ -264,7 +264,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		this._register(focusTracker.onDidBlur(() => this.paneFocusContextKey.set(false)));
 	}
 
-	private createEmptyPaneMessage(parent: HTMLElement): void {
+	private createEmptyPaneMessage(parent: HTMLElement): codemavi {
 		this.emptyPaneMessageElement = $('.empty-pane-message-area');
 
 		const messageElement = $('.empty-pane-message');
@@ -385,7 +385,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return titleLabel;
 	}
 
-	protected updateCompositeBar(updateCompositeBarOption: boolean = false): void {
+	protected updateCompositeBar(updateCompositeBarOption: boolean = false): codemavi {
 		const wasCompositeBarVisible = this.compositeBarPosition !== undefined;
 		const isCompositeBarVisible = this.shouldShowCompositeBar();
 		const previousPosition = this.compositeBarPosition;
@@ -476,7 +476,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return area;
 	}
 
-	private removeFooterHeaderArea(header: boolean): void {
+	private removeFooterHeaderArea(header: boolean): codemavi {
 		this.headerFooterCompositeBarContainer = undefined;
 		this.headerFooterCompositeBarDispoables.clear();
 		if (header) {
@@ -490,7 +490,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return this.instantiationService.createInstance(PaneCompositeBar, this.getCompositeBarOptions(), this.partId, this);
 	}
 
-	protected override onTitleAreaUpdate(compositeId: string): void {
+	protected override onTitleAreaUpdate(compositeId: string): codemavi {
 		super.onTitleAreaUpdate(compositeId);
 
 		// If title actions change, relayout the composite bar
@@ -567,7 +567,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return this.getLastActiveCompositeId();
 	}
 
-	hideActivePaneComposite(): void {
+	hideActivePaneComposite(): codemavi {
 		if (this.layoutService.isVisible(this.partId)) {
 			this.layoutService.setPartHidden(true, this.partId);
 		}
@@ -575,11 +575,11 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		this.hideActiveComposite();
 	}
 
-	protected focusCompositeBar(): void {
+	protected focusCompositeBar(): codemavi {
 		this.paneCompositeBar.value?.focus();
 	}
 
-	override layout(width: number, height: number, top: number, left: number): void {
+	override layout(width: number, height: number, top: number, left: number): codemavi {
 		if (!this.layoutService.isVisible(this.partId)) {
 			return;
 		}
@@ -596,7 +596,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		this.layoutEmptyMessage();
 	}
 
-	private layoutCompositeBar(): void {
+	private layoutCompositeBar(): codemavi {
 		if (this.contentDimension && this.dimension && this.paneCompositeBar.value) {
 			const padding = this.compositeBarPosition === CompositeBarPosition.TITLE ? 16 : 8;
 			const borderWidth = this.partId === Parts.PANEL_PART ? 0 : 1;
@@ -606,7 +606,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		}
 	}
 
-	private layoutEmptyMessage(): void {
+	private layoutEmptyMessage(): codemavi {
 		const visible = !this.getActiveComposite();
 		this.element.classList.toggle('empty', visible);
 		if (visible) {
@@ -614,7 +614,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		}
 	}
 
-	private updateGlobalToolbarActions(): void {
+	private updateGlobalToolbarActions(): codemavi {
 		const primaryActions = this.globalActions.getPrimaryActions();
 		const secondaryActions = this.globalActions.getSecondaryActions();
 		this.globalToolBar?.setActions(prepareActions(primaryActions), prepareActions(secondaryActions));
@@ -636,7 +636,7 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		return toolBarWidth + globalToolBarWidth + 5; // 5px padding left
 	}
 
-	private onTitleAreaContextMenu(event: StandardMouseEvent): void {
+	private onTitleAreaContextMenu(event: StandardMouseEvent): codemavi {
 		if (this.shouldShowCompositeBar() && this.getCompositeBarPosition() === CompositeBarPosition.TITLE) {
 			return this.onCompositeBarContextMenu(event);
 		} else {
@@ -654,11 +654,11 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 		}
 	}
 
-	private onCompositeBarAreaContextMenu(event: StandardMouseEvent): void {
+	private onCompositeBarAreaContextMenu(event: StandardMouseEvent): codemavi {
 		return this.onCompositeBarContextMenu(event);
 	}
 
-	private onCompositeBarContextMenu(event: StandardMouseEvent): void {
+	private onCompositeBarContextMenu(event: StandardMouseEvent): codemavi {
 		if (this.paneCompositeBar.value) {
 			const actions: IAction[] = [...this.paneCompositeBar.value.getContextMenuActions()];
 			if (actions.length) {

@@ -314,7 +314,7 @@ registerAction2(class ChangeCellToCodeAction extends NotebookMultiCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		await changeCellToKind(CellKind.Code, context);
 	}
 });
@@ -338,7 +338,7 @@ registerAction2(class ChangeCellToMarkdownAction extends NotebookMultiCellAction
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		await changeCellToKind(CellKind.Markup, context, 'markdown', Mimes.markdown);
 	}
 });
@@ -373,7 +373,7 @@ registerAction2(class CollapseCellInputAction extends NotebookMultiCellAction {
 		return parseMultiCellExecutionArgs(accessor, ...args);
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		if (context.ui) {
 			context.cell.isInputCollapsed = true;
 		} else {
@@ -399,7 +399,7 @@ registerAction2(class ExpandCellInputAction extends NotebookMultiCellAction {
 		return parseMultiCellExecutionArgs(accessor, ...args);
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		if (context.ui) {
 			context.cell.isInputCollapsed = false;
 		} else {
@@ -421,7 +421,7 @@ registerAction2(class CollapseCellOutputAction extends NotebookMultiCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		if (context.ui) {
 			context.cell.isOutputCollapsed = true;
 		} else {
@@ -443,7 +443,7 @@ registerAction2(class ExpandCellOuputAction extends NotebookMultiCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		if (context.ui) {
 			context.cell.isOutputCollapsed = false;
 		} else {
@@ -469,7 +469,7 @@ registerAction2(class extends NotebookMultiCellAction {
 		return parseMultiCellExecutionArgs(accessor, ...args);
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		let cells: readonly ICellViewModel[] = [];
 		if (context.ui) {
 			cells = [context.cell];
@@ -492,7 +492,7 @@ registerAction2(class CollapseAllCellInputsAction extends NotebookMultiCellActio
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		forEachCell(context.notebookEditor, cell => cell.isInputCollapsed = true);
 	}
 });
@@ -506,7 +506,7 @@ registerAction2(class ExpandAllCellInputsAction extends NotebookMultiCellAction 
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		forEachCell(context.notebookEditor, cell => cell.isInputCollapsed = false);
 	}
 });
@@ -520,7 +520,7 @@ registerAction2(class CollapseAllCellOutputsAction extends NotebookMultiCellActi
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		forEachCell(context.notebookEditor, cell => cell.isOutputCollapsed = true);
 	}
 });
@@ -534,7 +534,7 @@ registerAction2(class ExpandAllCellOutputsAction extends NotebookMultiCellAction
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		forEachCell(context.notebookEditor, cell => cell.isOutputCollapsed = false);
 	}
 });
@@ -563,7 +563,7 @@ registerAction2(class ToggleCellOutputScrolling extends NotebookMultiCellAction 
 		}
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
 		const globalScrolling = accessor.get(IConfigurationService).getValue<boolean>(NotebookSetting.outputScrolling);
 		if (context.ui) {
 			context.cell.outputsViewModels.forEach((viewModel) => {
@@ -583,7 +583,7 @@ registerAction2(class ToggleCellOutputScrolling extends NotebookMultiCellAction 
 
 //#endregion
 
-function forEachCell(editor: INotebookEditor, callback: (cell: ICellViewModel, index: number) => void) {
+function forEachCell(editor: INotebookEditor, callback: (cell: ICellViewModel, index: number) => codemavi) {
 	for (let i = 0; i < editor.getLength(); i++) {
 		const cell = editor.cellAt(i);
 		callback(cell!, i);

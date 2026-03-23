@@ -264,7 +264,7 @@ export async function applyCodeAction(
 	codeActionReason: ApplyCodeActionReason,
 	options?: { readonly preview?: boolean; readonly editor?: ICodeEditor },
 	token: CancellationToken = CancellationToken.None,
-): Promise<void> {
+): Promise<codemavi> {
 	const bulkEditService = accessor.get(IBulkEditService);
 	const commandService = accessor.get(ICommandService);
 	const telemetryService = accessor.get(ITelemetryService);

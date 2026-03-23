@@ -31,7 +31,7 @@ class TerminalTypeAheadContribution extends DisposableStore implements ITerminal
 		this.add(toDisposable(() => this._addon?.dispose()));
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
 		this._loadTypeAheadAddon(xterm.raw);
 		this.add(this._configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration(TerminalTypeAheadSettingId.LocalEchoEnabled)) {
@@ -45,7 +45,7 @@ class TerminalTypeAheadContribution extends DisposableStore implements ITerminal
 		}));
 	}
 
-	private _loadTypeAheadAddon(xterm: RawXtermTerminal): void {
+	private _loadTypeAheadAddon(xterm: RawXtermTerminal): codemavi {
 		const enabled = this._configurationService.getValue<ITerminalTypeAheadConfiguration>(TERMINAL_CONFIG_SECTION).localEchoEnabled;
 		const isRemote = !!this._ctx.processManager.remoteAuthority;
 		if (enabled === 'off' || enabled === 'auto' && !isRemote) {

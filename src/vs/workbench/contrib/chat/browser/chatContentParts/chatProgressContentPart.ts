@@ -64,7 +64,7 @@ export class ChatProgressContentPart extends Disposable implements IChatContentP
 		append(this.domNode, result.element);
 	}
 
-	private renderFileWidgets(element: HTMLElement): void {
+	private renderFileWidgets(element: HTMLElement): codemavi {
 		const links = element.querySelectorAll('a');
 		links.forEach(a => {
 			// Empty link text -> render file widget

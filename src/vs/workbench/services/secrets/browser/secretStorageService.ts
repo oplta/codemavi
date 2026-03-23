@@ -40,7 +40,7 @@ export class BrowserSecretStorageService extends BaseSecretStorageService {
 		return super.get(key);
 	}
 
-	override set(key: string, value: string): Promise<void> {
+	override set(key: string, value: string): Promise<codemavi> {
 		if (this._secretStorageProvider) {
 			return this._embedderSequencer!.queue(key, async () => {
 				await this._secretStorageProvider!.set(key, value);
@@ -51,7 +51,7 @@ export class BrowserSecretStorageService extends BaseSecretStorageService {
 		return super.set(key, value);
 	}
 
-	override delete(key: string): Promise<void> {
+	override delete(key: string): Promise<codemavi> {
 		if (this._secretStorageProvider) {
 			return this._embedderSequencer!.queue(key, async () => {
 				await this._secretStorageProvider!.delete(key);

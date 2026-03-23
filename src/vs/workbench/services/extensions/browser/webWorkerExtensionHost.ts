@@ -263,7 +263,7 @@ export class WebWorkerExtensionHost extends Disposable implements IExtensionHost
 		return protocol;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (this._isTerminating) {
 			return;
 		}

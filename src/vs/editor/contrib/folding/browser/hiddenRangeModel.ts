@@ -41,7 +41,7 @@ export class HiddenRangeModel {
 		}
 	}
 
-	private updateHiddenRanges(): void {
+	private updateHiddenRanges(): codemavi {
 		let updateHiddenAreas = false;
 		const newHiddenAreas: IRange[] = [];
 		let i = 0; // index into hidden

@@ -82,7 +82,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 	// they are not classified by Safari as "in response to a user gesture" and will reject.
 	//
 	// This function sets up some handlers to work around that behavior.
-	private installWebKitWriteTextWorkaround(): void {
+	private installWebKitWriteTextWorkaround(): codemavi {
 		const handler = () => {
 			const currentWritePromise = new DeferredPromise<string>();
 
@@ -114,7 +114,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 
 	private readonly mapTextToType = new Map<string, string>(); // unsupported in web (only in-memory)
 
-	async writeText(text: string, type?: string): Promise<void> {
+	async writeText(text: string, type?: string): Promise<codemavi> {
 
 		// Clear resources given we are writing text
 		this.clearResourcesState();
@@ -146,7 +146,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 		this.fallbackWriteText(text);
 	}
 
-	private fallbackWriteText(text: string): void {
+	private fallbackWriteText(text: string): codemavi {
 		const activeDocument = getActiveDocument();
 		const activeElement = activeDocument.activeElement;
 
@@ -193,7 +193,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 		return this.findText;
 	}
 
-	async writeFindText(text: string): Promise<void> {
+	async writeFindText(text: string): Promise<codemavi> {
 		this.findText = text;
 	}
 
@@ -202,7 +202,7 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 
 	private static readonly MAX_RESOURCE_STATE_SOURCE_LENGTH = 1000;
 
-	async writeResources(resources: URI[]): Promise<void> {
+	async writeResources(resources: URI[]): Promise<codemavi> {
 		// Guard access to navigator.clipboard with try/catch
 		// as we have seen DOMExceptions in certain browsers
 		// due to security policies.
@@ -288,11 +288,11 @@ export class BrowserClipboardService extends Disposable implements IClipboardSer
 		return this.resources.length > 0;
 	}
 
-	public clearInternalState(): void {
+	public clearInternalState(): codemavi {
 		this.clearResourcesState();
 	}
 
-	private clearResourcesState(): void {
+	private clearResourcesState(): codemavi {
 		this.resources = [];
 		this.resourcesStateHash = undefined;
 	}

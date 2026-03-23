@@ -182,7 +182,7 @@ export class MergeEditorViewZones {
  * This is an abstract class to create various editor view zones.
 */
 export abstract class MergeEditorViewZone {
-	abstract create(viewZoneChangeAccessor: IViewZoneChangeAccessor, viewZoneIdsToCleanUp: string[], disposableStore: DisposableStore): void;
+	abstract create(viewZoneChangeAccessor: IViewZoneChangeAccessor, viewZoneIdsToCleanUp: string[], disposableStore: DisposableStore): codemavi;
 }
 
 class Spacer extends MergeEditorViewZone {
@@ -197,7 +197,7 @@ class Spacer extends MergeEditorViewZone {
 		viewZoneChangeAccessor: IViewZoneChangeAccessor,
 		viewZoneIdsToCleanUp: string[],
 		disposableStore: DisposableStore
-	): void {
+	): codemavi {
 		viewZoneIdsToCleanUp.push(
 			viewZoneChangeAccessor.addZone({
 				afterLineNumber: this.afterLineNumber,
@@ -220,7 +220,7 @@ class Placeholder extends MergeEditorViewZone {
 		viewZoneChangeAccessor: IViewZoneChangeAccessor,
 		viewZoneIdsToCleanUp: string[],
 		disposableStore: DisposableStore
-	): void {
+	): codemavi {
 		viewZoneIdsToCleanUp.push(
 			viewZoneChangeAccessor.addZone({
 				afterLineNumber: this.afterLineNumber,
@@ -240,7 +240,7 @@ class CommandViewZone extends MergeEditorViewZone {
 		super();
 	}
 
-	override create(viewZoneChangeAccessor: IViewZoneChangeAccessor, viewZoneIdsToCleanUp: string[], disposableStore: DisposableStore): void {
+	override create(viewZoneChangeAccessor: IViewZoneChangeAccessor, viewZoneIdsToCleanUp: string[], disposableStore: DisposableStore): codemavi {
 		disposableStore.add(
 			this.conflictActionsFactory.createWidget(
 				viewZoneChangeAccessor,

@@ -12,7 +12,7 @@ import { Selection } from '../../../../common/core/selection.js';
 import { ExpandLineSelectionAction } from '../../browser/lineSelection.js';
 import { withTestCodeEditor } from '../../../../test/browser/testCodeEditor.js';
 
-function executeAction(action: EditorAction, editor: ICodeEditor): void {
+function executeAction(action: EditorAction, editor: ICodeEditor): codemavi {
 	action.run(null!, editor, undefined);
 }
 

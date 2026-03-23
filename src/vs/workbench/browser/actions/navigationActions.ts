@@ -29,7 +29,7 @@ abstract class BaseNavigationAction extends Action2 {
 		super(options);
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const paneCompositeService = accessor.get(IPaneCompositePartService);
@@ -247,7 +247,7 @@ abstract class BaseFocusAction extends Action2 {
 		super(options);
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const editorService = accessor.get(IEditorService);
 
@@ -299,7 +299,7 @@ abstract class BaseFocusAction extends Action2 {
 		return this.findVisibleNeighbour(layoutService, neighbour, next);
 	}
 
-	private focusNextOrPreviousPart(layoutService: IWorkbenchLayoutService, editorService: IEditorService, next: boolean): void {
+	private focusNextOrPreviousPart(layoutService: IWorkbenchLayoutService, editorService: IEditorService, next: boolean): codemavi {
 		let currentlyFocusedPart: Parts | undefined;
 		if (editorService.activeEditorPane?.hasFocus() || layoutService.hasFocus(Parts.EDITOR_PART)) {
 			currentlyFocusedPart = Parts.EDITOR_PART;

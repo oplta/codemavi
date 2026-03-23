@@ -22,17 +22,17 @@ class PendingChanges {
 		this._removes = [];
 	}
 
-	public insert(x: EditorWhitespace): void {
+	public insert(x: EditorWhitespace): codemavi {
 		this._hasPending = true;
 		this._inserts.push(x);
 	}
 
-	public change(x: IPendingChange): void {
+	public change(x: IPendingChange): codemavi {
 		this._hasPending = true;
 		this._changes.push(x);
 	}
 
-	public remove(x: IPendingRemove): void {
+	public remove(x: IPendingRemove): codemavi {
 		this._hasPending = true;
 		this._removes.push(x);
 	}
@@ -41,7 +41,7 @@ class PendingChanges {
 		return this._hasPending;
 	}
 
-	public commit(linesLayout: LinesLayout): void {
+	public commit(linesLayout: LinesLayout): codemavi {
 		if (!this._hasPending) {
 			return;
 		}
@@ -141,7 +141,7 @@ export class LinesLayout {
 	/**
 	 * Change the height of a line in pixels.
 	 */
-	public setLineHeight(lineHeight: number): void {
+	public setLineHeight(lineHeight: number): codemavi {
 		this._checkPendingChanges();
 		this._lineHeight = lineHeight;
 	}
@@ -149,7 +149,7 @@ export class LinesLayout {
 	/**
 	 * Changes the padding used to calculate vertical offsets.
 	 */
-	public setPadding(paddingTop: number, paddingBottom: number): void {
+	public setPadding(paddingTop: number, paddingBottom: number): codemavi {
 		this._paddingTop = paddingTop;
 		this._paddingBottom = paddingBottom;
 	}
@@ -159,12 +159,12 @@ export class LinesLayout {
 	 *
 	 * @param lineCount New number of lines.
 	 */
-	public onFlushed(lineCount: number): void {
+	public onFlushed(lineCount: number): codemavi {
 		this._checkPendingChanges();
 		this._lineCount = lineCount;
 	}
 
-	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => void): boolean {
+	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => codemavi): boolean {
 		let hadAChange = false;
 		try {
 			const accessor: IWhitespaceChangeAccessor = {
@@ -178,13 +178,13 @@ export class LinesLayout {
 					this._pendingChanges.insert(new EditorWhitespace(id, afterLineNumber, ordinal, heightInPx, minWidth));
 					return id;
 				},
-				changeOneWhitespace: (id: string, newAfterLineNumber: number, newHeight: number): void => {
+				changeOneWhitespace: (id: string, newAfterLineNumber: number, newHeight: number): codemavi => {
 					hadAChange = true;
 					newAfterLineNumber = newAfterLineNumber | 0;
 					newHeight = newHeight | 0;
 					this._pendingChanges.change({ id, newAfterLineNumber, newHeight });
 				},
-				removeWhitespace: (id: string): void => {
+				removeWhitespace: (id: string): codemavi => {
 					hadAChange = true;
 					this._pendingChanges.remove({ id });
 				}
@@ -196,7 +196,7 @@ export class LinesLayout {
 		return hadAChange;
 	}
 
-	public _commitPendingChanges(inserts: EditorWhitespace[], changes: IPendingChange[], removes: IPendingRemove[]): void {
+	public _commitPendingChanges(inserts: EditorWhitespace[], changes: IPendingChange[], removes: IPendingRemove[]): codemavi {
 		if (inserts.length > 0 || removes.length > 0) {
 			this._minWidth = -1; /* marker for not being computed */
 		}
@@ -259,13 +259,13 @@ export class LinesLayout {
 		this._prefixSumValidIndex = -1;
 	}
 
-	private _checkPendingChanges(): void {
+	private _checkPendingChanges(): codemavi {
 		if (this._pendingChanges.mustCommit()) {
 			this._pendingChanges.commit(this);
 		}
 	}
 
-	private _insertWhitespace(whitespace: EditorWhitespace): void {
+	private _insertWhitespace(whitespace: EditorWhitespace): codemavi {
 		const insertIndex = LinesLayout.findInsertionIndex(this._arr, whitespace.afterLineNumber, whitespace.ordinal);
 		this._arr.splice(insertIndex, 0, whitespace);
 		this._prefixSumValidIndex = Math.min(this._prefixSumValidIndex, insertIndex - 1);
@@ -281,7 +281,7 @@ export class LinesLayout {
 		return -1;
 	}
 
-	private _changeOneWhitespace(id: string, newAfterLineNumber: number, newHeight: number): void {
+	private _changeOneWhitespace(id: string, newAfterLineNumber: number, newHeight: number): codemavi {
 		const index = this._findWhitespaceIndex(id);
 		if (index === -1) {
 			return;
@@ -306,7 +306,7 @@ export class LinesLayout {
 		}
 	}
 
-	private _removeWhitespace(removeIndex: number): void {
+	private _removeWhitespace(removeIndex: number): codemavi {
 		this._arr.splice(removeIndex, 1);
 		this._prefixSumValidIndex = Math.min(this._prefixSumValidIndex, removeIndex - 1);
 	}
@@ -317,7 +317,7 @@ export class LinesLayout {
 	 * @param fromLineNumber The line number at which the deletion started, inclusive
 	 * @param toLineNumber The line number at which the deletion ended, inclusive
 	 */
-	public onLinesDeleted(fromLineNumber: number, toLineNumber: number): void {
+	public onLinesDeleted(fromLineNumber: number, toLineNumber: number): codemavi {
 		this._checkPendingChanges();
 		fromLineNumber = fromLineNumber | 0;
 		toLineNumber = toLineNumber | 0;
@@ -344,7 +344,7 @@ export class LinesLayout {
 	 * @param fromLineNumber The line number at which the insertion started, inclusive
 	 * @param toLineNumber The line number at which the insertion ended, inclusive.
 	 */
-	public onLinesInserted(fromLineNumber: number, toLineNumber: number): void {
+	public onLinesInserted(fromLineNumber: number, toLineNumber: number): codemavi {
 		this._checkPendingChanges();
 		fromLineNumber = fromLineNumber | 0;
 		toLineNumber = toLineNumber | 0;

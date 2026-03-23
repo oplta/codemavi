@@ -20,8 +20,8 @@ export interface ILinkHoverTargetOptions {
 	readonly viewportRange: IViewportRange;
 	readonly cellDimensions: { width: number; height: number };
 	readonly terminalDimensions: { width: number; height: number };
-	readonly modifierDownCallback?: () => void;
-	readonly modifierUpCallback?: () => void;
+	readonly modifierDownCallback?: () => codemavi;
+	readonly modifierUpCallback?: () => codemavi;
 }
 
 export class TerminalHover extends Disposable implements ITerminalWidget {
@@ -38,7 +38,7 @@ export class TerminalHover extends Disposable implements ITerminalWidget {
 		super();
 	}
 
-	attach(container: HTMLElement): void {
+	attach(container: HTMLElement): codemavi {
 		const showLinkHover = this._configurationService.getValue(TerminalSettingId.ShowLinkHover);
 		if (!showLinkHover) {
 			return;

@@ -37,7 +37,7 @@ class MementoKeyValueStorage implements IKeyValueStorage {
 		return value || defaultValue;
 	}
 
-	setValue<T>(key: string, value: T): void {
+	setValue<T>(key: string, value: T): codemavi {
 		this.mementoObj[key] = value;
 		this.memento.saveMemento();
 	}
@@ -55,7 +55,7 @@ class WorkbenchAssignmentServiceTelemetry implements IExperimentationTelemetry {
 	}
 
 	// __GDPR__COMMON__ "abexp.assignmentcontext" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-	setSharedProperty(name: string, value: string): void {
+	setSharedProperty(name: string, value: string): codemavi {
 		if (name === this.productService.tasConfig?.assignmentContextTelemetryPropertyName) {
 			this._lastAssignmentContext = value;
 		}
@@ -63,7 +63,7 @@ class WorkbenchAssignmentServiceTelemetry implements IExperimentationTelemetry {
 		this.telemetryService.setExperimentProperty(name, value);
 	}
 
-	postEvent(eventName: string, props: Map<string, string>): void {
+	postEvent(eventName: string, props: Map<string, string>): codemavi {
 		const data: ITelemetryData = {};
 		for (const [key, value] of props.entries()) {
 			data[key] = value;

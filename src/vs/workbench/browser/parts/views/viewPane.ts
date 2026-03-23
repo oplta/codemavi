@@ -94,7 +94,7 @@ interface IItem {
 
 interface IViewWelcomeDelegate {
 	readonly id: string;
-	readonly onDidChangeViewWelcomeState: Event<void>;
+	readonly onDidChangeViewWelcomeState: Event<codemavi>;
 	shouldShowWelcome(): boolean;
 }
 
@@ -143,7 +143,7 @@ class ViewWelcomeController {
 		this.element!.focus();
 	}
 
-	private onDidChangeViewWelcomeState(): void {
+	private onDidChangeViewWelcomeState(): codemavi {
 		const enabled = this.delegate.shouldShowWelcome();
 
 		if (this._enabled === enabled) {
@@ -177,7 +177,7 @@ class ViewWelcomeController {
 		this.onDidChangeViewWelcomeContent();
 	}
 
-	private onDidChangeViewWelcomeContent(): void {
+	private onDidChangeViewWelcomeContent(): codemavi {
 		const descriptors = viewsRegistry.getViewWelcomeContent(this.delegate.id);
 
 		this.items = [];
@@ -194,7 +194,7 @@ class ViewWelcomeController {
 		this.render();
 	}
 
-	private onDidChangeContext(): void {
+	private onDidChangeContext(): codemavi {
 		let didChange = false;
 
 		for (const item of this.items) {
@@ -217,7 +217,7 @@ class ViewWelcomeController {
 		}
 	}
 
-	private render(): void {
+	private render(): codemavi {
 		this.renderDisposables.clear();
 		this.element!.innerText = '';
 
@@ -298,7 +298,7 @@ class ViewWelcomeController {
 		return visibleItems.map(v => v.descriptor);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
@@ -307,20 +307,20 @@ export abstract class ViewPane extends Pane implements IView {
 
 	private static readonly AlwaysShowActionsConfig = 'workbench.view.alwaysShowHeaderActions';
 
-	private _onDidFocus = this._register(new Emitter<void>());
-	readonly onDidFocus: Event<void> = this._onDidFocus.event;
+	private _onDidFocus = this._register(new Emitter<codemavi>());
+	readonly onDidFocus: Event<codemavi> = this._onDidFocus.event;
 
-	private _onDidBlur = this._register(new Emitter<void>());
-	readonly onDidBlur: Event<void> = this._onDidBlur.event;
+	private _onDidBlur = this._register(new Emitter<codemavi>());
+	readonly onDidBlur: Event<codemavi> = this._onDidBlur.event;
 
 	private _onDidChangeBodyVisibility = this._register(new Emitter<boolean>());
 	readonly onDidChangeBodyVisibility: Event<boolean> = this._onDidChangeBodyVisibility.event;
 
-	protected _onDidChangeTitleArea = this._register(new Emitter<void>());
-	readonly onDidChangeTitleArea: Event<void> = this._onDidChangeTitleArea.event;
+	protected _onDidChangeTitleArea = this._register(new Emitter<codemavi>());
+	readonly onDidChangeTitleArea: Event<codemavi> = this._onDidChangeTitleArea.event;
 
-	protected _onDidChangeViewWelcomeState = this._register(new Emitter<void>());
-	readonly onDidChangeViewWelcomeState: Event<void> = this._onDidChangeViewWelcomeState.event;
+	protected _onDidChangeViewWelcomeState = this._register(new Emitter<codemavi>());
+	readonly onDidChangeViewWelcomeState: Event<codemavi> = this._onDidChangeViewWelcomeState.event;
 
 	private _isVisible: boolean = false;
 	readonly id: string;
@@ -401,7 +401,7 @@ export abstract class ViewPane extends Pane implements IView {
 		this.element.classList.toggle('merged-header', !visible);
 	}
 
-	setVisible(visible: boolean): void {
+	setVisible(visible: boolean): codemavi {
 		if (this._isVisible !== visible) {
 			this._isVisible = visible;
 
@@ -428,7 +428,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return changed;
 	}
 
-	override render(): void {
+	override render(): codemavi {
 		super.render();
 
 		const focusTracker = trackFocus(this.element);
@@ -437,7 +437,7 @@ export abstract class ViewPane extends Pane implements IView {
 		this._register(focusTracker.onDidBlur(() => this._onDidBlur.fire()));
 	}
 
-	protected renderHeader(container: HTMLElement): void {
+	protected renderHeader(container: HTMLElement): codemavi {
 		this.headerContainer = container;
 
 		this.twistiesContainer = append(container, $(`.twisty-container${ThemeIcon.asCSSSelector(this.getTwistyIcon(this.isExpanded()))}`));
@@ -480,12 +480,12 @@ export abstract class ViewPane extends Pane implements IView {
 		this.updateActionsVisibility();
 	}
 
-	protected override updateHeader(): void {
+	protected override updateHeader(): codemavi {
 		super.updateHeader();
 		this.updateTwistyIcon();
 	}
 
-	private updateTwistyIcon(): void {
+	private updateTwistyIcon(): codemavi {
 		if (this.twistiesContainer) {
 			this.twistiesContainer.classList.remove(...ThemeIcon.asClassNameArray(this.getTwistyIcon(!this._expanded)));
 			this.twistiesContainer.classList.add(...ThemeIcon.asClassNameArray(this.getTwistyIcon(this._expanded)));
@@ -496,7 +496,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return expanded ? viewPaneContainerExpandedIcon : viewPaneContainerCollapsedIcon;
 	}
 
-	override style(styles: IPaneStyles): void {
+	override style(styles: IPaneStyles): codemavi {
 		super.style(styles);
 
 		const icon = this.getIcon();
@@ -518,7 +518,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return this.viewDescriptorService.getViewDescriptorById(this.id)?.containerIcon || defaultViewIcon;
 	}
 
-	protected renderHeaderTitle(container: HTMLElement, title: string): void {
+	protected renderHeaderTitle(container: HTMLElement, title: string): codemavi {
 		this.iconContainer = append(container, $('.icon', undefined));
 		const icon = this.getIcon();
 
@@ -567,7 +567,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return nls.localize('viewAccessibilityHelp', 'Use Alt+F1 for accessibility help {0}', title);
 	}
 
-	protected updateTitle(title: string): void {
+	protected updateTitle(title: string): codemavi {
 		const calculatedTitle = this.calculateTitle(title);
 		if (this.titleContainer) {
 			this.titleContainer.textContent = calculatedTitle;
@@ -600,7 +600,7 @@ export abstract class ViewPane extends Pane implements IView {
 		}
 	}
 
-	protected updateTitleDescription(description?: string | undefined): void {
+	protected updateTitleDescription(description?: string | undefined): codemavi {
 		this.setTitleDescription(description);
 		this.updateAriaHeaderLabel(this._title, description);
 		this._titleDescription = description;
@@ -620,11 +620,11 @@ export abstract class ViewPane extends Pane implements IView {
 		return title;
 	}
 
-	protected renderBody(container: HTMLElement): void {
+	protected renderBody(container: HTMLElement): codemavi {
 		this.viewWelcomeController = this._register(this.instantiationService.createInstance(ViewWelcomeController, container, this));
 	}
 
-	protected layoutBody(height: number, width: number): void {
+	protected layoutBody(height: number, width: number): codemavi {
 		this.viewWelcomeController.layout(height, width);
 	}
 
@@ -659,7 +659,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return getLocationBasedViewColors(this.viewDescriptorService.getViewLocationById(this.id));
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		if (this.viewWelcomeController.enabled) {
 			this.viewWelcomeController.focus();
 		} else if (this.element) {
@@ -670,7 +670,7 @@ export abstract class ViewPane extends Pane implements IView {
 		}
 	}
 
-	private setActions(): void {
+	private setActions(): codemavi {
 		if (this.toolbar) {
 			const primaryActions = [...this.menuActions.getPrimaryActions()];
 			if (this.shouldShowFilterInHeader()) {
@@ -681,7 +681,7 @@ export abstract class ViewPane extends Pane implements IView {
 		}
 	}
 
-	private updateActionsVisibility(): void {
+	private updateActionsVisibility(): codemavi {
 		if (!this.headerContainer) {
 			return;
 		}
@@ -689,7 +689,7 @@ export abstract class ViewPane extends Pane implements IView {
 		this.headerContainer.classList.toggle('actions-always-visible', shouldAlwaysShowActions);
 	}
 
-	protected updateActions(): void {
+	protected updateActions(): codemavi {
 		this.setActions();
 		this._onDidChangeTitleArea.fire();
 	}
@@ -699,9 +699,9 @@ export abstract class ViewPane extends Pane implements IView {
 			const that = this;
 			return new class extends BaseActionViewItem {
 				constructor() { super(null, action); }
-				override setFocusable(): void { /* noop input elements are focusable by default */ }
+				override setFocusable(): codemavi { /* noop input elements are focusable by default */ }
 				override get trapsArrowNavigation(): boolean { return true; }
-				override render(container: HTMLElement): void {
+				override render(container: HTMLElement): codemavi {
 					container.classList.add('viewpane-filter-container');
 					const filter = that.getFilterWidget()!;
 					append(container, filter.element);
@@ -724,7 +724,7 @@ export abstract class ViewPane extends Pane implements IView {
 		return 0;
 	}
 
-	saveState(): void {
+	saveState(): codemavi {
 		// Subclasses to implement for saving state
 	}
 
@@ -769,12 +769,12 @@ export abstract class FilterViewPane extends ViewPane {
 		return this.filterWidget;
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 		this.filterContainer = append(container, $('.viewpane-filter-container'));
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 
 		this.dimension = new Dimension(width, height);
@@ -800,7 +800,7 @@ export abstract class FilterViewPane extends ViewPane {
 		return !(this.dimension && this.dimension.width < 600 && this.dimension.height > 100);
 	}
 
-	protected abstract layoutBodyContent(height: number, width: number): void;
+	protected abstract layoutBodyContent(height: number, width: number): codemavi;
 
 }
 

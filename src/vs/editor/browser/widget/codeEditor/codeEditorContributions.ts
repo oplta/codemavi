@@ -86,7 +86,7 @@ export class CodeEditorContributions extends Disposable {
 		return contributionsState;
 	}
 
-	public restoreViewState(contributionsState: { [key: string]: any }): void {
+	public restoreViewState(contributionsState: { [key: string]: any }): codemavi {
 		for (const [id, contribution] of this._instances) {
 			if (typeof contribution.restoreViewState === 'function') {
 				contribution.restoreViewState(contributionsState[id]);
@@ -106,7 +106,7 @@ export class CodeEditorContributions extends Disposable {
 		this._instances.set(id, value);
 	}
 
-	public onBeforeInteractionEvent(): void {
+	public onBeforeInteractionEvent(): codemavi {
 		// this method is called very often by the editor!
 		this._instantiateSome(EditorContributionInstantiation.BeforeFirstInteraction);
 	}
@@ -117,7 +117,7 @@ export class CodeEditorContributions extends Disposable {
 		}, 50);
 	}
 
-	private _instantiateSome(instantiation: EditorContributionInstantiation): void {
+	private _instantiateSome(instantiation: EditorContributionInstantiation): codemavi {
 		if (this._finishedInstantiation[instantiation]) {
 			// already done with this instantiation!
 			return;
@@ -140,7 +140,7 @@ export class CodeEditorContributions extends Disposable {
 		return result;
 	}
 
-	private _instantiateById(id: string): void {
+	private _instantiateById(id: string): codemavi {
 		const desc = this._pending.get(id);
 		if (!desc) {
 			return;

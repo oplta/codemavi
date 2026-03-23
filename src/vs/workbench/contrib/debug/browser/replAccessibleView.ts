@@ -36,10 +36,10 @@ export class ReplAccessibleView implements IAccessibleViewImplementation {
 class ReplOutputAccessibleViewProvider extends Disposable implements IAccessibleViewContentProvider {
 	public readonly id = AccessibleViewProviderId.Repl;
 	private _content: string | undefined;
-	private readonly _onDidChangeContent: Emitter<void> = this._register(new Emitter<void>());
-	public readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
-	private readonly _onDidResolveChildren: Emitter<void> = this._register(new Emitter<void>());
-	public readonly onDidResolveChildren: Event<void> = this._onDidResolveChildren.event;
+	private readonly _onDidChangeContent: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	public readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
+	private readonly _onDidResolveChildren: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	public readonly onDidResolveChildren: Event<codemavi> = this._onDidResolveChildren.event;
 
 	public readonly verbositySettingKey = AccessibilityVerbositySettingId.Debug;
 	public readonly options = {
@@ -72,7 +72,7 @@ class ReplOutputAccessibleViewProvider extends Disposable implements IAccessible
 		return this._content ?? elements.map(e => e.toString(true)).join('\n');
 	}
 
-	public onClose(): void {
+	public onClose(): codemavi {
 		this._content = undefined;
 		this._elementPositionMap.clear();
 		if (this._treeHadFocus) {
@@ -81,7 +81,7 @@ class ReplOutputAccessibleViewProvider extends Disposable implements IAccessible
 		this._replView.getReplInput().focus();
 	}
 
-	public onOpen(): void {
+	public onOpen(): codemavi {
 		// Children are resolved async, so we need to update the content when they are resolved.
 		this._register(this.onDidResolveChildren(() => {
 			this._onDidChangeContent.fire();

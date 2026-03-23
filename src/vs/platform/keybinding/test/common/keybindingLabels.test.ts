@@ -13,7 +13,7 @@ suite('KeybindingLabels', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertUSLabel(OS: OperatingSystem, keybinding: number, expected: string): void {
+	function assertUSLabel(OS: OperatingSystem, keybinding: number, expected: string): codemavi {
 		const usResolvedKeybinding = createUSLayoutResolvedKeybinding(keybinding, OS)!;
 		assert.strictEqual(usResolvedKeybinding.getLabel(), expected);
 	}
@@ -118,7 +118,7 @@ suite('KeybindingLabels', () => {
 	});
 
 	test('Aria label', () => {
-		function assertAriaLabel(OS: OperatingSystem, keybinding: number, expected: string): void {
+		function assertAriaLabel(OS: OperatingSystem, keybinding: number, expected: string): codemavi {
 			const usResolvedKeybinding = createUSLayoutResolvedKeybinding(keybinding, OS)!;
 			assert.strictEqual(usResolvedKeybinding.getAriaLabel(), expected);
 		}
@@ -129,7 +129,7 @@ suite('KeybindingLabels', () => {
 	});
 
 	test('Electron Accelerator label', () => {
-		function assertElectronAcceleratorLabel(OS: OperatingSystem, keybinding: number, expected: string | null): void {
+		function assertElectronAcceleratorLabel(OS: OperatingSystem, keybinding: number, expected: string | null): codemavi {
 			const usResolvedKeybinding = createUSLayoutResolvedKeybinding(keybinding, OS)!;
 			assert.strictEqual(usResolvedKeybinding.getElectronAccelerator(), expected);
 		}
@@ -156,7 +156,7 @@ suite('KeybindingLabels', () => {
 	});
 
 	test('User Settings label', () => {
-		function assertElectronAcceleratorLabel(OS: OperatingSystem, keybinding: number, expected: string): void {
+		function assertElectronAcceleratorLabel(OS: OperatingSystem, keybinding: number, expected: string): codemavi {
 			const usResolvedKeybinding = createUSLayoutResolvedKeybinding(keybinding, OS)!;
 			assert.strictEqual(usResolvedKeybinding.getUserSettingsLabel(), expected);
 		}

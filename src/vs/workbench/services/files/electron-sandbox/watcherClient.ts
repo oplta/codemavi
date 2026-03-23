@@ -12,8 +12,8 @@ import { IUtilityProcessWorkerWorkbenchService } from '../../utilityProcess/elec
 export class UniversalWatcherClient extends AbstractUniversalWatcherClient {
 
 	constructor(
-		onFileChanges: (changes: IFileChange[]) => void,
-		onLogMessage: (msg: ILogMessage) => void,
+		onFileChanges: (changes: IFileChange[]) => codemavi,
+		onLogMessage: (msg: ILogMessage) => codemavi,
 		verboseLogging: boolean,
 		private readonly utilityProcessWorkerWorkbenchService: IUtilityProcessWorkerWorkbenchService
 	) {

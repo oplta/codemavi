@@ -23,7 +23,7 @@ export class TerminalEnvironmentManager {
 		this.refresh();
 	}
 
-	private refresh(): void {
+	private refresh(): codemavi {
 		const config = workspace.getConfiguration('git', null);
 		this.context.environmentVariableCollection.clear();
 
@@ -47,7 +47,7 @@ export class TerminalEnvironmentManager {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposable.dispose();
 	}
 }
@@ -66,7 +66,7 @@ export class TerminalShellExecutionManager {
 		window.onDidEndTerminalShellExecution(this.onDidEndTerminalShellExecution, this, this.disposables);
 	}
 
-	private onDidEndTerminalShellExecution(e: TerminalShellExecutionEndEvent): void {
+	private onDidEndTerminalShellExecution(e: TerminalShellExecutionEndEvent): codemavi {
 		const { execution, exitCode, shellIntegration } = e;
 		const [executable, subcommand] = execution.commandLine.value.split(/\s+/);
 		const cwd = execution.cwd ?? shellIntegration.cwd;
@@ -86,7 +86,7 @@ export class TerminalShellExecutionManager {
 		repository.status();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.disposables);
 	}
 }

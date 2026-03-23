@@ -8,7 +8,7 @@ import { DisposableStore } from '../../../../base/common/lifecycle.js';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../base/test/common/utils.js';
 import { InMemoryStorageService, IStorageService, IStorageTargetChangeEvent, IStorageValueChangeEvent, StorageScope, StorageTarget } from '../../common/storage.js';
 
-export function createSuite<T extends IStorageService>(params: { setup: () => Promise<T>; teardown: (service: T) => Promise<void> }): void {
+export function createSuite<T extends IStorageService>(params: { setup: () => Promise<T>; teardown: (service: T) => Promise<codemavi> }): codemavi {
 
 	let storageService: T;
 
@@ -79,7 +79,7 @@ export function createSuite<T extends IStorageService>(params: { setup: () => Pr
 		strictEqual(storageValueChangeEvents.length, 1);
 	});
 
-	function storeData(scope: StorageScope): void {
+	function storeData(scope: StorageScope): codemavi {
 		let storageValueChangeEvents: IStorageValueChangeEvent[] = [];
 		storageService.onDidChangeValue(scope, undefined, disposables)(e => storageValueChangeEvents.push(e), undefined, disposables);
 
@@ -155,7 +155,7 @@ export function createSuite<T extends IStorageService>(params: { setup: () => Pr
 		removeData(StorageScope.WORKSPACE);
 	});
 
-	function removeData(scope: StorageScope): void {
+	function removeData(scope: StorageScope): codemavi {
 		const storageValueChangeEvents: IStorageValueChangeEvent[] = [];
 		storageService.onDidChangeValue(scope, undefined, disposables)(e => storageValueChangeEvents.push(e), undefined, disposables);
 

@@ -67,8 +67,8 @@ export interface INotebookKernel {
 	implementsExecutionOrder?: boolean;
 	hasVariableProvider?: boolean;
 
-	executeNotebookCellsRequest(uri: URI, cellHandles: number[]): Promise<void>;
-	cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<void>;
+	executeNotebookCellsRequest(uri: URI, cellHandles: number[]): Promise<codemavi>;
+	cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<codemavi>;
 
 	provideVariables(notebookUri: URI, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): AsyncIterableObject<VariablesResult>;
 }
@@ -89,10 +89,10 @@ export interface INotebookKernelDetectionTask {
 
 export interface ISourceAction {
 	readonly action: IAction;
-	readonly onDidChangeState: Event<void>;
+	readonly onDidChangeState: Event<codemavi>;
 	readonly isPrimary?: boolean;
-	execution: Promise<void> | undefined;
-	runAction: () => Promise<void>;
+	execution: Promise<codemavi> | undefined;
+	runAction: () => Promise<codemavi>;
 }
 
 export interface INotebookSourceActionChangeEvent {
@@ -102,7 +102,7 @@ export interface INotebookSourceActionChangeEvent {
 
 export interface IKernelSourceActionProvider {
 	readonly viewType: string;
-	onDidChangeSourceActions?: Event<void>;
+	onDidChangeSourceActions?: Event<codemavi>;
 	provideKernelSourceActions(): Promise<INotebookKernelSourceAction[]>;
 }
 
@@ -116,7 +116,7 @@ export interface INotebookKernelService {
 	readonly onDidAddKernel: Event<INotebookKernel>;
 	readonly onDidRemoveKernel: Event<INotebookKernel>;
 	readonly onDidChangeSelectedNotebooks: Event<ISelectedNotebooksChangeEvent>;
-	readonly onDidChangeNotebookAffinity: Event<void>;
+	readonly onDidChangeNotebookAffinity: Event<codemavi>;
 	readonly onDidNotebookVariablesUpdate: Event<URI>;
 	registerKernel(kernel: INotebookKernel): IDisposable;
 
@@ -131,17 +131,17 @@ export interface INotebookKernelService {
 	 * Bind a notebook document to a kernel. A notebook is only bound to one kernel
 	 * but a kernel can be bound to many notebooks (depending on its configuration)
 	 */
-	selectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): void;
+	selectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): codemavi;
 
 	/**
 	 * Set the kernel that a notebook should use when it starts up
 	 */
-	preselectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): void;
+	preselectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): codemavi;
 
 	/**
 	 * Set a perference of a kernel for a certain notebook. Higher values win, `undefined` removes the preference
 	 */
-	updateKernelNotebookAffinity(kernel: INotebookKernel, notebook: URI, preference: number | undefined): void;
+	updateKernelNotebookAffinity(kernel: INotebookKernel, notebook: URI, preference: number | undefined): codemavi;
 
 	//#region Kernel detection tasks
 	readonly onDidChangeKernelDetectionTasks: Event<string>;
@@ -157,12 +157,12 @@ export interface INotebookKernelService {
 	getKernelSourceActions2(notebook: INotebookTextModelLike): Promise<INotebookKernelSourceAction[]>;
 	//#endregion
 
-	notifyVariablesChange(notebookUri: URI): void;
+	notifyVariablesChange(notebookUri: URI): codemavi;
 }
 
 export const INotebookKernelHistoryService = createDecorator<INotebookKernelHistoryService>('INotebookKernelHistoryService');
 export interface INotebookKernelHistoryService {
 	_serviceBrand: undefined;
 	getKernels(notebook: INotebookTextModelLike): { selected: INotebookKernel | undefined; all: INotebookKernel[] };
-	addMostRecentKernel(kernel: INotebookKernel): void;
+	addMostRecentKernel(kernel: INotebookKernel): codemavi;
 }

@@ -36,11 +36,11 @@ export class TestGlobalStyleSheet extends GlobalStyleSheet {
 		super(null!);
 	}
 
-	public override insertRule(selector: string, rule: string): void {
+	public override insertRule(selector: string, rule: string): codemavi {
 		this.rules.unshift(`${selector} {${rule}}`);
 	}
 
-	public override removeRulesContainingSelector(ruleName: string): void {
+	public override removeRulesContainingSelector(ruleName: string): codemavi {
 		for (let i = 0; i < this.rules.length; i++) {
 			if (this.rules[i].indexOf(ruleName) >= 0) {
 				this.rules.splice(i, 1);

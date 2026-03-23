@@ -33,11 +33,11 @@ export class WindowsExternalTerminalService extends ExternalTerminalService impl
 	private static readonly CMD = 'cmd.exe';
 	private static _DEFAULT_TERMINAL_WINDOWS: string;
 
-	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<void> {
+	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<codemavi> {
 		return this.spawnTerminal(cp, configuration, processes.getWindowsShell(), cwd);
 	}
 
-	public spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, command: string, cwd?: string): Promise<void> {
+	public spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, command: string, cwd?: string): Promise<codemavi> {
 		const exec = configuration.windowsExec || WindowsExternalTerminalService.getDefaultTerminalWindows();
 
 		// Make the drive letter uppercase on Windows (see #9448)
@@ -66,7 +66,7 @@ export class WindowsExternalTerminalService extends ExternalTerminalService impl
 			cmdArgs.push('-d .');
 		}
 
-		return new Promise<void>((c, e) => {
+		return new Promise<codemavi>((c, e) => {
 			const env = getSanitizedEnvironment(process);
 			const child = spawner.spawn(command, cmdArgs, { cwd, env, detached: true });
 			child.on('error', e);
@@ -144,7 +144,7 @@ export class WindowsExternalTerminalService extends ExternalTerminalService impl
 export class MacExternalTerminalService extends ExternalTerminalService implements IExternalTerminalService {
 	private static readonly OSASCRIPT = '/usr/bin/osascript';	// osascript is the AppleScript interpreter on OS X
 
-	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<void> {
+	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<codemavi> {
 		return this.spawnTerminal(cp, configuration, cwd);
 	}
 
@@ -215,10 +215,10 @@ export class MacExternalTerminalService extends ExternalTerminalService implemen
 		});
 	}
 
-	spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, cwd?: string): Promise<void> {
+	spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, cwd?: string): Promise<codemavi> {
 		const terminalApp = configuration.osxExec || DEFAULT_TERMINAL_OSX;
 
-		return new Promise<void>((c, e) => {
+		return new Promise<codemavi>((c, e) => {
 			const args = ['-a', terminalApp];
 			if (cwd) {
 				args.push(cwd);
@@ -235,7 +235,7 @@ export class LinuxExternalTerminalService extends ExternalTerminalService implem
 
 	private static readonly WAIT_MESSAGE = nls.localize('press.any.key', "Press any key to continue...");
 
-	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<void> {
+	public openTerminal(configuration: IExternalTerminalSettings, cwd?: string): Promise<codemavi> {
 		return this.spawnTerminal(cp, configuration, cwd);
 	}
 
@@ -324,10 +324,10 @@ export class LinuxExternalTerminalService extends ExternalTerminalService implem
 		return LinuxExternalTerminalService._DEFAULT_TERMINAL_LINUX_READY;
 	}
 
-	spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, cwd?: string): Promise<void> {
+	spawnTerminal(spawner: typeof cp, configuration: IExternalTerminalSettings, cwd?: string): Promise<codemavi> {
 		const execPromise = configuration.linuxExec ? Promise.resolve(configuration.linuxExec) : LinuxExternalTerminalService.getDefaultTerminalLinuxReady();
 
-		return new Promise<void>((c, e) => {
+		return new Promise<codemavi>((c, e) => {
 			execPromise.then(exec => {
 				const env = getSanitizedEnvironment(process);
 				const child = spawner.spawn(exec, [], { cwd, env });

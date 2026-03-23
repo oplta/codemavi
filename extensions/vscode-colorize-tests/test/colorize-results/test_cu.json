@@ -4760,7 +4760,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.cuda-cpp meta.function.definition.cuda-cpp meta.qualified_type.cuda-cpp storage.type.primitive.cuda-cpp storage.type.built-in.primitive.cuda-cpp",
 		"r": {
 			"dark_plus": "storage.type: #569CD6",
@@ -11718,7 +11718,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.cuda-cpp meta.function.definition.cuda-cpp meta.body.function.definition.cuda-cpp storage.type.primitive.cuda-cpp storage.type.built-in.primitive.cuda-cpp",
 		"r": {
 			"dark_plus": "storage.type: #569CD6",

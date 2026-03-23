@@ -20,14 +20,14 @@ export interface IExtensionHostManager {
 	readonly friendyName: string;
 	readonly onDidExit: Event<[number, string | null]>;
 	readonly onDidChangeResponsiveState: Event<ResponsiveState>;
-	disconnect(): Promise<void>;
-	dispose(): void;
-	ready(): Promise<void>;
+	disconnect(): Promise<codemavi>;
+	dispose(): codemavi;
+	ready(): Promise<codemavi>;
 	representsRunningLocation(runningLocation: ExtensionRunningLocation): boolean;
-	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<void>;
+	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi>;
 	containsExtension(extensionId: ExtensionIdentifier): boolean;
 	activate(extension: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<boolean>;
-	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void>;
+	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi>;
 	activationEventIsDone(activationEvent: string): boolean;
 	getInspectPort(tryEnableInspector: boolean): Promise<{ port: number; host: string } | undefined>;
 	resolveAuthority(remoteAuthority: string, resolveAttempt: number): Promise<IResolveAuthorityResult>;
@@ -35,7 +35,7 @@ export interface IExtensionHostManager {
 	 * Returns `null` if no resolver for `remoteAuthority` is found.
 	 */
 	getCanonicalURI(remoteAuthority: string, uri: URI): Promise<URI | null>;
-	start(extensionRegistryVersionId: number, allExtensions: readonly IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<void>;
+	start(extensionRegistryVersionId: number, allExtensions: readonly IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<codemavi>;
 	extensionTestsExecute(): Promise<number>;
-	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void>;
+	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi>;
 }

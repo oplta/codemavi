@@ -71,7 +71,7 @@ export class CodeLensContribution implements IEditorContribution {
 		this._updateLensStyle();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._localDispose();
 		this._localToDispose.dispose();
 		this._disposables.dispose();
@@ -91,7 +91,7 @@ export class CodeLensContribution implements IEditorContribution {
 		};
 	}
 
-	private _updateLensStyle(): void {
+	private _updateLensStyle(): codemavi {
 
 		const { codeLensHeight, fontSize } = this._getLayoutInfo();
 		const fontFamily = this._editor.getOption(EditorOption.codeLensFontFamily);
@@ -116,7 +116,7 @@ export class CodeLensContribution implements IEditorContribution {
 		});
 	}
 
-	private _localDispose(): void {
+	private _localDispose(): codemavi {
 		this._getCodeLensModelPromise?.cancel();
 		this._getCodeLensModelPromise = undefined;
 		this._resolveCodeLensesPromise?.cancel();
@@ -126,7 +126,7 @@ export class CodeLensContribution implements IEditorContribution {
 		this._currentCodeLensModel?.dispose();
 	}
 
-	private _onModelChange(): void {
+	private _onModelChange(): codemavi {
 
 		this._localDispose();
 
@@ -279,7 +279,7 @@ export class CodeLensContribution implements IEditorContribution {
 		scheduler.schedule();
 	}
 
-	private _disposeAllLenses(decChangeAccessor: IModelDecorationsChangeAccessor | undefined, viewZoneChangeAccessor: IViewZoneChangeAccessor | undefined): void {
+	private _disposeAllLenses(decChangeAccessor: IModelDecorationsChangeAccessor | undefined, viewZoneChangeAccessor: IViewZoneChangeAccessor | undefined): codemavi {
 		const helper = new CodeLensHelper();
 		for (const lens of this._lenses) {
 			lens.dispose(helper, viewZoneChangeAccessor);
@@ -290,7 +290,7 @@ export class CodeLensContribution implements IEditorContribution {
 		this._lenses.length = 0;
 	}
 
-	private _renderCodeLensSymbols(symbols: CodeLensModel): void {
+	private _renderCodeLensSymbols(symbols: CodeLensModel): codemavi {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -367,14 +367,14 @@ export class CodeLensContribution implements IEditorContribution {
 		scrollState.restore(this._editor);
 	}
 
-	private _resolveCodeLensesInViewportSoon(): void {
+	private _resolveCodeLensesInViewportSoon(): codemavi {
 		const model = this._editor.getModel();
 		if (model) {
 			this._resolveCodeLensesScheduler.schedule();
 		}
 	}
 
-	private _resolveCodeLensesInViewport(): void {
+	private _resolveCodeLensesInViewport(): codemavi {
 
 		this._resolveCodeLensesPromise?.cancel();
 		this._resolveCodeLensesPromise = undefined;
@@ -469,7 +469,7 @@ registerEditorAction(class ShowLensesInCurrentLine extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 
 		if (!editor.hasModel()) {
 			return;

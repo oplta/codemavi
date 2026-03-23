@@ -183,8 +183,8 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 	private readonly _onDidChangeWorkspace = new Emitter<vscode.WorkspaceFoldersChangeEvent>();
 	readonly onDidChangeWorkspace: Event<vscode.WorkspaceFoldersChangeEvent> = this._onDidChangeWorkspace.event;
 
-	private readonly _onDidGrantWorkspaceTrust = new Emitter<void>();
-	readonly onDidGrantWorkspaceTrust: Event<void> = this._onDidGrantWorkspaceTrust.event;
+	private readonly _onDidGrantWorkspaceTrust = new Emitter<codemavi>();
+	readonly onDidGrantWorkspaceTrust: Event<codemavi> = this._onDidGrantWorkspaceTrust.event;
 
 	private readonly _logService: ILogService;
 	private readonly _requestIdProvider: Counter;
@@ -223,7 +223,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		this._confirmedWorkspace = data ? new ExtHostWorkspaceImpl(data.id, data.name, [], !!data.transient, data.configuration ? URI.revive(data.configuration) : null, !!data.isUntitled, uri => ignorePathCasing(uri, extHostFileSystemInfo)) : undefined;
 	}
 
-	$initializeWorkspace(data: IWorkspaceData | null, trusted: boolean): void {
+	$initializeWorkspace(data: IWorkspaceData | null, trusted: boolean): codemavi {
 		this._trusted = trusted;
 		this.$acceptWorkspaceData(data);
 		this._barrier.open();
@@ -417,7 +417,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		return result!;
 	}
 
-	private trySetWorkspaceFolders(folders: vscode.WorkspaceFolder[]): void {
+	private trySetWorkspaceFolders(folders: vscode.WorkspaceFolder[]): codemavi {
 
 		// Update directly here. The workspace is unconfirmed as long as we did not get an
 		// acknowledgement from the main side (via $acceptWorkspaceData)
@@ -432,7 +432,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		}
 	}
 
-	$acceptWorkspaceData(data: IWorkspaceData | null): void {
+	$acceptWorkspaceData(data: IWorkspaceData | null): codemavi {
 
 		const { workspace, added, removed } = ExtHostWorkspaceImpl.toExtHostWorkspace(data, this._confirmedWorkspace, this._unconfirmedWorkspace, this._extHostFileSystemInfo);
 
@@ -642,7 +642,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 	}
 
 
-	async findTextInFilesBase(query: vscode.TextSearchQuery, queryOptions: QueryOptions<ITextQueryBuilderOptions>[] | undefined, callback: (result: ITextSearchResult<URI>, uri: URI) => void, token: vscode.CancellationToken = CancellationToken.None): Promise<vscode.TextSearchComplete> {
+	async findTextInFilesBase(query: vscode.TextSearchQuery, queryOptions: QueryOptions<ITextQueryBuilderOptions>[] | undefined, callback: (result: ITextSearchResult<URI>, uri: URI) => codemavi, token: vscode.CancellationToken = CancellationToken.None): Promise<vscode.TextSearchComplete> {
 		const requestId = this._requestIdProvider.getNext();
 
 		let isCanceled = false;
@@ -688,7 +688,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		}
 	}
 
-	async findTextInFiles(query: vscode.TextSearchQuery, options: vscode.FindTextInFilesOptions & { useSearchExclude?: boolean }, callback: (result: vscode.TextSearchResult) => void, extensionId: ExtensionIdentifier, token: vscode.CancellationToken = CancellationToken.None): Promise<vscode.TextSearchComplete> {
+	async findTextInFiles(query: vscode.TextSearchQuery, options: vscode.FindTextInFilesOptions & { useSearchExclude?: boolean }, callback: (result: vscode.TextSearchResult) => codemavi, extensionId: ExtensionIdentifier, token: vscode.CancellationToken = CancellationToken.None): Promise<vscode.TextSearchComplete> {
 		this._logService.trace(`extHostWorkspace#findTextInFiles: textSearch, extension: ${extensionId.value}, entryPoint: findTextInFiles`);
 
 		const previewOptions: vscode.TextSearchPreviewOptions = typeof options.previewOptions === 'undefined' ?
@@ -744,7 +744,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		return this.findTextInFilesBase(query, [{ options: queryOptions, folder: parsedInclude?.folder }], progress, token);
 	}
 
-	$handleTextSearchResult(result: IRawFileMatch2, requestId: number): void {
+	$handleTextSearchResult(result: IRawFileMatch2, requestId: number): codemavi {
 		this._activeSearchCallbacks[requestId]?.(result);
 	}
 
@@ -790,7 +790,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 		return this._proxy.$requestWorkspaceTrust(options);
 	}
 
-	$onDidGrantWorkspaceTrust(): void {
+	$onDidGrantWorkspaceTrust(): codemavi {
 		if (!this._trusted) {
 			this._trusted = true;
 			this._onDidGrantWorkspaceTrust.fire();
@@ -880,7 +880,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 	}
 
 	// main thread calls this to trigger participants
-	async $onWillCreateEditSessionIdentity(workspaceFolder: UriComponents, token: CancellationToken, timeout: number): Promise<void> {
+	async $onWillCreateEditSessionIdentity(workspaceFolder: UriComponents, token: CancellationToken, timeout: number): Promise<codemavi> {
 		const folder = await this.resolveWorkspaceFolder(URI.revive(workspaceFolder));
 
 		if (folder === undefined) {

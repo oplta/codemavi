@@ -167,7 +167,7 @@ export class LabelService extends Disposable implements ILabelService {
 		this.resolveRemoteEnvironment();
 	}
 
-	private async resolveRemoteEnvironment(): Promise<void> {
+	private async resolveRemoteEnvironment(): Promise<codemavi> {
 
 		// OS
 		const env = await this.remoteAgentService.getEnvironment();

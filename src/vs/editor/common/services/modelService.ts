@@ -35,15 +35,15 @@ class ModelData implements IDisposable {
 
 	constructor(
 		public readonly model: TextModel,
-		onWillDispose: (model: ITextModel) => void,
-		onDidChangeLanguage: (model: ITextModel, e: IModelLanguageChangedEvent) => void
+		onWillDispose: (model: ITextModel) => codemavi,
+		onDidChangeLanguage: (model: ITextModel, e: IModelLanguageChangedEvent) => codemavi
 	) {
 		this.model = model;
 		this._modelEventListeners.add(model.onWillDispose(() => onWillDispose(model)));
 		this._modelEventListeners.add(model.onDidChangeLanguage((e) => onDidChangeLanguage(model, e)));
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._modelEventListeners.dispose();
 	}
 }
@@ -218,7 +218,7 @@ export class ModelService extends Disposable implements IModelService {
 		return creationOptions;
 	}
 
-	private _updateModelOptions(e: IConfigurationChangeEvent | undefined): void {
+	private _updateModelOptions(e: IConfigurationChangeEvent | undefined): codemavi {
 		const oldOptionsByLanguageAndResource = this._modelCreationOptionsByLanguageAndResource;
 		this._modelCreationOptionsByLanguageAndResource = Object.create(null);
 
@@ -240,7 +240,7 @@ export class ModelService extends Disposable implements IModelService {
 		}
 	}
 
-	private static _setModelOptionsForModel(model: ITextModel, newOptions: ITextModelCreationOptions, currentOptions: ITextModelCreationOptions): void {
+	private static _setModelOptionsForModel(model: ITextModel, newOptions: ITextModelCreationOptions, currentOptions: ITextModelCreationOptions): codemavi {
 		if (currentOptions && currentOptions.defaultEOL !== newOptions.defaultEOL && model.getLineCount() === 1) {
 			model.setEOL(newOptions.defaultEOL === DefaultEndOfLine.LF ? EndOfLineSequence.LF : EndOfLineSequence.CRLF);
 		}
@@ -276,7 +276,7 @@ export class ModelService extends Disposable implements IModelService {
 
 	// --- begin IModelService
 
-	private _insertDisposedModel(disposedModelData: DisposedModelInfo): void {
+	private _insertDisposedModel(disposedModelData: DisposedModelInfo): codemavi {
 		this._disposedModels.set(MODEL_ID(disposedModelData.uri), disposedModelData);
 		this._disposedModelsHeapSize += disposedModelData.heapSize;
 	}
@@ -290,7 +290,7 @@ export class ModelService extends Disposable implements IModelService {
 		return disposedModelData;
 	}
 
-	private _ensureDisposedModelsHeapSize(maxModelsHeapSize: number): void {
+	private _ensureDisposedModelsHeapSize(maxModelsHeapSize: number): codemavi {
 		if (this._disposedModelsHeapSize > maxModelsHeapSize) {
 			// we must remove some old undo stack elements to free up some memory
 			const disposedModels: DisposedModelInfo[] = [];
@@ -368,7 +368,7 @@ export class ModelService extends Disposable implements IModelService {
 		return modelData;
 	}
 
-	public updateModel(model: ITextModel, value: string | ITextBufferFactory): void {
+	public updateModel(model: ITextModel, value: string | ITextBufferFactory): codemavi {
 		const options = this.getCreationOptions(model.getLanguageId(), model.uri, model.isForSimpleWidget);
 		const { textBuffer, disposable } = createTextBuffer(value, options.defaultEOL);
 
@@ -455,7 +455,7 @@ export class ModelService extends Disposable implements IModelService {
 		return modelData.model;
 	}
 
-	public destroyModel(resource: URI): void {
+	public destroyModel(resource: URI): codemavi {
 		// We need to support that not all models get disposed through this service (i.e. model.dispose() should work!)
 		const modelData = this._models[MODEL_ID(resource)];
 		if (!modelData) {
@@ -497,7 +497,7 @@ export class ModelService extends Disposable implements IModelService {
 		);
 	}
 
-	private _onWillDispose(model: ITextModel): void {
+	private _onWillDispose(model: ITextModel): codemavi {
 		const modelId = MODEL_ID(model.uri);
 		const modelData = this._models[modelId];
 
@@ -555,7 +555,7 @@ export class ModelService extends Disposable implements IModelService {
 		this._onModelRemoved.fire(model);
 	}
 
-	private _onDidChangeLanguage(model: ITextModel, e: IModelLanguageChangedEvent): void {
+	private _onDidChangeLanguage(model: ITextModel, e: IModelLanguageChangedEvent): codemavi {
 		const oldLanguageId = e.oldLanguage;
 		const newLanguageId = model.getLanguageId();
 		const oldOptions = this.getCreationOptions(oldLanguageId, model.uri, model.isForSimpleWidget);

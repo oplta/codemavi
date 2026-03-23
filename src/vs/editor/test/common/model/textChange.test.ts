@@ -59,7 +59,7 @@ suite('TextChangeCompressor', () => {
 		return changes;
 	}
 
-	function assertCompression(initialText: string, edit1: IGeneratedEdit[], edit2: IGeneratedEdit[]): void {
+	function assertCompression(initialText: string, edit1: IGeneratedEdit[], edit2: IGeneratedEdit[]): codemavi {
 
 		const tmpText = getResultingContent(initialText, edit1);
 		const chg1 = getTextChanges(initialText, edit1);
@@ -258,11 +258,11 @@ suite('TextChangeCompressor', () => {
 			this._edits2 = getRandomEdits(tmp, 1, 5).map((e) => { return { offset: e.offset, length: e.length, text: e.text.replace(/\n/g, '_') }; });
 		}
 
-		public print(): void {
+		public print(): codemavi {
 			console.log(`assertCompression(${JSON.stringify(this._content)}, ${JSON.stringify(this._edits1)}, ${JSON.stringify(this._edits2)});`);
 		}
 
-		public assert(): void {
+		public assert(): codemavi {
 			assertCompression(this._content, this._edits1, this._edits2);
 		}
 	}

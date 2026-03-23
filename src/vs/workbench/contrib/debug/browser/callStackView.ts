@@ -125,7 +125,7 @@ export function getSpecificSourceName(stackFrame: IStackFrame): string {
 	return (from > 0 ? '...' : '') + stackFrame.source.uri.path.substring(from);
 }
 
-async function expandTo(session: IDebugSession, tree: WorkbenchCompressibleAsyncDataTree<IDebugModel, CallStackItem, FuzzyScore>): Promise<void> {
+async function expandTo(session: IDebugSession, tree: WorkbenchCompressibleAsyncDataTree<IDebugModel, CallStackItem, FuzzyScore>): Promise<codemavi> {
 	if (session.parentSession) {
 		await expandTo(session.parentSession, tree);
 	}
@@ -213,7 +213,7 @@ export class CallStackView extends ViewPane {
 		}, 50));
 	}
 
-	protected override renderHeaderTitle(container: HTMLElement): void {
+	protected override renderHeaderTitle(container: HTMLElement): codemavi {
 		super.renderHeaderTitle(container, this.options.title);
 
 		this.stateMessage = dom.append(container, $('span.call-stack-state-message'));
@@ -222,7 +222,7 @@ export class CallStackView extends ViewPane {
 		this.stateMessageLabelHover = this._register(this.hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), this.stateMessage, ''));
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 		this.element.classList.add('debug-pane');
 		container.classList.add('debug-call-stack');
@@ -388,21 +388,21 @@ export class CallStackView extends ViewPane {
 		}));
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this.tree.layout(height, width);
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this.tree.domFocus();
 	}
 
-	collapseAll(): void {
+	collapseAll(): codemavi {
 		this.tree.collapseAll();
 	}
 
-	private async updateTreeSelection(): Promise<void> {
+	private async updateTreeSelection(): Promise<codemavi> {
 		if (!this.tree || !this.tree.getInput()) {
 			// Tree not initialized yet
 			return;
@@ -450,7 +450,7 @@ export class CallStackView extends ViewPane {
 		}
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<CallStackItem>): void {
+	private onContextMenu(e: ITreeContextMenuEvent<CallStackItem>): codemavi {
 		const element = e.element;
 		let overlay: [string, any][] = [];
 		if (isDebugSession(element)) {
@@ -567,17 +567,17 @@ class SessionsRenderer implements ICompressibleTreeRenderer<IDebugSession, Fuzzy
 		return { session, name, stateLabel, label, actionBar, elementDisposable, templateDisposable };
 	}
 
-	renderElement(element: ITreeNode<IDebugSession, FuzzyScore>, _: number, data: ISessionTemplateData): void {
+	renderElement(element: ITreeNode<IDebugSession, FuzzyScore>, _: number, data: ISessionTemplateData): codemavi {
 		this.doRenderElement(element.element, createMatches(element.filterData), data);
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IDebugSession>, FuzzyScore>, _index: number, templateData: ISessionTemplateData): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IDebugSession>, FuzzyScore>, _index: number, templateData: ISessionTemplateData): codemavi {
 		const lastElement = node.element.elements[node.element.elements.length - 1];
 		const matches = createMatches(node.filterData);
 		this.doRenderElement(lastElement, matches, templateData);
 	}
 
-	private doRenderElement(session: IDebugSession, matches: IMatch[], data: ISessionTemplateData): void {
+	private doRenderElement(session: IDebugSession, matches: IMatch[], data: ISessionTemplateData): codemavi {
 		const sessionHover = data.elementDisposable.add(this.hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), data.session, localize({ key: 'session', comment: ['Session is a noun'] }, "Session")));
 		data.label.set(session.getLabel(), matches);
 		const stoppedDetails = session.getStoppedDetails();
@@ -614,15 +614,15 @@ class SessionsRenderer implements ICompressibleTreeRenderer<IDebugSession, Fuzzy
 		}
 	}
 
-	disposeTemplate(templateData: ISessionTemplateData): void {
+	disposeTemplate(templateData: ISessionTemplateData): codemavi {
 		templateData.templateDisposable.dispose();
 	}
 
-	disposeElement(_element: ITreeNode<IDebugSession, FuzzyScore>, _: number, templateData: ISessionTemplateData): void {
+	disposeElement(_element: ITreeNode<IDebugSession, FuzzyScore>, _: number, templateData: ISessionTemplateData): codemavi {
 		templateData.elementDisposable.clear();
 	}
 
-	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<IDebugSession>, FuzzyScore>, index: number, templateData: ISessionTemplateData, height: number | undefined): void {
+	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<IDebugSession>, FuzzyScore>, index: number, templateData: ISessionTemplateData, height: number | undefined): codemavi {
 		templateData.elementDisposable.clear();
 	}
 }
@@ -661,7 +661,7 @@ class ThreadsRenderer implements ICompressibleTreeRenderer<IThread, FuzzyScore, 
 		return { thread, name, stateLabel, label, actionBar, elementDisposable, templateDisposable };
 	}
 
-	renderElement(element: ITreeNode<IThread, FuzzyScore>, _index: number, data: IThreadTemplateData): void {
+	renderElement(element: ITreeNode<IThread, FuzzyScore>, _index: number, data: IThreadTemplateData): codemavi {
 		const thread = element.element;
 		data.elementDisposable.add(this.hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), data.thread, thread.name));
 		data.label.set(thread.name, createMatches(element.filterData));
@@ -684,15 +684,15 @@ class ThreadsRenderer implements ICompressibleTreeRenderer<IThread, FuzzyScore, 
 		setupActionBar();
 	}
 
-	renderCompressedElements(_node: ITreeNode<ICompressedTreeNode<IThread>, FuzzyScore>, _index: number, _templateData: IThreadTemplateData, _height: number | undefined): void {
+	renderCompressedElements(_node: ITreeNode<ICompressedTreeNode<IThread>, FuzzyScore>, _index: number, _templateData: IThreadTemplateData, _height: number | undefined): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	disposeElement(_element: any, _index: number, templateData: IThreadTemplateData): void {
+	disposeElement(_element: any, _index: number, templateData: IThreadTemplateData): codemavi {
 		templateData.elementDisposable.clear();
 	}
 
-	disposeTemplate(templateData: IThreadTemplateData): void {
+	disposeTemplate(templateData: IThreadTemplateData): codemavi {
 		templateData.templateDisposable.dispose();
 	}
 }
@@ -733,7 +733,7 @@ class StackFramesRenderer implements ICompressibleTreeRenderer<IStackFrame, Fuzz
 		return { file, fileName, label, lineNumber, stackFrame, actionBar, templateDisposable };
 	}
 
-	renderElement(element: ITreeNode<IStackFrame, FuzzyScore>, index: number, data: IStackFrameTemplateData): void {
+	renderElement(element: ITreeNode<IStackFrame, FuzzyScore>, index: number, data: IStackFrameTemplateData): codemavi {
 		const stackFrame = element.element;
 		data.stackFrame.classList.toggle('disabled', !stackFrame.source || !stackFrame.source.available || isFrameDeemphasized(stackFrame));
 		data.stackFrame.classList.toggle('label', stackFrame.presentationHint === 'label');
@@ -771,11 +771,11 @@ class StackFramesRenderer implements ICompressibleTreeRenderer<IStackFrame, Fuzz
 		}
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IStackFrame>, FuzzyScore>, index: number, templateData: IStackFrameTemplateData, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IStackFrame>, FuzzyScore>, index: number, templateData: IStackFrameTemplateData, height: number | undefined): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	disposeTemplate(templateData: IStackFrameTemplateData): void {
+	disposeTemplate(templateData: IStackFrameTemplateData): codemavi {
 		templateData.actionBar.dispose();
 	}
 }
@@ -798,17 +798,17 @@ class ErrorsRenderer implements ICompressibleTreeRenderer<string, FuzzyScore, IE
 		return { label, templateDisposable: new DisposableStore() };
 	}
 
-	renderElement(element: ITreeNode<string, FuzzyScore>, index: number, data: IErrorTemplateData): void {
+	renderElement(element: ITreeNode<string, FuzzyScore>, index: number, data: IErrorTemplateData): codemavi {
 		const error = element.element;
 		data.label.textContent = error;
 		data.templateDisposable.add(this.hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), data.label, error));
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<string>, FuzzyScore>, index: number, templateData: IErrorTemplateData, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<string>, FuzzyScore>, index: number, templateData: IErrorTemplateData, height: number | undefined): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	disposeTemplate(templateData: IErrorTemplateData): void {
+	disposeTemplate(templateData: IErrorTemplateData): codemavi {
 		// noop
 	}
 }
@@ -829,15 +829,15 @@ class LoadMoreRenderer implements ICompressibleTreeRenderer<ThreadAndSessionIds,
 		return { label };
 	}
 
-	renderElement(element: ITreeNode<ThreadAndSessionIds, FuzzyScore>, index: number, data: ILabelTemplateData): void {
+	renderElement(element: ITreeNode<ThreadAndSessionIds, FuzzyScore>, index: number, data: ILabelTemplateData): codemavi {
 		data.label.textContent = LoadMoreRenderer.LABEL;
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ThreadAndSessionIds>, FuzzyScore>, index: number, templateData: ILabelTemplateData, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ThreadAndSessionIds>, FuzzyScore>, index: number, templateData: ILabelTemplateData, height: number | undefined): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	disposeTemplate(templateData: ILabelTemplateData): void {
+	disposeTemplate(templateData: ILabelTemplateData): codemavi {
 		// noop
 	}
 }
@@ -858,7 +858,7 @@ class ShowMoreRenderer implements ICompressibleTreeRenderer<IStackFrame[], Fuzzy
 		return { label };
 	}
 
-	renderElement(element: ITreeNode<IStackFrame[], FuzzyScore>, index: number, data: ILabelTemplateData): void {
+	renderElement(element: ITreeNode<IStackFrame[], FuzzyScore>, index: number, data: ILabelTemplateData): codemavi {
 		const stackFrames = element.element;
 		if (stackFrames.every(sf => !!(sf.source && sf.source.origin && sf.source.origin === stackFrames[0].source.origin))) {
 			data.label.textContent = localize('showMoreAndOrigin', "Show {0} More: {1}", stackFrames.length, stackFrames[0].source.origin);
@@ -867,11 +867,11 @@ class ShowMoreRenderer implements ICompressibleTreeRenderer<IStackFrame[], Fuzzy
 		}
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IStackFrame[]>, FuzzyScore>, index: number, templateData: ILabelTemplateData, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IStackFrame[]>, FuzzyScore>, index: number, templateData: ILabelTemplateData, height: number | undefined): codemavi {
 		throw new Error('Method not implemented.');
 	}
 
-	disposeTemplate(templateData: ILabelTemplateData): void {
+	disposeTemplate(templateData: ILabelTemplateData): codemavi {
 		// noop
 	}
 }
@@ -1110,7 +1110,7 @@ registerAction2(class Collapse extends ViewAction<CallStackView> {
 	}
 });
 
-function registerCallStackInlineMenuItem(id: string, title: string | ICommandActionTitle, icon: Icon, when: ContextKeyExpression, order: number, precondition?: ContextKeyExpression): void {
+function registerCallStackInlineMenuItem(id: string, title: string | ICommandActionTitle, icon: Icon, when: ContextKeyExpression, order: number, precondition?: ContextKeyExpression): codemavi {
 	MenuRegistry.appendMenuItem(MenuId.DebugCallStackContext, {
 		group: 'inline',
 		order,

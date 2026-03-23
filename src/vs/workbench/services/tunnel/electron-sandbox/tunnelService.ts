@@ -30,7 +30,7 @@ class SharedProcessTunnel extends Disposable implements RemoteTunnel {
 		public readonly tunnelRemotePort: number,
 		public readonly tunnelLocalPort: number | undefined,
 		public readonly localAddress: string,
-		private readonly _onBeforeDispose: () => void,
+		private readonly _onBeforeDispose: () => codemavi,
 		@ISharedProcessTunnelService private readonly _sharedProcessTunnelService: ISharedProcessTunnelService,
 		@IRemoteAuthorityResolverService private readonly _remoteAuthorityResolverService: IRemoteAuthorityResolverService,
 	) {
@@ -39,13 +39,13 @@ class SharedProcessTunnel extends Disposable implements RemoteTunnel {
 		this._register(this._remoteAuthorityResolverService.onDidChangeConnectionData(() => this._updateAddress()));
 	}
 
-	private _updateAddress(): void {
+	private _updateAddress(): codemavi {
 		this._addressProvider.getAddress().then((address) => {
 			this._sharedProcessTunnelService.setAddress(this._id, address);
 		});
 	}
 
-	public override async dispose(): Promise<void> {
+	public override async dispose(): Promise<codemavi> {
 		this._onBeforeDispose();
 		super.dispose();
 		await this._sharedProcessTunnelService.destroyTunnel(this._id);

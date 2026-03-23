@@ -96,7 +96,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	});
 
-	test('when contexts', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when contexts', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -140,7 +140,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('when contexts - multiple', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when contexts - multiple', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -163,7 +163,7 @@ suite('ViewContainerModel', () => {
 		ViewsRegistry.deregisterViews([view1, view2], container);
 	}));
 
-	test('when contexts - multiple 2', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('when contexts - multiple 2', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -260,7 +260,7 @@ suite('ViewContainerModel', () => {
 		assert.deepStrictEqual(target.elements, [view1, view2, view3]);
 	});
 
-	test('view states', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('view states', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storageService.store(`${container.id}.state.hidden`, JSON.stringify([{ id: 'view1', isHidden: true }]), StorageScope.PROFILE, StorageTarget.MACHINE);
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
@@ -280,7 +280,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('view states and when contexts', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('view states and when contexts', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storageService.store(`${container.id}.state.hidden`, JSON.stringify([{ id: 'view1', isHidden: true }]), StorageScope.PROFILE, StorageTarget.MACHINE);
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
@@ -310,7 +310,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('view states and when contexts multiple views', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('view states and when contexts multiple views', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		storageService.store(`${container.id}.state.hidden`, JSON.stringify([{ id: 'view1', isHidden: true }]), StorageScope.PROFILE, StorageTarget.MACHINE);
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
@@ -356,7 +356,7 @@ suite('ViewContainerModel', () => {
 		assert.deepStrictEqual(target.elements, [view2]);
 	}));
 
-	test('remove event is not triggered if view was hidden and removed', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('remove event is not triggered if view was hidden and removed', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -386,7 +386,7 @@ suite('ViewContainerModel', () => {
 		assert.ok(!targetEvent.called, 'remove event should not be called since it is already hidden');
 	}));
 
-	test('add event is not triggered if view was set visible (when visible) and not active', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add event is not triggered if view was set visible (when visible) and not active', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -413,7 +413,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('remove event is not triggered if view was hidden and not active', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('remove event is not triggered if view was hidden and not active', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -440,7 +440,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('add event is not triggered if view was set visible (when not visible) and not active', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add event is not triggered if view was set visible (when not visible) and not active', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -471,7 +471,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('added view descriptors are in ascending order in the event', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('added view descriptors are in ascending order in the event', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -522,7 +522,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements[4].id, 'view5');
 	}));
 
-	test('add event is triggered only once when view is set visible while it is set active', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add event is triggered only once when view is set visible while it is set active', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -553,7 +553,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements[0].id, 'view1');
 	}));
 
-	test('add event is not triggered only when view is set hidden while it is set active', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add event is not triggered only when view is set hidden while it is set active', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -582,7 +582,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements.length, 0);
 	}));
 
-	test('#142087: view descriptor visibility is not reset', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('#142087: view descriptor visibility is not reset', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const viewDescriptor: IViewDescriptor = {
@@ -605,7 +605,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(testObject.visibleViewDescriptors.length, 0);
 	}));
 
-	test('remove event is triggered properly if multiple views are hidden at the same time', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('remove event is triggered properly if multiple views are hidden at the same time', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -663,7 +663,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements[0].id, viewDescriptor1.id);
 	}));
 
-	test('add event is triggered properly if multiple views are hidden at the same time', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add event is triggered properly if multiple views are hidden at the same time', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -731,7 +731,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements[2].id, viewDescriptor3.id);
 	}));
 
-	test('add and remove events are triggered properly if multiple views are hidden and added at the same time', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('add and remove events are triggered properly if multiple views are hidden and added at the same time', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const testObject = viewDescriptorService.getViewContainerModel(container);
 		const target = disposableStore.add(new ViewDescriptorSequence(testObject));
@@ -808,7 +808,7 @@ suite('ViewContainerModel', () => {
 		assert.strictEqual(target.elements[1].id, viewDescriptor3.id);
 	}));
 
-	test('newly added view descriptor is hidden if it was toggled hidden in storage before adding', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('newly added view descriptor is hidden if it was toggled hidden in storage before adding', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		container = ViewContainerRegistry.registerViewContainer({ id: 'test', title: nls.localize2('test', 'test'), ctorDescriptor: new SyncDescriptor(<any>{}) }, ViewContainerLocation.Sidebar);
 		const viewDescriptor: IViewDescriptor = {
 			id: 'view1',

@@ -46,7 +46,7 @@ export class LineNumbersOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	private _readConfig(): void {
+	private _readConfig(): codemavi {
 		const options = this._context.configuration.options;
 		this._lineHeight = options.get(EditorOption.lineHeight);
 		const lineNumbers = options.get(EditorOption.lineNumbers);
@@ -58,7 +58,7 @@ export class LineNumbersOverlay extends DynamicViewOverlay {
 		this._lineNumbersWidth = layoutInfo.lineNumbersWidth;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -144,7 +144,7 @@ export class LineNumbersOverlay extends DynamicViewOverlay {
 		return String(modelLineNumber);
 	}
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		if (this._renderLineNumbers === RenderLineNumbersType.Off) {
 			this._renderResult = null;
 			return;

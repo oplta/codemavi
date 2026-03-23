@@ -32,8 +32,8 @@ export interface IResourceUndoRedoElement {
 	 * Show a message to the user confirming when trying to undo this element
 	 */
 	readonly confirmBeforeUndo?: boolean;
-	undo(): Promise<void> | void;
-	redo(): Promise<void> | void;
+	undo(): Promise<codemavi> | codemavi;
+	redo(): Promise<codemavi> | codemavi;
 }
 
 export interface IWorkspaceUndoRedoElement {
@@ -54,8 +54,8 @@ export interface IWorkspaceUndoRedoElement {
 	 * Show a message to the user confirming when trying to undo this element
 	 */
 	readonly confirmBeforeUndo?: boolean;
-	undo(): Promise<void> | void;
-	redo(): Promise<void> | void;
+	undo(): Promise<codemavi> | codemavi;
+	redo(): Promise<codemavi> | codemavi;
 
 	/**
 	 * If implemented, indicates that this undo/redo element can be split into multiple per resource elements.
@@ -67,7 +67,7 @@ export interface IWorkspaceUndoRedoElement {
 	 * This is a good place to prepare everything such that the calls to `undo()` or `redo()` are synchronous.
 	 * If a disposable is returned, it will be invoked to clean things up.
 	 */
-	prepareUndoRedo?(): Promise<IDisposable> | IDisposable | void;
+	prepareUndoRedo?(): Promise<IDisposable> | IDisposable | codemavi;
 }
 
 export type IUndoRedoElement = IResourceUndoRedoElement | IWorkspaceUndoRedoElement;
@@ -149,7 +149,7 @@ export interface IUndoRedoService {
 	 * Add a new element to the `undo` stack.
 	 * This will destroy the `redo` stack.
 	 */
-	pushElement(element: IUndoRedoElement, group?: UndoRedoGroup, source?: UndoRedoSource): void;
+	pushElement(element: IUndoRedoElement, group?: UndoRedoGroup, source?: UndoRedoSource): codemavi;
 
 	/**
 	 * Get the last pushed element for a resource.
@@ -166,12 +166,12 @@ export interface IUndoRedoService {
 	/**
 	 * Validate or invalidate stack elements associated with a resource.
 	 */
-	setElementsValidFlag(resource: URI, isValid: boolean, filter: (element: IUndoRedoElement) => boolean): void;
+	setElementsValidFlag(resource: URI, isValid: boolean, filter: (element: IUndoRedoElement) => boolean): codemavi;
 
 	/**
 	 * Remove elements that target `resource`.
 	 */
-	removeElements(resource: URI): void;
+	removeElements(resource: URI): codemavi;
 
 	/**
 	 * Create a snapshot of the current elements on the undo-redo stack for a resource.
@@ -180,11 +180,11 @@ export interface IUndoRedoService {
 	/**
 	 * Attempt (as best as possible) to restore a certain snapshot previously created with `createSnapshot` for a resource.
 	 */
-	restoreSnapshot(snapshot: ResourceEditStackSnapshot): void;
+	restoreSnapshot(snapshot: ResourceEditStackSnapshot): codemavi;
 
 	canUndo(resource: URI | UndoRedoSource): boolean;
-	undo(resource: URI | UndoRedoSource): Promise<void> | void;
+	undo(resource: URI | UndoRedoSource): Promise<codemavi> | codemavi;
 
 	canRedo(resource: URI | UndoRedoSource): boolean;
-	redo(resource: URI | UndoRedoSource): Promise<void> | void;
+	redo(resource: URI | UndoRedoSource): Promise<codemavi> | codemavi;
 }

@@ -52,14 +52,14 @@ export interface IDelegate {
 	 */
 	getAnchor(): HTMLElement | StandardMouseEvent | IAnchor;
 	render(container: HTMLElement): IDisposable | null;
-	focus?(): void;
-	layout?(): void;
+	focus?(): codemavi;
+	layout?(): codemavi;
 	anchorAlignment?: AnchorAlignment; // default: left
 	anchorPosition?: AnchorPosition; // default: below
 	anchorAxisAlignment?: AnchorAxisAlignment; // default: vertical
 	canRelayout?: boolean; // default: true
-	onDOMEvent?(e: Event, activeElement: HTMLElement): void;
-	onHide?(data?: unknown): void;
+	onDOMEvent?(e: Event, activeElement: HTMLElement): codemavi;
+	onHide?(data?: unknown): codemavi;
 
 	/**
 	 * context views with higher layers are rendered higher in z-index order
@@ -68,9 +68,9 @@ export interface IDelegate {
 }
 
 export interface IContextViewProvider {
-	showContextView(delegate: IDelegate, container?: HTMLElement): void;
-	hideContextView(): void;
-	layout(): void;
+	showContextView(delegate: IDelegate, container?: HTMLElement): codemavi;
+	hideContextView(): codemavi;
+	layout(): codemavi;
 }
 
 export interface IPosition {
@@ -159,7 +159,7 @@ export class ContextView extends Disposable {
 		this._register(toDisposable(() => this.setContainer(null, ContextViewDOMPosition.ABSOLUTE)));
 	}
 
-	setContainer(container: HTMLElement | null, domPosition: ContextViewDOMPosition): void {
+	setContainer(container: HTMLElement | null, domPosition: ContextViewDOMPosition): codemavi {
 		this.useFixedPosition = domPosition !== ContextViewDOMPosition.ABSOLUTE;
 		const usedShadowDOM = this.useShadowDOM;
 		this.useShadowDOM = domPosition === ContextViewDOMPosition.FIXED_SHADOW;
@@ -215,7 +215,7 @@ export class ContextView extends Disposable {
 		}
 	}
 
-	show(delegate: IDelegate): void {
+	show(delegate: IDelegate): codemavi {
 		if (this.isVisible()) {
 			this.hide();
 		}
@@ -246,7 +246,7 @@ export class ContextView extends Disposable {
 		return this.view;
 	}
 
-	layout(): void {
+	layout(): codemavi {
 		if (!this.isVisible()) {
 			return;
 		}
@@ -261,7 +261,7 @@ export class ContextView extends Disposable {
 		this.doLayout();
 	}
 
-	private doLayout(): void {
+	private doLayout(): codemavi {
 		// Check that we still have a delegate - this.delegate.layout may have hidden
 		if (!this.isVisible()) {
 			return;
@@ -325,7 +325,7 @@ export class ContextView extends Disposable {
 
 			top = layout(activeWindow.innerHeight, viewSizeHeight, verticalAnchor) + activeWindow.pageYOffset;
 
-			// if view intersects vertically with anchor,  we must avoid the anchor
+			// if view intersects vertically with anchor,  we must acodemavi the anchor
 			if (Range.intersects({ start: top, end: top + viewSizeHeight }, { start: verticalAnchor.offset, end: verticalAnchor.offset + verticalAnchor.size })) {
 				horizontalAnchor.mode = LayoutAnchorMode.AVOID;
 			}
@@ -337,7 +337,7 @@ export class ContextView extends Disposable {
 
 			left = layout(activeWindow.innerWidth, viewSizeWidth, horizontalAnchor);
 
-			// if view intersects horizontally with anchor, we must avoid the anchor
+			// if view intersects horizontally with anchor, we must acodemavi the anchor
 			if (Range.intersects({ start: left, end: left + viewSizeWidth }, { start: horizontalAnchor.offset, end: horizontalAnchor.offset + horizontalAnchor.size })) {
 				verticalAnchor.mode = LayoutAnchorMode.AVOID;
 			}
@@ -356,7 +356,7 @@ export class ContextView extends Disposable {
 		this.view.style.width = 'initial';
 	}
 
-	hide(data?: unknown): void {
+	hide(data?: unknown): codemavi {
 		const delegate = this.delegate;
 		this.delegate = null;
 
@@ -373,7 +373,7 @@ export class ContextView extends Disposable {
 		return !!this.delegate;
 	}
 
-	private onDOMEvent(e: UIEvent, onCapture: boolean): void {
+	private onDOMEvent(e: UIEvent, onCapture: boolean): codemavi {
 		if (this.delegate) {
 			if (this.delegate.onDOMEvent) {
 				this.delegate.onDOMEvent(e, <HTMLElement>DOM.getWindow(e).document.activeElement);
@@ -383,7 +383,7 @@ export class ContextView extends Disposable {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.hide();
 
 		super.dispose();

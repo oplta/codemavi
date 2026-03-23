@@ -32,7 +32,7 @@ export class ContributedStatusBarItemController extends Disposable implements IN
 		this._register(this._notebookCellStatusBarService.onDidChangeItems(this._updateEverything, this));
 	}
 
-	private _updateEverything(): void {
+	private _updateEverything(): codemavi {
 		const newCells = this._observer.visibleCells.filter(cell => !this._visibleCells.has(cell.handle));
 		const visibleCellHandles = new Set(this._observer.visibleCells.map(item => item.handle));
 		const currentCellHandles = Array.from(this._visibleCells.keys());
@@ -46,7 +46,7 @@ export class ContributedStatusBarItemController extends Disposable implements IN
 	private _updateVisibleCells(e: {
 		added: ICellViewModel[];
 		removed: { handle: number }[];
-	}): void {
+	}): codemavi {
 		const vm = this._notebookEditor.getViewModel();
 		if (!vm) {
 			return;
@@ -63,7 +63,7 @@ export class ContributedStatusBarItemController extends Disposable implements IN
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this._visibleCells.forEach(cell => cell.dispose());
@@ -96,10 +96,10 @@ class CellStatusBarHelper extends Disposable {
 		this._register(this._cell.model.onDidChangeOutputs(() => this._updateSoon()));
 	}
 
-	public update(): void {
+	public update(): codemavi {
 		this._updateSoon();
 	}
-	private _updateSoon(): void {
+	private _updateSoon(): codemavi {
 		// Wait a tick to make sure that the event is fired to the EH before triggering status bar providers
 		setTimeout(() => {
 			if (!this._isDisposed) {

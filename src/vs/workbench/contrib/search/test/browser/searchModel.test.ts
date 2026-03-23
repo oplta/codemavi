@@ -53,7 +53,7 @@ const nullEvent = new class {
 	startTime!: Date;
 	stopTime!: Date;
 
-	stop(): void {
+	stop(): codemavi {
 		return;
 	}
 
@@ -107,7 +107,7 @@ suite('SearchModel', () => {
 
 	function searchServiceWithResults(results: IFileMatch[], complete: ISearchComplete | null = null): ISearchService {
 		return <ISearchService>{
-			textSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
+			textSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
 				return new Promise(resolve => {
 					queueMicrotask(() => {
 						results.forEach(onProgress!);
@@ -123,7 +123,7 @@ suite('SearchModel', () => {
 
 				});
 			},
-			aiTextSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
+			aiTextSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
 				return new Promise(resolve => {
 					queueMicrotask(() => {
 						results.forEach(onProgress!);
@@ -131,7 +131,7 @@ suite('SearchModel', () => {
 					});
 				});
 			},
-			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => void) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
+			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
 				return {
 					syncResults: {
 						results: [],
@@ -150,7 +150,7 @@ suite('SearchModel', () => {
 
 	function searchServiceWithError(error: Error): ISearchService {
 		return <ISearchService>{
-			textSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete> {
+			textSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete> {
 				return new Promise((resolve, reject) => {
 					reject(error);
 				});
@@ -162,12 +162,12 @@ suite('SearchModel', () => {
 					});
 				});
 			},
-			aiTextSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
+			aiTextSearch(query: ISearchQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
 				return new Promise((resolve, reject) => {
 					reject(error);
 				});
 			},
-			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => void) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
+			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
 				return {
 					syncResults: {
 						results: [],
@@ -183,7 +183,7 @@ suite('SearchModel', () => {
 
 	function canceleableSearchService(tokenSource: CancellationTokenSource): ISearchService {
 		return <ISearchService>{
-			textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete> {
+			textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete> {
 				const disposable = token?.onCancellationRequested(() => tokenSource.cancel());
 				if (disposable) {
 					store.add(disposable);
@@ -202,7 +202,7 @@ suite('SearchModel', () => {
 					});
 				});
 			},
-			aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
+			aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi, notebookURIs?: ResourceSet): Promise<ISearchComplete> {
 				const disposable = token?.onCancellationRequested(() => tokenSource.cancel());
 				if (disposable) {
 					store.add(disposable);
@@ -213,7 +213,7 @@ suite('SearchModel', () => {
 					messages: []
 				});
 			},
-			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => void) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
+			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
 				const disposable = token?.onCancellationRequested(() => tokenSource.cancel());
 				if (disposable) {
 					store.add(disposable);
@@ -238,7 +238,7 @@ suite('SearchModel', () => {
 
 	function searchServiceWithDeferredPromise(p: Promise<ISearchComplete>): ISearchService {
 		return <ISearchService>{
-			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => void) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
+			textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> } {
 				return {
 					syncResults: {
 						results: [],
@@ -254,7 +254,7 @@ suite('SearchModel', () => {
 	function notebookSearchServiceWithInfo(results: INotebookFileMatchWithModel[], tokenSource: CancellationTokenSource | undefined): INotebookSearchService {
 		return <INotebookSearchService>{
 			_serviceBrand: undefined,
-			notebookSearch(query: ITextQuery, token: CancellationToken | undefined, searchInstanceID: string, onProgress?: (result: ISearchProgressItem) => void): {
+			notebookSearch(query: ITextQuery, token: CancellationToken | undefined, searchInstanceID: string, onProgress?: (result: ISearchProgressItem) => codemavi): {
 				openFilesToScan: ResourceSet;
 				completeData: Promise<ISearchComplete>;
 				allScannedFiles: Promise<ResourceSet>;

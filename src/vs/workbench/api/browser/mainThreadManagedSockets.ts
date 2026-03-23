@@ -28,7 +28,7 @@ export class MainThreadManagedSockets extends Disposable implements MainThreadMa
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostManagedSockets);
 	}
 
-	async $registerSocketFactory(socketFactoryId: number): Promise<void> {
+	async $registerSocketFactory(socketFactoryId: number): Promise<codemavi> {
 		const that = this;
 		const socketFactory = new class implements ISocketFactory<RemoteConnectionType.Managed> {
 
@@ -69,15 +69,15 @@ export class MainThreadManagedSockets extends Disposable implements MainThreadMa
 
 	}
 
-	async $unregisterSocketFactory(socketFactoryId: number): Promise<void> {
+	async $unregisterSocketFactory(socketFactoryId: number): Promise<codemavi> {
 		this._registrations.get(socketFactoryId)?.dispose();
 	}
 
-	$onDidManagedSocketHaveData(socketId: number, data: VSBuffer): void {
+	$onDidManagedSocketHaveData(socketId: number, data: VSBuffer): codemavi {
 		this._remoteSockets.get(socketId)?.onData.fire(data);
 	}
 
-	$onDidManagedSocketClose(socketId: number, error: string | undefined): void {
+	$onDidManagedSocketClose(socketId: number, error: string | undefined): codemavi {
 		this._remoteSockets.get(socketId)?.onClose.fire({
 			type: SocketCloseEventType.NodeSocketCloseEvent,
 			error: error ? new Error(error) : undefined,
@@ -86,7 +86,7 @@ export class MainThreadManagedSockets extends Disposable implements MainThreadMa
 		this._remoteSockets.delete(socketId);
 	}
 
-	$onDidManagedSocketEnd(socketId: number): void {
+	$onDidManagedSocketEnd(socketId: number): codemavi {
 		this._remoteSockets.get(socketId)?.onEnd.fire();
 	}
 }
@@ -111,15 +111,15 @@ export class MainThreadManagedSocket extends ManagedSocket {
 		super(debugLabel, half);
 	}
 
-	public override write(buffer: VSBuffer): void {
+	public override write(buffer: VSBuffer): codemavi {
 		this.proxy.$remoteSocketWrite(this.socketId, buffer);
 	}
 
-	protected override  closeRemote(): void {
+	protected override  closeRemote(): codemavi {
 		this.proxy.$remoteSocketEnd(this.socketId);
 	}
 
-	public override drain(): Promise<void> {
+	public override drain(): Promise<codemavi> {
 		return this.proxy.$remoteSocketDrain(this.socketId);
 	}
 }

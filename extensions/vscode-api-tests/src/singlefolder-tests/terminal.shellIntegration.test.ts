@@ -69,8 +69,8 @@ import { assertNoRpc } from '../utils';
 		};
 	}
 
-	function closeTerminalAsync(terminal: Terminal): Promise<void> {
-		return new Promise<void>(resolve => {
+	function closeTerminalAsync(terminal: Terminal): Promise<codemavi> {
+		return new Promise<codemavi>(resolve => {
 			disposables.push(window.onDidCloseTerminal(e => {
 				if (e === terminal) {
 					resolve();
@@ -91,7 +91,7 @@ import { assertNoRpc } from '../utils';
 		// TODO: Enable when this is enabled in stable, otherwise it will break the stable product builds only
 		test.skip('Test if env is set', async () => {
 			const { shellIntegration } = await createTerminalAndWaitForShellIntegration();
-			await new Promise<void>(r => {
+			await new Promise<codemavi>(r => {
 				disposables.push(window.onDidChangeTerminalShellIntegration(e => {
 					if (e.shellIntegration.env) {
 						r();

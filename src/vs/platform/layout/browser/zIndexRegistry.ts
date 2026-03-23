@@ -59,7 +59,7 @@ class ZIndexRegistry {
 		return `--z-index-${name}`;
 	}
 
-	private updateStyleElement(): void {
+	private updateStyleElement(): codemavi {
 		clearNode(this.styleSheet);
 		let ruleBuilder = '';
 		this.zIndexMap.forEach((zIndex, name) => {

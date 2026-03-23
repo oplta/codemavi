@@ -55,7 +55,7 @@ export class NativeAccessibilityService extends AccessibilityService implements 
 		return this.shouldAlwaysUnderlineAccessKeys;
 	}
 
-	override setAccessibilitySupport(accessibilitySupport: AccessibilitySupport): void {
+	override setAccessibilitySupport(accessibilitySupport: AccessibilitySupport): codemavi {
 		super.setAccessibilitySupport(accessibilitySupport);
 
 		if (!this.didSendTelemetry && accessibilitySupport === AccessibilitySupport.Enabled) {

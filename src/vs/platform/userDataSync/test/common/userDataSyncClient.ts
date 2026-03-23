@@ -55,7 +55,7 @@ export class UserDataSyncClient extends Disposable {
 		this.instantiationService = this._register(new TestInstantiationService());
 	}
 
-	async setUp(empty: boolean = false): Promise<void> {
+	async setUp(empty: boolean = false): Promise<codemavi> {
 		this._register(registerConfiguration());
 
 		const logService = this.instantiationService.stub(ILogService, new NullLogService());
@@ -148,7 +148,7 @@ export class UserDataSyncClient extends Disposable {
 			.setResourceEnablement(SyncResource.Prompts, true);
 	}
 
-	async sync(): Promise<void> {
+	async sync(): Promise<codemavi> {
 		await (await this.instantiationService.get(IUserDataSyncService).createSyncTask(null)).run();
 	}
 
@@ -186,7 +186,7 @@ export class UserDataSyncTestServer implements IRequestService {
 
 	private _responses: { status: number }[] = [];
 	get responses(): { status: number }[] { return this._responses; }
-	reset(): void { this._requests = []; this._responses = []; this._requestsWithAllHeaders = []; }
+	reset(): codemavi { this._requests = []; this._responses = []; this._requestsWithAllHeaders = []; }
 
 	private manifestRef = 0;
 	private collectionCounter = 0;

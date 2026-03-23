@@ -17,7 +17,7 @@ import { ILogService } from '../../log/common/log.js';
  * 		- the extension is not installed
  * 		- or it is a release version and the unsupported extension is enabled.
  */
-export async function migrateUnsupportedExtensions(extensionManagementService: IExtensionManagementService, galleryService: IExtensionGalleryService, extensionStorageService: IExtensionStorageService, extensionEnablementService: IGlobalExtensionEnablementService, logService: ILogService): Promise<void> {
+export async function migrateUnsupportedExtensions(extensionManagementService: IExtensionManagementService, galleryService: IExtensionGalleryService, extensionStorageService: IExtensionStorageService, extensionEnablementService: IGlobalExtensionEnablementService, logService: ILogService): Promise<codemavi> {
 	try {
 		const extensionsControlManifest = await extensionManagementService.getExtensionsControlManifest();
 		if (!extensionsControlManifest.deprecated) {

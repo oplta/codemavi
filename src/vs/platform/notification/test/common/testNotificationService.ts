@@ -13,7 +13,7 @@ export class TestNotificationService implements INotificationService {
 
 	readonly onDidRemoveNotification: Event<INotification> = Event.None;
 
-	readonly onDidChangeFilter: Event<void> = Event.None;
+	readonly onDidChangeFilter: Event<codemavi> = Event.None;
 
 	declare readonly _serviceBrand: undefined;
 
@@ -43,7 +43,7 @@ export class TestNotificationService implements INotificationService {
 		return Disposable.None;
 	}
 
-	setFilter(): void { }
+	setFilter(): codemavi { }
 
 	getFilter(source?: INotificationSource | undefined): NotificationsFilter {
 		return NotificationsFilter.OFF;
@@ -53,5 +53,5 @@ export class TestNotificationService implements INotificationService {
 		return [];
 	}
 
-	removeFilter(sourceId: string): void { }
+	removeFilter(sourceId: string): codemavi { }
 }

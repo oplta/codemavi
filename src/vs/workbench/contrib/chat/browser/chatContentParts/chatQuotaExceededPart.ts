@@ -37,7 +37,7 @@ let shouldShowWaitWarning = false;
 export class ChatQuotaExceededPart extends Disposable implements IChatContentPart {
 	public readonly domNode: HTMLElement;
 
-	private readonly _onDidChangeHeight = this._register(new Emitter<void>());
+	private readonly _onDidChangeHeight = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	constructor(

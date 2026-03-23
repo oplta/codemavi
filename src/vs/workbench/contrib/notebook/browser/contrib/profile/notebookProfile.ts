@@ -48,7 +48,7 @@ const profiles = {
 	}
 };
 
-async function applyProfile(configService: IConfigurationService, profile: Record<string, any>): Promise<void> {
+async function applyProfile(configService: IConfigurationService, profile: Record<string, any>): Promise<codemavi> {
 	const promises = [];
 	for (const settingKey in profile) {
 		promises.push(configService.updateValue(settingKey, profile[settingKey]));
@@ -69,7 +69,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, args: unknown): Promise<void> {
+	async run(accessor: ServicesAccessor, args: unknown): Promise<codemavi> {
 		if (!isSetProfileArgs(args)) {
 			return;
 		}

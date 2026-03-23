@@ -728,7 +728,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.java meta.class.java meta.class.body.java meta.method.java meta.method.return-type.java storage.type.primitive.java",
 		"r": {
 			"dark_plus": "storage.type.primitive.java: #4EC9B0",
@@ -2450,7 +2450,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.java meta.class.java meta.class.body.java meta.method.java meta.method.return-type.java storage.type.primitive.java",
 		"r": {
 			"dark_plus": "storage.type.primitive.java: #4EC9B0",

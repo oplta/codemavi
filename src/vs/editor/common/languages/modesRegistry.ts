@@ -20,8 +20,8 @@ export class EditorModesRegistry {
 
 	private readonly _languages: ILanguageExtensionPoint[];
 
-	private readonly _onDidChangeLanguages = new Emitter<void>();
-	public readonly onDidChangeLanguages: Event<void> = this._onDidChangeLanguages.event;
+	private readonly _onDidChangeLanguages = new Emitter<codemavi>();
+	public readonly onDidChangeLanguages: Event<codemavi> = this._onDidChangeLanguages.event;
 
 	constructor() {
 		this._languages = [];

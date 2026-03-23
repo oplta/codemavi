@@ -28,7 +28,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		return this.fileService.getProvider(Schemas.file) as HTMLFileSystemProvider;
 	}
 
-	async pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -47,7 +47,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 			: (((schema !== Schemas.file) && (!isFolder || (schema !== Schemas.vscodeRemote))) ? [schema, Schemas.file] : [schema]);
 	}
 
-	async pickFileAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFileAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -81,7 +81,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		await this.openerService.open(uri, { fromUserGesture: true, editorOptions: { pinned: true } });
 	}
 
-	async pickFolderAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		const schema = this.getFileSystemSchema(options);
 
 		if (!options.defaultUri) {
@@ -95,7 +95,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 		throw new Error(localize('pickFolderAndOpen', "Can't open folders, try adding a folder to the workspace instead."));
 	}
 
-	async pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<void> {
+	async pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<codemavi> {
 		options.availableFileSystems = this.getWorkspaceAvailableFileSystems(options);
 		const schema = this.getFileSystemSchema(options);
 
@@ -230,7 +230,7 @@ export class FileDialogService extends AbstractFileDialogService implements IFil
 
 		// Otherwise inform the user about options
 
-		const buttons: IPromptButton<void>[] = [
+		const buttons: IPromptButton<codemavi>[] = [
 			{
 				label: localize({ key: 'openRemote', comment: ['&& denotes a mnemonic'] }, "&&Open Remote..."),
 				run: async () => { await this.commandService.executeCommand('workbench.action.remote.showMenu'); }

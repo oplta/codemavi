@@ -83,7 +83,7 @@ export interface IMergedEnvironmentVariableCollection {
 	 * @param variableResolver An optional function to use to resolve variables within the
 	 * environment values.
 	 */
-	applyToProcessEnvironment(env: IProcessEnvironment, scope: EnvironmentVariableScope | undefined, variableResolver?: VariableResolver): Promise<void>;
+	applyToProcessEnvironment(env: IProcessEnvironment, scope: EnvironmentVariableScope | undefined, variableResolver?: VariableResolver): Promise<codemavi>;
 
 	/**
 	 * Generates a diff of this collection against another. Returns undefined if the collections are

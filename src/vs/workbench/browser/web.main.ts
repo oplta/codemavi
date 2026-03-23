@@ -110,7 +110,7 @@ export class BrowserMain extends Disposable {
 		this.init();
 	}
 
-	private init(): void {
+	private init(): codemavi {
 
 		// Browser config
 		setFullscreen(!!detectFullscreen(mainWindow), mainWindow);
@@ -244,7 +244,7 @@ export class BrowserMain extends Disposable {
 		});
 	}
 
-	private registerListeners(workbench: Workbench): void {
+	private registerListeners(workbench: Workbench): codemavi {
 
 		// Workbench Lifecycle
 		this._register(workbench.onWillShutdown(() => this.onWillShutdownDisposables.clear()));
@@ -295,7 +295,7 @@ export class BrowserMain extends Disposable {
 		serviceCollection.set(ILogService, logService);
 
 		// Set the logger of the fileLogger after the log service is ready.
-		// This is to avoid cyclic dependency
+		// This is to acodemavi cyclic dependency
 		fileLogger.logger = logService;
 
 		// Register File System Providers depending on IndexedDB support
@@ -448,7 +448,7 @@ export class BrowserMain extends Disposable {
 		}
 	}
 
-	private async registerIndexedDBFileSystemProviders(environmentService: IWorkbenchEnvironmentService, fileService: IFileService, logService: ILogService, loggerService: ILoggerService, logsPath: URI): Promise<void> {
+	private async registerIndexedDBFileSystemProviders(environmentService: IWorkbenchEnvironmentService, fileService: IFileService, logService: ILogService, loggerService: ILoggerService, logsPath: URI): Promise<codemavi> {
 
 		// IndexedDB is used for logging and user data
 		let indexedDB: IndexedDB | undefined;
@@ -494,7 +494,7 @@ export class BrowserMain extends Disposable {
 		fileService.registerProvider(Schemas.tmp, new InMemoryFileSystemProvider());
 	}
 
-	private registerDeveloperActions(provider: IndexedDBFileSystemProvider): void {
+	private registerDeveloperActions(provider: IndexedDBFileSystemProvider): codemavi {
 		this._register(registerAction2(class ResetUserDataAction extends Action2 {
 			constructor() {
 				super({
@@ -507,7 +507,7 @@ export class BrowserMain extends Disposable {
 				});
 			}
 
-			async run(accessor: ServicesAccessor): Promise<void> {
+			async run(accessor: ServicesAccessor): Promise<codemavi> {
 				const dialogService = accessor.get(IDialogService);
 				const hostService = accessor.get(IHostService);
 				const storageService = accessor.get(IStorageService);

@@ -8,7 +8,7 @@ import { DebugNameData, IDebugNameData } from './debugName.js';
 import { EqualityComparer, strictEquals } from './commonFacade/deps.js';
 import { LazyObservableValue } from './lazyObservableValue.js';
 
-export function observableValueOpts<T, TChange = void>(
+export function observableValueOpts<T, TChange = codemavi>(
 	options: IDebugNameData & {
 		equalsFn?: EqualityComparer<T>;
 		lazy?: boolean;

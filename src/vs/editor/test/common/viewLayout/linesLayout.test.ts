@@ -18,13 +18,13 @@ suite('Editor ViewLayout - LinesLayout', () => {
 		return id!;
 	}
 
-	function changeOneWhitespace(linesLayout: LinesLayout, id: string, newAfterLineNumber: number, newHeight: number): void {
+	function changeOneWhitespace(linesLayout: LinesLayout, id: string, newAfterLineNumber: number, newHeight: number): codemavi {
 		linesLayout.changeWhitespace((accessor) => {
 			accessor.changeOneWhitespace(id, newAfterLineNumber, newHeight);
 		});
 	}
 
-	function removeWhitespace(linesLayout: LinesLayout, id: string): void {
+	function removeWhitespace(linesLayout: LinesLayout, id: string): codemavi {
 		linesLayout.changeWhitespace((accessor) => {
 			accessor.removeWhitespace(id);
 		});

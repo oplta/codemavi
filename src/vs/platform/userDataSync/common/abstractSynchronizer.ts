@@ -140,9 +140,9 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 	private _onDidChangeConflicts = this._register(new Emitter<IUserDataSyncResourceConflicts>());
 	readonly onDidChangeConflicts = this._onDidChangeConflicts.event;
 
-	private readonly localChangeTriggerThrottler = this._register(new ThrottledDelayer<void>(50));
-	private readonly _onDidChangeLocal: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDidChangeLocal: Event<void> = this._onDidChangeLocal.event;
+	private readonly localChangeTriggerThrottler = this._register(new ThrottledDelayer<codemavi>(50));
+	private readonly _onDidChangeLocal: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDidChangeLocal: Event<codemavi> = this._onDidChangeLocal.event;
 
 	protected readonly lastSyncResource: URI;
 	private readonly lastSyncUserDataStateKey = `${this.collection ? `${this.collection}.` : ''}${this.syncResource.syncResource}.lastSyncUserData`;
@@ -176,11 +176,11 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		this.currentMachineIdPromise = getServiceMachineId(environmentService, fileService, storageService);
 	}
 
-	protected triggerLocalChange(): void {
+	protected triggerLocalChange(): codemavi {
 		this.localChangeTriggerThrottler.trigger(() => this.doTriggerLocalChange());
 	}
 
-	protected async doTriggerLocalChange(): Promise<void> {
+	protected async doTriggerLocalChange(): Promise<codemavi> {
 
 		// Sync again if current status is in conflicts
 		if (this.status === SyncStatus.HasConflicts) {
@@ -202,7 +202,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		}
 	}
 
-	protected setStatus(status: SyncStatus): void {
+	protected setStatus(status: SyncStatus): codemavi {
 		if (this._status !== status) {
 			this._status = status;
 			this._onDidChangStatus.fire(status);
@@ -338,7 +338,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 						// Rejected as there is a new remote version. Syncing again...
 						this.logService.info(`${this.syncResourceLogLabel}: Failed to synchronize as there is a new remote version available. Synchronizing again...`);
 
-						// Avoid cache and get latest remote user data - https://github.com/microsoft/vscode/issues/90624
+						// Acodemavi cache and get latest remote user data - https://github.com/microsoft/vscode/issues/90624
 						remoteUserData = await this.getRemoteUserData(null);
 
 						// Get the latest last sync user data. Because multiple parallel syncs (in Web) could share same last sync data
@@ -432,7 +432,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		return this.syncPreviewPromise;
 	}
 
-	private async updateSyncResourcePreview(resource: URI, updateResourcePreview: (resourcePreview: IEditableResourcePreview) => Promise<IEditableResourcePreview>): Promise<void> {
+	private async updateSyncResourcePreview(resource: URI, updateResourcePreview: (resourcePreview: IEditableResourcePreview) => Promise<IEditableResourcePreview>): Promise<codemavi> {
 		if (!this.syncPreviewPromise) {
 			return;
 		}
@@ -491,13 +491,13 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		return SyncStatus.Idle;
 	}
 
-	private async clearPreviewFolder(): Promise<void> {
+	private async clearPreviewFolder(): Promise<codemavi> {
 		try {
 			await this.fileService.del(this.syncPreviewFolder, { recursive: true });
 		} catch (error) { /* Ignore */ }
 	}
 
-	private updateConflicts(resourcePreviews: IEditableResourcePreview[]): void {
+	private updateConflicts(resourcePreviews: IEditableResourcePreview[]): codemavi {
 		const conflicts = resourcePreviews.filter(({ mergeState }) => mergeState === MergeState.Conflict);
 		if (!equals(this._conflicts, conflicts, (a, b) => this.extUri.isEqual(a.previewResource, b.previewResource))) {
 			this._conflicts = conflicts;
@@ -531,7 +531,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		return null;
 	}
 
-	async resetLocal(): Promise<void> {
+	async resetLocal(): Promise<codemavi> {
 		this.storageService.remove(this.lastSyncUserDataStateKey, StorageScope.APPLICATION);
 		try {
 			await this.fileService.del(this.lastSyncResource);
@@ -659,7 +659,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		};
 	}
 
-	protected async updateLastSyncUserData(lastSyncRemoteUserData: IRemoteUserData, additionalProps: IStringDictionary<any> = {}): Promise<void> {
+	protected async updateLastSyncUserData(lastSyncRemoteUserData: IRemoteUserData, additionalProps: IStringDictionary<any> = {}): Promise<codemavi> {
 		if (additionalProps['ref'] || additionalProps['version']) {
 			throw new Error('Cannot have core properties as additional');
 		}
@@ -692,7 +692,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		return undefined;
 	}
 
-	private async writeLastSyncStoredRemoteUserData(lastSyncRemoteUserData: IRemoteUserData): Promise<void> {
+	private async writeLastSyncStoredRemoteUserData(lastSyncRemoteUserData: IRemoteUserData): Promise<codemavi> {
 		await this.fileService.writeFile(this.lastSyncResource, VSBuffer.fromString(JSON.stringify(lastSyncRemoteUserData)));
 	}
 
@@ -736,12 +736,12 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 		}
 	}
 
-	protected async backupLocal(content: string): Promise<void> {
+	protected async backupLocal(content: string): Promise<codemavi> {
 		const syncData: ISyncData = { version: this.version, content };
 		return this.userDataSyncLocalStoreService.writeResource(this.resource, JSON.stringify(syncData), new Date(), this.syncResource.profile.isDefault ? undefined : this.syncResource.profile.id);
 	}
 
-	async stop(): Promise<void> {
+	async stop(): Promise<codemavi> {
 		if (this.status === SyncStatus.Idle) {
 			return;
 		}
@@ -767,7 +767,7 @@ export abstract class AbstractSynchroniser extends Disposable implements IUserDa
 	protected abstract generateSyncPreview(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, isRemoteDataFromCurrentMachine: boolean, userDataSyncConfiguration: IUserDataSyncConfiguration, token: CancellationToken): Promise<IResourcePreview[]>;
 	protected abstract getMergeResult(resourcePreview: IResourcePreview, token: CancellationToken): Promise<IMergeResult>;
 	protected abstract getAcceptResult(resourcePreview: IResourcePreview, resource: URI, content: string | null | undefined, token: CancellationToken): Promise<IAcceptResult>;
-	protected abstract applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, result: [IResourcePreview, IAcceptResult][], force: boolean): Promise<void>;
+	protected abstract applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, result: [IResourcePreview, IAcceptResult][], force: boolean): Promise<codemavi>;
 	protected abstract hasRemoteChanged(lastSyncUserData: IRemoteUserData): Promise<boolean>;
 
 	abstract hasLocalData(): Promise<boolean>;
@@ -808,7 +808,7 @@ export abstract class AbstractFileSynchroniser extends AbstractSynchroniser {
 		}
 	}
 
-	protected async updateLocalFileContent(newContent: string, oldContent: IFileContent | null, force: boolean): Promise<void> {
+	protected async updateLocalFileContent(newContent: string, oldContent: IFileContent | null, force: boolean): Promise<codemavi> {
 		try {
 			if (oldContent) {
 				// file exists already
@@ -827,7 +827,7 @@ export abstract class AbstractFileSynchroniser extends AbstractSynchroniser {
 		}
 	}
 
-	protected async deleteLocalFile(): Promise<void> {
+	protected async deleteLocalFile(): Promise<codemavi> {
 		try {
 			await this.fileService.del(this.file);
 		} catch (e) {
@@ -837,7 +837,7 @@ export abstract class AbstractFileSynchroniser extends AbstractSynchroniser {
 		}
 	}
 
-	private onFileChanges(e: FileChangesEvent): void {
+	private onFileChanges(e: FileChangesEvent): codemavi {
 		if (!e.contains(this.file)) {
 			return;
 		}
@@ -901,7 +901,7 @@ export abstract class AbstractInitializer implements IUserDataSyncResourceInitia
 		this.lastSyncResource = getLastSyncResourceUri(undefined, this.resource, environmentService, this.extUri);
 	}
 
-	async initialize({ ref, content }: IUserData): Promise<void> {
+	async initialize({ ref, content }: IUserData): Promise<codemavi> {
 		if (!content) {
 			this.logService.info('Remote content does not exist.', this.resource);
 			return;
@@ -932,7 +932,7 @@ export abstract class AbstractInitializer implements IUserDataSyncResourceInitia
 		return undefined;
 	}
 
-	protected async updateLastSyncUserData(lastSyncRemoteUserData: IRemoteUserData, additionalProps: IStringDictionary<any> = {}): Promise<void> {
+	protected async updateLastSyncUserData(lastSyncRemoteUserData: IRemoteUserData, additionalProps: IStringDictionary<any> = {}): Promise<codemavi> {
 		if (additionalProps['ref'] || additionalProps['version']) {
 			throw new Error('Cannot have core properties as additional');
 		}
@@ -947,6 +947,6 @@ export abstract class AbstractInitializer implements IUserDataSyncResourceInitia
 		await this.fileService.writeFile(this.lastSyncResource, VSBuffer.fromString(JSON.stringify(lastSyncRemoteUserData)));
 	}
 
-	protected abstract doInitialize(remoteUserData: IRemoteUserData): Promise<void>;
+	protected abstract doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi>;
 
 }

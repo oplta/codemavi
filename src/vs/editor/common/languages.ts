@@ -41,7 +41,7 @@ export interface ILanguageIdCodec {
 }
 
 export class Token {
-	_tokenBrand: void = undefined;
+	_tokenBrand: codemavi = undefined;
 
 	constructor(
 		public readonly offset: number,
@@ -59,7 +59,7 @@ export class Token {
  * @internal
  */
 export class TokenizationResult {
-	_tokenizationResultBrand: void = undefined;
+	_tokenizationResultBrand: codemavi = undefined;
 
 	constructor(
 		public readonly tokens: Token[],
@@ -72,7 +72,7 @@ export class TokenizationResult {
  * @internal
  */
 export class EncodedTokenizationResult {
-	_encodedTokenizationResultBrand: void = undefined;
+	_encodedTokenizationResultBrand: codemavi = undefined;
 
 	constructor(
 		/**
@@ -110,7 +110,7 @@ export interface ITreeSitterTokenizationSupport {
 	 * exposed for testing
 	 */
 	getTokensInRange(textModel: ITextModel, range: Range, rangeStartOffset: number, rangeEndOffset: number): TokenUpdate[] | undefined;
-	tokenizeEncoded(lineNumber: number, textModel: model.ITextModel): void;
+	tokenizeEncoded(lineNumber: number, textModel: model.ITextModel): codemavi;
 	captureAtPosition(lineNumber: number, column: number, textModel: model.ITextModel): QueryCapture[];
 	captureAtRangeTree(range: Range, tree: Parser.Tree, textModelTreeSitter: ITextModelTreeSitter): QueryCapture[];
 	onDidChangeTokens: Event<{ textModel: model.ITextModel; changes: IModelTokensChangedEvent }>;
@@ -151,24 +151,24 @@ export interface IBackgroundTokenizer extends IDisposable {
 	 * This might be necessary if the renderer overwrote those tokens with heuristically computed ones for some viewport,
 	 * when the change does not even propagate to that viewport.
 	 */
-	requestTokens(startLineNumber: number, endLineNumberExclusive: number): void;
+	requestTokens(startLineNumber: number, endLineNumberExclusive: number): codemavi;
 
-	reportMismatchingTokens?(lineNumber: number): void;
+	reportMismatchingTokens?(lineNumber: number): codemavi;
 }
 
 /**
  * @internal
  */
 export interface IBackgroundTokenizationStore {
-	setTokens(tokens: ContiguousMultilineTokens[]): void;
+	setTokens(tokens: ContiguousMultilineTokens[]): codemavi;
 
-	setEndState(lineNumber: number, state: IState): void;
+	setEndState(lineNumber: number, state: IState): codemavi;
 
 	/**
 	 * Should be called to indicate that the background tokenization has finished for now.
 	 * (This triggers bracket pair colorization to re-parse the bracket pairs with token information)
 	 */
-	backgroundTokenizationFinished(): void;
+	backgroundTokenizationFinished(): codemavi;
 }
 
 /**
@@ -348,7 +348,7 @@ export type InlineValue = InlineValueText | InlineValueVariableLookup | InlineVa
 export interface InlineValuesProvider {
 	/**
 	 */
-	onDidChangeInlineValues?: Event<void> | undefined;
+	onDidChangeInlineValues?: Event<codemavi> | undefined;
 	/**
 	 * Provide the "inline values" for the given range and document. Multiple hovers at the same
 	 * position will be merged by the editor. A hover can have a range which defaults
@@ -654,7 +654,7 @@ export interface CompletionItem {
 export interface CompletionList {
 	suggestions: CompletionItem[];
 	incomplete?: boolean;
-	dispose?(): void;
+	dispose?(): codemavi;
 
 	/**
 	 * @internal
@@ -889,20 +889,20 @@ export interface InlineCompletionsProvider<T extends InlineCompletions = InlineC
 	 * Will be called when an item is shown.
 	 * @param updatedInsertText Is useful to understand bracket completion.
 	*/
-	handleItemDidShow?(completions: T, item: T['items'][number], updatedInsertText: string): void;
+	handleItemDidShow?(completions: T, item: T['items'][number], updatedInsertText: string): codemavi;
 
 	/**
 	 * Will be called when an item is partially accepted. TODO: also handle full acceptance here!
 	 * @param acceptedCharacters Deprecated. Use `info.acceptedCharacters` instead.
 	 */
-	handlePartialAccept?(completions: T, item: T['items'][number], acceptedCharacters: number, info: PartialAcceptInfo): void;
+	handlePartialAccept?(completions: T, item: T['items'][number], acceptedCharacters: number, info: PartialAcceptInfo): codemavi;
 
-	handleRejection?(completions: T, item: T['items'][number]): void;
+	handleRejection?(completions: T, item: T['items'][number]): codemavi;
 
 	/**
 	 * Will be called when a completions list is no longer in use and can be garbage-collected.
 	*/
-	freeInlineCompletions(completions: T): void;
+	freeInlineCompletions(completions: T): codemavi;
 
 	/**
 	 * Only used for {@link yieldsToGroupIds}.
@@ -1019,7 +1019,7 @@ export interface DocumentPasteContext {
  */
 export interface DocumentPasteEditsSession {
 	edits: readonly DocumentPasteEdit[];
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 /**
@@ -1669,7 +1669,7 @@ export interface ILink {
 
 export interface ILinksList {
 	links: ILink[];
-	dispose?(): void;
+	dispose?(): codemavi;
 }
 /**
  * A provider of links.
@@ -1897,8 +1897,8 @@ export interface WorkspaceEdit {
 export interface ICustomEdit {
 	readonly resource: URI;
 	readonly metadata?: WorkspaceEditMetadata;
-	undo(): Promise<void> | void;
-	redo(): Promise<void> | void;
+	undo(): Promise<codemavi> | codemavi;
+	redo(): Promise<codemavi> | codemavi;
 }
 
 export interface Rejection {
@@ -2197,7 +2197,7 @@ export interface CodeLens {
 
 export interface CodeLensList {
 	lenses: CodeLens[];
-	dispose?(): void;
+	dispose?(): codemavi;
 }
 
 export interface CodeLensProvider {
@@ -2232,12 +2232,12 @@ export interface InlayHint {
 
 export interface InlayHintList {
 	hints: InlayHint[];
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface InlayHintsProvider {
 	displayName?: string;
-	onDidChangeInlayHints?: Event<void>;
+	onDidChangeInlayHints?: Event<codemavi>;
 	provideInlayHints(model: model.ITextModel, range: Range, token: CancellationToken): ProviderResult<InlayHintList>;
 	resolveInlayHint?(hint: InlayHint, token: CancellationToken): ProviderResult<InlayHint>;
 }
@@ -2264,10 +2264,10 @@ export interface SemanticTokensEdits {
 }
 
 export interface DocumentSemanticTokensProvider {
-	onDidChange?: Event<void>;
+	onDidChange?: Event<codemavi>;
 	getLegend(): SemanticTokensLegend;
 	provideDocumentSemanticTokens(model: model.ITextModel, lastResultId: string | null, token: CancellationToken): ProviderResult<SemanticTokens | SemanticTokensEdits>;
-	releaseDocumentSemanticTokens(resultId: string | undefined): void;
+	releaseDocumentSemanticTokens(resultId: string | undefined): codemavi;
 }
 
 export interface DocumentRangeSemanticTokensProvider {
@@ -2299,7 +2299,7 @@ export class LazyTokenizationSupport<TSupport = ITokenizationSupport> implements
 	constructor(private readonly createSupport: () => Promise<TSupport & IDisposable | null>) {
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._tokenizationSupport) {
 			this._tokenizationSupport.then((support) => {
 				if (support) {
@@ -2333,7 +2333,7 @@ export interface ITokenizationRegistry<TSupport> {
 	 * Fire a change event for a language.
 	 * This is useful for languages that embed other languages.
 	 */
-	handleChange(languageIds: string[]): void;
+	handleChange(languageIds: string[]): codemavi;
 
 	/**
 	 * Register a tokenization support.
@@ -2365,7 +2365,7 @@ export interface ITokenizationRegistry<TSupport> {
 	/**
 	 * Set the new color map that all tokens will use in their ColorId binary encoded bits for foreground and background.
 	 */
-	setColorMap(colorMap: Color[]): void;
+	setColorMap(colorMap: Color[]): codemavi;
 
 	getColorMap(): Color[] | null;
 
@@ -2414,7 +2414,7 @@ export interface DocumentDropEdit {
  */
 export interface DocumentDropEditsSession {
 	edits: readonly DocumentDropEdit[];
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 /**
@@ -2458,5 +2458,5 @@ export enum InlineEditTriggerKind {
 export interface InlineEditProvider<T extends IInlineEdit = IInlineEdit> {
 	displayName?: string;
 	provideInlineEdit(model: model.ITextModel, context: IInlineEditContext, token: CancellationToken): ProviderResult<T>;
-	freeInlineEdit(edit: T): void;
+	freeInlineEdit(edit: T): codemavi;
 }

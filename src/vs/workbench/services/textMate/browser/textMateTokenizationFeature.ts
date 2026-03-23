@@ -13,5 +13,5 @@ export interface ITextMateTokenizationService {
 
 	createTokenizer(languageId: string): Promise<IGrammar | null>;
 
-	startDebugMode(printFn: (str: string) => void, onStop: () => void): void;
+	startDebugMode(printFn: (str: string) => codemavi, onStop: () => codemavi): codemavi;
 }

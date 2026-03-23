@@ -119,7 +119,7 @@ export class ChatStatusBarEntry extends Disposable implements IWorkbenchContribu
 		this.registerListeners();
 	}
 
-	private async create(): Promise<void> {
+	private async create(): Promise<codemavi> {
 		const hidden = this.chatEntitlementService.sentiment === ChatSentiment.Disabled;
 
 		if (!hidden) {
@@ -135,7 +135,7 @@ export class ChatStatusBarEntry extends Disposable implements IWorkbenchContribu
 		}
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.chatEntitlementService.onDidChangeQuotaExceeded(() => this.entry?.update(this.getEntryProps())));
 		this._register(this.chatEntitlementService.onDidChangeSentiment(() => this.entry?.update(this.getEntryProps())));
 		this._register(this.chatEntitlementService.onDidChangeEntitlement(() => this.entry?.update(this.getEntryProps())));
@@ -149,7 +149,7 @@ export class ChatStatusBarEntry extends Disposable implements IWorkbenchContribu
 		}));
 	}
 
-	private onDidActiveEditorChange(): void {
+	private onDidActiveEditorChange(): codemavi {
 		this.entry?.update(this.getEntryProps());
 
 		this.activeCodeEditorListener.clear();
@@ -214,7 +214,7 @@ export class ChatStatusBarEntry extends Disposable implements IWorkbenchContribu
 		};
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.entry?.dispose();
@@ -250,7 +250,7 @@ function isCompletionsEnabled(configurationService: IConfigurationService, modeI
 
 interface ISettingsAccessor {
 	readSetting: () => boolean;
-	writeSetting: (value: boolean) => Promise<void>;
+	writeSetting: (value: boolean) => Promise<codemavi>;
 }
 
 class ChatStatusDashboard extends Disposable {
@@ -393,7 +393,7 @@ class ChatStatusDashboard extends Disposable {
 		return { element: entryEl, disposables };
 	}
 
-	private renderTextPlus(target: HTMLElement, text: string, store: DisposableStore): void {
+	private renderTextPlus(target: HTMLElement, text: string, store: DisposableStore): codemavi {
 		for (const node of parseLinkedText(text).nodes) {
 			if (typeof node === 'string') {
 				const parts = renderLabelWithIcons(node);
@@ -404,7 +404,7 @@ class ChatStatusDashboard extends Disposable {
 		}
 	}
 
-	private runCommandAndClose(commandOrFn: string | Function): void {
+	private runCommandAndClose(commandOrFn: string | Function): codemavi {
 		if (typeof commandOrFn === 'function') {
 			commandOrFn();
 		} else {
@@ -415,7 +415,7 @@ class ChatStatusDashboard extends Disposable {
 		this.hoverService.hideHover(true);
 	}
 
-	private createQuotaIndicator(container: HTMLElement, total: number | undefined, remaining: number | undefined, label: string): (total: number | undefined, remaining: number | undefined) => void {
+	private createQuotaIndicator(container: HTMLElement, total: number | undefined, remaining: number | undefined, label: string): (total: number | undefined, remaining: number | undefined) => codemavi {
 		const quotaText = $('span');
 		const quotaBit = $('div.quota-bit');
 
@@ -515,7 +515,7 @@ class ChatStatusDashboard extends Disposable {
 		return checkbox;
 	}
 
-	private createCodeCompletionsSetting(container: HTMLElement, label: string, modeId: string | undefined, disposables: DisposableStore): void {
+	private createCodeCompletionsSetting(container: HTMLElement, label: string, modeId: string | undefined, disposables: DisposableStore): codemavi {
 		this.createSetting(container, defaultChat.completionsEnablementSetting, label, this.getCompletionsSettingAccessor(modeId), disposables);
 	}
 
@@ -535,7 +535,7 @@ class ChatStatusDashboard extends Disposable {
 		};
 	}
 
-	private createNextEditSuggestionsSetting(container: HTMLElement, label: string, modeId: string | undefined, completionsSettingAccessor: ISettingsAccessor, disposables: DisposableStore): void {
+	private createNextEditSuggestionsSetting(container: HTMLElement, label: string, modeId: string | undefined, completionsSettingAccessor: ISettingsAccessor, disposables: DisposableStore): codemavi {
 		const nesSettingId = defaultChat.nextEditSuggestionsSetting;
 		const completionsSettingId = defaultChat.completionsEnablementSetting;
 		const resource = EditorResourceAccessor.getOriginalUri(this.editorService.activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY });

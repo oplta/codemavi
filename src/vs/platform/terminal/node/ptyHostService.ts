@@ -68,11 +68,11 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 
 	private readonly _onPtyHostExit = this._register(new Emitter<number>());
 	readonly onPtyHostExit = this._onPtyHostExit.event;
-	private readonly _onPtyHostStart = this._register(new Emitter<void>());
+	private readonly _onPtyHostStart = this._register(new Emitter<codemavi>());
 	readonly onPtyHostStart = this._onPtyHostStart.event;
-	private readonly _onPtyHostUnresponsive = this._register(new Emitter<void>());
+	private readonly _onPtyHostUnresponsive = this._register(new Emitter<codemavi>());
 	readonly onPtyHostUnresponsive = this._onPtyHostUnresponsive.event;
-	private readonly _onPtyHostResponsive = this._register(new Emitter<void>());
+	private readonly _onPtyHostResponsive = this._register(new Emitter<codemavi>());
 	readonly onPtyHostResponsive = this._onPtyHostResponsive.event;
 	private readonly _onPtyHostRequestResolveVariables = this._register(new Emitter<IRequestResolveVariablesEvent>());
 	readonly onPtyHostRequestResolveVariables = this._onPtyHostRequestResolveVariables.event;
@@ -124,7 +124,7 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 		return this._configurationService.getValue<string[]>(TerminalSettingId.IgnoreProcessNames);
 	}
 
-	private async _refreshIgnoreProcessNames(): Promise<void> {
+	private async _refreshIgnoreProcessNames(): Promise<codemavi> {
 		return this._optionalProxy?.refreshIgnoreProcessNames?.(this._ignoreProcessNames);
 	}
 
@@ -215,19 +215,19 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 		clearTimeout(timeout);
 		return id;
 	}
-	updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<void> {
+	updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<codemavi> {
 		return this._proxy.updateTitle(id, title, titleSource);
 	}
-	updateIcon(id: number, userInitiated: boolean, icon: TerminalIcon, color?: string): Promise<void> {
+	updateIcon(id: number, userInitiated: boolean, icon: TerminalIcon, color?: string): Promise<codemavi> {
 		return this._proxy.updateIcon(id, userInitiated, icon, color);
 	}
-	attachToProcess(id: number): Promise<void> {
+	attachToProcess(id: number): Promise<codemavi> {
 		return this._proxy.attachToProcess(id);
 	}
-	detachFromProcess(id: number, forcePersist?: boolean): Promise<void> {
+	detachFromProcess(id: number, forcePersist?: boolean): Promise<codemavi> {
 		return this._proxy.detachFromProcess(id, forcePersist);
 	}
-	shutdownAll(): Promise<void> {
+	shutdownAll(): Promise<codemavi> {
 		return this._proxy.shutdownAll();
 	}
 	listProcesses(): Promise<IProcessDetails[]> {
@@ -236,31 +236,31 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 	async getPerformanceMarks(): Promise<performance.PerformanceMark[]> {
 		return this._optionalProxy?.getPerformanceMarks() ?? [];
 	}
-	async reduceConnectionGraceTime(): Promise<void> {
+	async reduceConnectionGraceTime(): Promise<codemavi> {
 		return this._optionalProxy?.reduceConnectionGraceTime();
 	}
 	start(id: number): Promise<ITerminalLaunchError | { injectedArgs: string[] } | undefined> {
 		return this._proxy.start(id);
 	}
-	shutdown(id: number, immediate: boolean): Promise<void> {
+	shutdown(id: number, immediate: boolean): Promise<codemavi> {
 		return this._proxy.shutdown(id, immediate);
 	}
-	input(id: number, data: string): Promise<void> {
+	input(id: number, data: string): Promise<codemavi> {
 		return this._proxy.input(id, data);
 	}
-	processBinary(id: number, data: string): Promise<void> {
+	processBinary(id: number, data: string): Promise<codemavi> {
 		return this._proxy.processBinary(id, data);
 	}
-	resize(id: number, cols: number, rows: number): Promise<void> {
+	resize(id: number, cols: number, rows: number): Promise<codemavi> {
 		return this._proxy.resize(id, cols, rows);
 	}
-	clearBuffer(id: number): Promise<void> {
+	clearBuffer(id: number): Promise<codemavi> {
 		return this._proxy.clearBuffer(id);
 	}
-	acknowledgeDataEvent(id: number, charCount: number): Promise<void> {
+	acknowledgeDataEvent(id: number, charCount: number): Promise<codemavi> {
 		return this._proxy.acknowledgeDataEvent(id, charCount);
 	}
-	setUnicodeVersion(id: number, version: '6' | '11'): Promise<void> {
+	setUnicodeVersion(id: number, version: '6' | '11'): Promise<codemavi> {
 		return this._proxy.setUnicodeVersion(id, version);
 	}
 	getInitialCwd(id: number): Promise<string> {
@@ -281,14 +281,14 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 			...results
 		];
 	}
-	orphanQuestionReply(id: number): Promise<void> {
+	orphanQuestionReply(id: number): Promise<codemavi> {
 		return this._proxy.orphanQuestionReply(id);
 	}
 
-	installAutoReply(match: string, reply: string): Promise<void> {
+	installAutoReply(match: string, reply: string): Promise<codemavi> {
 		return this._proxy.installAutoReply(match, reply);
 	}
-	uninstallAllAutoReplies(): Promise<void> {
+	uninstallAllAutoReplies(): Promise<codemavi> {
 		return this._proxy.uninstallAllAutoReplies();
 	}
 
@@ -315,7 +315,7 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 		return this._proxy.getRevivedPtyNewId(workspaceId, id);
 	}
 
-	setTerminalLayoutInfo(args: ISetTerminalLayoutInfoArgs): Promise<void> {
+	setTerminalLayoutInfo(args: ISetTerminalLayoutInfoArgs): Promise<codemavi> {
 		return this._proxy.setTerminalLayoutInfo(args);
 	}
 	async getTerminalLayoutInfo(args: IGetTerminalLayoutInfoArgs): Promise<ITerminalsLayoutInfo | undefined> {
@@ -329,7 +329,7 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 		return this._proxy.requestDetachInstance(workspaceId, instanceId);
 	}
 
-	async acceptDetachInstanceReply(requestId: number, persistentProcessId: number): Promise<void> {
+	async acceptDetachInstanceReply(requestId: number, persistentProcessId: number): Promise<codemavi> {
 		return this._proxy.acceptDetachInstanceReply(requestId, persistentProcessId);
 	}
 
@@ -352,17 +352,17 @@ export class PtyHostService extends Disposable implements IPtyHostService {
 		return this._proxy.refreshProperty(id, property);
 
 	}
-	async updateProperty<T extends ProcessPropertyType>(id: number, property: T, value: IProcessPropertyMap[T]): Promise<void> {
+	async updateProperty<T extends ProcessPropertyType>(id: number, property: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
 		return this._proxy.updateProperty(id, property, value);
 	}
 
-	async restartPtyHost(): Promise<void> {
+	async restartPtyHost(): Promise<codemavi> {
 		this._disposePtyHost();
 		this._isResponsive = true;
 		this._startPtyHost();
 	}
 
-	private _disposePtyHost(): void {
+	private _disposePtyHost(): codemavi {
 		this._proxy.shutdownAll();
 		this._connection.store.dispose();
 	}

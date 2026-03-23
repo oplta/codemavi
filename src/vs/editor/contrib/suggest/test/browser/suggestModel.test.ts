@@ -54,7 +54,7 @@ function createMockEditor(model: TextModel, languageFeaturesService: ILanguageFe
 			[IKeybindingService, new MockKeybindingService()],
 			[ISuggestMemoryService, new class implements ISuggestMemoryService {
 				declare readonly _serviceBrand: undefined;
-				memorize(): void {
+				memorize(): codemavi {
 				}
 				select(): number {
 					return -1;
@@ -128,7 +128,7 @@ suite('SuggestModel - Context', function () {
 		}
 	}
 
-	const assertAutoTrigger = (model: TextModel, offset: number, expected: boolean, message?: string): void => {
+	const assertAutoTrigger = (model: TextModel, offset: number, expected: boolean, message?: string): codemavi => {
 		const pos = model.getPositionAt(offset);
 		const editor = createMockEditor(model, new LanguageFeaturesService());
 		editor.setPosition(pos);

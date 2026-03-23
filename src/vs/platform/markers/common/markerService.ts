@@ -92,11 +92,11 @@ class MarkerStats implements MarkerStatistics {
 		this._subscription = service.onMarkerChanged(this._update, this);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._subscription.dispose();
 	}
 
-	private _update(resources: readonly URI[]): void {
+	private _update(resources: readonly URI[]): codemavi {
 		for (const resource of resources) {
 			const oldStats = this._data.get(resource);
 			if (oldStats) {
@@ -161,7 +161,7 @@ export class MarkerService implements IMarkerService {
 	private readonly _stats = new MarkerStats(this);
 	private readonly _filteredResources = new ResourceMap<string[]>();
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._stats.dispose();
 		this._onMarkerChanged.dispose();
 	}
@@ -170,13 +170,13 @@ export class MarkerService implements IMarkerService {
 		return this._stats;
 	}
 
-	remove(owner: string, resources: URI[]): void {
+	remove(owner: string, resources: URI[]): codemavi {
 		for (const resource of resources || []) {
 			this.changeOne(owner, resource, []);
 		}
 	}
 
-	changeOne(owner: string, resource: URI, markerData: IMarkerData[]): void {
+	changeOne(owner: string, resource: URI, markerData: IMarkerData[]): codemavi {
 
 		if (isFalsyOrEmpty(markerData)) {
 			// remove marker for this (owner,resource)-tuple
@@ -260,7 +260,7 @@ export class MarkerService implements IMarkerService {
 		};
 	}
 
-	changeAll(owner: string, data: IResourceMarker[]): void {
+	changeAll(owner: string, data: IResourceMarker[]): codemavi {
 		const changes: URI[] = [];
 
 		// remove old marker

@@ -9,7 +9,7 @@ import { LinePartMetadata } from './linePart.js';
 import { InlineDecoration, InlineDecorationType } from '../viewModel.js';
 
 export class LineDecoration {
-	_lineDecorationBrand: void = undefined;
+	_lineDecorationBrand: codemavi = undefined;
 
 	constructor(
 		public readonly startColumn: number,
@@ -182,7 +182,7 @@ class Stack {
 		return nextStartOffset;
 	}
 
-	public insert(stopOffset: number, className: string, metadata: number): void {
+	public insert(stopOffset: number, className: string, metadata: number): codemavi {
 		if (this.count === 0 || this.stopOffsets[this.count - 1] <= stopOffset) {
 			// Insert at the end
 			this.stopOffsets.push(stopOffset);

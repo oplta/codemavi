@@ -89,7 +89,7 @@ const cliCommandCwd = process.env['VSCODE_CLIENT_COMMAND_CWD'] as string;
 const cliRemoteAuthority = process.env['VSCODE_CLI_AUTHORITY'] as string;
 const cliStdInFilePath = process.env['VSCODE_STDIN_FILE_PATH'] as string;
 
-export async function main(desc: ProductDescription, args: string[]): Promise<void> {
+export async function main(desc: ProductDescription, args: string[]): Promise<codemavi> {
 	if (!cliPipe && !cliCommand) {
 		console.log('Command is only available in WSL or inside a Visual Studio Code terminal.');
 		return;
@@ -183,7 +183,7 @@ export async function main(desc: ProductDescription, args: string[]): Promise<vo
 
 	parsedArgs['_'] = [];
 
-	let readFromStdinPromise: Promise<void> | undefined;
+	let readFromStdinPromise: Promise<codemavi> | undefined;
 	let stdinFilePath: string | undefined;
 
 	if (hasReadStdinArg && hasStdinWithoutTty()) {
@@ -191,7 +191,7 @@ export async function main(desc: ProductDescription, args: string[]): Promise<vo
 			stdinFilePath = cliStdInFilePath;
 			if (!stdinFilePath) {
 				stdinFilePath = getStdinFilePath();
-				const readFromStdinDone = new DeferredPromise<void>();
+				const readFromStdinDone = new DeferredPromise<codemavi>();
 				await readFromStdin(stdinFilePath, verbose, () => readFromStdinDone.complete()); // throws error if file can not be written
 				if (!parsedArgs.wait) {
 					// if `--wait` is not provided, we keep this process alive
@@ -466,7 +466,7 @@ function asExtensionIdOrVSIX(inputs: string[] | undefined) {
 	return inputs?.map(input => /\.vsix$/i.test(input) ? pathToURI(input).href : input);
 }
 
-function fatal(message: string, err: any): void {
+function fatal(message: string, err: any): codemavi {
 	console.error('Unable to connect to VS Code server: ' + message);
 	console.error(err);
 	process.exit(1);

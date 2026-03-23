@@ -35,7 +35,7 @@ function readExactlyByFile(file: string, totalBytes: number): Promise<ReadResult
 				return reject(err);
 			}
 
-			function end(err: Error | null, resultBuffer: Buffer | null, bytesRead: number): void {
+			function end(err: Error | null, resultBuffer: Buffer | null, bytesRead: number): codemavi {
 				fs.close(fd, closeError => {
 					if (closeError) {
 						return reject(closeError);
@@ -52,7 +52,7 @@ function readExactlyByFile(file: string, totalBytes: number): Promise<ReadResult
 			const buffer = Buffer.allocUnsafe(totalBytes);
 			let offset = 0;
 
-			function readChunk(): void {
+			function readChunk(): codemavi {
 				fs.read(fd, buffer, offset, totalBytes - offset, null, (err, bytesRead) => {
 					if (err) {
 						return end(err, null, 0);

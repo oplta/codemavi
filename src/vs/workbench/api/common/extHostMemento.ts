@@ -19,7 +19,7 @@ export class ExtensionMemento implements vscode.Memento {
 	private _value?: { [n: string]: any };
 	private readonly _storageListener: IDisposable;
 
-	private _deferredPromises: Map<string, DeferredPromise<void>> = new Map();
+	private _deferredPromises: Map<string, DeferredPromise<codemavi>> = new Map();
 	private _scheduler: RunOnceScheduler;
 
 	constructor(id: string, global: boolean, storage: ExtHostStorage) {
@@ -75,7 +75,7 @@ export class ExtensionMemento implements vscode.Memento {
 		return value;
 	}
 
-	update(key: string, value: any): Promise<void> {
+	update(key: string, value: any): Promise<codemavi> {
 		if (value !== null && typeof value === 'object') {
 			// Prevent the value from being as-is for until we have
 			// received the change event from the main side by emulating
@@ -91,7 +91,7 @@ export class ExtensionMemento implements vscode.Memento {
 			return record.p;
 		}
 
-		const promise = new DeferredPromise<void>();
+		const promise = new DeferredPromise<codemavi>();
 		this._deferredPromises.set(key, promise);
 
 		if (!this._scheduler.isScheduled()) {
@@ -101,7 +101,7 @@ export class ExtensionMemento implements vscode.Memento {
 		return promise.p;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._storageListener.dispose();
 	}
 }
@@ -110,7 +110,7 @@ export class ExtensionGlobalMemento extends ExtensionMemento {
 
 	private readonly _extension: IExtensionDescription;
 
-	setKeysForSync(keys: string[]): void {
+	setKeysForSync(keys: string[]): codemavi {
 		this._storage.registerExtensionStorageKeysToSync({ id: this._id, version: this._extension.version }, keys);
 	}
 

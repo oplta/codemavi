@@ -26,7 +26,7 @@ export class ManageAccountPreferencesForExtensionAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, extensionId?: string, providerId?: string): Promise<void> {
+	override run(accessor: ServicesAccessor, extensionId?: string, providerId?: string): Promise<codemavi> {
 		return accessor.get(IInstantiationService).createInstance(ManageAccountPreferenceForExtensionActionImpl).run(extensionId, providerId);
 	}
 }

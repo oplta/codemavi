@@ -30,7 +30,7 @@ export async function activate(context: ExtensionContext) {
 	}
 }
 
-export async function deactivate(): Promise<void> {
+export async function deactivate(): Promise<codemavi> {
 	if (client) {
 		await client.stop();
 		client = undefined;

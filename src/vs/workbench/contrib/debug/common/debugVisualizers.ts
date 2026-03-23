@@ -23,14 +23,14 @@ interface VisualizerHandle {
 	extensionId: ExtensionIdentifier;
 	provideDebugVisualizers(context: IDebugVisualizationContext, token: CancellationToken): Promise<IDebugVisualization[]>;
 	resolveDebugVisualizer(viz: IDebugVisualization, token: CancellationToken): Promise<MainThreadDebugVisualization>;
-	executeDebugVisualizerCommand(id: number): Promise<void>;
-	disposeDebugVisualizers(ids: number[]): void;
+	executeDebugVisualizerCommand(id: number): Promise<codemavi>;
+	disposeDebugVisualizers(ids: number[]): codemavi;
 }
 
 interface VisualizerTreeHandle {
 	getTreeItem(element: IDebugVisualizationContext): Promise<IDebugVisualizationTreeItem | undefined>;
 	getChildren(element: number): Promise<IDebugVisualizationTreeItem[]>;
-	disposeItem(element: number): void;
+	disposeItem(element: number): codemavi;
 	editItem?(item: number, value: string): Promise<IDebugVisualizationTreeItem | undefined>;
 }
 
@@ -89,7 +89,7 @@ export interface IDebugVisualizerService {
 	/**
 	 * Gets children for a visualized tree node.
 	 */
-	editTreeItem(treeId: string, item: IDebugVisualizationTreeItem, newValue: string): Promise<void>;
+	editTreeItem(treeId: string, item: IDebugVisualizationTreeItem, newValue: string): Promise<codemavi>;
 }
 
 const emptyRef: IReference<DebugVisualizer[]> = { object: [], dispose: () => { } };
@@ -99,7 +99,7 @@ export class DebugVisualizerService implements IDebugVisualizerService {
 
 	private readonly handles = new Map</* extId + \0 + vizId */ string, VisualizerHandle>();
 	private readonly trees = new Map</* extId + \0 + treeId */ string, VisualizerTreeHandle>();
-	private readonly didActivate = new Map<string, Promise<void>>();
+	private readonly didActivate = new Map<string, Promise<codemavi>>();
 	private registrations: { expr: ContextKeyExpression; id: string; extensionId: ExtensionIdentifier }[] = [];
 
 	constructor(
@@ -217,7 +217,7 @@ export class DebugVisualizerService implements IDebugVisualizerService {
 	}
 
 	/** @inheritdoc */
-	public async editTreeItem(treeId: string, treeItem: IDebugVisualizationTreeItem, newValue: string): Promise<void> {
+	public async editTreeItem(treeId: string, treeItem: IDebugVisualizationTreeItem, newValue: string): Promise<codemavi> {
 		const newItem = await this.trees.get(treeId)?.editItem?.(treeItem.id, newValue);
 		if (newItem) {
 			Object.assign(treeItem, newItem); // replace in-place so rerenders work
@@ -291,7 +291,7 @@ const visualizersExtensionPoint = ExtensionsRegistry.registerExtensionPoint<{ id
 			required: ['id', 'when']
 		}
 	},
-	activationEventsGenerator: (contribs, result: { push(item: string): void }) => {
+	activationEventsGenerator: (contribs, result: { push(item: string): codemavi }) => {
 		for (const contrib of contribs) {
 			if (contrib.id) {
 				result.push(`onDebugVisualizer:${contrib.id}`);

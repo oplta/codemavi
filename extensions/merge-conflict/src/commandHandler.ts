@@ -40,7 +40,7 @@ export default class CommandHandler implements vscode.Disposable {
 		);
 	}
 
-	private registerTextEditorCommand(command: string, cb: (editor: vscode.TextEditor, ...args: any[]) => Promise<void>, resourceCB?: (uris: vscode.Uri[]) => Promise<void>) {
+	private registerTextEditorCommand(command: string, cb: (editor: vscode.TextEditor, ...args: any[]) => Promise<codemavi>, resourceCB?: (uris: vscode.Uri[]) => Promise<codemavi>) {
 		return vscode.commands.registerCommand(command, (...args) => {
 			if (resourceCB && args.length && args.every(arg => arg && arg.resourceUri)) {
 				return resourceCB.call(this, args.map(arg => arg.resourceUri));
@@ -50,35 +50,35 @@ export default class CommandHandler implements vscode.Disposable {
 		});
 	}
 
-	acceptCurrent(editor: vscode.TextEditor, ...args: any[]): Promise<void> {
+	acceptCurrent(editor: vscode.TextEditor, ...args: any[]): Promise<codemavi> {
 		return this.accept(interfaces.CommitType.Current, editor, ...args);
 	}
 
-	acceptIncoming(editor: vscode.TextEditor, ...args: any[]): Promise<void> {
+	acceptIncoming(editor: vscode.TextEditor, ...args: any[]): Promise<codemavi> {
 		return this.accept(interfaces.CommitType.Incoming, editor, ...args);
 	}
 
-	acceptBoth(editor: vscode.TextEditor, ...args: any[]): Promise<void> {
+	acceptBoth(editor: vscode.TextEditor, ...args: any[]): Promise<codemavi> {
 		return this.accept(interfaces.CommitType.Both, editor, ...args);
 	}
 
-	acceptAllCurrent(editor: vscode.TextEditor): Promise<void> {
+	acceptAllCurrent(editor: vscode.TextEditor): Promise<codemavi> {
 		return this.acceptAll(interfaces.CommitType.Current, editor);
 	}
 
-	acceptAllIncoming(editor: vscode.TextEditor): Promise<void> {
+	acceptAllIncoming(editor: vscode.TextEditor): Promise<codemavi> {
 		return this.acceptAll(interfaces.CommitType.Incoming, editor);
 	}
 
-	acceptAllCurrentResources(resources: vscode.Uri[]): Promise<void> {
+	acceptAllCurrentResources(resources: vscode.Uri[]): Promise<codemavi> {
 		return this.acceptAllResources(interfaces.CommitType.Current, resources);
 	}
 
-	acceptAllIncomingResources(resources: vscode.Uri[]): Promise<void> {
+	acceptAllIncomingResources(resources: vscode.Uri[]): Promise<codemavi> {
 		return this.acceptAllResources(interfaces.CommitType.Incoming, resources);
 	}
 
-	acceptAllBoth(editor: vscode.TextEditor): Promise<void> {
+	acceptAllBoth(editor: vscode.TextEditor): Promise<codemavi> {
 		return this.acceptAll(interfaces.CommitType.Both, editor);
 	}
 
@@ -131,7 +131,7 @@ export default class CommandHandler implements vscode.Disposable {
 		);
 
 		const docPath = editor.document.uri.path;
-		const fileName = docPath.substring(docPath.lastIndexOf('/') + 1); // avoid NodeJS path to keep browser webpack small
+		const fileName = docPath.substring(docPath.lastIndexOf('/') + 1); // acodemavi NodeJS path to keep browser webpack small
 		const title = vscode.l10n.t("{0}: Current Changes ↔ Incoming Changes", fileName);
 		const mergeConflictConfig = vscode.workspace.getConfiguration('merge-conflict');
 		const openToTheSide = mergeConflictConfig.get<string>('diffViewPosition');
@@ -147,15 +147,15 @@ export default class CommandHandler implements vscode.Disposable {
 		await vscode.commands.executeCommand('vscode.diff', leftUri, rightUri, title, opts);
 	}
 
-	navigateNext(editor: vscode.TextEditor): Promise<void> {
+	navigateNext(editor: vscode.TextEditor): Promise<codemavi> {
 		return this.navigate(editor, NavigationDirection.Forwards);
 	}
 
-	navigatePrevious(editor: vscode.TextEditor): Promise<void> {
+	navigatePrevious(editor: vscode.TextEditor): Promise<codemavi> {
 		return this.navigate(editor, NavigationDirection.Backwards);
 	}
 
-	async acceptSelection(editor: vscode.TextEditor): Promise<void> {
+	async acceptSelection(editor: vscode.TextEditor): Promise<codemavi> {
 		const conflict = await this.findConflictContainingSelection(editor);
 
 		if (!conflict) {
@@ -199,7 +199,7 @@ export default class CommandHandler implements vscode.Disposable {
 		this.disposables = [];
 	}
 
-	private async navigate(editor: vscode.TextEditor, direction: NavigationDirection): Promise<void> {
+	private async navigate(editor: vscode.TextEditor, direction: NavigationDirection): Promise<codemavi> {
 		const navigationResult = await this.findConflictForNavigation(editor, direction);
 
 		if (!navigationResult) {
@@ -225,7 +225,7 @@ export default class CommandHandler implements vscode.Disposable {
 		editor.revealRange(navigationResult.conflict.range, vscode.TextEditorRevealType.Default);
 	}
 
-	private async accept(type: interfaces.CommitType, editor: vscode.TextEditor, ...args: any[]): Promise<void> {
+	private async accept(type: interfaces.CommitType, editor: vscode.TextEditor, ...args: any[]): Promise<codemavi> {
 
 		let conflict: interfaces.IDocumentMergeConflict | null;
 
@@ -255,7 +255,7 @@ export default class CommandHandler implements vscode.Disposable {
 
 	}
 
-	private async acceptAll(type: interfaces.CommitType, editor: vscode.TextEditor): Promise<void> {
+	private async acceptAll(type: interfaces.CommitType, editor: vscode.TextEditor): Promise<codemavi> {
 		const conflicts = await this.tracker.getConflicts(editor.document);
 
 		if (!conflicts || conflicts.length === 0) {
@@ -272,7 +272,7 @@ export default class CommandHandler implements vscode.Disposable {
 		}));
 	}
 
-	private async acceptAllResources(type: interfaces.CommitType, resources: vscode.Uri[]): Promise<void> {
+	private async acceptAllResources(type: interfaces.CommitType, resources: vscode.Uri[]): Promise<codemavi> {
 		const documents = await Promise.all(resources.map(resource => vscode.workspace.openTextDocument(resource)));
 		const edit = new vscode.WorkspaceEdit();
 		for (const document of documents) {

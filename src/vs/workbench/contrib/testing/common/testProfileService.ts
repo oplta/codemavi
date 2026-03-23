@@ -24,23 +24,23 @@ export interface ITestProfileService {
 	/**
 	 * Fired when any profile changes.
 	 */
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	/**
 	 * Publishes a new test profile.
 	 */
-	addProfile(controller: IMainThreadTestController, profile: ITestRunProfile): void;
+	addProfile(controller: IMainThreadTestController, profile: ITestRunProfile): codemavi;
 
 	/**
 	 * Updates an existing test run profile
 	 */
-	updateProfile(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): void;
+	updateProfile(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): codemavi;
 
 	/**
 	 * Removes a profile. If profileId is not given, all profiles
 	 * for the given controller will be removed.
 	 */
-	removeProfile(controllerId: string, profileId?: number): void;
+	removeProfile(controllerId: string, profileId?: number): codemavi;
 
 	/**
 	 * Gets capabilities for the given test, indicating whether
@@ -52,7 +52,7 @@ export interface ITestProfileService {
 	/**
 	 * Configures a test profile.
 	 */
-	configure(controllerId: string, profileId: number): void;
+	configure(controllerId: string, profileId: number): codemavi;
 
 	/**
 	 * Gets all registered controllers, grouping by controller.
@@ -70,7 +70,7 @@ export interface ITestProfileService {
 	/**
 	 * Sets the default profiles to be run for a given run group.
 	 */
-	setGroupDefaultProfiles(group: TestRunProfileBitset, profiles: ITestRunProfile[]): void;
+	setGroupDefaultProfiles(group: TestRunProfileBitset, profiles: ITestRunProfile[]): codemavi;
 
 	/**
 	 * Gets the profiles for a controller, in priority order.
@@ -117,7 +117,7 @@ export class TestProfileService extends Disposable implements ITestProfileServic
 	declare readonly _serviceBrand: undefined;
 	private readonly userDefaults: StoredValue<DefaultsMap>;
 	private readonly capabilitiesContexts: { [K in TestRunProfileBitset]: IContextKey<boolean> };
-	private readonly changeEmitter = this._register(new Emitter<void>());
+	private readonly changeEmitter = this._register(new Emitter<codemavi>());
 	private readonly controllerProfiles = new Map</* controller ID */string, {
 		profiles: IExtendedTestRunProfile[];
 		controller: IMainThreadTestController;
@@ -152,7 +152,7 @@ export class TestProfileService extends Disposable implements ITestProfileServic
 	}
 
 	/** @inheritdoc */
-	public addProfile(controller: IMainThreadTestController, profile: ITestRunProfile): void {
+	public addProfile(controller: IMainThreadTestController, profile: ITestRunProfile): codemavi {
 		const previousExplicitDefaultValue = this.userDefaults.get()?.[controller.id]?.[profile.profileId];
 		const extended: IExtendedTestRunProfile = {
 			...profile,
@@ -177,7 +177,7 @@ export class TestProfileService extends Disposable implements ITestProfileServic
 	}
 
 	/** @inheritdoc */
-	public updateProfile(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): void {
+	public updateProfile(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): codemavi {
 		const ctrl = this.controllerProfiles.get(controllerId);
 		if (!ctrl) {
 			return;
@@ -208,7 +208,7 @@ export class TestProfileService extends Disposable implements ITestProfileServic
 	}
 
 	/** @inheritdoc */
-	public removeProfile(controllerId: string, profileId?: number): void {
+	public removeProfile(controllerId: string, profileId?: number): codemavi {
 		const ctrl = this.controllerProfiles.get(controllerId);
 		if (!ctrl) {
 			return;

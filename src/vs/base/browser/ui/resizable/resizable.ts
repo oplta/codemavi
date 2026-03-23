@@ -22,8 +22,8 @@ export class ResizableHTMLElement {
 
 	readonly domNode: HTMLElement;
 
-	private readonly _onDidWillResize = new Emitter<void>();
-	readonly onDidWillResize: Event<void> = this._onDidWillResize.event;
+	private readonly _onDidWillResize = new Emitter<codemavi>();
+	readonly onDidWillResize: Event<codemavi> = this._onDidWillResize.event;
 
 	private readonly _onDidResize = new Emitter<IResizeEvent>();
 	readonly onDidResize: Event<IResizeEvent> = this._onDidResize.event;
@@ -115,7 +115,7 @@ export class ResizableHTMLElement {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._northSash.dispose();
 		this._southSash.dispose();
 		this._eastSash.dispose();
@@ -126,14 +126,14 @@ export class ResizableHTMLElement {
 		this.domNode.remove();
 	}
 
-	enableSashes(north: boolean, east: boolean, south: boolean, west: boolean): void {
+	enableSashes(north: boolean, east: boolean, south: boolean, west: boolean): codemavi {
 		this._northSash.state = north ? SashState.Enabled : SashState.Disabled;
 		this._eastSash.state = east ? SashState.Enabled : SashState.Disabled;
 		this._southSash.state = south ? SashState.Enabled : SashState.Disabled;
 		this._westSash.state = west ? SashState.Enabled : SashState.Disabled;
 	}
 
-	layout(height: number = this.size.height, width: number = this.size.width): void {
+	layout(height: number = this.size.height, width: number = this.size.width): codemavi {
 
 		const { height: minHeight, width: minWidth } = this._minSize;
 		const { height: maxHeight, width: maxWidth } = this._maxSize;
@@ -153,7 +153,7 @@ export class ResizableHTMLElement {
 		}
 	}
 
-	clearSashHoverState(): void {
+	clearSashHoverState(): codemavi {
 		this._eastSash.clearSashHoverState();
 		this._westSash.clearSashHoverState();
 		this._northSash.clearSashHoverState();

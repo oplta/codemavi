@@ -270,7 +270,7 @@ class DiffToolBar extends Disposable implements IGutterItemView {
 	private _lastItemRange: OffsetRange | undefined = undefined;
 	private _lastViewRange: OffsetRange | undefined = undefined;
 
-	layout(itemRange: OffsetRange, viewRange: OffsetRange): void {
+	layout(itemRange: OffsetRange, viewRange: OffsetRange): codemavi {
 		this._lastItemRange = itemRange;
 		this._lastViewRange = viewRange;
 

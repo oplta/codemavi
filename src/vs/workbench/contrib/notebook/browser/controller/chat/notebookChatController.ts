@@ -248,13 +248,13 @@ export class NotebookChatController extends Disposable implements INotebookEdito
 	private static _promptHistory: string[] = [];
 	private _historyOffset: number = -1;
 	private _historyCandidate: string = '';
-	private _historyUpdate: (prompt: string) => void;
+	private _historyUpdate: (prompt: string) => codemavi;
 	private _promptCache = new LRUCache<string, string>(1000, 0.7);
 	private readonly _onDidChangePromptCache = this._register(new Emitter<{ cell: URI }>());
 	readonly onDidChangePromptCache = this._onDidChangePromptCache.event;
 
 	private _strategy: EditStrategy | undefined;
-	private _sessionCtor: CancelablePromise<void> | undefined;
+	private _sessionCtor: CancelablePromise<codemavi> | undefined;
 	private _activeRequestCts?: CancellationTokenSource;
 	private readonly _ctxHasActiveRequest: IContextKey<boolean>;
 	private readonly _ctxCellWidgetFocused: IContextKey<boolean>;
@@ -318,7 +318,7 @@ export class NotebookChatController extends Disposable implements INotebookEdito
 		}));
 	}
 
-	run(index: number, input: string | undefined, autoSend: boolean | undefined): void {
+	run(index: number, input: string | undefined, autoSend: boolean | undefined): codemavi {
 		if (this._widget) {
 			if (this._widget.afterModelPosition !== index) {
 				const window = getWindow(this._widget.domNode);
@@ -475,7 +475,7 @@ export class NotebookChatController extends Disposable implements INotebookEdito
 				this._focusWidget();
 			}, 0, this._store);
 
-			this._sessionCtor = createCancelablePromise<void>(async token => {
+			this._sessionCtor = createCancelablePromise<codemavi>(async token => {
 				await this._startSession(token);
 				assertType(this._model.value);
 				const model = this._model.value;
@@ -603,7 +603,7 @@ export class NotebookChatController extends Disposable implements INotebookEdito
 			const progressiveEditsAvgDuration = new MovingAverage();
 			const progressiveEditsCts = new CancellationTokenSource(this._activeRequestCts.token);
 
-			const responsePromise = new DeferredPromise<void>();
+			const responsePromise = new DeferredPromise<codemavi>();
 			const response = await this._widget.inlineChatWidget.chatWidget.acceptInput();
 			if (response) {
 				let lastLength = 0;
@@ -900,7 +900,7 @@ export class NotebookChatController extends Disposable implements INotebookEdito
 		const cellId = NotebookCellTextModelLikeId.str({ uri: cell.uri, viewType: this._notebookEditor.textModel.viewType });
 		return this._promptCache.get(cellId);
 	}
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.dismiss(false);
 		super.dispose();
 	}
@@ -912,7 +912,7 @@ export class EditStrategy {
 	constructor() {
 	}
 
-	async makeProgressiveChanges(editor: IActiveCodeEditor, edits: ISingleEditOperation[], opts: ProgressingEditsOptions): Promise<void> {
+	async makeProgressiveChanges(editor: IActiveCodeEditor, edits: ISingleEditOperation[], opts: ProgressingEditsOptions): Promise<codemavi> {
 		// push undo stop before first edit
 		if (++this._editCount === 1) {
 			editor.pushUndoStop();
@@ -927,7 +927,7 @@ export class EditStrategy {
 		}
 	}
 
-	async makeChanges(editor: IActiveCodeEditor, edits: ISingleEditOperation[]): Promise<void> {
+	async makeChanges(editor: IActiveCodeEditor, edits: ISingleEditOperation[]): Promise<codemavi> {
 		const cursorStateComputerAndInlineDiffCollection: ICursorStateComputer = (undoEdits) => {
 			let last: Position | null = null;
 			for (const edit of undoEdits) {

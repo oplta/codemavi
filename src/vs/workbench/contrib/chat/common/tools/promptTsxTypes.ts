@@ -54,7 +54,7 @@ export function stringifyPromptElementJSON(element: PromptElementJSON): string {
 	return strs.join('');
 }
 
-function stringifyPromptNodeJSON(node: PromptNodeJSON, strs: string[]): void {
+function stringifyPromptNodeJSON(node: PromptNodeJSON, strs: string[]): codemavi {
 	if (node.type === PromptNodeType.Text) {
 		if (node.lineBreakBefore) {
 			strs.push('\n');

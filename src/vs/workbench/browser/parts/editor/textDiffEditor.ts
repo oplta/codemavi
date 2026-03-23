@@ -80,11 +80,11 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		return localize('textDiffEditor', "Text Diff Editor");
 	}
 
-	protected override createEditorControl(parent: HTMLElement, configuration: ICodeEditorOptions): void {
+	protected override createEditorControl(parent: HTMLElement, configuration: ICodeEditorOptions): codemavi {
 		this.diffEditorControl = this._register(this.instantiationService.createInstance(DiffEditorWidget, parent, configuration, {}));
 	}
 
-	protected updateEditorControlOptions(options: ICodeEditorOptions): void {
+	protected updateEditorControlOptions(options: ICodeEditorOptions): codemavi {
 		this.diffEditorControl?.updateOptions(options);
 	}
 
@@ -94,7 +94,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 
 	private _previousViewModel: IDiffEditorViewModel | null = null;
 
-	override async setInput(input: DiffEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: DiffEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		if (this._previousViewModel) {
 			this._previousViewModel.dispose();
 			this._previousViewModel = null;
@@ -164,7 +164,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		}
 	}
 
-	private async handleSetInputError(error: Error, input: DiffEditorInput, options: ITextEditorOptions | undefined): Promise<void> {
+	private async handleSetInputError(error: Error, input: DiffEditorInput, options: ITextEditorOptions | undefined): Promise<codemavi> {
 
 		// Handle case where content appears to be binary
 		if (this.isFileBinaryError(error)) {
@@ -206,7 +206,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		return false;
 	}
 
-	private openAsBinary(input: DiffEditorInput, options: ITextEditorOptions | undefined): void {
+	private openAsBinary(input: DiffEditorInput, options: ITextEditorOptions | undefined): codemavi {
 		const original = input.original;
 		const modified = input.modified;
 
@@ -239,7 +239,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		}]);
 	}
 
-	override setOptions(options: ITextEditorOptions | undefined): void {
+	override setOptions(options: ITextEditorOptions | undefined): codemavi {
 		super.setOptions(options);
 
 		if (options) {
@@ -262,11 +262,11 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		if (isObject(configuration.diffEditor)) {
 			const diffEditorConfiguration: IDiffEditorOptions = deepClone(configuration.diffEditor);
 
-			// User settings defines `diffEditor.codeLens`, but here we rename that to `diffEditor.diffCodeLens` to avoid collisions with `editor.codeLens`.
+			// User settings defines `diffEditor.codeLens`, but here we rename that to `diffEditor.diffCodeLens` to acodemavi collisions with `editor.codeLens`.
 			diffEditorConfiguration.diffCodeLens = diffEditorConfiguration.codeLens;
 			delete diffEditorConfiguration.codeLens;
 
-			// User settings defines `diffEditor.wordWrap`, but here we rename that to `diffEditor.diffWordWrap` to avoid collisions with `editor.wordWrap`.
+			// User settings defines `diffEditor.wordWrap`, but here we rename that to `diffEditor.diffWordWrap` to acodemavi collisions with `editor.wordWrap`.
 			diffEditorConfiguration.diffWordWrap = <'off' | 'on' | 'inherit' | undefined>diffEditorConfiguration.wordWrap;
 			delete diffEditorConfiguration.wordWrap;
 
@@ -288,7 +288,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		};
 	}
 
-	protected override updateReadonly(input: EditorInput): void {
+	protected override updateReadonly(input: EditorInput): codemavi {
 		if (input instanceof DiffEditorInput) {
 			this.diffEditorControl?.updateOptions({
 				...this.getReadonlyConfiguration(input.isReadonly()),
@@ -311,7 +311,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		return (<TextFileOperationError>error).textFileOperationResult === TextFileOperationResult.FILE_IS_BINARY;
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 		if (this._previousViewModel) {
 			this._previousViewModel.dispose();
 			this._previousViewModel = null;
@@ -330,7 +330,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		this.diffEditorControl?.setModel(null);
 	}
 
-	private logInputLifecycleTelemetry(duration: number, languageId: string | undefined): void {
+	private logInputLifecycleTelemetry(duration: number, languageId: string | undefined): codemavi {
 		let collapseUnchangedRegions = false;
 		if (this.diffEditorControl instanceof DiffEditorWidget) {
 			collapseUnchangedRegions = this.diffEditorControl.collapseUnchangedRegions;
@@ -356,7 +356,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		return this.diffEditorControl;
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		this.diffEditorControl?.focus();
@@ -366,7 +366,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		return this.diffEditorControl?.hasTextFocus() || super.hasFocus();
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		super.setEditorVisible(visible);
 
 		if (visible) {
@@ -376,7 +376,7 @@ export class TextDiffEditor extends AbstractTextEditor<IDiffEditorViewState> imp
 		}
 	}
 
-	override layout(dimension: Dimension): void {
+	override layout(dimension: Dimension): codemavi {
 		this.diffEditorControl?.layout(dimension);
 	}
 

@@ -49,7 +49,7 @@ export class CommentMenus implements IDisposable {
 		return this.menuService.getMenuActions(menuId, contextKeyService, options).map((value) => value[1]).flat();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 
 	}
 }

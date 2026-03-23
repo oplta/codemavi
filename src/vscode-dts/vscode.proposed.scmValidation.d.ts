@@ -49,7 +49,7 @@ declare module 'vscode' {
 		/**
 		 * Shows a transient contextual message on the input.
 		 */
-		showValidationMessage(message: string | MarkdownString, type: SourceControlInputBoxValidationType): void;
+		showValidationMessage(message: string | MarkdownString, type: SourceControlInputBoxValidationType): codemavi;
 
 		/**
 		 * A validation function for the input box. It's possible to change

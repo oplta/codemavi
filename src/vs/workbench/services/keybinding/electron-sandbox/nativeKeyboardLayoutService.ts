@@ -16,7 +16,7 @@ export const INativeKeyboardLayoutService = createDecorator<INativeKeyboardLayou
 
 export interface INativeKeyboardLayoutService {
 	readonly _serviceBrand: undefined;
-	readonly onDidChangeKeyboardLayout: Event<void>;
+	readonly onDidChangeKeyboardLayout: Event<codemavi>;
 	getRawKeyboardMapping(): IKeyboardMapping | null;
 	getCurrentKeyboardLayout(): IKeyboardLayoutInfo | null;
 }
@@ -25,11 +25,11 @@ export class NativeKeyboardLayoutService extends Disposable implements INativeKe
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeKeyboardLayout = this._register(new Emitter<void>());
+	private readonly _onDidChangeKeyboardLayout = this._register(new Emitter<codemavi>());
 	readonly onDidChangeKeyboardLayout = this._onDidChangeKeyboardLayout.event;
 
 	private readonly _keyboardLayoutService: IBaseNativeKeyboardLayoutService;
-	private _initPromise: Promise<void> | null;
+	private _initPromise: Promise<codemavi> | null;
 	private _keyboardMapping: IKeyboardMapping | null;
 	private _keyboardLayoutInfo: IKeyboardLayoutInfo | null;
 
@@ -55,14 +55,14 @@ export class NativeKeyboardLayoutService extends Disposable implements INativeKe
 		}));
 	}
 
-	public initialize(): Promise<void> {
+	public initialize(): Promise<codemavi> {
 		if (!this._initPromise) {
 			this._initPromise = this._doInitialize();
 		}
 		return this._initPromise;
 	}
 
-	private async _doInitialize(): Promise<void> {
+	private async _doInitialize(): Promise<codemavi> {
 		const keyboardLayoutData = await this._keyboardLayoutService.getKeyboardLayoutData();
 		const { keyboardLayoutInfo, keyboardMapping } = keyboardLayoutData;
 		this._keyboardMapping = keyboardMapping;

@@ -24,7 +24,7 @@ export class ContiguousMultilineTokensBuilder {
 		this._tokens = [];
 	}
 
-	public add(lineNumber: number, lineTokens: Uint32Array): void {
+	public add(lineNumber: number, lineTokens: Uint32Array): codemavi {
 		if (this._tokens.length > 0) {
 			const last = this._tokens[this._tokens.length - 1];
 			if (last.endLineNumber + 1 === lineNumber) {
@@ -56,7 +56,7 @@ export class ContiguousMultilineTokensBuilder {
 		return result;
 	}
 
-	private _serialize(destination: Uint8Array): void {
+	private _serialize(destination: Uint8Array): codemavi {
 		let offset = 0;
 		writeUInt32BE(destination, this._tokens.length, offset); offset += 4;
 		for (let i = 0; i < this._tokens.length; i++) {

@@ -43,7 +43,7 @@ export class BinaryFileEditor extends BaseBinaryResourceEditor {
 		);
 	}
 
-	private async openInternal(input: EditorInput, options: IEditorOptions | undefined): Promise<void> {
+	private async openInternal(input: EditorInput, options: IEditorOptions | undefined): Promise<codemavi> {
 		if (input instanceof FileEditorInput && this.group.activeEditor) {
 
 			// We operate on the active editor here to support re-opening

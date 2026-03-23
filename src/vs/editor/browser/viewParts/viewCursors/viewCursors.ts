@@ -87,7 +87,7 @@ export class ViewCursors extends ViewPart {
 		this._updateBlinking();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this._startCursorBlinkAnimation.dispose();
 		this._cursorFlatBlinkInterval.dispose();
@@ -127,7 +127,7 @@ export class ViewCursors extends ViewPart {
 		}
 		return true;
 	}
-	private _onCursorPositionChanged(position: Position, secondaryPositions: Position[], reason: CursorChangeReason): void {
+	private _onCursorPositionChanged(position: Position, secondaryPositions: Position[], reason: CursorChangeReason): codemavi {
 		const pauseAnimation = (
 			this._secondaryCursors.length !== secondaryPositions.length
 			|| (this._cursorSmoothCaretAnimation === 'explicit' && reason !== CursorChangeReason.Explicit)
@@ -227,7 +227,7 @@ export class ViewCursors extends ViewPart {
 	private _getCursorBlinking(): TextEditorCursorBlinkingStyle {
 		// TODO: Remove the following if statement when experimental edit context is made default sole implementation
 		if (this._isComposingInput && !this._experimentalEditContextEnabled) {
-			// avoid double cursors
+			// acodemavi double cursors
 			return TextEditorCursorBlinkingStyle.Hidden;
 		}
 		if (!this._editorHasFocus) {
@@ -239,7 +239,7 @@ export class ViewCursors extends ViewPart {
 		return this._cursorBlinking;
 	}
 
-	private _updateBlinking(): void {
+	private _updateBlinking(): codemavi {
 		this._startCursorBlinkAnimation.cancel();
 		this._cursorFlatBlinkInterval.cancel();
 
@@ -279,7 +279,7 @@ export class ViewCursors extends ViewPart {
 
 	// --- end blinking logic
 
-	private _updateDomClassName(): void {
+	private _updateDomClassName(): codemavi {
 		this._domNode.setClassName(this._getClassName());
 	}
 
@@ -339,7 +339,7 @@ export class ViewCursors extends ViewPart {
 		return result;
 	}
 
-	private _show(): void {
+	private _show(): codemavi {
 		this._primaryCursor.show();
 		for (let i = 0, len = this._secondaryCursors.length; i < len; i++) {
 			this._secondaryCursors[i].show();
@@ -347,7 +347,7 @@ export class ViewCursors extends ViewPart {
 		this._isVisible = true;
 	}
 
-	private _hide(): void {
+	private _hide(): codemavi {
 		this._primaryCursor.hide();
 		for (let i = 0, len = this._secondaryCursors.length; i < len; i++) {
 			this._secondaryCursors[i].hide();
@@ -357,14 +357,14 @@ export class ViewCursors extends ViewPart {
 
 	// ---- IViewPart implementation
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		this._primaryCursor.prepareRender(ctx);
 		for (let i = 0, len = this._secondaryCursors.length; i < len; i++) {
 			this._secondaryCursors[i].prepareRender(ctx);
 		}
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		const renderData: IViewCursorRenderData[] = [];
 		let renderDataLen = 0;
 

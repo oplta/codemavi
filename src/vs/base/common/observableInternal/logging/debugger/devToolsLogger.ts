@@ -184,7 +184,7 @@ export class DevToolsLogger implements IObservableLogger {
 		return info as IAutorunInfo;
 	}
 
-	private _getInfo(observer: IObserver, queue: (observer: IObserver) => void): ObserverInstanceState | undefined {
+	private _getInfo(observer: IObserver, queue: (observer: IObserver) => codemavi): ObserverInstanceState | undefined {
 		if (observer instanceof Derived) {
 			const observersToUpdate = [...observer.debugGetObservers()];
 			for (const o of observersToUpdate) {
@@ -258,7 +258,7 @@ export class DevToolsLogger implements IObservableLogger {
 
 	private readonly _fullState = {};
 
-	private _handleChange(update: ObsStateUpdate): void {
+	private _handleChange(update: ObsStateUpdate): codemavi {
 		deepAssignDeleteNulls(this._fullState, update);
 
 		if (this._pendingChanges === null) {
@@ -323,7 +323,7 @@ export class DevToolsLogger implements IObservableLogger {
 		return decInfo.id;
 	}
 
-	handleObservableCreated(observable: IObservable<any>): void {
+	handleObservableCreated(observable: IObservable<any>): codemavi {
 		const declarationId = this._getDeclarationId('observable/value');
 
 		const info: IObservableInfo = {
@@ -337,7 +337,7 @@ export class DevToolsLogger implements IObservableLogger {
 		this._instanceInfos.set(observable, info);
 	}
 
-	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): void {
+	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): codemavi {
 		const info = this._getObservableInfo(observable);
 		if (!info) { return; }
 
@@ -365,7 +365,7 @@ export class DevToolsLogger implements IObservableLogger {
 		info.listenerCount = newCount;
 	}
 
-	handleObservableUpdated(observable: IObservable<any>, changeInfo: IChangeInformation): void {
+	handleObservableUpdated(observable: IObservable<any>, changeInfo: IChangeInformation): codemavi {
 		if (observable instanceof Derived) {
 			this._handleDerivedRecomputed(observable, changeInfo);
 			return;
@@ -384,7 +384,7 @@ export class DevToolsLogger implements IObservableLogger {
 		}
 	}
 
-	handleAutorunCreated(autorun: AutorunObserver): void {
+	handleAutorunCreated(autorun: AutorunObserver): codemavi {
 		const declarationId = this._getDeclarationId('autorun');
 		const info: IAutorunInfo = {
 			declarationId,
@@ -408,7 +408,7 @@ export class DevToolsLogger implements IObservableLogger {
 			});
 		}
 	}
-	handleAutorunDisposed(autorun: AutorunObserver): void {
+	handleAutorunDisposed(autorun: AutorunObserver): codemavi {
 		const info = this._getAutorunInfo(autorun);
 		if (!info) { return; }
 
@@ -418,16 +418,16 @@ export class DevToolsLogger implements IObservableLogger {
 		this._instanceInfos.delete(autorun);
 		this._aliveInstances.delete(info.instanceId);
 	}
-	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): void {
+	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): codemavi {
 		const info = this._getAutorunInfo(autorun);
 		if (!info) { return; }
 
 		info.changedObservables.add(observable);
 	}
-	handleAutorunStarted(autorun: AutorunObserver): void {
+	handleAutorunStarted(autorun: AutorunObserver): codemavi {
 
 	}
-	handleAutorunFinished(autorun: AutorunObserver): void {
+	handleAutorunFinished(autorun: AutorunObserver): codemavi {
 		const info = this._getAutorunInfo(autorun);
 		if (!info) { return; }
 
@@ -438,13 +438,13 @@ export class DevToolsLogger implements IObservableLogger {
 		});
 	}
 
-	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): void {
+	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): codemavi {
 		const info = this._getObservableInfo(derived);
 		if (info) {
 			info.changedObservables.add(observable);
 		}
 	}
-	_handleDerivedRecomputed(observable: Derived<any>, changeInfo: IChangeInformation): void {
+	_handleDerivedRecomputed(observable: Derived<any>, changeInfo: IChangeInformation): codemavi {
 		const info = this._getObservableInfo(observable);
 		if (!info) { return; }
 
@@ -459,7 +459,7 @@ export class DevToolsLogger implements IObservableLogger {
 			});
 		}
 	}
-	handleDerivedCleared(observable: Derived<any>): void {
+	handleDerivedCleared(observable: Derived<any>): codemavi {
 		const info = this._getObservableInfo(observable);
 		if (!info) { return; }
 
@@ -475,10 +475,10 @@ export class DevToolsLogger implements IObservableLogger {
 			});
 		}
 	}
-	handleBeginTransaction(transaction: TransactionImpl): void {
+	handleBeginTransaction(transaction: TransactionImpl): codemavi {
 		this._activeTransactions.add(transaction);
 	}
-	handleEndTransaction(transaction: TransactionImpl): void {
+	handleEndTransaction(transaction: TransactionImpl): codemavi {
 		this._activeTransactions.delete(transaction);
 	}
 }

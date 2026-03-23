@@ -424,7 +424,7 @@ class MyCompletionItem extends vscode.CompletionItem {
 		return insertText;
 	}
 
-	private resolveRange(): void {
+	private resolveRange(): codemavi {
 		if (this.range) {
 			return;
 		}
@@ -558,7 +558,7 @@ class CompletionAcceptedCommand implements Command {
 	public readonly id = CompletionAcceptedCommand.ID;
 
 	public constructor(
-		private readonly onCompletionAccepted: (item: vscode.CompletionItem) => void,
+		private readonly onCompletionAccepted: (item: vscode.CompletionItem) => codemavi,
 		private readonly telemetryReporter: TelemetryReporter,
 	) { }
 
@@ -690,7 +690,7 @@ class TypeScriptCompletionItemProvider implements vscode.CompletionItemProvider<
 		private readonly fileConfigurationManager: FileConfigurationManager,
 		commandManager: CommandManager,
 		private readonly telemetryReporter: TelemetryReporter,
-		onCompletionAccepted: (item: vscode.CompletionItem) => void
+		onCompletionAccepted: (item: vscode.CompletionItem) => codemavi
 	) {
 		commandManager.register(new ApplyCompletionCodeActionCommand(this.client));
 		commandManager.register(new CompletionAcceptedCommand(onCompletionAccepted, this.telemetryReporter));
@@ -934,7 +934,7 @@ export function register(
 	fileConfigurationManager: FileConfigurationManager,
 	commandManager: CommandManager,
 	telemetryReporter: TelemetryReporter,
-	onCompletionAccepted: (item: vscode.CompletionItem) => void
+	onCompletionAccepted: (item: vscode.CompletionItem) => codemavi
 ) {
 	return conditionalRegistration([
 		requireSomeCapability(client, ClientCapability.EnhancedSyntax, ClientCapability.Semantic),

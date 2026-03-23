@@ -29,7 +29,7 @@ export class GpuMarkOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -67,7 +67,7 @@ export class GpuMarkOverlay extends DynamicViewOverlay {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		const visibleStartLineNumber = ctx.visibleRange.startLineNumber;
 		const visibleEndLineNumber = ctx.visibleRange.endLineNumber;
 

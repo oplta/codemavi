@@ -17,7 +17,7 @@ import { IStateService } from '../../state/node/state.js';
 export const IUserDataProfilesMainService = refineServiceDecorator<IUserDataProfilesService, IUserDataProfilesMainService>(IUserDataProfilesService);
 export interface IUserDataProfilesMainService extends IUserDataProfilesService {
 	getProfileForWorkspace(workspaceIdentifier: IAnyWorkspaceIdentifier): IUserDataProfile | undefined;
-	unsetWorkspace(workspaceIdentifier: IAnyWorkspaceIdentifier, transient?: boolean): void;
+	unsetWorkspace(workspaceIdentifier: IAnyWorkspaceIdentifier, transient?: boolean): codemavi;
 	getAssociatedEmptyWindows(): IEmptyWorkspaceIdentifier[];
 	readonly onWillCreateProfile: Event<WillCreateProfileEvent>;
 	readonly onWillRemoveProfile: Event<WillRemoveProfileEvent>;

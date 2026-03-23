@@ -15,7 +15,7 @@ export class TestClipboardService implements IClipboardService {
 
 	private text: string | undefined = undefined;
 
-	async writeText(text: string, type?: string): Promise<void> {
+	async writeText(text: string, type?: string): Promise<codemavi> {
 		this.text = text;
 	}
 
@@ -29,13 +29,13 @@ export class TestClipboardService implements IClipboardService {
 		return this.findText ?? '';
 	}
 
-	async writeFindText(text: string): Promise<void> {
+	async writeFindText(text: string): Promise<codemavi> {
 		this.findText = text;
 	}
 
 	private resources: URI[] | undefined = undefined;
 
-	async writeResources(resources: URI[]): Promise<void> {
+	async writeResources(resources: URI[]): Promise<codemavi> {
 		this.resources = resources;
 	}
 

@@ -21,7 +21,7 @@ export function findArgumentStringArray(args: readonly string[], name: string): 
 }
 
 /**
- * Copied from `ts.LanguageServiceMode` to avoid direct dependency.
+ * Copied from `ts.LanguageServiceMode` to acodemavi direct dependency.
  */
 export enum LanguageServiceMode {
 	Semantic = 0,

@@ -131,7 +131,7 @@ export class ChatImplicitContextContribution extends Disposable implements IWork
 		return getNotebookEditorFromEditorPane(this.editorService.activeEditorPane);
 	}
 
-	private async updateImplicitContext(updateWidget?: IChatWidget): Promise<void> {
+	private async updateImplicitContext(updateWidget?: IChatWidget): Promise<codemavi> {
 		const cancelTokenSource = this._currentCancelTokenSource.value = new CancellationTokenSource();
 		const codeEditor = this.findActiveCodeEditor();
 		const model = codeEditor?.getModel();
@@ -239,7 +239,7 @@ export class ChatImplicitContext extends Disposable implements IChatRequestImpli
 		return this._isSelection;
 	}
 
-	private _onDidChangeValue = new Emitter<void>();
+	private _onDidChangeValue = new Emitter<codemavi>();
 	readonly onDidChangeValue = this._onDidChangeValue.event;
 
 	private _value: Location | URI | undefined;

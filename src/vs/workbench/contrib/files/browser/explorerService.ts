@@ -154,7 +154,7 @@ export class ExplorerService implements IExplorerService {
 		};
 	}
 
-	registerView(contextProvider: IExplorerView): void {
+	registerView(contextProvider: IExplorerView): codemavi {
 		this.view = contextProvider;
 	}
 
@@ -181,7 +181,7 @@ export class ExplorerService implements IExplorerService {
 		return [...items];
 	}
 
-	async applyBulkEdit(edit: ResourceFileEdit[], options: { undoLabel: string; progressLabel: string; confirmBeforeUndo?: boolean; progressLocation?: ProgressLocation.Explorer | ProgressLocation.Window }): Promise<void> {
+	async applyBulkEdit(edit: ResourceFileEdit[], options: { undoLabel: string; progressLabel: string; confirmBeforeUndo?: boolean; progressLocation?: ProgressLocation.Explorer | ProgressLocation.Window }): Promise<codemavi> {
 		const cancellationTokenSource = new CancellationTokenSource();
 		const location = options.progressLocation ?? ProgressLocation.Window;
 		let progressOptions;
@@ -229,7 +229,7 @@ export class ExplorerService implements IExplorerService {
 		return parentRoots.length ? parentRoots[0] : null;
 	}
 
-	async setEditable(stat: ExplorerItem, data: IEditableData | null): Promise<void> {
+	async setEditable(stat: ExplorerItem, data: IEditableData | null): Promise<codemavi> {
 		if (!this.view) {
 			return;
 		}
@@ -252,7 +252,7 @@ export class ExplorerService implements IExplorerService {
 		}
 	}
 
-	async setToCopy(items: ExplorerItem[], cut: boolean): Promise<void> {
+	async setToCopy(items: ExplorerItem[], cut: boolean): Promise<codemavi> {
 		const previouslyCutItems = this.cutItems;
 		this.cutItems = cut ? items : undefined;
 		await this.clipboardService.writeResources(items.map(s => s.resource));
@@ -276,7 +276,7 @@ export class ExplorerService implements IExplorerService {
 		return !!this.editable && (this.editable.stat === stat || !stat);
 	}
 
-	async select(resource: URI, reveal?: boolean | string): Promise<void> {
+	async select(resource: URI, reveal?: boolean | string): Promise<codemavi> {
 		if (!this.view) {
 			return;
 		}
@@ -321,7 +321,7 @@ export class ExplorerService implements IExplorerService {
 		}
 	}
 
-	async refresh(reveal = true): Promise<void> {
+	async refresh(reveal = true): Promise<codemavi> {
 		// Do not refresh the tree when it is showing temporary nodes (phantom elements)
 		if (this.view?.hasPhantomElements()) {
 			return;
@@ -342,7 +342,7 @@ export class ExplorerService implements IExplorerService {
 
 	// File events
 
-	private async onDidRunOperation(e: FileOperationEvent): Promise<void> {
+	private async onDidRunOperation(e: FileOperationEvent): Promise<codemavi> {
 		// When nesting, changes to one file in a folder may impact the rendered structure
 		// of all the folder's immediate children, thus a recursive refresh is needed.
 		// Ideally the tree would be able to recusively refresh just one level but that does not yet exist.
@@ -463,7 +463,7 @@ export class ExplorerService implements IExplorerService {
 		return true;
 	}
 
-	private async onConfigurationUpdated(event: IConfigurationChangeEvent): Promise<void> {
+	private async onConfigurationUpdated(event: IConfigurationChangeEvent): Promise<codemavi> {
 		if (!event.affectsConfiguration('explorer')) {
 			return;
 		}
@@ -498,7 +498,7 @@ export class ExplorerService implements IExplorerService {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }

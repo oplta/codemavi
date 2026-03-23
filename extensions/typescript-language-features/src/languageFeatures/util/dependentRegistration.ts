@@ -13,7 +13,7 @@ export class Condition extends Disposable {
 
 	constructor(
 		private readonly getValue: () => boolean,
-		onUpdate: (handler: () => void) => void,
+		onUpdate: (handler: () => codemavi) => codemavi,
 	) {
 		super();
 		this._value = this.getValue();
@@ -29,7 +29,7 @@ export class Condition extends Disposable {
 
 	public get value(): boolean { return this._value; }
 
-	private readonly _onDidChange = this._register(new vscode.EventEmitter<void>());
+	private readonly _onDidChange = this._register(new vscode.EventEmitter<codemavi>());
 	public readonly onDidChange = this._onDidChange.event;
 }
 

@@ -98,7 +98,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 	 */
 	private readonly editedCells = new ResourceSet();
 
-	public static async create(uri: URI, _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => void }, telemetryInfo: IModifiedEntryTelemetryInfo, chatKind: ChatEditKind, initialContent: string | undefined, instantiationService: IInstantiationService): Promise<AbstractChatEditingModifiedFileEntry> {
+	public static async create(uri: URI, _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => codemavi }, telemetryInfo: IModifiedEntryTelemetryInfo, chatKind: ChatEditKind, initialContent: string | undefined, instantiationService: IInstantiationService): Promise<AbstractChatEditingModifiedFileEntry> {
 		return instantiationService.invokeFunction(async accessor => {
 			const notebookService = accessor.get(INotebookService);
 			const resolver = accessor.get(INotebookEditorModelResolverService);
@@ -164,7 +164,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 	constructor(
 		private readonly modifiedResourceRef: IReference<IResolvedNotebookEditorModel>,
 		originalResourceRef: IReference<IResolvedNotebookEditorModel>,
-		private readonly _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => void },
+		private readonly _multiDiffEntryDelegate: { collapse: (transaction: ITransaction | undefined) => codemavi },
 		private readonly transientOptions: TransientOptions | undefined,
 		telemetryInfo: IModifiedEntryTelemetryInfo,
 		kind: ChatEditKind,
@@ -403,7 +403,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	protected override async _doAccept(tx: ITransaction | undefined): Promise<void> {
+	protected override async _doAccept(tx: ITransaction | undefined): Promise<codemavi> {
 		this.updateCellDiffInfo([], tx);
 		const snapshot = createSnapshot(this.modifiedModel, this.transientOptions, this.configurationService);
 		restoreSnapshot(this.originalModel, snapshot);
@@ -427,7 +427,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	protected override async _doReject(tx: ITransaction | undefined): Promise<void> {
+	protected override async _doReject(tx: ITransaction | undefined): Promise<codemavi> {
 		this.updateCellDiffInfo([], tx);
 		if (this.createdInRequestId === this._telemetryInfo.requestId) {
 			await this._applyEdits(async () => {
@@ -450,7 +450,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	private async _collapse(transaction: ITransaction | undefined): Promise<void> {
+	private async _collapse(transaction: ITransaction | undefined): Promise<codemavi> {
 		this._multiDiffEntryDelegate.collapse(transaction);
 	}
 
@@ -464,7 +464,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		return this._instantiationService.createInstance(ChatEditingNotebookEditorIntegration, this, editor, this.modifiedModel, this.originalModel, this._cellsDiffInfo);
 	}
 
-	protected override _resetEditsState(tx: ITransaction): void {
+	protected override _resetEditsState(tx: ITransaction): codemavi {
 		super._resetEditsState(tx);
 		this.cellEntryMap.forEach(entry => !entry.disposed && entry.clearCurrentEditLineDecoration());
 	}
@@ -506,7 +506,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 	}
 
 	private newNotebookEditGenerator?: ChatEditingNewNotebookContentEdits;
-	override async acceptAgentEdits(resource: URI, edits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<void> {
+	override async acceptAgentEdits(resource: URI, edits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<codemavi> {
 		const isCellUri = resource.scheme === Schemas.vscodeNotebookCell;
 		const cell = isCellUri && this.modifiedModel.cells.find(cell => isEqual(cell.uri, resource));
 		let cellEntry: ChatEditingNotebookCellEntry | undefined;
@@ -600,7 +600,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		});
 	}
 
-	acceptNotebookEdit(edit: ICellEditOperation): void {
+	acceptNotebookEdit(edit: ICellEditOperation): codemavi {
 		// make the actual edit
 		this.modifiedModel.applyEdits([edit], true, undefined, () => undefined, undefined, false);
 		this.disposeDeletedCellEntries();
@@ -859,7 +859,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		this.updateCellDiffInfo(diffs, undefined);
 	}
 
-	private async _applyEdits(operation: () => Promise<void>) {
+	private async _applyEdits(operation: () => Promise<codemavi>) {
 		// make the actual edit
 		this._isEditFromUs = true;
 		try {
@@ -869,7 +869,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		}
 	}
 
-	private _applyEditsSync(operation: () => void) {
+	private _applyEditsSync(operation: () => codemavi) {
 		// make the actual edit
 		this._isEditFromUs = true;
 		try {
@@ -901,7 +901,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 
 	}
 
-	override restoreFromSnapshot(snapshot: ISnapshotEntry, restoreToDisk = true): void {
+	override restoreFromSnapshot(snapshot: ISnapshotEntry, restoreToDisk = true): codemavi {
 		this.updateCellDiffInfo([], undefined);
 		this._stateObs.set(snapshot.state, undefined);
 		restoreSnapshot(this.originalModel, snapshot.original);
@@ -911,7 +911,7 @@ export class ChatEditingModifiedNotebookEntry extends AbstractChatEditingModifie
 		this.initializeModelsFromDiff();
 	}
 
-	override resetToInitialContent(): void {
+	override resetToInitialContent(): codemavi {
 		this.updateCellDiffInfo([], undefined);
 		this.restoreSnapshotInModifiedModel(this.initialContent);
 		this.initializeModelsFromDiff();

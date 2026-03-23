@@ -53,31 +53,31 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	//#region Events
 
-	private readonly _onDidChangeContent = this._register(new Emitter<void>());
+	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
 	private readonly _onDidResolve = this._register(new Emitter<TextFileResolveReason>());
 	readonly onDidResolve = this._onDidResolve.event;
 
-	private readonly _onDidChangeDirty = this._register(new Emitter<void>());
+	private readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
-	private readonly _onDidSaveError = this._register(new Emitter<void>());
+	private readonly _onDidSaveError = this._register(new Emitter<codemavi>());
 	readonly onDidSaveError = this._onDidSaveError.event;
 
 	private readonly _onDidSave = this._register(new Emitter<ITextFileEditorModelSaveEvent>());
 	readonly onDidSave = this._onDidSave.event;
 
-	private readonly _onDidRevert = this._register(new Emitter<void>());
+	private readonly _onDidRevert = this._register(new Emitter<codemavi>());
 	readonly onDidRevert = this._onDidRevert.event;
 
-	private readonly _onDidChangeEncoding = this._register(new Emitter<void>());
+	private readonly _onDidChangeEncoding = this._register(new Emitter<codemavi>());
 	readonly onDidChangeEncoding = this._onDidChangeEncoding.event;
 
-	private readonly _onDidChangeOrphaned = this._register(new Emitter<void>());
+	private readonly _onDidChangeOrphaned = this._register(new Emitter<codemavi>());
 	readonly onDidChangeOrphaned = this._onDidChangeOrphaned.event;
 
-	private readonly _onDidChangeReadonly = this._register(new Emitter<void>());
+	private readonly _onDidChangeReadonly = this._register(new Emitter<codemavi>());
 	readonly onDidChangeReadonly = this._onDidChangeReadonly.event;
 
 	//#endregion
@@ -139,13 +139,13 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.fileService.onDidFilesChange(e => this.onDidFilesChange(e)));
 		this._register(this.filesConfigurationService.onDidChangeFilesAssociation(() => this.onDidChangeFilesAssociation()));
 		this._register(this.filesConfigurationService.onDidChangeReadonly(() => this._onDidChangeReadonly.fire()));
 	}
 
-	private async onDidFilesChange(e: FileChangesEvent): Promise<void> {
+	private async onDidFilesChange(e: FileChangesEvent): Promise<codemavi> {
 		let fileEventImpactsModel = false;
 		let newInOrphanModeGuess: boolean | undefined;
 
@@ -190,14 +190,14 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private setOrphaned(orphaned: boolean): void {
+	private setOrphaned(orphaned: boolean): codemavi {
 		if (this.inOrphanMode !== orphaned) {
 			this.inOrphanMode = orphaned;
 			this._onDidChangeOrphaned.fire();
 		}
 	}
 
-	private onDidChangeFilesAssociation(): void {
+	private onDidChangeFilesAssociation(): codemavi {
 		if (!this.isResolved()) {
 			return;
 		}
@@ -208,7 +208,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this.textEditorModel.setLanguage(languageSelection);
 	}
 
-	override setLanguageId(languageId: string, source?: string): void {
+	override setLanguageId(languageId: string, source?: string): codemavi {
 		super.setLanguageId(languageId, source);
 
 		this.preferredLanguageId = languageId;
@@ -242,7 +242,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	//#region Revert
 
-	async revert(options?: IRevertOptions): Promise<void> {
+	async revert(options?: IRevertOptions): Promise<codemavi> {
 		if (!this.isResolved()) {
 			return;
 		}
@@ -282,7 +282,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	//#region Resolve
 
-	override async resolve(options?: ITextFileResolveOptions): Promise<void> {
+	override async resolve(options?: ITextFileResolveOptions): Promise<codemavi> {
 		this.trace('resolve() - enter');
 		mark('code/willResolveTextFileEditorModel');
 
@@ -308,7 +308,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		mark('code/didResolveTextFileEditorModel');
 	}
 
-	private async doResolve(options?: ITextFileResolveOptions): Promise<void> {
+	private async doResolve(options?: ITextFileResolveOptions): Promise<codemavi> {
 
 		// First check if we have contents to use for the model
 		if (options?.contents) {
@@ -328,7 +328,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return this.resolveFromFile(options);
 	}
 
-	private async resolveFromBuffer(buffer: ITextBufferFactory, options?: ITextFileResolveOptions): Promise<void> {
+	private async resolveFromBuffer(buffer: ITextBufferFactory, options?: ITextFileResolveOptions): Promise<codemavi> {
 		this.trace('resolveFromBuffer()');
 
 		// Try to resolve metdata from disk
@@ -404,7 +404,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return false;
 	}
 
-	private async doResolveFromBackup(backup: IResolvedWorkingCopyBackup<IBackupMetaData>, encoding: string, options?: ITextFileResolveOptions): Promise<void> {
+	private async doResolveFromBackup(backup: IResolvedWorkingCopyBackup<IBackupMetaData>, encoding: string, options?: ITextFileResolveOptions): Promise<codemavi> {
 		this.trace('doResolveFromBackup()');
 
 		// Resolve with backup
@@ -427,7 +427,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private async resolveFromFile(options?: ITextFileResolveOptions): Promise<void> {
+	private async resolveFromFile(options?: ITextFileResolveOptions): Promise<codemavi> {
 		this.trace('resolveFromFile()');
 
 		const forceReadFromFile = options?.forceReadFromFile;
@@ -496,7 +496,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private resolveFromContent(content: ITextFileStreamContent, dirty: boolean, options?: ITextFileResolveOptions): void {
+	private resolveFromContent(content: ITextFileStreamContent, dirty: boolean, options?: ITextFileResolveOptions): codemavi {
 		this.trace('resolveFromContent() - enter');
 
 		// Return early if we are disposed
@@ -554,7 +554,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this._onDidResolve.fire(options?.reason ?? TextFileResolveReason.OTHER);
 	}
 
-	private doCreateTextModel(resource: URI, value: ITextBufferFactory): void {
+	private doCreateTextModel(resource: URI, value: ITextBufferFactory): codemavi {
 		this.trace('doCreateTextModel()');
 
 		// Create model
@@ -567,7 +567,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this.autoDetectLanguage();
 	}
 
-	private doUpdateTextModel(value: ITextBufferFactory): void {
+	private doUpdateTextModel(value: ITextBufferFactory): codemavi {
 		this.trace('doUpdateTextModel()');
 
 		// Update model value in a block that ignores content change events for dirty tracking
@@ -579,7 +579,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	protected override installModelListeners(model: ITextModel): void {
+	protected override installModelListeners(model: ITextModel): codemavi {
 
 		// See https://github.com/microsoft/vscode/issues/30189
 		// This code has been extracted to a different method because it caused a memory leak
@@ -591,7 +591,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		super.installModelListeners(model);
 	}
 
-	private onModelContentChanged(model: ITextModel, isUndoingOrRedoing: boolean): void {
+	private onModelContentChanged(model: ITextModel, isUndoingOrRedoing: boolean): codemavi {
 		this.trace(`onModelContentChanged() - enter`);
 
 		// In any case increment the version id because it tracks the textual content state of the model at all times
@@ -641,7 +641,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this.autoDetectLanguage();
 	}
 
-	protected override async autoDetectLanguage(): Promise<void> {
+	protected override async autoDetectLanguage(): Promise<codemavi> {
 
 		// Wait to be ready to detect language
 		await this.extensionService?.whenInstalledExtensionsRegistered();
@@ -657,7 +657,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private async forceResolveFromFile(): Promise<void> {
+	private async forceResolveFromFile(): Promise<codemavi> {
 		if (this.isDisposed()) {
 			return; // return early when the model is invalid
 		}
@@ -686,7 +686,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return this.isDirty();
 	}
 
-	setDirty(dirty: boolean): void {
+	setDirty(dirty: boolean): codemavi {
 		if (!this.isResolved()) {
 			return; // only resolved models can be marked dirty
 		}
@@ -701,7 +701,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private doSetDirty(dirty: boolean): () => void {
+	private doSetDirty(dirty: boolean): () => codemavi {
 		const wasDirty = this.dirty;
 		const wasInConflictMode = this.inConflictMode;
 		const wasInErrorMode = this.inErrorMode;
@@ -757,7 +757,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return this.hasState(TextFileEditorModelState.SAVED);
 	}
 
-	private async doSave(options: ITextFileSaveAsOptions): Promise<void> {
+	private async doSave(options: ITextFileSaveAsOptions): Promise<codemavi> {
 		if (typeof options.reason !== 'number') {
 			options.reason = SaveReason.EXPLICIT;
 		}
@@ -838,7 +838,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		});
 	}
 
-	private doSaveSequential(versionId: number, options: ITextFileSaveAsOptions, progress: IProgress<IProgressStep>, saveCancellation: CancellationTokenSource): Promise<void> {
+	private doSaveSequential(versionId: number, options: ITextFileSaveAsOptions, progress: IProgress<IProgressStep>, saveCancellation: CancellationTokenSource): Promise<codemavi> {
 		return this.saveSequentializer.run(versionId, (async () => {
 
 			// A save participant can still change the model now and since we are so close to saving
@@ -946,7 +946,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		})(), () => saveCancellation.cancel());
 	}
 
-	private handleSaveSuccess(stat: IFileStatWithMetadata, versionId: number, options: ITextFileSaveAsOptions): void {
+	private handleSaveSuccess(stat: IFileStatWithMetadata, versionId: number, options: ITextFileSaveAsOptions): codemavi {
 
 		// Updated resolved stat with updated stat
 		this.updateLastResolvedFileStat(stat);
@@ -966,7 +966,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this._onDidSave.fire({ reason: options.reason, stat, source: options.source });
 	}
 
-	private handleSaveError(error: Error, versionId: number, options: ITextFileSaveAsOptions): void {
+	private handleSaveError(error: Error, versionId: number, options: ITextFileSaveAsOptions): codemavi {
 		(options.ignoreErrorHandler ? this.logService.trace : this.logService.error).apply(this.logService, [`[text file model] handleSaveError(${versionId}) - exit - resulted in a save error: ${error.toString()}`, this.resource.toString()]);
 
 		// Return early if the save() call was made asking to
@@ -996,7 +996,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		this._onDidSaveError.fire();
 	}
 
-	private updateSavedVersionId(): void {
+	private updateSavedVersionId(): codemavi {
 		// we remember the models alternate version id to remember when the version
 		// of the model matches with the saved version on disk. we need to keep this
 		// in order to find out if the model changed back to a saved version (e.g.
@@ -1007,7 +1007,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	private updateLastResolvedFileStat(newFileStat: IFileStatWithMetadata): void {
+	private updateLastResolvedFileStat(newFileStat: IFileStatWithMetadata): codemavi {
 		const oldReadonly = this.isReadonly();
 
 		// First resolve - just take
@@ -1052,7 +1052,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	async joinState(state: TextFileEditorModelState.PENDING_SAVE): Promise<void> {
+	async joinState(state: TextFileEditorModelState.PENDING_SAVE): Promise<codemavi> {
 		return this.saveSequentializer.running;
 	}
 
@@ -1068,7 +1068,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	//#region Encoding
 
-	private async onMaybeShouldChangeEncoding(): Promise<void> {
+	private async onMaybeShouldChangeEncoding(): Promise<codemavi> {
 
 		// This is a bit of a hack but there is a narrow case where
 		// per-language configured encodings are not working:
@@ -1119,7 +1119,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	private hasEncodingSetExplicitly: boolean = false;
 
-	setEncoding(encoding: string, mode: EncodingMode): Promise<void> {
+	setEncoding(encoding: string, mode: EncodingMode): Promise<codemavi> {
 
 		// Remember that an explicit encoding was set
 		this.hasEncodingSetExplicitly = true;
@@ -1127,7 +1127,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return this.setEncodingInternal(encoding, mode);
 	}
 
-	private async setEncodingInternal(encoding: string, mode: EncodingMode): Promise<void> {
+	private async setEncodingInternal(encoding: string, mode: EncodingMode): Promise<codemavi> {
 
 		// Encode: Save with encoding
 		if (mode === EncodingMode.Encode) {
@@ -1160,7 +1160,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		}
 	}
 
-	updatePreferredEncoding(encoding: string | undefined): void {
+	updatePreferredEncoding(encoding: string | undefined): codemavi {
 		if (!this.isNewEncoding(encoding)) {
 			return;
 		}
@@ -1189,7 +1189,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 
 	//#endregion
 
-	private trace(msg: string): void {
+	private trace(msg: string): codemavi {
 		this.logService.trace(`[text file model] ${msg}`, this.resource.toString());
 	}
 
@@ -1201,7 +1201,7 @@ export class TextFileEditorModel extends BaseTextEditorModel implements ITextFil
 		return this.filesConfigurationService.isReadonly(this.resource, this.lastResolvedFileStat);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.trace('dispose()');
 
 		this.inConflictMode = false;

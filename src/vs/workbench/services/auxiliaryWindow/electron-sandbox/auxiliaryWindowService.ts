@@ -57,7 +57,7 @@ export class NativeAuxiliaryWindow extends AuxiliaryWindow {
 		this.handleFullScreenState();
 	}
 
-	private handleMaximizedState(): void {
+	private handleMaximizedState(): codemavi {
 		(async () => {
 			this.maximized = await this.nativeHostService.isMaximized({ targetWindowId: this.window.vscodeWindowId });
 		})();
@@ -75,20 +75,20 @@ export class NativeAuxiliaryWindow extends AuxiliaryWindow {
 		}));
 	}
 
-	private async handleFullScreenState(): Promise<void> {
+	private async handleFullScreenState(): Promise<codemavi> {
 		const fullscreen = await this.nativeHostService.isFullScreen({ targetWindowId: this.window.vscodeWindowId });
 		if (fullscreen) {
 			setFullscreen(true, this.window);
 		}
 	}
 
-	protected override async handleVetoBeforeClose(e: BeforeUnloadEvent, veto: string): Promise<void> {
+	protected override async handleVetoBeforeClose(e: BeforeUnloadEvent, veto: string): Promise<codemavi> {
 		this.preventUnload(e);
 
 		await this.dialogService.error(veto, localize('backupErrorDetails', "Try saving or reverting the editors with unsaved changes first and then try again."));
 	}
 
-	protected override async confirmBeforeClose(e: BeforeUnloadEvent): Promise<void> {
+	protected override async confirmBeforeClose(e: BeforeUnloadEvent): Promise<codemavi> {
 		if (this.skipUnloadConfirmation) {
 			return;
 		}
@@ -102,7 +102,7 @@ export class NativeAuxiliaryWindow extends AuxiliaryWindow {
 		}
 	}
 
-	protected override preventUnload(e: BeforeUnloadEvent): void {
+	protected override preventUnload(e: BeforeUnloadEvent): codemavi {
 		e.preventDefault();
 		e.returnValue = true;
 	}

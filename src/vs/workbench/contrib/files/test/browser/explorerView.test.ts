@@ -85,7 +85,7 @@ suite('Files - ExplorerView', () => {
 		dom.append(label, labelName1);
 		dom.append(label, labelName2);
 		dom.append(label, labelName3);
-		const emitter = new Emitter<void>();
+		const emitter = new Emitter<codemavi>();
 
 		const navigationController = new CompressedNavigationController('id', [s1, s2, s3], {
 			container,

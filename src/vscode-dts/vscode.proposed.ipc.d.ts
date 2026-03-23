@@ -23,7 +23,7 @@ declare module 'vscode' {
 		 * @param transfer A collection of `ArrayBuffer` instances which can be transferred
 		 * to the other party, saving costly memory copy operations.
 		 */
-		postMessage(message: any, transfer?: ArrayBuffer[]): void;
+		postMessage(message: any, transfer?: ArrayBuffer[]): codemavi;
 	}
 
 	export interface ExtensionContext {

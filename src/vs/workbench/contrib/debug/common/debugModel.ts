@@ -67,7 +67,7 @@ export class ExpressionContainer implements IExpressionContainer {
 		this.children = undefined; // invalidate children cache
 	}
 
-	async evaluateLazy(): Promise<void> {
+	async evaluateLazy(): Promise<codemavi> {
 		if (typeof this.reference === 'undefined') {
 			return;
 		}
@@ -89,7 +89,7 @@ export class ExpressionContainer implements IExpressionContainer {
 		this.adoptLazyResponse(dummyVar);
 	}
 
-	protected adoptLazyResponse(response: DebugProtocol.Variable): void {
+	protected adoptLazyResponse(response: DebugProtocol.Variable): codemavi {
 	}
 
 	getChildren(): Promise<IExpression[]> {
@@ -239,7 +239,7 @@ export class ExpressionContainer implements IExpressionContainer {
 	}
 }
 
-function handleSetResponse(expression: ExpressionContainer, response: DebugProtocol.SetVariableResponse | DebugProtocol.SetExpressionResponse | undefined): void {
+function handleSetResponse(expression: ExpressionContainer, response: DebugProtocol.SetVariableResponse | DebugProtocol.SetExpressionResponse | undefined): codemavi {
 	if (response && response.body) {
 		expression.value = response.body.value || '';
 		expression.type = response.body.type || expression.type;
@@ -254,7 +254,7 @@ export class VisualizedExpression implements IExpression {
 	public errorMessage?: string;
 	private readonly id = generateUuid();
 
-	evaluateLazy(): Promise<void> {
+	evaluateLazy(): Promise<codemavi> {
 		return Promise.resolve();
 	}
 	getChildren(): Promise<IExpression[]> {
@@ -319,7 +319,7 @@ export class Expression extends ExpressionContainer implements IExpression {
 		}
 	}
 
-	async evaluate(session: IDebugSession | undefined, stackFrame: IStackFrame | undefined, context: string, keepLazyVars?: boolean, location?: IDebugEvaluatePosition): Promise<void> {
+	async evaluate(session: IDebugSession | undefined, stackFrame: IStackFrame | undefined, context: string, keepLazyVars?: boolean, location?: IDebugEvaluatePosition): Promise<codemavi> {
 		const hadDefaultValue = this.value === Expression.DEFAULT_VALUE;
 		this.available = await this.evaluateExpression(this.name, session, stackFrame, context, keepLazyVars, location);
 		if (hadDefaultValue || this.valueChanged) {
@@ -331,7 +331,7 @@ export class Expression extends ExpressionContainer implements IExpression {
 		return `${this.name}\n${this.value}`;
 	}
 
-	async setExpression(value: string, stackFrame: IStackFrame): Promise<void> {
+	async setExpression(value: string, stackFrame: IStackFrame): Promise<codemavi> {
 		if (!this.session) {
 			return;
 		}
@@ -393,7 +393,7 @@ export class Variable extends ExpressionContainer implements IExpression {
 		}
 	}
 
-	async setExpression(value: string, stackFrame: IStackFrame): Promise<void> {
+	async setExpression(value: string, stackFrame: IStackFrame): Promise<codemavi> {
 		if (!this.session || !this.evaluateName) {
 			return;
 		}
@@ -406,7 +406,7 @@ export class Variable extends ExpressionContainer implements IExpression {
 		return this.name ? `${this.name}: ${this.value}` : this.value;
 	}
 
-	protected override adoptLazyResponse(response: DebugProtocol.Variable): void {
+	protected override adoptLazyResponse(response: DebugProtocol.Variable): codemavi {
 		this.evaluateName = response.evaluateName;
 	}
 
@@ -524,11 +524,11 @@ export class StackFrame implements IStackFrame {
 		return scopesContainingRange.length ? scopesContainingRange : nonExpensiveScopes;
 	}
 
-	restart(): Promise<void> {
+	restart(): Promise<codemavi> {
 		return this.thread.session.restartFrame(this.frameId, this.thread.threadId);
 	}
 
-	forgetScopes(): void {
+	forgetScopes(): codemavi {
 		this.scopes = undefined;
 	}
 
@@ -580,7 +580,7 @@ export class Thread implements IThread {
 		return `thread:${this.session.getId()}:${this.threadId}`;
 	}
 
-	clearCallStack(): void {
+	clearCallStack(): codemavi {
 		if (this.callStack.length) {
 			this.staleCallStack = this.callStack;
 		}
@@ -623,7 +623,7 @@ export class Thread implements IThread {
 	 * Only fetches the first stack frame for performance reasons. Calling this method consecutive times
 	 * gets the remainder of the call stack.
 	 */
-	async fetchCallStack(levels = 20): Promise<void> {
+	async fetchCallStack(levels = 20): Promise<codemavi> {
 		if (this.stopped) {
 			const start = this.callStack.length;
 			const callStack = await this.getCallStackImpl(start, levels);
@@ -870,7 +870,7 @@ export abstract class BaseBreakpoint extends Enablement implements IBaseBreakpoi
 		this.modeLabel = opts.modeLabel;
 	}
 
-	setSessionData(sessionId: string, data: IBreakpointSessionData | undefined): void {
+	setSessionData(sessionId: string, data: IBreakpointSessionData | undefined): codemavi {
 		if (!data) {
 			this.sessionData.delete(sessionId);
 		} else {
@@ -1069,7 +1069,7 @@ export class Breakpoint extends BaseBreakpoint implements IBreakpoint {
 		return true;
 	}
 
-	override setSessionData(sessionId: string, data: IBreakpointSessionData | undefined): void {
+	override setSessionData(sessionId: string, data: IBreakpointSessionData | undefined): codemavi {
 		super.setSessionData(sessionId, data);
 		if (!this._adapterData) {
 			this._adapterData = this.adapterData;
@@ -1091,7 +1091,7 @@ export class Breakpoint extends BaseBreakpoint implements IBreakpoint {
 		return `${resources.basenameOrAuthority(this.uri)} ${this.lineNumber}`;
 	}
 
-	public setSessionDidTrigger(sessionId: string, didTrigger = true): void {
+	public setSessionDidTrigger(sessionId: string, didTrigger = true): codemavi {
 		if (didTrigger) {
 			this.sessionsDidTrigger ??= new Set();
 			this.sessionsDidTrigger.add(sessionId);
@@ -1104,7 +1104,7 @@ export class Breakpoint extends BaseBreakpoint implements IBreakpoint {
 		return !!this.sessionsDidTrigger?.has(sessionId);
 	}
 
-	update(data: IBreakpointUpdateData): void {
+	update(data: IBreakpointUpdateData): codemavi {
 		if (data.hasOwnProperty('lineNumber') && !isUndefinedOrNull(data.lineNumber)) {
 			this._lineNumber = data.lineNumber;
 		}
@@ -1305,7 +1305,7 @@ export class ExceptionBreakpoint extends BaseBreakpoint implements IExceptionBre
 		};
 	}
 
-	setSupportedSession(sessionId: string, supported: boolean): void {
+	setSupportedSession(sessionId: string, supported: boolean): codemavi {
 		if (supported) {
 			this.supportedSessions.add(sessionId);
 		}
@@ -1419,10 +1419,10 @@ interface IBreakpointModeInternal extends DebugProtocol.BreakpointMode {
 export class DebugModel extends Disposable implements IDebugModel {
 
 	private sessions: IDebugSession[];
-	private schedulers = new Map<string, { scheduler: RunOnceScheduler; completeDeferred: DeferredPromise<void> }>();
+	private schedulers = new Map<string, { scheduler: RunOnceScheduler; completeDeferred: DeferredPromise<codemavi> }>();
 	private breakpointsActivated = true;
 	private readonly _onDidChangeBreakpoints = this._register(new Emitter<IBreakpointsChangeEvent | undefined>());
-	private readonly _onDidChangeCallStack = this._register(new Emitter<void>());
+	private readonly _onDidChangeCallStack = this._register(new Emitter<codemavi>());
 	private readonly _onDidChangeWatchExpressions = this._register(new Emitter<IExpression | undefined>());
 	private readonly _onDidChangeWatchExpressionValue = this._register(new Emitter<IExpression | undefined>());
 	private readonly _breakpointModes = new Map<string, IBreakpointModeInternal>();
@@ -1481,7 +1481,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return this.sessions.filter(s => includeInactive || s.state !== State.Inactive);
 	}
 
-	addSession(session: IDebugSession): void {
+	addSession(session: IDebugSession): codemavi {
 		this.sessions = this.sessions.filter(s => {
 			if (s.getId() === session.getId()) {
 				// Make sure to de-dupe if a session is re-initialized. In case of EH debugging we are adding a session again after an attach.
@@ -1517,7 +1517,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return this._onDidChangeBreakpoints.event;
 	}
 
-	get onDidChangeCallStack(): Event<void> {
+	get onDidChangeCallStack(): Event<codemavi> {
 		return this._onDidChangeCallStack.event;
 	}
 
@@ -1529,7 +1529,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return this._onDidChangeWatchExpressionValue.event;
 	}
 
-	rawUpdate(data: IRawModelUpdate): void {
+	rawUpdate(data: IRawModelUpdate): codemavi {
 		const session = this.sessions.find(p => p.getId() === data.sessionId);
 		if (session) {
 			session.rawUpdate(data);
@@ -1537,7 +1537,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	clearThreads(id: string, removeThreads: boolean, reference: number | undefined = undefined): void {
+	clearThreads(id: string, removeThreads: boolean, reference: number | undefined = undefined): codemavi {
 		const session = this.sessions.find(p => p.getId() === id);
 		this.schedulers.forEach(entry => {
 			entry.scheduler.dispose();
@@ -1554,7 +1554,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 	/**
 	 * Update the call stack and notify the call stack view that changes have occurred.
 	 */
-	async fetchCallstack(thread: IThread, levels?: number): Promise<void> {
+	async fetchCallstack(thread: IThread, levels?: number): Promise<codemavi> {
 
 		if ((<Thread>thread).reachedEndOfCallStack) {
 			return;
@@ -1575,11 +1575,11 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return;
 	}
 
-	refreshTopOfCallstack(thread: Thread, fetchFullStack = true): { topCallStack: Promise<void>; wholeCallStack: Promise<void> } {
+	refreshTopOfCallstack(thread: Thread, fetchFullStack = true): { topCallStack: Promise<codemavi>; wholeCallStack: Promise<codemavi> } {
 		if (thread.session.capabilities.supportsDelayedStackTraceLoading) {
 			// For improved performance load the first stack frame and then load the rest async.
 			let topCallStack = Promise.resolve();
-			const wholeCallStack = new Promise<void>((c, e) => {
+			const wholeCallStack = new Promise<codemavi>((c, e) => {
 				topCallStack = thread.fetchCallStack(1).then(() => {
 					if (!fetchFullStack) {
 						c();
@@ -1588,7 +1588,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 					}
 
 					if (!this.schedulers.has(thread.getId())) {
-						const deferred = new DeferredPromise<void>();
+						const deferred = new DeferredPromise<codemavi>();
 						this.schedulers.set(thread.getId(), {
 							completeDeferred: deferred,
 							scheduler: new RunOnceScheduler(() => {
@@ -1676,7 +1676,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return this.instructionBreakpoints;
 	}
 
-	setExceptionBreakpointsForSession(sessionId: string, filters: DebugProtocol.ExceptionBreakpointsFilter[]): void {
+	setExceptionBreakpointsForSession(sessionId: string, filters: DebugProtocol.ExceptionBreakpointsFilter[]): codemavi {
 		if (!filters) {
 			return;
 		}
@@ -1706,17 +1706,17 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	removeExceptionBreakpointsForSession(sessionId: string): void {
+	removeExceptionBreakpointsForSession(sessionId: string): codemavi {
 		this.exceptionBreakpoints.forEach(ebp => ebp.setSupportedSession(sessionId, false));
 	}
 
 	// Set last focused session as fallback session.
 	// This is done to keep track of the exception breakpoints to show when no session is active.
-	setExceptionBreakpointFallbackSession(sessionId: string): void {
+	setExceptionBreakpointFallbackSession(sessionId: string): codemavi {
 		this.exceptionBreakpoints.forEach(ebp => ebp.setFallback(ebp.isSupportedSession(sessionId)));
 	}
 
-	setExceptionBreakpointCondition(exceptionBreakpoint: IExceptionBreakpoint, condition: string | undefined): void {
+	setExceptionBreakpointCondition(exceptionBreakpoint: IExceptionBreakpoint, condition: string | undefined): codemavi {
 		(exceptionBreakpoint as ExceptionBreakpoint).condition = condition;
 		this._onDidChangeBreakpoints.fire(undefined);
 	}
@@ -1725,7 +1725,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return this.breakpointsActivated;
 	}
 
-	setBreakpointsActivated(activated: boolean): void {
+	setBreakpointsActivated(activated: boolean): codemavi {
 		this.breakpointsActivated = activated;
 		this._onDidChangeBreakpoints.fire(undefined);
 	}
@@ -1757,12 +1757,12 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return newBreakpoints;
 	}
 
-	removeBreakpoints(toRemove: IBreakpoint[]): void {
+	removeBreakpoints(toRemove: IBreakpoint[]): codemavi {
 		this.breakpoints = this.breakpoints.filter(bp => !toRemove.some(toRemove => toRemove.getId() === bp.getId()));
 		this._onDidChangeBreakpoints.fire({ removed: toRemove, sessionOnly: false });
 	}
 
-	updateBreakpoints(data: Map<string, IBreakpointUpdateData>): void {
+	updateBreakpoints(data: Map<string, IBreakpointUpdateData>): codemavi {
 		const updated: IBreakpoint[] = [];
 		this.breakpoints.forEach(bp => {
 			const bpData = data.get(bp.getId());
@@ -1775,7 +1775,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		this._onDidChangeBreakpoints.fire({ changed: updated, sessionOnly: false });
 	}
 
-	setBreakpointSessionData(sessionId: string, capabilites: DebugProtocol.Capabilities, data: Map<string, DebugProtocol.Breakpoint> | undefined): void {
+	setBreakpointSessionData(sessionId: string, capabilites: DebugProtocol.Capabilities, data: Map<string, DebugProtocol.Breakpoint> | undefined): codemavi {
 		this.breakpoints.forEach(bp => {
 			if (!data) {
 				bp.setSessionData(sessionId, undefined);
@@ -1865,13 +1865,13 @@ export class DebugModel extends Disposable implements IDebugModel {
 					label: duplicate ? `${mode.label} (${debugType})` : mode.label,
 					firstFromDebugType: debugType,
 					description: mode.description,
-					appliesTo: mode.appliesTo.slice(), // avoid later mutations
+					appliesTo: mode.appliesTo.slice(), // acodemavi later mutations
 				});
 			}
 		}
 	}
 
-	private sortAndDeDup(): void {
+	private sortAndDeDup(): codemavi {
 		this.breakpoints = this.breakpoints.sort((first, second) => {
 			if (first.uri.toString() !== second.uri.toString()) {
 				return resources.basenameOrAuthority(first.uri).localeCompare(resources.basenameOrAuthority(second.uri));
@@ -1888,7 +1888,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		this.breakpoints = distinct(this.breakpoints, bp => `${bp.uri.toString()}:${bp.lineNumber}:${bp.column}`);
 	}
 
-	setEnablement(element: IEnablement, enable: boolean): void {
+	setEnablement(element: IEnablement, enable: boolean): codemavi {
 		if (element instanceof Breakpoint || element instanceof FunctionBreakpoint || element instanceof ExceptionBreakpoint || element instanceof DataBreakpoint || element instanceof InstructionBreakpoint) {
 			const changed: Array<IBreakpoint | IFunctionBreakpoint | IDataBreakpoint | IInstructionBreakpoint> = [];
 			if (element.enabled !== enable && (element instanceof Breakpoint || element instanceof FunctionBreakpoint || element instanceof DataBreakpoint || element instanceof InstructionBreakpoint)) {
@@ -1904,7 +1904,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	enableOrDisableAllBreakpoints(enable: boolean): void {
+	enableOrDisableAllBreakpoints(enable: boolean): codemavi {
 		const changed: Array<IBreakpoint | IFunctionBreakpoint | IDataBreakpoint | IInstructionBreakpoint> = [];
 
 		this.breakpoints.forEach(bp => {
@@ -1947,7 +1947,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return newFunctionBreakpoint;
 	}
 
-	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): void {
+	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): codemavi {
 		const functionBreakpoint = this.functionBreakpoints.find(fbp => fbp.getId() === id);
 		if (functionBreakpoint) {
 			if (typeof update.name === 'string') {
@@ -1963,7 +1963,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	removeFunctionBreakpoints(id?: string): void {
+	removeFunctionBreakpoints(id?: string): codemavi {
 		let removed: FunctionBreakpoint[];
 		if (id) {
 			removed = this.functionBreakpoints.filter(fbp => fbp.getId() === id);
@@ -1975,13 +1975,13 @@ export class DebugModel extends Disposable implements IDebugModel {
 		this._onDidChangeBreakpoints.fire({ removed, sessionOnly: false });
 	}
 
-	addDataBreakpoint(opts: IDataBreakpointOptions, id?: string): void {
+	addDataBreakpoint(opts: IDataBreakpointOptions, id?: string): codemavi {
 		const newDataBreakpoint = new DataBreakpoint(opts, id);
 		this.dataBreakpoints.push(newDataBreakpoint);
 		this._onDidChangeBreakpoints.fire({ added: [newDataBreakpoint], sessionOnly: false });
 	}
 
-	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): void {
+	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): codemavi {
 		const dataBreakpoint = this.dataBreakpoints.find(fbp => fbp.getId() === id);
 		if (dataBreakpoint) {
 			if (typeof update.condition === 'string') {
@@ -1994,7 +1994,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	removeDataBreakpoints(id?: string): void {
+	removeDataBreakpoints(id?: string): codemavi {
 		let removed: DataBreakpoint[];
 		if (id) {
 			removed = this.dataBreakpoints.filter(fbp => fbp.getId() === id);
@@ -2006,13 +2006,13 @@ export class DebugModel extends Disposable implements IDebugModel {
 		this._onDidChangeBreakpoints.fire({ removed, sessionOnly: false });
 	}
 
-	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): void {
+	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): codemavi {
 		const newInstructionBreakpoint = new InstructionBreakpoint(opts);
 		this.instructionBreakpoints.push(newInstructionBreakpoint);
 		this._onDidChangeBreakpoints.fire({ added: [newInstructionBreakpoint], sessionOnly: true });
 	}
 
-	removeInstructionBreakpoints(instructionReference?: string, offset?: number): void {
+	removeInstructionBreakpoints(instructionReference?: string, offset?: number): codemavi {
 		let removed: InstructionBreakpoint[] = [];
 		if (instructionReference) {
 			for (let i = 0; i < this.instructionBreakpoints.length; i++) {
@@ -2041,7 +2041,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		return we;
 	}
 
-	renameWatchExpression(id: string, newName: string): void {
+	renameWatchExpression(id: string, newName: string): codemavi {
 		const filtered = this.watchExpressions.filter(we => we.getId() === id);
 		if (filtered.length === 1) {
 			filtered[0].name = newName;
@@ -2049,12 +2049,12 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	removeWatchExpressions(id: string | null = null): void {
+	removeWatchExpressions(id: string | null = null): codemavi {
 		this.watchExpressions = id ? this.watchExpressions.filter(we => we.getId() !== id) : [];
 		this._onDidChangeWatchExpressions.fire(undefined);
 	}
 
-	moveWatchExpression(id: string, position: number): void {
+	moveWatchExpression(id: string, position: number): codemavi {
 		const we = this.watchExpressions.find(we => we.getId() === id);
 		if (we) {
 			this.watchExpressions = this.watchExpressions.filter(we => we.getId() !== id);
@@ -2063,7 +2063,7 @@ export class DebugModel extends Disposable implements IDebugModel {
 		}
 	}
 
-	sourceIsNotAvailable(uri: uri): void {
+	sourceIsNotAvailable(uri: uri): codemavi {
 		this.sessions.forEach(s => {
 			const source = s.getSourceForUri(uri);
 			if (source) {

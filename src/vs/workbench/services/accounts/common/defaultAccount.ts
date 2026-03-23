@@ -78,7 +78,7 @@ export interface IDefaultAccountService {
 	readonly onDidChangeDefaultAccount: Event<IDefaultAccount | null>;
 
 	getDefaultAccount(): Promise<IDefaultAccount | null>;
-	setDefaultAccount(account: IDefaultAccount | null): void;
+	setDefaultAccount(account: IDefaultAccount | null): codemavi;
 }
 
 export class DefaultAccountService extends Disposable implements IDefaultAccountService {
@@ -97,7 +97,7 @@ export class DefaultAccountService extends Disposable implements IDefaultAccount
 		return this.defaultAccount;
 	}
 
-	setDefaultAccount(account: IDefaultAccount | null): void {
+	setDefaultAccount(account: IDefaultAccount | null): codemavi {
 		const oldAccount = this._defaultAccount;
 		this._defaultAccount = account;
 
@@ -120,7 +120,7 @@ export class NullDefaultAccountService extends Disposable implements IDefaultAcc
 		return null;
 	}
 
-	setDefaultAccount(account: IDefaultAccount | null): void {
+	setDefaultAccount(account: IDefaultAccount | null): codemavi {
 		// noop
 	}
 
@@ -148,7 +148,7 @@ export class DefaultAccountManagementContribution extends Disposable implements 
 		this.initialize();
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		if (!this.productService.defaultAccount) {
 			return;
 		}
@@ -179,7 +179,7 @@ export class DefaultAccountManagementContribution extends Disposable implements 
 
 	}
 
-	private setDefaultAccount(account: IDefaultAccount | null): void {
+	private setDefaultAccount(account: IDefaultAccount | null): codemavi {
 		this.defaultAccount = account;
 		this.defaultAccountService.setDefaultAccount(this.defaultAccount);
 		if (this.defaultAccount) {
@@ -282,7 +282,7 @@ export class DefaultAccountManagementContribution extends Disposable implements 
 		return {};
 	}
 
-	private registerSignInAction(authProviderId: string, authProviderLabel: string, enterpriseAuthProviderId: string, enterpriseAuthProviderConfig: string, scopes: string[]): void {
+	private registerSignInAction(authProviderId: string, authProviderLabel: string, enterpriseAuthProviderId: string, enterpriseAuthProviderConfig: string, scopes: string[]): codemavi {
 		const that = this;
 		this._register(registerAction2(class extends Action2 {
 			constructor() {

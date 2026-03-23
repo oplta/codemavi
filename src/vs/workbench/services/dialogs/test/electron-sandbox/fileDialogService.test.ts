@@ -97,7 +97,7 @@ suite('FileDialogService', function () {
 				assert.strictEqual(options.availableFileSystems[0], Schemas.file);
 				return testFile;
 			}
-			dispose(): void { }
+			dispose(): codemavi { }
 		}
 
 		const dialogService = instantiationService.createInstance(TestFileDialogService, new TestSimpleFileDialog());
@@ -119,7 +119,7 @@ suite('FileDialogService', function () {
 				assert.strictEqual(options.availableFileSystems[0], Schemas.file);
 				return testFile;
 			}
-			dispose(): void { }
+			dispose(): codemavi { }
 		}
 
 		instantiationService.stub(IPathService, new class {
@@ -147,7 +147,7 @@ suite('FileDialogService', function () {
 				assert.strictEqual(options.availableFileSystems[1], Schemas.file);
 				return testFile;
 			}
-			dispose(): void { }
+			dispose(): codemavi { }
 		}
 
 		instantiationService.set(IWorkbenchEnvironmentService, new class extends mock<BrowserWorkbenchEnvironmentService>() {
@@ -174,7 +174,7 @@ suite('FileDialogService', function () {
 			async showSaveDialog(): Promise<URI | undefined> {
 				return testFile;
 			}
-			dispose(): void { }
+			dispose(): codemavi { }
 		}
 		instantiationService.set(IWorkbenchEnvironmentService, new class extends mock<BrowserWorkbenchEnvironmentService>() {
 			override get remoteAuthority() {

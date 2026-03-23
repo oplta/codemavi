@@ -68,7 +68,7 @@ export class ShowOrFocusHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -125,7 +125,7 @@ export class ShowDefinitionPreviewHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -163,7 +163,7 @@ export class HideContentHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		ContentHoverController.get(editor)?.hideContentHover();
 	}
 }
@@ -191,7 +191,7 @@ export class ScrollUpHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -223,7 +223,7 @@ export class ScrollDownHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -255,7 +255,7 @@ export class ScrollLeftHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -287,7 +287,7 @@ export class ScrollRightHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -320,7 +320,7 @@ export class PageUpHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -353,7 +353,7 @@ export class PageDownHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -386,7 +386,7 @@ export class GoToTopHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -420,7 +420,7 @@ export class GoToBottomHoverAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ContentHoverController.get(editor);
 		if (!controller) {
 			return;
@@ -440,7 +440,7 @@ export class IncreaseHoverVerbosityLevel extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args?: { index: number; focus: boolean }): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args?: { index: number; focus: boolean }): codemavi {
 		const hoverController = ContentHoverController.get(editor);
 		if (!hoverController) {
 			return;
@@ -461,7 +461,7 @@ export class DecreaseHoverVerbosityLevel extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args?: { index: number; focus: boolean }): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args?: { index: number; focus: boolean }): codemavi {
 		const hoverController = ContentHoverController.get(editor);
 		if (!hoverController) {
 			return;

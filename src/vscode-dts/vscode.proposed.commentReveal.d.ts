@@ -34,12 +34,12 @@ declare module 'vscode' {
 		/**
 		 * Reveal the comment thread in an editor. If no comment is provided, the first comment in the thread will be revealed.
 		 */
-		reveal(comment?: Comment, options?: CommentThreadRevealOptions): Thenable<void>;
+		reveal(comment?: Comment, options?: CommentThreadRevealOptions): Thenable<codemavi>;
 
 		/**
 		 * Collapse the comment thread in an editor.
 		 */
-		hide(): Thenable<void>;
+		hide(): Thenable<codemavi>;
 	}
 
 }

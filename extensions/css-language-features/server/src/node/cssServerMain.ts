@@ -20,11 +20,11 @@ process.on('unhandledRejection', (e: any) => {
 
 const runtime: RuntimeEnvironment = {
 	timer: {
-		setImmediate(callback: (...args: any[]) => void, ...args: any[]): Disposable {
+		setImmediate(callback: (...args: any[]) => codemavi, ...args: any[]): Disposable {
 			const handle = setImmediate(callback, ...args);
 			return { dispose: () => clearImmediate(handle) };
 		},
-		setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): Disposable {
+		setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): Disposable {
 			const handle = setTimeout(callback, ms, ...args);
 			return { dispose: () => clearTimeout(handle) };
 		}

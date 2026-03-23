@@ -17,7 +17,7 @@ import { IUserDataProfilesService } from '../../userDataProfile/common/userDataP
 
 export class ExtensionsLifecycle extends Disposable {
 
-	private processesLimiter: Limiter<void> = new Limiter(5); // Run max 5 processes in parallel
+	private processesLimiter: Limiter<codemavi> = new Limiter(5); // Run max 5 processes in parallel
 
 	constructor(
 		@IUserDataProfilesService private userDataProfilesService: IUserDataProfilesService,
@@ -26,7 +26,7 @@ export class ExtensionsLifecycle extends Disposable {
 		super();
 	}
 
-	async postUninstall(extension: ILocalExtension): Promise<void> {
+	async postUninstall(extension: ILocalExtension): Promise<codemavi> {
 		const script = this.parseScript(extension, 'uninstall');
 		if (script) {
 			this.logService.info(extension.identifier.id, extension.manifest.version, `Running post uninstall script`);
@@ -61,8 +61,8 @@ export class ExtensionsLifecycle extends Disposable {
 		return null;
 	}
 
-	private runLifecycleHook(lifecycleHook: string, lifecycleType: string, args: string[], timeout: boolean, extension: ILocalExtension): Promise<void> {
-		return new Promise<void>((c, e) => {
+	private runLifecycleHook(lifecycleHook: string, lifecycleType: string, args: string[], timeout: boolean, extension: ILocalExtension): Promise<codemavi> {
+		return new Promise<codemavi>((c, e) => {
 
 			const extensionLifecycleProcess = this.start(lifecycleHook, lifecycleType, args, extension);
 			let timeoutHandler: any;

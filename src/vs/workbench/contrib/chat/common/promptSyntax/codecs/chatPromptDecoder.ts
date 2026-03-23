@@ -37,7 +37,7 @@ export class ChatPromptDecoder extends BaseDecoder<TChatPromptToken, TMarkdownTo
 		super(new MarkdownDecoder(stream));
 	}
 
-	protected override onStreamData(token: TMarkdownToken): void {
+	protected override onStreamData(token: TMarkdownToken): codemavi {
 		// prompt variables always start with the `#` character, hence
 		// initiate a parser object if we encounter respective token and
 		// there is no active parser object present at the moment
@@ -107,7 +107,7 @@ export class ChatPromptDecoder extends BaseDecoder<TChatPromptToken, TMarkdownTo
 		}
 	}
 
-	protected override onStreamEnd(): void {
+	protected override onStreamEnd(): codemavi {
 		try {
 			// if there is no currently active parser object present, nothing to do
 			if (!this.current) {

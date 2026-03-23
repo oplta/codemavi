@@ -67,7 +67,7 @@ export class CodeCoverageDecorations extends Disposable implements IEditorContri
 	private decorationIds = new Map<string, {
 		detail: DetailRange;
 		options: IModelDecorationOptions;
-		applyHoverOptions(target: IModelDecorationOptions): void;
+		applyHoverOptions(target: IModelDecorationOptions): codemavi;
 	}>();
 	private hoveredSubject?: unknown;
 	private details?: CoverageDetailsModel;
@@ -253,7 +253,7 @@ export class CodeCoverageDecorations extends Disposable implements IEditorContri
 					// don't bother showing the miss indicator if the condition wasn't executed at all:
 					const showMissIndicator = !hits && range.isEmpty() && detail.detail.branches!.some(b => b.count);
 					const options: IModelDecorationOptions = {
-						showIfCollapsed: showMissIndicator, // only avoid collapsing if we want to show the miss indicator
+						showIfCollapsed: showMissIndicator, // only acodemavi collapsing if we want to show the miss indicator
 						description: 'coverage-gutter',
 						lineNumberClassName: `coverage-deco-gutter ${cls}`,
 					};
@@ -723,7 +723,7 @@ registerAction2(class ToggleInlineCoverage extends Action2 {
 		});
 	}
 
-	public run(accessor: ServicesAccessor): void {
+	public run(accessor: ServicesAccessor): codemavi {
 		const coverage = accessor.get(ITestCoverageService);
 		coverage.showInline.set(!coverage.showInline.get(), undefined);
 	}
@@ -749,7 +749,7 @@ registerAction2(class ToggleCoverageToolbar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const config = accessor.get(IConfigurationService);
 		const value = getTestingConfiguration(config, TestingConfigKeys.CoverageToolbarEnabled);
 		config.updateValue(TestingConfigKeys.CoverageToolbarEnabled, !value);
@@ -782,7 +782,7 @@ registerAction2(class FilterCoverageToTestInEditor extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, coverageOrUri?: FileCoverage | URI, editor?: ICodeEditor): void {
+	run(accessor: ServicesAccessor, coverageOrUri?: FileCoverage | URI, editor?: ICodeEditor): codemavi {
 		const testCoverageService = accessor.get(ITestCoverageService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const activeEditor = isCodeEditor(editor) ? editor : accessor.get(ICodeEditorService).getActiveCodeEditor();
@@ -853,7 +853,7 @@ registerAction2(class FilterCoverageToTestInEditor extends Action2 {
 });
 
 class ActionWithIcon extends Action {
-	constructor(id: string, title: string, public readonly icon: ThemeIcon, enabled: boolean | undefined, run: () => void) {
+	constructor(id: string, title: string, public readonly icon: ThemeIcon, enabled: boolean | undefined, run: () => codemavi) {
 		super(id, title, undefined, enabled, run);
 	}
 }
@@ -862,7 +862,7 @@ class CodiconActionViewItem extends ActionViewItem {
 
 	public themeIcon?: ThemeIcon;
 
-	protected override updateLabel(): void {
+	protected override updateLabel(): codemavi {
 		if (this.options.label && this.label && this.themeIcon) {
 			dom.reset(this.label, renderIcon(this.themeIcon), this.action.label);
 		}

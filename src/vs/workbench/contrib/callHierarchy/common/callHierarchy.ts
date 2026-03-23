@@ -47,7 +47,7 @@ export interface OutgoingCall {
 
 export interface CallHierarchySession {
 	roots: CallHierarchyItem[];
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface CallHierarchyProvider {
@@ -87,7 +87,7 @@ export class CallHierarchyModel {
 		this.root = roots[0];
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.ref.release();
 	}
 

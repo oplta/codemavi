@@ -73,7 +73,7 @@ export abstract class AbstractTextResourceEditorInput extends AbstractResourceEd
 		return { resource: target };
 	}
 
-	override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
+	override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
 		await this.textFileService.revert(this.resource, options);
 	}
 }
@@ -119,7 +119,7 @@ export class TextResourceEditorInput extends AbstractTextResourceEditorInput imp
 		return this.name || super.getName();
 	}
 
-	setName(name: string): void {
+	setName(name: string): codemavi {
 		if (this.name !== name) {
 			this.name = name;
 
@@ -131,7 +131,7 @@ export class TextResourceEditorInput extends AbstractTextResourceEditorInput imp
 		return this.description;
 	}
 
-	setDescription(description: string): void {
+	setDescription(description: string): codemavi {
 		if (this.description !== description) {
 			this.description = description;
 
@@ -139,17 +139,17 @@ export class TextResourceEditorInput extends AbstractTextResourceEditorInput imp
 		}
 	}
 
-	setLanguageId(languageId: string, source?: string): void {
+	setLanguageId(languageId: string, source?: string): codemavi {
 		this.setPreferredLanguageId(languageId);
 
 		this.cachedModel?.setLanguageId(languageId, source);
 	}
 
-	setPreferredLanguageId(languageId: string): void {
+	setPreferredLanguageId(languageId: string): codemavi {
 		this.preferredLanguageId = languageId;
 	}
 
-	setPreferredContents(contents: string): void {
+	setPreferredContents(contents: string): codemavi {
 		this.preferredContents = contents;
 	}
 
@@ -206,7 +206,7 @@ export class TextResourceEditorInput extends AbstractTextResourceEditorInput imp
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		if (this.modelReference) {
 			this.modelReference.then(ref => ref.dispose());
 			this.modelReference = undefined;

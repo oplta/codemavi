@@ -46,7 +46,7 @@ export class TextSearchManager {
 		return this.queryProviderPair.query;
 	}
 
-	search(onProgress: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
+	search(onProgress: (matches: IFileMatch[]) => codemavi, token: CancellationToken): Promise<ISearchCompleteStats> {
 		const folderQueries = this.query.folderQueries || [];
 		const tokenSource = new CancellationTokenSource(token);
 
@@ -121,7 +121,7 @@ export class TextSearchManager {
 		return new TextSearchMatch2(result.uri, result.ranges.slice(0, size), result.previewText);
 	}
 
-	private async doSearch(folderQueries: IFolderQuery<URI>[], onResult: (result: TextSearchResult2, folderIdx: number) => void, token: CancellationToken): Promise<TextSearchComplete2 | null | undefined> {
+	private async doSearch(folderQueries: IFolderQuery<URI>[], onResult: (result: TextSearchResult2, folderIdx: number) => codemavi, token: CancellationToken): Promise<TextSearchComplete2 | null | undefined> {
 		const folderMappings: FolderQuerySearchTree<FolderQueryInfo> = new FolderQuerySearchTree<FolderQueryInfo>(
 			folderQueries,
 			(fq, i) => {
@@ -131,7 +131,7 @@ export class TextSearchManager {
 			() => true
 		);
 
-		const testingPs: Promise<void>[] = [];
+		const testingPs: Promise<codemavi>[] = [];
 		const progress = {
 			report: (result: TextSearchResult2) => {
 
@@ -237,11 +237,11 @@ export class TextSearchResultsCollector {
 	private _currentUri: URI | undefined;
 	private _currentFileMatch: IFileMatch | null = null;
 
-	constructor(private _onResult: (result: IFileMatch[]) => void) {
+	constructor(private _onResult: (result: IFileMatch[]) => codemavi) {
 		this._batchedCollector = new BatchedCollector<IFileMatch>(512, items => this.sendItems(items));
 	}
 
-	add(data: TextSearchResult2, folderIdx: number): void {
+	add(data: TextSearchResult2, folderIdx: number): codemavi {
 		// Collects TextSearchResults into IInternalFileMatches and collates using BatchedCollector.
 		// This is efficient for ripgrep which sends results back one file at a time. It wouldn't be efficient for other search
 		// providers that send results in random order. We could do this step afterwards instead.
@@ -261,19 +261,19 @@ export class TextSearchResultsCollector {
 		this._currentFileMatch.results!.push(extensionResultToFrontendResult(data));
 	}
 
-	private pushToCollector(): void {
+	private pushToCollector(): codemavi {
 		const size = this._currentFileMatch && this._currentFileMatch.results ?
 			this._currentFileMatch.results.length :
 			0;
 		this._batchedCollector.addItem(this._currentFileMatch!, size);
 	}
 
-	flush(): void {
+	flush(): codemavi {
 		this.pushToCollector();
 		this._batchedCollector.flush();
 	}
 
-	private sendItems(items: IFileMatch[]): void {
+	private sendItems(items: IFileMatch[]): codemavi {
 		this._onResult(items);
 	}
 }
@@ -324,10 +324,10 @@ export class BatchedCollector<T> {
 	private batchSize = 0;
 	private timeoutHandle: any;
 
-	constructor(private maxBatchSize: number, private cb: (items: T[]) => void) {
+	constructor(private maxBatchSize: number, private cb: (items: T[]) => codemavi) {
 	}
 
-	addItem(item: T, size: number): void {
+	addItem(item: T, size: number): codemavi {
 		if (!item) {
 			return;
 		}
@@ -335,7 +335,7 @@ export class BatchedCollector<T> {
 		this.addItemToBatch(item, size);
 	}
 
-	addItems(items: T[], size: number): void {
+	addItems(items: T[], size: number): codemavi {
 		if (!items) {
 			return;
 		}
@@ -343,19 +343,19 @@ export class BatchedCollector<T> {
 		this.addItemsToBatch(items, size);
 	}
 
-	private addItemToBatch(item: T, size: number): void {
+	private addItemToBatch(item: T, size: number): codemavi {
 		this.batch.push(item);
 		this.batchSize += size;
 		this.onUpdate();
 	}
 
-	private addItemsToBatch(item: T[], size: number): void {
+	private addItemsToBatch(item: T[], size: number): codemavi {
 		this.batch = this.batch.concat(item);
 		this.batchSize += size;
 		this.onUpdate();
 	}
 
-	private onUpdate(): void {
+	private onUpdate(): codemavi {
 		if (this.totalNumberCompleted < BatchedCollector.START_BATCH_AFTER_COUNT) {
 			// Flush because we aren't batching yet
 			this.flush();
@@ -370,7 +370,7 @@ export class BatchedCollector<T> {
 		}
 	}
 
-	flush(): void {
+	flush(): codemavi {
 		if (this.batchSize) {
 			this.totalNumberCompleted += this.batchSize;
 			this.cb(this.batch);

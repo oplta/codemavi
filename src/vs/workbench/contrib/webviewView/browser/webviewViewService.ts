@@ -46,17 +46,17 @@ export interface WebviewView {
 	/**
 	 * Fired when the webview view has been disposed of.
 	 */
-	readonly onDispose: Event<void>;
+	readonly onDispose: Event<codemavi>;
 
 	/**
 	 * Dispose of the webview view and clean up any associated resources.
 	 */
-	dispose(): void;
+	dispose(): codemavi;
 
 	/**
 	 * Force the webview view to show.
 	 */
-	show(preserveFocus: boolean): void;
+	show(preserveFocus: boolean): codemavi;
 }
 
 /**
@@ -66,7 +66,7 @@ interface IWebviewViewResolver {
 	/**
 	 * Fill in the contents of a webview view.
 	 */
-	resolve(webviewView: WebviewView, cancellation: CancellationToken): Promise<void>;
+	resolve(webviewView: WebviewView, cancellation: CancellationToken): Promise<codemavi>;
 }
 
 export const IWebviewViewService = createDecorator<IWebviewViewService>('webviewViewService');
@@ -89,7 +89,7 @@ export interface IWebviewViewService {
 	 * Try to resolve a webview view. The promise will not resolve until a resolver for the webview has been registered
 	 * and run
 	 */
-	resolve(viewType: string, webview: WebviewView, cancellation: CancellationToken): Promise<void>;
+	resolve(viewType: string, webview: WebviewView, cancellation: CancellationToken): Promise<codemavi>;
 }
 
 export class WebviewViewService extends Disposable implements IWebviewViewService {
@@ -98,7 +98,7 @@ export class WebviewViewService extends Disposable implements IWebviewViewServic
 
 	private readonly _resolvers = new Map<string, IWebviewViewResolver>();
 
-	private readonly _awaitingRevival = new Map<string, { readonly webview: WebviewView; readonly resolve: () => void }>();
+	private readonly _awaitingRevival = new Map<string, { readonly webview: WebviewView; readonly resolve: () => codemavi }>();
 
 	private readonly _onNewResolverRegistered = this._register(new Emitter<{ readonly viewType: string }>());
 	public readonly onNewResolverRegistered = this._onNewResolverRegistered.event;
@@ -124,14 +124,14 @@ export class WebviewViewService extends Disposable implements IWebviewViewServic
 		});
 	}
 
-	resolve(viewType: string, webview: WebviewView, cancellation: CancellationToken): Promise<void> {
+	resolve(viewType: string, webview: WebviewView, cancellation: CancellationToken): Promise<codemavi> {
 		const resolver = this._resolvers.get(viewType);
 		if (!resolver) {
 			if (this._awaitingRevival.has(viewType)) {
 				throw new Error('View already awaiting revival');
 			}
 
-			const { promise, resolve } = promiseWithResolvers<void>();
+			const { promise, resolve } = promiseWithResolvers<codemavi>();
 			this._awaitingRevival.set(viewType, { webview, resolve });
 			return promise;
 		}

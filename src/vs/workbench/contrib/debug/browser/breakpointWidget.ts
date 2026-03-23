@@ -50,7 +50,7 @@ const $ = dom.$;
 const IPrivateBreakpointWidgetService = createDecorator<IPrivateBreakpointWidgetService>('privateBreakpointWidgetService');
 interface IPrivateBreakpointWidgetService {
 	readonly _serviceBrand: undefined;
-	close(success: boolean): void;
+	close(success: boolean): codemavi;
 }
 const DECORATION_KEY = 'breakpointwidgetdecoration';
 
@@ -169,7 +169,7 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	private rememberInput(): void {
+	private rememberInput(): codemavi {
 		if (this.context !== Context.TRIGGER_POINT) {
 			const value = this.input.getModel().getValue();
 			switch (this.context) {
@@ -185,7 +185,7 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	private setInputMode(): void {
+	private setInputMode(): codemavi {
 		if (this.editor.hasModel()) {
 			// Use plaintext language for log messages, otherwise respect underlying editor language #125619
 			const languageId = this.context === Context.LOG_MESSAGE ? PLAINTEXT_LANGUAGE_ID : this.editor.getModel().getLanguageId();
@@ -193,17 +193,17 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	override show(rangeOrPos: IRange | IPosition): void {
+	override show(rangeOrPos: IRange | IPosition): codemavi {
 		const lineNum = this.input.getModel().getLineCount();
 		super.show(rangeOrPos, lineNum + 1);
 	}
 
-	fitHeightToContent(): void {
+	fitHeightToContent(): codemavi {
 		const lineNum = this.input.getModel().getLineCount();
 		this._relayout(lineNum + 1);
 	}
 
-	protected _fillContainer(container: HTMLElement): void {
+	protected _fillContainer(container: HTMLElement): codemavi {
 		this.setCssClass('breakpoint-widget');
 		const selectBox = new SelectBox([
 			{ text: nls.localize('expression', "Expression") },
@@ -331,19 +331,19 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	protected override _doLayout(heightInPixel: number, widthInPixel: number): void {
+	protected override _doLayout(heightInPixel: number, widthInPixel: number): codemavi {
 		this.heightInPx = heightInPixel;
 		this.input.layout({ height: heightInPixel, width: widthInPixel - 113 });
 		this.centerInputVertically();
 	}
 
-	protected override _onWidth(widthInPixel: number): void {
+	protected override _onWidth(widthInPixel: number): codemavi {
 		if (typeof this.heightInPx === 'number') {
 			this._doLayout(this.heightInPx, widthInPixel);
 		}
 	}
 
-	private createBreakpointInput(container: HTMLElement): void {
+	private createBreakpointInput(container: HTMLElement): codemavi {
 		const scopedInstatiationService = this.instantiationService.createChild(new ServiceCollection(
 			[IPrivateBreakpointWidgetService, this]
 		));
@@ -431,7 +431,7 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	close(success: boolean): void {
+	close(success: boolean): codemavi {
 		if (success) {
 			// if there is already a breakpoint on this location - remove it.
 
@@ -505,7 +505,7 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.input.dispose();
 		lifecycle.dispose(this.toDispose);
@@ -527,7 +527,7 @@ class AcceptBreakpointWidgetInputAction extends EditorCommand {
 		});
 	}
 
-	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		accessor.get(IPrivateBreakpointWidgetService).close(true);
 	}
 }
@@ -547,7 +547,7 @@ class CloseBreakpointWidgetCommand extends EditorCommand {
 		});
 	}
 
-	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 		const debugContribution = editor.getContribution<IBreakpointEditorContribution>(BREAKPOINT_EDITOR_CONTRIBUTION_ID);
 		if (debugContribution) {
 			// if focus is in outer editor we need to use the debug contribution to close

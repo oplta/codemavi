@@ -15,12 +15,12 @@ export const isRemote = env.remoteName !== undefined;
 export const isLinux = process.platform === 'linux';
 export const isLinuxSnap = isLinux && !!process.env['SNAP'] && !!process.env['SNAP_REVISION'];
 
-export function log(...args: any[]): void {
+export function log(...args: any[]): codemavi {
 	console.log.apply(console, ['git:', ...args]);
 }
 
 export interface IDisposable {
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export function dispose<T extends IDisposable>(disposables: T[]): T[] {
@@ -28,7 +28,7 @@ export function dispose<T extends IDisposable>(disposables: T[]): T[] {
 	return [];
 }
 
-export function toDisposable(dispose: () => void): IDisposable {
+export function toDisposable(dispose: () => codemavi): IDisposable {
 	return { dispose };
 }
 
@@ -67,8 +67,8 @@ export function anyEvent<T>(...events: Event<T>[]): Event<T> {
 	};
 }
 
-export function done<T>(promise: Promise<T>): Promise<void> {
-	return promise.then<void>(() => undefined);
+export function done<T>(promise: Promise<T>): Promise<codemavi> {
+	return promise.then<codemavi>(() => undefined);
 }
 
 export function onceEvent<T>(event: Event<T>): Event<T> {
@@ -389,8 +389,8 @@ export function isUndefined(obj: unknown): obj is undefined {
 
 interface ILimitedTaskFactory<T> {
 	factory: () => Promise<T>;
-	c: (value: T | Promise<T>) => void;
-	e: (error?: any) => void;
+	c: (value: T | Promise<T>) => codemavi;
+	e: (error?: any) => codemavi;
 }
 
 export class Limiter<T> {
@@ -412,7 +412,7 @@ export class Limiter<T> {
 		});
 	}
 
-	private consume(): void {
+	private consume(): codemavi {
 		while (this.outstandingPromises.length && this.runningPromises < this.maxDegreeOfParalellism) {
 			const iLimitedTask = this.outstandingPromises.shift()!;
 			this.runningPromises++;
@@ -423,7 +423,7 @@ export class Limiter<T> {
 		}
 	}
 
-	private consumed(): void {
+	private consumed(): codemavi {
 		this.runningPromises--;
 
 		if (this.outstandingPromises.length > 0) {
@@ -453,14 +453,14 @@ export class PromiseSource<T> {
 		});
 	}
 
-	resolve(value: T): void {
+	resolve(value: T): codemavi {
 		if (!this._promise) {
 			this._promise = Promise.resolve(value);
 			this._onDidComplete.fire({ success: true, value });
 		}
 	}
 
-	reject(err: any): void {
+	reject(err: any): codemavi {
 		if (!this._promise) {
 			this._promise = Promise.reject(err);
 			this._onDidComplete.fire({ success: false, err });

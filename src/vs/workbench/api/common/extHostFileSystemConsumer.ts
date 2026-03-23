@@ -74,7 +74,7 @@ export class ExtHostConsumerFileSystem {
 					return ExtHostConsumerFileSystem._handleError(err);
 				}
 			},
-			async createDirectory(uri: vscode.Uri): Promise<void> {
+			async createDirectory(uri: vscode.Uri): Promise<codemavi> {
 				try {
 					const provider = that._fileSystemProvider.get(uri.scheme);
 					if (provider && !provider.isReadonly) {
@@ -103,7 +103,7 @@ export class ExtHostConsumerFileSystem {
 					return ExtHostConsumerFileSystem._handleError(err);
 				}
 			},
-			async writeFile(uri: vscode.Uri, content: Uint8Array): Promise<void> {
+			async writeFile(uri: vscode.Uri, content: Uint8Array): Promise<codemavi> {
 				try {
 					const provider = that._fileSystemProvider.get(uri.scheme);
 					if (provider && !provider.isReadonly) {
@@ -118,7 +118,7 @@ export class ExtHostConsumerFileSystem {
 					return ExtHostConsumerFileSystem._handleError(err);
 				}
 			},
-			async delete(uri: vscode.Uri, options?: { recursive?: boolean; useTrash?: boolean }): Promise<void> {
+			async delete(uri: vscode.Uri, options?: { recursive?: boolean; useTrash?: boolean }): Promise<codemavi> {
 				try {
 					const provider = that._fileSystemProvider.get(uri.scheme);
 					if (provider && !provider.isReadonly && !options?.useTrash /* no shortcut: use trash */) {
@@ -132,7 +132,7 @@ export class ExtHostConsumerFileSystem {
 					return ExtHostConsumerFileSystem._handleError(err);
 				}
 			},
-			async rename(oldUri: vscode.Uri, newUri: vscode.Uri, options?: { overwrite?: boolean }): Promise<void> {
+			async rename(oldUri: vscode.Uri, newUri: vscode.Uri, options?: { overwrite?: boolean }): Promise<codemavi> {
 				try {
 					// no shortcut: potentially involves different schemes, does mkdirp
 					return await that._proxy.$rename(oldUri, newUri, { ...{ overwrite: false }, ...options });
@@ -140,7 +140,7 @@ export class ExtHostConsumerFileSystem {
 					return ExtHostConsumerFileSystem._handleError(err);
 				}
 			},
-			async copy(source: vscode.Uri, destination: vscode.Uri, options?: { overwrite?: boolean }): Promise<void> {
+			async copy(source: vscode.Uri, destination: vscode.Uri, options?: { overwrite?: boolean }): Promise<codemavi> {
 				try {
 					// no shortcut: potentially involves different schemes, does mkdirp
 					return await that._proxy.$copy(source, destination, { ...{ overwrite: false }, ...options });
@@ -158,7 +158,7 @@ export class ExtHostConsumerFileSystem {
 		});
 	}
 
-	private async mkdirp(provider: vscode.FileSystemProvider, providerExtUri: IExtUri, directory: vscode.Uri): Promise<void> {
+	private async mkdirp(provider: vscode.FileSystemProvider, providerExtUri: IExtUri, directory: vscode.Uri): Promise<codemavi> {
 		const directoriesToCreate: string[] = [];
 
 		while (!providerExtUri.isEqual(directory, providerExtUri.dirname(directory))) {

@@ -45,7 +45,7 @@ export abstract class NotebookSaveParticipant implements IStoredFileWorkingCopyS
 	constructor(
 		private readonly _editorService: IEditorService,
 	) { }
-	abstract participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void>;
+	abstract participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi>;
 
 	protected canParticipate(): boolean {
 		const editor = getNotebookEditorFromEditorPane(this._editorService.activeEditorPane);
@@ -68,7 +68,7 @@ class FormatOnSaveParticipant implements IStoredFileWorkingCopySaveParticipant {
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 	) { }
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
 		if (!workingCopy.model || !(workingCopy.model instanceof NotebookFileWorkingCopyModel)) {
 			return;
 		}
@@ -133,7 +133,7 @@ class TrimWhitespaceParticipant extends NotebookSaveParticipant {
 		super(editorService);
 	}
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<void> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<codemavi> {
 		const trimTrailingWhitespaceOption = this.configurationService.getValue<boolean>('files.trimTrailingWhitespace');
 		const trimInRegexAndStrings = this.configurationService.getValue<boolean>('files.trimTrailingWhitespaceInRegexAndStrings');
 		if (trimTrailingWhitespaceOption && this.canParticipate()) {
@@ -205,7 +205,7 @@ class TrimFinalNewLinesParticipant extends NotebookSaveParticipant {
 	}
 
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<void> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<codemavi> {
 		if (this.configurationService.getValue<boolean>('files.trimFinalNewlines') && this.canParticipate()) {
 			await this.doTrimFinalNewLines(workingCopy, context.reason === SaveReason.AUTO, progress);
 		}
@@ -226,7 +226,7 @@ class TrimFinalNewLinesParticipant extends NotebookSaveParticipant {
 		return 0;
 	}
 
-	private async doTrimFinalNewLines(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, isAutoSaved: boolean, progress: IProgress<IProgressStep>): Promise<void> {
+	private async doTrimFinalNewLines(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, isAutoSaved: boolean, progress: IProgress<IProgressStep>): Promise<codemavi> {
 		if (!workingCopy.model || !(workingCopy.model instanceof NotebookFileWorkingCopyModel)) {
 			return;
 		}
@@ -287,7 +287,7 @@ class InsertFinalNewLineParticipant extends NotebookSaveParticipant {
 		super(editorService);
 	}
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<void> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, _token: CancellationToken): Promise<codemavi> {
 		// waiting on notebook-specific override before this feature can sync with 'files.insertFinalNewline'
 		// if (this.configurationService.getValue('files.insertFinalNewline')) {
 
@@ -296,7 +296,7 @@ class InsertFinalNewLineParticipant extends NotebookSaveParticipant {
 		}
 	}
 
-	private async doInsertFinalNewLine(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, isAutoSaved: boolean, progress: IProgress<IProgressStep>): Promise<void> {
+	private async doInsertFinalNewLine(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, isAutoSaved: boolean, progress: IProgress<IProgressStep>): Promise<codemavi> {
 		if (!workingCopy.model || !(workingCopy.model instanceof NotebookFileWorkingCopyModel)) {
 			return;
 		}
@@ -351,7 +351,7 @@ class CodeActionOnSaveParticipant implements IStoredFileWorkingCopySaveParticipa
 	) {
 	}
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
 		const isTrusted = this.workspaceTrustManagementService.isWorkspaceTrusted();
 		if (!isTrusted) {
 			return;
@@ -497,7 +497,7 @@ export class CodeActionParticipantUtils {
 		codeActionsOnSave: readonly HierarchicalKind[],
 		excludes: readonly HierarchicalKind[],
 		progress: IProgress<IProgressStep>,
-		token: CancellationToken): Promise<void> {
+		token: CancellationToken): Promise<codemavi> {
 
 		const instantiationService: IInstantiationService = accessor.get(IInstantiationService);
 		const languageFeaturesService: ILanguageFeaturesService = accessor.get(ILanguageFeaturesService);
@@ -505,7 +505,7 @@ export class CodeActionParticipantUtils {
 
 		const getActionProgress = new class implements IProgress<CodeActionProvider> {
 			private _names = new Set<string>();
-			private _report(): void {
+			private _report(): codemavi {
 				progress.report({
 					message: localize(
 						{ key: 'codeaction.get2', comment: ['[configure]({1}) is a link. Only translate `configure`. Do not change brackets and parentheses or {1}'] },
@@ -579,7 +579,7 @@ export class CodeActionParticipantUtils {
 
 		const getActionProgress = new class implements IProgress<CodeActionProvider> {
 			private _names = new Set<string>();
-			private _report(): void {
+			private _report(): codemavi {
 				progress.report({
 					message: localize(
 						{ key: 'codeaction.get2', comment: ['[configure]({1}) is a link. Only translate `configure`. Do not change brackets and parentheses or {1}'] },
@@ -655,7 +655,7 @@ export class SaveParticipantsContribution extends Disposable implements IWorkben
 		this.registerSaveParticipants();
 	}
 
-	private registerSaveParticipants(): void {
+	private registerSaveParticipants(): codemavi {
 		this._register(this.workingCopyFileService.addSaveParticipant(this.instantiationService.createInstance(TrimWhitespaceParticipant)));
 		this._register(this.workingCopyFileService.addSaveParticipant(this.instantiationService.createInstance(CodeActionOnSaveParticipant)));
 		this._register(this.workingCopyFileService.addSaveParticipant(this.instantiationService.createInstance(FormatOnSaveParticipant)));

@@ -26,7 +26,7 @@ import { InputMode } from '../../common/inputMode.js';
 
 export interface IEditorConstructionOptions extends IEditorOptions {
 	/**
-	 * The initial editor dimension (to avoid measuring the container).
+	 * The initial editor dimension (to acodemavi measuring the container).
 	 */
 	dimension?: IDimension;
 	/**
@@ -99,7 +99,7 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		this._register(InputMode.onDidChangeInputMode(() => this._recomputeOptions()));
 	}
 
-	private _recomputeOptions(): void {
+	private _recomputeOptions(): codemavi {
 		const newOptions = this._computeOptions();
 		const changeEvent = EditorOptionsUtil.checkEquals(this.options, newOptions);
 		if (changeEvent === null) {
@@ -158,7 +158,7 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		return this._rawOptions;
 	}
 
-	public updateOptions(_newOptions: Readonly<IEditorOptions>): void {
+	public updateOptions(_newOptions: Readonly<IEditorOptions>): codemavi {
 		const newOptions = deepCloneAndMigrateOptions(_newOptions);
 
 		const didChange = EditorOptionsUtil.applyUpdate(this._rawOptions, newOptions);
@@ -170,11 +170,11 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		this._recomputeOptions();
 	}
 
-	public observeContainer(dimension?: IDimension): void {
+	public observeContainer(dimension?: IDimension): codemavi {
 		this._containerObserver.observe(dimension);
 	}
 
-	public setIsDominatedByLongLines(isDominatedByLongLines: boolean): void {
+	public setIsDominatedByLongLines(isDominatedByLongLines: boolean): codemavi {
 		if (this._isDominatedByLongLines === isDominatedByLongLines) {
 			return;
 		}
@@ -182,7 +182,7 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		this._recomputeOptions();
 	}
 
-	public setModelLineCount(modelLineCount: number): void {
+	public setModelLineCount(modelLineCount: number): codemavi {
 		const lineNumbersDigitCount = digitCount(modelLineCount);
 		if (this._lineNumbersDigitCount === lineNumbersDigitCount) {
 			return;
@@ -191,7 +191,7 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		this._recomputeOptions();
 	}
 
-	public setViewLineCount(viewLineCount: number): void {
+	public setViewLineCount(viewLineCount: number): codemavi {
 		if (this._viewLineCount === viewLineCount) {
 			return;
 		}
@@ -207,7 +207,7 @@ export class EditorConfiguration extends Disposable implements IEditorConfigurat
 		this._recomputeOptions();
 	}
 
-	public setGlyphMarginDecorationLaneCount(decorationLaneCount: number): void {
+	public setGlyphMarginDecorationLaneCount(decorationLaneCount: number): codemavi {
 		if (this._glyphMarginDecorationLaneCount === decorationLaneCount) {
 			return;
 		}
@@ -259,7 +259,7 @@ class ValidatedEditorOptions implements IValidatedEditorOptions {
 	public get<T extends EditorOption>(id: T): FindComputedEditorOptionValueById<T> {
 		return this._values[id];
 	}
-	public _write<T>(option: EditorOption, value: T): void {
+	public _write<T>(option: EditorOption, value: T): codemavi {
 		this._values[option] = value;
 	}
 }
@@ -275,7 +275,7 @@ export class ComputedEditorOptions implements IComputedEditorOptions {
 	public get<T extends EditorOption>(id: T): FindComputedEditorOptionValueById<T> {
 		return this._read(id);
 	}
-	public _write<T>(id: EditorOption, value: T): void {
+	public _write<T>(id: EditorOption, value: T): codemavi {
 		this._values[id] = value;
 	}
 }

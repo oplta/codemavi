@@ -33,22 +33,22 @@ export class MainThreadWebviewsViews extends Disposable implements extHostProtoc
 		this._proxy = context.getProxy(extHostProtocol.ExtHostContext.ExtHostWebviewViews);
 	}
 
-	public $setWebviewViewTitle(handle: extHostProtocol.WebviewHandle, value: string | undefined): void {
+	public $setWebviewViewTitle(handle: extHostProtocol.WebviewHandle, value: string | undefined): codemavi {
 		const webviewView = this.getWebviewView(handle);
 		webviewView.title = value;
 	}
 
-	public $setWebviewViewDescription(handle: extHostProtocol.WebviewHandle, value: string | undefined): void {
+	public $setWebviewViewDescription(handle: extHostProtocol.WebviewHandle, value: string | undefined): codemavi {
 		const webviewView = this.getWebviewView(handle);
 		webviewView.description = value;
 	}
 
-	public $setWebviewViewBadge(handle: string, badge: IViewBadge | undefined): void {
+	public $setWebviewViewBadge(handle: string, badge: IViewBadge | undefined): codemavi {
 		const webviewView = this.getWebviewView(handle);
 		webviewView.badge = badge;
 	}
 
-	public $show(handle: extHostProtocol.WebviewHandle, preserveFocus: boolean): void {
+	public $show(handle: extHostProtocol.WebviewHandle, preserveFocus: boolean): codemavi {
 		const webviewView = this.getWebviewView(handle);
 		webviewView.show(preserveFocus);
 	}
@@ -57,7 +57,7 @@ export class MainThreadWebviewsViews extends Disposable implements extHostProtoc
 		extensionData: extHostProtocol.WebviewExtensionDescription,
 		viewType: string,
 		options: { retainContextWhenHidden?: boolean; serializeBuffersForPostMessage: boolean }
-	): void {
+	): codemavi {
 		if (this._webviewViewProviders.has(viewType)) {
 			throw new Error(`View provider for ${viewType} already registered`);
 		}
@@ -122,7 +122,7 @@ export class MainThreadWebviewsViews extends Disposable implements extHostProtoc
 		this._webviewViewProviders.set(viewType, registration);
 	}
 
-	public $unregisterWebviewViewProvider(viewType: string): void {
+	public $unregisterWebviewViewProvider(viewType: string): codemavi {
 		if (!this._webviewViewProviders.has(viewType)) {
 			throw new Error(`No view provider for ${viewType} registered`);
 		}

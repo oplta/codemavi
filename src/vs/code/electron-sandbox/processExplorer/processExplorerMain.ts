@@ -106,7 +106,7 @@ class ProcessTreeDataSource implements IDataSource<ProcessTree, ProcessInformati
 	}
 }
 
-class ProcessHeaderTreeRenderer implements ITreeRenderer<ProcessInformation, void, IProcessItemTemplateData> {
+class ProcessHeaderTreeRenderer implements ITreeRenderer<ProcessInformation, codemavi, IProcessItemTemplateData> {
 	templateId: string = 'header';
 
 	renderTemplate(container: HTMLElement): IProcessItemTemplateData {
@@ -118,7 +118,7 @@ class ProcessHeaderTreeRenderer implements ITreeRenderer<ProcessInformation, voi
 		return { name, CPU, memory, PID };
 	}
 
-	renderElement(node: ITreeNode<ProcessInformation, void>, index: number, templateData: IProcessItemTemplateData, height: number | undefined): void {
+	renderElement(node: ITreeNode<ProcessInformation, codemavi>, index: number, templateData: IProcessItemTemplateData, height: number | undefined): codemavi {
 		templateData.name.textContent = localize('name', "Process Name");
 		templateData.CPU.textContent = localize('cpu', "CPU (%)");
 		templateData.PID.textContent = localize('pid', "PID");
@@ -126,12 +126,12 @@ class ProcessHeaderTreeRenderer implements ITreeRenderer<ProcessInformation, voi
 
 	}
 
-	disposeTemplate(templateData: any): void {
+	disposeTemplate(templateData: any): codemavi {
 		// Nothing to do
 	}
 }
 
-class MachineRenderer implements ITreeRenderer<MachineProcessInformation, void, IProcessRowTemplateData> {
+class MachineRenderer implements ITreeRenderer<MachineProcessInformation, codemavi, IProcessRowTemplateData> {
 	templateId: string = 'machine';
 	renderTemplate(container: HTMLElement): IProcessRowTemplateData {
 		const data = Object.create(null);
@@ -139,15 +139,15 @@ class MachineRenderer implements ITreeRenderer<MachineProcessInformation, void, 
 		data.name = append(row, $('.nameLabel'));
 		return data;
 	}
-	renderElement(node: ITreeNode<MachineProcessInformation, void>, index: number, templateData: IProcessRowTemplateData, height: number | undefined): void {
+	renderElement(node: ITreeNode<MachineProcessInformation, codemavi>, index: number, templateData: IProcessRowTemplateData, height: number | undefined): codemavi {
 		templateData.name.textContent = node.element.name;
 	}
-	disposeTemplate(templateData: IProcessRowTemplateData): void {
+	disposeTemplate(templateData: IProcessRowTemplateData): codemavi {
 		// Nothing to do
 	}
 }
 
-class ErrorRenderer implements ITreeRenderer<IRemoteDiagnosticError, void, IProcessRowTemplateData> {
+class ErrorRenderer implements ITreeRenderer<IRemoteDiagnosticError, codemavi, IProcessRowTemplateData> {
 	templateId: string = 'error';
 	renderTemplate(container: HTMLElement): IProcessRowTemplateData {
 		const data = Object.create(null);
@@ -155,16 +155,16 @@ class ErrorRenderer implements ITreeRenderer<IRemoteDiagnosticError, void, IProc
 		data.name = append(row, $('.nameLabel'));
 		return data;
 	}
-	renderElement(node: ITreeNode<IRemoteDiagnosticError, void>, index: number, templateData: IProcessRowTemplateData, height: number | undefined): void {
+	renderElement(node: ITreeNode<IRemoteDiagnosticError, codemavi>, index: number, templateData: IProcessRowTemplateData, height: number | undefined): codemavi {
 		templateData.name.textContent = node.element.errorMessage;
 	}
-	disposeTemplate(templateData: IProcessRowTemplateData): void {
+	disposeTemplate(templateData: IProcessRowTemplateData): codemavi {
 		// Nothing to do
 	}
 }
 
 
-class ProcessRenderer implements ITreeRenderer<ProcessItem, void, IProcessItemTemplateData> {
+class ProcessRenderer implements ITreeRenderer<ProcessItem, codemavi, IProcessItemTemplateData> {
 	constructor(private platform: string, private totalMem: number, private mapPidToName: Map<number, string>) { }
 
 	templateId: string = 'process';
@@ -178,7 +178,7 @@ class ProcessRenderer implements ITreeRenderer<ProcessItem, void, IProcessItemTe
 
 		return { name, CPU, PID, memory };
 	}
-	renderElement(node: ITreeNode<ProcessItem, void>, index: number, templateData: IProcessItemTemplateData, height: number | undefined): void {
+	renderElement(node: ITreeNode<ProcessItem, codemavi>, index: number, templateData: IProcessItemTemplateData, height: number | undefined): codemavi {
 		const { element } = node;
 
 		const pid = element.pid.toFixed(0);
@@ -199,7 +199,7 @@ class ProcessRenderer implements ITreeRenderer<ProcessItem, void, IProcessItemTe
 		templateData.memory.textContent = (memory / ByteSize.MB).toFixed(0);
 	}
 
-	disposeTemplate(templateData: IProcessItemTemplateData): void {
+	disposeTemplate(templateData: IProcessItemTemplateData): codemavi {
 		// Nothing to do
 	}
 }
@@ -275,7 +275,7 @@ class ProcessExplorer {
 		ipcRenderer.send('vscode:listProcesses');
 	}
 
-	private setEventHandlers(data: ProcessExplorerData): void {
+	private setEventHandlers(data: ProcessExplorerData): codemavi {
 		mainWindow.document.onkeydown = (e: KeyboardEvent) => {
 			const cmdOrCtrlKey = data.platform === 'darwin' ? e.metaKey : e.ctrlKey;
 
@@ -299,7 +299,7 @@ class ProcessExplorer {
 		};
 	}
 
-	private async createProcessTree(processRoots: MachineProcessInformation[]): Promise<void> {
+	private async createProcessTree(processRoots: MachineProcessInformation[]): Promise<codemavi> {
 		const container = mainWindow.document.getElementById('process-list');
 		if (!container) {
 			return;
@@ -349,7 +349,7 @@ class ProcessExplorer {
 			const event = new StandardKeyboardEvent(e);
 			if (event.keyCode === KeyCode.KeyE && event.altKey) {
 				const selectionPids = this.getSelectedPids();
-				void Promise.all(selectionPids.map((pid) => this.nativeHostService.killProcess(pid, 'SIGTERM'))).then(() => this.tree?.refresh());
+				codemavi Promise.all(selectionPids.map((pid) => this.nativeHostService.killProcess(pid, 'SIGTERM'))).then(() => this.tree?.refresh());
 			}
 		});
 		this.tree.onContextMenu(e => {
@@ -396,7 +396,7 @@ class ProcessExplorer {
 		ipcRenderer.send('vscode:workbenchCommand', { id: 'debug.startFromConfig', from: 'processExplorer', args: [config] });
 	}
 
-	private applyStyles(styles: ProcessExplorerStyles): void {
+	private applyStyles(styles: ProcessExplorerStyles): codemavi {
 		const styleElement = createStyleSheet();
 		const content: string[] = [];
 
@@ -552,7 +552,7 @@ class ProcessExplorer {
 		popup(items);
 	}
 
-	private requestProcessList(totalWaitTime: number): void {
+	private requestProcessList(totalWaitTime: number): codemavi {
 		setTimeout(() => {
 			const nextRequestTime = Date.now();
 			const waited = totalWaitTime + nextRequestTime - this.lastRequestTime;
@@ -593,10 +593,10 @@ function createCodiconStyleSheet() {
 }
 
 export interface IProcessExplorerMain {
-	startup(configuration: ProcessExplorerWindowConfiguration): void;
+	startup(configuration: ProcessExplorerWindowConfiguration): codemavi;
 }
 
-export function startup(configuration: ProcessExplorerWindowConfiguration): void {
+export function startup(configuration: ProcessExplorerWindowConfiguration): codemavi {
 	const platformClass = configuration.data.platform === 'win32' ? 'windows' : configuration.data.platform === 'linux' ? 'linux' : 'mac';
 	mainWindow.document.body.classList.add(platformClass); // used by our fonts
 	createCodiconStyleSheet();

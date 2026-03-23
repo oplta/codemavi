@@ -309,7 +309,7 @@ export interface IDialogHandler {
 	/**
 	 * Present the about dialog to the user.
 	 */
-	about(): Promise<void>;
+	about(): Promise<codemavi>;
 }
 
 enum DialogKind {
@@ -439,7 +439,7 @@ export abstract class AbstractDialogHandler implements IDialogHandler {
 	abstract confirm(confirmation: IConfirmation): Promise<IConfirmationResult>;
 	abstract input(input: IInput): Promise<IInputResult>;
 	abstract prompt<T>(prompt: IPrompt<T>): Promise<IAsyncPromptResult<T>>;
-	abstract about(): Promise<void>;
+	abstract about(): Promise<codemavi>;
 }
 
 /**
@@ -455,12 +455,12 @@ export interface IDialogService {
 	/**
 	 * An event that fires when a dialog is about to show.
 	 */
-	onWillShowDialog: Event<void>;
+	onWillShowDialog: Event<codemavi>;
 
 	/**
 	 * An event that fires when a dialog did show (closed).
 	 */
-	onDidShowDialog: Event<void>;
+	onDidShowDialog: Event<codemavi>;
 
 	/**
 	 * Ask the user for confirmation with a modal dialog.
@@ -489,22 +489,22 @@ export interface IDialogService {
 	/**
 	 * Show a modal info dialog.
 	 */
-	info(message: string, detail?: string): Promise<void>;
+	info(message: string, detail?: string): Promise<codemavi>;
 
 	/**
 	 * Show a modal warning dialog.
 	 */
-	warn(message: string, detail?: string): Promise<void>;
+	warn(message: string, detail?: string): Promise<codemavi>;
 
 	/**
 	 * Show a modal error dialog.
 	 */
-	error(message: string, detail?: string): Promise<void>;
+	error(message: string, detail?: string): Promise<codemavi>;
 
 	/**
 	 * Present the about dialog to the user.
 	 */
-	about(): Promise<void>;
+	about(): Promise<codemavi>;
 }
 
 export const IFileDialogService = createDecorator<IFileDialogService>('fileDialogService');
@@ -540,22 +540,22 @@ export interface IFileDialogService {
 	/**
 	 * Shows a file-folder selection dialog and opens the selected entry.
 	 */
-	pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<void>;
+	pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
 
 	/**
 	 * Shows a file selection dialog and opens the selected entry.
 	 */
-	pickFileAndOpen(options: IPickAndOpenOptions): Promise<void>;
+	pickFileAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
 
 	/**
 	 * Shows a folder selection dialog and opens the selected entry.
 	 */
-	pickFolderAndOpen(options: IPickAndOpenOptions): Promise<void>;
+	pickFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
 
 	/**
 	 * Shows a workspace selection dialog and opens the selected entry.
 	 */
-	pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<void>;
+	pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
 
 	/**
 	 * Shows a save file dialog and save the file at the chosen file URI.

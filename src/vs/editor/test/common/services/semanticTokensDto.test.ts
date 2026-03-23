@@ -20,7 +20,7 @@ suite('SemanticTokensDto', () => {
 		return result;
 	}
 
-	function assertEqualFull(actual: IFullSemanticTokensDto, expected: IFullSemanticTokensDto): void {
+	function assertEqualFull(actual: IFullSemanticTokensDto, expected: IFullSemanticTokensDto): codemavi {
 		const convert = (dto: IFullSemanticTokensDto) => {
 			return {
 				id: dto.id,
@@ -31,7 +31,7 @@ suite('SemanticTokensDto', () => {
 		assert.deepStrictEqual(convert(actual), convert(expected));
 	}
 
-	function assertEqualDelta(actual: IDeltaSemanticTokensDto, expected: IDeltaSemanticTokensDto): void {
+	function assertEqualDelta(actual: IDeltaSemanticTokensDto, expected: IDeltaSemanticTokensDto): codemavi {
 		const convertOne = (delta: { start: number; deleteCount: number; data?: Uint32Array }) => {
 			if (!delta.data) {
 				return delta;
@@ -52,7 +52,7 @@ suite('SemanticTokensDto', () => {
 		assert.deepStrictEqual(convert(actual), convert(expected));
 	}
 
-	function testRoundTrip(value: ISemanticTokensDto): void {
+	function testRoundTrip(value: ISemanticTokensDto): codemavi {
 		const decoded = decodeSemanticTokensDto(encodeSemanticTokensDto(value));
 		if (value.type === 'full' && decoded.type === 'full') {
 			assertEqualFull(decoded, value);

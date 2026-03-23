@@ -26,7 +26,7 @@ export interface ITestTreeProjection extends IDisposable {
 	/**
 	 * Event that fires when the projection changes.
 	 */
-	onUpdate: Event<void>;
+	onUpdate: Event<codemavi>;
 
 	/**
 	 * State to use for applying default collapse state of items.
@@ -36,7 +36,7 @@ export interface ITestTreeProjection extends IDisposable {
 	/**
 	 * Fired when an element in the tree is expanded.
 	 */
-	expandElement(element: TestItemTreeElement, depth: number): void;
+	expandElement(element: TestItemTreeElement, depth: number): codemavi;
 
 	/**
 	 * Gets an element by its extension-assigned ID.
@@ -46,7 +46,7 @@ export interface ITestTreeProjection extends IDisposable {
 	/**
 	 * Applies pending update to the tree.
 	 */
-	applyTo(tree: ObjectTree<TestExplorerTreeElement, FuzzyScore>): void;
+	applyTo(tree: ObjectTree<TestExplorerTreeElement, FuzzyScore>): codemavi;
 }
 
 let idCounter = 0;
@@ -54,7 +54,7 @@ let idCounter = 0;
 const getId = () => String(idCounter++);
 
 export abstract class TestItemTreeElement {
-	protected readonly changeEmitter = new Emitter<void>();
+	protected readonly changeEmitter = new Emitter<codemavi>();
 
 	/**
 	 * Fired whenever the element or test properties change.

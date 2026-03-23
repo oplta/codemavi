@@ -18,7 +18,7 @@ export interface IExtensionStoragePaths {
 	whenReady: Promise<any>;
 	workspaceValue(extension: IExtensionDescription): URI | undefined;
 	globalValue(extension: IExtensionDescription): URI;
-	onWillDeactivateAll(): void;
+	onWillDeactivateAll(): codemavi;
 }
 
 export class ExtensionStoragePaths implements IExtensionStoragePaths {
@@ -90,6 +90,6 @@ export class ExtensionStoragePaths implements IExtensionStoragePaths {
 		return URI.joinPath(this._environment.globalStorageHome, extension.identifier.value.toLowerCase());
 	}
 
-	onWillDeactivateAll(): void {
+	onWillDeactivateAll(): codemavi {
 	}
 }

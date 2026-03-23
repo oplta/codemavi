@@ -83,7 +83,7 @@ namespace Configuration {
 
 const taskDefinitionsExtPoint = ExtensionsRegistry.registerExtensionPoint<Configuration.ITaskDefinition[]>({
 	extensionPoint: 'taskDefinitions',
-	activationEventsGenerator: (contributions: Configuration.ITaskDefinition[], result: { push(item: string): void }) => {
+	activationEventsGenerator: (contributions: Configuration.ITaskDefinition[], result: { push(item: string): codemavi }) => {
 		for (const task of contributions) {
 			if (task.type) {
 				result.push(`onTaskType:${task.type}`);
@@ -98,25 +98,25 @@ const taskDefinitionsExtPoint = ExtensionsRegistry.registerExtensionPoint<Config
 });
 
 export interface ITaskDefinitionRegistry {
-	onReady(): Promise<void>;
+	onReady(): Promise<codemavi>;
 
 	get(key: string): Tasks.ITaskDefinition;
 	all(): Tasks.ITaskDefinition[];
 	getJsonSchema(): IJSONSchema;
-	onDefinitionsChanged: Event<void>;
+	onDefinitionsChanged: Event<codemavi>;
 }
 
 class TaskDefinitionRegistryImpl implements ITaskDefinitionRegistry {
 
 	private taskTypes: IStringDictionary<Tasks.ITaskDefinition>;
-	private readyPromise: Promise<void>;
+	private readyPromise: Promise<codemavi>;
 	private _schema: IJSONSchema | undefined;
-	private _onDefinitionsChanged: Emitter<void> = new Emitter();
-	public onDefinitionsChanged: Event<void> = this._onDefinitionsChanged.event;
+	private _onDefinitionsChanged: Emitter<codemavi> = new Emitter();
+	public onDefinitionsChanged: Event<codemavi> = this._onDefinitionsChanged.event;
 
 	constructor() {
 		this.taskTypes = Object.create(null);
-		this.readyPromise = new Promise<void>((resolve, reject) => {
+		this.readyPromise = new Promise<codemavi>((resolve, reject) => {
 			taskDefinitionsExtPoint.setHandler((extensions, delta) => {
 				this._schema = undefined;
 				try {
@@ -147,7 +147,7 @@ class TaskDefinitionRegistryImpl implements ITaskDefinitionRegistry {
 		});
 	}
 
-	public onReady(): Promise<void> {
+	public onReady(): Promise<codemavi> {
 		return this.readyPromise;
 	}
 

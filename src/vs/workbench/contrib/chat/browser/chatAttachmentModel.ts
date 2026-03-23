@@ -41,7 +41,7 @@ export class ChatAttachmentModel extends Disposable {
 		return Array.from(this._attachments.values());
 	}
 
-	protected _onDidChangeContext = this._register(new Emitter<void>());
+	protected _onDidChangeContext = this._register(new Emitter<codemavi>());
 	readonly onDidChangeContext = this._onDidChangeContext.event;
 
 	get size(): number {
@@ -61,7 +61,7 @@ export class ChatAttachmentModel extends Disposable {
 		return new Set(this._attachments.keys());
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._attachments.clear();
 		this._onDidChangeContext.fire();
 	}

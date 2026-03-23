@@ -82,7 +82,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		this.bigSurOrNewer = isBigSurOrNewer(environmentService.os.release);
 	}
 
-	protected override onMenubarVisibilityChanged(visible: boolean): void {
+	protected override onMenubarVisibilityChanged(visible: boolean): codemavi {
 
 		// Hide title when toggling menu bar
 		if ((isWindows || isLinux) && this.currentMenubarVisibility === 'toggle' && visible) {
@@ -97,7 +97,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		super.onMenubarVisibilityChanged(visible);
 	}
 
-	protected override onConfigurationChanged(event: IConfigurationChangeEvent): void {
+	protected override onConfigurationChanged(event: IConfigurationChangeEvent): codemavi {
 		super.onConfigurationChanged(event);
 
 		if (event.affectsConfiguration('window.doubleClickIconToClose')) {
@@ -107,7 +107,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		}
 	}
 
-	private onUpdateAppIconDragBehavior(): void {
+	private onUpdateAppIconDragBehavior(): codemavi {
 		const setting = this.configurationService.getValue('window.doubleClickIconToClose');
 		if (setting && this.appIcon) {
 			(this.appIcon.style as any)['-webkit-app-region'] = 'no-drag';
@@ -116,7 +116,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		}
 	}
 
-	protected override installMenubar(): void {
+	protected override installMenubar(): codemavi {
 		super.installMenubar();
 
 		if (this.menubar) {
@@ -128,7 +128,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		}
 	}
 
-	private onMenubarFocusChanged(focused: boolean): void {
+	private onMenubarFocusChanged(focused: boolean): codemavi {
 		if ((isWindows || isLinux) && this.currentMenubarVisibility !== 'compact' && this.dragRegion) {
 			if (focused) {
 				hide(this.dragRegion);
@@ -212,7 +212,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		return result;
 	}
 
-	private onDidChangeWindowMaximized(maximized: boolean): void {
+	private onDidChangeWindowMaximized(maximized: boolean): codemavi {
 		if (this.maxRestoreControl) {
 			if (maximized) {
 				this.maxRestoreControl.classList.remove(...ThemeIcon.asClassNameArray(Codicon.chromeMaximize));
@@ -232,7 +232,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		}
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		super.updateStyles();
 
 		// Part container
@@ -253,7 +253,7 @@ export class NativeTitlebarPart extends BrowserTitlebarPart {
 		}
 	}
 
-	override layout(width: number, height: number): void {
+	override layout(width: number, height: number): codemavi {
 		super.layout(width, height);
 
 		if (useWindowControlsOverlay(this.configurationService)) {

@@ -220,11 +220,11 @@ export interface IEditorGroupsView {
 	moveGroup(group: IEditorGroupView | GroupIdentifier, location: IEditorGroupView | GroupIdentifier, direction: GroupDirection): IEditorGroupView;
 	copyGroup(group: IEditorGroupView | GroupIdentifier, location: IEditorGroupView | GroupIdentifier, direction: GroupDirection): IEditorGroupView;
 
-	removeGroup(group: IEditorGroupView | GroupIdentifier, preserveFocus?: boolean): void;
+	removeGroup(group: IEditorGroupView | GroupIdentifier, preserveFocus?: boolean): codemavi;
 
-	arrangeGroups(arrangement: GroupsArrangement, target?: IEditorGroupView | GroupIdentifier): void;
-	toggleMaximizeGroup(group?: IEditorGroupView | GroupIdentifier): void;
-	toggleExpandGroup(group?: IEditorGroupView | GroupIdentifier): void;
+	arrangeGroups(arrangement: GroupsArrangement, target?: IEditorGroupView | GroupIdentifier): codemavi;
+	toggleMaximizeGroup(group?: IEditorGroupView | GroupIdentifier): codemavi;
+	toggleExpandGroup(group?: IEditorGroupView | GroupIdentifier): codemavi;
 }
 
 export interface IEditorGroupTitleHeight {
@@ -257,7 +257,7 @@ export interface IEditorGroupViewOptions {
  */
 export interface IEditorGroupView extends IDisposable, ISerializableView, IEditorGroup {
 
-	readonly onDidFocus: Event<void>;
+	readonly onDidFocus: Event<codemavi>;
 
 	readonly onWillOpenEditor: Event<IEditorWillOpenEvent>;
 	readonly onDidOpenEditorFail: Event<EditorInput>;
@@ -272,20 +272,20 @@ export interface IEditorGroupView extends IDisposable, ISerializableView, IEdito
 	 * For a group with active editor, the promise will resolve
 	 * when the active editor has finished to resolve.
 	 */
-	readonly whenRestored: Promise<void>;
+	readonly whenRestored: Promise<codemavi>;
 
 	readonly titleHeight: IEditorGroupTitleHeight;
 
 	readonly disposed: boolean;
 
-	setActive(isActive: boolean): void;
+	setActive(isActive: boolean): codemavi;
 
-	notifyIndexChanged(newIndex: number): void;
-	notifyLabelChanged(newLabel: string): void;
+	notifyIndexChanged(newIndex: number): codemavi;
+	notifyLabelChanged(newLabel: string): codemavi;
 
 	openEditor(editor: EditorInput, options?: IEditorOptions, internalOptions?: IInternalEditorOpenOptions): Promise<IEditorPane | undefined>;
 
-	relayout(): void;
+	relayout(): codemavi;
 }
 
 export function fillActiveEditorViewState(group: IEditorGroup, expectedActiveEditor?: EditorInput, presetOptions?: IEditorOptions): IEditorOptions {
@@ -359,7 +359,7 @@ export interface EditorServiceImpl extends IEditorService {
 	/**
 	 * Emitted when the list of most recently active editors change.
 	 */
-	readonly onDidMostRecentlyActiveEditorsChange: Event<void>;
+	readonly onDidMostRecentlyActiveEditorsChange: Event<codemavi>;
 }
 
 export interface IInternalEditorTitleControlOptions {

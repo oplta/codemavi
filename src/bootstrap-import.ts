@@ -18,7 +18,7 @@ import { join } from 'node:path';
 
 const _specifierToUrl: Record<string, string> = {};
 
-export async function initialize(injectPath: string): Promise<void> {
+export async function initialize(injectPath: string): Promise<codemavi> {
 	// populate mappings
 
 	const injectPackageJSONPath = fileURLToPath(new URL('../package.json', pathToFileURL(injectPath)));

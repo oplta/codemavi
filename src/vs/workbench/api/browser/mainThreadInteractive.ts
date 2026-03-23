@@ -30,7 +30,7 @@ export class MainThreadInteractive implements MainThreadInteractiveShape {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 
 	}

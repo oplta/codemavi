@@ -35,7 +35,7 @@ export class AllowedExtensionsService extends Disposable implements IAllowedExte
 	get allowedExtensionsConfigValue(): AllowedExtensionsConfigValueType | undefined {
 		return this._allowedExtensionsConfigValue;
 	}
-	private _onDidChangeAllowedExtensions = this._register(new Emitter<void>());
+	private _onDidChangeAllowedExtensions = this._register(new Emitter<codemavi>());
 	readonly onDidChangeAllowedExtensionsConfigValue = this._onDidChangeAllowedExtensions.event;
 
 	constructor(

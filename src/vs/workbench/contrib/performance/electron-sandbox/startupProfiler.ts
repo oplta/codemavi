@@ -44,7 +44,7 @@ export class StartupProfiler implements IWorkbenchContribution {
 		});
 	}
 
-	private _stopProfiling(): void {
+	private _stopProfiling(): codemavi {
 
 		if (!this._environmentService.args['prof-startup-prefix']) {
 			return;
@@ -57,7 +57,7 @@ export class StartupProfiler implements IWorkbenchContribution {
 		const removeArgs: string[] = ['--prof-startup'];
 		const markerFile = this._fileService.readFile(profileFilenamePrefix).then(value => removeArgs.push(...value.toString().split('|')))
 			.then(() => this._fileService.del(profileFilenamePrefix, { recursive: true })) // (1) delete the file to tell the main process to stop profiling
-			.then(() => new Promise<void>(resolve => { // (2) wait for main that recreates the fail to signal profiling has stopped
+			.then(() => new Promise<codemavi>(resolve => { // (2) wait for main that recreates the fail to signal profiling has stopped
 				const check = () => {
 					this._fileService.exists(profileFilenamePrefix).then(exists => {
 						if (exists) {
@@ -112,7 +112,7 @@ export class StartupProfiler implements IWorkbenchContribution {
 		});
 	}
 
-	private async _createPerfIssue(files: string[]): Promise<void> {
+	private async _createPerfIssue(files: string[]): Promise<codemavi> {
 		const reportIssueUrl = this._productService.reportIssueUrl;
 		if (!reportIssueUrl) {
 			return;

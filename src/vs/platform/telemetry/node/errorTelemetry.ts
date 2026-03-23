@@ -7,7 +7,7 @@ import { isCancellationError, isSigPipeError, onUnexpectedError, setUnexpectedEr
 import BaseErrorTelemetry from '../common/errorTelemetry.js';
 
 export default class ErrorTelemetry extends BaseErrorTelemetry {
-	protected override installErrorListeners(): void {
+	protected override installErrorListeners(): codemavi {
 		setUnexpectedErrorHandler(err => console.error(err));
 
 		// Print a console message when rejection isn't handled within N seconds. For details:

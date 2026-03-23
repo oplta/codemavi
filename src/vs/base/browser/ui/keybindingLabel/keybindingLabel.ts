@@ -120,7 +120,7 @@ export class KeybindingLabel extends Disposable {
 		this.didEverRender = true;
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		dom.clearNode(this.domNode);
 		this.keyElements.clear();
 	}
@@ -145,14 +145,14 @@ export class KeybindingLabel extends Disposable {
 		}
 	}
 
-	private renderKey(parent: HTMLElement, label: string, highlight: boolean, separator: string): void {
+	private renderKey(parent: HTMLElement, label: string, highlight: boolean, separator: string): codemavi {
 		dom.append(parent, this.createKeyElement(label, highlight ? '.highlight' : ''));
 		if (separator) {
 			dom.append(parent, $('span.monaco-keybinding-key-separator', undefined, separator));
 		}
 	}
 
-	private renderUnbound(parent: HTMLElement): void {
+	private renderUnbound(parent: HTMLElement): codemavi {
 		dom.append(parent, this.createKeyElement(localize('unbound', "Unbound")));
 	}
 

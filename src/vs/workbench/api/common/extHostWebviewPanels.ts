@@ -37,7 +37,7 @@ class ExtHostWebviewPanel extends Disposable implements vscode.WebviewPanel {
 	#active: boolean;
 	#isDisposed: boolean = false;
 
-	readonly #onDidDispose = this._register(new Emitter<void>());
+	readonly #onDidDispose = this._register(new Emitter<codemavi>());
 	public readonly onDidDispose = this.#onDidDispose.event;
 
 	readonly #onDidChangeViewState = this._register(new Emitter<vscode.WebviewPanelOnDidChangeViewStateEvent>());
@@ -154,7 +154,7 @@ class ExtHostWebviewPanel extends Disposable implements vscode.WebviewPanel {
 		}
 	}
 
-	public reveal(viewColumn?: vscode.ViewColumn, preserveFocus?: boolean): void {
+	public reveal(viewColumn?: vscode.ViewColumn, preserveFocus?: boolean): codemavi {
 		this.assertNotDisposed();
 		this.#proxy.$reveal(this.#handle, {
 			viewColumn: typeof viewColumn === 'undefined' ? undefined : typeConverters.ViewColumn.from(viewColumn),
@@ -193,7 +193,7 @@ export class ExtHostWebviewPanels extends Disposable implements extHostProtocol.
 		this._proxy = mainContext.getProxy(extHostProtocol.MainContext.MainThreadWebviewPanels);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 
 		this._webviewPanels.forEach(value => value.dispose());
@@ -228,7 +228,7 @@ export class ExtHostWebviewPanels extends Disposable implements extHostProtocol.
 		return panel;
 	}
 
-	public $onDidChangeWebviewPanelViewStates(newStates: extHostProtocol.WebviewPanelViewStateData): void {
+	public $onDidChangeWebviewPanelViewStates(newStates: extHostProtocol.WebviewPanelViewStateData): codemavi {
 		const handles = Object.keys(newStates);
 		// Notify webviews of state changes in the following order:
 		// - Non-visible
@@ -261,7 +261,7 @@ export class ExtHostWebviewPanels extends Disposable implements extHostProtocol.
 		}
 	}
 
-	async $onDidDisposeWebviewPanel(handle: extHostProtocol.WebviewHandle): Promise<void> {
+	async $onDidDisposeWebviewPanel(handle: extHostProtocol.WebviewHandle): Promise<codemavi> {
 		const panel = this.getWebviewPanel(handle);
 		panel?.dispose();
 
@@ -300,7 +300,7 @@ export class ExtHostWebviewPanels extends Disposable implements extHostProtocol.
 			active: boolean;
 		},
 		position: EditorGroupColumn
-	): Promise<void> {
+	): Promise<codemavi> {
 		const entry = this._serializers.get(viewType);
 		if (!entry) {
 			throw new Error(`No serializer found for '${viewType}'`);

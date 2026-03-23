@@ -66,7 +66,7 @@ flakySuite('WorkspacesManagementMainService', () => {
 		return service.createUntitledWorkspace(folders.map((folder, index) => ({ uri: URI.file(folder), name: names ? names[index] : undefined } as IWorkspaceFolderCreationData)));
 	}
 
-	function createWorkspace(workspaceConfigPath: string, folders: (string | URI)[], names?: string[]): void {
+	function createWorkspace(workspaceConfigPath: string, folders: (string | URI)[], names?: string[]): codemavi {
 		const ws: IStoredWorkspace = {
 			folders: []
 		};
@@ -121,7 +121,7 @@ flakySuite('WorkspacesManagementMainService', () => {
 		return pfs.Promises.rm(testDir);
 	});
 
-	function assertPathEquals(pathInWorkspaceFile: string, pathOnDisk: string): void {
+	function assertPathEquals(pathInWorkspaceFile: string, pathOnDisk: string): codemavi {
 		if (isWindows) {
 			pathInWorkspaceFile = normalizeDriveLetter(pathInWorkspaceFile);
 			pathOnDisk = normalizeDriveLetter(pathOnDisk);
@@ -133,7 +133,7 @@ flakySuite('WorkspacesManagementMainService', () => {
 		assert.strictEqual(pathInWorkspaceFile, pathOnDisk);
 	}
 
-	function assertEqualURI(u1: URI, u2: URI): void {
+	function assertEqualURI(u1: URI, u2: URI): codemavi {
 		assert.strictEqual(u1.toString(), u2.toString());
 	}
 

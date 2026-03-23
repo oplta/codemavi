@@ -100,9 +100,9 @@ class WorkbenchHostService extends Disposable implements IHostService {
 
 	readonly onDidChangeFullScreen: Event<{ readonly windowId: number; readonly fullscreen: boolean }>;
 
-	openWindow(options?: IOpenEmptyWindowOptions): Promise<void>;
-	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void>;
-	openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<void> {
+	openWindow(options?: IOpenEmptyWindowOptions): Promise<codemavi>;
+	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi>;
+	openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<codemavi> {
 		if (Array.isArray(arg1)) {
 			return this.doOpenWindow(arg1, arg2);
 		}
@@ -110,7 +110,7 @@ class WorkbenchHostService extends Disposable implements IHostService {
 		return this.doOpenEmptyWindow(arg1);
 	}
 
-	private doOpenWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void> {
+	private doOpenWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi> {
 		const remoteAuthority = this.environmentService.remoteAuthority;
 		if (!!remoteAuthority) {
 			toOpen.forEach(openable => openable.label = openable.label || this.getRecentLabel(openable));
@@ -137,7 +137,7 @@ class WorkbenchHostService extends Disposable implements IHostService {
 		return this.labelService.getUriLabel(openable.fileUri, { appendWorkspaceSuffix: true });
 	}
 
-	private doOpenEmptyWindow(options?: IOpenEmptyWindowOptions): Promise<void> {
+	private doOpenEmptyWindow(options?: IOpenEmptyWindowOptions): Promise<codemavi> {
 		const remoteAuthority = this.environmentService.remoteAuthority;
 		if (!!remoteAuthority && options?.remoteAuthority === undefined) {
 			// set the remoteAuthority of the window the request came from
@@ -146,11 +146,11 @@ class WorkbenchHostService extends Disposable implements IHostService {
 		return this.nativeHostService.openWindow(options);
 	}
 
-	toggleFullScreen(targetWindow: Window): Promise<void> {
+	toggleFullScreen(targetWindow: Window): Promise<codemavi> {
 		return this.nativeHostService.toggleFullScreen({ targetWindowId: isAuxiliaryWindow(targetWindow) ? targetWindow.vscodeWindowId : undefined });
 	}
 
-	async moveTop(targetWindow: Window): Promise<void> {
+	async moveTop(targetWindow: Window): Promise<codemavi> {
 		if (getWindowsCount() <= 1) {
 			return; // does not apply when only one window is opened
 		}
@@ -166,22 +166,22 @@ class WorkbenchHostService extends Disposable implements IHostService {
 
 	//#region Lifecycle
 
-	focus(targetWindow: Window, options?: { force: boolean }): Promise<void> {
+	focus(targetWindow: Window, options?: { force: boolean }): Promise<codemavi> {
 		return this.nativeHostService.focusWindow({
 			force: options?.force,
 			targetWindowId: getWindowId(targetWindow)
 		});
 	}
 
-	restart(): Promise<void> {
+	restart(): Promise<codemavi> {
 		return this.nativeHostService.relaunch();
 	}
 
-	reload(options?: { disableExtensions?: boolean }): Promise<void> {
+	reload(options?: { disableExtensions?: boolean }): Promise<codemavi> {
 		return this.nativeHostService.reload(options);
 	}
 
-	close(): Promise<void> {
+	close(): Promise<codemavi> {
 		return this.nativeHostService.closeWindow();
 	}
 

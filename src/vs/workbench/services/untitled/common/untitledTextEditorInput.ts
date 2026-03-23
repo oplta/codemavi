@@ -37,7 +37,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		return DEFAULT_EDITOR_ASSOCIATION.id;
 	}
 
-	private modelResolve: Promise<void> | undefined = undefined;
+	private modelResolve: Promise<codemavi> | undefined = undefined;
 	private readonly modelDisposables = this._register(new DisposableStore());
 	private cachedUntitledTextEditorModelReference: IReference<IUntitledTextEditorModel> | undefined = undefined;
 
@@ -61,7 +61,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		this._register(this.textFileService.untitled.onDidCreate(model => this.onDidCreateUntitledModel(model)));
 	}
 
-	private registerModelListeners(model: IUntitledTextEditorModel): void {
+	private registerModelListeners(model: IUntitledTextEditorModel): codemavi {
 		this.modelDisposables.clear();
 
 		// re-emit some events from the model
@@ -72,7 +72,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		this.modelDisposables.add(model.onDidRevert(() => this.dispose()));
 	}
 
-	private onDidCreateUntitledModel(model: IUntitledTextEditorModel): void {
+	private onDidCreateUntitledModel(model: IUntitledTextEditorModel): codemavi {
 		if (isEqual(model.resource, this.model.resource) && model !== this.model) {
 
 			// Ensure that we keep our model up to date with
@@ -130,7 +130,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		return this.model.getEncoding();
 	}
 
-	setEncoding(encoding: string, mode: EncodingMode /* ignored, we only have Encode */): Promise<void> {
+	setEncoding(encoding: string, mode: EncodingMode /* ignored, we only have Encode */): Promise<codemavi> {
 		return this.model.setEncoding(encoding);
 	}
 
@@ -138,7 +138,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 
 	get hasAssociatedFilePath() { return this.model.hasAssociatedFilePath; }
 
-	setLanguageId(languageId: string, source?: string): void {
+	setLanguageId(languageId: string, source?: string): codemavi {
 		this.model.setLanguageId(languageId, source);
 	}
 
@@ -214,7 +214,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		return false;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 
 		// Model
 		this.modelResolve = undefined;
@@ -225,7 +225,7 @@ export class UntitledTextEditorInput extends AbstractTextResourceEditorInput imp
 		super.dispose();
 	}
 
-	private disposeModelReference(): void {
+	private disposeModelReference(): codemavi {
 		dispose(this.cachedUntitledTextEditorModelReference);
 		this.cachedUntitledTextEditorModelReference = undefined;
 	}

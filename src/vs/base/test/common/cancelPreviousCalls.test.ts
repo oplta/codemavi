@@ -38,14 +38,14 @@ suite('cancelPreviousCalls decorator', () => {
 		}
 
 		@cancelPreviousCalls
-		async doSomethingAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<void> {
+		async doSomethingAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<codemavi> {
 			this.callArgs1.push([arg1, arg2, cancellationToken]);
 
 			await new Promise(resolve => setTimeout(resolve, 25));
 		}
 
 		@cancelPreviousCalls
-		async doSomethingElseAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<void> {
+		async doSomethingElseAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<codemavi> {
 			this.callArgs2.push([arg1, arg2, cancellationToken]);
 
 			await new Promise(resolve => setTimeout(resolve, 25));

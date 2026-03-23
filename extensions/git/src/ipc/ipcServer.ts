@@ -80,7 +80,7 @@ export class IPCServer implements IIPCServer, ITerminalEnvironmentProvider, Disp
 		return toDisposable(() => this.handlers.delete(name));
 	}
 
-	private onRequest(req: http.IncomingMessage, res: http.ServerResponse): void {
+	private onRequest(req: http.IncomingMessage, res: http.ServerResponse): codemavi {
 		if (!req.url) {
 			console.warn(`Request lacks url`);
 			return;
@@ -115,7 +115,7 @@ export class IPCServer implements IIPCServer, ITerminalEnvironmentProvider, Disp
 		return { VSCODE_GIT_IPC_HANDLE: this.ipcHandlePath };
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.handlers.clear();
 		this.server.close();
 

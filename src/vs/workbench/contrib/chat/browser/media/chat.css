@@ -328,7 +328,7 @@
 		margin-top: 0;
 
 	}
-	/* Override the top to avoid the toolbar getting clipped by overflow:hidden */
+	/* Override the top to acodemavi the toolbar getting clipped by overflow:hidden */
 	> div[data-code]:first-child .interactive-result-code-block .interactive-result-code-block-toolbar > .monaco-action-bar,
 	> div[data-code]:first-child .interactive-result-code-block .interactive-result-code-block-toolbar > .monaco-toolbar {
 		top: 6px;

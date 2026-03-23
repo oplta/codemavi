@@ -55,7 +55,7 @@ import { ILifecycleService, WillShutdownJoinerOrder } from '../../lifecycle/comm
 import { IExtensionHostExitInfo, IRemoteAgentService } from '../../remote/common/remoteAgentService.js';
 
 const hasOwnProperty = Object.hasOwnProperty;
-const NO_OP_VOID_PROMISE = Promise.resolve<void>(undefined);
+const NO_OP_VOID_PROMISE = Promise.resolve<codemavi>(undefined);
 
 export abstract class AbstractExtensionService extends Disposable implements IExtensionService {
 
@@ -64,7 +64,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 	private readonly _hasLocalProcess: boolean;
 	private readonly _allowRemoteExtensionsInLocalWebWorker: boolean;
 
-	private readonly _onDidRegisterExtensions = this._register(new Emitter<void>());
+	private readonly _onDidRegisterExtensions = this._register(new Emitter<codemavi>());
 	public readonly onDidRegisterExtensions = this._onDidRegisterExtensions.event;
 
 	private readonly _onDidChangeExtensionsStatus = this._register(new Emitter<ExtensionIdentifier[]>());
@@ -235,7 +235,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 
 	//#region deltaExtensions
 
-	private async _handleDeltaExtensions(item: DeltaExtensionsQueueItem): Promise<void> {
+	private async _handleDeltaExtensions(item: DeltaExtensionsQueueItem): Promise<codemavi> {
 		this._deltaExtensionsQueue.push(item);
 		if (this._inHandleDeltaExtensions) {
 			// Let the current item finish, the new one will be picked up
@@ -260,7 +260,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private async _deltaExtensions(lock: ExtensionDescriptionRegistryLock, _toAdd: IExtension[], _toRemove: string[] | IExtension[]): Promise<void> {
+	private async _deltaExtensions(lock: ExtensionDescriptionRegistryLock, _toAdd: IExtension[], _toRemove: string[] | IExtension[]): Promise<codemavi> {
 		if (isCI) {
 			this._logService.info(`AbstractExtensionService._deltaExtensions: toAdd: [${_toAdd.map(e => e.identifier.id).join(',')}] toRemove: [${_toRemove.map(e => typeof e === 'string' ? e : e.identifier.id).join(',')}]`);
 		}
@@ -335,7 +335,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private async _updateExtensionsOnExtHosts(versionId: number, toAdd: IExtensionDescription[], toRemove: ExtensionIdentifier[]): Promise<void> {
+	private async _updateExtensionsOnExtHosts(versionId: number, toAdd: IExtensionDescription[], toRemove: ExtensionIdentifier[]): Promise<codemavi> {
 		const removedRunningLocation = this._runningLocations.deltaExtensions(toAdd, toRemove);
 		const promises = this._extensionHostManagers.map(
 			extHostManager => this._updateExtensionsOnExtHost(extHostManager, versionId, toAdd, toRemove, removedRunningLocation)
@@ -343,7 +343,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		await Promise.all(promises);
 	}
 
-	private async _updateExtensionsOnExtHost(extensionHostManager: IExtensionHostManager, versionId: number, toAdd: IExtensionDescription[], toRemove: ExtensionIdentifier[], removedRunningLocation: ExtensionIdentifierMap<ExtensionRunningLocation | null>): Promise<void> {
+	private async _updateExtensionsOnExtHost(extensionHostManager: IExtensionHostManager, versionId: number, toAdd: IExtensionDescription[], toRemove: ExtensionIdentifier[], removedRunningLocation: ExtensionIdentifierMap<ExtensionRunningLocation | null>): Promise<codemavi> {
 		const myToAdd = this._runningLocations.filterByExtensionHostManager(toAdd, extensionHostManager);
 		const myToRemove = filterExtensionIdentifiers(toRemove, removedRunningLocation, extRunningLocation => extensionHostManager.representsRunningLocation(extRunningLocation));
 		const addActivationEvents = ImplicitActivationEvents.createActivationEventsMap(toAdd);
@@ -396,7 +396,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return true;
 	}
 
-	private async _activateAddedExtensionIfNeeded(extensionDescription: IExtensionDescription): Promise<void> {
+	private async _activateAddedExtensionIfNeeded(extensionDescription: IExtensionDescription): Promise<codemavi> {
 		let shouldActivate = false;
 		let shouldActivateReason: string | null = null;
 		let hasWorkspaceContains = false;
@@ -454,7 +454,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 
 	//#endregion
 
-	protected async _initialize(): Promise<void> {
+	protected async _initialize(): Promise<codemavi> {
 		perf.mark('code/willLoadExtensions');
 		this._startExtensionHostsIfNecessary(true, []);
 
@@ -478,7 +478,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		await this._handleExtensionTests();
 	}
 
-	private async _resolveAndProcessExtensions(lock: ExtensionDescriptionRegistryLock,): Promise<void> {
+	private async _resolveAndProcessExtensions(lock: ExtensionDescriptionRegistryLock,): Promise<codemavi> {
 		let resolverExtensions: IExtensionDescription[] = [];
 		let localExtensions: IExtensionDescription[] = [];
 		let remoteExtensions: IExtensionDescription[] = [];
@@ -543,7 +543,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		this._doHandleExtensionPoints(this._registry.getAllExtensionDescriptions(), false);
 	}
 
-	private async _handleExtensionTests(): Promise<void> {
+	private async _handleExtensionTests(): Promise<codemavi> {
 		if (!this._environmentService.isExtensionDevelopment || !this._environmentService.extensionTestsLocationURI) {
 			return;
 		}
@@ -601,7 +601,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return null;
 	}
 
-	private _releaseBarrier(): void {
+	private _releaseBarrier(): codemavi {
 		this._installedExtensionsReady.open();
 		this._onDidRegisterExtensions.fire(undefined);
 		this._onDidChangeExtensionsStatus.fire(this._registry.getAllExtensionDescriptions().map(e => e.identifier));
@@ -634,7 +634,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	protected async _resolveAuthorityAgain(): Promise<void> {
+	protected async _resolveAuthorityAgain(): Promise<codemavi> {
 		const remoteAuthority = this._environmentService.remoteAuthority;
 		if (!remoteAuthority) {
 			return;
@@ -705,7 +705,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return this._doStopExtensionHostsWithVeto(reason, auto);
 	}
 
-	protected async _doStopExtensionHosts(): Promise<void> {
+	protected async _doStopExtensionHosts(): Promise<codemavi> {
 		const previouslyActivatedExtensionIds: ExtensionIdentifier[] = [];
 		for (const extensionStatus of this._extensionStatus.values()) {
 			if (extensionStatus.activationStarted) {
@@ -781,7 +781,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return !veto;
 	}
 
-	private _startExtensionHostsIfNecessary(isInitialStart: boolean, initialActivationEvents: string[]): void {
+	private _startExtensionHostsIfNecessary(isInitialStart: boolean, initialActivationEvents: string[]): codemavi {
 		const locations: ExtensionRunningLocation[] = [];
 		for (let affinity = 0; affinity <= this._runningLocations.maxLocalProcessAffinity; affinity++) {
 			locations.push(new LocalProcessRunningLocation(affinity));
@@ -833,7 +833,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return this._instantiationService.createInstance(ExtensionHostManager, extensionHost, initialActivationEvents, internalExtensionService);
 	}
 
-	private _onExtensionHostCrashOrExit(extensionHost: IExtensionHostManager, code: number, signal: string | null): void {
+	private _onExtensionHostCrashOrExit(extensionHost: IExtensionHostManager, code: number, signal: string | null): codemavi {
 
 		// Unexpected termination
 		const isExtensionDevHost = parseExtensionDevOptions(this._environmentService).isExtensionDevHost;
@@ -845,7 +845,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		this._onExtensionHostExit(code);
 	}
 
-	protected _onExtensionHostCrashed(extensionHost: IExtensionHostManager, code: number, signal: string | null): void {
+	protected _onExtensionHostCrashed(extensionHost: IExtensionHostManager, code: number, signal: string | null): codemavi {
 		console.error(`Extension host (${extensionHost.friendyName}) terminated unexpectedly. Code: ${code}, Signal: ${signal}`);
 		if (extensionHost.kind === ExtensionHostKind.LocalProcess) {
 			this._doStopExtensionHosts();
@@ -872,7 +872,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		});
 	}
 
-	private async _onRemoteExtensionHostCrashed(extensionHost: IExtensionHostManager, reconnectionToken: string): Promise<void> {
+	private async _onRemoteExtensionHostCrashed(extensionHost: IExtensionHostManager, reconnectionToken: string): Promise<codemavi> {
 		try {
 			const info = await this._getExtensionHostExitInfoWithTimeout(reconnectionToken);
 			if (info) {
@@ -901,7 +901,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	protected _logExtensionHostCrash(extensionHost: IExtensionHostManager): void {
+	protected _logExtensionHostCrash(extensionHost: IExtensionHostManager): codemavi {
 
 		const activatedExtensions: ExtensionIdentifier[] = [];
 		for (const extensionStatus of this._extensionStatus.values()) {
@@ -917,7 +917,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	public async startExtensionHosts(updates?: { toAdd: IExtension[]; toRemove: string[] }): Promise<void> {
+	public async startExtensionHosts(updates?: { toAdd: IExtension[]; toRemove: string[] }): Promise<codemavi> {
 		await this._doStopExtensionHosts();
 
 		if (updates) {
@@ -939,7 +939,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 
 	//#region IExtensionService
 
-	public activateByEvent(activationEvent: string, activationKind: ActivationKind = ActivationKind.Normal): Promise<void> {
+	public activateByEvent(activationEvent: string, activationKind: ActivationKind = ActivationKind.Normal): Promise<codemavi> {
 		if (this._installedExtensionsReady.isOpen()) {
 			// Extensions have been scanned and interpreted
 
@@ -967,7 +967,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private _activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
+	private _activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
 		const result = Promise.all(
 			this._extensionHostManagers.map(extHostManager => extHostManager.activateByEvent(activationEvent, activationKind))
 		).then(() => { });
@@ -978,7 +978,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return result;
 	}
 
-	public activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
+	public activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
 		return this._activateById(extensionId, reason);
 	}
 
@@ -1053,7 +1053,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		return result.filter(isDefined);
 	}
 
-	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void> {
+	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi> {
 		await this._extensionHostManagers
 			.map(manager => manager.setRemoteEnvironment(env));
 	}
@@ -1070,7 +1070,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private _doHandleExtensionPoints(affectedExtensions: IExtensionDescription[], onlyResolverExtensionPoints: boolean): void {
+	private _doHandleExtensionPoints(affectedExtensions: IExtensionDescription[], onlyResolverExtensionPoints: boolean): codemavi {
 		const affectedExtensionPoints: { [extPointName: string]: boolean } = Object.create(null);
 		for (const extensionDescription of affectedExtensions) {
 			if (extensionDescription.contributes) {
@@ -1148,7 +1148,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private static _handleExtensionPoint<T extends IExtensionContributions[keyof IExtensionContributions]>(extensionPoint: ExtensionPoint<T>, availableExtensions: IExtensionDescription[], messageHandler: (msg: IMessage) => void): void {
+	private static _handleExtensionPoint<T extends IExtensionContributions[keyof IExtensionContributions]>(extensionPoint: ExtensionPoint<T>, availableExtensions: IExtensionDescription[], messageHandler: (msg: IMessage) => codemavi): codemavi {
 		const users: IExtensionPointUser<T>[] = [];
 		for (const desc of availableExtensions) {
 			if (desc.contributes && hasOwnProperty.call(desc.contributes, extensionPoint.name)) {
@@ -1166,25 +1166,25 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 
 	private _acquireInternalAPI(extensionHost: IExtensionHost): IInternalExtensionService {
 		return {
-			_activateById: (extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> => {
+			_activateById: (extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> => {
 				return this._activateById(extensionId, reason);
 			},
-			_onWillActivateExtension: (extensionId: ExtensionIdentifier): void => {
+			_onWillActivateExtension: (extensionId: ExtensionIdentifier): codemavi => {
 				return this._onWillActivateExtension(extensionId, extensionHost.runningLocation);
 			},
-			_onDidActivateExtension: (extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): void => {
+			_onDidActivateExtension: (extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): codemavi => {
 				return this._onDidActivateExtension(extensionId, codeLoadingTime, activateCallTime, activateResolvedTime, activationReason);
 			},
-			_onDidActivateExtensionError: (extensionId: ExtensionIdentifier, error: Error): void => {
+			_onDidActivateExtensionError: (extensionId: ExtensionIdentifier, error: Error): codemavi => {
 				return this._onDidActivateExtensionError(extensionId, error);
 			},
-			_onExtensionRuntimeError: (extensionId: ExtensionIdentifier, err: Error): void => {
+			_onExtensionRuntimeError: (extensionId: ExtensionIdentifier, err: Error): codemavi => {
 				return this._onExtensionRuntimeError(extensionId, err);
 			}
 		};
 	}
 
-	public async _activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
+	public async _activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
 		const results = await Promise.all(
 			this._extensionHostManagers.map(manager => manager.activate(extensionId, reason))
 		);
@@ -1194,19 +1194,19 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		}
 	}
 
-	private _onWillActivateExtension(extensionId: ExtensionIdentifier, runningLocation: ExtensionRunningLocation): void {
+	private _onWillActivateExtension(extensionId: ExtensionIdentifier, runningLocation: ExtensionRunningLocation): codemavi {
 		this._runningLocations.set(extensionId, runningLocation);
 		const extensionStatus = this._getOrCreateExtensionStatus(extensionId);
 		extensionStatus.onWillActivate();
 	}
 
-	private _onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): void {
+	private _onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): codemavi {
 		const extensionStatus = this._getOrCreateExtensionStatus(extensionId);
 		extensionStatus.setActivationTimes(new ActivationTimes(codeLoadingTime, activateCallTime, activateResolvedTime, activationReason));
 		this._onDidChangeExtensionsStatus.fire([extensionId]);
 	}
 
-	private _onDidActivateExtensionError(extensionId: ExtensionIdentifier, error: Error): void {
+	private _onDidActivateExtensionError(extensionId: ExtensionIdentifier, error: Error): codemavi {
 		type ExtensionActivationErrorClassification = {
 			owner: 'alexdima';
 			comment: 'An extension failed to activate';
@@ -1223,7 +1223,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 		});
 	}
 
-	private _onExtensionRuntimeError(extensionId: ExtensionIdentifier, err: Error): void {
+	private _onExtensionRuntimeError(extensionId: ExtensionIdentifier, err: Error): codemavi {
 		const extensionStatus = this._getOrCreateExtensionStatus(extensionId);
 		extensionStatus.addRuntimeError(err);
 		this._onDidChangeExtensionsStatus.fire([extensionId]);
@@ -1232,7 +1232,7 @@ export abstract class AbstractExtensionService extends Disposable implements IEx
 	//#endregion
 
 	protected abstract _resolveExtensions(): AsyncIterable<ResolvedExtensions>;
-	protected abstract _onExtensionHostExit(code: number): Promise<void>;
+	protected abstract _onExtensionHostExit(code: number): Promise<codemavi>;
 	protected abstract _resolveAuthority(remoteAuthority: string): Promise<ResolverResult>;
 }
 
@@ -1250,11 +1250,11 @@ class ExtensionHostCollection extends Disposable {
 		super.dispose();
 	}
 
-	public add(extensionHostManager: IExtensionHostManager, disposableStore: DisposableStore): void {
+	public add(extensionHostManager: IExtensionHostManager, disposableStore: DisposableStore): codemavi {
 		this._extensionHostManagers.push(new ExtensionHostManagerData(extensionHostManager, disposableStore));
 	}
 
-	public async stopAllInReverse(): Promise<void> {
+	public async stopAllInReverse(): Promise<codemavi> {
 		// See https://github.com/microsoft/vscode/issues/152204
 		// Dispose extension hosts in reverse creation order because the local extension host
 		// might be critical in sustaining a connection to the remote extension host
@@ -1266,7 +1266,7 @@ class ExtensionHostCollection extends Disposable {
 		this._extensionHostManagers = [];
 	}
 
-	public async stopOne(extensionHostManager: IExtensionHostManager): Promise<void> {
+	public async stopOne(extensionHostManager: IExtensionHostManager): Promise<codemavi> {
 		const index = this._extensionHostManagers.findIndex(el => el.extensionHost === extensionHostManager);
 		if (index >= 0) {
 			this._extensionHostManagers.splice(index, 1);
@@ -1313,7 +1313,7 @@ class ExtensionHostManagerData {
 		public readonly disposableStore: DisposableStore
 	) { }
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.disposableStore.dispose();
 		this.extensionHost.dispose();
 	}
@@ -1439,13 +1439,13 @@ export class ExtensionStatus {
 		public readonly id: ExtensionIdentifier,
 	) { }
 
-	public clearRuntimeStatus(): void {
+	public clearRuntimeStatus(): codemavi {
 		this._activationStarted = false;
 		this._activationTimes = null;
 		this._runtimeErrors = [];
 	}
 
-	public addMessage(msg: IMessage): void {
+	public addMessage(msg: IMessage): codemavi {
 		this._messages.push(msg);
 	}
 
@@ -1453,7 +1453,7 @@ export class ExtensionStatus {
 		this._activationTimes = activationTimes;
 	}
 
-	public addRuntimeError(err: Error): void {
+	public addRuntimeError(err: Error): codemavi {
 		this._runtimeErrors.push(err);
 	}
 
@@ -1473,14 +1473,14 @@ export class ExtensionHostCrashTracker {
 
 	private readonly _recentCrashes: IExtensionHostCrashInfo[] = [];
 
-	private _removeOldCrashes(): void {
+	private _removeOldCrashes(): codemavi {
 		const limit = Date.now() - ExtensionHostCrashTracker._TIME_LIMIT;
 		while (this._recentCrashes.length > 0 && this._recentCrashes[0].timestamp < limit) {
 			this._recentCrashes.shift();
 		}
 	}
 
-	public registerCrash(): void {
+	public registerCrash(): codemavi {
 		this._removeOldCrashes();
 		this._recentCrashes.push({ timestamp: Date.now() });
 	}

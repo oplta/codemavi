@@ -104,7 +104,7 @@ suite('ModelSemanticColoring', () => {
 					}
 					assert.fail('Unexpected call');
 				}
-				releaseDocumentSemanticTokens(resultId: string | undefined): void {
+				releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 				}
 			}));
 
@@ -161,7 +161,7 @@ suite('ModelSemanticColoring', () => {
 					}
 					return lastResult;
 				}
-				releaseDocumentSemanticTokens(resultId: string | undefined): void {
+				releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 				}
 			}));
 
@@ -187,7 +187,7 @@ suite('ModelSemanticColoring', () => {
 
 			disposables.add(languageService.registerLanguage({ id: 'testMode' }));
 
-			const emitter = new Emitter<void>();
+			const emitter = new Emitter<codemavi>();
 			let requestCount = 0;
 			disposables.add(languageFeaturesService.documentSemanticTokensProvider.register('testMode', new class implements DocumentSemanticTokensProvider {
 				onDidChange = emitter.event;
@@ -205,7 +205,7 @@ suite('ModelSemanticColoring', () => {
 					}
 					return null;
 				}
-				releaseDocumentSemanticTokens(resultId: string | undefined): void {
+				releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 				}
 			}));
 
@@ -240,7 +240,7 @@ suite('ModelSemanticColoring', () => {
 						data: new Uint32Array([0, 1, 1, 1, 1, 0, 2, 1, 1, 1])
 					};
 				}
-				releaseDocumentSemanticTokens(resultId: string | undefined): void {
+				releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 				}
 			}));
 			disposables.add(languageFeaturesService.documentSemanticTokensProvider.register('testMode2', new class implements DocumentSemanticTokensProvider {
@@ -251,7 +251,7 @@ suite('ModelSemanticColoring', () => {
 					callCount++;
 					return null;
 				}
-				releaseDocumentSemanticTokens(resultId: string | undefined): void {
+				releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 				}
 			}));
 

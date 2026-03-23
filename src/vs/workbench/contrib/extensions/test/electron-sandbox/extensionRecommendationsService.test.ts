@@ -193,7 +193,7 @@ suite('ExtensionRecommendationsService Test', () => {
 	let testConfigurationService: TestConfigurationService;
 	let testObject: ExtensionRecommendationsService;
 	let prompted: boolean;
-	let promptedEmitter: Emitter<void>;
+	let promptedEmitter: Emitter<codemavi>;
 	let onModelAddedEvent: Emitter<ITextModel>;
 
 	teardown(async () => {
@@ -206,7 +206,7 @@ suite('ExtensionRecommendationsService Test', () => {
 	setup(() => {
 		disposableStore = new DisposableStore();
 		instantiationService = disposableStore.add(new TestInstantiationService());
-		promptedEmitter = disposableStore.add(new Emitter<void>());
+		promptedEmitter = disposableStore.add(new Emitter<codemavi>());
 		instantiationService.stub(IExtensionGalleryService, ExtensionGalleryService);
 		instantiationService.stub(ISharedProcessService, TestSharedProcessService);
 		instantiationService.stub(ILifecycleService, disposableStore.add(new TestLifecycleService()));
@@ -318,11 +318,11 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	});
 
-	function setUpFolderWorkspace(folderName: string, recommendedExtensions: string[], ignoredRecommendations: string[] = []): Promise<void> {
+	function setUpFolderWorkspace(folderName: string, recommendedExtensions: string[], ignoredRecommendations: string[] = []): Promise<codemavi> {
 		return setUpFolder(folderName, recommendedExtensions, ignoredRecommendations);
 	}
 
-	async function setUpFolder(folderName: string, recommendedExtensions: string[], ignoredRecommendations: string[] = []): Promise<void> {
+	async function setUpFolder(folderName: string, recommendedExtensions: string[], ignoredRecommendations: string[] = []): Promise<codemavi> {
 		const fileService = instantiationService.get(IFileService);
 		const folderDir = joinPath(ROOT, folderName);
 		const workspaceSettingsDir = joinPath(folderDir, '.vscode');
@@ -365,7 +365,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	}
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations when galleryService is absent', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations when galleryService is absent', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const galleryQuerySpy = sinon.spy();
 		instantiationService.stub(IExtensionGalleryService, { query: galleryQuerySpy, isEnabled: () => false });
 
@@ -373,16 +373,16 @@ suite('ExtensionRecommendationsService Test', () => {
 			.then(() => assert.ok(galleryQuerySpy.notCalled));
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations during extension development', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations during extension development', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		instantiationService.stub(IEnvironmentService, { extensionDevelopmentLocationURI: [URI.file('/folder/file')], isExtensionDevelopment: true });
 		return testNoPromptOrRecommendationsForValidRecommendations(mockTestData.validRecommendedExtensions);
 	}));
 
-	test('ExtensionRecommendationsService: No workspace recommendations or prompts when extensions.json has empty array', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No workspace recommendations or prompts when extensions.json has empty array', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		return testNoPromptForValidRecommendations([]);
 	}));
 
-	test('ExtensionRecommendationsService: Prompt for valid workspace recommendations', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: Prompt for valid workspace recommendations', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await setUpFolderWorkspace('myFolder', mockTestData.recommendedExtensions);
 		testObject = disposableStore.add(instantiationService.createInstance(ExtensionRecommendationsService));
 
@@ -395,22 +395,22 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if they are already installed', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if they are already installed', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		instantiationService.stubPromise(IExtensionManagementService, 'getInstalled', mockExtensionLocal);
 		return testNoPromptForValidRecommendations(mockTestData.validRecommendedExtensions);
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations with casing mismatch if they are already installed', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations with casing mismatch if they are already installed', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		instantiationService.stubPromise(IExtensionManagementService, 'getInstalled', mockExtensionLocal);
 		return testNoPromptForValidRecommendations(mockTestData.validRecommendedExtensions.map(x => x.toUpperCase()));
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if ignoreRecommendations is set', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if ignoreRecommendations is set', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		testConfigurationService.setUserConfiguration(ConfigurationKey, { ignoreRecommendations: true });
 		return testNoPromptForValidRecommendations(mockTestData.validRecommendedExtensions);
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if showRecommendationsOnlyOnDemand is set', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if showRecommendationsOnlyOnDemand is set', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		testConfigurationService.setUserConfiguration(ConfigurationKey, { showRecommendationsOnlyOnDemand: true });
 		return setUpFolderWorkspace('myFolder', mockTestData.validRecommendedExtensions).then(() => {
 			testObject = disposableStore.add(instantiationService.createInstance(ExtensionRecommendationsService));
@@ -420,12 +420,12 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	}));
 
-	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if ignoreRecommendations is set for current workspace', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Prompt for valid workspace recommendations if ignoreRecommendations is set for current workspace', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		instantiationService.get(IStorageService).store('extensionsAssistant/workspaceRecommendationsIgnore', true, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 		return testNoPromptForValidRecommendations(mockTestData.validRecommendedExtensions);
 	}));
 
-	test('ExtensionRecommendationsService: No Recommendations of globally ignored recommendations', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Recommendations of globally ignored recommendations', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		instantiationService.get(IStorageService).store('extensionsAssistant/workspaceRecommendationsIgnore', true, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 		instantiationService.get(IStorageService).store('extensionsAssistant/recommendations', '["ms-dotnettools.csharp", "ms-python.python", "ms-vscode.vscode-typescript-tslint-plugin"]', StorageScope.PROFILE, StorageTarget.MACHINE);
 		instantiationService.get(IStorageService).store('extensionsAssistant/ignored_recommendations', '["ms-dotnettools.csharp", "mockpublisher2.mockextension2"]', StorageScope.PROFILE, StorageTarget.MACHINE);
@@ -442,7 +442,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	}));
 
-	test('ExtensionRecommendationsService: No Recommendations of workspace ignored recommendations', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: No Recommendations of workspace ignored recommendations', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const ignoredRecommendations = ['ms-dotnettools.csharp', 'mockpublisher2.mockextension2']; // ignore a stored recommendation and a workspace recommendation.
 		const storedRecommendations = '["ms-dotnettools.csharp", "ms-python.python"]';
 		instantiationService.get(IStorageService).store('extensionsAssistant/workspaceRecommendationsIgnore', true, StorageScope.WORKSPACE, StorageTarget.MACHINE);
@@ -460,7 +460,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		});
 	}));
 
-	test('ExtensionRecommendationsService: Able to retrieve collection of all ignored recommendations', async () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: Able to retrieve collection of all ignored recommendations', async () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 
 		const storageService = instantiationService.get(IStorageService);
 		const workspaceIgnoredRecommendations = ['ms-dotnettools.csharp']; // ignore a stored recommendation and a workspace recommendation.
@@ -478,7 +478,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		assert.deepStrictEqual(Object.keys(recommendations), ['ms-python.python', 'mockpublisher1.mockextension1']);
 	}));
 
-	test('ExtensionRecommendationsService: Able to dynamically ignore/unignore global recommendations', async () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: Able to dynamically ignore/unignore global recommendations', async () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const storageService = instantiationService.get(IStorageService);
 
 		const storedRecommendations = '["ms-dotnettools.csharp", "ms-python.python"]';
@@ -512,7 +512,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		assert.ok(!recommendations['mockpublisher2.mockextension2']);
 	}));
 
-	test('test global extensions are modified and recommendation change event is fired when an extension is ignored', async () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('test global extensions are modified and recommendation change event is fired when an extension is ignored', async () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const storageService = instantiationService.get(IStorageService);
 		const changeHandlerTarget = sinon.spy();
 		const ignoredExtensionId = 'Some.Extension';
@@ -531,7 +531,7 @@ suite('ExtensionRecommendationsService Test', () => {
 		assert.ok(changeHandlerTarget.getCall(0).calledWithMatch({ extensionId: ignoredExtensionId.toLowerCase(), isRecommended: false }));
 	}));
 
-	test('ExtensionRecommendationsService: Get file based recommendations from storage (old format)', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('ExtensionRecommendationsService: Get file based recommendations from storage (old format)', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const storedRecommendations = '["ms-dotnettools.csharp", "ms-python.python", "ms-vscode.vscode-typescript-tslint-plugin"]';
 		instantiationService.get(IStorageService).store('extensionsAssistant/recommendations', storedRecommendations, StorageScope.PROFILE, StorageTarget.MACHINE);
 

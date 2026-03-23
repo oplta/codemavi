@@ -58,7 +58,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		limit: this.MAX_NOTIFICATIONS
 	};
 
-	private readonly _onDidChangeVisibility = this._register(new Emitter<void>());
+	private readonly _onDidChangeVisibility = this._register(new Emitter<codemavi>());
 	readonly onDidChangeVisibility = this._onDidChangeVisibility.event;
 
 	private _isVisible = false;
@@ -93,7 +93,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Layout
 		this._register(this.layoutService.onDidLayoutMainContainer(dimension => this.layout(Dimension.lift(dimension))));
@@ -123,7 +123,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}));
 	}
 
-	private onDidChangeNotification(e: INotificationChangeEvent): void {
+	private onDidChangeNotification(e: INotificationChangeEvent): codemavi {
 		switch (e.kind) {
 			case NotificationChangeType.ADD:
 				return this.addToast(e.item);
@@ -132,7 +132,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	private addToast(item: INotificationViewItem): void {
+	private addToast(item: INotificationViewItem): codemavi {
 		if (this.isNotificationsCenterVisible) {
 			return; // do not show toasts while notification center is visible
 		}
@@ -162,7 +162,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		itemDisposables.add(scheduleAtNextAnimationFrame(getWindow(this.container), () => this.doAddToast(item, itemDisposables)));
 	}
 
-	private doAddToast(item: INotificationViewItem, itemDisposables: DisposableStore): void {
+	private doAddToast(item: INotificationViewItem, itemDisposables: DisposableStore): codemavi {
 
 		// Lazily create toasts containers
 		let notificationsToastsContainer = this.notificationsToastsContainer;
@@ -274,7 +274,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	private purgeNotification(item: INotificationViewItem, notificationToastContainer: HTMLElement, notificationList: NotificationsList, disposables: DisposableStore): void {
+	private purgeNotification(item: INotificationViewItem, notificationToastContainer: HTMLElement, notificationList: NotificationsList, disposables: DisposableStore): codemavi {
 
 		// Track mouse over item
 		let isMouseOverToast = false;
@@ -322,7 +322,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		disposables.add(toDisposable(() => clearTimeout(purgeTimeoutHandle)));
 	}
 
-	private removeToast(item: INotificationViewItem): void {
+	private removeToast(item: INotificationViewItem): codemavi {
 		let focusEditor = false;
 
 		// UI
@@ -360,7 +360,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	private removeToasts(): void {
+	private removeToasts(): codemavi {
 
 		// Toast
 		this.mapNotificationToToast.clear();
@@ -372,7 +372,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		this.doHide();
 	}
 
-	private doHide(): void {
+	private doHide(): codemavi {
 		this.notificationsToastsContainer?.classList.remove('visible');
 
 		// Context Key
@@ -385,7 +385,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		const focusEditor = this.notificationsToastsContainer ? isAncestorOfActiveElement(this.notificationsToastsContainer) : false;
 
 		this.removeToasts();
@@ -466,7 +466,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		return false;
 	}
 
-	update(isCenterVisible: boolean): void {
+	update(isCenterVisible: boolean): codemavi {
 		if (this.isNotificationsCenterVisible !== isCenterVisible) {
 			this.isNotificationsCenterVisible = isCenterVisible;
 
@@ -477,7 +477,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		this.mapNotificationToToast.forEach(({ toast }) => {
 			const backgroundColor = this.getColor(NOTIFICATIONS_BACKGROUND);
 			toast.style.background = backgroundColor ? backgroundColor : '';
@@ -514,7 +514,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		return notificationToasts.reverse(); // from newest to oldest
 	}
 
-	layout(dimension: Dimension | undefined): void {
+	layout(dimension: Dimension | undefined): codemavi {
 		this.workbenchDimensions = dimension;
 
 		const maxDimensions = this.computeMaxDimensions();
@@ -560,11 +560,11 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		return new Dimension(Math.min(maxWidth, availableWidth), availableHeight);
 	}
 
-	private layoutLists(width: number): void {
+	private layoutLists(width: number): codemavi {
 		this.mapNotificationToToast.forEach(({ list }) => list.layout(width));
 	}
 
-	private layoutContainer(heightToGive: number): void {
+	private layoutContainer(heightToGive: number): codemavi {
 		let visibleToasts = 0;
 		for (const toast of this.getToasts(ToastVisibility.HIDDEN_OR_VISIBLE)) {
 
@@ -591,7 +591,7 @@ export class NotificationsToasts extends Themable implements INotificationsToast
 		}
 	}
 
-	private updateToastVisibility(toast: INotificationToast, visible: boolean): void {
+	private updateToastVisibility(toast: INotificationToast, visible: boolean): codemavi {
 		if (this.isToastInDOM(toast) === visible) {
 			return;
 		}

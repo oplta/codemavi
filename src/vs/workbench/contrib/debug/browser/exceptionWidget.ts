@@ -49,7 +49,7 @@ export class ExceptionWidget extends ZoneWidget {
 		this._disposables.add(onDidLayoutChangeScheduler);
 	}
 
-	private applyTheme(theme: IColorTheme): void {
+	private applyTheme(theme: IColorTheme): codemavi {
 		this.backgroundColor = theme.getColor(debugExceptionWidgetBackground);
 		const frameColor = theme.getColor(debugExceptionWidgetBorder);
 		this.style({
@@ -58,14 +58,14 @@ export class ExceptionWidget extends ZoneWidget {
 		}); // style() will trigger _applyStyles
 	}
 
-	protected override _applyStyles(): void {
+	protected override _applyStyles(): codemavi {
 		if (this.container) {
 			this.container.style.backgroundColor = this.backgroundColor ? this.backgroundColor.toString() : '';
 		}
 		super._applyStyles();
 	}
 
-	protected _fillContainer(container: HTMLElement): void {
+	protected _fillContainer(container: HTMLElement): codemavi {
 		this.setCssClass('exception-widget');
 		// Set the font size and line height to the one from the editor configuration.
 		const fontInfo = this.editor.getOption(EditorOption.fontInfo);
@@ -106,7 +106,7 @@ export class ExceptionWidget extends ZoneWidget {
 		container.setAttribute('aria-label', ariaLabel);
 	}
 
-	protected override _doLayout(_heightInPixel: number | undefined, _widthInPixel: number | undefined): void {
+	protected override _doLayout(_heightInPixel: number | undefined, _widthInPixel: number | undefined): codemavi {
 		// Reload the height with respect to the exception text content and relayout it to match the line count.
 		this.container!.style.height = 'initial';
 
@@ -117,7 +117,7 @@ export class ExceptionWidget extends ZoneWidget {
 		this._relayout(computedLinesNumber);
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		// Focus into the container for accessibility purposes so the exception and stack trace gets read
 		this.container?.focus();
 	}

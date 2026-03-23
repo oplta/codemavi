@@ -62,7 +62,7 @@ export class CountBadge extends Disposable {
 		this.render();
 	}
 
-	private updateHover(): void {
+	private updateHover(): codemavi {
 		if (this.titleFormat !== '' && !this.hover.value) {
 			this.hover.value = getBaseLayerHoverDelegate().setupDelayedHoverAtMouse(this.element, () => ({ content: format(this.titleFormat, this.count), appearance: { compact: true } }));
 		} else if (this.titleFormat === '' && this.hover.value) {

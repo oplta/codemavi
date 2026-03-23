@@ -42,7 +42,7 @@ export class WorkspacesMainService implements AddFirstParameterToFunctions<IWork
 		return this.workspacesManagementMainService.createUntitledWorkspace(folders, remoteAuthority);
 	}
 
-	deleteUntitledWorkspace(windowId: number, workspace: IWorkspaceIdentifier): Promise<void> {
+	deleteUntitledWorkspace(windowId: number, workspace: IWorkspaceIdentifier): Promise<codemavi> {
 		return this.workspacesManagementMainService.deleteUntitledWorkspace(workspace);
 	}
 
@@ -54,21 +54,21 @@ export class WorkspacesMainService implements AddFirstParameterToFunctions<IWork
 
 	//#region Workspaces History
 
-	readonly onDidChangeRecentlyOpened: Event<void>;
+	readonly onDidChangeRecentlyOpened: Event<codemavi>;
 
 	getRecentlyOpened(windowId: number): Promise<IRecentlyOpened> {
 		return this.workspacesHistoryMainService.getRecentlyOpened();
 	}
 
-	addRecentlyOpened(windowId: number, recents: IRecent[]): Promise<void> {
+	addRecentlyOpened(windowId: number, recents: IRecent[]): Promise<codemavi> {
 		return this.workspacesHistoryMainService.addRecentlyOpened(recents);
 	}
 
-	removeRecentlyOpened(windowId: number, paths: URI[]): Promise<void> {
+	removeRecentlyOpened(windowId: number, paths: URI[]): Promise<codemavi> {
 		return this.workspacesHistoryMainService.removeRecentlyOpened(paths);
 	}
 
-	clearRecentlyOpened(windowId: number): Promise<void> {
+	clearRecentlyOpened(windowId: number): Promise<codemavi> {
 		return this.workspacesHistoryMainService.clearRecentlyOpened();
 	}
 

@@ -17,11 +17,11 @@ export interface IWebWorker extends IDisposable {
 	getId(): number;
 	onMessage: Event<Message>;
 	onError: Event<any>;
-	postMessage(message: Message, transfer: ArrayBuffer[]): void;
+	postMessage(message: Message, transfer: ArrayBuffer[]): codemavi;
 }
 
 let webWorkerWarningLogged = false;
-export function logOnceWebWorkerWarning(err: any): void {
+export function logOnceWebWorkerWarning(err: any): codemavi {
 	if (!isWeb) {
 		// running tests
 		return;
@@ -87,12 +87,12 @@ class UnsubscribeEventMessage {
 export type Message = RequestMessage | ReplyMessage | SubscribeEventMessage | EventMessage | UnsubscribeEventMessage;
 
 interface IMessageReply {
-	resolve: (value?: any) => void;
-	reject: (error?: any) => void;
+	resolve: (value?: any) => codemavi;
+	reject: (error?: any) => codemavi;
 }
 
 interface IMessageHandler {
-	sendMessage(msg: any, transfer?: ArrayBuffer[]): void;
+	sendMessage(msg: any, transfer?: ArrayBuffer[]): codemavi;
 	handleMessage(channel: string, method: string, args: any[]): Promise<any>;
 	handleEvent(channel: string, eventName: string, arg: any): Event<any>;
 }
@@ -115,7 +115,7 @@ class WebWorkerProtocol {
 		this._pendingEvents = new Map<string, IDisposable>();
 	}
 
-	public setWorkerId(workerId: number): void {
+	public setWorkerId(workerId: number): codemavi {
 		this._workerId = workerId;
 	}
 
@@ -147,7 +147,7 @@ class WebWorkerProtocol {
 		return emitter.event;
 	}
 
-	public handleMessage(message: Message): void {
+	public handleMessage(message: Message): codemavi {
 		if (!message || !message.vsWorker) {
 			return;
 		}
@@ -157,7 +157,7 @@ class WebWorkerProtocol {
 		this._handleMessage(message);
 	}
 
-	public createProxyToRemoteChannel<T extends object>(channel: string, sendMessageBarrier?: () => Promise<void>): T {
+	public createProxyToRemoteChannel<T extends object>(channel: string, sendMessageBarrier?: () => Promise<codemavi>): T {
 		const handler = {
 			get: (target: any, name: PropertyKey) => {
 				if (typeof name === 'string' && !target[name]) {
@@ -180,7 +180,7 @@ class WebWorkerProtocol {
 		return new Proxy(Object.create(null), handler);
 	}
 
-	private _handleMessage(msg: Message): void {
+	private _handleMessage(msg: Message): codemavi {
 		switch (msg.type) {
 			case MessageType.Reply:
 				return this._handleReplyMessage(msg);
@@ -195,7 +195,7 @@ class WebWorkerProtocol {
 		}
 	}
 
-	private _handleReplyMessage(replyMessage: ReplyMessage): void {
+	private _handleReplyMessage(replyMessage: ReplyMessage): codemavi {
 		if (!this._pendingReplies[replyMessage.seq]) {
 			console.warn('Got reply to unknown seq');
 			return;
@@ -219,7 +219,7 @@ class WebWorkerProtocol {
 		reply.resolve(replyMessage.res);
 	}
 
-	private _handleRequestMessage(requestMessage: RequestMessage): void {
+	private _handleRequestMessage(requestMessage: RequestMessage): codemavi {
 		const req = requestMessage.req;
 		const result = this._handler.handleMessage(requestMessage.channel, requestMessage.method, requestMessage.args);
 		result.then((r) => {
@@ -233,7 +233,7 @@ class WebWorkerProtocol {
 		});
 	}
 
-	private _handleSubscribeEventMessage(msg: SubscribeEventMessage): void {
+	private _handleSubscribeEventMessage(msg: SubscribeEventMessage): codemavi {
 		const req = msg.req;
 		const disposable = this._handler.handleEvent(msg.channel, msg.eventName, msg.arg)((event) => {
 			this._send(new EventMessage(this._workerId, req, event));
@@ -241,7 +241,7 @@ class WebWorkerProtocol {
 		this._pendingEvents.set(req, disposable);
 	}
 
-	private _handleEventMessage(msg: EventMessage): void {
+	private _handleEventMessage(msg: EventMessage): codemavi {
 		if (!this._pendingEmitters.has(msg.req)) {
 			console.warn('Got event for unknown req');
 			return;
@@ -249,7 +249,7 @@ class WebWorkerProtocol {
 		this._pendingEmitters.get(msg.req)!.fire(msg.event);
 	}
 
-	private _handleUnsubscribeEventMessage(msg: UnsubscribeEventMessage): void {
+	private _handleUnsubscribeEventMessage(msg: UnsubscribeEventMessage): codemavi {
 		if (!this._pendingEvents.has(msg.req)) {
 			console.warn('Got unsubscribe for unknown req');
 			return;
@@ -258,7 +258,7 @@ class WebWorkerProtocol {
 		this._pendingEvents.delete(msg.req);
 	}
 
-	private _send(msg: Message): void {
+	private _send(msg: Message): codemavi {
 		const transfer: ArrayBuffer[] = [];
 		if (msg.type === MessageType.Request) {
 			for (let i = 0; i < msg.args.length; i++) {
@@ -288,13 +288,13 @@ export type Proxied<T> = { [K in keyof T]: T[K] extends (...args: infer A) => in
 
 export interface IWebWorkerClient<TProxy> {
 	proxy: Proxied<TProxy>;
-	dispose(): void;
-	setChannel<T extends object>(channel: string, handler: T): void;
+	dispose(): codemavi;
+	setChannel<T extends object>(channel: string, handler: T): codemavi;
 	getChannel<T extends object>(channel: string): Proxied<T>;
 }
 
 export interface IWebWorkerServer {
-	setChannel<T extends object>(channel: string, handler: T): void;
+	setChannel<T extends object>(channel: string, handler: T): codemavi;
 	getChannel<T extends object>(channel: string): Proxied<T>;
 }
 
@@ -304,7 +304,7 @@ export interface IWebWorkerServer {
 export class WebWorkerClient<W extends object> extends Disposable implements IWebWorkerClient<W> {
 
 	private readonly _worker: IWebWorker;
-	private readonly _onModuleLoaded: Promise<void>;
+	private readonly _onModuleLoaded: Promise<codemavi>;
 	private readonly _protocol: WebWorkerProtocol;
 	public readonly proxy: Proxied<W>;
 	private readonly _localChannels: Map<string, object> = new Map();
@@ -325,7 +325,7 @@ export class WebWorkerClient<W extends object> extends Disposable implements IWe
 		}));
 
 		this._protocol = new WebWorkerProtocol({
-			sendMessage: (msg: any, transfer: ArrayBuffer[]): void => {
+			sendMessage: (msg: any, transfer: ArrayBuffer[]): codemavi => {
 				this._worker.postMessage(msg, transfer);
 			},
 			handleMessage: (channel: string, method: string, args: any[]): Promise<any> => {
@@ -386,7 +386,7 @@ export class WebWorkerClient<W extends object> extends Disposable implements IWe
 		throw new Error(`Malformed event name ${eventName}`);
 	}
 
-	public setChannel<T extends object>(channel: string, handler: T): void {
+	public setChannel<T extends object>(channel: string, handler: T): codemavi {
 		this._localChannels.set(channel, handler);
 	}
 
@@ -398,7 +398,7 @@ export class WebWorkerClient<W extends object> extends Disposable implements IWe
 		return this._remoteChannels.get(channel) as Proxied<T>;
 	}
 
-	private _onError(message: string, error?: any): void {
+	private _onError(message: string, error?: any): codemavi {
 		console.error(message);
 		console.info(error);
 	}
@@ -433,9 +433,9 @@ export class WebWorkerServer<T extends IWebWorkerServerRequestHandler> implement
 	private readonly _localChannels: Map<string, object> = new Map();
 	private readonly _remoteChannels: Map<string, object> = new Map();
 
-	constructor(postMessage: (msg: Message, transfer?: ArrayBuffer[]) => void, requestHandlerFactory: IWebWorkerServerRequestHandlerFactory<T>) {
+	constructor(postMessage: (msg: Message, transfer?: ArrayBuffer[]) => codemavi, requestHandlerFactory: IWebWorkerServerRequestHandlerFactory<T>) {
 		this._protocol = new WebWorkerProtocol({
-			sendMessage: (msg: any, transfer: ArrayBuffer[]): void => {
+			sendMessage: (msg: any, transfer: ArrayBuffer[]): codemavi => {
 				postMessage(msg, transfer);
 			},
 			handleMessage: (channel: string, method: string, args: any[]): Promise<any> => this._handleMessage(channel, method, args),
@@ -444,7 +444,7 @@ export class WebWorkerServer<T extends IWebWorkerServerRequestHandler> implement
 		this.requestHandler = requestHandlerFactory(this);
 	}
 
-	public onmessage(msg: any): void {
+	public onmessage(msg: any): codemavi {
 		this._protocol.handleMessage(msg);
 	}
 
@@ -490,7 +490,7 @@ export class WebWorkerServer<T extends IWebWorkerServerRequestHandler> implement
 		throw new Error(`Malformed event name ${eventName}`);
 	}
 
-	public setChannel<T extends object>(channel: string, handler: T): void {
+	public setChannel<T extends object>(channel: string, handler: T): codemavi {
 		this._localChannels.set(channel, handler);
 	}
 
@@ -502,7 +502,7 @@ export class WebWorkerServer<T extends IWebWorkerServerRequestHandler> implement
 		return this._remoteChannels.get(channel) as Proxied<T>;
 	}
 
-	private async initialize(workerId: number): Promise<void> {
+	private async initialize(workerId: number): Promise<codemavi> {
 		this._protocol.setWorkerId(workerId);
 	}
 }

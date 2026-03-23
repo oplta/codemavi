@@ -114,7 +114,7 @@ export interface MarkdownContributionProvider {
 	readonly contributions: MarkdownContributions;
 	readonly onContributionsChanged: vscode.Event<this>;
 
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 class VSCodeExtensionMarkdownContributionProvider extends Disposable implements MarkdownContributionProvider {

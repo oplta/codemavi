@@ -35,7 +35,7 @@ export class ShowNextInlineSuggestionAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		controller?.model.get()?.next();
 	}
@@ -55,7 +55,7 @@ export class ShowPreviousInlineSuggestionAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		controller?.model.get()?.previous();
 	}
@@ -70,7 +70,7 @@ export class TriggerInlineSuggestionAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		await asyncTransaction(async tx => {
 			/** @description triggerExplicitly from command */
@@ -89,7 +89,7 @@ export class ExplicitTriggerInlineEditAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const notificationService = accessor!.get(INotificationService);
 		const controller = InlineCompletionsController.get(editor);
 
@@ -111,7 +111,7 @@ export class TriggerInlineEditAction extends EditorCommand {
 		});
 	}
 
-	public override async runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: { triggerKind?: 'automatic' | 'explicit' }): Promise<void> {
+	public override async runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: { triggerKind?: 'automatic' | 'explicit' }): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		await controller?.model.get()?.trigger(undefined, { onlyFetchInlineEdits: true });
 	}
@@ -137,7 +137,7 @@ export class AcceptNextWordOfInlineCompletion extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		await controller?.model.get()?.acceptNextWord(controller.editor);
 	}
@@ -161,7 +161,7 @@ export class AcceptNextLineOfInlineCompletion extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		await controller?.model.get()?.acceptNextLine(controller.editor);
 	}
@@ -211,7 +211,7 @@ export class AcceptInlineCompletion extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.getInFocusedEditorOrParent(accessor);
 		if (controller) {
 			controller.model.get()?.accept(controller.editor);
@@ -253,7 +253,7 @@ export class JumpToNextInlineEdit extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		if (controller) {
 			controller.jump();
@@ -274,7 +274,7 @@ export class AcceptNextInlineEditPart extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor | undefined, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.get(editor);
 		await controller?.model.get()?.acceptNextInlineEditPart(controller.editor);
 	}
@@ -301,7 +301,7 @@ export class HideInlineCompletion extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const controller = InlineCompletionsController.getInFocusedEditorOrParent(accessor);
 		transaction(tx => {
 			controller?.model.get()?.stop('explicitCancel', tx);
@@ -321,7 +321,7 @@ export class ToggleInlineCompletionShowCollapsed extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	public async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const configurationService = accessor.get(IConfigurationService);
 		const showCollapsed = configurationService.getValue<boolean>('editor.inlineSuggest.edits.showCollapsed');
 		configurationService.updateValue('editor.inlineSuggest.edits.showCollapsed', !showCollapsed);
@@ -354,7 +354,7 @@ export class ToggleAlwaysShowInlineSuggestionToolbar extends Action2 {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor): Promise<void> {
+	public async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const configService = accessor.get(IConfigurationService);
 		const currentValue = configService.getValue<'always' | 'onHover'>('editor.inlineSuggest.showToolbar');
 		const newValue = currentValue === 'always' ? 'onHover' : 'always';

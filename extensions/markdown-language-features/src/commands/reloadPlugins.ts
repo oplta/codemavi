@@ -15,7 +15,7 @@ export class ReloadPlugins implements Command {
 		private readonly _engine: MarkdownItEngine,
 	) { }
 
-	public execute(): void {
+	public execute(): codemavi {
 		this._engine.reloadPlugins();
 		this._engine.cleanCache();
 		this._webviewManager.refresh();

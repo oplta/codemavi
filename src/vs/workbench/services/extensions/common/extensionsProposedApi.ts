@@ -55,13 +55,13 @@ export class ExtensionsProposedApi {
 		}
 	}
 
-	updateEnabledApiProposals(extensions: IExtensionDescription[]): void {
+	updateEnabledApiProposals(extensions: IExtensionDescription[]): codemavi {
 		for (const extension of extensions) {
 			this.doUpdateEnabledApiProposals(extension);
 		}
 	}
 
-	private doUpdateEnabledApiProposals(extension: Mutable<IExtensionDescription>): void {
+	private doUpdateEnabledApiProposals(extension: Mutable<IExtensionDescription>): codemavi {
 
 		const key = ExtensionIdentifier.toKey(extension.identifier);
 

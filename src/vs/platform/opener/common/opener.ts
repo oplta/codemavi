@@ -60,7 +60,7 @@ export interface IOpener {
 
 export interface IExternalOpener {
 	openExternal(href: string, ctx: { sourceUri: URI; preferredOpenerId?: string }, token: CancellationToken): Promise<boolean>;
-	dispose?(): void;
+	dispose?(): codemavi;
 }
 
 export interface IValidator {
@@ -68,7 +68,7 @@ export interface IValidator {
 }
 
 export interface IExternalUriResolver {
-	resolveExternalUri(resource: URI, options?: OpenOptions): Promise<{ resolved: URI; dispose(): void } | undefined>;
+	resolveExternalUri(resource: URI, options?: OpenOptions): Promise<{ resolved: URI; dispose(): codemavi } | undefined>;
 }
 
 export interface IOpenerService {
@@ -95,7 +95,7 @@ export interface IOpenerService {
 	 * Sets the handler for opening externally. If not provided,
 	 * a default handler will be used.
 	 */
-	setDefaultExternalOpener(opener: IExternalOpener): void;
+	setDefaultExternalOpener(opener: IExternalOpener): codemavi;
 
 	/**
 	 * Registers a new opener external resources openers.

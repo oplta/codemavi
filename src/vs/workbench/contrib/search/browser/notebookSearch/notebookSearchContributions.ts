@@ -6,6 +6,6 @@ import { InstantiationType, registerSingleton } from '../../../../../platform/in
 import { INotebookSearchService } from '../../common/notebookSearch.js';
 import { NotebookSearchService } from './notebookSearchService.js';
 
-export function registerContributions(): void {
+export function registerContributions(): codemavi {
 	registerSingleton(INotebookSearchService, NotebookSearchService, InstantiationType.Delayed);
 }

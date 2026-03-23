@@ -97,7 +97,7 @@ export class ElectronURLListener extends Disposable {
 		}
 	}
 
-	private async flush(): Promise<void> {
+	private async flush(): Promise<codemavi> {
 		if (this.retryCount++ > 10) {
 			this.logService.trace('ElectronURLListener#flush(): giving up after 10 retries');
 

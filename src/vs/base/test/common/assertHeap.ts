@@ -36,7 +36,7 @@ suiteTeardown(async () => {
 });
 
 export interface ISnapshotAssertOptions {
-	classes: Record<string, (count: number) => void>;
+	classes: Record<string, (count: number) => codemavi>;
 }
 
 const snapshotMinTime = 20_000;

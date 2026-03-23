@@ -36,12 +36,12 @@ function toIResolvedKeybinding(kb: ResolvedKeybinding): IResolvedKeybinding {
 	};
 }
 
-export function assertResolveKeyboardEvent(mapper: IKeyboardMapper, keyboardEvent: IKeyboardEvent, expected: IResolvedKeybinding): void {
+export function assertResolveKeyboardEvent(mapper: IKeyboardMapper, keyboardEvent: IKeyboardEvent, expected: IResolvedKeybinding): codemavi {
 	const actual = toIResolvedKeybinding(mapper.resolveKeyboardEvent(keyboardEvent));
 	assert.deepStrictEqual(actual, expected);
 }
 
-export function assertResolveKeybinding(mapper: IKeyboardMapper, keybinding: Keybinding, expected: IResolvedKeybinding[]): void {
+export function assertResolveKeybinding(mapper: IKeyboardMapper, keybinding: Keybinding, expected: IResolvedKeybinding[]): codemavi {
 	const actual: IResolvedKeybinding[] = mapper.resolveKeybinding(keybinding).map(toIResolvedKeybinding);
 	assert.deepStrictEqual(actual, expected);
 }
@@ -49,7 +49,7 @@ export function assertResolveKeybinding(mapper: IKeyboardMapper, keybinding: Key
 export function readRawMapping<T>(file: string): Promise<T> {
 	return fs.promises.readFile(FileAccess.asFileUri(`vs/workbench/services/keybinding/test/node/${file}.js`).fsPath).then((buff) => {
 		const contents = buff.toString();
-		const func = new Function('define', contents);// CodeQL [SM01632] This is used in tests and we read the files as JS to avoid slowing down TS compilation
+		const func = new Function('define', contents);// CodeQL [SM01632] This is used in tests and we read the files as JS to acodemavi slowing down TS compilation
 		let rawMappings: T | null = null;
 		func(function (value: T) {
 			rawMappings = value;
@@ -58,7 +58,7 @@ export function readRawMapping<T>(file: string): Promise<T> {
 	});
 }
 
-export function assertMapping(writeFileIfDifferent: boolean, mapper: IKeyboardMapper, file: string): Promise<void> {
+export function assertMapping(writeFileIfDifferent: boolean, mapper: IKeyboardMapper, file: string): Promise<codemavi> {
 	const filePath = path.normalize(FileAccess.asFileUri(`vs/workbench/services/keybinding/test/node/${file}`).fsPath);
 
 	return fs.promises.readFile(filePath).then((buff) => {

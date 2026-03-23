@@ -151,7 +151,7 @@ class RuntimeStatusMarkdownRenderer extends Disposable implements IExtensionFeat
 		return container;
 	}
 
-	private renderMarkdown(markdown: IMarkdownString, container: HTMLElement, disposables: DisposableStore): void {
+	private renderMarkdown(markdown: IMarkdownString, container: HTMLElement, disposables: DisposableStore): codemavi {
 		const { element, dispose } = renderMarkdown(
 			{
 				value: markdown.value,
@@ -168,7 +168,7 @@ class RuntimeStatusMarkdownRenderer extends Disposable implements IExtensionFeat
 		append(container, element);
 	}
 
-	private renderRequestsChart(container: HTMLElement, accessTimes: Date[], disposables: DisposableStore): void {
+	private renderRequestsChart(container: HTMLElement, accessTimes: Date[], disposables: DisposableStore): codemavi {
 		const width = 450;
 		const height = 250;
 		const margin = { top: 0, right: 4, bottom: 20, left: 4 };
@@ -271,7 +271,7 @@ class RuntimeStatusMarkdownRenderer extends Disposable implements IExtensionFeat
 		g.appendChild(highlightCircle);
 
 		const hoverDisposable = disposables.add(new MutableDisposable<IDisposable>());
-		const mouseMoveListener = (event: MouseEvent): void => {
+		const mouseMoveListener = (event: MouseEvent): codemavi => {
 			const rect = svg.getBoundingClientRect();
 			const mouseX = event.clientX - rect.left - margin.left;
 
@@ -318,7 +318,7 @@ class RuntimeStatusMarkdownRenderer extends Disposable implements IExtensionFeat
 
 
 interface ILayoutParticipant {
-	layout(height?: number, width?: number): void;
+	layout(height?: number, width?: number): codemavi;
 }
 
 const runtimeStatusFeature = {
@@ -353,11 +353,11 @@ export class ExtensionFeaturesTab extends Themable {
 		this.create();
 	}
 
-	layout(height?: number, width?: number): void {
+	layout(height?: number, width?: number): codemavi {
 		this.layoutParticipants.forEach(participant => participant.layout(height, width));
 	}
 
-	private create(): void {
+	private create(): codemavi {
 		const features = this.getFeatures();
 		if (features.length === 0) {
 			append($('.no-features'), this.domNode).textContent = localize('noFeatures', "No features contributed.");
@@ -438,11 +438,11 @@ export class ExtensionFeaturesTab extends Themable {
 		return list;
 	}
 
-	private layoutFeatureView(): void {
+	private layoutFeatureView(): codemavi {
 		this.featureView.value?.layout(this.featureViewDimension?.height, this.featureViewDimension?.width);
 	}
 
-	private showFeatureView(feature: IExtensionFeatureDescriptor, container: HTMLElement): void {
+	private showFeatureView(feature: IExtensionFeatureDescriptor, container: HTMLElement): codemavi {
 		if (this.featureView.value?.feature.id === feature.id) {
 			return;
 		}
@@ -534,7 +534,7 @@ class ExtensionFeatureItemRenderer implements IListRenderer<IExtensionFeatureDes
 		}));
 	}
 
-	disposeElement(element: IExtensionFeatureDescriptor, index: number, templateData: IExtensionFeatureItemTemplateData, height: number | undefined): void {
+	disposeElement(element: IExtensionFeatureDescriptor, index: number, templateData: IExtensionFeatureItemTemplateData, height: number | undefined): codemavi {
 		templateData.disposables.dispose();
 	}
 
@@ -564,7 +564,7 @@ class ExtensionFeatureView extends Disposable {
 		this.create(this.domNode);
 	}
 
-	private create(content: HTMLElement): void {
+	private create(content: HTMLElement): codemavi {
 		const header = append(content, $('.feature-header'));
 		const title = append(header, $('.feature-title'));
 		title.textContent = this.feature.label;
@@ -630,11 +630,11 @@ class ExtensionFeatureView extends Disposable {
 		}
 	}
 
-	private updateButtonLabel(button: Button): void {
+	private updateButtonLabel(button: Button): codemavi {
 		button.label = this.extensionFeaturesManagementService.isEnabled(this.extensionId, this.feature.id) ? localize('revoke', "Revoke Access") : localize('enable', "Allow Access");
 	}
 
-	private renderTableData(container: HTMLElement, renderer: IExtensionFeatureTableRenderer): void {
+	private renderTableData(container: HTMLElement, renderer: IExtensionFeatureTableRenderer): codemavi {
 		const tableData = this._register(renderer.render(this.manifest));
 		const tableDisposable = this._register(new MutableDisposable());
 		if (tableData.onDidChange) {
@@ -684,7 +684,7 @@ class ExtensionFeatureView extends Disposable {
 		return disposables;
 	}
 
-	private renderMarkdownAndTableData(container: HTMLElement, renderer: IExtensionFeatureMarkdownAndTableRenderer): void {
+	private renderMarkdownAndTableData(container: HTMLElement, renderer: IExtensionFeatureMarkdownAndTableRenderer): codemavi {
 		const markdownAndTableData = this._register(renderer.render(this.manifest));
 		if (markdownAndTableData.onDidChange) {
 			this._register(markdownAndTableData.onDidChange(data => {
@@ -695,7 +695,7 @@ class ExtensionFeatureView extends Disposable {
 		this.renderMarkdownAndTable(markdownAndTableData.data, container);
 	}
 
-	private renderMarkdownData(container: HTMLElement, renderer: IExtensionFeatureMarkdownRenderer): void {
+	private renderMarkdownData(container: HTMLElement, renderer: IExtensionFeatureMarkdownRenderer): codemavi {
 		container.classList.add('markdown');
 		const markdownData = this._register(renderer.render(this.manifest));
 		if (markdownData.onDidChange) {
@@ -707,7 +707,7 @@ class ExtensionFeatureView extends Disposable {
 		this.renderMarkdown(markdownData.data, container);
 	}
 
-	private renderMarkdown(markdown: IMarkdownString, container: HTMLElement): void {
+	private renderMarkdown(markdown: IMarkdownString, container: HTMLElement): codemavi {
 		const { element, dispose } = renderMarkdown(
 			{
 				value: markdown.value,
@@ -724,7 +724,7 @@ class ExtensionFeatureView extends Disposable {
 		append(container, element);
 	}
 
-	private renderMarkdownAndTable(data: Array<IMarkdownString | ITableData>, container: HTMLElement): void {
+	private renderMarkdownAndTable(data: Array<IMarkdownString | ITableData>, container: HTMLElement): codemavi {
 		for (const markdownOrTable of data) {
 			if (isMarkdownString(markdownOrTable)) {
 				const element = $('', undefined);
@@ -737,7 +737,7 @@ class ExtensionFeatureView extends Disposable {
 		}
 	}
 
-	private renderElementData(container: HTMLElement, renderer: IExtensionFeatureElementRenderer): void {
+	private renderElementData(container: HTMLElement, renderer: IExtensionFeatureElementRenderer): codemavi {
 		const elementData = renderer.render(this.manifest);
 		if (elementData.onDidChange) {
 			this._register(elementData.onDidChange(data => {
@@ -748,7 +748,7 @@ class ExtensionFeatureView extends Disposable {
 		container.appendChild(elementData.data);
 	}
 
-	layout(height?: number, width?: number): void {
+	layout(height?: number, width?: number): codemavi {
 		this.layoutParticipants.forEach(p => p.layout(height, width));
 	}
 

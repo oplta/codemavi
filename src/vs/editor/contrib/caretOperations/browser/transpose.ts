@@ -32,7 +32,7 @@ class TransposeLettersAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}

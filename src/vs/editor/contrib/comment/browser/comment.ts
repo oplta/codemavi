@@ -26,7 +26,7 @@ abstract class CommentLineAction extends EditorAction {
 		this._type = type;
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		if (!editor.hasModel()) {
@@ -151,7 +151,7 @@ class BlockCommentAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		if (!editor.hasModel()) {

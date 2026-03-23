@@ -9,7 +9,7 @@ import { IMouseEvent } from './mouseEvent.js';
 import { DisposableStore } from '../common/lifecycle.js';
 
 export interface IContentActionHandler {
-	readonly callback: (content: string, event: IMouseEvent | IKeyboardEvent) => void;
+	readonly callback: (content: string, event: IMouseEvent | IKeyboardEvent) => codemavi;
 	readonly disposables: DisposableStore;
 }
 
@@ -64,7 +64,7 @@ class StringStream {
 		return this.source[this.index];
 	}
 
-	public advance(): void {
+	public advance(): codemavi {
 		this.index++;
 	}
 }

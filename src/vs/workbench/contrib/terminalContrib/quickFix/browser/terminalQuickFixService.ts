@@ -47,7 +47,7 @@ export class TerminalQuickFixService implements ITerminalQuickFixService {
 		});
 	}
 
-	registerCommandSelector(selector: ITerminalCommandSelector): void {
+	registerCommandSelector(selector: ITerminalCommandSelector): codemavi {
 		this._selectors.set(selector.id, selector);
 		this._onDidRegisterCommandSelector.fire(selector);
 	}
@@ -84,7 +84,7 @@ export class TerminalQuickFixService implements ITerminalQuickFixService {
 const quickFixExtensionPoint = ExtensionsRegistry.registerExtensionPoint<ITerminalCommandSelector[]>({
 	extensionPoint: 'terminalQuickFixes',
 	defaultExtensionKind: ['workspace'],
-	activationEventsGenerator: (terminalQuickFixes: ITerminalCommandSelector[], result: { push(item: string): void }) => {
+	activationEventsGenerator: (terminalQuickFixes: ITerminalCommandSelector[], result: { push(item: string): codemavi }) => {
 		for (const quickFixContrib of terminalQuickFixes ?? []) {
 			result.push(`onTerminalQuickFixRequest:${quickFixContrib.id}`);
 		}

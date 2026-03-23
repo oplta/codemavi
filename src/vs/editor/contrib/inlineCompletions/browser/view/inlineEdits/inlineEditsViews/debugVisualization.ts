@@ -11,7 +11,7 @@ export interface IVisualizationEffect {
 	visualize(): IDisposable;
 }
 
-export function setVisualization(data: object, visualization: IVisualizationEffect): void {
+export function setVisualization(data: object, visualization: IVisualizationEffect): codemavi {
 	(data as any)['$$visualization'] = visualization;
 }
 
@@ -96,14 +96,14 @@ class HtmlRectVisualizer implements IVisualizationEffect {
 	}
 }
 
-export function debugView(value: unknown, reader: IReader): void {
+export function debugView(value: unknown, reader: IReader): codemavi {
 	if (typeof value === 'object' && value && '$$visualization' in value) {
 		const vis = value['$$visualization'] as IVisualizationEffect;
 		debugReadDisposable(vis.visualize(), reader);
 	}
 }
 
-function debugReadDisposable(d: IDisposable, reader: IReader): void {
+function debugReadDisposable(d: IDisposable, reader: IReader): codemavi {
 	derivedWithStore((_reader, store) => {
 		store.add(d);
 		return undefined;

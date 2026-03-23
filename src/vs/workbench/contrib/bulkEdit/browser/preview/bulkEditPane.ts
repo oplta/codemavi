@@ -68,7 +68,7 @@ export class BulkEditPane extends ViewPane {
 
 	private readonly _disposables = new DisposableStore();
 	private readonly _sessionDisposables = new DisposableStore();
-	private _currentResolve?: (edit?: ResourceEdit[]) => void;
+	private _currentResolve?: (edit?: ResourceEdit[]) => codemavi;
 	private _currentInput?: BulkFileOperations;
 	private _currentProvider?: BulkEditPreviewProvider;
 
@@ -101,13 +101,13 @@ export class BulkEditPane extends ViewPane {
 		this._ctxHasCheckedChanges = BulkEditPane.ctxHasCheckedChanges.bindTo(contextKeyService);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._tree.dispose();
 		this._disposables.dispose();
 		super.dispose();
 	}
 
-	protected override renderBody(parent: HTMLElement): void {
+	protected override renderBody(parent: HTMLElement): codemavi {
 		super.renderBody(parent);
 
 		const resourceLabels = this._instaService.createInstance(
@@ -172,14 +172,14 @@ export class BulkEditPane extends ViewPane {
 		this._setState(State.Message);
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		const treeHeight = height - 50;
 		this._tree.getHTMLElement().parentElement!.style.height = `${treeHeight}px`;
 		this._tree.layout(treeHeight, width);
 	}
 
-	private _setState(state: State): void {
+	private _setState(state: State): codemavi {
 		this.element.dataset['state'] = state;
 	}
 
@@ -249,7 +249,7 @@ export class BulkEditPane extends ViewPane {
 		}
 	}
 
-	accept(): void {
+	accept(): codemavi {
 
 		const conflicts = this._currentInput?.conflicts.list();
 
@@ -272,7 +272,7 @@ export class BulkEditPane extends ViewPane {
 		this._done(false);
 	}
 
-	private _done(accept: boolean): void {
+	private _done(accept: boolean): codemavi {
 		this._currentResolve?.(accept ? this._currentInput?.getWorkspaceEdit() : undefined);
 		this._currentInput = undefined;
 		this._setState(State.Message);
@@ -288,13 +288,13 @@ export class BulkEditPane extends ViewPane {
 		}
 	}
 
-	groupByFile(): void {
+	groupByFile(): codemavi {
 		if (!this._treeDataSource.groupByFile) {
 			this.toggleGrouping();
 		}
 	}
 
-	groupByType(): void {
+	groupByType(): codemavi {
 		if (this._treeDataSource.groupByFile) {
 			this.toggleGrouping();
 		}
@@ -318,7 +318,7 @@ export class BulkEditPane extends ViewPane {
 		}
 	}
 
-	private async _openElementInMultiDiffEditor(e: IOpenEvent<BulkEditElement | undefined>): Promise<void> {
+	private async _openElementInMultiDiffEditor(e: IOpenEvent<BulkEditElement | undefined>): Promise<codemavi> {
 
 		const fileOperations = this._currentInput?.fileOperations;
 		if (!fileOperations) {
@@ -409,7 +409,7 @@ export class BulkEditPane extends ViewPane {
 		};
 	});
 
-	private _onContextMenu(e: ITreeContextMenuEvent<any>): void {
+	private _onContextMenu(e: ITreeContextMenuEvent<any>): codemavi {
 
 		this._contextMenuService.showContextMenu({
 			menuId: MenuId.BulkEditContext,

@@ -59,13 +59,13 @@ export class TOCTreeModel {
 		return this._settingsTreeRoot.children;
 	}
 
-	update(): void {
+	update(): codemavi {
 		if (this._settingsTreeRoot) {
 			this.updateGroupCount(this._settingsTreeRoot);
 		}
 	}
 
-	private updateGroupCount(group: SettingsTreeGroupElement): void {
+	private updateGroupCount(group: SettingsTreeGroupElement): codemavi {
 		group.children.forEach(child => {
 			if (child instanceof SettingsTreeGroupElement) {
 				this.updateGroupCount(child);
@@ -123,7 +123,7 @@ export class TOCRenderer implements ITreeRenderer<SettingsTreeGroupElement, neve
 		};
 	}
 
-	renderElement(node: ITreeNode<SettingsTreeGroupElement>, index: number, template: ITOCEntryTemplate): void {
+	renderElement(node: ITreeNode<SettingsTreeGroupElement>, index: number, template: ITOCEntryTemplate): codemavi {
 		template.elementDisposables.clear();
 
 		const element = node.element;
@@ -140,7 +140,7 @@ export class TOCRenderer implements ITreeRenderer<SettingsTreeGroupElement, neve
 		}
 	}
 
-	disposeTemplate(templateData: ITOCEntryTemplate): void {
+	disposeTemplate(templateData: ITOCEntryTemplate): codemavi {
 		templateData.elementDisposables.dispose();
 	}
 }
@@ -217,7 +217,7 @@ export class TOCTree extends WorkbenchObjectTree<SettingsTreeGroupElement> {
 		// test open mode
 
 		const filter = instantiationService.createInstance(SettingsTreeFilter, viewState);
-		const options: IWorkbenchObjectTreeOptions<SettingsTreeGroupElement, void> = {
+		const options: IWorkbenchObjectTreeOptions<SettingsTreeGroupElement, codemavi> = {
 			filter,
 			multipleSelectionSupport: false,
 			identityProvider: {

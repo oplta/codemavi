@@ -41,12 +41,12 @@ export class LanguageIdCodec implements ILanguageIdCodec {
 		this._nextLanguageId = 2;
 	}
 
-	private _register(language: string, languageId: LanguageId): void {
+	private _register(language: string, languageId: LanguageId): codemavi {
 		this._languageIdToLanguage[languageId] = language;
 		this._languageToLanguageId.set(language, languageId);
 	}
 
-	public register(language: string): void {
+	public register(language: string): codemavi {
 		if (this._languageToLanguageId.has(language)) {
 			return;
 		}
@@ -67,8 +67,8 @@ export class LanguagesRegistry extends Disposable {
 
 	static instanceCount = 0;
 
-	private readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
-	public readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	public readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private readonly _warnOnOverwrite: boolean;
 	public readonly languageIdCodec: LanguageIdCodec;
@@ -103,12 +103,12 @@ export class LanguagesRegistry extends Disposable {
 		super.dispose();
 	}
 
-	public setDynamicLanguages(def: ILanguageExtensionPoint[]): void {
+	public setDynamicLanguages(def: ILanguageExtensionPoint[]): codemavi {
 		this._dynamicLanguages = def;
 		this._initializeFromRegistry();
 	}
 
-	private _initializeFromRegistry(): void {
+	private _initializeFromRegistry(): codemavi {
 		this._languages = {};
 		this._mimeTypesMap = {};
 		this._nameMap = {};
@@ -123,7 +123,7 @@ export class LanguagesRegistry extends Disposable {
 		return ModesRegistry.registerLanguage(desc);
 	}
 
-	_registerLanguages(desc: ILanguageExtensionPoint[]): void {
+	_registerLanguages(desc: ILanguageExtensionPoint[]): codemavi {
 
 		for (const d of desc) {
 			this._registerLanguage(d);
@@ -151,7 +151,7 @@ export class LanguagesRegistry extends Disposable {
 		this._onDidChange.fire();
 	}
 
-	private _registerLanguage(lang: ILanguageExtensionPoint): void {
+	private _registerLanguage(lang: ILanguageExtensionPoint): codemavi {
 		const langId = lang.id;
 
 		let resolvedLanguage: IResolvedLanguage;
@@ -175,7 +175,7 @@ export class LanguagesRegistry extends Disposable {
 		this._mergeLanguage(resolvedLanguage, lang);
 	}
 
-	private _mergeLanguage(resolvedLanguage: IResolvedLanguage, lang: ILanguageExtensionPoint): void {
+	private _mergeLanguage(resolvedLanguage: IResolvedLanguage, lang: ILanguageExtensionPoint): codemavi {
 		const langId = lang.id;
 
 		let primaryMime: string | null = null;

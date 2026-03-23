@@ -109,7 +109,7 @@ const completionSpec: Fig.Spec = {
 		{
 			name: ["-s", "--no-messages"],
 			description:
-				"Suppress error messages about nonexistent or unreadable files. Portability note: unlike GNU grep, 7th Edition Unix grep did not conform to POSIX, because it lacked -q and its -s option behaved like GNU grep's -q option. USG -style grep also lacked -q but its -s option behaved like GNU grep. Portable shell scripts should avoid both -q and -s and should redirect standard and error output to /dev/null instead. (-s is specified by POSIX.)",
+				"Suppress error messages about nonexistent or unreadable files. Portability note: unlike GNU grep, 7th Edition Unix grep did not conform to POSIX, because it lacked -q and its -s option behaved like GNU grep's -q option. USG -style grep also lacked -q but its -s option behaved like GNU grep. Portable shell scripts should acodemavi both -q and -s and should redirect standard and error output to /dev/null instead. (-s is specified by POSIX.)",
 		},
 		{
 			name: ["-b", "--byte-offset"],

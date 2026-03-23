@@ -147,7 +147,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, subject: InspectSubject): void {
+	override run(accessor: ServicesAccessor, subject: InspectSubject): codemavi {
 		runInLast(accessor, TestRunProfileBitset.Run, subject);
 	}
 });
@@ -166,7 +166,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, subject: InspectSubject): void {
+	override run(accessor: ServicesAccessor, subject: InspectSubject): codemavi {
 		runInLast(accessor, TestRunProfileBitset.Debug, subject);
 	}
 });
@@ -176,7 +176,7 @@ export class TestResultsViewContent extends Disposable {
 
 	private readonly didReveal = this._register(new Emitter<{ subject: InspectSubject; preserveFocus: boolean }>());
 	private readonly currentSubjectStore = this._register(new DisposableStore());
-	private readonly onCloseEmitter = this._register(new Relay<void>());
+	private readonly onCloseEmitter = this._register(new Relay<codemavi>());
 	private followupWidget!: FollowupActionWidget;
 	private messageContextKeyService!: IContextKeyService;
 	private contextKeyTestMessage!: IContextKey<string>;
@@ -231,7 +231,7 @@ export class TestResultsViewContent extends Disposable {
 		super();
 	}
 
-	public fillBody(containerElement: HTMLElement): void {
+	public fillBody(containerElement: HTMLElement): codemavi {
 		const initialSpitWidth = TestResultsViewContent.lastSplitWidth;
 		this.splitView = new SplitView(containerElement, { orientation: Orientation.HORIZONTAL });
 
@@ -463,7 +463,7 @@ const FOLLOWUP_ANIMATION_MIN_TIME = 500;
 class FollowupActionWidget extends Disposable {
 	private readonly el = dom.h('div.testing-followup-action', []);
 	private readonly visibleStore = this._register(new DisposableStore());
-	private readonly onCloseEmitter = this._register(new Emitter<void>());
+	private readonly onCloseEmitter = this._register(new Emitter<codemavi>());
 	public readonly onClose = this.onCloseEmitter.event;
 
 	public get domNode() {
@@ -544,7 +544,7 @@ class FollowupActionWidget extends Disposable {
 		return link;
 	}
 
-	private makeLink(onClick: () => void) {
+	private makeLink(onClick: () => codemavi) {
 		const link = document.createElement('a');
 		link.tabIndex = 0;
 		this.visibleStore.add(dom.addDisposableListener(link, 'click', onClick));

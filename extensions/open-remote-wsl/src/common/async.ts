@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export function timeout(millis: number): Promise<void> {
+export function timeout(millis: number): Promise<codemavi> {
 	return new Promise((resolve) => setTimeout(resolve, millis));
 }
 

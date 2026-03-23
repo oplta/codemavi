@@ -20,36 +20,36 @@ class TestTelemetryLogger extends AbstractLogger implements ILogger {
 		this.setLevel(logLevel);
 	}
 
-	trace(message: string, ...args: any[]): void {
+	trace(message: string, ...args: any[]): codemavi {
 		if (this.canLog(LogLevel.Trace)) {
 			this.logs.push(message + JSON.stringify(args));
 		}
 	}
 
-	debug(message: string, ...args: any[]): void {
+	debug(message: string, ...args: any[]): codemavi {
 		if (this.canLog(LogLevel.Debug)) {
 			this.logs.push(message);
 		}
 	}
 
-	info(message: string, ...args: any[]): void {
+	info(message: string, ...args: any[]): codemavi {
 		if (this.canLog(LogLevel.Info)) {
 			this.logs.push(message);
 		}
 	}
 
-	warn(message: string | Error, ...args: any[]): void {
+	warn(message: string | Error, ...args: any[]): codemavi {
 		if (this.canLog(LogLevel.Warning)) {
 			this.logs.push(message.toString());
 		}
 	}
 
-	error(message: string, ...args: any[]): void {
+	error(message: string, ...args: any[]): codemavi {
 		if (this.canLog(LogLevel.Error)) {
 			this.logs.push(message);
 		}
 	}
-	flush(): void { }
+	flush(): codemavi { }
 }
 
 export class TestTelemetryLoggerService implements ILoggerService {
@@ -74,12 +74,12 @@ export class TestTelemetryLoggerService implements ILoggerService {
 	onDidChangeVisibility = Event.None;
 	onDidChangeLogLevel = Event.None;
 	onDidChangeLoggers = Event.None;
-	setLogLevel(): void { }
+	setLogLevel(): codemavi { }
 	getLogLevel() { return LogLevel.Info; }
-	setVisibility(): void { }
+	setVisibility(): codemavi { }
 	getDefaultLogLevel() { return this.logLevel; }
 	registerLogger() { }
-	deregisterLogger(): void { }
+	deregisterLogger(): codemavi { }
 	getRegisteredLoggers() { return []; }
 	getRegisteredLogger() { return undefined; }
 }

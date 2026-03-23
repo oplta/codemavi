@@ -378,7 +378,7 @@
 		}
 	},
 	{
-		"c": "void",
+		"c": "codemavi",
 		"t": "source.objc meta.implementation.objc meta.scope.implementation.objc meta.function-with-body.objc meta.function.objc meta.return-type.objc storage.type.built-in.primitive.objc",
 		"r": {
 			"dark_plus": "storage.type: #569CD6",

@@ -28,7 +28,7 @@ export interface IColorizerElementOptions extends IColorizerOptions {
 
 export class Colorizer {
 
-	public static colorizeElement(themeService: IStandaloneThemeService, languageService: ILanguageService, domNode: HTMLElement, options: IColorizerElementOptions): Promise<void> {
+	public static colorizeElement(themeService: IStandaloneThemeService, languageService: ILanguageService, domNode: HTMLElement, options: IColorizerElementOptions): Promise<codemavi> {
 		options = options || {};
 		const theme = options.theme || 'vs';
 		const mimeType = options.mimeType || domNode.getAttribute('lang') || domNode.getAttribute('data-lang');

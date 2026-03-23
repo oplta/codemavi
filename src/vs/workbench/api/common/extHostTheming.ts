@@ -26,7 +26,7 @@ export class ExtHostTheming implements ExtHostThemingShape {
 		return this._actual;
 	}
 
-	$onColorThemeChange(type: string): void {
+	$onColorThemeChange(type: string): codemavi {
 		let kind;
 		switch (type) {
 			case 'light': kind = ColorThemeKind.Light; break;

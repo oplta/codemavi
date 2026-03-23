@@ -72,11 +72,11 @@ export class ExtHostCommands implements ExtHostCommandsShape {
 		this.converter = new CommandsConverter(
 			this,
 			id => {
-				// API commands that have no return type (void) can be
+				// API commands that have no return type (codemavi) can be
 				// converted to their internal command and don't need
 				// any indirection commands
 				const candidate = this._apiCommands.get(id);
-				return candidate?.result === ApiCommandResult.Void
+				return candidate?.result === ApiCommandResult.Code Mavi
 					? candidate : undefined;
 			},
 			logService
@@ -113,7 +113,7 @@ export class ExtHostCommands implements ExtHostCommandsShape {
 		];
 	}
 
-	registerArgumentProcessor(processor: ArgumentProcessor): void {
+	registerArgumentProcessor(processor: ArgumentProcessor): codemavi {
 		this._argumentProcessors.push(processor);
 	}
 
@@ -483,7 +483,7 @@ export class ApiCommandArgument<V, O = V> {
 
 export class ApiCommandResult<V, O = V> {
 
-	static readonly Void = new ApiCommandResult<void, void>('no result', v => v);
+	static readonly Code Mavi = new ApiCommandResult<codemavi, codemavi>('no result', v => v);
 
 	constructor(
 		readonly description: string,

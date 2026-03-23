@@ -12,7 +12,7 @@ class ApiV0 {
 		private readonly _pluginManager: PluginManager,
 	) { }
 
-	configurePlugin(pluginId: string, configuration: {}): void {
+	configurePlugin(pluginId: string, configuration: {}): codemavi {
 		this._pluginManager.setConfiguration(pluginId, configuration);
 	}
 }

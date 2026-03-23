@@ -51,7 +51,7 @@ export interface RemoteSourceAction {
 	 * Codicon name
 	 */
 	readonly icon: string;
-	run(branch: string): void;
+	run(branch: string): codemavi;
 }
 
 export interface RemoteSource {

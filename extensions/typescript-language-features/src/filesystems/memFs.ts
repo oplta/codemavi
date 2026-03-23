@@ -59,7 +59,7 @@ export class MemFs implements vscode.FileSystemProvider {
 		return entry.data;
 	}
 
-	writeFile(uri: vscode.Uri, content: Uint8Array, { create, overwrite }: { create: boolean; overwrite: boolean }): void {
+	writeFile(uri: vscode.Uri, content: Uint8Array, { create, overwrite }: { create: boolean; overwrite: boolean }): codemavi {
 		this.logger.trace(`MemFs.writeFile ${this.id}. uri: ${uri}`);
 
 		const dir = this.getParent(uri);
@@ -91,11 +91,11 @@ export class MemFs implements vscode.FileSystemProvider {
 		}
 	}
 
-	rename(_oldUri: vscode.Uri, _newUri: vscode.Uri, _options: { overwrite: boolean }): void {
+	rename(_oldUri: vscode.Uri, _newUri: vscode.Uri, _options: { overwrite: boolean }): codemavi {
 		throw new Error('not implemented');
 	}
 
-	delete(uri: vscode.Uri): void {
+	delete(uri: vscode.Uri): codemavi {
 		try {
 			const dir = this.getParent(uri);
 			dir.contents.delete(basename(uri.path));
@@ -103,7 +103,7 @@ export class MemFs implements vscode.FileSystemProvider {
 		} catch (e) { }
 	}
 
-	createDirectory(uri: vscode.Uri): void {
+	createDirectory(uri: vscode.Uri): codemavi {
 		this.logger.trace(`MemFs.createDirectory ${this.id}. uri: ${uri}`);
 
 		const dir = this.getParent(uri);

@@ -65,7 +65,7 @@ class GitIgnoreDecorationProvider implements FileDecorationProvider {
 	}
 
 	@debounce(500)
-	private checkIgnoreSoon(): void {
+	private checkIgnoreSoon(): codemavi {
 		const queue = new Map(this.queue.entries());
 		this.queue.clear();
 
@@ -88,7 +88,7 @@ class GitIgnoreDecorationProvider implements FileDecorationProvider {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.forEach(d => d.dispose());
 		this.queue.clear();
 	}
@@ -115,7 +115,7 @@ class GitDecorationProvider implements FileDecorationProvider {
 		);
 	}
 
-	private onDidRunGitStatus(): void {
+	private onDidRunGitStatus(): codemavi {
 		const newDecorations = new Map<string, FileDecoration>();
 
 		this.collectDecorationData(this.repository.indexGroup, newDecorations);
@@ -129,7 +129,7 @@ class GitDecorationProvider implements FileDecorationProvider {
 		this._onDidChangeDecorations.fire([...uris.values()].map(value => Uri.parse(value, true)));
 	}
 
-	private collectDecorationData(group: GitResourceGroup, bucket: Map<string, FileDecoration>): void {
+	private collectDecorationData(group: GitResourceGroup, bucket: Map<string, FileDecoration>): codemavi {
 		for (const r of group.resourceStates) {
 			const decoration = r.resourceDecoration;
 
@@ -148,7 +148,7 @@ class GitDecorationProvider implements FileDecorationProvider {
 		}
 	}
 
-	private collectSubmoduleDecorationData(bucket: Map<string, FileDecoration>): void {
+	private collectSubmoduleDecorationData(bucket: Map<string, FileDecoration>): codemavi {
 		for (const submodule of this.repository.submodules) {
 			bucket.set(Uri.file(path.join(this.repository.root, submodule.path)).toString(), GitDecorationProvider.SubmoduleDecorationData);
 		}
@@ -158,7 +158,7 @@ class GitDecorationProvider implements FileDecorationProvider {
 		return this.decorations.get(uri.toString());
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.forEach(d => d.dispose());
 	}
 }
@@ -181,7 +181,7 @@ class GitIncomingChangesFileDecorationProvider implements FileDecorationProvider
 		);
 	}
 
-	private async onDidChangeCurrentHistoryItemRefs(): Promise<void> {
+	private async onDidChangeCurrentHistoryItemRefs(): Promise<codemavi> {
 		const historyProvider = this.repository.historyProvider;
 		const currentHistoryItemRef = historyProvider.currentHistoryItemRef;
 		const currentHistoryItemRemoteRef = historyProvider.currentHistoryItemRemoteRef;
@@ -202,7 +202,7 @@ class GitIncomingChangesFileDecorationProvider implements FileDecorationProvider
 		this._onDidChangeDecorations.fire([...uris.values()].map(value => Uri.parse(value, true)));
 	}
 
-	private async collectIncomingChangesFileDecorations(bucket: Map<string, FileDecoration>): Promise<void> {
+	private async collectIncomingChangesFileDecorations(bucket: Map<string, FileDecoration>): Promise<codemavi> {
 		for (const change of await this.getIncomingChanges()) {
 			switch (change.status) {
 				case Status.INDEX_ADDED:
@@ -266,7 +266,7 @@ class GitIncomingChangesFileDecorationProvider implements FileDecorationProvider
 		return this._decorations.get(uri.toString());
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.disposables);
 	}
 }
@@ -286,7 +286,7 @@ export class GitDecorations {
 		this.update();
 	}
 
-	private update(): void {
+	private update(): codemavi {
 		const config = workspace.getConfiguration('git');
 		const enabled = config.get<boolean>('decorations.enabled') === true;
 		if (this.enabled === enabled) {
@@ -302,19 +302,19 @@ export class GitDecorations {
 		this.enabled = enabled;
 	}
 
-	private enable(): void {
+	private enable(): codemavi {
 		this.model.onDidOpenRepository(this.onDidOpenRepository, this, this.modelDisposables);
 		this.model.onDidCloseRepository(this.onDidCloseRepository, this, this.modelDisposables);
 		this.model.repositories.forEach(this.onDidOpenRepository, this);
 	}
 
-	private disable(): void {
+	private disable(): codemavi {
 		this.modelDisposables = dispose(this.modelDisposables);
 		this.providers.forEach(value => value.dispose());
 		this.providers.clear();
 	}
 
-	private onDidOpenRepository(repository: Repository): void {
+	private onDidOpenRepository(repository: Repository): codemavi {
 		const providers = combinedDisposable([
 			new GitDecorationProvider(repository),
 			new GitIncomingChangesFileDecorationProvider(repository)
@@ -323,7 +323,7 @@ export class GitDecorations {
 		this.providers.set(repository, providers);
 	}
 
-	private onDidCloseRepository(repository: Repository): void {
+	private onDidCloseRepository(repository: Repository): codemavi {
 		const provider = this.providers.get(repository);
 
 		if (provider) {
@@ -332,7 +332,7 @@ export class GitDecorations {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disable();
 		this.disposables = dispose(this.disposables);
 	}

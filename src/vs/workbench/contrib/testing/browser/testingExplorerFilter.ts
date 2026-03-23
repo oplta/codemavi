@@ -35,7 +35,7 @@ const testFilterDescriptions: { [K in TestFilterTerm]: string } = {
 export class TestingExplorerFilter extends BaseActionViewItem {
 	private input!: SuggestEnabledInputWithHistory;
 	private wrapper!: HTMLDivElement;
-	private readonly focusEmitter = this._register(new Emitter<void>());
+	private readonly focusEmitter = this._register(new Emitter<codemavi>());
 	public readonly onDidFocus = this.focusEmitter.event;
 	private readonly history: StoredValue<{ values: string[]; lastValue: string } | string[]> = this._register(this.instantiationService.createInstance(StoredValue, {
 		key: 'testing.filterHistory2',
@@ -63,7 +63,7 @@ export class TestingExplorerFilter extends BaseActionViewItem {
 	public override render(container: HTMLElement) {
 		container.classList.add('testing-filter-action-item');
 
-		const updateDelayer = this._register(new Delayer<void>(400));
+		const updateDelayer = this._register(new Delayer<codemavi>(400));
 		const wrapper = this.wrapper = dom.$('.testing-filter-wrapper');
 		container.appendChild(wrapper);
 
@@ -145,7 +145,7 @@ export class TestingExplorerFilter extends BaseActionViewItem {
 	/**
 	 * Focuses the filter input.
 	 */
-	public override focus(): void {
+	public override focus(): codemavi {
 		this.input.focus();
 	}
 
@@ -195,7 +195,7 @@ class FiltersDropdownMenuActionViewItem extends DropdownMenuActionViewItem {
 		);
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		this.updateChecked();
 	}
@@ -243,7 +243,7 @@ class FiltersDropdownMenuActionViewItem extends DropdownMenuActionViewItem {
 		];
 	}
 
-	protected override updateChecked(): void {
+	protected override updateChecked(): codemavi {
 		this.element!.classList.toggle('checked', this._action.checked);
 	}
 }

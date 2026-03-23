@@ -207,7 +207,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, args?: { index: number; levels: number; direction: 'up' | 'down' }): Promise<void> {
+	async run(accessor: ServicesAccessor, args?: { index: number; levels: number; direction: 'up' | 'down' }): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
@@ -277,7 +277,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, args?: { index: number; levels: number; direction: 'up' | 'down' }): Promise<void> {
+	async run(accessor: ServicesAccessor, args?: { index: number; levels: number; direction: 'up' | 'down' }): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);

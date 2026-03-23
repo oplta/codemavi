@@ -16,22 +16,22 @@ class ProblemReporter implements IProblemReporter {
 		this._messages = [];
 	}
 
-	public info(message: string): void {
+	public info(message: string): codemavi {
 		this._messages.push(message);
 		this._validationStatus.state = ValidationState.Info;
 	}
 
-	public warn(message: string): void {
+	public warn(message: string): codemavi {
 		this._messages.push(message);
 		this._validationStatus.state = ValidationState.Warning;
 	}
 
-	public error(message: string): void {
+	public error(message: string): codemavi {
 		this._messages.push(message);
 		this._validationStatus.state = ValidationState.Error;
 	}
 
-	public fatal(message: string): void {
+	public fatal(message: string): codemavi {
 		this._messages.push(message);
 		this._validationStatus.state = ValidationState.Fatal;
 	}

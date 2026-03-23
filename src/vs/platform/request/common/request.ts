@@ -134,7 +134,7 @@ export async function asJson<T = {}>(context: IRequestContext): Promise<T | null
 	}
 }
 
-export function updateProxyConfigurationsScope(useHostProxy: boolean, useHostProxyDefault: boolean): void {
+export function updateProxyConfigurationsScope(useHostProxy: boolean, useHostProxyDefault: boolean): codemavi {
 	registerProxyConfigurations(useHostProxy, useHostProxyDefault);
 }
 
@@ -153,7 +153,7 @@ export const USER_LOCAL_AND_REMOTE_SETTINGS = [
 let proxyConfiguration: IConfigurationNode[] = [];
 let previousUseHostProxy: boolean | undefined = undefined;
 let previousUseHostProxyDefault: boolean | undefined = undefined;
-function registerProxyConfigurations(useHostProxy = true, useHostProxyDefault = true): void {
+function registerProxyConfigurations(useHostProxy = true, useHostProxyDefault = true): codemavi {
 	if (previousUseHostProxy === useHostProxy && previousUseHostProxyDefault === useHostProxyDefault) {
 		return;
 	}

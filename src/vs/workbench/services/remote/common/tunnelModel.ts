@@ -196,7 +196,7 @@ export class PortsAttributes extends Disposable {
 	private static HOST_AND_PORT = /^([a-z0-9\-]+):(\d{1,5})$/;
 	private portsAttributes: PortAttributes[] = [];
 	private defaultPortAttributes: Attributes | undefined;
-	private _onDidChangeAttributes = new Emitter<void>();
+	private _onDidChangeAttributes = new Emitter<codemavi>();
 	public readonly onDidChangeAttributes = this._onDidChangeAttributes.event;
 
 	constructor(private readonly configurationService: IConfigurationService) {
@@ -402,8 +402,8 @@ export class TunnelModel extends Disposable {
 	private readonly inProgress: Map<string, true> = new Map();
 	readonly detected: Map<string, Tunnel>;
 	private remoteTunnels: Map<string, RemoteTunnel>;
-	private _onForwardPort: Emitter<Tunnel | void> = new Emitter();
-	public onForwardPort: Event<Tunnel | void> = this._onForwardPort.event;
+	private _onForwardPort: Emitter<Tunnel | codemavi> = new Emitter();
+	public onForwardPort: Event<Tunnel | codemavi> = this._onForwardPort.event;
 	private _onClosePort: Emitter<{ host: string; port: number }> = new Emitter();
 	public onClosePort: Event<{ host: string; port: number }> = this._onClosePort.event;
 	private _onPortName: Emitter<{ host: string; port: number }> = new Emitter();
@@ -414,14 +414,14 @@ export class TunnelModel extends Disposable {
 	public onCandidatesChanged: Event<Map<string, { host: string; port: number }>> = this._onCandidatesChanged.event;
 	private _candidateFilter: ((candidates: CandidatePort[]) => Promise<CandidatePort[]>) | undefined;
 	private tunnelRestoreValue: Promise<string | undefined>;
-	private _onEnvironmentTunnelsSet: Emitter<void> = new Emitter();
-	public onEnvironmentTunnelsSet: Event<void> = this._onEnvironmentTunnelsSet.event;
+	private _onEnvironmentTunnelsSet: Emitter<codemavi> = new Emitter();
+	public onEnvironmentTunnelsSet: Event<codemavi> = this._onEnvironmentTunnelsSet.event;
 	private _environmentTunnelsSet: boolean = false;
 	public readonly configPortsAttributes: PortsAttributes;
 	private restoreListener: DisposableStore | undefined = undefined;
 	private knownPortsRestoreValue: string | undefined;
 	private restoreComplete = false;
-	private onRestoreComplete: Emitter<void> = new Emitter();
+	private onRestoreComplete: Emitter<codemavi> = new Emitter();
 	private unrestoredExtensionTunnels: Map<string, RestorableTunnel> = new Map();
 	private sessionCachedProperties: Map<string, Partial<TunnelProperties>> = new Map();
 
@@ -826,7 +826,7 @@ export class TunnelModel extends Disposable {
 		}
 	}
 
-	async close(host: string, port: number, reason: TunnelCloseReason): Promise<void> {
+	async close(host: string, port: number, reason: TunnelCloseReason): Promise<codemavi> {
 		const key = makeAddress(host, port);
 		const oldTunnel = this.forwarded.get(key)!;
 		if ((reason === TunnelCloseReason.AutoForwardEnd) && oldTunnel && (oldTunnel.source.source === TunnelSource.Auto)) {
@@ -849,7 +849,7 @@ export class TunnelModel extends Disposable {
 		return this._environmentTunnelsSet;
 	}
 
-	addEnvironmentTunnels(tunnels: TunnelDescription[] | undefined): void {
+	addEnvironmentTunnels(tunnels: TunnelDescription[] | undefined): codemavi {
 		if (tunnels) {
 			for (const tunnel of tunnels) {
 				const matchingCandidate = mapHasAddressLocalhostOrAllInterfaces(this._candidates ?? new Map(), tunnel.remoteAddress.host, tunnel.remoteAddress.port);
@@ -878,7 +878,7 @@ export class TunnelModel extends Disposable {
 		this._onForwardPort.fire();
 	}
 
-	setCandidateFilter(filter: ((candidates: CandidatePort[]) => Promise<CandidatePort[]>) | undefined): void {
+	setCandidateFilter(filter: ((candidates: CandidatePort[]) => Promise<CandidatePort[]>) | undefined): codemavi {
 		this._candidateFilter = filter;
 	}
 

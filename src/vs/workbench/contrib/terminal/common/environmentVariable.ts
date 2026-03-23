@@ -37,12 +37,12 @@ export interface IEnvironmentVariableService {
 	/**
 	 * Sets an extension's environment variable collection.
 	 */
-	set(extensionIdentifier: string, collection: IEnvironmentVariableCollection): void;
+	set(extensionIdentifier: string, collection: IEnvironmentVariableCollection): codemavi;
 
 	/**
 	 * Deletes an extension's environment variable collection.
 	 */
-	delete(extensionIdentifier: string): void;
+	delete(extensionIdentifier: string): codemavi;
 }
 
 export interface IEnvironmentVariableCollectionWithPersistence extends IEnvironmentVariableCollection {

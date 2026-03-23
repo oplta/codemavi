@@ -35,7 +35,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		this._state = 0;
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._map.clear();
 		this._head = undefined;
 		this._tail = undefined;
@@ -132,7 +132,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		return item.value;
 	}
 
-	forEach(callbackfn: (value: V, key: K, map: LinkedMap<K, V>) => void, thisArg?: any): void {
+	forEach(callbackfn: (value: V, key: K, map: LinkedMap<K, V>) => codemavi, thisArg?: any): codemavi {
 		const state = this._state;
 		let current = this._head;
 		while (current) {
@@ -270,7 +270,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private addItemFirst(item: Item<K, V>): void {
+	private addItemFirst(item: Item<K, V>): codemavi {
 		// First time Insert
 		if (!this._head && !this._tail) {
 			this._tail = item;
@@ -284,7 +284,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private addItemLast(item: Item<K, V>): void {
+	private addItemLast(item: Item<K, V>): codemavi {
 		// First time Insert
 		if (!this._head && !this._tail) {
 			this._head = item;
@@ -298,7 +298,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private removeItem(item: Item<K, V>): void {
+	private removeItem(item: Item<K, V>): codemavi {
 		if (item === this._head && item === this._tail) {
 			this._head = undefined;
 			this._tail = undefined;
@@ -335,7 +335,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private touch(item: Item<K, V>, touch: Touch): void {
+	private touch(item: Item<K, V>, touch: Touch): codemavi {
 		if (!this._head || !this._tail) {
 			throw new Error('Invalid list');
 		}
@@ -407,7 +407,7 @@ class LinkedMap<K, V> implements Map<K, V> {
 		return data;
 	}
 
-	fromJSON(data: [K, V][]): void {
+	fromJSON(data: [K, V][]): codemavi {
 		this.clear();
 
 		for (const [key, value] of data) {
@@ -464,7 +464,7 @@ abstract class Cache<K, V> extends LinkedMap<K, V> {
 		}
 	}
 
-	protected abstract trim(newSize: number): void;
+	protected abstract trim(newSize: number): codemavi;
 }
 
 export class LRUCache<K, V> extends Cache<K, V> {

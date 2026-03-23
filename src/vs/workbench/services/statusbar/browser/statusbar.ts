@@ -221,5 +221,5 @@ export interface IStatusbarEntryAccessor extends IDisposable {
 	/**
 	 * Allows to update an existing status bar entry.
 	 */
-	update(properties: IStatusbarEntry): void;
+	update(properties: IStatusbarEntry): codemavi;
 }

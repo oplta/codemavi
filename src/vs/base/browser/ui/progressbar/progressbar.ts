@@ -63,7 +63,7 @@ export class ProgressBar extends Disposable {
 		this.create(container, options);
 	}
 
-	private create(container: HTMLElement, options?: IProgressBarOptions): void {
+	private create(container: HTMLElement, options?: IProgressBarOptions): codemavi {
 		this.element = document.createElement('div');
 		this.element.classList.add('monaco-progress-container');
 		this.element.setAttribute('role', 'progressbar');
@@ -76,7 +76,7 @@ export class ProgressBar extends Disposable {
 		this.element.appendChild(this.bit);
 	}
 
-	private off(): void {
+	private off(): codemavi {
 		this.bit.style.width = 'inherit';
 		this.bit.style.opacity = '1';
 		this.element.classList.remove(CSS_ACTIVE, CSS_INFINITE, CSS_INFINITE_LONG_RUNNING, CSS_DISCRETE);
@@ -144,7 +144,7 @@ export class ProgressBar extends Disposable {
 		return this;
 	}
 
-	private infiniteLongRunning(): void {
+	private infiniteLongRunning(): codemavi {
 		this.element.classList.add(CSS_INFINITE_LONG_RUNNING);
 	}
 
@@ -204,7 +204,7 @@ export class ProgressBar extends Disposable {
 		return this.element;
 	}
 
-	show(delay?: number): void {
+	show(delay?: number): codemavi {
 		this.showDelayedScheduler.cancel();
 		this.progressSignal.value = getProgressAcccessibilitySignalScheduler(ProgressBar.PROGRESS_SIGNAL_DEFAULT_DELAY);
 
@@ -215,7 +215,7 @@ export class ProgressBar extends Disposable {
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		hide(this.element);
 
 		this.showDelayedScheduler.cancel();

@@ -66,7 +66,7 @@ suite('ExtHostWebview', () => {
 		let lastInvokedDeserializer: vscode.WebviewPanelSerializer | undefined = undefined;
 
 		class NoopSerializer implements vscode.WebviewPanelSerializer {
-			async deserializeWebviewPanel(webview: vscode.WebviewPanel, _state: any): Promise<void> {
+			async deserializeWebviewPanel(webview: vscode.WebviewPanel, _state: any): Promise<codemavi> {
 				lastInvokedDeserializer = this;
 				disposables.add(webview);
 			}

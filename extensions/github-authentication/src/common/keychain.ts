@@ -13,7 +13,7 @@ export class Keychain {
 		private readonly Logger: Log
 	) { }
 
-	async setToken(token: string): Promise<void> {
+	async setToken(token: string): Promise<codemavi> {
 		try {
 			return await this.context.secrets.store(this.serviceId, token);
 		} catch (e) {
@@ -36,7 +36,7 @@ export class Keychain {
 		}
 	}
 
-	async deleteToken(): Promise<void> {
+	async deleteToken(): Promise<codemavi> {
 		try {
 			return await this.context.secrets.delete(this.serviceId);
 		} catch (e) {

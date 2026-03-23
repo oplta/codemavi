@@ -116,7 +116,7 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		this._store.add(this._terminalProfileService.onDidChangeAvailableProfiles(() => this._updateDefaultProfile()));
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._store.dispose();
 		for (const provider of this._profileProviders.values()) {
 			provider.dispose();
@@ -140,7 +140,7 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		return this._terminalService.getInstanceFromId(id);
 	}
 
-	public async $createTerminal(extHostTerminalId: string, launchConfig: TerminalLaunchConfig): Promise<void> {
+	public async $createTerminal(extHostTerminalId: string, launchConfig: TerminalLaunchConfig): Promise<codemavi> {
 		const shellLaunchConfig: IShellLaunchConfig = {
 			name: launchConfig.name,
 			executable: launchConfig.shellPath,
@@ -186,7 +186,7 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		return location;
 	}
 
-	public async $show(id: ExtHostTerminalIdentifier, preserveFocus: boolean): Promise<void> {
+	public async $show(id: ExtHostTerminalIdentifier, preserveFocus: boolean): Promise<codemavi> {
 		const terminalInstance = await this._getTerminalInstance(id);
 		if (terminalInstance) {
 			this._terminalService.setActiveInstance(terminalInstance);
@@ -198,7 +198,7 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}
 	}
 
-	public async $hide(id: ExtHostTerminalIdentifier): Promise<void> {
+	public async $hide(id: ExtHostTerminalIdentifier): Promise<codemavi> {
 		const instanceToHide = await this._getTerminalInstance(id);
 		const activeInstance = this._terminalService.activeInstance;
 		if (activeInstance && activeInstance.instanceId === instanceToHide?.instanceId && activeInstance.target !== TerminalLocation.Editor) {
@@ -206,20 +206,20 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}
 	}
 
-	public async $dispose(id: ExtHostTerminalIdentifier): Promise<void> {
+	public async $dispose(id: ExtHostTerminalIdentifier): Promise<codemavi> {
 		(await this._getTerminalInstance(id))?.dispose(TerminalExitReason.Extension);
 	}
 
-	public async $sendText(id: ExtHostTerminalIdentifier, text: string, shouldExecute: boolean): Promise<void> {
+	public async $sendText(id: ExtHostTerminalIdentifier, text: string, shouldExecute: boolean): Promise<codemavi> {
 		const instance = await this._getTerminalInstance(id);
 		await instance?.sendText(text, shouldExecute);
 	}
 
-	public $sendProcessExit(terminalId: number, exitCode: number | undefined): void {
+	public $sendProcessExit(terminalId: number, exitCode: number | undefined): codemavi {
 		this._terminalProcessProxies.get(terminalId)?.emitExit(exitCode);
 	}
 
-	public $startSendingDataEvents(): void {
+	public $startSendingDataEvents(): codemavi {
 		if (!this._dataEventTracker.value) {
 			this._dataEventTracker.value = this._instantiationService.createInstance(TerminalDataEventTracker, (id, data) => {
 				this._onTerminalData(id, data);
@@ -233,11 +233,11 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}
 	}
 
-	public $stopSendingDataEvents(): void {
+	public $stopSendingDataEvents(): codemavi {
 		this._dataEventTracker.clear();
 	}
 
-	public $startSendingCommandEvents(): void {
+	public $startSendingCommandEvents(): codemavi {
 		if (this._sendCommandEventListener.value) {
 			return;
 		}
@@ -255,23 +255,23 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		this._sendCommandEventListener.value = combinedDisposable(multiplexer, sub);
 	}
 
-	public $stopSendingCommandEvents(): void {
+	public $stopSendingCommandEvents(): codemavi {
 		this._sendCommandEventListener.clear();
 	}
 
-	public $startLinkProvider(): void {
+	public $startLinkProvider(): codemavi {
 		this._linkProvider.value = this._terminalLinkProviderService.registerLinkProvider(new ExtensionTerminalLinkProvider(this._proxy));
 	}
 
-	public $stopLinkProvider(): void {
+	public $stopLinkProvider(): codemavi {
 		this._linkProvider.clear();
 	}
 
-	public $registerProcessSupport(isSupported: boolean): void {
+	public $registerProcessSupport(isSupported: boolean): codemavi {
 		this._terminalService.registerProcessSupport(isSupported);
 	}
 
-	public $registerCompletionProvider(id: string, extensionIdentifier: string, ...triggerCharacters: string[]): void {
+	public $registerCompletionProvider(id: string, extensionIdentifier: string, ...triggerCharacters: string[]): codemavi {
 		this._completionProviders.set(id, this._terminalCompletionService.registerTerminalCompletionProvider(extensionIdentifier, id, {
 			id,
 			provideCompletions: async (commandLine, cursorPosition, allowFallbackCompletions, token) => {
@@ -284,12 +284,12 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}, ...triggerCharacters));
 	}
 
-	public $unregisterCompletionProvider(id: string): void {
+	public $unregisterCompletionProvider(id: string): codemavi {
 		this._completionProviders.get(id)?.dispose();
 		this._completionProviders.delete(id);
 	}
 
-	public $registerProfileProvider(id: string, extensionIdentifier: string): void {
+	public $registerProfileProvider(id: string, extensionIdentifier: string): codemavi {
 		// Proxy profile provider requests through the extension host
 		this._profileProviders.set(id, this._terminalProfileService.registerTerminalProfileProvider(extensionIdentifier, id, {
 			createContributedTerminalProfile: async (options) => {
@@ -298,12 +298,12 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}));
 	}
 
-	public $unregisterProfileProvider(id: string): void {
+	public $unregisterProfileProvider(id: string): codemavi {
 		this._profileProviders.get(id)?.dispose();
 		this._profileProviders.delete(id);
 	}
 
-	public async $registerQuickFixProvider(id: string, extensionId: string): Promise<void> {
+	public async $registerQuickFixProvider(id: string, extensionId: string): Promise<codemavi> {
 		this._quickFixProviders.set(id, this._terminalQuickFixService.registerQuickFixProvider(id, {
 			provideTerminalQuickFixes: async (terminalCommand, lines, options, token) => {
 				if (token.isCancellationRequested) {
@@ -340,39 +340,39 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		}));
 	}
 
-	public $unregisterQuickFixProvider(id: string): void {
+	public $unregisterQuickFixProvider(id: string): codemavi {
 		this._quickFixProviders.get(id)?.dispose();
 		this._quickFixProviders.delete(id);
 	}
 
-	private _onActiveTerminalChanged(terminalId: number | null): void {
+	private _onActiveTerminalChanged(terminalId: number | null): codemavi {
 		this._proxy.$acceptActiveTerminalChanged(terminalId);
 	}
 
-	private _onTerminalData(terminalId: number, data: string): void {
+	private _onTerminalData(terminalId: number, data: string): codemavi {
 		this._proxy.$acceptTerminalProcessData(terminalId, data);
 	}
 
-	private _onDidExecuteCommand(terminalId: number, command: ITerminalCommandDto): void {
+	private _onDidExecuteCommand(terminalId: number, command: ITerminalCommandDto): codemavi {
 		this._proxy.$acceptDidExecuteCommand(terminalId, command);
 	}
 
-	private _onTitleChanged(terminalId: number, name: string): void {
+	private _onTitleChanged(terminalId: number, name: string): codemavi {
 		this._proxy.$acceptTerminalTitleChange(terminalId, name);
 	}
 
-	private _onShellTypeChanged(terminalId: number): void {
+	private _onShellTypeChanged(terminalId: number): codemavi {
 		const terminalInstance = this._terminalService.getInstanceFromId(terminalId);
 		if (terminalInstance) {
 			this._proxy.$acceptTerminalShellType(terminalId, terminalInstance.shellType);
 		}
 	}
 
-	private _onTerminalDisposed(terminalInstance: ITerminalInstance): void {
+	private _onTerminalDisposed(terminalInstance: ITerminalInstance): codemavi {
 		this._proxy.$acceptTerminalClosed(terminalInstance.instanceId, terminalInstance.exitCode, terminalInstance.exitReason ?? TerminalExitReason.Unknown);
 	}
 
-	private _onTerminalOpened(terminalInstance: ITerminalInstance): void {
+	private _onTerminalOpened(terminalInstance: ITerminalInstance): codemavi {
 		const extHostTerminalId = terminalInstance.shellLaunchConfig.extHostTerminalId;
 		const shellLaunchConfigDto: IShellLaunchConfigDto = {
 			name: terminalInstance.shellLaunchConfig.name,
@@ -386,22 +386,22 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		this._proxy.$acceptTerminalOpened(terminalInstance.instanceId, extHostTerminalId, terminalInstance.title, shellLaunchConfigDto);
 	}
 
-	private _onTerminalProcessIdReady(terminalInstance: ITerminalInstance): void {
+	private _onTerminalProcessIdReady(terminalInstance: ITerminalInstance): codemavi {
 		if (terminalInstance.processId === undefined) {
 			return;
 		}
 		this._proxy.$acceptTerminalProcessId(terminalInstance.instanceId, terminalInstance.processId);
 	}
 
-	private _onInstanceDimensionsChanged(instance: ITerminalInstance): void {
+	private _onInstanceDimensionsChanged(instance: ITerminalInstance): codemavi {
 		this._proxy.$acceptTerminalDimensions(instance.instanceId, instance.cols, instance.rows);
 	}
 
-	private _onInstanceMaximumDimensionsChanged(instance: ITerminalInstance): void {
+	private _onInstanceMaximumDimensionsChanged(instance: ITerminalInstance): codemavi {
 		this._proxy.$acceptTerminalMaximumDimensions(instance.instanceId, instance.maxCols, instance.maxRows);
 	}
 
-	private _onRequestStartExtensionTerminal(request: IStartExtensionTerminalRequest): void {
+	private _onRequestStartExtensionTerminal(request: IStartExtensionTerminalRequest): codemavi {
 		const proxy = request.proxy;
 		this._terminalProcessProxies.set(proxy.instanceId, proxy);
 
@@ -423,15 +423,15 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		proxy.onRequestInitialCwd(() => this._proxy.$acceptProcessRequestInitialCwd(proxy.instanceId));
 	}
 
-	public $sendProcessData(terminalId: number, data: string): void {
+	public $sendProcessData(terminalId: number, data: string): codemavi {
 		this._terminalProcessProxies.get(terminalId)?.emitData(data);
 	}
 
-	public $sendProcessReady(terminalId: number, pid: number, cwd: string, windowsPty: IProcessReadyWindowsPty | undefined): void {
+	public $sendProcessReady(terminalId: number, pid: number, cwd: string, windowsPty: IProcessReadyWindowsPty | undefined): codemavi {
 		this._terminalProcessProxies.get(terminalId)?.emitReady(pid, cwd, windowsPty);
 	}
 
-	public $sendProcessProperty(terminalId: number, property: IProcessProperty<any>): void {
+	public $sendProcessProperty(terminalId: number, property: IProcessProperty<any>): codemavi {
 		if (property.type === ProcessPropertyType.Title) {
 			const instance = this._terminalService.getInstanceFromId(terminalId);
 			instance?.rename(property.value);
@@ -439,7 +439,7 @@ export class MainThreadTerminalService implements MainThreadTerminalServiceShape
 		this._terminalProcessProxies.get(terminalId)?.emitProcessProperty(property);
 	}
 
-	$setEnvironmentVariableCollection(extensionIdentifier: string, persistent: boolean, collection: ISerializableEnvironmentVariableCollection | undefined, descriptionMap: ISerializableEnvironmentDescriptionMap): void {
+	$setEnvironmentVariableCollection(extensionIdentifier: string, persistent: boolean, collection: ISerializableEnvironmentVariableCollection | undefined, descriptionMap: ISerializableEnvironmentDescriptionMap): codemavi {
 		if (collection) {
 			const translatedCollection = {
 				persistent,
@@ -461,7 +461,7 @@ class TerminalDataEventTracker extends Disposable {
 	private readonly _bufferer: TerminalDataBufferer;
 
 	constructor(
-		private readonly _callback: (id: number, data: string) => void,
+		private readonly _callback: (id: number, data: string) => codemavi,
 		@ITerminalService private readonly _terminalService: ITerminalService
 	) {
 		super();
@@ -475,7 +475,7 @@ class TerminalDataEventTracker extends Disposable {
 		this._register(this._terminalService.onDidDisposeInstance(instance => this._bufferer.stopBuffering(instance.instanceId)));
 	}
 
-	private _registerInstance(instance: ITerminalInstance): void {
+	private _registerInstance(instance: ITerminalInstance): codemavi {
 		// Buffer data events to reduce the amount of messages going to the extension host
 		this._register(this._bufferer.startBuffering(instance.instanceId, instance.onData));
 	}

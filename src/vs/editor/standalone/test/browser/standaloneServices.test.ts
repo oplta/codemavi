@@ -22,7 +22,7 @@ suite('StandaloneKeybindingService', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
 	class TestStandaloneKeybindingService extends StandaloneKeybindingService {
-		public testDispatch(e: IKeyboardEvent): void {
+		public testDispatch(e: IKeyboardEvent): codemavi {
 			super._dispatch(e, null!);
 		}
 	}

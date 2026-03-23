@@ -277,7 +277,7 @@ suite('ExtensionsViews Tests', () => {
 		const workbenchService = instantiationService.get(IExtensionsWorkbenchService);
 		const extension = (await workbenchService.queryLocal()).find(ex => ex.identifier.id === localEnabledLanguage.identifier.id);
 
-		await new Promise<void>(c => {
+		await new Promise<codemavi>(c => {
 			const disposable = workbenchService.onChange(() => {
 				if (extension?.outdated) {
 					disposable.dispose();

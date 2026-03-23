@@ -15,7 +15,7 @@ export function getRemoteAuthority(distro: string) {
 }
 
 class Tunnel implements vscode.Tunnel {
-	private _onDidDisposeEmitter = new vscode.EventEmitter<void>();
+	private _onDidDisposeEmitter = new vscode.EventEmitter<codemavi>();
 
 	readonly onDidDispose = this._onDidDisposeEmitter.event;
 

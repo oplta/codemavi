@@ -159,7 +159,7 @@ export class Renderer implements IPagedRenderer<IExtension, ITemplateData> {
 		};
 	}
 
-	renderPlaceholder(index: number, data: ITemplateData): void {
+	renderPlaceholder(index: number, data: ITemplateData): codemavi {
 		data.element.classList.add('loading');
 
 		data.root.removeAttribute('aria-label');
@@ -173,7 +173,7 @@ export class Renderer implements IPagedRenderer<IExtension, ITemplateData> {
 		data.extension = null;
 	}
 
-	renderElement(extension: IExtension, index: number, data: ITemplateData): void {
+	renderElement(extension: IExtension, index: number, data: ITemplateData): codemavi {
 		data.element.classList.remove('loading');
 		data.root.setAttribute('data-extension-id', extension.identifier.id);
 
@@ -227,11 +227,11 @@ export class Renderer implements IPagedRenderer<IExtension, ITemplateData> {
 		}, this, data.extensionDisposables);
 	}
 
-	disposeElement(extension: IExtension, index: number, data: ITemplateData): void {
+	disposeElement(extension: IExtension, index: number, data: ITemplateData): codemavi {
 		data.extensionDisposables = dispose(data.extensionDisposables);
 	}
 
-	disposeTemplate(data: ITemplateData): void {
+	disposeTemplate(data: ITemplateData): codemavi {
 		data.extensionDisposables = dispose(data.extensionDisposables);
 		data.disposables = dispose(data.disposables);
 	}

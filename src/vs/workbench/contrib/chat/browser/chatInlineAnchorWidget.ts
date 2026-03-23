@@ -97,7 +97,7 @@ export class InlineAnchorWidget extends Disposable {
 
 		let location: { readonly uri: URI; readonly range?: IRange };
 
-		let updateContextKeys: (() => Promise<void>) | undefined;
+		let updateContextKeys: (() => Promise<codemavi>) | undefined;
 		if (this.data.kind === 'symbol') {
 			const symbol = this.data.symbol;
 
@@ -197,7 +197,7 @@ export class InlineAnchorWidget extends Disposable {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._isDisposed = true;
 		super.dispose();
 	}
@@ -226,7 +226,7 @@ registerAction2(class AddFileToChatAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, resource: URI): Promise<void> {
+	override async run(accessor: ServicesAccessor, resource: URI): Promise<codemavi> {
 		const chatWidgetService = accessor.get(IChatWidgetService);
 		const variablesService = accessor.get(IChatVariablesService);
 
@@ -260,7 +260,7 @@ registerAction2(class CopyResourceAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const chatWidgetService = accessor.get(IChatMarkdownAnchorService);
 		const clipboardService = accessor.get(IClipboardService);
 
@@ -301,7 +301,7 @@ registerAction2(class OpenToSideResourceAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, arg?: Location | URI): Promise<void> {
+	override async run(accessor: ServicesAccessor, arg?: Location | URI): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const target = this.getTarget(accessor, arg);
@@ -363,7 +363,7 @@ registerAction2(class GoToDefinitionAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, location: Location): Promise<void> {
+	override async run(accessor: ServicesAccessor, location: Location): Promise<codemavi> {
 		const editorService = accessor.get(ICodeEditorService);
 
 		await openEditorWithSelection(editorService, location);
@@ -413,7 +413,7 @@ registerAction2(class GoToTypeDefinitionsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, location: Location): Promise<void> {
+	override async run(accessor: ServicesAccessor, location: Location): Promise<codemavi> {
 		return runGoToCommand(accessor, 'editor.action.goToTypeDefinition', location);
 	}
 });
@@ -438,7 +438,7 @@ registerAction2(class GoToImplementations extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, location: Location): Promise<void> {
+	override async run(accessor: ServicesAccessor, location: Location): Promise<codemavi> {
 		return runGoToCommand(accessor, 'editor.action.goToImplementation', location);
 	}
 });
@@ -463,7 +463,7 @@ registerAction2(class GoToReferencesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, location: Location): Promise<void> {
+	override async run(accessor: ServicesAccessor, location: Location): Promise<codemavi> {
 		return runGoToCommand(accessor, 'editor.action.goToReferences', location);
 	}
 });

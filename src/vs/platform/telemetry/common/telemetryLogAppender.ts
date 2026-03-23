@@ -40,11 +40,11 @@ export class TelemetryLogAppender extends Disposable implements ITelemetryAppend
 		}
 	}
 
-	flush(): Promise<void> {
+	flush(): Promise<codemavi> {
 		return Promise.resolve();
 	}
 
-	log(eventName: string, data: any): void {
+	log(eventName: string, data: any): codemavi {
 		this.logger.trace(`${this.prefix}telemetry/${eventName}`, validateTelemetryData(data));
 	}
 }

@@ -12,7 +12,7 @@ export class Delayer<T> {
 	public defaultDelay: number;
 	private timeout: any; // Timer
 	private completionPromise: Promise<T> | null;
-	private onSuccess: ((value: T | PromiseLike<T> | undefined) => void) | null;
+	private onSuccess: ((value: T | PromiseLike<T> | undefined) => codemavi) | null;
 	private task: ITask<T> | null;
 
 	constructor(defaultDelay: number) {
@@ -65,12 +65,12 @@ export class Delayer<T> {
 		return this.timeout !== null;
 	}
 
-	public cancel(): void {
+	public cancel(): codemavi {
 		this.cancelTimeout();
 		this.completionPromise = null;
 	}
 
-	private cancelTimeout(): void {
+	private cancelTimeout(): codemavi {
 		if (this.timeout !== null) {
 			clearTimeout(this.timeout);
 			this.timeout = null;

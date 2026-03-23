@@ -83,7 +83,7 @@ export class InlineEditsAdapter extends Disposable {
 						enableForwardStability: true,
 					};
 				},
-				handleRejection: (completions: InlineCompletions, item: InlineCompletionsAndEdits['items'][number]): void => {
+				handleRejection: (completions: InlineCompletions, item: InlineCompletionsAndEdits['items'][number]): codemavi => {
 					if (item.edit.rejected) {
 						this._commandService.executeCommand(item.edit.rejected.id, ...(item.edit.rejected.arguments ?? []));
 					}

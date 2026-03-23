@@ -28,15 +28,15 @@ export class CellProgressBar extends CellContentPart {
 		this._collapsedProgressBar.hide();
 	}
 
-	override didRenderCell(element: ICellViewModel): void {
+	override didRenderCell(element: ICellViewModel): codemavi {
 		this._updateForExecutionState(element);
 	}
 
-	override updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): void {
+	override updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): codemavi {
 		this._updateForExecutionState(element, e);
 	}
 
-	override updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): void {
+	override updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): codemavi {
 		if (e.metadataChanged || e.internalMetadataChanged) {
 			this._updateForExecutionState(element);
 		}
@@ -57,7 +57,7 @@ export class CellProgressBar extends CellContentPart {
 		}
 	}
 
-	private _updateForExecutionState(element: ICellViewModel, e?: ICellExecutionStateChangedEvent): void {
+	private _updateForExecutionState(element: ICellViewModel, e?: ICellExecutionStateChangedEvent): codemavi {
 		const exeState = e?.changed ?? this._notebookExecutionStateService.getCellExecution(element.uri);
 		const progressBar = element.isInputCollapsed ? this._collapsedProgressBar : this._progressBar;
 		if (exeState?.state === NotebookCellExecutionState.Executing && (!exeState.didPause || element.isInputCollapsed)) {
@@ -68,6 +68,6 @@ export class CellProgressBar extends CellContentPart {
 	}
 }
 
-function showProgressBar(progressBar: ProgressBar): void {
+function showProgressBar(progressBar: ProgressBar): codemavi {
 	progressBar.infinite().show(500);
 }

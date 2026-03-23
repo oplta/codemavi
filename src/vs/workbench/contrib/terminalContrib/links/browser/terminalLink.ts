@@ -22,8 +22,8 @@ export class TerminalLink extends Disposable implements ILink {
 	private readonly _tooltipScheduler: MutableDisposable<RunOnceScheduler> = this._register(new MutableDisposable());
 	private readonly _hoverListeners = this._register(new MutableDisposable());
 
-	private readonly _onInvalidated = new Emitter<void>();
-	get onInvalidated(): Event<void> { return this._onInvalidated.event; }
+	private readonly _onInvalidated = new Emitter<codemavi>();
+	get onInvalidated(): Event<codemavi> { return this._onInvalidated.event; }
 
 	get type(): TerminalLinkType { return this._type; }
 
@@ -35,8 +35,8 @@ export class TerminalLink extends Disposable implements ILink {
 		readonly parsedLink: IParsedLink | undefined,
 		readonly actions: IHoverAction[] | undefined,
 		private readonly _viewportY: number,
-		private readonly _activateCallback: (event: MouseEvent | undefined, uri: string) => Promise<void>,
-		private readonly _tooltipCallback: (link: TerminalLink, viewportRange: IViewportRange, modifierDownCallback?: () => void, modifierUpCallback?: () => void) => void,
+		private readonly _activateCallback: (event: MouseEvent | undefined, uri: string) => Promise<codemavi>,
+		private readonly _tooltipCallback: (link: TerminalLink, viewportRange: IViewportRange, modifierDownCallback?: () => codemavi, modifierUpCallback?: () => codemavi) => codemavi,
 		private readonly _isHighConfidenceLink: boolean,
 		readonly label: string | undefined,
 		private readonly _type: TerminalLinkType,
@@ -49,11 +49,11 @@ export class TerminalLink extends Disposable implements ILink {
 		};
 	}
 
-	activate(event: MouseEvent | undefined, text: string): void {
+	activate(event: MouseEvent | undefined, text: string): codemavi {
 		this._activateCallback(event, text);
 	}
 
-	hover(event: MouseEvent, text: string): void {
+	hover(event: MouseEvent, text: string): codemavi {
 		const w = dom.getWindow(event);
 		const d = w.document;
 		// Listen for modifier before handing it off to the hover to handle so it gets disposed correctly
@@ -111,12 +111,12 @@ export class TerminalLink extends Disposable implements ILink {
 		}));
 	}
 
-	leave(): void {
+	leave(): codemavi {
 		this._hoverListeners.clear();
 		this._tooltipScheduler.clear();
 	}
 
-	private _enableDecorations(): void {
+	private _enableDecorations(): codemavi {
 		if (!this.decorations.pointerCursor) {
 			this.decorations.pointerCursor = true;
 		}
@@ -125,7 +125,7 @@ export class TerminalLink extends Disposable implements ILink {
 		}
 	}
 
-	private _disableDecorations(): void {
+	private _disableDecorations(): codemavi {
 		if (this.decorations.pointerCursor) {
 			this.decorations.pointerCursor = false;
 		}

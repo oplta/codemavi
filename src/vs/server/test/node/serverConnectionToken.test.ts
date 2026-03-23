@@ -19,7 +19,7 @@ suite('parseServerConnectionToken', () => {
 		return (r instanceof ServerConnectionTokenParseError);
 	}
 
-	function assertIsError(r: ServerConnectionToken | ServerConnectionTokenParseError): void {
+	function assertIsError(r: ServerConnectionToken | ServerConnectionTokenParseError): codemavi {
 		assert.strictEqual(isError(r), true);
 	}
 

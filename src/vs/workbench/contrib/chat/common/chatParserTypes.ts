@@ -14,7 +14,7 @@ import { IChatRequestProblemsVariable, IChatRequestVariableValue } from './chatV
 import { ChatAgentLocation } from './constants.js';
 import { IToolData } from './languageModelToolsService.js';
 
-// These are in a separate file to avoid circular dependencies with the dependencies of the parser
+// These are in a separate file to acodemavi circular dependencies with the dependencies of the parser
 
 export interface IParsedChatRequest {
 	readonly parts: ReadonlyArray<IParsedChatRequestPart>;

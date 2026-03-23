@@ -72,7 +72,7 @@ export class ExtHostAuthentication implements ExtHostAuthenticationShape {
 		return await this._proxy.$getAccounts(providerId);
 	}
 
-	async removeSession(providerId: string, sessionId: string): Promise<void> {
+	async removeSession(providerId: string, sessionId: string): Promise<codemavi> {
 		const providerData = this._authenticationProviders.get(providerId);
 		if (!providerData) {
 			return this._proxy.$removeSession(providerId, sessionId);
@@ -106,7 +106,7 @@ export class ExtHostAuthentication implements ExtHostAuthenticationShape {
 		throw new Error(`Unable to find authentication provider with handle: ${providerId}`);
 	}
 
-	async $removeSession(providerId: string, sessionId: string): Promise<void> {
+	async $removeSession(providerId: string, sessionId: string): Promise<codemavi> {
 		const providerData = this._authenticationProviders.get(providerId);
 		if (providerData) {
 			return await providerData.provider.removeSession(sessionId);

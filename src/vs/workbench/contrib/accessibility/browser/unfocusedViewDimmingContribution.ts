@@ -82,7 +82,7 @@ export class UnfocusedViewDimmingContribution extends Disposable implements IWor
 		return this._styleElement;
 	}
 
-	private _removeStyleElement(): void {
+	private _removeStyleElement(): codemavi {
 		this._styleElementDisposables?.dispose();
 		this._styleElementDisposables = undefined;
 		this._styleElement = undefined;

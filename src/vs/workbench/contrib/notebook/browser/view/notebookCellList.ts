@@ -112,9 +112,9 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 	private _hiddenRangeIds: string[] = [];
 	private hiddenRangesPrefixSum: PrefixSumComputer | null = null;
 
-	private readonly _onDidChangeVisibleRanges = this._localDisposableStore.add(new Emitter<void>());
+	private readonly _onDidChangeVisibleRanges = this._localDisposableStore.add(new Emitter<codemavi>());
 
-	onDidChangeVisibleRanges: Event<void> = this._onDidChangeVisibleRanges.event;
+	onDidChangeVisibleRanges: Event<codemavi> = this._onDidChangeVisibleRanges.event;
 	private _visibleRanges: ICellRange[] = [];
 
 	get visibleRanges() {
@@ -524,7 +524,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		this._updateElementsInWebview(viewDiffs);
 	}
 
-	splice2(start: number, deleteCount: number, elements: readonly CellViewModel[] = []): void {
+	splice2(start: number, deleteCount: number, elements: readonly CellViewModel[] = []): codemavi {
 		// we need to convert start and delete count based on hidden ranges
 		if (start < 0 || start > this.view.length) {
 			return;
@@ -768,7 +768,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		return top + height;
 	}
 
-	override setFocus(indexes: number[], browserEvent?: UIEvent, ignoreTextModelUpdate?: boolean): void {
+	override setFocus(indexes: number[], browserEvent?: UIEvent, ignoreTextModelUpdate?: boolean): codemavi {
 		if (ignoreTextModelUpdate) {
 			super.setFocus(indexes, browserEvent);
 			return;
@@ -899,7 +899,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 	 * but the cell's editor will be attached asyncronously if it was previously out of view.
 	 * @returns The promise to await for the cell editor to be attached
 	 */
-	async revealCell(cell: ICellViewModel, revealType: CellRevealType): Promise<void> {
+	async revealCell(cell: ICellViewModel, revealType: CellRevealType): Promise<codemavi> {
 		const index = this._getViewIndexUpperBound(cell);
 
 		if (index < 0) {
@@ -1002,7 +1002,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 	}
 
 	//#region Reveal Cell Editor Range asynchronously
-	async revealRangeInCell(cell: ICellViewModel, range: Selection | Range, revealType: CellRevealRangeType): Promise<void> {
+	async revealRangeInCell(cell: ICellViewModel, range: Selection | Range, revealType: CellRevealRangeType): Promise<codemavi> {
 		const index = this._getViewIndexUpperBound(cell);
 
 		if (index < 0) {
@@ -1022,7 +1022,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 	// List items have real dynamic heights, which means after we set `scrollTop` based on the `elementTop(index)`, the element at `index` might still be removed from the view once all relayouting tasks are done.
 	// For example, we scroll item 10 into the view upwards, in the first round, items 7, 8, 9, 10 are all in the viewport. Then item 7 and 8 resize themselves to be larger and finally item 10 is removed from the view.
 	// To ensure that item 10 is always there, we need to scroll item 10 to the top edge of the viewport.
-	private async _revealRangeInternalAsync(viewIndex: number, range: Selection | Range): Promise<void> {
+	private async _revealRangeInternalAsync(viewIndex: number, range: Selection | Range): Promise<codemavi> {
 		const scrollTop = this.getViewScrollTop();
 		const wrapperBottom = this.getViewScrollBottom();
 		const elementTop = this.view.elementTop(viewIndex);
@@ -1044,7 +1044,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 				alignHint = 'bottom';
 			}
 
-			const editorAttachedPromise = new Promise<void>((resolve, reject) => {
+			const editorAttachedPromise = new Promise<codemavi>((resolve, reject) => {
 				Event.once(element.onDidChangeEditorAttachState)(() => {
 					element.editorAttached ? resolve() : reject();
 				});
@@ -1056,7 +1056,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		}
 	}
 
-	private async _revealRangeInCenterInternalAsync(viewIndex: number, range: Selection | Range): Promise<void> {
+	private async _revealRangeInCenterInternalAsync(viewIndex: number, range: Selection | Range): Promise<codemavi> {
 		const reveal = (viewIndex: number, range: Range) => {
 			const element = this.view.element(viewIndex);
 			const positionOffset = element.getPositionScrollTopOffset(range);
@@ -1077,7 +1077,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		}
 	}
 
-	private async _revealRangeInCenterIfOutsideViewportInternalAsync(viewIndex: number, range: Selection | Range): Promise<void> {
+	private async _revealRangeInCenterIfOutsideViewportInternalAsync(viewIndex: number, range: Selection | Range): Promise<codemavi> {
 		const reveal = (viewIndex: number, range: Range) => {
 			const element = this.view.element(viewIndex);
 			const positionOffset = element.getPositionScrollTopOffset(range);
@@ -1214,7 +1214,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		return elementBottom < this.scrollTop;
 	}
 
-	updateElementHeight2(element: ICellViewModel, size: number, anchorElementIndex: number | null = null): void {
+	updateElementHeight2(element: ICellViewModel, size: number, anchorElementIndex: number | null = null): codemavi {
 		const index = this._getViewIndexUpperBound(element);
 		if (index === undefined || index < 0 || index >= this.length) {
 			return;
@@ -1273,13 +1273,13 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		return;
 	}
 
-	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => void): void {
+	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => codemavi): codemavi {
 		if (this.viewZones.changeViewZones(callback)) {
 			this.viewZones.layout();
 		}
 	}
 
-	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => void): void {
+	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => codemavi): codemavi {
 		if (this.cellOverlays.changeCellOverlays(callback)) {
 			this.cellOverlays.layout();
 		}
@@ -1445,7 +1445,7 @@ export class NotebookCellList extends WorkbenchList<CellViewModel> implements ID
 		return this.view.scrollHeight;
 	}
 
-	override layout(height?: number, width?: number): void {
+	override layout(height?: number, width?: number): codemavi {
 		this._isInLayout = true;
 		super.layout(height, width);
 		if (this.renderHeight === 0) {
@@ -1540,7 +1540,7 @@ export class ListViewInfoAccessor extends Disposable {
 }
 
 function getEditorAttachedPromise(element: ICellViewModel) {
-	return new Promise<void>((resolve, reject) => {
+	return new Promise<codemavi>((resolve, reject) => {
 		Event.once(element.onDidChangeEditorAttachState)(() => element.editorAttached ? resolve() : reject());
 	});
 }

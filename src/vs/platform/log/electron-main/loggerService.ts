@@ -24,11 +24,11 @@ export interface ILoggerMainService extends ILoggerService {
 
 	createLogger(id: string, options?: Omit<ILoggerOptions, 'id'>, windowId?: number): ILogger;
 
-	registerLogger(resource: ILoggerResource, windowId?: number): void;
+	registerLogger(resource: ILoggerResource, windowId?: number): codemavi;
 
 	getGlobalLoggers(): ILoggerResource[];
 
-	deregisterLoggers(windowId: number): void;
+	deregisterLoggers(windowId: number): codemavi;
 
 }
 
@@ -48,14 +48,14 @@ export class LoggerMainService extends LoggerService implements ILoggerMainServi
 		}
 	}
 
-	override registerLogger(resource: ILoggerResource, windowId?: number): void {
+	override registerLogger(resource: ILoggerResource, windowId?: number): codemavi {
 		if (windowId !== undefined) {
 			this.loggerResourcesByWindow.set(resource.resource, windowId);
 		}
 		super.registerLogger(resource);
 	}
 
-	override deregisterLogger(resource: URI): void {
+	override deregisterLogger(resource: URI): codemavi {
 		this.loggerResourcesByWindow.delete(resource);
 		super.deregisterLogger(resource);
 	}
@@ -89,7 +89,7 @@ export class LoggerMainService extends LoggerService implements ILoggerMainServi
 			}), e => e.added.length > 0 || e.removed.length > 0);
 	}
 
-	deregisterLoggers(windowId: number): void {
+	deregisterLoggers(windowId: number): codemavi {
 		for (const [resource, resourceWindow] of this.loggerResourcesByWindow) {
 			if (resourceWindow === windowId) {
 				this.deregisterLogger(resource);
@@ -102,7 +102,7 @@ export class LoggerMainService extends LoggerService implements ILoggerMainServi
 		return loggerWindowId === undefined || loggerWindowId === windowId;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.loggerResourcesByWindow.clear();
 	}

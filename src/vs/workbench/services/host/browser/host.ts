@@ -52,7 +52,7 @@ export interface IHostService {
 	 * focused application which may not be VSCode. It may not be supported
 	 * in all environments.
 	 */
-	focus(targetWindow: Window, options?: { force: boolean }): Promise<void>;
+	focus(targetWindow: Window, options?: { force: boolean }): Promise<codemavi>;
 
 	//#endregion
 
@@ -74,22 +74,22 @@ export interface IHostService {
 	 * Opens an empty window. The optional parameter allows to define if
 	 * a new window should open or the existing one change to an empty.
 	 */
-	openWindow(options?: IOpenEmptyWindowOptions): Promise<void>;
+	openWindow(options?: IOpenEmptyWindowOptions): Promise<codemavi>;
 
 	/**
 	 * Opens the provided array of openables in a window with the provided options.
 	 */
-	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void>;
+	openWindow(toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi>;
 
 	/**
 	 * Switch between fullscreen and normal window.
 	 */
-	toggleFullScreen(targetWindow: Window): Promise<void>;
+	toggleFullScreen(targetWindow: Window): Promise<codemavi>;
 
 	/**
 	 * Bring a window to the front and restore it if needed.
 	 */
-	moveTop(targetWindow: Window): Promise<void>;
+	moveTop(targetWindow: Window): Promise<codemavi>;
 
 	/**
 	 * Get the location of the mouse cursor and its display bounds or `undefined` if unavailable.
@@ -103,17 +103,17 @@ export interface IHostService {
 	/**
 	 * Restart the entire application.
 	 */
-	restart(): Promise<void>;
+	restart(): Promise<codemavi>;
 
 	/**
 	 * Reload the currently active main window.
 	 */
-	reload(options?: { disableExtensions?: boolean }): Promise<void>;
+	reload(options?: { disableExtensions?: boolean }): Promise<codemavi>;
 
 	/**
 	 * Attempt to close the active main window.
 	 */
-	close(): Promise<void>;
+	close(): Promise<codemavi>;
 
 	/**
 	 * Execute an asynchronous `expectedShutdownTask`. While this task is

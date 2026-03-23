@@ -112,13 +112,13 @@ export class NotebookDiffOverviewRuler extends Themable {
 		this._scheduleRender();
 	}
 
-	private _scheduleRender(): void {
+	private _scheduleRender(): codemavi {
 		if (this._renderAnimationFrame === null) {
 			this._renderAnimationFrame = DOM.runAtThisOrScheduleAtNextAnimationFrame(DOM.getWindow(this._domNode.domNode), this._onRenderScheduled.bind(this), 16);
 		}
 	}
 
-	private _onRenderScheduled(): void {
+	private _onRenderScheduled(): codemavi {
 		this._renderAnimationFrame = null;
 		this._layoutNow();
 	}
@@ -138,7 +138,7 @@ export class NotebookDiffOverviewRuler extends Themable {
 		this._renderOverviewViewport();
 	}
 
-	private _renderOverviewViewport(): void {
+	private _renderOverviewViewport(): codemavi {
 		const layout = this._computeOverviewViewport();
 		if (!layout) {
 			this._overviewViewportDomElement.setTop(0);

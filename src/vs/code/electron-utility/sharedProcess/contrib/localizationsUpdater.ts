@@ -17,7 +17,7 @@ export class LocalizationsUpdater extends Disposable {
 		this.updateLocalizations();
 	}
 
-	private updateLocalizations(): void {
+	private updateLocalizations(): codemavi {
 		this.localizationsService.update();
 	}
 }

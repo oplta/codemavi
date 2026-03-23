@@ -44,13 +44,13 @@ export const ISearchService = createDecorator<ISearchService>('searchService');
  */
 export interface ISearchService {
 	readonly _serviceBrand: undefined;
-	textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete>;
-	aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => void): Promise<ISearchComplete>;
+	textSearch(query: ITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete>;
+	aiTextSearch(query: IAITextQuery, token?: CancellationToken, onProgress?: (result: ISearchProgressItem) => codemavi): Promise<ISearchComplete>;
 	getAIName(): Promise<string | undefined>;
-	textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => void) | undefined, notebookFilesToIgnore?: ResourceSet, asyncNotebookFilesToIgnore?: Promise<ResourceSet>): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> };
+	textSearchSplitSyncAsync(query: ITextQuery, token?: CancellationToken | undefined, onProgress?: ((result: ISearchProgressItem) => codemavi) | undefined, notebookFilesToIgnore?: ResourceSet, asyncNotebookFilesToIgnore?: Promise<ResourceSet>): { syncResults: ISearchComplete; asyncResults: Promise<ISearchComplete> };
 	fileSearch(query: IFileQuery, token?: CancellationToken): Promise<ISearchComplete>;
 	schemeHasFileSearchProvider(scheme: string): boolean;
-	clearCache(cacheKey: string): Promise<void>;
+	clearCache(cacheKey: string): Promise<codemavi>;
 	registerSearchResultProvider(scheme: string, type: SearchProviderType, provider: ISearchResultProvider): IDisposable;
 }
 
@@ -65,9 +65,9 @@ export const enum SearchProviderType {
 
 export interface ISearchResultProvider {
 	getAIName(): Promise<string | undefined>;
-	textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => void, token?: CancellationToken): Promise<ISearchComplete>;
+	textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => codemavi, token?: CancellationToken): Promise<ISearchComplete>;
 	fileSearch(query: IFileQuery, token?: CancellationToken): Promise<ISearchComplete>;
-	clearCache(cacheKey: string): Promise<void>;
+	clearCache(cacheKey: string): Promise<codemavi>;
 }
 
 
@@ -561,7 +561,7 @@ export interface ITelemetryEvent {
 export interface IRawSearchService {
 	fileSearch(search: IRawFileQuery): Event<ISerializedSearchProgressItem | ISerializedSearchComplete>;
 	textSearch(search: IRawTextQuery): Event<ISerializedSearchProgressItem | ISerializedSearchComplete>;
-	clearCache(cacheKey: string): Promise<void>;
+	clearCache(cacheKey: string): Promise<codemavi>;
 }
 
 export interface IRawFileMatch {
@@ -582,8 +582,8 @@ export interface IRawFileMatch {
 }
 
 export interface ISearchEngine<T> {
-	search: (onResult: (matches: T) => void, onProgress: (progress: IProgressMessage) => void, done: (error: Error | null, complete: ISearchEngineSuccess) => void) => void;
-	cancel: () => void;
+	search: (onResult: (matches: T) => codemavi, onProgress: (progress: IProgressMessage) => codemavi, done: (error: Error | null, complete: ISearchEngineSuccess) => codemavi) => codemavi;
+	cancel: () => codemavi;
 }
 
 export interface ISerializedSearchSuccess {
@@ -654,7 +654,7 @@ export class SerializableFileMatch implements ISerializedFileMatch {
 		this.results = [];
 	}
 
-	addMatch(match: ITextSearchMatch): void {
+	addMatch(match: ITextSearchMatch): codemavi {
 		this.results.push(match);
 	}
 
@@ -766,7 +766,7 @@ export class QueryGlobTester {
 	}
 
 	/**
-	 * Evaluating the exclude expression is only async if it includes sibling clauses. As an optimization, avoid doing anything with Promises
+	 * Evaluating the exclude expression is only async if it includes sibling clauses. As an optimization, acodemavi doing anything with Promises
 	 * unless the expression is async.
 	 */
 	includedInQuery(testPath: string, basename?: string, hasSibling?: (name: string) => boolean | Promise<boolean>): Promise<boolean> | boolean {

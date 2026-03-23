@@ -67,7 +67,7 @@ class ExtensionFeaturesManagementService extends Disposable implements IExtensio
 		return !feature.access.requireUserConsent;
 	}
 
-	setEnablement(extension: ExtensionIdentifier, featureId: string, enabled: boolean): void {
+	setEnablement(extension: ExtensionIdentifier, featureId: string, enabled: boolean): codemavi {
 		const feature = this.registry.getExtensionFeature(featureId);
 		if (!feature) {
 			throw new Error(`No feature with id '${featureId}'`);
@@ -155,7 +155,7 @@ class ExtensionFeaturesManagementService extends Disposable implements IExtensio
 		return this.getExtensionFeatureState(extension, featureId)?.accessData;
 	}
 
-	setStatus(extension: ExtensionIdentifier, featureId: string, status: { readonly severity: Severity; readonly message: string } | undefined): void {
+	setStatus(extension: ExtensionIdentifier, featureId: string, status: { readonly severity: Severity; readonly message: string } | undefined): codemavi {
 		const feature = this.registry.getExtensionFeature(featureId);
 		if (!feature) {
 			throw new Error(`No feature with id '${featureId}'`);
@@ -187,7 +187,7 @@ class ExtensionFeaturesManagementService extends Disposable implements IExtensio
 		return featureState;
 	}
 
-	private onDidStorageChange(e: IStorageChangeEvent): void {
+	private onDidStorageChange(e: IStorageChangeEvent): codemavi {
 		if (e.external) {
 			const oldState = this.extensionFeaturesState;
 			this.extensionFeaturesState = this.loadState();
@@ -237,7 +237,7 @@ class ExtensionFeaturesManagementService extends Disposable implements IExtensio
 		return result;
 	}
 
-	private saveState(): void {
+	private saveState(): codemavi {
 		const data: IStringDictionary<IStringDictionary<{ disabled?: boolean; accessTimes: number[] }>> = {};
 		this.extensionFeaturesState.forEach((extensionState, extensionId) => {
 			const extensionFeatures: IStringDictionary<{ disabled?: boolean; accessTimes: number[] }> = {};
@@ -252,7 +252,7 @@ class ExtensionFeaturesManagementService extends Disposable implements IExtensio
 		this.storageService.store(FEATURES_STATE_KEY, JSON.stringify(data), StorageScope.PROFILE, StorageTarget.USER);
 	}
 
-	private garbageCollectOldRequests(): void {
+	private garbageCollectOldRequests(): codemavi {
 		const now = new Date();
 		const thirtyDaysAgo = new Date(now.setDate(now.getDate() - 30));
 		let modified = false;

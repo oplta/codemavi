@@ -564,7 +564,7 @@ const terminalConfiguration: IConfigurationNode = {
 			default: 'onExit'
 		},
 		[TerminalSettingId.HideOnStartup]: {
-			description: localize('terminal.integrated.hideOnStartup', "Whether to hide the terminal view on startup, avoiding creating a terminal when there are no persistent sessions."),
+			description: localize('terminal.integrated.hideOnStartup', "Whether to hide the terminal view on startup, acodemaviing creating a terminal when there are no persistent sessions."),
 			type: 'string',
 			enum: ['never', 'whenEmpty', 'always'],
 			markdownEnumDescriptions: [

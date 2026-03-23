@@ -61,7 +61,7 @@ export class CommentReply<T extends IRange | ICellRange> extends Disposable {
 		private _pendingComment: languages.PendingComment | undefined,
 		private _parentThread: ICommentThreadWidget,
 		focus: boolean,
-		private _actionRunDelegate: (() => void) | null,
+		private _actionRunDelegate: (() => codemavi) | null,
 		@ICommentService private commentService: ICommentService,
 		@IConfigurationService configurationService: IConfigurationService,
 		@IKeybindingService private keybindingService: IKeybindingService,
@@ -211,7 +211,7 @@ export class CommentReply<T extends IRange | ICellRange> extends Disposable {
 		}
 	}
 
-	async submitComment(): Promise<void> {
+	async submitComment(): Promise<codemavi> {
 		await this._commentFormActions?.triggerDefaultAction();
 		this._pendingComment = undefined;
 	}
@@ -366,7 +366,7 @@ export class CommentReply<T extends IRange | ICellRange> extends Disposable {
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		dispose(this._commentThreadDisposables);
 	}

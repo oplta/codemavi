@@ -114,14 +114,14 @@ class BaseDropdown extends ActionRunner {
 		}
 	}
 
-	show(): void {
+	show(): codemavi {
 		if (!this.visible) {
 			this.visible = true;
 			this._onDidChangeVisibility.fire(true);
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		if (this.visible) {
 			this.visible = false;
 			this._onDidChangeVisibility.fire(false);
@@ -132,11 +132,11 @@ class BaseDropdown extends ActionRunner {
 		return !!this.visible;
 	}
 
-	protected onEvent(_e: Event, activeElement: HTMLElement): void {
+	protected onEvent(_e: Event, activeElement: HTMLElement): codemavi {
 		this.hide();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this.hide();
 
@@ -206,7 +206,7 @@ export class DropdownMenu extends BaseDropdown {
 		this._actions = actions;
 	}
 
-	override show(): void {
+	override show(): codemavi {
 		super.show();
 
 		this.element.classList.add('active');
@@ -226,11 +226,11 @@ export class DropdownMenu extends BaseDropdown {
 		});
 	}
 
-	override hide(): void {
+	override hide(): codemavi {
 		super.hide();
 	}
 
-	private onHide(): void {
+	private onHide(): codemavi {
 		this.hide();
 		this.element.classList.remove('active');
 	}

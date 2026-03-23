@@ -60,9 +60,9 @@ class TunnelMock implements Partial<ITunnelService> {
 }
 
 class TestNativeWindow extends NativeWindow {
-	protected override create(): void { }
-	protected override registerListeners(): void { }
-	protected override enableMultiWindowAwareTimeout(): void { }
+	protected override create(): codemavi { }
+	protected override registerListeners(): codemavi { }
+	protected override enableMultiWindowAwareTimeout(): codemavi { }
 }
 
 suite.skip('NativeWindow:resolveExternal', () => {

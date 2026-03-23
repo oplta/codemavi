@@ -43,7 +43,7 @@ export class ExtensionsDownloader extends Disposable {
 	readonly extensionsDownloadDir: URI;
 	private readonly extensionsTrashDir: URI;
 	private readonly cache: number;
-	private readonly cleanUpPromise: Promise<void>;
+	private readonly cleanUpPromise: Promise<codemavi>;
 
 	constructor(
 		@INativeEnvironmentService environmentService: INativeEnvironmentService,
@@ -168,7 +168,7 @@ export class ExtensionsDownloader extends Disposable {
 		}
 	}
 
-	private async downloadFile(extension: IGalleryExtension, location: URI, downloadFn: (location: URI) => Promise<void>): Promise<void> {
+	private async downloadFile(extension: IGalleryExtension, location: URI, downloadFn: (location: URI) => Promise<codemavi>): Promise<codemavi> {
 		// Do not download if exists
 		if (await this.fileService.exists(location)) {
 			return;
@@ -207,7 +207,7 @@ export class ExtensionsDownloader extends Disposable {
 		}
 	}
 
-	private async doDownload(extension: IGalleryExtension, name: string, downloadFn: () => Promise<void>, retries: number): Promise<number> {
+	private async doDownload(extension: IGalleryExtension, name: string, downloadFn: () => Promise<codemavi>, retries: number): Promise<number> {
 		let attempts = 1;
 		while (true) {
 			try {
@@ -222,7 +222,7 @@ export class ExtensionsDownloader extends Disposable {
 		}
 	}
 
-	protected async validate(zipPath: string, filePath: string): Promise<void> {
+	protected async validate(zipPath: string, filePath: string): Promise<codemavi> {
 		try {
 			await buffer(zipPath, filePath);
 		} catch (e) {
@@ -230,7 +230,7 @@ export class ExtensionsDownloader extends Disposable {
 		}
 	}
 
-	async delete(location: URI): Promise<void> {
+	async delete(location: URI): Promise<codemavi> {
 		await this.cleanUpPromise;
 		const trashRelativePath = this.uriIdentityService.extUri.relativePath(this.extensionsDownloadDir, location);
 		if (trashRelativePath) {
@@ -240,7 +240,7 @@ export class ExtensionsDownloader extends Disposable {
 		}
 	}
 
-	private async cleanUp(): Promise<void> {
+	private async cleanUp(): Promise<codemavi> {
 		try {
 			if (!(await this.fileService.exists(this.extensionsDownloadDir))) {
 				this.logService.trace('Extension VSIX downloads cache dir does not exist');

@@ -102,7 +102,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Mouse back/forward support
 		this.registerMouseNavigationListener();
@@ -131,12 +131,12 @@ export class HistoryService extends Disposable implements IHistoryService {
 		this._register(this.editorGroupService.onDidChangeActiveGroup(() => this.updateContextKeys()));
 	}
 
-	private onDidCloseEditor(e: IEditorCloseEvent): void {
+	private onDidCloseEditor(e: IEditorCloseEvent): codemavi {
 		this.handleEditorCloseEventInHistory(e);
 		this.handleEditorCloseEventInReopen(e);
 	}
 
-	private registerMouseNavigationListener(): void {
+	private registerMouseNavigationListener(): codemavi {
 		const mouseBackForwardSupportListener = this._register(new DisposableStore());
 		const handleMouseBackForwardSupport = () => {
 			mouseBackForwardSupportListener.clear();
@@ -161,7 +161,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		handleMouseBackForwardSupport();
 	}
 
-	private onMouseDownOrUp(event: MouseEvent, isMouseDown: boolean): void {
+	private onMouseDownOrUp(event: MouseEvent, isMouseDown: boolean): codemavi {
 
 		// Support to navigate in history when mouse buttons 4/5 are pressed
 		// We want to trigger this on mouse down for a faster experience
@@ -185,11 +185,11 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private onDidRemoveGroup(group: IEditorGroup): void {
+	private onDidRemoveGroup(group: IEditorGroup): codemavi {
 		this.handleEditorGroupRemoveInNavigationStacks(group);
 	}
 
-	private onDidActiveEditorChange(): void {
+	private onDidActiveEditorChange(): codemavi {
 		const activeEditorGroup = this.editorGroupService.activeGroup;
 		const activeEditorPane = activeEditorGroup.activeEditorPane;
 
@@ -237,7 +237,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		this.updateContextKeys();
 	}
 
-	private onDidFilesChange(event: FileChangesEvent | FileOperationEvent): void {
+	private onDidFilesChange(event: FileChangesEvent | FileOperationEvent): codemavi {
 
 		// External file changes (watcher)
 		if (event instanceof FileChangesEvent) {
@@ -261,31 +261,31 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private handleActiveEditorChange(group: IEditorGroup, editorPane?: IEditorPane): void {
+	private handleActiveEditorChange(group: IEditorGroup, editorPane?: IEditorPane): codemavi {
 		this.handleActiveEditorChangeInHistory(editorPane);
 		this.handleActiveEditorChangeInNavigationStacks(group, editorPane);
 	}
 
-	private handleActiveEditorSelectionChangeEvent(group: IEditorGroup, editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): void {
+	private handleActiveEditorSelectionChangeEvent(group: IEditorGroup, editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): codemavi {
 		this.handleActiveEditorSelectionChangeInNavigationStacks(group, editorPane, event);
 	}
 
-	private move(event: FileOperationEvent): void {
+	private move(event: FileOperationEvent): codemavi {
 		this.moveInHistory(event);
 		this.moveInEditorNavigationStacks(event);
 	}
 
-	private remove(editor: EditorInput): void;
-	private remove(event: FileChangesEvent): void;
-	private remove(event: FileOperationEvent): void;
-	private remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent): void {
+	private remove(editor: EditorInput): codemavi;
+	private remove(event: FileChangesEvent): codemavi;
+	private remove(event: FileOperationEvent): codemavi;
+	private remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent): codemavi {
 		this.removeFromHistory(arg1);
 		this.removeFromEditorNavigationStacks(arg1);
 		this.removeFromRecentlyClosedEditors(arg1);
 		this.removeFromRecentlyOpened(arg1);
 	}
 
-	private removeFromRecentlyOpened(arg1: EditorInput | FileChangesEvent | FileOperationEvent): void {
+	private removeFromRecentlyOpened(arg1: EditorInput | FileChangesEvent | FileOperationEvent): codemavi {
 		let resource: URI | undefined = undefined;
 		if (isEditorInput(arg1)) {
 			resource = EditorResourceAccessor.getOriginalUri(arg1);
@@ -300,7 +300,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	clear(): void {
+	clear(): codemavi {
 
 		// History
 		this.clearRecentlyOpened();
@@ -330,7 +330,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 
 	private readonly canReopenClosedEditorContextKey: IContextKey<boolean>;
 
-	updateContextKeys(): void {
+	updateContextKeys(): codemavi {
 		this.contextKeyService.bufferChangeEvents(() => {
 			const activeStack = this.getStack();
 
@@ -353,7 +353,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 
 	//#region Editor History Navigation (limit: 50)
 
-	private readonly _onDidChangeEditorNavigationStack = this._register(new Emitter<void>());
+	private readonly _onDidChangeEditorNavigationStack = this._register(new Emitter<codemavi>());
 	readonly onDidChangeEditorNavigationStack = this._onDidChangeEditorNavigationStack.event;
 
 	private defaultScopedEditorNavigationStack: IEditorNavigationStacks | undefined = undefined;
@@ -362,7 +362,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 
 	private editorNavigationScope = GoScope.DEFAULT;
 
-	private registerEditorNavigationScopeChangeListener(): void {
+	private registerEditorNavigationScopeChangeListener(): codemavi {
 		const handleEditorNavigationScopeChange = () => {
 
 			// Ensure to start fresh when setting changes
@@ -444,31 +444,31 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	goForward(filter?: GoFilter): Promise<void> {
+	goForward(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack().goForward(filter);
 	}
 
-	goBack(filter?: GoFilter): Promise<void> {
+	goBack(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack().goBack(filter);
 	}
 
-	goPrevious(filter?: GoFilter): Promise<void> {
+	goPrevious(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack().goPrevious(filter);
 	}
 
-	goLast(filter?: GoFilter): Promise<void> {
+	goLast(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack().goLast(filter);
 	}
 
-	private handleActiveEditorChangeInNavigationStacks(group: IEditorGroup, editorPane?: IEditorPane): void {
+	private handleActiveEditorChangeInNavigationStacks(group: IEditorGroup, editorPane?: IEditorPane): codemavi {
 		this.getStack(group, editorPane?.input).handleActiveEditorChange(editorPane);
 	}
 
-	private handleActiveEditorSelectionChangeInNavigationStacks(group: IEditorGroup, editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): void {
+	private handleActiveEditorSelectionChangeInNavigationStacks(group: IEditorGroup, editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): codemavi {
 		this.getStack(group, editorPane.input).handleActiveEditorSelectionChange(editorPane, event);
 	}
 
-	private handleEditorCloseEventInHistory(e: IEditorCloseEvent): void {
+	private handleEditorCloseEventInHistory(e: IEditorCloseEvent): codemavi {
 		const editors = this.editorScopedNavigationStacks.get(e.groupId);
 		if (editors) {
 			const editorStack = editors.get(e.editor);
@@ -483,7 +483,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private handleEditorGroupRemoveInNavigationStacks(group: IEditorGroup): void {
+	private handleEditorGroupRemoveInNavigationStacks(group: IEditorGroup): codemavi {
 
 		// Global
 		this.defaultScopedEditorNavigationStack?.remove(group.id);
@@ -496,19 +496,19 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private clearEditorNavigationStacks(): void {
+	private clearEditorNavigationStacks(): codemavi {
 		this.withEachEditorNavigationStack(stack => stack.clear());
 	}
 
-	private removeFromEditorNavigationStacks(arg1: EditorInput | FileChangesEvent | FileOperationEvent): void {
+	private removeFromEditorNavigationStacks(arg1: EditorInput | FileChangesEvent | FileOperationEvent): codemavi {
 		this.withEachEditorNavigationStack(stack => stack.remove(arg1));
 	}
 
-	private moveInEditorNavigationStacks(event: FileOperationEvent): void {
+	private moveInEditorNavigationStacks(event: FileOperationEvent): codemavi {
 		this.withEachEditorNavigationStack(stack => stack.move(event));
 	}
 
-	private withEachEditorNavigationStack(fn: (stack: IEditorNavigationStacks) => void): void {
+	private withEachEditorNavigationStack(fn: (stack: IEditorNavigationStacks) => codemavi): codemavi {
 
 		// Global
 		if (this.defaultScopedEditorNavigationStack) {
@@ -528,7 +528,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private disposeEditorNavigationStacks(): void {
+	private disposeEditorNavigationStacks(): codemavi {
 
 		// Global
 		this.defaultScopedEditorNavigationStack?.dispose();
@@ -562,19 +562,19 @@ export class HistoryService extends Disposable implements IHistoryService {
 	private navigatingInRecentlyUsedEditorsStack = false;
 	private navigatingInRecentlyUsedEditorsInGroupStack = false;
 
-	openNextRecentlyUsedEditor(groupId?: GroupIdentifier): Promise<void> {
+	openNextRecentlyUsedEditor(groupId?: GroupIdentifier): Promise<codemavi> {
 		const [stack, index] = this.ensureRecentlyUsedStack(index => index - 1, groupId);
 
 		return this.doNavigateInRecentlyUsedEditorsStack(stack[index], groupId);
 	}
 
-	openPreviouslyUsedEditor(groupId?: GroupIdentifier): Promise<void> {
+	openPreviouslyUsedEditor(groupId?: GroupIdentifier): Promise<codemavi> {
 		const [stack, index] = this.ensureRecentlyUsedStack(index => index + 1, groupId);
 
 		return this.doNavigateInRecentlyUsedEditorsStack(stack[index], groupId);
 	}
 
-	private async doNavigateInRecentlyUsedEditorsStack(editorIdentifier: IEditorIdentifier | undefined, groupId?: GroupIdentifier): Promise<void> {
+	private async doNavigateInRecentlyUsedEditorsStack(editorIdentifier: IEditorIdentifier | undefined, groupId?: GroupIdentifier): Promise<codemavi> {
 		if (editorIdentifier) {
 			const acrossGroups = typeof groupId !== 'number' || !this.editorGroupService.getGroup(groupId);
 
@@ -635,7 +635,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return [editors, newIndex];
 	}
 
-	private handleEditorEventInRecentEditorsStack(): void {
+	private handleEditorEventInRecentEditorsStack(): codemavi {
 
 		// Drop all-editors stack unless navigating in all editors
 		if (!this.navigatingInRecentlyUsedEditorsStack) {
@@ -659,7 +659,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 	private recentlyClosedEditors: IRecentlyClosedEditor[] = [];
 	private ignoreEditorCloseEvent = false;
 
-	private handleEditorCloseEventInReopen(event: IEditorCloseEvent): void {
+	private handleEditorCloseEventInReopen(event: IEditorCloseEvent): codemavi {
 		if (this.ignoreEditorCloseEvent) {
 			return; // blocked
 		}
@@ -704,11 +704,11 @@ export class HistoryService extends Disposable implements IHistoryService {
 		this.canReopenClosedEditorContextKey.set(true);
 	}
 
-	async reopenLastClosedEditor(): Promise<void> {
+	async reopenLastClosedEditor(): Promise<codemavi> {
 
 		// Open editor if we have one
 		const lastClosedEditor = this.recentlyClosedEditors.pop();
-		let reopenClosedEditorPromise: Promise<void> | undefined = undefined;
+		let reopenClosedEditorPromise: Promise<codemavi> | undefined = undefined;
 		if (lastClosedEditor) {
 			reopenClosedEditorPromise = this.doReopenLastClosedEditor(lastClosedEditor);
 		}
@@ -719,7 +719,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return reopenClosedEditorPromise;
 	}
 
-	private async doReopenLastClosedEditor(lastClosedEditor: IRecentlyClosedEditor): Promise<void> {
+	private async doReopenLastClosedEditor(lastClosedEditor: IRecentlyClosedEditor): Promise<codemavi> {
 		const options: IEditorOptions = { pinned: true, sticky: lastClosedEditor.sticky, index: lastClosedEditor.index, ignoreError: true };
 
 		// Special sticky handling: remove the index property from options
@@ -770,7 +770,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private removeFromRecentlyClosedEditors(arg1: EditorInput | FileChangesEvent | FileOperationEvent): void {
+	private removeFromRecentlyClosedEditors(arg1: EditorInput | FileChangesEvent | FileOperationEvent): codemavi {
 		this.recentlyClosedEditors = this.recentlyClosedEditors.filter(recentlyClosedEditor => {
 			if (isEditorInput(arg1) && recentlyClosedEditor.editorId !== arg1.editorId) {
 				return true; // keep: different editor identifiers
@@ -814,7 +814,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return matcher;
 	}));
 
-	private handleActiveEditorChangeInHistory(editorPane?: IEditorPane): void {
+	private handleActiveEditorChangeInHistory(editorPane?: IEditorPane): codemavi {
 
 		// Ensure we have not configured to exclude input and don't track invalid inputs
 		const editor = editorPane?.input;
@@ -827,7 +827,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		this.addToHistory(editor);
 	}
 
-	private addToHistory(editor: EditorInput | IResourceEditorInput, insertFirst = true): void {
+	private addToHistory(editor: EditorInput | IResourceEditorInput, insertFirst = true): codemavi {
 		this.ensureHistoryLoaded(this.history);
 
 		const historyInput = this.editorHelper.preferResourceEditorInput(editor);
@@ -853,7 +853,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private updateHistoryOnEditorDispose(editor: EditorInput | IResourceEditorInput): void {
+	private updateHistoryOnEditorDispose(editor: EditorInput | IResourceEditorInput): codemavi {
 		if (isEditorInput(editor)) {
 
 			// Any non side-by-side editor input gets removed directly on dispose
@@ -896,7 +896,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return !this.resourceExcludeMatcher.value.matches(editor.resource);
 	}
 
-	private removeExcludedFromHistory(): void {
+	private removeExcludedFromHistory(): codemavi {
 		this.ensureHistoryLoaded(this.history);
 
 		this.history = this.history.filter(entry => {
@@ -911,7 +911,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		});
 	}
 
-	private moveInHistory(event: FileOperationEvent): void {
+	private moveInHistory(event: FileOperationEvent): codemavi {
 		if (event.isOperation(FileOperation.MOVE)) {
 			const removed = this.removeFromHistory(event);
 			if (removed) {
@@ -940,7 +940,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return removed;
 	}
 
-	private replaceInHistory(editor: EditorInput | IResourceEditorInput, ...replacements: ReadonlyArray<EditorInput | IResourceEditorInput>): void {
+	private replaceInHistory(editor: EditorInput | IResourceEditorInput, ...replacements: ReadonlyArray<EditorInput | IResourceEditorInput>): codemavi {
 		this.ensureHistoryLoaded(this.history);
 
 		let replaced = false;
@@ -977,7 +977,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		this.history = newHistory;
 	}
 
-	clearRecentlyOpened(): void {
+	clearRecentlyOpened(): codemavi {
 		this.history = [];
 
 		for (const [, disposable] of this.editorHistoryListeners) {
@@ -1013,7 +1013,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		}
 	}
 
-	private loadHistory(): void {
+	private loadHistory(): codemavi {
 
 		// Init as empty before adding - since we are about to
 		// populate the history from opened editors, we capture
@@ -1103,7 +1103,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 		return entries;
 	}
 
-	private saveState(): void {
+	private saveState(): codemavi {
 		if (!this.history) {
 			return; // nothing to save because history was not used
 		}
@@ -1197,7 +1197,7 @@ export class HistoryService extends Disposable implements IHistoryService {
 
 	//#endregion
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		for (const [, stack] of this.editorGroupScopedNavigationStacks) {
@@ -1252,22 +1252,22 @@ class EditorSelectionState {
 }
 
 interface IEditorNavigationStacks extends IDisposable {
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	canGoForward(filter?: GoFilter): boolean;
-	goForward(filter?: GoFilter): Promise<void>;
+	goForward(filter?: GoFilter): Promise<codemavi>;
 	canGoBack(filter?: GoFilter): boolean;
-	goBack(filter?: GoFilter): Promise<void>;
-	goPrevious(filter?: GoFilter): Promise<void>;
+	goBack(filter?: GoFilter): Promise<codemavi>;
+	goPrevious(filter?: GoFilter): Promise<codemavi>;
 	canGoLast(filter?: GoFilter): boolean;
-	goLast(filter?: GoFilter): Promise<void>;
+	goLast(filter?: GoFilter): Promise<codemavi>;
 
-	handleActiveEditorChange(editorPane?: IEditorPane): void;
-	handleActiveEditorSelectionChange(editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): void;
+	handleActiveEditorChange(editorPane?: IEditorPane): codemavi;
+	handleActiveEditorSelectionChange(editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): codemavi;
 
-	clear(): void;
-	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): void;
-	move(event: FileOperationEvent): void;
+	clear(): codemavi;
+	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): codemavi;
+	move(event: FileOperationEvent): codemavi;
 }
 
 class EditorNavigationStacks extends Disposable implements IEditorNavigationStacks {
@@ -1278,7 +1278,7 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 
 	private readonly stacks: EditorNavigationStack[];
 
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	constructor(
 		private readonly scope: GoScope,
@@ -1307,7 +1307,7 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 		return this.getStack(filter).canGoForward();
 	}
 
-	goForward(filter?: GoFilter): Promise<void> {
+	goForward(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack(filter).goForward();
 	}
 
@@ -1315,11 +1315,11 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 		return this.getStack(filter).canGoBack();
 	}
 
-	goBack(filter?: GoFilter): Promise<void> {
+	goBack(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack(filter).goBack();
 	}
 
-	goPrevious(filter?: GoFilter): Promise<void> {
+	goPrevious(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack(filter).goPrevious();
 	}
 
@@ -1327,7 +1327,7 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 		return this.getStack(filter).canGoLast();
 	}
 
-	goLast(filter?: GoFilter): Promise<void> {
+	goLast(filter?: GoFilter): Promise<codemavi> {
 		return this.getStack(filter).goLast();
 	}
 
@@ -1339,13 +1339,13 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 		}
 	}
 
-	handleActiveEditorChange(editorPane?: IEditorPane): void {
+	handleActiveEditorChange(editorPane?: IEditorPane): codemavi {
 
 		// Always send to selections navigation stack
 		this.selectionsStack.notifyNavigation(editorPane);
 	}
 
-	handleActiveEditorSelectionChange(editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): void {
+	handleActiveEditorSelectionChange(editorPane: IEditorPaneWithSelection, event: IEditorPaneSelectionChangeEvent): codemavi {
 		const previous = this.selectionsStack.current;
 
 		// Always send to selections navigation stack
@@ -1381,19 +1381,19 @@ class EditorNavigationStacks extends Disposable implements IEditorNavigationStac
 		}
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		for (const stack of this.stacks) {
 			stack.clear();
 		}
 	}
 
-	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): void {
+	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): codemavi {
 		for (const stack of this.stacks) {
 			stack.remove(arg1);
 		}
 	}
 
-	move(event: FileOperationEvent): void {
+	move(event: FileOperationEvent): codemavi {
 		for (const stack of this.stacks) {
 			stack.move(event);
 		}
@@ -1404,21 +1404,21 @@ class NoOpEditorNavigationStacks implements IEditorNavigationStacks {
 	onDidChange = Event.None;
 
 	canGoForward(): boolean { return false; }
-	async goForward(): Promise<void> { }
+	async goForward(): Promise<codemavi> { }
 	canGoBack(): boolean { return false; }
-	async goBack(): Promise<void> { }
-	async goPrevious(): Promise<void> { }
+	async goBack(): Promise<codemavi> { }
+	async goPrevious(): Promise<codemavi> { }
 	canGoLast(): boolean { return false; }
-	async goLast(): Promise<void> { }
+	async goLast(): Promise<codemavi> { }
 
-	handleActiveEditorChange(): void { }
-	handleActiveEditorSelectionChange(): void { }
+	handleActiveEditorChange(): codemavi { }
+	handleActiveEditorSelectionChange(): codemavi { }
 
-	clear(): void { }
-	remove(): void { }
-	move(): void { }
+	clear(): codemavi { }
+	remove(): codemavi { }
+	move(): codemavi { }
 
-	dispose(): void { }
+	dispose(): codemavi { }
 }
 
 interface IEditorNavigationStackEntry {
@@ -1431,7 +1431,7 @@ export class EditorNavigationStack extends Disposable {
 
 	private static readonly MAX_STACK_SIZE = 50;
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private readonly mapEditorToDisposable = new Map<EditorInput, DisposableStore>();
@@ -1473,12 +1473,12 @@ export class EditorNavigationStack extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.onDidChange(() => this.traceStack()));
 		this._register(this.logService.onDidChangeLogLevel(() => this.traceStack()));
 	}
 
-	private traceStack(): void {
+	private traceStack(): codemavi {
 		if (this.logService.getLevel() !== LogLevel.Trace) {
 			return;
 		}
@@ -1501,7 +1501,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	private trace(msg: string, editor: EditorInput | IResourceEditorInput | undefined | null = null, event?: IEditorPaneSelectionChangeEvent): void {
+	private trace(msg: string, editor: EditorInput | IResourceEditorInput | undefined | null = null, event?: IEditorPaneSelectionChangeEvent): codemavi {
 		if (this.logService.getLevel() !== LogLevel.Trace) {
 			return;
 		}
@@ -1547,7 +1547,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	private registerGroupListeners(groupId: GroupIdentifier): void {
+	private registerGroupListeners(groupId: GroupIdentifier): codemavi {
 		if (!this.mapGroupToDisposable.has(groupId)) {
 			const group = this.editorGroupService.getGroup(groupId);
 			if (group) {
@@ -1556,7 +1556,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	private onWillMoveEditor(e: IEditorWillMoveEvent): void {
+	private onWillMoveEditor(e: IEditorWillMoveEvent): codemavi {
 		this.trace('onWillMoveEditor()', e.editor);
 
 		if (this.scope === GoScope.EDITOR_GROUP) {
@@ -1579,7 +1579,7 @@ ${entryLabels.join('\n')}
 
 	//#region Stack Mutation
 
-	notifyNavigation(editorPane: IEditorPane | undefined, event?: IEditorPaneSelectionChangeEvent): void {
+	notifyNavigation(editorPane: IEditorPane | undefined, event?: IEditorPaneSelectionChangeEvent): codemavi {
 		this.trace('notifyNavigation()', editorPane?.input, event);
 
 		const isSelectionAwareEditorPane = isEditorPaneWithSelection(editorPane);
@@ -1623,7 +1623,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	private onSelectionAwareEditorNavigation(groupId: GroupIdentifier, editor: EditorInput, selection: IEditorPaneSelection | undefined, event?: IEditorPaneSelectionChangeEvent): void {
+	private onSelectionAwareEditorNavigation(groupId: GroupIdentifier, editor: EditorInput, selection: IEditorPaneSelection | undefined, event?: IEditorPaneSelectionChangeEvent): codemavi {
 		if (this.current?.groupId === groupId && !selection && this.editorHelper.matchesEditor(this.current.editor, editor)) {
 			return; // do not push same editor input again of same group if we have no valid selection
 		}
@@ -1646,7 +1646,7 @@ ${entryLabels.join('\n')}
 		this.currentSelectionState = stateCandidate;
 	}
 
-	private onNonSelectionAwareEditorNavigation(groupId: GroupIdentifier, editor: EditorInput): void {
+	private onNonSelectionAwareEditorNavigation(groupId: GroupIdentifier, editor: EditorInput): codemavi {
 		if (this.current?.groupId === groupId && this.editorHelper.matchesEditor(this.current.editor, editor)) {
 			return; // do not push same editor input again of same group
 		}
@@ -1656,19 +1656,19 @@ ${entryLabels.join('\n')}
 		this.doAdd(groupId, editor);
 	}
 
-	private doAdd(groupId: GroupIdentifier, editor: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection): void {
+	private doAdd(groupId: GroupIdentifier, editor: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection): codemavi {
 		if (!this.navigating) {
 			this.addOrReplace(groupId, editor, selection);
 		}
 	}
 
-	private doReplace(groupId: GroupIdentifier, editor: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection): void {
+	private doReplace(groupId: GroupIdentifier, editor: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection): codemavi {
 		if (!this.navigating) {
 			this.addOrReplace(groupId, editor, selection, true /* force replace */);
 		}
 	}
 
-	addOrReplace(groupId: GroupIdentifier, editorCandidate: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection, forceReplace?: boolean): void {
+	addOrReplace(groupId: GroupIdentifier, editorCandidate: EditorInput | IResourceEditorInput, selection?: IEditorPaneSelection, forceReplace?: boolean): codemavi {
 
 		// Ensure we listen to changes in group
 		this.registerGroupListeners(groupId);
@@ -1767,7 +1767,7 @@ ${entryLabels.join('\n')}
 		return entry.selection.compare(candidate.selection) === EditorPaneSelectionCompareResult.IDENTICAL;
 	}
 
-	move(event: FileOperationEvent): void {
+	move(event: FileOperationEvent): codemavi {
 		if (event.isOperation(FileOperation.MOVE)) {
 			for (const entry of this.stack) {
 				if (this.editorHelper.matchesEditor(event, entry.editor)) {
@@ -1777,7 +1777,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): void {
+	remove(arg1: EditorInput | FileChangesEvent | FileOperationEvent | GroupIdentifier): codemavi {
 		const previousStackSize = this.stack.length;
 
 		// Remove all stack entries that match `arg1`
@@ -1815,7 +1815,7 @@ ${entryLabels.join('\n')}
 		this._onDidChange.fire();
 	}
 
-	private flatten(): void {
+	private flatten(): codemavi {
 		const flattenedStack: IEditorNavigationStackEntry[] = [];
 
 		let previousEntry: IEditorNavigationStackEntry | undefined = undefined;
@@ -1831,7 +1831,7 @@ ${entryLabels.join('\n')}
 		this.stack = flattenedStack;
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this.index = -1;
 		this.previousIndex = -1;
 		this.stack.splice(0);
@@ -1847,7 +1847,7 @@ ${entryLabels.join('\n')}
 		this.mapGroupToDisposable.clear();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.clear();
@@ -1861,7 +1861,7 @@ ${entryLabels.join('\n')}
 		return this.stack.length > this.index + 1;
 	}
 
-	async goForward(): Promise<void> {
+	async goForward(): Promise<codemavi> {
 		const navigated = await this.maybeGoCurrent();
 		if (navigated) {
 			return;
@@ -1879,7 +1879,7 @@ ${entryLabels.join('\n')}
 		return this.index > 0;
 	}
 
-	async goBack(): Promise<void> {
+	async goBack(): Promise<codemavi> {
 		const navigated = await this.maybeGoCurrent();
 		if (navigated) {
 			return;
@@ -1893,7 +1893,7 @@ ${entryLabels.join('\n')}
 		return this.navigate();
 	}
 
-	async goPrevious(): Promise<void> {
+	async goPrevious(): Promise<codemavi> {
 		const navigated = await this.maybeGoCurrent();
 		if (navigated) {
 			return;
@@ -1913,7 +1913,7 @@ ${entryLabels.join('\n')}
 		return this.stack.length > 0;
 	}
 
-	async goLast(): Promise<void> {
+	async goLast(): Promise<codemavi> {
 		if (!this.canGoLast()) {
 			return;
 		}
@@ -1970,7 +1970,7 @@ ${entryLabels.join('\n')}
 		return paneSelection.compare(this.current.selection) === EditorPaneSelectionCompareResult.IDENTICAL;
 	}
 
-	private setIndex(newIndex: number, skipEvent?: boolean): void {
+	private setIndex(newIndex: number, skipEvent?: boolean): codemavi {
 		this.previousIndex = this.index;
 		this.index = newIndex;
 
@@ -1980,7 +1980,7 @@ ${entryLabels.join('\n')}
 		}
 	}
 
-	private async navigate(): Promise<void> {
+	private async navigate(): Promise<codemavi> {
 		this.navigating = true;
 
 		try {
@@ -2132,7 +2132,7 @@ class EditorHelper {
 		return editorPane.input ? identifier.editor.matches(editorPane.input) : false;
 	}
 
-	onEditorDispose(editor: EditorInput, listener: Function, mapEditorToDispose: Map<EditorInput, DisposableStore>): void {
+	onEditorDispose(editor: EditorInput, listener: Function, mapEditorToDispose: Map<EditorInput, DisposableStore>): codemavi {
 		const toDispose = Event.once(editor.onWillDispose)(() => listener());
 
 		let disposables = mapEditorToDispose.get(editor);
@@ -2144,7 +2144,7 @@ class EditorHelper {
 		disposables.add(toDispose);
 	}
 
-	clearOnEditorDispose(editor: EditorInput | IResourceEditorInput | FileChangesEvent | FileOperationEvent, mapEditorToDispose: Map<EditorInput, DisposableStore>): void {
+	clearOnEditorDispose(editor: EditorInput | IResourceEditorInput | FileChangesEvent | FileOperationEvent, mapEditorToDispose: Map<EditorInput, DisposableStore>): codemavi {
 		if (!isEditorInput(editor)) {
 			return; // only supported when passing in an actual editor input
 		}

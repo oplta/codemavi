@@ -18,7 +18,7 @@ import { GitHubCanonicalUriProvider } from './canonicalUriProvider';
 import { VscodeDevShareProvider } from './shareProviders';
 import { GitHubSourceControlHistoryItemDetailsProvider } from './historyItemDetailsProvider';
 
-export function activate(context: ExtensionContext): void {
+export function activate(context: ExtensionContext): codemavi {
 	const disposables: Disposable[] = [];
 	context.subscriptions.push(new Disposable(() => Disposable.from(...disposables).dispose()));
 

@@ -33,7 +33,7 @@ export class ExtHostDocumentSaveParticipant implements ExtHostDocumentSavePartic
 		//
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._callbacks.clear();
 	}
 

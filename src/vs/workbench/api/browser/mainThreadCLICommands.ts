@@ -61,7 +61,7 @@ CommandsRegistry.registerCommand('_remoteCLI.manageExtensions', async function (
 
 	const lines: string[] = [];
 	const logger = new class extends AbstractMessageLogger {
-		protected override log(level: LogLevel, message: string): void {
+		protected override log(level: LogLevel, message: string): codemavi {
 			lines.push(message);
 		}
 	}();

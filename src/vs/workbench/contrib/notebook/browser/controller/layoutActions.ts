@@ -54,7 +54,7 @@ registerAction2(class NotebookConfigureLayoutAction extends Action2 {
 			]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		accessor.get(ICommandService).executeCommand('workbench.action.openWalkthrough', { category: 'notebooks', step: 'notebookProfile' }, true);
 	}
 });
@@ -76,7 +76,7 @@ registerAction2(class NotebookConfigureLayoutAction extends Action2 {
 			]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		accessor.get(IPreferencesService).openSettings({ jsonEditor: false, query: '@tag:notebookLayout' });
 	}
 });
@@ -98,7 +98,7 @@ registerAction2(class NotebookConfigureLayoutFromEditorTitle extends Action2 {
 			]
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		accessor.get(IPreferencesService).openSettings({ jsonEditor: false, query: '@tag:notebookLayout' });
 	}
 });
@@ -135,7 +135,7 @@ registerAction2(class ToggleLineNumberFromEditorTitle extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(ICommandService).executeCommand('notebook.toggleLineNumbers');
 	}
 });
@@ -155,7 +155,7 @@ registerAction2(class ToggleCellToolbarPositionFromEditorTitle extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
+	async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
 		return accessor.get(ICommandService).executeCommand('notebook.toggleCellToolbarPosition', ...args);
 	}
 });
@@ -174,7 +174,7 @@ registerAction2(class ToggleBreadcrumbFromEditorTitle extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(ICommandService).executeCommand('breadcrumbs.toggle');
 	}
 });
@@ -223,7 +223,7 @@ registerAction2(class NotebookWebviewResetAction extends Action2 {
 			category: NOTEBOOK_ACTIONS_CATEGORY
 		});
 	}
-	run(accessor: ServicesAccessor, args?: UriComponents): void {
+	run(accessor: ServicesAccessor, args?: UriComponents): codemavi {
 		const editorService = accessor.get(IEditorService);
 
 		if (args) {
@@ -268,7 +268,7 @@ registerAction2(class ToggleNotebookStickyScroll extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const configurationService = accessor.get(IConfigurationService);
 		const newValue = !configurationService.getValue('notebook.stickyScroll.enabled');
 		return configurationService.updateValue('notebook.stickyScroll.enabled', newValue);

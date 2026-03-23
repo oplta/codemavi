@@ -51,7 +51,7 @@ export class ViewOverlays extends ViewPart {
 		return false;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 
 		for (let i = 0, len = this._dynamicOverlays.length; i < len; i++) {
@@ -65,7 +65,7 @@ export class ViewOverlays extends ViewPart {
 		return this.domNode;
 	}
 
-	public addDynamicOverlay(overlay: DynamicViewOverlay): void {
+	public addDynamicOverlay(overlay: DynamicViewOverlay): codemavi {
 		this._dynamicOverlays.push(overlay);
 	}
 
@@ -108,7 +108,7 @@ export class ViewOverlays extends ViewPart {
 
 	// ----- end event handlers
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		const toRender = this._dynamicOverlays.filter(overlay => overlay.shouldRender());
 
 		for (let i = 0, len = toRender.length; i < len; i++) {
@@ -118,14 +118,14 @@ export class ViewOverlays extends ViewPart {
 		}
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		// Overwriting to bypass `shouldRender` flag
 		this._viewOverlaysRender(ctx);
 
 		this.domNode.toggleClassName('focused', this._isFocused);
 	}
 
-	_viewOverlaysRender(ctx: RestrictedRenderingContext): void {
+	_viewOverlaysRender(ctx: RestrictedRenderingContext): codemavi {
 		this._visibleLines.renderLines(ctx.viewportData);
 	}
 }
@@ -149,14 +149,14 @@ export class ViewOverlayLine implements IVisibleLine {
 		}
 		return this._domNode.domNode;
 	}
-	public setDomNode(domNode: HTMLElement): void {
+	public setDomNode(domNode: HTMLElement): codemavi {
 		this._domNode = createFastDomNode(domNode);
 	}
 
-	public onContentChanged(): void {
+	public onContentChanged(): codemavi {
 		// Nothing
 	}
-	public onTokensChanged(): void {
+	public onTokensChanged(): codemavi {
 		// Nothing
 	}
 
@@ -185,7 +185,7 @@ export class ViewOverlayLine implements IVisibleLine {
 		return true;
 	}
 
-	public layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): void {
+	public layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): codemavi {
 		if (this._domNode) {
 			this._domNode.setTop(deltaTop);
 			this._domNode.setHeight(lineHeight);
@@ -220,7 +220,7 @@ export class ContentViewOverlays extends ViewOverlays {
 
 	// --- end event handlers
 
-	override _viewOverlaysRender(ctx: RestrictedRenderingContext): void {
+	override _viewOverlaysRender(ctx: RestrictedRenderingContext): codemavi {
 		super._viewOverlaysRender(ctx);
 
 		this.domNode.setWidth(Math.max(ctx.scrollWidth, this._contentWidth));
@@ -256,7 +256,7 @@ export class MarginViewOverlays extends ViewOverlays {
 		return super.onScrollChanged(e) || e.scrollHeightChanged;
 	}
 
-	override _viewOverlaysRender(ctx: RestrictedRenderingContext): void {
+	override _viewOverlaysRender(ctx: RestrictedRenderingContext): codemavi {
 		super._viewOverlaysRender(ctx);
 		const height = Math.min(ctx.scrollHeight, 1000000);
 		this.domNode.setHeight(height);

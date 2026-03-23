@@ -131,7 +131,7 @@ export class ChatEditorInput extends EditorInput implements IEditorCloseHandler 
 		return this._register(new ChatEditorModel(this.model));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		if (this.sessionId) {
 			this.chatService.clearSession(this.sessionId);
@@ -140,7 +140,7 @@ export class ChatEditorInput extends EditorInput implements IEditorCloseHandler 
 }
 
 export class ChatEditorModel extends Disposable {
-	private _onWillDispose = this._register(new Emitter<void>());
+	private _onWillDispose = this._register(new Emitter<codemavi>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	private _isDisposed = false;
@@ -150,7 +150,7 @@ export class ChatEditorModel extends Disposable {
 		readonly model: IChatModel
 	) { super(); }
 
-	async resolve(): Promise<void> {
+	async resolve(): Promise<codemavi> {
 		this._isResolved = true;
 	}
 
@@ -162,7 +162,7 @@ export class ChatEditorModel extends Disposable {
 		return this._isDisposed;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._isDisposed = true;
 	}

@@ -69,7 +69,7 @@ export class WorkbenchExtensionGalleryManifestService extends ExtensionGalleryMa
 		});
 	}
 
-	private extensionGalleryManifestPromise: Promise<void> | undefined;
+	private extensionGalleryManifestPromise: Promise<codemavi> | undefined;
 	override async getExtensionGalleryManifest(): Promise<IExtensionGalleryManifest | null> {
 		if (!this.extensionGalleryManifestPromise) {
 			this.extensionGalleryManifestPromise = this.doGetExtensionGalleryManifest();
@@ -78,7 +78,7 @@ export class WorkbenchExtensionGalleryManifestService extends ExtensionGalleryMa
 		return this.extensionGalleryManifest ? this.extensionGalleryManifest[1] : null;
 	}
 
-	private async doGetExtensionGalleryManifest(): Promise<void> {
+	private async doGetExtensionGalleryManifest(): Promise<codemavi> {
 		const defaultServiceUrl = this.productService.extensionsGallery?.serviceUrl;
 		if (!defaultServiceUrl) {
 			this.extensionGalleryManifest = null;
@@ -144,7 +144,7 @@ export class WorkbenchExtensionGalleryManifestService extends ExtensionGalleryMa
 		return account.enterprise;
 	}
 
-	private async requestRestart(): Promise<void> {
+	private async requestRestart(): Promise<codemavi> {
 		const confirmation = await this.dialogService.confirm({
 			message: localize('extensionGalleryManifestService.accountChange', "{0} is now configured to a different Marketplace. Please restart to apply the changes.", this.productService.nameLong),
 			primaryButton: localize({ key: 'restart', comment: ['&& denotes a mnemonic'] }, "&&Restart")

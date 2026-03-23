@@ -125,14 +125,14 @@ import ErrorTelemetry from '../../platform/telemetry/electron-main/errorTelemetr
 
 // in theory this is not allowed
 // ignore the eslint errors below
-import { IMetricsService } from '../../workbench/contrib/void/common/metricsService.js';
-import { IVoidUpdateService } from '../../workbench/contrib/void/common/voidUpdateService.js';
-import { MetricsMainService } from '../../workbench/contrib/void/electron-main/metricsMainService.js';
-import { VoidMainUpdateService } from '../../workbench/contrib/void/electron-main/voidUpdateMainService.js';
-import { LLMMessageChannel } from '../../workbench/contrib/void/electron-main/sendLLMMessageChannel.js';
-import { VoidSCMService } from '../../workbench/contrib/void/electron-main/voidSCMMainService.js';
-import { IVoidSCMService } from '../../workbench/contrib/void/common/voidSCMTypes.js';
-import { MCPChannel } from '../../workbench/contrib/void/electron-main/mcpChannel.js';
+import { IMetricsService } from '../../workbench/contrib/codemavi/common/metricsService.js';
+import { IMaviUpdateService } from '../../workbench/contrib/codemavi/common/codemaviUpdateService.js';
+import { MetricsMainService } from '../../workbench/contrib/codemavi/electron-main/metricsMainService.js';
+import { Code MaviMainUpdateService } from '../../workbench/contrib/codemavi/electron-main/codemaviUpdateMainService.js';
+import { LLMMessageChannel } from '../../workbench/contrib/codemavi/electron-main/sendLLMMessageChannel.js';
+import { Code MaviSCMService } from '../../workbench/contrib/codemavi/electron-main/codemaviSCMMainService.js';
+import { IMaviSCMService } from '../../workbench/contrib/codemavi/common/codemaviSCMTypes.js';
+import { MCPChannel } from '../../workbench/contrib/codemavi/electron-main/mcpChannel.js';
 /**
  * The main VS Code application. There will only ever be one instance,
  * even if the user starts many instances (e.g. from the command line).
@@ -168,7 +168,7 @@ export class CodeApplication extends Disposable {
 		this.registerListeners();
 	}
 
-	private configureSession(): void {
+	private configureSession(): codemavi {
 
 		//#region Security related measures (https://electronjs.org/docs/tutorial/security)
 		//
@@ -354,7 +354,7 @@ export class CodeApplication extends Disposable {
 			 * Sets code cache directory. By default, the directory will be `Code Cache` under
 			 * the respective user data folder.
 			 */
-			setCodeCachePath?(path: string): void;
+			setCodeCachePath?(path: string): codemavi;
 		};
 
 		const defaultSession = session.defaultSession as unknown as SessionWithCodeCachePathSupport;
@@ -381,7 +381,7 @@ export class CodeApplication extends Disposable {
 		//#endregion
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Dispose on shutdown
 		Event.once(this.lifecycleMainService.onWillShutdown)(() => this.dispose());
@@ -529,7 +529,7 @@ export class CodeApplication extends Disposable {
 		//#endregion
 	}
 
-	async startup(): Promise<void> {
+	async startup(): Promise<codemavi> {
 		this.logService.debug('Starting VS Code');
 		this.logService.debug(`from: ${this.environmentMainService.appRoot}`);
 		this.logService.debug('args:', this.environmentMainService.args);
@@ -1101,10 +1101,10 @@ export class CodeApplication extends Disposable {
 			services.set(ITelemetryService, NullTelemetryService);
 		}
 
-		// Void main process services (required for services with a channel for comm between browser and electron-main (node))
+		// Code Mavi main process services (required for services with a channel for comm between browser and electron-main (node))
 		services.set(IMetricsService, new SyncDescriptor(MetricsMainService, undefined, false));
-		services.set(IVoidUpdateService, new SyncDescriptor(VoidMainUpdateService, undefined, false));
-		services.set(IVoidSCMService, new SyncDescriptor(VoidSCMService, undefined, false));
+		services.set(IMaviUpdateService, new SyncDescriptor(Code MaviMainUpdateService, undefined, false));
+		services.set(IMaviSCMService, new SyncDescriptor(Code MaviSCMService, undefined, false));
 
 		// Default Extensions Profile Init
 		services.set(IExtensionsProfileScannerService, new SyncDescriptor(ExtensionsProfileScannerService, undefined, true));
@@ -1132,7 +1132,7 @@ export class CodeApplication extends Disposable {
 		return this.mainInstantiationService.createChild(services);
 	}
 
-	private initChannels(accessor: ServicesAccessor, mainProcessElectronServer: ElectronIPCServer, sharedProcessClient: Promise<MessagePortClient>): void {
+	private initChannels(accessor: ServicesAccessor, mainProcessElectronServer: ElectronIPCServer, sharedProcessClient: Promise<MessagePortClient>): codemavi {
 
 		// Channels registered to node.js are exposed to second instances
 		// launching because that is the only way the second instance
@@ -1236,23 +1236,23 @@ export class CodeApplication extends Disposable {
 		mainProcessElectronServer.registerChannel('logger', loggerChannel);
 		sharedProcessClient.then(client => client.registerChannel('logger', loggerChannel));
 
-		// Void - use loggerChannel as reference
+		// Code Mavi - use loggerChannel as reference
 		const metricsChannel = ProxyChannel.fromService(accessor.get(IMetricsService), disposables);
-		mainProcessElectronServer.registerChannel('void-channel-metrics', metricsChannel);
+		mainProcessElectronServer.registerChannel('mavi-channel-metrics', metricsChannel);
 
-		const voidUpdatesChannel = ProxyChannel.fromService(accessor.get(IVoidUpdateService), disposables);
-		mainProcessElectronServer.registerChannel('void-channel-update', voidUpdatesChannel);
+		const codemaviUpdatesChannel = ProxyChannel.fromService(accessor.get(IMaviUpdateService), disposables);
+		mainProcessElectronServer.registerChannel('mavi-channel-update', codemaviUpdatesChannel);
 
 		const sendLLMMessageChannel = new LLMMessageChannel(accessor.get(IMetricsService));
-		mainProcessElectronServer.registerChannel('void-channel-llmMessage', sendLLMMessageChannel);
+		mainProcessElectronServer.registerChannel('mavi-channel-llmMessage', sendLLMMessageChannel);
 
-		// Void added this
-		const voidSCMChannel = ProxyChannel.fromService(accessor.get(IVoidSCMService), disposables);
-		mainProcessElectronServer.registerChannel('void-channel-scm', voidSCMChannel);
+		// Code Mavi added this
+		const codemaviSCMChannel = ProxyChannel.fromService(accessor.get(IMaviSCMService), disposables);
+		mainProcessElectronServer.registerChannel('mavi-channel-scm', codemaviSCMChannel);
 
-		// Void added this
+		// Code Mavi added this
 		const mcpChannel = new MCPChannel();
-		mainProcessElectronServer.registerChannel('void-channel-mcp', mcpChannel);
+		mainProcessElectronServer.registerChannel('mavi-channel-mcp', mcpChannel);
 
 		// Extension Host Debug Broadcasting
 		const electronExtensionHostDebugBroadcastChannel = new ElectronExtensionHostDebugBroadcastChannel(accessor.get(IWindowsMainService));
@@ -1387,7 +1387,7 @@ export class CodeApplication extends Disposable {
 		});
 	}
 
-	private afterWindowOpen(): void {
+	private afterWindowOpen(): codemavi {
 
 		// Windows: mutex
 		this.installMutex();
@@ -1415,7 +1415,7 @@ export class CodeApplication extends Disposable {
 		}
 	}
 
-	private async installMutex(): Promise<void> {
+	private async installMutex(): Promise<codemavi> {
 		const win32MutexName = this.productService.win32MutexName;
 		if (isWindows && win32MutexName) {
 			try {
@@ -1443,7 +1443,7 @@ export class CodeApplication extends Disposable {
 		return {};
 	}
 
-	private async updateCrashReporterEnablement(): Promise<void> {
+	private async updateCrashReporterEnablement(): Promise<codemavi> {
 
 		// If enable-crash-reporter argv is undefined then this is a fresh start,
 		// based on `telemetry.enableCrashreporter` settings, generate a UUID which
@@ -1489,7 +1489,7 @@ export class CodeApplication extends Disposable {
 		}
 	}
 
-	private eventuallyAfterWindowOpen(): void {
+	private eventuallyAfterWindowOpen(): codemavi {
 
 		// Validate Device ID is up to date (delay this as it has shown significant perf impact)
 		// Refs: https://github.com/microsoft/vscode/issues/234064

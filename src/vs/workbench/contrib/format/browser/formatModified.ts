@@ -30,7 +30,7 @@ registerEditorAction(class FormatModifiedAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const instaService = accessor.get(IInstantiationService);
 
 		if (!editor.hasModel()) {

@@ -17,7 +17,7 @@ export const ILanguageModelStatsService = createDecorator<ILanguageModelStatsSer
 export interface ILanguageModelStatsService {
 	readonly _serviceBrand: undefined;
 
-	update(model: string, extensionId: ExtensionIdentifier, agent: string | undefined, tokenCount: number | undefined): Promise<void>;
+	update(model: string, extensionId: ExtensionIdentifier, agent: string | undefined, tokenCount: number | undefined): Promise<codemavi>;
 }
 
 export class LanguageModelStatsService extends Disposable implements ILanguageModelStatsService {
@@ -37,7 +37,7 @@ export class LanguageModelStatsService extends Disposable implements ILanguageMo
 		}
 	}
 
-	async update(model: string, extensionId: ExtensionIdentifier, agent: string | undefined, tokenCount: number | undefined): Promise<void> {
+	async update(model: string, extensionId: ExtensionIdentifier, agent: string | undefined, tokenCount: number | undefined): Promise<codemavi> {
 		await this.extensionFeaturesManagementService.getAccess(extensionId, CopilotUsageExtensionFeatureId);
 	}
 

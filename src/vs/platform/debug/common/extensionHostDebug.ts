@@ -35,16 +35,16 @@ export interface IOpenExtensionWindowResult {
 export interface IExtensionHostDebugService {
 	readonly _serviceBrand: undefined;
 
-	reload(sessionId: string): void;
+	reload(sessionId: string): codemavi;
 	readonly onReload: Event<IReloadSessionEvent>;
 
-	close(sessionId: string): void;
+	close(sessionId: string): codemavi;
 	readonly onClose: Event<ICloseSessionEvent>;
 
-	attachSession(sessionId: string, port: number, subId?: string): void;
+	attachSession(sessionId: string, port: number, subId?: string): codemavi;
 	readonly onAttachSession: Event<IAttachSessionEvent>;
 
-	terminateSession(sessionId: string, subId?: string): void;
+	terminateSession(sessionId: string, subId?: string): codemavi;
 	readonly onTerminateSession: Event<ITerminateSessionEvent>;
 
 	openExtensionDevelopmentHostWindow(args: string[], debugRenderer: boolean): Promise<IOpenExtensionWindowResult>;

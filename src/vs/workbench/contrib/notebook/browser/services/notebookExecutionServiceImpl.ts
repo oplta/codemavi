@@ -32,7 +32,7 @@ export class NotebookExecutionService implements INotebookExecutionService, IDis
 	) {
 	}
 
-	async executeNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>, contextKeyService: IContextKeyService): Promise<void> {
+	async executeNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>, contextKeyService: IContextKeyService): Promise<codemavi> {
 		const cellsArr = Array.from(cells)
 			.filter(c => c.cellKind === CellKind.Code);
 		if (!cellsArr.length) {
@@ -92,7 +92,7 @@ export class NotebookExecutionService implements INotebookExecutionService, IDis
 		}
 	}
 
-	async cancelNotebookCellHandles(notebook: INotebookTextModel, cells: Iterable<number>): Promise<void> {
+	async cancelNotebookCellHandles(notebook: INotebookTextModel, cells: Iterable<number>): Promise<codemavi> {
 		const cellsArr = Array.from(cells);
 		this._logService.debug(`Execution`, `CancelNotebookCellHandles ${JSON.stringify(cellsArr)}`);
 		const kernel = this._notebookKernelService.getSelectedOrSuggestedKernel(notebook);
@@ -102,7 +102,7 @@ export class NotebookExecutionService implements INotebookExecutionService, IDis
 		}
 	}
 
-	async cancelNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>): Promise<void> {
+	async cancelNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>): Promise<codemavi> {
 		this.cancelNotebookCellHandles(notebook, Array.from(cells, cell => cell.handle));
 	}
 
@@ -113,7 +113,7 @@ export class NotebookExecutionService implements INotebookExecutionService, IDis
 		return toDisposable(() => this.cellExecutionParticipants.delete(participant));
 	}
 
-	private async runExecutionParticipants(executions: INotebookCellExecution[]): Promise<void> {
+	private async runExecutionParticipants(executions: INotebookCellExecution[]): Promise<codemavi> {
 		for (const participant of this.cellExecutionParticipants) {
 			await participant.onWillExecuteCell(executions);
 		}

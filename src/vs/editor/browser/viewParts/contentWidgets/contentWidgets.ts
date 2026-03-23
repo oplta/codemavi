@@ -46,7 +46,7 @@ export class ViewContentWidgets extends ViewPart {
 		this.overflowingContentWidgetsDomNode.setClassName('overflowingContentWidgets');
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this._widgets = {};
 	}
@@ -92,14 +92,14 @@ export class ViewContentWidgets extends ViewPart {
 
 	// ---- end view event handlers
 
-	private _updateAnchorsViewPositions(): void {
+	private _updateAnchorsViewPositions(): codemavi {
 		const keys = Object.keys(this._widgets);
 		for (const widgetId of keys) {
 			this._widgets[widgetId].updateAnchorViewPosition();
 		}
 	}
 
-	public addWidget(_widget: IContentWidget): void {
+	public addWidget(_widget: IContentWidget): codemavi {
 		const myWidget = new Widget(this._context, this._viewDomNode, _widget);
 		this._widgets[myWidget.id] = myWidget;
 
@@ -112,14 +112,14 @@ export class ViewContentWidgets extends ViewPart {
 		this.setShouldRender();
 	}
 
-	public setWidgetPosition(widget: IContentWidget, primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null, preference: ContentWidgetPositionPreference[] | null, affinity: PositionAffinity | null): void {
+	public setWidgetPosition(widget: IContentWidget, primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null, preference: ContentWidgetPositionPreference[] | null, affinity: PositionAffinity | null): codemavi {
 		const myWidget = this._widgets[widget.getId()];
 		myWidget.setPosition(primaryAnchor, secondaryAnchor, preference, affinity);
 
 		this.setShouldRender();
 	}
 
-	public removeWidget(widget: IContentWidget): void {
+	public removeWidget(widget: IContentWidget): codemavi {
 		const widgetId = widget.getId();
 		if (this._widgets.hasOwnProperty(widgetId)) {
 			const myWidget = this._widgets[widgetId];
@@ -140,21 +140,21 @@ export class ViewContentWidgets extends ViewPart {
 		return false;
 	}
 
-	public onBeforeRender(viewportData: ViewportData): void {
+	public onBeforeRender(viewportData: ViewportData): codemavi {
 		const keys = Object.keys(this._widgets);
 		for (const widgetId of keys) {
 			this._widgets[widgetId].onBeforeRender(viewportData);
 		}
 	}
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		const keys = Object.keys(this._widgets);
 		for (const widgetId of keys) {
 			this._widgets[widgetId].prepareRender(ctx);
 		}
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		const keys = Object.keys(this._widgets);
 		for (const widgetId of keys) {
 			this._widgets[widgetId].render(ctx);
@@ -244,7 +244,7 @@ class Widget {
 		this.domNode.setMaxWidth(this._maxWidth);
 	}
 
-	public onConfigurationChanged(e: viewEvents.ViewConfigurationChangedEvent): void {
+	public onConfigurationChanged(e: viewEvents.ViewConfigurationChangedEvent): codemavi {
 		const options = this._context.configuration.options;
 		this._lineHeight = options.get(EditorOption.lineHeight);
 		if (e.hasChanged(EditorOption.layoutInfo)) {
@@ -255,11 +255,11 @@ class Widget {
 		}
 	}
 
-	public updateAnchorViewPosition(): void {
+	public updateAnchorViewPosition(): codemavi {
 		this._setPosition(this._affinity, this._primaryAnchor.modelPosition, this._secondaryAnchor.modelPosition);
 	}
 
-	private _setPosition(affinity: PositionAffinity | null, primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null): void {
+	private _setPosition(affinity: PositionAffinity | null, primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null): codemavi {
 		this._affinity = affinity;
 		this._primaryAnchor = getValidPositionPair(primaryAnchor, this._context.viewModel, this._affinity);
 		this._secondaryAnchor = getValidPositionPair(secondaryAnchor, this._context.viewModel, this._affinity);
@@ -288,7 +288,7 @@ class Widget {
 		);
 	}
 
-	public setPosition(primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null, preference: ContentWidgetPositionPreference[] | null, affinity: PositionAffinity | null): void {
+	public setPosition(primaryAnchor: IPosition | null, secondaryAnchor: IPosition | null, preference: ContentWidgetPositionPreference[] | null, affinity: PositionAffinity | null): codemavi {
 		this._setPosition(affinity, primaryAnchor, secondaryAnchor);
 		this._preference = preference;
 		if (this._primaryAnchor.viewPosition && this._preference && this._preference.length > 0) {
@@ -533,7 +533,7 @@ class Widget {
 	/**
 	 * On this first pass, we ensure that the content widget (if it is in the viewport) has the max width set correctly.
 	 */
-	public onBeforeRender(viewportData: ViewportData): void {
+	public onBeforeRender(viewportData: ViewportData): codemavi {
 		if (!this._primaryAnchor.viewPosition || !this._preference) {
 			return;
 		}
@@ -546,11 +546,11 @@ class Widget {
 		this.domNode.setMaxWidth(this._maxWidth);
 	}
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		this._renderData = this._prepareRenderWidget(ctx);
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		if (!this._renderData || this._renderData.kind === 'offViewport') {
 			// This widget should be invisible
 			if (this._isVisible) {
@@ -601,7 +601,7 @@ class PositionPair {
 }
 
 class Coordinate implements IContentWidgetRenderedCoordinate {
-	_coordinateBrand: void = undefined;
+	_coordinateBrand: codemavi = undefined;
 
 	constructor(
 		public readonly top: number,
@@ -610,7 +610,7 @@ class Coordinate implements IContentWidgetRenderedCoordinate {
 }
 
 class AnchorCoordinate {
-	_anchorCoordinateBrand: void = undefined;
+	_anchorCoordinateBrand: codemavi = undefined;
 
 	constructor(
 		public readonly top: number,

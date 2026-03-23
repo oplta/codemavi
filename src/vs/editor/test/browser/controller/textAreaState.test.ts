@@ -29,7 +29,7 @@ class MockTextAreaWrapper extends Disposable implements ITextAreaWrapper {
 		return this._value;
 	}
 
-	public setValue(reason: string, value: string): void {
+	public setValue(reason: string, value: string): codemavi {
 		this._value = value;
 		this._selectionStart = this._value.length;
 		this._selectionEnd = this._value.length;
@@ -43,7 +43,7 @@ class MockTextAreaWrapper extends Disposable implements ITextAreaWrapper {
 		return this._selectionEnd;
 	}
 
-	public setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): void {
+	public setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): codemavi {
 		if (selectionStart < 0) {
 			selectionStart = 0;
 		}
@@ -75,7 +75,7 @@ suite('TextAreaState', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertTextAreaState(actual: TextAreaState, value: string, selectionStart: number, selectionEnd: number): void {
+	function assertTextAreaState(actual: TextAreaState, value: string, selectionStart: number, selectionEnd: number): codemavi {
 		const desired = new TextAreaState(value, selectionStart, selectionEnd, null, undefined);
 		assert.ok(equalsTextAreaState(desired, actual), desired.toString() + ' == ' + actual.toString());
 	}
@@ -127,7 +127,7 @@ suite('TextAreaState', () => {
 		textArea.dispose();
 	});
 
-	function testDeduceInput(prevState: TextAreaState | null, value: string, selectionStart: number, selectionEnd: number, couldBeEmojiInput: boolean, expected: string, expectedCharReplaceCnt: number): void {
+	function testDeduceInput(prevState: TextAreaState | null, value: string, selectionStart: number, selectionEnd: number, couldBeEmojiInput: boolean, expected: string, expectedCharReplaceCnt: number): codemavi {
 		prevState = prevState || TextAreaState.EMPTY;
 
 		const textArea = new MockTextAreaWrapper();
@@ -304,7 +304,7 @@ suite('TextAreaState', () => {
 	function testDeduceAndroidCompositionInput(
 		prevState: TextAreaState | null,
 		value: string, selectionStart: number, selectionEnd: number,
-		expected: string, expectedReplacePrevCharCnt: number, expectedReplaceNextCharCnt: number, expectedPositionDelta: number): void {
+		expected: string, expectedReplacePrevCharCnt: number, expectedReplaceNextCharCnt: number, expectedPositionDelta: number): codemavi {
 		prevState = prevState || TextAreaState.EMPTY;
 
 		const textArea = new MockTextAreaWrapper();
@@ -363,7 +363,7 @@ suite('TextAreaState', () => {
 
 	suite('PagedScreenReaderStrategy', () => {
 
-		function testPagedScreenReaderStrategy(lines: string[], selection: Selection, expected: TextAreaState): void {
+		function testPagedScreenReaderStrategy(lines: string[], selection: Selection, expected: TextAreaState): codemavi {
 			const model = createTextModel(lines.join('\n'));
 			const screenReaderContentState = PagedScreenReaderStrategy.fromEditorSelection(model, selection, 10, true);
 			const textAreaState = TextAreaState.fromScreenReaderContentState(screenReaderContentState);

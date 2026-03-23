@@ -46,7 +46,7 @@ export class HoldToSpeak extends EditorAction2 {
 	}
 }
 
-function holdForSpeech(accessor: ServicesAccessor, ctrl: InlineChatController, action: Action2): void {
+function holdForSpeech(accessor: ServicesAccessor, ctrl: InlineChatController, action: Action2): codemavi {
 
 	const configService = accessor.get(IConfigurationService);
 	const speechService = accessor.get(ISpeechService);

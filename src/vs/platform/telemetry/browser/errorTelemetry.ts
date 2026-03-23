@@ -9,7 +9,7 @@ import { toDisposable } from '../../../base/common/lifecycle.js';
 import BaseErrorTelemetry, { ErrorEvent } from '../common/errorTelemetry.js';
 
 export default class ErrorTelemetry extends BaseErrorTelemetry {
-	protected override installErrorListeners(): void {
+	protected override installErrorListeners(): codemavi {
 		let oldOnError: OnErrorEventHandler;
 		const that = this;
 		if (typeof mainWindow.onerror === 'function') {
@@ -26,7 +26,7 @@ export default class ErrorTelemetry extends BaseErrorTelemetry {
 		}));
 	}
 
-	private _onUncaughtError(msg: string, file: string, line: number, column?: number, err?: any): void {
+	private _onUncaughtError(msg: string, file: string, line: number, column?: number, err?: any): codemavi {
 		const data: ErrorEvent = {
 			callstack: msg,
 			msg,

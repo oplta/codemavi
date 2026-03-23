@@ -274,7 +274,7 @@ suite('File Service', () => {
 	test('readFile/readFileStream supports cancellation (https://github.com/microsoft/vscode/issues/138805)', async () => {
 		const service = disposables.add(new FileService(new NullLogService()));
 
-		let readFileStreamReady: DeferredPromise<void> | undefined = undefined;
+		let readFileStreamReady: DeferredPromise<codemavi> | undefined = undefined;
 
 		const provider = new class extends NullFileSystemProvider {
 
@@ -365,7 +365,7 @@ suite('File Service', () => {
 				return isEqual(resource, atomicResource);
 			}
 
-			override async writeFile(resource: URI, content: Uint8Array, opts: IFileAtomicWriteOptions): Promise<void> {
+			override async writeFile(resource: URI, content: Uint8Array, opts: IFileAtomicWriteOptions): Promise<codemavi> {
 				if (opts.atomic) {
 					atomicWriteCounter++;
 				}
@@ -375,7 +375,7 @@ suite('File Service', () => {
 				return isEqual(resource, atomicResource) ? { postfix: '.tmp' } : false;
 			}
 
-			override async delete(resource: URI, opts: IFileAtomicDeleteOptions): Promise<void> {
+			override async delete(resource: URI, opts: IFileAtomicDeleteOptions): Promise<codemavi> {
 				if (opts.atomic) {
 					atomicDeleteCounter++;
 				}

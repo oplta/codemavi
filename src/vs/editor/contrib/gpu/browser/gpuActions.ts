@@ -31,7 +31,7 @@ class DebugEditorGpuRendererAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const instantiationService = accessor.get(IInstantiationService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const choice = await quickInputService.pick([

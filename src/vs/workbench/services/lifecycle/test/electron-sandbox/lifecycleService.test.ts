@@ -23,7 +23,7 @@ suite('Lifecycleservice', function () {
 			return super.handleBeforeShutdown(reason);
 		}
 
-		testHandleWillShutdown(reason: ShutdownReason): Promise<void> {
+		testHandleWillShutdown(reason: ShutdownReason): Promise<codemavi> {
 			return super.handleWillShutdown(reason);
 		}
 	}

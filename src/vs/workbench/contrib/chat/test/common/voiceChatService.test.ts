@@ -49,7 +49,7 @@ suite('VoiceChat', () => {
 		provideSampleQuestions?(location: ChatAgentLocation, token: CancellationToken): ProviderResult<IChatFollowup[] | undefined> {
 			throw new Error('Method not implemented.');
 		}
-		invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> { throw new Error('Method not implemented.'); }
+		invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> { throw new Error('Method not implemented.'); }
 		provideWelcomeMessage?(token: CancellationToken): ProviderResult<IChatWelcomeMessageContent | undefined> { throw new Error('Method not implemented.'); }
 		metadata = {};
 	}
@@ -69,8 +69,8 @@ suite('VoiceChat', () => {
 		readonly onDidChangeAgents = Event.None;
 		registerAgentImplementation(id: string, agent: IChatAgentImplementation): IDisposable { throw new Error(); }
 		registerDynamicAgent(data: IChatAgentData, agentImpl: IChatAgentImplementation): IDisposable { throw new Error('Method not implemented.'); }
-		invokeAgent(id: string, request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> { throw new Error(); }
-		setRequestPaused(agent: string, requestId: string, isPaused: boolean): void { throw new Error('not implemented'); }
+		invokeAgent(id: string, request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> { throw new Error(); }
+		setRequestPaused(agent: string, requestId: string, isPaused: boolean): codemavi { throw new Error('not implemented'); }
 		getFollowups(id: string, request: IChatAgentRequest, result: IChatAgentResult, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatFollowup[]> { throw new Error(); }
 		getActivatedAgents(): IChatAgent[] { return agents; }
 		getAgents(): IChatAgent[] { return agents; }
@@ -79,7 +79,7 @@ suite('VoiceChat', () => {
 		registerAgent(id: string, data: IChatAgentData): IDisposable { throw new Error('Method not implemented.'); }
 		getAgent(id: string): IChatAgentData | undefined { throw new Error('Method not implemented.'); }
 		getAgentsByName(name: string): IChatAgentData[] { throw new Error('Method not implemented.'); }
-		updateAgent(id: string, updateMetadata: IChatAgentMetadata): void { throw new Error('Method not implemented.'); }
+		updateAgent(id: string, updateMetadata: IChatAgentMetadata): codemavi { throw new Error('Method not implemented.'); }
 		getAgentByFullyQualifiedId(id: string): IChatAgentData | undefined { throw new Error('Method not implemented.'); }
 		registerAgentCompletionProvider(id: string, provider: (query: string, token: CancellationToken) => Promise<IChatAgentCompletionItem[]>): IDisposable { throw new Error('Method not implemented.'); }
 		getAgentCompletionItems(id: string, query: string, token: CancellationToken): Promise<IChatAgentCompletionItem[]> { throw new Error('Method not implemented.'); }

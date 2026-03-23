@@ -55,11 +55,11 @@ export abstract class ExtensionWidget extends Disposable implements IExtensionCo
 	private _extension: IExtension | null = null;
 	get extension(): IExtension | null { return this._extension; }
 	set extension(extension: IExtension | null) { this._extension = extension; this.update(); }
-	update(): void { this.render(); }
-	abstract render(): void;
+	update(): codemavi { this.render(); }
+	abstract render(): codemavi;
 }
 
-export function onClick(element: HTMLElement, callback: () => void): IDisposable {
+export function onClick(element: HTMLElement, callback: () => codemavi): IDisposable {
 	const disposables: DisposableStore = new DisposableStore();
 	disposables.add(addDisposableListener(element, EventType.CLICK, finalHandler(callback)));
 	disposables.add(addDisposableListener(element, EventType.KEY_UP, e => {
@@ -88,12 +88,12 @@ export class InstallCountWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.container.innerText = '';
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 
 		if (!this.extension) {
@@ -167,12 +167,12 @@ export class RatingsWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.container.innerText = '';
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 
 		if (!this.extension) {
@@ -248,12 +248,12 @@ export class PublisherWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.element?.remove();
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 		if (!this.extension) {
 			return;
@@ -321,7 +321,7 @@ export class SponsorWidget extends ExtensionWidget {
 		this.render();
 	}
 
-	render(): void {
+	render(): codemavi {
 		reset(this.container);
 		this.disposables.clear();
 		if (!this.extension?.publisherSponsorLink) {
@@ -355,13 +355,13 @@ export class RecommendationWidget extends ExtensionWidget {
 		this._register(this.extensionRecommendationsService.onDidChangeRecommendations(() => this.render()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.element?.remove();
 		this.element = undefined;
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 		if (!this.extension || this.extension.state === ExtensionState.Installed || this.extension.deprecationInfo) {
 			return;
@@ -389,13 +389,13 @@ export class PreReleaseBookmarkWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.element?.remove();
 		this.element = undefined;
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 		if (this.extension?.state === ExtensionState.Installed ? this.extension.preRelease : this.extension?.hasPreReleaseVersion) {
 			this.element = append(this.parent, $('div.extension-bookmark'));
@@ -424,12 +424,12 @@ export class RemoteBadgeWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.remoteBadge.value?.element.remove();
 		this.remoteBadge.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 		if (!this.extension || !this.extension.local || !this.extension.server || !(this.extensionManagementServerService.localExtensionManagementServer && this.extensionManagementServerService.remoteExtensionManagementServer) || this.extension.server !== this.extensionManagementServerService.remoteExtensionManagementServer) {
 			return;
@@ -457,7 +457,7 @@ class RemoteBadge extends Disposable {
 		this.render();
 	}
 
-	private render(): void {
+	private render(): codemavi {
 		append(this.element, $('span' + ThemeIcon.asCSSSelector(remoteIcon)));
 
 		const applyBadgeStyle = () => {
@@ -497,13 +497,13 @@ export class ExtensionPackCountWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.element?.remove();
 		this.countBadge?.dispose();
 		this.countBadge = undefined;
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 		if (!this.extension || !(this.extension.categories?.some(category => category.toLowerCase() === 'extension packs')) || !this.extension.extensionPack.length) {
 			return;
@@ -534,12 +534,12 @@ export class ExtensionKindIndicatorWidget extends ExtensionWidget {
 		this._register(toDisposable(() => this.clear()));
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.element?.remove();
 		this.disposables.clear();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.clear();
 
 		if (this.small) {
@@ -598,7 +598,7 @@ export class SyncIgnoredWidget extends ExtensionWidget {
 		this.render();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.disposables.clear();
 		this.container.innerText = '';
 
@@ -632,7 +632,7 @@ export class ExtensionRuntimeStatusWidget extends ExtensionWidget {
 		}));
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.container.innerText = '';
 
 		if (!this.extension) {
@@ -685,7 +685,7 @@ export class ExtensionHoverWidget extends ExtensionWidget {
 		super();
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.hover.value = undefined;
 		if (this.extension) {
 			this.hover.value = this.hoverService.setupManagedHover({
@@ -907,8 +907,8 @@ export class ExtensionStatusWidget extends ExtensionWidget {
 
 	private readonly renderDisposables = this._register(new MutableDisposable());
 
-	private readonly _onDidRender = this._register(new Emitter<void>());
-	readonly onDidRender: Event<void> = this._onDidRender.event;
+	private readonly _onDidRender = this._register(new Emitter<codemavi>());
+	readonly onDidRender: Event<codemavi> = this._onDidRender.event;
 
 	constructor(
 		private readonly container: HTMLElement,
@@ -920,7 +920,7 @@ export class ExtensionStatusWidget extends ExtensionWidget {
 		this._register(extensionStatusAction.onDidChangeStatus(() => this.render()));
 	}
 
-	render(): void {
+	render(): codemavi {
 		reset(this.container);
 		this.renderDisposables.value = undefined;
 		const disposables = new DisposableStore();
@@ -954,8 +954,8 @@ export class ExtensionStatusWidget extends ExtensionWidget {
 
 export class ExtensionRecommendationWidget extends ExtensionWidget {
 
-	private readonly _onDidRender = this._register(new Emitter<void>());
-	readonly onDidRender: Event<void> = this._onDidRender.event;
+	private readonly _onDidRender = this._register(new Emitter<codemavi>());
+	readonly onDidRender: Event<codemavi> = this._onDidRender.event;
 
 	constructor(
 		private readonly container: HTMLElement,
@@ -967,7 +967,7 @@ export class ExtensionRecommendationWidget extends ExtensionWidget {
 		this._register(this.extensionRecommendationsService.onDidChangeRecommendations(() => this.render()));
 	}
 
-	render(): void {
+	render(): codemavi {
 		reset(this.container);
 		const recommendationStatus = this.getRecommendationStatus();
 		if (recommendationStatus) {

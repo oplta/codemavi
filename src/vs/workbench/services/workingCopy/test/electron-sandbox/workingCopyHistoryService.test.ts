@@ -550,7 +550,7 @@ suite('WorkingCopyHistoryService', () => {
 		assert.strictEqual(resources.length, 0);
 	});
 
-	function assertEntryEqual(entryA: IWorkingCopyHistoryEntry, entryB: IWorkingCopyHistoryEntry, assertTimestamp = true): void {
+	function assertEntryEqual(entryA: IWorkingCopyHistoryEntry, entryB: IWorkingCopyHistoryEntry, assertTimestamp = true): codemavi {
 		assert.strictEqual(entryA.id, entryB.id);
 		assert.strictEqual(entryA.location.toString(), entryB.location.toString());
 		if (assertTimestamp) {

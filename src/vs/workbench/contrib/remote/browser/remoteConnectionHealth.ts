@@ -81,7 +81,7 @@ export class InitialRemoteConnectionHealthContribution implements IWorkbenchCont
 		return allowed;
 	}
 
-	private async _checkInitialRemoteConnectionHealth(): Promise<void> {
+	private async _checkInitialRemoteConnectionHealth(): Promise<codemavi> {
 		try {
 			const environment = await this._remoteAgentService.getRawEnvironment();
 

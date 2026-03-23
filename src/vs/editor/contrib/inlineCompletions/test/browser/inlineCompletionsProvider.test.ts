@@ -653,7 +653,7 @@ suite('Inline Completions', () => {
 			);
 		});
 
-		async function acceptNextWord(model: InlineCompletionsModel, editor: ITestCodeEditor, timesToAccept: number = 1): Promise<void> {
+		async function acceptNextWord(model: InlineCompletionsModel, editor: ITestCodeEditor, timesToAccept: number = 1): Promise<codemavi> {
 			for (let i = 0; i < timesToAccept; i++) {
 				model.triggerExplicitly();
 				await timeout(1000);

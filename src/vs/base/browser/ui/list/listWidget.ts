@@ -62,7 +62,7 @@ class TraitRenderer<T> implements IListRenderer<T, ITraitTemplateData> {
 		return container;
 	}
 
-	renderElement(element: T, index: number, templateData: ITraitTemplateData): void {
+	renderElement(element: T, index: number, templateData: ITraitTemplateData): codemavi {
 		const renderedElementIndex = this.renderedElements.findIndex(el => el.templateData === templateData);
 
 		if (renderedElementIndex >= 0) {
@@ -77,7 +77,7 @@ class TraitRenderer<T> implements IListRenderer<T, ITraitTemplateData> {
 		this.trait.renderIndex(index, templateData);
 	}
 
-	splice(start: number, deleteCount: number, insertCount: number): void {
+	splice(start: number, deleteCount: number, insertCount: number): codemavi {
 		const rendered: IRenderedContainer[] = [];
 
 		for (const renderedElement of this.renderedElements) {
@@ -95,7 +95,7 @@ class TraitRenderer<T> implements IListRenderer<T, ITraitTemplateData> {
 		this.renderedElements = rendered;
 	}
 
-	renderIndexes(indexes: number[]): void {
+	renderIndexes(indexes: number[]): codemavi {
 		for (const { index, templateData } of this.renderedElements) {
 			if (indexes.indexOf(index) > -1) {
 				this.trait.renderIndex(index, templateData);
@@ -103,7 +103,7 @@ class TraitRenderer<T> implements IListRenderer<T, ITraitTemplateData> {
 		}
 	}
 
-	disposeTemplate(templateData: ITraitTemplateData): void {
+	disposeTemplate(templateData: ITraitTemplateData): codemavi {
 		const index = this.renderedElements.findIndex(el => el.templateData === templateData);
 
 		if (index < 0) {
@@ -131,7 +131,7 @@ class Trait<T> implements ISpliceable<boolean>, IDisposable {
 
 	constructor(private _trait: string) { }
 
-	splice(start: number, deleteCount: number, elements: boolean[]): void {
+	splice(start: number, deleteCount: number, elements: boolean[]): codemavi {
 		const diff = elements.length - deleteCount;
 		const end = start + deleteCount;
 		const sortedIndexes: number[] = [];
@@ -155,11 +155,11 @@ class Trait<T> implements ISpliceable<boolean>, IDisposable {
 		this._set(sortedIndexes, sortedIndexes);
 	}
 
-	renderIndex(index: number, container: HTMLElement): void {
+	renderIndex(index: number, container: HTMLElement): codemavi {
 		container.classList.toggle(this._trait, this.contains(index));
 	}
 
-	unrender(container: HTMLElement): void {
+	unrender(container: HTMLElement): codemavi {
 		container.classList.remove(this._trait);
 	}
 
@@ -206,7 +206,7 @@ class SelectionTrait<T> extends Trait<T> {
 		super('selected');
 	}
 
-	override renderIndex(index: number, container: HTMLElement): void {
+	override renderIndex(index: number, container: HTMLElement): codemavi {
 		super.renderIndex(index, container);
 
 		if (this.setAriaSelected) {
@@ -232,7 +232,7 @@ class TraitSpliceable<T> implements ISpliceable<T> {
 		private identityProvider?: IIdentityProvider<T>
 	) { }
 
-	splice(start: number, deleteCount: number, elements: T[]): void {
+	splice(start: number, deleteCount: number, elements: T[]): codemavi {
 		if (!this.identityProvider) {
 			return this.trait.splice(start, deleteCount, new Array(elements.length).fill(false));
 		}
@@ -348,19 +348,19 @@ class KeyboardController<T> implements IDisposable {
 		}));
 	}
 
-	updateOptions(optionsUpdate: IListOptionsUpdate): void {
+	updateOptions(optionsUpdate: IListOptionsUpdate): codemavi {
 		if (optionsUpdate.multipleSelectionSupport !== undefined) {
 			this.multipleSelectionSupport = optionsUpdate.multipleSelectionSupport;
 		}
 	}
 
-	private onEnter(e: StandardKeyboardEvent): void {
+	private onEnter(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.setSelection(this.list.getFocus(), e.browserEvent);
 	}
 
-	private onUpArrow(e: StandardKeyboardEvent): void {
+	private onUpArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.focusPrevious(1, false, e.browserEvent);
@@ -370,7 +370,7 @@ class KeyboardController<T> implements IDisposable {
 		this.view.domNode.focus();
 	}
 
-	private onDownArrow(e: StandardKeyboardEvent): void {
+	private onDownArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.focusNext(1, false, e.browserEvent);
@@ -380,7 +380,7 @@ class KeyboardController<T> implements IDisposable {
 		this.view.domNode.focus();
 	}
 
-	private onPageUpArrow(e: StandardKeyboardEvent): void {
+	private onPageUpArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.focusPreviousPage(e.browserEvent);
@@ -390,7 +390,7 @@ class KeyboardController<T> implements IDisposable {
 		this.view.domNode.focus();
 	}
 
-	private onPageDownArrow(e: StandardKeyboardEvent): void {
+	private onPageDownArrow(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.focusNextPage(e.browserEvent);
@@ -400,7 +400,7 @@ class KeyboardController<T> implements IDisposable {
 		this.view.domNode.focus();
 	}
 
-	private onCtrlA(e: StandardKeyboardEvent): void {
+	private onCtrlA(e: StandardKeyboardEvent): codemavi {
 		e.preventDefault();
 		e.stopPropagation();
 		this.list.setSelection(range(this.list.length), e.browserEvent);
@@ -408,7 +408,7 @@ class KeyboardController<T> implements IDisposable {
 		this.view.domNode.focus();
 	}
 
-	private onEscape(e: StandardKeyboardEvent): void {
+	private onEscape(e: StandardKeyboardEvent): codemavi {
 		if (this.list.getSelection().length) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -469,7 +469,7 @@ class TypeNavigationController<T> implements IDisposable {
 		this.updateOptions(list.options);
 	}
 
-	updateOptions(options: IListOptions<T>): void {
+	updateOptions(options: IListOptions<T>): codemavi {
 		if (options.typeNavigationEnabled ?? true) {
 			this.enable();
 		} else {
@@ -479,11 +479,11 @@ class TypeNavigationController<T> implements IDisposable {
 		this.mode = options.typeNavigationMode ?? TypeNavigationMode.Automatic;
 	}
 
-	trigger(): void {
+	trigger(): codemavi {
 		this.triggered = !this.triggered;
 	}
 
-	private enable(): void {
+	private enable(): codemavi {
 		if (this.enabled) {
 			return;
 		}
@@ -513,7 +513,7 @@ class TypeNavigationController<T> implements IDisposable {
 		this.triggered = false;
 	}
 
-	private disable(): void {
+	private disable(): codemavi {
 		if (!this.enabled) {
 			return;
 		}
@@ -523,7 +523,7 @@ class TypeNavigationController<T> implements IDisposable {
 		this.triggered = false;
 	}
 
-	private onClear(): void {
+	private onClear(): codemavi {
 		const focus = this.list.getFocus();
 		if (focus.length > 0 && focus[0] === this.previouslyFocused) {
 			// List: re-announce element on typing end since typed keys will interrupt aria label of focused element
@@ -539,7 +539,7 @@ class TypeNavigationController<T> implements IDisposable {
 		this.previouslyFocused = -1;
 	}
 
-	private onInput(word: string | null): void {
+	private onInput(word: string | null): codemavi {
 		if (!word) {
 			this.state = TypeNavigationControllerState.Idle;
 			this.triggered = false;
@@ -614,7 +614,7 @@ class DOMFocusController<T> implements IDisposable {
 		onTab(this.onTab, this, this.disposables);
 	}
 
-	private onTab(e: StandardKeyboardEvent): void {
+	private onTab(e: StandardKeyboardEvent): codemavi {
 		if (e.target !== this.view.domNode) {
 			return;
 		}
@@ -696,7 +696,7 @@ export class MouseController<T> implements IDisposable {
 		Event.any<IListMouseEvent<any> | IListGestureEvent<any>>(list.onMouseClick, list.onMouseMiddleClick, list.onTap)(this.onViewPointer, this, this.disposables);
 	}
 
-	updateOptions(optionsUpdate: IListOptionsUpdate): void {
+	updateOptions(optionsUpdate: IListOptionsUpdate): codemavi {
 		if (optionsUpdate.multipleSelectionSupport !== undefined) {
 			this.multipleSelectionController = undefined;
 
@@ -726,7 +726,7 @@ export class MouseController<T> implements IDisposable {
 		return this.isSelectionSingleChangeEvent(event) || this.isSelectionRangeChangeEvent(event);
 	}
 
-	protected onMouseDown(e: IListMouseEvent<T> | IListTouchEvent<T>): void {
+	protected onMouseDown(e: IListMouseEvent<T> | IListTouchEvent<T>): codemavi {
 		if (isMonacoEditor(e.browserEvent.target as HTMLElement)) {
 			return;
 		}
@@ -736,7 +736,7 @@ export class MouseController<T> implements IDisposable {
 		}
 	}
 
-	protected onContextMenu(e: IListContextMenuEvent<T>): void {
+	protected onContextMenu(e: IListContextMenuEvent<T>): codemavi {
 		if (isEditableElement(e.browserEvent.target as HTMLElement) || isMonacoEditor(e.browserEvent.target as HTMLElement)) {
 			return;
 		}
@@ -745,7 +745,7 @@ export class MouseController<T> implements IDisposable {
 		this.list.setFocus(focus, e.browserEvent);
 	}
 
-	protected onViewPointer(e: IListMouseEvent<T>): void {
+	protected onViewPointer(e: IListMouseEvent<T>): codemavi {
 		if (!this.mouseSupport) {
 			return;
 		}
@@ -782,7 +782,7 @@ export class MouseController<T> implements IDisposable {
 		this._onPointer.fire(e);
 	}
 
-	protected onDoubleClick(e: IListMouseEvent<T>): void {
+	protected onDoubleClick(e: IListMouseEvent<T>): codemavi {
 		if (isEditableElement(e.browserEvent.target as HTMLElement) || isMonacoEditor(e.browserEvent.target as HTMLElement)) {
 			return;
 		}
@@ -800,7 +800,7 @@ export class MouseController<T> implements IDisposable {
 		this.list.setSelection(focus, e.browserEvent);
 	}
 
-	private changeSelection(e: IListMouseEvent<T> | IListTouchEvent<T>): void {
+	private changeSelection(e: IListMouseEvent<T> | IListTouchEvent<T>): codemavi {
 		const focus = e.index!;
 		let anchor = this.list.getAnchor();
 
@@ -851,7 +851,7 @@ export interface IMultipleSelectionController<T> {
 }
 
 export interface IStyleController {
-	style(styles: IListStyles): void;
+	style(styles: IListStyles): codemavi;
 }
 
 export interface IListAccessibilityProvider<T> extends IListViewAccessibilityProvider<T> {
@@ -859,7 +859,7 @@ export interface IListAccessibilityProvider<T> extends IListViewAccessibilityPro
 	getWidgetAriaLabel(): string;
 	getWidgetRole?(): AriaRole;
 	getAriaLevel?(element: T): number | undefined;
-	onDidChangeActiveDescendant?: Event<void>;
+	onDidChangeActiveDescendant?: Event<codemavi>;
 	getActiveDescendantId?(element: T): string | undefined;
 }
 
@@ -867,7 +867,7 @@ export class DefaultStyleController implements IStyleController {
 
 	constructor(private styleElement: HTMLStyleElement, private selectorSuffix: string) { }
 
-	style(styles: IListStyles): void {
+	style(styles: IListStyles): codemavi {
 		const suffix = this.selectorSuffix && `.${this.selectorSuffix}`;
 		const content: string[] = [];
 
@@ -1138,7 +1138,7 @@ const DefaultOptions: IListOptions<any> = {
 	multipleSelectionSupport: true,
 	dnd: {
 		getDragURI() { return null; },
-		onDragStart(): void { },
+		onDragStart(): codemavi { },
 		onDragOver() { return false; },
 		drop() { },
 		dispose() { }
@@ -1241,7 +1241,7 @@ class PipelineRenderer<T> implements IListRenderer<T, any> {
 		return this.renderers.map(r => r.renderTemplate(container));
 	}
 
-	renderElement(element: T, index: number, templateData: any[], height: number | undefined): void {
+	renderElement(element: T, index: number, templateData: any[], height: number | undefined): codemavi {
 		let i = 0;
 
 		for (const renderer of this.renderers) {
@@ -1249,7 +1249,7 @@ class PipelineRenderer<T> implements IListRenderer<T, any> {
 		}
 	}
 
-	disposeElement(element: T, index: number, templateData: any[], height: number | undefined): void {
+	disposeElement(element: T, index: number, templateData: any[], height: number | undefined): codemavi {
 		let i = 0;
 
 		for (const renderer of this.renderers) {
@@ -1259,7 +1259,7 @@ class PipelineRenderer<T> implements IListRenderer<T, any> {
 		}
 	}
 
-	disposeTemplate(templateData: any[]): void {
+	disposeTemplate(templateData: any[]): codemavi {
 		let i = 0;
 
 		for (const renderer of this.renderers) {
@@ -1278,7 +1278,7 @@ class AccessibiltyRenderer<T> implements IListRenderer<T, IAccessibilityTemplate
 		return { container, disposables: new DisposableStore() };
 	}
 
-	renderElement(element: T, index: number, data: IAccessibilityTemplateData): void {
+	renderElement(element: T, index: number, data: IAccessibilityTemplateData): codemavi {
 		const ariaLabel = this.accessibilityProvider.getAriaLabel(element);
 		const observable = (ariaLabel && typeof ariaLabel !== 'string') ? ariaLabel : constObservable(ariaLabel);
 
@@ -1295,7 +1295,7 @@ class AccessibiltyRenderer<T> implements IListRenderer<T, IAccessibilityTemplate
 		}
 	}
 
-	private setAriaLabel(ariaLabel: string | null, element: HTMLElement): void {
+	private setAriaLabel(ariaLabel: string | null, element: HTMLElement): codemavi {
 		if (ariaLabel) {
 			element.setAttribute('aria-label', ariaLabel);
 		} else {
@@ -1303,11 +1303,11 @@ class AccessibiltyRenderer<T> implements IListRenderer<T, IAccessibilityTemplate
 		}
 	}
 
-	disposeElement(element: T, index: number, templateData: IAccessibilityTemplateData, height: number | undefined): void {
+	disposeElement(element: T, index: number, templateData: IAccessibilityTemplateData, height: number | undefined): codemavi {
 		templateData.disposables.clear();
 	}
 
-	disposeTemplate(templateData: any): void {
+	disposeTemplate(templateData: any): codemavi {
 		templateData.disposables.dispose();
 	}
 }
@@ -1334,7 +1334,7 @@ class ListViewDragAndDrop<T> implements IListViewDragAndDrop<T> {
 		return undefined;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
 		this.dnd.onDragStart?.(data, originalEvent);
 	}
 
@@ -1342,19 +1342,19 @@ class ListViewDragAndDrop<T> implements IListViewDragAndDrop<T> {
 		return this.dnd.onDragOver(data, targetElement, targetIndex, targetSector, originalEvent);
 	}
 
-	onDragLeave(data: IDragAndDropData, targetElement: T, targetIndex: number, originalEvent: DragEvent): void {
+	onDragLeave(data: IDragAndDropData, targetElement: T, targetIndex: number, originalEvent: DragEvent): codemavi {
 		this.dnd.onDragLeave?.(data, targetElement, targetIndex, originalEvent);
 	}
 
-	onDragEnd(originalEvent: DragEvent): void {
+	onDragEnd(originalEvent: DragEvent): codemavi {
 		this.dnd.onDragEnd?.(originalEvent);
 	}
 
-	drop(data: IDragAndDropData, targetElement: T, targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void {
+	drop(data: IDragAndDropData, targetElement: T, targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi {
 		this.dnd.drop(data, targetElement, targetIndex, targetSector, originalEvent);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.dnd.dispose();
 	}
 }
@@ -1454,11 +1454,11 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 	@memoize get onKeyUp(): Event<KeyboardEvent> { return this.disposables.add(new DomEmitter(this.view.domNode, 'keyup')).event; }
 	@memoize get onKeyPress(): Event<KeyboardEvent> { return this.disposables.add(new DomEmitter(this.view.domNode, 'keypress')).event; }
 
-	@memoize get onDidFocus(): Event<void> { return Event.signal(this.disposables.add(new DomEmitter(this.view.domNode, 'focus', true)).event); }
-	@memoize get onDidBlur(): Event<void> { return Event.signal(this.disposables.add(new DomEmitter(this.view.domNode, 'blur', true)).event); }
+	@memoize get onDidFocus(): Event<codemavi> { return Event.signal(this.disposables.add(new DomEmitter(this.view.domNode, 'focus', true)).event); }
+	@memoize get onDidBlur(): Event<codemavi> { return Event.signal(this.disposables.add(new DomEmitter(this.view.domNode, 'blur', true)).event); }
 
-	private readonly _onDidDispose = new Emitter<void>();
-	readonly onDidDispose: Event<void> = this._onDidDispose.event;
+	private readonly _onDidDispose = new Emitter<codemavi>();
+	readonly onDidDispose: Event<codemavi> = this._onDidDispose.event;
 
 	constructor(
 		private user: string,
@@ -1546,7 +1546,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return new MouseController(this);
 	}
 
-	updateOptions(optionsUpdate: IListOptionsUpdate = {}): void {
+	updateOptions(optionsUpdate: IListOptionsUpdate = {}): codemavi {
 		this._options = { ...this._options, ...optionsUpdate };
 
 		this.typeNavigationController?.updateOptions(this._options);
@@ -1568,7 +1568,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return this._options;
 	}
 
-	splice(start: number, deleteCount: number, elements: readonly T[] = []): void {
+	splice(start: number, deleteCount: number, elements: readonly T[] = []): codemavi {
 		if (start < 0 || start > this.view.length) {
 			throw new ListError(this.user, `Invalid start index: ${start}`);
 		}
@@ -1584,15 +1584,15 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		this.eventBufferer.bufferEvents(() => this.spliceable.splice(start, deleteCount, elements));
 	}
 
-	updateWidth(index: number): void {
+	updateWidth(index: number): codemavi {
 		this.view.updateWidth(index);
 	}
 
-	updateElementHeight(index: number, size: number | undefined): void {
+	updateElementHeight(index: number, size: number | undefined): codemavi {
 		this.view.updateElementHeight(index, size, null);
 	}
 
-	rerender(): void {
+	rerender(): codemavi {
 		this.view.rerender();
 	}
 
@@ -1673,19 +1673,19 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		this.view.domNode.setAttribute('aria-label', value);
 	}
 
-	domFocus(): void {
+	domFocus(): codemavi {
 		this.view.domNode.focus({ preventScroll: true });
 	}
 
-	layout(height?: number, width?: number): void {
+	layout(height?: number, width?: number): codemavi {
 		this.view.layout(height, width);
 	}
 
-	triggerTypeNavigation(): void {
+	triggerTypeNavigation(): codemavi {
 		this.typeNavigationController?.trigger();
 	}
 
-	setSelection(indexes: number[], browserEvent?: UIEvent): void {
+	setSelection(indexes: number[], browserEvent?: UIEvent): codemavi {
 		for (const index of indexes) {
 			if (index < 0 || index >= this.length) {
 				throw new ListError(this.user, `Invalid index ${index}`);
@@ -1703,7 +1703,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return this.getSelection().map(i => this.view.element(i));
 	}
 
-	setAnchor(index: number | undefined): void {
+	setAnchor(index: number | undefined): codemavi {
 		if (typeof index === 'undefined') {
 			this.anchor.set([]);
 			return;
@@ -1725,7 +1725,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return typeof anchor === 'undefined' ? undefined : this.element(anchor);
 	}
 
-	setFocus(indexes: number[], browserEvent?: UIEvent): void {
+	setFocus(indexes: number[], browserEvent?: UIEvent): codemavi {
 		for (const index of indexes) {
 			if (index < 0 || index >= this.length) {
 				throw new ListError(this.user, `Invalid index ${index}`);
@@ -1735,7 +1735,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		this.focus.set(indexes, browserEvent);
 	}
 
-	focusNext(n = 1, loop = false, browserEvent?: UIEvent, filter?: (element: T) => boolean): void {
+	focusNext(n = 1, loop = false, browserEvent?: UIEvent, filter?: (element: T) => boolean): codemavi {
 		if (this.length === 0) { return; }
 
 		const focus = this.focus.get();
@@ -1746,7 +1746,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent, filter?: (element: T) => boolean): void {
+	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent, filter?: (element: T) => boolean): codemavi {
 		if (this.length === 0) { return; }
 
 		const focus = this.focus.get();
@@ -1757,7 +1757,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	async focusNextPage(browserEvent?: UIEvent, filter?: (element: T) => boolean): Promise<void> {
+	async focusNextPage(browserEvent?: UIEvent, filter?: (element: T) => boolean): Promise<codemavi> {
 		let lastPageIndex = this.view.indexAt(this.view.getScrollTop() + this.view.renderHeight);
 		lastPageIndex = lastPageIndex === 0 ? 0 : lastPageIndex - 1;
 		const currentlyFocusedElementIndex = this.getFocus()[0];
@@ -1790,7 +1790,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	async focusPreviousPage(browserEvent?: UIEvent, filter?: (element: T) => boolean, getPaddingTop: () => number = () => 0): Promise<void> {
+	async focusPreviousPage(browserEvent?: UIEvent, filter?: (element: T) => boolean, getPaddingTop: () => number = () => 0): Promise<codemavi> {
 		let firstPageIndex: number;
 		const paddingTop = getPaddingTop();
 		const scrollTop = this.view.getScrollTop() + paddingTop;
@@ -1825,7 +1825,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	focusLast(browserEvent?: UIEvent, filter?: (element: T) => boolean): void {
+	focusLast(browserEvent?: UIEvent, filter?: (element: T) => boolean): codemavi {
 		if (this.length === 0) { return; }
 
 		const index = this.findPreviousIndex(this.length - 1, false, filter);
@@ -1835,11 +1835,11 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	focusFirst(browserEvent?: UIEvent, filter?: (element: T) => boolean): void {
+	focusFirst(browserEvent?: UIEvent, filter?: (element: T) => boolean): codemavi {
 		this.focusNth(0, browserEvent, filter);
 	}
 
-	focusNth(n: number, browserEvent?: UIEvent, filter?: (element: T) => boolean): void {
+	focusNth(n: number, browserEvent?: UIEvent, filter?: (element: T) => boolean): codemavi {
 		if (this.length === 0) { return; }
 
 		const index = this.findNextIndex(n, false, filter);
@@ -1893,7 +1893,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return this.getFocus().map(i => this.view.element(i));
 	}
 
-	reveal(index: number, relativeTop?: number, paddingTop: number = 0): void {
+	reveal(index: number, relativeTop?: number, paddingTop: number = 0): codemavi {
 		if (index < 0 || index >= this.length) {
 			throw new ListError(this.user, `Invalid index ${index}`);
 		}
@@ -1962,7 +1962,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return this.view.elementTop(index);
 	}
 
-	style(styles: IListStyles): void {
+	style(styles: IListStyles): codemavi {
 		this.styleController.style(styles);
 	}
 
@@ -1970,13 +1970,13 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		return { indexes, elements: indexes.map(i => this.view.element(i)), browserEvent };
 	}
 
-	private _onFocusChange(): void {
+	private _onFocusChange(): codemavi {
 		const focus = this.focus.get();
 		this.view.domNode.classList.toggle('element-focused', focus.length > 0);
 		this.onDidChangeActiveDescendant();
 	}
 
-	private onDidChangeActiveDescendant(): void {
+	private onDidChangeActiveDescendant(): codemavi {
 		const focus = this.focus.get();
 
 		if (focus.length > 0) {
@@ -1992,7 +1992,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		}
 	}
 
-	private _onSelectionChange(): void {
+	private _onSelectionChange(): codemavi {
 		const selection = this.selection.get();
 
 		this.view.domNode.classList.toggle('selection-none', selection.length === 0);
@@ -2000,7 +2000,7 @@ export class List<T> implements ISpliceable<T>, IDisposable {
 		this.view.domNode.classList.toggle('selection-multiple', selection.length > 1);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._onDidDispose.fire();
 		this.disposables.dispose();
 

@@ -43,13 +43,13 @@ export class PartialCommandDetectionCapability extends DisposableStore implement
 		}));
 	}
 
-	private _onData(data: string): void {
+	private _onData(data: string): codemavi {
 		if (data === '\x0d') {
 			this._onEnter();
 		}
 	}
 
-	private _onEnter(): void {
+	private _onEnter(): codemavi {
 		if (!this._terminal) {
 			return;
 		}
@@ -62,7 +62,7 @@ export class PartialCommandDetectionCapability extends DisposableStore implement
 		}
 	}
 
-	private _clearCommandsInViewport(): void {
+	private _clearCommandsInViewport(): codemavi {
 		// Find the number of commands on the tail end of the array that are within the viewport
 		let count = 0;
 		for (let i = this._commands.length - 1; i >= 0; i--) {

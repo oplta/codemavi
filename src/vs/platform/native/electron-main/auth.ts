@@ -27,7 +27,7 @@ interface ElectronAuthenticationResponseDetails extends AuthenticationResponseDe
 type LoginEvent = {
 	event?: ElectronEvent;
 	authInfo: AuthInfo;
-	callback?: (username?: string, password?: string) => void;
+	callback?: (username?: string, password?: string) => codemavi;
 };
 
 export const IProxyAuthService = createDecorator<IProxyAuthService>('proxyAuthService');
@@ -62,7 +62,7 @@ export class ProxyAuthService extends Disposable implements IProxyAuthService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		const onLogin = Event.fromNodeEventEmitter<LoginEvent>(app, 'login', (event: ElectronEvent, _webContents: WebContents, req: ElectronAuthenticationResponseDetails, authInfo: ElectronAuthInfo, callback) => ({ event, authInfo: { ...authInfo, attempt: req.firstAuthAttempt ? 1 : 2 }, callback } satisfies LoginEvent));
 		this._register(onLogin(this.onLogin, this));
 	}

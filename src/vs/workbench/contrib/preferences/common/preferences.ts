@@ -47,7 +47,7 @@ export interface ISearchProvider {
 }
 
 export interface IRemoteSearchProvider extends ISearchProvider {
-	setFilter(filter: string): void;
+	setFilter(filter: string): codemavi;
 }
 
 export const SETTINGS_EDITOR_COMMAND_CLEAR_SEARCH_RESULTS = 'settings.action.clearSearchResults';

@@ -7,7 +7,7 @@ import * as vscode from 'vscode';
 import { SymbolsTree } from '../tree';
 import { FileItem, ReferenceItem, ReferencesModel, ReferencesTreeInput } from './model';
 
-export function register(tree: SymbolsTree, context: vscode.ExtensionContext): void {
+export function register(tree: SymbolsTree, context: vscode.ExtensionContext): codemavi {
 
 	function findLocations(title: string, command: string) {
 		if (vscode.window.activeTextEditor) {

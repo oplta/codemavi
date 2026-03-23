@@ -71,7 +71,7 @@ function toExtractError(err: Error): ExtractError {
 	return new ExtractError(type, err);
 }
 
-function extractEntry(stream: Readable, fileName: string, mode: number, targetPath: string, options: IOptions, token: CancellationToken): Promise<void> {
+function extractEntry(stream: Readable, fileName: string, mode: number, targetPath: string, options: IOptions, token: CancellationToken): Promise<codemavi> {
 	const dirName = path.dirname(fileName);
 	const targetDirName = path.join(targetPath, dirName);
 	if (!targetDirName.startsWith(targetPath)) {
@@ -85,7 +85,7 @@ function extractEntry(stream: Readable, fileName: string, mode: number, targetPa
 		istream?.destroy();
 	});
 
-	return Promise.resolve(promises.mkdir(targetDirName, { recursive: true })).then(() => new Promise<void>((c, e) => {
+	return Promise.resolve(promises.mkdir(targetDirName, { recursive: true })).then(() => new Promise<codemavi>((c, e) => {
 		if (token.isCancellationRequested) {
 			return;
 		}
@@ -102,8 +102,8 @@ function extractEntry(stream: Readable, fileName: string, mode: number, targetPa
 	}));
 }
 
-function extractZip(zipfile: ZipFile, targetPath: string, options: IOptions, token: CancellationToken): Promise<void> {
-	let last = createCancelablePromise<void>(() => Promise.resolve());
+function extractZip(zipfile: ZipFile, targetPath: string, options: IOptions, token: CancellationToken): Promise<codemavi> {
+	let last = createCancelablePromise<codemavi>(() => Promise.resolve());
 	let extractedEntriesCount = 0;
 
 	const listener = token.onCancellationRequested(() => {
@@ -111,7 +111,7 @@ function extractZip(zipfile: ZipFile, targetPath: string, options: IOptions, tok
 		zipfile.close();
 	});
 
-	return new Promise<void>((c, e) => {
+	return new Promise<codemavi>((c, e) => {
 		const throttler = new Sequencer();
 
 		const readNextEntry = (token: CancellationToken) => {
@@ -215,7 +215,7 @@ export async function zip(zipPath: string, files: IFile[]): Promise<string> {
 	});
 }
 
-export function extract(zipPath: string, targetPath: string, options: IExtractOptions = {}, token: CancellationToken): Promise<void> {
+export function extract(zipPath: string, targetPath: string, options: IExtractOptions = {}, token: CancellationToken): Promise<codemavi> {
 	const sourcePathRegex = new RegExp(options.sourcePath ? `^${options.sourcePath}` : '');
 
 	let promise = openZip(zipPath, true);

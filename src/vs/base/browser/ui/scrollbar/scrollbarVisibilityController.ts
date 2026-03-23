@@ -32,7 +32,7 @@ export class ScrollbarVisibilityController extends Disposable {
 		this._revealTimer = this._register(new TimeoutTimer());
 	}
 
-	public setVisibility(visibility: ScrollbarVisibility): void {
+	public setVisibility(visibility: ScrollbarVisibility): codemavi {
 		if (this._visibility !== visibility) {
 			this._visibility = visibility;
 			this._updateShouldBeVisible();
@@ -41,7 +41,7 @@ export class ScrollbarVisibilityController extends Disposable {
 
 	// ----------------- Hide / Reveal
 
-	public setShouldBeVisible(rawShouldBeVisible: boolean): void {
+	public setShouldBeVisible(rawShouldBeVisible: boolean): codemavi {
 		this._rawShouldBeVisible = rawShouldBeVisible;
 		this._updateShouldBeVisible();
 	}
@@ -56,7 +56,7 @@ export class ScrollbarVisibilityController extends Disposable {
 		return this._rawShouldBeVisible;
 	}
 
-	private _updateShouldBeVisible(): void {
+	private _updateShouldBeVisible(): codemavi {
 		const shouldBeVisible = this._applyVisibilitySetting();
 
 		if (this._shouldBeVisible !== shouldBeVisible) {
@@ -65,14 +65,14 @@ export class ScrollbarVisibilityController extends Disposable {
 		}
 	}
 
-	public setIsNeeded(isNeeded: boolean): void {
+	public setIsNeeded(isNeeded: boolean): codemavi {
 		if (this._isNeeded !== isNeeded) {
 			this._isNeeded = isNeeded;
 			this.ensureVisibility();
 		}
 	}
 
-	public setDomNode(domNode: FastDomNode<HTMLElement>): void {
+	public setDomNode(domNode: FastDomNode<HTMLElement>): codemavi {
 		this._domNode = domNode;
 		this._domNode.setClassName(this._invisibleClassName);
 
@@ -80,7 +80,7 @@ export class ScrollbarVisibilityController extends Disposable {
 		this.setShouldBeVisible(false);
 	}
 
-	public ensureVisibility(): void {
+	public ensureVisibility(): codemavi {
 
 		if (!this._isNeeded) {
 			// Nothing to be rendered
@@ -95,7 +95,7 @@ export class ScrollbarVisibilityController extends Disposable {
 		}
 	}
 
-	private _reveal(): void {
+	private _reveal(): codemavi {
 		if (this._isVisible) {
 			return;
 		}
@@ -107,7 +107,7 @@ export class ScrollbarVisibilityController extends Disposable {
 		}, 0);
 	}
 
-	private _hide(withFadeAway: boolean): void {
+	private _hide(withFadeAway: boolean): codemavi {
 		this._revealTimer.cancel();
 		if (!this._isVisible) {
 			return;

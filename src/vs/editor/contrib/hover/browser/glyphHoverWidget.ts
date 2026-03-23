@@ -64,7 +64,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		this._editor.addOverlayWidget(this);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._hoverComputerOptions = undefined;
 		this._editor.removeOverlayWidget(this);
 		super.dispose();
@@ -82,12 +82,12 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		return null;
 	}
 
-	private _updateFont(): void {
+	private _updateFont(): codemavi {
 		const codeClasses: HTMLElement[] = Array.prototype.slice.call(this._hover.contentsDomNode.getElementsByClassName('code'));
 		codeClasses.forEach(node => this._editor.applyFontInfo(node));
 	}
 
-	private _onModelDecorationsChanged(): void {
+	private _onModelDecorationsChanged(): codemavi {
 		if (this._isVisible && this._hoverComputerOptions) {
 			// The decorations have changed and the hover is visible,
 			// we need to recompute the displayed text
@@ -109,7 +109,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		return false;
 	}
 
-	private _startShowingAt(lineNumber: number, laneOrLine: LaneOrLineNumber): void {
+	private _startShowingAt(lineNumber: number, laneOrLine: LaneOrLineNumber): codemavi {
 		if (this._hoverComputerOptions
 			&& this._hoverComputerOptions.lineNumber === lineNumber
 			&& this._hoverComputerOptions.laneOrLine === laneOrLine) {
@@ -122,7 +122,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		this._hoverOperation.start(HoverStartMode.Delayed, this._hoverComputerOptions);
 	}
 
-	public hide(): void {
+	public hide(): codemavi {
 		this._hoverComputerOptions = undefined;
 		this._hoverOperation.cancel();
 		if (!this._isVisible) {
@@ -132,7 +132,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		this._hover.containerDomNode.classList.toggle('hidden', !this._isVisible);
 	}
 
-	private _withResult(result: HoverResult<GlyphHoverComputerOptions, IHoverMessage>): void {
+	private _withResult(result: HoverResult<GlyphHoverComputerOptions, IHoverMessage>): codemavi {
 		this._messages = result.value;
 
 		if (this._messages.length > 0) {
@@ -142,7 +142,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		}
 	}
 
-	private _renderMessages(lineNumber: number, laneOrLine: LaneOrLineNumber, messages: IHoverMessage[]): void {
+	private _renderMessages(lineNumber: number, laneOrLine: LaneOrLineNumber, messages: IHoverMessage[]): codemavi {
 		this._renderDisposeables.clear();
 
 		const fragment = document.createDocumentFragment();
@@ -159,13 +159,13 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		this._showAt(lineNumber, laneOrLine);
 	}
 
-	private _updateContents(node: Node): void {
+	private _updateContents(node: Node): codemavi {
 		this._hover.contentsDomNode.textContent = '';
 		this._hover.contentsDomNode.appendChild(node);
 		this._updateFont();
 	}
 
-	private _showAt(lineNumber: number, laneOrLine: LaneOrLineNumber): void {
+	private _showAt(lineNumber: number, laneOrLine: LaneOrLineNumber): codemavi {
 		if (!this._isVisible) {
 			this._isVisible = true;
 			this._hover.containerDomNode.classList.toggle('hidden', !this._isVisible);
@@ -183,7 +183,7 @@ export class GlyphHoverWidget extends Disposable implements IOverlayWidget, IHov
 		this._hover.containerDomNode.style.zIndex = '11'; // 1 more than the zone widget at 10 (#233819)
 	}
 
-	private _onMouseLeave(e: MouseEvent): void {
+	private _onMouseLeave(e: MouseEvent): codemavi {
 		const editorDomNode = this._editor.getDomNode();
 		const isMousePositionOutsideOfEditor = !editorDomNode || !isMousePositionWithinElement(editorDomNode, e.x, e.y);
 		if (isMousePositionOutsideOfEditor) {

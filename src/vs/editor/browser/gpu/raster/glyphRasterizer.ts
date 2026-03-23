@@ -85,7 +85,7 @@ export class GlyphRasterizer extends Disposable implements IGlyphRasterizer {
 				fontBoundingBoxDescent: 0,
 			};
 		}
-		// Check if the last glyph matches the config, reuse if so. This helps avoid unnecessary
+		// Check if the last glyph matches the config, reuse if so. This helps acodemavi unnecessary
 		// work when the rasterizer is called multiple times like when the glyph doesn't fit into a
 		// page.
 		if (this._workGlyphConfig.chars === chars && this._workGlyphConfig.tokenMetadata === tokenMetadata && this._workGlyphConfig.decorationStyleSetId === decorationStyleSetId) {

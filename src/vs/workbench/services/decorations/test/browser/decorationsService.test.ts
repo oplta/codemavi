@@ -117,7 +117,7 @@ suite('DecorationsService', function () {
 
 			// un-register -> ensure good event
 			let didSeeEvent = false;
-			const p = new Promise<void>(resolve => {
+			const p = new Promise<codemavi>(resolve => {
 				const l = service.onDidChangeDecorations(e => {
 					assert.strictEqual(e.affectsResource(uri), true);
 					assert.deepStrictEqual(service.getDecoration(uri, false), undefined);
@@ -304,7 +304,7 @@ suite('DecorationsService', function () {
 			data = service.getDecoration(uri2, true)!;
 			assert.ok(data.tooltip); // emphazied items...
 
-			return new Promise<void>((resolve, reject) => {
+			return new Promise<codemavi>((resolve, reject) => {
 				const l = service.onDidChangeDecorations(e => {
 					l.dispose();
 					try {

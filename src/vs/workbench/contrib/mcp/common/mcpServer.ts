@@ -114,7 +114,7 @@ export class McpServerMetadataCache extends Disposable {
 	}
 
 	/** Sets cached tools for a server */
-	storeTools(definitionId: string, tools: readonly IValidatedMcpTool[]): void {
+	storeTools(definitionId: string, tools: readonly IValidatedMcpTool[]): codemavi {
 		this.cache.set(definitionId, { ...this.cache.get(definitionId), tools });
 		this.didChange = true;
 	}
@@ -125,7 +125,7 @@ export class McpServerMetadataCache extends Disposable {
 	}
 
 	/** Sets cached servers for a collection */
-	storeServers(collectionId: string, entry: IServerCacheEntry | undefined): void {
+	storeServers(collectionId: string, entry: IServerCacheEntry | undefined): codemavi {
 		if (entry) {
 			this.extensionServers.set(collectionId, entry);
 		} else {
@@ -254,7 +254,7 @@ export class McpServer extends Disposable implements IMcpServer {
 		});
 	}
 
-	public showOutput(): void {
+	public showOutput(): codemavi {
 		this._loggerService.setVisibility(this._loggerId, true);
 		this._outputService.showChannel(this._loggerId);
 	}
@@ -310,7 +310,7 @@ export class McpServer extends Disposable implements IMcpServer {
 		});
 	}
 
-	public stop(): Promise<void> {
+	public stop(): Promise<codemavi> {
 		return this._connection.get()?.stop() || Promise.resolve();
 	}
 

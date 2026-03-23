@@ -10,7 +10,7 @@ import { DeferredPromise, toPromise } from './async';
 import { isSupportedClient } from './env';
 
 export interface ILoopbackClientAndOpener extends ILoopbackClient {
-	openBrowser(url: string): Promise<void>;
+	openBrowser(url: string): Promise<codemavi>;
 }
 
 export class UriHandlerLoopbackClient implements ILoopbackClientAndOpener {
@@ -39,27 +39,27 @@ export class UriHandlerLoopbackClient implements ILoopbackClientAndOpener {
 		return this._redirectUri;
 	}
 
-	closeServer(): void {
+	closeServer(): codemavi {
 		// No-op
 	}
 
-	async openBrowser(url: string): Promise<void> {
+	async openBrowser(url: string): Promise<codemavi> {
 		const callbackUri = await env.asExternalUri(Uri.parse(`${env.uriScheme}://vscode.microsoft-authentication`));
 
 		if (isSupportedClient(callbackUri)) {
-			void this._getCodeResponseFromUriHandler();
+			codemavi this._getCodeResponseFromUriHandler();
 		} else {
 			// Unsupported clients will be shown the code in the browser, but it will not redirect back since this
 			// isn't a supported client. Instead, they will copy that code in the browser and paste it in an input box
 			// that will be shown to them by the extension.
-			void this._getCodeResponseFromQuickPick();
+			codemavi this._getCodeResponseFromQuickPick();
 		}
 
 		const uri = Uri.parse(url + `&state=${encodeURI(callbackUri.toString(true))}`);
 		await env.openExternal(uri);
 	}
 
-	private async _getCodeResponseFromUriHandler(): Promise<void> {
+	private async _getCodeResponseFromUriHandler(): Promise<codemavi> {
 		if (!this._responseDeferred) {
 			throw new Error('No listener for auth code');
 		}
@@ -76,7 +76,7 @@ export class UriHandlerLoopbackClient implements ILoopbackClientAndOpener {
 		});
 	}
 
-	private async _getCodeResponseFromQuickPick(): Promise<void> {
+	private async _getCodeResponseFromQuickPick(): Promise<codemavi> {
 		if (!this._responseDeferred) {
 			throw new Error('No listener for auth code');
 		}

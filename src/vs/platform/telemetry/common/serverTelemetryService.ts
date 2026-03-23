@@ -12,7 +12,7 @@ import { ITelemetryServiceConfig, TelemetryService } from './telemetryService.js
 import { NullTelemetryServiceShape } from './telemetryUtils.js';
 
 export interface IServerTelemetryService extends ITelemetryService {
-	updateInjectedTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<void>;
+	updateInjectedTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<codemavi>;
 }
 
 export class ServerTelemetryService extends TelemetryService implements IServerTelemetryService {
@@ -52,7 +52,7 @@ export class ServerTelemetryService extends TelemetryService implements IServerT
 		return this.publicLogError(eventName, data as ITelemetryData | undefined);
 	}
 
-	async updateInjectedTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<void> {
+	async updateInjectedTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<codemavi> {
 		if (telemetryLevel === undefined) {
 			this._injectedTelemetryLevel = TelemetryLevel.NONE;
 			throw new Error('Telemetry level cannot be undefined. This will cause infinite looping!');
@@ -66,7 +66,7 @@ export class ServerTelemetryService extends TelemetryService implements IServerT
 }
 
 export const ServerNullTelemetryService = new class extends NullTelemetryServiceShape implements IServerTelemetryService {
-	async updateInjectedTelemetryLevel(): Promise<void> { return; } // No-op, telemetry is already disabled
+	async updateInjectedTelemetryLevel(): Promise<codemavi> { return; } // No-op, telemetry is already disabled
 };
 
 export const IServerTelemetryService = refineServiceDecorator<ITelemetryService, IServerTelemetryService>(ITelemetryService);

@@ -72,14 +72,14 @@ class SCMInput extends Disposable implements ISCMInput {
 	private readonly _onDidChangeVisibility = new Emitter<boolean>();
 	readonly onDidChangeVisibility: Event<boolean> = this._onDidChangeVisibility.event;
 
-	setFocus(): void {
+	setFocus(): codemavi {
 		this._onDidChangeFocus.fire();
 	}
 
-	private readonly _onDidChangeFocus = new Emitter<void>();
-	readonly onDidChangeFocus: Event<void> = this._onDidChangeFocus.event;
+	private readonly _onDidChangeFocus = new Emitter<codemavi>();
+	readonly onDidChangeFocus: Event<codemavi> = this._onDidChangeFocus.event;
 
-	showValidationMessage(message: string | IMarkdownString, type: InputValidationType): void {
+	showValidationMessage(message: string | IMarkdownString, type: InputValidationType): codemavi {
 		this._onDidChangeValidationMessage.fire({ message: message, type: type });
 	}
 
@@ -97,8 +97,8 @@ class SCMInput extends Disposable implements ISCMInput {
 		this._onDidChangeValidateInput.fire();
 	}
 
-	private readonly _onDidChangeValidateInput = new Emitter<void>();
-	readonly onDidChangeValidateInput: Event<void> = this._onDidChangeValidateInput.event;
+	private readonly _onDidChangeValidateInput = new Emitter<codemavi>();
+	readonly onDidChangeValidateInput: Event<codemavi> = this._onDidChangeValidateInput.event;
 
 	private readonly historyNavigator: HistoryNavigator2<string>;
 	private didChangeHistory: boolean = false;
@@ -144,7 +144,7 @@ class SCMInput extends Disposable implements ISCMInput {
 		this._onDidChange.fire({ value, reason });
 	}
 
-	showNextHistoryValue(): void {
+	showNextHistoryValue(): codemavi {
 		if (this.historyNavigator.isAtEnd()) {
 			return;
 		} else if (!this.historyNavigator.has(this.value)) {
@@ -156,7 +156,7 @@ class SCMInput extends Disposable implements ISCMInput {
 		this.setValue(value, true, SCMInputChangeReason.HistoryNext);
 	}
 
-	showPreviousHistoryValue(): void {
+	showPreviousHistoryValue(): codemavi {
 		if (this.historyNavigator.isAtEnd()) {
 			this.saveValue();
 		} else if (!this.historyNavigator.has(this._value)) {
@@ -168,7 +168,7 @@ class SCMInput extends Disposable implements ISCMInput {
 		this.setValue(value, true, SCMInputChangeReason.HistoryPrevious);
 	}
 
-	private saveValue(): void {
+	private saveValue(): codemavi {
 		const oldValue = this.historyNavigator.replaceLast(this._value);
 		this.didChangeHistory = this.didChangeHistory || (oldValue !== this._value);
 	}
@@ -195,7 +195,7 @@ class SCMRepository implements ISCMRepository {
 		this.input = new SCMInput(this, inputHistory);
 	}
 
-	setSelected(selected: boolean): void {
+	setSelected(selected: boolean): codemavi {
 		if (this._selected === selected) {
 			return;
 		}
@@ -204,7 +204,7 @@ class SCMRepository implements ISCMRepository {
 		this._onDidChangeSelection.fire(selected);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 		this.provider.dispose();
 	}
@@ -271,7 +271,7 @@ class SCMInputHistory {
 		}));
 	}
 
-	private saveToStorage(): void {
+	private saveToStorage(): codemavi {
 		const raw: [string, URI, string[]][] = [];
 
 		for (const [providerLabel, providerHistories] of this.histories) {

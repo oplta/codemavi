@@ -22,7 +22,7 @@ export class MdLanguageClient implements IDisposable {
 		private readonly _workspace: VsCodeMdWorkspace,
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._client.stop();
 		this._workspace.dispose();
 	}
@@ -141,7 +141,7 @@ export async function startClient(factory: LanguageClientConstructor, parser: IM
 
 	const watchers = new FileWatcherManager();
 
-	client.onRequest(proto.fs_watcher_create, async (params): Promise<void> => {
+	client.onRequest(proto.fs_watcher_create, async (params): Promise<codemavi> => {
 		const id = params.id;
 		const uri = vscode.Uri.parse(params.uri);
 
@@ -156,7 +156,7 @@ export async function startClient(factory: LanguageClientConstructor, parser: IM
 		});
 	});
 
-	client.onRequest(proto.fs_watcher_delete, async (params): Promise<void> => {
+	client.onRequest(proto.fs_watcher_delete, async (params): Promise<codemavi> => {
 		watchers.delete(params.id);
 	});
 

@@ -260,7 +260,7 @@ suite('ShellIntegrationAddon', () => {
 	});
 
 	suite('deserializeMessage', () => {
-		// A single literal backslash, in order to avoid confusion about whether we are escaping test data or testing escapes.
+		// A single literal backslash, in order to acodemavi confusion about whether we are escaping test data or testing escapes.
 		const Backslash = '\\' as const;
 		const Newline = '\n' as const;
 		const Semicolon = ';' as const;

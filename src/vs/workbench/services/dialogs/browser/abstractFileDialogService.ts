@@ -191,7 +191,7 @@ export abstract class AbstractFileDialogService implements IFileDialogService {
 		return schema === Schemas.untitled ? [Schemas.file] : (schema !== Schemas.file ? [schema, Schemas.file] : [schema]);
 	}
 
-	protected async pickFileFolderAndOpenSimplified(schema: string, options: IPickAndOpenOptions, preferNewWindow: boolean): Promise<void> {
+	protected async pickFileFolderAndOpenSimplified(schema: string, options: IPickAndOpenOptions, preferNewWindow: boolean): Promise<codemavi> {
 		const title = nls.localize('openFileOrFolder.title', 'Open File or Folder');
 		const availableFileSystems = this.addFileSchemaIfNeeded(schema);
 
@@ -213,7 +213,7 @@ export abstract class AbstractFileDialogService implements IFileDialogService {
 		}
 	}
 
-	protected async pickFileAndOpenSimplified(schema: string, options: IPickAndOpenOptions, preferNewWindow: boolean): Promise<void> {
+	protected async pickFileAndOpenSimplified(schema: string, options: IPickAndOpenOptions, preferNewWindow: boolean): Promise<codemavi> {
 		const title = nls.localize('openFile.title', 'Open File');
 		const availableFileSystems = this.addFileSchemaIfNeeded(schema);
 
@@ -229,11 +229,11 @@ export abstract class AbstractFileDialogService implements IFileDialogService {
 		}
 	}
 
-	protected addFileToRecentlyOpened(uri: URI): void {
+	protected addFileToRecentlyOpened(uri: URI): codemavi {
 		this.workspacesService.addRecentlyOpened([{ fileUri: uri, label: this.labelService.getUriLabel(uri, { appendWorkspaceSuffix: true }) }]);
 	}
 
-	protected async pickFolderAndOpenSimplified(schema: string, options: IPickAndOpenOptions): Promise<void> {
+	protected async pickFolderAndOpenSimplified(schema: string, options: IPickAndOpenOptions): Promise<codemavi> {
 		const title = nls.localize('openFolder.title', 'Open Folder');
 		const availableFileSystems = this.addFileSchemaIfNeeded(schema, true);
 
@@ -243,7 +243,7 @@ export abstract class AbstractFileDialogService implements IFileDialogService {
 		}
 	}
 
-	protected async pickWorkspaceAndOpenSimplified(schema: string, options: IPickAndOpenOptions): Promise<void> {
+	protected async pickWorkspaceAndOpenSimplified(schema: string, options: IPickAndOpenOptions): Promise<codemavi> {
 		const title = nls.localize('openWorkspace.title', 'Open Workspace from File');
 		const filters: FileFilter[] = [{ name: nls.localize('filterName.workspace', 'Workspace'), extensions: [WORKSPACE_EXTENSION] }];
 		const availableFileSystems = this.addFileSchemaIfNeeded(schema, true);
@@ -311,10 +311,10 @@ export abstract class AbstractFileDialogService implements IFileDialogService {
 		return options.availableFileSystems && options.availableFileSystems[0] || this.getSchemeFilterForWindow(options.defaultUri?.scheme);
 	}
 
-	abstract pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<void>;
-	abstract pickFileAndOpen(options: IPickAndOpenOptions): Promise<void>;
-	abstract pickFolderAndOpen(options: IPickAndOpenOptions): Promise<void>;
-	abstract pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<void>;
+	abstract pickFileFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
+	abstract pickFileAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
+	abstract pickFolderAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
+	abstract pickWorkspaceAndOpen(options: IPickAndOpenOptions): Promise<codemavi>;
 	protected getWorkspaceAvailableFileSystems(options: IPickAndOpenOptions): string[] {
 		if (options.availableFileSystems && (options.availableFileSystems.length > 0)) {
 			return options.availableFileSystems;

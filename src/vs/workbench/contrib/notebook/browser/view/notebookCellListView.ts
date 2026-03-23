@@ -61,7 +61,7 @@ export class NotebookCellsLayout implements IRangeMap {
 
 	/**
 	 */
-	splice(index: number, deleteCount: number, items?: IItem[] | undefined): void {
+	splice(index: number, deleteCount: number, items?: IItem[] | undefined): codemavi {
 		const inserts = items ?? [];
 		// Perform the splice operation on the items array.
 		this._items.splice(index, deleteCount, ...inserts);
@@ -96,7 +96,7 @@ export class NotebookCellsLayout implements IRangeMap {
 		}
 	}
 
-	insertWhitespace(id: string, afterPosition: number, size: number): void {
+	insertWhitespace(id: string, afterPosition: number, size: number): codemavi {
 		let priority = 0;
 		const existingWhitespaces = this._whitespace.filter(ws => ws.afterPosition === afterPosition);
 		if (existingWhitespaces.length > 0) {
@@ -121,7 +121,7 @@ export class NotebookCellsLayout implements IRangeMap {
 		}
 	}
 
-	changeOneWhitespace(id: string, afterPosition: number, size: number): void {
+	changeOneWhitespace(id: string, afterPosition: number, size: number): codemavi {
 		const whitespaceIndex = this._whitespace.findIndex(ws => ws.id === id);
 		if (whitespaceIndex !== -1) {
 			const whitespace = this._whitespace[whitespaceIndex];
@@ -148,7 +148,7 @@ export class NotebookCellsLayout implements IRangeMap {
 		}
 	}
 
-	removeWhitespace(id: string): void {
+	removeWhitespace(id: string): codemavi {
 		const whitespaceIndex = this._whitespace.findIndex(ws => ws.id === id);
 		if (whitespaceIndex !== -1) {
 			const whitespace = this._whitespace[whitespaceIndex];
@@ -247,13 +247,13 @@ export class NotebookCellListView<T> extends ListView<T> {
 		return this.rangeMap as NotebookCellsLayout;
 	}
 
-	protected override render(previousRenderRange: IRange, renderTop: number, renderHeight: number, renderLeft: number | undefined, scrollWidth: number | undefined, updateItemsInDOM?: boolean): void {
+	protected override render(previousRenderRange: IRange, renderTop: number, renderHeight: number, renderLeft: number | undefined, scrollWidth: number | undefined, updateItemsInDOM?: boolean): codemavi {
 		this._renderingStack++;
 		super.render(previousRenderRange, renderTop, renderHeight, renderLeft, scrollWidth, updateItemsInDOM);
 		this._renderingStack--;
 	}
 
-	protected override _rerender(renderTop: number, renderHeight: number, inSmoothScrolling?: boolean | undefined): void {
+	protected override _rerender(renderTop: number, renderHeight: number, inSmoothScrolling?: boolean | undefined): codemavi {
 		this._renderingStack++;
 		super._rerender(renderTop, renderHeight, inSmoothScrolling);
 		this._renderingStack--;
@@ -303,7 +303,7 @@ export class NotebookCellListView<T> extends ListView<T> {
 		}
 	}
 
-	removeWhitespace(id: string): void {
+	removeWhitespace(id: string): codemavi {
 		const scrollTop = this.scrollTop;
 		const previousRenderRange = this.getRenderRange(this.lastRenderTop, this.lastRenderHeight);
 

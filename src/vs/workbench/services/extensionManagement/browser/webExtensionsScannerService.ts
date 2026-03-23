@@ -302,8 +302,8 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return [...webExtensionsMap.values()];
 	}
 
-	private _migrateExtensionsStoragePromise: Promise<void> | undefined;
-	private async migrateExtensionsStorage(customBuiltinExtensions: IExtension[]): Promise<void> {
+	private _migrateExtensionsStoragePromise: Promise<codemavi> | undefined;
+	private async migrateExtensionsStorage(customBuiltinExtensions: IExtension[]): Promise<codemavi> {
 		if (!this._migrateExtensionsStoragePromise) {
 			this._migrateExtensionsStoragePromise = (async () => {
 				const { extensionsToMigrate } = await this.readCustomBuiltinExtensionsInfoFromEnv();
@@ -332,12 +332,12 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return this._migrateExtensionsStoragePromise;
 	}
 
-	private async updateCaches(): Promise<void> {
+	private async updateCaches(): Promise<codemavi> {
 		await this.updateSystemExtensionsCache();
 		await this.updateCustomBuiltinExtensionsCache();
 	}
 
-	private async updateSystemExtensionsCache(): Promise<void> {
+	private async updateSystemExtensionsCache(): Promise<codemavi> {
 		const systemExtensions = await this.builtinExtensionsScannerService.scanBuiltinExtensions();
 		const cachedSystemExtensions = (await this.readSystemExtensionsCache())
 			.filter(cached => {
@@ -422,7 +422,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return webExtensions;
 	}
 
-	private async resolveDependenciesAndPackedExtensions(webExtensions: IWebExtension[], result: Map<string, IWebExtension>): Promise<void> {
+	private async resolveDependenciesAndPackedExtensions(webExtensions: IWebExtension[], result: Map<string, IWebExtension>): Promise<codemavi> {
 		const extensionInfos: IExtensionInfo[] = [];
 		for (const webExtension of webExtensions) {
 			for (const e of [...(webExtension.manifest?.extensionDependencies ?? []), ...(webExtension.manifest?.extensionPack ?? [])]) {
@@ -536,7 +536,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return extension;
 	}
 
-	async removeExtension(extension: IScannedExtension, profileLocation: URI): Promise<void> {
+	async removeExtension(extension: IScannedExtension, profileLocation: URI): Promise<codemavi> {
 		await this.writeInstalledExtensions(profileLocation, installedExtensions => installedExtensions.filter(installedExtension => !areSameExtensions(installedExtension.identifier, extension.identifier)));
 	}
 
@@ -561,7 +561,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return this.toScannedExtension(updatedExtension, extension.isBuiltin);
 	}
 
-	async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, filter: (extension: IScannedExtension) => boolean): Promise<void> {
+	async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, filter: (extension: IScannedExtension) => boolean): Promise<codemavi> {
 		const extensionsToCopy: IWebExtension[] = [];
 		const fromWebExtensions = await this.readInstalledExtensions(fromProfileLocation);
 		await Promise.all(fromWebExtensions.map(async webExtension => {
@@ -582,7 +582,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 
 		if (isSystem) {
 			await this.writeSystemExtensionsCache(systemExtensions => {
-				// Remove the existing extension to avoid duplicates
+				// Remove the existing extension to acodemavi duplicates
 				systemExtensions = systemExtensions.filter(extension => !areSameExtensions(extension.identifier, webExtension.identifier));
 				systemExtensions.push(webExtension);
 				return systemExtensions;
@@ -593,7 +593,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		// Update custom builtin extensions to custom builtin extensions cache
 		if (isBuiltin) {
 			await this.writeCustomBuiltinExtensionsCache(customBuiltinExtensions => {
-				// Remove the existing extension to avoid duplicates
+				// Remove the existing extension to acodemavi duplicates
 				customBuiltinExtensions = customBuiltinExtensions.filter(extension => !areSameExtensions(extension.identifier, webExtension.identifier));
 				customBuiltinExtensions.push(webExtension);
 				return customBuiltinExtensions;
@@ -612,9 +612,9 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return extension;
 	}
 
-	private async addToInstalledExtensions(webExtensions: IWebExtension[], profileLocation: URI): Promise<void> {
+	private async addToInstalledExtensions(webExtensions: IWebExtension[], profileLocation: URI): Promise<codemavi> {
 		await this.writeInstalledExtensions(profileLocation, installedExtensions => {
-			// Remove the existing extension to avoid duplicates
+			// Remove the existing extension to acodemavi duplicates
 			installedExtensions = installedExtensions.filter(installedExtension => webExtensions.some(extension => !areSameExtensions(installedExtension.identifier, extension.identifier)));
 			installedExtensions.push(...webExtensions);
 			return installedExtensions;
@@ -960,7 +960,7 @@ export class WebExtensionsScannerService extends Disposable implements IWebExten
 		return webExtensions;
 	}
 
-	private async storeWebExtensions(webExtensions: IWebExtension[], file: URI): Promise<void> {
+	private async storeWebExtensions(webExtensions: IWebExtension[], file: URI): Promise<codemavi> {
 		function toStringDictionary(dictionary: Map<string, URI> | undefined): IStringDictionary<UriComponents> | undefined {
 			if (!dictionary) {
 				return undefined;
@@ -1005,7 +1005,7 @@ if (isWeb) {
 				precondition: IsWebContext
 			});
 		}
-		run(serviceAccessor: ServicesAccessor): void {
+		run(serviceAccessor: ServicesAccessor): codemavi {
 			const editorService = serviceAccessor.get(IEditorService);
 			const userDataProfileService = serviceAccessor.get(IUserDataProfileService);
 			editorService.openEditor({ resource: userDataProfileService.currentProfile.extensionsResource });

@@ -24,11 +24,11 @@ export class NotificationsAlerts extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.model.onDidChangeNotification(e => this.onDidChangeNotification(e)));
 	}
 
-	private onDidChangeNotification(e: INotificationChangeEvent): void {
+	private onDidChangeNotification(e: INotificationChangeEvent): codemavi {
 		if (e.kind === NotificationChangeType.ADD) {
 
 			// ARIA alert for screen readers
@@ -45,7 +45,7 @@ export class NotificationsAlerts extends Disposable {
 		}
 	}
 
-	private triggerAriaAlert(notification: INotificationViewItem): void {
+	private triggerAriaAlert(notification: INotificationViewItem): codemavi {
 		if (notification.priority === NotificationPriority.SILENT) {
 			return;
 		}
@@ -62,7 +62,7 @@ export class NotificationsAlerts extends Disposable {
 		this.doTriggerAriaAlert(notification);
 	}
 
-	private doTriggerAriaAlert(notification: INotificationViewItem): void {
+	private doTriggerAriaAlert(notification: INotificationViewItem): codemavi {
 		let alertText: string;
 		if (notification.severity === Severity.Error) {
 			alertText = localize('alertErrorMessage', "Error: {0}", notification.message.linkedText.toString());

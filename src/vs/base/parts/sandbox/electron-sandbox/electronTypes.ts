@@ -12,7 +12,7 @@
 // #######################################################################
 
 type Event<Params extends object = {}> = {
-	preventDefault: () => void;
+	preventDefault: () => codemavi;
 	readonly defaultPrevented: boolean;
 } & Params;
 
@@ -71,12 +71,12 @@ export interface IpcRenderer {
 	 * Listens to `channel`, when a new message arrives `listener` would be called with
 	 * `listener(event, args...)`.
 	 */
-	on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
+	on(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => codemavi): this;
 	/**
 	 * Adds a one time `listener` function for the event. This `listener` is invoked
 	 * only the next time a message is sent to `channel`, after which it is removed.
 	 */
-	once(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
+	once(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => codemavi): this;
 	// Note: API with `Transferable` intentionally commented out because you
 	// cannot transfer these when `contextIsolation: true`.
 	// /**
@@ -92,12 +92,12 @@ export interface IpcRenderer {
 	//  * For more information on using `MessagePort` and `MessageChannel`, see the MDN
 	//  * documentation.
 	//  */
-	// postMessage(channel: string, message: any, transfer?: MessagePort[]): void;
+	// postMessage(channel: string, message: any, transfer?: MessagePort[]): codemavi;
 	/**
 	 * Removes the specified `listener` from the listener array for the specified
 	 * `channel`.
 	 */
-	removeListener(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => void): this;
+	removeListener(channel: string, listener: (event: IpcRendererEvent, ...args: any[]) => codemavi): this;
 	/**
 	 * Send an asynchronous message to the main process via `channel`, along with
 	 * arguments. Arguments will be serialized with the Structured Clone Algorithm,
@@ -122,7 +122,7 @@ export interface IpcRenderer {
 	 * If you want to receive a single response from the main process, like the result
 	 * of a method call, consider using `ipcRenderer.invoke`.
 	 */
-	send(channel: string, ...args: any[]): void;
+	send(channel: string, ...args: any[]): codemavi;
 }
 
 export interface WebFrame {
@@ -137,7 +137,7 @@ export interface WebFrame {
 	 * with the same domain. Differentiating the window URLs will make zoom work
 	 * per-window.
 	 */
-	setZoomLevel(level: number): void;
+	setZoomLevel(level: number): codemavi;
 }
 
 export interface ProcessMemoryInfo {

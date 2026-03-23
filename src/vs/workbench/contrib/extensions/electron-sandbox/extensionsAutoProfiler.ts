@@ -65,12 +65,12 @@ export class ExtensionsAutoProfiler implements IWorkbenchContribution {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._unresponsiveListener?.dispose();
 		this._session?.dispose(true);
 	}
 
-	private async _onDidChangeResponsiveChange(event: IResponsiveStateChangeEvent): Promise<void> {
+	private async _onDidChangeResponsiveChange(event: IResponsiveStateChangeEvent): Promise<codemavi> {
 		if (event.extensionHostKind !== ExtensionHostKind.LocalProcess) {
 			return;
 		}

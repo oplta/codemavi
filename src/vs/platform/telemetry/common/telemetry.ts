@@ -35,22 +35,22 @@ export interface ITelemetryService {
 	/**
 	 * @deprecated Use publicLog2 and the typescript GDPR annotation where possible
 	 */
-	publicLog(eventName: string, data?: ITelemetryData): void;
+	publicLog(eventName: string, data?: ITelemetryData): codemavi;
 
 	/**
 	 * Sends a telemetry event that has been privacy approved.
 	 * Do not call this unless you have been given approval.
 	 */
-	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void;
+	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi;
 
 	/**
 	 * @deprecated Use publicLogError2 and the typescript GDPR annotation where possible
 	 */
-	publicLogError(errorEventName: string, data?: ITelemetryData): void;
+	publicLogError(errorEventName: string, data?: ITelemetryData): codemavi;
 
-	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void;
+	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi;
 
-	setExperimentProperty(name: string, value: string): void;
+	setExperimentProperty(name: string, value: string): codemavi;
 }
 
 export interface ITelemetryEndpoint {
@@ -64,8 +64,8 @@ export const ICustomEndpointTelemetryService = createDecorator<ICustomEndpointTe
 export interface ICustomEndpointTelemetryService {
 	readonly _serviceBrand: undefined;
 
-	publicLog(endpoint: ITelemetryEndpoint, eventName: string, data?: ITelemetryData): void;
-	publicLogError(endpoint: ITelemetryEndpoint, errorEventName: string, data?: ITelemetryData): void;
+	publicLog(endpoint: ITelemetryEndpoint, eventName: string, data?: ITelemetryData): codemavi;
+	publicLogError(endpoint: ITelemetryEndpoint, errorEventName: string, data?: ITelemetryData): codemavi;
 }
 
 // Keys

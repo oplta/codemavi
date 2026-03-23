@@ -34,7 +34,7 @@ export class ShowWebViewEditorFindWidgetAction extends Action2 {
 		});
 	}
 
-	public run(accessor: ServicesAccessor): void {
+	public run(accessor: ServicesAccessor): codemavi {
 		getActiveWebviewEditor(accessor)?.showFind();
 	}
 }
@@ -55,7 +55,7 @@ export class HideWebViewEditorFindCommand extends Action2 {
 		});
 	}
 
-	public run(accessor: ServicesAccessor): void {
+	public run(accessor: ServicesAccessor): codemavi {
 		getActiveWebviewEditor(accessor)?.hideFind();
 	}
 }
@@ -76,7 +76,7 @@ export class WebViewEditorFindNextCommand extends Action2 {
 		});
 	}
 
-	public run(accessor: ServicesAccessor): void {
+	public run(accessor: ServicesAccessor): codemavi {
 		getActiveWebviewEditor(accessor)?.runFindAction(false);
 	}
 }
@@ -97,7 +97,7 @@ export class WebViewEditorFindPreviousCommand extends Action2 {
 		});
 	}
 
-	public run(accessor: ServicesAccessor): void {
+	public run(accessor: ServicesAccessor): codemavi {
 		getActiveWebviewEditor(accessor)?.runFindAction(true);
 	}
 }
@@ -117,7 +117,7 @@ export class ReloadWebviewAction extends Action2 {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor): Promise<void> {
+	public async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const webviewService = accessor.get(IWebviewService);
 		for (const webview of webviewService.webviews) {
 			webview.reload();

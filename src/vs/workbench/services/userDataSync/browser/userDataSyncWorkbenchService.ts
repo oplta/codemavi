@@ -79,7 +79,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 	private readonly _onDidChangeAccountStatus = this._register(new Emitter<AccountStatus>());
 	readonly onDidChangeAccountStatus = this._onDidChangeAccountStatus.event;
 
-	private readonly _onDidTurnOnSync = this._register(new Emitter<void>());
+	private readonly _onDidTurnOnSync = this._register(new Emitter<codemavi>());
 	readonly onDidTurnOnSync = this._onDidTurnOnSync.event;
 
 	private _current: UserDataSyncAccount | undefined;
@@ -152,7 +152,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		return this.authenticationProviders.some(({ id }) => id === authenticationProviderId);
 	}
 
-	private async waitAndInitialize(): Promise<void> {
+	private async waitAndInitialize(): Promise<codemavi> {
 		try {
 			/* wait */
 			await Promise.all([this.extensionService.whenInstalledExtensionsRegistered(), this.userDataInitializationService.whenInitializationFinished()]);
@@ -167,7 +167,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		if (isWeb) {
 			const authenticationSession = await getCurrentAuthenticationSessionInfo(this.secretStorageService, this.productService);
 			if (this.currentSessionId === undefined && authenticationSession?.id) {
@@ -220,7 +220,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}));
 	}
 
-	private async update(reason: string): Promise<void> {
+	private async update(reason: string): Promise<codemavi> {
 		this.logService.trace(`Settings Sync: Updating due to ${reason}`);
 
 		this.updateAuthenticationProviders();
@@ -234,7 +234,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		this.updateAccountStatus(this._current ? AccountStatus.Available : AccountStatus.Unavailable);
 	}
 
-	private async updateCurrentAccount(): Promise<void> {
+	private async updateCurrentAccount(): Promise<codemavi> {
 		this.logService.trace('Settings Sync: Updating the current account');
 		const currentSessionId = this.currentSessionId;
 		const currentAuthenticationProviderId = this.currentAuthenticationProviderId;
@@ -254,7 +254,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		this._current = undefined;
 	}
 
-	private async updateToken(current: UserDataSyncAccount | undefined): Promise<void> {
+	private async updateToken(current: UserDataSyncAccount | undefined): Promise<codemavi> {
 		let value: { token: string; authenticationProviderId: string } | undefined = undefined;
 		if (current) {
 			try {
@@ -269,7 +269,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		await this.userDataSyncAccountService.updateAccount(value);
 	}
 
-	private traceOrInfo(msg: string, ...args: any[]): void {
+	private traceOrInfo(msg: string, ...args: any[]): codemavi {
 		if (this.environmentService.isBuilt) {
 			this.logService.info(msg, ...args);
 		} else {
@@ -277,7 +277,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	private updateAccountStatus(accountStatus: AccountStatus): void {
+	private updateAccountStatus(accountStatus: AccountStatus): codemavi {
 		this.logService.trace(`Settings Sync: Updating the account status to ${accountStatus}`);
 		if (this._accountStatus !== accountStatus) {
 			const previous = this._accountStatus;
@@ -289,7 +289,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	async turnOn(): Promise<void> {
+	async turnOn(): Promise<codemavi> {
 		if (!this.authenticationProviders.length) {
 			throw new Error(localize('no authentication providers', "Settings sync cannot be turned on because there are no authentication providers available."));
 		}
@@ -345,7 +345,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		this._onDidTurnOnSync.fire();
 	}
 
-	async turnoff(everywhere: boolean): Promise<void> {
+	async turnoff(everywhere: boolean): Promise<codemavi> {
 		if (this.userDataSyncEnablementService.isEnabled()) {
 			await this.userDataAutoSyncService.turnOff(everywhere);
 			if (this.environmentService.options?.settingsSyncOptions?.enablementHandler && this.currentAuthenticationProviderId) {
@@ -357,7 +357,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	async synchroniseUserDataSyncStoreType(): Promise<void> {
+	async synchroniseUserDataSyncStoreType(): Promise<codemavi> {
 		if (!this.userDataSyncAccountService.account) {
 			throw new Error('Cannot update because you are signed out from settings sync. Please sign in and try again.');
 		}
@@ -372,11 +372,11 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		await this.instantiationService.createInstance(UserDataSyncStoreTypeSynchronizer, userDataSyncStoreClient).sync(this.userDataSyncStoreManagementService.userDataSyncStore.type);
 	}
 
-	syncNow(): Promise<void> {
+	syncNow(): Promise<codemavi> {
 		return this.userDataAutoSyncService.triggerSync(['Sync Now'], { immediately: true, disableCache: true });
 	}
 
-	private async doTurnOnSync(token: CancellationToken): Promise<void> {
+	private async doTurnOnSync(token: CancellationToken): Promise<codemavi> {
 		const disposables = new DisposableStore();
 		const manualSyncTask = await this.userDataSyncService.createManualSyncTask();
 		try {
@@ -408,7 +408,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	private async handleConflictsWhileTurningOn(token: CancellationToken): Promise<void> {
+	private async handleConflictsWhileTurningOn(token: CancellationToken): Promise<codemavi> {
 		const conflicts = this.userDataSyncService.conflicts;
 		const andSeparator = localize('and', ' and ');
 		let conflictsText = '';
@@ -451,7 +451,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		});
 	}
 
-	private async replace(local: boolean): Promise<void> {
+	private async replace(local: boolean): Promise<codemavi> {
 		for (const conflict of this.userDataSyncService.conflicts) {
 			for (const preview of conflict.conflicts) {
 				await this.accept({ syncResource: conflict.syncResource, profile: conflict.profile }, local ? preview.remoteResource : preview.localResource, undefined, { force: true });
@@ -459,11 +459,11 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	async accept(resource: IUserDataSyncResource, conflictResource: URI, content: string | null | undefined, apply: boolean | { force: boolean }): Promise<void> {
+	async accept(resource: IUserDataSyncResource, conflictResource: URI, content: string | null | undefined, apply: boolean | { force: boolean }): Promise<codemavi> {
 		return this.userDataSyncService.accept(resource, conflictResource, content, apply);
 	}
 
-	async showConflicts(conflictToOpen?: IResourcePreview): Promise<void> {
+	async showConflicts(conflictToOpen?: IResourcePreview): Promise<codemavi> {
 		if (!this.userDataSyncService.conflicts.length) {
 			return;
 		}
@@ -474,7 +474,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	async resetSyncedData(): Promise<void> {
+	async resetSyncedData(): Promise<codemavi> {
 		const { confirmed } = await this.dialogService.confirm({
 			type: 'info',
 			message: localize('reset', "This will clear your data in the cloud and stop sync on all your devices."),
@@ -507,7 +507,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		return result;
 	}
 
-	async showSyncActivity(): Promise<void> {
+	async showSyncActivity(): Promise<codemavi> {
 		this.activityViewsEnablementContext.set(true);
 		await this.waitForActiveSyncViews();
 		await this.viewsService.openViewContainer(SYNC_VIEW_CONTAINER_ID);
@@ -559,7 +559,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		});
 	}
 
-	private async waitForActiveSyncViews(): Promise<void> {
+	private async waitForActiveSyncViews(): Promise<codemavi> {
 		const viewContainer = this.viewDescriptorService.getViewContainerById(SYNC_VIEW_CONTAINER_ID);
 		if (viewContainer) {
 			const model = this.viewDescriptorService.getViewContainerModel(viewContainer);
@@ -569,7 +569,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		}
 	}
 
-	async signIn(): Promise<void> {
+	async signIn(): Promise<codemavi> {
 		const currentAuthenticationProviderId = this.currentAuthenticationProviderId;
 		const authenticationProvider = currentAuthenticationProviderId ? this.authenticationProviders.find(p => p.id === currentAuthenticationProviderId) : undefined;
 		if (authenticationProvider) {
@@ -700,7 +700,7 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		return quickPickItems;
 	}
 
-	private async doSignIn(accountOrAuthProvider: UserDataSyncAccount | IAuthenticationProvider): Promise<void> {
+	private async doSignIn(accountOrAuthProvider: UserDataSyncAccount | IAuthenticationProvider): Promise<codemavi> {
 		let sessionId: string;
 		if (isAuthenticationProvider(accountOrAuthProvider)) {
 			if (this.environmentService.options?.settingsSyncOptions?.authenticationProvider?.id === accountOrAuthProvider.id) {
@@ -721,19 +721,19 @@ export class UserDataSyncWorkbenchService extends Disposable implements IUserDat
 		await this.update('sign in');
 	}
 
-	private async onDidAuthFailure(): Promise<void> {
+	private async onDidAuthFailure(): Promise<codemavi> {
 		this.currentSessionId = undefined;
 		await this.update('auth failure');
 	}
 
-	private onDidChangeSessions(e: AuthenticationSessionsChangeEvent): void {
+	private onDidChangeSessions(e: AuthenticationSessionsChangeEvent): codemavi {
 		if (this.currentSessionId && e.removed?.find(session => session.id === this.currentSessionId)) {
 			this.currentSessionId = undefined;
 		}
 		this.update('change in sessions');
 	}
 
-	private onDidChangeStorage(): void {
+	private onDidChangeStorage(): codemavi {
 		if (this.currentSessionId !== this.getStoredCachedSessionId() /* This checks if current window changed the value or not */) {
 			this._cachedCurrentSessionId = null;
 			this.update('change in storage');

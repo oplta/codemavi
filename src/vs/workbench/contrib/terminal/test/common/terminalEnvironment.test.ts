@@ -180,7 +180,7 @@ suite('Workbench - TerminalEnvironment', () => {
 
 	suite('getCwd', () => {
 		// This helper checks the paths in a cross-platform friendly manner
-		function assertPathsMatch(a: string, b: string): void {
+		function assertPathsMatch(a: string, b: string): codemavi {
 			strictEqual(Uri.file(a).fsPath, Uri.file(b).fsPath);
 		}
 

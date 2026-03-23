@@ -75,7 +75,7 @@ class BaseTreeItem {
 		return undefined;
 	}
 
-	setSource(session: IDebugSession, source: Source): void {
+	setSource(session: IDebugSession, source: Source): codemavi {
 		this._source = source;
 		this._children.clear();
 		if (source.raw && source.raw.sources) {
@@ -103,11 +103,11 @@ class BaseTreeItem {
 		return this._children.get(key);
 	}
 
-	remove(key: string): void {
+	remove(key: string): codemavi {
 		this._children.delete(key);
 	}
 
-	removeFromParent(): void {
+	removeFromParent(): codemavi {
 		if (this._parent) {
 			this._parent.remove(this._label);
 			if (this._parent._children.size === 0) {
@@ -316,7 +316,7 @@ class SessionTreeItem extends BaseTreeItem {
 		return 999;
 	}
 
-	async addPath(source: Source): Promise<void> {
+	async addPath(source: Source): Promise<codemavi> {
 
 		let folder: IWorkspaceFolder | null;
 		let url: string;
@@ -442,7 +442,7 @@ export class LoadedScriptsView extends ViewPane {
 		this.loadedScriptsItemType = CONTEXT_LOADED_SCRIPTS_ITEM_TYPE.bindTo(contextKeyService);
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		this.element.classList.add('debug-pane');
@@ -624,16 +624,16 @@ export class LoadedScriptsView extends ViewPane {
 		this.debugService.getModel().getSessions().forEach(session => addSourcePathsToSession(session));
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this.tree.layout(height, width);
 	}
 
-	collapseAll(): void {
+	collapseAll(): codemavi {
 		this.tree.collapseAll();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		dispose(this.tree);
 		dispose(this.treeLabels);
 		super.dispose();
@@ -673,7 +673,7 @@ class LoadedScriptsRenderer implements ICompressibleTreeRenderer<BaseTreeItem, F
 		return { label };
 	}
 
-	renderElement(node: ITreeNode<BaseTreeItem, FuzzyScore>, index: number, data: ILoadedScriptsItemTemplateData): void {
+	renderElement(node: ITreeNode<BaseTreeItem, FuzzyScore>, index: number, data: ILoadedScriptsItemTemplateData): codemavi {
 
 		const element = node.element;
 		const label = element.getLabel();
@@ -681,7 +681,7 @@ class LoadedScriptsRenderer implements ICompressibleTreeRenderer<BaseTreeItem, F
 		this.render(element, label, data, node.filterData);
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<BaseTreeItem>, FuzzyScore>, index: number, data: ILoadedScriptsItemTemplateData, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<BaseTreeItem>, FuzzyScore>, index: number, data: ILoadedScriptsItemTemplateData, height: number | undefined): codemavi {
 
 		const element = node.element.elements[node.element.elements.length - 1];
 		const labels = node.element.elements.map(e => e.getLabel());
@@ -722,7 +722,7 @@ class LoadedScriptsRenderer implements ICompressibleTreeRenderer<BaseTreeItem, F
 		data.label.setResource(label, options);
 	}
 
-	disposeTemplate(templateData: ILoadedScriptsItemTemplateData): void {
+	disposeTemplate(templateData: ILoadedScriptsItemTemplateData): codemavi {
 		templateData.label.dispose();
 	}
 }

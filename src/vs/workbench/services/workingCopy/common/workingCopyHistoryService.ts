@@ -67,7 +67,7 @@ export class WorkingCopyHistoryModel {
 
 	private entries: IWorkingCopyHistoryEntry[] = [];
 
-	private whenResolved: Promise<void> | undefined = undefined;
+	private whenResolved: Promise<codemavi> | undefined = undefined;
 
 	private workingCopyResource: URI | undefined = undefined;
 	private workingCopyName: string | undefined = undefined;
@@ -98,7 +98,7 @@ export class WorkingCopyHistoryModel {
 		this.setWorkingCopy(workingCopyResource);
 	}
 
-	private setWorkingCopy(workingCopyResource: URI): void {
+	private setWorkingCopy(workingCopyResource: URI): codemavi {
 
 		// Update working copy
 		this.workingCopyResource = workingCopyResource;
@@ -238,7 +238,7 @@ export class WorkingCopyHistoryModel {
 		return true;
 	}
 
-	async updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<void> {
+	async updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<codemavi> {
 
 		// Make sure to await resolving when updating entries
 		await this.resolveEntriesOnce();
@@ -291,7 +291,7 @@ export class WorkingCopyHistoryModel {
 		return this.entries.length > 0;
 	}
 
-	private resolveEntriesOnce(): Promise<void> {
+	private resolveEntriesOnce(): Promise<codemavi> {
 		if (!this.whenResolved) {
 			this.whenResolved = this.doResolveEntries();
 		}
@@ -299,7 +299,7 @@ export class WorkingCopyHistoryModel {
 		return this.whenResolved;
 	}
 
-	private async doResolveEntries(): Promise<void> {
+	private async doResolveEntries(): Promise<codemavi> {
 
 		// Resolve from disk
 		const entries = await this.resolveEntriesFromDisk();
@@ -362,7 +362,7 @@ export class WorkingCopyHistoryModel {
 		return entries;
 	}
 
-	async moveEntries(target: WorkingCopyHistoryModel, source: SaveSource, token: CancellationToken): Promise<void> {
+	async moveEntries(target: WorkingCopyHistoryModel, source: SaveSource, token: CancellationToken): Promise<codemavi> {
 		const timestamp = Date.now();
 		const sourceDescription = this.labelService.getUriLabel(assertIsDefined(this.workingCopyResource));
 
@@ -419,7 +419,7 @@ export class WorkingCopyHistoryModel {
 		await this.store(token);
 	}
 
-	async store(token: CancellationToken): Promise<void> {
+	async store(token: CancellationToken): Promise<codemavi> {
 		if (!this.shouldStore()) {
 			return;
 		}
@@ -440,7 +440,7 @@ export class WorkingCopyHistoryModel {
 		return this.storedVersionId !== this.versionId;
 	}
 
-	private async doStore(token: CancellationToken): Promise<void> {
+	private async doStore(token: CancellationToken): Promise<codemavi> {
 		const historyEntriesFolder = assertIsDefined(this.historyEntriesFolder);
 
 		// Make sure to await resolving when persisting
@@ -472,7 +472,7 @@ export class WorkingCopyHistoryModel {
 		this.storedVersionId = storedVersion;
 	}
 
-	private async cleanUpEntries(): Promise<void> {
+	private async cleanUpEntries(): Promise<codemavi> {
 		const configuredMaxEntries = this.configurationService.getValue<number>(WorkingCopyHistoryModel.SETTINGS.MAX_ENTRIES, { resource: this.workingCopyResource });
 		if (this.entries.length <= configuredMaxEntries) {
 			return; // nothing to cleanup
@@ -496,7 +496,7 @@ export class WorkingCopyHistoryModel {
 		}
 	}
 
-	private async deleteEntry(entry: IWorkingCopyHistoryEntry): Promise<void> {
+	private async deleteEntry(entry: IWorkingCopyHistoryEntry): Promise<codemavi> {
 		try {
 			await this.fileService.del(entry.location);
 		} catch (error) {
@@ -504,7 +504,7 @@ export class WorkingCopyHistoryModel {
 		}
 	}
 
-	private async writeEntriesFile(): Promise<void> {
+	private async writeEntriesFile(): Promise<codemavi> {
 		const workingCopyResource = assertIsDefined(this.workingCopyResource);
 		const historyEntriesListingFile = assertIsDefined(this.historyEntriesListingFile);
 
@@ -569,7 +569,7 @@ export class WorkingCopyHistoryModel {
 		return error instanceof FileOperationError && error.fileOperationResult === FileOperationResult.FILE_NOT_FOUND;
 	}
 
-	private traceError(error: Error): void {
+	private traceError(error: Error): codemavi {
 		this.logService.trace('[Working Copy History Service]', error);
 	}
 }
@@ -590,13 +590,13 @@ export abstract class WorkingCopyHistoryService extends Disposable implements IW
 	protected readonly _onDidReplaceEntry = this._register(new Emitter<IWorkingCopyHistoryEvent>());
 	readonly onDidReplaceEntry = this._onDidReplaceEntry.event;
 
-	private readonly _onDidMoveEntries = this._register(new Emitter<void>());
+	private readonly _onDidMoveEntries = this._register(new Emitter<codemavi>());
 	readonly onDidMoveEntries = this._onDidMoveEntries.event;
 
 	protected readonly _onDidRemoveEntry = this._register(new Emitter<IWorkingCopyHistoryEvent>());
 	readonly onDidRemoveEntry = this._onDidRemoveEntry.event;
 
-	private readonly _onDidRemoveEntries = this._register(new Emitter<void>());
+	private readonly _onDidRemoveEntries = this._register(new Emitter<codemavi>());
 	readonly onDidRemoveEntries = this._onDidRemoveEntries.event;
 
 	private readonly localHistoryHome = new DeferredPromise<URI>();
@@ -617,7 +617,7 @@ export abstract class WorkingCopyHistoryService extends Disposable implements IW
 		this.resolveLocalHistoryHome();
 	}
 
-	private async resolveLocalHistoryHome(): Promise<void> {
+	private async resolveLocalHistoryHome(): Promise<codemavi> {
 		let historyHome: URI | undefined = undefined;
 
 		// Prefer history to be stored in the remote if we are connected to a remote
@@ -709,7 +709,7 @@ export abstract class WorkingCopyHistoryService extends Disposable implements IW
 		return model.addEntry(source, undefined, timestamp, token);
 	}
 
-	async updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<void> {
+	async updateEntry(entry: IWorkingCopyHistoryEntry, properties: { source: SaveSource }, token: CancellationToken): Promise<codemavi> {
 
 		// Resolve history model for working copy
 		const model = await this.getModel(entry.workingCopy.resource);
@@ -733,7 +733,7 @@ export abstract class WorkingCopyHistoryService extends Disposable implements IW
 		return model.removeEntry(entry, token);
 	}
 
-	async removeAll(token: CancellationToken): Promise<void> {
+	async removeAll(token: CancellationToken): Promise<codemavi> {
 		const historyHome = await this.localHistoryHome.p;
 		if (token.isCancellationRequested) {
 			return;
@@ -848,7 +848,7 @@ export class NativeWorkingCopyHistoryService extends WorkingCopyHistoryService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		if (!this.isRemotelyStored) {
 
 			// Local: persist all on shutdown
@@ -863,7 +863,7 @@ export class NativeWorkingCopyHistoryService extends WorkingCopyHistoryService {
 		return { flushOnChange: this.isRemotelyStored /* because the connection might drop anytime */ };
 	}
 
-	private onWillShutdown(e: WillShutdownEvent): void {
+	private onWillShutdown(e: WillShutdownEvent): codemavi {
 
 		// Dispose the scheduler...
 		this.storeAllScheduler.dispose();
@@ -873,13 +873,13 @@ export class NativeWorkingCopyHistoryService extends WorkingCopyHistoryService {
 		e.join(this.storeAll(e.token), { id: 'join.workingCopyHistory', label: localize('join.workingCopyHistory', "Saving local history") });
 	}
 
-	private onDidChangeModels(): void {
+	private onDidChangeModels(): codemavi {
 		if (!this.storeAllScheduler.isScheduled()) {
 			this.storeAllScheduler.schedule();
 		}
 	}
 
-	private async storeAll(token: CancellationToken): Promise<void> {
+	private async storeAll(token: CancellationToken): Promise<codemavi> {
 		const limiter = new Limiter(MAX_PARALLEL_HISTORY_IO_OPS);
 		const promises = [];
 

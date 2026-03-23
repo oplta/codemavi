@@ -62,7 +62,7 @@ export class SCMWorkingSetController extends Disposable implements IWorkbenchCon
 		}));
 	}
 
-	private _onDidAddRepository(repository: ISCMRepository): void {
+	private _onDidAddRepository(repository: ISCMRepository): codemavi {
 		const disposables = new DisposableStore();
 
 		const historyItemRefId = derived(reader => {
@@ -102,7 +102,7 @@ export class SCMWorkingSetController extends Disposable implements IWorkbenchCon
 		this._repositoryDisposables.set(repository, disposables);
 	}
 
-	private _onDidRemoveRepository(repository: ISCMRepository): void {
+	private _onDidRemoveRepository(repository: ISCMRepository): codemavi {
 		this._repositoryDisposables.deleteAndDispose(repository);
 	}
 
@@ -123,7 +123,7 @@ export class SCMWorkingSetController extends Disposable implements IWorkbenchCon
 		return workingSets;
 	}
 
-	private _saveWorkingSet(providerKey: string, currentHistoryItemGroupId: string, repositoryWorkingSets: ISCMRepositoryWorkingSet): void {
+	private _saveWorkingSet(providerKey: string, currentHistoryItemGroupId: string, repositoryWorkingSets: ISCMRepositoryWorkingSet): codemavi {
 		const previousHistoryItemGroupId = repositoryWorkingSets.currentHistoryItemGroupId;
 		const editorWorkingSets = repositoryWorkingSets.editorWorkingSets;
 
@@ -138,7 +138,7 @@ export class SCMWorkingSetController extends Disposable implements IWorkbenchCon
 		this.storageService.store('scm.workingSets', JSON.stringify(workingSets), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	private async _restoreWorkingSet(providerKey: string, currentHistoryItemGroupId: string): Promise<void> {
+	private async _restoreWorkingSet(providerKey: string, currentHistoryItemGroupId: string): Promise<codemavi> {
 		const workingSets = this._workingSets.get(providerKey);
 		if (!workingSets) {
 			return;
@@ -160,7 +160,7 @@ export class SCMWorkingSetController extends Disposable implements IWorkbenchCon
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._repositoryDisposables.dispose();
 		super.dispose();
 	}

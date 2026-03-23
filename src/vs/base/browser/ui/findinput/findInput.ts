@@ -71,8 +71,8 @@ export class FindInput extends Widget {
 	private readonly _onMouseDown = this._register(new Emitter<IMouseEvent>());
 	public readonly onMouseDown: Event<IMouseEvent> = this._onMouseDown.event;
 
-	private readonly _onInput = this._register(new Emitter<void>());
-	public readonly onInput: Event<void> = this._onInput.event;
+	private readonly _onInput = this._register(new Emitter<codemavi>());
+	public readonly onInput: Event<codemavi> = this._onInput.event;
 
 	private readonly _onKeyUp = this._register(new Emitter<IKeyboardEvent>());
 	public readonly onKeyUp: Event<IKeyboardEvent> = this._onKeyUp.event;
@@ -243,7 +243,7 @@ export class FindInput extends Widget {
 		this.updateInputBoxPadding(style.collapsedFindWidget);
 	}
 
-	public enable(): void {
+	public enable(): codemavi {
 		this.domNode.classList.remove('disabled');
 		this.inputBox.enable();
 		this.regex?.enable();
@@ -255,7 +255,7 @@ export class FindInput extends Widget {
 		}
 	}
 
-	public disable(): void {
+	public disable(): codemavi {
 		this.domNode.classList.add('disabled');
 		this.inputBox.disable();
 		this.regex?.disable();
@@ -267,11 +267,11 @@ export class FindInput extends Widget {
 		}
 	}
 
-	public setFocusInputOnOptionClick(value: boolean): void {
+	public setFocusInputOnOptionClick(value: boolean): codemavi {
 		this.fixFocusOnOptionClickEnabled = value;
 	}
 
-	public setEnabled(enabled: boolean): void {
+	public setEnabled(enabled: boolean): codemavi {
 		if (enabled) {
 			this.enable();
 		} else {
@@ -279,7 +279,7 @@ export class FindInput extends Widget {
 		}
 	}
 
-	public setAdditionalToggles(toggles: Toggle[] | undefined): void {
+	public setAdditionalToggles(toggles: Toggle[] | undefined): codemavi {
 		for (const currentToggle of this.additionalToggles) {
 			currentToggle.domNode.remove();
 		}
@@ -317,7 +317,7 @@ export class FindInput extends Widget {
 		}
 	}
 
-	public clear(): void {
+	public clear(): codemavi {
 		this.clearValidation();
 		this.setValue('');
 		this.focus();
@@ -327,21 +327,21 @@ export class FindInput extends Widget {
 		return this.inputBox.value;
 	}
 
-	public setValue(value: string): void {
+	public setValue(value: string): codemavi {
 		if (this.inputBox.value !== value) {
 			this.inputBox.value = value;
 		}
 	}
 
-	public onSearchSubmit(): void {
+	public onSearchSubmit(): codemavi {
 		this.inputBox.addToHistory();
 	}
 
-	public select(): void {
+	public select(): codemavi {
 		this.inputBox.select();
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		this.inputBox.focus();
 	}
 
@@ -349,7 +349,7 @@ export class FindInput extends Widget {
 		return this.caseSensitive?.checked ?? false;
 	}
 
-	public setCaseSensitive(value: boolean): void {
+	public setCaseSensitive(value: boolean): codemavi {
 		if (this.caseSensitive) {
 			this.caseSensitive.checked = value;
 		}
@@ -359,7 +359,7 @@ export class FindInput extends Widget {
 		return this.wholeWords?.checked ?? false;
 	}
 
-	public setWholeWords(value: boolean): void {
+	public setWholeWords(value: boolean): codemavi {
 		if (this.wholeWords) {
 			this.wholeWords.checked = value;
 		}
@@ -369,41 +369,41 @@ export class FindInput extends Widget {
 		return this.regex?.checked ?? false;
 	}
 
-	public setRegex(value: boolean): void {
+	public setRegex(value: boolean): codemavi {
 		if (this.regex) {
 			this.regex.checked = value;
 			this.validate();
 		}
 	}
 
-	public focusOnCaseSensitive(): void {
+	public focusOnCaseSensitive(): codemavi {
 		this.caseSensitive?.focus();
 	}
 
-	public focusOnRegex(): void {
+	public focusOnRegex(): codemavi {
 		this.regex?.focus();
 	}
 
 	private _lastHighlightFindOptions: number = 0;
-	public highlightFindOptions(): void {
+	public highlightFindOptions(): codemavi {
 		this.domNode.classList.remove('highlight-' + (this._lastHighlightFindOptions));
 		this._lastHighlightFindOptions = 1 - this._lastHighlightFindOptions;
 		this.domNode.classList.add('highlight-' + (this._lastHighlightFindOptions));
 	}
 
-	public validate(): void {
+	public validate(): codemavi {
 		this.inputBox.validate();
 	}
 
-	public showMessage(message: InputBoxMessage): void {
+	public showMessage(message: InputBoxMessage): codemavi {
 		this.inputBox.showMessage(message);
 	}
 
-	public clearMessage(): void {
+	public clearMessage(): codemavi {
 		this.inputBox.hideMessage();
 	}
 
-	private clearValidation(): void {
+	private clearValidation(): codemavi {
 		this.inputBox.hideMessage();
 	}
 }

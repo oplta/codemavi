@@ -8,7 +8,7 @@ import { WorkspaceEdit, TextDocument, getLanguageModes, ClientCapabilities } fro
 import { getNodeFileFS } from '../node/nodeFs';
 
 
-async function testRename(value: string, newName: string, expectedDocContent: string): Promise<void> {
+async function testRename(value: string, newName: string, expectedDocContent: string): Promise<codemavi> {
 	const offset = value.indexOf('|');
 	value = value.substr(0, offset) + value.substr(offset + 1);
 
@@ -40,7 +40,7 @@ async function testRename(value: string, newName: string, expectedDocContent: st
 	}
 }
 
-async function testNoRename(value: string, newName: string): Promise<void> {
+async function testNoRename(value: string, newName: string): Promise<codemavi> {
 	const offset = value.indexOf('|');
 	value = value.substr(0, offset) + value.substr(offset + 1);
 

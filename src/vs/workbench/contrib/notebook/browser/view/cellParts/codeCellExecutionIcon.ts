@@ -38,7 +38,7 @@ export class CollapsedCodeCellExecutionIcon extends Disposable {
 		this._register(this._cell.model.onDidChangeInternalMetadata(() => this._update()));
 	}
 
-	setVisibility(visible: boolean): void {
+	setVisibility(visible: boolean): codemavi {
 		this._visible = visible;
 		this._update();
 	}

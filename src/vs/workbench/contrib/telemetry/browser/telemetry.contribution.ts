@@ -152,7 +152,7 @@ export class TelemetryContribution extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private onTextFileModelResolved(e: ITextFileResolveEvent): void {
+	private onTextFileModelResolved(e: ITextFileResolveEvent): codemavi {
 		const settingsType = this.getTypeIfSettings(e.model.resource);
 		if (!settingsType) {
 			type FileGetClassification = {
@@ -164,7 +164,7 @@ export class TelemetryContribution extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private onTextFileModelSaved(e: ITextFileSaveEvent): void {
+	private onTextFileModelSaved(e: ITextFileSaveEvent): codemavi {
 		const settingsType = this.getTypeIfSettings(e.model.resource);
 		if (!settingsType) {
 			type FilePutClassfication = {
@@ -231,7 +231,7 @@ export class TelemetryContribution extends Disposable implements IWorkbenchContr
 		return telemetryData;
 	}
 
-	private async handleTelemetryOutputVisibility(): Promise<void> {
+	private async handleTelemetryOutputVisibility(): Promise<codemavi> {
 		const that = this;
 
 		this._register(registerAction2(class extends Action2 {
@@ -243,7 +243,7 @@ export class TelemetryContribution extends Disposable implements IWorkbenchContr
 					f1: true
 				});
 			}
-			async run(): Promise<void> {
+			async run(): Promise<codemavi> {
 				for (const logger of that.loggerService.getRegisteredLoggers()) {
 					if (logger.group?.id === TelemetryLogGroup.id) {
 						that.loggerService.setLogLevel(logger.resource, LogLevel.Trace);
@@ -328,7 +328,7 @@ class ConfigurationTelemetryContribution extends Disposable implements IWorkbenc
 		return undefined;
 	}
 
-	private reportTelemetry(key: string, target: ConfigurationTarget.USER_LOCAL | ConfigurationTarget.WORKSPACE): void {
+	private reportTelemetry(key: string, target: ConfigurationTarget.USER_LOCAL | ConfigurationTarget.WORKSPACE): codemavi {
 		type UpdatedSettingEvent = {
 			settingValue: string | undefined;
 			source: string;

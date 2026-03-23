@@ -41,12 +41,12 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		this.handleTabBarsStateChange();
 	}
 
-	private handleTabBarsStateChange(): void {
+	private handleTabBarsStateChange(): codemavi {
 		this.activeControl = this.model.activeEditor ? this.getEditorTabsController(this.model.activeEditor) : undefined;
 		this.handleTabBarsLayoutChange();
 	}
 
-	private handleTabBarsLayoutChange(): void {
+	private handleTabBarsLayoutChange(): codemavi {
 		if (this.groupView.count === 0) {
 			// Do nothing as no tab bar is visible
 			return;
@@ -98,15 +98,15 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		return didChange;
 	}
 
-	private handleOpenedEditors(): void {
+	private handleOpenedEditors(): codemavi {
 		this.handleTabBarsStateChange();
 	}
 
-	beforeCloseEditor(editor: EditorInput): void {
+	beforeCloseEditor(editor: EditorInput): codemavi {
 		this.getEditorTabsController(editor).beforeCloseEditor(editor);
 	}
 
-	closeEditor(editor: EditorInput): void {
+	closeEditor(editor: EditorInput): codemavi {
 		// Has to be called on both tab bars as the editor could be either sticky or not
 		this.stickyEditorTabsControl.closeEditor(editor);
 		this.unstickyEditorTabsControl.closeEditor(editor);
@@ -114,7 +114,7 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		this.handleClosedEditors();
 	}
 
-	closeEditors(editors: EditorInput[]): void {
+	closeEditors(editors: EditorInput[]): codemavi {
 		const stickyEditors = editors.filter(e => this.model.isSticky(e));
 		const unstickyEditors = editors.filter(e => !this.model.isSticky(e));
 
@@ -124,11 +124,11 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		this.handleClosedEditors();
 	}
 
-	private handleClosedEditors(): void {
+	private handleClosedEditors(): codemavi {
 		this.handleTabBarsStateChange();
 	}
 
-	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): void {
+	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): codemavi {
 		if (stickyStateChange) {
 			// If sticky state changes, move editor between tab bars
 			if (this.model.isSticky(editor)) {
@@ -150,43 +150,43 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		}
 	}
 
-	pinEditor(editor: EditorInput): void {
+	pinEditor(editor: EditorInput): codemavi {
 		this.getEditorTabsController(editor).pinEditor(editor);
 	}
 
-	stickEditor(editor: EditorInput): void {
+	stickEditor(editor: EditorInput): codemavi {
 		this.unstickyEditorTabsControl.closeEditor(editor);
 		this.stickyEditorTabsControl.openEditor(editor);
 
 		this.handleTabBarsStateChange();
 	}
 
-	unstickEditor(editor: EditorInput): void {
+	unstickEditor(editor: EditorInput): codemavi {
 		this.stickyEditorTabsControl.closeEditor(editor);
 		this.unstickyEditorTabsControl.openEditor(editor);
 
 		this.handleTabBarsStateChange();
 	}
 
-	setActive(isActive: boolean): void {
+	setActive(isActive: boolean): codemavi {
 		this.stickyEditorTabsControl.setActive(isActive);
 		this.unstickyEditorTabsControl.setActive(isActive);
 	}
 
-	updateEditorSelections(): void {
+	updateEditorSelections(): codemavi {
 		this.stickyEditorTabsControl.updateEditorSelections();
 		this.unstickyEditorTabsControl.updateEditorSelections();
 	}
 
-	updateEditorLabel(editor: EditorInput): void {
+	updateEditorLabel(editor: EditorInput): codemavi {
 		this.getEditorTabsController(editor).updateEditorLabel(editor);
 	}
 
-	updateEditorDirty(editor: EditorInput): void {
+	updateEditorDirty(editor: EditorInput): codemavi {
 		this.getEditorTabsController(editor).updateEditorDirty(editor);
 	}
 
-	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {
+	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi {
 		this.stickyEditorTabsControl.updateOptions(oldOptions, newOptions);
 		this.unstickyEditorTabsControl.updateOptions(oldOptions, newOptions);
 	}
@@ -209,7 +209,7 @@ export class MultiRowEditorControl extends Disposable implements IEditorTabsCont
 		return this.stickyEditorTabsControl.getHeight() + this.unstickyEditorTabsControl.getHeight();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.parent.classList.toggle('two-tab-bars', false);
 
 		super.dispose();

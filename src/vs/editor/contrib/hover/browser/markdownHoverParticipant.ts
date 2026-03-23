@@ -197,7 +197,7 @@ export class MarkdownHoverParticipant implements IEditorHoverParticipant<Markdow
 		return this._renderedHoverParts;
 	}
 
-	public handleScroll(e: ScrollEvent): void {
+	public handleScroll(e: ScrollEvent): codemavi {
 		this._renderedHoverParts?.handleScroll(e);
 	}
 
@@ -227,7 +227,7 @@ class RenderedMarkdownHoverPart implements IRenderedHoverPart<MarkdownHover> {
 		return this.hoverElement.innerText.trim();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
@@ -251,7 +251,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 		private readonly _keybindingService: IKeybindingService,
 		private readonly _hoverService: IHoverService,
 		private readonly _configurationService: IConfigurationService,
-		private readonly _onFinishedRendering: () => void,
+		private readonly _onFinishedRendering: () => codemavi,
 	) {
 		this.renderedHoverParts = this._renderHoverParts(hoverParts, hoverPartsContainer, this._onFinishedRendering);
 		this._disposables.add(toDisposable(() => {
@@ -267,7 +267,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 	private _renderHoverParts(
 		hoverParts: MarkdownHover[],
 		hoverPartsContainer: DocumentFragment,
-		onFinishedRendering: () => void,
+		onFinishedRendering: () => codemavi,
 	): RenderedMarkdownHoverPart[] {
 		hoverParts.sort(compareBy(hover => hover.ordinal, numberComparator));
 		return hoverParts.map(hoverPart => {
@@ -279,7 +279,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 
 	private _renderHoverPart(
 		hoverPart: MarkdownHover,
-		onFinishedRendering: () => void
+		onFinishedRendering: () => codemavi
 	): RenderedMarkdownHoverPart {
 
 		const renderedMarkdownPart = this._renderMarkdownHover(hoverPart, onFinishedRendering);
@@ -310,7 +310,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 
 	private _renderMarkdownHover(
 		markdownHover: MarkdownHover,
-		onFinishedRendering: () => void
+		onFinishedRendering: () => codemavi
 	): IRenderedHoverPart<MarkdownHover> {
 		const renderedMarkdownHover = renderMarkdownInContainer(
 			this._editor,
@@ -340,7 +340,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 		return store;
 	}
 
-	public handleScroll(e: ScrollEvent): void {
+	public handleScroll(e: ScrollEvent): codemavi {
 		this.renderedHoverParts.forEach(renderedHoverPart => {
 			const actionsContainerInner = renderedHoverPart.actionsContainer;
 			if (!actionsContainerInner) {
@@ -467,7 +467,7 @@ class MarkdownRenderedHoverParts implements IRenderedHoverParts<MarkdownHover> {
 		return this.renderedHoverParts[index];
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._disposables.dispose();
 	}
 }
@@ -500,7 +500,7 @@ function renderMarkdownInContainer(
 	markdownHover: MarkdownHover,
 	languageService: ILanguageService,
 	openerService: IOpenerService,
-	onFinishedRendering: () => void,
+	onFinishedRendering: () => codemavi,
 ): IRenderedHoverPart<MarkdownHover> {
 	const disposables = new DisposableStore();
 	const renderedMarkdown = $('div.hover-row');

@@ -18,7 +18,7 @@ registerAction2(class extends Action2 {
 			f1: true
 		});
 	}
-	run(servicesAccessor: ServicesAccessor): Promise<void> {
+	run(servicesAccessor: ServicesAccessor): Promise<codemavi> {
 		return servicesAccessor.get(IInstantiationService).createInstance(OpenLogsFolderAction, OpenLogsFolderAction.ID, OpenLogsFolderAction.TITLE.value).run();
 	}
 });
@@ -32,7 +32,7 @@ registerAction2(class extends Action2 {
 			f1: true
 		});
 	}
-	run(servicesAccessor: ServicesAccessor): Promise<void> {
+	run(servicesAccessor: ServicesAccessor): Promise<codemavi> {
 		return servicesAccessor.get(IInstantiationService).createInstance(OpenExtensionLogsFolderAction, OpenExtensionLogsFolderAction.ID, OpenExtensionLogsFolderAction.TITLE.value).run();
 	}
 });

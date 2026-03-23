@@ -18,7 +18,7 @@ export class AutoInstallerFs extends Disposable implements vscode.FileSystemProv
 
 	private readonly memfs: MemFs;
 	private readonly packageManager: PackageManager;
-	private readonly _projectCache = new Map</* root */ string, Promise<void> | undefined>();
+	private readonly _projectCache = new Map</* root */ string, Promise<codemavi> | undefined>();
 
 	private readonly _emitter = this._register(new vscode.EventEmitter<vscode.FileChangeEvent[]>());
 	readonly onDidChangeFile = this._emitter.event;
@@ -43,15 +43,15 @@ export class AutoInstallerFs extends Disposable implements vscode.FileSystemProv
 				return memfs.readDirectory(URI.file(path)).map(([name, _]) => name);
 			},
 
-			deleteFile(path: string): void {
+			deleteFile(path: string): codemavi {
 				memfs.delete(URI.file(path));
 			},
 
-			createDirectory(path: string): void {
+			createDirectory(path: string): codemavi {
 				memfs.createDirectory(URI.file(path));
 			},
 
-			writeFile(path: string, data: string, _writeByteOrderMark?: boolean): void {
+			writeFile(path: string, data: string, _writeByteOrderMark?: boolean): codemavi {
 				memfs.writeFile(URI.file(path), TEXT_ENCODER.encode(data), { overwrite: true, create: true });
 			},
 
@@ -120,23 +120,23 @@ export class AutoInstallerFs extends Disposable implements vscode.FileSystemProv
 		return this.memfs.readFile(URI.file(mapped.path));
 	}
 
-	writeFile(_uri: vscode.Uri, _content: Uint8Array, _options: { create: boolean; overwrite: boolean }): void {
+	writeFile(_uri: vscode.Uri, _content: Uint8Array, _options: { create: boolean; overwrite: boolean }): codemavi {
 		throw new Error('not implemented');
 	}
 
-	rename(_oldUri: vscode.Uri, _newUri: vscode.Uri, _options: { overwrite: boolean }): void {
+	rename(_oldUri: vscode.Uri, _newUri: vscode.Uri, _options: { overwrite: boolean }): codemavi {
 		throw new Error('not implemented');
 	}
 
-	delete(_uri: vscode.Uri): void {
+	delete(_uri: vscode.Uri): codemavi {
 		throw new Error('not implemented');
 	}
 
-	createDirectory(_uri: vscode.Uri): void {
+	createDirectory(_uri: vscode.Uri): codemavi {
 		throw new Error('not implemented');
 	}
 
-	private async ensurePackageContents(incomingUri: MappedUri): Promise<void> {
+	private async ensurePackageContents(incomingUri: MappedUri): Promise<codemavi> {
 		// If we're not looking for something inside node_modules, bail early.
 		if (!incomingUri.path.includes('node_modules')) {
 			throw vscode.FileSystemError.FileNotFound();

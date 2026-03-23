@@ -22,14 +22,14 @@ export interface IMcpMessageTransport extends IDisposable {
 	readonly state: IObservable<McpConnectionState>;
 	readonly onDidLog: Event<{ level: LogLevel; message: string }>;
 	readonly onDidReceiveMessage: Event<MCP.JSONRPCMessage>;
-	send(message: MCP.JSONRPCMessage): void;
-	stop(): void;
+	send(message: MCP.JSONRPCMessage): codemavi;
+	stop(): codemavi;
 }
 
 export interface IMcpHostDelegate {
 	/** Priority for this delegate, delegates are tested in descending priority order */
 	readonly priority: number;
-	waitForInitialProviderPromises(): Promise<void>;
+	waitForInitialProviderPromises(): Promise<codemavi>;
 	canStart(collectionDefinition: McpCollectionDefinition, serverDefinition: McpServerDefinition): boolean;
 	start(collectionDefinition: McpCollectionDefinition, serverDefinition: McpServerDefinition, resolvedLaunch: McpServerLaunch): IMcpMessageTransport;
 }
@@ -46,14 +46,14 @@ export interface IMcpRegistry {
 	readonly _serviceBrand: undefined;
 
 	/** Fired when the user provides more inputs when creating a connection. */
-	readonly onDidChangeInputs: Event<void>;
+	readonly onDidChangeInputs: Event<codemavi>;
 
 	readonly collections: IObservable<readonly McpCollectionDefinition[]>;
 	readonly delegates: readonly IMcpHostDelegate[];
 	/** Whether there are new collections that can be resolved with a discover() call */
 	readonly lazyCollectionState: IObservable<LazyCollectionState>;
 
-	/** Gets the prefix that should be applied to a collection's tools in order to avoid ID conflicts */
+	/** Gets the prefix that should be applied to a collection's tools in order to acodemavi ID conflicts */
 	collectionToolPrefix(collection: McpCollectionReference): IObservable<string>;
 
 	/** Discover new collections, returning newly-discovered ones. */
@@ -63,15 +63,15 @@ export interface IMcpRegistry {
 	registerCollection(collection: McpCollectionDefinition): IDisposable;
 
 	/** Resets the trust state of all collections. */
-	resetTrust(): void;
+	resetTrust(): codemavi;
 
 	/** Gets whether the collection is trusted. */
 	getTrust(collection: McpCollectionReference): IObservable<boolean | undefined>;
 
 	/** Resets any saved inputs for the input, or globally. */
-	clearSavedInputs(scope: StorageScope, inputId?: string): Promise<void>;
+	clearSavedInputs(scope: StorageScope, inputId?: string): Promise<codemavi>;
 	/** Edits a previously-saved input. */
-	editSavedInput(inputId: string, folderData: IWorkspaceFolderData | undefined, configSection: string, target: ConfigurationTarget): Promise<void>;
+	editSavedInput(inputId: string, folderData: IWorkspaceFolderData | undefined, configSection: string, target: ConfigurationTarget): Promise<codemavi>;
 	/** Gets saved inputs from storage. */
 	getSavedInputs(scope: StorageScope): Promise<{ [id: string]: IResolvedValue }>;
 	/** Creates a connection for the collection and definition. */

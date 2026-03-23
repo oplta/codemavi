@@ -181,13 +181,13 @@ export function* groupAdjacentBy<T>(items: Iterable<T>, shouldBeGrouped: (item1:
 	}
 }
 
-export function forEachAdjacent<T>(arr: T[], f: (item1: T | undefined, item2: T | undefined) => void): void {
+export function forEachAdjacent<T>(arr: T[], f: (item1: T | undefined, item2: T | undefined) => codemavi): codemavi {
 	for (let i = 0; i <= arr.length; i++) {
 		f(i === 0 ? undefined : arr[i - 1], i === arr.length ? undefined : arr[i]);
 	}
 }
 
-export function forEachWithNeighbors<T>(arr: T[], f: (before: T | undefined, element: T, after: T | undefined) => void): void {
+export function forEachWithNeighbors<T>(arr: T[], f: (before: T | undefined, element: T, after: T | undefined) => codemavi): codemavi {
 	for (let i = 0; i < arr.length; i++) {
 		f(i === 0 ? undefined : arr[i - 1], arr[i], i + 1 === arr.length ? undefined : arr[i + 1]);
 	}
@@ -204,7 +204,7 @@ interface IMutableSplice<T> extends ISplice<T> {
 export function sortedDiff<T>(before: ReadonlyArray<T>, after: ReadonlyArray<T>, compare: (a: T, b: T) => number): ISplice<T>[] {
 	const result: IMutableSplice<T>[] = [];
 
-	function pushSplice(start: number, deleteCount: number, toInsert: T[]): void {
+	function pushSplice(start: number, deleteCount: number, toInsert: T[]): codemavi {
 		if (deleteCount === 0 && toInsert.length === 0) {
 			return;
 		}
@@ -326,7 +326,7 @@ export function topAsync<T>(array: T[], compare: (a: T, b: T) => number, n: numb
 	});
 }
 
-function topStep<T>(array: ReadonlyArray<T>, compare: (a: T, b: T) => number, result: T[], i: number, m: number): void {
+function topStep<T>(array: ReadonlyArray<T>, compare: (a: T, b: T) => number, result: T[], i: number, m: number): codemavi {
 	for (const n = result.length; i < m; i++) {
 		const element = array[i];
 		if (compare(element, result[n - 1]) < 0) {
@@ -361,7 +361,7 @@ export function coalesceInPlace<T>(array: Array<T | undefined | null>): asserts 
 /**
  * @deprecated Use `Array.copyWithin` instead
  */
-export function move(array: unknown[], from: number, to: number): void {
+export function move(array: unknown[], from: number, to: number): codemavi {
 	array.splice(to, 0, array.splice(from, 1)[0]);
 }
 
@@ -465,7 +465,7 @@ export function index<T, R>(array: ReadonlyArray<T>, indexer: (t: T) => string, 
  *
  * @deprecated In almost all cases, use a `Set<T>` instead.
  */
-export function insert<T>(array: T[], element: T): () => void {
+export function insert<T>(array: T[], element: T): () => codemavi {
 	array.push(element);
 
 	return () => remove(array, element);
@@ -500,7 +500,7 @@ export function arrayInsert<T>(target: T[], insertIndex: number, insertArr: T[])
 /**
  * Uses Fisher-Yates shuffle to shuffle the given array
  */
-export function shuffle<T>(array: T[], _seed?: number): void {
+export function shuffle<T>(array: T[], _seed?: number): codemavi {
 	let rand: () => number;
 
 	if (typeof _seed === 'number') {
@@ -526,7 +526,7 @@ export function shuffle<T>(array: T[], _seed?: number): void {
 /**
  * Pushes an element to the start of the array, if found.
  */
-export function pushToStart<T>(arr: T[], value: T): void {
+export function pushToStart<T>(arr: T[], value: T): codemavi {
 	const index = arr.indexOf(value);
 
 	if (index > -1) {
@@ -538,7 +538,7 @@ export function pushToStart<T>(arr: T[], value: T): void {
 /**
  * Pushes an element to the end of the array, if found.
  */
-export function pushToEnd<T>(arr: T[], value: T): void {
+export function pushToEnd<T>(arr: T[], value: T): codemavi {
 	const index = arr.indexOf(value);
 
 	if (index > -1) {
@@ -547,7 +547,7 @@ export function pushToEnd<T>(arr: T[], value: T): void {
 	}
 }
 
-export function pushMany<T>(arr: T[], items: ReadonlyArray<T>): void {
+export function pushMany<T>(arr: T[], items: ReadonlyArray<T>): codemavi {
 	for (const item of items) {
 		arr.push(item);
 	}
@@ -575,7 +575,7 @@ export function getRandomElement<T>(arr: T[]): T | undefined {
  * @param start The zero-based location in the array from which to start inserting elements.
  * @param newItems The items to be inserted
  */
-export function insertInto<T>(array: T[], start: number, newItems: T[]): void {
+export function insertInto<T>(array: T[], start: number, newItems: T[]): codemavi {
 	const startIdx = getActualStartIndex(array, start);
 	const originalLength = array.length;
 	const newItemsLength = newItems.length;
@@ -822,11 +822,11 @@ export class CallbackIterable<T> {
 		 * Calls the callback for every item.
 		 * Stops when the callback returns false.
 		*/
-		public readonly iterate: (callback: (item: T) => boolean) => void
+		public readonly iterate: (callback: (item: T) => boolean) => codemavi
 	) {
 	}
 
-	forEach(handler: (item: T) => void) {
+	forEach(handler: (item: T) => codemavi) {
 		this.iterate(item => { handler(item); return true; });
 	}
 

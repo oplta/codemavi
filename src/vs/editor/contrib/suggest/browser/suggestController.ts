@@ -78,7 +78,7 @@ class LineSuffix {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._marker && !this._model.isDisposed()) {
 			this._model.changeDecorations(accessor => {
 				accessor.removeDecoration(this._marker!);
@@ -305,7 +305,7 @@ export class SuggestController implements IEditorContribution {
 		updateFromConfig();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._alternatives.dispose();
 		this._toDispose.dispose();
 		this.widget.dispose();
@@ -317,7 +317,7 @@ export class SuggestController implements IEditorContribution {
 	protected _insertSuggestion(
 		event: ISelectedSuggestion | undefined,
 		flags: InsertFlags
-	): void {
+	): codemavi {
 		if (!event || !event.item) {
 			this._alternatives.value.reset();
 			this.model.cancel();
@@ -516,7 +516,7 @@ export class SuggestController implements IEditorContribution {
 		});
 	}
 
-	private _reportSuggestionAcceptedTelemetry(item: CompletionItem, model: ITextModel, itemResolved: boolean, commandExectionDuration: number, additionalEditsAppliedAsync: number, index: number, completionItems: CompletionItem[]): void {
+	private _reportSuggestionAcceptedTelemetry(item: CompletionItem, model: ITextModel, itemResolved: boolean, commandExectionDuration: number, additionalEditsAppliedAsync: number, index: number, completionItems: CompletionItem[]): codemavi {
 		if (Math.random() > 0.0001) { // 0.01%
 			return;
 		}
@@ -596,14 +596,14 @@ export class SuggestController implements IEditorContribution {
 		};
 	}
 
-	private _alertCompletionItem(item: CompletionItem): void {
+	private _alertCompletionItem(item: CompletionItem): codemavi {
 		if (isNonEmptyArray(item.completion.additionalTextEdits)) {
 			const msg = nls.localize('aria.alert.snippet', "Accepting '{0}' made {1} additional edits", item.textLabel, item.completion.additionalTextEdits.length);
 			alert(msg);
 		}
 	}
 
-	triggerSuggest(onlyFrom?: Set<CompletionItemProvider>, auto?: boolean, noFilter?: boolean): void {
+	triggerSuggest(onlyFrom?: Set<CompletionItemProvider>, auto?: boolean, noFilter?: boolean): codemavi {
 		if (this.editor.hasModel()) {
 			this.model.trigger({
 				auto: auto ?? false,
@@ -614,7 +614,7 @@ export class SuggestController implements IEditorContribution {
 		}
 	}
 
-	triggerSuggestAndAcceptBest(arg: { fallback: string }): void {
+	triggerSuggestAndAcceptBest(arg: { fallback: string }): codemavi {
 		if (!this.editor.hasModel()) {
 			return;
 
@@ -682,7 +682,7 @@ export class SuggestController implements IEditorContribution {
 		this.editor.focus();
 	}
 
-	acceptSelectedSuggestion(keepAlternativeSuggestions: boolean, alternativeOverwriteConfig: boolean): void {
+	acceptSelectedSuggestion(keepAlternativeSuggestions: boolean, alternativeOverwriteConfig: boolean): codemavi {
 		const item = this.widget.value.getFocusedItem();
 		let flags = 0;
 		if (keepAlternativeSuggestions) {
@@ -702,53 +702,53 @@ export class SuggestController implements IEditorContribution {
 		this._alternatives.value.prev();
 	}
 
-	cancelSuggestWidget(): void {
+	cancelSuggestWidget(): codemavi {
 		this.model.cancel();
 		this.model.clear();
 		this.widget.value.hideWidget();
 	}
 
-	focusSuggestion(): void {
+	focusSuggestion(): codemavi {
 		this.widget.value.focusSelected();
 	}
 
-	selectNextSuggestion(): void {
+	selectNextSuggestion(): codemavi {
 		this.widget.value.selectNext();
 	}
 
-	selectNextPageSuggestion(): void {
+	selectNextPageSuggestion(): codemavi {
 		this.widget.value.selectNextPage();
 	}
 
-	selectLastSuggestion(): void {
+	selectLastSuggestion(): codemavi {
 		this.widget.value.selectLast();
 	}
 
-	selectPrevSuggestion(): void {
+	selectPrevSuggestion(): codemavi {
 		this.widget.value.selectPrevious();
 	}
 
-	selectPrevPageSuggestion(): void {
+	selectPrevPageSuggestion(): codemavi {
 		this.widget.value.selectPreviousPage();
 	}
 
-	selectFirstSuggestion(): void {
+	selectFirstSuggestion(): codemavi {
 		this.widget.value.selectFirst();
 	}
 
-	toggleSuggestionDetails(): void {
+	toggleSuggestionDetails(): codemavi {
 		this.widget.value.toggleDetails();
 	}
 
-	toggleExplainMode(): void {
+	toggleExplainMode(): codemavi {
 		this.widget.value.toggleExplainMode();
 	}
 
-	toggleSuggestionFocus(): void {
+	toggleSuggestionFocus(): codemavi {
 		this.widget.value.toggleDetailsFocus();
 	}
 
-	resetWidgetSize(): void {
+	resetWidgetSize(): codemavi {
 		this.widget.value.resetPersistedSize();
 	}
 
@@ -815,7 +815,7 @@ export class TriggerSuggestAction extends EditorAction {
 		});
 	}
 
-	run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 		const controller = SuggestController.get(editor);
 
 		if (!controller) {
@@ -1122,7 +1122,7 @@ registerEditorAction(class extends EditorAction {
 		});
 	}
 
-	run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		SuggestController.get(editor)?.resetWidgetSize();
 	}
 });

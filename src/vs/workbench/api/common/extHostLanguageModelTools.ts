@@ -87,7 +87,7 @@ export class ExtHostLanguageModelTools implements ExtHostLanguageModelToolsShape
 		}
 	}
 
-	$onDidChangeTools(tools: IToolDataDto[]): void {
+	$onDidChangeTools(tools: IToolDataDto[]): codemavi {
 		this._allTools.clear();
 		for (const tool of tools) {
 			this._allTools.set(tool.id, tool);

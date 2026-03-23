@@ -115,7 +115,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		this.registerActions();
 	}
 
-	private onDidChangeActivityBarLocation(): void {
+	private onDidChangeActivityBarLocation(): codemavi {
 		this.activityBarPart.hide();
 
 		this.updateCompositeBar();
@@ -132,7 +132,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		this.rememberActivityBarVisiblePosition();
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		super.updateStyles();
 
 		const container = assertIsDefined(this.getContainer());
@@ -151,7 +151,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		container.style.outlineColor = this.getColor(SIDE_BAR_DRAG_AND_DROP_BACKGROUND) ?? '';
 	}
 
-	override layout(width: number, height: number, top: number, left: number): void {
+	override layout(width: number, height: number, top: number, left: number): codemavi {
 		if (!this.layoutService.isVisible(Parts.SIDEBAR_PART)) {
 			return;
 		}
@@ -229,7 +229,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		}
 	}
 
-	private rememberActivityBarVisiblePosition(): void {
+	private rememberActivityBarVisiblePosition(): codemavi {
 		const activityBarPosition = this.configurationService.getValue<string>(LayoutSettings.ACTIVITY_BAR_LOCATION);
 		if (activityBarPosition !== ActivityBarPosition.HIDDEN) {
 			this.storageService.store(LayoutSettings.ACTIVITY_BAR_LOCATION, activityBarPosition, StorageScope.PROFILE, StorageTarget.USER);
@@ -257,7 +257,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		return this.shouldShowCompositeBar() ? super.getPaneCompositeIds() : this.activityBarPart.getPaneCompositeIds();
 	}
 
-	async focusActivityBar(): Promise<void> {
+	async focusActivityBar(): Promise<codemavi> {
 		if (this.configurationService.getValue(LayoutSettings.ACTIVITY_BAR_LOCATION) === ActivityBarPosition.HIDDEN) {
 			await this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, this.getRememberedActivityBarVisiblePosition());
 
@@ -275,7 +275,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 		}
 	}
 
-	private registerActions(): void {
+	private registerActions(): codemavi {
 		const that = this;
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
@@ -284,7 +284,7 @@ export class SidebarPart extends AbstractPaneCompositePart {
 					title: localize2('toggleActivityBar', "Toggle Activity Bar Visibility"),
 				});
 			}
-			run(): Promise<void> {
+			run(): Promise<codemavi> {
 				const value = that.configurationService.getValue(LayoutSettings.ACTIVITY_BAR_LOCATION) === ActivityBarPosition.HIDDEN ? that.getRememberedActivityBarVisiblePosition() : ActivityBarPosition.HIDDEN;
 				return that.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, value);
 			}

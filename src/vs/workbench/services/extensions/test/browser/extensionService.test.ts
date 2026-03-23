@@ -202,7 +202,7 @@ suite('ExtensionService', () => {
 				override disconnect() {
 					return Promise.resolve();
 				}
-				override dispose(): void {
+				override dispose(): codemavi {
 					order.push(`dispose ${extensionHostId}`);
 				}
 				override representsRunningLocation(runningLocation: ExtensionRunningLocation): boolean {
@@ -216,7 +216,7 @@ suite('ExtensionService', () => {
 		protected _scanSingleExtension(extension: IExtension): Promise<IExtensionDescription | null> {
 			throw new Error('Method not implemented.');
 		}
-		protected _onExtensionHostExit(code: number): Promise<void> {
+		protected _onExtensionHostExit(code: number): Promise<codemavi> {
 			throw new Error('Method not implemented.');
 		}
 		protected _resolveAuthority(remoteAuthority: string): Promise<ResolverResult> {

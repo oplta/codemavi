@@ -33,7 +33,7 @@ export class GitBranchProtectionProvider implements BranchProtectionProvider {
 		return [this.branchProtection];
 	}
 
-	private updateBranchProtection(): void {
+	private updateBranchProtection(): codemavi {
 		const scopedConfig = workspace.getConfiguration('git', this.repositoryRoot);
 		const branchProtectionConfig = scopedConfig.get<unknown>('branchProtection') ?? [];
 		const branchProtectionValues = Array.isArray(branchProtectionConfig) ? branchProtectionConfig : [branchProtectionConfig];
@@ -46,7 +46,7 @@ export class GitBranchProtectionProvider implements BranchProtectionProvider {
 		this._onDidChangeBranchProtection.fire(this.repositoryRoot);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables = dispose(this.disposables);
 	}
 }

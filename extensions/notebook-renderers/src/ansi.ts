@@ -111,7 +111,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * @param color Color to change to. If `undefined` or not provided,
 	 * will clear current color without adding a new one.
 	 */
-	function changeColor(colorType: 'foreground' | 'background' | 'underline', color?: RGBA | string | undefined): void {
+	function changeColor(colorType: 'foreground' | 'background' | 'underline', color?: RGBA | string | undefined): codemavi {
 		if (colorType === 'foreground') {
 			customFgColor = color;
 		} else if (colorType === 'background') {
@@ -129,7 +129,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * Swap foreground and background colors.  Used for color inversion.  Caller should check
 	 * [] flag to make sure it is appropriate to turn ON or OFF (if it is already inverted don't call
 	 */
-	function reverseForegroundAndBackgroundColors(): void {
+	function reverseForegroundAndBackgroundColors(): codemavi {
 		const oldFgColor: RGBA | string | undefined = customFgColor;
 		changeColor('foreground', customBgColor);
 		changeColor('background', oldFgColor);
@@ -148,7 +148,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * does not.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#SGR }
 	 */
-	function setBasicFormatters(styleCodes: number[]): void {
+	function setBasicFormatters(styleCodes: number[]): codemavi {
 		for (const code of styleCodes) {
 			switch (code) {
 				case 0: {  // reset (everything)
@@ -301,7 +301,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * will set the underline color.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit }
 	 */
-	function set24BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): void {
+	function set24BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): codemavi {
 		if (styleCodes.length >= 5 &&
 			styleCodes[2] >= 0 && styleCodes[2] <= 255 &&
 			styleCodes[3] >= 0 && styleCodes[3] <= 255 &&
@@ -320,7 +320,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * will set the underline color.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit }
 	 */
-	function set8BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): void {
+	function set8BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): codemavi {
 		let colorNumber = styleCodes[2];
 		const color = calcANSI8bitColor(colorNumber);
 
@@ -353,7 +353,7 @@ export function handleANSIOutput(text: string, linkOptions: LinkOptions): HTMLSp
 	 * [30-37, 90-97, 40-47, 100-107]. If not on one of these ranges, will do
 	 * nothing.
 	 */
-	function setBasicColor(styleCode: number): void {
+	function setBasicColor(styleCode: number): codemavi {
 		// const theme = themeService.getColorTheme();
 		let colorType: 'foreground' | 'background' | undefined;
 		let colorIndex: number | undefined;
@@ -386,7 +386,7 @@ function appendStylizedStringToContainer(
 	customTextColor?: RGBA | string,
 	customBackgroundColor?: RGBA | string,
 	customUnderlineColor?: RGBA | string
-): void {
+): codemavi {
 	if (!root || !stringContent) {
 		return;
 	}

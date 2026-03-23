@@ -29,7 +29,7 @@ export class IPadShowKeyboard extends Disposable implements IEditorContribution 
 		}
 	}
 
-	private update(): void {
+	private update(): codemavi {
 		const shouldHaveWidget = (!this.editor.getOption(EditorOption.readOnly));
 
 		if (!this.widget && shouldHaveWidget) {
@@ -44,7 +44,7 @@ export class IPadShowKeyboard extends Disposable implements IEditorContribution 
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		if (this.widget) {
 			this.widget.dispose();
@@ -77,7 +77,7 @@ class ShowKeyboardWidget extends Disposable implements IOverlayWidget {
 		this.editor.addOverlayWidget(this);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.editor.removeOverlayWidget(this);
 		super.dispose();
 	}

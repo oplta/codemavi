@@ -33,7 +33,7 @@ export async function checkNewHostInHostkeys(host: string): Promise<boolean> {
 	return true;
 }
 
-export async function addHostToHostFile(host: string, hostKey: Buffer, type: string): Promise<void> {
+export async function addHostToHostFile(host: string, hostKey: Buffer, type: string): Promise<codemavi> {
 	if (!folderExists(PATH_SSH_USER_DIR)) {
 		await fs.promises.mkdir(PATH_SSH_USER_DIR, 0o700);
 	}

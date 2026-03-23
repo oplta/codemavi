@@ -18,7 +18,7 @@ export abstract class DelegatingEditor extends Disposable implements IEditor {
 	private static idCounter = 0;
 	private readonly _id = ++DelegatingEditor.idCounter;
 
-	private readonly _onDidDispose = this._register(new Emitter<void>());
+	private readonly _onDidDispose = this._register(new Emitter<codemavi>());
 	public readonly onDidDispose = this._onDidDispose.event;
 
 	protected abstract get _targetEditor(): CodeEditorWidget;
@@ -26,15 +26,15 @@ export abstract class DelegatingEditor extends Disposable implements IEditor {
 	getId(): string { return this.getEditorType() + ':v2:' + this._id; }
 
 	abstract getEditorType(): string;
-	abstract updateOptions(newOptions: IEditorOptions): void;
-	abstract onVisible(): void;
-	abstract onHide(): void;
-	abstract layout(dimension?: IDimension | undefined): void;
+	abstract updateOptions(newOptions: IEditorOptions): codemavi;
+	abstract onVisible(): codemavi;
+	abstract onHide(): codemavi;
+	abstract layout(dimension?: IDimension | undefined): codemavi;
 	abstract hasTextFocus(): boolean;
 	abstract saveViewState(): IEditorViewState | null;
-	abstract restoreViewState(state: IEditorViewState | null): void;
+	abstract restoreViewState(state: IEditorViewState | null): codemavi;
 	abstract getModel(): IEditorModel | null;
-	abstract setModel(model: IEditorModel | null | IDiffEditorViewModel): void;
+	abstract setModel(model: IEditorModel | null | IDiffEditorViewModel): codemavi;
 
 	// #region editorBrowser.IDiffEditor: Delegating to modified Editor
 
@@ -50,39 +50,39 @@ export abstract class DelegatingEditor extends Disposable implements IEditor {
 		return this._targetEditor.getPosition();
 	}
 
-	public setPosition(position: IPosition, source: string = 'api'): void {
+	public setPosition(position: IPosition, source: string = 'api'): codemavi {
 		this._targetEditor.setPosition(position, source);
 	}
 
-	public revealLine(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLine(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLine(lineNumber, scrollType);
 	}
 
-	public revealLineInCenter(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLineInCenter(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLineInCenter(lineNumber, scrollType);
 	}
 
-	public revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLineInCenterIfOutsideViewport(lineNumber, scrollType);
 	}
 
-	public revealLineNearTop(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLineNearTop(lineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLineNearTop(lineNumber, scrollType);
 	}
 
-	public revealPosition(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealPosition(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealPosition(position, scrollType);
 	}
 
-	public revealPositionInCenter(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealPositionInCenter(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealPositionInCenter(position, scrollType);
 	}
 
-	public revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealPositionInCenterIfOutsideViewport(position, scrollType);
 	}
 
-	public revealPositionNearTop(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealPositionNearTop(position: IPosition, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealPositionNearTop(position, scrollType);
 	}
 
@@ -94,55 +94,55 @@ export abstract class DelegatingEditor extends Disposable implements IEditor {
 		return this._targetEditor.getSelections();
 	}
 
-	public setSelection(range: IRange, source?: string): void;
-	public setSelection(editorRange: Range, source?: string): void;
-	public setSelection(selection: ISelection, source?: string): void;
-	public setSelection(editorSelection: Selection, source?: string): void;
-	public setSelection(something: any, source: string = 'api'): void {
+	public setSelection(range: IRange, source?: string): codemavi;
+	public setSelection(editorRange: Range, source?: string): codemavi;
+	public setSelection(selection: ISelection, source?: string): codemavi;
+	public setSelection(editorSelection: Selection, source?: string): codemavi;
+	public setSelection(something: any, source: string = 'api'): codemavi {
 		this._targetEditor.setSelection(something, source);
 	}
 
-	public setSelections(ranges: readonly ISelection[], source: string = 'api'): void {
+	public setSelections(ranges: readonly ISelection[], source: string = 'api'): codemavi {
 		this._targetEditor.setSelections(ranges, source);
 	}
 
-	public revealLines(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLines(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLines(startLineNumber, endLineNumber, scrollType);
 	}
 
-	public revealLinesInCenter(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLinesInCenter(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLinesInCenter(startLineNumber, endLineNumber, scrollType);
 	}
 
-	public revealLinesInCenterIfOutsideViewport(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLinesInCenterIfOutsideViewport(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLinesInCenterIfOutsideViewport(startLineNumber, endLineNumber, scrollType);
 	}
 
-	public revealLinesNearTop(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealLinesNearTop(startLineNumber: number, endLineNumber: number, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealLinesNearTop(startLineNumber, endLineNumber, scrollType);
 	}
 
-	public revealRange(range: IRange, scrollType: ScrollType = ScrollType.Smooth, revealVerticalInCenter: boolean = false, revealHorizontal: boolean = true): void {
+	public revealRange(range: IRange, scrollType: ScrollType = ScrollType.Smooth, revealVerticalInCenter: boolean = false, revealHorizontal: boolean = true): codemavi {
 		this._targetEditor.revealRange(range, scrollType, revealVerticalInCenter, revealHorizontal);
 	}
 
-	public revealRangeInCenter(range: IRange, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealRangeInCenter(range: IRange, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealRangeInCenter(range, scrollType);
 	}
 
-	public revealRangeInCenterIfOutsideViewport(range: IRange, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealRangeInCenterIfOutsideViewport(range: IRange, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealRangeInCenterIfOutsideViewport(range, scrollType);
 	}
 
-	public revealRangeNearTop(range: IRange, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealRangeNearTop(range: IRange, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealRangeNearTop(range, scrollType);
 	}
 
-	public revealRangeNearTopIfOutsideViewport(range: IRange, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealRangeNearTopIfOutsideViewport(range: IRange, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealRangeNearTopIfOutsideViewport(range, scrollType);
 	}
 
-	public revealRangeAtTop(range: IRange, scrollType: ScrollType = ScrollType.Smooth): void {
+	public revealRangeAtTop(range: IRange, scrollType: ScrollType = ScrollType.Smooth): codemavi {
 		this._targetEditor.revealRangeAtTop(range, scrollType);
 	}
 
@@ -150,11 +150,11 @@ export abstract class DelegatingEditor extends Disposable implements IEditor {
 		return this._targetEditor.getSupportedActions();
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		this._targetEditor.focus();
 	}
 
-	public trigger(source: string | null | undefined, handlerId: string, payload: any): void {
+	public trigger(source: string | null | undefined, handlerId: string, payload: any): codemavi {
 		this._targetEditor.trigger(source, handlerId, payload);
 	}
 

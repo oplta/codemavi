@@ -25,7 +25,7 @@ export class GlobalStateResourceInitializer implements IProfileResourceInitializ
 	constructor(@IStorageService private readonly storageService: IStorageService) {
 	}
 
-	async initialize(content: string): Promise<void> {
+	async initialize(content: string): Promise<codemavi> {
 		const globalState: IGlobalState = JSON.parse(content);
 		const storageKeys = Object.keys(globalState.storage);
 		if (storageKeys.length) {
@@ -52,7 +52,7 @@ export class GlobalStateResource implements IProfileResource {
 		return JSON.stringify(globalState);
 	}
 
-	async apply(content: string, profile: IUserDataProfile): Promise<void> {
+	async apply(content: string, profile: IUserDataProfile): Promise<codemavi> {
 		const globalState: IGlobalState = JSON.parse(content);
 		await this.writeGlobalState(globalState, profile);
 	}
@@ -68,7 +68,7 @@ export class GlobalStateResource implements IProfileResource {
 		return { storage };
 	}
 
-	private async writeGlobalState(globalState: IGlobalState, profile: IUserDataProfile): Promise<void> {
+	private async writeGlobalState(globalState: IGlobalState, profile: IUserDataProfile): Promise<codemavi> {
 		const storageKeys = Object.keys(globalState.storage);
 		if (storageKeys.length) {
 			const updatedStorage = new Map<string, string | undefined>();

@@ -203,7 +203,7 @@ async function onReady() {
 /**
  * Main startup routine
  */
-async function startup(codeCachePath: string | undefined, nlsConfig: INLSConfiguration): Promise<void> {
+async function startup(codeCachePath: string | undefined, nlsConfig: INLSConfiguration): Promise<codemavi> {
 	process.env['VSCODE_NLS_CONFIG'] = JSON.stringify(nlsConfig);
 	process.env['VSCODE_CODE_CACHE_PATH'] = codeCachePath || '';
 
@@ -382,7 +382,7 @@ function readArgvConfigSync(): IArgvConfig {
 	return argvConfig;
 }
 
-function createDefaultArgvConfigSync(argvConfigPath: string): void {
+function createDefaultArgvConfigSync(argvConfigPath: string): codemavi {
 	try {
 
 		// Ensure argv config parent exists
@@ -428,7 +428,7 @@ function getArgvConfigPath(): string {
 	return path.join(os.homedir(), dataFolderName!, 'argv.json');
 }
 
-function configureCrashReporter(): void {
+function configureCrashReporter(): codemavi {
 	let crashReporterDirectory = args['crash-reporter-directory'];
 	let submitURL = '';
 	if (crashReporterDirectory) {
@@ -562,7 +562,7 @@ function parseCLIArgs(): NativeParsedArgs {
 	});
 }
 
-function registerListeners(): void {
+function registerListeners(): codemavi {
 
 	/**
 	 * macOS: when someone drops a file to the not-yet running VSCode, the open-file event fires even before
@@ -579,7 +579,7 @@ function registerListeners(): void {
 	 */
 	const openUrls: string[] = [];
 	const onOpenUrl =
-		function (event: { preventDefault: () => void }, url: string) {
+		function (event: { preventDefault: () => codemavi }, url: string) {
 			event.preventDefault();
 
 			openUrls.push(url);

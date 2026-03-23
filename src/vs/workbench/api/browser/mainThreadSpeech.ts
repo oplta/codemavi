@@ -42,7 +42,7 @@ export class MainThreadSpeech implements MainThreadSpeechShape {
 		this.proxy = extHostContext.getProxy(ExtHostContext.ExtHostSpeech);
 	}
 
-	$registerProvider(handle: number, identifier: string, metadata: ISpeechProviderMetadata): void {
+	$registerProvider(handle: number, identifier: string, metadata: ISpeechProviderMetadata): codemavi {
 		this.logService.trace('[Speech] extension registered provider', metadata.extension.value);
 
 		const registration = this.speechService.registerSpeechProvider(identifier, {
@@ -135,7 +135,7 @@ export class MainThreadSpeech implements MainThreadSpeechShape {
 		});
 	}
 
-	$unregisterProvider(handle: number): void {
+	$unregisterProvider(handle: number): codemavi {
 		const registration = this.providerRegistrations.get(handle);
 		if (registration) {
 			registration.dispose();
@@ -143,22 +143,22 @@ export class MainThreadSpeech implements MainThreadSpeechShape {
 		}
 	}
 
-	$emitSpeechToTextEvent(session: number, event: ISpeechToTextEvent): void {
+	$emitSpeechToTextEvent(session: number, event: ISpeechToTextEvent): codemavi {
 		const providerSession = this.speechToTextSessions.get(session);
 		providerSession?.onDidChange.fire(event);
 	}
 
-	$emitTextToSpeechEvent(session: number, event: ITextToSpeechEvent): void {
+	$emitTextToSpeechEvent(session: number, event: ITextToSpeechEvent): codemavi {
 		const providerSession = this.textToSpeechSessions.get(session);
 		providerSession?.onDidChange.fire(event);
 	}
 
-	$emitKeywordRecognitionEvent(session: number, event: IKeywordRecognitionEvent): void {
+	$emitKeywordRecognitionEvent(session: number, event: IKeywordRecognitionEvent): codemavi {
 		const providerSession = this.keywordRecognitionSessions.get(session);
 		providerSession?.onDidChange.fire(event);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.providerRegistrations.forEach(disposable => disposable.dispose());
 		this.providerRegistrations.clear();
 

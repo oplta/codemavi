@@ -93,16 +93,16 @@ type IRawEventFireResponse = { type: ResponseType.EventFire; id: number; data: a
 type IRawResponse = IRawInitializeResponse | IRawPromiseSuccessResponse | IRawPromiseErrorResponse | IRawPromiseErrorObjResponse | IRawEventFireResponse;
 
 interface IHandler {
-	(response: IRawResponse): void;
+	(response: IRawResponse): codemavi;
 }
 
 export interface IMessagePassingProtocol {
-	send(buffer: VSBuffer): void;
+	send(buffer: VSBuffer): codemavi;
 	onMessage: Event<VSBuffer>;
 	/**
 	 * Wait for the write buffer (if applicable) to become empty.
 	 */
-	drain?(): Promise<void>;
+	drain?(): Promise<codemavi>;
 }
 
 enum State {
@@ -115,7 +115,7 @@ enum State {
  * able to register channels onto it, provided a channel name.
  */
 export interface IChannelServer<TContext = string> {
-	registerChannel(channelName: string, channel: IServerChannel<TContext>): void;
+	registerChannel(channelName: string, channel: IServerChannel<TContext>): codemavi;
 }
 
 /**
@@ -162,7 +162,7 @@ interface IReader {
 }
 
 interface IWriter {
-	write(buffer: VSBuffer): void;
+	write(buffer: VSBuffer): codemavi;
 }
 
 
@@ -229,7 +229,7 @@ export class BufferWriter implements IWriter {
 		return VSBuffer.concat(this.buffers);
 	}
 
-	write(buffer: VSBuffer): void {
+	write(buffer: VSBuffer): codemavi {
 		this.buffers.push(buffer);
 	}
 }
@@ -263,7 +263,7 @@ const BufferPresets = {
 declare const Buffer: any;
 const hasBuffer = (typeof Buffer !== 'undefined');
 
-export function serialize(writer: IWriter, data: any): void {
+export function serialize(writer: IWriter, data: any): codemavi {
 	if (typeof data === 'undefined') {
 		writer.write(BufferPresets.Undefined);
 	} else if (typeof data === 'string') {
@@ -342,14 +342,14 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		this.sendResponse({ type: ResponseType.Initialize });
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<TContext>): void {
+	registerChannel(channelName: string, channel: IServerChannel<TContext>): codemavi {
 		this.channels.set(channelName, channel);
 
 		// https://github.com/microsoft/vscode/issues/72531
 		setTimeout(() => this.flushPendingRequests(channelName), 0);
 	}
 
-	private sendResponse(response: IRawResponse): void {
+	private sendResponse(response: IRawResponse): codemavi {
 		switch (response.type) {
 			case ResponseType.Initialize: {
 				const msgLength = this.send([response.type]);
@@ -385,7 +385,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		}
 	}
 
-	private onRawMessage(message: VSBuffer): void {
+	private onRawMessage(message: VSBuffer): codemavi {
 		const reader = new BufferReader(message);
 		const header = deserialize(reader);
 		const body = deserialize(reader);
@@ -407,7 +407,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		}
 	}
 
-	private onPromise(request: IRawPromiseRequest): void {
+	private onPromise(request: IRawPromiseRequest): codemavi {
 		const channel = this.channels.get(request.channelName);
 
 		if (!channel) {
@@ -449,7 +449,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		this.activeRequests.set(request.id, disposable);
 	}
 
-	private onEventListen(request: IRawEventListenRequest): void {
+	private onEventListen(request: IRawEventListenRequest): codemavi {
 		const channel = this.channels.get(request.channelName);
 
 		if (!channel) {
@@ -464,7 +464,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		this.activeRequests.set(request.id, disposable);
 	}
 
-	private disposeActiveRequest(request: IRawRequest): void {
+	private disposeActiveRequest(request: IRawRequest): codemavi {
 		const disposable = this.activeRequests.get(request.id);
 
 		if (disposable) {
@@ -473,7 +473,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		}
 	}
 
-	private collectPendingRequest(request: IRawPromiseRequest | IRawEventListenRequest): void {
+	private collectPendingRequest(request: IRawPromiseRequest | IRawEventListenRequest): codemavi {
 		let pendingRequests = this.pendingRequests.get(request.channelName);
 
 		if (!pendingRequests) {
@@ -496,7 +496,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		pendingRequests.push({ request, timeoutTimer: timer });
 	}
 
-	private flushPendingRequests(channelName: string): void {
+	private flushPendingRequests(channelName: string): codemavi {
 		const requests = this.pendingRequests.get(channelName);
 
 		if (requests) {
@@ -513,7 +513,7 @@ export class ChannelServer<TContext = string> implements IChannelServer<TContext
 		}
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this.protocolListener) {
 			this.protocolListener.dispose();
 			this.protocolListener = null;
@@ -529,8 +529,8 @@ export const enum RequestInitiator {
 }
 
 export interface IIPCLogger {
-	logIncoming(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): void;
-	logOutgoing(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): void;
+	logIncoming(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): codemavi;
+	logOutgoing(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): codemavi;
 }
 
 export class ChannelClient implements IChannelClient, IDisposable {
@@ -543,7 +543,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 	private protocolListener: IDisposable | null;
 	private logger: IIPCLogger | null;
 
-	private readonly _onDidInitialize = new Emitter<void>();
+	private readonly _onDidInitialize = new Emitter<codemavi>();
 	readonly onDidInitialize = this._onDidInitialize.event;
 
 	constructor(private protocol: IMessagePassingProtocol, logger: IIPCLogger | null = null) {
@@ -615,7 +615,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 				this.sendRequest(request);
 			};
 
-			let uninitializedPromise: CancelablePromise<void> | null = null;
+			let uninitializedPromise: CancelablePromise<codemavi> | null = null;
 			if (this.state === State.Idle) {
 				doRequest();
 			} else {
@@ -659,7 +659,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 		const type = RequestType.EventListen;
 		const request: IRawRequest = { id, type, channelName, name, arg };
 
-		let uninitializedPromise: CancelablePromise<void> | null = null;
+		let uninitializedPromise: CancelablePromise<codemavi> | null = null;
 
 		const emitter = new Emitter<any>({
 			onWillAddFirstListener: () => {
@@ -694,7 +694,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 		return emitter.event;
 	}
 
-	private sendRequest(request: IRawRequest): void {
+	private sendRequest(request: IRawRequest): codemavi {
 		switch (request.type) {
 			case RequestType.Promise:
 			case RequestType.EventListen: {
@@ -729,7 +729,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 		}
 	}
 
-	private onBuffer(message: VSBuffer): void {
+	private onBuffer(message: VSBuffer): codemavi {
 		const reader = new BufferReader(message);
 		const header = deserialize(reader);
 		const body = deserialize(reader);
@@ -749,7 +749,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 		}
 	}
 
-	private onResponse(response: IRawResponse): void {
+	private onResponse(response: IRawResponse): codemavi {
 		if (response.type === ResponseType.Initialize) {
 			this.state = State.Idle;
 			this._onDidInitialize.fire();
@@ -762,11 +762,11 @@ export class ChannelClient implements IChannelClient, IDisposable {
 	}
 
 	@memoize
-	get onDidInitializePromise(): Promise<void> {
+	get onDidInitializePromise(): Promise<codemavi> {
 		return Event.toPromise(this.onDidInitialize);
 	}
 
-	private whenInitialized(): Promise<void> {
+	private whenInitialized(): Promise<codemavi> {
 		if (this.state === State.Idle) {
 			return Promise.resolve();
 		} else {
@@ -774,7 +774,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.isDisposed = true;
 		if (this.protocolListener) {
 			this.protocolListener.dispose();
@@ -787,7 +787,7 @@ export class ChannelClient implements IChannelClient, IDisposable {
 
 export interface ClientConnectionEvent {
 	protocol: IMessagePassingProtocol;
-	onDidClientDisconnect: Event<void>;
+	onDidClientDisconnect: Event<codemavi>;
 }
 
 interface Connection<TContext> extends Client<TContext> {
@@ -953,7 +953,7 @@ export class IPCServer<TContext = string> implements IChannelServer<TContext>, I
 		return emitter.event;
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<TContext>): void {
+	registerChannel(channelName: string, channel: IServerChannel<TContext>): codemavi {
 		this.channels.set(channelName, channel);
 
 		for (const connection of this._connections) {
@@ -961,7 +961,7 @@ export class IPCServer<TContext = string> implements IChannelServer<TContext>, I
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 
 		for (const connection of this._connections) {
@@ -1001,11 +1001,11 @@ export class IPCClient<TContext = string> implements IChannelClient, IChannelSer
 		return this.channelClient.getChannel(channelName) as T;
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<TContext>): void {
+	registerChannel(channelName: string, channel: IServerChannel<TContext>): codemavi {
 		this.channelServer.registerChannel(channelName, channel);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.channelClient.dispose();
 		this.channelServer.dispose();
 	}
@@ -1272,7 +1272,7 @@ function pretty(data: any): any {
 	return prettyWithoutArrays(data);
 }
 
-function logWithColors(direction: string, totalLength: number, msgLength: number, req: number, initiator: RequestInitiator, str: string, data: any): void {
+function logWithColors(direction: string, totalLength: number, msgLength: number, req: number, initiator: RequestInitiator, str: string, data: any): codemavi {
 	data = pretty(data);
 
 	const colorTable = colorTables[initiator];
@@ -1296,12 +1296,12 @@ export class IPCLogger implements IIPCLogger {
 		private readonly _incomingPrefix: string,
 	) { }
 
-	public logOutgoing(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): void {
+	public logOutgoing(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): codemavi {
 		this._totalOutgoing += msgLength;
 		logWithColors(this._outgoingPrefix, this._totalOutgoing, msgLength, requestId, initiator, str, data);
 	}
 
-	public logIncoming(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): void {
+	public logIncoming(msgLength: number, requestId: number, initiator: RequestInitiator, str: string, data?: any): codemavi {
 		this._totalIncoming += msgLength;
 		logWithColors(this._incomingPrefix, this._totalIncoming, msgLength, requestId, initiator, str, data);
 	}

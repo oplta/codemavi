@@ -28,7 +28,7 @@ suite('getSemanticTokens', () => {
 			provideDocumentSemanticTokens(model: ITextModel, lastResultId: string | null, token: CancellationToken): ProviderResult<SemanticTokens | SemanticTokensEdits> {
 				throw canceled();
 			}
-			releaseDocumentSemanticTokens(resultId: string | undefined): void {
+			releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
 			}
 		};
 

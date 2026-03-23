@@ -186,7 +186,7 @@ export default class SSHConnection extends EventEmitter {
 	/**
 	 * Close SSH Connection
 	 */
-	close(): Promise<void> {
+	close(): Promise<codemavi> {
 		this.emit(SSHConstants.CHANNEL.SSH, SSHConstants.STATUS.BEFOREDISCONNECT);
 		return this.closeTunnel().then(() => {
 			if (this.sshConnection) {
@@ -273,7 +273,7 @@ export default class SSHConnection extends EventEmitter {
 				let server: net.Server;
 				if (SSHTunnelConfig.socks) {
 					server = createSocksServer({
-						connectionFilter: (destination: SocksConnectionInfo, origin: SocksConnectionInfo, callback: (err?: any, dest?: stream.Duplex) => void) => {
+						connectionFilter: (destination: SocksConnectionInfo, origin: SocksConnectionInfo, callback: (err?: any, dest?: stream.Duplex) => codemavi) => {
 							this.connect().then(() => {
 								this.sshConnection!.forwardOut(
 									origin.address,
@@ -338,7 +338,7 @@ export default class SSHConnection extends EventEmitter {
 	/**
 	 * Close the tunnel
 	 */
-	closeTunnel(name?: string): Promise<void> {
+	closeTunnel(name?: string): Promise<codemavi> {
 		if (name && this.activeTunnels[name]) {
 			return new Promise((resolve) => {
 				const tunnel = this.activeTunnels[name];

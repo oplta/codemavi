@@ -92,7 +92,7 @@ export interface IAccessibleViewContentProvider extends IBasicContentProvider, I
 	 * Note that a Codicon class should be provided for each action.
 	 * If not, a default will be used.
 	 */
-	onKeyDown?(e: IKeyboardEvent): void;
+	onKeyDown?(e: IKeyboardEvent): codemavi;
 	/**
 	 * When the language is markdown, this is provided by default.
 	 */
@@ -119,16 +119,16 @@ export interface IPosition {
 export interface IAccessibleViewService {
 	readonly _serviceBrand: undefined;
 	// The provider will be disposed when the view is closed
-	show(provider: AccesibleViewContentProvider, position?: IPosition): void;
-	showLastProvider(id: AccessibleViewProviderId): void;
-	showAccessibleViewHelp(): void;
-	next(): void;
-	previous(): void;
-	navigateToCodeBlock(type: 'next' | 'previous'): void;
-	goToSymbol(): void;
-	disableHint(): void;
+	show(provider: AccesibleViewContentProvider, position?: IPosition): codemavi;
+	showLastProvider(id: AccessibleViewProviderId): codemavi;
+	showAccessibleViewHelp(): codemavi;
+	next(): codemavi;
+	previous(): codemavi;
+	navigateToCodeBlock(type: 'next' | 'previous'): codemavi;
+	goToSymbol(): codemavi;
+	disableHint(): codemavi;
 	getPosition(id: AccessibleViewProviderId): IPosition | undefined;
-	setPosition(position: IPosition, reveal?: boolean, select?: boolean): void;
+	setPosition(position: IPosition, reveal?: boolean, select?: boolean): codemavi;
 	getLastPosition(): IPosition | undefined;
 	/**
 	 * If the setting is enabled, provides the open accessible view hint as a localized string.
@@ -136,8 +136,8 @@ export interface IAccessibleViewService {
 	 */
 	getOpenAriaHint(verbositySettingKey: string): string | null;
 	getCodeBlockContext(): ICodeBlockActionContext | undefined;
-	configureKeybindings(unassigned: boolean): void;
-	openHelpLink(): void;
+	configureKeybindings(unassigned: boolean): codemavi;
+	openHelpLink(): codemavi;
 }
 
 
@@ -156,14 +156,14 @@ export class AccessibleContentProvider extends Disposable implements IAccessible
 		public id: AccessibleViewProviderId,
 		public options: IAccessibleViewOptions,
 		public provideContent: () => string,
-		public onClose: () => void,
+		public onClose: () => codemavi,
 		public verbositySettingKey: string,
-		public onOpen?: () => void,
+		public onOpen?: () => codemavi,
 		public actions?: IAction[],
 		public provideNextContent?: () => string | undefined,
 		public providePreviousContent?: () => string | undefined,
-		public onDidChangeContent?: Event<void>,
-		public onKeyDown?: (e: IKeyboardEvent) => void,
+		public onDidChangeContent?: Event<codemavi>,
+		public onKeyDown?: (e: IKeyboardEvent) => codemavi,
 		public getSymbols?: () => IAccessibleViewSymbol[],
 		public onDidRequestClearLastProvider?: Event<AccessibleViewProviderId>,
 	) {
@@ -181,12 +181,12 @@ export class ExtensionContentProvider extends Disposable implements IBasicConten
 		public readonly id: string,
 		public options: IAccessibleViewOptions,
 		public provideContent: () => string,
-		public onClose: () => void,
-		public onOpen?: () => void,
+		public onClose: () => codemavi,
+		public onOpen?: () => codemavi,
 		public provideNextContent?: () => string | undefined,
 		public providePreviousContent?: () => string | undefined,
 		public actions?: IAction[],
-		public onDidChangeContent?: Event<void>,
+		public onDidChangeContent?: Event<codemavi>,
 	) {
 		super();
 	}
@@ -195,11 +195,11 @@ export class ExtensionContentProvider extends Disposable implements IBasicConten
 export interface IBasicContentProvider extends IDisposable {
 	id: string;
 	options: IAccessibleViewOptions;
-	onClose(): void;
+	onClose(): codemavi;
 	provideContent(): string;
-	onOpen?(): void;
+	onOpen?(): codemavi;
 	actions?: IAction[];
-	providePreviousContent?(): void;
-	provideNextContent?(): void;
-	onDidChangeContent?: Event<void>;
+	providePreviousContent?(): codemavi;
+	provideNextContent?(): codemavi;
+	onDidChangeContent?: Event<codemavi>;
 }

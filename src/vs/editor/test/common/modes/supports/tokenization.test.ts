@@ -57,16 +57,16 @@ suite('Token theme matching', () => {
 		const _G = colorMap.getId('100000');
 		const _H = colorMap.getId('600000');
 
-		function assertMatch(scopeName: string, expected: ThemeTrieElementRule): void {
+		function assertMatch(scopeName: string, expected: ThemeTrieElementRule): codemavi {
 			const actual = theme._match(scopeName);
 			assert.deepStrictEqual(actual, expected, 'when matching <<' + scopeName + '>>');
 		}
 
-		function assertSimpleMatch(scopeName: string, fontStyle: FontStyle, foreground: number, background: number): void {
+		function assertSimpleMatch(scopeName: string, fontStyle: FontStyle, foreground: number, background: number): codemavi {
 			assertMatch(scopeName, new ThemeTrieElementRule(fontStyle, foreground, background));
 		}
 
-		function assertNoMatch(scopeName: string): void {
+		function assertNoMatch(scopeName: string): codemavi {
 			assertMatch(scopeName, new ThemeTrieElementRule(FontStyle.None, _A, _B));
 		}
 

@@ -9,7 +9,7 @@ import * as paths from './path.js';
 import { extUri as defaultExtUri, IExtUri } from './resources.js';
 import { URI } from './uri.js';
 
-export interface IResourceNode<T, C = void> {
+export interface IResourceNode<T, C = codemavi> {
 	readonly uri: URI;
 	readonly relativePath: string;
 	readonly name: string;
@@ -50,15 +50,15 @@ class Node<T, C> implements IResourceNode<T, C> {
 		return this._children.get(path);
 	}
 
-	set(path: string, child: Node<T, C>): void {
+	set(path: string, child: Node<T, C>): codemavi {
 		this._children.set(path, child);
 	}
 
-	delete(path: string): void {
+	delete(path: string): codemavi {
 		this._children.delete(path);
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._children.clear();
 	}
 }
@@ -99,7 +99,7 @@ export class ResourceTree<T extends NonNullable<any>, C> {
 		this.root = new Node(rootURI, '', context);
 	}
 
-	add(uri: URI, element: T): void {
+	add(uri: URI, element: T): codemavi {
 		const key = this.extUri.relativePath(this.root.uri, uri) || uri.path;
 		const iterator = new PathIterator(false).reset(key);
 		let node = this.root;
@@ -163,7 +163,7 @@ export class ResourceTree<T extends NonNullable<any>, C> {
 		return child.element;
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this.root.clear();
 	}
 

@@ -36,7 +36,7 @@ registerAction2(class ShowAllOutputsAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, context: INotebookOutputActionContext): void {
+	run(accessor: ServicesAccessor, context: INotebookOutputActionContext): codemavi {
 		const cell = context.cell;
 		if (cell && cell.cellKind === CellKind.Code) {
 
@@ -71,7 +71,7 @@ registerAction2(class CopyCellOutputAction extends Action2 {
 		return getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 	}
 
-	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<void> {
+	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<codemavi> {
 		const notebookEditor = this.getNoteboookEditor(accessor.get(IEditorService), outputContext);
 
 		if (!notebookEditor) {
@@ -156,7 +156,7 @@ registerAction2(class OpenCellOutputInEditorAction extends Action2 {
 		return getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 	}
 
-	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<void> {
+	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<codemavi> {
 		const notebookEditor = this.getNoteboookEditor(accessor.get(IEditorService), outputContext);
 		const notebookModelService = accessor.get(INotebookEditorModelResolverService);
 

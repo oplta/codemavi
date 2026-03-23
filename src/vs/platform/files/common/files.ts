@@ -58,7 +58,7 @@ export interface IFileService {
 	/**
 	 * Tries to activate a provider with the given scheme.
 	 */
-	activateProvider(scheme: string): Promise<void>;
+	activateProvider(scheme: string): Promise<codemavi>;
 
 	/**
 	 * Checks if this file service can handle the given resource by
@@ -189,7 +189,7 @@ export interface IFileService {
 	 *
 	 * If the target path exists, it will be overwritten.
 	 */
-	cloneFile(source: URI, target: URI): Promise<void>;
+	cloneFile(source: URI, target: URI): Promise<codemavi>;
 
 	/**
 	 * Creates a new file with the given path and optional contents. The returned promise
@@ -222,7 +222,7 @@ export interface IFileService {
 	 *
 	 * Emits a `FileOperation.DELETE` file operation event when successful.
 	 */
-	del(resource: URI, options?: Partial<IFileDeleteOptions>): Promise<void>;
+	del(resource: URI, options?: Partial<IFileDeleteOptions>): Promise<codemavi>;
 
 	/**
 	 * Find out if a delete operation is possible given the arguments. No changes on disk will
@@ -257,7 +257,7 @@ export interface IFileService {
 	/**
 	 * Frees up any resources occupied by this service.
 	 */
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface IFileOverwriteOptions {
@@ -641,36 +641,36 @@ export const enum FileSystemProviderCapabilities {
 export interface IFileSystemProvider {
 
 	readonly capabilities: FileSystemProviderCapabilities;
-	readonly onDidChangeCapabilities: Event<void>;
+	readonly onDidChangeCapabilities: Event<codemavi>;
 
 	readonly onDidChangeFile: Event<readonly IFileChange[]>;
 	readonly onDidWatchError?: Event<string>;
 	watch(resource: URI, opts: IWatchOptions): IDisposable;
 
 	stat(resource: URI): Promise<IStat>;
-	mkdir(resource: URI): Promise<void>;
+	mkdir(resource: URI): Promise<codemavi>;
 	readdir(resource: URI): Promise<[string, FileType][]>;
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<void>;
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi>;
 
-	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void>;
-	copy?(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void>;
+	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi>;
+	copy?(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi>;
 
 	readFile?(resource: URI): Promise<Uint8Array>;
-	writeFile?(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void>;
+	writeFile?(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi>;
 
 	readFileStream?(resource: URI, opts: IFileReadStreamOptions, token: CancellationToken): ReadableStreamEvents<Uint8Array>;
 
 	open?(resource: URI, opts: IFileOpenOptions): Promise<number>;
-	close?(fd: number): Promise<void>;
+	close?(fd: number): Promise<codemavi>;
 	read?(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number>;
 	write?(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number>;
 
-	cloneFile?(from: URI, to: URI): Promise<void>;
+	cloneFile?(from: URI, to: URI): Promise<codemavi>;
 }
 
 export interface IFileSystemProviderWithFileReadWriteCapability extends IFileSystemProvider {
 	readFile(resource: URI): Promise<Uint8Array>;
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void>;
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi>;
 }
 
 export function hasReadWriteCapability(provider: IFileSystemProvider): provider is IFileSystemProviderWithFileReadWriteCapability {
@@ -678,7 +678,7 @@ export function hasReadWriteCapability(provider: IFileSystemProvider): provider 
 }
 
 export interface IFileSystemProviderWithFileFolderCopyCapability extends IFileSystemProvider {
-	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void>;
+	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi>;
 }
 
 export function hasFileFolderCopyCapability(provider: IFileSystemProvider): provider is IFileSystemProviderWithFileFolderCopyCapability {
@@ -686,7 +686,7 @@ export function hasFileFolderCopyCapability(provider: IFileSystemProvider): prov
 }
 
 export interface IFileSystemProviderWithFileCloneCapability extends IFileSystemProvider {
-	cloneFile(from: URI, to: URI): Promise<void>;
+	cloneFile(from: URI, to: URI): Promise<codemavi>;
 }
 
 export function hasFileCloneCapability(provider: IFileSystemProvider): provider is IFileSystemProviderWithFileCloneCapability {
@@ -695,7 +695,7 @@ export function hasFileCloneCapability(provider: IFileSystemProvider): provider 
 
 export interface IFileSystemProviderWithOpenReadWriteCloseCapability extends IFileSystemProvider {
 	open(resource: URI, opts: IFileOpenOptions): Promise<number>;
-	close(fd: number): Promise<void>;
+	close(fd: number): Promise<codemavi>;
 	read(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number>;
 	write(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number>;
 }
@@ -726,7 +726,7 @@ export function hasFileAtomicReadCapability(provider: IFileSystemProvider): prov
 }
 
 export interface IFileSystemProviderWithFileAtomicWriteCapability extends IFileSystemProvider {
-	writeFile(resource: URI, contents: Uint8Array, opts?: IFileAtomicWriteOptions): Promise<void>;
+	writeFile(resource: URI, contents: Uint8Array, opts?: IFileAtomicWriteOptions): Promise<codemavi>;
 	enforceAtomicWriteFile?(resource: URI): IFileAtomicOptions | false;
 }
 
@@ -739,7 +739,7 @@ export function hasFileAtomicWriteCapability(provider: IFileSystemProvider): pro
 }
 
 export interface IFileSystemProviderWithFileAtomicDeleteCapability extends IFileSystemProvider {
-	delete(resource: URI, opts: IFileAtomicDeleteOptions): Promise<void>;
+	delete(resource: URI, opts: IFileAtomicDeleteOptions): Promise<codemavi>;
 	enforceAtomicDelete?(resource: URI): IFileAtomicOptions | false;
 }
 
@@ -885,7 +885,7 @@ export interface IFileSystemProviderCapabilitiesChangeEvent {
 
 export interface IFileSystemProviderActivationEvent {
 	readonly scheme: string;
-	join(promise: Promise<void>): void;
+	join(promise: Promise<codemavi>): codemavi;
 }
 
 export const enum FileOperation {
@@ -1513,7 +1513,7 @@ export function etag(stat: { mtime: number | undefined; size: number | undefined
 	return stat.mtime.toString(29) + stat.size.toString(31);
 }
 
-export async function whenProviderRegistered(file: URI, fileService: IFileService): Promise<void> {
+export async function whenProviderRegistered(file: URI, fileService: IFileService): Promise<codemavi> {
 	if (fileService.hasProvider(URI.from({ scheme: file.scheme }))) {
 		return;
 	}
@@ -1577,7 +1577,7 @@ export function getLargeFileConfirmationLimit(arg?: string | URI): number {
 	}
 
 	if (isRemote) {
-		// With a remote, pick a low limit to avoid
+		// With a remote, pick a low limit to acodemavi
 		// potentially costly file transfers
 		return 10 * ByteSize.MB;
 	}

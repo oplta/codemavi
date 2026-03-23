@@ -58,7 +58,7 @@ export class NotebookKernelHistoryService extends Disposable implements INoteboo
 		};
 	}
 
-	addMostRecentKernel(kernel: INotebookKernel): void {
+	addMostRecentKernel(kernel: INotebookKernel): codemavi {
 		const key = kernel.id;
 		const viewType = kernel.viewType;
 		const recentKeynels = this._mostRecentKernelsMap[viewType] ?? new LinkedMap<string, string>();
@@ -74,7 +74,7 @@ export class NotebookKernelHistoryService extends Disposable implements INoteboo
 		this._mostRecentKernelsMap[viewType] = recentKeynels;
 	}
 
-	private _saveState(): void {
+	private _saveState(): codemavi {
 		let notEmpty = false;
 		for (const [_, kernels] of Object.entries(this._mostRecentKernelsMap)) {
 			notEmpty = notEmpty || kernels.size > 0;
@@ -88,7 +88,7 @@ export class NotebookKernelHistoryService extends Disposable implements INoteboo
 		}
 	}
 
-	private _loadState(): void {
+	private _loadState(): codemavi {
 		const serialized = this._storageService.get(NotebookKernelHistoryService.STORAGE_KEY, StorageScope.WORKSPACE);
 		if (serialized) {
 			try {
@@ -112,7 +112,7 @@ export class NotebookKernelHistoryService extends Disposable implements INoteboo
 		return result;
 	}
 
-	private _deserialize(serialized: ISerializedKernelsList): void {
+	private _deserialize(serialized: ISerializedKernelsList): codemavi {
 		this._mostRecentKernelsMap = {};
 
 		for (const [viewType, kernels] of Object.entries(serialized)) {
@@ -128,7 +128,7 @@ export class NotebookKernelHistoryService extends Disposable implements INoteboo
 		}
 	}
 
-	_clear(): void {
+	_clear(): codemavi {
 		this._mostRecentKernelsMap = {};
 		this._saveState();
 	}
@@ -144,7 +144,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(INotebookKernelHistoryService) as NotebookKernelHistoryService;
 		historyService._clear();
 	}

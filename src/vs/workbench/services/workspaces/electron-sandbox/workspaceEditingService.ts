@@ -66,7 +66,7 @@ export class NativeWorkspaceEditingService extends AbstractWorkspaceEditingServi
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.lifecycleService.onBeforeShutdown(e => {
 			const saveOperation = this.saveUntitledBeforeShutdown(e.reason);
 			e.veto(saveOperation, 'veto.untitledWorkspace');
@@ -173,7 +173,7 @@ export class NativeWorkspaceEditingService extends AbstractWorkspaceEditingServi
 		return true; // OK
 	}
 
-	async enterWorkspace(workspaceUri: URI): Promise<void> {
+	async enterWorkspace(workspaceUri: URI): Promise<codemavi> {
 		const stopped = await this.extensionService.stopExtensionHosts(localize('restartExtensionHost.reason', "Opening a multi-root workspace"));
 		if (!stopped) {
 			return;

@@ -83,7 +83,7 @@ class FileDiagnostics {
 		];
 	}
 
-	public delete(toDelete: vscode.Diagnostic): void {
+	public delete(toDelete: vscode.Diagnostic): codemavi {
 		for (const [type, diags] of this._diagnostics) {
 			this._diagnostics.set(type, diags.filter(diag => !diagnosticsEquals(diag, toDelete)));
 		}
@@ -199,7 +199,7 @@ class DiagnosticsTelemetryManager extends Disposable {
 		this._registerTelemetryEventEmitter();
 	}
 
-	public logDiagnosticsPerformanceTelemetry(performanceData: DiagnosticPerformanceData[]): void {
+	public logDiagnosticsPerformanceTelemetry(performanceData: DiagnosticPerformanceData[]): codemavi {
 		for (const data of performanceData) {
 			/* __GDPR__
 				"diagnostics.performance" : {
@@ -317,7 +317,7 @@ export class DiagnosticsManager extends Disposable {
 		this._pendingUpdates.clear();
 	}
 
-	public reInitialize(): void {
+	public reInitialize(): codemavi {
 		this._currentDiagnostics.clear();
 		this._diagnostics.clear();
 	}
@@ -342,7 +342,7 @@ export class DiagnosticsManager extends Disposable {
 		kind: DiagnosticKind,
 		diagnostics: ReadonlyArray<vscode.Diagnostic>,
 		ranges: ReadonlyArray<vscode.Range> | undefined,
-	): void {
+	): codemavi {
 		let didUpdate = false;
 		const entry = this._diagnostics.get(file);
 		if (entry) {
@@ -362,16 +362,16 @@ export class DiagnosticsManager extends Disposable {
 	public configFileDiagnosticsReceived(
 		file: vscode.Uri,
 		diagnostics: ReadonlyArray<vscode.Diagnostic>
-	): void {
+	): codemavi {
 		this._currentDiagnostics.set(file, diagnostics);
 	}
 
-	public deleteAllDiagnosticsInFile(resource: vscode.Uri): void {
+	public deleteAllDiagnosticsInFile(resource: vscode.Uri): codemavi {
 		this._currentDiagnostics.delete(resource);
 		this._diagnostics.delete(resource);
 	}
 
-	public deleteDiagnostic(resource: vscode.Uri, diagnostic: vscode.Diagnostic): void {
+	public deleteDiagnostic(resource: vscode.Uri, diagnostic: vscode.Diagnostic): codemavi {
 		const fileDiagnostics = this._diagnostics.get(resource);
 		if (fileDiagnostics) {
 			fileDiagnostics.delete(diagnostic);
@@ -383,7 +383,7 @@ export class DiagnosticsManager extends Disposable {
 		return this._currentDiagnostics.get(file) || [];
 	}
 
-	public logDiagnosticsPerformanceTelemetry(performanceData: DiagnosticPerformanceData[]): void {
+	public logDiagnosticsPerformanceTelemetry(performanceData: DiagnosticPerformanceData[]): codemavi {
 		this._diagnosticsTelemetryManager?.logDiagnosticsPerformanceTelemetry(performanceData);
 	}
 
@@ -393,7 +393,7 @@ export class DiagnosticsManager extends Disposable {
 		}
 	}
 
-	private updateCurrentDiagnostics(file: vscode.Uri): void {
+	private updateCurrentDiagnostics(file: vscode.Uri): codemavi {
 		if (this._pendingUpdates.has(file)) {
 			clearTimeout(this._pendingUpdates.get(file));
 			this._pendingUpdates.delete(file);
@@ -403,7 +403,7 @@ export class DiagnosticsManager extends Disposable {
 		this._currentDiagnostics.set(file, fileDiagnostics ? fileDiagnostics.getAllDiagnostics(this._settings) : []);
 	}
 
-	private rebuildAll(): void {
+	private rebuildAll(): codemavi {
 		this._currentDiagnostics.clear();
 		for (const fileDiagnostic of this._diagnostics.values()) {
 			this.rebuildFile(fileDiagnostic);

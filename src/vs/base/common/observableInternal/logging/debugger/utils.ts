@@ -58,7 +58,7 @@ function parseLine(stackLine: string): ILocation | undefined {
 export class Debouncer implements IDisposable {
 	private _timeout: any | undefined = undefined;
 
-	public debounce(fn: () => void, timeoutMs: number): void {
+	public debounce(fn: () => codemavi, timeoutMs: number): codemavi {
 		if (this._timeout !== undefined) {
 			clearTimeout(this._timeout);
 		}
@@ -68,7 +68,7 @@ export class Debouncer implements IDisposable {
 		}, timeoutMs);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._timeout !== undefined) {
 			clearTimeout(this._timeout);
 		}
@@ -78,7 +78,7 @@ export class Debouncer implements IDisposable {
 export class Throttler implements IDisposable {
 	private _timeout: any | undefined = undefined;
 
-	public throttle(fn: () => void, timeoutMs: number): void {
+	public throttle(fn: () => codemavi, timeoutMs: number): codemavi {
 		if (this._timeout === undefined) {
 			this._timeout = setTimeout(() => {
 				this._timeout = undefined;
@@ -87,14 +87,14 @@ export class Throttler implements IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._timeout !== undefined) {
 			clearTimeout(this._timeout);
 		}
 	}
 }
 
-export function deepAssign<T>(target: T, source: T): void {
+export function deepAssign<T>(target: T, source: T): codemavi {
 	for (const key in source) {
 		if (!!target[key] && typeof target[key] === 'object' && !!source[key] && typeof source[key] === 'object') {
 			deepAssign(target[key], source[key]);
@@ -104,7 +104,7 @@ export function deepAssign<T>(target: T, source: T): void {
 	}
 }
 
-export function deepAssignDeleteNulls<T>(target: T, source: T): void {
+export function deepAssignDeleteNulls<T>(target: T, source: T): codemavi {
 	for (const key in source) {
 		if (source[key] === null) {
 			delete target[key];

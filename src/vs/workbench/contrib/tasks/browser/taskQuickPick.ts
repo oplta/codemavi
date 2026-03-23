@@ -222,7 +222,7 @@ export class TaskQuickPick extends Disposable {
 		});
 		if (confirmed) {
 			await this._configurationService.updateValue(`${selectedType}.autoDetect`, 'on');
-			await new Promise<void>(resolve => setTimeout(() => resolve(), 100));
+			await new Promise<codemavi>(resolve => setTimeout(() => resolve(), 100));
 			return this.show(nls.localize('TaskService.pickRunTask', 'Select the task to run'), undefined, selectedType);
 		}
 		return undefined;

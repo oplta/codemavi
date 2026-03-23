@@ -199,11 +199,11 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return result;
 	}
 
-	uninstall(extension: ILocalExtension, options: UninstallOptions): Promise<void> {
+	uninstall(extension: ILocalExtension, options: UninstallOptions): Promise<codemavi> {
 		return this.uninstallExtensions([{ extension, options }]);
 	}
 
-	async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void> {
+	async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi> {
 		const workspaceExtensions: ILocalExtension[] = [];
 		const groupedExtensions = new Map<IExtensionManagementServer, UninstallExtensionInfo[]>();
 
@@ -238,7 +238,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 			}
 		}
 
-		const promises: Promise<void>[] = [];
+		const promises: Promise<codemavi>[] = [];
 		for (const workspaceExtension of workspaceExtensions) {
 			promises.push(this.uninstallExtensionFromWorkspace(workspaceExtension));
 		}
@@ -253,7 +253,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		}
 	}
 
-	private async uninstallInServer(server: IExtensionManagementServer, extensions: UninstallExtensionInfo[]): Promise<void> {
+	private async uninstallInServer(server: IExtensionManagementServer, extensions: UninstallExtensionInfo[]): Promise<codemavi> {
 		if (server === this.extensionManagementServerService.localExtensionManagementServer && this.extensionManagementServerService.remoteExtensionManagementServer) {
 			for (const { extension } of extensions) {
 				const installedExtensions = await this.extensionManagementServerService.remoteExtensionManagementServer.extensionManagementService.getInstalled(ExtensionType.User);
@@ -290,7 +290,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return Promise.reject(`Invalid location ${extension.location.toString()}`);
 	}
 
-	async resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<void> {
+	async resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<codemavi> {
 		await Promise.allSettled(this.servers.map(server => server.extensionManagementService.resetPinnedStateForAllUserExtensions(pinned)));
 	}
 
@@ -630,7 +630,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return this.getInstallableExtensionManagementServers(manifest);
 	}
 
-	private async uninstallExtensionFromWorkspace(extension: ILocalExtension): Promise<void> {
+	private async uninstallExtensionFromWorkspace(extension: ILocalExtension): Promise<codemavi> {
 		if (!extension.isWorkspaceScoped) {
 			throw new Error('The extension is not a workspace extension');
 		}
@@ -805,7 +805,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		throw new Error('No extension server found');
 	}
 
-	async requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<void> {
+	async requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<codemavi> {
 		const manifests = await Promise.all(extensions.map(async ({ extension }) => {
 			const manifest = await this.extensionGalleryService.getManifest(extension, CancellationToken.None);
 			if (!manifest) {
@@ -817,7 +817,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		await this.checkForTrustedPublishers(extensions.map((e, index) => ({ extension: e.extension, manifest: manifests[index], checkForPackAndDependencies: !e.options?.donotIncludePackAndDependencies })));
 	}
 
-	private async checkForTrustedPublishers(extensions: { extension: IGalleryExtension; manifest: IExtensionManifest; checkForPackAndDependencies: boolean }[]): Promise<void> {
+	private async checkForTrustedPublishers(extensions: { extension: IGalleryExtension; manifest: IExtensionManifest; checkForPackAndDependencies: boolean }[]): Promise<codemavi> {
 		const untrustedExtensions: IGalleryExtension[] = [];
 		const untrustedExtensionManifests: IExtensionManifest[] = [];
 		const manifestsToGetOtherUntrustedPublishers: IExtensionManifest[] = [];
@@ -851,7 +851,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 			extensionId: string;
 		};
 
-		const installButton: IPromptButton<void> = {
+		const installButton: IPromptButton<codemavi> = {
 			label: allPublishers.length > 1 ? localize({ key: 'trust publishers and install', comment: ['&& denotes a mnemonic'] }, "Trust Publishers & &&Install") : localize({ key: 'trust and install', comment: ['&& denotes a mnemonic'] }, "Trust Publisher & &&Install"),
 			run: () => {
 				this.telemetryService.publicLog2<TrustPublisherEvent, TrustPublisherClassification>('extensions:trustPublisher', { action: 'trust', extensionId: untrustedExtensions.map(e => e.identifier.id).join(',') });
@@ -859,7 +859,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 			}
 		};
 
-		const learnMoreButton: IPromptButton<void> = {
+		const learnMoreButton: IPromptButton<codemavi> = {
 			label: localize({ key: 'learnMore', comment: ['&& denotes a mnemonic'] }, "&&Learn More"),
 			run: () => {
 				this.telemetryService.publicLog2<TrustPublisherEvent, TrustPublisherClassification>('extensions:trustPublisher', { action: 'learn', extensionId: untrustedExtensions.map(e => e.identifier.id).join(',') });
@@ -975,7 +975,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return [...publishers.values()];
 	}
 
-	private async getDependenciesAndPackedExtensionsRecursively(toGet: string[], result: Map<string, IGalleryExtension>, token: CancellationToken): Promise<void> {
+	private async getDependenciesAndPackedExtensionsRecursively(toGet: string[], result: Map<string, IGalleryExtension>, token: CancellationToken): Promise<codemavi> {
 		if (toGet.length === 0) {
 			return;
 		}
@@ -1005,7 +1005,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return this.getDependenciesAndPackedExtensionsRecursively(toGet, result, token);
 	}
 
-	private async checkForWorkspaceTrust(manifest: IExtensionManifest, requireTrust: boolean): Promise<void> {
+	private async checkForWorkspaceTrust(manifest: IExtensionManifest, requireTrust: boolean): Promise<codemavi> {
 		if (requireTrust || this.extensionManifestPropertiesService.getExtensionUntrustedWorkspaceSupportType(manifest) === false) {
 			const buttons: WorkspaceTrustRequestButton[] = [];
 			buttons.push({ label: localize('extensionInstallWorkspaceTrustButton', "Trust Workspace & Install"), type: 'ContinueWithTrust' });
@@ -1024,7 +1024,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		}
 	}
 
-	private async checkInstallingExtensionOnWeb(extension: IGalleryExtension, manifest: IExtensionManifest): Promise<void> {
+	private async checkInstallingExtensionOnWeb(extension: IGalleryExtension, manifest: IExtensionManifest): Promise<codemavi> {
 		if (this.servers.length !== 1 || this.servers[0] !== this.extensionManagementServerService.webExtensionManagementServer) {
 			return;
 		}
@@ -1053,15 +1053,15 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 
 		const limitedSupportMessage = localize('limited support', "'{0}' has limited functionality in {1}.", extension.displayName || extension.identifier.id, productName);
 		let message: string;
-		let buttons: IPromptButton<void>[] = [];
+		let buttons: IPromptButton<codemavi>[] = [];
 		let detail: string | undefined;
 
-		const installAnywayButton: IPromptButton<void> = {
+		const installAnywayButton: IPromptButton<codemavi> = {
 			label: localize({ key: 'install anyways', comment: ['&& denotes a mnemonic'] }, "&&Install Anyway"),
 			run: () => { }
 		};
 
-		const showExtensionsButton: IPromptButton<void> = {
+		const showExtensionsButton: IPromptButton<codemavi> = {
 			label: localize({ key: 'showExtensions', comment: ['&& denotes a mnemonic'] }, "&&Show Extensions"),
 			run: () => this.instantiationService.invokeFunction(accessor => accessor.get(ICommandService).executeCommand('extension.open', extension.identifier.id, 'extensionPack'))
 		};
@@ -1108,7 +1108,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return this._targetPlatformPromise;
 	}
 
-	async cleanUp(): Promise<void> {
+	async cleanUp(): Promise<codemavi> {
 		await Promise.allSettled(this.servers.map(server => server.extensionManagementService.cleanUp()));
 	}
 
@@ -1120,7 +1120,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		throw new Error('Not Supported');
 	}
 
-	copyExtensions(from: URI, to: URI): Promise<void> {
+	copyExtensions(from: URI, to: URI): Promise<codemavi> {
 		if (this.extensionManagementServerService.remoteExtensionManagementServer) {
 			throw new Error('Not Supported');
 		}
@@ -1160,7 +1160,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		return Object.keys(trustedPublishers).map(publisher => trustedPublishers[publisher]);
 	}
 
-	trustPublishers(...publishers: IPublisherInfo[]): void {
+	trustPublishers(...publishers: IPublisherInfo[]): codemavi {
 		const trustedPublishers = this.getTrustedPublishersFromStorage();
 		for (const publisher of publishers) {
 			trustedPublishers[publisher.publisher.toLowerCase()] = publisher;
@@ -1168,7 +1168,7 @@ export class ExtensionManagementService extends Disposable implements IWorkbench
 		this.storageService.store(TrustedPublishersStorageKey, JSON.stringify(trustedPublishers), StorageScope.APPLICATION, StorageTarget.USER);
 	}
 
-	untrustPublishers(...publishers: string[]): void {
+	untrustPublishers(...publishers: string[]): codemavi {
 		const trustedPublishers = this.getTrustedPublishersFromStorage();
 		for (const publisher of publishers) {
 			delete trustedPublishers[publisher.toLowerCase()];
@@ -1197,7 +1197,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 	readonly onDidChangeInvalidExtensions = this._onDidChangeInvalidExtensions.event;
 
 	private readonly extensions: ILocalExtension[] = [];
-	private readonly initializePromise: Promise<void>;
+	private readonly initializePromise: Promise<codemavi>;
 
 	private readonly invalidExtensionWatchers = this._register(new DisposableStore());
 
@@ -1225,7 +1225,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 		this.initializePromise = this.initialize();
 	}
 
-	private async initialize(): Promise<void> {
+	private async initialize(): Promise<codemavi> {
 		const existingLocations = this.getInstalledWorkspaceExtensionsLocations();
 		if (!existingLocations.length) {
 			return;
@@ -1255,7 +1255,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 		this.saveWorkspaceExtensions();
 	}
 
-	private watchInvalidExtensions(): void {
+	private watchInvalidExtensions(): codemavi {
 		this.invalidExtensionWatchers.clear();
 		for (const extension of this.extensions) {
 			if (!extension.isValid) {
@@ -1264,7 +1264,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 		}
 	}
 
-	private async checkExtensionsValidity(extensions: ILocalExtension[]): Promise<void> {
+	private async checkExtensionsValidity(extensions: ILocalExtension[]): Promise<codemavi> {
 		const validExtensions: ILocalExtension[] = [];
 		await Promise.all(extensions.map(async extension => {
 			const newExtension = await this.scanWorkspaceExtension(extension.location);
@@ -1317,7 +1317,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 		return workspaceExtension;
 	}
 
-	async uninstall(extension: ILocalExtension): Promise<void> {
+	async uninstall(extension: ILocalExtension): Promise<codemavi> {
 		await this.initializePromise;
 
 		const existingExtensionIndex = this.extensions.findIndex(e => areSameExtensions(e.identifier, extension.identifier));
@@ -1357,7 +1357,7 @@ class WorkspaceExtensionsManagementService extends Disposable {
 		return locations;
 	}
 
-	private saveWorkspaceExtensions(): void {
+	private saveWorkspaceExtensions(): codemavi {
 		const locations = this.extensions.map(extension => extension.location);
 		if (this.workspaceService.getWorkbenchState() === WorkbenchState.FOLDER) {
 			this.storageService.store(WorkspaceExtensionsManagementService.WORKSPACE_EXTENSIONS_KEY,

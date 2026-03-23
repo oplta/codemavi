@@ -44,7 +44,7 @@ export function getRootName(): string {
 	}
 }
 
-export function stubModelService(instantiationService: TestInstantiationService, addDisposable: (e: IDisposable) => void): IModelService {
+export function stubModelService(instantiationService: TestInstantiationService, addDisposable: (e: IDisposable) => codemavi): IModelService {
 	instantiationService.stub(IThemeService, new TestThemeService());
 	const config = new TestConfigurationService();
 	config.setUserConfiguration('search', { searchOnType: true });
@@ -54,7 +54,7 @@ export function stubModelService(instantiationService: TestInstantiationService,
 	return modelService;
 }
 
-export function stubNotebookEditorService(instantiationService: TestInstantiationService, addDisposable: (e: IDisposable) => void): INotebookEditorService {
+export function stubNotebookEditorService(instantiationService: TestInstantiationService, addDisposable: (e: IDisposable) => codemavi): INotebookEditorService {
 	instantiationService.stub(IEditorGroupsService, new TestEditorGroupsService());
 	instantiationService.stub(IContextKeyService, new MockContextKeyService());
 	const es = new TestEditorService();

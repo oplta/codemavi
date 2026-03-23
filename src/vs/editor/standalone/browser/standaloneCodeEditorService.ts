@@ -40,7 +40,7 @@ export class StandaloneCodeEditorService extends AbstractCodeEditorService {
 		}));
 	}
 
-	private _checkContextKey(): void {
+	private _checkContextKey(): codemavi {
 		let hasCodeEditor = false;
 		for (const editor of this.listCodeEditors()) {
 			if (!editor.isSimpleWidget) {
@@ -51,7 +51,7 @@ export class StandaloneCodeEditorService extends AbstractCodeEditorService {
 		this._editorIsOpen.set(hasCodeEditor);
 	}
 
-	public setActiveCodeEditor(activeCodeEditor: ICodeEditor | null): void {
+	public setActiveCodeEditor(activeCodeEditor: ICodeEditor | null): codemavi {
 		this._activeCodeEditor = activeCodeEditor;
 	}
 

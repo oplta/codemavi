@@ -58,7 +58,7 @@ export class DropIntoEditorController extends Disposable implements IEditorContr
 	 *
 	 * TODO: figure out how to make this work with multiple windows
 	 */
-	private static _currentDropOperation?: CancelablePromise<void>;
+	private static _currentDropOperation?: CancelablePromise<codemavi>;
 
 	private readonly _dropProgressManager: InlineProgressManager;
 	private readonly _postDropWidgetManager: PostEditWidgetManager<DocumentDropEdit>;

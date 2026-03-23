@@ -27,7 +27,7 @@ export const DIFF_OPEN_SIDE = 'workbench.action.compareEditor.openSide';
 export const TOGGLE_DIFF_IGNORE_TRIM_WHITESPACE = 'toggle.diff.ignoreTrimWhitespace';
 export const DIFF_SWAP_SIDES = 'workbench.action.compareEditor.swapSides';
 
-export function registerDiffEditorCommands(): void {
+export function registerDiffEditorCommands(): codemavi {
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: GOTO_NEXT_CHANGE,
 		weight: KeybindingWeight.WorkbenchContrib,
@@ -71,7 +71,7 @@ export function registerDiffEditorCommands(): void {
 		return undefined;
 	}
 
-	function navigateInDiffEditor(accessor: ServicesAccessor, args: any[], next: boolean): void {
+	function navigateInDiffEditor(accessor: ServicesAccessor, args: any[], next: boolean): codemavi {
 		const activeTextDiffEditor = getActiveTextDiffEditor(accessor, args);
 
 		if (activeTextDiffEditor) {
@@ -85,7 +85,7 @@ export function registerDiffEditorCommands(): void {
 		Toggle
 	}
 
-	function focusInDiffEditor(accessor: ServicesAccessor, args: any[], mode: FocusTextDiffEditorMode): void {
+	function focusInDiffEditor(accessor: ServicesAccessor, args: any[], mode: FocusTextDiffEditorMode): codemavi {
 		const activeTextDiffEditor = getActiveTextDiffEditor(accessor, args);
 
 		if (activeTextDiffEditor) {
@@ -106,7 +106,7 @@ export function registerDiffEditorCommands(): void {
 		}
 	}
 
-	function toggleDiffSideBySide(accessor: ServicesAccessor, args: any[]): void {
+	function toggleDiffSideBySide(accessor: ServicesAccessor, args: any[]): codemavi {
 		const configService = accessor.get(ITextResourceConfigurationService);
 		const activeTextDiffEditor = getActiveTextDiffEditor(accessor, args);
 
@@ -118,7 +118,7 @@ export function registerDiffEditorCommands(): void {
 		configService.updateValue(m.uri, key, !val);
 	}
 
-	function toggleDiffIgnoreTrimWhitespace(accessor: ServicesAccessor, args: any[]): void {
+	function toggleDiffIgnoreTrimWhitespace(accessor: ServicesAccessor, args: any[]): codemavi {
 		const configService = accessor.get(ITextResourceConfigurationService);
 		const activeTextDiffEditor = getActiveTextDiffEditor(accessor, args);
 
@@ -130,7 +130,7 @@ export function registerDiffEditorCommands(): void {
 		configService.updateValue(m.uri, key, !val);
 	}
 
-	async function swapDiffSides(accessor: ServicesAccessor, args: any[]): Promise<void> {
+	async function swapDiffSides(accessor: ServicesAccessor, args: any[]): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const diffEditor = getActiveTextDiffEditor(accessor, args);

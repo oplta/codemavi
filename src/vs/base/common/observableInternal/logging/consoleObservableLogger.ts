@@ -12,7 +12,7 @@ import { getClassName } from '../debugName.js';
 
 let consoleObservableLogger: ConsoleObservableLogger | undefined;
 
-export function logObservableToConsole(obs: IObservable<any>): void {
+export function logObservableToConsole(obs: IObservable<any>): codemavi {
 	if (!consoleObservableLogger) {
 		consoleObservableLogger = new ConsoleObservableLogger();
 		addLogger(consoleObservableLogger);
@@ -25,7 +25,7 @@ export class ConsoleObservableLogger implements IObservableLogger {
 
 	private _filteredObjects: Set<unknown> | undefined;
 
-	public addFilteredObj(obj: unknown): void {
+	public addFilteredObj(obj: unknown): codemavi {
 		if (!this._filteredObjects) {
 			this._filteredObjects = new Set();
 		}
@@ -68,7 +68,7 @@ export class ConsoleObservableLogger implements IObservableLogger {
 			: [normalText(` (unchanged)`)];
 	}
 
-	handleObservableCreated(observable: IObservable<any>): void {
+	handleObservableCreated(observable: IObservable<any>): codemavi {
 		if (observable instanceof Derived) {
 			const derived = observable;
 			this.changedObservablesSets.set(derived, new Set());
@@ -97,10 +97,10 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		}
 	}
 
-	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): void {
+	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): codemavi {
 	}
 
-	handleObservableUpdated(observable: IObservable<unknown>, info: IChangeInformation): void {
+	handleObservableUpdated(observable: IObservable<unknown>, info: IChangeInformation): codemavi {
 		if (!this._isIncluded(observable)) { return; }
 		if (observable instanceof Derived) {
 			this._handleDerivedRecomputed(observable, info);
@@ -128,13 +128,13 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		);
 	}
 
-	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): void {
+	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): codemavi {
 		if (!this._isIncluded(derived)) { return; }
 
 		this.changedObservablesSets.get(derived)?.add(observable);
 	}
 
-	_handleDerivedRecomputed(derived: Derived<unknown>, info: IChangeInformation): void {
+	_handleDerivedRecomputed(derived: Derived<unknown>, info: IChangeInformation): codemavi {
 		if (!this._isIncluded(derived)) { return; }
 
 		const changedObservables = this.changedObservablesSets.get(derived);
@@ -149,7 +149,7 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		changedObservables.clear();
 	}
 
-	handleDerivedCleared(derived: Derived<unknown>): void {
+	handleDerivedCleared(derived: Derived<unknown>): codemavi {
 		if (!this._isIncluded(derived)) { return; }
 
 		console.log(...this.textToConsoleArgs([
@@ -158,7 +158,7 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		]));
 	}
 
-	handleFromEventObservableTriggered(observable: FromEventObservable<any, any>, info: IChangeInformation): void {
+	handleFromEventObservableTriggered(observable: FromEventObservable<any, any>, info: IChangeInformation): codemavi {
 		if (!this._isIncluded(observable)) { return; }
 
 		console.log(...this.textToConsoleArgs([
@@ -169,22 +169,22 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		]));
 	}
 
-	handleAutorunCreated(autorun: AutorunObserver): void {
+	handleAutorunCreated(autorun: AutorunObserver): codemavi {
 		if (!this._isIncluded(autorun)) { return; }
 
 		this.changedObservablesSets.set(autorun, new Set());
 	}
 
-	handleAutorunDisposed(autorun: AutorunObserver): void {
+	handleAutorunDisposed(autorun: AutorunObserver): codemavi {
 	}
 
-	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): void {
+	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): codemavi {
 		if (!this._isIncluded(autorun)) { return; }
 
 		this.changedObservablesSets.get(autorun)!.add(observable);
 	}
 
-	handleAutorunStarted(autorun: AutorunObserver): void {
+	handleAutorunStarted(autorun: AutorunObserver): codemavi {
 		const changedObservables = this.changedObservablesSets.get(autorun);
 		if (!changedObservables) { return; }
 
@@ -200,11 +200,11 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		this.indentation++;
 	}
 
-	handleAutorunFinished(autorun: AutorunObserver): void {
+	handleAutorunFinished(autorun: AutorunObserver): codemavi {
 		this.indentation--;
 	}
 
-	handleBeginTransaction(transaction: TransactionImpl): void {
+	handleBeginTransaction(transaction: TransactionImpl): codemavi {
 		let transactionName = transaction.getDebugName();
 		if (transactionName === undefined) {
 			transactionName = '';
@@ -219,7 +219,7 @@ export class ConsoleObservableLogger implements IObservableLogger {
 		this.indentation++;
 	}
 
-	handleEndTransaction(): void {
+	handleEndTransaction(): codemavi {
 		this.indentation--;
 	}
 }
@@ -231,7 +231,7 @@ function consoleTextToArgs(text: ConsoleText): unknown[] {
 	const data: unknown[] = [];
 	let firstArg = '';
 
-	function process(t: ConsoleText): void {
+	function process(t: ConsoleText): codemavi {
 		if ('length' in t) {
 			for (const item of t) {
 				if (item) {

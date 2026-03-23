@@ -68,10 +68,10 @@ namespace SemanticTokenLegendRequest {
 
 export interface RuntimeEnvironment {
 	fileFs?: FileSystemProvider;
-	configureHttpRequests?(proxy: string | undefined, strictSSL: boolean): void;
+	configureHttpRequests?(proxy: string | undefined, strictSSL: boolean): codemavi;
 	readonly timer: {
-		setImmediate(callback: (...args: any[]) => void, ...args: any[]): Disposable;
-		setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): Disposable;
+		setImmediate(callback: (...args: any[]) => codemavi, ...args: any[]): Disposable;
+		setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): Disposable;
 	};
 }
 

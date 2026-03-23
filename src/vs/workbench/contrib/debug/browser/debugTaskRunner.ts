@@ -56,12 +56,12 @@ export class DebugTaskRunner implements IDisposable {
 		@IProgressService private readonly progressService: IProgressService,
 	) { }
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.globalCancellation.dispose(true);
 		this.globalCancellation = new CancellationTokenSource();
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.globalCancellation.dispose(true);
 	}
 
@@ -236,7 +236,7 @@ export class DebugTaskRunner implements IDisposable {
 			})
 		);
 
-		const didAcquireInput = store.add(new Emitter<void>());
+		const didAcquireInput = store.add(new Emitter<codemavi>());
 		store.add(onceFilter(
 			this.taskService.onDidStateChange,
 			e => (e.kind === TaskEventKind.AcquiredInput) && getTaskKey(e.__task) === taskKey

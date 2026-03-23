@@ -42,7 +42,7 @@ export class TopmostLineMonitor extends Disposable {
 	private readonly _onChanged = this._register(new vscode.EventEmitter<{ readonly resource: vscode.Uri; readonly line: number }>());
 	public readonly onDidChanged = this._onChanged.event;
 
-	public setPreviousStaticEditorLine(scrollLocation: LastScrollLocation): void {
+	public setPreviousStaticEditorLine(scrollLocation: LastScrollLocation): codemavi {
 		this._previousStaticEditorInfo.set(scrollLocation.uri, scrollLocation);
 	}
 
@@ -53,7 +53,7 @@ export class TopmostLineMonitor extends Disposable {
 	}
 
 
-	public setPreviousTextEditorLine(scrollLocation: LastScrollLocation): void {
+	public setPreviousTextEditorLine(scrollLocation: LastScrollLocation): codemavi {
 		this._previousTextEditorInfo.set(scrollLocation.uri, scrollLocation);
 	}
 

@@ -242,7 +242,7 @@ export abstract class Pane extends Disposable implements IView {
 		}
 	}
 
-	render(): void {
+	render(): codemavi {
 		this.element.classList.toggle('expanded', this.isExpanded());
 		this.element.classList.toggle('horizontal', this.orientation === Orientation.HORIZONTAL);
 		this.element.classList.toggle('vertical', this.orientation === Orientation.VERTICAL);
@@ -297,7 +297,7 @@ export abstract class Pane extends Disposable implements IView {
 		}
 	}
 
-	layout(size: number): void {
+	layout(size: number): codemavi {
 		const headerSize = this.headerVisible ? Pane.HEADER_SIZE : 0;
 
 		const width = this._orientation === Orientation.VERTICAL ? this.orthogonalSize : size;
@@ -310,7 +310,7 @@ export abstract class Pane extends Disposable implements IView {
 		}
 	}
 
-	style(styles: IPaneStyles): void {
+	style(styles: IPaneStyles): codemavi {
 		this.styles = styles;
 
 		if (!this.header) {
@@ -320,7 +320,7 @@ export abstract class Pane extends Disposable implements IView {
 		this.updateHeader();
 	}
 
-	protected updateHeader(): void {
+	protected updateHeader(): codemavi {
 		if (!this.header) {
 			return;
 		}
@@ -346,9 +346,9 @@ export abstract class Pane extends Disposable implements IView {
 		this.element.style.borderLeft = this.styles.leftBorder && this.orientation === Orientation.HORIZONTAL ? `1px solid ${this.styles.leftBorder}` : '';
 	}
 
-	protected abstract renderHeader(container: HTMLElement): void;
-	protected abstract renderBody(container: HTMLElement): void;
-	protected abstract layoutBody(height: number, width: number): void;
+	protected abstract renderHeader(container: HTMLElement): codemavi;
+	protected abstract renderBody(container: HTMLElement): codemavi;
+	protected abstract layoutBody(height: number, width: number): codemavi;
 }
 
 interface IDndContext {
@@ -375,7 +375,7 @@ class PaneDraggable extends Disposable {
 		this._register(addDisposableListener(pane.dropTargetElement, 'drop', e => this.onDrop(e)));
 	}
 
-	private onDragStart(e: DragEvent): void {
+	private onDragStart(e: DragEvent): codemavi {
 		if (!this.dnd.canDrag(this.pane) || !e.dataTransfer) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -396,7 +396,7 @@ class PaneDraggable extends Disposable {
 		this.context.draggable = this;
 	}
 
-	private onDragEnter(e: DragEvent): void {
+	private onDragEnter(e: DragEvent): codemavi {
 		if (!this.context.draggable || this.context.draggable === this) {
 			return;
 		}
@@ -409,7 +409,7 @@ class PaneDraggable extends Disposable {
 		this.render();
 	}
 
-	private onDragLeave(e: DragEvent): void {
+	private onDragLeave(e: DragEvent): codemavi {
 		if (!this.context.draggable || this.context.draggable === this) {
 			return;
 		}
@@ -425,7 +425,7 @@ class PaneDraggable extends Disposable {
 		}
 	}
 
-	private onDragEnd(e: DragEvent): void {
+	private onDragEnd(e: DragEvent): codemavi {
 		if (!this.context.draggable) {
 			return;
 		}
@@ -435,7 +435,7 @@ class PaneDraggable extends Disposable {
 		this.context.draggable = null;
 	}
 
-	private onDrop(e: DragEvent): void {
+	private onDrop(e: DragEvent): codemavi {
 		if (!this.context.draggable) {
 			return;
 		}
@@ -452,7 +452,7 @@ class PaneDraggable extends Disposable {
 		this.context.draggable = null;
 	}
 
-	private render(): void {
+	private render(): codemavi {
 		let backgroundColor: string | null = null;
 
 		if (this.dragOverCounter > 0) {
@@ -528,7 +528,7 @@ export class PaneView extends Disposable {
 		this._register(Event.filter(onHeaderKeyDown, e => e.keyCode === KeyCode.DownArrow, eventDisposables)(() => this.focusNext()));
 	}
 
-	addPane(pane: Pane, size: number, index = this.splitview.length): void {
+	addPane(pane: Pane, size: number, index = this.splitview.length): codemavi {
 		const disposables = new DisposableStore();
 		pane.onDidChangeExpansionState(this.setupAnimation, this, disposables);
 
@@ -545,7 +545,7 @@ export class PaneView extends Disposable {
 		}
 	}
 
-	removePane(pane: Pane): void {
+	removePane(pane: Pane): codemavi {
 		const index = this.paneItems.findIndex(item => item.pane === pane);
 
 		if (index === -1) {
@@ -557,7 +557,7 @@ export class PaneView extends Disposable {
 		paneItem.disposable.dispose();
 	}
 
-	movePane(from: Pane, to: Pane): void {
+	movePane(from: Pane, to: Pane): codemavi {
 		const fromIndex = this.paneItems.findIndex(item => item.pane === from);
 		const toIndex = this.paneItems.findIndex(item => item.pane === to);
 
@@ -571,7 +571,7 @@ export class PaneView extends Disposable {
 		this.splitview.moveView(fromIndex, toIndex);
 	}
 
-	resizePane(pane: Pane, size: number): void {
+	resizePane(pane: Pane, size: number): codemavi {
 		const index = this.paneItems.findIndex(item => item.pane === pane);
 
 		if (index === -1) {
@@ -591,7 +591,7 @@ export class PaneView extends Disposable {
 		return this.splitview.getViewSize(index);
 	}
 
-	layout(height: number, width: number): void {
+	layout(height: number, width: number): codemavi {
 		this.orthogonalSize = this.orientation === Orientation.VERTICAL ? width : height;
 		this.size = this.orientation === Orientation.HORIZONTAL ? width : height;
 
@@ -616,7 +616,7 @@ export class PaneView extends Disposable {
 		}
 	}
 
-	flipOrientation(height: number, width: number): void {
+	flipOrientation(height: number, width: number): codemavi {
 		this.orientation = this.orientation === Orientation.VERTICAL ? Orientation.HORIZONTAL : Orientation.VERTICAL;
 		const paneSizes = this.paneItems.map(pane => this.getPaneSize(pane.pane));
 
@@ -643,7 +643,7 @@ export class PaneView extends Disposable {
 		this.splitview.layout(this.size);
 	}
 
-	private setupAnimation(): void {
+	private setupAnimation(): codemavi {
 		if (typeof this.animationTimer === 'number') {
 			getWindow(this.element).clearTimeout(this.animationTimer);
 		}
@@ -660,7 +660,7 @@ export class PaneView extends Disposable {
 		return [...this.element.querySelectorAll('.pane-header')] as HTMLElement[];
 	}
 
-	private focusPrevious(): void {
+	private focusPrevious(): codemavi {
 		const headers = this.getPaneHeaderElements();
 		const index = headers.indexOf(this.element.ownerDocument.activeElement as HTMLElement);
 
@@ -671,7 +671,7 @@ export class PaneView extends Disposable {
 		headers[Math.max(index - 1, 0)].focus();
 	}
 
-	private focusNext(): void {
+	private focusNext(): codemavi {
 		const headers = this.getPaneHeaderElements();
 		const index = headers.indexOf(this.element.ownerDocument.activeElement as HTMLElement);
 
@@ -682,7 +682,7 @@ export class PaneView extends Disposable {
 		headers[Math.min(index + 1, headers.length - 1)].focus();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.paneItems.forEach(i => i.disposable.dispose());

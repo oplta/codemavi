@@ -110,7 +110,7 @@ suite('InlineChatSession', function () {
 				override editingSessionsObs: IObservable<readonly IChatEditingSession[]> = constObservable([]);
 			}],
 			[IChatAccessibilityService, new class extends mock<IChatAccessibilityService>() {
-				override acceptResponse(response: IChatResponseViewModel | undefined, requestId: number): void { }
+				override acceptResponse(response: IChatResponseViewModel | undefined, requestId: number): codemavi { }
 				override acceptRequest(): number { return -1; }
 			}],
 			[IAccessibleViewService, new class extends mock<IAccessibleViewService>() {
@@ -492,7 +492,7 @@ suite('InlineChatSession', function () {
 	test('Pressing Escape after inline chat errored with "response filtered" leaves document dirty #7764', async function () {
 
 		const origValue = `class Foo {
-	private onError(error: string): void {
+	private onError(error: string): codemavi {
 		if (/The request timed out|The network connection was lost/i.test(error)) {
 			return;
 		}

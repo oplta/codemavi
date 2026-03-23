@@ -37,8 +37,8 @@ import assert from 'assert';
 		const certPEM = pki.certificateToPem(cert);
 		const privateKeyPEM = pki.privateKeyToPem(keys.privateKey);
 
-		let resolvePort: (port: number) => void;
-		let rejectPort: (err: any) => void;
+		let resolvePort: (port: number) => codemavi;
+		let rejectPort: (err: any) => codemavi;
 		const port = new Promise<number>((resolve, reject) => {
 			resolvePort = resolve;
 			rejectPort = reject;
@@ -61,7 +61,7 @@ import assert from 'assert';
 
 		try {
 			const portNumber = await port;
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				https.get(`https://127.0.0.1:${portNumber}`, { servername: 'localhost-proxy-test' }, res => {
 					if (res.statusCode === 200) {
 						resolve();
@@ -110,7 +110,7 @@ import assert from 'assert';
 			const change = waitForConfigChange('http.proxy');
 			await vscode.workspace.getConfiguration().update('http.proxy', `http://127.0.0.1:${proxyPort}`, vscode.ConfigurationTarget.Global);
 			await change;
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				https.get(url, res => {
 					if (res.statusCode === 418) {
 						resolve();
@@ -122,7 +122,7 @@ import assert from 'assert';
 			});
 
 			authEnabled = true;
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				https.get(url, res => {
 					if (res.statusCode === 407) {
 						resolve();
@@ -134,7 +134,7 @@ import assert from 'assert';
 			});
 
 			authOpts.realm = Buffer.from(JSON.stringify({ username: user, password: pass })).toString('base64');
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				https.get(url, res => {
 					if (res.statusCode === 204) {
 						resolve();
@@ -200,7 +200,7 @@ import assert from 'assert';
 	});
 
 	function waitForConfigChange(key: string) {
-		return new Promise<void>(resolve => {
+		return new Promise<codemavi>(resolve => {
 			const s = vscode.workspace.onDidChangeConfiguration(e => {
 				if (e.affectsConfiguration(key)) {
 					s.dispose();

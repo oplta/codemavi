@@ -41,11 +41,11 @@ class TestFindController extends CommonFindController {
 	) {
 		super(editor, contextKeyService, storageService, clipboardService, notificationService, hoverService);
 		this._findInputFocused = CONTEXT_FIND_INPUT_FOCUSED.bindTo(contextKeyService);
-		this._updateHistoryDelayer = new Delayer<void>(50);
+		this._updateHistoryDelayer = new Delayer<codemavi>(50);
 		this.hasFocus = false;
 	}
 
-	protected override async _start(opts: IFindStartOptions): Promise<void> {
+	protected override async _start(opts: IFindStartOptions): Promise<codemavi> {
 		await super._start(opts);
 
 		if (opts.shouldFocus !== FindStartFocusAction.NoFocusChange) {
@@ -61,7 +61,7 @@ function fromSelection(slc: Selection): number[] {
 	return [slc.startLineNumber, slc.startColumn, slc.endLineNumber, slc.endColumn];
 }
 
-function executeAction(instantiationService: IInstantiationService, editor: ICodeEditor, action: EditorAction, args?: any): Promise<void> {
+function executeAction(instantiationService: IInstantiationService, editor: ICodeEditor, action: EditorAction, args?: any): Promise<codemavi> {
 	return instantiationService.invokeFunction((accessor) => {
 		return Promise.resolve(action.runEditorCommand(accessor, editor, args));
 	});

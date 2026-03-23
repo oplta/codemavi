@@ -6,11 +6,11 @@
 import { IModelChangedEvent } from '../../model/mirrorTextModel.js';
 
 export interface IWorkerTextModelSyncChannelServer {
-	$acceptNewModel(data: IRawModelData): void;
+	$acceptNewModel(data: IRawModelData): codemavi;
 
-	$acceptModelChanged(strURL: string, e: IModelChangedEvent): void;
+	$acceptModelChanged(strURL: string, e: IModelChangedEvent): codemavi;
 
-	$acceptRemovedModel(strURL: string): void;
+	$acceptRemovedModel(strURL: string): codemavi;
 }
 
 export interface IRawModelData {

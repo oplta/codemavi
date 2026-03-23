@@ -28,11 +28,11 @@ export class SuggestAlternatives {
 		this._ckOtherSuggestions = SuggestAlternatives.OtherSuggestions.bindTo(contextKeyService);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.reset();
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		this._ckOtherSuggestions.reset();
 		this._listener?.dispose();
 		this._model = undefined;
@@ -40,7 +40,7 @@ export class SuggestAlternatives {
 		this._ignore = false;
 	}
 
-	set({ model, index }: ISelectedSuggestion, acceptNext: (selected: ISelectedSuggestion) => any): void {
+	set({ model, index }: ISelectedSuggestion, acceptNext: (selected: ISelectedSuggestion) => any): codemavi {
 
 		// no suggestions -> nothing to do
 		if (model.items.length === 0) {
@@ -80,15 +80,15 @@ export class SuggestAlternatives {
 		return newIndex;
 	}
 
-	next(): void {
+	next(): codemavi {
 		this._move(true);
 	}
 
-	prev(): void {
+	prev(): codemavi {
 		this._move(false);
 	}
 
-	private _move(fwd: boolean): void {
+	private _move(fwd: boolean): codemavi {
 		if (!this._model) {
 			// nothing to reason about
 			return;

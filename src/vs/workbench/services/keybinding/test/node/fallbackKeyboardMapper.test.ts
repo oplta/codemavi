@@ -16,7 +16,7 @@ suite('keyboardMapper - MAC fallback', () => {
 
 	const mapper = new FallbackKeyboardMapper(false, OperatingSystem.Macintosh);
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Macintosh)!, expected);
 	}
 
@@ -236,7 +236,7 @@ suite('keyboardMapper - LINUX fallback', () => {
 
 	const mapper = new FallbackKeyboardMapper(false, OperatingSystem.Linux);
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Linux)!, expected);
 	}
 

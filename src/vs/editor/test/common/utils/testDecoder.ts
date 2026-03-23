@@ -97,7 +97,7 @@ export class TestDecoder<T extends BaseToken, D extends BaseDecoder<T>> extends 
 		inputData: string | string[],
 		expectedTokens: readonly T[],
 		tokensConsumeMethod: TTokensConsumeMethod = this.randomTokensConsumeMethod(),
-	): Promise<void> {
+	): Promise<codemavi> {
 		try {
 			// initiate the data sending flow
 			this.sendData(inputData);

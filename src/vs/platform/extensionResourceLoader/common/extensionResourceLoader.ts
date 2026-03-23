@@ -68,7 +68,7 @@ export abstract class AbstractExtensionResourceLoaderService extends Disposable 
 
 	readonly _serviceBrand: undefined;
 
-	private readonly _initPromise: Promise<void>;
+	private readonly _initPromise: Promise<codemavi>;
 
 	private _extensionGalleryResourceUrlTemplate: string | undefined;
 	private _extensionGalleryAuthority: string | undefined;
@@ -86,7 +86,7 @@ export abstract class AbstractExtensionResourceLoaderService extends Disposable 
 		this._initPromise = this._init();
 	}
 
-	private async _init(): Promise<void> {
+	private async _init(): Promise<codemavi> {
 		try {
 			const manifest = await this._extensionGalleryManifestService.getExtensionGalleryManifest();
 			this.resolve(manifest);
@@ -96,7 +96,7 @@ export abstract class AbstractExtensionResourceLoaderService extends Disposable 
 		}
 	}
 
-	private resolve(manifest: IExtensionGalleryManifest | null): void {
+	private resolve(manifest: IExtensionGalleryManifest | null): codemavi {
 		this._extensionGalleryResourceUrlTemplate = manifest ? getExtensionGalleryManifestResourceUri(manifest, ExtensionGalleryResourceType.ExtensionResourceUri) : undefined;
 		this._extensionGalleryAuthority = this._extensionGalleryResourceUrlTemplate ? this._getExtensionGalleryAuthority(URI.parse(this._extensionGalleryResourceUrlTemplate)) : undefined;
 	}

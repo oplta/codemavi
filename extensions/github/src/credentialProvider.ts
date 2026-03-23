@@ -51,13 +51,13 @@ export class GithubCredentialProviderManager {
 		this.refresh();
 	}
 
-	private refresh(): void {
+	private refresh(): codemavi {
 		const config = workspace.getConfiguration('github', null);
 		const enabled = config.get<boolean>('gitAuthentication', true);
 		this.enabled = !!enabled;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.enabled = false;
 		this.disposable.dispose();
 	}

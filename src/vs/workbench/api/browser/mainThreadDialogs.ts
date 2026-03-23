@@ -18,7 +18,7 @@ export class MainThreadDialogs implements MainThreadDiaglogsShape {
 		//
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		//
 	}
 

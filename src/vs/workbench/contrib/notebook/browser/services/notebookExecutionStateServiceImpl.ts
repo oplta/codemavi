@@ -53,7 +53,7 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		return this._lastCompletedCellHandles.get(notebook);
 	}
 
-	forceCancelNotebookExecutions(notebookUri: URI): void {
+	forceCancelNotebookExecutions(notebookUri: URI): codemavi {
 		const notebookCellExecutions = this._executions.get(notebookUri);
 		if (notebookCellExecutions) {
 			for (const exe of notebookCellExecutions.values()) {
@@ -92,11 +92,11 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		return exeMap ? new Map(exeMap.entries()) : undefined;
 	}
 
-	private _onCellExecutionDidChange(notebookUri: URI, cellHandle: number, exe: CellExecution): void {
+	private _onCellExecutionDidChange(notebookUri: URI, cellHandle: number, exe: CellExecution): codemavi {
 		this._onDidChangeExecution.fire(new NotebookCellExecutionEvent(notebookUri, cellHandle, exe));
 	}
 
-	private _onCellExecutionDidComplete(notebookUri: URI, cellHandle: number, exe: CellExecution, lastRunSuccess?: boolean): void {
+	private _onCellExecutionDidComplete(notebookUri: URI, cellHandle: number, exe: CellExecution, lastRunSuccess?: boolean): codemavi {
 		const notebookExecutions = this._executions.get(notebookUri);
 		if (!notebookExecutions) {
 			this._logService.debug(`NotebookExecutionStateService#_onCellExecutionDidComplete - unknown notebook ${notebookUri.toString()}`);
@@ -130,11 +130,11 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		this._onDidChangeExecution.fire(new NotebookCellExecutionEvent(notebookUri, cellHandle));
 	}
 
-	private _onExecutionDidChange(notebookUri: URI, exe: NotebookExecution): void {
+	private _onExecutionDidChange(notebookUri: URI, exe: NotebookExecution): codemavi {
 		this._onDidChangeExecution.fire(new NotebookExecutionEvent(notebookUri, exe));
 	}
 
-	private _onExecutionDidComplete(notebookUri: URI): void {
+	private _onExecutionDidComplete(notebookUri: URI): codemavi {
 		const disposables = this._notebookExecutions.get(notebookUri);
 		if (!Array.isArray(disposables)) {
 			this._logService.debug(`NotebookExecutionStateService#_onCellExecutionDidComplete - unknown notebook ${notebookUri.toString()}`);
@@ -212,7 +212,7 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		return [exe, disposable];
 	}
 
-	private _setLastFailedCell(notebookURI: URI, cellHandle: number): void {
+	private _setLastFailedCell(notebookURI: URI, cellHandle: number): codemavi {
 		const prevLastFailedCellInfo = this._lastFailedCells.get(notebookURI);
 		const notebook = this._notebookService.getNotebookTextModel(notebookURI);
 		if (!notebook) {
@@ -230,7 +230,7 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		this._onDidChangeLastRunFailState.fire({ visible: true, notebook: notebookURI });
 	}
 
-	private _setLastFailedCellVisibility(notebookURI: URI, visible: boolean): void {
+	private _setLastFailedCellVisibility(notebookURI: URI, visible: boolean): codemavi {
 		const lastFailedCellInfo = this._lastFailedCells.get(notebookURI);
 
 		if (lastFailedCellInfo) {
@@ -244,7 +244,7 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		this._onDidChangeLastRunFailState.fire({ visible: visible, notebook: notebookURI });
 	}
 
-	private _clearLastFailedCell(notebookURI: URI): void {
+	private _clearLastFailedCell(notebookURI: URI): codemavi {
 		const lastFailedCellInfo = this._lastFailedCells.get(notebookURI);
 
 		if (lastFailedCellInfo) {
@@ -276,7 +276,7 @@ export class NotebookExecutionStateService extends Disposable implements INotebo
 		});
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._executions.forEach(executionMap => {
 			executionMap.forEach(execution => execution.dispose());
@@ -348,18 +348,18 @@ class NotebookExecutionListeners extends Disposable {
 		this._register(this._notebookModel.onWillDispose(() => this.onWillDisposeDocument()));
 	}
 
-	private cancelAll(): void {
+	private cancelAll(): codemavi {
 		this._logService.debug(`NotebookExecutionListeners#cancelAll`);
 		const exes = this._notebookExecutionStateService.getCellExecutionsForNotebook(this._notebookModel.uri);
 		this._notebookExecutionService.cancelNotebookCellHandles(this._notebookModel, exes.map(exe => exe.cellHandle));
 	}
 
-	private onWillDisposeDocument(): void {
+	private onWillDisposeDocument(): codemavi {
 		this._logService.debug(`NotebookExecution#onWillDisposeDocument`);
 		this.cancelAll();
 	}
 
-	private onWillAddRemoveCells(e: NotebookTextModelWillAddRemoveEvent): void {
+	private onWillAddRemoveCells(e: NotebookTextModelWillAddRemoveEvent): codemavi {
 		const notebookExes = this._notebookExecutionStateService.getCellExecutionsByHandleForNotebook(this._notebookModel.uri);
 
 		const executingDeletedHandles = new Set<number>();
@@ -428,7 +428,7 @@ function updateToEdit(update: ICellExecuteUpdate, cellHandle: number): ICellEdit
 }
 
 class CellExecution extends Disposable implements INotebookCellExecution {
-	private readonly _onDidUpdate = this._register(new Emitter<void>());
+	private readonly _onDidUpdate = this._register(new Emitter<codemavi>());
 	readonly onDidUpdate = this._onDidUpdate.event;
 
 	private readonly _onDidComplete = this._register(new Emitter<boolean | undefined>());
@@ -482,7 +482,7 @@ class CellExecution extends Disposable implements INotebookCellExecution {
 		return `${this._notebookModel.uri.toString()}, ${this.cellHandle}`;
 	}
 
-	private logUpdates(updates: ICellExecuteUpdate[]): void {
+	private logUpdates(updates: ICellExecuteUpdate[]): codemavi {
 		const updateTypes = updates.map(u => CellExecutionUpdateType[u.editType]).join(', ');
 		this._logService.debug(`CellExecution#updateExecution ${this.getCellLog()}, [${updateTypes}]`);
 	}
@@ -493,7 +493,7 @@ class CellExecution extends Disposable implements INotebookCellExecution {
 		this._onDidUpdate.fire();
 	}
 
-	update(updates: ICellExecuteUpdate[]): void {
+	update(updates: ICellExecuteUpdate[]): codemavi {
 		this.logUpdates(updates);
 		if (updates.some(u => u.editType === CellExecutionUpdateType.ExecutionState)) {
 			this._state = NotebookCellExecutionState.Executing;
@@ -521,7 +521,7 @@ class CellExecution extends Disposable implements INotebookCellExecution {
 		}
 	}
 
-	complete(completionData: ICellExecutionComplete): void {
+	complete(completionData: ICellExecutionComplete): codemavi {
 		const cellModel = this._notebookModel.cells.find(c => c.handle === this.cellHandle);
 		if (!cellModel) {
 			this._logService.debug(`CellExecution#complete, completing cell not in notebook: ${this._notebookModel.uri.toString()}, ${this.cellHandle}`);
@@ -542,16 +542,16 @@ class CellExecution extends Disposable implements INotebookCellExecution {
 		this._onDidComplete.fire(completionData.lastRunSuccess);
 	}
 
-	private _applyExecutionEdits(edits: ICellEditOperation[]): void {
+	private _applyExecutionEdits(edits: ICellEditOperation[]): codemavi {
 		this._notebookModel.applyEdits(edits, true, undefined, () => undefined, undefined, false);
 	}
 }
 
 class NotebookExecution extends Disposable implements INotebookExecution {
-	private readonly _onDidUpdate = this._register(new Emitter<void>());
+	private readonly _onDidUpdate = this._register(new Emitter<codemavi>());
 	readonly onDidUpdate = this._onDidUpdate.event;
 
-	private readonly _onDidComplete = this._register(new Emitter<void>());
+	private readonly _onDidComplete = this._register(new Emitter<codemavi>());
 	readonly onDidComplete = this._onDidComplete.event;
 
 	private _state: NotebookExecutionState = NotebookExecutionState.Unconfirmed;
@@ -580,13 +580,13 @@ class NotebookExecution extends Disposable implements INotebookExecution {
 		this._onDidUpdate.fire();
 	}
 
-	begin(): void {
+	begin(): codemavi {
 		this.debug(`Execution#begin`);
 		this._state = NotebookExecutionState.Executing;
 		this._onDidUpdate.fire();
 	}
 
-	complete(): void {
+	complete(): codemavi {
 		this.debug(`Execution#begin`);
 		this._state = NotebookExecutionState.Unconfirmed;
 		this._onDidComplete.fire();

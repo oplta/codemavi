@@ -38,7 +38,7 @@ const enum LanguageId {
 	TypeScript = 'ts-test'
 }
 
-function forceTokenizationFromLineToLine(model: ITextModel, startLine: number, endLine: number): void {
+function forceTokenizationFromLineToLine(model: ITextModel, startLine: number, endLine: number): codemavi {
 	for (let line = startLine; line <= endLine; line++) {
 		model.tokenization.forceTokenization(line);
 	}
@@ -195,8 +195,8 @@ suite('Auto-Reindentation - TypeScript/JavaScript', () => {
 	 *  - In (https://macromates.com/manual/en/appendix)
 	 *    This regex means that we increase the indent when we have any characters followed by the opening brace, followed by characters
 	 *    except for closing brace }, double quotes " or single quote '.
-	 *    The } is checked in order to avoid the indentation in the following case `int arr[] = { 1, 2, 3 };`
-	 *    The double quote and single quote are checked in order to avoid the indentation in the following case: str = "foo {";
+	 *    The } is checked in order to acodemavi the indentation in the following case `int arr[] = { 1, 2, 3 };`
+	 *    The double quote and single quote are checked in order to acodemavi the indentation in the following case: str = "foo {";
 	 */
 
 	test('Issue #25437', () => {

@@ -35,7 +35,7 @@ export function createLazyClientHost(
 		experimentTelemetryReporter: IExperimentationTelemetryReporter | undefined;
 		logger: Logger;
 	},
-	onCompletionAccepted: (item: vscode.CompletionItem) => void,
+	onCompletionAccepted: (item: vscode.CompletionItem) => codemavi,
 ): Lazy<TypeScriptServiceClientHost> {
 	return new Lazy(() => {
 		const clientHost = new TypeScriptServiceClientHost(
@@ -55,7 +55,7 @@ export function lazilyActivateClient(
 	lazyClientHost: Lazy<TypeScriptServiceClientHost>,
 	pluginManager: PluginManager,
 	activeJsTsEditorTracker: ActiveJsTsEditorTracker,
-	onActivate: () => Promise<void> = () => Promise.resolve(),
+	onActivate: () => Promise<codemavi> = () => Promise.resolve(),
 ): vscode.Disposable {
 	const disposables: vscode.Disposable[] = [];
 
@@ -71,7 +71,7 @@ export function lazilyActivateClient(
 
 			onActivate().then(() => {
 				// Force activation
-				void lazyClientHost.value;
+				codemavi lazyClientHost.value;
 
 				disposables.push(new ManagedFileContextManager(activeJsTsEditorTracker));
 			});

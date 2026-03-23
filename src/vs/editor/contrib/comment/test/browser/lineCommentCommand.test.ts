@@ -19,7 +19,7 @@ import { testCommand } from '../../../../test/browser/testCommand.js';
 import { TestLanguageConfigurationService } from '../../../../test/common/modes/testLanguageConfigurationService.js';
 import { IInstantiationService, ServicesAccessor } from '../../../../../platform/instantiation/common/instantiation.js';
 
-function createTestCommandHelper(commentsConfig: CommentRule, commandFactory: (accessor: ServicesAccessor, selection: Selection) => ICommand): (lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection) => void {
+function createTestCommandHelper(commentsConfig: CommentRule, commandFactory: (accessor: ServicesAccessor, selection: Selection) => ICommand): (lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection) => codemavi {
 	return (lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection) => {
 		const languageId = 'commentMode';
 		const prepare = (accessor: ServicesAccessor, disposables: DisposableStore) => {
@@ -1146,7 +1146,7 @@ suite('Editor Contrib - Line Comment in mixed modes', () => {
 		}
 	}
 
-	function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
+	function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
 
 		const setup = (accessor: ServicesAccessor, disposables: DisposableStore) => {
 			const instantiationService = accessor.get(IInstantiationService);

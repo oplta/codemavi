@@ -33,11 +33,11 @@ suite('debugConfigurationManager', () => {
 			return Promise.resolve(undefined);
 		},
 
-		activateDebuggers(activationEvent: string, debugType?: string): Promise<void> {
+		activateDebuggers(activationEvent: string, debugType?: string): Promise<codemavi> {
 			return Promise.resolve();
 		},
 
-		get onDidDebuggersExtPointRead(): Event<void> {
+		get onDidDebuggersExtPointRead(): Event<codemavi> {
 			return Event.None;
 		}
 	};

@@ -61,7 +61,7 @@ export class FindModel extends Disposable {
 	protected _findMatchesStarts: PrefixSumComputer | null = null;
 	private _currentMatch: number = -1;
 
-	private readonly _throttledDelayer: Delayer<void>;
+	private readonly _throttledDelayer: Delayer<codemavi>;
 	private _computePromise: CancelablePromise<CellFindMatchWithIndex[] | null> | null = null;
 	private readonly _modelDisposable = this._register(new DisposableStore());
 	private _findMatchDecorationModel: FindMatchDecorationModel;
@@ -431,7 +431,7 @@ export class FindModel extends Disposable {
 		}
 	}
 
-	private set(cellFindMatches: CellFindMatchWithIndex[] | null, autoStart: boolean): void {
+	private set(cellFindMatches: CellFindMatchWithIndex[] | null, autoStart: boolean): codemavi {
 		if (!cellFindMatches || !cellFindMatches.length) {
 			this._findMatches = [];
 			this._findMatchDecorationModel.setAllFindMatchesDecorations([]);

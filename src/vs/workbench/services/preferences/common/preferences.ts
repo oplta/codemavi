@@ -191,14 +191,14 @@ export interface IFilterMetadata {
 export interface IPreferencesEditorModel<T> {
 	uri?: URI;
 	getPreference(key: string): T | undefined;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export type IGroupFilter = (group: ISettingsGroup) => boolean | null;
 export type ISettingMatcher = (setting: ISetting, group: ISettingsGroup) => { matches: IRange[]; matchType: SettingMatchType; keyMatchScore: number; score: number } | null;
 
 export interface ISettingsEditorModel extends IPreferencesEditorModel<ISetting> {
-	readonly onDidChangeGroups: Event<void>;
+	readonly onDidChangeGroups: Event<codemavi>;
 	settingsGroups: ISettingsGroup[];
 	filterSettings(filter: string, groupFilter: IGroupFilter, settingMatcher: ISettingMatcher): ISettingMatch[];
 	updateResultGroup(id: string, resultGroup: ISearchResultGroup | undefined): IFilterResult | undefined;
@@ -269,7 +269,7 @@ export interface IPreferencesService {
 	openRemoteSettings(options?: IOpenSettingsOptions): Promise<IEditorPane | undefined>;
 	openWorkspaceSettings(options?: IOpenSettingsOptions): Promise<IEditorPane | undefined>;
 	openFolderSettings(options: IOpenSettingsOptions & { folderUri: IOpenSettingsOptions['folderUri'] }): Promise<IEditorPane | undefined>;
-	openGlobalKeybindingSettings(textual: boolean, options?: IOpenKeybindingsEditorOptions): Promise<void>;
+	openGlobalKeybindingSettings(textual: boolean, options?: IOpenKeybindingsEditorOptions): Promise<codemavi>;
 	openDefaultKeybindingsFile(): Promise<IEditorPane | undefined>;
 	openLanguageSpecificSettings(languageId: string, options?: IOpenSettingsOptions): Promise<IEditorPane | undefined>;
 	getEditableSettingsURI(configurationTarget: ConfigurationTarget, resource?: URI): Promise<URI | null>;
@@ -319,28 +319,28 @@ export interface IKeybindingsEditorPane extends IEditorPane {
 
 	readonly activeKeybindingEntry: IKeybindingItemEntry | null;
 	readonly onDefineWhenExpression: Event<IKeybindingItemEntry>;
-	readonly onLayout: Event<void>;
+	readonly onLayout: Event<codemavi>;
 
-	search(filter: string): void;
-	focusSearch(): void;
-	clearSearchResults(): void;
-	focusKeybindings(): void;
-	recordSearchKeys(): void;
-	toggleSortByPrecedence(): void;
-	selectKeybinding(keybindingEntry: IKeybindingItemEntry): void;
-	defineKeybinding(keybindingEntry: IKeybindingItemEntry, add: boolean): Promise<void>;
-	defineWhenExpression(keybindingEntry: IKeybindingItemEntry): void;
+	search(filter: string): codemavi;
+	focusSearch(): codemavi;
+	clearSearchResults(): codemavi;
+	focusKeybindings(): codemavi;
+	recordSearchKeys(): codemavi;
+	toggleSortByPrecedence(): codemavi;
+	selectKeybinding(keybindingEntry: IKeybindingItemEntry): codemavi;
+	defineKeybinding(keybindingEntry: IKeybindingItemEntry, add: boolean): Promise<codemavi>;
+	defineWhenExpression(keybindingEntry: IKeybindingItemEntry): codemavi;
 	updateKeybinding(keybindingEntry: IKeybindingItemEntry, key: string, when: string | undefined): Promise<any>;
 	removeKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<any>;
 	resetKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<any>;
-	copyKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<void>;
-	copyKeybindingCommand(keybindingEntry: IKeybindingItemEntry): Promise<void>;
-	showSimilarKeybindings(keybindingEntry: IKeybindingItemEntry): void;
+	copyKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<codemavi>;
+	copyKeybindingCommand(keybindingEntry: IKeybindingItemEntry): Promise<codemavi>;
+	showSimilarKeybindings(keybindingEntry: IKeybindingItemEntry): codemavi;
 }
 
 export const DEFINE_KEYBINDING_EDITOR_CONTRIB_ID = 'editor.contrib.defineKeybinding';
 export interface IDefineKeybindingEditorContribution extends IEditorContribution {
-	showDefineKeybindingWidget(): void;
+	showDefineKeybindingWidget(): codemavi;
 }
 
 export const FOLDER_SETTINGS_PATH = '.vscode/settings.json';

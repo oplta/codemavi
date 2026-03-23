@@ -58,7 +58,7 @@ export class ExtensionDependencyChecker extends Disposable implements IWorkbench
 		return [...missingDependencies.values()];
 	}
 
-	private async installMissingDependencies(): Promise<void> {
+	private async installMissingDependencies(): Promise<codemavi> {
 		const missingDependencies = await this.getUninstalledMissingDependencies();
 		if (missingDependencies.length) {
 			const extensions = await this.extensionsWorkbenchService.getExtensions(missingDependencies.map(id => ({ id })), CancellationToken.None);

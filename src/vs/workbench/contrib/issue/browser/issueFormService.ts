@@ -50,7 +50,7 @@ export class IssueFormService implements IIssueFormService {
 		@IHostService protected readonly hostService: IHostService
 	) { }
 
-	async openReporter(data: IssueReporterData): Promise<void> {
+	async openReporter(data: IssueReporterData): Promise<codemavi> {
 		if (this.hasToReload(data)) {
 			return;
 		}
@@ -63,7 +63,7 @@ export class IssueFormService implements IIssueFormService {
 		}
 	}
 
-	async openAuxIssueReporter(data: IssueReporterData, bounds?: IRectangle): Promise<void> {
+	async openAuxIssueReporter(data: IssueReporterData, bounds?: IRectangle): Promise<codemavi> {
 
 		let issueReporterBounds: Partial<IRectangle> = { width: 700, height: 800 };
 
@@ -144,11 +144,11 @@ export class IssueFormService implements IIssueFormService {
 
 	//#region used by issue reporter
 
-	async closeReporter(): Promise<void> {
+	async closeReporter(): Promise<codemavi> {
 		this.issueReporterWindow?.close();
 	}
 
-	async reloadWithExtensionsDisabled(): Promise<void> {
+	async reloadWithExtensionsDisabled(): Promise<codemavi> {
 		if (this.issueReporterWindow) {
 			try {
 				await this.hostService.reload({ disableExtensions: true });
@@ -158,7 +158,7 @@ export class IssueFormService implements IIssueFormService {
 		}
 	}
 
-	async showConfirmCloseDialog(): Promise<void> {
+	async showConfirmCloseDialog(): Promise<codemavi> {
 		await this.dialogService.prompt({
 			type: Severity.Warning,
 			message: localize('confirmCloseIssueReporter', "Your input will not be saved. Are you sure you want to close this window?"),

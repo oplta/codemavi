@@ -89,7 +89,7 @@ onceDocumentLoaded(() => {
 
 	toggleFocusLockIndicatorEnabled(settings.focusLockIndicatorEnabled);
 
-	function navigateTo(rawUrl: string): void {
+	function navigateTo(rawUrl: string): codemavi {
 		try {
 			const url = new URL(rawUrl);
 

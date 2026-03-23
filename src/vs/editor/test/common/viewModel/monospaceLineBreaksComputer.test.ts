@@ -126,7 +126,7 @@ suite('Editor ViewModel - MonospaceLineBreaksComputer', () => {
 		assertLineBreaks(factory, 4, 5, 'aa.|(.).|aaa');
 	});
 
-	function assertLineBreakDataEqual(a: ModelLineProjectionData | null, b: ModelLineProjectionData | null): void {
+	function assertLineBreakDataEqual(a: ModelLineProjectionData | null, b: ModelLineProjectionData | null): codemavi {
 		if (!a || !b) {
 			assert.deepStrictEqual(a, b);
 			return;
@@ -139,7 +139,7 @@ suite('Editor ViewModel - MonospaceLineBreaksComputer', () => {
 		}
 	}
 
-	function assertIncrementalLineBreaks(factory: ILineBreaksComputerFactory, text: string, tabSize: number, breakAfter1: number, annotatedText1: string, breakAfter2: number, annotatedText2: string, wrappingIndent = WrappingIndent.None, columnsForFullWidthChar: number = 2): void {
+	function assertIncrementalLineBreaks(factory: ILineBreaksComputerFactory, text: string, tabSize: number, breakAfter1: number, annotatedText1: string, breakAfter2: number, annotatedText2: string, wrappingIndent = WrappingIndent.None, columnsForFullWidthChar: number = 2): codemavi {
 		// sanity check the test
 		assert.strictEqual(text, parseAnnotatedText(annotatedText1).text);
 		assert.strictEqual(text, parseAnnotatedText(annotatedText2).text);

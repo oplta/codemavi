@@ -8,7 +8,7 @@ import { ICoordinatesConverter } from '../viewModel.js';
 import { CursorConfiguration, ICursorSimpleModel } from '../cursorCommon.js';
 
 export class CursorContext {
-	_cursorContextBrand: void = undefined;
+	_cursorContextBrand: codemavi = undefined;
 
 	public readonly model: ITextModel;
 	public readonly viewModel: ICursorSimpleModel;

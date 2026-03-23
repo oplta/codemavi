@@ -288,7 +288,7 @@ class TscTaskProvider extends Disposable implements vscode.TaskProvider {
 		return project.posixPath;
 	}
 
-	private onConfigurationChanged(): void {
+	private onConfigurationChanged(): codemavi {
 		const type = vscode.workspace.getConfiguration('typescript.tsc').get<AutoDetect>('autoDetect');
 		this.autoDetect = typeof type === 'undefined' ? AutoDetect.on : type;
 	}

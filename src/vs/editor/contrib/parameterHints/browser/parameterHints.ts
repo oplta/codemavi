@@ -55,19 +55,19 @@ export class ParameterHintsController extends Disposable implements IEditorContr
 		this.widget = new Lazy(() => this._register(instantiationService.createInstance(ParameterHintsWidget, this.editor, this.model)));
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		this.model.cancel();
 	}
 
-	previous(): void {
+	previous(): codemavi {
 		this.widget.rawValue?.previous();
 	}
 
-	next(): void {
+	next(): codemavi {
 		this.widget.rawValue?.next();
 	}
 
-	trigger(context: TriggerContext): void {
+	trigger(context: TriggerContext): codemavi {
 		this.model.trigger(context, 0);
 	}
 }
@@ -87,7 +87,7 @@ export class TriggerParameterHintsAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = ParameterHintsController.get(editor);
 		controller?.trigger({
 			triggerKind: languages.SignatureHelpTriggerKind.Invoke

@@ -14,7 +14,7 @@ import { getNodeFileFS } from '../node/nodeFs';
 
 suite('HTML Embedded Formatting', () => {
 
-	async function assertFormat(value: string, expected: string, options?: any, formatOptions?: FormattingOptions, message?: string): Promise<void> {
+	async function assertFormat(value: string, expected: string, options?: any, formatOptions?: FormattingOptions, message?: string): Promise<codemavi> {
 		const workspace = {
 			settings: options,
 			folders: [{ name: 'foo', uri: 'test://foo' }]
@@ -44,7 +44,7 @@ suite('HTML Embedded Formatting', () => {
 		assert.strictEqual(actual, expected, message);
 	}
 
-	async function assertFormatWithFixture(fixtureName: string, expectedPath: string, options?: any, formatOptions?: FormattingOptions): Promise<void> {
+	async function assertFormatWithFixture(fixtureName: string, expectedPath: string, options?: any, formatOptions?: FormattingOptions): Promise<codemavi> {
 		const input = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'test', 'fixtures', 'inputs', fixtureName)).toString().replace(/\r\n/mg, '\n');
 		const expected = fs.readFileSync(path.join(__dirname, '..', '..', 'src', 'test', 'fixtures', 'expected', expectedPath)).toString().replace(/\r\n/mg, '\n');
 		await assertFormat(input, expected, options, formatOptions, expectedPath);

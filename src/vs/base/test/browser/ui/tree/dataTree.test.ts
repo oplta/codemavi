@@ -45,15 +45,15 @@ suite('DataTree', function () {
 			getTemplateId(): string { return 'default'; }
 		};
 
-		const renderer = new class implements ITreeRenderer<E, void, HTMLElement> {
+		const renderer = new class implements ITreeRenderer<E, codemavi, HTMLElement> {
 			readonly templateId = 'default';
 			renderTemplate(container: HTMLElement): HTMLElement {
 				return container;
 			}
-			renderElement(element: ITreeNode<E, void>, index: number, templateData: HTMLElement): void {
+			renderElement(element: ITreeNode<E, codemavi>, index: number, templateData: HTMLElement): codemavi {
 				templateData.textContent = `${element.element.value}`;
 			}
-			disposeTemplate(): void { }
+			disposeTemplate(): codemavi { }
 		};
 
 		const dataSource = new class implements IDataSource<E, E> {

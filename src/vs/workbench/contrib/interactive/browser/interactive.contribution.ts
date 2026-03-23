@@ -204,7 +204,7 @@ class InteractiveInputContentProvider implements ITextModelContentProvider {
 		this._registration = textModelService.registerTextModelContentProvider(Schemas.vscodeInteractiveInput, this);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._registration.dispose();
 	}
 
@@ -259,7 +259,7 @@ class InteractiveWindowWorkingCopyEditorHandler extends Disposable implements IW
 		return createEditor(workingCopy.resource, this._instantiationService);
 	}
 
-	private async _installHandler(): Promise<void> {
+	private async _installHandler(): Promise<codemavi> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 
 		this._register(this._workingCopyEditorService.registerHandler(this));
@@ -496,7 +496,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<void> {
+	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const bulkEditService = accessor.get(IBulkEditService);
 		const historyService = accessor.get(IInteractiveHistoryService);
@@ -592,7 +592,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 
@@ -629,7 +629,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const historyService = accessor.get(IInteractiveHistoryService);
 		const editorControl = editorService.activeEditorPane?.getControl();
@@ -670,7 +670,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const historyService = accessor.get(IInteractiveHistoryService);
 		const editorControl = editorService.activeEditorPane?.getControl();
@@ -705,7 +705,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 
@@ -734,7 +734,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 
@@ -762,7 +762,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 
@@ -798,7 +798,7 @@ registerAction2(class extends Action2 {
 				when: ContextKeyExpr.equals('activeEditor', 'workbench.editor.interactive'),
 			},
 			keybinding: [{
-				// On mac, require that the cursor is at the top of the input, to avoid stealing cmd+up to move the cursor to the top
+				// On mac, require that the cursor is at the top of the input, to acodemavi stealing cmd+up to move the cursor to the top
 				when: ContextKeyExpr.and(
 					INTERACTIVE_INPUT_CURSOR_BOUNDARY.notEqualsTo('bottom'),
 					INTERACTIVE_INPUT_CURSOR_BOUNDARY.notEqualsTo('none')),
@@ -814,7 +814,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 

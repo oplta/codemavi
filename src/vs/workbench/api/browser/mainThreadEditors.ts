@@ -77,7 +77,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		this._registeredDecorationTypes = Object.create(null);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		Object.keys(this._textEditorsListenersMap).forEach((editorId) => {
 			dispose(this._textEditorsListenersMap[editorId]);
 		});
@@ -89,7 +89,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		this._registeredDecorationTypes = Object.create(null);
 	}
 
-	handleTextEditorAdded(textEditor: MainThreadTextEditor): void {
+	handleTextEditorAdded(textEditor: MainThreadTextEditor): codemavi {
 		const id = textEditor.getId();
 		const toDispose: IDisposable[] = [];
 		toDispose.push(textEditor.onPropertiesChanged((data) => {
@@ -105,12 +105,12 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		this._textEditorsListenersMap[id] = toDispose;
 	}
 
-	handleTextEditorRemoved(id: string): void {
+	handleTextEditorRemoved(id: string): codemavi {
 		dispose(this._textEditorsListenersMap[id]);
 		delete this._textEditorsListenersMap[id];
 	}
 
-	private _updateActiveAndVisibleTextEditors(): void {
+	private _updateActiveAndVisibleTextEditors(): codemavi {
 
 		// editor columns
 		const editorPositionData = this._getTextEditorPositionData();
@@ -267,7 +267,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return codeEditor ? this._editorLocator.getIdOfCodeEditor(codeEditor) : undefined;
 	}
 
-	async $tryShowEditor(id: string, position?: EditorGroupColumn): Promise<void> {
+	async $tryShowEditor(id: string, position?: EditorGroupColumn): Promise<codemavi> {
 		const mainThreadEditor = this._editorLocator.getEditor(id);
 		if (mainThreadEditor) {
 			const model = mainThreadEditor.getModel();
@@ -279,7 +279,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		}
 	}
 
-	async $tryHideEditor(id: string): Promise<void> {
+	async $tryHideEditor(id: string): Promise<codemavi> {
 		const mainThreadEditor = this._editorLocator.getEditor(id);
 		if (mainThreadEditor) {
 			const editorPanes = this._editorService.visibleEditorPanes;
@@ -292,7 +292,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		}
 	}
 
-	$trySetSelections(id: string, selections: ISelection[]): Promise<void> {
+	$trySetSelections(id: string, selections: ISelection[]): Promise<codemavi> {
 		const editor = this._editorLocator.getEditor(id);
 		if (!editor) {
 			return Promise.reject(illegalArgument(`TextEditor(${id})`));
@@ -301,7 +301,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return Promise.resolve(undefined);
 	}
 
-	$trySetDecorations(id: string, key: string, ranges: IDecorationOptions[]): Promise<void> {
+	$trySetDecorations(id: string, key: string, ranges: IDecorationOptions[]): Promise<codemavi> {
 		key = `${this._instanceId}-${key}`;
 		const editor = this._editorLocator.getEditor(id);
 		if (!editor) {
@@ -311,7 +311,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return Promise.resolve(undefined);
 	}
 
-	$trySetDecorationsFast(id: string, key: string, ranges: number[]): Promise<void> {
+	$trySetDecorationsFast(id: string, key: string, ranges: number[]): Promise<codemavi> {
 		key = `${this._instanceId}-${key}`;
 		const editor = this._editorLocator.getEditor(id);
 		if (!editor) {
@@ -321,7 +321,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return Promise.resolve(undefined);
 	}
 
-	$tryRevealRange(id: string, range: IRange, revealType: TextEditorRevealType): Promise<void> {
+	$tryRevealRange(id: string, range: IRange, revealType: TextEditorRevealType): Promise<codemavi> {
 		const editor = this._editorLocator.getEditor(id);
 		if (!editor) {
 			return Promise.reject(illegalArgument(`TextEditor(${id})`));
@@ -330,7 +330,7 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return Promise.resolve();
 	}
 
-	$trySetOptions(id: string, options: ITextEditorConfigurationUpdate): Promise<void> {
+	$trySetOptions(id: string, options: ITextEditorConfigurationUpdate): Promise<codemavi> {
 		const editor = this._editorLocator.getEditor(id);
 		if (!editor) {
 			return Promise.reject(illegalArgument(`TextEditor(${id})`));
@@ -355,13 +355,13 @@ export class MainThreadTextEditors implements MainThreadTextEditorsShape {
 		return Promise.resolve(editor.insertSnippet(modelVersionId, template, ranges, opts));
 	}
 
-	$registerTextEditorDecorationType(extensionId: ExtensionIdentifier, key: string, options: IDecorationRenderOptions): void {
+	$registerTextEditorDecorationType(extensionId: ExtensionIdentifier, key: string, options: IDecorationRenderOptions): codemavi {
 		key = `${this._instanceId}-${key}`;
 		this._registeredDecorationTypes[key] = true;
 		this._codeEditorService.registerDecorationType(`exthost-api-${extensionId}`, key, options);
 	}
 
-	$removeTextEditorDecorationType(key: string): void {
+	$removeTextEditorDecorationType(key: string): codemavi {
 		key = `${this._instanceId}-${key}`;
 		delete this._registeredDecorationTypes[key];
 		this._codeEditorService.removeDecorationType(key);

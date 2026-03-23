@@ -66,7 +66,7 @@ export interface IUtilityProcessWorkerWorkbenchService {
 	/**
 	 * Notifies the service that the workbench window has restored.
 	 */
-	notifyRestored(): void;
+	notifyRestored(): codemavi;
 }
 
 export class UtilityProcessWorkerWorkbenchService extends Disposable implements IUtilityProcessWorkerWorkbenchService {
@@ -96,7 +96,7 @@ export class UtilityProcessWorkerWorkbenchService extends Disposable implements 
 	async createWorker(process: IUtilityProcessWorkerProcess): Promise<IUtilityProcessWorker> {
 		this.logService.trace('Renderer->UtilityProcess#createWorker');
 
-		// We want to avoid heavy utility process work to happen before
+		// We want to acodemavi heavy utility process work to happen before
 		// the window has restored. As such, make sure we await the
 		// `Restored` phase before making a connection attempt, but also
 		// add a timeout to be safe against possible deadlocks.
@@ -141,7 +141,7 @@ export class UtilityProcessWorkerWorkbenchService extends Disposable implements 
 		return { client, onDidTerminate, dispose: () => disposables.dispose() };
 	}
 
-	notifyRestored(): void {
+	notifyRestored(): codemavi {
 		if (!this.restoredBarrier.isOpen()) {
 			this.restoredBarrier.open();
 		}

@@ -77,7 +77,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 			experimentTelemetryReporter: IExperimentationTelemetryReporter | undefined;
 			logger: Logger;
 		},
-		onCompletionAccepted: (item: vscode.CompletionItem) => void,
+		onCompletionAccepted: (item: vscode.CompletionItem) => codemavi,
 	) {
 		super();
 
@@ -161,7 +161,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		this._register(new LogLevelMonitor(context));
 	}
 
-	private registerExtensionLanguageProvider(description: LanguageDescription, onCompletionAccepted: (item: vscode.CompletionItem) => void) {
+	private registerExtensionLanguageProvider(description: LanguageDescription, onCompletionAccepted: (item: vscode.CompletionItem) => codemavi) {
 		const manager = new LanguageProvider(this.client, description, this.commandManager, this.client.telemetryReporter, this.typingsStatus, this.fileConfigurationManager, onCompletionAccepted);
 		this.languages.push(manager);
 		this._register(manager);
@@ -179,7 +179,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		return this.client;
 	}
 
-	public reloadProjects(): void {
+	public reloadProjects(): codemavi {
 		this.client.executeWithoutWaitingForResponse('reloadProjects', null);
 		this.triggerAllDiagnostics();
 	}
@@ -192,7 +192,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		return this.client.bufferSyncSupport.handles(resource);
 	}
 
-	private configurationChanged(): void {
+	private configurationChanged(): codemavi {
 		const typescriptConfig = vscode.workspace.getConfiguration('typescript');
 
 		this.reportStyleCheckAsWarnings = typescriptConfig.get('reportStyleChecksAsWarnings', true);
@@ -225,7 +225,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		}
 	}
 
-	private populateService(): void {
+	private populateService(): codemavi {
 		this.fileConfigurationManager.reset();
 
 		for (const language of this.languagePerId.values()) {
@@ -238,7 +238,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		resource: vscode.Uri,
 		diagnostics: Proto.Diagnostic[],
 		spans: Proto.TextSpan[] | undefined,
-	): Promise<void> {
+	): Promise<codemavi> {
 		const language = await this.findLanguage(resource);
 		if (language) {
 			language.diagnosticsReceived(
@@ -249,7 +249,7 @@ export default class TypeScriptServiceClientHost extends Disposable {
 		}
 	}
 
-	private configFileDiagnosticsReceived(event: Proto.ConfigFileDiagnosticEvent): void {
+	private configFileDiagnosticsReceived(event: Proto.ConfigFileDiagnosticEvent): codemavi {
 		// See https://github.com/microsoft/TypeScript/issues/10384
 		const body = event.body;
 		if (!body?.diagnostics || !body.configFile) {

@@ -29,7 +29,7 @@ export class SortLinesCommand implements ICommand {
 		this.selectionId = null;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		const op = sortLines(model, this.selection, this.descending);
 		if (op) {
 			builder.addEditOperation(op.range, op.text);

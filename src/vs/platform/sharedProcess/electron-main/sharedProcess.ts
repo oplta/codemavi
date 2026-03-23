@@ -28,7 +28,7 @@ export class SharedProcess extends Disposable {
 	private utilityProcess: UtilityProcess | undefined = undefined;
 	private utilityProcessLogListener: IDisposable | undefined = undefined;
 
-	private readonly _onDidCrash = this._register(new Emitter<void>());
+	private readonly _onDidCrash = this._register(new Emitter<codemavi>());
 	readonly onDidCrash = this._onDidCrash.event;
 
 	constructor(
@@ -47,7 +47,7 @@ export class SharedProcess extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Shared process channel connections from workbench windows
 		validatedIpcMain.on(SharedProcessChannelConnection.request, (e, nonce: string) => this.onWindowConnection(e, nonce, SharedProcessChannelConnection.response));
@@ -59,7 +59,7 @@ export class SharedProcess extends Disposable {
 		this._register(this.lifecycleMainService.onWillShutdown(() => this.onWillShutdown()));
 	}
 
-	private async onWindowConnection(e: IpcMainEvent, nonce: string, responseChannel: string): Promise<void> {
+	private async onWindowConnection(e: IpcMainEvent, nonce: string, responseChannel: string): Promise<codemavi> {
 		this.logService.trace(`[SharedProcess] onWindowConnection for: ${responseChannel}`);
 
 		// release barrier if this is the first window connection
@@ -91,15 +91,15 @@ export class SharedProcess extends Disposable {
 		e.sender.postMessage(responseChannel, nonce, [port]);
 	}
 
-	private onWillShutdown(): void {
+	private onWillShutdown(): codemavi {
 		this.logService.trace('[SharedProcess] onWillShutdown');
 
 		this.utilityProcess?.postMessage(SharedProcessLifecycle.exit);
 		this.utilityProcess = undefined;
 	}
 
-	private _whenReady: Promise<void> | undefined = undefined;
-	whenReady(): Promise<void> {
+	private _whenReady: Promise<codemavi> | undefined = undefined;
+	whenReady(): Promise<codemavi> {
 		if (!this._whenReady) {
 			this._whenReady = (async () => {
 
@@ -109,7 +109,7 @@ export class SharedProcess extends Disposable {
 				// Overall signal that the shared process was loaded and
 				// all services within have been created.
 
-				const whenReady = new DeferredPromise<void>();
+				const whenReady = new DeferredPromise<codemavi>();
 				this.utilityProcess?.once(SharedProcessLifecycle.initDone, () => whenReady.complete());
 
 				await whenReady.p;
@@ -121,7 +121,7 @@ export class SharedProcess extends Disposable {
 		return this._whenReady;
 	}
 
-	private _whenIpcReady: Promise<void> | undefined = undefined;
+	private _whenIpcReady: Promise<codemavi> | undefined = undefined;
 	private get whenIpcReady() {
 		if (!this._whenIpcReady) {
 			this._whenIpcReady = (async () => {
@@ -133,7 +133,7 @@ export class SharedProcess extends Disposable {
 				this.createUtilityProcess();
 
 				// Wait for shared process indicating that IPC connections are accepted
-				const sharedProcessIpcReady = new DeferredPromise<void>();
+				const sharedProcessIpcReady = new DeferredPromise<codemavi>();
 				this.utilityProcess?.once(SharedProcessLifecycle.ipcReady, () => sharedProcessIpcReady.complete());
 
 				await sharedProcessIpcReady.p;
@@ -144,7 +144,7 @@ export class SharedProcess extends Disposable {
 		return this._whenIpcReady;
 	}
 
-	private createUtilityProcess(): void {
+	private createUtilityProcess(): codemavi {
 		this.utilityProcess = this._register(new UtilityProcess(this.logService, NullTelemetryService, this.lifecycleMainService));
 
 		// Install a log listener for very early shared process warnings and errors

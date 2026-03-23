@@ -27,7 +27,7 @@ export interface IViewLineTokens {
 	getMetadata(tokenIndex: number): number;
 	getLanguageId(tokenIndex: number): string;
 	getTokenText(tokenIndex: number): string;
-	forEach(callback: (tokenIndex: number) => void): void;
+	forEach(callback: (tokenIndex: number) => codemavi): codemavi;
 }
 
 export class LineTokens implements IViewLineTokens {
@@ -53,7 +53,7 @@ export class LineTokens implements IViewLineTokens {
 		return new LineTokens(new Uint32Array(tokens), fullText, decoder);
 	}
 
-	public static convertToEndOffset(tokens: Uint32Array, lineTextLength: number): void {
+	public static convertToEndOffset(tokens: Uint32Array, lineTextLength: number): codemavi {
 		const tokenCount = (tokens.length >>> 1);
 		const lastTokenIndex = tokenCount - 1;
 		for (let tokenIndex = 0; tokenIndex < lastTokenIndex; tokenIndex++) {
@@ -87,7 +87,7 @@ export class LineTokens implements IViewLineTokens {
 		return low;
 	}
 
-	_lineTokensBrand: void = undefined;
+	_lineTokensBrand: codemavi = undefined;
 
 	private readonly _tokens: Uint32Array;
 	private readonly _tokensCount: number;
@@ -283,7 +283,7 @@ export class LineTokens implements IViewLineTokens {
 		return text;
 	}
 
-	public forEach(callback: (tokenIndex: number) => void): void {
+	public forEach(callback: (tokenIndex: number) => codemavi): codemavi {
 		const tokenCount = this.getCount();
 		for (let tokenIndex = 0; tokenIndex < tokenCount; tokenIndex++) {
 			callback(tokenIndex);
@@ -400,7 +400,7 @@ class SliceLineTokens implements IViewLineTokens {
 		return text;
 	}
 
-	public forEach(callback: (tokenIndex: number) => void): void {
+	public forEach(callback: (tokenIndex: number) => codemavi): codemavi {
 		for (let tokenIndex = 0; tokenIndex < this.getCount(); tokenIndex++) {
 			callback(tokenIndex);
 		}

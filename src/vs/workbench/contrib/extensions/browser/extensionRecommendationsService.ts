@@ -44,10 +44,10 @@ export class ExtensionRecommendationsService extends Disposable implements IExte
 	private readonly languageRecommendations: LanguageRecommendations;
 	private readonly remoteRecommendations: RemoteRecommendations;
 
-	public readonly activationPromise: Promise<void>;
+	public readonly activationPromise: Promise<codemavi>;
 	private sessionSeed: number;
 
-	private _onDidChangeRecommendations = this._register(new Emitter<void>());
+	private _onDidChangeRecommendations = this._register(new Emitter<codemavi>());
 	readonly onDidChangeRecommendations = this._onDidChangeRecommendations.event;
 
 	constructor(
@@ -88,7 +88,7 @@ export class ExtensionRecommendationsService extends Disposable implements IExte
 		this._register(this.extensionManagementService.onDidInstallExtensions(e => this.onDidInstallExtensions(e)));
 	}
 
-	private async activate(): Promise<void> {
+	private async activate(): Promise<codemavi> {
 		try {
 			await Promise.allSettled([
 				this.remoteExtensionsScannerService.whenExtensionsReady(),
@@ -116,7 +116,7 @@ export class ExtensionRecommendationsService extends Disposable implements IExte
 		return this.galleryService.isEnabled() && !this.environmentService.isExtensionDevelopment;
 	}
 
-	private async activateProactiveRecommendations(): Promise<void> {
+	private async activateProactiveRecommendations(): Promise<codemavi> {
 		await Promise.all([this.exeBasedRecommendations.activate(), this.configBasedRecommendations.activate()]);
 	}
 
@@ -223,7 +223,7 @@ export class ExtensionRecommendationsService extends Disposable implements IExte
 		return this.toExtensionIds(this.fileBasedRecommendations.recommendations);
 	}
 
-	private onDidInstallExtensions(results: readonly InstallExtensionResult[]): void {
+	private onDidInstallExtensions(results: readonly InstallExtensionResult[]): codemavi {
 		for (const e of results) {
 			if (e.source && !URI.isUri(e.source) && e.operation === InstallOperation.Install) {
 				const extRecommendations = this.getAllRecommendationsWithReason() || {};
@@ -258,7 +258,7 @@ export class ExtensionRecommendationsService extends Disposable implements IExte
 		return !this.extensionRecommendationsManagementService.ignoredRecommendations.includes(extensionId.toLowerCase());
 	}
 
-	private async promptWorkspaceRecommendations(): Promise<void> {
+	private async promptWorkspaceRecommendations(): Promise<codemavi> {
 		const installed = await this.extensionsWorkbenchService.queryLocal();
 		const allowedRecommendations = [
 			...this.workspaceRecommendations.recommendations,

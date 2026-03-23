@@ -221,7 +221,7 @@ export async function main(argv: string[]): Promise<any> {
 
 		delete env['ELECTRON_RUN_AS_NODE'];
 
-		const processCallbacks: ((child: ChildProcess) => Promise<void>)[] = [];
+		const processCallbacks: ((child: ChildProcess) => Promise<codemavi>)[] = [];
 
 		if (args.verbose) {
 			env['ELECTRON_ENABLE_LOGGING'] = '1';
@@ -254,7 +254,7 @@ export async function main(argv: string[]): Promise<any> {
 				stdinFilePath = getStdinFilePath();
 
 				try {
-					const readFromStdinDone = new DeferredPromise<void>();
+					const readFromStdinDone = new DeferredPromise<codemavi>();
 					await readFromStdin(stdinFilePath, !!args.verbose, () => readFromStdinDone.complete());
 					if (!args.wait) {
 
@@ -323,7 +323,7 @@ export async function main(argv: string[]): Promise<any> {
 					// On Big Sur, we resolve the following promise only when the child,
 					// i.e. the open command, exited with a signal or error. Otherwise, we
 					// wait for the marker file to be deleted or for the child to error.
-					childExitPromise = new Promise<void>(resolve => {
+					childExitPromise = new Promise<codemavi>(resolve => {
 						// Only resolve this promise if the child (i.e. open) exited with an error
 						child.on('exit', (code, signal) => {
 							if (code !== 0 || signal) {
@@ -555,7 +555,7 @@ function getAppRoot() {
 	return dirname(FileAccess.asFileUri('').fsPath);
 }
 
-function eventuallyExit(code: number): void {
+function eventuallyExit(code: number): codemavi {
 	setTimeout(() => process.exit(code), 0);
 }
 

@@ -25,7 +25,7 @@ export class ResourceGlobMatcher extends Disposable {
 
 	private static readonly NO_FOLDER = null;
 
-	private readonly _onExpressionChange = this._register(new Emitter<void>());
+	private readonly _onExpressionChange = this._register(new Emitter<codemavi>());
 	readonly onExpressionChange = this._onExpressionChange.event;
 
 	private readonly mapFolderToParsedExpression = new Map<string | null, ParsedExpression>();
@@ -44,7 +44,7 @@ export class ResourceGlobMatcher extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 			if (this.shouldUpdate(e)) {
 				this.updateExpressions(true);
@@ -54,7 +54,7 @@ export class ResourceGlobMatcher extends Disposable {
 		this._register(this.contextService.onDidChangeWorkspaceFolders(() => this.updateExpressions(true)));
 	}
 
-	private updateExpressions(fromEvent: boolean): void {
+	private updateExpressions(fromEvent: boolean): codemavi {
 		let changed = false;
 
 		// Add expressions per workspaces that got added

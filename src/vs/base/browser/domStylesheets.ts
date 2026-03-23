@@ -24,7 +24,7 @@ class WrappedStyleElement {
 	private _currentCssStyle = '';
 	private _styleSheet: HTMLStyleElement | undefined = undefined;
 
-	public setStyle(cssStyle: string): void {
+	public setStyle(cssStyle: string): codemavi {
 		if (cssStyle === this._currentCssStyle) {
 			return;
 		}
@@ -37,7 +37,7 @@ class WrappedStyleElement {
 		}
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		if (this._styleSheet) {
 			this._styleSheet.remove();
 			this._styleSheet = undefined;
@@ -45,7 +45,7 @@ class WrappedStyleElement {
 	}
 }
 
-export function createStyleSheet(container: HTMLElement = mainWindow.document.head, beforeAppend?: (style: HTMLStyleElement) => void, disposableStore?: DisposableStore): HTMLStyleElement {
+export function createStyleSheet(container: HTMLElement = mainWindow.document.head, beforeAppend?: (style: HTMLStyleElement) => codemavi, disposableStore?: DisposableStore): HTMLStyleElement {
 	const style = document.createElement('style');
 	style.type = 'text/css';
 	style.media = 'screen';
@@ -126,7 +126,7 @@ function getDynamicStyleSheetRules(style: HTMLStyleElement) {
 	return [];
 }
 
-export function createCSSRule(selector: string, cssText: string, style = getSharedStyleSheet()): void {
+export function createCSSRule(selector: string, cssText: string, style = getSharedStyleSheet()): codemavi {
 	if (!style || !cssText) {
 		return;
 	}
@@ -139,7 +139,7 @@ export function createCSSRule(selector: string, cssText: string, style = getShar
 	}
 }
 
-export function removeCSSRulesContainingSelector(ruleName: string, style = getSharedStyleSheet()): void {
+export function removeCSSRulesContainingSelector(ruleName: string, style = getSharedStyleSheet()): codemavi {
 	if (!style) {
 		return;
 	}

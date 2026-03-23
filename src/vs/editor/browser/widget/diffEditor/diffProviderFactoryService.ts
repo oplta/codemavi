@@ -42,8 +42,8 @@ export class WorkerBasedDiffProviderFactoryService implements IDiffProviderFacto
 registerSingleton(IDiffProviderFactoryService, WorkerBasedDiffProviderFactoryService, InstantiationType.Delayed);
 
 export class WorkerBasedDocumentDiffProvider implements IDocumentDiffProvider, IDisposable {
-	private onDidChangeEventEmitter = new Emitter<void>();
-	public readonly onDidChange: Event<void> = this.onDidChangeEventEmitter.event;
+	private onDidChangeEventEmitter = new Emitter<codemavi>();
+	public readonly onDidChange: Event<codemavi> = this.onDidChangeEventEmitter.event;
 
 	private diffAlgorithm: DiffAlgorithmName | IDocumentDiffProvider = 'advanced';
 	private diffAlgorithmOnDidChangeSubscription: IDisposable | undefined = undefined;
@@ -58,7 +58,7 @@ export class WorkerBasedDocumentDiffProvider implements IDocumentDiffProvider, I
 		this.setOptions(options);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.diffAlgorithmOnDidChangeSubscription?.dispose();
 	}
 
@@ -159,7 +159,7 @@ export class WorkerBasedDocumentDiffProvider implements IDocumentDiffProvider, I
 		return result;
 	}
 
-	public setOptions(newOptions: IWorkerBasedDocumentDiffProviderOptions): void {
+	public setOptions(newOptions: IWorkerBasedDocumentDiffProviderOptions): codemavi {
 		let didChange = false;
 		if (newOptions.diffAlgorithm) {
 			if (this.diffAlgorithm !== newOptions.diffAlgorithm) {

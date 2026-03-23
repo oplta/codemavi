@@ -23,8 +23,8 @@ export class LanguageService extends Disposable implements ILanguageService {
 	private readonly _onDidRequestRichLanguageFeatures = this._register(new Emitter<string>());
 	public readonly onDidRequestRichLanguageFeatures = this._onDidRequestRichLanguageFeatures.event;
 
-	protected readonly _onDidChange = this._register(new Emitter<void>({ leakWarningThreshold: 200 /* https://github.com/microsoft/vscode/issues/119968 */ }));
-	public readonly onDidChange: Event<void> = this._onDidChange.event;
+	protected readonly _onDidChange = this._register(new Emitter<codemavi>({ leakWarningThreshold: 200 /* https://github.com/microsoft/vscode/issues/119968 */ }));
+	public readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private readonly _requestedBasicLanguages = new Set<string>();
 	private readonly _requestedRichLanguages = new Set<string>();
@@ -40,7 +40,7 @@ export class LanguageService extends Disposable implements ILanguageService {
 		this._register(this._registry.onDidChange(() => this._onDidChange.fire()));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		LanguageService.instanceCount--;
 		super.dispose();
 	}
@@ -127,14 +127,14 @@ export class LanguageService extends Disposable implements ILanguageService {
 		return languageId;
 	}
 
-	public requestBasicLanguageFeatures(languageId: string): void {
+	public requestBasicLanguageFeatures(languageId: string): codemavi {
 		if (!this._requestedBasicLanguages.has(languageId)) {
 			this._requestedBasicLanguages.add(languageId);
 			this._onDidRequestBasicLanguageFeatures.fire(languageId);
 		}
 	}
 
-	public requestRichLanguageFeatures(languageId: string): void {
+	public requestRichLanguageFeatures(languageId: string): codemavi {
 		if (!this._requestedRichLanguages.has(languageId)) {
 			this._requestedRichLanguages.add(languageId);
 
@@ -153,7 +153,7 @@ class LanguageSelection implements ILanguageSelection {
 	private readonly _value: IObservable<string>;
 	public readonly onDidChange: Event<string>;
 
-	constructor(onDidChangeLanguages: Event<void>, selector: () => string) {
+	constructor(onDidChangeLanguages: Event<codemavi>, selector: () => string) {
 		this._value = observableFromEvent(this, onDidChangeLanguages, () => selector());
 		this.onDidChange = Event.fromObservable(this._value);
 	}

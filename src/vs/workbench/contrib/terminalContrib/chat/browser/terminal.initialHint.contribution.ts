@@ -39,15 +39,15 @@ const enum Constants {
 }
 
 export class InitialHintAddon extends Disposable implements ITerminalAddon {
-	private readonly _onDidRequestCreateHint = this._register(new Emitter<void>());
-	get onDidRequestCreateHint(): Event<void> { return this._onDidRequestCreateHint.event; }
+	private readonly _onDidRequestCreateHint = this._register(new Emitter<codemavi>());
+	get onDidRequestCreateHint(): Event<codemavi> { return this._onDidRequestCreateHint.event; }
 	private readonly _disposables = this._register(new MutableDisposable<DisposableStore>());
 
 	constructor(private readonly _capabilities: ITerminalCapabilityStore,
 		private readonly _onDidChangeAgents: Event<IChatAgent | undefined>) {
 		super();
 	}
-	activate(terminal: RawXtermTerminal): void {
+	activate(terminal: RawXtermTerminal): codemavi {
 		const store = this._register(new DisposableStore());
 		this._disposables.value = store;
 		const capability = this._capabilities.get(TerminalCapability.CommandDetection);
@@ -106,7 +106,7 @@ export class TerminalInitialHintContribution extends Disposable implements ITerm
 		}));
 	}
 
-	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
+	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
 		// Don't show is the terminal was launched by an extension or a feature like debug
 		if ('shellLaunchConfig' in this._ctx.instance && (this._ctx.instance.shellLaunchConfig.isExtensionOwnedTerminal || this._ctx.instance.shellLaunchConfig.isFeatureTerminal)) {
 			return;
@@ -125,7 +125,7 @@ export class TerminalInitialHintContribution extends Disposable implements ITerm
 		this._register(this._addon.onDidRequestCreateHint(() => this._createHint()));
 	}
 
-	private _createHint(): void {
+	private _createHint(): codemavi {
 		const instance = this._ctx.instance instanceof TerminalInstance ? this._ctx.instance : undefined;
 		const commandDetectionCapability = instance?.capabilities.get(TerminalCapability.CommandDetection);
 		if (!instance || !this._xterm || this._hintWidget || !commandDetectionCapability || commandDetectionCapability.promptInputModel.value || !!instance.shellLaunchConfig.attachPersistentProcess) {
@@ -358,7 +358,7 @@ class TerminalInitialHintWidget extends Disposable {
 		return this._domNode;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._domNode?.remove();
 		super.dispose();
 	}

@@ -33,7 +33,7 @@ export function createScopedLineTokens(context: LineTokens, offset: number): Sco
 }
 
 export class ScopedLineTokens {
-	_scopedLineTokensBrand: void = undefined;
+	_scopedLineTokensBrand: codemavi = undefined;
 
 	public readonly languageIdCodec: ILanguageIdCodec;
 	public readonly languageId: string;

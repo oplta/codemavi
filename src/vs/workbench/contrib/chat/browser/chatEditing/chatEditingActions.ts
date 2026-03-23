@@ -124,7 +124,7 @@ registerAction2(class RemoveFileFromWorkingSet extends WorkingSetAction {
 		});
 	}
 
-	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<void> {
+	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 
 		const pendingEntries = currentEditingSession.entries.get().filter((entry) => uris.includes(entry.modifiedURI) && entry.state.get() === WorkingSetEntryState.Modified);
@@ -175,7 +175,7 @@ registerAction2(class OpenFileInDiffAction extends WorkingSetAction {
 		});
 	}
 
-	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, _chatWidget: IChatWidget, ...uris: URI[]): Promise<void> {
+	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, _chatWidget: IChatWidget, ...uris: URI[]): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		for (const uri of uris) {
 			const editedFile = currentEditingSession.getEntry(uri);
@@ -212,7 +212,7 @@ registerAction2(class AcceptAction extends WorkingSetAction {
 		});
 	}
 
-	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<void> {
+	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<codemavi> {
 		await currentEditingSession.accept(...uris);
 	}
 });
@@ -238,7 +238,7 @@ registerAction2(class DiscardAction extends WorkingSetAction {
 		});
 	}
 
-	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<void> {
+	async runWorkingSetAction(accessor: ServicesAccessor, currentEditingSession: IChatEditingSession, chatWidget: IChatWidget, ...uris: URI[]): Promise<codemavi> {
 		await currentEditingSession.reject(...uris);
 	}
 });
@@ -351,7 +351,7 @@ export class ChatEditingRemoveAllFilesAction extends EditingSessionAction {
 		});
 	}
 
-	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<void> {
+	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<codemavi> {
 		// Remove all files from working set
 		const uris = [...editingSession.entries.get()].map((e) => e.modifiedURI);
 		editingSession.remove(WorkingSetEntryRemovalReason.User, ...uris);
@@ -387,7 +387,7 @@ export class ChatEditingShowChangesAction extends EditingSessionAction {
 		});
 	}
 
-	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<void> {
+	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<codemavi> {
 		await editingSession.show();
 	}
 }
@@ -404,7 +404,7 @@ registerAction2(class AddFilesToWorkingSetAction extends EditingSessionAction {
 		});
 	}
 
-	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<void> {
+	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<codemavi> {
 		const listService = accessor.get(IListService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
@@ -557,7 +557,7 @@ registerAction2(class OpenWorkingSetHistoryAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
 		const context: { sessionId: string; requestId: string; uri: URI; stopId: string | undefined } | undefined = args[0];
 		if (!context?.sessionId) {
 			return;
@@ -583,7 +583,7 @@ registerAction2(class OpenWorkingSetHistoryAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
 		const context: { sessionId: string; requestId: string; uri: URI; stopId: string | undefined } | undefined = args[0];
 		if (!context?.sessionId) {
 			return;
@@ -624,7 +624,7 @@ registerAction2(class ResolveSymbolsContextAction extends EditingSessionAction {
 		});
 	}
 
-	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<void> {
+	override async runEditingSessionAction(accessor: ServicesAccessor, editingSession: IChatEditingSession, chatWidget: IChatWidget, ...args: any[]): Promise<codemavi> {
 		if (args.length === 0 || !isLocation(args[0])) {
 			return;
 		}

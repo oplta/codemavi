@@ -22,7 +22,7 @@ suite('Window', () => {
 			super(window, dom, new TestHostService(), TestEnvironmentService);
 		}
 
-		protected override enableWindowFocusOnElementFocus(): void { }
+		protected override enableWindowFocusOnElementFocus(): codemavi { }
 	}
 
 	test('multi window aware setTimeout()', async function () {
@@ -45,7 +45,7 @@ suite('Window', () => {
 
 						return mainWindow.setTimeout(() => callback(id), slow ? delay * 2 : delay, ...args);
 					},
-					clearTimeout: function (timeoutId: number): void {
+					clearTimeout: function (timeoutId: number): codemavi {
 						clearTimeoutCalls.push(id);
 
 						return mainWindow.clearTimeout(timeoutId);
@@ -63,7 +63,7 @@ suite('Window', () => {
 			// Window Count: 1
 
 			let called = false;
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				window1.setTimeout(() => {
 					if (!called) {
 						called = true;
@@ -81,7 +81,7 @@ suite('Window', () => {
 			setTimeoutCalls.length = 0;
 			clearTimeoutCalls.length = 0;
 
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				window1.setTimeout(() => {
 					if (!called) {
 						called = true;
@@ -109,7 +109,7 @@ suite('Window', () => {
 				{ window: window3, disposables }
 			];
 
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				window1.setTimeout(() => {
 					if (!called) {
 						called = true;
@@ -135,7 +135,7 @@ suite('Window', () => {
 				{ window: window1, disposables },
 			];
 
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				window1.setTimeout((windowId: number) => {
 					if (!called && windowId === 1) {
 						called = true;

@@ -50,7 +50,7 @@ class InlayHintsCache {
 		return this._entries.get(key);
 	}
 
-	set(model: ITextModel, value: InlayHintItem[]): void {
+	set(model: ITextModel, value: InlayHintItem[]): codemavi {
 		const key = InlayHintsCache._key(model);
 		this._entries.set(key, value);
 	}
@@ -139,13 +139,13 @@ export class InlayHintsController implements IEditorContribution {
 
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._sessionDisposables.dispose();
 		this._removeAllDecorations();
 		this._disposables.dispose();
 	}
 
-	private _update(): void {
+	private _update(): codemavi {
 		this._sessionDisposables.clear();
 		this._removeAllDecorations();
 
@@ -404,7 +404,7 @@ export class InlayHintsController implements IEditorContribution {
 		}
 	}
 
-	private _cacheHintsForFastRestore(model: ITextModel): void {
+	private _cacheHintsForFastRestore(model: ITextModel): codemavi {
 		const hints = this._copyInlayHintsWithCurrentAnchor(model);
 		this._inlayHintsCache.set(model, hints);
 	}
@@ -446,7 +446,7 @@ export class InlayHintsController implements IEditorContribution {
 		return result;
 	}
 
-	private _updateHintsDecorators(ranges: readonly Range[], items: readonly InlayHintItem[]): void {
+	private _updateHintsDecorators(ranges: readonly Range[], items: readonly InlayHintItem[]): codemavi {
 
 		const itemFixedLengths = new Map<InlayHintItem, number>();
 
@@ -506,7 +506,7 @@ export class InlayHintsController implements IEditorContribution {
 
 		// utils to collect/create injected text decorations
 		const newDecorationsData: InlayHintDecorationRenderInfo[] = [];
-		const addInjectedText = (item: InlayHintItem, ref: ClassNameReference, content: string, cursorStops: InjectedTextCursorStops, attachedData?: RenderedInlayHintLabelPart | object): void => {
+		const addInjectedText = (item: InlayHintItem, ref: ClassNameReference, content: string, cursorStops: InjectedTextCursorStops, attachedData?: RenderedInlayHintLabelPart | object): codemavi => {
 			const opts: InjectedTextOptions = {
 				content,
 				inlineClassNameAffectsLetterSpacing: true,
@@ -531,7 +531,7 @@ export class InlayHintsController implements IEditorContribution {
 			});
 		};
 
-		const addInjectedWhitespace = (item: InlayHintItem, isLast: boolean): void => {
+		const addInjectedWhitespace = (item: InlayHintItem, isLast: boolean): codemavi => {
 			const marginRule = this._ruleFactory.createClassNameRef({
 				width: `${(fontSize / 3) | 0}px`,
 				display: 'inline-block'
@@ -700,7 +700,7 @@ export class InlayHintsController implements IEditorContribution {
 		scrollState.restore(this._editor);
 	}
 
-	private _fillInColors(props: CssProperties, hint: languages.InlayHint): void {
+	private _fillInColors(props: CssProperties, hint: languages.InlayHint): codemavi {
 		if (hint.kind === languages.InlayHintKind.Parameter) {
 			props.backgroundColor = themeColorFromId(colors.editorInlayHintParameterBackground);
 			props.color = themeColorFromId(colors.editorInlayHintParameterForeground);
@@ -734,7 +734,7 @@ export class InlayHintsController implements IEditorContribution {
 		return { fontSize, fontFamily, padding, isUniform };
 	}
 
-	private _removeAllDecorations(): void {
+	private _removeAllDecorations(): codemavi {
 		this._editor.removeDecorations(Array.from(this._decorationsMetadata.keys()));
 		for (const obj of this._decorationsMetadata.values()) {
 			obj.classNameRef.dispose();

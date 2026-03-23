@@ -85,7 +85,7 @@ export class SelectionClipboard extends Disposable implements IEditorContributio
 		}
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 	}
 }
@@ -125,7 +125,7 @@ class PasteSelectionClipboardAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): Promise<void> {
+	public async run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): Promise<codemavi> {
 		const clipboardService = accessor.get(IClipboardService);
 
 		// read selection clipboard

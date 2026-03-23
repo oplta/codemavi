@@ -2020,15 +2020,15 @@ export interface IContext {
 }
 
 export interface IContextKey<T extends ContextKeyValue = ContextKeyValue> {
-	set(value: T): void;
-	reset(): void;
+	set(value: T): codemavi;
+	reset(): codemavi;
 	get(): T | undefined;
 }
 
 export interface IContextKeyServiceTarget {
 	parentElement: IContextKeyServiceTarget | null;
-	setAttribute(attr: string, value: string): void;
-	removeAttribute(attr: string): void;
+	setAttribute(attr: string, value: string): codemavi;
+	removeAttribute(attr: string): codemavi;
 	hasAttribute(attr: string): boolean;
 	getAttribute(attr: string): string | null;
 }
@@ -2050,7 +2050,7 @@ export interface IContextKeyService {
 	readonly _serviceBrand: undefined;
 
 	onDidChangeContext: Event<IContextKeyChangeEvent>;
-	bufferChangeEvents(callback: Function): void;
+	bufferChangeEvents(callback: Function): codemavi;
 
 	createKey<T extends ContextKeyValue>(key: string, defaultValue: T | undefined): IContextKey<T>;
 	contextMatchesRules(rules: ContextKeyExpression | undefined): boolean;
@@ -2060,7 +2060,7 @@ export interface IContextKeyService {
 	createOverlay(overlay: Iterable<[string, any]>): IContextKeyService;
 	getContext(target: IContextKeyServiceTarget | null): IContext;
 
-	updateParent(parentContextKeyService: IContextKeyService): void;
+	updateParent(parentContextKeyService: IContextKeyService): codemavi;
 }
 
 function cmp1(key1: string, key2: string): number {

@@ -39,7 +39,7 @@ function createSingleEditOp(text: string | null, positionLineNumber: number, pos
 	};
 }
 
-function assertTrimTrailingWhitespaceCommand(text: string[], expected: ISingleEditOperation[]): void {
+function assertTrimTrailingWhitespaceCommand(text: string[], expected: ISingleEditOperation[]): codemavi {
 	return withEditorModel(text, (model) => {
 		const op = new TrimTrailingWhitespaceCommand(new Selection(1, 1, 1, 1), [], true);
 		const actual = getEditOperation(model, op);
@@ -47,7 +47,7 @@ function assertTrimTrailingWhitespaceCommand(text: string[], expected: ISingleEd
 	});
 }
 
-function assertTrimTrailingWhitespace(text: string[], cursors: Position[], expected: ISingleEditOperation[]): void {
+function assertTrimTrailingWhitespace(text: string[], cursors: Position[], expected: ISingleEditOperation[]): codemavi {
 	return withEditorModel(text, (model) => {
 		const actual = trimTrailingWhitespace(model, cursors, true);
 		assert.deepStrictEqual(actual, expected);

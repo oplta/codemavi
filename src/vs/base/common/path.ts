@@ -356,7 +356,7 @@ export const win32: IPath = {
 
 		// Try to match a root
 		if (len === 1) {
-			// `path` contains just a single char, exit early to avoid
+			// `path` contains just a single char, exit early to acodemavi
 			// unnecessary work
 			return isPosixPathSeparator(code) ? '\\' : path;
 		}
@@ -741,7 +741,7 @@ export const win32: IPath = {
 		const code = path.charCodeAt(0);
 
 		if (len === 1) {
-			// `path` contains just a path separator, exit early to avoid
+			// `path` contains just a path separator, exit early to acodemavi
 			// unnecessary work or a dot.
 			return isPathSeparator(code) ? path : '.';
 		}
@@ -988,7 +988,7 @@ export const win32: IPath = {
 
 		if (len === 1) {
 			if (isPathSeparator(code)) {
-				// `path` contains just a path separator, exit early to avoid
+				// `path` contains just a path separator, exit early to acodemavi
 				// unnecessary work
 				ret.root = ret.dir = path;
 				return ret;
@@ -1036,7 +1036,7 @@ export const win32: IPath = {
 		} else if (isWindowsDeviceRoot(code) && path.charCodeAt(1) === CHAR_COLON) {
 			// Possible device root
 			if (len <= 2) {
-				// `path` contains just a drive root, exit early to avoid
+				// `path` contains just a drive root, exit early to acodemavi
 				// unnecessary work
 				ret.root = ret.dir = path;
 				return ret;
@@ -1044,7 +1044,7 @@ export const win32: IPath = {
 			rootEnd = 2;
 			if (isPathSeparator(path.charCodeAt(2))) {
 				if (len === 3) {
-					// `path` contains just a drive root, exit early to avoid
+					// `path` contains just a drive root, exit early to acodemavi
 					// unnecessary work
 					ret.root = ret.dir = path;
 					return ret;

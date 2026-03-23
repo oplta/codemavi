@@ -247,7 +247,7 @@ suite('KeybindingsEditing', () => {
 		assert.deepStrictEqual(await getUserKeybindings(), expected);
 	});
 
-	async function writeToKeybindingsFile(...keybindings: IUserFriendlyKeybinding[]): Promise<void> {
+	async function writeToKeybindingsFile(...keybindings: IUserFriendlyKeybinding[]): Promise<codemavi> {
 		await fileService.writeFile(userDataProfileService.currentProfile.keybindingsResource, VSBuffer.fromString(JSON.stringify(keybindings || [])));
 	}
 

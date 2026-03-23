@@ -12,7 +12,7 @@ suite('CharCode', () => {
 
 	test('has good values', () => {
 
-		function assertValue(actual: CharCode, expected: string): void {
+		function assertValue(actual: CharCode, expected: string): codemavi {
 			assert.strictEqual(actual, expected.charCodeAt(0), 'char code ok for <<' + expected + '>>');
 		}
 

@@ -71,7 +71,7 @@ export class DebugStatusContribution implements IWorkbenchContribution {
 		};
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.entryAccessor?.dispose();
 		dispose(this.toDispose);
 	}

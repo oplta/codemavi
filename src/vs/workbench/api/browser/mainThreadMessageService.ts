@@ -34,7 +34,7 @@ export class MainThreadMessageService implements MainThreadMessageServiceShape {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.extensionsListener.dispose();
 	}
 

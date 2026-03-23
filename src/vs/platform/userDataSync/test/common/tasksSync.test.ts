@@ -34,7 +34,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file does not exist', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 
@@ -67,7 +67,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file does not exist and remote has changes', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const content = JSON.stringify({
@@ -97,7 +97,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file exists locally and remote has no tasks', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 			const content = JSON.stringify({
@@ -121,7 +121,7 @@ suite('TasksSync', () => {
 	});
 
 	test('first time sync: when tasks file exists locally with same content as remote', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const content = JSON.stringify({
@@ -152,7 +152,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file locally has moved forward', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 			fileService.writeFile(tasksResource, VSBuffer.fromString(JSON.stringify({
@@ -183,7 +183,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file remotely has moved forward', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -222,7 +222,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file has moved forward locally and remotely with same changes', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -262,7 +262,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file has moved forward locally and remotely - accept preview', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -317,7 +317,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file has moved forward locally and remotely - accept modified preview', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -372,7 +372,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file has moved forward locally and remotely - accept remote', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -421,7 +421,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file has moved forward locally and remotely - accept local', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const tasksResource2 = client2.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
@@ -470,7 +470,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file was removed in one client', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 			await fileService.writeFile(tasksResource, VSBuffer.fromString(JSON.stringify({
@@ -500,7 +500,7 @@ suite('TasksSync', () => {
 	});
 
 	test('when tasks file is created after first sync', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 			await testObject.sync(await client.getResourceManifest());
@@ -533,7 +533,7 @@ suite('TasksSync', () => {
 	});
 
 	test('apply remote when tasks file does not exist', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const fileService = client.instantiationService.get(IFileService);
 			const tasksResource = client.instantiationService.get(IUserDataProfilesService).defaultProfile.tasksResource;
 			if (await fileService.exists(tasksResource)) {
@@ -551,7 +551,7 @@ suite('TasksSync', () => {
 	});
 
 	test('sync profile tasks', async () => {
-		await runWithFakedTimers<void>({}, async () => {
+		await runWithFakedTimers<codemavi>({}, async () => {
 			const client2 = disposableStore.add(new UserDataSyncClient(server));
 			await client2.setUp(true);
 			const profile = await client2.instantiationService.get(IUserDataProfilesService).createNamedProfile('profile1');

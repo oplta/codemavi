@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 export interface IDisposable {
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export interface Event<T> {
@@ -45,7 +45,7 @@ export function toPromise<T>(event: Event<T>, signal?: AbortSignal): Promise<T |
 /**
  * Adds a handler that handles one event on the emitter, then disposes itself.
  */
-export const once = <T>(event: Event<T>, listener: (data: T) => void): IDisposable => {
+export const once = <T>(event: Event<T>, listener: (data: T) => codemavi): IDisposable => {
 	const disposable = event((value) => {
 		listener(value);
 		disposable.dispose();
@@ -58,7 +58,7 @@ export const once = <T>(event: Event<T>, listener: (data: T) => void): IDisposab
  * Base event emitter. Calls listeners when data is emitted.
  */
 export class EventEmitter<T> {
-	private listeners?: Array<(data: T) => void> | ((data: T) => void);
+	private listeners?: Array<(data: T) => codemavi> | ((data: T) => codemavi);
 
 	/**
 	 * Event<T> function.
@@ -104,7 +104,7 @@ export class EventEmitter<T> {
 		this.listeners = undefined;
 	}
 
-	private add(listener: (data: T) => void): IDisposable {
+	private add(listener: (data: T) => codemavi): IDisposable {
 		if (!this.listeners) {
 			this.listeners = listener;
 		} else if (typeof this.listeners === 'function') {
@@ -116,7 +116,7 @@ export class EventEmitter<T> {
 		return { dispose: () => this.rm(listener) };
 	}
 
-	private rm(listener: (data: T) => void) {
+	private rm(listener: (data: T) => codemavi) {
 		if (!this.listeners) {
 			return;
 		}

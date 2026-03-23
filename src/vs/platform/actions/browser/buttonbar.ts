@@ -69,7 +69,7 @@ export class WorkbenchButtonBar extends ButtonBar {
 		super.dispose();
 	}
 
-	update(actions: IAction[], secondary: IAction[]): void {
+	update(actions: IAction[], secondary: IAction[]): codemavi {
 
 		const conifgProvider: IButtonConfigProvider = this._options?.buttonConfigProvider ?? (() => ({ showLabel: true }));
 
@@ -211,7 +211,7 @@ export class MenuWorkbenchButtonBar extends WorkbenchButtonBar {
 		super.dispose();
 	}
 
-	override update(_actions: IAction[]): void {
+	override update(_actions: IAction[]): codemavi {
 		throw new Error('Use Menu or WorkbenchButtonBar');
 	}
 }

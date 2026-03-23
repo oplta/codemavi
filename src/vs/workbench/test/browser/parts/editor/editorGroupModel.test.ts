@@ -64,13 +64,13 @@ suite('EditorGroupModel', () => {
 		return group;
 	}
 
-	function closeAllEditors(group: EditorGroupModel): void {
+	function closeAllEditors(group: EditorGroupModel): codemavi {
 		for (const editor of group.getEditors(EditorsOrder.SEQUENTIAL)) {
 			group.closeEditor(editor, undefined, false);
 		}
 	}
 
-	function closeEditors(group: EditorGroupModel, except: EditorInput, direction?: CloseDirection): void {
+	function closeEditors(group: EditorGroupModel, except: EditorInput, direction?: CloseDirection): codemavi {
 		const index = group.indexOf(except);
 		if (index === -1) {
 			return; // not found
@@ -210,11 +210,11 @@ suite('EditorGroupModel', () => {
 			return other && this.id === other.id && other instanceof TestEditorInput;
 		}
 
-		setDirty(): void {
+		setDirty(): codemavi {
 			this._onDidChangeDirty.fire();
 		}
 
-		setLabel(): void {
+		setLabel(): codemavi {
 			this._onDidChangeLabel.fire();
 		}
 	}
@@ -246,14 +246,14 @@ suite('EditorGroupModel', () => {
 		override get typeId() { return 'testFileEditorInputForGroups'; }
 		override get editorId() { return this.id; }
 		override async resolve(): Promise<IDisposable | null> { return null; }
-		setPreferredName(name: string): void { }
-		setPreferredDescription(description: string): void { }
-		setPreferredResource(resource: URI): void { }
+		setPreferredName(name: string): codemavi { }
+		setPreferredDescription(description: string): codemavi { }
+		setPreferredResource(resource: URI): codemavi { }
 		async setEncoding(encoding: string) { }
 		getEncoding() { return undefined; }
 		setPreferredEncoding(encoding: string) { }
-		setForceOpenAsBinary(): void { }
-		setPreferredContents(contents: string): void { }
+		setForceOpenAsBinary(): codemavi { }
+		setPreferredContents(contents: string): codemavi { }
 		setLanguageId(languageId: string) { }
 		setPreferredLanguageId(languageId: string) { }
 		isResolved(): boolean { return false; }
@@ -2416,7 +2416,7 @@ suite('EditorGroupModel', () => {
 		assert.strictEqual(group2Events.unsticky[0].editorIndex, 1);
 	});
 
-	function assertSelection(group: EditorGroupModel, activeEditor: EditorInput, selectedEditors: EditorInput[]): void {
+	function assertSelection(group: EditorGroupModel, activeEditor: EditorInput, selectedEditors: EditorInput[]): codemavi {
 		assert.strictEqual(group.activeEditor, activeEditor);
 		assert.strictEqual(group.selectedEditors.length, selectedEditors.length);
 		for (let i = 0; i < selectedEditors.length; i++) {

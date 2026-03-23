@@ -115,7 +115,7 @@ const WIDGET_CLASS_NAME = 'multiCallStackWidget';
  */
 export class CallStackWidget extends Disposable {
 	private readonly list: WorkbenchList<ListItem>;
-	private readonly layoutEmitter = this._register(new Emitter<void>());
+	private readonly layoutEmitter = this._register(new Emitter<codemavi>());
 	private readonly currentFramesDs = this._register(new DisposableStore());
 	private cts?: CancellationTokenSource;
 
@@ -164,7 +164,7 @@ export class CallStackWidget extends Disposable {
 	}
 
 	/** Replaces the call frames display in the view. */
-	public setFrames(frames: AnyStackFrame[]): void {
+	public setFrames(frames: AnyStackFrame[]): codemavi {
 		// cancel any existing load
 		this.currentFramesDs.clear();
 		this.cts = new CancellationTokenSource();
@@ -173,7 +173,7 @@ export class CallStackWidget extends Disposable {
 		this.list.splice(0, this.list.length, this.mapFrames(frames));
 	}
 
-	public layout(height?: number, width?: number): void {
+	public layout(height?: number, width?: number): codemavi {
 		this.list.layout(height, width);
 		this.layoutEmitter.fire();
 	}
@@ -189,7 +189,7 @@ export class CallStackWidget extends Disposable {
 		});
 	}
 
-	private async loadFrame(replacing: SkippedCallFrames): Promise<void> {
+	private async loadFrame(replacing: SkippedCallFrames): Promise<codemavi> {
 		if (!this.cts) {
 			return;
 		}
@@ -372,7 +372,7 @@ abstract class AbstractFrameRenderer<T extends IAbstractFrameRendererTemplateDat
 
 	protected abstract finishRenderTemplate(data: IAbstractFrameRendererTemplateData): T;
 
-	renderElement(element: ListItem, index: number, template: T, height: number | undefined): void {
+	renderElement(element: ListItem, index: number, template: T, height: number | undefined): codemavi {
 		const { elementStore } = template;
 		elementStore.clear();
 		const item = element as IFrameLikeItem;
@@ -393,11 +393,11 @@ abstract class AbstractFrameRenderer<T extends IAbstractFrameRendererTemplateDat
 		elementStore.add(dom.addDisposableListener(elements.title, 'click', toggleCollapse));
 	}
 
-	disposeElement(element: ListItem, index: number, templateData: T, height: number | undefined): void {
+	disposeElement(element: ListItem, index: number, templateData: T, height: number | undefined): codemavi {
 		templateData.elementStore.clear();
 	}
 
-	disposeTemplate(templateData: T): void {
+	disposeTemplate(templateData: T): codemavi {
 		templateData.templateStore.dispose();
 	}
 }
@@ -412,7 +412,7 @@ class FrameCodeRenderer extends AbstractFrameRenderer<IStackTemplateData> {
 
 	constructor(
 		private readonly containingEditor: ICodeEditor | undefined,
-		private readonly onLayout: Event<void>,
+		private readonly onLayout: Event<codemavi>,
 		@ITextModelService private readonly modelService: ITextModelService,
 		@IInstantiationService instantiationService: IInstantiationService,
 	) {
@@ -453,7 +453,7 @@ class FrameCodeRenderer extends AbstractFrameRenderer<IStackTemplateData> {
 		return { ...data, editor, toolbar };
 	}
 
-	override renderElement(element: ListItem, index: number, template: IStackTemplateData, height: number | undefined): void {
+	override renderElement(element: ListItem, index: number, template: IStackTemplateData, height: number | undefined): codemavi {
 		super.renderElement(element, index, template, height);
 
 		const { elementStore, editor } = template;
@@ -495,7 +495,7 @@ class FrameCodeRenderer extends AbstractFrameRenderer<IStackTemplateData> {
 		layout();
 	}
 
-	private setupEditorAfterModel(item: WrappedCallStackFrame, template: IStackTemplateData): void {
+	private setupEditorAfterModel(item: WrappedCallStackFrame, template: IStackTemplateData): codemavi {
 		const range = Range.fromPositions({
 			column: item.column ?? 1,
 			lineNumber: item.line ?? 1,
@@ -558,7 +558,7 @@ class MissingCodeRenderer implements IListRenderer<ListItem, IMissingTemplateDat
 		return { elements, label };
 	}
 
-	renderElement(element: ListItem, _index: number, templateData: IMissingTemplateData): void {
+	renderElement(element: ListItem, _index: number, templateData: IMissingTemplateData): codemavi {
 		const cast = element as CallStackFrame;
 		templateData.label.element.setResource({
 			name: cast.name,
@@ -569,7 +569,7 @@ class MissingCodeRenderer implements IListRenderer<ListItem, IMissingTemplateDat
 		});
 	}
 
-	disposeTemplate(templateData: IMissingTemplateData): void {
+	disposeTemplate(templateData: IMissingTemplateData): codemavi {
 		templateData.label.dispose();
 		templateData.elements.root.remove();
 	}
@@ -584,7 +584,7 @@ class CustomRenderer extends AbstractFrameRenderer<IAbstractFrameRendererTemplat
 		return data;
 	}
 
-	override renderElement(element: ListItem, index: number, template: IAbstractFrameRendererTemplateData, height: number | undefined): void {
+	override renderElement(element: ListItem, index: number, template: IAbstractFrameRendererTemplateData, height: number | undefined): codemavi {
 		super.renderElement(element, index, template, height);
 
 		const item = element as WrappedCustomStackFrame;
@@ -621,7 +621,7 @@ class SkippedRenderer implements IListRenderer<ListItem, ISkippedTemplateData> {
 	public readonly templateId = SkippedRenderer.templateId;
 
 	constructor(
-		private readonly loadFrames: (fromItem: SkippedCallFrames) => Promise<void>,
+		private readonly loadFrames: (fromItem: SkippedCallFrames) => Promise<codemavi>,
 		@INotificationService private readonly notificationService: INotificationService,
 	) { }
 
@@ -645,14 +645,14 @@ class SkippedRenderer implements IListRenderer<ListItem, ISkippedTemplateData> {
 		return data;
 	}
 
-	renderElement(element: ListItem, index: number, templateData: ISkippedTemplateData, height: number | undefined): void {
+	renderElement(element: ListItem, index: number, templateData: ISkippedTemplateData, height: number | undefined): codemavi {
 		const cast = element as SkippedCallFrames;
 		templateData.button.enabled = true;
 		templateData.button.label = cast.label;
 		templateData.current = cast;
 	}
 
-	disposeTemplate(templateData: ISkippedTemplateData): void {
+	disposeTemplate(templateData: ISkippedTemplateData): codemavi {
 		templateData.store.dispose();
 	}
 }
@@ -738,7 +738,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, { uri, range }: Location): Promise<void> {
+	async run(accessor: ServicesAccessor, { uri, range }: Location): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		await editorService.openEditor({
 			resource: uri,

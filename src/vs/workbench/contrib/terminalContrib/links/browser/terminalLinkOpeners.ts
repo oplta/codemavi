@@ -31,7 +31,7 @@ export class TerminalLocalFileLinkOpener implements ITerminalLinkOpener {
 	) {
 	}
 
-	async open(link: ITerminalSimpleLink): Promise<void> {
+	async open(link: ITerminalSimpleLink): Promise<codemavi> {
 		if (!link.uri) {
 			throw new Error('Tried to open file link without a resolved URI');
 		}
@@ -56,7 +56,7 @@ export class TerminalLocalFolderInWorkspaceLinkOpener implements ITerminalLinkOp
 	constructor(@ICommandService private readonly _commandService: ICommandService) {
 	}
 
-	async open(link: ITerminalSimpleLink): Promise<void> {
+	async open(link: ITerminalSimpleLink): Promise<codemavi> {
 		if (!link.uri) {
 			throw new Error('Tried to open folder in workspace link without a resolved URI');
 		}
@@ -68,7 +68,7 @@ export class TerminalLocalFolderOutsideWorkspaceLinkOpener implements ITerminalL
 	constructor(@IHostService private readonly _hostService: IHostService) {
 	}
 
-	async open(link: ITerminalSimpleLink): Promise<void> {
+	async open(link: ITerminalSimpleLink): Promise<codemavi> {
 		if (!link.uri) {
 			throw new Error('Tried to open folder in workspace link without a resolved URI');
 		}
@@ -96,7 +96,7 @@ export class TerminalSearchLinkOpener implements ITerminalLinkOpener {
 		this._fileQueryBuilder = instantiationService.createInstance(QueryBuilder);
 	}
 
-	async open(link: ITerminalSimpleLink): Promise<void> {
+	async open(link: ITerminalSimpleLink): Promise<codemavi> {
 		const osPath = osPathModule(this._getOS());
 		const pathSeparator = osPath.sep;
 
@@ -282,11 +282,11 @@ export class TerminalUrlLinkOpener implements ITerminalLinkOpener {
 	) {
 	}
 
-	async open(link: ITerminalSimpleLink): Promise<void> {
+	async open(link: ITerminalSimpleLink): Promise<codemavi> {
 		if (!link.uri) {
 			throw new Error('Tried to open a url without a resolved URI');
 		}
-		// It's important to use the raw string value here to avoid converting pre-encoded values
+		// It's important to use the raw string value here to acodemavi converting pre-encoded values
 		// from the URL like `%2B` -> `+`.
 		this._openerService.open(link.text, {
 			allowTunneling: this._isRemote && this._configurationService.getValue('remote.forwardOnOpen'),

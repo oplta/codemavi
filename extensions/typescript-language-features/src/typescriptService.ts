@@ -169,11 +169,11 @@ export interface ITypeScriptServiceClient {
 	readonly onTypesInstallerInitializationFailed: vscode.Event<Proto.TypesInstallerInitializationFailedEventBody>;
 
 	readonly capabilities: ClientCapabilities;
-	readonly onDidChangeCapabilities: vscode.Event<void>;
+	readonly onDidChangeCapabilities: vscode.Event<codemavi>;
 
-	onReady(f: () => void): Promise<void>;
+	onReady(f: () => codemavi): Promise<codemavi>;
 
-	showVersionPicker(): void;
+	showVersionPicker(): codemavi;
 
 	readonly apiVersion: API;
 
@@ -192,7 +192,7 @@ export interface ITypeScriptServiceClient {
 	executeWithoutWaitingForResponse<K extends keyof NoResponseTsServerRequests>(
 		command: K,
 		args: NoResponseTsServerRequests[K][0]
-	): void;
+	): codemavi;
 
 	executeAsync<K extends keyof AsyncTsServerRequests>(
 		command: K,

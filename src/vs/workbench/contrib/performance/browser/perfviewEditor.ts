@@ -50,7 +50,7 @@ export class PerfviewContrib {
 		this._registration = textModelResolverService.registerTextModelContentProvider('perf', _instaService.createInstance(PerfModelContentProvider));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._registration.dispose();
 	}
 
@@ -134,7 +134,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		return Promise.resolve(this._model);
 	}
 
-	private _updateModel(): void {
+	private _updateModel(): codemavi {
 
 		Promise.all([
 			this._timerService.whenReady(),
@@ -166,7 +166,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 
 	}
 
-	private _addSummary(md: MarkdownBuilder): void {
+	private _addSummary(md: MarkdownBuilder): codemavi {
 		const metrics = this._timerService.startupMetrics;
 		md.heading(2, 'System Info');
 		md.li(`${this._productService.nameShort}: ${this._productService.version} (${this._productService.commit || '0000000'})`);
@@ -187,7 +187,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		md.li(`Empty Workspace: ${metrics.emptyWorkbench}`);
 	}
 
-	private _addSummaryTable(md: MarkdownBuilder): void {
+	private _addSummaryTable(md: MarkdownBuilder): codemavi {
 
 		const metrics = this._timerService.startupMetrics;
 		const contribTimings = Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench).timings;
@@ -225,7 +225,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		md.table(['What', 'Duration', 'Process', 'Info'], table);
 	}
 
-	private _addExtensionsTable(md: MarkdownBuilder): void {
+	private _addExtensionsTable(md: MarkdownBuilder): codemavi {
 
 		const eager: ({ toString(): string })[][] = [];
 		const normal: ({ toString(): string })[][] = [];
@@ -252,7 +252,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		}
 	}
 
-	private _addPerfMarksTable(name: string | undefined, md: MarkdownBuilder, marks: readonly perf.PerformanceMark[] | undefined): void {
+	private _addPerfMarksTable(name: string | undefined, md: MarkdownBuilder, marks: readonly perf.PerformanceMark[] | undefined): codemavi {
 		if (!marks) {
 			return;
 		}
@@ -271,7 +271,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		md.table(['Name', 'Timestamp', 'Delta', 'Total'], table);
 	}
 
-	private _addWorkbenchContributionsPerfMarksTable(md: MarkdownBuilder): void {
+	private _addWorkbenchContributionsPerfMarksTable(md: MarkdownBuilder): codemavi {
 		md.heading(2, 'Workbench Contributions Blocking Restore');
 
 		const timings = Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench).timings;
@@ -288,7 +288,7 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		this._addPerfMarksTable(undefined, md, marks);
 	}
 
-	private _addRawPerfMarks(md: MarkdownBuilder): void {
+	private _addRawPerfMarks(md: MarkdownBuilder): codemavi {
 
 		for (const [source, marks] of this._timerService.getPerformanceMarks()) {
 			md.heading(2, `Raw Perf Marks: ${source}`);

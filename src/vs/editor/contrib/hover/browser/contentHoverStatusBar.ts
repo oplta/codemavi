@@ -37,7 +37,7 @@ export class EditorHoverStatusBar extends Disposable implements IEditorHoverStat
 	public addAction(
 		actionOptions: {
 			label: string;
-			iconClass?: string; run: (target: HTMLElement) => void;
+			iconClass?: string; run: (target: HTMLElement) => codemavi;
 			commandId: string;
 		}): IEditorHoverAction {
 

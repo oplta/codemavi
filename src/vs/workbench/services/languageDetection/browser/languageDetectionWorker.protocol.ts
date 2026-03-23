@@ -10,13 +10,13 @@ export abstract class LanguageDetectionWorkerHost {
 	public static getChannel(workerServer: IWebWorkerServer): LanguageDetectionWorkerHost {
 		return workerServer.getChannel<LanguageDetectionWorkerHost>(LanguageDetectionWorkerHost.CHANNEL_NAME);
 	}
-	public static setChannel(workerClient: IWebWorkerClient<any>, obj: LanguageDetectionWorkerHost): void {
+	public static setChannel(workerClient: IWebWorkerClient<any>, obj: LanguageDetectionWorkerHost): codemavi {
 		workerClient.setChannel<LanguageDetectionWorkerHost>(LanguageDetectionWorkerHost.CHANNEL_NAME, obj);
 	}
 
 	abstract $getIndexJsUri(): Promise<string>;
 	abstract $getLanguageId(languageIdOrExt: string | undefined): Promise<string | undefined>;
-	abstract $sendTelemetryEvent(languages: string[], confidences: number[], timeSpent: number): Promise<void>;
+	abstract $sendTelemetryEvent(languages: string[], confidences: number[], timeSpent: number): Promise<codemavi>;
 	abstract $getRegexpModelUri(): Promise<string>;
 	abstract $getModelJsonUri(): Promise<string>;
 	abstract $getWeightsUri(): Promise<string>;

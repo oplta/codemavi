@@ -3122,8 +3122,8 @@
 		}
 	},
 	{
-		"c": "void",
-		"t": "keyword.operator.expression.void.ts",
+		"c": "codemavi",
+		"t": "keyword.operator.expression.codemavi.ts",
 		"r": {
 			"dark_plus": "keyword.operator.expression: #569CD6",
 			"light_plus": "keyword.operator.expression: #0000FF",

@@ -61,12 +61,12 @@ class ViewZoneDelegate implements IViewZone {
 	readonly showInHiddenAreas: boolean | undefined;
 	readonly ordinal: number | undefined;
 
-	private readonly _onDomNodeTop: (top: number) => void;
-	private readonly _onComputedHeight: (height: number) => void;
+	private readonly _onDomNodeTop: (top: number) => codemavi;
+	private readonly _onComputedHeight: (height: number) => codemavi;
 
 	constructor(domNode: HTMLElement, afterLineNumber: number, afterColumn: number, heightInLines: number,
-		onDomNodeTop: (top: number) => void,
-		onComputedHeight: (height: number) => void,
+		onDomNodeTop: (top: number) => codemavi,
+		onComputedHeight: (height: number) => codemavi,
 		showInHiddenAreas: boolean | undefined,
 		ordinal: number | undefined
 	) {
@@ -80,11 +80,11 @@ class ViewZoneDelegate implements IViewZone {
 		this._onComputedHeight = onComputedHeight;
 	}
 
-	onDomNodeTop(top: number): void {
+	onDomNodeTop(top: number): codemavi {
 		this._onDomNodeTop(top);
 	}
 
-	onComputedHeight(height: number): void {
+	onComputedHeight(height: number): codemavi {
 		this._onComputedHeight(height);
 	}
 }
@@ -127,7 +127,7 @@ class Arrow {
 		this._decorations = this._editor.createDecorationsCollection();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.hide();
 		domStylesheetsJs.removeCSSRulesContainingSelector(this._ruleName);
 	}
@@ -146,7 +146,7 @@ class Arrow {
 		}
 	}
 
-	private _updateStyle(): void {
+	private _updateStyle(): codemavi {
 		domStylesheetsJs.removeCSSRulesContainingSelector(this._ruleName);
 		domStylesheetsJs.createCSSRule(
 			`.monaco-editor ${this._ruleName}`,
@@ -154,7 +154,7 @@ class Arrow {
 		);
 	}
 
-	show(where: IPosition): void {
+	show(where: IPosition): codemavi {
 
 		if (where.column === 1) {
 			// the arrow isn't pretty at column 1 and we need to push it out a little
@@ -171,7 +171,7 @@ class Arrow {
 		}]);
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		this._decorations.clear();
 	}
 }
@@ -212,7 +212,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._overlayWidget) {
 			this.editor.removeOverlayWidget(this._overlayWidget);
 			this._overlayWidget = null;
@@ -232,7 +232,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		this._disposables.dispose();
 	}
 
-	create(): void {
+	create(): codemavi {
 
 		this.domNode.classList.add('zone-widget');
 		if (this.options.className) {
@@ -251,7 +251,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		this._applyStyles();
 	}
 
-	style(styles: IStyles): void {
+	style(styles: IStyles): codemavi {
 		if (styles.frameColor) {
 			this.options.frameColor = styles.frameColor;
 		}
@@ -261,7 +261,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		this._applyStyles();
 	}
 
-	protected _applyStyles(): void {
+	protected _applyStyles(): codemavi {
 		if (this.container && this.options.frameColor) {
 			const frameColor = this.options.frameColor.toString();
 			this.container.style.borderTopColor = frameColor;
@@ -285,11 +285,11 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		return 0;
 	}
 
-	private _onViewZoneTop(top: number): void {
+	private _onViewZoneTop(top: number): codemavi {
 		this.domNode.style.top = top + 'px';
 	}
 
-	private _onViewZoneHeight(height: number): void {
+	private _onViewZoneHeight(height: number): codemavi {
 		this.domNode.style.height = `${height}px`;
 
 		if (this.container) {
@@ -316,7 +316,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 
 	protected _isShowing: boolean = false;
 
-	show(rangeOrPos: IRange | IPosition, heightInLines: number): void {
+	show(rangeOrPos: IRange | IPosition, heightInLines: number): codemavi {
 		const range = Range.isIRange(rangeOrPos) ? Range.lift(rangeOrPos) : Range.fromPositions(rangeOrPos);
 		this._isShowing = true;
 		this._showImpl(range, heightInLines);
@@ -324,7 +324,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		this._positionMarkerId.set([{ range, options: ModelDecorationOptions.EMPTY }]);
 	}
 
-	updatePositionAndHeight(rangeOrPos: IRange | IPosition, heightInLines?: number): void {
+	updatePositionAndHeight(rangeOrPos: IRange | IPosition, heightInLines?: number): codemavi {
 		if (this._viewZone) {
 			rangeOrPos = Range.isIRange(rangeOrPos) ? Range.getStartPosition(rangeOrPos) : rangeOrPos;
 			this._viewZone.afterLineNumber = rangeOrPos.lineNumber;
@@ -342,7 +342,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		}
 	}
 
-	hide(): void {
+	hide(): codemavi {
 		if (this._viewZone) {
 			this.editor.changeViewZones(accessor => {
 				if (this._viewZone) {
@@ -382,7 +382,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		return Math.max(12, (this.editor.getLayoutInfo().height / this.editor.getOption(EditorOption.lineHeight)) * 0.8);
 	}
 
-	private _showImpl(where: Range, heightInLines: number): void {
+	private _showImpl(where: Range, heightInLines: number): codemavi {
 		const position = where.getStartPosition();
 		const layoutInfo = this.editor.getLayoutInfo();
 		const width = this._getWidth(layoutInfo);
@@ -476,7 +476,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		}
 	}
 
-	protected setCssClass(className: string, classToReplace?: string): void {
+	protected setCssClass(className: string, classToReplace?: string): codemavi {
 		if (!this.container) {
 			return;
 		}
@@ -489,17 +489,17 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 
 	}
 
-	protected abstract _fillContainer(container: HTMLElement): void;
+	protected abstract _fillContainer(container: HTMLElement): codemavi;
 
-	protected _onWidth(widthInPixel: number): void {
+	protected _onWidth(widthInPixel: number): codemavi {
 		// implement in subclass
 	}
 
-	protected _doLayout(heightInPixel: number, widthInPixel: number): void {
+	protected _doLayout(heightInPixel: number, widthInPixel: number): codemavi {
 		// implement in subclass
 	}
 
-	protected _relayout(_newHeightInLines: number, useMax?: boolean): void {
+	protected _relayout(_newHeightInLines: number, useMax?: boolean): codemavi {
 		const maxHeightInLines = this._getMaximumHeightInLines();
 		const newHeightInLines = (useMax && (maxHeightInLines !== undefined)) ? Math.min(maxHeightInLines, _newHeightInLines) : _newHeightInLines;
 		if (this._viewZone && this._viewZone.heightInLines !== newHeightInLines) {
@@ -515,7 +515,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 
 	// --- sash
 
-	private _initSash(): void {
+	private _initSash(): codemavi {
 		if (this._resizeSash) {
 			return;
 		}
@@ -554,7 +554,7 @@ export abstract class ZoneWidget implements IHorizontalSashLayoutProvider {
 		}));
 	}
 
-	private _updateSashEnablement(): void {
+	private _updateSashEnablement(): codemavi {
 		if (this._resizeSash) {
 			const { minLines, maxLines } = this._getResizeBounds();
 			this._resizeSash.state = minLines === maxLines ? SashState.Disabled : SashState.Enabled;

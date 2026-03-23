@@ -50,12 +50,12 @@ class InspectTokensController extends Disposable implements IEditorContribution 
 		this._register(this._editor.onKeyUp((e) => e.keyCode === KeyCode.Escape && this.stop()));
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this.stop();
 		super.dispose();
 	}
 
-	public launch(): void {
+	public launch(): codemavi {
 		if (this._widget) {
 			return;
 		}
@@ -65,7 +65,7 @@ class InspectTokensController extends Disposable implements IEditorContribution 
 		this._widget = new InspectTokensWidget(this._editor, this._languageService);
 	}
 
-	public stop(): void {
+	public stop(): codemavi {
 		if (this._widget) {
 			this._widget.dispose();
 			this._widget = null;
@@ -84,7 +84,7 @@ class InspectTokens extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const controller = InspectTokensController.get(editor);
 		controller?.launch();
 	}
@@ -167,7 +167,7 @@ class InspectTokensWidget extends Disposable implements IContentWidget {
 		this._editor.addContentWidget(this);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._editor.removeContentWidget(this);
 		super.dispose();
 	}
@@ -176,7 +176,7 @@ class InspectTokensWidget extends Disposable implements IContentWidget {
 		return InspectTokensWidget._ID;
 	}
 
-	private _compute(position: Position): void {
+	private _compute(position: Position): codemavi {
 		const data = this._getTokensAtLine(position.lineNumber);
 
 		let token1Index = 0;

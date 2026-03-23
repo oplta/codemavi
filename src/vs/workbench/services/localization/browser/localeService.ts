@@ -20,25 +20,25 @@ const localeStorage = new class LocaleStorage {
 	private static readonly LOCAL_STORAGE_LOCALE_KEY = 'vscode.nls.locale';
 	private static readonly LOCAL_STORAGE_EXTENSION_ID_KEY = 'vscode.nls.languagePackExtensionId';
 
-	setLocale(locale: string): void {
+	setLocale(locale: string): codemavi {
 		localStorage.setItem(LocaleStorage.LOCAL_STORAGE_LOCALE_KEY, locale);
 		this.doSetLocaleToCookie(locale);
 	}
 
-	private doSetLocaleToCookie(locale: string): void {
+	private doSetLocaleToCookie(locale: string): codemavi {
 		document.cookie = `${LocaleStorage.LOCAL_STORAGE_LOCALE_KEY}=${locale};path=/;max-age=3153600000`;
 	}
 
-	clearLocale(): void {
+	clearLocale(): codemavi {
 		localStorage.removeItem(LocaleStorage.LOCAL_STORAGE_LOCALE_KEY);
 		this.doClearLocaleToCookie();
 	}
 
-	private doClearLocaleToCookie(): void {
+	private doClearLocaleToCookie(): codemavi {
 		document.cookie = `${LocaleStorage.LOCAL_STORAGE_LOCALE_KEY}=;path=/;max-age=0`;
 	}
 
-	setExtensionId(extensionId: string): void {
+	setExtensionId(extensionId: string): codemavi {
 		localStorage.setItem(LocaleStorage.LOCAL_STORAGE_EXTENSION_ID_KEY, extensionId);
 	}
 
@@ -46,7 +46,7 @@ const localeStorage = new class LocaleStorage {
 		return localStorage.getItem(LocaleStorage.LOCAL_STORAGE_EXTENSION_ID_KEY);
 	}
 
-	clearExtensionId(): void {
+	clearExtensionId(): codemavi {
 		localStorage.removeItem(LocaleStorage.LOCAL_STORAGE_EXTENSION_ID_KEY);
 	}
 };
@@ -61,7 +61,7 @@ export class WebLocaleService implements ILocaleService {
 		@IProductService private readonly productService: IProductService
 	) { }
 
-	async setLocale(languagePackItem: ILanguagePackItem, _skipDialog = false): Promise<void> {
+	async setLocale(languagePackItem: ILanguagePackItem, _skipDialog = false): Promise<codemavi> {
 		const locale = languagePackItem.id;
 		if (locale === Language.value() || (!locale && Language.value() === navigator.language.toLowerCase())) {
 			return;
@@ -88,7 +88,7 @@ export class WebLocaleService implements ILocaleService {
 		}
 	}
 
-	async clearLocalePreference(): Promise<void> {
+	async clearLocalePreference(): Promise<codemavi> {
 		localeStorage.clearLocale();
 		localeStorage.clearExtensionId();
 

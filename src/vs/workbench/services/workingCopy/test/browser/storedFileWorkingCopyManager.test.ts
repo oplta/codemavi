@@ -99,7 +99,7 @@ suite('StoredFileWorkingCopyManager', () => {
 		disposables.add(await manager.resolve(resource));
 
 		let didResolve = false;
-		let onDidResolve = new Promise<void>(resolve => {
+		let onDidResolve = new Promise<codemavi>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model?.resource.toString() === resource.toString()) {
 					didResolve = true;
@@ -116,7 +116,7 @@ suite('StoredFileWorkingCopyManager', () => {
 
 		didResolve = false;
 
-		onDidResolve = new Promise<void>(resolve => {
+		onDidResolve = new Promise<codemavi>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model?.resource.toString() === resource.toString()) {
 					didResolve = true;
@@ -477,7 +477,7 @@ suite('StoredFileWorkingCopyManager', () => {
 		await manager.resolve(resource);
 
 		let didResolve = false;
-		const onDidResolve = new Promise<void>(resolve => {
+		const onDidResolve = new Promise<codemavi>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model?.resource.toString() === resource.toString()) {
 					didResolve = true;
@@ -500,7 +500,7 @@ suite('StoredFileWorkingCopyManager', () => {
 
 		let didResolve = false;
 		let resolvedCounter = 0;
-		const onDidResolve = new Promise<void>(resolve => {
+		const onDidResolve = new Promise<codemavi>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model?.resource.toString() === resource.toString()) {
 					resolvedCounter++;
@@ -525,7 +525,7 @@ suite('StoredFileWorkingCopyManager', () => {
 		disposables.add(await manager.resolve(resource));
 
 		let didResolve = false;
-		const onDidResolve = new Promise<void>(resolve => {
+		const onDidResolve = new Promise<codemavi>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model?.resource.toString() === resource.toString()) {
 					didResolve = true;

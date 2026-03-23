@@ -72,7 +72,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 	private readonly mapResourceToModel = new ResourceMap<TextFileEditorModel>();
 	private readonly mapResourceToModelListeners = new ResourceMap<IDisposable>();
 	private readonly mapResourceToDisposeListener = new ResourceMap<IDisposable>();
-	private readonly mapResourceToPendingModelResolvers = new ResourceMap<Promise<void>>();
+	private readonly mapResourceToPendingModelResolvers = new ResourceMap<Promise<codemavi>>();
 
 	private readonly modelResolveQueue = this._register(new ResourceQueue());
 
@@ -80,7 +80,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		const notificationService = this.notificationService;
 
 		return {
-			onSaveError(error: Error, model: ITextFileEditorModel): void {
+			onSaveError(error: Error, model: ITextFileEditorModel): codemavi {
 				notificationService.error(localize({ key: 'genericSaveError', comment: ['{0} is the resource that failed to save and {1} the error message'] }, "Failed to save '{0}': {1}", model.name, toErrorMessage(error, false)));
 			}
 		};
@@ -104,7 +104,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Update models from file change events
 		this._register(this.fileService.onDidFilesChange(e => this.onDidFilesChange(e)));
@@ -119,7 +119,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this._register(this.workingCopyFileService.onDidRunWorkingCopyFileOperation(e => this.onDidRunWorkingCopyFileOperation(e)));
 	}
 
-	private onDidFilesChange(e: FileChangesEvent): void {
+	private onDidFilesChange(e: FileChangesEvent): codemavi {
 		for (const model of this.models) {
 			if (model.isDirty()) {
 				continue; // never reload dirty models
@@ -134,7 +134,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		}
 	}
 
-	private onDidChangeFileSystemProviderCapabilities(e: IFileSystemProviderCapabilitiesChangeEvent): void {
+	private onDidChangeFileSystemProviderCapabilities(e: IFileSystemProviderCapabilitiesChangeEvent): codemavi {
 
 		// Resolve models again for file systems that changed
 		// capabilities to fetch latest metadata (e.g. readonly)
@@ -142,7 +142,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this.queueModelReloads(e.scheme);
 	}
 
-	private onDidChangeFileSystemProviderRegistrations(e: IFileSystemProviderRegistrationEvent): void {
+	private onDidChangeFileSystemProviderRegistrations(e: IFileSystemProviderRegistrationEvent): codemavi {
 		if (!e.added) {
 			return; // only if added
 		}
@@ -155,7 +155,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this.queueModelReloads(e.scheme);
 	}
 
-	private queueModelReloads(scheme: string): void {
+	private queueModelReloads(scheme: string): codemavi {
 		for (const model of this.models) {
 			if (model.isDirty()) {
 				continue; // never reload dirty models
@@ -167,7 +167,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		}
 	}
 
-	private queueModelReload(model: TextFileEditorModel): void {
+	private queueModelReload(model: TextFileEditorModel): codemavi {
 
 		// Resolve model to update (use a queue to prevent accumulation of resolves
 		// when the resolve actually takes long. At most we only want the queue
@@ -186,7 +186,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 
 	private readonly mapCorrelationIdToModelsToRestore = new Map<number, ITextFileEditorModelToRestore[]>();
 
-	private onWillRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
+	private onWillRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
 
 		// Move / Copy: remember models to restore after the operation
 		if (e.operation === FileOperation.MOVE || e.operation === FileOperation.COPY) {
@@ -242,7 +242,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		}
 	}
 
-	private onDidFailWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
+	private onDidFailWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
 
 		// Move / Copy: restore dirty flag on models to restore that were dirty
 		if ((e.operation === FileOperation.MOVE || e.operation === FileOperation.COPY)) {
@@ -262,7 +262,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		}
 	}
 
-	private onDidRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
+	private onDidRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
 		switch (e.operation) {
 
 			// Create: Revert existing models
@@ -335,7 +335,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		return this.mapResourceToModel.has(resource);
 	}
 
-	private async reload(model: TextFileEditorModel): Promise<void> {
+	private async reload(model: TextFileEditorModel): Promise<codemavi> {
 
 		// Await a pending model resolve first before proceeding
 		// to ensure that we never resolve a model more than once
@@ -375,7 +375,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 			model = resourceOrModel;
 		}
 
-		let modelResolve: Promise<void>;
+		let modelResolve: Promise<codemavi>;
 		let didCreateModel = false;
 
 		// Model exists
@@ -425,7 +425,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 			this.registerModel(newModel);
 		}
 
-		// Store pending resolves to avoid race conditions
+		// Store pending resolves to acodemavi race conditions
 		this.mapResourceToPendingModelResolvers.set(resource, modelResolve);
 
 		// Make known to manager (if not already known)
@@ -474,7 +474,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		return model;
 	}
 
-	private joinPendingResolves(resource: URI): Promise<void> | undefined {
+	private joinPendingResolves(resource: URI): Promise<codemavi> | undefined {
 		const pendingModelResolve = this.mapResourceToPendingModelResolvers.get(resource);
 		if (!pendingModelResolve) {
 			return;
@@ -483,14 +483,14 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		return this.doJoinPendingResolves(resource);
 	}
 
-	private async doJoinPendingResolves(resource: URI): Promise<void> {
+	private async doJoinPendingResolves(resource: URI): Promise<codemavi> {
 
 		// While we have pending model resolves, ensure
 		// to await the last one finishing before returning.
 		// This prevents a race when multiple clients await
 		// the pending resolve and then all trigger the resolve
 		// at the same time.
-		let currentModelCopyResolve: Promise<void> | undefined;
+		let currentModelCopyResolve: Promise<codemavi> | undefined;
 		while (this.mapResourceToPendingModelResolvers.has(resource)) {
 			const nextPendingModelResolve = this.mapResourceToPendingModelResolvers.get(resource);
 			if (nextPendingModelResolve === currentModelCopyResolve) {
@@ -506,7 +506,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		}
 	}
 
-	private registerModel(model: TextFileEditorModel): void {
+	private registerModel(model: TextFileEditorModel): codemavi {
 
 		// Install model listeners
 		const modelListeners = new DisposableStore();
@@ -523,7 +523,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this.mapResourceToModelListeners.set(model.resource, modelListeners);
 	}
 
-	add(resource: URI, model: TextFileEditorModel): void {
+	add(resource: URI, model: TextFileEditorModel): codemavi {
 		const knownModel = this.mapResourceToModel.get(resource);
 		if (knownModel === model) {
 			return; // already cached
@@ -538,7 +538,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		this.mapResourceToDisposeListener.set(resource, model.onWillDispose(() => this.remove(resource)));
 	}
 
-	remove(resource: URI): void {
+	remove(resource: URI): codemavi {
 		const removed = this.mapResourceToModel.delete(resource);
 
 		const disposeListener = this.mapResourceToDisposeListener.get(resource);
@@ -566,7 +566,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		return this.saveParticipants.addSaveParticipant(participant);
 	}
 
-	runSaveParticipants(model: ITextFileEditorModel, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
+	runSaveParticipants(model: ITextFileEditorModel, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
 		return this.saveParticipants.participate(model, context, progress, token);
 	}
 
@@ -608,7 +608,7 @@ export class TextFileEditorModelManager extends Disposable implements ITextFileE
 		return true;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		// model caches

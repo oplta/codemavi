@@ -27,7 +27,7 @@ suite('RPCProtocol', () => {
 			this._pair = other;
 		}
 
-		public send(buffer: VSBuffer): void {
+		public send(buffer: VSBuffer): codemavi {
 			Promise.resolve().then(() => {
 				this._pair!._onMessage.fire(buffer);
 			});

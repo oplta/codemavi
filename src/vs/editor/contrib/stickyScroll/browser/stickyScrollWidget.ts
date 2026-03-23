@@ -142,7 +142,7 @@ export class StickyScrollWidget extends Disposable implements IOverlayWidget {
 		return this._lineNumbers;
 	}
 
-	setState(_state: StickyScrollWidgetState | undefined, foldingModel: FoldingModel | undefined, _rebuildFromLine?: number): void {
+	setState(_state: StickyScrollWidgetState | undefined, foldingModel: FoldingModel | undefined, _rebuildFromLine?: number): codemavi {
 		if (_rebuildFromLine === undefined &&
 			((!this._previousState && !_state) || (this._previousState && this._previousState.equals(_state)))
 		) {
@@ -187,7 +187,7 @@ export class StickyScrollWidget extends Disposable implements IOverlayWidget {
 		return (indexOfLinesAlreadyRendered === -1) ? 0 : indexOfLinesAlreadyRendered;
 	}
 
-	private _updateWidgetWidth(): void {
+	private _updateWidgetWidth(): codemavi {
 		const layoutInfo = this._editor.getLayoutInfo();
 		const lineNumbersWidth = layoutInfo.contentLeft;
 		this._lineNumbersDomNode.style.width = `${lineNumbersWidth}px`;
@@ -221,7 +221,7 @@ export class StickyScrollWidget extends Disposable implements IOverlayWidget {
 		}
 	}
 
-	private async _renderRootNode(state: StickyScrollWidgetState | undefined, foldingModel: FoldingModel | undefined, rebuildFromLine: number): Promise<void> {
+	private async _renderRootNode(state: StickyScrollWidgetState | undefined, foldingModel: FoldingModel | undefined, rebuildFromLine: number): Promise<codemavi> {
 		this._clearStickyLinesFromLine(rebuildFromLine);
 		if (!state) {
 			// make sure the dom is 0 height and display:none
@@ -257,7 +257,7 @@ export class StickyScrollWidget extends Disposable implements IOverlayWidget {
 		this._editor.layoutOverlayWidget(this);
 	}
 
-	private _setHeight(height: number): void {
+	private _setHeight(height: number): codemavi {
 		if (this._height === height) {
 			return;
 		}
@@ -275,7 +275,7 @@ export class StickyScrollWidget extends Disposable implements IOverlayWidget {
 		this._onDidChangeStickyScrollHeight.fire({ height: this._height });
 	}
 
-	private _setFoldingHoverListeners(): void {
+	private _setFoldingHoverListeners(): codemavi {
 		const showFoldingControls: 'mouseover' | 'always' | 'never' = this._editor.getOption(EditorOption.showFoldingControls);
 		if (showFoldingControls !== 'mouseover') {
 			return;

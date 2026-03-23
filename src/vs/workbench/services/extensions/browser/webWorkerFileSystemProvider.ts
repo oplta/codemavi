@@ -43,19 +43,19 @@ export class FetchFileSystemProvider implements IFileSystemProviderWithFileReadW
 	}
 
 	// error implementations
-	writeFile(_resource: URI, _content: Uint8Array, _opts: IFileWriteOptions): Promise<void> {
+	writeFile(_resource: URI, _content: Uint8Array, _opts: IFileWriteOptions): Promise<codemavi> {
 		throw new NotSupportedError();
 	}
 	readdir(_resource: URI): Promise<[string, FileType][]> {
 		throw new NotSupportedError();
 	}
-	mkdir(_resource: URI): Promise<void> {
+	mkdir(_resource: URI): Promise<codemavi> {
 		throw new NotSupportedError();
 	}
-	delete(_resource: URI, _opts: IFileDeleteOptions): Promise<void> {
+	delete(_resource: URI, _opts: IFileDeleteOptions): Promise<codemavi> {
 		throw new NotSupportedError();
 	}
-	rename(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<void> {
+	rename(_from: URI, _to: URI, _opts: IFileOverwriteOptions): Promise<codemavi> {
 		throw new NotSupportedError();
 	}
 }

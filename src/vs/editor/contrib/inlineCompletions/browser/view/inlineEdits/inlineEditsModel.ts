@@ -55,7 +55,7 @@ export class InlineEditModel implements IInlineEditModel {
 }
 
 export class InlineEditHost implements IInlineEditHost {
-	readonly onDidAccept: Event<void>;
+	readonly onDidAccept: Event<codemavi>;
 	readonly inAcceptFlow: IObservable<boolean>;
 	readonly inPartialAcceptFlow: IObservable<boolean>;
 

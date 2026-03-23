@@ -32,7 +32,7 @@ export class FindDecorations implements IDisposable {
 		this._startPosition = this._editor.getPosition();
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this._editor.removeDecorations(this._allDecorations());
 
 		this._decorations = [];
@@ -42,7 +42,7 @@ export class FindDecorations implements IDisposable {
 		this._highlightedDecorationId = null;
 	}
 
-	public reset(): void {
+	public reset(): codemavi {
 		this._decorations = [];
 		this._overviewRulerApproximateDecorations = [];
 		this._findScopeDecorationIds = [];
@@ -78,7 +78,7 @@ export class FindDecorations implements IDisposable {
 		return this._startPosition;
 	}
 
-	public setStartPosition(newStartPosition: Position): void {
+	public setStartPosition(newStartPosition: Position): codemavi {
 		this._startPosition = newStartPosition;
 		this.setCurrentFindMatch(null);
 	}
@@ -154,7 +154,7 @@ export class FindDecorations implements IDisposable {
 		return matchPosition;
 	}
 
-	public set(findMatches: FindMatch[], findScopes: Range[] | null): void {
+	public set(findMatches: FindMatch[], findScopes: Range[] | null): codemavi {
 		this._editor.changeDecorations((accessor) => {
 
 			let findMatchesOptions: ModelDecorationOptions = FindDecorations._FIND_MATCH_DECORATION;

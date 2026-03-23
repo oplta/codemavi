@@ -344,7 +344,7 @@ export class CommandsHistory extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.updateConfiguration(e)));
 		this._register(this.storageService.onWillSaveState(e => {
 			if (e.reason === WillSaveStateReason.SHUTDOWN) {
@@ -356,7 +356,7 @@ export class CommandsHistory extends Disposable {
 		}));
 	}
 
-	private updateConfiguration(e?: IConfigurationChangeEvent): void {
+	private updateConfiguration(e?: IConfigurationChangeEvent): codemavi {
 		if (e && !e.affectsConfiguration('workbench.commandPalette.history')) {
 			return;
 		}
@@ -369,7 +369,7 @@ export class CommandsHistory extends Disposable {
 		}
 	}
 
-	private load(): void {
+	private load(): codemavi {
 		const raw = this.storageService.get(CommandsHistory.PREF_KEY_CACHE, StorageScope.PROFILE);
 		let serializedCache: ISerializedCommandHistory | undefined;
 		if (raw) {
@@ -394,7 +394,7 @@ export class CommandsHistory extends Disposable {
 		CommandsHistory.counter = this.storageService.getNumber(CommandsHistory.PREF_KEY_COUNTER, StorageScope.PROFILE, CommandsHistory.counter);
 	}
 
-	push(commandId: string): void {
+	push(commandId: string): codemavi {
 		if (!CommandsHistory.cache) {
 			return;
 		}
@@ -407,7 +407,7 @@ export class CommandsHistory extends Disposable {
 		return CommandsHistory.cache?.peek(commandId);
 	}
 
-	private saveState(): void {
+	private saveState(): codemavi {
 		if (!CommandsHistory.cache) {
 			return;
 		}
@@ -435,7 +435,7 @@ export class CommandsHistory extends Disposable {
 		return CommandsHistory.DEFAULT_COMMANDS_HISTORY_LENGTH;
 	}
 
-	static clearHistory(configurationService: IConfigurationService, storageService: IStorageService): void {
+	static clearHistory(configurationService: IConfigurationService, storageService: IStorageService): codemavi {
 		const commandHistoryLength = CommandsHistory.getConfiguredCommandHistoryLength(configurationService);
 		CommandsHistory.cache = new LRUCache<string, number>(commandHistoryLength);
 		CommandsHistory.counter = 1;

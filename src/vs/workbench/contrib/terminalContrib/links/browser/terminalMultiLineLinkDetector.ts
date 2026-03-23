@@ -20,7 +20,7 @@ const enum Constants {
 
 	/**
 	 * The maximum length of a link to resolve against the file system. This limit is put in place
-	 * to avoid sending excessive data when remote connections are in place.
+	 * to acodemavi sending excessive data when remote connections are in place.
 	 */
 	MaxResolvedLinkLength = 1024,
 }

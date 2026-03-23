@@ -33,7 +33,7 @@ class TunnelData extends Disposable implements IAddressProvider {
 		return this._addressPromise.p;
 	}
 
-	setAddress(address: IAddress): void {
+	setAddress(address: IAddress): codemavi {
 		this._address = address;
 		if (this._addressPromise) {
 			this._addressPromise.complete(address);
@@ -41,7 +41,7 @@ class TunnelData extends Disposable implements IAddressProvider {
 		}
 	}
 
-	setTunnel(tunnel: RemoteTunnel): void {
+	setTunnel(tunnel: RemoteTunnel): codemavi {
 		this._register(tunnel);
 	}
 }
@@ -61,7 +61,7 @@ export class SharedProcessTunnelService extends Disposable implements ISharedPro
 		super();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this._tunnels.forEach((tunnel) => tunnel.dispose());
 	}
@@ -100,7 +100,7 @@ export class SharedProcessTunnelService extends Disposable implements ISharedPro
 		return result;
 	}
 
-	async setAddress(id: string, address: IAddress): Promise<void> {
+	async setAddress(id: string, address: IAddress): Promise<codemavi> {
 		const tunnel = this._tunnels.get(id);
 		if (!tunnel) {
 			return;
@@ -108,7 +108,7 @@ export class SharedProcessTunnelService extends Disposable implements ISharedPro
 		tunnel.setAddress(address);
 	}
 
-	async destroyTunnel(id: string): Promise<void> {
+	async destroyTunnel(id: string): Promise<codemavi> {
 		const tunnel = this._tunnels.get(id);
 		if (tunnel) {
 			this._logService.info(`[SharedProcessTunnelService] Disposing tunnel ${id}.`);

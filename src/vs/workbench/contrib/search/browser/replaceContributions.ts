@@ -7,7 +7,7 @@ import { IReplaceService } from './replace.js';
 import { ReplaceService, ReplacePreviewContentProvider } from './replaceService.js';
 import { WorkbenchPhase, registerWorkbenchContribution2 } from '../../../common/contributions.js';
 
-export function registerContributions(): void {
+export function registerContributions(): codemavi {
 	registerSingleton(IReplaceService, ReplaceService, InstantiationType.Delayed);
 	registerWorkbenchContribution2(ReplacePreviewContentProvider.ID, ReplacePreviewContentProvider, WorkbenchPhase.BlockStartup /* registration only */);
 }

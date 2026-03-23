@@ -262,7 +262,7 @@ const allFlows: IFlow[] = [
 					codeToExchange = code;
 				} finally {
 					setTimeout(() => {
-						void server.stop();
+						codemavi server.stop();
 					}, 5000);
 				}
 

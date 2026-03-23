@@ -50,7 +50,7 @@ class ExecuteCommandAction extends Action2 {
 		super(desc);
 	}
 
-	override run(accessor: ServicesAccessor): Promise<void> {
+	override run(accessor: ServicesAccessor): Promise<codemavi> {
 		const commandService = accessor.get(ICommandService);
 
 		return commandService.executeCommand(this.commandId, this.commandArgs);
@@ -63,7 +63,7 @@ abstract class AbstractSplitEditorAction extends Action2 {
 		return preferredSideBySideGroupDirection(configurationService);
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
+	override async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
 		const editorGroupsService = accessor.get(IEditorGroupsService);
 		const configurationService = accessor.get(IConfigurationService);
 		const editorService = accessor.get(IEditorService);
@@ -195,7 +195,7 @@ export class JoinTwoGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		let sourceGroup: IEditorGroup | undefined;
@@ -230,7 +230,7 @@ export class JoinAllGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.mergeAllGroups(editorGroupService.activeGroup);
@@ -248,7 +248,7 @@ export class NavigateBetweenGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const nextGroup = editorGroupService.findGroup({ location: GroupLocation.NEXT }, editorGroupService.activeGroup, true);
@@ -267,7 +267,7 @@ export class FocusActiveGroupAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.activeGroup.focus();
@@ -283,7 +283,7 @@ abstract class AbstractFocusGroupAction extends Action2 {
 		super(desc);
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const group = editorGroupService.findGroup(this.scope, editorGroupService.activeGroup, true);
@@ -420,7 +420,7 @@ export class CloseEditorAction extends Action {
 		super(id, label, ThemeIcon.asClassName(Codicon.close));
 	}
 
-	override run(context?: IEditorCommandsContext): Promise<void> {
+	override run(context?: IEditorCommandsContext): Promise<codemavi> {
 		return this.commandService.executeCommand(CLOSE_EDITOR_COMMAND_ID, undefined, context);
 	}
 }
@@ -438,7 +438,7 @@ export class UnpinEditorAction extends Action {
 		super(id, label, ThemeIcon.asClassName(Codicon.pinned));
 	}
 
-	override run(context?: IEditorCommandsContext): Promise<void> {
+	override run(context?: IEditorCommandsContext): Promise<codemavi> {
 		return this.commandService.executeCommand(UNPIN_EDITOR_COMMAND_ID, undefined, context);
 	}
 }
@@ -456,7 +456,7 @@ export class CloseEditorTabAction extends Action {
 		super(id, label, ThemeIcon.asClassName(Codicon.close));
 	}
 
-	override async run(context?: IEditorCommandsContext): Promise<void> {
+	override async run(context?: IEditorCommandsContext): Promise<codemavi> {
 		const group = context ? this.editorGroupService.getGroup(context.groupId) : this.editorGroupService.activeGroup;
 		if (!group) {
 			// group mentioned in context does not exist
@@ -494,7 +494,7 @@ export class RevertAndCloseEditorAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const logService = accessor.get(ILogService);
 
@@ -533,7 +533,7 @@ export class CloseLeftEditorsInGroupAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const { group, editor } = this.getTarget(editorGroupService, context);
@@ -568,7 +568,7 @@ abstract class AbstractCloseAllAction extends Action2 {
 		return groupsToClose;
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const logService = accessor.get(ILogService);
 		const progressService = accessor.get(IProgressService);
@@ -694,7 +694,7 @@ abstract class AbstractCloseAllAction extends Action2 {
 		return this.doCloseAll(editorGroupService);
 	}
 
-	private revertEditors(editorService: IEditorService, logService: ILogService, progressService: IProgressService, editors: IEditorIdentifier[]): Promise<void> {
+	private revertEditors(editorService: IEditorService, logService: ILogService, progressService: IProgressService, editors: IEditorIdentifier[]): Promise<codemavi> {
 		return progressService.withProgress({
 			location: ProgressLocation.Window, 	// use window progress to not be too annoying about this operation
 			delay: 800,							// delay so that it only appears when operation takes a long time
@@ -702,7 +702,7 @@ abstract class AbstractCloseAllAction extends Action2 {
 		}, () => this.doRevertEditors(editorService, logService, editors));
 	}
 
-	private async doRevertEditors(editorService: IEditorService, logService: ILogService, editors: IEditorIdentifier[]): Promise<void> {
+	private async doRevertEditors(editorService: IEditorService, logService: ILogService, editors: IEditorIdentifier[]): Promise<codemavi> {
 		try {
 			// We first attempt to revert all editors with `soft: false`, to ensure that
 			// working copies revert to their state on disk. Even though we close editors,
@@ -721,7 +721,7 @@ abstract class AbstractCloseAllAction extends Action2 {
 		}
 	}
 
-	private async revealEditorsToConfirm(editors: ReadonlyArray<IEditorIdentifier>, editorGroupService: IEditorGroupsService): Promise<void> {
+	private async revealEditorsToConfirm(editors: ReadonlyArray<IEditorIdentifier>, editorGroupService: IEditorGroupsService): Promise<codemavi> {
 		try {
 			const handledGroups = new Set<GroupIdentifier>();
 			for (const { editor, groupId } of editors) {
@@ -741,7 +741,7 @@ abstract class AbstractCloseAllAction extends Action2 {
 
 	protected abstract get excludeSticky(): boolean;
 
-	protected async doCloseAll(editorGroupService: IEditorGroupsService): Promise<void> {
+	protected async doCloseAll(editorGroupService: IEditorGroupsService): Promise<codemavi> {
 		await Promise.all(this.groupsToClose(editorGroupService).map(group => group.closeAllEditors({ excludeSticky: this.excludeSticky })));
 	}
 }
@@ -789,7 +789,7 @@ export class CloseAllEditorGroupsAction extends AbstractCloseAllAction {
 		return false; // the intent to close groups means, even sticky are included
 	}
 
-	protected override async doCloseAll(editorGroupService: IEditorGroupsService): Promise<void> {
+	protected override async doCloseAll(editorGroupService: IEditorGroupsService): Promise<codemavi> {
 		await super.doCloseAll(editorGroupService);
 
 		for (const groupToClose of this.groupsToClose(editorGroupService)) {
@@ -809,7 +809,7 @@ export class CloseEditorsInOtherGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const groupToSkip = context ? editorGroupService.getGroup(context.groupId) : editorGroupService.activeGroup;
@@ -834,7 +834,7 @@ export class CloseEditorInAllGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
@@ -855,7 +855,7 @@ abstract class AbstractMoveCopyGroupAction extends Action2 {
 		super(desc);
 	}
 
-	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<void> {
+	override async run(accessor: ServicesAccessor, context?: IEditorIdentifier): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		let sourceGroup: IEditorGroup | undefined;
@@ -1054,7 +1054,7 @@ export class MinimizeOtherGroupsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.arrangeGroups(GroupsArrangement.EXPAND);
@@ -1073,7 +1073,7 @@ export class MinimizeOtherGroupsHideSidebarAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 
@@ -1094,7 +1094,7 @@ export class ResetGroupSizesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.arrangeGroups(GroupsArrangement.EVEN);
@@ -1112,7 +1112,7 @@ export class ToggleGroupSizesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.toggleExpandGroup();
@@ -1131,7 +1131,7 @@ export class MaximizeGroupHideSidebarAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const editorService = accessor.get(IEditorService);
@@ -1174,7 +1174,7 @@ export class ToggleMaximizeEditorGroupAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
+	override async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
 		const editorGroupsService = accessor.get(IEditorGroupsService);
 		const editorService = accessor.get(IEditorService);
 		const listService = accessor.get(IListService);
@@ -1188,7 +1188,7 @@ export class ToggleMaximizeEditorGroupAction extends Action2 {
 
 abstract class AbstractNavigateEditorAction extends Action2 {
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const result = this.navigate(editorGroupService);
@@ -1435,7 +1435,7 @@ export class NavigateForwardAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goForward(GoFilter.NONE);
@@ -1470,7 +1470,7 @@ export class NavigateBackwardsAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goBack(GoFilter.NONE);
@@ -1487,7 +1487,7 @@ export class NavigatePreviousAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goPrevious(GoFilter.NONE);
@@ -1504,7 +1504,7 @@ export class NavigateForwardInEditsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goForward(GoFilter.EDITS);
@@ -1521,7 +1521,7 @@ export class NavigateBackwardsInEditsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goBack(GoFilter.EDITS);
@@ -1538,7 +1538,7 @@ export class NavigatePreviousInEditsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goPrevious(GoFilter.EDITS);
@@ -1559,7 +1559,7 @@ export class NavigateToLastEditLocationAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goLast(GoFilter.EDITS);
@@ -1576,7 +1576,7 @@ export class NavigateForwardInNavigationsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goForward(GoFilter.NAVIGATION);
@@ -1593,7 +1593,7 @@ export class NavigateBackwardsInNavigationsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goBack(GoFilter.NAVIGATION);
@@ -1610,7 +1610,7 @@ export class NavigatePreviousInNavigationsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goPrevious(GoFilter.NAVIGATION);
@@ -1627,7 +1627,7 @@ export class NavigateToLastNavigationLocationAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.goLast(GoFilter.NAVIGATION);
@@ -1651,7 +1651,7 @@ export class ReopenClosedEditorAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		await historyService.reopenLastClosedEditor();
@@ -1671,7 +1671,7 @@ export class ClearRecentFilesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 		const workspacesService = accessor.get(IWorkspacesService);
 		const historyService = accessor.get(IHistoryService);
@@ -1709,7 +1709,7 @@ export class ShowEditorsInActiveGroupByMostRecentlyUsedAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const quickInputService = accessor.get(IQuickInputService);
 
 		quickInputService.quickAccess.show(ActiveGroupEditorsByMostRecentlyUsedQuickAccess.PREFIX);
@@ -1736,7 +1736,7 @@ export class ShowAllEditorsByAppearanceAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const quickInputService = accessor.get(IQuickInputService);
 
 		quickInputService.quickAccess.show(AllEditorsByAppearanceQuickAccess.PREFIX);
@@ -1756,7 +1756,7 @@ export class ShowAllEditorsByMostRecentlyUsedAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const quickInputService = accessor.get(IQuickInputService);
 
 		quickInputService.quickAccess.show(AllEditorsByMostRecentlyUsedQuickAccess.PREFIX);
@@ -1773,7 +1773,7 @@ abstract class AbstractQuickAccessEditorAction extends Action2 {
 		super(desc);
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const keybindingService = accessor.get(IKeybindingService);
 		const quickInputService = accessor.get(IQuickInputService);
 
@@ -1862,7 +1862,7 @@ export class QuickAccessPreviousEditorFromHistoryAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const keybindingService = accessor.get(IKeybindingService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
@@ -1891,7 +1891,7 @@ export class OpenNextRecentlyUsedEditorAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		historyService.openNextRecentlyUsedEditor();
@@ -1909,7 +1909,7 @@ export class OpenPreviousRecentlyUsedEditorAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 
 		historyService.openPreviouslyUsedEditor();
@@ -1927,7 +1927,7 @@ export class OpenNextRecentlyUsedEditorInGroupAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 		const editorGroupsService = accessor.get(IEditorGroupsService);
 
@@ -1946,7 +1946,7 @@ export class OpenPreviousRecentlyUsedEditorInGroupAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const historyService = accessor.get(IHistoryService);
 		const editorGroupsService = accessor.get(IEditorGroupsService);
 
@@ -1964,7 +1964,7 @@ export class ClearEditorHistoryAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 		const historyService = accessor.get(IHistoryService);
 
@@ -2367,7 +2367,7 @@ abstract class AbstractCreateEditorGroupAction extends Action2 {
 		super(desc);
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 
@@ -2454,7 +2454,7 @@ export class ToggleEditorTypeAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const editorResolverService = accessor.get(IEditorResolverService);
 
@@ -2500,7 +2500,7 @@ export class ReOpenInTextEditorAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 
 		const activeEditorPane = editorService.activeEditorPane;
@@ -2616,7 +2616,7 @@ abstract class BaseMoveCopyEditorGroupToNewWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const activeGroup = editorGroupService.activeGroup;
 
@@ -2673,7 +2673,7 @@ export class RestoreEditorsToMainWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		editorGroupService.mergeAllGroups(editorGroupService.mainPart.activeGroup);
@@ -2694,7 +2694,7 @@ export class NewEmptyEditorWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<void> {
+	override async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const auxiliaryEditorPart = await editorGroupService.createAuxiliaryEditorPart();

@@ -82,21 +82,21 @@ export abstract class AbstractRemoteAgentService extends Disposable implements I
 		);
 	}
 
-	updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<void> {
+	updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<codemavi> {
 		return this._withTelemetryChannel(
 			channel => RemoteExtensionEnvironmentChannelClient.updateTelemetryLevel(channel, telemetryLevel),
 			undefined
 		);
 	}
 
-	logTelemetry(eventName: string, data: ITelemetryData): Promise<void> {
+	logTelemetry(eventName: string, data: ITelemetryData): Promise<codemavi> {
 		return this._withTelemetryChannel(
 			channel => RemoteExtensionEnvironmentChannelClient.logTelemetry(channel, eventName, data),
 			undefined
 		);
 	}
 
-	flushTelemetry(): Promise<void> {
+	flushTelemetry(): Promise<codemavi> {
 		return this._withTelemetryChannel(
 			channel => RemoteExtensionEnvironmentChannelClient.flushTelemetry(channel),
 			undefined
@@ -114,7 +114,7 @@ export abstract class AbstractRemoteAgentService extends Disposable implements I
 		);
 	}
 
-	async endConnection(): Promise<void> {
+	async endConnection(): Promise<codemavi> {
 		if (this._connection) {
 			await this._connection.end();
 			this._connection.dispose();
@@ -141,7 +141,7 @@ export abstract class AbstractRemoteAgentService extends Disposable implements I
 
 class RemoteAgentConnection extends Disposable implements IRemoteAgentConnection {
 
-	private readonly _onReconnecting = this._register(new Emitter<void>());
+	private readonly _onReconnecting = this._register(new Emitter<codemavi>());
 	public readonly onReconnecting = this._onReconnecting.event;
 
 	private readonly _onDidStateChange = this._register(new Emitter<PersistentConnectionEvent>());
@@ -166,7 +166,7 @@ class RemoteAgentConnection extends Disposable implements IRemoteAgentConnection
 		this._connection = null;
 	}
 
-	end: () => Promise<void> = () => Promise.resolve();
+	end: () => Promise<codemavi> = () => Promise.resolve();
 
 	getChannel<T extends IChannel>(channelName: string): T {
 		return <T>getDelayedChannel(this._getOrCreateConnection().then(c => c.getChannel(channelName)));
@@ -178,7 +178,7 @@ class RemoteAgentConnection extends Disposable implements IRemoteAgentConnection
 		return result;
 	}
 
-	registerChannel<T extends IServerChannel<RemoteAgentConnectionContext>>(channelName: string, channel: T): void {
+	registerChannel<T extends IServerChannel<RemoteAgentConnectionContext>>(channelName: string, channel: T): codemavi {
 		this._getOrCreateConnection().then(client => client.registerChannel(channelName, channel));
 	}
 

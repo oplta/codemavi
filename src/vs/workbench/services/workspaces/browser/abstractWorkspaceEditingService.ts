@@ -99,7 +99,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return `workspace.${WORKSPACE_EXTENSION}`;
 	}
 
-	async updateFolders(index: number, deleteCount?: number, foldersToAddCandidates?: IWorkspaceFolderCreationData[], donotNotifyError?: boolean): Promise<void> {
+	async updateFolders(index: number, deleteCount?: number, foldersToAddCandidates?: IWorkspaceFolderCreationData[], donotNotifyError?: boolean): Promise<codemavi> {
 		const folders = this.contextService.getWorkspace().folders;
 
 		let foldersToDelete: URI[] = [];
@@ -149,7 +149,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		}
 	}
 
-	private async doUpdateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToDelete: URI[], index?: number, donotNotifyError: boolean = false): Promise<void> {
+	private async doUpdateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToDelete: URI[], index?: number, donotNotifyError: boolean = false): Promise<codemavi> {
 		try {
 			await this.contextService.updateFolders(foldersToAdd, foldersToDelete, index);
 		} catch (error) {
@@ -161,7 +161,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		}
 	}
 
-	addFolders(foldersToAddCandidates: IWorkspaceFolderCreationData[], donotNotifyError: boolean = false): Promise<void> {
+	addFolders(foldersToAddCandidates: IWorkspaceFolderCreationData[], donotNotifyError: boolean = false): Promise<codemavi> {
 
 		// Normalize
 		const foldersToAdd = foldersToAddCandidates.map(folderToAdd => ({ uri: removeTrailingPathSeparator(folderToAdd.uri), name: folderToAdd.name }));
@@ -169,7 +169,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return this.doAddFolders(foldersToAdd, undefined, donotNotifyError);
 	}
 
-	private async doAddFolders(foldersToAdd: IWorkspaceFolderCreationData[], index?: number, donotNotifyError: boolean = false): Promise<void> {
+	private async doAddFolders(foldersToAdd: IWorkspaceFolderCreationData[], index?: number, donotNotifyError: boolean = false): Promise<codemavi> {
 		const state = this.contextService.getWorkbenchState();
 		const remoteAuthority = this.environmentService.remoteAuthority;
 		if (remoteAuthority) {
@@ -203,7 +203,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		}
 	}
 
-	async removeFolders(foldersToRemove: URI[], donotNotifyError: boolean = false): Promise<void> {
+	async removeFolders(foldersToRemove: URI[], donotNotifyError: boolean = false): Promise<codemavi> {
 
 		// If we are in single-folder state and the opened folder is to be removed,
 		// we create an empty workspace and enter it.
@@ -232,7 +232,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return false;
 	}
 
-	async createAndEnterWorkspace(folders: IWorkspaceFolderCreationData[], path?: URI): Promise<void> {
+	async createAndEnterWorkspace(folders: IWorkspaceFolderCreationData[], path?: URI): Promise<codemavi> {
 		if (path && !await this.isValidTargetWorkspacePath(path)) {
 			return;
 		}
@@ -255,7 +255,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return this.enterWorkspace(path);
 	}
 
-	async saveAndEnterWorkspace(workspaceUri: URI): Promise<void> {
+	async saveAndEnterWorkspace(workspaceUri: URI): Promise<codemavi> {
 		const workspaceIdentifier = this.getCurrentWorkspaceIdentifier();
 		if (!workspaceIdentifier) {
 			return;
@@ -281,7 +281,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return true; // OK
 	}
 
-	protected async saveWorkspaceAs(workspace: IWorkspaceIdentifier, targetConfigPathURI: URI): Promise<void> {
+	protected async saveWorkspaceAs(workspace: IWorkspaceIdentifier, targetConfigPathURI: URI): Promise<codemavi> {
 		const configPathURI = workspace.configPath;
 
 		const isNotUntitledWorkspace = !isUntitledWorkspace(targetConfigPathURI, this.environmentService);
@@ -306,7 +306,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		await this.trustWorkspaceConfiguration(targetConfigPathURI);
 	}
 
-	protected async saveWorkspace(workspace: IWorkspaceIdentifier): Promise<void> {
+	protected async saveWorkspace(workspace: IWorkspaceIdentifier): Promise<codemavi> {
 		const configPathURI = workspace.configPath;
 
 		// First: try to save any existing model as it could be dirty
@@ -328,7 +328,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		await this.textFileService.create([{ resource: configPathURI, value: newRawWorkspaceContents }]);
 	}
 
-	private handleWorkspaceConfigurationEditingError(error: JSONEditingError): void {
+	private handleWorkspaceConfigurationEditingError(error: JSONEditingError): codemavi {
 		switch (error.code) {
 			case JSONEditingErrorCode.ERROR_INVALID_FILE:
 				this.onInvalidWorkspaceConfigurationFileError();
@@ -338,12 +338,12 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		}
 	}
 
-	private onInvalidWorkspaceConfigurationFileError(): void {
+	private onInvalidWorkspaceConfigurationFileError(): codemavi {
 		const message = localize('errorInvalidTaskConfiguration', "Unable to write into workspace configuration file. Please open the file to correct errors/warnings in it and try again.");
 		this.askToOpenWorkspaceConfigurationFile(message);
 	}
 
-	private askToOpenWorkspaceConfigurationFile(message: string): void {
+	private askToOpenWorkspaceConfigurationFile(message: string): codemavi {
 		this.notificationService.prompt(Severity.Error, message,
 			[{
 				label: localize('openWorkspaceConfigurationFile', "Open Workspace Configuration"),
@@ -352,7 +352,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		);
 	}
 
-	abstract enterWorkspace(workspaceUri: URI): Promise<void>;
+	abstract enterWorkspace(workspaceUri: URI): Promise<codemavi>;
 
 	protected async doEnterWorkspace(workspaceUri: URI): Promise<IEnterWorkspaceResult | undefined> {
 		if (!!this.environmentService.extensionTestsLocationURI) {
@@ -371,15 +371,15 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return this.workspacesService.enterWorkspace(workspaceUri);
 	}
 
-	private migrateWorkspaceSettings(toWorkspace: IWorkspaceIdentifier): Promise<void> {
+	private migrateWorkspaceSettings(toWorkspace: IWorkspaceIdentifier): Promise<codemavi> {
 		return this.doCopyWorkspaceSettings(toWorkspace, setting => setting.scope === ConfigurationScope.WINDOW);
 	}
 
-	copyWorkspaceSettings(toWorkspace: IWorkspaceIdentifier): Promise<void> {
+	copyWorkspaceSettings(toWorkspace: IWorkspaceIdentifier): Promise<codemavi> {
 		return this.doCopyWorkspaceSettings(toWorkspace);
 	}
 
-	private doCopyWorkspaceSettings(toWorkspace: IWorkspaceIdentifier, filter?: (config: IConfigurationPropertySchema) => boolean): Promise<void> {
+	private doCopyWorkspaceSettings(toWorkspace: IWorkspaceIdentifier, filter?: (config: IConfigurationPropertySchema) => boolean): Promise<codemavi> {
 		const configurationProperties = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration).getConfigurationProperties();
 		const targetWorkspaceConfiguration: any = {};
 		for (const key of this.configurationService.keys().workspace) {
@@ -395,7 +395,7 @@ export abstract class AbstractWorkspaceEditingService extends Disposable impleme
 		return this.jsonEditingService.write(toWorkspace.configPath, [{ path: ['settings'], value: targetWorkspaceConfiguration }], true);
 	}
 
-	private async trustWorkspaceConfiguration(configPathURI: URI): Promise<void> {
+	private async trustWorkspaceConfiguration(configPathURI: URI): Promise<codemavi> {
 		if (this.contextService.getWorkbenchState() !== WorkbenchState.EMPTY && this.workspaceTrustManagementService.isWorkspaceTrusted()) {
 			await this.workspaceTrustManagementService.setUrisTrust([configPathURI], true);
 		}

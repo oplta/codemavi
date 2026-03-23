@@ -92,37 +92,37 @@ function parseLogLevel(level: string): LogLevel {
 }
 
 export interface IOutputChannelModel extends IDisposable {
-	readonly onDispose: Event<void>;
+	readonly onDispose: Event<codemavi>;
 	readonly source: IOutputContentSource | ReadonlyArray<IOutputContentSource>;
 	getLogEntries(): ReadonlyArray<ILogEntry>;
-	append(output: string): void;
-	update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): void;
-	updateChannelSources(sources: ReadonlyArray<IOutputContentSource>): void;
+	append(output: string): codemavi;
+	update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): codemavi;
+	updateChannelSources(sources: ReadonlyArray<IOutputContentSource>): codemavi;
 	loadModel(): Promise<ITextModel>;
-	clear(): void;
-	replace(value: string): void;
+	clear(): codemavi;
+	replace(value: string): codemavi;
 }
 
 interface IContentProvider {
-	readonly onDidAppend: Event<void>;
-	readonly onDidReset: Event<void>;
-	reset(): void;
-	watch(): void;
-	unwatch(): void;
-	getContent(): Promise<{ readonly content: string; readonly consume: () => void }>;
+	readonly onDidAppend: Event<codemavi>;
+	readonly onDidReset: Event<codemavi>;
+	reset(): codemavi;
+	watch(): codemavi;
+	unwatch(): codemavi;
+	getContent(): Promise<{ readonly content: string; readonly consume: () => codemavi }>;
 	getLogEntries(): ReadonlyArray<ILogEntry>;
 }
 
 class FileContentProvider extends Disposable implements IContentProvider {
 
-	private readonly _onDidAppend = new Emitter<void>();
+	private readonly _onDidAppend = new Emitter<codemavi>();
 	readonly onDidAppend = this._onDidAppend.event;
 
-	private readonly _onDidReset = new Emitter<void>();
+	private readonly _onDidReset = new Emitter<codemavi>();
 	readonly onDidReset = this._onDidReset.event;
 
 	private watching: boolean = false;
-	private syncDelayer: ThrottledDelayer<void>;
+	private syncDelayer: ThrottledDelayer<codemavi>;
 	private etag: string | undefined = '';
 
 	private logEntries: ILogEntry[] = [];
@@ -142,21 +142,21 @@ class FileContentProvider extends Disposable implements IContentProvider {
 
 		this.name = name ?? '';
 		this.resource = resource;
-		this.syncDelayer = new ThrottledDelayer<void>(500);
+		this.syncDelayer = new ThrottledDelayer<codemavi>(500);
 		this._register(toDisposable(() => this.unwatch()));
 	}
 
-	reset(offset?: number): void {
+	reset(offset?: number): codemavi {
 		this.endOffset = this.startOffset = offset ?? this.startOffset;
 		this.logEntries = [];
 	}
 
-	resetToEnd(): void {
+	resetToEnd(): codemavi {
 		this.startOffset = this.endOffset;
 		this.logEntries = [];
 	}
 
-	watch(): void {
+	watch(): codemavi {
 		if (!this.watching) {
 			this.logService.trace('Started polling', this.resource.toString());
 			this.poll();
@@ -164,7 +164,7 @@ class FileContentProvider extends Disposable implements IContentProvider {
 		}
 	}
 
-	unwatch(): void {
+	unwatch(): codemavi {
 		if (this.watching) {
 			this.syncDelayer.cancel();
 			this.watching = false;
@@ -172,7 +172,7 @@ class FileContentProvider extends Disposable implements IContentProvider {
 		}
 	}
 
-	private poll(): void {
+	private poll(): codemavi {
 		const loop = () => this.doWatch().then(() => this.poll());
 		this.syncDelayer.trigger(loop).catch(error => {
 			if (!isCancellationError(error)) {
@@ -181,7 +181,7 @@ class FileContentProvider extends Disposable implements IContentProvider {
 		});
 	}
 
-	private async doWatch(): Promise<void> {
+	private async doWatch(): Promise<codemavi> {
 		try {
 			if (!this.fileService.hasProvider(this.resource)) {
 				return;
@@ -207,7 +207,7 @@ class FileContentProvider extends Disposable implements IContentProvider {
 		return this.logEntries;
 	}
 
-	async getContent(donotConsumeLogEntries?: boolean): Promise<{ readonly name: string; readonly content: string; readonly consume: () => void }> {
+	async getContent(donotConsumeLogEntries?: boolean): Promise<{ readonly name: string; readonly content: string; readonly consume: () => codemavi }> {
 		try {
 			if (!this.fileService.hasProvider(this.resource)) {
 				return {
@@ -265,7 +265,7 @@ class FileContentProvider extends Disposable implements IContentProvider {
 
 class MultiFileContentProvider extends Disposable implements IContentProvider {
 
-	private readonly _onDidAppend = this._register(new Emitter<void>());
+	private readonly _onDidAppend = this._register(new Emitter<codemavi>());
 	readonly onDidAppend = this._onDidAppend.event;
 	readonly onDidReset = Event.None;
 
@@ -298,7 +298,7 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 		return [fileOutput, disposables];
 	}
 
-	watch(): void {
+	watch(): codemavi {
 		if (!this.watching) {
 			this.watching = true;
 			for (const [output] of this.fileContentProviderItems) {
@@ -307,7 +307,7 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 		}
 	}
 
-	unwatch(): void {
+	unwatch(): codemavi {
 		if (this.watching) {
 			this.watching = false;
 			for (const [output] of this.fileContentProviderItems) {
@@ -316,7 +316,7 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 		}
 	}
 
-	updateFiles(files: IOutputContentSource[]): void {
+	updateFiles(files: IOutputContentSource[]): codemavi {
 		const wasWatching = this.watching;
 		if (wasWatching) {
 			this.unwatch();
@@ -336,14 +336,14 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 		}
 	}
 
-	reset(): void {
+	reset(): codemavi {
 		for (const [output] of this.fileContentProviderItems) {
 			output.reset();
 		}
 		this.logEntries = [];
 	}
 
-	resetToEnd(): void {
+	resetToEnd(): codemavi {
 		for (const [output] of this.fileContentProviderItems) {
 			output.resetToEnd();
 		}
@@ -354,7 +354,7 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 		return this.logEntries;
 	}
 
-	async getContent(): Promise<{ readonly content: string; readonly consume: () => void }> {
+	async getContent(): Promise<{ readonly content: string; readonly consume: () => codemavi }> {
 		const outputs = await Promise.all(this.fileContentProviderItems.map(([output]) => output.getContent(true)));
 		const { content, logEntries } = this.combineLogEntries(outputs, this.logEntries[this.logEntries.length - 1]);
 		let consumed = false;
@@ -465,8 +465,8 @@ class MultiFileContentProvider extends Disposable implements IContentProvider {
 
 export abstract class AbstractFileOutputChannelModel extends Disposable implements IOutputChannelModel {
 
-	private readonly _onDispose = this._register(new Emitter<void>());
-	readonly onDispose: Event<void> = this._onDispose.event;
+	private readonly _onDispose = this._register(new Emitter<codemavi>());
+	readonly onDispose: Event<codemavi> = this._onDispose.event;
 
 	protected loadModelPromise: Promise<ITextModel> | null = null;
 
@@ -475,7 +475,7 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 	private modelUpdateInProgress: boolean = false;
 	private readonly modelUpdateCancellationSource = this._register(new MutableDisposable<CancellationTokenSource>());
 	private readonly appendThrottler = this._register(new ThrottledDelayer(300));
-	private replacePromise: Promise<void> | undefined;
+	private replacePromise: Promise<codemavi> | undefined;
 
 	abstract readonly source: IOutputContentSource | ReadonlyArray<IOutputContentSource>;
 
@@ -519,14 +519,14 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 		return this.outputContentProvider.getLogEntries();
 	}
 
-	private onDidContentChange(reset: boolean, appendImmediately: boolean): void {
+	private onDidContentChange(reset: boolean, appendImmediately: boolean): codemavi {
 		if (reset && !this.modelUpdateInProgress) {
 			this.doUpdate(OutputChannelUpdateMode.Clear, true);
 		}
 		this.doUpdate(OutputChannelUpdateMode.Append, appendImmediately);
 	}
 
-	protected doUpdate(mode: OutputChannelUpdateMode, immediate: boolean): void {
+	protected doUpdate(mode: OutputChannelUpdateMode, immediate: boolean): codemavi {
 		if (mode === OutputChannelUpdateMode.Clear || mode === OutputChannelUpdateMode.Replace) {
 			this.cancelModelUpdate();
 		}
@@ -553,12 +553,12 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 		}
 	}
 
-	private clearContent(model: ITextModel): void {
+	private clearContent(model: ITextModel): codemavi {
 		model.applyEdits([EditOperation.delete(model.getFullModelRange())]);
 		this.modelUpdateInProgress = false;
 	}
 
-	private appendContent(model: ITextModel, immediate: boolean, token: CancellationToken): void {
+	private appendContent(model: ITextModel, immediate: boolean, token: CancellationToken): codemavi {
 		this.appendThrottler.trigger(async () => {
 			/* Abort if operation is cancelled */
 			if (token.isCancellationRequested) {
@@ -592,13 +592,13 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 		});
 	}
 
-	private doAppendContent(model: ITextModel, content: string): void {
+	private doAppendContent(model: ITextModel, content: string): codemavi {
 		const lastLine = model.getLineCount();
 		const lastLineMaxColumn = model.getLineMaxColumn(lastLine);
 		model.applyEdits([EditOperation.insert(new Position(lastLine, lastLineMaxColumn), content)]);
 	}
 
-	private async replaceContent(model: ITextModel, token: CancellationToken): Promise<void> {
+	private async replaceContent(model: ITextModel, token: CancellationToken): Promise<codemavi> {
 		/* Get content to replace */
 		const { content, consume } = await this.outputContentProvider.getContent();
 		/* Abort if operation is cancelled */
@@ -634,7 +634,7 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 		return [];
 	}
 
-	protected cancelModelUpdate(): void {
+	protected cancelModelUpdate(): codemavi {
 		this.modelUpdateCancellationSource.value?.cancel();
 		this.modelUpdateCancellationSource.value = undefined;
 		this.appendThrottler.cancel();
@@ -646,17 +646,17 @@ export abstract class AbstractFileOutputChannelModel extends Disposable implemen
 		return !!this.model;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._onDispose.fire();
 		super.dispose();
 	}
 
-	append(message: string): void { throw new Error('Not supported'); }
-	replace(message: string): void { throw new Error('Not supported'); }
+	append(message: string): codemavi { throw new Error('Not supported'); }
+	replace(message: string): codemavi { throw new Error('Not supported'); }
 
-	abstract clear(): void;
-	abstract update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): void;
-	abstract updateChannelSources(files: IOutputContentSource[]): void;
+	abstract clear(): codemavi;
+	abstract update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): codemavi;
+	abstract updateChannelSources(files: IOutputContentSource[]): codemavi;
 }
 
 export class FileOutputChannelModel extends AbstractFileOutputChannelModel implements IOutputChannelModel {
@@ -678,11 +678,11 @@ export class FileOutputChannelModel extends AbstractFileOutputChannelModel imple
 		this.fileOutput = this._register(fileOutput);
 	}
 
-	override clear(): void {
+	override clear(): codemavi {
 		this.update(OutputChannelUpdateMode.Clear, undefined, true);
 	}
 
-	override update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): void {
+	override update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): codemavi {
 		const loadModelPromise: Promise<any> = this.loadModelPromise ? this.loadModelPromise : Promise.resolve();
 		loadModelPromise.then(() => {
 			if (mode === OutputChannelUpdateMode.Clear || mode === OutputChannelUpdateMode.Replace) {
@@ -696,7 +696,7 @@ export class FileOutputChannelModel extends AbstractFileOutputChannelModel imple
 		});
 	}
 
-	override updateChannelSources(files: IOutputContentSource[]): void { throw new Error('Not supported'); }
+	override updateChannelSources(files: IOutputContentSource[]): codemavi { throw new Error('Not supported'); }
 }
 
 export class MultiFileOutputChannelModel extends AbstractFileOutputChannelModel implements IOutputChannelModel {
@@ -718,7 +718,7 @@ export class MultiFileOutputChannelModel extends AbstractFileOutputChannelModel 
 		this.multifileOutput = this._register(multifileOutput);
 	}
 
-	override updateChannelSources(files: IOutputContentSource[]): void {
+	override updateChannelSources(files: IOutputContentSource[]): codemavi {
 		this.multifileOutput.unwatch();
 		this.multifileOutput.updateFiles(files);
 		this.multifileOutput.reset();
@@ -728,7 +728,7 @@ export class MultiFileOutputChannelModel extends AbstractFileOutputChannelModel 
 		}
 	}
 
-	override clear(): void {
+	override clear(): codemavi {
 		const loadModelPromise: Promise<any> = this.loadModelPromise ? this.loadModelPromise : Promise.resolve();
 		loadModelPromise.then(() => {
 			this.multifileOutput.resetToEnd();
@@ -736,7 +736,7 @@ export class MultiFileOutputChannelModel extends AbstractFileOutputChannelModel 
 		});
 	}
 
-	override update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): void { throw new Error('Not supported'); }
+	override update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): codemavi { throw new Error('Not supported'); }
 }
 
 class OutputChannelBackedByFile extends FileOutputChannelModel implements IOutputChannelModel {
@@ -763,18 +763,18 @@ class OutputChannelBackedByFile extends FileOutputChannelModel implements IOutpu
 		this._offset = 0;
 	}
 
-	override append(message: string): void {
+	override append(message: string): codemavi {
 		this.write(message);
 		this.update(OutputChannelUpdateMode.Append, undefined, this.isVisible());
 	}
 
-	override replace(message: string): void {
+	override replace(message: string): codemavi {
 		const till = this._offset;
 		this.write(message);
 		this.update(OutputChannelUpdateMode.Replace, till, true);
 	}
 
-	private write(content: string): void {
+	private write(content: string): codemavi {
 		this._offset += VSBuffer.fromString(content).byteLength;
 		this.logger.info(content);
 		if (this.isVisible()) {
@@ -786,8 +786,8 @@ class OutputChannelBackedByFile extends FileOutputChannelModel implements IOutpu
 
 export class DelegatedOutputChannelModel extends Disposable implements IOutputChannelModel {
 
-	private readonly _onDispose: Emitter<void> = this._register(new Emitter<void>());
-	readonly onDispose: Event<void> = this._onDispose.event;
+	private readonly _onDispose: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	readonly onDispose: Event<codemavi> = this._onDispose.event;
 
 	private readonly outputChannelModel: Promise<IOutputChannelModel>;
 	readonly source: IOutputContentSource;
@@ -797,7 +797,7 @@ export class DelegatedOutputChannelModel extends Disposable implements IOutputCh
 		modelUri: URI,
 		language: ILanguageSelection,
 		outputDir: URI,
-		outputDirCreationPromise: Promise<void>,
+		outputDirCreationPromise: Promise<codemavi>,
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
 		@IFileService private readonly fileService: IFileService,
 	) {
@@ -807,7 +807,7 @@ export class DelegatedOutputChannelModel extends Disposable implements IOutputCh
 		this.source = { resource };
 	}
 
-	private async createOutputChannelModel(id: string, modelUri: URI, language: ILanguageSelection, outputDir: URI, outputDirPromise: Promise<void>): Promise<IOutputChannelModel> {
+	private async createOutputChannelModel(id: string, modelUri: URI, language: ILanguageSelection, outputDir: URI, outputDirPromise: Promise<codemavi>): Promise<IOutputChannelModel> {
 		await outputDirPromise;
 		const file = resources.joinPath(outputDir, `${id.replace(/[\\/:\*\?"<>\|]/g, '')}.log`);
 		await this.fileService.createFile(file);
@@ -820,11 +820,11 @@ export class DelegatedOutputChannelModel extends Disposable implements IOutputCh
 		return [];
 	}
 
-	append(output: string): void {
+	append(output: string): codemavi {
 		this.outputChannelModel.then(outputChannelModel => outputChannelModel.append(output));
 	}
 
-	update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): void {
+	update(mode: OutputChannelUpdateMode, till: number | undefined, immediate: boolean): codemavi {
 		this.outputChannelModel.then(outputChannelModel => outputChannelModel.update(mode, till, immediate));
 	}
 
@@ -832,15 +832,15 @@ export class DelegatedOutputChannelModel extends Disposable implements IOutputCh
 		return this.outputChannelModel.then(outputChannelModel => outputChannelModel.loadModel());
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this.outputChannelModel.then(outputChannelModel => outputChannelModel.clear());
 	}
 
-	replace(value: string): void {
+	replace(value: string): codemavi {
 		this.outputChannelModel.then(outputChannelModel => outputChannelModel.replace(value));
 	}
 
-	updateChannelSources(files: IOutputContentSource[]): void {
+	updateChannelSources(files: IOutputContentSource[]): codemavi {
 		this.outputChannelModel.then(outputChannelModel => outputChannelModel.updateChannelSources(files));
 	}
 }

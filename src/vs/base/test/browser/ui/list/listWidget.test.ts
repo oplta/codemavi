@@ -25,7 +25,7 @@ suite('ListWidget', function () {
 
 		let templatesCount = 0;
 
-		const renderer: IListRenderer<number, void> = {
+		const renderer: IListRenderer<number, codemavi> = {
 			templateId: 'template',
 			renderTemplate() { templatesCount++; },
 			renderElement() { },
@@ -68,7 +68,7 @@ suite('ListWidget', function () {
 
 		let templatesCount = 0;
 
-		const renderer: IListRenderer<number, void> = {
+		const renderer: IListRenderer<number, codemavi> = {
 			templateId: 'template',
 			renderTemplate() { templatesCount++; },
 			renderElement() { },

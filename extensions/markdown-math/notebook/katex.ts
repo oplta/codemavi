@@ -7,7 +7,7 @@ import type { RendererContext } from 'vscode-notebook-renderer';
 
 const styleHref = import.meta.url.replace(/katex.js$/, 'katex.min.css');
 
-export async function activate(ctx: RendererContext<void>) {
+export async function activate(ctx: RendererContext<codemavi>) {
 	const markdownItRenderer = (await ctx.getRenderer('vscode.markdown-it-renderer')) as undefined | any;
 	if (!markdownItRenderer) {
 		throw new Error(`Could not load 'vscode.markdown-it-renderer'`);

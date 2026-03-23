@@ -19,12 +19,12 @@ export interface ISchemaContributions {
 export interface IJSONContributionRegistry {
 
 	readonly onDidChangeSchema: Event<string>;
-	readonly onDidChangeSchemaAssociations: Event<void>;
+	readonly onDidChangeSchemaAssociations: Event<codemavi>;
 
 	/**
 	 * Register a schema to the registry.
 	 */
-	registerSchema(uri: string, unresolvedSchemaContent: IJSONSchema, store?: DisposableStore): void;
+	registerSchema(uri: string, unresolvedSchemaContent: IJSONSchema, store?: DisposableStore): codemavi;
 
 	registerSchemaAssociation(uri: string, glob: string): IDisposable;
 
@@ -32,7 +32,7 @@ export interface IJSONContributionRegistry {
 	 * Notifies all listeners that the content of the given schema has changed.
 	 * @param uri The id of the schema
 	 */
-	notifySchemaChanged(uri: string): void;
+	notifySchemaChanged(uri: string): codemavi;
 
 	/**
 	 * Get all schemas
@@ -73,10 +73,10 @@ class JSONContributionRegistry implements IJSONContributionRegistry {
 	private readonly _onDidChangeSchema = new Emitter<string>();
 	readonly onDidChangeSchema: Event<string> = this._onDidChangeSchema.event;
 
-	private readonly _onDidChangeSchemaAssociations = new Emitter<void>();
-	readonly onDidChangeSchemaAssociations: Event<void> = this._onDidChangeSchemaAssociations.event;
+	private readonly _onDidChangeSchemaAssociations = new Emitter<codemavi>();
+	readonly onDidChangeSchemaAssociations: Event<codemavi> = this._onDidChangeSchemaAssociations.event;
 
-	public registerSchema(uri: string, unresolvedSchemaContent: IJSONSchema, store?: DisposableStore): void {
+	public registerSchema(uri: string, unresolvedSchemaContent: IJSONSchema, store?: DisposableStore): codemavi {
 		const normalizedUri = normalizeId(uri);
 		this.schemasById[normalizedUri] = unresolvedSchemaContent;
 		this._onDidChangeSchema.fire(uri);
@@ -114,7 +114,7 @@ class JSONContributionRegistry implements IJSONContributionRegistry {
 		});
 	}
 
-	public notifySchemaChanged(uri: string): void {
+	public notifySchemaChanged(uri: string): codemavi {
 		this._onDidChangeSchema.fire(uri);
 	}
 

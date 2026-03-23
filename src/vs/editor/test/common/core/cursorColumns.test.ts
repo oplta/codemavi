@@ -12,7 +12,7 @@ suite('CursorColumns', () => {
 
 	test('visibleColumnFromColumn', () => {
 
-		function testVisibleColumnFromColumn(text: string, tabSize: number, column: number, expected: number): void {
+		function testVisibleColumnFromColumn(text: string, tabSize: number, column: number, expected: number): codemavi {
 			assert.strictEqual(CursorColumns.visibleColumnFromColumn(text, column, tabSize), expected);
 		}
 
@@ -71,7 +71,7 @@ suite('CursorColumns', () => {
 
 	test('toStatusbarColumn', () => {
 
-		function t(text: string, tabSize: number, column: number, expected: number): void {
+		function t(text: string, tabSize: number, column: number, expected: number): codemavi {
 			assert.strictEqual(CursorColumns.toStatusbarColumn(text, column, tabSize), expected, `<<t('${text}', ${tabSize}, ${column}, ${expected})>>`);
 		}
 
@@ -127,7 +127,7 @@ suite('CursorColumns', () => {
 
 	test('columnFromVisibleColumn', () => {
 
-		function testColumnFromVisibleColumn(text: string, tabSize: number, visibleColumn: number, expected: number): void {
+		function testColumnFromVisibleColumn(text: string, tabSize: number, visibleColumn: number, expected: number): codemavi {
 			assert.strictEqual(CursorColumns.columnFromVisibleColumn(text, visibleColumn, tabSize), expected);
 		}
 

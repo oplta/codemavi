@@ -198,7 +198,7 @@ export class FileWorkingCopyManager<S extends IStoredFileWorkingCopyModel, U ext
 
 	//#region decorations
 
-	private provideDecorations(): void {
+	private provideDecorations(): codemavi {
 
 		// File working copy decorations
 		const provider = this._register(new class extends Disposable implements IDecorationsProvider {
@@ -214,7 +214,7 @@ export class FileWorkingCopyManager<S extends IStoredFileWorkingCopyModel, U ext
 				this.registerListeners();
 			}
 
-			private registerListeners(): void {
+			private registerListeners(): codemavi {
 
 				// Creates
 				this._register(this.stored.onDidResolve(workingCopy => {
@@ -550,7 +550,7 @@ export class FileWorkingCopyManager<S extends IStoredFileWorkingCopyModel, U ext
 
 	//#region Lifecycle
 
-	async destroy(): Promise<void> {
+	async destroy(): Promise<codemavi> {
 		await Promises.settled([
 			this.stored.destroy(),
 			this.untitled.destroy()

@@ -52,7 +52,7 @@ export class CodeBlockModelCollection extends Disposable {
 		super();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		super.dispose();
 		this.clear();
 	}
@@ -106,7 +106,7 @@ export class CodeBlockModelCollection extends Disposable {
 		this._models.delete(key);
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._models.forEach(async entry => (await entry.model).dispose());
 		this._models.clear();
 	}
@@ -130,7 +130,7 @@ export class CodeBlockModelCollection extends Disposable {
 		return this.get(sessionId, chat, codeBlockIndex) ?? entry;
 	}
 
-	markCodeBlockCompleted(sessionId: string, chat: IChatRequestViewModel | IChatResponseViewModel, codeBlockIndex: number): void {
+	markCodeBlockCompleted(sessionId: string, chat: IChatRequestViewModel | IChatResponseViewModel, codeBlockIndex: number): codemavi {
 		const entry = this._models.get(this.getKey(sessionId, chat, codeBlockIndex));
 		if (!entry) {
 			return;

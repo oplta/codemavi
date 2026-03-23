@@ -35,9 +35,9 @@ const ITroubleshootIssueService = createDecorator<ITroubleshootIssueService>('IT
 interface ITroubleshootIssueService {
 	_serviceBrand: undefined;
 	isActive(): boolean;
-	start(): Promise<void>;
-	resume(): Promise<void>;
-	stop(): Promise<void>;
+	start(): Promise<codemavi>;
+	resume(): Promise<codemavi>;
+	stop(): Promise<codemavi>;
 }
 
 enum TroubleshootStage {
@@ -103,7 +103,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		return this.state !== undefined;
 	}
 
-	async start(): Promise<void> {
+	async start(): Promise<codemavi> {
 		if (this.isActive()) {
 			throw new Error('invalid state');
 		}
@@ -125,7 +125,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		await this.resume();
 	}
 
-	async resume(): Promise<void> {
+	async resume(): Promise<codemavi> {
 		if (!this.isActive()) {
 			return;
 		}
@@ -141,7 +141,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		await this.stop();
 	}
 
-	async stop(): Promise<void> {
+	async stop(): Promise<codemavi> {
 		if (!this.isActive()) {
 			return;
 		}
@@ -160,7 +160,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		await this.userDataProfileManagementService.switchProfile(profile);
 	}
 
-	private async reproduceIssueWithExtensionsDisabled(): Promise<void> {
+	private async reproduceIssueWithExtensionsDisabled(): Promise<codemavi> {
 		if (!(await this.extensionManagementService.getInstalled(ExtensionType.User)).length) {
 			this.state = new TroubleShootState(TroubleshootStage.WORKBENCH, this.state!.profile);
 			return;
@@ -179,7 +179,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		}
 	}
 
-	private async reproduceIssueWithEmptyProfile(): Promise<void> {
+	private async reproduceIssueWithEmptyProfile(): Promise<codemavi> {
 		await this.userDataProfileManagementService.createAndEnterTransientProfile();
 		this.updateState(this.state);
 		const result = await this.askToReproduceIssue(localize('empty.profile', "Issue troubleshooting is active and has temporarily reset your configurations to defaults. Check if you can still reproduce the problem and proceed by selecting from these options."));
@@ -194,7 +194,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		}
 	}
 
-	private async reproduceIssueWithExtensionsBisect(profile: IUserDataProfile): Promise<void> {
+	private async reproduceIssueWithExtensionsBisect(profile: IUserDataProfile): Promise<codemavi> {
 		await this.userDataProfileManagementService.switchProfile(profile);
 		const extensions = (await this.extensionManagementService.getInstalled(ExtensionType.User)).filter(ext => this.extensionEnablementService.isEnabled(ext));
 		await this.extensionBisectService.start(extensions);
@@ -224,7 +224,7 @@ class TroubleshootIssueService extends Disposable implements ITroubleshootIssueS
 		});
 	}
 
-	private async askToReportIssue(message: string): Promise<void> {
+	private async askToReportIssue(message: string): Promise<codemavi> {
 		let isCheckedInInsiders = false;
 		if (this.productService.quality === 'stable') {
 			const res = await this.askToReproduceIssueWithInsiders();
@@ -337,7 +337,7 @@ class IssueTroubleshootUi extends Disposable {
 		}));
 	}
 
-	private updateContext(): void {
+	private updateContext(): codemavi {
 		IssueTroubleshootUi.ctxIsTroubleshootActive.bindTo(this.contextKeyService).set(this.troubleshootIssueService.isActive());
 	}
 
@@ -355,7 +355,7 @@ registerAction2(class TroubleshootIssueAction extends Action2 {
 			precondition: ContextKeyExpr.and(IssueTroubleshootUi.ctxIsTroubleshootActive.negate(), RemoteNameContext.isEqualTo(''), IsWebContext.negate()),
 		});
 	}
-	run(accessor: ServicesAccessor): Promise<void> {
+	run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(ITroubleshootIssueService).start();
 	}
 });
@@ -371,7 +371,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		return accessor.get(ITroubleshootIssueService).stop();
 	}
 });

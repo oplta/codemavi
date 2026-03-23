@@ -227,7 +227,7 @@ export class WordOperations {
 
 		if (wordNavigationType === WordNavigationType.WordStartFast) {
 			if (
-				!hasMulticursor // avoid having multiple cursors stop at different locations when doing word start
+				!hasMulticursor // acodemavi having multiple cursors stop at different locations when doing word start
 				&& prevWordOnLine
 				&& prevWordOnLine.wordType === WordType.Separator
 				&& prevWordOnLine.end - prevWordOnLine.start === 1

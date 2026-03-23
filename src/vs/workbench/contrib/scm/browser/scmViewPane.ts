@@ -164,7 +164,7 @@ function processResourceFilterData(uri: URI, filterData: FuzzyScore | LabelFuzzy
 interface ISCMLayout {
 	height: number | undefined;
 	width: number | undefined;
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 }
 
 interface ActionButtonTemplate {
@@ -200,7 +200,7 @@ export class ActionButtonRenderer implements ICompressibleTreeRenderer<ISCMActio
 		return { actionButton, disposable: Disposable.None, templateDisposable: actionButton };
 	}
 
-	renderElement(node: ITreeNode<ISCMActionButton, FuzzyScore>, index: number, templateData: ActionButtonTemplate, height: number | undefined): void {
+	renderElement(node: ITreeNode<ISCMActionButton, FuzzyScore>, index: number, templateData: ActionButtonTemplate, height: number | undefined): codemavi {
 		templateData.disposable.dispose();
 
 		const disposables = new DisposableStore();
@@ -214,19 +214,19 @@ export class ActionButtonRenderer implements ICompressibleTreeRenderer<ISCMActio
 		templateData.disposable = disposables;
 	}
 
-	renderCompressedElements(): void {
+	renderCompressedElements(): codemavi {
 		throw new Error('Should never happen since node is incompressible');
 	}
 
-	focusActionButton(actionButton: ISCMActionButton): void {
+	focusActionButton(actionButton: ISCMActionButton): codemavi {
 		this.actionButtons.get(actionButton)?.focus();
 	}
 
-	disposeElement(node: ITreeNode<ISCMActionButton, FuzzyScore>, index: number, template: ActionButtonTemplate): void {
+	disposeElement(node: ITreeNode<ISCMActionButton, FuzzyScore>, index: number, template: ActionButtonTemplate): codemavi {
 		template.disposable.dispose();
 	}
 
-	disposeTemplate(templateData: ActionButtonTemplate): void {
+	disposeTemplate(templateData: ActionButtonTemplate): codemavi {
 		templateData.disposable.dispose();
 		templateData.templateDisposable.dispose();
 	}
@@ -244,7 +244,7 @@ class SCMTreeDragAndDrop implements ITreeDragAndDrop<TreeElement> {
 		return null;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
 		const items = SCMTreeDragAndDrop.getResourcesFromDragAndDropData(data as ElementsDragAndDropData<TreeElement, TreeElement[]>);
 		if (originalEvent.dataTransfer && items?.length) {
 			this.instantiationService.invokeFunction(accessor => fillEditorsDragData(accessor, items, originalEvent));
@@ -271,7 +271,7 @@ class SCMTreeDragAndDrop implements ITreeDragAndDrop<TreeElement> {
 		return true;
 	}
 
-	drop(data: IDragAndDropData, targetElement: TreeElement | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void { }
+	drop(data: IDragAndDropData, targetElement: TreeElement | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi { }
 
 	private static getResourcesFromDragAndDropData(data: ElementsDragAndDropData<TreeElement, TreeElement[]>): URI[] {
 		const uris: URI[] = [];
@@ -283,7 +283,7 @@ class SCMTreeDragAndDrop implements ITreeDragAndDrop<TreeElement> {
 		return uris;
 	}
 
-	dispose(): void { }
+	dispose(): codemavi { }
 }
 
 interface InputTemplate {
@@ -307,7 +307,7 @@ class InputRenderer implements ICompressibleTreeRenderer<ISCMInput, FuzzyScore, 
 	constructor(
 		private outerLayout: ISCMLayout,
 		private overflowWidgetsDomNode: HTMLElement,
-		private updateHeight: (input: ISCMInput, height: number) => void,
+		private updateHeight: (input: ISCMInput, height: number) => codemavi,
 		@IInstantiationService private instantiationService: IInstantiationService
 	) { }
 
@@ -326,7 +326,7 @@ class InputRenderer implements ICompressibleTreeRenderer<ISCMInput, FuzzyScore, 
 		return { inputWidget, inputWidgetHeight: InputRenderer.DEFAULT_HEIGHT, elementDisposables: new DisposableStore(), templateDisposable };
 	}
 
-	renderElement(node: ITreeNode<ISCMInput, FuzzyScore>, index: number, templateData: InputTemplate): void {
+	renderElement(node: ITreeNode<ISCMInput, FuzzyScore>, index: number, templateData: InputTemplate): codemavi {
 		const input = node.element;
 		templateData.inputWidget.input = input;
 
@@ -380,15 +380,15 @@ class InputRenderer implements ICompressibleTreeRenderer<ISCMInput, FuzzyScore, 
 		layoutEditor();
 	}
 
-	renderCompressedElements(): void {
+	renderCompressedElements(): codemavi {
 		throw new Error('Should never happen since node is incompressible');
 	}
 
-	disposeElement(group: ITreeNode<ISCMInput, FuzzyScore>, index: number, template: InputTemplate): void {
+	disposeElement(group: ITreeNode<ISCMInput, FuzzyScore>, index: number, template: InputTemplate): codemavi {
 		template.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: InputTemplate): void {
+	disposeTemplate(templateData: InputTemplate): codemavi {
 		templateData.templateDisposable.dispose();
 	}
 
@@ -410,7 +410,7 @@ class InputRenderer implements ICompressibleTreeRenderer<ISCMInput, FuzzyScore, 
 		return undefined;
 	}
 
-	clearValidation(): void {
+	clearValidation(): codemavi {
 		for (const [, inputWidget] of this.inputWidgets) {
 			inputWidget.clearValidation();
 		}
@@ -460,7 +460,7 @@ class ResourceGroupRenderer implements ICompressibleTreeRenderer<ISCMResourceGro
 		return { name, count, actionBar, elementDisposables: new DisposableStore(), disposables };
 	}
 
-	renderElement(node: ITreeNode<ISCMResourceGroup, FuzzyScore>, index: number, template: ResourceGroupTemplate): void {
+	renderElement(node: ITreeNode<ISCMResourceGroup, FuzzyScore>, index: number, template: ResourceGroupTemplate): codemavi {
 		const group = node.element;
 		template.name.textContent = group.label;
 		template.count.setCount(group.resources.length);
@@ -472,15 +472,15 @@ class ResourceGroupRenderer implements ICompressibleTreeRenderer<ISCMResourceGro
 		template.actionBar.context = group;
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResourceGroup>, FuzzyScore>, index: number, templateData: ResourceGroupTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResourceGroup>, FuzzyScore>, index: number, templateData: ResourceGroupTemplate, height: number | undefined): codemavi {
 		throw new Error('Should never happen since node is incompressible');
 	}
 
-	disposeElement(group: ITreeNode<ISCMResourceGroup, FuzzyScore>, index: number, template: ResourceGroupTemplate): void {
+	disposeElement(group: ITreeNode<ISCMResourceGroup, FuzzyScore>, index: number, template: ResourceGroupTemplate): codemavi {
 		template.elementDisposables.clear();
 	}
 
-	disposeTemplate(template: ResourceGroupTemplate): void {
+	disposeTemplate(template: ResourceGroupTemplate): codemavi {
 		template.elementDisposables.dispose();
 		template.disposables.dispose();
 	}
@@ -569,7 +569,7 @@ class ResourceRenderer implements ICompressibleTreeRenderer<ISCMResource | IReso
 		return { element, name, fileLabel, decorationIcon, actionBar, actionBarMenu: undefined, actionBarMenuListener, elementDisposables: new DisposableStore(), disposables };
 	}
 
-	renderElement(node: ITreeNode<ISCMResource, FuzzyScore | LabelFuzzyScore> | ITreeNode<ISCMResource | IResourceNode<ISCMResource, ISCMResourceGroup>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate): void {
+	renderElement(node: ITreeNode<ISCMResource, FuzzyScore | LabelFuzzyScore> | ITreeNode<ISCMResource | IResourceNode<ISCMResource, ISCMResourceGroup>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate): codemavi {
 		const resourceOrFolder = node.element;
 		const iconResource = ResourceTree.isResourceNode(resourceOrFolder) ? resourceOrFolder.element : resourceOrFolder;
 		const uri = ResourceTree.isResourceNode(resourceOrFolder) ? resourceOrFolder.uri : resourceOrFolder.sourceUri;
@@ -616,11 +616,11 @@ class ResourceRenderer implements ICompressibleTreeRenderer<ISCMResource | IReso
 		template.element.setAttribute('data-tooltip', tooltip);
 	}
 
-	disposeElement(resource: ITreeNode<ISCMResource, FuzzyScore | LabelFuzzyScore> | ITreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate): void {
+	disposeElement(resource: ITreeNode<ISCMResource, FuzzyScore | LabelFuzzyScore> | ITreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate): codemavi {
 		template.elementDisposables.clear();
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResource> | ICompressedTreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate, height: number | undefined): void {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResource> | ICompressedTreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate, height: number | undefined): codemavi {
 		const compressed = node.element as ICompressedTreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>>;
 		const folder = compressed.elements[compressed.elements.length - 1];
 
@@ -646,16 +646,16 @@ class ResourceRenderer implements ICompressibleTreeRenderer<ISCMResource | IReso
 		template.element.setAttribute('data-tooltip', '');
 	}
 
-	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResource> | ICompressedTreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate, height: number | undefined): void {
+	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ISCMResource> | ICompressedTreeNode<IResourceNode<ISCMResource, ISCMResourceGroup>>, FuzzyScore | LabelFuzzyScore>, index: number, template: ResourceTemplate, height: number | undefined): codemavi {
 		template.elementDisposables.clear();
 	}
 
-	disposeTemplate(template: ResourceTemplate): void {
+	disposeTemplate(template: ResourceTemplate): codemavi {
 		template.elementDisposables.dispose();
 		template.disposables.dispose();
 	}
 
-	private _renderActionBar(template: ResourceTemplate, resourceOrFolder: ISCMResource | IResourceNode<ISCMResource, ISCMResourceGroup>, menu: IMenu): void {
+	private _renderActionBar(template: ResourceTemplate, resourceOrFolder: ISCMResource | IResourceNode<ISCMResource, ISCMResourceGroup>, menu: IMenu): codemavi {
 		if (!template.actionBarMenu || template.actionBarMenu !== menu) {
 			template.actionBarMenu = menu;
 			template.actionBarMenuListener.value = connectPrimaryMenu(menu, primary => {
@@ -666,13 +666,13 @@ class ResourceRenderer implements ICompressibleTreeRenderer<ISCMResource | IReso
 		template.actionBar.context = resourceOrFolder;
 	}
 
-	private onDidColorThemeChange(): void {
+	private onDidColorThemeChange(): codemavi {
 		for (const [template, data] of this.renderedResources) {
 			this.renderIcon(template, data);
 		}
 	}
 
-	private renderIcon(template: ResourceTemplate, data: RenderedResourceData): void {
+	private renderIcon(template: ResourceTemplate, data: RenderedResourceData): codemavi {
 		const theme = this.themeService.getColorTheme();
 		const icon = theme.type === ColorScheme.LIGHT ? data.iconResource?.decorations.icon : data.iconResource?.decorations.iconDark;
 
@@ -705,7 +705,7 @@ class ResourceRenderer implements ICompressibleTreeRenderer<ISCMResource | IReso
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
@@ -1033,7 +1033,7 @@ class RepositoryVisibilityAction extends Action2 {
 
 interface RepositoryVisibilityItem {
 	readonly contextKey: IContextKey<boolean>;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 class RepositoryVisibilityActionController {
@@ -1060,7 +1060,7 @@ class RepositoryVisibilityActionController {
 		}
 	}
 
-	private onDidAddRepository(repository: ISCMRepository): void {
+	private onDidAddRepository(repository: ISCMRepository): codemavi {
 		const action = registerAction2(class extends RepositoryVisibilityAction {
 			constructor() {
 				super(repository);
@@ -1081,13 +1081,13 @@ class RepositoryVisibilityActionController {
 		this.updateRepositoryContextKeys();
 	}
 
-	private onDidRemoveRepository(repository: ISCMRepository): void {
+	private onDidRemoveRepository(repository: ISCMRepository): codemavi {
 		this.items.get(repository)?.dispose();
 		this.items.delete(repository);
 		this.updateRepositoryContextKeys();
 	}
 
-	private onDidChangeVisibleRepositories(): void {
+	private onDidChangeVisibleRepositories(): codemavi {
 		let count = 0;
 
 		for (const [repository, item] of this.items) {
@@ -1103,12 +1103,12 @@ class RepositoryVisibilityActionController {
 		this.repositoryVisibilityCountContextKey.set(count);
 	}
 
-	private updateRepositoryContextKeys(): void {
+	private updateRepositoryContextKeys(): codemavi {
 		this.repositoryCountContextKey.set(this.items.size);
 		this.repositoryVisibilityCountContextKey.set(Iterable.reduce(this.items.keys(), (r, repository) => r + (this.scmViewService.isVisible(repository) ? 1 : 0), 0));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 		dispose(this.items.values());
 		this.items.clear();
@@ -1130,7 +1130,7 @@ class SetListViewModeAction extends ViewAction<SCMViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<codemavi> {
 		view.viewMode = ViewMode.List;
 	}
 }
@@ -1164,7 +1164,7 @@ class SetTreeViewModeAction extends ViewAction<SCMViewPane> {
 			});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<codemavi> {
 		view.viewMode = ViewMode.Tree;
 	}
 }
@@ -1249,7 +1249,7 @@ abstract class SetSortKeyAction extends ViewAction<SCMViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<codemavi> {
 		view.viewSortKey = this.sortKey;
 	}
 }
@@ -1293,7 +1293,7 @@ class CollapseAllRepositoriesAction extends ViewAction<SCMViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<codemavi> {
 		view.collapseAllRepositories();
 	}
 }
@@ -1315,7 +1315,7 @@ class ExpandAllRepositoriesAction extends ViewAction<SCMViewPane> {
 		});
 	}
 
-	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<void> {
+	async runInView(_: ServicesAccessor, view: SCMViewPane): Promise<codemavi> {
 		view.expandAllRepositories();
 	}
 }
@@ -1345,7 +1345,7 @@ class SCMInputWidgetActionRunner extends ActionRunner {
 		super();
 	}
 
-	protected override async runAction(action: IAction): Promise<void> {
+	protected override async runAction(action: IAction): Promise<codemavi> {
 		try {
 			// Cancel previous action
 			if (this.runningActions.size !== 0) {
@@ -1391,8 +1391,8 @@ class SCMInputWidgetToolbar extends WorkbenchToolBar {
 
 	private _cancelAction: IAction;
 
-	private _onDidChange = new Emitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private _onDidChange = new Emitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private readonly _disposables = this._register(new MutableDisposable<DisposableStore>());
 
@@ -1421,7 +1421,7 @@ class SCMInputWidgetToolbar extends WorkbenchToolBar {
 		}, undefined, undefined, undefined, undefined, contextKeyService, commandService);
 	}
 
-	public setInput(input: ISCMInput): void {
+	public setInput(input: ISCMInput): codemavi {
 		this._disposables.value = new DisposableStore();
 
 		const contextKeyService = this.contextKeyService.createOverlay([
@@ -1482,7 +1482,7 @@ class SCMInputWidgetToolbar extends WorkbenchToolBar {
 
 class SCMInputWidgetEditorOptions {
 
-	private readonly _onDidChange = new Emitter<void>();
+	private readonly _onDidChange = new Emitter<codemavi>();
 	readonly onDidChange = this._onDidChange.event;
 
 	private readonly defaultInputFontFamily = DEFAULT_FONT_FAMILY;
@@ -1581,7 +1581,7 @@ class SCMInputWidgetEditorOptions {
 		return Math.round(fontSize * 1.5);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 
@@ -1619,7 +1619,7 @@ class SCMInputWidget {
 	private lastLayoutWasTrash = false;
 	private shouldFocusAfterLayout = false;
 
-	readonly onDidChangeContentHeight: Event<void>;
+	readonly onDidChangeContentHeight: Event<codemavi>;
 
 	get input(): ISCMInput | undefined {
 		return this.model?.input;
@@ -1925,7 +1925,7 @@ class SCMInputWidget {
 		return clamp(this.inputEditor.getContentHeight(), editorMinHeight, editorMaxHeight);
 	}
 
-	layout(): void {
+	layout(): codemavi {
 		const editorHeight = this.getContentHeight();
 		const toolbarWidth = this.getToolbarWidth();
 		const dimension = new Dimension(this.element.clientWidth - toolbarWidth, editorHeight);
@@ -1948,7 +1948,7 @@ class SCMInputWidget {
 		}
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		if (this.lastLayoutWasTrash) {
 			this.lastLayoutWasTrash = false;
 			this.shouldFocusAfterLayout = true;
@@ -1963,11 +1963,11 @@ class SCMInputWidget {
 		return this.inputEditor.hasTextFocus();
 	}
 
-	private onDidChangeEditorOptions(): void {
+	private onDidChangeEditorOptions(): codemavi {
 		this.inputEditor.updateOptions(this.inputEditorOptions.getEditorOptions());
 	}
 
-	private renderValidation(): void {
+	private renderValidation(): codemavi {
 		this.clearValidation();
 
 		this.element.classList.toggle('validation-info', this.validation?.type === InputValidationType.Information);
@@ -2055,13 +2055,13 @@ class SCMInputWidget {
 			39 /* 35px action + 4px margin */;
 	}
 
-	clearValidation(): void {
+	clearValidation(): codemavi {
 		this.validationContextView?.close();
 		this.validationContextView = undefined;
 		this.validationHasFocus = false;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.input = undefined;
 		this.repositoryDisposables.dispose();
 		this.clearValidation();
@@ -2071,7 +2071,7 @@ class SCMInputWidget {
 
 export class SCMViewPane extends ViewPane {
 
-	private _onDidLayout: Emitter<void>;
+	private _onDidLayout: Emitter<codemavi>;
 	private layoutCache: ISCMLayout;
 
 	private treeScrollTop: number | undefined;
@@ -2181,7 +2181,7 @@ export class SCMViewPane extends ViewPane {
 		this.scmProviderRootUriContextKey = ContextKeys.SCMProviderRootUri.bindTo(contextKeyService);
 		this.scmProviderHasRootUriContextKey = ContextKeys.SCMProviderHasRootUri.bindTo(contextKeyService);
 
-		this._onDidLayout = new Emitter<void>();
+		this._onDidLayout = new Emitter<codemavi>();
 		this.layoutCache = { height: undefined, width: undefined, onDidChange: this._onDidLayout.event };
 
 		this.storageService.onDidChangeValue(StorageScope.WORKSPACE, undefined, this.disposables)(e => {
@@ -2208,7 +2208,7 @@ export class SCMViewPane extends ViewPane {
 		this.disposables.add(this.updateChildrenThrottler);
 	}
 
-	protected override layoutBody(height: number | undefined = this.layoutCache.height, width: number | undefined = this.layoutCache.width): void {
+	protected override layoutBody(height: number | undefined = this.layoutCache.height, width: number | undefined = this.layoutCache.width): codemavi {
 		if (height === undefined) {
 			return;
 		}
@@ -2225,7 +2225,7 @@ export class SCMViewPane extends ViewPane {
 		this.tree.layout(height, width);
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		// Tree
@@ -2298,7 +2298,7 @@ export class SCMViewPane extends ViewPane {
 		this.updateIndentStyles(this.themeService.getFileIconTheme());
 	}
 
-	private createTree(container: HTMLElement, viewState?: IAsyncDataTreeViewState): void {
+	private createTree(container: HTMLElement, viewState?: IAsyncDataTreeViewState): codemavi {
 		const overflowWidgetsDomNode = $('.scm-overflow-widgets-container.monaco-editor');
 
 		this.inputRenderer = this.instantiationService.createInstance(InputRenderer, this.layoutCache, overflowWidgetsDomNode, (input, height) => {
@@ -2377,7 +2377,7 @@ export class SCMViewPane extends ViewPane {
 		append(container, overflowWidgetsDomNode);
 	}
 
-	private async open(e: IOpenEvent<TreeElement | undefined>): Promise<void> {
+	private async open(e: IOpenEvent<TreeElement | undefined>): Promise<codemavi> {
 		if (!e.element) {
 			return;
 		} else if (isSCMRepository(e.element)) {
@@ -2461,7 +2461,7 @@ export class SCMViewPane extends ViewPane {
 		}
 	}
 
-	private onDidActiveEditorChange(): void {
+	private onDidActiveEditorChange(): codemavi {
 		if (!this.configurationService.getValue<boolean>('scm.autoReveal')) {
 			return;
 		}
@@ -2508,7 +2508,7 @@ export class SCMViewPane extends ViewPane {
 				}));
 	}
 
-	private onDidChangeVisibleRepositories({ added, removed }: ISCMViewVisibleRepositoryChangeEvent): void {
+	private onDidChangeVisibleRepositories({ added, removed }: ISCMViewVisibleRepositoryChangeEvent): codemavi {
 		// Added repositories
 		for (const repository of added) {
 			const repositoryDisposables = new DisposableStore();
@@ -2557,7 +2557,7 @@ export class SCMViewPane extends ViewPane {
 		this.onDidActiveEditorChange();
 	}
 
-	private onListContextMenu(e: ITreeContextMenuEvent<TreeElement | null>): void {
+	private onListContextMenu(e: ITreeContextMenuEvent<TreeElement | null>): codemavi {
 		if (!e.element) {
 			const menu = this.menuService.getMenuActions(Menus.ViewSort, this.contextKeyService);
 			const actions = getFlatContextMenuActions(menu);
@@ -2706,14 +2706,14 @@ export class SCMViewPane extends ViewPane {
 				}));
 	}
 
-	private updateIndentStyles(theme: IFileIconTheme): void {
+	private updateIndentStyles(theme: IFileIconTheme): codemavi {
 		this.treeContainer.classList.toggle('list-view-mode', this.viewMode === ViewMode.List);
 		this.treeContainer.classList.toggle('tree-view-mode', this.viewMode === ViewMode.Tree);
 		this.treeContainer.classList.toggle('align-icons-and-twisties', (this.viewMode === ViewMode.List && theme.hasFileIcons) || (theme.hasFileIcons && !theme.hasFolderIcons));
 		this.treeContainer.classList.toggle('hide-arrows', this.viewMode === ViewMode.Tree && theme.hidesExplorerArrows === true);
 	}
 
-	private updateScmProviderContextKeys(): void {
+	private updateScmProviderContextKeys(): codemavi {
 		const alwaysShowRepositories = this.configurationService.getValue<boolean>('scm.alwaysShowRepositories');
 
 		if (!alwaysShowRepositories && this.items.size === 1) {
@@ -2728,7 +2728,7 @@ export class SCMViewPane extends ViewPane {
 		}
 	}
 
-	private updateRepositoryCollapseAllContextKeys(): void {
+	private updateRepositoryCollapseAllContextKeys(): codemavi {
 		if (!this.isBodyVisible() || this.items.size === 1) {
 			this.isAnyRepositoryCollapsibleContextKey.set(false);
 			this.areAllRepositoriesCollapsedContextKey.set(false);
@@ -2739,7 +2739,7 @@ export class SCMViewPane extends ViewPane {
 		this.areAllRepositoriesCollapsedContextKey.set(this.scmViewService.visibleRepositories.every(r => this.tree.hasNode(r) && (!this.tree.isCollapsible(r) || this.tree.isCollapsed(r))));
 	}
 
-	collapseAllRepositories(): void {
+	collapseAllRepositories(): codemavi {
 		for (const repository of this.scmViewService.visibleRepositories) {
 			if (this.tree.isCollapsible(repository)) {
 				this.tree.collapse(repository);
@@ -2747,7 +2747,7 @@ export class SCMViewPane extends ViewPane {
 		}
 	}
 
-	expandAllRepositories(): void {
+	expandAllRepositories(): codemavi {
 		for (const repository of this.scmViewService.visibleRepositories) {
 			if (this.tree.isCollapsible(repository)) {
 				this.tree.expand(repository);
@@ -2755,15 +2755,15 @@ export class SCMViewPane extends ViewPane {
 		}
 	}
 
-	focusPreviousInput(): void {
+	focusPreviousInput(): codemavi {
 		this.treeOperationSequencer.queue(() => this.focusInput(-1));
 	}
 
-	focusNextInput(): void {
+	focusNextInput(): codemavi {
 		this.treeOperationSequencer.queue(() => this.focusInput(1));
 	}
 
-	private async focusInput(delta: number): Promise<void> {
+	private async focusInput(delta: number): Promise<codemavi> {
 		if (!this.scmViewService.focusedRepository ||
 			this.scmViewService.visibleRepositories.length === 0) {
 			return;
@@ -2790,15 +2790,15 @@ export class SCMViewPane extends ViewPane {
 		this.inputRenderer.getRenderedInputWidget(input)?.focus();
 	}
 
-	focusPreviousResourceGroup(): void {
+	focusPreviousResourceGroup(): codemavi {
 		this.treeOperationSequencer.queue(() => this.focusResourceGroup(-1));
 	}
 
-	focusNextResourceGroup(): void {
+	focusNextResourceGroup(): codemavi {
 		this.treeOperationSequencer.queue(() => this.focusResourceGroup(1));
 	}
 
-	private async focusResourceGroup(delta: number): Promise<void> {
+	private async focusResourceGroup(delta: number): Promise<codemavi> {
 		if (!this.scmViewService.focusedRepository ||
 			this.scmViewService.visibleRepositories.length === 0) {
 			return;
@@ -2849,11 +2849,11 @@ export class SCMViewPane extends ViewPane {
 		return this.scmViewService.visibleRepositories.length === 1 ? this.scmViewService.visibleRepositories[0].provider : undefined;
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		this.treeOperationSequencer.queue(() => {
-			return new Promise<void>(resolve => {
+			return new Promise<codemavi>(resolve => {
 				if (this.isExpanded()) {
 					if (this.tree.getFocus().length === 0) {
 						for (const repository of this.scmViewService.visibleRepositories) {
@@ -2874,7 +2874,7 @@ export class SCMViewPane extends ViewPane {
 		});
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.visibilityDisposables.dispose();
 		this.disposables.dispose();
 		this.items.dispose();
@@ -3026,11 +3026,11 @@ export class SCMActionButton implements IDisposable {
 	) {
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables?.dispose();
 	}
 
-	setButton(button: ISCMActionButtonDescriptor | undefined): void {
+	setButton(button: ISCMActionButtonDescriptor | undefined): codemavi {
 		// Clear old button
 		this.clear();
 		if (!button) {
@@ -3082,17 +3082,17 @@ export class SCMActionButton implements IDisposable {
 		this.disposables.value!.add(this.button);
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.button?.focus();
 	}
 
-	private clear(): void {
+	private clear(): codemavi {
 		this.disposables.value = new DisposableStore();
 		this.button = undefined;
 		clearNode(this.container);
 	}
 
-	private async executeCommand(commandId: string, ...args: any[]): Promise<void> {
+	private async executeCommand(commandId: string, ...args: any[]): Promise<codemavi> {
 		try {
 			await this.commandService.executeCommand(commandId, ...args);
 		} catch (ex) {

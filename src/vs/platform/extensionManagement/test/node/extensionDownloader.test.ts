@@ -50,7 +50,7 @@ class TestExtensionSignatureVerificationService extends mock<IExtensionSignature
 }
 
 class TestExtensionDownloader extends ExtensionsDownloader {
-	protected override async validate(): Promise<void> { }
+	protected override async validate(): Promise<codemavi> { }
 }
 
 suite('ExtensionDownloader Tests', () => {

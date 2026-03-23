@@ -27,8 +27,8 @@ export interface IEditSessionsStorageService {
 	readonly SIZE_LIMIT: number;
 
 	readonly isSignedIn: boolean;
-	readonly onDidSignIn: Event<void>;
-	readonly onDidSignOut: Event<void>;
+	readonly onDidSignIn: Event<codemavi>;
+	readonly onDidSignOut: Event<codemavi>;
 
 	storeClient: EditSessionsStoreClient | undefined;
 
@@ -38,7 +38,7 @@ export interface IEditSessionsStorageService {
 	initialize(reason: 'read' | 'write', silent?: boolean): Promise<boolean>;
 	read(resource: SyncResource, ref: string | undefined): Promise<{ ref: string; content: string } | undefined>;
 	write(resource: SyncResource, content: string | EditSession): Promise<string>;
-	delete(resource: SyncResource, ref: string | null): Promise<void>;
+	delete(resource: SyncResource, ref: string | null): Promise<codemavi>;
 	list(resource: SyncResource): Promise<IResourceRefHandle[]>;
 	getMachineById(machineId: string): Promise<string | undefined>;
 }

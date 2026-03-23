@@ -74,7 +74,7 @@ export class CustomEditorModelManager implements ICustomEditorModelManager {
 		return this.tryRetain(resource, viewType)!;
 	}
 
-	public disposeAllModelsForView(viewType: string): void {
+	public disposeAllModelsForView(viewType: string): codemavi {
 		for (const [key, value] of this._references) {
 			if (value.viewType === viewType) {
 				value.model.then(x => x.dispose());

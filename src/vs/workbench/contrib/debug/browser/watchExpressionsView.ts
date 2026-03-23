@@ -88,7 +88,7 @@ export class WatchExpressionsView extends ViewPane implements IDebugViewWithVari
 		this.expressionRenderer = instantiationService.createInstance(DebugExpressionRenderer);
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		this.element.classList.add('debug-pane');
@@ -189,21 +189,21 @@ export class WatchExpressionsView extends ViewPane implements IDebugViewWithVari
 		}));
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 		this.tree.layout(height, width);
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this.tree.domFocus();
 	}
 
-	collapseAll(): void {
+	collapseAll(): codemavi {
 		this.tree.collapseAll();
 	}
 
-	private onMouseDblClick(e: ITreeMouseEvent<IExpression>): void {
+	private onMouseDblClick(e: ITreeMouseEvent<IExpression>): codemavi {
 		if ((e.browserEvent.target as HTMLElement).className.indexOf('twistie') >= 0) {
 			// Ignore double click events on twistie
 			return;
@@ -220,7 +220,7 @@ export class WatchExpressionsView extends ViewPane implements IDebugViewWithVari
 		}
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<IExpression>): void {
+	private onContextMenu(e: ITreeContextMenuEvent<IExpression>): codemavi {
 		const element = e.element;
 		const selection = this.tree.getSelection();
 
@@ -301,7 +301,7 @@ export class WatchExpressionsRenderer extends AbstractExpressionsRenderer {
 		return WatchExpressionsRenderer.ID;
 	}
 
-	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): void {
+	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): codemavi {
 		data.elementDisposable.clear();
 		data.elementDisposable.add(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('debug.showVariableTypes')) {
@@ -311,7 +311,7 @@ export class WatchExpressionsRenderer extends AbstractExpressionsRenderer {
 		super.renderExpressionElement(node.element, node, data);
 	}
 
-	protected renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): void {
+	protected renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): codemavi {
 		let text: string;
 		data.type.textContent = '';
 		const showType = this.configurationService.getValue<IDebugConfiguration>('debug').showVariableTypes;
@@ -468,7 +468,7 @@ class WatchExpressionsDragAndDrop implements ITreeDragAndDrop<IExpression> {
 		return undefined;
 	}
 
-	drop(data: IDragAndDropData, targetElement: IExpression, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void {
+	drop(data: IDragAndDropData, targetElement: IExpression, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi {
 		if (!(data instanceof ElementsDragAndDropData)) {
 			return;
 		}
@@ -501,7 +501,7 @@ class WatchExpressionsDragAndDrop implements ITreeDragAndDrop<IExpression> {
 		this.debugService.moveWatchExpression(draggedElement.getId(), targetPosition);
 	}
 
-	dispose(): void { }
+	dispose(): codemavi { }
 }
 
 registerAction2(class Collapse extends ViewAction<WatchExpressionsView> {
@@ -545,7 +545,7 @@ registerAction2(class AddWatchExpressionAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const debugService = accessor.get(IDebugService);
 		debugService.addWatchExpression();
 	}
@@ -570,7 +570,7 @@ registerAction2(class RemoveAllWatchExpressionsAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const debugService = accessor.get(IDebugService);
 		debugService.removeWatchExpressions();
 	}
@@ -601,7 +601,7 @@ registerAction2(class CopyExpression extends ViewAction<WatchExpressionsView> {
 		});
 	}
 
-	runInView(accessor: ServicesAccessor, view: WatchExpressionsView, value?: IExpression): void {
+	runInView(accessor: ServicesAccessor, view: WatchExpressionsView, value?: IExpression): codemavi {
 		const clipboardService = accessor.get(IClipboardService);
 		if (!value) {
 			value = view.treeSelection.at(-1);

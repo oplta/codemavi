@@ -74,18 +74,18 @@ export interface IChatEntitlementService {
 
 	_serviceBrand: undefined;
 
-	readonly onDidChangeEntitlement: Event<void>;
+	readonly onDidChangeEntitlement: Event<codemavi>;
 
 	readonly entitlement: ChatEntitlement;
 
-	readonly onDidChangeQuotaExceeded: Event<void>;
-	readonly onDidChangeQuotaRemaining: Event<void>;
+	readonly onDidChangeQuotaExceeded: Event<codemavi>;
+	readonly onDidChangeQuotaRemaining: Event<codemavi>;
 
 	readonly quotas: IChatQuotas;
 
-	update(token: CancellationToken): Promise<void>;
+	update(token: CancellationToken): Promise<codemavi>;
 
-	readonly onDidChangeSentiment: Event<void>;
+	readonly onDidChangeSentiment: Event<codemavi>;
 
 	readonly sentiment: ChatSentiment;
 }
@@ -107,8 +107,8 @@ const defaultChat = {
 };
 
 interface IChatQuotasAccessor {
-	clearQuotas(): void;
-	acceptQuotas(quotas: IChatQuotas): void;
+	clearQuotas(): codemavi;
+	acceptQuotas(quotas: IChatQuotas): codemavi;
 }
 
 export class ChatEntitlementService extends Disposable implements IChatEntitlementService {
@@ -168,7 +168,7 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 
 	//#region --- Entitlements
 
-	readonly onDidChangeEntitlement: Event<void>;
+	readonly onDidChangeEntitlement: Event<codemavi>;
 
 	get entitlement(): ChatEntitlement {
 		if (this.contextKeyService.getContextKeyValue<boolean>(ChatContextKeys.Entitlement.pro.key) === true) {
@@ -188,10 +188,10 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 
 	//#region --- Quotas
 
-	private readonly _onDidChangeQuotaExceeded = this._register(new Emitter<void>());
+	private readonly _onDidChangeQuotaExceeded = this._register(new Emitter<codemavi>());
 	readonly onDidChangeQuotaExceeded = this._onDidChangeQuotaExceeded.event;
 
-	private readonly _onDidChangeQuotaRemaining = this._register(new Emitter<void>());
+	private readonly _onDidChangeQuotaRemaining = this._register(new Emitter<codemavi>());
 	readonly onDidChangeQuotaRemaining = this._onDidChangeQuotaRemaining.event;
 
 	private _quotas: IChatQuotas = { chatQuotaExceeded: false, completionsQuotaExceeded: false, quotaResetDate: undefined };
@@ -205,7 +205,7 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 		completionsQuotaExceeded: defaultChat.completionsQuotaExceededContext,
 	};
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		const chatQuotaExceededSet = new Set([this.ExtensionQuotaContextKeys.chatQuotaExceeded]);
 		const completionsQuotaExceededSet = new Set([this.ExtensionQuotaContextKeys.completionsQuotaExceeded]);
 
@@ -240,7 +240,7 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 		}));
 	}
 
-	acceptQuotas(quotas: IChatQuotas): void {
+	acceptQuotas(quotas: IChatQuotas): codemavi {
 		const oldQuota = this._quotas;
 		this._quotas = quotas;
 		this.updateContextKeys();
@@ -260,13 +260,13 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 		}
 	}
 
-	clearQuotas(): void {
+	clearQuotas(): codemavi {
 		if (this.quotas.chatQuotaExceeded || this.quotas.completionsQuotaExceeded) {
 			this.acceptQuotas({ chatQuotaExceeded: false, completionsQuotaExceeded: false, quotaResetDate: undefined });
 		}
 	}
 
-	private updateContextKeys(): void {
+	private updateContextKeys(): codemavi {
 		this.chatQuotaExceededContextKey.set(this._quotas.chatQuotaExceeded);
 		this.completionsQuotaExceededContextKey.set(this._quotas.completionsQuotaExceeded);
 	}
@@ -275,7 +275,7 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 
 	//#region --- Sentiment
 
-	private readonly _onDidChangeSentiment = this._register(new Emitter<void>());
+	private readonly _onDidChangeSentiment = this._register(new Emitter<codemavi>());
 	readonly onDidChangeSentiment = this._onDidChangeSentiment.event;
 
 	get sentiment(): ChatSentiment {
@@ -290,7 +290,7 @@ export class ChatEntitlementService extends Disposable implements IChatEntitleme
 
 	//#endregion
 
-	async update(token: CancellationToken): Promise<void> {
+	async update(token: CancellationToken): Promise<codemavi> {
 		await this.requests?.value.forceResolveEntitlement(undefined, token);
 	}
 }
@@ -386,7 +386,7 @@ export class ChatEntitlementRequests extends Disposable {
 		this.resolve();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.authenticationService.onDidChangeDeclaredProviders(() => this.resolve()));
 
 		this._register(this.authenticationService.onDidChangeSessions(e => {
@@ -417,7 +417,7 @@ export class ChatEntitlementRequests extends Disposable {
 		}));
 	}
 
-	private async resolve(): Promise<void> {
+	private async resolve(): Promise<codemavi> {
 		this.pendingResolveCts.dispose(true);
 		const cts = this.pendingResolveCts = new CancellationTokenSource();
 
@@ -601,7 +601,7 @@ export class ChatEntitlementRequests extends Disposable {
 		}
 	}
 
-	private update(state: IEntitlements): void {
+	private update(state: IEntitlements): codemavi {
 		this.state = state;
 
 		this.context.update({ entitlement: this.state.entitlement });
@@ -707,7 +707,7 @@ export class ChatEntitlementRequests extends Disposable {
 		return false;
 	}
 
-	private onUnprocessableSignUpError(logMessage: string, logDetails: string): void {
+	private onUnprocessableSignUpError(logMessage: string, logDetails: string): codemavi {
 		this.logService.error(logMessage);
 
 		if (!this.lifecycleService.willShutdown) {
@@ -741,7 +741,7 @@ export class ChatEntitlementRequests extends Disposable {
 		return { session, entitlements };
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.pendingResolveCts.dispose(true);
 
 		super.dispose();
@@ -776,7 +776,7 @@ export class ChatEntitlementContext extends Disposable {
 		return this.suspendedState ?? this._state;
 	}
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private updateBarrier: Barrier | undefined = undefined;
@@ -803,7 +803,7 @@ export class ChatEntitlementContext extends Disposable {
 		this.updateContextSync();
 	}
 
-	private async checkExtensionInstallation(): Promise<void> {
+	private async checkExtensionInstallation(): Promise<codemavi> {
 
 		// Await extensions to be ready to be queried
 		await this.extensionsWorkbenchService.queryLocal();
@@ -819,10 +819,10 @@ export class ChatEntitlementContext extends Disposable {
 		}));
 	}
 
-	update(context: { installed: boolean }): Promise<void>;
-	update(context: { hidden: boolean }): Promise<void>;
-	update(context: { entitlement: ChatEntitlement }): Promise<void>;
-	update(context: { installed?: boolean; hidden?: boolean; entitlement?: ChatEntitlement }): Promise<void> {
+	update(context: { installed: boolean }): Promise<codemavi>;
+	update(context: { hidden: boolean }): Promise<codemavi>;
+	update(context: { entitlement: ChatEntitlement }): Promise<codemavi>;
+	update(context: { installed?: boolean; hidden?: boolean; entitlement?: ChatEntitlement }): Promise<codemavi> {
 		this.logService.trace(`[chat entitlement context] update(): ${JSON.stringify(context)}`);
 
 		if (typeof context.installed === 'boolean') {
@@ -852,13 +852,13 @@ export class ChatEntitlementContext extends Disposable {
 		return this.updateContext();
 	}
 
-	private async updateContext(): Promise<void> {
+	private async updateContext(): Promise<codemavi> {
 		await this.updateBarrier?.wait();
 
 		this.updateContextSync();
 	}
 
-	private updateContextSync(): void {
+	private updateContextSync(): codemavi {
 		this.logService.trace(`[chat entitlement context] updateContext(): ${JSON.stringify(this._state)}`);
 
 		this.signedOutContextKey.set(this._state.entitlement === ChatEntitlement.Unknown);
@@ -871,12 +871,12 @@ export class ChatEntitlementContext extends Disposable {
 		this._onDidChange.fire();
 	}
 
-	suspend(): void {
+	suspend(): codemavi {
 		this.suspendedState = { ...this._state };
 		this.updateBarrier = new Barrier();
 	}
 
-	resume(): void {
+	resume(): codemavi {
 		this.suspendedState = undefined;
 		this.updateBarrier?.open();
 		this.updateBarrier = undefined;

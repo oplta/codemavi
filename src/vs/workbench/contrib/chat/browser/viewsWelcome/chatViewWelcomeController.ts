@@ -24,7 +24,7 @@ import { chatViewsWelcomeRegistry, IChatViewsWelcomeDescriptor } from './chatVie
 const $ = dom.$;
 
 export interface IViewWelcomeDelegate {
-	readonly onDidChangeViewWelcomeState: Event<void>;
+	readonly onDidChangeViewWelcomeState: Event<codemavi>;
 	shouldShowWelcome(): boolean;
 }
 
@@ -51,7 +51,7 @@ export class ChatViewWelcomeController extends Disposable {
 		this._register(chatViewsWelcomeRegistry.onDidChange(() => this.update(true)));
 	}
 
-	private update(force?: boolean): void {
+	private update(force?: boolean): codemavi {
 		const enabled = this.delegate.shouldShowWelcome();
 		if (this.enabled === enabled && !force) {
 			return;
@@ -79,7 +79,7 @@ export class ChatViewWelcomeController extends Disposable {
 		}
 	}
 
-	private render(descriptors: ReadonlyArray<IChatViewsWelcomeDescriptor>): void {
+	private render(descriptors: ReadonlyArray<IChatViewsWelcomeDescriptor>): codemavi {
 		this.renderDisposables.clear();
 		dom.clearNode(this.element!);
 

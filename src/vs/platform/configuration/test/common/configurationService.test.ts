@@ -35,7 +35,7 @@ suite('ConfigurationService.test.ts', () => {
 		settingsResource = URI.file('settings.json');
 	});
 
-	test('simple', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('simple', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await fileService.writeFile(settingsResource, VSBuffer.fromString('{ "foo": "bar" }'));
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
 		await testObject.initialize();
@@ -47,7 +47,7 @@ suite('ConfigurationService.test.ts', () => {
 		assert.strictEqual(config.foo, 'bar');
 	}));
 
-	test('config gets flattened', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('config gets flattened', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await fileService.writeFile(settingsResource, VSBuffer.fromString('{ "testworkbench.editor.tabs": true }'));
 
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
@@ -66,7 +66,7 @@ suite('ConfigurationService.test.ts', () => {
 		assert.strictEqual(config.testworkbench.editor.tabs, true);
 	}));
 
-	test('error case does not explode', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('error case does not explode', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await fileService.writeFile(settingsResource, VSBuffer.fromString(',,,,'));
 
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
@@ -78,7 +78,7 @@ suite('ConfigurationService.test.ts', () => {
 		assert.ok(config);
 	}));
 
-	test('missing file does not explode', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('missing file does not explode', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const testObject = disposables.add(new ConfigurationService(URI.file('__testFile'), fileService, new NullPolicyService(), new NullLogService()));
 		await testObject.initialize();
 
@@ -87,10 +87,10 @@ suite('ConfigurationService.test.ts', () => {
 		assert.ok(config);
 	}));
 
-	test('trigger configuration change event when file does not exist', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('trigger configuration change event when file does not exist', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
 		await testObject.initialize();
-		return new Promise<void>((c, e) => {
+		return new Promise<codemavi>((c, e) => {
 			disposables.add(Event.filter(testObject.onDidChangeConfiguration, e => e.source === ConfigurationTarget.USER)(() => {
 				assert.strictEqual(testObject.getValue('foo'), 'bar');
 				c();
@@ -100,12 +100,12 @@ suite('ConfigurationService.test.ts', () => {
 
 	}));
 
-	test('trigger configuration change event when file exists', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('trigger configuration change event when file exists', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
 		await fileService.writeFile(settingsResource, VSBuffer.fromString('{ "foo": "bar" }'));
 		await testObject.initialize();
 
-		return new Promise<void>((c) => {
+		return new Promise<codemavi>((c) => {
 			disposables.add(Event.filter(testObject.onDidChangeConfiguration, e => e.source === ConfigurationTarget.USER)(async (e) => {
 				assert.strictEqual(testObject.getValue('foo'), 'barz');
 				c();
@@ -114,7 +114,7 @@ suite('ConfigurationService.test.ts', () => {
 		});
 	}));
 
-	test('reloadConfiguration', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('reloadConfiguration', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		await fileService.writeFile(settingsResource, VSBuffer.fromString('{ "foo": "bar" }'));
 
 		const testObject = disposables.add(new ConfigurationService(settingsResource, fileService, new NullPolicyService(), new NullLogService()));
@@ -135,7 +135,7 @@ suite('ConfigurationService.test.ts', () => {
 		assert.strictEqual(config.foo, 'changed');
 	}));
 
-	test('model defaults', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('model defaults', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		interface ITestSetting {
 			configuration: {
 				service: {
@@ -180,7 +180,7 @@ suite('ConfigurationService.test.ts', () => {
 		assert.strictEqual(setting.configuration.service.testSetting, 'isChanged');
 	}));
 
-	test('lookup', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('lookup', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const configurationRegistry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration);
 		configurationRegistry.registerConfiguration({
 			'id': '_test',
@@ -219,7 +219,7 @@ suite('ConfigurationService.test.ts', () => {
 
 	}));
 
-	test('lookup with null', () => runWithFakedTimers<void>({ useFakeTimers: true }, async () => {
+	test('lookup with null', () => runWithFakedTimers<codemavi>({ useFakeTimers: true }, async () => {
 		const configurationRegistry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration);
 		configurationRegistry.registerConfiguration({
 			'id': '_testNull',

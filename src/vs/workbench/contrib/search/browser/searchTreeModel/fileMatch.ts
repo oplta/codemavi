@@ -65,8 +65,8 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 	protected _onChange = this._register(new Emitter<{ didRemove?: boolean; forceUpdateModel?: boolean }>());
 	readonly onChange: Event<{ didRemove?: boolean; forceUpdateModel?: boolean }> = this._onChange.event;
 
-	private _onDispose = this._register(new Emitter<void>());
-	readonly onDispose: Event<void> = this._onDispose.event;
+	private _onDispose = this._register(new Emitter<codemavi>());
+	readonly onDispose: Event<codemavi> = this._onDispose.event;
 
 	protected _resource: URI;
 	private _fileStat?: IFileStatWithPartialMetadata;
@@ -114,7 +114,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		return this.matches().some(m => m.isReadonly);
 	}
 
-	createMatches(): void {
+	createMatches(): codemavi {
 		const model = this.modelService.getModel(this._resource);
 		if (model) {
 			// todo: handle better when ai contributed results has model, currently, createMatches does not work for this
@@ -132,7 +132,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 			}
 		}
 	}
-	bindModel(model: ITextModel): void {
+	bindModel(model: ITextModel): codemavi {
 		this._model = model;
 		this._modelListener = new DisposableStore();
 		this._modelListener.add(this._model.onDidChangeContent(() => {
@@ -142,13 +142,13 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		this.updateHighlights();
 	}
 
-	private onModelWillDispose(): void {
+	private onModelWillDispose(): codemavi {
 		// Update matches because model might have some dirty changes
 		this.updateMatchesForModel();
 		this.unbindModel();
 	}
 
-	private unbindModel(): void {
+	private unbindModel(): codemavi {
 		if (this._model) {
 			this._updateScheduler.cancel();
 			this._model.changeDecorations((accessor) => {
@@ -159,7 +159,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		}
 	}
 
-	protected updateMatchesForModel(): void {
+	protected updateMatchesForModel(): codemavi {
 		// this is called from a timeout and might fire
 		// after the model has been disposed
 		if (!this._model) {
@@ -176,7 +176,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 
 
 
-	protected async updatesMatchesForLineAfterReplace(lineNumber: number, modelChange: boolean): Promise<void> {
+	protected async updatesMatchesForLineAfterReplace(lineNumber: number, modelChange: boolean): Promise<codemavi> {
 		if (!this._model) {
 			return;
 		}
@@ -196,7 +196,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 
 
 
-	private updateMatches(matches: FindMatch[], modelChange: boolean, model: ITextModel, isAiContributed: boolean): void {
+	private updateMatches(matches: FindMatch[], modelChange: boolean, model: ITextModel, isAiContributed: boolean): codemavi {
 		const textSearchResults = editorMatchesToTextSearchResults(matches, model, this._previewOptions);
 		textSearchResults.forEach(textSearchResult => {
 			textSearchResultToMatches(textSearchResult, this, isAiContributed).forEach(match => {
@@ -215,7 +215,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		this.updateHighlights();
 	}
 
-	updateHighlights(): void {
+	updateHighlights(): codemavi {
 		if (!this._model) {
 			return;
 		}
@@ -253,7 +253,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		return Array.from(this._textMatches.values());
 	}
 
-	remove(matches: ISearchTreeMatch | ISearchTreeMatch[]): void {
+	remove(matches: ISearchTreeMatch | ISearchTreeMatch[]): codemavi {
 		if (!Array.isArray(matches)) {
 			matches = [matches];
 		}
@@ -267,14 +267,14 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 	}
 
 	private replaceQ = Promise.resolve();
-	async replace(toReplace: ISearchTreeMatch): Promise<void> {
+	async replace(toReplace: ISearchTreeMatch): Promise<codemavi> {
 		return this.replaceQ = this.replaceQ.finally(async () => {
 			await this.replaceService.replace(toReplace);
 			await this.updatesMatchesForLineAfterReplace(toReplace.range().startLineNumber, false);
 		});
 	}
 
-	setSelectedMatch(match: ISearchTreeMatch | null): void {
+	setSelectedMatch(match: ISearchTreeMatch | null): codemavi {
 		if (match) {
 
 			if (!this._textMatches.has(match.id())) {
@@ -336,7 +336,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		}
 	}
 
-	async resolveFileStat(fileService: IFileService): Promise<void> {
+	async resolveFileStat(fileService: IFileService): Promise<codemavi> {
 		this._fileStat = await fileService.stat(this.resource).catch(() => undefined);
 	}
 
@@ -348,7 +348,7 @@ export class FileMatchImpl extends Disposable implements ISearchTreeFileMatch {
 		this._fileStat = stat;
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.setSelectedMatch(null);
 		this.unbindModel();
 		this._onDispose.fire();

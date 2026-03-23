@@ -70,7 +70,7 @@ suite('ViewModel', () => {
 
 			viewLineCount.push(viewModel.getLineCount());
 			const eventHandler = new class extends ViewEventHandler {
-				override handleEvents(events: ViewEvent[]): void {
+				override handleEvents(events: ViewEvent[]): codemavi {
 					// Access the view model
 					viewLineCount.push(viewModel.getLineCount());
 				}
@@ -119,7 +119,7 @@ suite('ViewModel', () => {
 		});
 	});
 
-	function assertGetPlainTextToCopy(text: string[], ranges: Range[], emptySelectionClipboard: boolean, expected: string | string[]): void {
+	function assertGetPlainTextToCopy(text: string[], ranges: Range[], emptySelectionClipboard: boolean, expected: string | string[]): codemavi {
 		testViewModel(text, {}, (viewModel, model) => {
 			const actual = viewModel.getPlainTextToCopy(ranges, emptySelectionClipboard, false);
 			assert.deepStrictEqual(actual, expected);

@@ -8,7 +8,7 @@ import { SymbolsTree } from '../tree';
 import { ContextKey } from '../utils';
 import { TypeHierarchyDirection, TypeItem, TypesTreeInput } from './model';
 
-export function register(tree: SymbolsTree, context: vscode.ExtensionContext): void {
+export function register(tree: SymbolsTree, context: vscode.ExtensionContext): codemavi {
 
 	const direction = new RichTypesDirection(context.workspaceState, TypeHierarchyDirection.Subtypes);
 
@@ -44,7 +44,7 @@ export function register(tree: SymbolsTree, context: vscode.ExtensionContext): v
 	);
 }
 
-function removeTypeItem(item: TypeItem | unknown): void {
+function removeTypeItem(item: TypeItem | unknown): codemavi {
 	if (item instanceof TypeItem) {
 		item.remove();
 	}

@@ -17,7 +17,7 @@ export class MergeEditorTelemetry {
 		baseVisible: boolean;
 		isColumnView: boolean;
 		baseTop: boolean;
-	}): void {
+	}): codemavi {
 		this.telemetryService.publicLog2<{
 			conflictCount: number;
 			combinableConflictCount: number;
@@ -50,7 +50,7 @@ export class MergeEditorTelemetry {
 		baseVisible: boolean;
 		isColumnView: boolean;
 		baseTop: boolean;
-	}): void {
+	}): codemavi {
 		this.telemetryService.publicLog2<{
 			baseVisible: boolean;
 			isColumnView: boolean;
@@ -93,7 +93,7 @@ export class MergeEditorTelemetry {
 		manuallySolvedConflictCountThatEqualNoneAndStartedWithInput2: number;
 		manuallySolvedConflictCountThatEqualNoneAndStartedWithBothNonSmart: number;
 		manuallySolvedConflictCountThatEqualNoneAndStartedWithBothSmart: number;
-	}): void {
+	}): codemavi {
 		this.telemetryService.publicLog2<{
 			conflictCount: number;
 			combinableConflictCount: number;
@@ -170,7 +170,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportAcceptInvoked(inputNumber: InputNumber, otherAccepted: boolean): void {
+	reportAcceptInvoked(inputNumber: InputNumber, otherAccepted: boolean): codemavi {
 		this.telemetryService.publicLog2<{
 			otherAccepted: boolean;
 			isInput1: boolean;
@@ -185,7 +185,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportSmartCombinationInvoked(otherAccepted: boolean): void {
+	reportSmartCombinationInvoked(otherAccepted: boolean): codemavi {
 		this.telemetryService.publicLog2<{
 			otherAccepted: boolean;
 		}, {
@@ -197,7 +197,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportRemoveInvoked(inputNumber: InputNumber, otherAccepted: boolean): void {
+	reportRemoveInvoked(inputNumber: InputNumber, otherAccepted: boolean): codemavi {
 		this.telemetryService.publicLog2<{
 			otherAccepted: boolean;
 			isInput1: boolean;
@@ -212,7 +212,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportResetToBaseInvoked(): void {
+	reportResetToBaseInvoked(): codemavi {
 		this.telemetryService.publicLog2<{
 		}, {
 			owner: 'hediet';
@@ -220,7 +220,7 @@ export class MergeEditorTelemetry {
 		}>('mergeEditor.action.resetToBase', {});
 	}
 
-	reportNavigationToNextConflict(): void {
+	reportNavigationToNextConflict(): codemavi {
 		this.telemetryService.publicLog2<{
 		}, {
 			owner: 'hediet';
@@ -230,7 +230,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportNavigationToPreviousConflict(): void {
+	reportNavigationToPreviousConflict(): codemavi {
 		this.telemetryService.publicLog2<{
 
 		}, {
@@ -241,7 +241,7 @@ export class MergeEditorTelemetry {
 		});
 	}
 
-	reportConflictCounterClicked(): void {
+	reportConflictCounterClicked(): codemavi {
 		this.telemetryService.publicLog2<{
 		}, {
 			owner: 'hediet';

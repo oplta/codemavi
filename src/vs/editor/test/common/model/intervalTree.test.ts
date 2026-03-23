@@ -23,7 +23,7 @@ suite('IntervalTree 1', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
 	class Interval {
-		_intervalBrand: void = undefined;
+		_intervalBrand: codemavi = undefined;
 
 		public start: number;
 		public end: number;
@@ -52,7 +52,7 @@ suite('IntervalTree 1', () => {
 			return interval;
 		}
 
-		public delete(interval: Interval): void {
+		public delete(interval: Interval): codemavi {
 			for (let i = 0, len = this.intervals.length; i < len; i++) {
 				if (this.intervals[i] === interval) {
 					this.intervals.splice(i, 1);
@@ -80,7 +80,7 @@ suite('IntervalTree 1', () => {
 		private _treeNodes: Array<IntervalNode | null> = [];
 		private _oracleNodes: Array<Interval | null> = [];
 
-		public acceptOp(op: IOperation): void {
+		public acceptOp(op: IOperation): codemavi {
 
 			if (op.type === 'insert') {
 				if (PRINT_TREE) {
@@ -170,7 +170,7 @@ suite('IntervalTree 1', () => {
 
 	type IOperation = IInsertOperation | IDeleteOperation | IChangeOperation | ISearchOperation;
 
-	function testIntervalTree(ops: IOperation[]): void {
+	function testIntervalTree(ops: IOperation[]): codemavi {
 		const state = new TestState();
 		for (let i = 0; i < ops.length; i++) {
 			state.acceptOp(ops[i]);
@@ -207,7 +207,7 @@ suite('IntervalTree 1', () => {
 			this._deleteCnt = 0;
 		}
 
-		private _doRandomInsert(): void {
+		private _doRandomInsert(): codemavi {
 			const range = getRandomRange(MIN_INTERVAL_START, MAX_INTERVAL_END);
 			this._run({
 				type: 'insert',
@@ -216,7 +216,7 @@ suite('IntervalTree 1', () => {
 			});
 		}
 
-		private _doRandomDelete(): void {
+		private _doRandomDelete(): codemavi {
 			const idx = getRandomInt(Math.floor(this._deleteCnt / 2), this._deleteCnt - 1);
 			this._run({
 				type: 'delete',
@@ -224,7 +224,7 @@ suite('IntervalTree 1', () => {
 			});
 		}
 
-		private _doRandomChange(): void {
+		private _doRandomChange(): codemavi {
 			const idx = getRandomInt(0, this._deleteCnt - 1);
 			const range = getRandomRange(MIN_INTERVAL_START, MAX_INTERVAL_END);
 			this._run({
@@ -259,12 +259,12 @@ suite('IntervalTree 1', () => {
 			}
 		}
 
-		private _run(op: IOperation): void {
+		private _run(op: IOperation): codemavi {
 			this._ops.push(op);
 			this._state.acceptOp(op);
 		}
 
-		public print(): void {
+		public print(): codemavi {
 			console.log(`testIntervalTree(${JSON.stringify(this._ops)})`);
 		}
 
@@ -500,7 +500,7 @@ suite('IntervalTree 1', () => {
 
 		const T = createCormenTree();
 
-		function assertIntervalSearch(start: number, end: number, expected: [number, number][]): void {
+		function assertIntervalSearch(start: number, end: number, expected: [number, number][]): codemavi {
 			const actualNodes = T.intervalSearch(start, end, 0, false, 0, false);
 			const actual = actualNodes.map((n) => <[number, number]>[n.cachedAbsoluteStart, n.cachedAbsoluteEnd]);
 			assert.deepStrictEqual(actual, expected);
@@ -561,7 +561,7 @@ suite('IntervalTree 2', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertNodeAcceptEdit(msg: string, nodeStart: number, nodeEnd: number, nodeStickiness: TrackedRangeStickiness, start: number, end: number, textLength: number, forceMoveMarkers: boolean, expectedNodeStart: number, expectedNodeEnd: number): void {
+	function assertNodeAcceptEdit(msg: string, nodeStart: number, nodeEnd: number, nodeStickiness: TrackedRangeStickiness, start: number, end: number, textLength: number, forceMoveMarkers: boolean, expectedNodeStart: number, expectedNodeEnd: number): codemavi {
 		const node = new IntervalNode('', nodeStart, nodeEnd);
 		setNodeStickiness(node, nodeStickiness);
 		nodeAcceptEdit(node, start, end, textLength, forceMoveMarkers);
@@ -827,7 +827,7 @@ suite('IntervalTree 2', () => {
 	});
 });
 
-function printTree(T: IntervalTree): void {
+function printTree(T: IntervalTree): codemavi {
 	if (T.root === SENTINEL) {
 		console.log(`~~ empty`);
 		return;
@@ -837,7 +837,7 @@ function printTree(T: IntervalTree): void {
 	console.log(out.join(''));
 }
 
-function _printTree(T: IntervalTree, n: IntervalNode, indent: string, delta: number, out: string[]): void {
+function _printTree(T: IntervalTree, n: IntervalNode, indent: string, delta: number, out: string[]): codemavi {
 	out.push(`${indent}[${getNodeColor(n) === NodeColor.Red ? 'R' : 'B'},${n.delta}, ${n.start}->${n.end}, ${n.maxEnd}] : {${delta + n.start}->${delta + n.end}}, maxEnd: ${n.maxEnd + delta}\n`);
 	if (n.left !== SENTINEL) {
 		_printTree(T, n.left, indent + '    ', delta, out);
@@ -853,7 +853,7 @@ function _printTree(T: IntervalTree, n: IntervalNode, indent: string, delta: num
 
 //#region Assertion
 
-function assertTreeInvariants(T: IntervalTree): void {
+function assertTreeInvariants(T: IntervalTree): codemavi {
 	assert(getNodeColor(SENTINEL) === NodeColor.Black);
 	assert(SENTINEL.parent === SENTINEL);
 	assert(SENTINEL.left === SENTINEL);
@@ -874,7 +874,7 @@ function depth(n: IntervalNode): number {
 	return (getNodeColor(n) === NodeColor.Black ? 1 : 0) + depth(n.left);
 }
 
-function assertValidNode(n: IntervalNode, delta: number): void {
+function assertValidNode(n: IntervalNode, delta: number): codemavi {
 	if (n === SENTINEL) {
 		return;
 	}
@@ -902,7 +902,7 @@ function assertValidNode(n: IntervalNode, delta: number): void {
 	assertValidNode(r, delta + n.delta);
 }
 
-function assertValidTree(T: IntervalTree): void {
+function assertValidTree(T: IntervalTree): codemavi {
 	if (T.root === SENTINEL) {
 		return;
 	}

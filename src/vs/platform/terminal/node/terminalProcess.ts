@@ -107,7 +107,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 	private _closeTimeout: any;
 	private _ptyProcess: IPty | undefined;
 	private _currentTitle: string = '';
-	private _processStartupComplete: Promise<void> | undefined;
+	private _processStartupComplete: Promise<codemavi> | undefined;
 	private _windowsShellHelper: WindowsShellHelper | undefined;
 	private _childProcessMonitor: ChildProcessMonitor | undefined;
 	private _titleInterval: NodeJS.Timeout | null = null;
@@ -174,7 +174,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 			// This option will force conpty to not redraw the whole viewport on launch
 			conptyInheritCursor: useConpty && !!shellLaunchConfig.initialText
 		};
-		// Delay resizes to avoid conpty not respecting very early resize calls
+		// Delay resizes to acodemavi conpty not respecting very early resize calls
 		if (isWindows) {
 			if (useConpty && cols === 0 && rows === 0 && this.shellLaunchConfig.executable?.endsWith('Git\\bin\\bash.exe')) {
 				this._delayedResizer = new DelayedResizer();
@@ -299,7 +299,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		shellLaunchConfig: IShellLaunchConfig,
 		options: IPtyForkOptions,
 		shellIntegrationInjection: IShellIntegrationConfigInjection | undefined
-	): Promise<void> {
+	): Promise<codemavi> {
 		const args = shellIntegrationInjection?.newArgs || shellLaunchConfig.args || [];
 		await this._throttleKillSpawn();
 		this._logService.trace('node-pty.IPty#spawn', shellLaunchConfig.executable, args, options);
@@ -307,7 +307,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		this._ptyProcess = ptyProcess;
 		this._childProcessMonitor = this._register(new ChildProcessMonitor(ptyProcess.pid, this._logService));
 		this._childProcessMonitor.onDidChangeHasChildProcesses(value => this._onDidChangeProperty.fire({ type: ProcessPropertyType.HasChildProcesses, value }));
-		this._processStartupComplete = new Promise<void>(c => {
+		this._processStartupComplete = new Promise<codemavi>(c => {
 			this.onProcessReady(() => c());
 		});
 		ptyProcess.onData(data => {
@@ -364,7 +364,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}, ShutdownConstants.DataFlushTimeout);
 	}
 
-	private async _kill(): Promise<void> {
+	private async _kill(): Promise<codemavi> {
 		// Wait to kill to process until the start up code has run. This prevents us from firing a process exit before a
 		// process start.
 		await this._processStartupComplete;
@@ -386,7 +386,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		this.dispose();
 	}
 
-	private async _throttleKillSpawn(): Promise<void> {
+	private async _throttleKillSpawn(): Promise<codemavi> {
 		// Only throttle on Windows/conpty
 		if (!isWindows || !('useConpty' in this._ptyOptions) || !this._ptyOptions.useConpty) {
 			return;
@@ -411,7 +411,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		});
 	}
 
-	private _sendProcessTitle(ptyProcess: IPty): void {
+	private _sendProcessTitle(ptyProcess: IPty): codemavi {
 		if (this._store.isDisposed) {
 			return;
 		}
@@ -436,7 +436,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	shutdown(immediate: boolean): void {
+	shutdown(immediate: boolean): codemavi {
 		if (this._logService.getLevel() === LogLevel.Trace) {
 			this._logService.trace('TerminalProcess#shutdown', new Error().stack?.replace(/^Error/, ''));
 		}
@@ -459,7 +459,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	input(data: string, isBinary: boolean = false): void {
+	input(data: string, isBinary: boolean = false): codemavi {
 		if (this._store.isDisposed || !this._ptyProcess) {
 			return;
 		}
@@ -469,7 +469,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		this._startWrite();
 	}
 
-	async processBinary(data: string): Promise<void> {
+	async processBinary(data: string): Promise<codemavi> {
 		this.input(data, true);
 	}
 
@@ -498,13 +498,13 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
 		if (type === ProcessPropertyType.FixedDimensions) {
 			this._properties.fixedDimensions = value as IProcessPropertyMap[ProcessPropertyType.FixedDimensions];
 		}
 	}
 
-	private _startWrite(): void {
+	private _startWrite(): codemavi {
 		// Don't write if it's already queued of is there is nothing to write
 		if (this._writeTimeout !== undefined || this._writeQueue.length === 0) {
 			return;
@@ -525,7 +525,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}, Constants.WriteInterval);
 	}
 
-	private _doWrite(): void {
+	private _doWrite(): codemavi {
 		const object = this._writeQueue.shift()!;
 		this._logService.trace('node-pty.IPty#write', object.data);
 		if (object.isBinary) {
@@ -536,7 +536,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		this._childProcessMonitor?.handleInput();
 	}
 
-	resize(cols: number, rows: number): void {
+	resize(cols: number, rows: number): codemavi {
 		if (this._store.isDisposed) {
 			return;
 		}
@@ -571,11 +571,11 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	clearBuffer(): void {
+	clearBuffer(): codemavi {
 		this._ptyProcess?.clear();
 	}
 
-	acknowledgeDataEvent(charCount: number): void {
+	acknowledgeDataEvent(charCount: number): codemavi {
 		// Prevent lower than 0 to heal from errors
 		this._unacknowledgedCharCount = Math.max(this._unacknowledgedCharCount - charCount, 0);
 		this._logService.trace(`Flow control: Ack ${charCount} chars (unacknowledged: ${this._unacknowledgedCharCount})`);
@@ -586,7 +586,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	clearUnacknowledgedChars(): void {
+	clearUnacknowledgedChars(): codemavi {
 		this._unacknowledgedCharCount = 0;
 		this._logService.trace(`Flow control: Cleared all unacknowledged chars, forcing resume`);
 		if (this._isPtyPaused) {
@@ -595,7 +595,7 @@ export class TerminalProcess extends Disposable implements ITerminalChildProcess
 		}
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
 		// No-op
 	}
 

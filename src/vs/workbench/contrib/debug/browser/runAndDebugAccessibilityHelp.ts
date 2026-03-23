@@ -47,7 +47,7 @@ class RunAndDebugAccessibilityHelpProvider extends Disposable implements IAccess
 		this._focusedView = this._viewsService.getFocusedViewName();
 	}
 
-	public onClose(): void {
+	public onClose(): codemavi {
 		switch (this._focusedView) {
 			case 'Watch':
 				this._commandService.executeCommand('workbench.debug.action.focusWatchView');

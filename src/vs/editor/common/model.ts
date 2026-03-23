@@ -59,14 +59,14 @@ export interface IGlyphMarginLanesModel {
 	/**
 	 * Resets the model and ensures it can contain at least `maxLine` lines.
 	 */
-	reset(maxLine: number): void;
+	reset(maxLine: number): codemavi;
 
 	/**
 	 * Registers that a lane should be visible at the Range in the model.
 	 * @param persist - if true, notes that the lane should always be visible,
 	 * even on lines where there's no specific request for that lane.
 	 */
-	push(lane: GlyphMarginLane, range: Range, persist?: boolean): void;
+	push(lane: GlyphMarginLane, range: Range, persist?: boolean): codemavi;
 }
 
 /**
@@ -376,18 +376,18 @@ export interface IModelDecorationsChangeAccessor {
 	 * @param id The unique identifier associated with the decoration.
 	 * @param newRange The new range that this decoration covers.
 	 */
-	changeDecoration(id: string, newRange: IRange): void;
+	changeDecoration(id: string, newRange: IRange): codemavi;
 	/**
 	 * Change the options associated with an existing decoration.
 	 * @param id The unique identifier associated with the decoration.
 	 * @param newOptions The new options associated with this decoration.
 	 */
-	changeDecorationOptions(id: string, newOptions: IModelDecorationOptions): void;
+	changeDecorationOptions(id: string, newOptions: IModelDecorationOptions): codemavi;
 	/**
 	 * Remove an existing decoration.
 	 * @param id The unique identifier associated with the decoration.
 	 */
-	removeDecoration(id: string): void;
+	removeDecoration(id: string): codemavi;
 	/**
 	 * Perform a minimum amount of operations, in order to transform the decorations
 	 * identified by `oldDecorations` to the decorations described by `newDecorations`
@@ -514,7 +514,7 @@ export interface ICursorStateComputer {
 }
 
 export class TextModelResolvedOptions {
-	_textModelResolvedOptionsBrand: void = undefined;
+	_textModelResolvedOptionsBrand: codemavi = undefined;
 
 	readonly tabSize: number;
 	readonly indentSize: number;
@@ -610,7 +610,7 @@ export interface ITextModelUpdateOptions {
 }
 
 export class FindMatch {
-	_findMatchBrand: void = undefined;
+	_findMatchBrand: codemavi = undefined;
 
 	public readonly range: Range;
 	public readonly matches: string[] | null;
@@ -689,7 +689,7 @@ export interface ITextModel {
 	/**
 	 * @internal
 	 */
-	removeUnusualLineTerminators(selections?: Selection[]): void;
+	removeUnusualLineTerminators(selections?: Selection[]): codemavi;
 
 	/**
 	 * If true, the text model might contain non basic ASCII.
@@ -726,7 +726,7 @@ export interface ITextModel {
 	/**
 	 * Replace the entire text buffer value contained in this model.
 	 */
-	setValue(newValue: string | ITextSnapshot): void;
+	setValue(newValue: string | ITextSnapshot): codemavi;
 
 	/**
 	 * Get the text stored in this model.
@@ -977,7 +977,7 @@ export interface ITextModel {
 	 * @param source The source of the call that set the language.
 	 * @internal
 	 */
-	setLanguage(languageId: string, source?: string): void;
+	setLanguage(languageId: string, source?: string): codemavi;
 
 	/**
 	 * Set the current language mode associated with the model.
@@ -985,7 +985,7 @@ export interface ITextModel {
 	 * @param source The source of the call that set the language.
 	 * @internal
 	 */
-	setLanguage(languageSelection: ILanguageSelection, source?: string): void;
+	setLanguage(languageSelection: ILanguageSelection, source?: string): codemavi;
 
 	/**
 	 * Returns the real (inner-most) language mode at a given position.
@@ -1035,7 +1035,7 @@ export interface ITextModel {
 	 * @param ownerId The owner id to search for.
 	 * @internal
 	 */
-	removeAllDecorationsWithOwnerId(ownerId: number): void;
+	removeAllDecorationsWithOwnerId(ownerId: number): codemavi;
 
 	/**
 	 * Get the options associated with a decoration.
@@ -1130,24 +1130,24 @@ export interface ITextModel {
 	/**
 	 * Change the options of this model.
 	 */
-	updateOptions(newOpts: ITextModelUpdateOptions): void;
+	updateOptions(newOpts: ITextModelUpdateOptions): codemavi;
 
 	/**
 	 * Detect the indentation options for this model from its content.
 	 */
-	detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): void;
+	detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): codemavi;
 
 	/**
 	 * Close the current undo-redo element.
 	 * This offers a way to create an undo/redo stop point.
 	 */
-	pushStackElement(): void;
+	pushStackElement(): codemavi;
 
 	/**
 	 * Open the current undo-redo element.
 	 * This offers a way to remove the current undo/redo stop point.
 	 */
-	popStackElement(): void;
+	popStackElement(): codemavi;
 
 	/**
 	 * Push edit operations, basically editing the model. This is the preferred way
@@ -1167,7 +1167,7 @@ export interface ITextModel {
 	 * Change the end of line sequence. This is the preferred way of
 	 * changing the eol sequence. This will land on the undo stack.
 	 */
-	pushEOL(eol: EndOfLineSequence): void;
+	pushEOL(eol: EndOfLineSequence): codemavi;
 
 	/**
 	 * Edit the model without adding the edits to the undo stack.
@@ -1175,32 +1175,32 @@ export interface ITextModel {
 	 * @param operations The edit operations.
 	 * @return If desired, the inverse edit operations, that, when applied, will bring the model back to the previous state.
 	 */
-	applyEdits(operations: IIdentifiedSingleEditOperation[]): void;
-	applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: false): void;
+	applyEdits(operations: IIdentifiedSingleEditOperation[]): codemavi;
+	applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: false): codemavi;
 	applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: true): IValidEditOperation[];
 
 	/**
 	 * Change the end of line sequence without recording in the undo stack.
 	 * This can have dire consequences on the undo stack! See @pushEOL for the preferred way.
 	 */
-	setEOL(eol: EndOfLineSequence): void;
+	setEOL(eol: EndOfLineSequence): codemavi;
 
 	/**
 	 * @internal
 	 */
-	_applyUndo(changes: TextChange[], eol: EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): void;
+	_applyUndo(changes: TextChange[], eol: EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): codemavi;
 
 	/**
 	 * @internal
 	 */
-	_applyRedo(changes: TextChange[], eol: EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): void;
+	_applyRedo(changes: TextChange[], eol: EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): codemavi;
 
 	/**
 	 * Undo edit operations until the previous undo/redo point.
 	 * The inverse edit operations will be pushed on the redo stack.
 	 * @internal
 	 */
-	undo(): void | Promise<void>;
+	undo(): codemavi | Promise<codemavi>;
 
 	/**
 	 * Is there anything in the undo stack?
@@ -1213,7 +1213,7 @@ export interface ITextModel {
 	 * The inverse edit operations will be pushed on the undo stack.
 	 * @internal
 	 */
-	redo(): void | Promise<void>;
+	redo(): codemavi | Promise<codemavi>;
 
 	/**
 	 * Is there anything in the redo stack?
@@ -1232,7 +1232,7 @@ export interface ITextModel {
 	 * An event emitted when the contents of the model have changed.
 	 * @event
 	 */
-	onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable;
+	onDidChangeContent(listener: (e: IModelContentChangedEvent) => codemavi): IDisposable;
 	/**
 	 * An event emitted when decorations of the model have changed.
 	 * @event
@@ -1263,17 +1263,17 @@ export interface ITextModel {
 	 * An event emitted when the model has been attached to the first editor or detached from the last editor.
 	 * @event
 	 */
-	readonly onDidChangeAttached: Event<void>;
+	readonly onDidChangeAttached: Event<codemavi>;
 	/**
 	 * An event emitted right before disposing the model.
 	 * @event
 	 */
-	readonly onWillDispose: Event<void>;
+	readonly onWillDispose: Event<codemavi>;
 
 	/**
 	 * Destroy this model.
 	 */
-	dispose(): void;
+	dispose(): codemavi;
 
 	/**
 	 * @internal
@@ -1283,7 +1283,7 @@ export interface ITextModel {
 	/**
 	 * @internal
 	 */
-	onBeforeDetached(view: IAttachedView): void;
+	onBeforeDetached(view: IAttachedView): codemavi;
 
 	/**
 	 * Returns if this model is attached to an editor or not.
@@ -1350,7 +1350,7 @@ export interface IAttachedView {
 	 * Is true on reveal range and false on scroll.
 	 * Tokenizers should tokenize synchronously if stabilized is true.
 	 */
-	setVisibleLines(visibleLines: { startLineNumber: number; endLineNumber: number }[], stabilized: boolean): void;
+	setVisibleLines(visibleLines: { startLineNumber: number; endLineNumber: number }[], stabilized: boolean): codemavi;
 }
 
 export const enum PositionAffinity {
@@ -1384,7 +1384,7 @@ export const enum PositionAffinity {
  * @internal
  */
 export interface ITextBufferBuilder {
-	acceptChunk(chunk: string): void;
+	acceptChunk(chunk: string): codemavi;
 	finish(): ITextBufferFactory;
 }
 
@@ -1423,11 +1423,11 @@ export class ValidAnnotatedEditOperation implements IIdentifiedSingleEditOperati
  * `lineNumber` is 1 based.
  */
 export interface IReadonlyTextBuffer {
-	onDidChangeContent: Event<void>;
+	onDidChangeContent: Event<codemavi>;
 	equals(other: ITextBuffer): boolean;
 	mightContainRTL(): boolean;
 	mightContainUnusualLineTerminators(): boolean;
-	resetMightContainUnusualLineTerminators(): void;
+	resetMightContainUnusualLineTerminators(): codemavi;
 	mightContainNonBasicASCII(): boolean;
 	getBOM(): string;
 	getEOL(): string;
@@ -1488,7 +1488,7 @@ export class SearchData {
  * @internal
  */
 export interface ITextBuffer extends IReadonlyTextBuffer, IDisposable {
-	setEOL(newEOL: '\r\n' | '\n'): void;
+	setEOL(newEOL: '\r\n' | '\n'): codemavi;
 	applyEdits(rawOperations: ValidAnnotatedEditOperation[], recordTrimAutoWhitespace: boolean, computeUndoEdits: boolean): ApplyEditsResult;
 }
 

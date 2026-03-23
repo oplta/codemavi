@@ -331,12 +331,12 @@ export interface IMenuService {
 	/**
 	 * Reset **all** menu item hidden states.
 	 */
-	resetHiddenStates(): void;
+	resetHiddenStates(): codemavi;
 
 	/**
 	 * Reset the menu's hidden states.
 	 */
-	resetHiddenStates(menuIds: readonly MenuId[] | undefined): void;
+	resetHiddenStates(menuIds: readonly MenuId[] | undefined): codemavi;
 }
 
 type ICommandsMap = Map<string, ICommandAction>;
@@ -562,7 +562,7 @@ export class MenuItemAction implements IAction {
 
 	}
 
-	run(...args: any[]): Promise<void> {
+	run(...args: any[]): Promise<codemavi> {
 		let runArgs: any[] = [];
 
 		if (this._options?.arg) {
@@ -635,7 +635,7 @@ export interface IAction2F1RequiredOptions {
 
 export abstract class Action2 {
 	constructor(readonly desc: Readonly<IAction2Options>) { }
-	abstract run(accessor: ServicesAccessor, ...args: any[]): void;
+	abstract run(accessor: ServicesAccessor, ...args: any[]): codemavi;
 }
 
 export function registerAction2(ctor: { new(): Action2 }): IDisposable {

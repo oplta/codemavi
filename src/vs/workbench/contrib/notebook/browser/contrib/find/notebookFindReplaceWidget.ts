@@ -84,7 +84,7 @@ class NotebookFindFilterActionViewItem extends DropdownMenuActionViewItem {
 		);
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		this.updateChecked();
 	}
@@ -156,7 +156,7 @@ class NotebookFindFilterActionViewItem extends DropdownMenuActionViewItem {
 
 	}
 
-	protected override updateChecked(): void {
+	protected override updateChecked(): codemavi {
 		this.element!.classList.toggle('checked', this._action.checked);
 	}
 }
@@ -193,11 +193,11 @@ export class NotebookFindInputFilterButton extends Disposable {
 		return 2 /*margin left*/ + 2 /*border*/ + 2 /*padding*/ + 16 /* icon width */;
 	}
 
-	enable(): void {
+	enable(): codemavi {
 		this.container.setAttribute('aria-disabled', String(false));
 	}
 
-	disable(): void {
+	disable(): codemavi {
 		this.container.setAttribute('aria-disabled', String(true));
 	}
 
@@ -209,7 +209,7 @@ export class NotebookFindInputFilterButton extends Disposable {
 		return this._filterButtonContainer.style.display !== 'none';
 	}
 
-	applyStyles(filterChecked: boolean): void {
+	applyStyles(filterChecked: boolean): codemavi {
 		const toggleStyles = this._toggleStyles;
 
 		this._filterButtonContainer.style.border = '1px solid transparent';
@@ -219,7 +219,7 @@ export class NotebookFindInputFilterButton extends Disposable {
 		this._filterButtonContainer.style.backgroundColor = (filterChecked && toggleStyles.inputActiveOptionBackground) || '';
 	}
 
-	private createFilters(container: HTMLElement): void {
+	private createFilters(container: HTMLElement): codemavi {
 		this._actionbar = this._register(new ActionBar(container, {
 			actionViewItemProvider: (action, options) => {
 				if (action.id === this._filtersAction.id) {
@@ -290,7 +290,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 	private readonly _innerFindDomNode: HTMLElement;
 	private readonly _focusTracker: dom.IFocusTracker;
 	private readonly _findInputFocusTracker: dom.IFocusTracker;
-	private readonly _updateHistoryDelayer: Delayer<void>;
+	private readonly _updateHistoryDelayer: Delayer<codemavi>;
 	protected readonly _matchesCount!: HTMLElement;
 	private readonly prevBtn: SimpleButton;
 	private readonly nextBtn: SimpleButton;
@@ -419,7 +419,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		));
 
 		// Find History with update delayer
-		this._updateHistoryDelayer = new Delayer<void>(500);
+		this._updateHistoryDelayer = new Delayer<codemavi>(500);
 
 		this.oninput(this._findInput.domNode, (e) => {
 			this.foundMatch = this.onInputChanged();
@@ -663,15 +663,15 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 	}
 
 	protected abstract onInputChanged(): boolean;
-	protected abstract find(previous: boolean): void;
-	protected abstract replaceOne(): void;
-	protected abstract replaceAll(): void;
-	protected abstract onFocusTrackerFocus(): void;
-	protected abstract onFocusTrackerBlur(): void;
-	protected abstract onFindInputFocusTrackerFocus(): void;
-	protected abstract onFindInputFocusTrackerBlur(): void;
-	protected abstract onReplaceInputFocusTrackerFocus(): void;
-	protected abstract onReplaceInputFocusTrackerBlur(): void;
+	protected abstract find(previous: boolean): codemavi;
+	protected abstract replaceOne(): codemavi;
+	protected abstract replaceAll(): codemavi;
+	protected abstract onFocusTrackerFocus(): codemavi;
+	protected abstract onFocusTrackerBlur(): codemavi;
+	protected abstract onFindInputFocusTrackerFocus(): codemavi;
+	protected abstract onFindInputFocusTrackerBlur(): codemavi;
+	protected abstract onReplaceInputFocusTrackerFocus(): codemavi;
+	protected abstract onReplaceInputFocusTrackerBlur(): codemavi;
 
 	protected get inputValue() {
 		return this._findInput.getValue();
@@ -696,12 +696,12 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		return this._isVisible;
 	}
 
-	private _onStateChanged(e: FindReplaceStateChangedEvent): void {
+	private _onStateChanged(e: FindReplaceStateChangedEvent): codemavi {
 		this._updateButtons();
 		this._updateMatchesCount();
 	}
 
-	private _updateButtons(): void {
+	private _updateButtons(): codemavi {
 		this._findInput.setEnabled(this._isVisible);
 		this._replaceInput.setEnabled(this._isVisible && this._isReplaceVisible);
 		const findInputIsNonEmpty = (this._state.searchString.length > 0);
@@ -761,7 +761,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		});
 	}
 
-	protected _updateMatchesCount(): void {
+	protected _updateMatchesCount(): codemavi {
 	}
 
 	override dispose() {
@@ -774,7 +774,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		return this._domNode;
 	}
 
-	public reveal(initialInput?: string): void {
+	public reveal(initialInput?: string): codemavi {
 		if (initialInput) {
 			this._findInput.setValue(initialInput);
 		}
@@ -794,11 +794,11 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		}, 0);
 	}
 
-	public focus(): void {
+	public focus(): codemavi {
 		this._findInput.focus();
 	}
 
-	public show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): void {
+	public show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): codemavi {
 		if (initialInput) {
 			this._findInput.setValue(initialInput);
 		}
@@ -815,7 +815,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		}, 0);
 	}
 
-	public showWithReplace(initialInput?: string, replaceInput?: string): void {
+	public showWithReplace(initialInput?: string, replaceInput?: string): codemavi {
 		if (initialInput) {
 			this._findInput.setValue(initialInput);
 		}
@@ -838,7 +838,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		}, 0);
 	}
 
-	private _updateReplaceViewDisplay(): void {
+	private _updateReplaceViewDisplay(): codemavi {
 		if (this._isReplaceVisible) {
 			this._innerReplaceDomNode.style.display = 'flex';
 		} else {
@@ -848,7 +848,7 @@ export abstract class SimpleFindReplaceWidget extends Widget {
 		this._replaceInput.width = dom.getTotalWidth(this._findInput.domNode);
 	}
 
-	public hide(): void {
+	public hide(): codemavi {
 		if (this._isVisible) {
 			this.inSelectionToggle.checked = false;
 			this._notebookEditor.deltaCellDecorations(this.cellSelectionDecorationIds, []);

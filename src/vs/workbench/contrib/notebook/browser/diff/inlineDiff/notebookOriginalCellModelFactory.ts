@@ -33,7 +33,7 @@ export class OriginalNotebookCellModelReferenceCollection extends ReferenceColle
 		const languageSelection = this._languageService.getLanguageIdByLanguageName(language) ? this._languageService.createById(language) : cellKind === CellKind.Markup ? this._languageService.createById('markdown') : null;
 		return this.modelService.createModel(cellValue, languageSelection, originalCellUri);
 	}
-	protected override destroyReferencedObject(_key: string, model: ITextModel): void {
+	protected override destroyReferencedObject(_key: string, model: ITextModel): codemavi {
 		model.dispose();
 	}
 }

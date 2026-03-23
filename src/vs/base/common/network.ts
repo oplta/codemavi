@@ -168,11 +168,11 @@ class RemoteAuthoritiesImpl {
 		this._preferredWebSchema = schema;
 	}
 
-	setDelegate(delegate: (uri: URI) => URI): void {
+	setDelegate(delegate: (uri: URI) => URI): codemavi {
 		this._delegate = delegate;
 	}
 
-	setServerRootPath(product: { quality?: string; commit?: string }, serverBasePath: string | undefined): void {
+	setServerRootPath(product: { quality?: string; commit?: string }, serverBasePath: string | undefined): codemavi {
 		this._serverRootPath = paths.posix.join(serverBasePath ?? '/', getServerProductSegment(product));
 	}
 
@@ -184,12 +184,12 @@ class RemoteAuthoritiesImpl {
 		return paths.posix.join(this._serverRootPath, Schemas.vscodeRemoteResource);
 	}
 
-	set(authority: string, host: string, port: number): void {
+	set(authority: string, host: string, port: number): codemavi {
 		this._hosts[authority] = host;
 		this._ports[authority] = port;
 	}
 
-	setConnectionToken(authority: string, connectionToken: string): void {
+	setConnectionToken(authority: string, connectionToken: string): codemavi {
 		this._connectionTokens[authority] = connectionToken;
 	}
 
@@ -400,7 +400,7 @@ export namespace COI {
 	 * Add the `vscode-coi` query attribute based on wanting `COOP` and `COEP`. Will be a noop when `crossOriginIsolated`
 	 * isn't enabled the current context
 	 */
-	export function addSearchParam(urlOrSearch: URLSearchParams | Record<string, string>, coop: boolean, coep: boolean): void {
+	export function addSearchParam(urlOrSearch: URLSearchParams | Record<string, string>, coop: boolean, coep: boolean): codemavi {
 		if (!(<any>globalThis).crossOriginIsolated) {
 			// depends on the current context being COI
 			return;

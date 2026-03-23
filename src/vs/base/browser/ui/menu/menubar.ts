@@ -200,7 +200,7 @@ export class MenuBar extends Disposable {
 		this.setUnfocusedState();
 	}
 
-	push(arg: MenuBarMenu | MenuBarMenu[]): void {
+	push(arg: MenuBarMenu | MenuBarMenu[]): codemavi {
 		const menus: MenuBarMenu[] = asArray(arg);
 
 		menus.forEach((menuBarMenu) => {
@@ -314,7 +314,7 @@ export class MenuBar extends Disposable {
 		});
 	}
 
-	createOverflowMenu(): void {
+	createOverflowMenu(): codemavi {
 		const label = this.isCompact ? nls.localize('mAppMenu', 'Application Menu') : nls.localize('mMore', 'More');
 		const buttonElement = $('div.menubar-menu-button', { 'role': 'menuitem', 'tabindex': this.isCompact ? 0 : -1, 'aria-label': label, 'aria-haspopup': true });
 		const titleElement = $('div.menubar-menu-title.toolbar-toggle-more' + ThemeIcon.asCSSSelector(Codicon.menuBarMore), { 'role': 'none', 'aria-hidden': true });
@@ -421,14 +421,14 @@ export class MenuBar extends Disposable {
 		};
 	}
 
-	updateMenu(menu: MenuBarMenu): void {
+	updateMenu(menu: MenuBarMenu): codemavi {
 		const menuToUpdate = this.menus.filter(menuBarMenu => menuBarMenu.label === menu.label);
 		if (menuToUpdate && menuToUpdate.length) {
 			menuToUpdate[0].actions = menu.actions;
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		this.menus.forEach(menuBarMenu => {
@@ -443,7 +443,7 @@ export class MenuBar extends Disposable {
 		this.overflowLayoutScheduled = undefined;
 	}
 
-	blur(): void {
+	blur(): codemavi {
 		this.setUnfocusedState();
 	}
 
@@ -461,7 +461,7 @@ export class MenuBar extends Disposable {
 		return this.container.clientHeight;
 	}
 
-	toggleFocus(): void {
+	toggleFocus(): codemavi {
 		if (!this.isFocused && this.options.visibility !== 'hidden') {
 			this.mnemonicsInUse = true;
 			this.focusedMenu = { index: this.numMenusShown > 0 ? 0 : MenuBar.OVERFLOW_INDEX };
@@ -471,7 +471,7 @@ export class MenuBar extends Disposable {
 		}
 	}
 
-	private updateOverflowAction(): void {
+	private updateOverflowAction(): codemavi {
 		if (!this.menus || !this.menus.length) {
 			return;
 		}
@@ -559,11 +559,11 @@ export class MenuBar extends Disposable {
 			this.overflowMenu.buttonElement.style.visibility = 'hidden';
 		}
 
-		// If we are only showing the overflow, add this class to avoid taking up space
+		// If we are only showing the overflow, add this class to acodemavi taking up space
 		this.container.classList.toggle(overflowMenuOnlyClass, this.numMenusShown === 0);
 	}
 
-	private updateLabels(titleElement: HTMLElement, buttonElement: HTMLElement, label: string): void {
+	private updateLabels(titleElement: HTMLElement, buttonElement: HTMLElement, label: string): codemavi {
 		const cleanMenuLabel = cleanMnemonic(label);
 
 		// Update the button label to reflect mnemonics
@@ -610,7 +610,7 @@ export class MenuBar extends Disposable {
 		}
 	}
 
-	update(options?: IMenuBarOptions): void {
+	update(options?: IMenuBarOptions): codemavi {
 		if (options) {
 			this.options = options;
 		}
@@ -639,18 +639,18 @@ export class MenuBar extends Disposable {
 		this.setUnfocusedState();
 	}
 
-	private registerMnemonic(menuIndex: number, mnemonic: string): void {
+	private registerMnemonic(menuIndex: number, mnemonic: string): codemavi {
 		this.mnemonics.set(mnemonic.toLocaleLowerCase(), menuIndex);
 	}
 
-	private hideMenubar(): void {
+	private hideMenubar(): codemavi {
 		if (this.container.style.display !== 'none') {
 			this.container.style.display = 'none';
 			this._onVisibilityChange.fire(false);
 		}
 	}
 
-	private showMenubar(): void {
+	private showMenubar(): codemavi {
 		if (this.container.style.display !== 'flex') {
 			this.container.style.display = 'flex';
 			this._onVisibilityChange.fire(true);
@@ -790,7 +790,7 @@ export class MenuBar extends Disposable {
 		return this.options.compactMode !== undefined;
 	}
 
-	private setUnfocusedState(): void {
+	private setUnfocusedState(): codemavi {
 		if (this.options.visibility === 'toggle' || this.options.visibility === 'hidden') {
 			this.focusState = MenubarState.HIDDEN;
 		} else if (this.options.visibility === 'classic' && browser.isFullscreen(mainWindow)) {
@@ -804,7 +804,7 @@ export class MenuBar extends Disposable {
 		this.updateMnemonicVisibility(false);
 	}
 
-	private focusPrevious(): void {
+	private focusPrevious(): codemavi {
 
 		if (!this.focusedMenu || this.numMenusShown === 0) {
 			return;
@@ -835,7 +835,7 @@ export class MenuBar extends Disposable {
 		}
 	}
 
-	private focusNext(): void {
+	private focusNext(): codemavi {
 		if (!this.focusedMenu || this.numMenusShown === 0) {
 			return;
 		}
@@ -864,7 +864,7 @@ export class MenuBar extends Disposable {
 		}
 	}
 
-	private updateMnemonicVisibility(visible: boolean): void {
+	private updateMnemonicVisibility(visible: boolean): codemavi {
 		if (this.menus) {
 			this.menus.forEach(menuBarMenu => {
 				if (menuBarMenu.titleElement && menuBarMenu.titleElement.children.length) {
@@ -924,7 +924,7 @@ export class MenuBar extends Disposable {
 		}
 	}
 
-	private onModifierKeyToggled(modifierKeyStatus: DOM.IModifierKeyStatus): void {
+	private onModifierKeyToggled(modifierKeyStatus: DOM.IModifierKeyStatus): codemavi {
 		const allModifiersReleased = !modifierKeyStatus.altKey && !modifierKeyStatus.ctrlKey && !modifierKeyStatus.shiftKey && !modifierKeyStatus.metaKey;
 
 		if (this.options.visibility === 'hidden') {
@@ -976,7 +976,7 @@ export class MenuBar extends Disposable {
 		return this.focusedMenu.index === menuIndex;
 	}
 
-	private cleanupCustomMenu(): void {
+	private cleanupCustomMenu(): codemavi {
 		if (this.focusedMenu) {
 			// Remove focus from the menus first
 			if (this.focusedMenu.index === MenuBar.OVERFLOW_INDEX) {
@@ -998,7 +998,7 @@ export class MenuBar extends Disposable {
 		this.menuDisposables.clear();
 	}
 
-	private showCustomMenu(menuIndex: number, selectFirst = true): void {
+	private showCustomMenu(menuIndex: number, selectFirst = true): codemavi {
 		const actualMenuIndex = menuIndex >= this.numMenusShown ? MenuBar.OVERFLOW_INDEX : menuIndex;
 		const customMenu = actualMenuIndex === MenuBar.OVERFLOW_INDEX ? this.overflowMenu : this.menus[actualMenuIndex];
 

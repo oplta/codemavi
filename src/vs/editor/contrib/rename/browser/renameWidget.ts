@@ -98,11 +98,11 @@ interface IRenameWidget {
 		cts: CancellationTokenSource
 	): Promise<RenameWidgetResult | boolean>;
 
-	acceptInput(wantsPreview: boolean): void;
-	cancelInput(focusEditor: boolean, caller: string): void;
+	acceptInput(wantsPreview: boolean): codemavi;
+	cancelInput(focusEditor: boolean, caller: string): codemavi;
 
-	focusNextRenameSuggestion(): void;
-	focusPreviousRenameSuggestion(): void;
+	focusNextRenameSuggestion(): codemavi;
+	focusPreviousRenameSuggestion(): codemavi;
 }
 
 export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable {
@@ -184,7 +184,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		this._disposables.add(_themeService.onDidColorThemeChange(this._updateStyles, this));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 		this._editor.removeContentWidget(this);
 	}
@@ -237,7 +237,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		return this._domNode;
 	}
 
-	private _updateStyles(theme: IColorTheme): void {
+	private _updateStyles(theme: IColorTheme): codemavi {
 		if (!this._domNode) {
 			return;
 		}
@@ -258,7 +258,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		this._inputWithButton.domNode.style.borderColor = border?.toString() ?? 'none';
 	}
 
-	private _updateFont(): void {
+	private _updateFont(): codemavi {
 		if (this._domNode === undefined) {
 			return;
 		}
@@ -315,7 +315,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		return null;
 	}
 
-	afterRender(position: ContentWidgetPositionPreference | null): void {
+	afterRender(position: ContentWidgetPositionPreference | null): codemavi {
 		// FIXME@ulugbekna: commenting trace log out until we start unmounting the widget from editor properly - https://github.com/microsoft/vscode/issues/226975
 		// this._trace('invoking afterRender, position: ', position ? 'not null' : 'null');
 		if (position === null) {
@@ -352,16 +352,16 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 	}
 
 
-	private _currentAcceptInput?: (wantsPreview: boolean) => void;
-	private _currentCancelInput?: (focusEditor: boolean) => void;
+	private _currentAcceptInput?: (wantsPreview: boolean) => codemavi;
+	private _currentCancelInput?: (focusEditor: boolean) => codemavi;
 	private _requestRenameCandidatesOnce?: (triggerKind: NewSymbolNameTriggerKind, cts: CancellationToken) => ProviderResult<NewSymbolName[]>[];
 
-	acceptInput(wantsPreview: boolean): void {
+	acceptInput(wantsPreview: boolean): codemavi {
 		this._trace(`invoking acceptInput`);
 		this._currentAcceptInput?.(wantsPreview);
 	}
 
-	cancelInput(focusEditor: boolean, caller: string): void {
+	cancelInput(focusEditor: boolean, caller: string): codemavi {
 		// this._trace(`invoking cancelInput, caller: ${caller}, _currentCancelInput: ${this._currentAcceptInput ? 'not undefined' : 'undefined'}`);
 		this._currentCancelInput?.(focusEditor);
 	}
@@ -577,7 +577,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		return { start, end };
 	}
 
-	private _show(): void {
+	private _show(): codemavi {
 		this._trace('invoking _show');
 		this._editor.revealLineInCenterIfOutsideViewport(this._position!.lineNumber, ScrollType.Smooth);
 		this._visible = true;
@@ -638,7 +638,7 @@ export class RenameWidget implements IRenameWidget, IContentWidget, IDisposable 
 		this._editor.layoutContentWidget(this);
 	}
 
-	private _hide(): void {
+	private _hide(): codemavi {
 		this._trace('invoked _hide');
 		this._visible = false;
 		this._visibleContextKey.reset();
@@ -676,7 +676,7 @@ class RenameCandidateListView {
 	private readonly _disposables: DisposableStore;
 
 	// FIXME@ulugbekna: rewrite using event emitters
-	constructor(parent: HTMLElement, opts: { fontInfo: FontInfo; onFocusChange: (newSymbolName: string) => void; onSelectionChange: () => void }) {
+	constructor(parent: HTMLElement, opts: { fontInfo: FontInfo; onFocusChange: (newSymbolName: string) => codemavi; onSelectionChange: () => codemavi }) {
 
 		this._disposables = new DisposableStore();
 
@@ -728,12 +728,12 @@ class RenameCandidateListView {
 	}
 
 	// height - max height allowed by parent element
-	public layout({ height, width }: { height: number; width: number }): void {
+	public layout({ height, width }: { height: number; width: number }): codemavi {
 		this._availableHeight = height;
 		this._minimumWidth = width;
 	}
 
-	public setCandidates(candidates: NewSymbolName[]): void {
+	public setCandidates(candidates: NewSymbolName[]): codemavi {
 
 		// insert candidates into list widget
 		this._listWidget.splice(0, 0, candidates);
@@ -751,7 +751,7 @@ class RenameCandidateListView {
 		aria.status(nls.localize('renameSuggestionsReceivedAria', "Received {0} rename suggestions", candidates.length));
 	}
 
-	public clearCandidates(): void {
+	public clearCandidates(): codemavi {
 		this._listContainer.style.height = '0px';
 		this._listContainer.style.width = '0px';
 		this._listWidget.splice(0, this._listWidget.length, []);
@@ -825,7 +825,7 @@ class RenameCandidateListView {
 		}
 	}
 
-	public clearFocus(): void {
+	public clearFocus(): codemavi {
 		this._listWidget.setFocus([]);
 	}
 
@@ -868,11 +868,11 @@ class RenameCandidateListView {
 				return new RenameCandidateView(container, fontInfo);
 			}
 
-			renderElement(candidate: NewSymbolName, index: number, templateData: RenameCandidateView): void {
+			renderElement(candidate: NewSymbolName, index: number, templateData: RenameCandidateView): codemavi {
 				templateData.populate(candidate);
 			}
 
-			disposeTemplate(templateData: RenameCandidateView): void {
+			disposeTemplate(templateData: RenameCandidateView): codemavi {
 				templateData.dispose();
 			}
 		};
@@ -904,7 +904,7 @@ class InputWithButton implements IDisposable {
 	private _sparkleIcon: HTMLElement | undefined;
 	private _stopIcon: HTMLElement | undefined;
 
-	private readonly _onDidInputChange = new Emitter<void>();
+	private readonly _onDidInputChange = new Emitter<codemavi>();
 	public readonly onDidInputChange = this._onDidInputChange.event;
 
 	private readonly _disposables = new DisposableStore();
@@ -1003,7 +1003,7 @@ class InputWithButton implements IDisposable {
 		this.input.focus();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 }

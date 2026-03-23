@@ -64,9 +64,9 @@ class WorkerServerProcess implements TsServerProcess {
 
 	private readonly id = WorkerServerProcess.idPool++;
 
-	private readonly _onDataHandlers = new Set<(data: Proto.Response) => void>();
-	private readonly _onErrorHandlers = new Set<(err: Error) => void>();
-	private readonly _onExitHandlers = new Set<(code: number | null, signal: string | null) => void>();
+	private readonly _onDataHandlers = new Set<(data: Proto.Response) => codemavi>();
+	private readonly _onErrorHandlers = new Set<(err: Error) => codemavi>();
+	private readonly _onExitHandlers = new Set<(code: number | null, signal: string | null) => codemavi>();
 
 	private readonly _worker: Worker;
 	private readonly _watches: FileWatcherManager;
@@ -154,24 +154,24 @@ class WorkerServerProcess implements TsServerProcess {
 		connection.signalReady();
 	}
 
-	write(serverRequest: Proto.Request): void {
+	write(serverRequest: Proto.Request): codemavi {
 		this._tsserver.postMessage(serverRequest);
 	}
 
-	onData(handler: (response: Proto.Response) => void): void {
+	onData(handler: (response: Proto.Response) => codemavi): codemavi {
 		this._onDataHandlers.add(handler);
 	}
 
-	onError(handler: (err: Error) => void): void {
+	onError(handler: (err: Error) => codemavi): codemavi {
 		this._onErrorHandlers.add(handler);
 	}
 
-	onExit(handler: (code: number | null, signal: string | null) => void): void {
+	onExit(handler: (code: number | null, signal: string | null) => codemavi): codemavi {
 		this._onExitHandlers.add(handler);
 		// Todo: not implemented
 	}
 
-	kill(): void {
+	kill(): codemavi {
 		this._worker.terminate();
 		this._tsserver.close();
 		this._watcher.close();

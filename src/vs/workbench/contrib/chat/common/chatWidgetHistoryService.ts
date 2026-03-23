@@ -30,11 +30,11 @@ export const IChatWidgetHistoryService = createDecorator<IChatWidgetHistoryServi
 export interface IChatWidgetHistoryService {
 	_serviceBrand: undefined;
 
-	readonly onDidClearHistory: Event<void>;
+	readonly onDidClearHistory: Event<codemavi>;
 
-	clearHistory(): void;
+	clearHistory(): codemavi;
 	getHistory(location: ChatAgentLocation): IChatHistoryEntry[];
-	saveHistory(location: ChatAgentLocation, history: IChatHistoryEntry[]): void;
+	saveHistory(location: ChatAgentLocation, history: IChatHistoryEntry[]): codemavi;
 }
 
 interface IChatHistory {
@@ -49,8 +49,8 @@ export class ChatWidgetHistoryService implements IChatWidgetHistoryService {
 	private memento: Memento;
 	private viewState: IChatHistory;
 
-	private readonly _onDidClearHistory = new Emitter<void>();
-	readonly onDidClearHistory: Event<void> = this._onDidClearHistory.event;
+	private readonly _onDidClearHistory = new Emitter<codemavi>();
+	readonly onDidClearHistory: Event<codemavi> = this._onDidClearHistory.event;
 
 	constructor(
 		@IStorageService storageService: IStorageService
@@ -75,7 +75,7 @@ export class ChatWidgetHistoryService implements IChatWidgetHistoryService {
 		return location === ChatAgentLocation.Panel ? CHAT_PROVIDER_ID : location;
 	}
 
-	saveHistory(location: ChatAgentLocation, history: IChatHistoryEntry[]): void {
+	saveHistory(location: ChatAgentLocation, history: IChatHistoryEntry[]): codemavi {
 		if (!this.viewState.history) {
 			this.viewState.history = {};
 		}
@@ -85,7 +85,7 @@ export class ChatWidgetHistoryService implements IChatWidgetHistoryService {
 		this.memento.saveMemento();
 	}
 
-	clearHistory(): void {
+	clearHistory(): codemavi {
 		this.viewState.history = {};
 		this.memento.saveMemento();
 		this._onDidClearHistory.fire();

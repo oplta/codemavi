@@ -13,7 +13,7 @@ import { Disposable } from '../../../base/common/lifecycle.js';
  */
 export class EditorModel extends Disposable {
 
-	private readonly _onWillDispose = this._register(new Emitter<void>());
+	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	private resolved = false;
@@ -21,7 +21,7 @@ export class EditorModel extends Disposable {
 	/**
 	 * Causes this model to resolve returning a promise when loading is completed.
 	 */
-	async resolve(): Promise<void> {
+	async resolve(): Promise<codemavi> {
 		this.resolved = true;
 	}
 
@@ -42,7 +42,7 @@ export class EditorModel extends Disposable {
 	/**
 	 * Subclasses should implement to free resources that have been claimed through loading.
 	 */
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._onWillDispose.fire();
 
 		super.dispose();

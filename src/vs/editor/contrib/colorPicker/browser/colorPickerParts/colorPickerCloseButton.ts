@@ -16,7 +16,7 @@ const $ = dom.$;
 export class CloseButton extends Disposable {
 
 	private _button: HTMLElement;
-	private readonly _onClicked = this._register(new Emitter<void>());
+	private readonly _onClicked = this._register(new Emitter<codemavi>());
 	public readonly onClicked = this._onClicked.event;
 
 	constructor(container: HTMLElement) {

@@ -36,9 +36,9 @@ export interface IExtensionBisectService {
 	isDisabledByBisect(extension: IExtension): boolean;
 	isActive: boolean;
 	disabledCount: number;
-	start(extensions: ILocalExtension[]): Promise<void>;
+	start(extensions: ILocalExtension[]): Promise<codemavi>;
 	next(seeingBad: boolean): Promise<{ id: string; bad: boolean } | undefined>;
-	reset(): Promise<void>;
+	reset(): Promise<codemavi>;
 }
 
 class BisectState {
@@ -120,7 +120,7 @@ class ExtensionBisectService implements IExtensionBisectService {
 		return Array.isArray(this._envService.enableExtensions) && this._envService.enableExtensions.some(id => areSameExtensions({ id }, extension.identifier));
 	}
 
-	async start(extensions: ILocalExtension[]): Promise<void> {
+	async start(extensions: ILocalExtension[]): Promise<codemavi> {
 		if (this._state) {
 			throw new Error('invalid state');
 		}
@@ -155,7 +155,7 @@ class ExtensionBisectService implements IExtensionBisectService {
 		return undefined;
 	}
 
-	async reset(): Promise<void> {
+	async reset(): Promise<codemavi> {
 		this._storageService.remove(ExtensionBisectService._storageKey, StorageScope.APPLICATION);
 		await this._storageService.flush();
 	}
@@ -181,7 +181,7 @@ class ExtensionBisectUi {
 		}
 	}
 
-	private _showBisectPrompt(): void {
+	private _showBisectPrompt(): codemavi {
 
 		const goodPrompt: IPromptChoice = {
 			label: localize('I cannot reproduce', "I can't reproduce"),
@@ -231,7 +231,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 		const hostService = accessor.get(IHostService);
 		const extensionManagement = accessor.get(IExtensionManagementService);
@@ -264,7 +264,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, seeingBad: boolean | undefined): Promise<void> {
+	async run(accessor: ServicesAccessor, seeingBad: boolean | undefined): Promise<codemavi> {
 		const dialogService = accessor.get(IDialogService);
 		const hostService = accessor.get(IHostService);
 		const bisectService = accessor.get(IExtensionBisectService);
@@ -360,7 +360,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const extensionsBisect = accessor.get(IExtensionBisectService);
 		const hostService = accessor.get(IHostService);
 		await extensionsBisect.reset();

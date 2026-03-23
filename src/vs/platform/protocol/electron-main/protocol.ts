@@ -24,7 +24,7 @@ export interface IIPCObjectUrl<T> extends IDisposable {
 	 * @param obj the object to make accessible to the
 	 * renderer.
 	 */
-	update(obj: T): void;
+	update(obj: T): codemavi;
 }
 
 export interface IProtocolMainService {

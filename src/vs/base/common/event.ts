@@ -57,7 +57,7 @@ export namespace Event {
 
 	/**
 	 * Given an event, returns another event which debounces calls and defers the listeners to a later task via a shared
-	 * `setTimeout`. The event is converted into a signal (`Event<void>`) to avoid additional object creation as a
+	 * `setTimeout`. The event is converted into a signal (`Event<codemavi>`) to acodemavi additional object creation as a
 	 * result of merging events and to try prevent race conditions that could arise when using related deferred and
 	 * non-deferred events.
 	 *
@@ -71,8 +71,8 @@ export namespace Event {
 	 * @param event The event source for the new event.
 	 * @param disposable A disposable store to add the new EventEmitter to.
 	 */
-	export function defer(event: Event<unknown>, disposable?: DisposableStore): Event<void> {
-		return debounce<unknown, void>(event, () => void 0, 0, undefined, true, undefined, disposable);
+	export function defer(event: Event<unknown>, disposable?: DisposableStore): Event<codemavi> {
+		return debounce<unknown, codemavi>(event, () => codemavi 0, 0, undefined, true, undefined, disposable);
 	}
 
 	/**
@@ -141,7 +141,7 @@ export namespace Event {
 	 * @param each The function to perform on the event object.
 	 * @param disposable A disposable store to add the new EventEmitter to.
 	 */
-	export function forEach<I>(event: Event<I>, each: (i: I) => void, disposable?: DisposableStore): Event<I> {
+	export function forEach<I>(event: Event<I>, each: (i: I) => codemavi, disposable?: DisposableStore): Event<I> {
 		return snapshot((listener, thisArgs = null, disposables?) => event(i => { each(i); listener.call(thisArgs, i); }, null, disposables), disposable);
 	}
 
@@ -165,17 +165,17 @@ export namespace Event {
 	}
 
 	/**
-	 * Given an event, returns the same event but typed as `Event<void>`.
+	 * Given an event, returns the same event but typed as `Event<codemavi>`.
 	 */
-	export function signal<T>(event: Event<T>): Event<void> {
-		return event as Event<any> as Event<void>;
+	export function signal<T>(event: Event<T>): Event<codemavi> {
+		return event as Event<any> as Event<codemavi>;
 	}
 
 	/**
 	 * Given a collection of events, returns a single event which emits whenever any of the provided events emit.
 	 */
 	export function any<T>(...events: Event<T>[]): Event<T>;
-	export function any(...events: Event<any>[]): Event<void>;
+	export function any(...events: Event<any>[]): Event<codemavi>;
 	export function any<T>(...events: Event<T>[]): Event<T> {
 		return (listener, thisArgs = null, disposables?) => {
 			const disposable = combinedDisposable(...events.map(event => event(e => listener.call(thisArgs, e))));
@@ -258,7 +258,7 @@ export namespace Event {
 		let output: O | undefined = undefined;
 		let handle: any = undefined;
 		let numDebouncedCalls = 0;
-		let doFire: (() => void) | undefined;
+		let doFire: (() => codemavi) | undefined;
 
 		const options: EmitterOptions | undefined = {
 			leakWarningThreshold,
@@ -502,7 +502,7 @@ export namespace Event {
 			return this;
 		}
 
-		forEach(fn: (i: any) => void): this {
+		forEach(fn: (i: any) => codemavi): this {
 			this.steps.push(v => {
 				fn(v);
 				return v;
@@ -551,7 +551,7 @@ export namespace Event {
 
 	export interface IChainableSythensis<T> {
 		map<O>(fn: (i: T) => O): IChainableSythensis<O>;
-		forEach(fn: (i: T) => void): IChainableSythensis<T>;
+		forEach(fn: (i: T) => codemavi): IChainableSythensis<T>;
 		filter<R extends T>(fn: (e: T) => e is R): IChainableSythensis<R>;
 		filter(fn: (e: T) => boolean): IChainableSythensis<T>;
 		reduce<R>(merge: (last: R, event: T) => R, initial: R): IChainableSythensis<R>;
@@ -577,8 +577,8 @@ export namespace Event {
 	}
 
 	export interface DOMEventEmitter {
-		addEventListener(event: string | symbol, listener: Function): void;
-		removeEventListener(event: string | symbol, listener: Function): void;
+		addEventListener(event: string | symbol, listener: Function): codemavi;
+		removeEventListener(event: string | symbol, listener: Function): codemavi;
 	}
 
 	/**
@@ -681,21 +681,21 @@ export namespace Event {
 			}
 		}
 
-		beginUpdate<T>(_observable: IObservable<T>): void {
+		beginUpdate<T>(_observable: IObservable<T>): codemavi {
 			// assert(_observable === this.obs);
 			this._counter++;
 		}
 
-		handlePossibleChange<T>(_observable: IObservable<T>): void {
+		handlePossibleChange<T>(_observable: IObservable<T>): codemavi {
 			// assert(_observable === this.obs);
 		}
 
-		handleChange<T, TChange>(_observable: IObservableWithChange<T, TChange>, _change: TChange): void {
+		handleChange<T, TChange>(_observable: IObservableWithChange<T, TChange>, _change: TChange): codemavi {
 			// assert(_observable === this.obs);
 			this._hasChanged = true;
 		}
 
-		endUpdate<T>(_observable: IObservable<T>): void {
+		endUpdate<T>(_observable: IObservable<T>): codemavi {
 			// assert(_observable === this.obs);
 			this._counter--;
 			if (this._counter === 0) {
@@ -720,7 +720,7 @@ export namespace Event {
 	/**
 	 * Each listener is attached to the observable directly.
 	 */
-	export function fromObservableLight(observable: IObservable<unknown>): Event<void> {
+	export function fromObservableLight(observable: IObservable<unknown>): Event<codemavi> {
 		return (listener, thisArgs, disposables) => {
 			let count = 0;
 			let didChange = false;
@@ -789,7 +789,7 @@ export interface EmitterOptions {
 	 * Optional function that's called when a listener throws an error. Defaults to
 	 * {@link onUnexpectedError}
 	 */
-	onListenerError?: (e: any) => void;
+	onListenerError?: (e: any) => codemavi;
 	/**
 	 * Number of listeners that are allowed before assuming a leak. Default to
 	 * a globally configured value
@@ -827,12 +827,12 @@ export class EventProfiling {
 		EventProfiling.all.add(this);
 	}
 
-	start(listenerCount: number): void {
+	start(listenerCount: number): codemavi {
 		this._stopWatch = new StopWatch();
 		this.listenerCount = listenerCount;
 	}
 
-	stop(): void {
+	stop(): codemavi {
 		if (this._stopWatch) {
 			const elapsed = this._stopWatch.elapsed();
 			this.durations.push(elapsed);
@@ -862,16 +862,16 @@ class LeakageMonitor {
 	private _warnCountdown: number = 0;
 
 	constructor(
-		private readonly _errorHandler: (err: Error) => void,
+		private readonly _errorHandler: (err: Error) => codemavi,
 		readonly threshold: number,
 		readonly name: string = (LeakageMonitor._idPool++).toString(16).padStart(3, '0')
 	) { }
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._stacks?.clear();
 	}
 
-	check(stack: Stacktrace, listenerCount: number): undefined | (() => void) {
+	check(stack: Stacktrace, listenerCount: number): undefined | (() => codemavi) {
 
 		const threshold = this.threshold;
 		if (threshold <= 0 || listenerCount < threshold) {
@@ -962,10 +962,10 @@ class UniqueContainer<T> {
 }
 const compactionThreshold = 2;
 
-type ListenerContainer<T> = UniqueContainer<(data: T) => void>;
+type ListenerContainer<T> = UniqueContainer<(data: T) => codemavi>;
 type ListenerOrListeners<T> = (ListenerContainer<T> | undefined)[] | ListenerContainer<T>;
 
-const forEachListener = <T>(listeners: ListenerOrListeners<T>, fn: (c: ListenerContainer<T>) => void) => {
+const forEachListener = <T>(listeners: ListenerOrListeners<T>, fn: (c: ListenerContainer<T>) => codemavi) => {
 	if (listeners instanceof UniqueContainer) {
 		fn(listeners);
 	} else {
@@ -1009,7 +1009,7 @@ export class Emitter<T> {
 
 	/**
 	 * A listener, or list of listeners. A single listener is the most common
-	 * for event emitters (#185789), so we optimize that special case to avoid
+	 * for event emitters (#185789), so we optimize that special case to acodemavi
 	 * wrapping it in an array (just like Node.js itself.)
 	 *
 	 * A list of listeners never 'downgrades' back to a plain function if
@@ -1020,7 +1020,7 @@ export class Emitter<T> {
 	 *     some point, and swapping between arrays and functions may[citation needed]
 	 *     introduce unnecessary work and garbage.
 	 *
-	 * The array listeners can be 'sparse', to avoid reallocating the array
+	 * The array listeners can be 'sparse', to acodemavi reallocating the array
 	 * whenever any listener is added or removed. If more than `1 / compactionThreshold`
 	 * of the array is empty, only then is it resized.
 	 */
@@ -1193,7 +1193,7 @@ export class Emitter<T> {
 		}
 	}
 
-	private _deliver(listener: undefined | UniqueContainer<(value: T) => void>, value: T) {
+	private _deliver(listener: undefined | UniqueContainer<(value: T) => codemavi>, value: T) {
 		if (!listener) {
 			return;
 		}
@@ -1225,7 +1225,7 @@ export class Emitter<T> {
 	 * To be kept private to fire an event to
 	 * subscribers
 	 */
-	fire(event: T): void {
+	fire(event: T): codemavi {
 		if (this._deliveryQueue?.current) {
 			this._deliverQueue(this._deliveryQueue);
 			this._perfMon?.stop(); // last fire() will have starting perfmon, stop it before starting the next dispatch
@@ -1295,16 +1295,16 @@ class EventDeliveryQueuePrivate implements EventDeliveryQueue {
 
 export interface IWaitUntil {
 	token: CancellationToken;
-	waitUntil(thenable: Promise<unknown>): void;
+	waitUntil(thenable: Promise<unknown>): codemavi;
 }
 
 export type IWaitUntilData<T> = Omit<Omit<T, 'waitUntil'>, 'token'>;
 
 export class AsyncEmitter<T extends IWaitUntil> extends Emitter<T> {
 
-	private _asyncDeliveryQueue?: LinkedList<[(ev: T) => void, IWaitUntilData<T>]>;
+	private _asyncDeliveryQueue?: LinkedList<[(ev: T) => codemavi, IWaitUntilData<T>]>;
 
-	async fireAsync(data: IWaitUntilData<T>, token: CancellationToken, promiseJoin?: (p: Promise<unknown>, listener: Function) => Promise<unknown>): Promise<void> {
+	async fireAsync(data: IWaitUntilData<T>, token: CancellationToken, promiseJoin?: (p: Promise<unknown>, listener: Function) => Promise<unknown>): Promise<codemavi> {
 		if (!this._listeners) {
 			return;
 		}
@@ -1324,7 +1324,7 @@ export class AsyncEmitter<T extends IWaitUntil> extends Emitter<T> {
 			const event = <T>{
 				...data,
 				token,
-				waitUntil: (p: Promise<unknown>): void => {
+				waitUntil: (p: Promise<unknown>): codemavi => {
 					if (Object.isFrozen(thenables)) {
 						throw new Error('waitUntil can NOT be called asynchronous');
 					}
@@ -1373,11 +1373,11 @@ export class PauseableEmitter<T> extends Emitter<T> {
 		this._mergeFn = options?.merge;
 	}
 
-	pause(): void {
+	pause(): codemavi {
 		this._isPaused++;
 	}
 
-	resume(): void {
+	resume(): codemavi {
 		if (this._isPaused !== 0 && --this._isPaused === 0) {
 			if (this._mergeFn) {
 				// use the merge function to create a single composite
@@ -1398,7 +1398,7 @@ export class PauseableEmitter<T> extends Emitter<T> {
 		}
 	}
 
-	override fire(event: T): void {
+	override fire(event: T): codemavi {
 		if (this._size) {
 			if (this._isPaused !== 0) {
 				this._eventQueue.push(event);
@@ -1419,7 +1419,7 @@ export class DebounceEmitter<T> extends PauseableEmitter<T> {
 		this._delay = options.delay ?? 100;
 	}
 
-	override fire(event: T): void {
+	override fire(event: T): codemavi {
 		if (!this._handle) {
 			this.pause();
 			this._handle = setTimeout(() => {
@@ -1443,7 +1443,7 @@ export class MicrotaskEmitter<T> extends Emitter<T> {
 		super(options);
 		this._mergeFn = options?.merge;
 	}
-	override fire(event: T): void {
+	override fire(event: T): codemavi {
 
 		if (!this.hasListeners()) {
 			return;
@@ -1523,26 +1523,26 @@ export class EventMultiplexer<T> implements IDisposable {
 		return toDisposable(createSingleCallFunction(dispose));
 	}
 
-	private onFirstListenerAdd(): void {
+	private onFirstListenerAdd(): codemavi {
 		this.hasListeners = true;
 		this.events.forEach(e => this.hook(e));
 	}
 
-	private onLastListenerRemove(): void {
+	private onLastListenerRemove(): codemavi {
 		this.hasListeners = false;
 		this.events.forEach(e => this.unhook(e));
 	}
 
-	private hook(e: { event: Event<T>; listener: IDisposable | null }): void {
+	private hook(e: { event: Event<T>; listener: IDisposable | null }): codemavi {
 		e.listener = e.event(r => this.emitter.fire(r));
 	}
 
-	private unhook(e: { event: Event<T>; listener: IDisposable | null }): void {
+	private unhook(e: { event: Event<T>; listener: IDisposable | null }): codemavi {
 		e.listener?.dispose();
 		e.listener = null;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.emitter.dispose();
 
 		for (const e of this.events) {
@@ -1676,7 +1676,7 @@ export class EventBufferer {
 		};
 	}
 
-	bufferEvents<R = void>(fn: () => R): R {
+	bufferEvents<R = codemavi>(fn: () => R): R {
 		const data = { buffers: new Array<Function>() };
 		this.data.push(data);
 		const r = fn();
@@ -1727,7 +1727,7 @@ export class Relay<T> implements IDisposable {
 }
 
 export interface IValueWithChangeEvent<T> {
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 	get value(): T;
 }
 
@@ -1736,8 +1736,8 @@ export class ValueWithChangeEvent<T> implements IValueWithChangeEvent<T> {
 		return new ConstValueWithChangeEvent(value);
 	}
 
-	private readonly _onDidChange = new Emitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	constructor(private _value: T) { }
 
@@ -1754,7 +1754,7 @@ export class ValueWithChangeEvent<T> implements IValueWithChangeEvent<T> {
 }
 
 class ConstValueWithChangeEvent<T> implements IValueWithChangeEvent<T> {
-	public readonly onDidChange: Event<void> = Event.None;
+	public readonly onDidChange: Event<codemavi> = Event.None;
 
 	constructor(readonly value: T) { }
 }

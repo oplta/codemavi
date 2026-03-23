@@ -27,7 +27,7 @@ export class NodeExtHostMpcService extends ExtHostMcpService {
 		child: ChildProcessWithoutNullStreams;
 	}>();
 
-	protected override _startMcp(id: number, launch: McpServerLaunch): void {
+	protected override _startMcp(id: number, launch: McpServerLaunch): codemavi {
 		if (launch.type === McpServerTransportType.Stdio) {
 			this.startNodeMpc(id, launch);
 		} else {
@@ -35,7 +35,7 @@ export class NodeExtHostMpcService extends ExtHostMcpService {
 		}
 	}
 
-	override $stopMcp(id: number): void {
+	override $stopMcp(id: number): codemavi {
 		const nodeServer = this.nodeServers.get(id);
 		if (nodeServer) {
 			nodeServer.abortCtrl.abort();
@@ -45,7 +45,7 @@ export class NodeExtHostMpcService extends ExtHostMcpService {
 		}
 	}
 
-	override $sendMessage(id: number, message: string): void {
+	override $sendMessage(id: number, message: string): codemavi {
 		const nodeServer = this.nodeServers.get(id);
 		if (nodeServer) {
 			nodeServer.child.stdin.write(message + '\n');
@@ -132,7 +132,7 @@ export class NodeExtHostMpcService extends ExtHostMcpService {
 const windowsShellScriptRe = /\.(bat|cmd)$/i;
 
 /**
- * Formats arguments to avoid issues on Windows for CVE-2024-27980.
+ * Formats arguments to acodemavi issues on Windows for CVE-2024-27980.
  */
 export const formatSubprocessArguments = async (
 	executable: string,

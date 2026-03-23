@@ -35,7 +35,7 @@ export class ChatSessionStore extends Disposable {
 
 	private readonly storeQueue = new Sequencer();
 
-	private storeTask: Promise<void> | undefined;
+	private storeTask: Promise<codemavi> | undefined;
 	private shuttingDown = false;
 
 	constructor(
@@ -77,7 +77,7 @@ export class ChatSessionStore extends Disposable {
 		}));
 	}
 
-	async storeSessions(sessions: ChatModel[]): Promise<void> {
+	async storeSessions(sessions: ChatModel[]): Promise<codemavi> {
 		if (this.shuttingDown) {
 			// Don't start this task if we missed the chance to block shutdown
 			return;
@@ -99,7 +99,7 @@ export class ChatSessionStore extends Disposable {
 		}
 	}
 
-	// async storeTransferSession(transferData: IChatTransfer, session: ISerializableChatData): Promise<void> {
+	// async storeTransferSession(transferData: IChatTransfer, session: ISerializableChatData): Promise<codemavi> {
 	// 	try {
 	// 		const content = JSON.stringify(session, undefined, 2);
 	// 		await this.fileService.writeFile(this.transferredSessionStorageRoot, VSBuffer.fromString(content));
@@ -127,7 +127,7 @@ export class ChatSessionStore extends Disposable {
 	// 	}
 	// }
 
-	private async writeSession(session: ChatModel | ISerializableChatData): Promise<void> {
+	private async writeSession(session: ChatModel | ISerializableChatData): Promise<codemavi> {
 		try {
 			const index = this.internalGetIndex();
 			const storageLocation = this.getStorageLocation(session.sessionId);
@@ -141,7 +141,7 @@ export class ChatSessionStore extends Disposable {
 		}
 	}
 
-	private async flushIndex(): Promise<void> {
+	private async flushIndex(): Promise<codemavi> {
 		const index = this.internalGetIndex();
 		try {
 			this.storageService.store(ChatIndexStorageKey, index, this.getIndexStorageScope(), StorageTarget.MACHINE);
@@ -157,7 +157,7 @@ export class ChatSessionStore extends Disposable {
 		return isEmptyWindow ? StorageScope.APPLICATION : StorageScope.WORKSPACE;
 	}
 
-	private async trimEntries(): Promise<void> {
+	private async trimEntries(): Promise<codemavi> {
 		const index = this.internalGetIndex();
 		const entries = Object.entries(index.entries)
 			.sort((a, b) => b[1].lastMessageDate - a[1].lastMessageDate)
@@ -173,7 +173,7 @@ export class ChatSessionStore extends Disposable {
 		}
 	}
 
-	private async internalDeleteSession(sessionId: string): Promise<void> {
+	private async internalDeleteSession(sessionId: string): Promise<codemavi> {
 		const index = this.internalGetIndex();
 		if (!index.entries[sessionId]) {
 			return;
@@ -200,14 +200,14 @@ export class ChatSessionStore extends Disposable {
 		return index.entries[sessionId]?.isEmpty ?? true;
 	}
 
-	async deleteSession(sessionId: string): Promise<void> {
+	async deleteSession(sessionId: string): Promise<codemavi> {
 		await this.storeQueue.queue(async () => {
 			await this.internalDeleteSession(sessionId);
 			await this.flushIndex();
 		});
 	}
 
-	async clearAllSessions(): Promise<void> {
+	async clearAllSessions(): Promise<codemavi> {
 		await this.storeQueue.queue(async () => {
 			const index = this.internalGetIndex();
 			const entries = Object.keys(index.entries);
@@ -217,7 +217,7 @@ export class ChatSessionStore extends Disposable {
 		});
 	}
 
-	public async setSessionTitle(sessionId: string, title: string): Promise<void> {
+	public async setSessionTitle(sessionId: string, title: string): Promise<codemavi> {
 		await this.storeQueue.queue(async () => {
 			const index = this.internalGetIndex();
 			if (index.entries[sessionId]) {
@@ -226,7 +226,7 @@ export class ChatSessionStore extends Disposable {
 		});
 	}
 
-	private reportError(reasonForTelemetry: string, message: string, error?: Error): void {
+	private reportError(reasonForTelemetry: string, message: string, error?: Error): codemavi {
 		this.logService.error(`ChatSessionStore: ` + message, toErrorMessage(error));
 
 		const fileOperationReason = error && toFileOperationResult(error);
@@ -285,12 +285,12 @@ export class ChatSessionStore extends Disposable {
 		});
 	}
 
-	logIndex(): void {
+	logIndex(): codemavi {
 		const data = this.storageService.get(ChatIndexStorageKey, this.getIndexStorageScope(), undefined);
 		this.logService.info('ChatSessionStore index: ', data);
 	}
 
-	async migrateDataIfNeeded(getInitialData: () => ISerializableChatsData | undefined): Promise<void> {
+	async migrateDataIfNeeded(getInitialData: () => ISerializableChatsData | undefined): Promise<codemavi> {
 		await this.storeQueue.queue(async () => {
 			const data = this.storageService.get(ChatIndexStorageKey, this.getIndexStorageScope(), undefined);
 			const needsMigrationFromStorageService = !data;
@@ -303,7 +303,7 @@ export class ChatSessionStore extends Disposable {
 		});
 	}
 
-	private async migrate(initialData: ISerializableChatsData): Promise<void> {
+	private async migrate(initialData: ISerializableChatsData): Promise<codemavi> {
 		const numSessions = Object.keys(initialData).length;
 		this.logService.info(`ChatSessionStore: Migrating ${numSessions} chat sessions from storage service to file system`);
 

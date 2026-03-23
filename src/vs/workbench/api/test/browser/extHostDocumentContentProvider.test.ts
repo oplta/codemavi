@@ -29,17 +29,17 @@ suite('ExtHostDocumentContentProvider', () => {
 		changes.length = 0;
 
 		mainThreadContentProvider = new class implements MainThreadDocumentContentProvidersShape {
-			$registerTextContentProvider(handle: number, scheme: string): void {
+			$registerTextContentProvider(handle: number, scheme: string): codemavi {
 
 			}
-			$unregisterTextContentProvider(handle: number): void {
+			$unregisterTextContentProvider(handle: number): codemavi {
 
 			}
-			async $onVirtualDocumentChange(uri: UriComponents, value: string): Promise<void> {
+			async $onVirtualDocumentChange(uri: UriComponents, value: string): Promise<codemavi> {
 				await timeout(10);
 				changes.push([uri, value]);
 			}
-			dispose(): void {
+			dispose(): codemavi {
 				throw new Error('Method not implemented.');
 			}
 		};

@@ -212,7 +212,7 @@ suite('Types', () => {
 		 * here. Therefore we had to resort to the manual try/catch.
 		 */
 		const assertThrows = (
-			testFunction: () => void,
+			testFunction: () => codemavi,
 			errorMessage: string,
 		) => {
 			let thrownError: Error | undefined;
@@ -424,8 +424,8 @@ suite('Types', () => {
 					assert.doesNotThrow(() => {
 						assertOneOf(
 							undefined,
-							[void 0],
-							'undefined must be one of: void 0',
+							[codemavi 0],
+							'undefined must be one of: codemavi 0',
 						);
 					});
 				});
@@ -701,9 +701,9 @@ suite('Types', () => {
 
 					assert.throws(() => {
 						assertOneOf(
-							void 0,
+							codemavi 0,
 							[],
-							'void 0 must not be one of: empty',
+							'codemavi 0 must not be one of: empty',
 						);
 					});
 				});

@@ -177,7 +177,7 @@
 }
 
 /**
- * Spans in markdown hovers need a margin-bottom to avoid looking cramped:
+ * Spans in markdown hovers need a margin-bottom to acodemavi looking cramped:
  * https://github.com/microsoft/vscode/issues/101496
 
  * This was later refined to only apply when the last child of a rendered markdown block (before the

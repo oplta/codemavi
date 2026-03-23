@@ -114,7 +114,7 @@ export abstract class Command {
 		this.metadata = opts.metadata;
 	}
 
-	public register(): void {
+	public register(): codemavi {
 
 		if (Array.isArray(this._menuOpts)) {
 			this._menuOpts.forEach(this._registerMenuItem, this);
@@ -157,7 +157,7 @@ export abstract class Command {
 		});
 	}
 
-	private _registerMenuItem(item: ICommandMenuOptions): void {
+	private _registerMenuItem(item: ICommandMenuOptions): codemavi {
 		MenuRegistry.appendMenuItem(item.menuId, {
 			group: item.group,
 			command: {
@@ -171,7 +171,7 @@ export abstract class Command {
 		});
 	}
 
-	public abstract runCommand(accessor: ServicesAccessor, args: any): void | Promise<void>;
+	public abstract runCommand(accessor: ServicesAccessor, args: any): codemavi | Promise<codemavi>;
 }
 
 //#endregion Command
@@ -183,7 +183,7 @@ export abstract class Command {
  *
  * @return `true` or a Promise if the command was successfully run. This stops other overrides from being executed.
  */
-export type CommandImplementation = (accessor: ServicesAccessor, args: unknown) => boolean | Promise<void>;
+export type CommandImplementation = (accessor: ServicesAccessor, args: unknown) => boolean | Promise<codemavi>;
 
 interface ICommandImplementationRegistration {
 	priority: number;
@@ -214,7 +214,7 @@ export class MultiCommand extends Command {
 		};
 	}
 
-	public runCommand(accessor: ServicesAccessor, args: any): void | Promise<void> {
+	public runCommand(accessor: ServicesAccessor, args: any): codemavi | Promise<codemavi> {
 		const logService = accessor.get(ILogService);
 		const contextKeyService = accessor.get(IContextKeyService);
 		logService.trace(`Executing Command '${this.id}' which has ${this._implementations.length} bound.`);
@@ -254,7 +254,7 @@ export class ProxyCommand extends Command {
 		super(opts);
 	}
 
-	public runCommand(accessor: ServicesAccessor, args: any): void | Promise<void> {
+	public runCommand(accessor: ServicesAccessor, args: any): codemavi | Promise<codemavi> {
 		return this.command.runCommand(accessor, args);
 	}
 }
@@ -262,7 +262,7 @@ export class ProxyCommand extends Command {
 //#region EditorCommand
 
 export interface IContributionCommandOptions<T> extends ICommandOptions {
-	handler: (controller: T, args: any) => void;
+	handler: (controller: T, args: any) => codemavi;
 }
 export interface EditorControllerCommand<T extends IEditorContribution> {
 	new(opts: IContributionCommandOptions<T>): EditorCommand;
@@ -274,7 +274,7 @@ export abstract class EditorCommand extends Command {
 	 */
 	public static bindToContribution<T extends IEditorContribution>(controllerGetter: (editor: ICodeEditor) => T | null): EditorControllerCommand<T> {
 		return class EditorControllerCommandImpl extends EditorCommand {
-			private readonly _callback: (controller: T, args: any) => void;
+			private readonly _callback: (controller: T, args: any) => codemavi;
 
 			constructor(opts: IContributionCommandOptions<T>) {
 				super(opts);
@@ -282,7 +282,7 @@ export abstract class EditorCommand extends Command {
 				this._callback = opts.handler;
 			}
 
-			public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+			public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 				const controller = controllerGetter(editor);
 				if (controller) {
 					this._callback(controller, args);
@@ -295,8 +295,8 @@ export abstract class EditorCommand extends Command {
 		accessor: ServicesAccessor,
 		args: any,
 		precondition: ContextKeyExpression | undefined,
-		runner: (accessor: ServicesAccessor | null, editor: ICodeEditor, args: any) => void | Promise<void>
-	): void | Promise<void> {
+		runner: (accessor: ServicesAccessor | null, editor: ICodeEditor, args: any) => codemavi | Promise<codemavi>
+	): codemavi | Promise<codemavi> {
 		const codeEditorService = accessor.get(ICodeEditorService);
 
 		// Find the editor with text focus or active
@@ -317,11 +317,11 @@ export abstract class EditorCommand extends Command {
 		});
 	}
 
-	public runCommand(accessor: ServicesAccessor, args: any): void | Promise<void> {
+	public runCommand(accessor: ServicesAccessor, args: any): codemavi | Promise<codemavi> {
 		return EditorCommand.runEditorCommand(accessor, args, this.precondition, (accessor, editor, args) => this.runEditorCommand(accessor, editor, args));
 	}
 
-	public abstract runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: any): void | Promise<void>;
+	public abstract runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: any): codemavi | Promise<codemavi>;
 }
 
 //#endregion EditorCommand
@@ -392,7 +392,7 @@ export abstract class EditorAction extends EditorCommand {
 		}
 	}
 
-	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void | Promise<void> {
+	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi | Promise<codemavi> {
 		this.reportTelemetry(accessor, editor);
 		return this.run(accessor, editor, args || {});
 	}
@@ -411,10 +411,10 @@ export abstract class EditorAction extends EditorCommand {
 		accessor.get(ITelemetryService).publicLog2<EditorActionInvokedEvent, EditorActionInvokedClassification>('editorActionInvoked', { name: this.label, id: this.id });
 	}
 
-	public abstract run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void | Promise<void>;
+	public abstract run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi | Promise<codemavi>;
 }
 
-export type EditorActionImplementation = (accessor: ServicesAccessor, editor: ICodeEditor, args: any) => boolean | Promise<void>;
+export type EditorActionImplementation = (accessor: ServicesAccessor, editor: ICodeEditor, args: any) => boolean | Promise<codemavi>;
 
 export class MultiEditorAction extends EditorAction {
 
@@ -438,7 +438,7 @@ export class MultiEditorAction extends EditorAction {
 		};
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void | Promise<void> {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi | Promise<codemavi> {
 		for (const impl of this._implementations) {
 			const result = impl[1](accessor, editor, args);
 			if (result) {
@@ -533,7 +533,7 @@ export function registerMultiEditorAction<T extends MultiEditorAction>(action: T
 	return action;
 }
 
-export function registerInstantiatedEditorAction(editorAction: EditorAction): void {
+export function registerInstantiatedEditorAction(editorAction: EditorAction): codemavi {
 	EditorContributionRegistry.INSTANCE.registerEditorAction(editorAction);
 }
 
@@ -541,7 +541,7 @@ export function registerInstantiatedEditorAction(editorAction: EditorAction): vo
  * Registers an editor contribution. Editor contributions have a lifecycle which is bound
  * to a specific code editor instance.
  */
-export function registerEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: ICodeEditor, ...services: Services): IEditorContribution }, instantiation: EditorContributionInstantiation): void {
+export function registerEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: ICodeEditor, ...services: Services): IEditorContribution }, instantiation: EditorContributionInstantiation): codemavi {
 	EditorContributionRegistry.INSTANCE.registerEditorContribution(id, ctor, instantiation);
 }
 
@@ -549,7 +549,7 @@ export function registerEditorContribution<Services extends BrandedService[]>(id
  * Registers a diff editor contribution. Diff editor contributions have a lifecycle which
  * is bound to a specific diff editor instance.
  */
-export function registerDiffEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: IDiffEditor, ...services: Services): IEditorContribution }): void {
+export function registerDiffEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: IDiffEditor, ...services: Services): IEditorContribution }): codemavi {
 	EditorContributionRegistry.INSTANCE.registerDiffEditorContribution(id, ctor);
 }
 
@@ -593,7 +593,7 @@ class EditorContributionRegistry {
 	constructor() {
 	}
 
-	public registerEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: ICodeEditor, ...services: Services): IEditorContribution }, instantiation: EditorContributionInstantiation): void {
+	public registerEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: ICodeEditor, ...services: Services): IEditorContribution }, instantiation: EditorContributionInstantiation): codemavi {
 		this.editorContributions.push({ id, ctor: ctor as EditorContributionCtor, instantiation });
 	}
 
@@ -601,7 +601,7 @@ class EditorContributionRegistry {
 		return this.editorContributions.slice(0);
 	}
 
-	public registerDiffEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: IDiffEditor, ...services: Services): IEditorContribution }): void {
+	public registerDiffEditorContribution<Services extends BrandedService[]>(id: string, ctor: { new(editor: IDiffEditor, ...services: Services): IEditorContribution }): codemavi {
 		this.diffEditorContributions.push({ id, ctor: ctor as DiffEditorContributionCtor });
 	}
 

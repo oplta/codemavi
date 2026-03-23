@@ -1,4 +1,4 @@
-function bar(): void {
+function bar(): codemavi {
     var a = 1;
     a = 1;
     a = 1;

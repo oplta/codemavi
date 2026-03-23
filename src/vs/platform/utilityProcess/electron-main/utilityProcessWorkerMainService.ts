@@ -79,7 +79,7 @@ export class UtilityProcessWorkerMainService extends Disposable implements IUtil
 		});
 	}
 
-	async disposeWorker(configuration: IUtilityProcessWorkerConfiguration): Promise<void> {
+	async disposeWorker(configuration: IUtilityProcessWorkerConfiguration): Promise<codemavi> {
 		const workerId = this.hash(configuration);
 		const worker = this.workers.get(workerId);
 		if (!worker) {
@@ -115,7 +115,7 @@ class UtilityProcessWorker extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.utilityProcess.onExit(e => this._onDidTerminate.fire({ code: e.code, signal: e.signal })));
 		this._register(this.utilityProcess.onCrash(e => this._onDidTerminate.fire({ code: e.code, signal: 'ECRASH' })));
 	}

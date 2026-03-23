@@ -49,8 +49,8 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 	private debugAdapterFactories = new Map<string, IDebugAdapterFactory>();
 	private debuggersAvailable!: IContextKey<boolean>;
 	private debugExtensionsAvailable!: IContextKey<boolean>;
-	private readonly _onDidRegisterDebugger = new Emitter<void>();
-	private readonly _onDidDebuggersExtPointRead = new Emitter<void>();
+	private readonly _onDidRegisterDebugger = new Emitter<codemavi>();
+	private readonly _onDidDebuggersExtPointRead = new Emitter<codemavi>();
 	private breakpointContributions: Breakpoints[] = [];
 	private debuggerWhenKeys = new Set<string>();
 	private taskLabels: string[] = [];
@@ -110,7 +110,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		updateTaskScheduler.schedule();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		debuggersExtPoint.setHandler((extensions, delta) => {
 			delta.added.forEach(added => {
 				added.value.forEach(rawAdapter => {
@@ -266,7 +266,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		if (factory) {
 			return factory.runInTerminal(args, sessionId);
 		}
-		return Promise.resolve(void 0);
+		return Promise.resolve(codemavi 0);
 	}
 
 	registerDebugAdapterDescriptorFactory(debugAdapterProvider: IDebugAdapterDescriptorFactory): IDisposable {
@@ -278,7 +278,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		};
 	}
 
-	unregisterDebugAdapterDescriptorFactory(debugAdapterProvider: IDebugAdapterDescriptorFactory): void {
+	unregisterDebugAdapterDescriptorFactory(debugAdapterProvider: IDebugAdapterDescriptorFactory): codemavi {
 		const ix = this.adapterDescriptorFactories.indexOf(debugAdapterProvider);
 		if (ix >= 0) {
 			this.adapterDescriptorFactories.splice(ix, 1);
@@ -305,11 +305,11 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		return undefined;
 	}
 
-	get onDidRegisterDebugger(): Event<void> {
+	get onDidRegisterDebugger(): Event<codemavi> {
 		return this._onDidRegisterDebugger.event;
 	}
 
-	get onDidDebuggersExtPointRead(): Event<void> {
+	get onDidDebuggersExtPointRead(): Event<codemavi> {
 		return this._onDidDebuggersExtPointRead.event;
 	}
 
@@ -472,7 +472,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		});
 	}
 
-	private initExtensionActivationsIfNeeded(): void {
+	private initExtensionActivationsIfNeeded(): codemavi {
 		if (!this.earlyActivatedExtensions) {
 			this.earlyActivatedExtensions = new Set<string>();
 
@@ -485,7 +485,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 		}
 	}
 
-	async activateDebuggers(activationEvent: string, debugType?: string): Promise<void> {
+	async activateDebuggers(activationEvent: string, debugType?: string): Promise<codemavi> {
 		this.initExtensionActivationsIfNeeded();
 
 		const promises: Promise<any>[] = [

@@ -152,7 +152,7 @@ export class IconSelectBox extends Disposable {
 		return disposables;
 	}
 
-	private focusIcon(index: number): void {
+	private focusIcon(index: number): codemavi {
 		const existing = this.renderedIcons[this.focusedItemIndex];
 		if (existing) {
 			existing.element.classList.remove('focused');
@@ -184,7 +184,7 @@ export class IconSelectBox extends Disposable {
 		this.reveal(index);
 	}
 
-	private reveal(index: number): void {
+	private reveal(index: number): codemavi {
 		if (!this.scrollableElement) {
 			return;
 		}
@@ -212,7 +212,7 @@ export class IconSelectBox extends Disposable {
 		return null;
 	}
 
-	layout(dimension: dom.Dimension): void {
+	layout(dimension: dom.Dimension): codemavi {
 		this.domNode.style.width = `${dimension.width}px`;
 		this.domNode.style.height = `${dimension.height}px`;
 
@@ -244,7 +244,7 @@ export class IconSelectBox extends Disposable {
 		return [this.focusedItemIndex];
 	}
 
-	setSelection(index: number): void {
+	setSelection(index: number): codemavi {
 		if (index < 0 || index >= this.renderedIcons.length) {
 			throw new Error(`Invalid index ${index}`);
 		}
@@ -252,26 +252,26 @@ export class IconSelectBox extends Disposable {
 		this._onDidSelect.fire(this.renderedIcons[index].icon);
 	}
 
-	clearInput(): void {
+	clearInput(): codemavi {
 		if (this.inputBox) {
 			this.inputBox.value = '';
 		}
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.inputBox?.focus();
 		this.focusIcon(0);
 	}
 
-	focusNext(): void {
+	focusNext(): codemavi {
 		this.focusIcon((this.focusedItemIndex + 1) % this.renderedIcons.length);
 	}
 
-	focusPrevious(): void {
+	focusPrevious(): codemavi {
 		this.focusIcon((this.focusedItemIndex - 1 + this.renderedIcons.length) % this.renderedIcons.length);
 	}
 
-	focusNextRow(): void {
+	focusNextRow(): codemavi {
 		let nextRowIndex = this.focusedItemIndex + this.numberOfElementsPerRow;
 		if (nextRowIndex >= this.renderedIcons.length) {
 			nextRowIndex = (nextRowIndex + 1) % this.numberOfElementsPerRow;
@@ -280,7 +280,7 @@ export class IconSelectBox extends Disposable {
 		this.focusIcon(nextRowIndex);
 	}
 
-	focusPreviousRow(): void {
+	focusPreviousRow(): codemavi {
 		let previousRowIndex = this.focusedItemIndex - this.numberOfElementsPerRow;
 		if (previousRowIndex < 0) {
 			const numberOfRows = Math.floor(this.renderedIcons.length / this.numberOfElementsPerRow);

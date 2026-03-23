@@ -483,11 +483,11 @@ function createMockTerminal({ lines, cursorAttrs }: {
 		terminal: {
 			cols: 80,
 			rows: 5,
-			onResize: new Emitter<void>().event,
+			onResize: new Emitter<codemavi>().event,
 			onData: onData.event,
 			onTitleChange: onTitleChange.event,
 			parser: {
-				registerCsiHandler(_: unknown, callback: () => void) {
+				registerCsiHandler(_: unknown, callback: () => codemavi) {
 					ds.add(csiEmitter.event(callback));
 				},
 			},

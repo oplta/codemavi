@@ -19,7 +19,7 @@ import { ICellRange } from '../../../common/notebookRange.js';
 
 export class CellComments extends CellContentPart {
 	// keyed by threadId
-	private readonly _commentThreadWidgets: DisposableMap<string, { widget: CommentThreadWidget<ICellRange>; dispose: () => void }>;
+	private readonly _commentThreadWidgets: DisposableMap<string, { widget: CommentThreadWidget<ICellRange>; dispose: () => codemavi }>;
 	private currentElement: ICellViewModel | undefined;
 
 	constructor(
@@ -34,7 +34,7 @@ export class CellComments extends CellContentPart {
 		super();
 		this.container.classList.add('review-widget');
 
-		this._register(this._commentThreadWidgets = new DisposableMap<string, { widget: CommentThreadWidget<ICellRange>; dispose: () => void }>());
+		this._register(this._commentThreadWidgets = new DisposableMap<string, { widget: CommentThreadWidget<ICellRange>; dispose: () => codemavi }>());
 
 		this._register(this.themeService.onDidColorThemeChange(this._applyTheme, this));
 		// TODO @rebornix onDidChangeLayout (font change)
@@ -128,7 +128,7 @@ export class CellComments extends CellContentPart {
 		const arrowHeight = Math.round(lineHeight / 3);
 		const frameThickness = Math.round(lineHeight / 9) * 2;
 
-		const computedHeight = headHeight + bodyHeight + arrowHeight + frameThickness + 8 /** margin bottom to avoid margin collapse */;
+		const computedHeight = headHeight + bodyHeight + arrowHeight + frameThickness + 8 /** margin bottom to acodemavi margin collapse */;
 		return computedHeight;
 	}
 
@@ -159,16 +159,16 @@ export class CellComments extends CellContentPart {
 		}
 	}
 
-	override didRenderCell(element: ICellViewModel): void {
+	override didRenderCell(element: ICellViewModel): codemavi {
 		this.initialize(element);
 		this._bindListeners();
 	}
 
-	override prepareLayout(): void {
+	override prepareLayout(): codemavi {
 		this._updateHeight();
 	}
 
-	override updateInternalLayoutNow(element: ICellViewModel): void {
+	override updateInternalLayoutNow(element: ICellViewModel): codemavi {
 		if (this.currentElement) {
 			this.container.style.top = `${element.layoutInfo.commentOffset}px`;
 		}

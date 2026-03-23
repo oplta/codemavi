@@ -39,13 +39,13 @@ export class MultiDiffEditorViewModel extends Disposable {
 		(reader, lastValue) => this.focusedDiffItem.read(reader) ?? (lastValue && this.items.read(reader).indexOf(lastValue) !== -1) ? lastValue : undefined
 	);
 
-	public async waitForDiffs(): Promise<void> {
+	public async waitForDiffs(): Promise<codemavi> {
 		for (const d of this.items.get()) {
 			await d.diffEditorViewModel.waitForDiff();
 		}
 	}
 
-	public collapseAll(): void {
+	public collapseAll(): codemavi {
 		transaction(tx => {
 			for (const d of this.items.get()) {
 				d.collapsed.set(true, tx);
@@ -53,7 +53,7 @@ export class MultiDiffEditorViewModel extends Disposable {
 		});
 	}
 
-	public expandAll(): void {
+	public expandAll(): codemavi {
 		transaction(tx => {
 			for (const d of this.items.get()) {
 				d.collapsed.set(false, tx);
@@ -96,7 +96,7 @@ export class DocumentDiffItemViewModel extends Disposable {
 	private readonly _isFocusedSource = observableValue<IObservable<boolean>>(this, constObservable(false));
 	public readonly isFocused = derived(this, reader => this._isFocusedSource.read(reader).read(reader));
 
-	public setIsFocused(source: IObservable<boolean>, tx: ITransaction | undefined): void {
+	public setIsFocused(source: IObservable<boolean>, tx: ITransaction | undefined): codemavi {
 		this._isFocusedSource.set(source, tx);
 	}
 

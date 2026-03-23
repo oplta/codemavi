@@ -84,12 +84,12 @@ export class ObservableMemento<T> extends ObservableValue<T> implements IDisposa
 		}));
 	}
 
-	protected override _setValue(newValue: T): void {
+	protected override _setValue(newValue: T): codemavi {
 		super._setValue(newValue);
 		this._didChange = true;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._store.dispose();
 	}
 }

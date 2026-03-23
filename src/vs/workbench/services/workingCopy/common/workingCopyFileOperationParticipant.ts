@@ -28,7 +28,7 @@ export class WorkingCopyFileOperationParticipant extends Disposable {
 		return toDisposable(() => remove());
 	}
 
-	async participate(files: SourceTargetPair[], operation: FileOperation, undoInfo: IFileOperationUndoRedoInfo | undefined, token: CancellationToken): Promise<void> {
+	async participate(files: SourceTargetPair[], operation: FileOperation, undoInfo: IFileOperationUndoRedoInfo | undefined, token: CancellationToken): Promise<codemavi> {
 		const timeout = this.configurationService.getValue<number>('files.participants.timeout');
 		if (typeof timeout !== 'number' || timeout <= 0) {
 			return; // disabled
@@ -44,7 +44,7 @@ export class WorkingCopyFileOperationParticipant extends Disposable {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.participants.clear();
 
 		super.dispose();

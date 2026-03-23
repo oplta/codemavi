@@ -14,7 +14,7 @@ import { InMemoryStorageService } from '../../../storage/common/storage.js';
 class TestEncryptionService implements IEncryptionService {
 	_serviceBrand: undefined;
 	private encryptedPrefix = 'encrypted+'; // prefix to simulate encryption
-	setUsePlainTextEncryption(): Promise<void> {
+	setUsePlainTextEncryption(): Promise<codemavi> {
 		return Promise.resolve();
 	}
 	getKeyStorageProvider(): Promise<KnownStorageProvider> {
@@ -33,7 +33,7 @@ class TestEncryptionService implements IEncryptionService {
 
 class TestNoEncryptionService implements IEncryptionService {
 	_serviceBrand: undefined;
-	setUsePlainTextEncryption(): Promise<void> {
+	setUsePlainTextEncryption(): Promise<codemavi> {
 		throw new Error('Method not implemented.');
 	}
 	getKeyStorageProvider(): Promise<KnownStorageProvider> {

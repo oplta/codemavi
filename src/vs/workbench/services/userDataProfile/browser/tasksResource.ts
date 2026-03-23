@@ -27,7 +27,7 @@ export class TasksResourceInitializer implements IProfileResourceInitializer {
 	) {
 	}
 
-	async initialize(content: string): Promise<void> {
+	async initialize(content: string): Promise<codemavi> {
 		const tasksContent: ITasksResourceContent = JSON.parse(content);
 		if (!tasksContent.tasks) {
 			this.logService.info(`Initializing Profile: No tasks to apply...`);
@@ -55,7 +55,7 @@ export class TasksResource implements IProfileResource {
 		return { tasks: tasksContent };
 	}
 
-	async apply(content: string, profile: IUserDataProfile): Promise<void> {
+	async apply(content: string, profile: IUserDataProfile): Promise<codemavi> {
 		const tasksContent: ITasksResourceContent = JSON.parse(content);
 		if (!tasksContent.tasks) {
 			this.logService.info(`Importing Profile (${profile.name}): No tasks to apply...`);

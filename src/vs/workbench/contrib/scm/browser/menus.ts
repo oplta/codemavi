@@ -28,7 +28,7 @@ export class SCMTitleMenu implements IDisposable {
 	private _secondaryActions: IAction[] = [];
 	get secondaryActions(): IAction[] { return this._secondaryActions; }
 
-	private readonly _onDidChangeTitle = new Emitter<void>();
+	private readonly _onDidChangeTitle = new Emitter<codemavi>();
 	readonly onDidChangeTitle = this._onDidChangeTitle.event;
 
 	readonly menu: IMenu;
@@ -45,7 +45,7 @@ export class SCMTitleMenu implements IDisposable {
 		this.updateTitleActions();
 	}
 
-	private updateTitleActions(): void {
+	private updateTitleActions(): codemavi {
 		const { primary, secondary } = getActionBarActions(this.menu.getActions({ shouldForwardArgs: true }));
 
 		if (equals(primary, this._actions, actionEquals) && equals(secondary, this._secondaryActions, actionEquals)) {
@@ -58,14 +58,14 @@ export class SCMTitleMenu implements IDisposable {
 		this._onDidChangeTitle.fire();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }
 
 interface IContextualMenuItem {
 	readonly menu: IMenu;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 class SCMMenusItem implements IDisposable {
@@ -152,7 +152,7 @@ class SCMMenusItem implements IDisposable {
 		return item.menu;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.genericResourceGroupMenu?.dispose();
 		this.genericResourceMenu?.dispose();
 		this._resourceFolderMenu?.dispose();
@@ -244,7 +244,7 @@ export class SCMRepositoryMenus implements ISCMRepositoryMenus, IDisposable {
 		return result;
 	}
 
-	private onDidChangeResourceGroups(): void {
+	private onDidChangeResourceGroups(): codemavi {
 		for (const resourceGroup of this.resourceGroupMenusItems.keys()) {
 			if (!this.provider.groups.includes(resourceGroup)) {
 				this.resourceGroupMenusItems.get(resourceGroup)?.dispose();
@@ -253,7 +253,7 @@ export class SCMRepositoryMenus implements ISCMRepositoryMenus, IDisposable {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 		this.resourceGroupMenusItems.forEach(item => item.dispose());
 	}
@@ -264,7 +264,7 @@ export class SCMMenus implements ISCMMenus, IDisposable {
 	readonly titleMenu: SCMTitleMenu;
 	private readonly disposables = new DisposableStore();
 	private readonly repositoryMenuDisposables = new DisposableStore();
-	private readonly menus = new Map<ISCMProvider, { menus: SCMRepositoryMenus; dispose: () => void }>();
+	private readonly menus = new Map<ISCMProvider, { menus: SCMRepositoryMenus; dispose: () => codemavi }>();
 
 	constructor(
 		@ISCMService scmService: ISCMService,
@@ -288,7 +288,7 @@ export class SCMMenus implements ISCMMenus, IDisposable {
 		}));
 	}
 
-	private onDidRemoveRepository(repository: ISCMRepository): void {
+	private onDidRemoveRepository(repository: ISCMRepository): codemavi {
 		const menus = this.menus.get(repository.provider);
 		menus?.dispose();
 		this.menus.delete(repository.provider);
@@ -311,7 +311,7 @@ export class SCMMenus implements ISCMMenus, IDisposable {
 		return result.menus;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.disposables.dispose();
 	}
 }

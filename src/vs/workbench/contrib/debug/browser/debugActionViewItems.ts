@@ -64,7 +64,7 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this.toDispose.push(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('launch')) {
 				this.updateOptions();
@@ -75,7 +75,7 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		}));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		this.container = container;
 		container.classList.add('start-debug-action-item');
 		this.start = dom.append(container, $(ThemeIcon.asCSSSelector(debugStart)));
@@ -153,7 +153,7 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		this.updateOptions();
 	}
 
-	override setActionContext(context: any): void {
+	override setActionContext(context: any): codemavi {
 		this.context = context;
 	}
 
@@ -161,7 +161,7 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		return true;
 	}
 
-	override focus(fromRight?: boolean): void {
+	override focus(fromRight?: boolean): codemavi {
 		if (fromRight) {
 			this.selectBox.focus();
 		} else {
@@ -170,13 +170,13 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	override blur(): void {
+	override blur(): codemavi {
 		this.start.tabIndex = -1;
 		this.selectBox.blur();
 		this.container.blur();
 	}
 
-	override setFocusable(focusable: boolean): void {
+	override setFocusable(focusable: boolean): codemavi {
 		if (focusable) {
 			this.start.tabIndex = 0;
 		} else {
@@ -185,12 +185,12 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.toDispose = dispose(this.toDispose);
 		super.dispose();
 	}
 
-	private updateOptions(): void {
+	private updateOptions(): codemavi {
 		this.selected = 0;
 		this.debugOptions = [];
 		const manager = this.debugService.getConfigurationManager();
@@ -267,7 +267,7 @@ export class StartDebugActionViewItem extends BaseActionViewItem {
 		this.selectBox.setOptions(this.debugOptions.map((data, index): ISelectOptionItem => ({ text: data.label, isDisabled: disabledIdxs.indexOf(index) !== -1 })), this.selected);
 	}
 
-	private _setAriaLabel(title: string): void {
+	private _setAriaLabel(title: string): codemavi {
 		let ariaLabel = title;
 		let keybinding: string | undefined;
 		const verbose = this.configurationService.getValue(AccessibilityVerbositySettingId.Debug);

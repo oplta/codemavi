@@ -45,7 +45,7 @@ export class PausedCellDecorationContribution extends Disposable implements INot
 		}));
 	}
 
-	private updateExecutionDecorations(): void {
+	private updateExecutionDecorations(): codemavi {
 		const exes = this._notebookEditor.textModel ?
 			this._notebookExecutionStateService.getCellExecutionsByHandleForNotebook(this._notebookEditor.textModel.uri)
 			: undefined;
@@ -95,7 +95,7 @@ export class PausedCellDecorationContribution extends Disposable implements INot
 		this.setExecutingCellDecorations(exeHandles);
 	}
 
-	private setTopFrameDecoration(handlesAndRanges: ICellAndRange[]): void {
+	private setTopFrameDecoration(handlesAndRanges: ICellAndRange[]): codemavi {
 		const newDecorations: INotebookDeltaCellDecoration[] = handlesAndRanges.map(({ handle, range }) => {
 			const options: INotebookCellDecorationOptions = {
 				overviewRuler: {
@@ -114,7 +114,7 @@ export class PausedCellDecorationContribution extends Disposable implements INot
 		this._currentTopDecorations = this._notebookEditor.deltaCellDecorations(this._currentTopDecorations, newDecorations);
 	}
 
-	private setFocusedFrameDecoration(focusedFrameCellAndRange: ICellAndRange | undefined): void {
+	private setFocusedFrameDecoration(focusedFrameCellAndRange: ICellAndRange | undefined): codemavi {
 		let newDecorations: INotebookDeltaCellDecoration[] = [];
 		if (focusedFrameCellAndRange) {
 			const options: INotebookCellDecorationOptions = {
@@ -134,7 +134,7 @@ export class PausedCellDecorationContribution extends Disposable implements INot
 		this._currentOtherDecorations = this._notebookEditor.deltaCellDecorations(this._currentOtherDecorations, newDecorations);
 	}
 
-	private setExecutingCellDecorations(handles: number[]): void {
+	private setExecutingCellDecorations(handles: number[]): codemavi {
 		const newDecorations: INotebookDeltaCellDecoration[] = handles.map(handle => {
 			const options: INotebookCellDecorationOptions = {
 				overviewRuler: {
@@ -171,7 +171,7 @@ export class NotebookBreakpointDecorations extends Disposable implements INotebo
 		this._register(_configService.onDidChangeConfiguration(e => e.affectsConfiguration('debug.showBreakpointsInOverviewRuler') && this.updateDecorations()));
 	}
 
-	private updateDecorations(): void {
+	private updateDecorations(): codemavi {
 		const enabled = this._configService.getValue('debug.showBreakpointsInOverviewRuler');
 		const newDecorations = enabled ?
 			this._debugService.getModel().getBreakpoints().map(breakpoint => {

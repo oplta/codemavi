@@ -113,7 +113,7 @@ export class ChatServiceTelemetry {
 		@ITelemetryService private readonly telemetryService: ITelemetryService,
 	) { }
 
-	notifyUserAction(action: IChatUserActionEvent): void {
+	notifyUserAction(action: IChatUserActionEvent): codemavi {
 		if (action.action.kind === 'vote') {
 			this.telemetryService.publicLog2<ChatVoteEvent, ChatVoteClassification>('interactiveSessionVote', {
 				direction: action.action.direction === ChatAgentVoteDirection.Up ? 'up' : 'down',
@@ -155,7 +155,7 @@ export class ChatServiceTelemetry {
 		}
 	}
 
-	retrievedFollowups(agentId: string, command: string | undefined, numFollowups: number): void {
+	retrievedFollowups(agentId: string, command: string | undefined, numFollowups: number): codemavi {
 		this.telemetryService.publicLog2<ChatFollowupsRetrievedEvent, ChatFollowupsRetrievedClassification>('chatFollowupsRetrieved', {
 			agentId,
 			command,

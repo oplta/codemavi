@@ -545,7 +545,7 @@ export class CodePointIterator {
 		this._offset = offset;
 	}
 
-	public setOffset(offset: number): void {
+	public setOffset(offset: number): codemavi {
 		this._offset = offset;
 	}
 
@@ -1029,14 +1029,14 @@ function breakBetweenGraphemeBreakType(breakTypeA: GraphemeBreakType, breakTypeB
 	// Do not break within emoji modifier sequences or emoji zwj sequences.
 	// GB11    \p{Extended_Pictographic} Extend* ZWJ × \p{Extended_Pictographic}
 	if (breakTypeA === GraphemeBreakType.ZWJ && breakTypeB === GraphemeBreakType.Extended_Pictographic) {
-		// Note: we are not implementing the rule entirely here to avoid introducing states
+		// Note: we are not implementing the rule entirely here to acodemavi introducing states
 		return false; // GB11
 	}
 
 	// GB12                          sot (RI RI)* RI × RI
 	// GB13                        [^RI] (RI RI)* RI × RI
 	if (breakTypeA === GraphemeBreakType.Regional_Indicator && breakTypeB === GraphemeBreakType.Regional_Indicator) {
-		// Note: we are not implementing the rule entirely here to avoid introducing states
+		// Note: we are not implementing the rule entirely here to acodemavi introducing states
 		return false; // GB12 & GB13
 	}
 

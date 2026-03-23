@@ -65,7 +65,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 	/**
 	 * A map of already requested activation events to speed things up if the same activation event is triggered multiple times.
 	 */
-	private readonly _cachedActivationEvents: Map<string, Promise<void>>;
+	private readonly _cachedActivationEvents: Map<string, Promise<codemavi>>;
 	private readonly _resolvedActivationEvents: Set<string>;
 	private _rpcProtocol: RPCProtocol | null;
 	private readonly _customers: IDisposable[];
@@ -99,7 +99,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		@ILogService private readonly _logService: ILogService,
 	) {
 		super();
-		this._cachedActivationEvents = new Map<string, Promise<void>>();
+		this._cachedActivationEvents = new Map<string, Promise<codemavi>>();
 		this._resolvedActivationEvents = new Set<string>();
 		this._rpcProtocol = null;
 		this._customers = [];
@@ -161,11 +161,11 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		});
 	}
 
-	public async disconnect(): Promise<void> {
+	public async disconnect(): Promise<codemavi> {
 		await this._extensionHost?.disconnect?.();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._extensionHost?.dispose();
 		this._rpcProtocol?.dispose();
 
@@ -198,7 +198,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		};
 	}
 
-	public async ready(): Promise<void> {
+	public async ready(): Promise<codemavi> {
 		await this._proxy;
 	}
 
@@ -260,16 +260,16 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 			extensionHostKind: this.kind,
 			getProxy: <T>(identifier: ProxyIdentifier<T>): Proxied<T> => this._rpcProtocol!.getProxy(identifier),
 			set: <T, R extends T>(identifier: ProxyIdentifier<T>, instance: R): R => this._rpcProtocol!.set(identifier, instance),
-			dispose: (): void => this._rpcProtocol!.dispose(),
-			assertRegistered: (identifiers: ProxyIdentifier<any>[]): void => this._rpcProtocol!.assertRegistered(identifiers),
-			drain: (): Promise<void> => this._rpcProtocol!.drain(),
+			dispose: (): codemavi => this._rpcProtocol!.dispose(),
+			assertRegistered: (identifiers: ProxyIdentifier<any>[]): codemavi => this._rpcProtocol!.assertRegistered(identifiers),
+			drain: (): Promise<codemavi> => this._rpcProtocol!.drain(),
 
 			//#region internal
 			internalExtensionService: this._internalExtensionService,
-			_setExtensionHostProxy: (value: IExtensionHostProxy): void => {
+			_setExtensionHostProxy: (value: IExtensionHostProxy): codemavi => {
 				extensionHostProxy = value;
 			},
-			_setAllMainProxyIdentifiers: (value: ProxyIdentifier<any>[]): void => {
+			_setAllMainProxyIdentifiers: (value: ProxyIdentifier<any>[]): codemavi => {
 				mainProxyIdentifiers = value;
 			},
 			//#endregion
@@ -320,7 +320,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		return proxy.activate(extension, reason);
 	}
 
-	public activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
+	public activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
 		if (activationKind === ActivationKind.Immediate && !this._hasStarted) {
 			return Promise.resolve();
 		}
@@ -335,7 +335,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		return this._resolvedActivationEvents.has(activationEvent);
 	}
 
-	private async _activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
+	private async _activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
 		if (!this._proxy) {
 			return;
 		}
@@ -422,7 +422,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		return proxy.getCanonicalURI(remoteAuthority, uri);
 	}
 
-	public async start(extensionRegistryVersionId: number, allExtensions: IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<void> {
+	public async start(extensionRegistryVersionId: number, allExtensions: IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<codemavi> {
 		const proxy = await this._proxy;
 		if (!proxy) {
 			return;
@@ -443,7 +443,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		return this._extensionHost.runningLocation.equals(runningLocation);
 	}
 
-	public async deltaExtensions(incomingExtensionsDelta: IExtensionDescriptionDelta): Promise<void> {
+	public async deltaExtensions(incomingExtensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
 		const proxy = await this._proxy;
 		if (!proxy) {
 			return;
@@ -460,7 +460,7 @@ export class ExtensionHostManager extends Disposable implements IExtensionHostMa
 		return this._extensionHost.extensions?.containsExtension(extensionId) ?? false;
 	}
 
-	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void> {
+	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi> {
 		const proxy = await this._proxy;
 		if (!proxy) {
 			return;
@@ -511,7 +511,7 @@ class RPCLogger implements IRPCProtocolLogger {
 		private readonly _kind: ExtensionHostKind
 	) { }
 
-	private _log(direction: string, totalLength: number, msgLength: number, req: number, initiator: RequestInitiator, str: string, data: any): void {
+	private _log(direction: string, totalLength: number, msgLength: number, req: number, initiator: RequestInitiator, str: string, data: any): codemavi {
 		data = pretty(data);
 
 		const colorTable = colorTables[initiator];
@@ -526,12 +526,12 @@ class RPCLogger implements IRPCProtocolLogger {
 		console.log.apply(console, args as [string, ...string[]]);
 	}
 
-	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): void {
+	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): codemavi {
 		this._totalIncoming += msgLength;
 		this._log('Ext \u2192 Win', this._totalIncoming, msgLength, req, initiator, str, data);
 	}
 
-	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): void {
+	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): codemavi {
 		this._totalOutgoing += msgLength;
 		this._log('Win \u2192 Ext', this._totalOutgoing, msgLength, req, initiator, str, data);
 	}
@@ -559,7 +559,7 @@ class TelemetryRPCLogger implements IRPCProtocolLogger {
 
 	constructor(@ITelemetryService private readonly _telemetryService: ITelemetryService) { }
 
-	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string): void {
+	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string): codemavi {
 
 		if (initiator === RequestInitiator.LocalSide && /^receiveReply(Err)?:/.test(str)) {
 			// log the size of reply messages
@@ -580,7 +580,7 @@ class TelemetryRPCLogger implements IRPCProtocolLogger {
 		}
 	}
 
-	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string): void {
+	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string): codemavi {
 
 		if (initiator === RequestInitiator.LocalSide && str.startsWith('request: ')) {
 			this._pendingRequests.set(req, str);

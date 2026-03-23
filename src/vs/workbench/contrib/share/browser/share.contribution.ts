@@ -71,7 +71,7 @@ class ShareWorkbenchContribution extends Disposable {
 		}));
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._disposables?.dispose();
 	}
@@ -103,7 +103,7 @@ class ShareWorkbenchContribution extends Disposable {
 					});
 				}
 
-				override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
+				override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
 					const shareService = accessor.get(IShareService);
 					const activeEditor = accessor.get(IEditorService)?.activeEditor;
 					const resourceUri = (activeEditor && EditorResourceAccessor.getOriginalUri(activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY }))
@@ -147,7 +147,7 @@ class ShareWorkbenchContribution extends Disposable {
 		const actions = this.shareService.getShareActions();
 		for (const menuId of targetMenus) {
 			for (const action of actions) {
-				// todo@joyceerhl avoid duplicates
+				// todo@joyceerhl acodemavi duplicates
 				this._disposables.add(MenuRegistry.appendMenuItem(menuId, action));
 			}
 		}

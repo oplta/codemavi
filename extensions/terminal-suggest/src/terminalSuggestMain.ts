@@ -350,7 +350,7 @@ function getTerminalShellType(shellType: string | undefined): TerminalShellType 
 	}
 }
 
-export function sanitizeProcessEnvironment(env: Record<string, string>, ...preserve: string[]): void {
+export function sanitizeProcessEnvironment(env: Record<string, string>, ...preserve: string[]): codemavi {
 	const set = preserve.reduce<Record<string, boolean>>((set, key) => {
 		set[key] = true;
 		return set;

@@ -24,12 +24,12 @@ class FsLinkProvider {
 	private _schemes: string[] = [];
 	private _stateMachine?: StateMachine;
 
-	add(scheme: string): void {
+	add(scheme: string): codemavi {
 		this._stateMachine = undefined;
 		this._schemes.push(scheme);
 	}
 
-	delete(scheme: string): void {
+	delete(scheme: string): codemavi {
 		const idx = this._schemes.indexOf(scheme);
 		if (idx >= 0) {
 			this._schemes.splice(idx, 1);
@@ -37,7 +37,7 @@ class FsLinkProvider {
 		}
 	}
 
-	private _initStateMachine(): void {
+	private _initStateMachine(): codemavi {
 		if (!this._stateMachine) {
 
 			// sort and compute common prefix with previous scheme
@@ -125,7 +125,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadFileSystem);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._linkProviderRegistration?.dispose();
 	}
 
@@ -265,19 +265,19 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		return Promise.resolve(this._getFsProvider(handle).readFile(URI.revive(resource))).then(data => VSBuffer.wrap(data));
 	}
 
-	$writeFile(handle: number, resource: UriComponents, content: VSBuffer, opts: files.IFileWriteOptions): Promise<void> {
+	$writeFile(handle: number, resource: UriComponents, content: VSBuffer, opts: files.IFileWriteOptions): Promise<codemavi> {
 		return Promise.resolve(this._getFsProvider(handle).writeFile(URI.revive(resource), content.buffer, opts));
 	}
 
-	$delete(handle: number, resource: UriComponents, opts: files.IFileDeleteOptions): Promise<void> {
+	$delete(handle: number, resource: UriComponents, opts: files.IFileDeleteOptions): Promise<codemavi> {
 		return Promise.resolve(this._getFsProvider(handle).delete(URI.revive(resource), opts));
 	}
 
-	$rename(handle: number, oldUri: UriComponents, newUri: UriComponents, opts: files.IFileOverwriteOptions): Promise<void> {
+	$rename(handle: number, oldUri: UriComponents, newUri: UriComponents, opts: files.IFileOverwriteOptions): Promise<codemavi> {
 		return Promise.resolve(this._getFsProvider(handle).rename(URI.revive(oldUri), URI.revive(newUri), opts));
 	}
 
-	$copy(handle: number, oldUri: UriComponents, newUri: UriComponents, opts: files.IFileOverwriteOptions): Promise<void> {
+	$copy(handle: number, oldUri: UriComponents, newUri: UriComponents, opts: files.IFileOverwriteOptions): Promise<codemavi> {
 		const provider = this._getFsProvider(handle);
 		if (!provider.copy) {
 			throw new Error('FileSystemProvider does not implement "copy"');
@@ -285,16 +285,16 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		return Promise.resolve(provider.copy(URI.revive(oldUri), URI.revive(newUri), opts));
 	}
 
-	$mkdir(handle: number, resource: UriComponents): Promise<void> {
+	$mkdir(handle: number, resource: UriComponents): Promise<codemavi> {
 		return Promise.resolve(this._getFsProvider(handle).createDirectory(URI.revive(resource)));
 	}
 
-	$watch(handle: number, session: number, resource: UriComponents, opts: files.IWatchOptions): void {
+	$watch(handle: number, session: number, resource: UriComponents, opts: files.IWatchOptions): codemavi {
 		const subscription = this._getFsProvider(handle).watch(URI.revive(resource), opts);
 		this._watches.set(session, subscription);
 	}
 
-	$unwatch(_handle: number, session: number): void {
+	$unwatch(_handle: number, session: number): codemavi {
 		const subscription = this._watches.get(session);
 		if (subscription) {
 			subscription.dispose();
@@ -310,7 +310,7 @@ export class ExtHostFileSystem implements ExtHostFileSystemShape {
 		return Promise.resolve(provider.open(URI.revive(resource), opts));
 	}
 
-	$close(handle: number, fd: number): Promise<void> {
+	$close(handle: number, fd: number): Promise<codemavi> {
 		const provider = this._getFsProvider(handle);
 		if (!provider.close) {
 			throw new Error('FileSystemProvider does not implement "close"');

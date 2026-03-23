@@ -105,22 +105,22 @@ class ProblemReporter implements TaskConfig.IProblemReporter {
 		this._validationStatus = new ValidationStatus();
 	}
 
-	public info(message: string): void {
+	public info(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Info;
 		this._outputChannel.append(message + '\n');
 	}
 
-	public warn(message: string): void {
+	public warn(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Warning;
 		this._outputChannel.append(message + '\n');
 	}
 
-	public error(message: string): void {
+	public error(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Error;
 		this._outputChannel.append(message + '\n');
 	}
 
-	public fatal(message: string): void {
+	public fatal(message: string): codemavi {
 		this._validationStatus.state = ValidationState.Fatal;
 		this._outputChannel.append(message + '\n');
 	}
@@ -144,7 +144,7 @@ interface ICommandUpgrade {
 class TaskMap {
 	private _store: Map<string, Task[]> = new Map();
 
-	public forEach(callback: (value: Task[], folder: string) => void): void {
+	public forEach(callback: (value: Task[], folder: string) => codemavi): codemavi {
 		this._store.forEach(callback);
 	}
 
@@ -169,7 +169,7 @@ class TaskMap {
 		return result;
 	}
 
-	public add(workspaceFolder: IWorkspace | IWorkspaceFolder | string, ...task: Task[]): void {
+	public add(workspaceFolder: IWorkspace | IWorkspaceFolder | string, ...task: Task[]): codemavi {
 		const key = TaskMap.getKey(workspaceFolder);
 		let values = this._store.get(key);
 		if (!values) {
@@ -212,7 +212,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 	protected _taskSystemInfos: Map<string, ITaskSystemInfo[]>;
 
 	protected _workspaceTasksPromise?: Promise<Map<string, IWorkspaceFolderTaskResult>>;
-	protected readonly _whenTaskSystemReady: Promise<void>;
+	protected readonly _whenTaskSystemReady: Promise<codemavi>;
 
 	protected _taskSystem?: ITaskSystem;
 	protected _taskSystemListeners?: IDisposable[] = [];
@@ -225,18 +225,18 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 
 	protected _outputChannel: IOutputChannel;
 	protected readonly _onDidStateChange: Emitter<ITaskEvent>;
-	private _waitForAllSupportedExecutions: Promise<void>;
-	private _onDidRegisterSupportedExecutions: Emitter<void> = new Emitter();
-	private _onDidRegisterAllSupportedExecutions: Emitter<void> = new Emitter();
-	private _onDidChangeTaskSystemInfo: Emitter<void> = new Emitter();
+	private _waitForAllSupportedExecutions: Promise<codemavi>;
+	private _onDidRegisterSupportedExecutions: Emitter<codemavi> = new Emitter();
+	private _onDidRegisterAllSupportedExecutions: Emitter<codemavi> = new Emitter();
+	private _onDidChangeTaskSystemInfo: Emitter<codemavi> = new Emitter();
 	private _willRestart: boolean = false;
-	public onDidChangeTaskSystemInfo: Event<void> = this._onDidChangeTaskSystemInfo.event;
-	private _onDidReconnectToTasks: Emitter<void> = new Emitter();
-	public onDidReconnectToTasks: Event<void> = this._onDidReconnectToTasks.event;
-	private _onDidChangeTaskConfig: Emitter<void> = new Emitter();
-	public onDidChangeTaskConfig: Event<void> = this._onDidChangeTaskConfig.event;
+	public onDidChangeTaskSystemInfo: Event<codemavi> = this._onDidChangeTaskSystemInfo.event;
+	private _onDidReconnectToTasks: Emitter<codemavi> = new Emitter();
+	public onDidReconnectToTasks: Event<codemavi> = this._onDidReconnectToTasks.event;
+	private _onDidChangeTaskConfig: Emitter<codemavi> = new Emitter();
+	public onDidChangeTaskConfig: Event<codemavi> = this._onDidChangeTaskConfig.event;
 	public get isReconnected(): boolean { return this._tasksReconnected; }
-	private _onDidChangeTaskProviders = this._register(new Emitter<void>());
+	private _onDidChangeTaskProviders = this._register(new Emitter<codemavi>());
 	public onDidChangeTaskProviders = this._onDidChangeTaskProviders.event;
 
 	private _activatedTaskProviders: Set<string> = new Set();
@@ -406,7 +406,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _attemptTaskReconnection(): void {
+	private _attemptTaskReconnection(): codemavi {
 		if (this._lifecycleService.startupKind !== StartupKind.ReloadedWindow) {
 			this._log(nls.localize('TaskService.skippingReconnection', 'Startup kind not window reload, setting connected and removing persistent tasks'), true);
 			this._tasksReconnected = true;
@@ -454,7 +454,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return this.inTerminal();
 	}
 
-	private async _registerCommands(): Promise<void> {
+	private async _registerCommands(): Promise<codemavi> {
 		CommandsRegistry.registerCommand({
 			id: 'workbench.action.tasks.runTask',
 			handler: async (accessor, arg) => {
@@ -617,7 +617,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return result;
 	}
 
-	private async _activateTaskProviders(type: string | undefined): Promise<void> {
+	private async _activateTaskProviders(type: string | undefined): Promise<codemavi> {
 		// We need to first wait for extensions to be registered because we might read
 		// the `TaskDefinitionRegistry` in case `type` is `undefined`
 		await this._extensionService.whenInstalledExtensionsRegistered();
@@ -635,7 +635,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _updateSetup(setup?: [IWorkspaceFolder[], IWorkspaceFolder[], ExecutionEngine, JsonSchemaVersion, IWorkspace | undefined]): void {
+	private _updateSetup(setup?: [IWorkspaceFolder[], IWorkspaceFolder[], ExecutionEngine, JsonSchemaVersion, IWorkspace | undefined]): codemavi {
 		if (!setup) {
 			setup = this._computeWorkspaceFolderSetup();
 		}
@@ -660,7 +660,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		this._workspace = setup[4];
 	}
 
-	protected _showOutput(runSource: TaskRunSource = TaskRunSource.User, userRequested?: boolean): void {
+	protected _showOutput(runSource: TaskRunSource = TaskRunSource.User, userRequested?: boolean): codemavi {
 		if (!VirtualWorkspaceContext.getValue(this._contextKeyService) && ((runSource === TaskRunSource.User) || (runSource === TaskRunSource.ConfigurationChange))) {
 			if (userRequested) {
 				this._outputService.showChannel(this._outputChannel.id, true);
@@ -676,7 +676,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	protected _disposeTaskSystemListeners(): void {
+	protected _disposeTaskSystemListeners(): codemavi {
 		if (this._taskSystemListeners) {
 			dispose(this._taskSystemListeners);
 			this._taskSystemListeners = undefined;
@@ -712,7 +712,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return infosCount > 0;
 	}
 
-	public registerTaskSystem(key: string, info: ITaskSystemInfo): void {
+	public registerTaskSystem(key: string, info: ITaskSystemInfo): codemavi {
 		// Ideally the Web caller of registerRegisterTaskSystem would use the correct key.
 		// However, the caller doesn't know about the workspace folders at the time of the call, even though we know about them here.
 		if (info.platform === Platform.Platform.Web) {
@@ -740,7 +740,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return (infos && infos.length) ? infos[0] : undefined;
 	}
 
-	public extensionCallbackTaskComplete(task: Task, result: number): Promise<void> {
+	public extensionCallbackTaskComplete(task: Task, result: number): Promise<codemavi> {
 		if (!this._taskSystem) {
 			return Promise.resolve();
 		}
@@ -1137,7 +1137,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private async _setRecentlyUsedTask(task: Task): Promise<void> {
+	private async _setRecentlyUsedTask(task: Task): Promise<codemavi> {
 		let key = task.getKey();
 		if (!InMemoryTask.is(task) && key) {
 			const customizations = this._createCustomizableTask(task);
@@ -1157,7 +1157,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _saveRecentlyUsedTasks(): void {
+	private _saveRecentlyUsedTasks(): codemavi {
 		if (!this._recentlyUsedTasks) {
 			return;
 		}
@@ -1177,7 +1177,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		this._storageService.store(AbstractTaskService.RecentlyUsedTasks_KeyV2, JSON.stringify(keyValues), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	private async _setPersistentTask(task: Task): Promise<void> {
+	private async _setPersistentTask(task: Task): Promise<codemavi> {
 		if (!this._configurationService.getValue(TaskSettingId.Reconnection)) {
 			return;
 		}
@@ -1204,7 +1204,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _savePersistentTasks(): void {
+	private _savePersistentTasks(): codemavi {
 		this._persistentTasks = this._getTasksFromStorage('persistent');
 		const keys = [...this._persistentTasks.keys()];
 		const keyValues: [string, string][] = [];
@@ -1215,7 +1215,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		this._storageService.store(AbstractTaskService.PersistentTasks_Key, JSON.stringify(keyValues), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	private _openDocumentation(): void {
+	private _openDocumentation(): codemavi {
 		this._openerService.open(URI.parse('https://code.visualstudio.com/docs/editor/tasks#_defining-a-problem-matcher'));
 	}
 
@@ -1357,7 +1357,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return false;
 	}
 
-	private async _updateNeverProblemMatcherSetting(type: string): Promise<void> {
+	private async _updateNeverProblemMatcherSetting(type: string): Promise<codemavi> {
 		const current = this._configurationService.getValue(PROBLEM_MATCHER_NEVER_CONFIG);
 		if (current === true) {
 			return;
@@ -1585,7 +1585,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return toCustomize;
 	}
 
-	public async customize(task: ContributedTask | CustomTask | ConfiguringTask, properties?: ICustomizationProperties, openConfig?: boolean): Promise<void> {
+	public async customize(task: ContributedTask | CustomTask | ConfiguringTask, properties?: ICustomizationProperties, openConfig?: boolean): Promise<codemavi> {
 		if (!(await this._trust())) {
 			return;
 		}
@@ -1597,7 +1597,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		const configuration = this._getConfiguration(workspaceFolder, task._source.kind);
 		if (configuration.hasParseErrors) {
 			this._notificationService.warn(nls.localize('customizeParseErrors', 'The current task configuration has errors. Please fix the errors first before customizing a task.'));
-			return Promise.resolve<void>(undefined);
+			return Promise.resolve<codemavi>(undefined);
 		}
 
 		const fileConfig = configuration.config;
@@ -1657,7 +1657,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _writeConfiguration(workspaceFolder: IWorkspaceFolder, key: string, value: any, source?: string): Promise<void> | undefined {
+	private _writeConfiguration(workspaceFolder: IWorkspaceFolder, key: string, value: any, source?: string): Promise<codemavi> | undefined {
 		let target: ConfigurationTarget | undefined = undefined;
 		switch (source) {
 			case TaskSourceKind.User: target = ConfigurationTarget.USER; break;
@@ -1967,7 +1967,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return executeResult.promise;
 	}
 
-	private async _restart(task: Task): Promise<void> {
+	private async _restart(task: Task): Promise<codemavi> {
 		if (!this._taskSystem) {
 			return;
 		}
@@ -2403,7 +2403,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return { config, hasParseErrors: false };
 	}
 
-	private _log(value: string, verbose?: boolean): void {
+	private _log(value: string, verbose?: boolean): codemavi {
 		if (!verbose || this._configurationService.getValue(TaskSettingId.VerboseLogging)) {
 			this._outputChannel.append(value + '\n');
 		}
@@ -2599,7 +2599,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		};
 	}
 
-	private _handleError(err: any): void {
+	private _handleError(err: any): codemavi {
 		let showOutput = true;
 		if (err instanceof TaskError) {
 			const buildError = err;
@@ -2656,7 +2656,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 			return newEntry;
 
 		};
-		function fillEntries(entries: QuickPickInput<ITaskQuickPickEntry>[], tasks: Task[], groupLabel: string): void {
+		function fillEntries(entries: QuickPickInput<ITaskQuickPickEntry>[], tasks: Task[], groupLabel: string): codemavi {
 			if (tasks.length) {
 				entries.push({ type: 'separator', label: groupLabel });
 			}
@@ -2790,7 +2790,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		this._storageService.remove(AbstractTaskService.RecentlyUsedTasks_Key, StorageScope.WORKSPACE);
 	}
 
-	private _showIgnoredFoldersMessage(): Promise<void> {
+	private _showIgnoredFoldersMessage(): Promise<codemavi> {
 		if (this.ignoredWorkspaceFolders.length === 0 || !this.showIgnoreMessage) {
 			return Promise.resolve(undefined);
 		}
@@ -2825,7 +2825,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return true;
 	}
 
-	private async _runTaskCommand(filter?: string | ITaskIdentifier): Promise<void> {
+	private async _runTaskCommand(filter?: string | ITaskIdentifier): Promise<codemavi> {
 		if (!this._tasksReconnected) {
 			return;
 		}
@@ -2896,7 +2896,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return { tasks, grouped };
 	}
 
-	private _doRunTaskCommand(tasks?: Task[], type?: string, name?: string): void {
+	private _doRunTaskCommand(tasks?: Task[], type?: string, name?: string): codemavi {
 		const pickThen = (task: Task | undefined | null) => {
 			if (task === undefined) {
 				return;
@@ -2939,7 +2939,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 	}
 
 
-	rerun(terminalInstanceId: number): void {
+	rerun(terminalInstanceId: number): codemavi {
 		const task = this._taskSystem?.getTaskForTerminal(terminalInstanceId);
 		if (task) {
 			this._restart(task);
@@ -2948,7 +2948,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _reRunTaskCommand(onlyRerun?: boolean): void {
+	private _reRunTaskCommand(onlyRerun?: boolean): codemavi {
 
 		ProblemMatcherRegistry.onReady().then(() => {
 			return this._editorService.saveAll({ reason: SaveReason.AUTO }).then(() => { // make sure all dirty editors are saved
@@ -2989,7 +2989,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		fetching: string;
 		select: string;
 		notFoundConfigure: string;
-	}, configure: () => void, legacyCommand: () => void): void {
+	}, configure: () => codemavi, legacyCommand: () => codemavi): codemavi {
 		if (this.schemaVersion === JsonSchemaVersion.V0_1_0) {
 			legacyCommand();
 			return;
@@ -3122,7 +3122,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 
 	}
 
-	private _runBuildCommand(): void {
+	private _runBuildCommand(): codemavi {
 		if (!this._tasksReconnected) {
 			return;
 		}
@@ -3133,7 +3133,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}, this._runConfigureDefaultBuildTask, this._build);
 	}
 
-	private _runTestCommand(): void {
+	private _runTestCommand(): codemavi {
 		return this._runTaskGroupCommand(TaskGroup.Test, {
 			fetching: nls.localize('TaskService.fetchingTestTasks', 'Fetching test tasks...'),
 			select: nls.localize('TaskService.pickTestTask', 'Select the test task to run'),
@@ -3141,7 +3141,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}, this._runConfigureDefaultTestTask, this._runTest);
 	}
 
-	private _runTerminateCommand(arg?: any): void {
+	private _runTerminateCommand(arg?: any): codemavi {
 		if (arg === 'terminateAll') {
 			this._terminateAll();
 			return;
@@ -3208,7 +3208,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private async _runRestartTaskCommand(arg?: any): Promise<void> {
+	private async _runRestartTaskCommand(arg?: any): Promise<codemavi> {
 
 		const activeTasks = await this.getActiveTasks();
 
@@ -3368,7 +3368,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return description;
 	}
 
-	private async _runConfigureTasks(): Promise<void> {
+	private async _runConfigureTasks(): Promise<codemavi> {
 		if (!(await this._trust())) {
 			return;
 		}
@@ -3456,7 +3456,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 			});
 	}
 
-	private _runConfigureDefaultBuildTask(): void {
+	private _runConfigureDefaultBuildTask(): codemavi {
 		if (this.schemaVersion === JsonSchemaVersion.V2_0_0) {
 			this.tasks().then((tasks => {
 				if (tasks.length === 0) {
@@ -3551,7 +3551,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	private _runConfigureDefaultTestTask(): void {
+	private _runConfigureDefaultTestTask(): codemavi {
 		if (this.schemaVersion === JsonSchemaVersion.V2_0_0) {
 			this.tasks().then((tasks => {
 				if (tasks.length === 0) {
@@ -3601,7 +3601,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		}
 	}
 
-	public async runShowTasks(): Promise<void> {
+	public async runShowTasks(): Promise<codemavi> {
 		const activeTasksPromise: Promise<Task[]> = this.getActiveTasks();
 		const activeTasks: Task[] = await activeTasksPromise;
 		let group: string | undefined;
@@ -3697,7 +3697,7 @@ export abstract class AbstractTaskService extends Disposable implements ITaskSer
 		return;
 	}
 
-	private async _upgrade(): Promise<void> {
+	private async _upgrade(): Promise<codemavi> {
 		if (this.schemaVersion === JsonSchemaVersion.V2_0_0) {
 			return;
 		}

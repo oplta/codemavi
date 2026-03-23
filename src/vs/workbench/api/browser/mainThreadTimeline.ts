@@ -25,7 +25,7 @@ export class MainThreadTimeline implements MainThreadTimelineShape {
 		this._proxy = context.getProxy(ExtHostContext.ExtHostTimeline);
 	}
 
-	$registerTimelineProvider(provider: TimelineProviderDescriptor): void {
+	$registerTimelineProvider(provider: TimelineProviderDescriptor): codemavi {
 		this.logService.trace(`MainThreadTimeline#registerTimelineProvider: id=${provider.id}`);
 
 		const proxy = this._proxy;
@@ -50,20 +50,20 @@ export class MainThreadTimeline implements MainThreadTimelineShape {
 		});
 	}
 
-	$unregisterTimelineProvider(id: string): void {
+	$unregisterTimelineProvider(id: string): codemavi {
 		this.logService.trace(`MainThreadTimeline#unregisterTimelineProvider: id=${id}`);
 
 		this._timelineService.unregisterTimelineProvider(id);
 	}
 
-	$emitTimelineChangeEvent(e: TimelineChangeEvent): void {
+	$emitTimelineChangeEvent(e: TimelineChangeEvent): codemavi {
 		this.logService.trace(`MainThreadTimeline#emitChangeEvent: id=${e.id}, uri=${e.uri?.toString(true)}`);
 
 		const emitter = this._providerEmitters.get(e.id);
 		emitter?.fire(e);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		// noop
 	}
 }

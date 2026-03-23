@@ -83,7 +83,7 @@ export class StatusbarEntryItem extends Disposable {
 		this.update(entry);
 	}
 
-	update(entry: IStatusbarEntry): void {
+	update(entry: IStatusbarEntry): codemavi {
 
 		// Update: Progress
 		this.label.showProgress = entry.showProgress ?? false;
@@ -218,7 +218,7 @@ export class StatusbarEntryItem extends Disposable {
 		return tooltip === otherTooltip;
 	}
 
-	private async executeCommand(command: string | Command): Promise<void> {
+	private async executeCommand(command: string | Command): Promise<codemavi> {
 
 		// Custom command from us: Show tooltip
 		if (command === ShowTooltipCommand) {
@@ -239,7 +239,7 @@ export class StatusbarEntryItem extends Disposable {
 		}
 	}
 
-	private applyColor(container: HTMLElement, color: string | ThemeColor | undefined, isBackground?: boolean): void {
+	private applyColor(container: HTMLElement, color: string | ThemeColor | undefined, isBackground?: boolean): codemavi {
 		let colorResult: string | undefined = undefined;
 
 		if (isBackground) {

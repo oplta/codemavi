@@ -67,7 +67,7 @@ suite('NotebookExecutionStateService', () => {
 			}
 		});
 		instantiationService.stub(INotebookLoggingService, new class extends mock<INotebookLoggingService>() {
-			override debug(category: string, output: string): void {
+			override debug(category: string, output: string): codemavi {
 				//
 			}
 		});
@@ -78,7 +78,7 @@ suite('NotebookExecutionStateService', () => {
 		instantiationService.set(INotebookExecutionStateService, disposables.add(instantiationService.createInstance(NotebookExecutionStateService)));
 	});
 
-	async function withTestNotebook(cells: [string, string, CellKind, IOutputDto[], NotebookCellMetadata][], callback: (viewModel: NotebookViewModel, textModel: NotebookTextModel, disposables: DisposableStore) => void | Promise<void>) {
+	async function withTestNotebook(cells: [string, string, CellKind, IOutputDto[], NotebookCellMetadata][], callback: (viewModel: NotebookViewModel, textModel: NotebookTextModel, disposables: DisposableStore) => codemavi | Promise<codemavi>) {
 		return _withTestNotebook(cells, (editor, viewModel) => callback(viewModel, viewModel.notebookDocument, disposables));
 	}
 
@@ -94,9 +94,9 @@ suite('NotebookExecutionStateService', () => {
 					super({ languages: ['javascript'] });
 				}
 
-				override async executeNotebookCellsRequest(): Promise<void> { }
+				override async executeNotebookCellsRequest(): Promise<codemavi> { }
 
-				override async cancelNotebookCellExecution(_uri: URI, handles: number[]): Promise<void> {
+				override async cancelNotebookCellExecution(_uri: URI, handles: number[]): Promise<codemavi> {
 					cancels += handles.length;
 				}
 			};
@@ -200,7 +200,7 @@ suite('NotebookExecutionStateService', () => {
 			const executionStateService: INotebookExecutionStateService = instantiationService.get(INotebookExecutionStateService);
 			const cell = disposables.add(insertCellAtIndex(viewModel, 0, 'var c = 3', 'javascript', CellKind.Code, {}, [], true, true));
 
-			const deferred = new DeferredPromise<void>();
+			const deferred = new DeferredPromise<codemavi>();
 			disposables.add(executionStateService.onDidChangeExecution(e => {
 				if (e.type === NotebookExecutionType.cell) {
 					const cellUri = CellUri.generate(e.notebook, e.cellHandle);
@@ -233,7 +233,7 @@ suite('NotebookExecutionStateService', () => {
 			const executionStateService: INotebookExecutionStateService = instantiationService.get(INotebookExecutionStateService);
 			executionStateService.onDidChangeExecution(e => eventRaisedWithExecution.push(e.type === NotebookExecutionType.notebook && !!e.changed), this, disposables);
 
-			const deferred = new DeferredPromise<void>();
+			const deferred = new DeferredPromise<codemavi>();
 			disposables.add(executionStateService.onDidChangeExecution(e => {
 				if (e.type === NotebookExecutionType.notebook) {
 					const exe = executionStateService.getExecution(viewModel.uri);
@@ -261,7 +261,7 @@ suite('NotebookExecutionStateService', () => {
 
 			const executionStateService: INotebookExecutionStateService = instantiationService.get(INotebookExecutionStateService);
 
-			const deferred = new DeferredPromise<void>();
+			const deferred = new DeferredPromise<codemavi>();
 			const expectedNotebookEventStates: (NotebookExecutionState | undefined)[] = [NotebookExecutionState.Unconfirmed, NotebookExecutionState.Pending, NotebookExecutionState.Executing, undefined];
 			executionStateService.onDidChangeExecution(e => {
 				if (e.type === NotebookExecutionType.notebook) {
@@ -369,8 +369,8 @@ class TestNotebookKernel implements INotebookKernel {
 	preloadUris: URI[] = [];
 	preloadProvides: string[] = [];
 	supportedLanguages: string[] = [];
-	async executeNotebookCellsRequest(): Promise<void> { }
-	async cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<void> { }
+	async executeNotebookCellsRequest(): Promise<codemavi> { }
+	async cancelNotebookCellExecution(uri: URI, cellHandles: number[]): Promise<codemavi> { }
 	provideVariables(notebookUri: URI, parentId: number | undefined, kind: 'named' | 'indexed', start: number, token: CancellationToken): AsyncIterableObject<VariablesResult> {
 		return AsyncIterableObject.EMPTY;
 	}

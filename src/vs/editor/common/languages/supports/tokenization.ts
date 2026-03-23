@@ -14,7 +14,7 @@ export interface ITokenThemeRule {
 }
 
 export class ParsedTokenThemeRule {
-	_parsedThemeRuleBrand: void = undefined;
+	_parsedThemeRuleBrand: codemavi = undefined;
 
 	readonly token: string;
 	readonly index: number;
@@ -274,7 +274,7 @@ export function strcmp(a: string, b: string): number {
 }
 
 export class ThemeTrieElementRule {
-	_themeTrieElementRuleBrand: void = undefined;
+	_themeTrieElementRuleBrand: codemavi = undefined;
 
 	private _fontStyle: FontStyle;
 	private _foreground: ColorId;
@@ -296,7 +296,7 @@ export class ThemeTrieElementRule {
 		return new ThemeTrieElementRule(this._fontStyle, this._foreground, this._background);
 	}
 
-	public acceptOverwrite(fontStyle: FontStyle, foreground: ColorId, background: ColorId): void {
+	public acceptOverwrite(fontStyle: FontStyle, foreground: ColorId, background: ColorId): codemavi {
 		if (fontStyle !== FontStyle.NotSet) {
 			this._fontStyle = fontStyle;
 		}
@@ -336,7 +336,7 @@ export class ExternalThemeTrieElement {
 }
 
 export class ThemeTrieElement {
-	_themeTrieElementBrand: void = undefined;
+	_themeTrieElementBrand: codemavi = undefined;
 
 	private readonly _mainRule: ThemeTrieElementRule;
 	private readonly _children: Map<string, ThemeTrieElement>;
@@ -381,7 +381,7 @@ export class ThemeTrieElement {
 		return this._mainRule;
 	}
 
-	public insert(token: string, fontStyle: FontStyle, foreground: ColorId, background: ColorId): void {
+	public insert(token: string, fontStyle: FontStyle, foreground: ColorId, background: ColorId): codemavi {
 		if (token === '') {
 			// Merge into the main rule
 			this._mainRule.acceptOverwrite(fontStyle, foreground, background);

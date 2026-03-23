@@ -6,7 +6,7 @@
 import { IRemoteConsoleLog, parse } from '../../../../base/common/console.js';
 import { ILogService } from '../../../../platform/log/common/log.js';
 
-export function logRemoteEntry(logService: ILogService, entry: IRemoteConsoleLog, label: string | null = null): void {
+export function logRemoteEntry(logService: ILogService, entry: IRemoteConsoleLog, label: string | null = null): codemavi {
 	const args = parse(entry).args;
 	let firstArg = args.shift();
 	if (typeof firstArg !== 'string') {
@@ -41,7 +41,7 @@ export function logRemoteEntry(logService: ILogService, entry: IRemoteConsoleLog
 	}
 }
 
-export function logRemoteEntryIfError(logService: ILogService, entry: IRemoteConsoleLog, label: string): void {
+export function logRemoteEntryIfError(logService: ILogService, entry: IRemoteConsoleLog, label: string): codemavi {
 	const args = parse(entry).args;
 	const firstArg = args.shift();
 	if (typeof firstArg !== 'string' || entry.severity !== 'error') {

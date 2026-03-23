@@ -82,13 +82,13 @@ export class ColorPickerHeader extends Disposable {
 		return this._originalColorNode;
 	}
 
-	private onDidChangeColor(color: Color): void {
+	private onDidChangeColor(color: Color): codemavi {
 		this._pickedColorNode.style.backgroundColor = Color.Format.CSS.format(color) || '';
 		this._pickedColorNode.classList.toggle('light', color.rgba.a < 0.5 ? this.backgroundColor.isLighter() : color.isLighter());
 		this.onDidChangePresentation();
 	}
 
-	private onDidChangePresentation(): void {
+	private onDidChangePresentation(): codemavi {
 		this._pickedColorPresentation.textContent = this.model.presentation ? this.model.presentation.label : '';
 	}
 }

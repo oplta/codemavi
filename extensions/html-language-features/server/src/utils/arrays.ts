@@ -24,7 +24,7 @@ export function mergeSort<T>(data: T[], compare: (a: T, b: T) => number): T[] {
 	return data;
 }
 
-function _divideAndMerge<T>(data: T[], compare: (a: T, b: T) => number): void {
+function _divideAndMerge<T>(data: T[], compare: (a: T, b: T) => number): codemavi {
 	if (data.length <= 1) {
 		// sorted
 		return;

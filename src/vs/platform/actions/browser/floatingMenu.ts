@@ -16,7 +16,7 @@ import { asCssVariable, asCssVariableWithDefault, buttonBackground, buttonForegr
 
 export class FloatingClickWidget extends Widget {
 
-	private readonly _onClick = this._register(new Emitter<void>());
+	private readonly _onClick = this._register(new Emitter<codemavi>());
 	readonly onClick = this._onClick.event;
 
 	private _domNode: HTMLElement;
@@ -104,7 +104,7 @@ export class FloatingClickMenu extends AbstractFloatingClickMenu {
 			/** Menu to show. If no actions are present, the button is hidden. */
 			menuId: MenuId;
 			/** Argument provided to the menu action */
-			getActionArg: () => void;
+			getActionArg: () => codemavi;
 		},
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
 		@IMenuService menuService: IMenuService,

@@ -84,8 +84,8 @@ export class GitHistoryProvider implements SourceControlHistoryProvider, FileDec
 	private _currentHistoryItemBaseRef: SourceControlHistoryItemRef | undefined;
 	get currentHistoryItemBaseRef(): SourceControlHistoryItemRef | undefined { return this._currentHistoryItemBaseRef; }
 
-	private readonly _onDidChangeCurrentHistoryItemRefs = new EventEmitter<void>();
-	readonly onDidChangeCurrentHistoryItemRefs: Event<void> = this._onDidChangeCurrentHistoryItemRefs.event;
+	private readonly _onDidChangeCurrentHistoryItemRefs = new EventEmitter<codemavi>();
+	readonly onDidChangeCurrentHistoryItemRefs: Event<codemavi> = this._onDidChangeCurrentHistoryItemRefs.event;
 
 	private readonly _onDidChangeHistoryItemRefs = new EventEmitter<SourceControlHistoryItemRefsChangeEvent>();
 	readonly onDidChangeHistoryItemRefs: Event<SourceControlHistoryItemRefsChangeEvent> = this._onDidChangeHistoryItemRefs.event;
@@ -108,7 +108,7 @@ export class GitHistoryProvider implements SourceControlHistoryProvider, FileDec
 		this.disposables.push(window.registerFileDecorationProvider(this));
 	}
 
-	private async onDidRunWriteOperation(result: OperationResult): Promise<void> {
+	private async onDidRunWriteOperation(result: OperationResult): Promise<codemavi> {
 		if (!this.repository.HEAD) {
 			this.logger.trace('[GitHistoryProvider][onDidRunWriteOperation] repository.HEAD is undefined');
 			this._currentHistoryItemRef = this._currentHistoryItemRemoteRef = this._currentHistoryItemBaseRef = undefined;
@@ -469,7 +469,7 @@ export class GitHistoryProvider implements SourceControlHistoryProvider, FileDec
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		dispose(this.disposables);
 	}
 }

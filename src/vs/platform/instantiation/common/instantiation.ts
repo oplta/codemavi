@@ -76,7 +76,7 @@ export interface IInstantiationService {
 	 * - Will NOT dispose services-instances that this service has been created with
 	 * - Will NOT dispose consumer-instances this service has created
 	 */
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 
@@ -84,11 +84,11 @@ export interface IInstantiationService {
  * Identifies a service of type `T`.
  */
 export interface ServiceIdentifier<T> {
-	(...args: any[]): void;
+	(...args: any[]): codemavi;
 	type: T;
 }
 
-function storeServiceDependency(id: Function, target: Function, index: number): void {
+function storeServiceDependency(id: Function, target: Function, index: number): codemavi {
 	if ((target as any)[_util.DI_TARGET] === target) {
 		(target as any)[_util.DI_DEPENDENCIES].push({ id, index });
 	} else {

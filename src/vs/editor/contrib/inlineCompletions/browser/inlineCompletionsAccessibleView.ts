@@ -41,8 +41,8 @@ export class InlineCompletionsAccessibleView implements IAccessibleViewImplement
 }
 
 class InlineCompletionsAccessibleViewContentProvider extends Disposable implements IAccessibleViewContentProvider {
-	private readonly _onDidChangeContent: Emitter<void> = this._register(new Emitter<void>());
-	public readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
+	private readonly _onDidChangeContent: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	public readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
 	constructor(
 		private readonly _editor: ICodeEditor,
 		private readonly _model: InlineCompletionsModel,
@@ -83,7 +83,7 @@ class InlineCompletionsAccessibleViewContentProvider extends Disposable implemen
 		this._model.previous().then((() => this._onDidChangeContent.fire()));
 		return;
 	}
-	public onClose(): void {
+	public onClose(): codemavi {
 		this._model.stop();
 		this._editor.focus();
 	}

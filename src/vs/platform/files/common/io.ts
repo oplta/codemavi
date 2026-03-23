@@ -34,7 +34,7 @@ export async function readFileIntoStream<T>(
 	transformer: IDataTransformer<VSBuffer, T>,
 	options: ICreateReadStreamOptions,
 	token: CancellationToken
-): Promise<void> {
+): Promise<codemavi> {
 	let error: Error | undefined = undefined;
 
 	try {
@@ -54,7 +54,7 @@ export async function readFileIntoStream<T>(
 	}
 }
 
-async function doReadFileIntoStream<T>(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, resource: URI, target: WriteableStream<T>, transformer: IDataTransformer<VSBuffer, T>, options: ICreateReadStreamOptions, token: CancellationToken): Promise<void> {
+async function doReadFileIntoStream<T>(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, resource: URI, target: WriteableStream<T>, transformer: IDataTransformer<VSBuffer, T>, options: ICreateReadStreamOptions, token: CancellationToken): Promise<codemavi> {
 
 	// Check for cancellation
 	throwIfCancelled(token);

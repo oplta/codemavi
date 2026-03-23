@@ -364,7 +364,7 @@ class CommentingRangeDecorator {
 		return (decorations.length > 0 ? (decorations[0].getActiveRange() ?? undefined) : undefined);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.commentingRangeDecorations = [];
 	}
 }
@@ -398,7 +398,7 @@ export function moveToNextCommentInThread(commentInfo: { thread: languages.Comme
 }
 
 export function revealCommentThread(commentService: ICommentService, editorService: IEditorService, uriIdentityService: IUriIdentityService,
-	commentThread: languages.CommentThread<IRange>, comment: languages.Comment | undefined, focusReply?: boolean, pinned?: boolean, preserveFocus?: boolean, sideBySide?: boolean): void {
+	commentThread: languages.CommentThread<IRange>, comment: languages.Comment | undefined, focusReply?: boolean, pinned?: boolean, preserveFocus?: boolean, sideBySide?: boolean): codemavi {
 	if (!commentThread.resource) {
 		return;
 	}
@@ -460,7 +460,7 @@ export class CommentController implements IEditorContribution {
 	private _commentingRangeSpaceReserved = false;
 	private _commentingRangeAmountReserved = 0;
 	private _computePromise: CancelablePromise<Array<ICommentInfo | null>> | null;
-	private _computeAndSetPromise: Promise<void> | undefined;
+	private _computeAndSetPromise: Promise<codemavi> | undefined;
 	private _addInProgress!: boolean;
 	private _emptyThreadsToAddQueue: [Range | undefined, IEditorMouseEvent | undefined][] = [];
 	private _computeCommentingRangePromise!: CancelablePromise<ICommentInfo[]> | null;
@@ -620,7 +620,7 @@ export class CommentController implements IEditorContribution {
 		this._commentingRangeDecorator.updateHover();
 	}
 
-	private onEditorMouseMove(e: IEditorMouseEvent): void {
+	private onEditorMouseMove(e: IEditorMouseEvent): codemavi {
 		const position = e.target.position?.lineNumber;
 		if (e.event.leftButton.valueOf() && position && this.mouseDownInfo) {
 			this._commentingRangeDecorator.updateSelection(position, new Range(this.mouseDownInfo.lineNumber, 1, position, 1));
@@ -629,7 +629,7 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	private onEditorChangeCursorSelection(e?: ICursorSelectionChangedEvent): void {
+	private onEditorChangeCursorSelection(e?: ICursorSelectionChangedEvent): codemavi {
 		const position = this.editor?.getPosition()?.lineNumber;
 		if (position) {
 			this._commentingRangeDecorator.updateSelection(position, e?.selection);
@@ -673,7 +673,7 @@ export class CommentController implements IEditorContribution {
 		return !!foundEditor;
 	}
 
-	private beginCompute(): Promise<void> {
+	private beginCompute(): Promise<codemavi> {
 		this._computePromise = createCancelablePromise(token => {
 			const editorURI = this.editor && this.editor.hasModel() && this.editor.getModel().uri;
 
@@ -723,7 +723,7 @@ export class CommentController implements IEditorContribution {
 		return editor.getContribution<CommentController>(ID);
 	}
 
-	public revealCommentThread(threadId: string, commentUniqueId: number | undefined, fetchOnceIfNotExist: boolean, focus: CommentWidgetFocus): void {
+	public revealCommentThread(threadId: string, commentUniqueId: number | undefined, fetchOnceIfNotExist: boolean, focus: CommentWidgetFocus): codemavi {
 		const commentThreadWidget = this._commentWidgets.filter(widget => widget.commentThread.threadId === threadId);
 		if (commentThreadWidget.length === 1) {
 			commentThreadWidget[0].reveal(commentUniqueId, focus);
@@ -740,19 +740,19 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	public collapseAll(): void {
+	public collapseAll(): codemavi {
 		for (const widget of this._commentWidgets) {
 			widget.collapse(true);
 		}
 	}
 
-	public expandAll(): void {
+	public expandAll(): codemavi {
 		for (const widget of this._commentWidgets) {
 			widget.expand();
 		}
 	}
 
-	public expandUnresolved(): void {
+	public expandUnresolved(): codemavi {
 		for (const widget of this._commentWidgets) {
 			if (widget.commentThread.state === languages.CommentThreadState.Unresolved) {
 				widget.expand();
@@ -760,11 +760,11 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	public nextCommentThread(focusThread: boolean): void {
+	public nextCommentThread(focusThread: boolean): codemavi {
 		this._findNearestCommentThread(focusThread);
 	}
 
-	private _findNearestCommentThread(focusThread: boolean, reverse?: boolean): void {
+	private _findNearestCommentThread(focusThread: boolean, reverse?: boolean): codemavi {
 		if (!this._commentWidgets.length || !this.editor?.hasModel()) {
 			return;
 		}
@@ -827,11 +827,11 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	public previousCommentThread(focusThread: boolean): void {
+	public previousCommentThread(focusThread: boolean): codemavi {
 		this._findNearestCommentThread(focusThread, true);
 	}
 
-	private _findNearestCommentingRange(reverse?: boolean): void {
+	private _findNearestCommentingRange(reverse?: boolean): codemavi {
 		if (!this.editor?.hasModel()) {
 			return;
 		}
@@ -853,15 +853,15 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	public nextCommentingRange(): void {
+	public nextCommentingRange(): codemavi {
 		this._findNearestCommentingRange();
 	}
 
-	public previousCommentingRange(): void {
+	public previousCommentingRange(): codemavi {
 		this._findNearestCommentingRange(true);
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 		this.globalToDispose.dispose();
 		this.localToDispose.dispose();
 		dispose(this._editorDisposables);
@@ -870,13 +870,13 @@ export class CommentController implements IEditorContribution {
 		this.editor = null!; // Strict null override - nulling out in dispose
 	}
 
-	private onWillChangeModel(e: IModelChangedEvent): void {
+	private onWillChangeModel(e: IModelChangedEvent): codemavi {
 		if (e.newModelUrl) {
 			this.tryUpdateReservedSpace(e.newModelUrl);
 		}
 	}
 
-	private async handleCommentAdded(editorId: string | undefined, uniqueOwner: string, thread: languages.AddedCommentThread): Promise<void> {
+	private async handleCommentAdded(editorId: string | undefined, uniqueOwner: string, thread: languages.AddedCommentThread): Promise<codemavi> {
 		const matchedZones = this._commentWidgets.filter(zoneWidget => zoneWidget.uniqueOwner === uniqueOwner && zoneWidget.commentThread.threadId === thread.threadId);
 		if (matchedZones.length) {
 			return;
@@ -910,7 +910,7 @@ export class CommentController implements IEditorContribution {
 		this.tryUpdateReservedSpace();
 	}
 
-	public onModelChanged(): void {
+	public onModelChanged(): codemavi {
 		this.localToDispose.clear();
 		this.tryUpdateReservedSpace();
 
@@ -1028,7 +1028,7 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	private beginComputeAndHandleEditorChange(): void {
+	private beginComputeAndHandleEditorChange(): codemavi {
 		this.beginCompute().then(() => {
 			if (!this._hasRespondedToEditorChange) {
 				if (this._commentInfos.some(commentInfo => commentInfo.commentingRanges.ranges.length > 0 || commentInfo.commentingRanges.fileComments)) {
@@ -1064,7 +1064,7 @@ export class CommentController implements IEditorContribution {
 		return undefined;
 	}
 
-	private async displayCommentThread(uniqueOwner: string, thread: languages.CommentThread, shouldReveal: boolean, pendingComment: languages.PendingComment | undefined, pendingEdits: { [key: number]: languages.PendingComment } | undefined): Promise<void> {
+	private async displayCommentThread(uniqueOwner: string, thread: languages.CommentThread, shouldReveal: boolean, pendingComment: languages.PendingComment | undefined, pendingEdits: { [key: number]: languages.PendingComment } | undefined): Promise<codemavi> {
 		const editor = this.editor?.getModel();
 		if (!editor) {
 			return;
@@ -1083,11 +1083,11 @@ export class CommentController implements IEditorContribution {
 		this.openCommentsView(thread);
 	}
 
-	private onEditorMouseDown(e: IEditorMouseEvent): void {
+	private onEditorMouseDown(e: IEditorMouseEvent): codemavi {
 		this.mouseDownInfo = this._activeEditorHasCommentingRange.get() ? parseMouseDownInfoFromEvent(e) : null;
 	}
 
-	private onEditorMouseUp(e: IEditorMouseEvent): void {
+	private onEditorMouseUp(e: IEditorMouseEvent): codemavi {
 		const matchedLineNumber = isMouseUpEventDragFromMouseDown(this.mouseDownInfo, e);
 		this.mouseDownInfo = null;
 
@@ -1127,7 +1127,7 @@ export class CommentController implements IEditorContribution {
 		return this._commentWidgets.filter(widget => widget.getGlyphPosition() === (commentRange ? commentRange.endLineNumber : 0));
 	}
 
-	public async addOrToggleCommentAtLine(commentRange: Range | undefined, e: IEditorMouseEvent | undefined): Promise<void> {
+	public async addOrToggleCommentAtLine(commentRange: Range | undefined, e: IEditorMouseEvent | undefined): Promise<codemavi> {
 		// If an add is already in progress, queue the next add and process it after the current one finishes to
 		// prevent empty comment threads from being added to the same line.
 		if (!this._addInProgress) {
@@ -1147,7 +1147,7 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	private processNextThreadToAdd(): void {
+	private processNextThreadToAdd(): codemavi {
 		this._addInProgress = false;
 		const info = this._emptyThreadsToAddQueue.shift();
 		if (info) {
@@ -1165,7 +1165,7 @@ export class CommentController implements IEditorContribution {
 		return userRange;
 	}
 
-	public addCommentAtLine(range: Range | undefined, e: IEditorMouseEvent | undefined): Promise<void> {
+	public addCommentAtLine(range: Range | undefined, e: IEditorMouseEvent | undefined): Promise<codemavi> {
 		const newCommentInfos = this._commentingRangeDecorator.getMatchedCommentAction(range);
 		if (!newCommentInfos.length || !this.editor?.hasModel()) {
 			this._addInProgress = false;
@@ -1347,7 +1347,7 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	private async setComments(commentInfos: ICommentInfo[]): Promise<void> {
+	private async setComments(commentInfos: ICommentInfo[]): Promise<codemavi> {
 		if (!this.editor || !this.commentService.isCommentingEnabled) {
 			return;
 		}
@@ -1394,7 +1394,7 @@ export class CommentController implements IEditorContribution {
 		}
 	}
 
-	public collapseAndFocusRange(threadId: string): void {
+	public collapseAndFocusRange(threadId: string): codemavi {
 		this._commentWidgets?.find(widget => widget.commentThread.threadId === threadId)?.collapseAndFocusRange();
 	}
 

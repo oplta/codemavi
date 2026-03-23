@@ -73,10 +73,10 @@ export class HoverWidget extends Widget implements IHoverWidget {
 	get isMouseIn(): boolean { return this._lockMouseTracker.isMouseIn; }
 	get domNode(): HTMLElement { return this._hover.containerDomNode; }
 
-	private readonly _onDispose = this._register(new Emitter<void>());
-	get onDispose(): Event<void> { return this._onDispose.event; }
-	private readonly _onRequestLayout = this._register(new Emitter<void>());
-	get onRequestLayout(): Event<void> { return this._onRequestLayout.event; }
+	private readonly _onDispose = this._register(new Emitter<codemavi>());
+	get onDispose(): Event<codemavi> { return this._onDispose.event; }
+	private readonly _onRequestLayout = this._register(new Emitter<codemavi>());
+	get onRequestLayout(): Event<codemavi> { return this._onRequestLayout.event; }
 
 	get anchor(): AnchorPosition { return this._hoverPosition === HoverPosition.BELOW ? AnchorPosition.BELOW : AnchorPosition.ABOVE; }
 	get x(): number { return this._x; }
@@ -306,7 +306,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		return undefined;
 	}
 
-	public render(container: HTMLElement): void {
+	public render(container: HTMLElement): codemavi {
 		container.appendChild(this._hoverContainer);
 		const hoverFocused = this._hoverContainer.contains(this._hoverContainer.ownerDocument.activeElement);
 		const accessibleViewHint = hoverFocused && getHoverAccessibleViewHint(this._configurationService.getValue('accessibility.verbosity.hover') === true && this._accessibilityService.isScreenReaderOptimized(), this._keybindingService.lookupKeybinding('editor.action.accessibleView')?.getAriaLabel());
@@ -403,7 +403,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		this._hover.onContentsChanged();
 	}
 
-	private computeXCordinate(target: TargetRect): void {
+	private computeXCordinate(target: TargetRect): codemavi {
 		const hoverWidth = this._hover.containerDomNode.clientWidth + Constants.HoverBorderWidth;
 
 		if (this._target.x !== undefined) {
@@ -439,7 +439,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 
 	}
 
-	private computeYCordinate(target: TargetRect): void {
+	private computeYCordinate(target: TargetRect): codemavi {
 		if (this._target.y !== undefined) {
 			this._y = this._target.y;
 		}
@@ -466,7 +466,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		}
 	}
 
-	private adjustHorizontalHoverPosition(target: TargetRect): void {
+	private adjustHorizontalHoverPosition(target: TargetRect): codemavi {
 		// Do not adjust horizontal hover position if x cordiante is provided
 		if (this._target.x !== undefined) {
 			return;
@@ -524,7 +524,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		}
 	}
 
-	private adjustVerticalHoverPosition(target: TargetRect): void {
+	private adjustVerticalHoverPosition(target: TargetRect): codemavi {
 		// Do not adjust vertical hover position if the y coordinate is provided
 		// or the position is forced
 		if (this._target.y !== undefined || this._forcePosition) {
@@ -550,7 +550,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		}
 	}
 
-	private adjustHoverMaxHeight(target: TargetRect): void {
+	private adjustHoverMaxHeight(target: TargetRect): codemavi {
 		let maxHeight = this._targetWindow.innerHeight / 2;
 
 		// When force position is enabled, restrict max height
@@ -573,7 +573,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		}
 	}
 
-	private setHoverPointerPosition(target: TargetRect): void {
+	private setHoverPointerPosition(target: TargetRect): codemavi {
 		if (!this._hoverPointer) {
 			return;
 		}
@@ -620,11 +620,11 @@ export class HoverWidget extends Widget implements IHoverWidget {
 		this._hover.containerDomNode.focus();
 	}
 
-	public hide(): void {
+	public hide(): codemavi {
 		this.dispose();
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		if (!this._isDisposed) {
 			this._onDispose.fire();
 			this._target.dispose?.();
@@ -640,8 +640,8 @@ class CompositeMouseTracker extends Widget {
 	private _isMouseIn: boolean = true;
 	private readonly _mouseTimer: MutableDisposable<TimeoutTimer> = this._register(new MutableDisposable());
 
-	private readonly _onMouseOut = this._register(new Emitter<void>());
-	get onMouseOut(): Event<void> { return this._onMouseOut.event; }
+	private readonly _onMouseOut = this._register(new Emitter<codemavi>());
+	get onMouseOut(): Event<codemavi> { return this._onMouseOut.event; }
 
 	get isMouseIn(): boolean { return this._isMouseIn; }
 
@@ -663,19 +663,19 @@ class CompositeMouseTracker extends Widget {
 		}
 	}
 
-	private _onTargetMouseOver(): void {
+	private _onTargetMouseOver(): codemavi {
 		this._isMouseIn = true;
 		this._mouseTimer.clear();
 	}
 
-	private _onTargetMouseLeave(): void {
+	private _onTargetMouseLeave(): codemavi {
 		this._isMouseIn = false;
 		// Evaluate whether the mouse is still outside asynchronously such that other mouse targets
 		// have the opportunity to first their mouse in event.
 		this._mouseTimer.value = new TimeoutTimer(() => this._fireIfMouseOutside(), this._eventDebounceDelay);
 	}
 
-	private _fireIfMouseOutside(): void {
+	private _fireIfMouseOutside(): codemavi {
 		if (!this._isMouseIn) {
 			this._onMouseOut.fire();
 		}
@@ -691,6 +691,6 @@ class ElementHoverTarget implements IHoverTarget {
 		this.targetElements = [this._element];
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 	}
 }

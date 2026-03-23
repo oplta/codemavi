@@ -127,7 +127,7 @@ export class FindOptionsWidget extends Widget implements IOverlayWidget {
 		return ` (${kb.getLabel()})`;
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._editor.removeOverlayWidget(this);
 		super.dispose();
 	}
@@ -148,28 +148,28 @@ export class FindOptionsWidget extends Widget implements IOverlayWidget {
 		};
 	}
 
-	public highlightFindOptions(): void {
+	public highlightFindOptions(): codemavi {
 		this._revealTemporarily();
 	}
 
 	private _hideSoon = this._register(new RunOnceScheduler(() => this._hide(), 2000));
 
-	private _revealTemporarily(): void {
+	private _revealTemporarily(): codemavi {
 		this._show();
 		this._hideSoon.schedule();
 	}
 
-	private _onMouseLeave(): void {
+	private _onMouseLeave(): codemavi {
 		this._hideSoon.schedule();
 	}
 
-	private _onMouseOver(): void {
+	private _onMouseOver(): codemavi {
 		this._hideSoon.cancel();
 	}
 
 	private _isVisible: boolean = false;
 
-	private _show(): void {
+	private _show(): codemavi {
 		if (this._isVisible) {
 			return;
 		}
@@ -177,7 +177,7 @@ export class FindOptionsWidget extends Widget implements IOverlayWidget {
 		this._domNode.style.display = 'block';
 	}
 
-	private _hide(): void {
+	private _hide(): codemavi {
 		if (!this._isVisible) {
 			return;
 		}

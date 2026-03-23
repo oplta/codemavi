@@ -37,7 +37,7 @@ import { ChatCollapsibleListContentPart, CollapsibleListPool, IChatCollapsibleLi
 export class ChatToolInvocationPart extends Disposable implements IChatContentPart {
 	public readonly domNode: HTMLElement;
 
-	private _onDidChangeHeight = this._register(new Emitter<void>());
+	private _onDidChangeHeight = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	public get codeblocks(): IChatCodeBlockInfo[] {
@@ -91,7 +91,7 @@ export class ChatToolInvocationPart extends Disposable implements IChatContentPa
 		return (other.kind === 'toolInvocation' || other.kind === 'toolInvocationSerialized') && this.toolInvocation.toolCallId === other.toolCallId;
 	}
 
-	addDisposable(disposable: IDisposable): void {
+	addDisposable(disposable: IDisposable): codemavi {
 		this._register(disposable);
 	}
 }
@@ -102,10 +102,10 @@ class ChatToolInvocationSubPart extends Disposable {
 
 	public readonly domNode: HTMLElement;
 
-	private _onNeedsRerender = this._register(new Emitter<void>());
+	private _onNeedsRerender = this._register(new Emitter<codemavi>());
 	public readonly onNeedsRerender = this._onNeedsRerender.event;
 
-	private _onDidChangeHeight = this._register(new Emitter<void>());
+	private _onDidChangeHeight = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	private markdownPart: ChatMarkdownContentPart | undefined;

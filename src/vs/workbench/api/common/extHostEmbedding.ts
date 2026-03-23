@@ -16,8 +16,8 @@ export class ExtHostEmbeddings implements ExtHostEmbeddingsShape {
 	private readonly _proxy: MainThreadEmbeddingsShape;
 	private readonly _provider = new Map<number, { id: string; provider: vscode.EmbeddingsProvider }>();
 
-	private readonly _onDidChange = new Emitter<void>();
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<codemavi>();
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private _allKnownModels = new Set<string>();
 	private _handlePool: number = 0;
@@ -86,7 +86,7 @@ export class ExtHostEmbeddings implements ExtHostEmbeddingsShape {
 		return Array.from(this._allKnownModels);
 	}
 
-	$acceptEmbeddingModels(models: string[]): void {
+	$acceptEmbeddingModels(models: string[]): codemavi {
 		this._allKnownModels = new Set(models);
 		this._onDidChange.fire();
 	}

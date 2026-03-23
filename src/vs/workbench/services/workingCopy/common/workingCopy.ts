@@ -144,13 +144,13 @@ export interface IWorkingCopy extends IWorkingCopyIdentifier {
 	 * is dirty or not. Typically a working copy is dirty
 	 * once changed until saved or reverted.
 	 */
-	readonly onDidChangeDirty: Event<void>;
+	readonly onDidChangeDirty: Event<codemavi>;
 
 	/**
 	 * Used by the workbench e.g. to trigger auto-save
 	 * (unless this working copy is untitled) and backups.
 	 */
-	readonly onDidChangeContent: Event<void>;
+	readonly onDidChangeContent: Event<codemavi>;
 
 	/**
 	 * Used by the workbench e.g. to track local history
@@ -215,7 +215,7 @@ export interface IWorkingCopy extends IWorkingCopyIdentifier {
 	 * Asks the working copy to revert. If the working copy was dirty, it is
 	 * expected to be non-dirty after this operation has finished.
 	 */
-	revert(options?: IRevertOptions): Promise<void>;
+	revert(options?: IRevertOptions): Promise<codemavi>;
 
 	//#endregion
 }

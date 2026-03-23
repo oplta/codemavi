@@ -154,14 +154,14 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 	readonly onDidBlurMainOrAuxiliaryWindow: Event<number>;
 	readonly onDidFocusMainOrAuxiliaryWindow: Event<number>;
 
-	readonly onDidResumeOS: Event<void>;
+	readonly onDidResumeOS: Event<codemavi>;
 
 	readonly onDidChangeColorScheme: Event<IColorScheme>;
 
 	private readonly _onDidChangePassword = this._register(new Emitter<{ account: string; service: string }>());
 	readonly onDidChangePassword = this._onDidChangePassword.event;
 
-	readonly onDidChangeDisplay: Event<void>;
+	readonly onDidChangeDisplay: Event<codemavi>;
 
 	//#endregion
 
@@ -221,9 +221,9 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return undefined;
 	}
 
-	openWindow(windowId: number | undefined, options?: IOpenEmptyWindowOptions): Promise<void>;
-	openWindow(windowId: number | undefined, toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<void>;
-	openWindow(windowId: number | undefined, arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<void> {
+	openWindow(windowId: number | undefined, options?: IOpenEmptyWindowOptions): Promise<codemavi>;
+	openWindow(windowId: number | undefined, toOpen: IWindowOpenable[], options?: IOpenWindowOptions): Promise<codemavi>;
+	openWindow(windowId: number | undefined, arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<codemavi> {
 		if (Array.isArray(arg1)) {
 			return this.doOpenWindow(windowId, arg1, arg2);
 		}
@@ -231,7 +231,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return this.doOpenEmptyWindow(windowId, arg1);
 	}
 
-	private async doOpenWindow(windowId: number | undefined, toOpen: IWindowOpenable[], options: IOpenWindowOptions = Object.create(null)): Promise<void> {
+	private async doOpenWindow(windowId: number | undefined, toOpen: IWindowOpenable[], options: IOpenWindowOptions = Object.create(null)): Promise<codemavi> {
 		if (toOpen.length > 0) {
 			await this.windowsMainService.open({
 				context: OpenContext.API,
@@ -255,7 +255,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	private async doOpenEmptyWindow(windowId: number | undefined, options?: IOpenEmptyWindowOptions): Promise<void> {
+	private async doOpenEmptyWindow(windowId: number | undefined, options?: IOpenEmptyWindowOptions): Promise<codemavi> {
 		await this.windowsMainService.openEmptyWindow({
 			context: OpenContext.API,
 			contextWindowId: windowId
@@ -267,7 +267,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return window?.isFullScreen ?? false;
 	}
 
-	async toggleFullScreen(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async toggleFullScreen(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.toggleFullScreen();
 	}
@@ -284,27 +284,27 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return window?.win?.isMaximized() ?? false;
 	}
 
-	async maximizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async maximizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.maximize();
 	}
 
-	async unmaximizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async unmaximizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.unmaximize();
 	}
 
-	async minimizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async minimizeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.minimize();
 	}
 
-	async moveWindowTop(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async moveWindowTop(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.moveTop();
 	}
 
-	async positionWindow(windowId: number | undefined, position: IRectangle, options?: INativeHostOptions): Promise<void> {
+	async positionWindow(windowId: number | undefined, position: IRectangle, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		if (window?.win) {
 			if (window.win.isFullScreen()) {
@@ -317,17 +317,17 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	async updateWindowControls(windowId: number | undefined, options: INativeHostOptions & { height?: number; backgroundColor?: string; foregroundColor?: string }): Promise<void> {
+	async updateWindowControls(windowId: number | undefined, options: INativeHostOptions & { height?: number; backgroundColor?: string; foregroundColor?: string }): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.updateWindowControls(options);
 	}
 
-	async focusWindow(windowId: number | undefined, options?: INativeHostOptions & { force?: boolean }): Promise<void> {
+	async focusWindow(windowId: number | undefined, options?: INativeHostOptions & { force?: boolean }): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.focus({ force: options?.force ?? false });
 	}
 
-	async setMinimumSize(windowId: number | undefined, width: number | undefined, height: number | undefined): Promise<void> {
+	async setMinimumSize(windowId: number | undefined, width: number | undefined, height: number | undefined): Promise<codemavi> {
 		const window = this.codeWindowById(windowId);
 		if (window?.win) {
 			const [windowWidth, windowHeight] = window.win.getSize();
@@ -344,7 +344,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	async saveWindowSplash(windowId: number | undefined, splash: IPartsSplash): Promise<void> {
+	async saveWindowSplash(windowId: number | undefined, splash: IPartsSplash): Promise<codemavi> {
 		const window = this.codeWindowById(windowId);
 
 		this.themeMainService.saveWindowSplash(windowId, window?.openedWorkspace, splash);
@@ -355,7 +355,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	//#region macOS Shell Command
 
-	async installShellCommand(windowId: number | undefined): Promise<void> {
+	async installShellCommand(windowId: number | undefined): Promise<codemavi> {
 		const { source, target } = await this.getShellCommandLink();
 
 		// Only install unless already existing
@@ -405,7 +405,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	async uninstallShellCommand(windowId: number | undefined): Promise<void> {
+	async uninstallShellCommand(windowId: number | undefined): Promise<codemavi> {
 		const { source } = await this.getShellCommandLink();
 
 		try {
@@ -474,35 +474,35 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return this.dialogMainService.showOpenDialog(options, window?.win ?? undefined);
 	}
 
-	async pickFileFolderAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<void> {
+	async pickFileFolderAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<codemavi> {
 		const paths = await this.dialogMainService.pickFileFolder(options);
 		if (paths) {
 			await this.doOpenPicked(await Promise.all(paths.map(async path => (await SymlinkSupport.existsDirectory(path)) ? { folderUri: URI.file(path) } : { fileUri: URI.file(path) })), options, windowId);
 		}
 	}
 
-	async pickFolderAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<void> {
+	async pickFolderAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<codemavi> {
 		const paths = await this.dialogMainService.pickFolder(options);
 		if (paths) {
 			await this.doOpenPicked(paths.map(path => ({ folderUri: URI.file(path) })), options, windowId);
 		}
 	}
 
-	async pickFileAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<void> {
+	async pickFileAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<codemavi> {
 		const paths = await this.dialogMainService.pickFile(options);
 		if (paths) {
 			await this.doOpenPicked(paths.map(path => ({ fileUri: URI.file(path) })), options, windowId);
 		}
 	}
 
-	async pickWorkspaceAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<void> {
+	async pickWorkspaceAndOpen(windowId: number | undefined, options: INativeOpenDialogOptions): Promise<codemavi> {
 		const paths = await this.dialogMainService.pickWorkspace(options);
 		if (paths) {
 			await this.doOpenPicked(paths.map(path => ({ workspaceUri: URI.file(path) })), options, windowId);
 		}
 	}
 
-	private async doOpenPicked(openable: IWindowOpenable[], options: INativeOpenDialogOptions, windowId: number | undefined): Promise<void> {
+	private async doOpenPicked(openable: IWindowOpenable[], options: INativeOpenDialogOptions, windowId: number | undefined): Promise<codemavi> {
 		await this.windowsMainService.open({
 			context: OpenContext.DIALOG,
 			contextWindowId: windowId,
@@ -518,16 +518,16 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	//#region OS
 
-	async showItemInFolder(windowId: number | undefined, path: string): Promise<void> {
+	async showItemInFolder(windowId: number | undefined, path: string): Promise<codemavi> {
 		shell.showItemInFolder(path);
 	}
 
-	async setRepresentedFilename(windowId: number | undefined, path: string, options?: INativeHostOptions): Promise<void> {
+	async setRepresentedFilename(windowId: number | undefined, path: string, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.setRepresentedFilename(path);
 	}
 
-	async setDocumentEdited(windowId: number | undefined, edited: boolean, options?: INativeHostOptions): Promise<void> {
+	async setDocumentEdited(windowId: number | undefined, edited: boolean, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.setDocumentEdited(edited);
 	}
@@ -547,7 +547,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return true;
 	}
 
-	private async openExternalBrowser(url: string, defaultApplication?: string): Promise<void> {
+	private async openExternalBrowser(url: string, defaultApplication?: string): Promise<codemavi> {
 		const configuredBrowser = defaultApplication ?? this.configurationService.getValue<string>('workbench.externalBrowser');
 		if (!configuredBrowser) {
 			return shell.openExternal(url);
@@ -589,7 +589,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	moveItemToTrash(windowId: number | undefined, fullPath: string): Promise<void> {
+	moveItemToTrash(windowId: number | undefined, fullPath: string): Promise<codemavi> {
 		return shell.trashItem(fullPath);
 	}
 
@@ -604,14 +604,14 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return isAdmin;
 	}
 
-	async writeElevated(windowId: number | undefined, source: URI, target: URI, options?: { unlock?: boolean }): Promise<void> {
+	async writeElevated(windowId: number | undefined, source: URI, target: URI, options?: { unlock?: boolean }): Promise<codemavi> {
 		const sudoPrompt = await import('@vscode/sudo-prompt');
 
 		const argsFile = randomPath(this.environmentMainService.userDataPath, 'code-elevated');
 		await Promises.writeFile(argsFile, JSON.stringify({ source: source.fsPath, target: target.fsPath }));
 
 		try {
-			await new Promise<void>((resolve, reject) => {
+			await new Promise<codemavi>((resolve, reject) => {
 				const sudoCommand: string[] = [`"${this.cliPath}"`];
 				if (options?.unlock) {
 					sudoCommand.push('--file-chmod');
@@ -737,7 +737,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return window?.win?.webContents.getOSProcessId();
 	}
 
-	async killProcess(windowId: number | undefined, pid: number, code: string): Promise<void> {
+	async killProcess(windowId: number | undefined, pid: number, code: string): Promise<codemavi> {
 		process.kill(pid, code);
 	}
 
@@ -754,7 +754,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return clipboard.readImage().toPNG();
 	}
 
-	async writeClipboardText(windowId: number | undefined, text: string, type?: 'selection' | 'clipboard'): Promise<void> {
+	async writeClipboardText(windowId: number | undefined, text: string, type?: 'selection' | 'clipboard'): Promise<codemavi> {
 		return clipboard.writeText(text, type);
 	}
 
@@ -762,11 +762,11 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		return clipboard.readFindText();
 	}
 
-	async writeClipboardFindText(windowId: number | undefined, text: string): Promise<void> {
+	async writeClipboardFindText(windowId: number | undefined, text: string): Promise<codemavi> {
 		return clipboard.writeFindText(text);
 	}
 
-	async writeClipboardBuffer(windowId: number | undefined, format: string, buffer: VSBuffer, type?: 'selection' | 'clipboard'): Promise<void> {
+	async writeClipboardBuffer(windowId: number | undefined, format: string, buffer: VSBuffer, type?: 'selection' | 'clipboard'): Promise<codemavi> {
 		return clipboard.writeBuffer(format, Buffer.from(buffer.buffer), type);
 	}
 
@@ -783,7 +783,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	//#region macOS Touchbar
 
-	async newWindowTab(): Promise<void> {
+	async newWindowTab(): Promise<codemavi> {
 		await this.windowsMainService.open({
 			context: OpenContext.API,
 			cli: this.environmentMainService.args,
@@ -793,27 +793,27 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		});
 	}
 
-	async showPreviousWindowTab(): Promise<void> {
+	async showPreviousWindowTab(): Promise<codemavi> {
 		Menu.sendActionToFirstResponder('selectPreviousTab:');
 	}
 
-	async showNextWindowTab(): Promise<void> {
+	async showNextWindowTab(): Promise<codemavi> {
 		Menu.sendActionToFirstResponder('selectNextTab:');
 	}
 
-	async moveWindowTabToNewWindow(): Promise<void> {
+	async moveWindowTabToNewWindow(): Promise<codemavi> {
 		Menu.sendActionToFirstResponder('moveTabToNewWindow:');
 	}
 
-	async mergeAllWindowTabs(): Promise<void> {
+	async mergeAllWindowTabs(): Promise<codemavi> {
 		Menu.sendActionToFirstResponder('mergeAllWindows:');
 	}
 
-	async toggleWindowTabsBar(): Promise<void> {
+	async toggleWindowTabsBar(): Promise<codemavi> {
 		Menu.sendActionToFirstResponder('toggleTabBar:');
 	}
 
-	async updateTouchBar(windowId: number | undefined, items: ISerializableCommandAction[][]): Promise<void> {
+	async updateTouchBar(windowId: number | undefined, items: ISerializableCommandAction[][]): Promise<codemavi> {
 		const window = this.codeWindowById(windowId);
 		window?.updateTouchBar(items);
 	}
@@ -823,16 +823,16 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	//#region Lifecycle
 
-	async notifyReady(windowId: number | undefined): Promise<void> {
+	async notifyReady(windowId: number | undefined): Promise<codemavi> {
 		const window = this.codeWindowById(windowId);
 		window?.setReady();
 	}
 
-	async relaunch(windowId: number | undefined, options?: IRelaunchOptions): Promise<void> {
+	async relaunch(windowId: number | undefined, options?: IRelaunchOptions): Promise<codemavi> {
 		return this.lifecycleMainService.relaunch(options);
 	}
 
-	async reload(windowId: number | undefined, options?: { disableExtensions?: boolean }): Promise<void> {
+	async reload(windowId: number | undefined, options?: { disableExtensions?: boolean }): Promise<codemavi> {
 		const window = this.codeWindowById(windowId);
 		if (window) {
 
@@ -856,12 +856,12 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	async closeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async closeWindow(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		return window?.win?.close();
 	}
 
-	async quit(windowId: number | undefined): Promise<void> {
+	async quit(windowId: number | undefined): Promise<codemavi> {
 
 		// If the user selected to exit from an extension development host window, do not quit, but just
 		// close the window unless this is the last window that is opened.
@@ -876,7 +876,7 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 		}
 	}
 
-	async exit(windowId: number | undefined, code: number): Promise<void> {
+	async exit(windowId: number | undefined, code: number): Promise<codemavi> {
 		await this.lifecycleMainService.kill(code);
 	}
 
@@ -915,17 +915,17 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 
 	private gpuInfoWindowId: number | undefined;
 
-	async openDevTools(windowId: number | undefined, options?: Partial<OpenDevToolsOptions> & INativeHostOptions): Promise<void> {
+	async openDevTools(windowId: number | undefined, options?: Partial<OpenDevToolsOptions> & INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.webContents.openDevTools(options?.mode ? { mode: options.mode, activate: options.activate } : undefined);
 	}
 
-	async toggleDevTools(windowId: number | undefined, options?: INativeHostOptions): Promise<void> {
+	async toggleDevTools(windowId: number | undefined, options?: INativeHostOptions): Promise<codemavi> {
 		const window = this.windowById(options?.targetWindowId, windowId);
 		window?.win?.webContents.toggleDevTools();
 	}
 
-	async openGPUInfoWindow(windowId: number | undefined): Promise<void> {
+	async openGPUInfoWindow(windowId: number | undefined): Promise<codemavi> {
 		const parentWindow = this.codeWindowById(windowId);
 		if (!parentWindow) {
 			return;

@@ -17,25 +17,25 @@ export const ICodeEditorService = createDecorator<ICodeEditorService>('codeEdito
 export interface ICodeEditorService {
 	readonly _serviceBrand: undefined;
 
-	readonly onWillCreateCodeEditor: Event<void>;
+	readonly onWillCreateCodeEditor: Event<codemavi>;
 	readonly onCodeEditorAdd: Event<ICodeEditor>;
 	readonly onCodeEditorRemove: Event<ICodeEditor>;
 
-	readonly onWillCreateDiffEditor: Event<void>;
+	readonly onWillCreateDiffEditor: Event<codemavi>;
 	readonly onDiffEditorAdd: Event<IDiffEditor>;
 	readonly onDiffEditorRemove: Event<IDiffEditor>;
 
 	readonly onDidChangeTransientModelProperty: Event<ITextModel>;
 	readonly onDecorationTypeRegistered: Event<string>;
 
-	willCreateCodeEditor(): void;
-	addCodeEditor(editor: ICodeEditor): void;
-	removeCodeEditor(editor: ICodeEditor): void;
+	willCreateCodeEditor(): codemavi;
+	addCodeEditor(editor: ICodeEditor): codemavi;
+	removeCodeEditor(editor: ICodeEditor): codemavi;
 	listCodeEditors(): readonly ICodeEditor[];
 
-	willCreateDiffEditor(): void;
-	addDiffEditor(editor: IDiffEditor): void;
-	removeDiffEditor(editor: IDiffEditor): void;
+	willCreateDiffEditor(): codemavi;
+	addDiffEditor(editor: IDiffEditor): codemavi;
+	removeDiffEditor(editor: IDiffEditor): codemavi;
 	listDiffEditors(): readonly IDiffEditor[];
 
 	/**
@@ -43,16 +43,16 @@ export interface ICodeEditorService {
 	 */
 	getFocusedCodeEditor(): ICodeEditor | null;
 
-	registerDecorationType(description: string, key: string, options: IDecorationRenderOptions, parentTypeKey?: string, editor?: ICodeEditor): void;
+	registerDecorationType(description: string, key: string, options: IDecorationRenderOptions, parentTypeKey?: string, editor?: ICodeEditor): codemavi;
 	listDecorationTypes(): string[];
-	removeDecorationType(key: string): void;
+	removeDecorationType(key: string): codemavi;
 	resolveDecorationOptions(typeKey: string, writable: boolean): IModelDecorationOptions;
 	resolveDecorationCSSRules(decorationTypeKey: string): CSSRuleList | null;
 
-	setModelProperty(resource: URI, key: string, value: any): void;
+	setModelProperty(resource: URI, key: string, value: any): codemavi;
 	getModelProperty(resource: URI, key: string): any;
 
-	setTransientModelProperty(model: ITextModel, key: string, value: any): void;
+	setTransientModelProperty(model: ITextModel, key: string, value: any): codemavi;
 	getTransientModelProperty(model: ITextModel, key: string): any;
 	getTransientModelProperties(model: ITextModel): [string, any][] | undefined;
 

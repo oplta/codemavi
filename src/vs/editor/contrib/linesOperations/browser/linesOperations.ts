@@ -39,7 +39,7 @@ abstract class AbstractCopyLinesAction extends EditorAction {
 		this.down = down;
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -135,7 +135,7 @@ export class DuplicateSelectionAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -170,7 +170,7 @@ abstract class AbstractMoveLinesAction extends EditorAction {
 		this.down = down;
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		const commands: ICommand[] = [];
@@ -239,7 +239,7 @@ export abstract class AbstractSortLinesAction extends EditorAction {
 		this.descending = descending;
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -297,7 +297,7 @@ export class DeleteDuplicateLinesAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -380,7 +380,7 @@ export class TrimTrailingWhitespaceAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
 
 		let cursors: Position[] = [];
 		if (args.reason === 'auto-save') {
@@ -431,7 +431,7 @@ export class DeleteLinesAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -532,7 +532,7 @@ export class IndentLinesAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const viewModel = editor._getViewModel();
 		if (!viewModel) {
 			return;
@@ -557,7 +557,7 @@ class OutdentLinesAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		CoreEditingCommands.Outdent.runEditorCommand(_accessor, editor, null);
 	}
 }
@@ -576,7 +576,7 @@ export class InsertLineBeforeAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const viewModel = editor._getViewModel();
 		if (!viewModel) {
 			return;
@@ -600,7 +600,7 @@ export class InsertLineAfterAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const viewModel = editor._getViewModel();
 		if (!viewModel) {
 			return;
@@ -611,7 +611,7 @@ export class InsertLineAfterAction extends EditorAction {
 }
 
 export abstract class AbstractDeleteAllToBoundaryAction extends EditorAction {
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -811,7 +811,7 @@ export class JoinLinesAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const selections = editor.getSelections();
 		if (selections === null) {
 			return;
@@ -964,7 +964,7 @@ export class TransposeAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const selections = editor.getSelections();
 		if (selections === null) {
 			return;
@@ -1013,7 +1013,7 @@ export class TransposeAction extends EditorAction {
 }
 
 export abstract class AbstractCaseAction extends EditorAction {
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
 		const selections = editor.getSelections();
 		if (selections === null) {
 			return;

@@ -47,11 +47,11 @@ export const NullTelemetryService = new NullTelemetryServiceShape();
 export class NullEndpointTelemetryService implements ICustomEndpointTelemetryService {
 	_serviceBrand: undefined;
 
-	async publicLog(_endpoint: ITelemetryEndpoint, _eventName: string, _data?: ITelemetryData): Promise<void> {
+	async publicLog(_endpoint: ITelemetryEndpoint, _eventName: string, _data?: ITelemetryData): Promise<codemavi> {
 		// noop
 	}
 
-	async publicLogError(_endpoint: ITelemetryEndpoint, _errorEventName: string, _data?: ITelemetryData): Promise<void> {
+	async publicLogError(_endpoint: ITelemetryEndpoint, _errorEventName: string, _data?: ITelemetryData): Promise<codemavi> {
 		// noop
 	}
 }
@@ -60,8 +60,8 @@ export const telemetryLogId = 'telemetry';
 export const TelemetryLogGroup: LoggerGroup = { id: telemetryLogId, name: localize('telemetryLogName', "Telemetry") };
 
 export interface ITelemetryAppender {
-	log(eventName: string, data: any): void;
-	flush(): Promise<void>;
+	log(eventName: string, data: any): codemavi;
+	flush(): Promise<codemavi>;
 }
 
 export const NullAppender: ITelemetryAppender = { log: () => null, flush: () => Promise.resolve(undefined) };
@@ -213,7 +213,7 @@ export function cleanRemoteAuthority(remoteAuthority?: string): string {
 	return telemetryAllowedAuthorities.has(remoteName) ? remoteName : 'other';
 }
 
-function flatten(obj: any, result: { [key: string]: any }, order: number = 0, prefix?: string): void {
+function flatten(obj: any, result: { [key: string]: any }, order: number = 0, prefix?: string): codemavi {
 	if (!obj) {
 		return;
 	}
@@ -275,7 +275,7 @@ export function getPiiPathsFromEnvironment(paths: IPathEnvironment): string[] {
  */
 function anonymizeFilePaths(stack: string, cleanupPatterns: RegExp[]): string {
 
-	// Fast check to see if it is a file path to avoid doing unnecessary heavy regex work
+	// Fast check to see if it is a file path to acodemavi doing unnecessary heavy regex work
 	if (!stack || (!stack.includes('/') && !stack.includes('\\'))) {
 		return stack;
 	}

@@ -365,7 +365,7 @@ suite('dom', () => {
 	suite('disposableWindowInterval', () => {
 		test('basics', async () => {
 			let count = 0;
-			const promise = new DeferredPromise<void>();
+			const promise = new DeferredPromise<codemavi>();
 			const interval = disposableWindowInterval(mainWindow, () => {
 				count++;
 				if (count === 3) {

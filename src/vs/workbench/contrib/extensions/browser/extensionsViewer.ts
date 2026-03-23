@@ -47,12 +47,12 @@ export class ExtensionsGridView extends Disposable {
 		this.disposableStore = this._register(new DisposableStore());
 	}
 
-	setExtensions(extensions: IExtension[]): void {
+	setExtensions(extensions: IExtension[]): codemavi {
 		this.disposableStore.clear();
 		extensions.forEach((e, index) => this.renderExtension(e, index));
 	}
 
-	private renderExtension(extension: IExtension, index: number): void {
+	private renderExtension(extension: IExtension, index: number): codemavi {
 		const extensionContainer = dom.append(this.element, dom.$('.extension-container'));
 		extensionContainer.style.height = `${this.delegate.getHeight()}px`;
 		extensionContainer.setAttribute('tabindex', '0');
@@ -164,7 +164,7 @@ class ExtensionRenderer implements IListRenderer<ITreeNode<IExtensionData>, IExt
 		};
 	}
 
-	public renderElement(node: ITreeNode<IExtensionData>, index: number, data: IExtensionTemplateData): void {
+	public renderElement(node: ITreeNode<IExtensionData>, index: number, data: IExtensionTemplateData): codemavi {
 		const extension = node.element.extension;
 		data.extensionDisposables.push(dom.addDisposableListener(data.icon, 'error', () => data.icon.src = extension.iconUrlFallback, { once: true }));
 		data.icon.src = extension.iconUrl;
@@ -182,7 +182,7 @@ class ExtensionRenderer implements IListRenderer<ITreeNode<IExtensionData>, IExt
 		data.extensionData = node.element;
 	}
 
-	public disposeTemplate(templateData: IExtensionTemplateData): void {
+	public disposeTemplate(templateData: IExtensionTemplateData): codemavi {
 		templateData.extensionDisposables = dispose((<IExtensionTemplateData>templateData).extensionDisposables);
 	}
 }
@@ -204,11 +204,11 @@ class UnknownExtensionRenderer implements IListRenderer<ITreeNode<IExtensionData
 		return { identifier };
 	}
 
-	public renderElement(node: ITreeNode<IExtensionData>, index: number, data: IUnknownExtensionTemplateData): void {
+	public renderElement(node: ITreeNode<IExtensionData>, index: number, data: IUnknownExtensionTemplateData): codemavi {
 		data.identifier.textContent = node.element.extension.identifier.id;
 	}
 
-	public disposeTemplate(data: IUnknownExtensionTemplateData): void {
+	public disposeTemplate(data: IUnknownExtensionTemplateData): codemavi {
 	}
 }
 

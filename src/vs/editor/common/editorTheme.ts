@@ -24,7 +24,7 @@ export class EditorTheme {
 		this._theme = theme;
 	}
 
-	public update(theme: IColorTheme): void {
+	public update(theme: IColorTheme): codemavi {
 		this._theme = theme;
 	}
 

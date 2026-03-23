@@ -12,10 +12,10 @@ interface IPackageInfo {
 }
 
 export interface TelemetryReporter {
-	dispose(): void;
+	dispose(): codemavi;
 	sendTelemetryEvent(eventName: string, properties?: {
 		[key: string]: string;
-	}): void;
+	}): codemavi;
 }
 
 const nullReporter = new class NullTelemetryReporter implements TelemetryReporter {

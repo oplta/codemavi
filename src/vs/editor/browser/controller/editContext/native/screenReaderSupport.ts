@@ -47,7 +47,7 @@ export class ScreenReaderSupport {
 		this._updateDomAttributes();
 	}
 
-	public setIgnoreSelectionChangeTime(reason: string): void {
+	public setIgnoreSelectionChangeTime(reason: string): codemavi {
 		this._ignoreSelectionChangeTime = Date.now();
 	}
 
@@ -55,11 +55,11 @@ export class ScreenReaderSupport {
 		return this._ignoreSelectionChangeTime;
 	}
 
-	public resetSelectionChangeTime(): void {
+	public resetSelectionChangeTime(): codemavi {
 		this._ignoreSelectionChangeTime = 0;
 	}
 
-	public onConfigurationChanged(e: ViewConfigurationChangedEvent): void {
+	public onConfigurationChanged(e: ViewConfigurationChangedEvent): codemavi {
 		this._updateConfigurationSettings();
 		this._updateDomAttributes();
 		if (e.hasChanged(EditorOption.accessibilitySupport)) {
@@ -67,7 +67,7 @@ export class ScreenReaderSupport {
 		}
 	}
 
-	private _updateConfigurationSettings(): void {
+	private _updateConfigurationSettings(): codemavi {
 		const options = this._context.configuration.options;
 		const layoutInfo = options.get(EditorOption.layoutInfo);
 		const wrappingColumn = layoutInfo.wrappingColumn;
@@ -80,7 +80,7 @@ export class ScreenReaderSupport {
 		this._divWidth = Math.round(wrappingColumn * this._fontInfo.typicalHalfwidthCharacterWidth);
 	}
 
-	private _updateDomAttributes(): void {
+	private _updateDomAttributes(): codemavi {
 		const options = this._context.configuration.options;
 		this._domNode.domNode.setAttribute('role', 'textbox');
 		this._domNode.domNode.setAttribute('aria-required', options.get(EditorOption.ariaRequired) ? 'true' : 'false');
@@ -96,16 +96,16 @@ export class ScreenReaderSupport {
 		this._domNode.domNode.style.textWrap = wordWrapValue === 'off' ? 'nowrap' : 'wrap';
 	}
 
-	public onCursorStateChanged(e: ViewCursorStateChangedEvent): void {
+	public onCursorStateChanged(e: ViewCursorStateChangedEvent): codemavi {
 		this._primarySelection = e.selections[0] ?? new Selection(1, 1, 1, 1);
 	}
 
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 		this.writeScreenReaderContent();
 		this._primaryCursorVisibleRange = ctx.visibleRangeForPosition(this._primarySelection.getPosition());
 	}
 
-	public render(ctx: RestrictedRenderingContext): void {
+	public render(ctx: RestrictedRenderingContext): codemavi {
 		if (!this._screenReaderContentState) {
 			return;
 		}
@@ -139,11 +139,11 @@ export class ScreenReaderSupport {
 		this._doRender(scrollTop, top, this._contentLeft, this._divWidth, this._lineHeight);
 	}
 
-	private _renderAtTopLeft(): void {
+	private _renderAtTopLeft(): codemavi {
 		this._doRender(0, 0, 0, this._contentWidth, 1);
 	}
 
-	private _doRender(scrollTop: number, top: number, left: number, width: number, height: number): void {
+	private _doRender(scrollTop: number, top: number, left: number, width: number, height: number): codemavi {
 		// For correct alignment of the screen reader content, we need to apply the correct font
 		applyFontInfo(this._domNode, this._fontInfo);
 
@@ -154,7 +154,7 @@ export class ScreenReaderSupport {
 		this._domNode.domNode.scrollTop = scrollTop;
 	}
 
-	public setAriaOptions(options: IEditorAriaOptions): void {
+	public setAriaOptions(options: IEditorAriaOptions): codemavi {
 		if (options.activeDescendant) {
 			this._domNode.setAttribute('aria-haspopup', 'true');
 			this._domNode.setAttribute('aria-autocomplete', 'list');
@@ -169,7 +169,7 @@ export class ScreenReaderSupport {
 		}
 	}
 
-	public writeScreenReaderContent(): void {
+	public writeScreenReaderContent(): codemavi {
 		const focusedElement = getActiveWindow().document.activeElement;
 		if (!focusedElement || focusedElement !== this._domNode.domNode) {
 			return;
@@ -214,7 +214,7 @@ export class ScreenReaderSupport {
 		return PagedScreenReaderStrategy.fromEditorSelection(simpleModel, this._primarySelection, this._accessibilityPageSize, this._accessibilityService.getAccessibilitySupport() === AccessibilitySupport.Unknown);
 	}
 
-	private _setSelectionOfScreenReaderContent(selectionOffsetStart: number, selectionOffsetEnd: number): void {
+	private _setSelectionOfScreenReaderContent(selectionOffsetStart: number, selectionOffsetEnd: number): codemavi {
 		const activeDocument = getActiveWindow().document;
 		const activeDocumentSelection = activeDocument.getSelection();
 		if (!activeDocumentSelection) {

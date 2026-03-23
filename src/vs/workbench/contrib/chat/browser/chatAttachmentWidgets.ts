@@ -80,7 +80,7 @@ abstract class AbstractChatAttachmentWidget extends Disposable {
 		}
 	}
 
-	protected addResourceOpenHandlers(resource: URI, range: IRange | undefined): void {
+	protected addResourceOpenHandlers(resource: URI, range: IRange | undefined): codemavi {
 		this.element.style.cursor = 'pointer';
 		this._register(dom.addDisposableListener(this.element, dom.EventType.CLICK, (e: MouseEvent) => {
 			dom.EventHelper.stop(e, true);
@@ -104,9 +104,9 @@ abstract class AbstractChatAttachmentWidget extends Disposable {
 		}));
 	}
 
-	protected openResource(resource: URI, isDirectory: true): void;
-	protected openResource(resource: URI, isDirectory: false, range: IRange | undefined): void;
-	protected openResource(resource: URI, isDirectory?: boolean, range?: IRange): void {
+	protected openResource(resource: URI, isDirectory: true): codemavi;
+	protected openResource(resource: URI, isDirectory: false, range: IRange | undefined): codemavi;
+	protected openResource(resource: URI, isDirectory?: boolean, range?: IRange): codemavi {
 		if (isDirectory) {
 			// Reveal Directory in explorer
 			this.commandService.executeCommand(revealInSideBarCommand.id, resource);

@@ -21,7 +21,7 @@ export interface IExplorerFileContribution extends IDisposable {
 	 * Called to render a file in the container. The implementation should
 	 * remove any rendered elements if `resource` is undefined.
 	 */
-	setResource(resource: URI | undefined): void;
+	setResource(resource: URI | undefined): codemavi;
 }
 
 export interface IExplorerFileContributionDescriptor {
@@ -33,7 +33,7 @@ export interface IExplorerFileContributionRegistry {
 	 * Registers a new contribution. A new instance of the contribution will be
 	 * instantiated for each template in the explorer.
 	 */
-	register(descriptor: IExplorerFileContributionDescriptor): void;
+	register(descriptor: IExplorerFileContributionDescriptor): codemavi;
 }
 
 class ExplorerFileContributionRegistry implements IExplorerFileContributionRegistry {
@@ -43,7 +43,7 @@ class ExplorerFileContributionRegistry implements IExplorerFileContributionRegis
 	private readonly descriptors: IExplorerFileContributionDescriptor[] = [];
 
 	/** @inheritdoc */
-	public register(descriptor: IExplorerFileContributionDescriptor): void {
+	public register(descriptor: IExplorerFileContributionDescriptor): codemavi {
 		this.descriptors.push(descriptor);
 		this._onDidRegisterDescriptor.fire(descriptor);
 	}

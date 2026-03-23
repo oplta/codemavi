@@ -126,7 +126,7 @@ export function registerChatActions() {
 			});
 		}
 
-		override async run(accessor: ServicesAccessor, opts?: string | IChatViewOpenOptions): Promise<void> {
+		override async run(accessor: ServicesAccessor, opts?: string | IChatViewOpenOptions): Promise<codemavi> {
 			opts = typeof opts === 'string' ? { query: opts } : opts;
 
 			const chatService = accessor.get(IChatService);
@@ -204,7 +204,7 @@ export function registerChatActions() {
 			}
 		}
 
-		private updatePartVisibility(layoutService: IWorkbenchLayoutService, location: ViewContainerLocation | null, visible: boolean): void {
+		private updatePartVisibility(layoutService: IWorkbenchLayoutService, location: ViewContainerLocation | null, visible: boolean): codemavi {
 			let part: Parts.PANEL_PART | Parts.SIDEBAR_PART | Parts.AUXILIARYBAR_PART | undefined;
 			switch (location) {
 				case ViewContainerLocation.Panel:
@@ -389,7 +389,7 @@ export function registerChatActions() {
 			});
 		}
 
-		override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
+		override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
 			const widgetService = accessor.get(IChatWidgetService);
 			const context: { widget?: IChatWidget } | undefined = args[0];
 			const widget = context?.widget ?? widgetService.lastFocusedWidget;
@@ -474,7 +474,7 @@ export function registerChatActions() {
 				precondition: ContextKeyExpr.and(ChatContextKeys.inChatInput),
 				category: CHAT_CATEGORY,
 				keybinding: [
-					// On mac, require that the cursor is at the top of the input, to avoid stealing cmd+up to move the cursor to the top
+					// On mac, require that the cursor is at the top of the input, to acodemavi stealing cmd+up to move the cursor to the top
 					{
 						when: ContextKeyExpr.and(ChatContextKeys.inputCursorAtTop, ChatContextKeys.inQuickChat.negate()),
 						primary: KeyMod.CtrlCmd | KeyCode.UpArrow,
@@ -495,7 +495,7 @@ export function registerChatActions() {
 			});
 		}
 
-		runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): void | Promise<void> {
+		runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): codemavi | Promise<codemavi> {
 			const editorUri = editor.getModel()?.uri;
 			if (editorUri) {
 				const widgetService = accessor.get(IChatWidgetService);
@@ -554,7 +554,7 @@ export function registerChatActions() {
 			});
 		}
 
-		override async run(accessor: ServicesAccessor): Promise<void> {
+		override async run(accessor: ServicesAccessor): Promise<codemavi> {
 			const openerService = accessor.get(IOpenerService);
 			openerService.open(URI.parse(defaultChat.manageSettingsUrl));
 		}
@@ -572,7 +572,7 @@ export function registerChatActions() {
 			});
 		}
 
-		override async run(accessor: ServicesAccessor): Promise<void> {
+		override async run(accessor: ServicesAccessor): Promise<codemavi> {
 			const extensionsWorkbenchService = accessor.get(IExtensionsWorkbenchService);
 			extensionsWorkbenchService.openSearch(`@feature:${CopilotUsageExtensionFeatureId}`);
 		}
@@ -593,7 +593,7 @@ export function registerChatActions() {
 			});
 		}
 
-		override async run(accessor: ServicesAccessor): Promise<void> {
+		override async run(accessor: ServicesAccessor): Promise<codemavi> {
 			const commandService = accessor.get(ICommandService);
 			commandService.executeCommand(defaultChat.completionsMenuCommand);
 		}
@@ -678,7 +678,7 @@ const defaultChat = {
 };
 
 // // Add next to the command center if command center is disabled
-// Void commented this out with /* */ - copilot head
+// Code Mavi commented this out with /* */ - copilot head
 /* MenuRegistry.appendMenuItem(MenuId.CommandCenter, {
 	submenu: MenuId.ChatTitleBarMenu,
 	title: localize('title4', "Copilot"),
@@ -724,7 +724,7 @@ registerAction2(class ResetTrustedToolsAction extends Action2 {
 			f1: true,
 		});
 	}
-	override run(accessor: ServicesAccessor): void {
+	override run(accessor: ServicesAccessor): codemavi {
 		accessor.get(ILanguageModelToolsService).resetToolAutoConfirmation();
 		accessor.get(INotificationService).info(localize('resetTrustedToolsSuccess', "Tool confirmation preferences have been reset."));
 	}

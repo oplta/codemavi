@@ -106,7 +106,7 @@ export class WebviewViewPane extends ViewPane {
 	private readonly _onDidChangeVisibility = this._register(new Emitter<boolean>());
 	readonly onDidChangeVisibility = this._onDidChangeVisibility.event;
 
-	private readonly _onDispose = this._register(new Emitter<void>());
+	private readonly _onDispose = this._register(new Emitter<codemavi>());
 	readonly onDispose = this._onDispose.event;
 
 	override dispose() {
@@ -117,12 +117,12 @@ export class WebviewViewPane extends ViewPane {
 		super.dispose();
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 		this._webview.value?.focus();
 	}
 
-	protected override renderBody(container: HTMLElement): void {
+	protected override renderBody(container: HTMLElement): codemavi {
 		super.renderBody(container);
 
 		this._container = container;
@@ -151,7 +151,7 @@ export class WebviewViewPane extends ViewPane {
 		super.saveState();
 	}
 
-	protected override layoutBody(height: number, width: number): void {
+	protected override layoutBody(height: number, width: number): codemavi {
 		super.layoutBody(height, width);
 
 		this.layoutWebview(new Dimension(width, height));
@@ -266,7 +266,7 @@ export class WebviewViewPane extends ViewPane {
 		}
 	}
 
-	private async withProgress(task: () => Promise<void>): Promise<void> {
+	private async withProgress(task: () => Promise<codemavi>): Promise<codemavi> {
 		return this.progressService.withProgress({ location: this.id, delay: 500 }, task);
 	}
 

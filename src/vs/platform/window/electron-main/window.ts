@@ -15,29 +15,29 @@ import { ISingleFolderWorkspaceIdentifier, IWorkspaceIdentifier } from '../../wo
 
 export interface IBaseWindow extends IDisposable {
 
-	readonly onDidMaximize: Event<void>;
-	readonly onDidUnmaximize: Event<void>;
+	readonly onDidMaximize: Event<codemavi>;
+	readonly onDidUnmaximize: Event<codemavi>;
 	readonly onDidTriggerSystemContextMenu: Event<{ readonly x: number; readonly y: number }>;
-	readonly onDidEnterFullScreen: Event<void>;
-	readonly onDidLeaveFullScreen: Event<void>;
-	readonly onDidClose: Event<void>;
+	readonly onDidEnterFullScreen: Event<codemavi>;
+	readonly onDidLeaveFullScreen: Event<codemavi>;
+	readonly onDidClose: Event<codemavi>;
 
 	readonly id: number;
 	readonly win: electron.BrowserWindow | null;
 
 	readonly lastFocusTime: number;
-	focus(options?: { force: boolean }): void;
+	focus(options?: { force: boolean }): codemavi;
 
-	setRepresentedFilename(name: string): void;
+	setRepresentedFilename(name: string): codemavi;
 	getRepresentedFilename(): string | undefined;
 
-	setDocumentEdited(edited: boolean): void;
+	setDocumentEdited(edited: boolean): codemavi;
 	isDocumentEdited(): boolean;
 
 	readonly isFullScreen: boolean;
-	toggleFullScreen(): void;
+	toggleFullScreen(): codemavi;
 
-	updateWindowControls(options: { height?: number; backgroundColor?: string; foregroundColor?: string }): void;
+	updateWindowControls(options: { height?: number; backgroundColor?: string; foregroundColor?: string }): codemavi;
 
 	matches(webContents: electron.WebContents): boolean;
 }
@@ -45,10 +45,10 @@ export interface IBaseWindow extends IDisposable {
 export interface ICodeWindow extends IBaseWindow {
 
 	readonly onWillLoad: Event<ILoadEvent>;
-	readonly onDidSignalReady: Event<void>;
-	readonly onDidDestroy: Event<void>;
+	readonly onDidSignalReady: Event<codemavi>;
+	readonly onDidDestroy: Event<codemavi>;
 
-	readonly whenClosedOrLoaded: Promise<void>;
+	readonly whenClosedOrLoaded: Promise<codemavi>;
 
 	readonly config: INativeWindowConfiguration | undefined;
 
@@ -65,23 +65,23 @@ export interface ICodeWindow extends IBaseWindow {
 
 	readonly isReady: boolean;
 	ready(): Promise<ICodeWindow>;
-	setReady(): void;
+	setReady(): codemavi;
 
-	addTabbedWindow(window: ICodeWindow): void;
+	addTabbedWindow(window: ICodeWindow): codemavi;
 
-	load(config: INativeWindowConfiguration, options?: { isReload?: boolean }): void;
-	reload(cli?: NativeParsedArgs): void;
+	load(config: INativeWindowConfiguration, options?: { isReload?: boolean }): codemavi;
+	reload(cli?: NativeParsedArgs): codemavi;
 
-	close(): void;
+	close(): codemavi;
 
 	getBounds(): electron.Rectangle;
 
-	send(channel: string, ...args: any[]): void;
-	sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): void;
+	send(channel: string, ...args: any[]): codemavi;
+	sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): codemavi;
 
-	updateTouchBar(items: ISerializableCommandAction[][]): void;
+	updateTouchBar(items: ISerializableCommandAction[][]): codemavi;
 
-	notifyZoomLevel(zoomLevel: number | undefined): void;
+	notifyZoomLevel(zoomLevel: number | undefined): codemavi;
 
 	serializeWindowState(): IWindowState;
 }

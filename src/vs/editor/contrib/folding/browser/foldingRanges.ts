@@ -161,7 +161,7 @@ export class FoldingRegions {
 		return FoldSource.provider;
 	}
 
-	public setSource(index: number, source: FoldSource): void {
+	public setSource(index: number, source: FoldSource): codemavi {
 		if (source === FoldSource.userDefined) {
 			this.setUserDefined(index, true);
 			this.setRecovered(index, false);

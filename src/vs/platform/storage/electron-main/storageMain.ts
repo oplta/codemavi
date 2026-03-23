@@ -46,7 +46,7 @@ export interface IStorageMain extends IDisposable {
 	/**
 	 * Emitted when the storage is closed.
 	 */
-	readonly onDidCloseStorage: Event<void>;
+	readonly onDidCloseStorage: Event<codemavi>;
 
 	/**
 	 * Access to all cached items of this storage service.
@@ -57,7 +57,7 @@ export interface IStorageMain extends IDisposable {
 	 * Allows to join on the `init` call having completed
 	 * to be able to safely use the storage.
 	 */
-	readonly whenInit: Promise<void>;
+	readonly whenInit: Promise<codemavi>;
 
 	/**
 	 * Provides access to the `IStorage` implementation which will be
@@ -73,7 +73,7 @@ export interface IStorageMain extends IDisposable {
 	/**
 	 * Required call to ensure the service can be used.
 	 */
-	init(): Promise<void>;
+	init(): Promise<codemavi>;
 
 	/**
 	 * Retrieve an element stored with the given key from storage. Use
@@ -86,12 +86,12 @@ export interface IStorageMain extends IDisposable {
 	 * Store a string value under the given key to storage. The value will
 	 * be converted to a string.
 	 */
-	set(key: string, value: string | boolean | number | undefined | null): void;
+	set(key: string, value: string | boolean | number | undefined | null): codemavi;
 
 	/**
 	 * Delete an element stored under the provided key from storage.
 	 */
-	delete(key: string): void;
+	delete(key: string): codemavi;
 
 	/**
 	 * Whether the storage is using in-memory persistence or not.
@@ -101,12 +101,12 @@ export interface IStorageMain extends IDisposable {
 	/**
 	 * Attempts to reduce the DB size via optimization commands if supported.
 	 */
-	optimize(): Promise<void>;
+	optimize(): Promise<codemavi>;
 
 	/**
 	 * Close the storage connection.
 	 */
-	close(): Promise<void>;
+	close(): Promise<codemavi>;
 }
 
 export interface IStorageChangeEvent {
@@ -120,7 +120,7 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 	protected readonly _onDidChangeStorage = this._register(new Emitter<IStorageChangeEvent>());
 	readonly onDidChangeStorage = this._onDidChangeStorage.event;
 
-	private readonly _onDidCloseStorage = this._register(new Emitter<void>());
+	private readonly _onDidCloseStorage = this._register(new Emitter<codemavi>());
 	readonly onDidCloseStorage = this._onDidCloseStorage.event;
 
 	private _storage = this._register(new Storage(new InMemoryStorageDatabase(), { hint: StorageHint.STORAGE_IN_MEMORY })); // storage is in-memory until initialized
@@ -128,9 +128,9 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 
 	abstract get path(): string | undefined;
 
-	private initializePromise: Promise<void> | undefined = undefined;
+	private initializePromise: Promise<codemavi> | undefined = undefined;
 
-	private readonly whenInitPromise = new DeferredPromise<void>();
+	private readonly whenInitPromise = new DeferredPromise<codemavi>();
 	readonly whenInit = this.whenInitPromise.p;
 
 	private state = StorageState.None;
@@ -146,7 +146,7 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 		return this._storage.isInMemory();
 	}
 
-	init(): Promise<void> {
+	init(): Promise<codemavi> {
 		if (!this.initializePromise) {
 			this.initializePromise = (async () => {
 				if (this.state !== StorageState.None) {
@@ -200,7 +200,7 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 		};
 	}
 
-	protected doInit(storage: IStorage): Promise<void> {
+	protected doInit(storage: IStorage): Promise<codemavi> {
 		return storage.init();
 	}
 
@@ -214,19 +214,19 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 		return this._storage.get(key, fallbackValue);
 	}
 
-	set(key: string, value: string | boolean | number | undefined | null): Promise<void> {
+	set(key: string, value: string | boolean | number | undefined | null): Promise<codemavi> {
 		return this._storage.set(key, value);
 	}
 
-	delete(key: string): Promise<void> {
+	delete(key: string): Promise<codemavi> {
 		return this._storage.delete(key);
 	}
 
-	optimize(): Promise<void> {
+	optimize(): Promise<codemavi> {
 		return this._storage.optimize();
 	}
 
-	async close(): Promise<void> {
+	async close(): Promise<codemavi> {
 
 		// Measure how long it takes to close storage
 		const watch = new StopWatch(false);
@@ -262,7 +262,7 @@ abstract class BaseStorageMain extends Disposable implements IStorageMain {
 		}
 	}
 
-	private async doClose(): Promise<void> {
+	private async doClose(): Promise<codemavi> {
 
 		// Ensure we are not accidentally leaving
 		// a pending initialized storage behind in
@@ -331,14 +331,14 @@ export class ApplicationStorageMain extends BaseProfileAwareStorageMain {
 		super(userDataProfileService.defaultProfile, options, logService, fileService);
 	}
 
-	protected override async doInit(storage: IStorage): Promise<void> {
+	protected override async doInit(storage: IStorage): Promise<codemavi> {
 		await super.doInit(storage);
 
 		// Apply telemetry values as part of the application storage initialization
 		this.updateTelemetryState(storage);
 	}
 
-	private updateTelemetryState(storage: IStorage): void {
+	private updateTelemetryState(storage: IStorage): codemavi {
 
 		// First session date (once)
 		const firstSessionDate = storage.get(firstSessionDateStorageKey, undefined);
@@ -412,7 +412,7 @@ export class WorkspaceStorageMain extends BaseStorageMain {
 		return { storageFilePath: workspaceStorageDatabasePath, wasCreated: true };
 	}
 
-	private async ensureWorkspaceStorageFolderMeta(workspaceStorageFolderPath: string): Promise<void> {
+	private async ensureWorkspaceStorageFolderMeta(workspaceStorageFolderPath: string): Promise<codemavi> {
 		let meta: object | undefined = undefined;
 		if (isSingleFolderWorkspaceIdentifier(this.workspace)) {
 			meta = { folder: this.workspace.uri.toString() };

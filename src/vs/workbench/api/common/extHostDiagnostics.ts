@@ -44,7 +44,7 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		this.#onDidChangeDiagnostics = onDidChangeDiagnostics;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (!this._isDisposed) {
 			this.#onDidChangeDiagnostics.fire([...this.#data.keys()]);
 			this.#proxy?.$clear(this._owner);
@@ -58,8 +58,8 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		return this._name;
 	}
 
-	set(uri: vscode.Uri, diagnostics: ReadonlyArray<vscode.Diagnostic>): void;
-	set(entries: ReadonlyArray<[vscode.Uri, ReadonlyArray<vscode.Diagnostic>]>): void;
+	set(uri: vscode.Uri, diagnostics: ReadonlyArray<vscode.Diagnostic>): codemavi;
+	set(entries: ReadonlyArray<[vscode.Uri, ReadonlyArray<vscode.Diagnostic>]>): codemavi;
 	set(first: vscode.Uri | ReadonlyArray<[vscode.Uri, ReadonlyArray<vscode.Diagnostic>]>, diagnostics?: ReadonlyArray<vscode.Diagnostic>) {
 
 		if (!first) {
@@ -171,21 +171,21 @@ export class DiagnosticCollection implements vscode.DiagnosticCollection {
 		this.#proxy.$changeMany(this._owner, entries);
 	}
 
-	delete(uri: vscode.Uri): void {
+	delete(uri: vscode.Uri): codemavi {
 		this._checkDisposed();
 		this.#onDidChangeDiagnostics.fire([uri]);
 		this.#data.delete(uri);
 		this.#proxy?.$changeMany(this._owner, [[uri, undefined]]);
 	}
 
-	clear(): void {
+	clear(): codemavi {
 		this._checkDisposed();
 		this.#onDidChangeDiagnostics.fire([...this.#data.keys()]);
 		this.#data.clear();
 		this.#proxy?.$clear(this._owner);
 	}
 
-	forEach(callback: (uri: URI, diagnostics: ReadonlyArray<vscode.Diagnostic>, collection: DiagnosticCollection) => any, thisArg?: any): void {
+	forEach(callback: (uri: URI, diagnostics: ReadonlyArray<vscode.Diagnostic>, collection: DiagnosticCollection) => any, thisArg?: any): codemavi {
 		this._checkDisposed();
 		for (const [uri, values] of this) {
 			callback.call(thisArg, uri, values, this);
@@ -264,15 +264,15 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 		const { _collections, _proxy, _onDidChangeDiagnostics, _logService, _fileSystemInfoService, _extHostDocumentsAndEditors } = this;
 
 		const loggingProxy = new class implements MainThreadDiagnosticsShape {
-			$changeMany(owner: string, entries: [UriComponents, IMarkerData[] | undefined][]): void {
+			$changeMany(owner: string, entries: [UriComponents, IMarkerData[] | undefined][]): codemavi {
 				_proxy.$changeMany(owner, entries);
 				_logService.trace('[DiagnosticCollection] change many (extension, owner, uris)', extensionId.value, owner, entries.length === 0 ? 'CLEARING' : entries);
 			}
-			$clear(owner: string): void {
+			$clear(owner: string): codemavi {
 				_proxy.$clear(owner);
 				_logService.trace('[DiagnosticCollection] remove all (extension, owner)', extensionId.value, owner);
 			}
-			dispose(): void {
+			dispose(): codemavi {
 				_proxy.dispose();
 			}
 		};
@@ -347,7 +347,7 @@ export class ExtHostDiagnostics implements ExtHostDiagnosticsShape {
 
 	private _mirrorCollection: vscode.DiagnosticCollection | undefined;
 
-	$acceptMarkersChange(data: [UriComponents, IMarkerData[]][]): void {
+	$acceptMarkersChange(data: [UriComponents, IMarkerData[]][]): codemavi {
 
 		if (!this._mirrorCollection) {
 			const name = '_generated_mirror';

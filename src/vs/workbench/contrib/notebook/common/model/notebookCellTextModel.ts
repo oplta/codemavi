@@ -23,19 +23,19 @@ import { IModelContentChangedEvent } from '../../../../../editor/common/textMode
 import { splitLines } from '../../../../../base/common/strings.js';
 
 export class NotebookCellTextModel extends Disposable implements ICell {
-	private readonly _onDidChangeTextModel = this._register(new Emitter<void>());
-	readonly onDidChangeTextModel: Event<void> = this._onDidChangeTextModel.event;
+	private readonly _onDidChangeTextModel = this._register(new Emitter<codemavi>());
+	readonly onDidChangeTextModel: Event<codemavi> = this._onDidChangeTextModel.event;
 	private readonly _onDidChangeOutputs = this._register(new Emitter<NotebookCellOutputsSplice>());
 	readonly onDidChangeOutputs: Event<NotebookCellOutputsSplice> = this._onDidChangeOutputs.event;
 
-	private readonly _onDidChangeOutputItems = this._register(new Emitter<void>());
-	readonly onDidChangeOutputItems: Event<void> = this._onDidChangeOutputItems.event;
+	private readonly _onDidChangeOutputItems = this._register(new Emitter<codemavi>());
+	readonly onDidChangeOutputItems: Event<codemavi> = this._onDidChangeOutputItems.event;
 
 	private readonly _onDidChangeContent = this._register(new Emitter<'content' | 'language' | 'mime' | { type: 'model'; event: IModelContentChangedEvent }>());
 	readonly onDidChangeContent: Event<'content' | 'language' | 'mime' | { type: 'model'; event: IModelContentChangedEvent }> = this._onDidChangeContent.event;
 
-	private readonly _onDidChangeMetadata = this._register(new Emitter<void>());
-	readonly onDidChangeMetadata: Event<void> = this._onDidChangeMetadata.event;
+	private readonly _onDidChangeMetadata = this._register(new Emitter<codemavi>());
+	readonly onDidChangeMetadata: Event<codemavi> = this._onDidChangeMetadata.event;
 
 	private readonly _onDidChangeInternalMetadata = this._register(new Emitter<CellInternalMetadataChangedEvent>());
 	readonly onDidChangeInternalMetadata: Event<CellInternalMetadataChangedEvent> = this._onDidChangeInternalMetadata.event;
@@ -185,7 +185,7 @@ export class NotebookCellTextModel extends Disposable implements ICell {
 		}
 	}
 	private static readonly AUTO_DETECT_LANGUAGE_THROTTLE_DELAY = 600;
-	private readonly autoDetectLanguageThrottler = this._register(new ThrottledDelayer<void>(NotebookCellTextModel.AUTO_DETECT_LANGUAGE_THROTTLE_DELAY));
+	private readonly autoDetectLanguageThrottler = this._register(new ThrottledDelayer<codemavi>(NotebookCellTextModel.AUTO_DETECT_LANGUAGE_THROTTLE_DELAY));
 	private _autoLanguageDetectionEnabled: boolean = false;
 	private _hasLanguageSetExplicitly: boolean = false;
 	get hasLanguageSetExplicitly(): boolean { return this._hasLanguageSetExplicitly; }
@@ -216,13 +216,13 @@ export class NotebookCellTextModel extends Disposable implements ICell {
 		this.autoDetectLanguage();
 	}
 
-	async autoDetectLanguage(): Promise<void> {
+	async autoDetectLanguage(): Promise<codemavi> {
 		if (this._autoLanguageDetectionEnabled) {
 			this.autoDetectLanguageThrottler.trigger(() => this._doAutoDetectLanguage());
 		}
 	}
 
-	private async _doAutoDetectLanguage(): Promise<void> {
+	private async _doAutoDetectLanguage(): Promise<codemavi> {
 		if (this.hasLanguageSetExplicitly) {
 			return;
 		}
@@ -320,7 +320,7 @@ export class NotebookCellTextModel extends Disposable implements ICell {
 		return new Range(1, 1, lineCount, this.textBuffer.getLineLength(lineCount) + 1);
 	}
 
-	spliceNotebookCellOutputs(splice: NotebookCellOutputsSplice): void {
+	spliceNotebookCellOutputs(splice: NotebookCellOutputsSplice): codemavi {
 		if (splice.deleteCount > 0 && splice.newOutputs.length > 0) {
 			const commonLen = Math.min(splice.deleteCount, splice.newOutputs.length);
 			// update
@@ -486,7 +486,7 @@ export class NotebookCellTextModel extends Disposable implements ICell {
 
 	override dispose() {
 		dispose(this._outputs);
-		// Manually release reference to previous text buffer to avoid large leaks
+		// Manually release reference to previous text buffer to acodemavi large leaks
 		// in case someone leaks a CellTextModel reference
 		const emptyDisposedTextBuffer = new PieceTreeTextBuffer([], '', '\n', false, false, true, true);
 		emptyDisposedTextBuffer.dispose();

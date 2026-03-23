@@ -120,7 +120,7 @@ export class MultiDiffEditorInput extends EditorInput implements ILanguageSuppor
 		};
 	}
 
-	public setLanguageId(languageId: string, source?: string | undefined): void {
+	public setLanguageId(languageId: string, source?: string | undefined): codemavi {
 		const activeDiffItem = this._viewModel.requireValue().activeDiffItem.get();
 		const value = activeDiffItem?.documentDiffItem;
 		if (!value) { return; }
@@ -255,13 +255,13 @@ export class MultiDiffEditorInput extends EditorInput implements ILanguageSuppor
 		return this;
 	}
 
-	override  revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
+	override  revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
 		return this.doSaveOrRevert('revert', group, options);
 	}
 
-	private async doSaveOrRevert(mode: 'save', group: GroupIdentifier, options?: ISaveOptions): Promise<void>;
-	private async doSaveOrRevert(mode: 'revert', group: GroupIdentifier, options?: IRevertOptions): Promise<void>;
-	private async doSaveOrRevert(mode: 'save' | 'revert', group: GroupIdentifier, options?: ISaveOptions | IRevertOptions): Promise<void> {
+	private async doSaveOrRevert(mode: 'save', group: GroupIdentifier, options?: ISaveOptions): Promise<codemavi>;
+	private async doSaveOrRevert(mode: 'revert', group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi>;
+	private async doSaveOrRevert(mode: 'save' | 'revert', group: GroupIdentifier, options?: ISaveOptions | IRevertOptions): Promise<codemavi> {
 		const items = this._viewModel.currentValue?.items.get();
 		if (items) {
 			await Promise.all(items.map(async item => {
@@ -301,7 +301,7 @@ export interface IDocumentDiffItemWithMultiDiffEditorItem extends IDocumentDiffI
 */
 class FastEventDispatcher<T, TKey> {
 	private _count = 0;
-	private readonly _buckets = new Map<string, Set<(value: T) => void>>();
+	private readonly _buckets = new Map<string, Set<(value: T) => codemavi>>();
 
 	private _eventSubscription: IDisposable | undefined;
 
@@ -373,11 +373,11 @@ function computeOptions(configuration: IEditorConfiguration): IDiffEditorOptions
 	if (isObject(configuration.diffEditor)) {
 		const diffEditorConfiguration: IDiffEditorOptions = deepClone(configuration.diffEditor);
 
-		// User settings defines `diffEditor.codeLens`, but here we rename that to `diffEditor.diffCodeLens` to avoid collisions with `editor.codeLens`.
+		// User settings defines `diffEditor.codeLens`, but here we rename that to `diffEditor.diffCodeLens` to acodemavi collisions with `editor.codeLens`.
 		diffEditorConfiguration.diffCodeLens = diffEditorConfiguration.codeLens;
 		delete diffEditorConfiguration.codeLens;
 
-		// User settings defines `diffEditor.wordWrap`, but here we rename that to `diffEditor.diffWordWrap` to avoid collisions with `editor.wordWrap`.
+		// User settings defines `diffEditor.wordWrap`, but here we rename that to `diffEditor.diffWordWrap` to acodemavi collisions with `editor.wordWrap`.
 		diffEditorConfiguration.diffWordWrap = <'off' | 'on' | 'inherit' | undefined>diffEditorConfiguration.wordWrap;
 		delete diffEditorConfiguration.wordWrap;
 

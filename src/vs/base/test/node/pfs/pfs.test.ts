@@ -451,7 +451,7 @@ flakySuite('PFS', function () {
 		smallDataValue: string,
 		bigData: string | Buffer | Uint8Array,
 		bigDataValue: string
-	): Promise<void> {
+	): Promise<codemavi> {
 		const testFile = join(testDir, 'flushed.txt');
 
 		assert.ok(fs.existsSync(testDir));

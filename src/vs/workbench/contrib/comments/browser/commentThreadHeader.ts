@@ -42,7 +42,7 @@ export class CommentThreadHeader<T = IRange> extends Disposable {
 
 	constructor(
 		container: HTMLElement,
-		private _delegate: { collapse: () => void },
+		private _delegate: { collapse: () => codemavi },
 		private _commentMenus: CommentMenus,
 		private _commentThread: languages.CommentThread<T>,
 		@IContextKeyService private readonly _contextKeyService: IContextKeyService,
@@ -56,7 +56,7 @@ export class CommentThreadHeader<T = IRange> extends Disposable {
 		this._fillHead();
 	}
 
-	protected _fillHead(): void {
+	protected _fillHead(): codemavi {
 		const titleElement = dom.append(this._headElement, dom.$('.review-title'));
 
 		this._headingLabel = dom.append(titleElement, dom.$('span.filename'));
@@ -97,7 +97,7 @@ export class CommentThreadHeader<T = IRange> extends Disposable {
 		this._actionbarWidget.context = this._commentThread;
 	}
 
-	private setActionBarActions(menu: IMenu): void {
+	private setActionBarActions(menu: IMenu): codemavi {
 		const groups = menu.getActions({ shouldForwardArgs: true }).reduce((r, [, actions]) => [...r, ...actions], <(MenuItemAction | SubmenuItemAction)[]>[]);
 		this._actionbarWidget.clear();
 		this._actionbarWidget.push([...groups, this._collapseAction], { label: false, icon: true });

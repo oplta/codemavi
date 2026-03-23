@@ -34,7 +34,7 @@ export class CheckedStates<T extends object> {
 	private readonly _onDidChange = new Emitter<T>();
 	readonly onDidChange: Event<T> = this._onDidChange.event;
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._onDidChange.dispose();
 	}
 
@@ -46,7 +46,7 @@ export class CheckedStates<T extends object> {
 		return this._states.get(obj) ?? false;
 	}
 
-	updateChecked(obj: T, value: boolean): void {
+	updateChecked(obj: T, value: boolean): codemavi {
 		const valueNow = this._states.get(obj);
 		if (valueNow === value) {
 			return;
@@ -157,7 +157,7 @@ export class BulkFileOperations {
 		this.conflicts = instaService.createInstance(ConflictDetector, _bulkEdit);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.checked.dispose();
 		this.conflicts.dispose();
 	}
@@ -383,7 +383,7 @@ export class BulkEditPreviewProvider implements ITextModelContentProvider {
 		this._ready = this._init();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._disposables.dispose();
 	}
 

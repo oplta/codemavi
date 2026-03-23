@@ -53,7 +53,7 @@ export class PointerEventHandler extends MouseHandler {
 		this._register(pointerEvents.onPointerDown(this.viewHelper.viewDomNode, (e, pointerId) => this._onMouseDown(e, pointerId)));
 	}
 
-	private onTap(event: GestureEvent): void {
+	private onTap(event: GestureEvent): codemavi {
 		if (!event.initialTarget || !this.viewHelper.linesContentDomNode.contains(<any>event.initialTarget)) {
 			return;
 		}
@@ -63,7 +63,7 @@ export class PointerEventHandler extends MouseHandler {
 		this._dispatchGesture(event, /*inSelectionMode*/false);
 	}
 
-	private onChange(event: GestureEvent): void {
+	private onChange(event: GestureEvent): codemavi {
 		if (this._lastPointerType === 'touch') {
 			this._context.viewModel.viewLayout.deltaScrollNow(-event.translationX, -event.translationY);
 		}
@@ -72,7 +72,7 @@ export class PointerEventHandler extends MouseHandler {
 		}
 	}
 
-	private _dispatchGesture(event: GestureEvent, inSelectionMode: boolean): void {
+	private _dispatchGesture(event: GestureEvent, inSelectionMode: boolean): codemavi {
 		const target = this._createMouseTarget(new EditorMouseEvent(event, false, this.viewHelper.viewDomNode), false);
 		if (target.position) {
 			this.viewController.dispatchMouse({
@@ -93,7 +93,7 @@ export class PointerEventHandler extends MouseHandler {
 		}
 	}
 
-	protected override _onMouseDown(e: EditorMouseEvent, pointerId: number): void {
+	protected override _onMouseDown(e: EditorMouseEvent, pointerId: number): codemavi {
 		if ((e.browserEvent as any).pointerType === 'touch') {
 			return;
 		}
@@ -114,7 +114,7 @@ class TouchHandler extends MouseHandler {
 		this._register(dom.addDisposableListener(this.viewHelper.linesContentDomNode, EventType.Contextmenu, (e: MouseEvent) => this._onContextMenu(new EditorMouseEvent(e, false, this.viewHelper.viewDomNode), false)));
 	}
 
-	private onTap(event: GestureEvent): void {
+	private onTap(event: GestureEvent): codemavi {
 		event.preventDefault();
 
 		this.viewHelper.focusTextArea();
@@ -131,7 +131,7 @@ class TouchHandler extends MouseHandler {
 		}
 	}
 
-	private onChange(e: GestureEvent): void {
+	private onChange(e: GestureEvent): codemavi {
 		this._context.viewModel.viewLayout.deltaScrollNow(-e.translationX, -e.translationY);
 	}
 }

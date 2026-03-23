@@ -84,7 +84,7 @@ export interface IExtensionsProfileScannerService {
 	scanProfileExtensions(profileLocation: URI, options?: IProfileExtensionsScanOptions): Promise<IScannedProfileExtension[]>;
 	addExtensionsToProfile(extensions: [IExtension, Metadata | undefined][], profileLocation: URI, keepExistingVersions?: boolean): Promise<IScannedProfileExtension[]>;
 	updateMetadata(extensions: [IExtension, Metadata | undefined][], profileLocation: URI): Promise<IScannedProfileExtension[]>;
-	removeExtensionsFromProfile(extensions: IExtensionIdentifier[], profileLocation: URI): Promise<void>;
+	removeExtensionsFromProfile(extensions: IExtensionIdentifier[], profileLocation: URI): Promise<codemavi>;
 }
 
 export abstract class AbstractExtensionsProfileScannerService extends Disposable implements IExtensionsProfileScannerService {
@@ -191,7 +191,7 @@ export abstract class AbstractExtensionsProfileScannerService extends Disposable
 		return updatedExtensions;
 	}
 
-	async removeExtensionsFromProfile(extensions: IExtensionIdentifier[], profileLocation: URI): Promise<void> {
+	async removeExtensionsFromProfile(extensions: IExtensionIdentifier[], profileLocation: URI): Promise<codemavi> {
 		const extensionsToRemove: IScannedProfileExtension[] = [];
 		try {
 			await this.withProfileExtensions(profileLocation, profileExtensions => {
@@ -301,7 +301,7 @@ export abstract class AbstractExtensionsProfileScannerService extends Disposable
 		});
 	}
 
-	private throwInvalidConentError(file: URI): void {
+	private throwInvalidConentError(file: URI): codemavi {
 		throw new ExtensionsProfileScanningError(`Invalid extensions content in ${file.toString()}`, ExtensionsProfileScanningErrorCode.ERROR_INVALID_CONTENT);
 	}
 

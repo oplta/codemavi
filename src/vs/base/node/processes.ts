@@ -14,9 +14,9 @@ import * as Types from '../common/types.js';
 import * as pfs from './pfs.js';
 export { Source, TerminateResponseCode, type CommandOptions, type ForkOptions, type SuccessData, type TerminateResponse };
 
-export type ValueCallback<T> = (value: T | Promise<T>) => void;
-export type ErrorCallback = (error?: any) => void;
-export type ProgressCallback<T> = (progress: T) => void;
+export type ValueCallback<T> = (value: T | Promise<T>) => codemavi;
+export type ErrorCallback = (error?: any) => codemavi;
+export type ProgressCallback<T> = (progress: T) => codemavi;
 
 
 export function getWindowsShell(env = process.env as Platform.IProcessEnvironment): string {
@@ -24,7 +24,7 @@ export function getWindowsShell(env = process.env as Platform.IProcessEnvironmen
 }
 
 export interface IQueuedSender {
-	send: (msg: any) => void;
+	send: (msg: any) => codemavi;
 }
 
 // Wrapper around process.send() that will queue any messages if the internal node.js
@@ -36,7 +36,7 @@ export function createQueuedSender(childProcess: cp.ChildProcess): IQueuedSender
 	let msgQueue: string[] = [];
 	let useQueue = false;
 
-	const send = function (msg: any): void {
+	const send = function (msg: any): codemavi {
 		if (useQueue) {
 			msgQueue.push(msg); // add to the queue if the process cannot handle more messages
 			return;

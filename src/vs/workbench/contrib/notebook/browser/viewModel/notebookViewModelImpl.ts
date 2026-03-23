@@ -64,19 +64,19 @@ class DecorationsTree {
 		return r1;
 	}
 
-	public insert(node: IntervalNode): void {
+	public insert(node: IntervalNode): codemavi {
 		this._decorationsTree.insert(node);
 	}
 
-	public delete(node: IntervalNode): void {
+	public delete(node: IntervalNode): codemavi {
 		this._decorationsTree.delete(node);
 	}
 
-	public resolveNode(node: IntervalNode, cachedVersionId: number): void {
+	public resolveNode(node: IntervalNode, cachedVersionId: number): codemavi {
 		this._decorationsTree.resolveNode(node, cachedVersionId);
 	}
 
-	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): void {
+	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): codemavi {
 		this._decorationsTree.acceptReplace(offset, length, textLength, forceMoveMarkers);
 	}
 }
@@ -105,8 +105,8 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 	private readonly _localStore = this._register(new DisposableStore());
 	private _handleToViewCellMapping = new Map<number, CellViewModel>();
 	get options(): NotebookViewModelOptions { return this._options; }
-	private readonly _onDidChangeOptions = this._register(new Emitter<void>());
-	get onDidChangeOptions(): Event<void> { return this._onDidChangeOptions.event; }
+	private readonly _onDidChangeOptions = this._register(new Emitter<codemavi>());
+	get onDidChangeOptions(): Event<codemavi> { return this._onDidChangeOptions.event; }
 	private _viewCells: CellViewModel[] = [];
 
 	get viewCells(): ICellViewModel[] {
@@ -177,8 +177,8 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 	private readonly _instanceId: string;
 	public readonly id: string;
 	private _foldingRanges: FoldingRegions | null = null;
-	private _onDidFoldingStateChanged = new Emitter<void>();
-	onDidFoldingStateChanged: Event<void> = this._onDidFoldingStateChanged.event;
+	private _onDidFoldingStateChanged = new Emitter<codemavi>();
+	onDidFoldingStateChanged: Event<codemavi> = this._onDidFoldingStateChanged.event;
 	private _hiddenRanges: ICellRange[] = [];
 	private _focused: boolean = true;
 
@@ -839,7 +839,7 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 		};
 	}
 
-	restoreEditorViewState(viewState: INotebookEditorViewState | undefined): void {
+	restoreEditorViewState(viewState: INotebookEditorViewState | undefined): codemavi {
 		if (!viewState) {
 			return;
 		}
@@ -980,7 +980,7 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 		);
 	}
 
-	replaceOne(cell: ICellViewModel, range: Range, text: string): Promise<void> {
+	replaceOne(cell: ICellViewModel, range: Range, text: string): Promise<codemavi> {
 		const viewCell = cell as CellViewModel;
 		this._lastNotebookEditResource.push(viewCell.uri);
 		return viewCell.resolveTextModel().then(() => {
@@ -991,7 +991,7 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 		});
 	}
 
-	async replaceAll(matches: CellFindMatchWithIndex[], texts: string[]): Promise<void> {
+	async replaceAll(matches: CellFindMatchWithIndex[], texts: string[]): Promise<codemavi> {
 		if (!matches.length) {
 			return;
 		}
@@ -1021,7 +1021,7 @@ export class NotebookViewModel extends Disposable implements EditorFoldingStateD
 
 	//#region Undo/Redo
 
-	private async _withElement(element: SingleModelEditStackElement | MultiModelEditStackElement, callback: () => Promise<void>) {
+	private async _withElement(element: SingleModelEditStackElement | MultiModelEditStackElement, callback: () => Promise<codemavi>) {
 		const viewCells = this._viewCells.filter(cell => element.matchesResource(cell.uri));
 		const refs = await Promise.all(viewCells.map(cell => this._textModelService.createModelReference(cell.uri)));
 		await callback();

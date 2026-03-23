@@ -71,14 +71,14 @@ export class ChatDragAndDrop extends Themable {
 		this.updateStyles();
 	}
 
-	addOverlay(target: HTMLElement, overlayContainer: HTMLElement): void {
+	addOverlay(target: HTMLElement, overlayContainer: HTMLElement): codemavi {
 		this.removeOverlay(target);
 
 		const { overlay, disposable } = this.createOverlay(target, overlayContainer);
 		this.overlays.set(target, { overlay, disposable });
 	}
 
-	removeOverlay(target: HTMLElement): void {
+	removeOverlay(target: HTMLElement): codemavi {
 		if (this.currentActiveTarget === target) {
 			this.currentActiveTarget = undefined;
 		}
@@ -139,21 +139,21 @@ export class ChatDragAndDrop extends Themable {
 		return { overlay, disposable };
 	}
 
-	private onDragEnter(e: DragEvent, target: HTMLElement): void {
+	private onDragEnter(e: DragEvent, target: HTMLElement): codemavi {
 		const estimatedDropType = this.guessDropType(e);
 		this.updateDropFeedback(e, target, estimatedDropType);
 	}
 
-	private onDragLeave(e: DragEvent, target: HTMLElement): void {
+	private onDragLeave(e: DragEvent, target: HTMLElement): codemavi {
 		this.updateDropFeedback(e, target, undefined);
 	}
 
-	private onDrop(e: DragEvent, target: HTMLElement): void {
+	private onDrop(e: DragEvent, target: HTMLElement): codemavi {
 		this.updateDropFeedback(e, target, undefined);
 		this.drop(e);
 	}
 
-	private async drop(e: DragEvent): Promise<void> {
+	private async drop(e: DragEvent): Promise<codemavi> {
 		const contexts = await this.getAttachContext(e);
 		if (contexts.length === 0) {
 			return;
@@ -162,7 +162,7 @@ export class ChatDragAndDrop extends Themable {
 		this.attachmentModel.addContext(...contexts);
 	}
 
-	private updateDropFeedback(e: DragEvent, target: HTMLElement, dropType: ChatDragAndDropType | undefined): void {
+	private updateDropFeedback(e: DragEvent, target: HTMLElement, dropType: ChatDragAndDropType | undefined): codemavi {
 		const showOverlay = dropType !== undefined;
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = showOverlay ? 'copy' : 'none';
@@ -403,7 +403,7 @@ export class ChatDragAndDrop extends Themable {
 		});
 	}
 
-	private setOverlay(target: HTMLElement, type: ChatDragAndDropType | undefined): void {
+	private setOverlay(target: HTMLElement, type: ChatDragAndDropType | undefined): codemavi {
 		// Remove any previous overlay text
 		this.overlayText?.remove();
 		this.overlayText = undefined;
@@ -433,12 +433,12 @@ export class ChatDragAndDrop extends Themable {
 		return localize('attacAsContext', 'Attach {0} as Context', typeName);
 	}
 
-	private updateOverlayStyles(overlay: HTMLElement): void {
+	private updateOverlayStyles(overlay: HTMLElement): codemavi {
 		overlay.style.backgroundColor = this.getColor(this.styles.overlayBackground) || '';
 		overlay.style.color = this.getColor(this.styles.listForeground) || '';
 	}
 
-	override updateStyles(): void {
+	override updateStyles(): codemavi {
 		this.overlays.forEach(overlay => this.updateOverlayStyles(overlay.overlay));
 		this.overlayTextBackground = this.getColor(this.styles.listBackground) || '';
 	}

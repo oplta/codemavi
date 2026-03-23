@@ -10,7 +10,7 @@ export interface ISettingsReader {
 }
 
 export interface ISettingsWriter {
-	(key: string, value: any): void;
+	(key: string, value: any): codemavi;
 }
 
 export class EditorSettingMigration {
@@ -19,10 +19,10 @@ export class EditorSettingMigration {
 
 	constructor(
 		public readonly key: string,
-		public readonly migrate: (value: any, read: ISettingsReader, write: ISettingsWriter) => void
+		public readonly migrate: (value: any, read: ISettingsReader, write: ISettingsWriter) => codemavi
 	) { }
 
-	apply(options: any): void {
+	apply(options: any): codemavi {
 		const value = EditorSettingMigration._read(options, this.key);
 		const read = (key: string) => EditorSettingMigration._read(options, key);
 		const write = (key: string, value: any) => EditorSettingMigration._write(options, key, value);
@@ -42,7 +42,7 @@ export class EditorSettingMigration {
 		return source[key];
 	}
 
-	private static _write(target: any, key: string, value: any): void {
+	private static _write(target: any, key: string, value: any): codemavi {
 		const firstDotIndex = key.indexOf('.');
 		if (firstDotIndex >= 0) {
 			const firstSegment = key.substring(0, firstDotIndex);
@@ -54,11 +54,11 @@ export class EditorSettingMigration {
 	}
 }
 
-function registerEditorSettingMigration(key: string, migrate: (value: any, read: ISettingsReader, write: ISettingsWriter) => void): void {
+function registerEditorSettingMigration(key: string, migrate: (value: any, read: ISettingsReader, write: ISettingsWriter) => codemavi): codemavi {
 	EditorSettingMigration.items.push(new EditorSettingMigration(key, migrate));
 }
 
-function registerSimpleEditorSettingMigration(key: string, values: [any, any][]): void {
+function registerSimpleEditorSettingMigration(key: string, values: [any, any][]): codemavi {
 	registerEditorSettingMigration(key, (value, read, write) => {
 		if (typeof value !== 'undefined') {
 			for (const [oldValue, newValue] of values) {
@@ -74,7 +74,7 @@ function registerSimpleEditorSettingMigration(key: string, values: [any, any][])
 /**
  * Compatibility with old options
  */
-export function migrateOptions(options: IEditorOptions): void {
+export function migrateOptions(options: IEditorOptions): codemavi {
 	EditorSettingMigration.items.forEach(migration => migration.apply(options));
 }
 

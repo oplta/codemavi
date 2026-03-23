@@ -44,18 +44,18 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		return startResult;
 	}
 
-	async detach(forcePersist?: boolean): Promise<void> {
+	async detach(forcePersist?: boolean): Promise<codemavi> {
 		await this._startBarrier.wait();
 		return this._remoteTerminalChannel.detachFromProcess(this.id, forcePersist);
 	}
 
-	shutdown(immediate: boolean): void {
+	shutdown(immediate: boolean): codemavi {
 		this._startBarrier.wait().then(_ => {
 			this._remoteTerminalChannel.shutdown(this.id, immediate);
 		});
 	}
 
-	input(data: string): void {
+	input(data: string): codemavi {
 		if (this._inReplay) {
 			return;
 		}
@@ -65,11 +65,11 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		});
 	}
 
-	processBinary(e: string): Promise<void> {
+	processBinary(e: string): Promise<codemavi> {
 		return this._remoteTerminalChannel.processBinary(this.id, e);
 	}
 
-	resize(cols: number, rows: number): void {
+	resize(cols: number, rows: number): codemavi {
 		if (this._inReplay || this._lastDimensions.cols === cols && this._lastDimensions.rows === rows) {
 			return;
 		}
@@ -80,7 +80,7 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		});
 	}
 
-	async clearBuffer(): Promise<void> {
+	async clearBuffer(): Promise<codemavi> {
 		await this._remoteTerminalChannel.clearBuffer(this.id);
 	}
 
@@ -91,7 +91,7 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		return this._remoteTerminalChannel.freePortKillProcess(port);
 	}
 
-	acknowledgeDataEvent(charCount: number): void {
+	acknowledgeDataEvent(charCount: number): codemavi {
 		// Support flow control for server spawned processes
 		if (this._inReplay) {
 			return;
@@ -102,7 +102,7 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		});
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
 		return this._remoteTerminalChannel.setUnicodeVersion(this.id, version);
 	}
 
@@ -110,7 +110,7 @@ export class RemotePty extends BasePty implements ITerminalChildProcess {
 		return this._remoteTerminalChannel.refreshProperty(this.id, type);
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
 		return this._remoteTerminalChannel.updateProperty(this.id, type, value);
 	}
 

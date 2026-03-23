@@ -44,7 +44,7 @@ export interface ISCMResource {
 	readonly command: Command | undefined;
 	readonly multiDiffEditorOriginalUri: URI | undefined;
 	readonly multiDiffEditorModifiedUri: URI | undefined;
-	open(preserveFocus: boolean): Promise<void>;
+	open(preserveFocus: boolean): Promise<codemavi>;
 }
 
 export interface ISCMResourceGroup {
@@ -53,12 +53,12 @@ export interface ISCMResourceGroup {
 
 	readonly resources: readonly ISCMResource[];
 	readonly resourceTree: ResourceTree<ISCMResource, ISCMResourceGroup>;
-	readonly onDidChangeResources: Event<void>;
+	readonly onDidChangeResources: Event<codemavi>;
 
 	readonly label: string;
 	contextValue: string | undefined;
 	readonly hideWhenEmpty: boolean;
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 
 	readonly multiDiffEditorEnableViewChanges: boolean;
 }
@@ -70,8 +70,8 @@ export interface ISCMProvider extends IDisposable {
 	readonly name: string;
 
 	readonly groups: readonly ISCMResourceGroup[];
-	readonly onDidChangeResourceGroups: Event<void>;
-	readonly onDidChangeResources: Event<void>;
+	readonly onDidChangeResourceGroups: Event<codemavi>;
+	readonly onDidChangeResources: Event<codemavi>;
 
 	readonly rootUri?: URI;
 	readonly inputBoxTextModel: ITextModel;
@@ -131,14 +131,14 @@ export interface ISCMInput {
 	readonly repository: ISCMRepository;
 
 	readonly value: string;
-	setValue(value: string, fromKeyboard: boolean): void;
+	setValue(value: string, fromKeyboard: boolean): codemavi;
 	readonly onDidChange: Event<ISCMInputChangeEvent>;
 
 	placeholder: string;
 	readonly onDidChangePlaceholder: Event<string>;
 
 	validateInput: IInputValidator;
-	readonly onDidChangeValidateInput: Event<void>;
+	readonly onDidChangeValidateInput: Event<codemavi>;
 
 	enabled: boolean;
 	readonly onDidChangeEnablement: Event<boolean>;
@@ -146,14 +146,14 @@ export interface ISCMInput {
 	visible: boolean;
 	readonly onDidChangeVisibility: Event<boolean>;
 
-	setFocus(): void;
-	readonly onDidChangeFocus: Event<void>;
+	setFocus(): codemavi;
+	readonly onDidChangeFocus: Event<codemavi>;
 
-	showValidationMessage(message: string | IMarkdownString, type: InputValidationType): void;
+	showValidationMessage(message: string | IMarkdownString, type: InputValidationType): codemavi;
 	readonly onDidChangeValidationMessage: Event<IInputValidation>;
 
-	showNextHistoryValue(): void;
-	showPreviousHistoryValue(): void;
+	showNextHistoryValue(): codemavi;
+	showPreviousHistoryValue(): codemavi;
 }
 
 export interface ISCMRepository extends IDisposable {
@@ -179,7 +179,7 @@ export interface ISCMService {
 export interface ISCMTitleMenu {
 	readonly actions: IAction[];
 	readonly secondaryActions: IAction[];
-	readonly onDidChangeTitle: Event<void>;
+	readonly onDidChangeTitle: Event<codemavi>;
 	readonly menu: IMenu;
 }
 
@@ -221,19 +221,19 @@ export interface ISCMViewService {
 	readonly onDidChangeVisibleRepositories: Event<ISCMViewVisibleRepositoryChangeEvent>;
 
 	isVisible(repository: ISCMRepository): boolean;
-	toggleVisibility(repository: ISCMRepository, visible?: boolean): void;
+	toggleVisibility(repository: ISCMRepository, visible?: boolean): codemavi;
 
-	toggleSortKey(sortKey: ISCMRepositorySortKey): void;
+	toggleSortKey(sortKey: ISCMRepositorySortKey): codemavi;
 
 	readonly focusedRepository: ISCMRepository | undefined;
 	readonly onDidFocusRepository: Event<ISCMRepository | undefined>;
-	focus(repository: ISCMRepository): void;
+	focus(repository: ISCMRepository): codemavi;
 
 	/**
 	 * Focused repository or the repository for the active editor
 	 */
 	readonly activeRepository: IObservable<ISCMRepository | undefined>;
-	pinActiveRepository(repository: ISCMRepository | undefined): void;
+	pinActiveRepository(repository: ISCMRepository | undefined): codemavi;
 }
 
 export const SCM_CHANGES_EDITOR_ID = 'workbench.editor.scmChangesEditor';

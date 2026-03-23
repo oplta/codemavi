@@ -32,7 +32,7 @@ export class CursorWorkspaceMcpDiscoveryAdapter extends FilesystemMcpDiscovery i
 		super(configurationService, fileService, mcpRegistry);
 	}
 
-	start(): void {
+	start(): codemavi {
 		this._register(this._workspaceContextService.onDidChangeWorkspaceFolders(e => {
 			for (const removed of e.removed) {
 				this._collections.deleteAndDispose(removed.uri.toString());

@@ -17,8 +17,8 @@ import { URI } from '../../../../../base/common/uri.js';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../../base/test/common/utils.js';
 
 class TestEnvironmentVariableService extends EnvironmentVariableService {
-	persistCollections(): void { this._persistCollections(); }
-	notifyCollectionUpdates(): void { this._notifyCollectionUpdates(); }
+	persistCollections(): codemavi { this._persistCollections(); }
+	notifyCollectionUpdates(): codemavi { this._notifyCollectionUpdates(); }
 }
 
 suite('EnvironmentVariable - EnvironmentVariableService', () => {
@@ -26,10 +26,10 @@ suite('EnvironmentVariable - EnvironmentVariableService', () => {
 
 	let instantiationService: TestInstantiationService;
 	let environmentVariableService: TestEnvironmentVariableService;
-	let changeExtensionsEvent: Emitter<void>;
+	let changeExtensionsEvent: Emitter<codemavi>;
 
 	setup(() => {
-		changeExtensionsEvent = store.add(new Emitter<void>());
+		changeExtensionsEvent = store.add(new Emitter<codemavi>());
 
 		instantiationService = store.add(new TestInstantiationService());
 		instantiationService.stub(IExtensionService, TestExtensionService);

@@ -10,7 +10,7 @@ export type XtermAttributes = Omit<IBufferCell, 'getWidth' | 'getChars' | 'getCo
 export interface IXtermCore {
 	viewport?: {
 		readonly scrollBarWidth: number;
-		_innerRefresh(): void;
+		_innerRefresh(): codemavi;
 	};
 
 	_inputHandler: {

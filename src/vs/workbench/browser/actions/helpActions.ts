@@ -44,7 +44,7 @@ class KeybindingsReferenceAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -77,7 +77,7 @@ class OpenIntroductoryVideosUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -109,7 +109,7 @@ class OpenTipsAndTricksUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -141,7 +141,7 @@ class OpenDocumentationUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 		const url = isWeb ? productService.serverDocumentationUrl : productService.documentationUrl;
@@ -196,7 +196,7 @@ class OpenYouTubeUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -228,7 +228,7 @@ class OpenRequestFeatureUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -260,7 +260,7 @@ class OpenLicenseUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 		const url = isWeb ? productService.serverLicenseUrl : productService.licenseUrl;
@@ -298,7 +298,7 @@ class OpenPrivacyStatementUrlAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -325,7 +325,7 @@ class GetStartedWithAccessibilityFeatures extends Action2 {
 			}
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const commandService = accessor.get(ICommandService);
 		commandService.executeCommand('workbench.action.openWalkthrough', 'SetupAccessibility');
 	}
@@ -349,7 +349,7 @@ class GetStartedWithCopilot extends Action2 {
 			}
 		});
 	}
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const openerService = accessor.get(IOpenerService);
 		openerService.open(URI.parse(product.defaultChatAgent!.documentationUrl));
 	}

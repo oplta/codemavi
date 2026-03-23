@@ -46,12 +46,12 @@ export class CommentsModel extends Disposable implements ICommentsModel {
 		}).flat();
 	}
 
-	public setCommentThreads(uniqueOwner: string, owner: string, ownerLabel: string, commentThreads: CommentThread[]): void {
+	public setCommentThreads(uniqueOwner: string, owner: string, ownerLabel: string, commentThreads: CommentThread[]): codemavi {
 		this.commentThreadsMap.set(uniqueOwner, { ownerLabel, resourceWithCommentThreads: this.groupByResource(uniqueOwner, owner, commentThreads) });
 		this.updateResourceCommentThreads();
 	}
 
-	public deleteCommentsByOwner(uniqueOwner?: string): void {
+	public deleteCommentsByOwner(uniqueOwner?: string): codemavi {
 		if (uniqueOwner) {
 			const existingOwner = this.commentThreadsMap.get(uniqueOwner);
 			this.commentThreadsMap.set(uniqueOwner, { ownerLabel: existingOwner?.ownerLabel, resourceWithCommentThreads: [] });

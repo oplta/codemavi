@@ -12,7 +12,7 @@ suite('HTML Embedded Support', () => {
 
 	const htmlLanguageService = getLanguageService();
 
-	function assertLanguageId(value: string, expectedLanguageId: string | undefined): void {
+	function assertLanguageId(value: string, expectedLanguageId: string | undefined): codemavi {
 		const offset = value.indexOf('|');
 		value = value.substr(0, offset) + value.substr(offset + 1);
 
@@ -26,7 +26,7 @@ suite('HTML Embedded Support', () => {
 		assert.strictEqual(languageId, expectedLanguageId);
 	}
 
-	function assertEmbeddedLanguageContent(value: string, languageId: string, expectedContent: string): void {
+	function assertEmbeddedLanguageContent(value: string, languageId: string, expectedContent: string): codemavi {
 		const document = TextDocument.create('test://test/test.html', 'html', 0, value);
 
 		const docRegions = embeddedSupport.getDocumentRegions(htmlLanguageService, document);

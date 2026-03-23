@@ -108,7 +108,7 @@ class CommentsAccessibleContentProvider extends Disposable implements IAccessibl
 		}
 		return content;
 	}
-	onClose(): void {
+	onClose(): codemavi {
 		this._commentsView.focus();
 	}
 	provideNextContent(): string | undefined {
@@ -161,7 +161,7 @@ class CommentsThreadWidgetAccessibleContentProvider extends Disposable implement
 		}
 		return commentLabel + contentLabel;
 	}
-	onClose(): void {
+	onClose(): codemavi {
 		const lastComment = this._activeCommentInfo;
 		this._activeCommentInfo = undefined;
 		if (lastComment) {

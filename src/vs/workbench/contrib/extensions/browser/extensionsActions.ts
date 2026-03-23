@@ -96,7 +96,7 @@ export class PromptExtensionInstallFailureAction extends Action {
 		super('extension.promptExtensionInstallFailure');
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		if (isCancellationError(this.error)) {
 			return;
 		}
@@ -276,7 +276,7 @@ export abstract class ExtensionAction extends Action implements IExtensionContai
 		}
 	}
 
-	protected override _setEnabled(value: boolean): void {
+	protected override _setEnabled(value: boolean): codemavi {
 		super._setEnabled(value);
 		if (this.hideOnDisabled) {
 			this.hidden = !value;
@@ -285,7 +285,7 @@ export abstract class ExtensionAction extends Action implements IExtensionContai
 
 	protected hideOnDisabled: boolean = true;
 
-	abstract update(): void;
+	abstract update(): codemavi;
 }
 
 export class ButtonWithDropDownExtensionAction extends ExtensionAction {
@@ -322,7 +322,7 @@ export class ButtonWithDropDownExtensionAction extends ExtensionAction {
 		this.extensionActions.forEach(a => this._register(a));
 	}
 
-	update(donotUpdateActions?: boolean): void {
+	update(donotUpdateActions?: boolean): codemavi {
 		if (!donotUpdateActions) {
 			this.extensionActions.forEach(a => a.update());
 		}
@@ -352,7 +352,7 @@ export class ButtonWithDropDownExtensionAction extends ExtensionAction {
 		}
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		if (this.enabled) {
 			await this.primaryAction?.run();
 		}
@@ -378,12 +378,12 @@ export class ButtonWithDropdownExtensionActionViewItem extends ActionWithDropdow
 		}));
 	}
 
-	override render(container: HTMLElement): void {
+	override render(container: HTMLElement): codemavi {
 		super.render(container);
 		this.updateClass();
 	}
 
-	protected override updateClass(): void {
+	protected override updateClass(): codemavi {
 		super.updateClass();
 		if (this.element && this.dropdownMenuActionViewItem?.element) {
 			this.element.classList.toggle('hide', (<ButtonWithDropDownExtensionAction>this._action).hidden);
@@ -431,11 +431,11 @@ export class InstallAction extends ExtensionAction {
 		this._register(this.labelService.onDidChangeFormatters(() => this.updateLabel(), this));
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.updateThrottler.queue(() => this.computeAndUpdateEnablement());
 	}
 
-	protected async computeAndUpdateEnablement(): Promise<void> {
+	protected async computeAndUpdateEnablement(): Promise<codemavi> {
 		this.enabled = false;
 		this.class = InstallAction.HIDE;
 		this.hidden = true;
@@ -635,7 +635,7 @@ export class InstallAction extends ExtensionAction {
 		return null;
 	}
 
-	protected updateLabel(): void {
+	protected updateLabel(): codemavi {
 		this.label = this.getLabel();
 	}
 
@@ -690,7 +690,7 @@ export class InstallingLabelAction extends ExtensionAction {
 		super('extension.installing', InstallingLabelAction.LABEL, InstallingLabelAction.CLASS, false);
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.class = `${InstallingLabelAction.CLASS}${this.extension && this.extension.state === ExtensionState.Installing ? '' : ' hide'}`;
 	}
 }
@@ -717,7 +717,7 @@ export abstract class InstallInOtherServerAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		this.class = InstallInOtherServerAction.Class;
 
@@ -785,7 +785,7 @@ export abstract class InstallInOtherServerAction extends ExtensionAction {
 		return false;
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		if (!this.extension?.local) {
 			return;
 		}
@@ -870,7 +870,7 @@ export class UninstallAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		if (!this.extension) {
 			this.enabled = false;
 			return;
@@ -937,14 +937,14 @@ export class UpdateAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.updateThrottler.queue(() => this.computeAndUpdateEnablement());
 		if (this.extension) {
 			this.label = this.verbose ? localize('update to', "Update to v{0}", this.extension.latestVersion) : localize('update', "Update");
 		}
 	}
 
-	private async computeAndUpdateEnablement(): Promise<void> {
+	private async computeAndUpdateEnablement(): Promise<codemavi> {
 		this.enabled = false;
 		this.class = UpdateAction.DisabledClass;
 
@@ -1003,7 +1003,7 @@ export class UpdateAction extends ExtensionAction {
 		return this.install(this.extension);
 	}
 
-	private async install(extension: IExtension): Promise<void> {
+	private async install(extension: IExtension): Promise<codemavi> {
 		const options = extension.local?.preRelease ? { installPreReleaseVersion: true } : undefined;
 		try {
 			await this.extensionsWorkbenchService.install(extension, options);
@@ -1120,7 +1120,7 @@ export class MigrateDeprecatedExtensionAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		this.class = MigrateDeprecatedExtensionAction.DisabledClass;
 		if (!this.extension?.local) {
@@ -1187,7 +1187,7 @@ export class DropDownExtensionActionViewItem extends ActionViewItem {
 		super(null, action, { ...options, icon: true, label: true });
 	}
 
-	public showMenu(menuActionGroups: IAction[][]): void {
+	public showMenu(menuActionGroups: IAction[][]): codemavi {
 		if (this.element) {
 			const actions = this.getActions(menuActionGroups);
 			const elementPosition = DOM.getDomNodePagePosition(this.element);
@@ -1372,7 +1372,7 @@ export class ManageExtensionAction extends DropDownExtensionAction {
 		return super.run(await this.getActionGroups());
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.class = ManageExtensionAction.HideManageExtensionClass;
 		this.enabled = false;
 		if (this.extension) {
@@ -1393,7 +1393,7 @@ export class ExtensionEditorManageExtensionAction extends DropDownExtensionActio
 		this.tooltip = localize('manage', "Manage");
 	}
 
-	update(): void { }
+	update(): codemavi { }
 
 	override async run(): Promise<any> {
 		const actionGroups: IAction[][] = [];
@@ -1440,7 +1440,7 @@ export class MenuItemExtensionAction extends ExtensionAction {
 		}
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		if (this.extension) {
 			const id = this.extension.local ? getExtensionId(this.extension.local.manifest.publisher, this.extension.local.manifest.name)
 				: this.extension.gallery ? getExtensionId(this.extension.gallery.publisher, this.extension.gallery.name)
@@ -1550,7 +1550,7 @@ export class InstallAnotherVersionAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = !!this.extension && !this.extension.isBuiltin && !!this.extension.identifier.uuid && !this.extension.deprecationInfo
 			&& this.allowedExtensionsService.isAllowed({ id: this.extension.identifier.id, publisherDisplayName: this.extension.publisherDisplayName }) === true;
 		if (this.enabled && this.whenInstalled) {
@@ -1616,7 +1616,7 @@ export class EnableForWorkspaceAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped) {
 			this.enabled = this.extension.state === ExtensionState.Installed
@@ -1647,7 +1647,7 @@ export class EnableGloballyAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped) {
 			this.enabled = this.extension.state === ExtensionState.Installed
@@ -1681,7 +1681,7 @@ export class DisableForWorkspaceAction extends ExtensionAction {
 		this._register(this.extensionService.onDidChangeExtensions(() => this.update()));
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped && this.extensionService.extensions.some(e => areSameExtensions({ id: e.identifier.value, uuid: e.uuid }, this.extension!.identifier) && this.workspaceContextService.getWorkbenchState() !== WorkbenchState.EMPTY)) {
 			this.enabled = this.extension.state === ExtensionState.Installed
@@ -1714,7 +1714,7 @@ export class DisableGloballyAction extends ExtensionAction {
 		this._register(this.extensionService.onDidChangeExtensions(() => this.update()));
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		if (this.extension && this.extension.local && !this.extension.isWorkspaceScoped && this.extensionService.extensions.some(e => areSameExtensions({ id: e.identifier.value, uuid: e.uuid }, this.extension!.identifier))) {
 			this.enabled = this.extension.state === ExtensionState.Installed
@@ -1778,7 +1778,7 @@ export class ExtensionRuntimeStateAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		this.tooltip = '';
 		this.class = ExtensionRuntimeStateAction.DisabledClass;
@@ -1888,7 +1888,7 @@ export class SetColorThemeAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.workbenchThemeService.getColorThemes().then(colorThemes => {
 			this.enabled = this.computeEnablement(colorThemes);
 			this.class = this.enabled ? SetColorThemeAction.EnabledClass : SetColorThemeAction.DisabledClass;
@@ -1939,7 +1939,7 @@ export class SetFileIconThemeAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.workbenchThemeService.getFileIconThemes().then(fileIconThemes => {
 			this.enabled = this.computeEnablement(fileIconThemes);
 			this.class = this.enabled ? SetFileIconThemeAction.EnabledClass : SetFileIconThemeAction.DisabledClass;
@@ -1989,7 +1989,7 @@ export class SetProductIconThemeAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.workbenchThemeService.getProductIconThemes().then(productIconThemes => {
 			this.enabled = this.computeEnablement(productIconThemes);
 			this.class = this.enabled ? SetProductIconThemeAction.EnabledClass : SetProductIconThemeAction.DisabledClass;
@@ -2036,7 +2036,7 @@ export class SetLanguageAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		this.class = SetLanguageAction.DisabledClass;
 		if (!this.extension) {
@@ -2073,7 +2073,7 @@ export class ClearLanguageAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = false;
 		this.class = ClearLanguageAction.DisabledClass;
 		if (!this.extension) {
@@ -2301,11 +2301,11 @@ export class ConfigureWorkspaceRecommendedExtensionsAction extends AbstractConfi
 		this.update();
 	}
 
-	private update(): void {
+	private update(): codemavi {
 		this.enabled = this.contextService.getWorkbenchState() !== WorkbenchState.EMPTY;
 	}
 
-	public override run(): Promise<void> {
+	public override run(): Promise<codemavi> {
 		switch (this.contextService.getWorkbenchState()) {
 			case WorkbenchState.FOLDER:
 				return this.openExtensionsFile(this.contextService.getWorkspace().folders[0].toResource(EXTENSIONS_CONFIG));
@@ -2379,7 +2379,7 @@ export class ExtensionStatusLabelAction extends Action implements IExtensionCont
 		super('extensions.action.statusLabel', '', ExtensionStatusLabelAction.DISABLED_CLASS, false);
 	}
 
-	update(): void {
+	update(): codemavi {
 		const label = this.computeLabel();
 		this.label = label || '';
 		this.class = label ? ExtensionStatusLabelAction.ENABLED_CLASS : ExtensionStatusLabelAction.DISABLED_CLASS;
@@ -2474,7 +2474,7 @@ export class ToggleSyncExtensionAction extends DropDownExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.enabled = !!this.extension && this.userDataSyncEnablementService.isEnabled() && this.extension.state === ExtensionState.Installed;
 		if (this.extension) {
 			const isIgnored = this.extensionsWorkbenchService.isExtensionIgnoredToSync(this.extension);
@@ -2506,7 +2506,7 @@ export class ExtensionStatusAction extends ExtensionAction {
 	private _status: ExtensionStatus[] = [];
 	get status(): ExtensionStatus[] { return this._status; }
 
-	private readonly _onDidChangeStatus = this._register(new Emitter<void>());
+	private readonly _onDidChangeStatus = this._register(new Emitter<codemavi>());
 	readonly onDidChangeStatus = this._onDidChangeStatus.event;
 
 	private readonly updateThrottler = new Throttler();
@@ -2535,11 +2535,11 @@ export class ExtensionStatusAction extends ExtensionAction {
 		this.update();
 	}
 
-	update(): void {
+	update(): codemavi {
 		this.updateThrottler.queue(() => this.computeAndUpdateStatus());
 	}
 
-	private async computeAndUpdateStatus(): Promise<void> {
+	private async computeAndUpdateStatus(): Promise<codemavi> {
 		this.updateStatus(undefined, true);
 		this.enabled = false;
 
@@ -2801,7 +2801,7 @@ export class ExtensionStatusAction extends ExtensionAction {
 		}
 	}
 
-	private updateStatus(status: ExtensionStatus | undefined, updateClass: boolean): void {
+	private updateStatus(status: ExtensionStatus | undefined, updateClass: boolean): codemavi {
 		if (status) {
 			if (this._status.some(s => s.message.value === status.message.value && s.icon?.id === status.icon?.id)) {
 				return;
@@ -2930,17 +2930,17 @@ export abstract class AbstractInstallExtensionsInServerAction extends Action {
 		}));
 	}
 
-	private updateExtensions(): void {
+	private updateExtensions(): codemavi {
 		this.extensions = this.extensionsWorkbenchService.local;
 		this.update();
 	}
 
-	private update(): void {
+	private update(): codemavi {
 		this.enabled = !!this.extensions && this.getExtensionsToInstall(this.extensions).length > 0;
 		this.tooltip = this.label;
 	}
 
-	override async run(): Promise<void> {
+	override async run(): Promise<codemavi> {
 		return this.selectAndInstallExtensions();
 	}
 
@@ -2949,7 +2949,7 @@ export abstract class AbstractInstallExtensionsInServerAction extends Action {
 		return this.getExtensionsToInstall(local);
 	}
 
-	private async selectAndInstallExtensions(): Promise<void> {
+	private async selectAndInstallExtensions(): Promise<codemavi> {
 		const quickPick = this.quickInputService.createQuickPick<IExtensionPickItem>();
 		quickPick.busy = true;
 		const disposable = quickPick.onDidAccept(() => {
@@ -2977,7 +2977,7 @@ export abstract class AbstractInstallExtensionsInServerAction extends Action {
 		}
 	}
 
-	private async onDidAccept(selectedItems: ReadonlyArray<IExtensionPickItem>): Promise<void> {
+	private async onDidAccept(selectedItems: ReadonlyArray<IExtensionPickItem>): Promise<codemavi> {
 		if (selectedItems.length) {
 			const localExtensionsToInstall = selectedItems.filter(r => !!r.extension).map(r => r.extension);
 			if (localExtensionsToInstall.length) {
@@ -2994,7 +2994,7 @@ export abstract class AbstractInstallExtensionsInServerAction extends Action {
 
 	protected abstract getQuickPickTitle(): string;
 	protected abstract getExtensionsToInstall(local: IExtension[]): IExtension[];
-	protected abstract installExtensions(extensions: IExtension[]): Promise<void>;
+	protected abstract installExtensions(extensions: IExtension[]): Promise<codemavi>;
 }
 
 export class InstallLocalExtensionsInRemoteAction extends AbstractInstallExtensionsInServerAction {
@@ -3032,7 +3032,7 @@ export class InstallLocalExtensionsInRemoteAction extends AbstractInstallExtensi
 		});
 	}
 
-	protected async installExtensions(localExtensionsToInstall: IExtension[]): Promise<void> {
+	protected async installExtensions(localExtensionsToInstall: IExtension[]): Promise<codemavi> {
 		const galleryExtensions: IGalleryExtension[] = [];
 		const vsixs: URI[] = [];
 		const targetPlatform = await this.extensionManagementServerService.remoteExtensionManagementServer!.extensionManagementService.getTargetPlatform();
@@ -3091,7 +3091,7 @@ export class InstallRemoteExtensionsInLocalAction extends AbstractInstallExtensi
 			&& !this.extensionsWorkbenchService.installed.some(e => e.server === this.extensionManagementServerService.localExtensionManagementServer && areSameExtensions(e.identifier, extension.identifier)));
 	}
 
-	protected async installExtensions(extensions: IExtension[]): Promise<void> {
+	protected async installExtensions(extensions: IExtension[]): Promise<codemavi> {
 		const galleryExtensions: IGalleryExtension[] = [];
 		const vsixs: URI[] = [];
 		const targetPlatform = await this.extensionManagementServerService.localExtensionManagementServer!.extensionManagementService.getTargetPlatform();

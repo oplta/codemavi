@@ -33,11 +33,11 @@ import { IBaseActionViewItemOptions } from '../../base/browser/ui/actionbar/acti
  */
 export abstract class Composite extends Component implements IComposite {
 
-	private readonly _onTitleAreaUpdate = this._register(new Emitter<void>());
+	private readonly _onTitleAreaUpdate = this._register(new Emitter<codemavi>());
 	readonly onTitleAreaUpdate = this._onTitleAreaUpdate.event;
 
-	protected _onDidFocus: Emitter<void> | undefined;
-	get onDidFocus(): Event<void> {
+	protected _onDidFocus: Emitter<codemavi> | undefined;
+	get onDidFocus(): Event<codemavi> {
 		if (!this._onDidFocus) {
 			this._onDidFocus = this.registerFocusTrackEvents().onDidFocus;
 		}
@@ -45,8 +45,8 @@ export abstract class Composite extends Component implements IComposite {
 		return this._onDidFocus.event;
 	}
 
-	private _onDidBlur: Emitter<void> | undefined;
-	get onDidBlur(): Event<void> {
+	private _onDidBlur: Emitter<codemavi> | undefined;
+	get onDidBlur(): Event<codemavi> {
 		if (!this._onDidBlur) {
 			this._onDidBlur = this.registerFocusTrackEvents().onDidBlur;
 		}
@@ -59,18 +59,18 @@ export abstract class Composite extends Component implements IComposite {
 		return this._hasFocus;
 	}
 
-	private registerFocusTrackEvents(): { onDidFocus: Emitter<void>; onDidBlur: Emitter<void> } {
+	private registerFocusTrackEvents(): { onDidFocus: Emitter<codemavi>; onDidBlur: Emitter<codemavi> } {
 		const container = assertIsDefined(this.getContainer());
 		const focusTracker = this._register(trackFocus(container));
 
-		const onDidFocus = this._onDidFocus = this._register(new Emitter<void>());
+		const onDidFocus = this._onDidFocus = this._register(new Emitter<codemavi>());
 		this._register(focusTracker.onDidFocus(() => {
 			this._hasFocus = true;
 
 			onDidFocus.fire();
 		}));
 
-		const onDidBlur = this._onDidBlur = this._register(new Emitter<void>());
+		const onDidBlur = this._onDidBlur = this._register(new Emitter<codemavi>());
 		this._register(focusTracker.onDidBlur(() => {
 			this._hasFocus = false;
 
@@ -107,7 +107,7 @@ export abstract class Composite extends Component implements IComposite {
 	 * Note that DOM-dependent calculations should be performed from the setVisible()
 	 * call. Only then the composite will be part of the DOM.
 	 */
-	create(parent: HTMLElement): void {
+	create(parent: HTMLElement): codemavi {
 		this.parent = parent;
 	}
 
@@ -129,7 +129,7 @@ export abstract class Composite extends Component implements IComposite {
 	 * Typically this operation should be fast though because setVisible might be called many times during a session.
 	 * If there is a long running operation it is fine to have it running in the background asyncly and return before.
 	 */
-	setVisible(visible: boolean): void {
+	setVisible(visible: boolean): codemavi {
 		if (this.visible !== !!visible) {
 			this.visible = visible;
 		}
@@ -138,20 +138,20 @@ export abstract class Composite extends Component implements IComposite {
 	/**
 	 * Called when this composite should receive keyboard focus.
 	 */
-	focus(): void {
+	focus(): codemavi {
 		// Subclasses can implement
 	}
 
 	/**
 	 * Layout the contents of this composite using the provided dimensions.
 	 */
-	abstract layout(dimension: Dimension, position?: IDomPosition): void;
+	abstract layout(dimension: Dimension, position?: IDomPosition): codemavi;
 
 	/**
 	 * Set boundary sashes for this composite. These are used to create
 	 * draggable corner areas with inner sashes.
 	 */
-	abstract setBoundarySashes(sashes: IBoundarySashes): void;
+	abstract setBoundarySashes(sashes: IBoundarySashes): codemavi;
 
 	/**
 	 *
@@ -218,7 +218,7 @@ export abstract class Composite extends Component implements IComposite {
 	 * and actions (getActions(), getSecondaryActions()) if the composite is visible or the next time the composite
 	 * gets visible.
 	 */
-	protected updateTitleArea(): void {
+	protected updateTitleArea(): codemavi {
 		this._onTitleAreaUpdate.fire();
 	}
 
@@ -266,7 +266,7 @@ export abstract class CompositeRegistry<T extends Composite> extends Disposable 
 
 	private readonly composites: CompositeDescriptor<T>[] = [];
 
-	protected registerComposite(descriptor: CompositeDescriptor<T>): void {
+	protected registerComposite(descriptor: CompositeDescriptor<T>): codemavi {
 		if (this.compositeById(descriptor.id)) {
 			return;
 		}
@@ -275,7 +275,7 @@ export abstract class CompositeRegistry<T extends Composite> extends Disposable 
 		this._onDidRegister.fire(descriptor);
 	}
 
-	protected deregisterComposite(id: string): void {
+	protected deregisterComposite(id: string): codemavi {
 		const descriptor = this.compositeById(id);
 		if (!descriptor) {
 			return;

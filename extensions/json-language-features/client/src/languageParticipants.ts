@@ -21,15 +21,15 @@ interface LanguageParticipantContribution {
 }
 
 export interface LanguageParticipants {
-	readonly onDidChange: Event<void>;
+	readonly onDidChange: Event<codemavi>;
 	readonly documentSelector: string[];
 	hasLanguage(languageId: string): boolean;
 	useComments(languageId: string): boolean;
-	dispose(): void;
+	dispose(): codemavi;
 }
 
 export function getLanguageParticipants(): LanguageParticipants {
-	const onDidChangeEmmiter = new EventEmitter<void>();
+	const onDidChangeEmmiter = new EventEmitter<codemavi>();
 	let languages = new Set<string>();
 	let comments = new Set<string>();
 

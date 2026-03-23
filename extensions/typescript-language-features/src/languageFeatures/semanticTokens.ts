@@ -116,7 +116,7 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 
 function waitForDocumentChangesToEnd(document: vscode.TextDocument) {
 	let version = document.version;
-	return new Promise<void>((resolve) => {
+	return new Promise<codemavi>((resolve) => {
 		const iv = setInterval(_ => {
 			if (document.version === version) {
 				clearInterval(iv);

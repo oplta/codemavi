@@ -94,11 +94,11 @@ export interface IWorkbenchExtensionManagementService extends IProfileAwareExten
 	updateFromGallery(gallery: IGalleryExtension, extension: ILocalExtension, installOptions?: InstallOptions): Promise<ILocalExtension>;
 	updateMetadata(local: ILocalExtension, metadata: Partial<Metadata>): Promise<ILocalExtension>;
 
-	requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<void>;
+	requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<codemavi>;
 	isPublisherTrusted(extension: IGalleryExtension): boolean;
 	getTrustedPublishers(): IPublisherInfo[];
-	trustPublishers(...publishers: IPublisherInfo[]): void;
-	untrustPublishers(...publishers: string[]): void;
+	trustPublishers(...publishers: IPublisherInfo[]): codemavi;
+	untrustPublishers(...publishers: string[]): codemavi;
 }
 
 export const enum EnablementState {
@@ -186,7 +186,7 @@ export interface IWorkbenchExtensionEnablementService {
 	/**
 	 * Updates the enablement state of the extensions when workspace trust changes.
 	 */
-	updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<void>;
+	updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<codemavi>;
 }
 
 export interface IScannedExtension extends IExtension {
@@ -206,8 +206,8 @@ export interface IWebExtensionsScannerService {
 
 	addExtension(location: URI, metadata: Metadata, profileLocation: URI): Promise<IScannedExtension>;
 	addExtensionFromGallery(galleryExtension: IGalleryExtension, metadata: Metadata, profileLocation: URI): Promise<IScannedExtension>;
-	removeExtension(extension: IScannedExtension, profileLocation: URI): Promise<void>;
-	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, filter: (extension: IScannedExtension) => boolean): Promise<void>;
+	removeExtension(extension: IScannedExtension, profileLocation: URI): Promise<codemavi>;
+	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, filter: (extension: IScannedExtension) => boolean): Promise<codemavi>;
 
 	updateMetadata(extension: IScannedExtension, metaData: Partial<Metadata>, profileLocation: URI): Promise<IScannedExtension>;
 

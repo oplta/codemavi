@@ -85,7 +85,7 @@ export abstract class AbstractTextFileService extends Disposable implements ITex
 
 	//#region decorations
 
-	private provideDecorations(): void {
+	private provideDecorations(): codemavi {
 
 		// Text file model decorations
 		const provider = this._register(new class extends Disposable implements IDecorationsProvider {
@@ -101,7 +101,7 @@ export abstract class AbstractTextFileService extends Disposable implements ITex
 				this.registerListeners();
 			}
 
-			private registerListeners(): void {
+			private registerListeners(): codemavi {
 
 				// Creates
 				this._register(this.files.onDidResolve(({ model }) => {
@@ -690,7 +690,7 @@ export abstract class AbstractTextFileService extends Disposable implements ITex
 
 	//#region revert
 
-	async revert(resource: URI, options?: IRevertOptions): Promise<void> {
+	async revert(resource: URI, options?: IRevertOptions): Promise<codemavi> {
 
 		// Untitled
 		if (resource.scheme === Schemas.untitled) {
@@ -750,7 +750,7 @@ export class EncodingOracle extends Disposable implements IResourceEncodings {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 
 		// Workspace Folder Change
 		this._register(this.contextService.onDidChangeWorkspaceFolders(() => this.encodingOverrides = this.getDefaultEncodingOverrides()));

@@ -145,7 +145,7 @@ export class NotebookStickyScroll extends Disposable {
 		private readonly domNode: HTMLElement,
 		private readonly notebookEditor: INotebookEditor,
 		private readonly notebookCellList: INotebookCellList,
-		private readonly layoutFn: (delta: number) => void,
+		private readonly layoutFn: (delta: number) => codemavi,
 		@IContextMenuService private readonly _contextMenuService: IContextMenuService,
 		@IInstantiationService private readonly instantiationService: IInstantiationService
 	) {
@@ -220,7 +220,7 @@ export class NotebookStickyScroll extends Disposable {
 			if (!this.compareStickyLineMaps(computed, this.currentStickyLines)) {
 				this.updateContent(computed);
 			} else {
-				// if we don't end up updating the content, we need to avoid leaking the map
+				// if we don't end up updating the content, we need to acodemavi leaking the map
 				this.disposeStickyLineMap(computed);
 			}
 		}));
@@ -243,7 +243,7 @@ export class NotebookStickyScroll extends Disposable {
 				if (!this.compareStickyLineMaps(computed, this.currentStickyLines)) {
 					this.updateContent(computed);
 				} else {
-					// if we don't end up updating the content, we need to avoid leaking the map
+					// if we don't end up updating the content, we need to acodemavi leaking the map
 					this.disposeStickyLineMap(computed);
 				}
 			});

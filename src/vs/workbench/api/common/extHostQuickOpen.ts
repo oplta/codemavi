@@ -45,7 +45,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 		private _workspace: IExtHostWorkspaceProvider;
 		private _commands: ExtHostCommands;
 
-		private _onDidSelectItem?: (handle: number) => void;
+		private _onDidSelectItem?: (handle: number) => codemavi;
 		private _validateInput?: (input: string) => string | InputBoxValidationMessage | undefined | null | Thenable<string | InputBoxValidationMessage | undefined | null>;
 
 		private _sessions = new Map<number, ExtHostQuickInput>();
@@ -146,7 +146,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 			});
 		}
 
-		$onItemSelected(handle: number): void {
+		$onItemSelected(handle: number): codemavi {
 			this._onDidSelectItem?.(handle);
 		}
 
@@ -227,43 +227,43 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 			return session;
 		}
 
-		$onDidChangeValue(sessionId: number, value: string): void {
+		$onDidChangeValue(sessionId: number, value: string): codemavi {
 			const session = this._sessions.get(sessionId);
 			session?._fireDidChangeValue(value);
 		}
 
-		$onDidAccept(sessionId: number): void {
+		$onDidAccept(sessionId: number): codemavi {
 			const session = this._sessions.get(sessionId);
 			session?._fireDidAccept();
 		}
 
-		$onDidChangeActive(sessionId: number, handles: number[]): void {
+		$onDidChangeActive(sessionId: number, handles: number[]): codemavi {
 			const session = this._sessions.get(sessionId);
 			if (session instanceof ExtHostQuickPick) {
 				session._fireDidChangeActive(handles);
 			}
 		}
 
-		$onDidChangeSelection(sessionId: number, handles: number[]): void {
+		$onDidChangeSelection(sessionId: number, handles: number[]): codemavi {
 			const session = this._sessions.get(sessionId);
 			if (session instanceof ExtHostQuickPick) {
 				session._fireDidChangeSelection(handles);
 			}
 		}
 
-		$onDidTriggerButton(sessionId: number, handle: number): void {
+		$onDidTriggerButton(sessionId: number, handle: number): codemavi {
 			const session = this._sessions.get(sessionId);
 			session?._fireDidTriggerButton(handle);
 		}
 
-		$onDidTriggerItemButton(sessionId: number, itemHandle: number, buttonHandle: number): void {
+		$onDidTriggerItemButton(sessionId: number, itemHandle: number, buttonHandle: number): codemavi {
 			const session = this._sessions.get(sessionId);
 			if (session instanceof ExtHostQuickPick) {
 				session._fireDidTriggerItemButton(itemHandle, buttonHandle);
 			}
 		}
 
-		$onDidHide(sessionId: number): void {
+		$onDidHide(sessionId: number): codemavi {
 			const session = this._sessions.get(sessionId);
 			session?._fireDidHide();
 		}
@@ -287,10 +287,10 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 		private _placeholder: string | undefined;
 		private _buttons: QuickInputButton[] = [];
 		private _handlesToButtons = new Map<number, QuickInputButton>();
-		private readonly _onDidAcceptEmitter = new Emitter<void>();
+		private readonly _onDidAcceptEmitter = new Emitter<codemavi>();
 		private readonly _onDidChangeValueEmitter = new Emitter<string>();
 		private readonly _onDidTriggerButtonEmitter = new Emitter<QuickInputButton>();
-		private readonly _onDidHideEmitter = new Emitter<void>();
+		private readonly _onDidHideEmitter = new Emitter<codemavi>();
 		private _updateTimeout: any;
 		private _pendingUpdate: TransferQuickInput = { id: this._id };
 
@@ -302,7 +302,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 			this._onDidChangeValueEmitter
 		];
 
-		constructor(protected _extension: IExtensionDescription, private _onDidDispose: () => void) {
+		constructor(protected _extension: IExtensionDescription, private _onDidDispose: () => codemavi) {
 		}
 
 		get title() {
@@ -419,13 +419,13 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 
 		onDidTriggerButton = this._onDidTriggerButtonEmitter.event;
 
-		show(): void {
+		show(): codemavi {
 			this._visible = true;
 			this._expectingHide = true;
 			this.update({ visible: true });
 		}
 
-		hide(): void {
+		hide(): codemavi {
 			this._visible = false;
 			this.update({ visible: false });
 		}
@@ -463,7 +463,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 			}
 		}
 
-		dispose(): void {
+		dispose(): codemavi {
 			if (this._disposed) {
 				return;
 			}
@@ -478,7 +478,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 			proxy.$dispose(this._id);
 		}
 
-		protected update(properties: Record<string, any>): void {
+		protected update(properties: Record<string, any>): codemavi {
 			if (this._disposed) {
 				return;
 			}
@@ -561,7 +561,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 		private readonly _onDidChangeSelectionEmitter = new Emitter<T[]>();
 		private readonly _onDidTriggerItemButtonEmitter = new Emitter<QuickPickItemButtonEvent<T>>();
 
-		constructor(extension: IExtensionDescription, onDispose: () => void) {
+		constructor(extension: IExtensionDescription, onDispose: () => codemavi) {
 			super(extension, onDispose);
 			this._disposables.push(
 				this._onDidChangeActiveEmitter,
@@ -725,7 +725,7 @@ export function createExtHostQuickOpen(mainContext: IMainContext, workspace: IEx
 		private _prompt: string | undefined;
 		private _validationMessage: string | InputBoxValidationMessage | undefined;
 
-		constructor(extension: IExtensionDescription, onDispose: () => void) {
+		constructor(extension: IExtensionDescription, onDispose: () => codemavi) {
 			super(extension, onDispose);
 			this.update({ type: 'inputBox' });
 		}

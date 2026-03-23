@@ -81,16 +81,16 @@ export class NativeExtHostSearch extends ExtHostSearch implements IDisposable {
 		return this._numThreadsPromise;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.isDisposed = true;
 		this._disposables.dispose();
 	}
 
-	override $enableExtensionHostSearch(): void {
+	override $enableExtensionHostSearch(): codemavi {
 		this._registerEHSearchProviders();
 	}
 
-	private _registerEHSearchProviders(): void {
+	private _registerEHSearchProviders(): codemavi {
 		if (this._registeredEHSearchProvider) {
 			return;
 		}
@@ -126,7 +126,7 @@ export class NativeExtHostSearch extends ExtHostSearch implements IDisposable {
 		return super.$provideFileSearchResults(handle, session, rawQuery, token);
 	}
 
-	override async doInternalFileSearchWithCustomCallback(rawQuery: IFileQuery, token: vscode.CancellationToken, handleFileMatch: (data: URI[]) => void): Promise<ISearchCompleteStats> {
+	override async doInternalFileSearchWithCustomCallback(rawQuery: IFileQuery, token: vscode.CancellationToken, handleFileMatch: (data: URI[]) => codemavi): Promise<ISearchCompleteStats> {
 		const onResult = (ev: ISerializedSearchProgressItem) => {
 			if (isSerializedFileMatch(ev)) {
 				ev = [ev];
@@ -155,7 +155,7 @@ export class NativeExtHostSearch extends ExtHostSearch implements IDisposable {
 		});
 	}
 
-	override $clearCache(cacheKey: string): Promise<void> {
+	override $clearCache(cacheKey: string): Promise<codemavi> {
 		this._internalFileSearchProvider?.clearCache(cacheKey);
 
 		return super.$clearCache(cacheKey);

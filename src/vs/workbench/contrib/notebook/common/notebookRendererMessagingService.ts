@@ -20,7 +20,7 @@ export interface INotebookRendererMessagingService {
 	/**
 	 * Prepares messaging for the given renderer ID.
 	 */
-	prepare(rendererId: string): void;
+	prepare(rendererId: string): codemavi;
 	/**
 	 * Gets messaging scoped for a specific editor.
 	 */
@@ -42,5 +42,5 @@ export interface IScopedRendererMessaging extends IDisposable {
 	/**
 	 * Sends a message to an extension from a renderer.
 	 */
-	postMessage(rendererId: string, message: unknown): void;
+	postMessage(rendererId: string, message: unknown): codemavi;
 }

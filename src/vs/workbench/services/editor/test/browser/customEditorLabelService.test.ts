@@ -33,7 +33,7 @@ suite('Custom Editor Label Service', () => {
 		return [customLabelService, configService, instantiationService.createInstance(TestServiceAccessor)];
 	}
 
-	async function updatePattern(configService: TestConfigurationService, value: any): Promise<void> {
+	async function updatePattern(configService: TestConfigurationService, value: any): Promise<codemavi> {
 		await configService.setUserConfiguration(CustomEditorLabelService.SETTING_ID_PATTERNS, value);
 		configService.onDidChangeConfigurationEmitter.fire({
 			affectsConfiguration: (key: string) => key === CustomEditorLabelService.SETTING_ID_PATTERNS,
@@ -110,7 +110,7 @@ suite('Custom Editor Label Service', () => {
 			extMinus2?: string;
 		}
 
-		function assertExtname(filename: string, ext: IExt): void {
+		function assertExtname(filename: string, ext: IExt): codemavi {
 			assert.strictEqual(customLabelService.getName(URI.file(`test/ext/${filename}`)), ext.extname ?? '${extname}', filename);
 			assert.strictEqual(customLabelService.getName(URI.file(`test/ext0/${filename}`)), ext.ext0 ?? '${extname(0)}', filename);
 			assert.strictEqual(customLabelService.getName(URI.file(`test/ext1/${filename}`)), ext.ext1 ?? '${extname(1)}', filename);
@@ -170,7 +170,7 @@ suite('Custom Editor Label Service', () => {
 			dirMinus2?: string;
 		}
 
-		function assertDirname(path: string, dir: IDir): void {
+		function assertDirname(path: string, dir: IDir): codemavi {
 			assert.strictEqual(customLabelService.getName(URI.file(path))?.split(',')[0], dir.dirname ?? '${dirname}', path);
 			assert.strictEqual(customLabelService.getName(URI.file(path))?.split(',')[1], dir.dir0 ?? '${dirname(0)}', path);
 			assert.strictEqual(customLabelService.getName(URI.file(path))?.split(',')[2], dir.dir1 ?? '${dirname(1)}', path);

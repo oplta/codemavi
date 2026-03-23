@@ -526,7 +526,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "advice.commitBeforeMerge",
 		description:
-			"Advice shown when git-merge[1] refuses to merge to avoid overwriting local changes",
+			"Advice shown when git-merge[1] refuses to merge to acodemavi overwriting local changes",
 	},
 	{
 		name: "advice.detachedHead",
@@ -661,7 +661,7 @@ const configSuggestions: Fig.Suggestion[] = [
 		name: "alias.*",
 		insertValue: "alias.{cursor}",
 		description:
-			"Command aliases for the git[1] command wrapper - e.g. after defining `alias.last = cat-file commit HEAD`, the invocation `git last` is equivalent to `git cat-file commit HEAD`. To avoid confusion and troubles with script usage, aliases that hide existing Git commands are ignored. Arguments are split by spaces, the usual shell quoting and escaping is supported. A quote pair or a backslash can be used to quote them",
+			"Command aliases for the git[1] command wrapper - e.g. after defining `alias.last = cat-file commit HEAD`, the invocation `git last` is equivalent to `git cat-file commit HEAD`. To acodemavi confusion and troubles with script usage, aliases that hide existing Git commands are ignored. Arguments are split by spaces, the usual shell quoting and escaping is supported. A quote pair or a backslash can be used to quote them",
 	},
 	{
 		name: "am.keepcr",
@@ -1093,7 +1093,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "core.deltaBaseCacheLimit",
 		description:
-			"Maximum number of bytes per thread to reserve for caching base objects that may be referenced by multiple deltified objects. By storing the entire decompressed base objects in a cache Git is able to avoid unpacking and decompressing frequently used base objects multiple times",
+			"Maximum number of bytes per thread to reserve for caching base objects that may be referenced by multiple deltified objects. By storing the entire decompressed base objects in a cache Git is able to acodemavi unpacking and decompressing frequently used base objects multiple times",
 	},
 	{
 		name: "core.editor",
@@ -1168,7 +1168,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "core.ignoreStat",
 		description:
-			'If true, Git will avoid using lstat() calls to detect if files have changed by setting the "assume-unchanged" bit for those tracked files which it has updated identically in both the index and working tree',
+			'If true, Git will acodemavi using lstat() calls to detect if files have changed by setting the "assume-unchanged" bit for those tracked files which it has updated identically in both the index and working tree',
 	},
 	{
 		name: "core.logAllRefUpdates",
@@ -1322,7 +1322,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "credential.helper",
 		description:
-			"Specify an external helper to be called when a username or password credential is needed; the helper may consult external storage to avoid prompting the user for the credentials. This is normally the name of a credential helper with possible arguments, but may also be an absolute path with arguments or, if preceded by `!`, shell commands",
+			"Specify an external helper to be called when a username or password credential is needed; the helper may consult external storage to acodemavi prompting the user for the credentials. This is normally the name of a credential helper with possible arguments, but may also be an absolute path with arguments or, if preceded by `!`, shell commands",
 	},
 	{
 		name: "credential.useHttpPath",
@@ -1348,7 +1348,7 @@ const configSuggestions: Fig.Suggestion[] = [
 		name: "credential.<url>.helper",
 		insertValue: "credential.{cursor}.helper",
 		description:
-			"Specify an external helper to be called when a username or password credential is needed; the helper may consult external storage to avoid prompting the user for the credentials. This is normally the name of a credential helper with possible arguments, but may also be an absolute path with arguments or, if preceded by `!`, shell commands",
+			"Specify an external helper to be called when a username or password credential is needed; the helper may consult external storage to acodemavi prompting the user for the credentials. This is normally the name of a credential helper with possible arguments, but may also be an absolute path with arguments or, if preceded by `!`, shell commands",
 	},
 	{
 		name: "credential.<url>.useHttpPath",
@@ -2146,7 +2146,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "http.postBuffer",
 		description:
-			"Maximum size in bytes of the buffer used by smart HTTP transports when POSTing data to the remote system. For requests larger than this buffer size, HTTP/1.1 and Transfer-Encoding: chunked is used to avoid creating a massive pack file locally. Default is 1 MiB, which is sufficient for most requests",
+			"Maximum size in bytes of the buffer used by smart HTTP transports when POSTing data to the remote system. For requests larger than this buffer size, HTTP/1.1 and Transfer-Encoding: chunked is used to acodemavi creating a massive pack file locally. Default is 1 MiB, which is sufficient for most requests",
 	},
 	{
 		name: "http.proxy",
@@ -2318,7 +2318,7 @@ const configSuggestions: Fig.Suggestion[] = [
 		name: "http.<url>.postBuffer",
 		insertValue: "http.{cursor}.postBuffer",
 		description:
-			"Maximum size in bytes of the buffer used by smart HTTP transports when POSTing data to the remote system. For requests larger than this buffer size, HTTP/1.1 and Transfer-Encoding: chunked is used to avoid creating a massive pack file locally. Default is 1 MiB, which is sufficient for most requests",
+			"Maximum size in bytes of the buffer used by smart HTTP transports when POSTing data to the remote system. For requests larger than this buffer size, HTTP/1.1 and Transfer-Encoding: chunked is used to acodemavi creating a massive pack file locally. Default is 1 MiB, which is sufficient for most requests",
 	},
 	{
 		name: "http.<url>.proxy",
@@ -2838,12 +2838,12 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "mergetool.meld.hasOutput",
 		description:
-			"Older versions of `meld` do not support the `--output` option. Git will attempt to detect whether `meld` supports `--output` by inspecting the output of `meld --help`. Configuring `mergetool.meld.hasOutput` will make Git skip these checks and use the configured value instead. Setting `mergetool.meld.hasOutput` to `true` tells Git to unconditionally use the `--output` option, and `false` avoids using `--output`",
+			"Older versions of `meld` do not support the `--output` option. Git will attempt to detect whether `meld` supports `--output` by inspecting the output of `meld --help`. Configuring `mergetool.meld.hasOutput` will make Git skip these checks and use the configured value instead. Setting `mergetool.meld.hasOutput` to `true` tells Git to unconditionally use the `--output` option, and `false` acodemavis using `--output`",
 	},
 	{
 		name: "mergetool.meld.useAutoMerge",
 		description:
-			"When the `--auto-merge` is given, meld will merge all non-conflicting parts automatically, highlight the conflicting parts and wait for user decision. Setting `mergetool.meld.useAutoMerge` to `true` tells Git to unconditionally use the `--auto-merge` option with `meld`. Setting this value to `auto` makes git detect whether `--auto-merge` is supported and will only use `--auto-merge` when available. A value of `false` avoids using `--auto-merge` altogether, and is the default value",
+			"When the `--auto-merge` is given, meld will merge all non-conflicting parts automatically, highlight the conflicting parts and wait for user decision. Setting `mergetool.meld.useAutoMerge` to `true` tells Git to unconditionally use the `--auto-merge` option with `meld`. Setting this value to `auto` makes git detect whether `--auto-merge` is supported and will only use `--auto-merge` when available. A value of `false` acodemavis using `--auto-merge` altogether, and is the default value",
 	},
 	{
 		name: "mergetool.prompt",
@@ -3394,7 +3394,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "sendemail.forbidSendmailVariables",
 		description:
-			'To avoid common misconfiguration mistakes, git-send-email[1] will abort with a warning if any configuration options for "sendmail" exist. Set this variable to bypass the check',
+			'To acodemavi common misconfiguration mistakes, git-send-email[1] will abort with a warning if any configuration options for "sendmail" exist. Set this variable to bypass the check',
 	},
 	{
 		name: "sendemail.identity",
@@ -3440,7 +3440,7 @@ const configSuggestions: Fig.Suggestion[] = [
 		name: "sendemail.<identity>.forbidSendmailVariables",
 		insertValue: "sendemail.{cursor}.forbidSendmailVariables",
 		description:
-			'To avoid common misconfiguration mistakes, git-send-email[1] will abort with a warning if any configuration options for "sendmail" exist. Set this variable to bypass the check',
+			'To acodemavi common misconfiguration mistakes, git-send-email[1] will abort with a warning if any configuration options for "sendmail" exist. Set this variable to bypass the check',
 	},
 	{
 		name: "sendemail.<identity>.signedoffcc",
@@ -3648,7 +3648,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "tag.gpgSign",
 		description:
-			'A boolean to specify whether all tags should be GPG signed. Use of this option when running in an automated script can result in a large number of tags being signed. It is therefore convenient to use an agent to avoid typing your gpg passphrase several times. Note that this option doesn\'t affect tag signing behavior enabled by "-u <keyid>" or "--local-user=<keyid>" options',
+			'A boolean to specify whether all tags should be GPG signed. Use of this option when running in an automated script can result in a large number of tags being signed. It is therefore convenient to use an agent to acodemavi typing your gpg passphrase several times. Note that this option doesn\'t affect tag signing behavior enabled by "-u <keyid>" or "--local-user=<keyid>" options',
 	},
 	{
 		name: "tag.sort",
@@ -3821,7 +3821,7 @@ const configSuggestions: Fig.Suggestion[] = [
 	{
 		name: "user.useConfigOnly",
 		description:
-			"Instruct Git to avoid trying to guess defaults for `user.email` and `user.name`, and instead retrieve the values only from the configuration. For example, if you have multiple email addresses and would like to use a different one for each repository, then with this configuration option set to `true` in the global config along with a name, Git will prompt you to set up an email before making new commits in a newly cloned repository. Defaults to `false`",
+			"Instruct Git to acodemavi trying to guess defaults for `user.email` and `user.name`, and instead retrieve the values only from the configuration. For example, if you have multiple email addresses and would like to use a different one for each repository, then with this configuration option set to `true` in the global config along with a name, Git will prompt you to set up an email before making new commits in a newly cloned repository. Defaults to `false`",
 	},
 	{
 		name: "versionsort.prereleaseSuffix",
@@ -5468,7 +5468,7 @@ const completionSpec: Fig.Spec = {
 				{
 					name: "-d",
 					description:
-						"Normally, when no <path> is specified, git clean will not recurse into untracked directories to avoid removing too much. Specify -d to have it recurse into such directories as well. If any paths are specified, -d is irrelevant; all untracked files matching the specified paths (with exceptions for nested git directories mentioned under --force) will be removed",
+						"Normally, when no <path> is specified, git clean will not recurse into untracked directories to acodemavi removing too much. Specify -d to have it recurse into such directories as well. If any paths are specified, -d is irrelevant; all untracked files matching the specified paths (with exceptions for nested git directories mentioned under --force) will be removed",
 				},
 				{
 					name: ["-f", "--force"],

@@ -53,7 +53,7 @@ export interface IExtHostTunnelService extends ExtHostTunnelServiceShape {
 	readonly _serviceBrand: undefined;
 	openTunnel(extension: IExtensionDescription, forward: TunnelOptions): Promise<vscode.Tunnel | undefined>;
 	getTunnels(): Promise<vscode.TunnelDescription[]>;
-	onDidChangeTunnels: vscode.Event<void>;
+	onDidChangeTunnels: vscode.Event<codemavi>;
 	setTunnelFactory(provider: vscode.RemoteAuthorityResolver | undefined, managedRemoteAuthority: vscode.ManagedResolvedAuthority | undefined): Promise<IDisposable>;
 	registerPortsAttributesProvider(portSelector: PortAttributesSelector, provider: vscode.PortAttributesProvider): IDisposable;
 	registerTunnelProvider(provider: vscode.TunnelProvider, information: vscode.TunnelInformation): Promise<IDisposable>;
@@ -67,8 +67,8 @@ export class ExtHostTunnelService extends Disposable implements IExtHostTunnelSe
 	private _forwardPortProvider: ((tunnelOptions: TunnelOptions, tunnelCreationOptions: TunnelCreationOptions, token?: vscode.CancellationToken) => Thenable<vscode.Tunnel | undefined> | undefined) | undefined;
 	private _showCandidatePort: (host: string, port: number, detail: string) => Thenable<boolean> = () => { return Promise.resolve(true); };
 	private _extensionTunnels: Map<string, Map<number, { tunnel: vscode.Tunnel; disposeListener: IDisposable }>> = new Map();
-	private _onDidChangeTunnels: Emitter<void> = new Emitter<void>();
-	onDidChangeTunnels: vscode.Event<void> = this._onDidChangeTunnels.event;
+	private _onDidChangeTunnels: Emitter<codemavi> = new Emitter<codemavi>();
+	onDidChangeTunnels: vscode.Event<codemavi> = this._onDidChangeTunnels.event;
 
 	private _providerHandleCounter: number = 0;
 	private _portAttributesProviders: Map<number, { provider: vscode.PortAttributesProvider; selector: PortAttributesSelector }> = new Map();
@@ -145,7 +145,7 @@ export class ExtHostTunnelService extends Disposable implements IExtHostTunnelSe
 		}) : [];
 	}
 
-	async $registerCandidateFinder(_enable: boolean): Promise<void> { }
+	async $registerCandidateFinder(_enable: boolean): Promise<codemavi> { }
 
 	registerTunnelProvider(provider: vscode.TunnelProvider, information: vscode.TunnelInformation): Promise<IDisposable> {
 		if (this._forwardPortProvider) {
@@ -228,7 +228,7 @@ export class ExtHostTunnelService extends Disposable implements IExtHostTunnelSe
 		return undefined; // may be overridden
 	}
 
-	async $closeTunnel(remote: { host: string; port: number }, silent?: boolean): Promise<void> {
+	async $closeTunnel(remote: { host: string; port: number }, silent?: boolean): Promise<codemavi> {
 		if (this._extensionTunnels.has(remote.host)) {
 			const hostMap = this._extensionTunnels.get(remote.host)!;
 			if (hostMap.has(remote.port)) {
@@ -241,7 +241,7 @@ export class ExtHostTunnelService extends Disposable implements IExtHostTunnelSe
 		}
 	}
 
-	async $onDidTunnelsChange(): Promise<void> {
+	async $onDidTunnelsChange(): Promise<codemavi> {
 		this._onDidChangeTunnels.fire();
 	}
 

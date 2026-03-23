@@ -57,28 +57,28 @@ export class MainThreadExtensionService implements MainThreadExtensionServiceSha
 		internalExtHostContext._setAllMainProxyIdentifiers(Object.keys(MainContext).map((key) => (<any>MainContext)[key]));
 	}
 
-	public dispose(): void {
+	public dispose(): codemavi {
 	}
 
 	$getExtension(extensionId: string) {
 		return this._extensionService.getExtension(extensionId);
 	}
-	$activateExtension(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
+	$activateExtension(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
 		return this._internalExtensionService._activateById(extensionId, reason);
 	}
-	async $onWillActivateExtension(extensionId: ExtensionIdentifier): Promise<void> {
+	async $onWillActivateExtension(extensionId: ExtensionIdentifier): Promise<codemavi> {
 		this._internalExtensionService._onWillActivateExtension(extensionId);
 	}
-	$onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): void {
+	$onDidActivateExtension(extensionId: ExtensionIdentifier, codeLoadingTime: number, activateCallTime: number, activateResolvedTime: number, activationReason: ExtensionActivationReason): codemavi {
 		this._internalExtensionService._onDidActivateExtension(extensionId, codeLoadingTime, activateCallTime, activateResolvedTime, activationReason);
 	}
-	$onExtensionRuntimeError(extensionId: ExtensionIdentifier, data: SerializedError): void {
+	$onExtensionRuntimeError(extensionId: ExtensionIdentifier, data: SerializedError): codemavi {
 		const error = transformErrorFromSerialization(data);
 		this._internalExtensionService._onExtensionRuntimeError(extensionId, error);
 		console.error(`[${extensionId.value}]${error.message}`);
 		console.error(error.stack);
 	}
-	async $onExtensionActivationError(extensionId: ExtensionIdentifier, data: SerializedError, missingExtensionDependency: MissingExtensionDependency | null): Promise<void> {
+	async $onExtensionActivationError(extensionId: ExtensionIdentifier, data: SerializedError, missingExtensionDependency: MissingExtensionDependency | null): Promise<codemavi> {
 		const error = transformErrorFromSerialization(data);
 
 		this._internalExtensionService._onDidActivateExtensionError(extensionId, error);
@@ -107,7 +107,7 @@ export class MainThreadExtensionService implements MainThreadExtensionServiceSha
 		console.error(error.message);
 	}
 
-	private async _handleMissingInstalledDependency(extension: IExtensionDescription, missingInstalledDependency: ILocalExtension): Promise<void> {
+	private async _handleMissingInstalledDependency(extension: IExtensionDescription, missingInstalledDependency: ILocalExtension): Promise<codemavi> {
 		const extName = extension.displayName || extension.name;
 		if (this._extensionEnablementService.isEnabled(missingInstalledDependency)) {
 			this._notificationService.notify({
@@ -152,7 +152,7 @@ export class MainThreadExtensionService implements MainThreadExtensionServiceSha
 		}
 	}
 
-	private async _handleMissingNotInstalledDependency(extension: IExtensionDescription, missingDependency: string): Promise<void> {
+	private async _handleMissingNotInstalledDependency(extension: IExtensionDescription, missingDependency: string): Promise<codemavi> {
 		const extName = extension.displayName || extension.name;
 		let dependencyExtension: IExtension | null = null;
 		try {
@@ -174,7 +174,7 @@ export class MainThreadExtensionService implements MainThreadExtensionServiceSha
 		}
 	}
 
-	async $setPerformanceMarks(marks: PerformanceMark[]): Promise<void> {
+	async $setPerformanceMarks(marks: PerformanceMark[]): Promise<codemavi> {
 		if (this._extensionHostKind === ExtensionHostKind.LocalProcess) {
 			this._timerService.setPerformanceMarks('localExtHost', marks);
 		} else if (this._extensionHostKind === ExtensionHostKind.LocalWebWorker) {
@@ -202,25 +202,25 @@ class ExtensionHostProxy implements IExtensionHostProxy {
 		const uriComponents = await this._actual.$getCanonicalURI(remoteAuthority, uri);
 		return (uriComponents ? URI.revive(uriComponents) : uriComponents);
 	}
-	startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<void> {
+	startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
 		return this._actual.$startExtensionHost(extensionsDelta);
 	}
 	extensionTestsExecute(): Promise<number> {
 		return this._actual.$extensionTestsExecute();
 	}
-	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
+	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
 		return this._actual.$activateByEvent(activationEvent, activationKind);
 	}
 	activate(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<boolean> {
 		return this._actual.$activate(extensionId, reason);
 	}
-	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void> {
+	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi> {
 		return this._actual.$setRemoteEnvironment(env);
 	}
-	updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<void> {
+	updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<codemavi> {
 		return this._actual.$updateRemoteConnectionData(connectionData);
 	}
-	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<void> {
+	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
 		return this._actual.$deltaExtensions(extensionsDelta);
 	}
 	test_latency(n: number): Promise<number> {

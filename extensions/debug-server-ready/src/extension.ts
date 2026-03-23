@@ -61,7 +61,7 @@ class ServerReadyDetector extends vscode.Disposable {
 	private static detectors = new Map<vscode.DebugSession, ServerReadyDetector>();
 	private static terminalDataListener: vscode.Disposable | undefined;
 
-	private readonly stoppedEmitter = new vscode.EventEmitter<void>();
+	private readonly stoppedEmitter = new vscode.EventEmitter<codemavi>();
 	private readonly onDidSessionStop = this.stoppedEmitter.event;
 	private readonly disposables = new Set<vscode.Disposable>([]);
 	private trigger: Trigger;
@@ -80,7 +80,7 @@ class ServerReadyDetector extends vscode.Disposable {
 		return undefined;
 	}
 
-	static stop(session: vscode.DebugSession): void {
+	static stop(session: vscode.DebugSession): codemavi {
 		const detector = ServerReadyDetector.detectors.get(session);
 		if (detector) {
 			ServerReadyDetector.detectors.delete(session);

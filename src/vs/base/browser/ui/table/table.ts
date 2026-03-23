@@ -14,7 +14,7 @@ export interface ITableColumn<TRow, TCell> {
 
 	readonly minimumWidth?: number;
 	readonly maximumWidth?: number;
-	readonly onDidChangeWidthConstraints?: Event<void>;
+	readonly onDidChangeWidthConstraints?: Event<codemavi>;
 
 	project(row: TRow): TCell;
 }

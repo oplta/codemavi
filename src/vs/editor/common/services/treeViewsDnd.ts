@@ -7,7 +7,7 @@ export interface ITreeViewsDnDService<T> {
 	readonly _serviceBrand: undefined;
 
 	removeDragOperationTransfer(uuid: string | undefined): Promise<T | undefined> | undefined;
-	addDragOperationTransfer(uuid: string, transferPromise: Promise<T | undefined>): void;
+	addDragOperationTransfer(uuid: string, transferPromise: Promise<T | undefined>): codemavi;
 }
 
 export class TreeViewsDnDService<T> implements ITreeViewsDnDService<T> {
@@ -23,7 +23,7 @@ export class TreeViewsDnDService<T> implements ITreeViewsDnDService<T> {
 		return undefined;
 	}
 
-	addDragOperationTransfer(uuid: string, transferPromise: Promise<T | undefined>): void {
+	addDragOperationTransfer(uuid: string, transferPromise: Promise<T | undefined>): codemavi {
 		this._dragOperations.set(uuid, transferPromise);
 	}
 }

@@ -16,7 +16,7 @@ interface ExpectedToken {
 	tokenClassifiction: string;
 }
 
-async function assertTokens(lines: string[], expected: ExpectedToken[], ranges?: Range[], message?: string): Promise<void> {
+async function assertTokens(lines: string[], expected: ExpectedToken[], ranges?: Range[], message?: string): Promise<codemavi> {
 	const document = TextDocument.create('test://foo/bar.html', 'html', 1, lines.join('\n'));
 	const workspace = {
 		settings: {},

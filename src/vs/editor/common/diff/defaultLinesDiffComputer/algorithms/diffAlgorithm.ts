@@ -52,7 +52,7 @@ export class SequenceDiff {
 		);
 	}
 
-	public static assertSorted(sequenceDiffs: SequenceDiff[]): void {
+	public static assertSorted(sequenceDiffs: SequenceDiff[]): codemavi {
 		let last: SequenceDiff | undefined = undefined;
 		for (const cur of sequenceDiffs) {
 			if (last) {

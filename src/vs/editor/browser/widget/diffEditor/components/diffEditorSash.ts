@@ -19,7 +19,7 @@ export class SashLayout {
 
 	private readonly _sashRatio = observableValue<number | undefined>(this, undefined);
 
-	public resetSash(): void {
+	public resetSash(): codemavi {
 		this._sashRatio.set(undefined, undefined);
 	}
 
@@ -64,7 +64,7 @@ export class DiffEditorSash extends Disposable {
 		private readonly _enabled: IObservable<boolean>,
 		private readonly _boundarySashes: IObservable<IBoundarySashes | undefined>,
 		public readonly sashLeft: ISettableObservable<number>,
-		private readonly _resetSash: () => void,
+		private readonly _resetSash: () => codemavi,
 	) {
 		super();
 

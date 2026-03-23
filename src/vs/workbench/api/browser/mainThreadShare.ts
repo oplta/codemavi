@@ -24,7 +24,7 @@ export class MainThreadShare implements MainThreadShareShape {
 		this.proxy = extHostContext.getProxy(ExtHostContext.ExtHostShare);
 	}
 
-	$registerShareProvider(handle: number, selector: IDocumentFilterDto[], id: string, label: string, priority: number): void {
+	$registerShareProvider(handle: number, selector: IDocumentFilterDto[], id: string, label: string, priority: number): codemavi {
 		const provider: IShareProvider = {
 			id,
 			label,
@@ -40,7 +40,7 @@ export class MainThreadShare implements MainThreadShareShape {
 		this.providerDisposables.set(handle, disposable);
 	}
 
-	$unregisterShareProvider(handle: number): void {
+	$unregisterShareProvider(handle: number): codemavi {
 		if (this.providers.has(handle)) {
 			this.providers.delete(handle);
 		}
@@ -49,7 +49,7 @@ export class MainThreadShare implements MainThreadShareShape {
 		}
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.providers.clear();
 		dispose(this.providerDisposables.values());
 		this.providerDisposables.clear();

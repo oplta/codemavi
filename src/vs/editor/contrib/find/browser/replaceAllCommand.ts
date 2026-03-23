@@ -27,7 +27,7 @@ export class ReplaceAllCommand implements ICommand {
 		this._trackedEditorSelectionId = null;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 		if (this._ranges.length > 0) {
 			// Collect all edit operations
 			const ops: IEditOperation[] = [];

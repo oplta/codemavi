@@ -146,7 +146,7 @@ export abstract class Marker {
 		return this;
 	}
 
-	replace(child: Marker, others: Marker[]): void {
+	replace(child: Marker, others: Marker[]): codemavi {
 		const { parent } = child;
 		const idx = parent.children.indexOf(child);
 		const newChildren = parent.children.slice(0);
@@ -488,7 +488,7 @@ export interface VariableResolver {
 	resolve(variable: Variable): string | undefined;
 }
 
-function walk(marker: Marker[], visitor: (marker: Marker) => boolean): void {
+function walk(marker: Marker[], visitor: (marker: Marker) => boolean): codemavi {
 	const stack = [...marker];
 	while (stack.length > 0) {
 		const marker = stack.shift()!;
@@ -582,7 +582,7 @@ export class TextmateSnippet extends Marker {
 		return super.appendChild(child);
 	}
 
-	override replace(child: Marker, others: Marker[]): void {
+	override replace(child: Marker, others: Marker[]): codemavi {
 		this._placeholders = undefined;
 		return super.replace(child, others);
 	}
@@ -597,7 +597,7 @@ export class TextmateSnippet extends Marker {
 		return ret;
 	}
 
-	walk(visitor: (marker: Marker) => boolean): void {
+	walk(visitor: (marker: Marker) => boolean): codemavi {
 		walk(this.children, visitor);
 	}
 }

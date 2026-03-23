@@ -7,10 +7,10 @@ import { IDisposable, IDisposableTracker, setDisposableTracker } from '../../com
 
 class DisposableTracker implements IDisposableTracker {
 	allDisposables: [IDisposable, string][] = [];
-	trackDisposable(x: IDisposable): void {
+	trackDisposable(x: IDisposable): codemavi {
 		this.allDisposables.push([x, new Error().stack!]);
 	}
-	setParent(child: IDisposable, parent: IDisposable): void {
+	setParent(child: IDisposable, parent: IDisposable): codemavi {
 		for (let idx = 0; idx < this.allDisposables.length; idx++) {
 			if (this.allDisposables[idx][0] === child) {
 				this.allDisposables.splice(idx, 1);
@@ -18,7 +18,7 @@ class DisposableTracker implements IDisposableTracker {
 			}
 		}
 	}
-	markAsDisposed(x: IDisposable): void {
+	markAsDisposed(x: IDisposable): codemavi {
 		for (let idx = 0; idx < this.allDisposables.length; idx++) {
 			if (this.allDisposables[idx][0] === x) {
 				this.allDisposables.splice(idx, 1);
@@ -26,19 +26,19 @@ class DisposableTracker implements IDisposableTracker {
 			}
 		}
 	}
-	markAsSingleton(disposable: IDisposable): void {
+	markAsSingleton(disposable: IDisposable): codemavi {
 		// noop
 	}
 }
 
 let currentTracker: DisposableTracker | null = null;
 
-export function beginTrackingDisposables(): void {
+export function beginTrackingDisposables(): codemavi {
 	currentTracker = new DisposableTracker();
 	setDisposableTracker(currentTracker);
 }
 
-export function endTrackingDisposables(): void {
+export function endTrackingDisposables(): codemavi {
 	if (currentTracker) {
 		setDisposableTracker(null);
 		console.log(currentTracker.allDisposables.map(e => `${e[0]}\n${e[1]}`).join('\n\n'));
@@ -46,10 +46,10 @@ export function endTrackingDisposables(): void {
 	}
 }
 
-export function beginLoggingFS(withStacks: boolean = false): void {
+export function beginLoggingFS(withStacks: boolean = false): codemavi {
 	(<any>self).beginLoggingFS?.(withStacks);
 }
 
-export function endLoggingFS(): void {
+export function endLoggingFS(): codemavi {
 	(<any>self).endLoggingFS?.();
 }

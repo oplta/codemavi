@@ -85,7 +85,7 @@ export class WalkThroughPart extends EditorPane {
 		this.editorMemento = this.getEditorMemento<IWalkThroughEditorViewState>(editorGroupService, textResourceConfigurationService, WALK_THROUGH_EDITOR_VIEW_STATE_PREFERENCE_KEY);
 	}
 
-	protected createEditor(container: HTMLElement): void {
+	protected createEditor(container: HTMLElement): codemavi {
 		this.content = document.createElement('div');
 		this.content.classList.add('welcomePageFocusElement');
 		this.content.tabIndex = 0;
@@ -201,7 +201,7 @@ export class WalkThroughPart extends EditorPane {
 		return uri.with({ query: JSON.stringify(query) });
 	}
 
-	layout(dimension: Dimension): void {
+	layout(dimension: Dimension): codemavi {
 		this.size = dimension;
 		size(this.content, dimension.width, dimension.height);
 		this.updateSizeClasses();
@@ -224,7 +224,7 @@ export class WalkThroughPart extends EditorPane {
 		}
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		let active = this.content.ownerDocument.activeElement;
@@ -267,7 +267,7 @@ export class WalkThroughPart extends EditorPane {
 		this.scrollbar.setScrollPosition({ scrollTop: scrollPosition.scrollTop + scrollDimensions.height });
 	}
 
-	override setInput(input: WalkThroughInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override setInput(input: WalkThroughInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		const store = new DisposableStore();
 		this.contentDisposables.push(store);
 
@@ -439,7 +439,7 @@ export class WalkThroughPart extends EditorPane {
 		});
 	}
 
-	private saveTextEditorViewState(input: WalkThroughInput): void {
+	private saveTextEditorViewState(input: WalkThroughInput): codemavi {
 		const scrollPosition = this.scrollbar.getScrollPosition();
 
 		this.editorMemento.saveEditorState(this.group, input, {
@@ -457,7 +457,7 @@ export class WalkThroughPart extends EditorPane {
 		}
 	}
 
-	public override clearInput(): void {
+	public override clearInput(): codemavi {
 		if (this.input instanceof WalkThroughInput) {
 			this.saveTextEditorViewState(this.input);
 		}
@@ -465,7 +465,7 @@ export class WalkThroughPart extends EditorPane {
 		super.clearInput();
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 		if (this.input instanceof WalkThroughInput) {
 			this.saveTextEditorViewState(this.input);
 		}
@@ -473,7 +473,7 @@ export class WalkThroughPart extends EditorPane {
 		super.saveState();
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this.editorFocus.reset();
 		this.contentDisposables = dispose(this.contentDisposables);
 		this.disposables.dispose();

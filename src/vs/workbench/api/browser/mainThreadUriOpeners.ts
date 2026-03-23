@@ -109,7 +109,7 @@ export class MainThreadUriOpeners extends Disposable implements MainThreadUriOpe
 		schemes: readonly string[],
 		extensionId: ExtensionIdentifier,
 		label: string,
-	): Promise<void> {
+	): Promise<codemavi> {
 		if (this._registeredOpeners.has(id)) {
 			throw new Error(`Opener with id '${id}' already registered`);
 		}
@@ -123,12 +123,12 @@ export class MainThreadUriOpeners extends Disposable implements MainThreadUriOpe
 		this._contributedExternalUriOpenersStore.didRegisterOpener(id, extensionId.value);
 	}
 
-	async $unregisterUriOpener(id: string): Promise<void> {
+	async $unregisterUriOpener(id: string): Promise<codemavi> {
 		this._registeredOpeners.delete(id);
 		this._contributedExternalUriOpenersStore.delete(id);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 		this._registeredOpeners.clear();
 	}

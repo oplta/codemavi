@@ -19,7 +19,7 @@ export class MainThreadDownloadService extends Disposable implements MainThreadD
 		super();
 	}
 
-	$download(uri: UriComponents, to: UriComponents): Promise<void> {
+	$download(uri: UriComponents, to: UriComponents): Promise<codemavi> {
 		return this.downloadService.download(URI.revive(uri), URI.revive(to));
 	}
 

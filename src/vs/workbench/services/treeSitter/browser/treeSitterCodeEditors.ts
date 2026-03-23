@@ -57,7 +57,7 @@ export class TreeSitterCodeEditors extends Disposable {
 		return viewports;
 	}
 
-	private _onCodeEditorRemove(editor: ICodeEditor): void {
+	private _onCodeEditorRemove(editor: ICodeEditor): codemavi {
 		this._allEditors.deleteAndDispose(editor);
 	}
 
@@ -71,7 +71,7 @@ export class TreeSitterCodeEditors extends Disposable {
 		return model;
 	}
 
-	private async _onCodeEditorAdd(editor: ICodeEditor): Promise<void> {
+	private async _onCodeEditorAdd(editor: ICodeEditor): Promise<codemavi> {
 		const otherEditorDisposables = new DisposableStore();
 		otherEditorDisposables.add(editor.onDidChangeModel(() => this._onDidChangeModel(editor, editor.getModel()), this));
 		this._allEditors.set(editor, otherEditorDisposables);
@@ -82,7 +82,7 @@ export class TreeSitterCodeEditors extends Disposable {
 		}
 	}
 
-	private _tryAddEditor(editor: ICodeEditor, model: ITextModel): void {
+	private _tryAddEditor(editor: ICodeEditor, model: ITextModel): codemavi {
 		const language = model.getLanguageId();
 		if ((language === this._languageId)) {
 			if (!this._textModels.has(model)) {
@@ -97,7 +97,7 @@ export class TreeSitterCodeEditors extends Disposable {
 		}
 	}
 
-	private async _onDidChangeModel(editor: ICodeEditor, model: ITextModel | null): Promise<void> {
+	private async _onDidChangeModel(editor: ICodeEditor, model: ITextModel | null): Promise<codemavi> {
 		if (model) {
 			this._tryAddEditor(editor, model);
 		} else {
@@ -105,7 +105,7 @@ export class TreeSitterCodeEditors extends Disposable {
 		}
 	}
 
-	private async _onViewportChange(editor: ICodeEditor): Promise<void> {
+	private async _onViewportChange(editor: ICodeEditor): Promise<codemavi> {
 		const ranges = this._nonIntersectingViewPortRanges(editor);
 		const model = editor.getModel();
 		if (!model) {

@@ -57,7 +57,7 @@ class ToggleBreakpointAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<void> {
+	async run(accessor: ServicesAccessor): Promise<codemavi> {
 		const editorService = accessor.get(IEditorService);
 		const debugService = accessor.get(IDebugService);
 
@@ -112,7 +112,7 @@ class ConditionalBreakpointAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 
 		const position = editor.getPosition();
@@ -141,7 +141,7 @@ class LogPointAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 
 		const position = editor.getPosition();
@@ -171,7 +171,7 @@ class TriggerByBreakpointAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 
 		const position = editor.getPosition();
@@ -198,7 +198,7 @@ class EditBreakpointAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 
 		const position = editor.getPosition();
@@ -259,7 +259,7 @@ class OpenDisassemblyViewAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		const editorService = accessor.get(IEditorService);
 		editorService.openEditor(DisassemblyViewInput.instance, { pinned: true, revealIfOpened: true });
 	}
@@ -284,7 +284,7 @@ class ToggleDisassemblyViewSourceCodeAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, editor: ICodeEditor, ...args: any[]): void {
+	run(accessor: ServicesAccessor, editor: ICodeEditor, ...args: any[]): codemavi {
 		const configService = accessor.get(IConfigurationService);
 		if (configService) {
 			const value = configService.getValue<IDebugConfiguration>('debug').disassemblyView.showSourceCode;
@@ -317,7 +317,7 @@ export class RunToCursorAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const position = editor.getPosition();
 		if (!(editor.hasModel() && position)) {
 			return;
@@ -360,7 +360,7 @@ export class SelectionToReplAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 		const viewsService = accessor.get(IViewsService);
 		const viewModel = debugService.getViewModel();
@@ -403,7 +403,7 @@ export class SelectionToWatchExpressionsAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 		const viewsService = accessor.get(IViewsService);
 		const languageFeaturesService = accessor.get(ILanguageFeaturesService);
@@ -451,7 +451,7 @@ class ShowDebugHoverAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const position = editor.getPosition();
 		if (!position || !editor.hasModel()) {
 			return;
@@ -481,7 +481,7 @@ class StepIntoTargetsAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const debugService = accessor.get(IDebugService);
 		const contextMenuService = accessor.get(IContextMenuService);
 		const uriIdentityService = accessor.get(IUriIdentityService);
@@ -623,7 +623,7 @@ class CloseExceptionWidgetAction extends EditorAction {
 		});
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
 		const contribution = editor.getContribution<IDebugEditorContribution>(EDITOR_CONTRIBUTION_ID);
 		contribution?.closeExceptionWidget();
 	}

@@ -51,7 +51,7 @@ export interface ILayoutService {
 	/**
 	 * An event that is emitted when the active container changes.
 	 */
-	readonly onDidChangeActiveContainer: Event<void>;
+	readonly onDidChangeActiveContainer: Event<codemavi>;
 
 	/**
 	 * The dimensions of the main container.
@@ -91,7 +91,7 @@ export interface ILayoutService {
 	 * will resolve once the styles have been loaded and helps
 	 * for when certain layout assumptions are made.
 	 */
-	whenContainerStylesLoaded(window: Window): Promise<void> | undefined;
+	whenContainerStylesLoaded(window: Window): Promise<codemavi> | undefined;
 
 	/**
 	 * An offset to use for positioning elements inside the main container.
@@ -106,5 +106,5 @@ export interface ILayoutService {
 	/**
 	 * Focus the primary component of the active container.
 	 */
-	focus(): void;
+	focus(): codemavi;
 }

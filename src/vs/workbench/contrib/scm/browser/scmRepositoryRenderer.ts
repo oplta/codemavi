@@ -33,7 +33,7 @@ export class RepositoryActionRunner extends ActionRunner {
 		super();
 	}
 
-	protected override async runAction(action: IAction, context: ISCMProvider): Promise<void> {
+	protected override async runAction(action: IAction, context: ISCMProvider): Promise<codemavi> {
 		if (!(action instanceof MenuItemAction)) {
 			return super.runAction(action, context);
 		}
@@ -97,7 +97,7 @@ export class RepositoryRenderer implements ICompressibleTreeRenderer<ISCMReposit
 		return { label, labelCustomHover, name, description, countContainer, count, toolBar, elementDisposables: new DisposableStore(), templateDisposable };
 	}
 
-	renderElement(arg: ISCMRepository | ITreeNode<ISCMRepository, FuzzyScore>, index: number, templateData: RepositoryTemplate, height: number | undefined): void {
+	renderElement(arg: ISCMRepository | ITreeNode<ISCMRepository, FuzzyScore>, index: number, templateData: RepositoryTemplate, height: number | undefined): codemavi {
 		const repository = isSCMRepository(arg) ? arg : arg.element;
 
 		templateData.name.textContent = repository.provider.name;
@@ -139,15 +139,15 @@ export class RepositoryRenderer implements ICompressibleTreeRenderer<ISCMReposit
 		templateData.toolBar.context = repository.provider;
 	}
 
-	renderCompressedElements(): void {
+	renderCompressedElements(): codemavi {
 		throw new Error('Should never happen since node is incompressible');
 	}
 
-	disposeElement(group: ISCMRepository | ITreeNode<ISCMRepository, FuzzyScore>, index: number, template: RepositoryTemplate): void {
+	disposeElement(group: ISCMRepository | ITreeNode<ISCMRepository, FuzzyScore>, index: number, template: RepositoryTemplate): codemavi {
 		template.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: RepositoryTemplate): void {
+	disposeTemplate(templateData: RepositoryTemplate): codemavi {
 		templateData.elementDisposables.dispose();
 		templateData.templateDisposable.dispose();
 		templateData.count.dispose();

@@ -77,7 +77,7 @@ function getFocusedWebviewDelegate(accessor: ServicesAccessor): IWebview | undef
 	return webview;
 }
 
-function withWebview(accessor: ServicesAccessor, f: (webviewe: IWebview) => void) {
+function withWebview(accessor: ServicesAccessor, f: (webviewe: IWebview) => codemavi) {
 	const webview = getFocusedWebviewDelegate(accessor);
 	if (webview) {
 		f(webview);
@@ -579,7 +579,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): void {
+	run(accessor: ServicesAccessor): codemavi {
 		toggleLogging();
 		if (_logging) {
 			const commandService = accessor.get(ICommandService);

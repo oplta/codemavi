@@ -46,16 +46,16 @@ export interface IInstallExtensionTask {
 	readonly verificationStatus?: ExtensionSignatureVerificationCode;
 	run(): Promise<ILocalExtension>;
 	waitUntilTaskIsFinished(): Promise<ILocalExtension>;
-	cancel(): void;
+	cancel(): codemavi;
 }
 
 export type UninstallExtensionTaskOptions = UninstallOptions & { readonly profileLocation: URI };
 export interface IUninstallExtensionTask {
 	readonly options: UninstallExtensionTaskOptions;
 	readonly extension: ILocalExtension;
-	run(): Promise<void>;
-	waitUntilTaskIsFinished(): Promise<void>;
-	cancel(): void;
+	run(): Promise<codemavi>;
+	waitUntilTaskIsFinished(): Promise<codemavi>;
+	cancel(): codemavi;
 }
 
 export abstract class CommontExtensionManagementService extends Disposable implements IExtensionManagementService {
@@ -96,12 +96,12 @@ export abstract class CommontExtensionManagementService extends Disposable imple
 	abstract readonly onDidUpdateExtensionMetadata: Event<DidUpdateExtensionMetadata>;
 	abstract installFromGallery(extension: IGalleryExtension, options?: InstallOptions): Promise<ILocalExtension>;
 	abstract installGalleryExtensions(extensions: InstallExtensionInfo[]): Promise<InstallExtensionResult[]>;
-	abstract uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<void>;
-	abstract uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void>;
+	abstract uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<codemavi>;
+	abstract uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi>;
 	abstract toggleAppliationScope(extension: ILocalExtension, fromProfileLocation: URI): Promise<ILocalExtension>;
 	abstract getExtensionsControlManifest(): Promise<IExtensionsControlManifest>;
-	abstract resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<void>;
-	abstract registerParticipant(pariticipant: IExtensionManagementParticipant): void;
+	abstract resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<codemavi>;
+	abstract registerParticipant(pariticipant: IExtensionManagementParticipant): codemavi;
 	abstract getTargetPlatform(): Promise<TargetPlatform>;
 	abstract zip(extension: ILocalExtension): Promise<URI>;
 	abstract getManifest(vsix: URI): Promise<IExtensionManifest>;
@@ -109,9 +109,9 @@ export abstract class CommontExtensionManagementService extends Disposable imple
 	abstract installFromLocation(location: URI, profileLocation: URI): Promise<ILocalExtension>;
 	abstract installExtensionsFromProfile(extensions: IExtensionIdentifier[], fromProfileLocation: URI, toProfileLocation: URI): Promise<ILocalExtension[]>;
 	abstract getInstalled(type?: ExtensionType, profileLocation?: URI, productVersion?: IProductVersion): Promise<ILocalExtension[]>;
-	abstract copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<void>;
+	abstract copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<codemavi>;
 	abstract download(extension: IGalleryExtension, operation: InstallOperation, donotVerifySignature: boolean): Promise<URI>;
-	abstract cleanUp(): Promise<void>;
+	abstract cleanUp(): Promise<codemavi>;
 	abstract updateMetadata(local: ILocalExtension, metadata: Partial<Metadata>, profileLocation: URI): Promise<ILocalExtension>;
 }
 
@@ -199,7 +199,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		return results;
 	}
 
-	async uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<void> {
+	async uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<codemavi> {
 		this.logService.trace('ExtensionManagementService#uninstall', extension.identifier.id);
 		return this.uninstallExtensions([{ extension, options }]);
 	}
@@ -249,11 +249,11 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		return this.extensionsControlManifest;
 	}
 
-	registerParticipant(participant: IExtensionManagementParticipant): void {
+	registerParticipant(participant: IExtensionManagementParticipant): codemavi {
 		this.participants.push(participant);
 	}
 
-	async resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<void> {
+	async resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<codemavi> {
 		try {
 			await this.joinAllSettled(this.userDataProfilesService.profiles.map(
 				async profile => {
@@ -277,7 +277,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		const alreadyRequestedInstallations: Promise<any>[] = [];
 
 		const getInstallExtensionTaskKey = (extension: IGalleryExtension, profileLocation: URI) => `${ExtensionKey.create(extension).toString()}-${profileLocation.toString()}`;
-		const createInstallExtensionTask = (manifest: IExtensionManifest, extension: IGalleryExtension | URI, options: InstallExtensionTaskOptions, root: IInstallExtensionTask | undefined): void => {
+		const createInstallExtensionTask = (manifest: IExtensionManifest, extension: IGalleryExtension | URI, options: InstallExtensionTaskOptions, root: IInstallExtensionTask | undefined): codemavi => {
 			if (!URI.isUri(extension)) {
 				if (installingExtensionsMap.has(`${extension.identifier.id.toLowerCase()}-${options.profileLocation.toString()}`)) {
 					return;
@@ -587,7 +587,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		const knownIdentifiers: IExtensionIdentifier[] = [];
 
 		const allDependenciesAndPacks: { gallery: IGalleryExtension; manifest: IExtensionManifest }[] = [];
-		const collectDependenciesAndPackExtensionsToInstall = async (extensionIdentifier: IExtensionIdentifier, manifest: IExtensionManifest): Promise<void> => {
+		const collectDependenciesAndPackExtensionsToInstall = async (extensionIdentifier: IExtensionIdentifier, manifest: IExtensionManifest): Promise<codemavi> => {
 			knownIdentifiers.push(extensionIdentifier);
 			const dependecies: string[] = manifest.extensionDependencies || [];
 			const dependenciesAndPackExtensions = [...dependecies];
@@ -704,7 +704,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		return compatibleExtension;
 	}
 
-	async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void> {
+	async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi> {
 
 		const getUninstallExtensionTaskKey = (extension: ILocalExtension, uninstallOptions: UninstallExtensionTaskOptions) => `${extension.identifier.id.toLowerCase()}${uninstallOptions.versionOnly ? `-${extension.manifest.version}` : ''}@${uninstallOptions.profileLocation.toString()}`;
 
@@ -716,7 +716,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 			return uninstallExtensionTask;
 		};
 
-		const postUninstallExtension = (extension: ILocalExtension, uninstallOptions: UninstallExtensionTaskOptions, error?: ExtensionManagementError): void => {
+		const postUninstallExtension = (extension: ILocalExtension, uninstallOptions: UninstallExtensionTaskOptions, error?: ExtensionManagementError): codemavi => {
 			if (error) {
 				this.logService.error('Failed to uninstall extension from the profile:', `${extension.identifier.id}@${extension.manifest.version}`, uninstallOptions.profileLocation.toString(), error.message);
 			} else {
@@ -849,7 +849,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 		}
 	}
 
-	private checkForDependents(extensionsToUninstall: ILocalExtension[], installed: ILocalExtension[], extensionToUninstall: ILocalExtension): void {
+	private checkForDependents(extensionsToUninstall: ILocalExtension[], installed: ILocalExtension[], extensionToUninstall: ILocalExtension): codemavi {
 		for (const extension of extensionsToUninstall) {
 			const dependents = this.getDependents(extension, installed);
 			if (dependents.length) {
@@ -925,7 +925,7 @@ export abstract class AbstractExtensionManagementService extends CommontExtensio
 	protected abstract createInstallExtensionTask(manifest: IExtensionManifest, extension: URI | IGalleryExtension, options: InstallExtensionTaskOptions): IInstallExtensionTask;
 	protected abstract createUninstallExtensionTask(extension: ILocalExtension, options: UninstallExtensionTaskOptions): IUninstallExtensionTask;
 	protected abstract copyExtension(extension: ILocalExtension, fromProfileLocation: URI, toProfileLocation: URI, metadata?: Partial<Metadata>): Promise<ILocalExtension>;
-	protected abstract removeExtension(extension: ILocalExtension): Promise<void>;
+	protected abstract removeExtension(extension: ILocalExtension): Promise<codemavi>;
 }
 
 export function toExtensionManagementError(error: Error, code?: ExtensionManagementErrorCode): ExtensionManagementError {
@@ -957,7 +957,7 @@ function reportTelemetry(telemetryService: ITelemetryService, eventName: string,
 		durationSinceUpdate?: number;
 		source?: string;
 		error?: ExtensionManagementError | ExtensionGalleryError;
-	}): void {
+	}): codemavi {
 
 	/* __GDPR__
 		"extensionGallery:install" : {
@@ -1027,7 +1027,7 @@ export abstract class AbstractExtensionTask<T> {
 		return this.cancellablePromise;
 	}
 
-	cancel(): void {
+	cancel(): codemavi {
 		if (!this.cancellablePromise) {
 			this.cancellablePromise = createCancelablePromise(token => {
 				return new Promise((c, e) => {

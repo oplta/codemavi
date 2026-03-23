@@ -65,7 +65,7 @@ class InputEditorDecorations extends Disposable {
 		this.registerViewModelListeners();
 	}
 
-	private registerViewModelListeners(): void {
+	private registerViewModelListeners(): codemavi {
 		this.viewModelDisposables.value = this.widget.viewModel?.onDidChange(e => {
 			if (e?.kind === 'changePlaceholder' || e?.kind === 'initialize') {
 				this.updateInputEditorDecorations();

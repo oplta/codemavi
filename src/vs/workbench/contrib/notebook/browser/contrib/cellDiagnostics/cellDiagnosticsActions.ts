@@ -38,7 +38,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		if (context.cell instanceof CodeCellViewModel) {
 			const error = context.cell.executionErrorDiagnostic.get();
 			if (error?.location) {
@@ -72,7 +72,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		if (context.cell instanceof CodeCellViewModel) {
 			const error = context.cell.executionErrorDiagnostic.get();
 			if (error?.location) {
@@ -106,7 +106,7 @@ registerAction2(class extends NotebookCellAction {
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<void> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCellActionContext): Promise<codemavi> {
 		if (context.cell instanceof CodeCellViewModel) {
 			const error = context.cell.executionErrorDiagnostic.get();
 			if (error?.message) {

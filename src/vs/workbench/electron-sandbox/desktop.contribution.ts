@@ -32,7 +32,7 @@ import { DefaultAccountManagementContribution } from '../services/accounts/commo
 import { registerWorkbenchContribution2, WorkbenchPhase } from '../common/contributions.js';
 
 // Actions
-(function registerActions(): void {
+(function registerActions(): codemavi {
 
 	// Actions: Zoom
 	registerAction2(ZoomInAction);
@@ -114,7 +114,7 @@ import { registerWorkbenchContribution2, WorkbenchPhase } from '../common/contri
 })();
 
 // Menu
-(function registerMenu(): void {
+(function registerMenu(): codemavi {
 
 	// Quit
 	MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
@@ -129,7 +129,7 @@ import { registerWorkbenchContribution2, WorkbenchPhase } from '../common/contri
 })();
 
 // Configuration
-(function registerConfiguration(): void {
+(function registerConfiguration(): codemavi {
 	const registry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration);
 
 	// Application
@@ -352,7 +352,7 @@ import { registerWorkbenchContribution2, WorkbenchPhase } from '../common/contri
 })();
 
 // JSON Schemas
-(function registerJSONSchemas(): void {
+(function registerJSONSchemas(): codemavi {
 	const argvDefinitionFileSchemaId = 'vscode://schemas/argv';
 	const jsonRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
 	const schema: IJSONSchema = {
@@ -426,6 +426,6 @@ import { registerWorkbenchContribution2, WorkbenchPhase } from '../common/contri
 	jsonRegistry.registerSchema(argvDefinitionFileSchemaId, schema);
 })();
 
-(function registerWorkbenchContributions(): void {
+(function registerWorkbenchContributions(): codemavi {
 	registerWorkbenchContribution2('workbench.contributions.defaultAccountManagement', DefaultAccountManagementContribution, WorkbenchPhase.AfterRestored);
 })();

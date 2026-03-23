@@ -14,19 +14,19 @@ export class Log {
 		this.output = vscode.window.createOutputChannel(`${friendlyName} Authentication`, { log: true });
 	}
 
-	public trace(message: string): void {
+	public trace(message: string): codemavi {
 		this.output.trace(message);
 	}
 
-	public info(message: string): void {
+	public info(message: string): codemavi {
 		this.output.info(message);
 	}
 
-	public error(message: string): void {
+	public error(message: string): codemavi {
 		this.output.error(message);
 	}
 
-	public warn(message: string): void {
+	public warn(message: string): codemavi {
 		this.output.warn(message);
 	}
 }

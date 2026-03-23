@@ -28,8 +28,8 @@ interface INavigableContainer {
 	 */
 	readonly focusNotifiers: readonly IFocusNotifier[];
 	readonly name?: string; // for debugging
-	focusPreviousWidget(): void;
-	focusNextWidget(): void;
+	focusPreviousWidget(): codemavi;
+	focusNextWidget(): codemavi;
 }
 
 interface IFocusNotifier {
@@ -37,7 +37,7 @@ interface IFocusNotifier {
 	readonly onDidBlur: Event<any>;
 }
 
-function handleFocusEventsGroup(group: readonly IFocusNotifier[], handler: (isFocus: boolean) => void, onPartFocusChange?: (index: number, state: string) => void): IDisposable {
+function handleFocusEventsGroup(group: readonly IFocusNotifier[], handler: (isFocus: boolean) => codemavi, onPartFocusChange?: (index: number, state: string) => codemavi): IDisposable {
 	const focusedIndices = new Set<number>();
 	return combinedDisposable(...group.map((events, index) => combinedDisposable(
 		events.onDidFocus(() => {
@@ -78,7 +78,7 @@ class NavigableContainerManager implements IDisposable {
 		NavigableContainerManager.INSTANCE = this;
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this.containers.clear();
 		this.focused.reset();
 		NavigableContainerManager.INSTANCE = undefined;
@@ -88,7 +88,7 @@ class NavigableContainerManager implements IDisposable {
 		return this.configurationService.getValue('workbench.navigibleContainer.enableDebug');
 	}
 
-	private log(msg: string, ...args: any[]): void {
+	private log(msg: string, ...args: any[]): codemavi {
 		if (this.debugEnabled) {
 			this.logService.debug(msg, ...args);
 		}

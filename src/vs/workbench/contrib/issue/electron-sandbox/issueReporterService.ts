@@ -74,7 +74,7 @@ export class IssueReporter extends BaseIssueReporterService {
 		this.updateUnsupportedMode(this.data.isUnsupported);
 	}
 
-	private async checkForUpdates(): Promise<void> {
+	private async checkForUpdates(): Promise<codemavi> {
 		const updateState = this.updateService.state;
 		if (updateState.type === StateType.Ready || updateState.type === StateType.Downloaded) {
 			this.needsUpdate = true;
@@ -88,7 +88,7 @@ export class IssueReporter extends BaseIssueReporterService {
 		}
 	}
 
-	public override setEventHandlers(): void {
+	public override setEventHandlers(): codemavi {
 		super.setEventHandlers();
 
 		this.addEventListener('issue-type', 'change', (event: Event) => {

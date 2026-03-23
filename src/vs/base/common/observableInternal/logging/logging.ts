@@ -9,7 +9,7 @@ import type { Derived } from '../derived.js';
 
 let globalObservableLogger: IObservableLogger | undefined;
 
-export function addLogger(logger: IObservableLogger): void {
+export function addLogger(logger: IObservableLogger): codemavi {
 	if (!globalObservableLogger) {
 		globalObservableLogger = logger;
 	} else if (globalObservableLogger instanceof ComposedLogger) {
@@ -23,12 +23,12 @@ export function getLogger(): IObservableLogger | undefined {
 	return globalObservableLogger;
 }
 
-let globalObservableLoggerFn: ((obs: IObservable<any>) => void) | undefined = undefined;
-export function setLogObservableFn(fn: (obs: IObservable<any>) => void): void {
+let globalObservableLoggerFn: ((obs: IObservable<any>) => codemavi) | undefined = undefined;
+export function setLogObservableFn(fn: (obs: IObservable<any>) => codemavi): codemavi {
 	globalObservableLoggerFn = fn;
 }
 
-export function logObservable(obs: IObservable<any>): void {
+export function logObservable(obs: IObservable<any>): codemavi {
 	if (globalObservableLoggerFn) {
 		globalObservableLoggerFn(obs);
 	}
@@ -43,22 +43,22 @@ export interface IChangeInformation {
 }
 
 export interface IObservableLogger {
-	handleObservableCreated(observable: IObservable<any>): void;
-	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): void;
+	handleObservableCreated(observable: IObservable<any>): codemavi;
+	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): codemavi;
 
-	handleObservableUpdated(observable: IObservable<any>, info: IChangeInformation): void;
+	handleObservableUpdated(observable: IObservable<any>, info: IChangeInformation): codemavi;
 
-	handleAutorunCreated(autorun: AutorunObserver): void;
-	handleAutorunDisposed(autorun: AutorunObserver): void;
-	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): void;
-	handleAutorunStarted(autorun: AutorunObserver): void;
-	handleAutorunFinished(autorun: AutorunObserver): void;
+	handleAutorunCreated(autorun: AutorunObserver): codemavi;
+	handleAutorunDisposed(autorun: AutorunObserver): codemavi;
+	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): codemavi;
+	handleAutorunStarted(autorun: AutorunObserver): codemavi;
+	handleAutorunFinished(autorun: AutorunObserver): codemavi;
 
-	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): void;
-	handleDerivedCleared(observable: Derived<any>): void;
+	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): codemavi;
+	handleDerivedCleared(observable: Derived<any>): codemavi;
 
-	handleBeginTransaction(transaction: TransactionImpl): void;
-	handleEndTransaction(transaction: TransactionImpl): void;
+	handleBeginTransaction(transaction: TransactionImpl): codemavi;
+	handleEndTransaction(transaction: TransactionImpl): codemavi;
 }
 
 class ComposedLogger implements IObservableLogger {
@@ -66,62 +66,62 @@ class ComposedLogger implements IObservableLogger {
 		public readonly loggers: IObservableLogger[],
 	) { }
 
-	handleObservableCreated(observable: IObservable<any>): void {
+	handleObservableCreated(observable: IObservable<any>): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleObservableCreated(observable);
 		}
 	}
-	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): void {
+	handleOnListenerCountChanged(observable: IObservable<any>, newCount: number): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleOnListenerCountChanged(observable, newCount);
 		}
 	}
-	handleObservableUpdated(observable: IObservable<any>, info: IChangeInformation): void {
+	handleObservableUpdated(observable: IObservable<any>, info: IChangeInformation): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleObservableUpdated(observable, info);
 		}
 	}
-	handleAutorunCreated(autorun: AutorunObserver): void {
+	handleAutorunCreated(autorun: AutorunObserver): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleAutorunCreated(autorun);
 		}
 	}
-	handleAutorunDisposed(autorun: AutorunObserver): void {
+	handleAutorunDisposed(autorun: AutorunObserver): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleAutorunDisposed(autorun);
 		}
 	}
-	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): void {
+	handleAutorunDependencyChanged(autorun: AutorunObserver, observable: IObservable<any>, change: unknown): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleAutorunDependencyChanged(autorun, observable, change);
 		}
 	}
-	handleAutorunStarted(autorun: AutorunObserver): void {
+	handleAutorunStarted(autorun: AutorunObserver): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleAutorunStarted(autorun);
 		}
 	}
-	handleAutorunFinished(autorun: AutorunObserver): void {
+	handleAutorunFinished(autorun: AutorunObserver): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleAutorunFinished(autorun);
 		}
 	}
-	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): void {
+	handleDerivedDependencyChanged(derived: Derived<any>, observable: IObservable<any>, change: unknown): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleDerivedDependencyChanged(derived, observable, change);
 		}
 	}
-	handleDerivedCleared(observable: Derived<any>): void {
+	handleDerivedCleared(observable: Derived<any>): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleDerivedCleared(observable);
 		}
 	}
-	handleBeginTransaction(transaction: TransactionImpl): void {
+	handleBeginTransaction(transaction: TransactionImpl): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleBeginTransaction(transaction);
 		}
 	}
-	handleEndTransaction(transaction: TransactionImpl): void {
+	handleEndTransaction(transaction: TransactionImpl): codemavi {
 		for (const logger of this.loggers) {
 			logger.handleEndTransaction(transaction);
 		}

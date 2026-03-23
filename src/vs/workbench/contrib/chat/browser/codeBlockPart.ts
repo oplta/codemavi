@@ -147,7 +147,7 @@ export interface ICodeBlockRenderOptions {
 
 const defaultCodeblockPadding = 10;
 export class CodeBlockPart extends Disposable {
-	protected readonly _onDidChangeContentHeight = this._register(new Emitter<void>());
+	protected readonly _onDidChangeContentHeight = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeContentHeight = this._onDidChangeContentHeight.event;
 
 	public readonly editor: CodeEditorWidget;
@@ -325,7 +325,7 @@ export class CodeBlockPart extends Disposable {
 		}));
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.editor.focus();
 	}
 
@@ -340,7 +340,7 @@ export class CodeBlockPart extends Disposable {
 		this.editor.updateOptions({ padding: { top: this.verticalPadding, bottom: bottomPadding } });
 	}
 
-	private _configureForScreenReader(): void {
+	private _configureForScreenReader(): codemavi {
 		const toolbarElt = this.toolbar.getElement();
 		if (this.accessibilityService.isScreenReaderOptimized()) {
 			toolbarElt.style.display = 'block';
@@ -365,7 +365,7 @@ export class CodeBlockPart extends Disposable {
 		};
 	}
 
-	layout(width: number): void {
+	layout(width: number): codemavi {
 		const contentHeight = this.getContentHeight();
 
 		let height = contentHeight;
@@ -437,7 +437,7 @@ export class CodeBlockPart extends Disposable {
 		GlyphHoverController.get(this.editor)?.hideGlyphHover();
 	}
 
-	private async updateEditor(data: ICodeBlockData): Promise<void> {
+	private async updateEditor(data: ICodeBlockData): Promise<codemavi> {
 		const textModel = await data.textModel;
 		this.editor.setModel(textModel);
 		if (data.range) {
@@ -515,7 +515,7 @@ export interface ICodeCompareBlockData {
 
 // long-lived object that sits in the DiffPool and that gets reused
 export class CodeCompareBlockPart extends Disposable {
-	protected readonly _onDidChangeContentHeight = this._register(new Emitter<void>());
+	protected readonly _onDidChangeContentHeight = this._register(new Emitter<codemavi>());
 	public readonly onDidChangeContentHeight = this._onDidChangeContentHeight.event;
 
 	private readonly contextKeyService: IContextKeyService;
@@ -557,7 +557,7 @@ export class CodeCompareBlockPart extends Disposable {
 				show(_total: unknown, _delay?: unknown) {
 					return emptyProgressRunner;
 				}
-				async showWhile(promise: Promise<unknown>, _delay?: number): Promise<void> {
+				async showWhile(promise: Promise<unknown>, _delay?: number): Promise<codemavi> {
 					await promise;
 				}
 			}],
@@ -685,7 +685,7 @@ export class CodeCompareBlockPart extends Disposable {
 		}, { originalEditor: widgetOptions, modifiedEditor: widgetOptions }));
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this.diffEditor.focus();
 	}
 
@@ -700,7 +700,7 @@ export class CodeCompareBlockPart extends Disposable {
 		this.diffEditor.updateOptions({ padding: { top: defaultCodeblockPadding, bottom: bottomPadding } });
 	}
 
-	private _configureForScreenReader(): void {
+	private _configureForScreenReader(): codemavi {
 		const toolbarElt = this.toolbar.getElement();
 		if (this.accessibilityService.isScreenReaderOptimized()) {
 			toolbarElt.style.display = 'block';
@@ -724,7 +724,7 @@ export class CodeCompareBlockPart extends Disposable {
 		};
 	}
 
-	layout(width: number): void {
+	layout(width: number): codemavi {
 		const editorBorder = 2;
 
 		const toolbar = dom.getTotalHeight(this.toolbar.getElement());
@@ -773,7 +773,7 @@ export class CodeCompareBlockPart extends Disposable {
 		GlyphHoverController.get(this.diffEditor.getModifiedEditor())?.hideGlyphHover();
 	}
 
-	private async updateEditor(data: ICodeCompareBlockData, token: CancellationToken): Promise<void> {
+	private async updateEditor(data: ICodeCompareBlockData, token: CancellationToken): Promise<codemavi> {
 
 		if (!isResponseVM(data.element)) {
 			return;
@@ -858,7 +858,7 @@ export class DefaultChatTextEditor {
 		@IDialogService private readonly dialogService: IDialogService,
 	) { }
 
-	async apply(response: IChatResponseModel | IChatResponseViewModel, item: IChatTextEditGroup, diffEditor: IDiffEditor | undefined): Promise<void> {
+	async apply(response: IChatResponseModel | IChatResponseViewModel, item: IChatTextEditGroup, diffEditor: IDiffEditor | undefined): Promise<codemavi> {
 
 		if (!response.response.value.includes(item)) {
 			// bogous item

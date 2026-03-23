@@ -52,9 +52,9 @@ export class RemoteTerminalBackendContribution implements IWorkbenchContribution
 class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBackend {
 	private readonly _ptys: Map<number, RemotePty> = new Map();
 
-	private readonly _whenConnected = new DeferredPromise<void>();
-	get whenReady(): Promise<void> { return this._whenConnected.p; }
-	setReady(): void { this._whenConnected.complete(); }
+	private readonly _whenConnected = new DeferredPromise<codemavi>();
+	get whenReady(): Promise<codemavi> { return this._whenConnected.p; }
+	setReady(): codemavi { this._whenConnected.complete(); }
 
 	private readonly _onDidRequestDetach = this._register(new Emitter<{ requestId: number; workspaceId: string; instanceId: number }>());
 	readonly onDidRequestDetach = this._onDidRequestDetach.event;
@@ -129,7 +129,7 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		return this._remoteTerminalChannel.requestDetachInstance(workspaceId, instanceId);
 	}
 
-	async acceptDetachInstanceReply(requestId: number, persistentProcessId?: number): Promise<void> {
+	async acceptDetachInstanceReply(requestId: number, persistentProcessId?: number): Promise<codemavi> {
 		if (!this._remoteTerminalChannel) {
 			throw new Error(`Cannot accept detached instance when there is no remote!`);
 		} else if (!persistentProcessId) {
@@ -140,7 +140,7 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		return this._remoteTerminalChannel.acceptDetachInstanceReply(requestId, persistentProcessId);
 	}
 
-	async persistTerminalState(): Promise<void> {
+	async persistTerminalState(): Promise<codemavi> {
 		if (!this._remoteTerminalChannel) {
 			throw new Error(`Cannot persist terminal state when there is no remote!`);
 		}
@@ -256,15 +256,15 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		];
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(id: number, property: T, value: any): Promise<void> {
+	async updateProperty<T extends ProcessPropertyType>(id: number, property: T, value: any): Promise<codemavi> {
 		await this._remoteTerminalChannel.updateProperty(id, property, value);
 	}
 
-	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<void> {
+	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<codemavi> {
 		await this._remoteTerminalChannel.updateTitle(id, title, titleSource);
 	}
 
-	async updateIcon(id: number, userInitiated: boolean, icon: TerminalIcon, color?: string): Promise<void> {
+	async updateIcon(id: number, userInitiated: boolean, icon: TerminalIcon, color?: string): Promise<codemavi> {
 		await this._remoteTerminalChannel.updateIcon(id, userInitiated, icon, color);
 	}
 
@@ -297,7 +297,7 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		return this._remoteTerminalChannel.getWslPath(original, direction) || original;
 	}
 
-	async setTerminalLayoutInfo(layout?: ITerminalsLayoutInfoById): Promise<void> {
+	async setTerminalLayoutInfo(layout?: ITerminalsLayoutInfoById): Promise<codemavi> {
 		if (!this._remoteTerminalChannel) {
 			throw new Error(`Cannot call setActiveInstanceId when there is no remote`);
 		}
@@ -305,7 +305,7 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		return this._remoteTerminalChannel.setTerminalLayoutInfo(layout);
 	}
 
-	async reduceConnectionGraceTime(): Promise<void> {
+	async reduceConnectionGraceTime(): Promise<codemavi> {
 		if (!this._remoteTerminalChannel) {
 			throw new Error('Cannot reduce grace time when there is no remote');
 		}
@@ -351,11 +351,11 @@ class RemoteTerminalBackend extends BaseTerminalBackend implements ITerminalBack
 		return this._remoteTerminalChannel.getPerformanceMarks();
 	}
 
-	installAutoReply(match: string, reply: string): Promise<void> {
+	installAutoReply(match: string, reply: string): Promise<codemavi> {
 		return this._remoteTerminalChannel.installAutoReply(match, reply);
 	}
 
-	uninstallAllAutoReplies(): Promise<void> {
+	uninstallAllAutoReplies(): Promise<codemavi> {
 		return this._remoteTerminalChannel.uninstallAllAutoReplies();
 	}
 }

@@ -56,7 +56,7 @@ export class UserDataSyncConflictsViewPane extends TreeViewPane implements IUser
 		this.registerActions();
 	}
 
-	protected override renderTreeView(container: HTMLElement): void {
+	protected override renderTreeView(container: HTMLElement): codemavi {
 		super.renderTreeView(DOM.append(container, DOM.$('')));
 
 		const that = this;
@@ -122,7 +122,7 @@ export class UserDataSyncConflictsViewPane extends TreeViewPane implements IUser
 		};
 	}
 
-	private registerActions(): void {
+	private registerActions(): codemavi {
 		const that = this;
 
 		this._register(registerAction2(class OpenConflictsAction extends Action2 {
@@ -132,7 +132,7 @@ export class UserDataSyncConflictsViewPane extends TreeViewPane implements IUser
 					title: localize({ key: 'workbench.actions.sync.openConflicts', comment: ['This is an action title to show the conflicts between local and remote version of resources'] }, "Show Conflicts"),
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const conflict = that.parseHandle(handle.$treeItemHandle);
 				return that.open(conflict);
 			}
@@ -152,7 +152,7 @@ export class UserDataSyncConflictsViewPane extends TreeViewPane implements IUser
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const conflict = that.parseHandle(handle.$treeItemHandle);
 				await that.userDataSyncWorkbenchService.accept({ syncResource: conflict.syncResource, profile: conflict.profile }, conflict.remoteResource, undefined, that.userDataSyncEnablementService.isEnabled());
 			}
@@ -172,14 +172,14 @@ export class UserDataSyncConflictsViewPane extends TreeViewPane implements IUser
 					},
 				});
 			}
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
 				const conflict = that.parseHandle(handle.$treeItemHandle);
 				await that.userDataSyncWorkbenchService.accept({ syncResource: conflict.syncResource, profile: conflict.profile }, conflict.localResource, undefined, that.userDataSyncEnablementService.isEnabled());
 			}
 		}));
 	}
 
-	async open(conflictToOpen: IResourcePreview): Promise<void> {
+	async open(conflictToOpen: IResourcePreview): Promise<codemavi> {
 		if (!this.userDataSyncService.conflicts.some(({ conflicts }) => conflicts.some(({ localResource }) => isEqual(localResource, conflictToOpen.localResource)))) {
 			return;
 		}

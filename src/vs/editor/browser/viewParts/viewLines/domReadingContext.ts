@@ -14,7 +14,7 @@ export class DomReadingContext {
 		return this._didDomLayout;
 	}
 
-	private readClientRect(): void {
+	private readClientRect(): codemavi {
 		if (!this._clientRectRead) {
 			this._clientRectRead = true;
 			const rect = this._domNode.getBoundingClientRect();
@@ -44,7 +44,7 @@ export class DomReadingContext {
 	) {
 	}
 
-	public markDidDomLayout(): void {
+	public markDidDomLayout(): codemavi {
 		this._didDomLayout = true;
 	}
 }

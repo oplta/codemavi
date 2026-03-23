@@ -23,10 +23,10 @@ suite('Contributions', () => {
 	const disposables = new DisposableStore();
 
 	let aCreated: boolean;
-	let aCreatedPromise: DeferredPromise<void>;
+	let aCreatedPromise: DeferredPromise<codemavi>;
 
 	let bCreated: boolean;
-	let bCreatedPromise: DeferredPromise<void>;
+	let bCreatedPromise: DeferredPromise<codemavi>;
 
 	const TEST_EDITOR_ID = 'MyTestEditorForContributions';
 	const TEST_EDITOR_INPUT_ID = 'testEditorInputForContributions';
@@ -43,10 +43,10 @@ suite('Contributions', () => {
 
 	setup(() => {
 		aCreated = false;
-		aCreatedPromise = new DeferredPromise<void>();
+		aCreatedPromise = new DeferredPromise<codemavi>();
 
 		bCreated = false;
-		bCreatedPromise = new DeferredPromise<void>();
+		bCreatedPromise = new DeferredPromise<codemavi>();
 
 		disposables.add(registerTestEditor(TEST_EDITOR_ID, [new SyncDescriptor(TestFileEditorInput), new SyncDescriptor(TestSingletonFileEditorInput)], TEST_EDITOR_INPUT_ID));
 	});

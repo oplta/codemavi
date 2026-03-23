@@ -18,8 +18,8 @@ import { DEFAULT_MAX_SEARCH_RESULTS, ICachedSearchStats, IFileQuery, IFileSearch
 import { Engine as FileSearchEngine } from './fileSearch.js';
 import { TextSearchEngineAdapter } from './textSearchAdapter.js';
 
-export type IProgressCallback = (p: ISerializedSearchProgressItem) => void;
-type IFileProgressCallback = (p: IFileSearchProgressItem) => void;
+export type IProgressCallback = (p: ISerializedSearchProgressItem) => codemavi;
+type IFileProgressCallback = (p: IFileSearchProgressItem) => codemavi;
 
 export class SearchService implements IRawSearchService {
 
@@ -376,7 +376,7 @@ export class SearchService implements IRawSearchService {
 		});
 	}
 
-	clearCache(cacheKey: string): Promise<void> {
+	clearCache(cacheKey: string): Promise<codemavi> {
 		delete this.caches[cacheKey];
 		return Promise.resolve(undefined);
 	}

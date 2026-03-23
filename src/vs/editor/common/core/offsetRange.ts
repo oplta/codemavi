@@ -18,7 +18,7 @@ export class OffsetRange implements IOffsetRange {
 		return new OffsetRange(start, endExclusive);
 	}
 
-	public static addRange(range: OffsetRange, sortedRanges: OffsetRange[]): void {
+	public static addRange(range: OffsetRange, sortedRanges: OffsetRange[]): codemavi {
 		let i = 0;
 		while (i < sortedRanges.length && sortedRanges[i].endExclusive < range.start) {
 			i++;
@@ -192,7 +192,7 @@ export class OffsetRange implements IOffsetRange {
 		return result;
 	}
 
-	public forEach(f: (offset: number) => void): void {
+	public forEach(f: (offset: number) => codemavi): codemavi {
 		for (let i = this.start; i < this.endExclusive; i++) {
 			f(i);
 		}
@@ -202,7 +202,7 @@ export class OffsetRange implements IOffsetRange {
 export class OffsetRangeSet {
 	private readonly _sortedRanges: OffsetRange[] = [];
 
-	public addRange(range: OffsetRange): void {
+	public addRange(range: OffsetRange): codemavi {
 		let i = 0;
 		while (i < this._sortedRanges.length && this._sortedRanges[i].endExclusive < range.start) {
 			i++;

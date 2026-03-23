@@ -46,7 +46,7 @@ suite('Request', () => {
 	});
 
 	teardown(async () => {
-		await new Promise<void>((resolve, reject) => {
+		await new Promise<codemavi>((resolve, reject) => {
 			server.close(err => err ? reject(err) : resolve());
 		});
 	});

@@ -87,7 +87,7 @@ export class SelectionsOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): void {
+	public override dispose(): codemavi {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -144,7 +144,7 @@ export class SelectionsOverlay extends DynamicViewOverlay {
 		return false;
 	}
 
-	private _enrichVisibleRangesWithStyle(viewport: Range, linesVisibleRanges: LineVisibleRangesWithStyle[], previousFrame: LineVisibleRangesWithStyle[] | null): void {
+	private _enrichVisibleRangesWithStyle(viewport: Range, linesVisibleRanges: LineVisibleRangesWithStyle[], previousFrame: LineVisibleRangesWithStyle[] | null): codemavi {
 		const epsilon = this._typicalHalfwidthCharacterWidth / 4;
 		let previousFrameTop: HorizontalRangeWithStyle | null = null;
 		let previousFrameBottom: HorizontalRangeWithStyle | null = null;
@@ -268,7 +268,7 @@ export class SelectionsOverlay extends DynamicViewOverlay {
 		);
 	}
 
-	private _actualRenderOneSelection(output2: [string, string][], visibleStartLineNumber: number, hasMultipleSelections: boolean, visibleRanges: LineVisibleRangesWithStyle[]): void {
+	private _actualRenderOneSelection(output2: [string, string][], visibleStartLineNumber: number, hasMultipleSelections: boolean, visibleRanges: LineVisibleRangesWithStyle[]): codemavi {
 		if (visibleRanges.length === 0) {
 			return;
 		}
@@ -355,7 +355,7 @@ export class SelectionsOverlay extends DynamicViewOverlay {
 	}
 
 	private _previousFrameVisibleRangesWithStyle: (LineVisibleRangesWithStyle[] | null)[] = [];
-	public prepareRender(ctx: RenderingContext): void {
+	public prepareRender(ctx: RenderingContext): codemavi {
 
 		// Build HTML for inner corners separate from HTML for the rest of selections,
 		// as the inner corner HTML can interfere with that of other selections.

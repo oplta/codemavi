@@ -10,8 +10,8 @@ import { RuntimeEnvironment } from '../cssServer';
 
 export type Validator = (textDocument: TextDocument) => Promise<Diagnostic[]>;
 export type DiagnosticsSupport = {
-	dispose(): void;
-	requestRefresh(): void;
+	dispose(): codemavi;
+	requestRefresh(): codemavi;
 };
 
 export function registerDiagnosticsPushSupport(documents: TextDocuments<TextDocument>, connection: Connection, runtime: RuntimeEnvironment, validate: Validator): DiagnosticsSupport {
@@ -33,7 +33,7 @@ export function registerDiagnosticsPushSupport(documents: TextDocuments<TextDocu
 		connection.sendDiagnostics({ uri: event.document.uri, diagnostics: [] });
 	}, undefined, disposables);
 
-	function cleanPendingValidation(textDocument: TextDocument): void {
+	function cleanPendingValidation(textDocument: TextDocument): codemavi {
 		const request = pendingValidationRequests[textDocument.uri];
 		if (request) {
 			request.dispose();
@@ -41,7 +41,7 @@ export function registerDiagnosticsPushSupport(documents: TextDocuments<TextDocu
 		}
 	}
 
-	function triggerValidation(textDocument: TextDocument): void {
+	function triggerValidation(textDocument: TextDocument): codemavi {
 		cleanPendingValidation(textDocument);
 		const request = pendingValidationRequests[textDocument.uri] = runtime.timer.setTimeout(async () => {
 			if (request === pendingValidationRequests[textDocument.uri]) {
@@ -94,7 +94,7 @@ export function registerDiagnosticsPullSupport(documents: TextDocuments<TextDocu
 		}, newDocumentDiagnosticReport([]), `Error while computing diagnostics for ${params.textDocument.uri}`, token);
 	});
 
-	function requestRefresh(): void {
+	function requestRefresh(): codemavi {
 		connection.languages.diagnostics.refresh();
 	}
 

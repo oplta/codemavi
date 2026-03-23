@@ -219,7 +219,7 @@ export class LanguageDetectionWorker implements ILanguageDetectionWorker {
 		return modelResult;
 	}
 
-	private async * detectLanguagesImpl(content: string): AsyncGenerator<ModelResult, void, unknown> {
+	private async * detectLanguagesImpl(content: string): AsyncGenerator<ModelResult, codemavi, unknown> {
 		if (this._loadFailed) {
 			return;
 		}

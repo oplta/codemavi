@@ -30,7 +30,7 @@ export class ExtensionEnablementWorkspaceTrustTransitionParticipant extends Disp
 			// trust state is initialized before starting the extension host.
 			workspaceTrustManagementService.workspaceTrustInitialized.then(() => {
 				const workspaceTrustTransitionParticipant = new class implements IWorkspaceTrustTransitionParticipant {
-					async participate(trusted: boolean): Promise<void> {
+					async participate(trusted: boolean): Promise<codemavi> {
 						if (trusted) {
 							// Untrusted -> Trusted
 							await extensionEnablementService.updateExtensionsEnablementsWhenWorkspaceTrustChanges();

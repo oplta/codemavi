@@ -119,7 +119,7 @@ class MainThreadDocumentAndEditorStateComputer {
 	private _activeEditorOrder: ActiveEditorOrder = ActiveEditorOrder.Editor;
 
 	constructor(
-		private readonly _onDidChangeState: (delta: DocumentAndEditorStateDelta) => void,
+		private readonly _onDidChangeState: (delta: DocumentAndEditorStateDelta) => codemavi,
 		@IModelService private readonly _modelService: IModelService,
 		@ICodeEditorService private readonly _codeEditorService: ICodeEditorService,
 		@IEditorService private readonly _editorService: IEditorService,
@@ -140,12 +140,12 @@ class MainThreadDocumentAndEditorStateComputer {
 		this._updateState();
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._toDispose.dispose();
 		this._toDisposeOnEditorRemove.dispose();
 	}
 
-	private _onDidAddEditor(e: ICodeEditor): void {
+	private _onDidAddEditor(e: ICodeEditor): codemavi {
 		this._toDisposeOnEditorRemove.set(e.getId(), combinedDisposable(
 			e.onDidChangeModel(() => this._updateState()),
 			e.onDidFocusEditorText(() => this._updateState()),
@@ -154,7 +154,7 @@ class MainThreadDocumentAndEditorStateComputer {
 		this._updateState();
 	}
 
-	private _onDidRemoveEditor(e: ICodeEditor): void {
+	private _onDidRemoveEditor(e: ICodeEditor): codemavi {
 		const id = e.getId();
 		if (this._toDisposeOnEditorRemove.has(id)) {
 			this._toDisposeOnEditorRemove.deleteAndDispose(id);
@@ -162,7 +162,7 @@ class MainThreadDocumentAndEditorStateComputer {
 		}
 	}
 
-	private _updateStateOnModelAdd(model: ITextModel): void {
+	private _updateStateOnModelAdd(model: ITextModel): codemavi {
 		if (!shouldSynchronizeModel(model)) {
 			// ignore
 			return;
@@ -188,7 +188,7 @@ class MainThreadDocumentAndEditorStateComputer {
 		));
 	}
 
-	private _updateState(widgetFocusCandidate?: ICodeEditor): void {
+	private _updateState(widgetFocusCandidate?: ICodeEditor): codemavi {
 
 		// models: ignore too large models
 		const models = new Set<ITextModel>();
@@ -312,11 +312,11 @@ export class MainThreadDocumentsAndEditors {
 		this._toDispose.add(new MainThreadDocumentAndEditorStateComputer(delta => this._onDelta(delta), _modelService, codeEditorService, this._editorService, paneCompositeService));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._toDispose.dispose();
 	}
 
-	private _onDelta(delta: DocumentAndEditorStateDelta): void {
+	private _onDelta(delta: DocumentAndEditorStateDelta): codemavi {
 
 		const removedEditors: string[] = [];
 		const addedEditors: MainThreadTextEditor[] = [];

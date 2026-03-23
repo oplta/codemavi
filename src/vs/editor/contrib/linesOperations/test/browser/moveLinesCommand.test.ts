@@ -19,19 +19,19 @@ const enum MoveLinesDirection {
 	Down
 }
 
-function testMoveLinesDownCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): void {
+function testMoveLinesDownCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): codemavi {
 	testMoveLinesUpOrDownCommand(MoveLinesDirection.Down, lines, selection, expectedLines, expectedSelection, languageConfigurationService);
 }
 
-function testMoveLinesUpCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): void {
+function testMoveLinesUpCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): codemavi {
 	testMoveLinesUpOrDownCommand(MoveLinesDirection.Up, lines, selection, expectedLines, expectedSelection, languageConfigurationService);
 }
 
-function testMoveLinesDownWithIndentCommand(languageId: string, lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): void {
+function testMoveLinesDownWithIndentCommand(languageId: string, lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): codemavi {
 	testMoveLinesUpOrDownWithIndentCommand(MoveLinesDirection.Down, languageId, lines, selection, expectedLines, expectedSelection, languageConfigurationService);
 }
 
-function testMoveLinesUpWithIndentCommand(languageId: string, lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): void {
+function testMoveLinesUpWithIndentCommand(languageId: string, lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection, languageConfigurationService?: ILanguageConfigurationService): codemavi {
 	testMoveLinesUpOrDownWithIndentCommand(MoveLinesDirection.Up, languageId, lines, selection, expectedLines, expectedSelection, languageConfigurationService);
 }
 

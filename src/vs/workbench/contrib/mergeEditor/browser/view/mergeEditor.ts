@@ -112,7 +112,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		super(MergeEditor.ID, group, telemetryService, instantiation, storageService, textResourceConfigurationService, themeService, editorService, editorGroupService, fileService);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		this._sessionDisposables.dispose();
 		this._ctxIsMergeEditor.reset();
 		this._ctxUsesColumnLayout.reset();
@@ -122,8 +122,8 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 
 	// #region layout constraints
 
-	private readonly _onDidChangeSizeConstraints = new Emitter<void>();
-	override readonly onDidChangeSizeConstraints: Event<void> = this._onDidChangeSizeConstraints.event;
+	private readonly _onDidChangeSizeConstraints = new Emitter<codemavi>();
+	override readonly onDidChangeSizeConstraints: Event<codemavi> = this._onDidChangeSizeConstraints.event;
 
 	override get minimumWidth() {
 		return this._layoutMode.value.kind === 'mixed'
@@ -141,18 +141,18 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		return localize('mergeEditor', "Text Merge Editor");
 	}
 
-	protected createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): void {
+	protected createEditorControl(parent: HTMLElement, initialOptions: ICodeEditorOptions): codemavi {
 		this.rootHtmlElement = parent;
 		parent.classList.add('merge-editor');
 		this.applyLayout(this._layoutMode.value);
 		this.applyOptions(initialOptions);
 	}
 
-	protected updateEditorControlOptions(options: ICodeEditorOptions): void {
+	protected updateEditorControlOptions(options: ICodeEditorOptions): codemavi {
 		this.applyOptions(options);
 	}
 
-	private applyOptions(options: ICodeEditorOptions): void {
+	private applyOptions(options: ICodeEditorOptions): codemavi {
 		const inputOptions: ICodeEditorOptions = deepMerge<ICodeEditorOptions>(options, {
 			minimap: { enabled: false },
 			glyphMargin: false,
@@ -174,11 +174,11 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		return this.inputResultView.editor;
 	}
 
-	layout(dimension: Dimension): void {
+	layout(dimension: Dimension): codemavi {
 		this._grid.value?.layout(dimension.width, dimension.height);
 	}
 
-	override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
+	override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
 		if (!(input instanceof MergeEditorInput)) {
 			throw new BugIndicatingError('ONLY MergeEditorInput is supported');
 		}
@@ -425,7 +425,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		return disposableStore;
 	}
 
-	override setOptions(options: ITextEditorOptions | undefined): void {
+	override setOptions(options: ITextEditorOptions | undefined): codemavi {
 		super.setOptions(options);
 
 		if (options) {
@@ -433,7 +433,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		}
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 		super.clearInput();
 
 		this._sessionDisposables.clear();
@@ -443,7 +443,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		}
 	}
 
-	override focus(): void {
+	override focus(): codemavi {
 		super.focus();
 
 		(this.getControl() ?? this.inputResultView.editor).focus();
@@ -458,7 +458,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		return super.hasFocus();
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 		super.setEditorVisible(visible);
 
 		for (const { editor } of [this.input1View, this.input2View, this.inputResultView]) {
@@ -485,14 +485,14 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 
 	// --- layout
 
-	public toggleBase(): void {
+	public toggleBase(): codemavi {
 		this.setLayout({
 			...this._layoutMode.value,
 			showBase: !this._layoutMode.value.showBase
 		});
 	}
 
-	public toggleShowBaseTop(): void {
+	public toggleShowBaseTop(): codemavi {
 		const showBaseTop = this._layoutMode.value.showBase && this._layoutMode.value.showBaseAtTop;
 		this.setLayout({
 			...this._layoutMode.value,
@@ -501,7 +501,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		});
 	}
 
-	public toggleShowBaseCenter(): void {
+	public toggleShowBaseCenter(): codemavi {
 		const showBaseCenter = this._layoutMode.value.showBase && !this._layoutMode.value.showBaseAtTop;
 		this.setLayout({
 			...this._layoutMode.value,
@@ -510,14 +510,14 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 		});
 	}
 
-	public setLayoutKind(kind: MergeEditorLayoutKind): void {
+	public setLayoutKind(kind: MergeEditorLayoutKind): codemavi {
 		this.setLayout({
 			...this._layoutMode.value,
 			kind
 		});
 	}
 
-	public setLayout(newLayout: IMergeEditorLayout): void {
+	public setLayout(newLayout: IMergeEditorLayout): codemavi {
 		const value = this._layoutMode.value;
 		if (JSON.stringify(value) === JSON.stringify(newLayout)) {
 			return;
@@ -532,7 +532,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 
 	private readonly baseViewDisposables = this._register(new DisposableStore());
 
-	private applyLayout(layout: IMergeEditorLayout): void {
+	private applyLayout(layout: IMergeEditorLayout): codemavi {
 		transaction(tx => {
 			/** @description applyLayout */
 
@@ -660,7 +660,7 @@ export class MergeEditor extends AbstractTextEditor<IMergeEditorViewState> {
 	private readonly showNonConflictingChangesStore = this.instantiationService.createInstance(PersistentStore<boolean>, 'mergeEditor/showNonConflictingChanges');
 	private readonly showNonConflictingChanges = observableValue(this, this.showNonConflictingChangesStore.get() ?? false);
 
-	public toggleShowNonConflictingChanges(): void {
+	public toggleShowNonConflictingChanges(): codemavi {
 		this.showNonConflictingChanges.set(!this.showNonConflictingChanges.get(), undefined);
 		this.showNonConflictingChangesStore.set(this.showNonConflictingChanges.get());
 		this._ctxShowNonConflictingChanges.set(this.showNonConflictingChanges.get());

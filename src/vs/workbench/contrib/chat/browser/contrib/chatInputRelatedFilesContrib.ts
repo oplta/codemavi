@@ -19,7 +19,7 @@ export class ChatRelatedFilesContribution extends Disposable implements IWorkben
 	static readonly ID = 'chat.relatedFilesWorkingSet';
 
 	private readonly chatEditingSessionDisposables = new Map<string, DisposableStore>();
-	private _currentRelatedFilesRetrievalOperation: Promise<void> | undefined;
+	private _currentRelatedFilesRetrievalOperation: Promise<codemavi> | undefined;
 
 	constructor(
 		@IChatEditingService private readonly chatEditingService: IChatEditingService,
@@ -125,8 +125,8 @@ export interface IChatRelatedFile {
 }
 export class ChatRelatedFiles extends Disposable {
 
-	private readonly _onDidChange = this._register(new Emitter<void>());
-	readonly onDidChange: Event<void> = this._onDidChange.event;
+	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
 
 	private _removedFiles = new ResourceSet();
 	get removedFiles() {

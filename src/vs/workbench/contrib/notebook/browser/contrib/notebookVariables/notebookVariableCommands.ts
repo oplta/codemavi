@@ -24,7 +24,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, context: contextMenuArg): void {
+	run(accessor: ServicesAccessor, context: contextMenuArg): codemavi {
 		const clipboardService = accessor.get(IClipboardService);
 
 		if (context.value) {

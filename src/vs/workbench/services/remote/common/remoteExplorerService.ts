@@ -131,16 +131,16 @@ export interface IRemoteExplorerService {
 	helpInformation: IExtensionPointUser<HelpInformation>[];
 	readonly tunnelModel: TunnelModel;
 	onDidChangeEditable: Event<{ tunnel: ITunnelItem; editId: TunnelEditId } | undefined>;
-	setEditable(tunnelItem: ITunnelItem | undefined, editId: TunnelEditId, data: IEditableData | null): void;
+	setEditable(tunnelItem: ITunnelItem | undefined, editId: TunnelEditId, data: IEditableData | null): codemavi;
 	getEditableData(tunnelItem: ITunnelItem | undefined, editId?: TunnelEditId): IEditableData | undefined;
 	forward(tunnelProperties: TunnelProperties, attributes?: Attributes | null): Promise<RemoteTunnel | string | undefined>;
-	close(remote: { host: string; port: number }, reason: TunnelCloseReason): Promise<void>;
-	setTunnelInformation(tunnelInformation: TunnelInformation | undefined): void;
+	close(remote: { host: string; port: number }, reason: TunnelCloseReason): Promise<codemavi>;
+	setTunnelInformation(tunnelInformation: TunnelInformation | undefined): codemavi;
 	setCandidateFilter(filter: ((candidates: CandidatePort[]) => Promise<CandidatePort[]>) | undefined): IDisposable;
-	onFoundNewCandidates(candidates: CandidatePort[]): void;
-	restore(): Promise<void>;
-	enablePortsFeatures(viewOnly: boolean): void;
-	onEnabledPortsFeatures: Event<void>;
+	onFoundNewCandidates(candidates: CandidatePort[]): codemavi;
+	restore(): Promise<codemavi>;
+	enablePortsFeatures(viewOnly: boolean): codemavi;
+	onEnabledPortsFeatures: Event<codemavi>;
 	portsFeaturesEnabled: PortsEnablement;
 	readonly namedProcesses: Map<number, string>;
 }
@@ -157,8 +157,8 @@ class RemoteExplorerService implements IRemoteExplorerService {
 	private _editable: { tunnelItem: ITunnelItem | undefined; editId: TunnelEditId; data: IEditableData } | undefined;
 	private readonly _onDidChangeEditable: Emitter<{ tunnel: ITunnelItem; editId: TunnelEditId } | undefined> = new Emitter();
 	public readonly onDidChangeEditable: Event<{ tunnel: ITunnelItem; editId: TunnelEditId } | undefined> = this._onDidChangeEditable.event;
-	private readonly _onEnabledPortsFeatures: Emitter<void> = new Emitter();
-	public readonly onEnabledPortsFeatures: Event<void> = this._onEnabledPortsFeatures.event;
+	private readonly _onEnabledPortsFeatures: Emitter<codemavi> = new Emitter();
+	public readonly onEnabledPortsFeatures: Event<codemavi> = this._onEnabledPortsFeatures.event;
 	private _portsFeaturesEnabled: PortsEnablement = PortsEnablement.Disabled;
 	public readonly namedProcesses = new Map<number, string>();
 
@@ -202,18 +202,18 @@ class RemoteExplorerService implements IRemoteExplorerService {
 		return this.tunnelModel.forward(tunnelProperties, attributes);
 	}
 
-	close(remote: { host: string; port: number }, reason: TunnelCloseReason): Promise<void> {
+	close(remote: { host: string; port: number }, reason: TunnelCloseReason): Promise<codemavi> {
 		return this.tunnelModel.close(remote.host, remote.port, reason);
 	}
 
-	setTunnelInformation(tunnelInformation: TunnelInformation | undefined): void {
+	setTunnelInformation(tunnelInformation: TunnelInformation | undefined): codemavi {
 		if (tunnelInformation?.features) {
 			this.tunnelService.setTunnelFeatures(tunnelInformation.features);
 		}
 		this.tunnelModel.addEnvironmentTunnels(tunnelInformation?.environmentTunnels);
 	}
 
-	setEditable(tunnelItem: ITunnelItem | undefined, editId: TunnelEditId, data: IEditableData | null): void {
+	setEditable(tunnelItem: ITunnelItem | undefined, editId: TunnelEditId, data: IEditableData | null): codemavi {
 		if (!data) {
 			this._editable = undefined;
 		} else {
@@ -244,15 +244,15 @@ class RemoteExplorerService implements IRemoteExplorerService {
 		};
 	}
 
-	onFoundNewCandidates(candidates: CandidatePort[]): void {
+	onFoundNewCandidates(candidates: CandidatePort[]): codemavi {
 		this.tunnelModel.setCandidates(candidates);
 	}
 
-	restore(): Promise<void> {
+	restore(): Promise<codemavi> {
 		return this.tunnelModel.restoreForwarded();
 	}
 
-	enablePortsFeatures(viewOnly: boolean): void {
+	enablePortsFeatures(viewOnly: boolean): codemavi {
 		this._portsFeaturesEnabled = viewOnly ? PortsEnablement.ViewOnly : PortsEnablement.AdditionalFeatures;
 		this._onEnabledPortsFeatures.fire();
 	}

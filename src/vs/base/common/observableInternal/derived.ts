@@ -37,7 +37,7 @@ export function derived<T>(computeFnOrOwner: ((reader: IReader) => T) | DebugOwn
 	);
 }
 
-export function derivedWithSetter<T>(owner: DebugOwner | undefined, computeFn: (reader: IReader) => T, setter: (value: T, transaction: ITransaction | undefined) => void): ISettableObservable<T> {
+export function derivedWithSetter<T>(owner: DebugOwner | undefined, computeFn: (reader: IReader) => T, setter: (value: T, transaction: ITransaction | undefined) => codemavi): ISettableObservable<T> {
 	return new DerivedWithSetter(
 		new DebugNameData(owner, undefined, computeFn),
 		computeFn,
@@ -52,7 +52,7 @@ export function derivedWithSetter<T>(owner: DebugOwner | undefined, computeFn: (
 export function derivedOpts<T>(
 	options: IDebugNameData & {
 		equalsFn?: EqualityComparer<T>;
-		onLastObserverRemoved?: (() => void);
+		onLastObserverRemoved?: (() => codemavi);
 	},
 	computeFn: (reader: IReader) => T
 ): IObservable<T> {
@@ -193,7 +193,7 @@ export const enum DerivedState {
 	upToDate = 3,
 }
 
-export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> implements IReader, IObserver {
+export class Derived<T, TChangeSummary = any> extends BaseObservable<T, codemavi> implements IReader, IObserver {
 	private _state = DerivedState.initial;
 	private _value: T | undefined = undefined;
 	private _updateCount = 0;
@@ -212,14 +212,14 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		public readonly _computeFn: (reader: IReader, changeSummary: TChangeSummary) => T,
 		private readonly createChangeSummary: (() => TChangeSummary) | undefined,
 		private readonly _handleChange: ((context: IChangeContext, summary: TChangeSummary) => boolean) | undefined,
-		private readonly _handleLastObserverRemoved: (() => void) | undefined = undefined,
+		private readonly _handleLastObserverRemoved: (() => codemavi) | undefined = undefined,
 		private readonly _equalityComparator: EqualityComparer<T>,
 	) {
 		super();
 		this._changeSummary = this.createChangeSummary?.();
 	}
 
-	protected override onLastObserverRemoved(): void {
+	protected override onLastObserverRemoved(): codemavi {
 		/**
 		 * We are not tracking changes anymore, thus we have to assume
 		 * that our cache is invalid.
@@ -345,7 +345,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 
 	// IObserver Implementation
 
-	public beginUpdate<T>(_observable: IObservable<T>): void {
+	public beginUpdate<T>(_observable: IObservable<T>): codemavi {
 		if (this._isUpdating) {
 			throw new BugIndicatingError('Cyclic deriveds are not supported yet!');
 		}
@@ -375,7 +375,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 
 	private _removedObserverToCallEndUpdateOn: Set<IObserver> | null = null;
 
-	public endUpdate<T>(_observable: IObservable<T>): void {
+	public endUpdate<T>(_observable: IObservable<T>): codemavi {
 		this._updateCount--;
 		if (this._updateCount === 0) {
 			// End update could change the observer list.
@@ -394,7 +394,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		assertFn(() => this._updateCount >= 0);
 	}
 
-	public handlePossibleChange<T>(observable: IObservable<T>): void {
+	public handlePossibleChange<T>(observable: IObservable<T>): codemavi {
 		// In all other states, observers already know that we might have changed.
 		if (this._state === DerivedState.upToDate && this._dependencies.has(observable) && !this._dependenciesToBeRemoved.has(observable)) {
 			this._state = DerivedState.dependenciesMightHaveChanged;
@@ -404,7 +404,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		}
 	}
 
-	public handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): void {
+	public handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): codemavi {
 		if (this._dependencies.has(observable) && !this._dependenciesToBeRemoved.has(observable)) {
 			getLogger()?.handleDerivedDependencyChanged(this, observable, change);
 
@@ -447,7 +447,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		return value;
 	}
 
-	public override addObserver(observer: IObserver): void {
+	public override addObserver(observer: IObserver): codemavi {
 		const shouldCallBeginUpdate = !this._observers.has(observer) && this._updateCount > 0;
 		super.addObserver(observer);
 
@@ -460,7 +460,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		}
 	}
 
-	public override removeObserver(observer: IObserver): void {
+	public override removeObserver(observer: IObserver): codemavi {
 		if (this._observers.has(observer) && this._updateCount > 0) {
 			if (!this._removedObserverToCallEndUpdateOn) {
 				this._removedObserverToCallEndUpdateOn = new Set();
@@ -493,9 +493,9 @@ export class DerivedWithSetter<T, TChangeSummary = any> extends Derived<T, TChan
 		computeFn: (reader: IReader, changeSummary: TChangeSummary) => T,
 		createChangeSummary: (() => TChangeSummary) | undefined,
 		handleChange: ((context: IChangeContext, summary: TChangeSummary) => boolean) | undefined,
-		handleLastObserverRemoved: (() => void) | undefined = undefined,
+		handleLastObserverRemoved: (() => codemavi) | undefined = undefined,
 		equalityComparator: EqualityComparer<T>,
-		public readonly set: (value: T, tx: ITransaction | undefined) => void,
+		public readonly set: (value: T, tx: ITransaction | undefined) => codemavi,
 	) {
 		super(
 			debugNameData,

@@ -108,7 +108,7 @@ function moveToEndOfBuffer(editor: ITestCodeEditor, viewModel: ViewModel, inSele
 	}
 }
 
-function assertCursor(viewModel: ViewModel, what: Position | Selection | Selection[]): void {
+function assertCursor(viewModel: ViewModel, what: Position | Selection | Selection[]): codemavi {
 	let selections: Selection[];
 	if (what instanceof Position) {
 		selections = [new Selection(what.lineNumber, what.column, what.lineNumber, what.column)];
@@ -137,7 +137,7 @@ suite('Editor Controller - Cursor', () => {
 		LINE4 + '\r\n' +
 		LINE5;
 
-	function runTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => void): void {
+	function runTest(callback: (editor: ITestCodeEditor, viewModel: ViewModel) => codemavi): codemavi {
 		withTestCodeEditor(TEXT, {}, (editor, viewModel) => {
 			callback(editor, viewModel);
 		});
@@ -1528,7 +1528,7 @@ suite('Editor Controller', () => {
 				}
 				return new EncodedTokenizationResult(result, state);
 
-				function advance(): void {
+				function advance(): codemavi {
 					if (state instanceof BaseState) {
 						const m1 = line.match(/^[^'"`{}/]+/g);
 						if (m1) {
@@ -1582,7 +1582,7 @@ suite('Editor Controller', () => {
 		}));
 	}
 
-	function setAutoClosingLanguageEnabledSet(chars: string): void {
+	function setAutoClosingLanguageEnabledSet(chars: string): codemavi {
 		disposables.add(languageConfigurationService.register(autoClosingLanguageId, {
 			autoCloseBefore: chars,
 			autoClosingPairs: [
@@ -1601,7 +1601,7 @@ suite('Editor Controller', () => {
 		return disposables.add(instantiateTextModel(instantiationService, text, languageId, options, uri));
 	}
 
-	function withTestCodeEditor(text: ITextModel | string | string[], options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel) => void): void {
+	function withTestCodeEditor(text: ITextModel | string | string[], options: TestCodeEditorInstantiationOptions, callback: (editor: ITestCodeEditor, viewModel: ViewModel) => codemavi): codemavi {
 		let model: ITextModel;
 		if (typeof text === 'string') {
 			model = createTextModel(text);
@@ -1623,7 +1623,7 @@ suite('Editor Controller', () => {
 		editorOpts?: IEditorOptions;
 	}
 
-	function usingCursor(opts: ICursorOpts, callback: (editor: ITestCodeEditor, model: TextModel, viewModel: ViewModel) => void): void {
+	function usingCursor(opts: ICursorOpts, callback: (editor: ITestCodeEditor, model: TextModel, viewModel: ViewModel) => codemavi): codemavi {
 		const model = createTextModel(opts.text.join('\n'), opts.languageId, opts.modelOpts);
 		const editorOptions: TestCodeEditorInstantiationOptions = opts.editorOpts || {};
 		withTestCodeEditor(model, editorOptions, (editor, viewModel) => {
@@ -1655,7 +1655,7 @@ suite('Editor Controller', () => {
 		return result;
 	}
 
-	function assertType(editor: ITestCodeEditor, model: ITextModel, viewModel: ViewModel, lineNumber: number, column: number, chr: string, expectedInsert: string, message: string): void {
+	function assertType(editor: ITestCodeEditor, model: ITextModel, viewModel: ViewModel, lineNumber: number, column: number, chr: string, expectedInsert: string, message: string): codemavi {
 		const lineContent = model.getLineContent(lineNumber);
 		const expected = lineContent.substr(0, column - 1) + expectedInsert + lineContent.substr(column - 1);
 		moveTo(editor, viewModel, lineNumber, column);
@@ -3331,7 +3331,7 @@ suite('Editor Controller', () => {
 
 				private _selectionId: string | null = null;
 
-				public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
+				public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
 					builder.addEditOperation(new Range(1, 13, 1, 14), '');
 					this._selectionId = builder.trackSelection(viewModel.getSelection());
 				}
@@ -5389,7 +5389,7 @@ suite('Editor Controller', () => {
 			languageId: autoClosingLanguageId
 		}, (editor, model, viewModel) => {
 
-			function typeCharacters(viewModel: ViewModel, chars: string): void {
+			function typeCharacters(viewModel: ViewModel, chars: string): codemavi {
 				for (let i = 0, len = chars.length; i < len; i++) {
 					viewModel.type(chars[i], 'keyboard');
 				}

@@ -7,7 +7,7 @@ import { ICachePlugin, TokenCacheContext } from '@azure/msal-node';
 import { Disposable, EventEmitter, SecretStorage } from 'vscode';
 
 export class SecretStorageCachePlugin implements ICachePlugin, Disposable {
-	private readonly _onDidChange: EventEmitter<void> = new EventEmitter<void>();
+	private readonly _onDidChange: EventEmitter<codemavi> = new EventEmitter<codemavi>();
 	readonly onDidChange = this._onDidChange.event;
 
 	private _disposable: Disposable;
@@ -32,7 +32,7 @@ export class SecretStorageCachePlugin implements ICachePlugin, Disposable {
 		});
 	}
 
-	async beforeCacheAccess(tokenCacheContext: TokenCacheContext): Promise<void> {
+	async beforeCacheAccess(tokenCacheContext: TokenCacheContext): Promise<codemavi> {
 		const data = await this._secretStorage.get(this._key);
 		this._value = data;
 		if (data) {
@@ -40,7 +40,7 @@ export class SecretStorageCachePlugin implements ICachePlugin, Disposable {
 		}
 	}
 
-	async afterCacheAccess(tokenCacheContext: TokenCacheContext): Promise<void> {
+	async afterCacheAccess(tokenCacheContext: TokenCacheContext): Promise<codemavi> {
 		if (tokenCacheContext.cacheHasChanged) {
 			const value = tokenCacheContext.tokenCache.serialize();
 			if (value !== this._value) {

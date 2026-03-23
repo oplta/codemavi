@@ -193,7 +193,7 @@ class QuickPickItemElement extends BaseQuickPickItemElement {
 	constructor(
 		index: number,
 		hasCheckbox: boolean,
-		readonly fireButtonTriggered: (event: IQuickPickItemButtonEvent<IQuickPickItem>) => void,
+		readonly fireButtonTriggered: (event: IQuickPickItemButtonEvent<IQuickPickItem>) => codemavi,
 		private _onChecked: Emitter<{ element: IQuickPickElement; checked: boolean }>,
 		readonly item: IQuickPickItem,
 		private _separator: IQuickPickSeparator | undefined,
@@ -259,7 +259,7 @@ class QuickPickSeparatorElement extends BaseQuickPickItemElement {
 
 	constructor(
 		index: number,
-		readonly fireSeparatorButtonTriggered: (event: IQuickPickSeparatorButtonEvent) => void,
+		readonly fireSeparatorButtonTriggered: (event: IQuickPickSeparatorButtonEvent) => codemavi,
 		readonly separator: IQuickPickSeparator,
 	) {
 		super(index, false, separator);
@@ -316,7 +316,7 @@ class QuickInputAccessibilityProvider implements IListAccessibilityProvider<IQui
 	}
 }
 
-abstract class BaseQuickInputListRenderer<T extends IQuickPickElement> implements ITreeRenderer<T, void, IQuickInputItemTemplateData> {
+abstract class BaseQuickInputListRenderer<T extends IQuickPickElement> implements ITreeRenderer<T, codemavi, IQuickInputItemTemplateData> {
 	abstract templateId: string;
 
 	constructor(
@@ -371,18 +371,18 @@ abstract class BaseQuickInputListRenderer<T extends IQuickPickElement> implement
 		return data;
 	}
 
-	disposeTemplate(data: IQuickInputItemTemplateData): void {
+	disposeTemplate(data: IQuickInputItemTemplateData): codemavi {
 		data.toDisposeElement.dispose();
 		data.toDisposeTemplate.dispose();
 	}
 
-	disposeElement(_element: ITreeNode<IQuickPickElement, void>, _index: number, data: IQuickInputItemTemplateData): void {
+	disposeElement(_element: ITreeNode<IQuickPickElement, codemavi>, _index: number, data: IQuickInputItemTemplateData): codemavi {
 		data.toDisposeElement.clear();
 		data.actionBar.clear();
 	}
 
 	// TODO: only do the common stuff here and have a subclass handle their specific stuff
-	abstract renderElement(node: ITreeNode<IQuickPickElement, void>, index: number, data: IQuickInputItemTemplateData): void;
+	abstract renderElement(node: ITreeNode<IQuickPickElement, codemavi>, index: number, data: IQuickInputItemTemplateData): codemavi;
 }
 
 class QuickPickItemElementRenderer extends BaseQuickInputListRenderer<QuickPickItemElement> {
@@ -412,7 +412,7 @@ class QuickPickItemElementRenderer extends BaseQuickInputListRenderer<QuickPickI
 		return data;
 	}
 
-	renderElement(node: ITreeNode<QuickPickItemElement, void>, index: number, data: IQuickInputItemTemplateData): void {
+	renderElement(node: ITreeNode<QuickPickItemElement, codemavi>, index: number, data: IQuickInputItemTemplateData): codemavi {
 		const element = node.element;
 		data.element = element;
 		element.element = data.entry ?? undefined;
@@ -515,7 +515,7 @@ class QuickPickItemElementRenderer extends BaseQuickInputListRenderer<QuickPickI
 		}
 	}
 
-	override disposeElement(element: ITreeNode<QuickPickItemElement, void>, _index: number, data: IQuickInputItemTemplateData): void {
+	override disposeElement(element: ITreeNode<QuickPickItemElement, codemavi>, _index: number, data: IQuickInputItemTemplateData): codemavi {
 		this.removeItemWithSeparator(element.element);
 		super.disposeElement(element, _index, data);
 	}
@@ -524,11 +524,11 @@ class QuickPickItemElementRenderer extends BaseQuickInputListRenderer<QuickPickI
 		return this._itemsWithSeparatorsFrequency.has(item);
 	}
 
-	private addItemWithSeparator(item: QuickPickItemElement): void {
+	private addItemWithSeparator(item: QuickPickItemElement): codemavi {
 		this._itemsWithSeparatorsFrequency.set(item, (this._itemsWithSeparatorsFrequency.get(item) || 0) + 1);
 	}
 
-	private removeItemWithSeparator(item: QuickPickItemElement): void {
+	private removeItemWithSeparator(item: QuickPickItemElement): codemavi {
 		const frequency = this._itemsWithSeparatorsFrequency.get(item) || 0;
 		if (frequency > 1) {
 			this._itemsWithSeparatorsFrequency.set(item, frequency - 1);
@@ -563,7 +563,7 @@ class QuickPickSeparatorElementRenderer extends BaseQuickInputListRenderer<Quick
 		return data;
 	}
 
-	override renderElement(node: ITreeNode<QuickPickSeparatorElement, void>, index: number, data: IQuickInputItemTemplateData): void {
+	override renderElement(node: ITreeNode<QuickPickSeparatorElement, codemavi>, index: number, data: IQuickInputItemTemplateData): codemavi {
 		const element = node.element;
 		data.element = element;
 		element.element = data.entry ?? undefined;
@@ -620,7 +620,7 @@ class QuickPickSeparatorElementRenderer extends BaseQuickInputListRenderer<Quick
 		this.addSeparator(element);
 	}
 
-	override disposeElement(element: ITreeNode<QuickPickSeparatorElement, void>, _index: number, data: IQuickInputItemTemplateData): void {
+	override disposeElement(element: ITreeNode<QuickPickSeparatorElement, codemavi>, _index: number, data: IQuickInputItemTemplateData): codemavi {
 		this.removeSeparator(element.element);
 		if (!this.isSeparatorVisible(element.element)) {
 			element.element.element?.classList.remove('focus-inside');
@@ -628,11 +628,11 @@ class QuickPickSeparatorElementRenderer extends BaseQuickInputListRenderer<Quick
 		super.disposeElement(element, _index, data);
 	}
 
-	private addSeparator(separator: QuickPickSeparatorElement): void {
+	private addSeparator(separator: QuickPickSeparatorElement): codemavi {
 		this._visibleSeparatorsFrequency.set(separator, (this._visibleSeparatorsFrequency.get(separator) || 0) + 1);
 	}
 
-	private removeSeparator(separator: QuickPickSeparatorElement): void {
+	private removeSeparator(separator: QuickPickSeparatorElement): codemavi {
 		const frequency = this._visibleSeparatorsFrequency.get(separator) || 0;
 		if (frequency > 1) {
 			this._visibleSeparatorsFrequency.set(separator, frequency - 1);
@@ -652,11 +652,11 @@ export class QuickInputTree extends Disposable {
 	*/
 	readonly onKeyDown: Event<StandardKeyboardEvent> = this._onKeyDown.event;
 
-	private readonly _onLeave = new Emitter<void>();
+	private readonly _onLeave = new Emitter<codemavi>();
 	/**
 	 * Event that is fired when the tree would no longer have focus.
 	*/
-	readonly onLeave: Event<void> = this._onLeave.event;
+	readonly onLeave: Event<codemavi> = this._onLeave.event;
 
 	private readonly _visibleCountObservable = observableValue('VisibleCount', 0);
 	onChangedVisibleCount: Event<number> = Event.fromObservable(this._visibleCountObservable, this._store);
@@ -684,7 +684,7 @@ export class QuickInputTree extends Disposable {
 	private _hasCheckboxes = false;
 
 	private readonly _container: HTMLElement;
-	private readonly _tree: WorkbenchObjectTree<IQuickPickElement, void>;
+	private readonly _tree: WorkbenchObjectTree<IQuickPickElement, codemavi>;
 	private readonly _separatorRenderer: QuickPickSeparatorElementRenderer;
 	private readonly _itemRenderer: QuickPickItemElementRenderer;
 	private _inputElements = new Array<QuickPickItem>();
@@ -698,7 +698,7 @@ export class QuickInputTree extends Disposable {
 	constructor(
 		private parent: HTMLElement,
 		private hoverDelegate: IHoverDelegate,
-		private linkOpenerDelegate: (content: string) => void,
+		private linkOpenerDelegate: (content: string) => codemavi,
 		id: string,
 		@IInstantiationService instantiationService: IInstantiationService,
 		@IAccessibilityService private readonly accessibilityService: IAccessibilityService
@@ -708,7 +708,7 @@ export class QuickInputTree extends Disposable {
 		this._separatorRenderer = new QuickPickSeparatorElementRenderer(hoverDelegate);
 		this._itemRenderer = instantiationService.createInstance(QuickPickItemElementRenderer, hoverDelegate);
 		this._tree = this._register(instantiationService.createInstance(
-			WorkbenchObjectTree<IQuickPickElement, void>,
+			WorkbenchObjectTree<IQuickPickElement, codemavi>,
 			'QuickInput',
 			this._container,
 			new QuickInputItemDelegate(),
@@ -887,7 +887,7 @@ export class QuickInputTree extends Disposable {
 
 	private _registerOnContainerClick() {
 		this._register(dom.addDisposableListener(this._container, dom.EventType.CLICK, e => {
-			if (e.x || e.y) { // Avoid 'click' triggered by 'space' on checkbox.
+			if (e.x || e.y) { // Acodemavi 'click' triggered by 'space' on checkbox.
 				this._onLeave.fire();
 			}
 		}));
@@ -1059,7 +1059,7 @@ export class QuickInputTree extends Disposable {
 		});
 	}
 
-	setElements(inputElements: QuickPickItem[]): void {
+	setElements(inputElements: QuickPickItem[]): codemavi {
 		this._elementDisposable.clear();
 		this._lastQueryString = undefined;
 		this._inputElements = inputElements;
@@ -1166,7 +1166,7 @@ export class QuickInputTree extends Disposable {
 		});
 	}
 
-	focus(what: QuickPickFocus): void {
+	focus(what: QuickPickFocus): codemavi {
 		if (!this._itemElements.length) {
 			return;
 		}
@@ -1358,7 +1358,7 @@ export class QuickInputTree extends Disposable {
 		this._tree.domFocus();
 	}
 
-	layout(maxHeight?: number): void {
+	layout(maxHeight?: number): codemavi {
 		this._tree.getHTMLElement().style.maxHeight = maxHeight ? `${
 			// Make sure height aligns with list item heights
 			Math.floor(maxHeight / 44) * 44
@@ -1547,7 +1547,7 @@ export class QuickInputTree extends Disposable {
 	 * Disposes of the hover and shows a new one for the given index if it has a tooltip.
 	 * @param element The element to show the hover for
 	 */
-	private showHover(element: QuickPickItemElement): void {
+	private showHover(element: QuickPickItemElement): codemavi {
 		if (this._lastHover && !this._lastHover.isDisposed) {
 			this.hoverDelegate.onDidHideHover?.();
 			this._lastHover?.dispose();

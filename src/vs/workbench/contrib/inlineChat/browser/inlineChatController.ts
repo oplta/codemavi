@@ -125,7 +125,7 @@ export class InlineChatController implements IEditorContribution {
 		});
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 
 	}
 
@@ -280,7 +280,7 @@ export class InlineChatController1 implements IEditorContribution {
 		this._log(`NEW controller`);
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		if (this._currentRun) {
 			this._messages.fire(this._session?.chatModel.hasRequests
 				? Message.PAUSE_SESSION
@@ -291,7 +291,7 @@ export class InlineChatController1 implements IEditorContribution {
 		this._log('DISPOSED controller');
 	}
 
-	private _log(message: string | Error, ...more: any[]): void {
+	private _log(message: string | Error, ...more: any[]): codemavi {
 		if (message instanceof Error) {
 			this._logService.error(message, ...more);
 		} else {
@@ -311,7 +311,7 @@ export class InlineChatController1 implements IEditorContribution {
 		return this._ui.value.position;
 	}
 
-	private _currentRun?: Promise<void>;
+	private _currentRun?: Promise<codemavi>;
 
 	async run(options: InlineChatRunOptions | undefined = {}): Promise<boolean> {
 
@@ -349,11 +349,11 @@ export class InlineChatController1 implements IEditorContribution {
 
 	// ---- state machine
 
-	protected async _nextState(state: State, options: InlineChatRunOptions): Promise<void> {
-		let nextState: State | void = state;
+	protected async _nextState(state: State, options: InlineChatRunOptions): Promise<codemavi> {
+		let nextState: State | codemavi = state;
 		while (nextState && !this._isDisposed) {
 			this._log('setState to ', nextState);
-			const p: State | Promise<State> | Promise<void> = this[nextState](options);
+			const p: State | Promise<State> | Promise<codemavi> = this[nextState](options);
 			this._onDidEnterState.fire(nextState);
 			nextState = await p;
 		}
@@ -625,7 +625,7 @@ export class InlineChatController1 implements IEditorContribution {
 		this._ui.value.widget.toggleStatus(true);
 
 		const { response } = request;
-		const responsePromise = new DeferredPromise<void>();
+		const responsePromise = new DeferredPromise<codemavi>();
 
 		const store = new DisposableStore();
 
@@ -954,7 +954,7 @@ export class InlineChatController1 implements IEditorContribution {
 		}
 	}
 
-	private _updateCtxResponseType(): void {
+	private _updateCtxResponseType(): codemavi {
 
 		if (!this._session) {
 			this._ctxResponseType.set(InlineChatResponseType.None);
@@ -1021,11 +1021,11 @@ export class InlineChatController1 implements IEditorContribution {
 		}
 	}
 
-	private _updatePlaceholder(): void {
+	private _updatePlaceholder(): codemavi {
 		this._ui.value.widget.placeholder = this._session?.agent.description ?? '';
 	}
 
-	private _updateInput(text: string, selectAll = true): void {
+	private _updateInput(text: string, selectAll = true): codemavi {
 
 		this._ui.value.widget.chatWidget.setInput(text);
 		if (selectAll) {
@@ -1036,7 +1036,7 @@ export class InlineChatController1 implements IEditorContribution {
 
 	// ---- controller API
 
-	arrowOut(up: boolean): void {
+	arrowOut(up: boolean): codemavi {
 		if (this._ui.value.position && this._editor.hasModel()) {
 			const { column } = this._editor.getPosition();
 			const { lineNumber } = this._ui.value.position;
@@ -1046,7 +1046,7 @@ export class InlineChatController1 implements IEditorContribution {
 		}
 	}
 
-	focus(): void {
+	focus(): codemavi {
 		this._ui.value.widget.focus();
 	}
 
@@ -1086,7 +1086,7 @@ export class InlineChatController1 implements IEditorContribution {
 		this.cancelSession();
 	}
 
-	acceptSession(): void {
+	acceptSession(): codemavi {
 		const response = this._session?.chatModel.getRequests().at(-1)?.response;
 		if (response) {
 			this._chatService.notifyUserAction({
@@ -1159,7 +1159,7 @@ export class InlineChatController1 implements IEditorContribution {
 		return result;
 	}
 
-	joinCurrentRun(): Promise<void> | undefined {
+	joinCurrentRun(): Promise<codemavi> | undefined {
 		return this._currentRun;
 	}
 
@@ -1356,7 +1356,7 @@ export class InlineChatController2 implements IEditorContribution {
 		}));
 	}
 
-	dispose(): void {
+	dispose(): codemavi {
 		this._store.dispose();
 	}
 

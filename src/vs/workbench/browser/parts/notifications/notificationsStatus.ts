@@ -36,13 +36,13 @@ export class NotificationsStatus extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): void {
+	private registerListeners(): codemavi {
 		this._register(this.model.onDidChangeNotification(e => this.onDidChangeNotification(e)));
 		this._register(this.model.onDidChangeStatusMessage(e => this.onDidChangeStatusMessage(e)));
 		this._register(this.notificationService.onDidChangeFilter(() => this.updateNotificationsCenterStatusItem()));
 	}
 
-	private onDidChangeNotification(e: INotificationChangeEvent): void {
+	private onDidChangeNotification(e: INotificationChangeEvent): codemavi {
 
 		// Consider a notification as unread as long as it only
 		// appeared as toast and not in the notification center
@@ -58,7 +58,7 @@ export class NotificationsStatus extends Disposable {
 		this.updateNotificationsCenterStatusItem();
 	}
 
-	private updateNotificationsCenterStatusItem(): void {
+	private updateNotificationsCenterStatusItem(): codemavi {
 
 		// Figure out how many notifications have progress only if neither
 		// toasts are visible nor center is visible. In that case we still
@@ -136,7 +136,7 @@ export class NotificationsStatus extends Disposable {
 		return localize({ key: 'notificationsWithProgress', comment: ['{0} and {1} will be replaced by a number'] }, "{0} New Notifications ({1} in progress)", this.newNotificationsCount, notificationsInProgress);
 	}
 
-	update(isCenterVisible: boolean, isToastsVisible: boolean): void {
+	update(isCenterVisible: boolean, isToastsVisible: boolean): codemavi {
 		let updateNotificationsCenterStatusItem = false;
 
 		if (this.isNotificationsCenterVisible !== isCenterVisible) {
@@ -156,7 +156,7 @@ export class NotificationsStatus extends Disposable {
 		}
 	}
 
-	private onDidChangeStatusMessage(e: IStatusMessageChangeEvent): void {
+	private onDidChangeStatusMessage(e: IStatusMessageChangeEvent): codemavi {
 		const statusItem = e.item;
 
 		switch (e.kind) {
@@ -178,7 +178,7 @@ export class NotificationsStatus extends Disposable {
 		}
 	}
 
-	private doSetStatusMessage(item: IStatusMessageViewItem): void {
+	private doSetStatusMessage(item: IStatusMessageViewItem): codemavi {
 		const message = item.message;
 
 		const showAfter = item.options && typeof item.options.showAfter === 'number' ? item.options.showAfter : 0;

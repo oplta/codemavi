@@ -46,7 +46,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		this.viewState = this.getEditorMemento<T>(editorGroupService, textResourceConfigurationService, viewStateStorageKey, 100);
 	}
 
-	protected override setEditorVisible(visible: boolean): void {
+	protected override setEditorVisible(visible: boolean): codemavi {
 
 		// Listen to close events to trigger `onWillCloseEditorInGroup`
 		this.groupListener.value = this.group.onWillCloseEditor(e => this.onWillCloseEditor(e));
@@ -54,7 +54,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		super.setEditorVisible(visible);
 	}
 
-	private onWillCloseEditor(e: IEditorCloseEvent): void {
+	private onWillCloseEditor(e: IEditorCloseEvent): codemavi {
 		const editor = e.editor;
 		if (editor === this.input) {
 			// React to editors closing to preserve or clear view state. This needs to happen
@@ -64,7 +64,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		}
 	}
 
-	override clearInput(): void {
+	override clearInput(): codemavi {
 
 		// Preserve current input view state before clearing
 		this.updateEditorViewState(this.input);
@@ -72,7 +72,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		super.clearInput();
 	}
 
-	protected override saveState(): void {
+	protected override saveState(): codemavi {
 
 		// Preserve current input view state before shutting down
 		this.updateEditorViewState(this.input);
@@ -80,7 +80,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		super.saveState();
 	}
 
-	private updateEditorViewState(input: EditorInput | undefined): void {
+	private updateEditorViewState(input: EditorInput | undefined): codemavi {
 		if (!input || !this.tracksEditorViewState(input)) {
 			return; // ensure we have an input to handle view state for
 		}
@@ -147,7 +147,7 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		return this.computeEditorViewState(resource);
 	}
 
-	private saveEditorViewState(resource: URI): void {
+	private saveEditorViewState(resource: URI): codemavi {
 		const editorViewState = this.computeEditorViewState(resource);
 		if (!editorViewState) {
 			return;
@@ -177,15 +177,15 @@ export abstract class AbstractEditorWithViewState<T extends object> extends Edit
 		return this.viewState.loadEditorState(this.group, resource);
 	}
 
-	protected moveEditorViewState(source: URI, target: URI, comparer: IExtUri): void {
+	protected moveEditorViewState(source: URI, target: URI, comparer: IExtUri): codemavi {
 		return this.viewState.moveEditorState(source, target, comparer);
 	}
 
-	protected clearEditorViewState(resource: URI, group?: IEditorGroup): void {
+	protected clearEditorViewState(resource: URI, group?: IEditorGroup): codemavi {
 		this.viewState.clearEditorState(resource, group);
 	}
 
-	override dispose(): void {
+	override dispose(): codemavi {
 		super.dispose();
 
 		if (this.editorViewStateDisposables) {

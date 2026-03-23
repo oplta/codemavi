@@ -284,13 +284,13 @@ suite('HistoryService', function () {
 		return workbenchTeardown(instantiationService);
 	});
 
-	async function setTextSelection(historyService: IHistoryService, pane: TestTextFileEditor, selection: Selection, reason = EditorPaneSelectionChangeReason.USER): Promise<void> {
+	async function setTextSelection(historyService: IHistoryService, pane: TestTextFileEditor, selection: Selection, reason = EditorPaneSelectionChangeReason.USER): Promise<codemavi> {
 		const promise = Event.toPromise((historyService as HistoryService).onDidChangeEditorNavigationStack);
 		pane.setSelection(selection, reason);
 		await promise;
 	}
 
-	function assertTextSelection(expected: Selection, pane: EditorPane): void {
+	function assertTextSelection(expected: Selection, pane: EditorPane): codemavi {
 		const options: ITextEditorOptions | undefined = pane.options;
 		if (!options) {
 			assert.fail('EditorPane has no selection');
@@ -617,7 +617,7 @@ suite('HistoryService', function () {
 
 		await editorService.openEditor({ resource: otherResource });
 
-		const onDidActiveEditorChange = new DeferredPromise<void>();
+		const onDidActiveEditorChange = new DeferredPromise<codemavi>();
 		disposables.add(editorService.onDidActiveEditorChange(e => {
 			onDidActiveEditorChange.complete(e);
 		}));
@@ -638,7 +638,7 @@ suite('HistoryService', function () {
 
 		await pane?.group.closeAllEditors();
 
-		const onDidActiveEditorChange = new DeferredPromise<void>();
+		const onDidActiveEditorChange = new DeferredPromise<codemavi>();
 		disposables.add(editorService.onDidActiveEditorChange(e => {
 			onDidActiveEditorChange.complete(e);
 		}));
