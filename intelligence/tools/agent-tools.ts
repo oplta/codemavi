@@ -94,6 +94,29 @@ export type UserInteractionResult = {
 	}
 }
 
+// Terminal operasyonları
+export type TerminalToolParams = {
+	'run_command': { command: string; cwd?: string; wait_for_output: boolean }
+	'open_persistent_terminal': { id: string; shell?: string }
+	'send_to_terminal': { id: string; input: string }
+	'kill_terminal': { id: string }
+}
+
+export type TerminalToolResult = {
+	'run_command': { output: string; exit_code: number }
+	'open_persistent_terminal': { success: boolean }
+	'send_to_terminal': { success: boolean }
+	'kill_terminal': { success: boolean }
+}
+
+// Dosya sistemi gelişmiş operasyonlar
+export type FileSystemAdvancedParams = {
+	'list_dir_recursive': { path: string; max_depth?: number }
+	'move_file': { source: string; destination: string }
+	'copy_file': { source: string; destination: string }
+	'find_files_by_content': { pattern: string; file_extension?: string }
+}
+
 // Genişletilmiş builtin tool'lar
 export type CodeMaviToolName = 
 	| 'create_checkpoint'
@@ -105,6 +128,8 @@ export type CodeMaviToolName =
 	| 'delegate_to_executor'
 	| 'delegate_to_verifier'
 	| 'ask_user'
+	| keyof TerminalToolParams
+	| keyof FileSystemAdvancedParams
 
 // Tüm tool params birleşimi
 export type CodeMaviToolParams =
@@ -112,10 +137,5 @@ export type CodeMaviToolParams =
 	& SemanticSearchParams
 	& AgentDelegationParams
 	& UserInteractionParams
-
-// Tüm tool result birleşimi  
-export type CodeMaviToolResult =
-	& CheckpointToolResult
-	& SemanticSearchResult
-	& AgentDelegationResult
-	& UserInteractionResult
+	& TerminalToolParams
+	& FileSystemAdvancedParams
