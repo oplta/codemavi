@@ -324,7 +324,7 @@ const SimpleModelSettingsDialog = ({
 					{type === 'default' ? `${modelName} comes packaged with Void, so you shouldn't need to change these settings.`
 						: isUnrecognizedModel
 							? `Model not recognized by Void.`
-							: `Void recognizes ${modelName} ("${recognizedModelName}").`}
+							: `Code Mavi recognizes ${modelName} ("${recognizedModelName}").`}
 				</div>
 
 

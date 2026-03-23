@@ -79,7 +79,7 @@ export class VoidMainUpdateService extends Disposable implements IVoidUpdateServ
 
 		if (this._updateService.state.type === StateType.Ready) {
 			// Update is ready
-			return { message: 'Restart Void to update!', action: 'restart' } as const
+			return { message: 'Restart Code Mavi to update!', action: 'restart' } as const
 		}
 
 		if (this._updateService.state.type === StateType.Disabled) {
