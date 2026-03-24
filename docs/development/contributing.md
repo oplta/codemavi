@@ -1,6 +1,6 @@
-# Contributing to Code Mavi
+# Contributing to Code Mavi IDE
 
-Thank you for your interest in contributing to Code Mavi! This guide will help you understand our development process and how to contribute effectively.
+Thank you for your interest in contributing to Code Mavi IDE! This guide will help you understand our development process and how to contribute effectively.
 
 ## Table of Contents
 - [Code of Conduct](#code-of-conduct)
@@ -49,7 +49,7 @@ We are committed to fostering a welcoming and inclusive community. Please read o
    npm run compile
    ```
 
-4. **Launch Code Mavi**
+4. **Launch Code Mavi IDE**
    ```bash
    # macOS/Linux
    ./scripts/code.sh
@@ -113,7 +113,7 @@ npm run clean
 
 ```
 mavi-ide/
-├── src/vs/workbench/contrib/mavi/     # Core Code Mavi functionality
+├── src/vs/workbench/contrib/mavi/     # Core Code Mavi IDE functionality
 │   ├── common/                       # Shared code (both main and renderer)
 │   │   ├── mavi-logic/              # Agent system core
 │   │   │   ├── agents/              # Agent prompts and logic
@@ -486,10 +486,10 @@ We follow [Semantic Versioning](https://semver.org/):
 
 ## License
 
-By contributing to Code Mavi, you agree that your contributions will be licensed under the project's [MIT License](LICENSE.txt).
+By contributing to Code Mavi IDE, you agree that your contributions will be licensed under the project's [MIT License](LICENSE.txt).
 
 ---
 
-Thank you for contributing to Code Mavi! Your efforts help make AI-assisted development more transparent, accessible, and powerful for everyone.
+Thank you for contributing to Code Mavi IDE! Your efforts help make AI-assisted development more transparent, accessible, and powerful for everyone.
 
 If you have any questions not covered in this guide, please don't hesitate to ask in our community channels.

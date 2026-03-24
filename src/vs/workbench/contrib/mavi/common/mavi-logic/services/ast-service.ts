@@ -1,5 +1,5 @@
 /**
- * Mavi - AST Service
+ * Code Mavi IDE - AST Service
  *
  * tree-sitter based AST parsing and code analysis service
  * Provides language-aware code parsing, symbol extraction, and chunking

@@ -49,7 +49,7 @@ class MaviSettingsInput extends EditorInput {
 	}
 
 	override getName(): string {
-		return nls.localize('maviSettingsInputsName', 'Mavi\'s Settings');
+		return nls.localize('maviSettingsInputsName', 'Code Mavi IDE\'s Settings');
 	}
 
 	override getIcon() {
@@ -112,7 +112,7 @@ class MaviSettingsPane extends EditorPane {
 
 // register Settings pane
 Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
-	EditorPaneDescriptor.create(MaviSettingsPane, MaviSettingsPane.ID, nls.localize('MaviSettingsPane', "Mavi\'s Settings Pane")),
+	EditorPaneDescriptor.create(MaviSettingsPane, MaviSettingsPane.ID, nls.localize('MaviSettingsPane', "Code Mavi IDE\'s Settings Pane")),
 	[new SyncDescriptor(MaviSettingsInput)]
 );
 
@@ -123,7 +123,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
-			title: nls.localize2('maviSettings', "Mavi: Toggle Settings"),
+			title: nls.localize2('maviSettings', "Code Mavi IDE: Toggle Settings"),
 			icon: Codicon.settingsGear,
 			menu: [
 				{
@@ -172,7 +172,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_OPEN_SETTINGS_ACTION_ID,
-			title: nls.localize2('maviSettingsAction2', "Mavi: Open Settings"),
+			title: nls.localize2('maviSettingsAction2', "Code Mavi IDE: Open Settings"),
 			f1: true,
 			icon: Codicon.settingsGear,
 		});
@@ -202,7 +202,7 @@ MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
 	group: '0_command',
 	command: {
 		id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
-		title: nls.localize('maviSettingsActionGear', "Mavi\'s Settings")
+		title: nls.localize('maviSettingsActionGear', "Code Mavi IDE\'s Settings")
 	},
 	order: 1
 });

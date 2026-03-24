@@ -1,5 +1,5 @@
 /**
- * Mavi - Executor Agent
+ * Code Mavi IDE - Executor Agent
  *
  * The implementation specialist of the triple-agent system
  * Receives specific tasks from Orchestrator, reads files, makes changes,

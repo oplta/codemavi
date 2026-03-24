@@ -1,5 +1,5 @@
 /**
- * Mavi - Agent State Manager
+ * Code Mavi IDE - Agent State Manager
  * 
  * Agent'ın düşünce zincirini (Chain of Thought), mevcut görev durumunu
  * ve zihin geçmişini (memory) yöneten servis.

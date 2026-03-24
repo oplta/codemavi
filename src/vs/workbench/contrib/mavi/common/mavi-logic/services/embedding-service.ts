@@ -1,5 +1,5 @@
 /**
- * Mavi - Embedding Service
+ * Code Mavi IDE - Embedding Service
  *
  * Multiple embedding model support with fallback mechanisms
  * Supports local (Ollama) and cloud (OpenAI) embedding models

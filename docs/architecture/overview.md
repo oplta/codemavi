@@ -1,8 +1,8 @@
-# Code Mavi Architecture Overview
+# Code Mavi IDE Architecture Overview
 
 ## Vision: Agent-First IDE
 
-Code Mavi is built on the principle that AI-assisted development should be **transparent, controllable, and intelligent**. Unlike traditional AI coding assistants that operate as black boxes, Code Mavi exposes its reasoning process, allows user intervention at every step, and implements a sophisticated multi-agent system for complex task execution.
+Code Mavi IDE is built on the principle that AI-assisted development should be **transparent, controllable, and intelligent**. Unlike traditional AI coding assistants that operate as black boxes, Code Mavi IDE exposes its reasoning process, allows user intervention at every step, and implements a sophisticated multi-agent system for complex task execution.
 
 ## Core Philosophy
 
@@ -231,7 +231,7 @@ Code Mavi is built on the principle that AI-assisted development should be **tra
 
 ### VS Code Integration
 
-Code Mavi extends VS Code through:
+Code Mavi IDE extends VS Code through:
 
 1. **Workbench Contributions:**
    - Custom sidebar panels
@@ -330,4 +330,4 @@ Developers can create specialized agents for:
 
 ---
 
-*This architecture enables Code Mavi to provide intelligent, transparent, and controllable AI-assisted development while maintaining the flexibility and extensibility of the open-source ecosystem.*
+*This architecture enables Code Mavi IDE to provide intelligent, transparent, and controllable AI-assisted development while maintaining the flexibility and extensibility of the open-source ecosystem.*

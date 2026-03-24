@@ -279,12 +279,12 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	// 	const details = errorDetails(e.fullError)
 	// 	this._notificationService.notify({
 	// 		severity: Severity.Warning,
-	// 		message: `Mavi Error: ${e.message}`,
+	// 		message: `Code Mavi IDE Error: ${e.message}`,
 	// 		actions: {
 	// 			secondary: [{
 	// 				id: 'mavi.onerror.opensettings',
 	// 				enabled: true,
-	// 				label: `Open Mavi's settings`,
+	// 				label: `Open Code Mavi IDE's settings`,
 	// 				tooltip: '',
 	// 				class: undefined,
 	// 				run: () => { this._commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID) }
@@ -585,7 +585,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 							offsetLines = 1
 						}
 					}
-					else { throw new Error('Mavi 1') }
+					else { throw new Error('Code Mavi IDE 1') }
 
 					const buttonsWidget = this._instantiationService.createInstance(AcceptRejectInlineWidget, {
 						editor,
@@ -743,7 +743,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		const elt: IUndoRedoElement = {
 			type: UndoRedoElementType.Resource,
 			resource: uri,
-			label: 'Mavi Agent',
+			label: 'Code Mavi IDE Agent',
 			code: 'undoredo.editCode',
 			undo: async () => { opts?.onWillUndo?.(); await this._restoreMaviFileSnapshot(uri, beforeSnapshot) },
 			redo: async () => { if (afterSnapshot) await this._restoreMaviFileSnapshot(uri, afterSnapshot) }
@@ -997,7 +997,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			else if (lastDiff.type === 'deletion')
 				endLineInLlmTextSoFar = lastDiff.startLine
 			else
-				throw new Error(`Mavi: diff.type not recognized on: ${lastDiff}`)
+				throw new Error(`Code Mavi IDE: diff.type not recognized on: ${lastDiff}`)
 		}
 
 		// at the start, add a newline between the stream and originalCode to make reasoning easier
@@ -1376,7 +1376,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			startRange = [startLine_, endLine_]
 		}
 		else {
-			throw new Error(`Mavi: diff.type not recognized on: ${from}`)
+			throw new Error(`Code Mavi IDE: diff.type not recognized on: ${from}`)
 		}
 
 		const { model } = this._maviModelService.getModel(uri)
@@ -1480,7 +1480,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			else if (from === 'ClickApply') {
 				return extractCodeFromRegular({ text: fullText, recentlyAddedTextLen })
 			}
-			throw new Error('Mavi 1')
+			throw new Error('Code Mavi IDE 1')
 		}
 
 		// refresh now in case onText takes a while to get 1st message
@@ -1968,7 +1968,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 						const blocks = extractSearchReplaceBlocks(fullText)
 						if (blocks.length === 0) {
-							this._notificationService.info(`Mavi: We ran Fast Apply, but the LLM didn't output any changes.`)
+							this._notificationService.info(`Code Mavi IDE: We ran Fast Apply, but the LLM didn't output any changes.`)
 						}
 						this._writeURIText(uri, originalFileCode, 'wholeFileRange', { shouldRealignDiffAreas: true })
 
@@ -2158,7 +2158,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			].join('\n')
 		}
 		else {
-			throw new Error(`Mavi error: ${diff}.type not recognized`)
+			throw new Error(`Code Mavi IDE error: ${diff}.type not recognized`)
 		}
 
 		// console.log('DIFF', diff)
@@ -2250,7 +2250,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			toRange = { startLineNumber: diff.startLine, startColumn: 1, endLineNumber: diff.endLine, endColumn: Number.MAX_SAFE_INTEGER } // 1-indexed
 		}
 		else {
-			throw new Error(`Mavi error: ${diff}.type not recognized`)
+			throw new Error(`Code Mavi IDE error: ${diff}.type not recognized`)
 		}
 
 		// update the file

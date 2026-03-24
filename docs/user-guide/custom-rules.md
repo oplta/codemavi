@@ -1,8 +1,8 @@
-# Custom Rules Guide for Code Mavi
+# Custom Rules Guide for Code Mavi IDE
 
-## Introduction to Code Mavi Rules
+## Introduction to Code Mavi IDE Rules
 
-Code Mavi's rule system allows you to customize how agents interact with your codebase. Unlike black-box AI assistants, Code Mavi gives you complete control over agent behavior through a hierarchical rule system.
+Code Mavi IDE's rule system allows you to customize how agents interact with your codebase. Unlike black-box AI assistants, Code Mavi IDE gives you complete control over agent behavior through a hierarchical rule system.
 
 ### Why Custom Rules Matter
 
@@ -14,7 +14,7 @@ Code Mavi's rule system allows you to customize how agents interact with your co
 
 ## Rule Hierarchy
 
-Code Mavi applies rules in this priority order (highest to lowest):
+Code Mavi IDE applies rules in this priority order (highest to lowest):
 
 ```
 1. Session Rules (temporary, in-memory)
@@ -266,7 +266,7 @@ Example `~/.mavi/global-rules.md`:
 
 ### 1. Rule Validation
 
-Code Mavi validates rules on load. Check the Output panel (View → Output → Code Mavi Rules) for validation errors.
+Code Mavi IDE validates rules on load. Check the Output panel (View → Output → Code Mavi IDE Rules) for validation errors.
 
 ### 2. Testing with Simple Tasks
 
@@ -279,7 +279,7 @@ Code Mavi validates rules on load. Check the Output panel (View → Output → C
 
 ### 3. Monitoring Agent Behavior
 
-Open the Agent Log Panel (View → Output → Code Mavi Agents) to see how rules affect agent decisions.
+Open the Agent Log Panel (View → Output → Code Mavi IDE Agents) to see how rules affect agent decisions.
 
 ## Common Rule Patterns
 
@@ -368,7 +368,7 @@ ls -la .mavi/rules.md
 cat .mavi/rules.md
 
 # Check agent logs
-# View → Output → Code Mavi Agents
+# View → Output → Code Mavi IDE Agents
 ```
 
 **Issue:** Conflicting rules
@@ -397,7 +397,7 @@ cat .mavi/rules.md
 1. **Start Simple:** Begin with basic rules, add complexity gradually
 2. **Test Incrementally:** Test each rule category separately
 3. **Check Logs:** Agent logs show which rules are being applied
-4. **Ask Community:** Share rule patterns in Code Mavi Discord
+4. **Ask Community:** Share rule patterns in Code Mavi IDE Discord
 
 ## Best Practices for Rule Creation
 
@@ -447,7 +447,7 @@ cp rules-template.md .mavi/rules.md
 
 ### Community Rule Templates
 
-Check the Code Mavi community for rule templates:
+Check the Code Mavi IDE community for rule templates:
 - React + TypeScript + Tailwind
 - Node.js + Express + TypeScript
 - Python + FastAPI + SQLAlchemy
@@ -505,7 +505,7 @@ Check the Code Mavi community for rule templates:
 
 ## Conclusion
 
-Effective rules make Code Mavi agents more powerful and aligned with your project needs. Start with simple rules, test them thoroughly, and evolve them as your project grows.
+Effective rules make Code Mavi IDE agents more powerful and aligned with your project needs. Start with simple rules, test them thoroughly, and evolve them as your project grows.
 
 Remember: The goal is not to restrict creativity, but to ensure consistency and quality while leveraging AI assistance effectively.
 

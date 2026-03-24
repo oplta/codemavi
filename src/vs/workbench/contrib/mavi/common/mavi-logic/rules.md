@@ -1,6 +1,6 @@
-# Code Mavi Project Rules
+# Code Mavi IDE Project Rules
 
-Bu dosya Code Mavi Agent'larının uyması gereken proje özelindeki kuralları içerir.
+Bu dosya Code Mavi IDE Agent'larının uyması gereken proje özelindeki kuralları içerir.
 
 ## Genel Prensipler
 - Kod kalitesi her şeyden önemlidir.

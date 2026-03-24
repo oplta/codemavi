@@ -98,7 +98,7 @@ class SidebarViewPane extends ViewPane {
 // ---------- Register viewpane inside the mavi container ----------
 
 // const maviThemeIcon = Codicon.symbolObject;
-// const maviViewIcon = registerIcon('mavi-view-icon', maviThemeIcon, localize('maviViewIcon', 'View icon of the Mavi chat view.'));
+// const maviViewIcon = registerIcon('mavi-view-icon', maviThemeIcon, localize('maviViewIcon', 'View icon of the Code Mavi IDE chat view.'));
 
 // called VIEWLET_ID in other places for some reason
 export const MAVI_VIEW_CONTAINER_ID = 'workbench.view.mavi'
@@ -108,7 +108,7 @@ export const MAVI_VIEW_ID = MAVI_VIEW_CONTAINER_ID
 const viewContainerRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
 const container = viewContainerRegistry.registerViewContainer({
 	id: MAVI_VIEW_CONTAINER_ID,
-	title: nls.localize2('maviContainer', 'Chat'), // this is used to say "Mavi" (Ctrl + L)
+	title: nls.localize2('maviContainer', 'Chat'), // this is used to say "Code Mavi IDE" (Ctrl + L)
 	ctorDescriptor: new SyncDescriptor(ViewPaneContainer, [MAVI_VIEW_CONTAINER_ID, {
 		mergeViewWithContainerWhenSingleView: true,
 		orientation: Orientation.HORIZONTAL,
@@ -154,7 +154,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_OPEN_SIDEBAR_ACTION_ID,
-			title: 'Open Mavi Sidebar',
+			title: 'Open Code Mavi IDE Sidebar',
 		})
 	}
 	run(accessor: ServicesAccessor): void {

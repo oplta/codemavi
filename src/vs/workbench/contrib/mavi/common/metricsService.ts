@@ -59,7 +59,7 @@ registerAction2(class extends Action2 {
 		super({
 			id: 'maviDebugInfo',
 			f1: true,
-			title: localize2('maviMetricsDebug', 'Mavi: Log Debug Info'),
+			title: localize2('maviMetricsDebug', 'Code Mavi IDE: Log Debug Info'),
 		});
 	}
 	async run(accessor: ServicesAccessor): Promise<void> {
@@ -68,6 +68,6 @@ registerAction2(class extends Action2 {
 
 		const debugProperties = await metricsService.getDebuggingProperties()
 		console.log('Metrics:', debugProperties)
-		notifService.info(`Mavi Debug info:\n${JSON.stringify(debugProperties, null, 2)}`)
+		notifService.info(`Code Mavi IDE Debug info:\n${JSON.stringify(debugProperties, null, 2)}`)
 	}
 })

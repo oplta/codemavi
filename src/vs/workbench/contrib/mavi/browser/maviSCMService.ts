@@ -186,9 +186,9 @@ class GenerateCommitMessageAction extends Action2 {
 	constructor() {
 		super({
 			id: 'mavi.generateCommitMessageAction',
-			title: localize2('maviCommitMessagePrompt', 'Mavi: Generate Commit Message'),
+			title: localize2('maviCommitMessagePrompt', 'Code Mavi IDE: Generate Commit Message'),
 			icon: ThemeIcon.fromId('sparkle'),
-			tooltip: localize2('maviCommitMessagePromptTooltip', 'Mavi: Generate Commit Message'),
+			tooltip: localize2('maviCommitMessagePromptTooltip', 'Code Mavi IDE: Generate Commit Message'),
 			f1: true,
 			menu: [{
 				id: MenuId.SCMInputBox,
@@ -208,9 +208,9 @@ class LoadingGenerateCommitMessageAction extends Action2 {
 	constructor() {
 		super({
 			id: 'mavi.loadingGenerateCommitMessageAction',
-			title: localize2('maviCommitMessagePromptCancel', 'Mavi: Cancel Commit Message Generation'),
+			title: localize2('maviCommitMessagePromptCancel', 'Code Mavi IDE: Cancel Commit Message Generation'),
 			icon: ThemeIcon.fromId('stop-circle'),
-			tooltip: localize2('maviCommitMessagePromptCancelTooltip', 'Mavi: Cancel Commit Message Generation'),
+			tooltip: localize2('maviCommitMessagePromptCancelTooltip', 'Code Mavi IDE: Cancel Commit Message Generation'),
 			f1: false, //Having a cancel command in the command palette is more confusing than useful.
 			menu: [{
 				id: MenuId.SCMInputBox,

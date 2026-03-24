@@ -21,7 +21,7 @@ import { IAction } from '../../../../base/common/actions.js';
 
 
 const notifyUpdate = (res: MaviCheckUpdateRespose & { message: string }, notifService: INotificationService, updateService: IUpdateService): INotificationHandle => {
-	const message = res?.message || 'This is a very old version of Mavi, please download the latest version! [Mavi Editor](https://mavieditor.com/download-beta)!'
+	const message = res?.message || 'This is a very old version of Code Mavi IDE, please download the latest version! [Code Mavi IDE Editor](https://mavieditor.com/download-beta)!'
 
 	let actions: INotificationActions | undefined
 
@@ -85,7 +85,7 @@ const notifyUpdate = (res: MaviCheckUpdateRespose & { message: string }, notifSe
 		primary.push({
 			id: 'mavi.updater.site',
 			enabled: true,
-			label: `Mavi Site`,
+			label: `Code Mavi IDE Site`,
 			tooltip: '',
 			class: undefined,
 			run: () => {
@@ -127,7 +127,7 @@ const notifyUpdate = (res: MaviCheckUpdateRespose & { message: string }, notifSe
 	// })
 }
 const notifyErrChecking = (notifService: INotificationService): INotificationHandle => {
-	const message = `Mavi Error: There was an error checking for updates. If this persists, please get in touch or reinstall Mavi [here](https://mavieditor.com/download-beta)!`
+	const message = `Code Mavi IDE Error: There was an error checking for updates. If this persists, please get in touch or reinstall Code Mavi IDE [here](https://mavieditor.com/download-beta)!`
 	const notifController = notifService.notify({
 		severity: Severity.Info,
 		message: message,
@@ -147,21 +147,21 @@ const performMaviCheck = async (
 
 	const metricsTag = explicit ? 'Manual' : 'Auto'
 
-	metricsService.capture(`Mavi Update ${metricsTag}: Checking...`, {})
+	metricsService.capture(`Code Mavi IDE Update ${metricsTag}: Checking...`, {})
 	const res = await maviUpdateService.check(explicit)
 	if (!res) {
 		const notifController = notifyErrChecking(notifService);
-		metricsService.capture(`Mavi Update ${metricsTag}: Error`, { res })
+		metricsService.capture(`Code Mavi IDE Update ${metricsTag}: Error`, { res })
 		return notifController
 	}
 	else {
 		if (res.message) {
 			const notifController = notifyUpdate(res, notifService, updateService)
-			metricsService.capture(`Mavi Update ${metricsTag}: Yes`, { res })
+			metricsService.capture(`Code Mavi IDE Update ${metricsTag}: Yes`, { res })
 			return notifController
 		}
 		else {
-			metricsService.capture(`Mavi Update ${metricsTag}: No`, { res })
+			metricsService.capture(`Code Mavi IDE Update ${metricsTag}: No`, { res })
 			return null
 		}
 	}
@@ -177,7 +177,7 @@ registerAction2(class extends Action2 {
 		super({
 			f1: true,
 			id: 'mavi.maviCheckUpdate',
-			title: localize2('maviCheckUpdate', 'Mavi: Check for Updates'),
+			title: localize2('maviCheckUpdate', 'Code Mavi IDE: Check for Updates'),
 		});
 	}
 	async run(accessor: ServicesAccessor): Promise<void> {

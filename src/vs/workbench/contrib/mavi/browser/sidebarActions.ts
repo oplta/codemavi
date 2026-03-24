@@ -64,7 +64,7 @@ export const roundRangeToLines = (range: IRange | null | undefined, options: { e
 const MAVI_OPEN_SIDEBAR_ACTION_ID = 'mavi.sidebar.open'
 registerAction2(class extends Action2 {
 	constructor() {
-		super({ id: MAVI_OPEN_SIDEBAR_ACTION_ID, title: localize2('maviOpenSidebar', 'Mavi: Open Sidebar'), f1: true });
+		super({ id: MAVI_OPEN_SIDEBAR_ACTION_ID, title: localize2('maviOpenSidebar', 'Code Mavi IDE: Open Sidebar'), f1: true });
 	}
 	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewsService = accessor.get(IViewsService)
@@ -81,7 +81,7 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_CTRL_L_ACTION_ID,
 			f1: true,
-			title: localize2('maviCmdL', 'Mavi: Add Selection to Chat'),
+			title: localize2('maviCmdL', 'Code Mavi IDE: Add Selection to Chat'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyCode.KeyL,
 				weight: KeybindingWeight.MaviExtension
@@ -240,7 +240,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: 'mavi.settingsAction',
-			title: `Mavi's Settings`,
+			title: `Code Mavi IDE's Settings`,
 			icon: { id: 'settings-gear' },
 			menu: [{ id: MenuId.ViewTitle, group: 'navigation', when: ContextKeyExpr.equals('view', MAVI_VIEW_ID), }]
 		});

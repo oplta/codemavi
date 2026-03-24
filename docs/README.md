@@ -1,6 +1,6 @@
-# Code Mavi Documentation
+# Code Mavi IDE Documentation
 
-Welcome to the Code Mavi documentation! This comprehensive guide covers everything you need to know about Code Mavi, the open-source, agent-first IDE.
+Welcome to the Code Mavi IDE documentation! This comprehensive guide covers everything you need to know about Code Mavi IDE, the open-source, agent-first IDE.
 
 ## 📚 Documentation Categories
 
@@ -22,7 +22,7 @@ Welcome to the Code Mavi documentation! This comprehensive guide covers everythi
 - **[Troubleshooting](user-guide/troubleshooting.md)** - Common issues and solutions
 
 ### 💻 For Developers
-- **[Contributing Guide](development/contributing.md)** - How to contribute to Code Mavi
+- **[Contributing Guide](development/contributing.md)** - How to contribute to Code Mavi IDE
 - **[Quick Start for Developers](development/quick-start.md)** - Development setup
 - **[Build Instructions](development/build.md)** - Building from source
 - **[Testing Guide](development/testing.md)** - Running tests
@@ -43,7 +43,7 @@ Welcome to the Code Mavi documentation! This comprehensive guide covers everythi
 4. **[Contributing Guide](development/contributing.md)** - Start contributing
 
 ### Key Concepts
-- **Agent-First Architecture**: Code Mavi is built around intelligent agents
+- **Agent-First Architecture**: Code Mavi IDE is built around intelligent agents
 - **Triple Agent System**: Orchestrator, Executor, and Verifier work together
 - **Transparent Prompts**: All system prompts are visible and editable
 - **Self-Correction**: Agents automatically fix errors (max 3 retries)
@@ -52,7 +52,7 @@ Welcome to the Code Mavi documentation! This comprehensive guide covers everythi
 ## 📖 Documentation Philosophy
 
 ### Transparency
-All Code Mavi documentation is:
+All Code Mavi IDE documentation is:
 - **Complete**: Covers all features and APIs
 - **Accurate**: Regularly updated with the codebase
 - **Practical**: Includes real-world examples
@@ -189,7 +189,7 @@ This documentation is licensed under [CC BY-SA 4.0](https://creativecommons.org/
 - **VS Code Team** for the amazing foundation
 - **Void Editor Contributors** for the initial fork
 - **Cursor Team** for inspiration and innovation
-- **All Contributors** who help improve Code Mavi
+- **All Contributors** who help improve Code Mavi IDE
 
 ---
 

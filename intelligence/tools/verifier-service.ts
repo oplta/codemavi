@@ -1,5 +1,5 @@
 /**
- * Mavi - Verifier Service
+ * Code Mavi IDE - Verifier Service
  * 
  * Yapılan kod değişikliklerini linter ve testler ile doğrular.
  * Hata durumunda "Self-Correction" döngüsü için veri hazırlar.

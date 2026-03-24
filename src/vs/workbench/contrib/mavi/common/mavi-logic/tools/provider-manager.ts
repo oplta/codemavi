@@ -1,5 +1,5 @@
 /**
- * Mavi - Provider Manager
+ * Code Mavi IDE - Provider Manager
  * 
  * Farklı LLM sağlayıcılarını (OpenAI, Anthropic, DeepSeek, Zhipu, vb.)
  * standart bir arayüz üzerinden yönetir.

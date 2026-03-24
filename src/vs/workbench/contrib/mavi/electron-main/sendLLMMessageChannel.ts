@@ -81,7 +81,7 @@ export class LLMMessageChannel implements IServerChannel {
 				this._callOpenAICompatibleList(params)
 			}
 			else {
-				throw new Error(`Mavi sendLLM: command "${command}" not recognized.`)
+				throw new Error(`Code Mavi IDE sendLLM: command "${command}" not recognized.`)
 			}
 		}
 		catch (e) {

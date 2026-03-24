@@ -1,5 +1,5 @@
 /**
- * Mavi - Semantic Search Service
+ * Code Mavi IDE - Semantic Search Service
  *
  * SQLite + vec0 (vector similarity search) extension ile
  * codebase indexing ve semantic search
@@ -87,7 +87,7 @@ export interface ISemanticSearchService {
 // ============================================
 
 export const SEMANTIC_SEARCH_SCHEMA = `
--- Mavi Semantic Search Database Schema
+-- Code Mavi IDE Semantic Search Database Schema
 -- Version: 1.0.0
 
 -- Metadata table for tracking database state

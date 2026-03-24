@@ -1,5 +1,5 @@
 /**
- * Mavi - Verifier Agent
+ * Code Mavi IDE - Verifier Agent
  *
  * The quality assurance specialist of the triple-agent system
  * Validates changes made by Executor, runs tests, checks for errors,

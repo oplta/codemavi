@@ -17,7 +17,7 @@ class FilePromptActionService extends Action2 {
 	constructor() {
 		super({
 			id: FilePromptActionService.MAVI_COPY_FILE_PROMPT_ID,
-			title: localize2('maviCopyPrompt', 'Mavi: Copy Prompt'),
+			title: localize2('maviCopyPrompt', 'Code Mavi IDE: Copy Prompt'),
 			menu: [{
 				id: MenuId.ExplorerContext,
 				group: '8_mavi',

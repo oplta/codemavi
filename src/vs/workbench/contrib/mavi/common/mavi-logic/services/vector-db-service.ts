@@ -1,5 +1,5 @@
 /**
- * Mavi - Vector Database Service
+ * Code Mavi IDE - Vector Database Service
  *
  * SQLite + vec0 extension for vector similarity search
  * Stores code embeddings and enables semantic search
@@ -82,9 +82,9 @@ export class VectorDBService extends Disposable {
 
     switch (process.platform) {
       case 'darwin':
-        return join(homeDir, 'Library', 'Application Support', 'Mavi');
+        return join(homeDir, 'Library', 'Application Support', 'Code Mavi IDE');
       case 'win32':
-        return join(process.env.APPDATA || homeDir, 'Mavi');
+        return join(process.env.APPDATA || homeDir, 'Code Mavi IDE');
       default:
         return join(homeDir, '.config', 'code-mavi');
     }

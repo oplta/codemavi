@@ -1,5 +1,5 @@
 /**
- * Mavi - Prompt Inspector and Layer System
+ * Code Mavi IDE - Prompt Inspector and Layer System
  *
  * Provides transparency into agent prompts by showing the complete prompt
  * that gets sent to LLMs, including all rule layers and context injections.
@@ -332,7 +332,7 @@ export class PromptInspectorService extends Disposable implements IPromptInspect
 	}
 
 	async mergeLayers(layers: PromptLayer[]): Promise<string> {
-		let prompt = '# Mavi Agent Prompt\n\n';
+		let prompt = '# Code Mavi IDE Agent Prompt\n\n';
 		prompt += '*This prompt is automatically assembled from multiple layers*\n\n';
 
 		// Add layer information
@@ -345,7 +345,7 @@ export class PromptInspectorService extends Disposable implements IPromptInspect
 
 		// Add footer
 		prompt += '---\n';
-		prompt += '*Prompt assembled by Mavi Prompt Inspector*\n';
+		prompt += '*Prompt assembled by Code Mavi IDE Prompt Inspector*\n';
 		prompt += `*Total layers: ${layers.length}*\n`;
 
 		return prompt;
@@ -582,9 +582,9 @@ async getLayerTemplates(agentType: string): Promise<PromptLayer[]> {
 		'orchestrator': {
 			name: 'Orchestrator Base Prompt',
 			description: 'Base system prompt for Orchestrator agent',
-			content: `# Mavi Orchestrator Agent
+			content: `# Code Mavi IDE Orchestrator Agent
 
-You are the Orchestrator agent for Mavi. Your role is to:
+You are the Orchestrator agent for Code Mavi IDE. Your role is to:
 1. Analyze user requests and understand requirements
 2. Create detailed execution plans
 3. Delegate tasks to specialized agents
@@ -597,14 +597,14 @@ You are the Orchestrator agent for Mavi. Your role is to:
 - Resource allocation and optimization
 - Quality assurance and validation`,
 			priority: 100,
-			source: { type: 'system', author: 'Mavi' }
+			source: { type: 'system', author: 'Code Mavi IDE' }
 		},
 		'executor': {
 			name: 'Executor Base Prompt',
 			description: 'Base system prompt for Executor agent',
-			content: `# Mavi Executor Agent
+			content: `# Code Mavi IDE Executor Agent
 
-You are the Executor agent for Mavi. Your role is to:
+You are the Executor agent for Code Mavi IDE. Your role is to:
 1. Implement specific code changes based on instructions
 2. Generate semantic diffs for changes
 3. Follow coding standards and best practices
@@ -616,14 +616,14 @@ You are the Executor agent for Mavi. Your role is to:
 - Code quality assurance
 - Self-validation and testing`,
 			priority: 100,
-			source: { type: 'system', author: 'Mavi' }
+			source: { type: 'system', author: 'Code Mavi IDE' }
 		},
 		'verifier': {
 			name: 'Verifier Base Prompt',
 			description: 'Base system prompt for Verifier agent',
-			content: `# Mavi Verifier Agent
+			content: `# Code Mavi IDE Verifier Agent
 
-You are the Verifier agent for Mavi. Your role is to:
+You are the Verifier agent for Code Mavi IDE. Your role is to:
 1. Validate code changes made by Executor
 2. Run comprehensive tests and checks
 3. Identify and report issues
@@ -635,7 +635,7 @@ You are the Verifier agent for Mavi. Your role is to:
 - Test execution and validation
 - Security and performance analysis`,
 			priority: 100,
-			source: { type: 'system', author: 'Mavi' }
+			source: { type: 'system', author: 'Code Mavi IDE' }
 		}
 	};
 
@@ -678,7 +678,7 @@ You are the Verifier agent for Mavi. Your role is to:
 {{RECENT_CHANGES}}`,
 		priority: 80,
 		enabled: true,
-		source: { type: 'context', author: 'Mavi' },
+		source: { type: 'context', author: 'Code Mavi IDE' },
 		metadata: {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
@@ -769,12 +769,12 @@ private async createSystemLayer(agentType: string): Promise<PromptLayer> {
 		id: `system_${agentType}_${Date.now()}`,
 		name: `${agentType.charAt(0).toUpperCase() + agentType.slice(1)} System Prompt`,
 		description: `Base system prompt for ${agentType} agent`,
-		content: `# Mavi ${agentType.charAt(0).toUpperCase() + agentType.slice(1)} Agent
+		content: `# Code Mavi IDE ${agentType.charAt(0).toUpperCase() + agentType.slice(1)} Agent
 
-You are a specialized AI agent working within the Mavi system.`,
+You are a specialized AI agent working within the Code Mavi IDE system.`,
 		priority: 100,
 		enabled: true,
-		source: { type: 'system', author: 'Mavi' },
+		source: { type: 'system', author: 'Code Mavi IDE' },
 		metadata: {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),

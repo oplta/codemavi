@@ -1,4 +1,4 @@
-# Code Mavi Implementation Guide
+# Code Mavi IDE Implementation Guide
 ## Bridging Vision to Reality
 
 **Based on:** `plan.md` strategic vision and current codebase analysis  
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This guide translates the strategic vision from `plan.md` into actionable technical implementation steps. Code Mavi aims to become the first open-source, agent-first IDE that combines Cursor's intelligence with Void's openness, while avoiding the architectural pitfalls that limited Void's success.
+This guide translates the strategic vision from `plan.md` into actionable technical implementation steps. Code Mavi IDE aims to become the first open-source, agent-first IDE that combines Cursor's intelligence with Void's openness, while avoiding the architectural pitfalls that limited Void's success.
 
 ### Core Thesis from plan.md
 > "Void neden öldü? Provider eklediler, UI yaptılar, ama **agent beyni yoktu.**  
@@ -25,7 +25,7 @@ This insight drives our entire implementation strategy.
 ### ✅ What We Have (Phase 0-1 Complete)
 
 1. **Void Fork Foundation**
-   - Working VS Code fork with Mavi branding
+   - Working VS Code fork with Code Mavi IDE branding
    - Basic UI components and services
    - Development environment established
 

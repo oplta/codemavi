@@ -13,7 +13,7 @@ which runs a GitHub Action that builds the AppImage you see on our website.
 
 # Void AppImage Creation Script
 
-This script automates the process of creating an AppImage for the  Code Mavi Editor using Docker. It works on macOS and Linux platforms.
+This script automates the process of creating an AppImage for the  Code Mavi IDE Editor using Docker. It works on macOS and Linux platforms.
 ## Requirements
 
 *   **Docker:** The script relies on Docker to build the AppImage inside a container.

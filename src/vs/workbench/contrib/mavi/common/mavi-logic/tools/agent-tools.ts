@@ -1,7 +1,7 @@
 /**
- * Mavi - Agent Tool Tanımları
+ * Code Mavi IDE - Agent Tool Tanımları
  * 
- * Mavi'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
+ * Code Mavi IDE'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
  * Agent-first mimari için gerekli tool'lar
  */
 

@@ -1,5 +1,5 @@
 /**
- * Mavi - Provider Manager Service
+ * Code Mavi IDE - Provider Manager Service
  *
  * Manages multiple LLM providers with failover, load balancing, and cost tracking
  * Supports Ollama, OpenAI, Anthropic, and other LLM providers

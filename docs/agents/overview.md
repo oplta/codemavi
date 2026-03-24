@@ -1,8 +1,8 @@
-# Code Mavi Agent System
+# Code Mavi IDE Agent System
 
 ## Introduction
 
-Code Mavi implements a sophisticated multi-agent system designed to handle complex software development tasks with intelligence, precision, and reliability. Unlike traditional AI assistants that operate as monolithic systems, Code Mavi decomposes tasks across specialized agents that collaborate through well-defined interfaces and feedback loops.
+Code Mavi IDE implements a sophisticated multi-agent system designed to handle complex software development tasks with intelligence, precision, and reliability. Unlike traditional AI assistants that operate as monolithic systems, Code Mavi IDE decomposes tasks across specialized agents that collaborate through well-defined interfaces and feedback loops.
 
 ## The Triple Agent Architecture
 
@@ -127,7 +127,7 @@ The agent system implements sophisticated error recovery:
 
 ### Layered Prompt System
 
-Code Mavi uses a hierarchical prompt system that combines:
+Code Mavi IDE uses a hierarchical prompt system that combines:
 
 ```
 1. Base Agent Prompt (System-defined)
@@ -143,7 +143,7 @@ Code Mavi uses a hierarchical prompt system that combines:
 
 ### Prompt Transparency
 
-Unlike closed systems, Code Mavi exposes all prompts:
+Unlike closed systems, Code Mavi IDE exposes all prompts:
 
 1. **Viewable:** Users can see exactly what instructions agents receive
 2. **Editable:** Users can modify prompts for their specific needs
@@ -413,4 +413,4 @@ New tools can be added through:
 
 ---
 
-*The Code Mavi agent system represents a significant advancement in AI-assisted development, combining the precision of specialized agents with the flexibility of open, transparent prompts. This architecture enables developers to harness AI capabilities while maintaining control, understanding, and quality throughout the development process.*
+*The Code Mavi IDE agent system represents a significant advancement in AI-assisted development, combining the precision of specialized agents with the flexibility of open, transparent prompts. This architecture enables developers to harness AI capabilities while maintaining control, understanding, and quality throughout the development process.*

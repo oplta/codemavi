@@ -1,5 +1,5 @@
 /**
- * Mavi - Semantic Search Service
+ * Code Mavi IDE - Semantic Search Service
  *
  * Complete implementation of semantic search with hybrid search capabilities
  * Integrates AST parsing, embedding generation, and vector search

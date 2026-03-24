@@ -1,5 +1,5 @@
 /**
- * Mavi - Orchestrator Agent
+ * Code Mavi IDE - Orchestrator Agent
  *
  * The strategic planner and coordinator of the triple-agent system
  * Analyzes user requests, creates execution plans, and delegates to specialized agents

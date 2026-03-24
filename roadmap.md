@@ -1,9 +1,9 @@
-# 🗺️ Code Mavi Roadmap
+# 🗺️ Code Mavi IDE Roadmap
 
-Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip eder.
+Bu doküman, Code Mavi IDE projesinin gelişim aşamalarını ve hedeflerini takip eder.
 
 ## 🟢 v0.1.0: Mantık Çekirdeği (Tamamlandı)
-- [x] Code Mavi repo temizliği ve "Agent Logic" odaklı yapı.
+- [x] Code Mavi IDE repo temizliği ve "Agent Logic" odaklı yapı.
 - [x] Orchestrator, Executor ve Verifier rollerinin tanımı.
 - [x] Temel `OrchestratorService` ve `SemanticSearchService` iskeleti.
 - [x] Proje kuralları (`rules.md`) altyapısı.
@@ -29,6 +29,6 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 - [x] GitHub release v0.4.0
 
 ## 🟡 v1.0.0: IDE Entegrasyonu ve Yayılım (Şu anki hedef)
-- [ ] Mantık katmanının Code Mavi IDE (VS Code Fork) ile tam entegrasyonu.
+- [ ] Mantık katmanının Code Mavi IDE IDE (VS Code Fork) ile tam entegrasyonu.
 - [ ] Kullanıcı dostu agent arayüzü.
 - [ ] Topluluk eklenti desteği.

@@ -1,8 +1,8 @@
-# Getting Started with Code Mavi
+# Getting Started with Code Mavi IDE
 
-## Welcome to Code Mavi!
+## Welcome to Code Mavi IDE!
 
-Code Mavi is an open-source, agent-first IDE that brings powerful AI-assisted development to your fingertips. This guide will help you set up Code Mavi and start using its advanced features.
+Code Mavi IDE is an open-source, agent-first IDE that brings powerful AI-assisted development to your fingertips. This guide will help you set up Code Mavi IDE and start using its advanced features.
 
 ## System Requirements
 
@@ -26,44 +26,44 @@ Code Mavi is an open-source, agent-first IDE that brings powerful AI-assisted de
 1. **Visit the Releases Page:**
    - Go to [GitHub Releases](https://github.com/mavi/mavi/releases)
    - Download the appropriate version for your OS:
-     - `CodeMavi-darwin-x64.zip` for macOS
-     - `CodeMavi-win32-x64.zip` for Windows
-     - `CodeMavi-linux-x64.tar.gz` for Linux
+     - `CodeCode Mavi IDE-darwin-x64.zip` for macOS
+     - `CodeCode Mavi IDE-win32-x64.zip` for Windows
+     - `CodeCode Mavi IDE-linux-x64.tar.gz` for Linux
 
 2. **Installation Steps:**
 
    **macOS:**
    ```bash
    # Extract the archive
-   unzip CodeMavi-darwin-x64.zip
+   unzip CodeCode Mavi IDE-darwin-x64.zip
    
    # Move to Applications
-   mv Code\ Mavi.app /Applications/
+   mv Code\ Code Mavi IDE.app /Applications/
    
    # Launch from Applications folder or Spotlight
    ```
 
    **Windows:**
    - Extract the ZIP file
-   - Run `Code Mavi.exe`
+   - Run `Code Mavi IDE.exe`
    - (Optional) Create a shortcut on your desktop
 
    **Linux:**
    ```bash
    # Extract the archive
-   tar -xzf CodeMavi-linux-x64.tar.gz
+   tar -xzf CodeCode Mavi IDE-linux-x64.tar.gz
    
-   # Run Code Mavi
-   ./CodeMavi/code-mavi
+   # Run Code Mavi IDE
+   ./CodeCode Mavi IDE/code-mavi
    
    # (Optional) Create desktop entry
-   sudo cp -r CodeMavi /opt/
-   sudo ln -s /opt/CodeMavi/code-mavi /usr/local/bin/code-mavi
+   sudo cp -r CodeCode Mavi IDE /opt/
+   sudo ln -s /opt/CodeCode Mavi IDE/code-mavi /usr/local/bin/code-mavi
    ```
 
 ### Method 2: Build from Source
 
-If you want the latest features or need to customize Code Mavi:
+If you want the latest features or need to customize Code Mavi IDE:
 
 ```bash
 # Clone the repository
@@ -76,20 +76,20 @@ npm install
 # Build in development mode
 npm run watch
 
-# Launch Code Mavi
+# Launch Code Mavi IDE
 ./scripts/code.sh  # macOS/Linux
 ./scripts/code.bat # Windows
 ```
 
 ## First-Time Setup
 
-### 1. Launch Code Mavi
+### 1. Launch Code Mavi IDE
 
-When you first launch Code Mavi, you'll see the welcome screen:
+When you first launch Code Mavi IDE, you'll see the welcome screen:
 
 ```
 ┌─────────────────────────────────────┐
-│         Welcome to Code Mavi        │
+│         Welcome to Code Mavi IDE        │
 │                                     │
 │  [ ] I accept the license terms     │
 │  [ ] Send anonymous usage data      │
@@ -102,7 +102,7 @@ When you first launch Code Mavi, you'll see the welcome screen:
 
 ### 2. Configure LLM Provider
 
-Code Mavi needs at least one LLM provider to function. Here are your options:
+Code Mavi IDE needs at least one LLM provider to function. Here are your options:
 
 #### Option A: Local Provider (Recommended for Privacy)
 
@@ -115,9 +115,9 @@ Code Mavi needs at least one LLM provider to function. Here are your options:
 ollama pull deepseek-coder:6.7b
 ollama pull codellama:7b
 
-# In Code Mavi:
+# In Code Mavi IDE:
 # 1. Open Settings (Cmd+, or Ctrl+,)
-# 2. Navigate to "Code Mavi" → "Providers"
+# 2. Navigate to "Code Mavi IDE" → "Providers"
 # 3. Click "Add Provider"
 # 4. Select "Ollama"
 # 5. Enter localhost:11434 as the URL
@@ -128,7 +128,7 @@ ollama pull codellama:7b
 
 **OpenAI:**
 - Get API key from [platform.openai.com](https://platform.openai.com)
-- In Code Mavi Settings → Providers → Add Provider → OpenAI
+- In Code Mavi IDE Settings → Providers → Add Provider → OpenAI
 - Enter your API key
 - Select default model (GPT-4o recommended)
 
@@ -152,7 +152,7 @@ echo "# Project Rules" > .mavi/rules.md
 
 Edit `.mavi/rules.md`:
 ```markdown
-# Project Rules for Code Mavi Agents
+# Project Rules for Code Mavi IDE Agents
 
 ## General Principles
 - Write clean, maintainable code
@@ -236,8 +236,8 @@ Edit `~/.mavi/global-rules.md`:
 
 ### Basic Interaction
 
-1. **Open the Code Mavi Sidebar:**
-   - Click the Code Mavi icon in the activity bar (blue icon)
+1. **Open the Code Mavi IDE Sidebar:**
+   - Click the Code Mavi IDE icon in the activity bar (blue icon)
    - Or press `Cmd+L` (macOS) / `Ctrl+L` (Windows/Linux)
 
 2. **Start a Conversation:**
@@ -289,11 +289,11 @@ When you make a request, three specialized agents work together:
 
 **Agent Log Panel:**
 - Open View → Output
-- Select "Code Mavi Agents" from the dropdown
+- Select "Code Mavi IDE Agents" from the dropdown
 - See real-time agent activity and decisions
 
 **Prompt Inspector:**
-- In Code Mavi sidebar, click "Prompt Inspector"
+- In Code Mavi IDE sidebar, click "Prompt Inspector"
 - See exactly what prompts are sent to each agent
 - Understand how agents make decisions
 
@@ -304,7 +304,7 @@ When you make a request, three specialized agents work together:
 Find code by meaning, not just keywords:
 
 ```typescript
-// In Code Mavi sidebar:
+// In Code Mavi IDE sidebar:
 search: "authentication error handling"
 // Returns: Files dealing with auth errors, even if they don't contain those exact words
 ```
@@ -314,7 +314,7 @@ search: "authentication error handling"
 Automate entire development tasks:
 
 1. Open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
-2. Type "Code Mavi: Auto Dev Mode"
+2. Type "Code Mavi IDE: Auto Dev Mode"
 3. Enter a complex task:
    ```
    Refactor all API calls to use the new HttpClient class
@@ -328,7 +328,7 @@ Safe experimentation with automatic rollback points:
 ```typescript
 // Agents automatically create checkpoints before major changes
 // If something goes wrong:
-// 1. Open Code Mavi sidebar
+// 1. Open Code Mavi IDE sidebar
 // 2. Click "Checkpoints"
 // 3. Select a checkpoint
 // 4. Click "Restore"
@@ -356,7 +356,7 @@ export class MyTool {
 
 ### Key Settings
 
-**Settings Path:** `File → Preferences → Settings → Code Mavi`
+**Settings Path:** `File → Preferences → Settings → Code Mavi IDE`
 
 | Setting | Description | Recommended Value |
 |---------|-------------|-------------------|
@@ -371,7 +371,7 @@ export class MyTool {
 
 | Shortcut | Action | Description |
 |----------|--------|-------------|
-| `Cmd+L` / `Ctrl+L` | Open Code Mavi sidebar | Main AI interface |
+| `Cmd+L` / `Ctrl+L` | Open Code Mavi IDE sidebar | Main AI interface |
 | `Cmd+K` / `Ctrl+K` | Quick edit | Edit selected code |
 | `Cmd+Shift+P` / `Ctrl+Shift+P` | Command palette | Access all commands |
 | `Cmd+Shift+A` / `Ctrl+Shift+A` | Toggle agent view | Show/hide agent activity |
@@ -381,7 +381,7 @@ export class MyTool {
 
 ### Issue: "No LLM provider configured"
 **Solution:**
-1. Open Settings → Code Mavi → Providers
+1. Open Settings → Code Mavi IDE → Providers
 2. Click "Add Provider"
 3. Configure at least one provider
 4. Test the connection
@@ -417,7 +417,7 @@ export class MyTool {
 ### Join the Community
 - **GitHub Discussions:** Share ideas and get help
 - **Discord Server:** Real-time chat with other users
-- **Contributor Guide:** Help improve Code Mavi
+- **Contributor Guide:** Help improve Code Mavi IDE
 
 ### Provide Feedback
 - **GitHub Issues:** Report bugs and request features
@@ -433,16 +433,16 @@ npm run compile      # Production build
 npm test            # Run tests
 npm run eslint      # Lint code
 
-# Common tasks in Code Mavi
+# Common tasks in Code Mavi IDE
 Cmd+L → Type request    # Use AI assistance
 Cmd+K on selection      # Quick edit
 Cmd+Shift+P → "Auto Dev Mode"  # Complex automation
-View → Output → Code Mavi Agents  # Monitor agents
+View → Output → Code Mavi IDE Agents  # Monitor agents
 ```
 
 ---
 
-**Congratulations!** You're now ready to use Code Mavi for AI-assisted development. Remember:
+**Congratulations!** You're now ready to use Code Mavi IDE for AI-assisted development. Remember:
 
 1. **Start small** with simple tasks
 2. **Review changes** before applying
@@ -450,4 +450,4 @@ View → Output → Code Mavi Agents  # Monitor agents
 4. **Customize rules** for your workflow
 5. **Join the community** for support and inspiration
 
-Happy coding with Code Mavi! 🚀
+Happy coding with Code Mavi IDE! 🚀

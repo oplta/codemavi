@@ -83,7 +83,7 @@ export class NativeDialogHandler extends AbstractDialogHandler {
 			return localize({ key: 'aboutDetail', comment: ['Electron, Chromium, Node.js and V8 are product names that need no translation'] },
 				"VSCode Version: {0}\nMavi Version: {1}\nCommit: {2}\nDate: {3}\nElectron: {4}\nElectronBuildId: {5}\nChromium: {6}\nNode.js: {7}\nV8: {8}\nOS: {9}",
 				version,
-				this.productService.maviVersion || 'Unknown', // Mavi added this
+				this.productService.maviVersion || 'Unknown', // Code Mavi IDE IDE added this
 				this.productService.commit || 'Unknown',
 				this.productService.date ? `${this.productService.date}${useAgo ? ' (' + fromNow(new Date(this.productService.date), true) + ')' : ''}` : 'Unknown',
 				process.versions['electron'],

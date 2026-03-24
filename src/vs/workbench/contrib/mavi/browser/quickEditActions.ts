@@ -38,7 +38,7 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_CTRL_K_ACTION_ID,
 			f1: true,
-			title: localize2('maviQuickEditAction', 'Mavi: Quick Edit'),
+			title: localize2('maviQuickEditAction', 'Code Mavi IDE: Quick Edit'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyCode.KeyK,
 				weight: KeybindingWeight.MaviExtension,

@@ -130,7 +130,7 @@ export function findDiffs(oldStr: string, newStr: string) {
 // 	let keys = new Set([...Object.keys(a), ...Object.keys(b)])
 // 	for (let k of keys) {
 // 		if (a[k] !== b[k]) {
-// 			console.error('Mavi Test Error:', name_, '\n', `${k}=`, `${JSON.stringify(a[k])}, ${JSON.stringify(b[k])}`)
+// 			console.error('Code Mavi IDE Test Error:', name_, '\n', `${k}=`, `${JSON.stringify(a[k])}, ${JSON.stringify(b[k])}`)
 // 			// console.error(JSON.stringify(a, null, 4))
 // 			// console.error(JSON.stringify(b, null, 4))
 // 			testsFailed += 1
@@ -244,8 +244,8 @@ export function findDiffs(oldStr: string, newStr: string) {
 
 
 // if (testsFailed === 0) {
-// 	console.log('✅ Mavi - All tests passed')
+// 	console.log('✅ Code Mavi IDE - All tests passed')
 // }
 // else {
-// 	console.log('❌ Mavi - At least one test failed')
+// 	console.log('❌ Code Mavi IDE - At least one test failed')
 // }

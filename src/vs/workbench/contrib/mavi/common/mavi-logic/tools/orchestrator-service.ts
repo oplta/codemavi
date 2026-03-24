@@ -1,8 +1,8 @@
 /**
- * Mavi - Orchestrator Service
+ * Code Mavi IDE - Orchestrator Service
  * 
  * Ana agent servisi - tüm agent akışını yönetir
- * Mavi'un chatThreadService.ts dosyasına entegre edilecek
+ * Code Mavi IDE'un chatThreadService.ts dosyasına entegre edilecek
  */
 
 import { URI } from '../../../../../../base/common/uri.js'

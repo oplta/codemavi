@@ -1,15 +1,15 @@
-# Code Mavi Development Roadmap
+# Code Mavi IDE Development Roadmap
 
 ## Overview
 
-This roadmap outlines the development phases for Code Mavi, following the strategic plan defined in `plan.md`. The project is organized into six phases, each building upon the previous to create a complete, production-ready agent-first IDE.
+This roadmap outlines the development phases for Code Mavi IDE, following the strategic plan defined in `plan.md`. The project is organized into six phases, each building upon the previous to create a complete, production-ready agent-first IDE.
 
 ## Phase 0: Void Fork + Orientation (Week 1-2)
 
 **Goal:** Establish foundation by forking Void editor and understanding the codebase
 
 ### Tasks:
-- [x] Fork Void editor repository to Code Mavi organization
+- [x] Fork Void editor repository to Code Mavi IDE organization
 - [x] Complete initial codebase analysis and documentation
 - [x] Identify critical Void components to preserve/modify
 - [x] Document Void's architecture and limitations
@@ -19,7 +19,7 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 1. **Codebase Analysis Report** - Understanding what Void does and doesn't do
 2. **Development Environment Setup** - Working build system for all contributors
 3. **Architecture Documentation** - Clear understanding of VS Code extension model
-4. **Initial Branding** - Basic Code Mavi identity applied
+4. **Initial Branding** - Basic Code Mavi IDE identity applied
 
 ### Technical Focus:
 - Study `VOID_CODEBASE_GUIDE.md` and create `CODEMAVI_CODEBASE_GUIDE.md`
@@ -29,20 +29,20 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 
 ## Phase 1: Branding + Stabilization (Week 3-4)
 
-**Goal:** Complete rebranding from Void to Code Mavi and stabilize the codebase
+**Goal:** Complete rebranding from Void to Code Mavi IDE and stabilize the codebase
 
 ### Tasks:
-- [ ] Complete rename from Void to Code Mavi across entire codebase
-- [ ] Implement Mavi theme system (`#020b18` base, `#3b82f6` accent)
+- [ ] Complete rename from Void to Code Mavi IDE across entire codebase
+- [ ] Implement Code Mavi IDE theme system (`#020b18` base, `#3b82f6` accent)
 - [ ] Disable telemetry and analytics systems
 - [ ] Fix broken Void features and stabilize core functionality
-- [ ] Update all documentation references from Void to Code Mavi
+- [ ] Update all documentation references from Void to Code Mavi IDE
 - [ ] Create comprehensive `CODEMAVI_CODEBASE_GUIDE.md`
 
 ### Key Deliverables:
 1. **Complete Rebranding** - No remaining "Void" references in UI or code
 2. **Stable Build System** - Reliable development and production builds
-3. **Theme System** - Consistent Mavi branding across all UI components
+3. **Theme System** - Consistent Code Mavi IDE branding across all UI components
 4. **Privacy-First Configuration** - All telemetry disabled by default
 
 ### Technical Focus:
@@ -185,9 +185,9 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 6. **Community Infrastructure** - Support channels and contribution guidelines
 
 ### Release Artifacts:
-- `CodeMavi-darwin-x64.zip` (macOS)
-- `CodeMavi-win32-x64.zip` (Windows)
-- `CodeMavi-linux-x64.tar.gz` (Linux)
+- `CodeCode Mavi IDE-darwin-x64.zip` (macOS)
+- `CodeCode Mavi IDE-win32-x64.zip` (Windows)
+- `CodeCode Mavi IDE-linux-x64.tar.gz` (Linux)
 - Source code archive
 - Documentation website
 - Example projects and tutorials
@@ -287,12 +287,12 @@ Month 10-12: Phase 9 - Enterprise Features
 
 ## Conclusion
 
-This roadmap represents a comprehensive plan to transform Code Mavi from a Void editor fork into a fully-featured, agent-first IDE that competes with commercial solutions while remaining open source and transparent. Each phase builds upon the previous, with clear deliverables and success metrics.
+This roadmap represents a comprehensive plan to transform Code Mavi IDE from a Void editor fork into a fully-featured, agent-first IDE that competes with commercial solutions while remaining open source and transparent. Each phase builds upon the previous, with clear deliverables and success metrics.
 
-The key differentiators of Code Mavi will be:
+The key differentiators of Code Mavi IDE will be:
 1. **Transparency:** All prompts and agent logic visible and editable
 2. **Control:** User-defined rules and approval workflows
 3. **Intelligence:** Sophisticated multi-agent system with self-correction
 4. **Openness:** Community-driven development and extensibility
 
-By following this roadmap, Code Mavi will deliver on its promise: making what Cursor does open, transparent, and free, while completing Void's vision with a sophisticated agent brain.
+By following this roadmap, Code Mavi IDE will deliver on its promise: making what Cursor does open, transparent, and free, while completing Void's vision with a sophisticated agent brain.

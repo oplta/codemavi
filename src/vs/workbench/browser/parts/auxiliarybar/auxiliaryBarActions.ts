@@ -27,7 +27,7 @@ const auxiliaryBarLeftOffIcon = registerIcon('auxiliarybar-left-off-layout-icon'
 export class ToggleAuxiliaryBarAction extends Action2 {
 
 	static readonly ID = 'workbench.action.toggleAuxiliaryBar';
-	static readonly LABEL = localize2('toggleAuxiliaryBar', "Toggle Mavi Side Bar Visibility");
+	static readonly LABEL = localize2('toggleAuxiliaryBar', "Toggle Code Mavi IDE Side Bar Visibility");
 
 	constructor() {
 		super({
@@ -35,14 +35,14 @@ export class ToggleAuxiliaryBarAction extends Action2 {
 			title: ToggleAuxiliaryBarAction.LABEL,
 			toggled: {
 				condition: AuxiliaryBarVisibleContext,
-				title: localize('closeSecondarySideBar', 'Hide Mavi Side Bar'),
+				title: localize('closeSecondarySideBar', 'Hide Code Mavi IDE Side Bar'),
 				icon: closeIcon,
 				mnemonicTitle: localize({ key: 'secondary sidebar mnemonic', comment: ['&& denotes a mnemonic'] }, "Secondary Si&&de Bar"),
 			},
 			icon: closeIcon, // Ensures no flickering when using toggled.icon
 			category: Categories.View,
 			metadata: {
-				description: localize('openAndCloseAuxiliaryBar', 'Open/Show and Close/Hide Mavi Side Bar'),
+				description: localize('openAndCloseAuxiliaryBar', 'Open/Show and Close/Hide Code Mavi IDE Side Bar'),
 			},
 			f1: true,
 			keybinding: {
@@ -81,7 +81,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: 'workbench.action.closeAuxiliaryBar',
-			title: localize2('closeSecondarySideBar', 'Hide Mavi Side Bar'),
+			title: localize2('closeSecondarySideBar', 'Hide Code Mavi IDE Side Bar'),
 			category: Categories.View,
 			precondition: AuxiliaryBarVisibleContext,
 			f1: true,
@@ -95,7 +95,7 @@ registerAction2(class extends Action2 {
 registerAction2(class FocusAuxiliaryBarAction extends Action2 {
 
 	static readonly ID = 'workbench.action.focusAuxiliaryBar';
-	static readonly LABEL = localize2('focusAuxiliaryBar', "Focus into Mavi Side Bar");
+	static readonly LABEL = localize2('focusAuxiliaryBar', "Focus into Code Mavi IDE Side Bar");
 
 	constructor() {
 		super({
@@ -128,7 +128,7 @@ MenuRegistry.appendMenuItems([
 			group: '2_pane_toggles',
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Mavi Side Bar"),
+				title: localize('toggleSecondarySideBar', "Toggle Code Mavi IDE Side Bar"),
 				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarLeftIcon },
 				icon: auxiliaryBarLeftOffIcon,
 			},
@@ -141,7 +141,7 @@ MenuRegistry.appendMenuItems([
 			group: '2_pane_toggles',
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Mavi Side Bar"),
+				title: localize('toggleSecondarySideBar', "Toggle Code Mavi IDE Side Bar"),
 				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarRightIcon },
 				icon: auxiliaryBarRightOffIcon,
 			},
@@ -154,7 +154,7 @@ MenuRegistry.appendMenuItems([
 			group: '3_workbench_layout_move',
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize2('hideAuxiliaryBar', 'Hide Mavi Side Bar'),
+				title: localize2('hideAuxiliaryBar', 'Hide Code Mavi IDE Side Bar'),
 			},
 			when: ContextKeyExpr.and(AuxiliaryBarVisibleContext, ContextKeyExpr.equals('viewContainerLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
 			order: 2
@@ -166,7 +166,7 @@ registerAction2(class extends SwitchCompositeViewAction {
 	constructor() {
 		super({
 			id: 'workbench.action.previousAuxiliaryBarView',
-			title: localize2('previousAuxiliaryBarView', 'Previous Mavi Side Bar View'),
+			title: localize2('previousAuxiliaryBarView', 'Previous Code Mavi IDE Side Bar View'),
 			category: Categories.View,
 			f1: true
 		}, ViewContainerLocation.AuxiliaryBar, -1);
@@ -177,7 +177,7 @@ registerAction2(class extends SwitchCompositeViewAction {
 	constructor() {
 		super({
 			id: 'workbench.action.nextAuxiliaryBarView',
-			title: localize2('nextAuxiliaryBarView', 'Next Mavi Side Bar View'),
+			title: localize2('nextAuxiliaryBarView', 'Next Code Mavi IDE Side Bar View'),
 			category: Categories.View,
 			f1: true
 		}, ViewContainerLocation.AuxiliaryBar, 1);

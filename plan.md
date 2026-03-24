@@ -1,4 +1,4 @@
-# Code Mavi IDE — Proje Planı v3
+# Code Mavi IDE IDE — Proje Planı v3
 ### "Void'un düştüğü çukura düşmeyeceğiz"
 
 > Void neden öldü? Provider eklediler, UI yaptılar, ama **agent beyni yoktu.**
@@ -32,7 +32,7 @@ Cursor'un prompt mühendisleri gerçekten iyi iş çıkarıyor — diğer AI IDE
 
 ---
 
-## Code Mavi'nin Farkı: Agent-First Mimari
+## Code Mavi IDE'nin Farkı: Agent-First Mimari
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -66,7 +66,7 @@ Token harcamak önemli değil — **sonuç doğru olmalı.**
 
 ## Temel Felsefe
 
-| | Void | Cursor | Code Mavi |
+| | Void | Cursor | Code Mavi IDE |
 |---|---|---|---|
 | Agent tipi | Yok | Var ama kapalı | Şeffaf + açık kaynak |
 | System prompt | Sabit | Gizli | **Kullanıcı düzenleyebilir** |
@@ -102,7 +102,7 @@ Bu olmadan agent kör uçuş yapar. Void'da yoktu.
 System prompt'un kalbi burası. Cursor'un gizli tuttuğu şey tam da bu.
 
 ```
-Sen Code Mavi'nin orchestrator agent'ısın.
+Sen Code Mavi IDE'nin orchestrator agent'ısın.
 Görevin:
   1. Kullanıcının isteğini analiz et
   2. Etkilenecek dosyaları semantic search ile bul
@@ -160,7 +160,7 @@ Cursor'un en büyük sırrı bu. Biz açık yapacağız.
 ### `.mavi/rules.md` — Proje Kuralları
 
 ```markdown
-# Proje Kuralları (Code Mavi Agent'ı okur)
+# Proje Kuralları (Code Mavi IDE Agent'ı okur)
 
 ## Mimari
 - Bu proje Cargo workspace, 6 crate var
@@ -192,7 +192,7 @@ Cursor'daki `.cursorrules` ile aynı fikir ama bizimki şeffaf ve genişletilebi
 ### System Prompt Katmanları (sırayla birleşir)
 
 ```
-1. Code Mavi base prompt (biz yazıyoruz, açık kaynak)
+1. Code Mavi IDE base prompt (biz yazıyoruz, açık kaynak)
 2. ~/.mavi/global-rules.md (kullanıcı global tercihleri)
 3. .mavi/rules.md (proje kuralları)
 4. Otomatik context: açık dosyalar, hata mesajları, son değişiklikler
@@ -248,8 +248,8 @@ Void'un ne yaptığını anla → **ne yapmadığını** listele → onları yap
 
 ## Faz 1 — Branding + Stabilizasyon (2-3. Hafta)
 
-- [ ] Void → Code Mavi rename (`product.json` ve string replace)
-- [ ] Mavi tema (`#020b18` base, `#3b82f6` accent)
+- [ ] Void → Code Mavi IDE rename (`product.json` ve string replace)
+- [ ] Code Mavi IDE tema (`#020b18` base, `#3b82f6` accent)
 - [ ] Telemetry kapat
 - [ ] Bozulan Void özelliklerini düzelt
 - [ ] `VOID_CODEBASE_GUIDE.md` → `CODEMAVI_CODEBASE_GUIDE.md` yeniden yaz
@@ -351,5 +351,5 @@ find . -name "sendLLMMessage.ts" -path "*/void/*"
 
 ---
 
-*Code Mavi — Cursor'un yaptığını açık, şeffaf ve ücretsiz yapar.*
+*Code Mavi IDE — Cursor'un yaptığını açık, şeffaf ve ücretsiz yapar.*
 *Void'un vizyonunu agent beyniyle tamamlar.*

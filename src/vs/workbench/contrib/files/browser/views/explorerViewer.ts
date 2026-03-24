@@ -894,7 +894,7 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		return FilesRenderer.ID;
 	}
 
-	// Mavi added this
+	// Code Mavi IDE IDE added this
 	// // Create mavi buttons container
 	// const maviButtonsContainer = DOM.append(container, DOM.$('div'));
 	// maviButtonsContainer.style.position = 'absolute'
@@ -931,7 +931,7 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		return templateData;
 	}
 
-	// Mavi cares about this function, this is where elements in the tree are rendered
+	// Code Mavi IDE IDE cares about this function, this is where elements in the tree are rendered
 	renderElement(node: ITreeNode<ExplorerItem, FuzzyScore>, index: number, templateData: IFileTemplateData): void {
 		const stat = node.element;
 		templateData.currentContext = stat;

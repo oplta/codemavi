@@ -2,15 +2,15 @@
 
 ## First 3 Commands (From Plan.md)
 
-Based on the strategic plan in `plan.md`, here are the essential first commands to get started with Code Mavi development:
+Based on the strategic plan in `plan.md`, here are the essential first commands to get started with Code Mavi IDE development:
 
 ### 1. Fork and Clone the Repository
 
 ```bash
-# Fork Void editor to start Code Mavi
+# Fork Void editor to start Code Mavi IDE
 gh repo fork voideditor/void --clone --org code-mavi
 
-# Or if starting fresh with existing Code Mavi codebase:
+# Or if starting fresh with existing Code Mavi IDE codebase:
 git clone https://github.com/mavi/mavi.git
 cd mavi
 ```
@@ -24,7 +24,7 @@ npm install
 # Start development build (watch mode)
 npm run watch
 
-# Launch Code Mavi in development mode
+# Launch Code Mavi IDE in development mode
 ./scripts/code.sh  # macOS/Linux
 ./scripts/code.bat # Windows
 ```
@@ -195,7 +195,7 @@ toolRegistry.register('semantic_search', new SemanticSearchTool());
 - Ask for clarification when unsure
 
 ## Test your changes:
-1. Restart Code Mavi development build
+1. Restart Code Mavi IDE development build
 2. Open a test project
 3. Use Agent Log Panel to see updated prompts
 ```
@@ -266,11 +266,11 @@ npm run hygiene
 export CODEMAVI_LOG_LEVEL=debug
 npm run watch
 
-# Open developer tools in Code Mavi
+# Open developer tools in Code Mavi IDE
 # Press Cmd+Shift+I (macOS) or Ctrl+Shift+I (Windows/Linux)
 
 # Monitor agent activity
-# View → Output → Select "Code Mavi Agents"
+# View → Output → Select "Code Mavi IDE Agents"
 ```
 
 ## Common Development Tasks
@@ -351,13 +351,13 @@ npm update @types/vscode @vscode/vscode-types
 
 ### Runtime Issues
 
-**Problem:** Code Mavi won't launch
+**Problem:** Code Mavi IDE won't launch
 ```bash
 # Check Electron version compatibility
 npm list electron
 
 # Clear Electron cache
-rm -rf ~/.config/Code\ Mavi
+rm -rf ~/.config/Code\ Code Mavi IDE
 ```
 
 **Problem:** Agents not responding
@@ -430,7 +430,7 @@ UI components:      src/vs/workbench/contrib/mavi/browser/
 # Debug shortcuts
 Cmd+Shift+I         # Open dev tools (macOS)
 Ctrl+Shift+I        # Open dev tools (Windows/Linux)
-View → Output → Code Mavi Agents  # Agent logs
+View → Output → Code Mavi IDE Agents  # Agent logs
 ```
 
 ## Getting Help

@@ -1,5 +1,5 @@
 /**
- * Mavi - Base Agent Class
+ * Code Mavi IDE - Base Agent Class
  *
  * Foundation for all agents in the triple-agent system
  * Provides common functionality and interfaces for Orchestrator, Executor, and Verifier agents

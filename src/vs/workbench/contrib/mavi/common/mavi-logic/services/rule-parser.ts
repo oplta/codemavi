@@ -1,5 +1,5 @@
 /**
- * Mavi - Rule Parser and Manager
+ * Code Mavi IDE - Rule Parser and Manager
  *
  * Handles parsing, validation, and management of rule files for agent system prompts
  * Supports hierarchical rule inheritance: global → project → session
@@ -658,7 +658,7 @@ export class RuleParserService
 		rules: ParsedRules,
 		context?: Record<string, any>,
 	): Promise<string> {
-		let prompt = "# Mavi Agent Rules\n\n";
+		let prompt = "# Code Mavi IDE Agent Rules\n\n";
 
 		// Add context information
 		if (context) {
@@ -770,7 +770,7 @@ export class RuleParserService
 				);
 
 			case "yaml":
-				const yamlContent = `# Mavi Rules Export
+				const yamlContent = `# Code Mavi IDE Rules Export
 version: '1.0.0'
 exportedAt: ${Date.now()}
 rules:
@@ -910,7 +910,7 @@ ${rules
 			priority: template.priority!,
 			enabled: true,
 			metadata: {
-				author: "Mavi",
+				author: "Code Mavi IDE",
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
 				version: "1.0.0",
@@ -1118,7 +1118,7 @@ ${rules
 	}
 
 	private generateRuleFileContent(rules: Rule[]): string {
-		let content = "# Mavi Rules\n\n";
+		let content = "# Code Mavi IDE Rules\n\n";
 		content += `*Generated: ${new Date().toISOString()}*\n`;
 		content += `*Total rules: ${rules.length}*\n\n`;
 

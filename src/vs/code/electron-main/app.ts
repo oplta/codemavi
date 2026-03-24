@@ -1101,7 +1101,7 @@ export class CodeApplication extends Disposable {
 			services.set(ITelemetryService, NullTelemetryService);
 		}
 
-		// Mavi main process services (required for services with a channel for comm between browser and electron-main (node))
+		// Code Mavi IDE IDE main process services (required for services with a channel for comm between browser and electron-main (node))
 		services.set(IMetricsService, new SyncDescriptor(MetricsMainService, undefined, false));
 		services.set(IMaviUpdateService, new SyncDescriptor(MaviMainUpdateService, undefined, false));
 		services.set(IMaviSCMService, new SyncDescriptor(MaviSCMService, undefined, false));
@@ -1236,7 +1236,7 @@ export class CodeApplication extends Disposable {
 		mainProcessElectronServer.registerChannel('logger', loggerChannel);
 		sharedProcessClient.then(client => client.registerChannel('logger', loggerChannel));
 
-		// Mavi - use loggerChannel as reference
+		// Code Mavi IDE IDE - use loggerChannel as reference
 		const metricsChannel = ProxyChannel.fromService(accessor.get(IMetricsService), disposables);
 		mainProcessElectronServer.registerChannel('mavi-channel-metrics', metricsChannel);
 
@@ -1246,11 +1246,11 @@ export class CodeApplication extends Disposable {
 		const sendLLMMessageChannel = new LLMMessageChannel(accessor.get(IMetricsService));
 		mainProcessElectronServer.registerChannel('mavi-channel-llmMessage', sendLLMMessageChannel);
 
-		// Mavi added this
+		// Code Mavi IDE IDE added this
 		const maviSCMChannel = ProxyChannel.fromService(accessor.get(IMaviSCMService), disposables);
 		mainProcessElectronServer.registerChannel('mavi-channel-scm', maviSCMChannel);
 
-		// Mavi added this
+		// Code Mavi IDE IDE added this
 		const mcpChannel = new MCPChannel();
 		mainProcessElectronServer.registerChannel('mavi-channel-mcp', mcpChannel);
 

@@ -79,7 +79,7 @@ export class MaviMainUpdateService extends Disposable implements IMaviUpdateServ
 
 		if (this._updateService.state.type === StateType.Ready) {
 			// Update is ready
-			return { message: 'Restart Mavi to update!', action: 'restart' } as const
+			return { message: 'Restart Code Mavi IDE to update!', action: 'restart' } as const
 		}
 
 		if (this._updateService.state.type === StateType.Disabled) {
@@ -112,11 +112,11 @@ export class MaviMainUpdateService extends Disposable implements IMaviUpdateServ
 			if (explicit) {
 				if (response.ok) {
 					if (!isUpToDate) {
-						message = 'A new version of Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
+						message = 'A new version of Code Mavi IDE is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
 						action = 'reinstall'
 					}
 					else {
-						message = 'Mavi is up-to-date!'
+						message = 'Code Mavi IDE is up-to-date!'
 					}
 				}
 				else {
@@ -127,7 +127,7 @@ export class MaviMainUpdateService extends Disposable implements IMaviUpdateServ
 			// not explicit
 			else {
 				if (response.ok && !isUpToDate) {
-					message = 'A new version of Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
+					message = 'A new version of Code Mavi IDE is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
 					action = 'reinstall'
 				}
 				else {

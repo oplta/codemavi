@@ -677,12 +677,12 @@ for (const menuId of [MenuId.EmptyEditorGroupContext, MenuId.EditorTabsBarContex
 // File menu
 
 
-// Mavi added this:
+// Code Mavi IDE IDE added this:
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	group: '0_mavi',
 	command: {
 		id: MAVI_OPEN_SETTINGS_ACTION_ID,
-		title: nls.localize({ key: 'openMavi', comment: ['&& denotes a mnemonic'] }, "&&Open Mavi Settings"),
+		title: nls.localize({ key: 'openMavi', comment: ['&& denotes a mnemonic'] }, "&&Open Code Mavi IDE Settings"),
 	},
 	order: 1
 });

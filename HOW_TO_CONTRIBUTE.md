@@ -1,6 +1,6 @@
-# Contributing to Code Mavi
+# Contributing to Code Mavi IDE
 ### Welcome! 👋
-This is the official guide on how to contribute to Code Mavi. We want to make it as easy as possible to contribute, so if you have any questions or comments, reach out via email or discord!
+This is the official guide on how to contribute to Code Mavi IDE. We want to make it as easy as possible to contribute, so if you have any questions or comments, reach out via email or discord!
 
 There are a few ways to contribute:
 
@@ -12,17 +12,17 @@ There are a few ways to contribute:
 
 ### Codebase Guide
 
-We [highly recommend reading this](https://github.com/mavi/mavi/blob/main/VOID_CODEBASE_GUIDE.md) guide that we put together on Code Mavi's sourcecode if you'd like to add new features.
+We [highly recommend reading this](https://github.com/mavi/mavi/blob/main/VOID_CODEBASE_GUIDE.md) guide that we put together on Code Mavi IDE's sourcecode if you'd like to add new features.
 
 The repo is not as intimidating as it first seems if you read the guide!
 
-Most of Code Mavi's code lives in the folder `src/vs/workbench/contrib/mavi/`.
+Most of Code Mavi IDE's code lives in the folder `src/vs/workbench/contrib/mavi/`.
 
 
 
-## Editing Code Mavi's Code
+## Editing Code Mavi IDE's Code
 
-If you're making changes to Code Mavi's code as a contributor, you'll want to run a local version of Code Mavi to make sure your changes worked. Developer mode lets you do this. Here's how to use it.
+If you're making changes to Code Mavi IDE's code as a contributor, you'll want to run a local version of Code Mavi IDE to make sure your changes worked. Developer mode lets you do this. Here's how to use it.
 
 ### a. Mac - Prerequisites
 
@@ -54,19 +54,19 @@ First, run `npm install -g node-gyp`. Then:
 
 ### Developer Mode Instructions
 
-Here's how to start changing Code Mavi's code. These steps cover everything from cloning Code Mavi, to opening a Developer Mode window where you can play around with your updates.
+Here's how to start changing Code Mavi IDE's code. These steps cover everything from cloning Code Mavi IDE, to opening a Developer Mode window where you can play around with your updates.
 
 1. `git clone https://github.com/mavi/mavi` to clone the repo.
 2. `npm install` to install all dependencies.
-3. Open Code Mavi or VSCode, and initialize Developer Mode (this can take ~5 min to finish, it's done when 2 of the 3 spinners turn to check marks):
+3. Open Code Mavi IDE or VSCode, and initialize Developer Mode (this can take ~5 min to finish, it's done when 2 of the 3 spinners turn to check marks):
    - Windows: Press <kbd>Ctrl+Shift+B</kbd>.
    - Mac: Press <kbd>Cmd+Shift+B</kbd>.
    - Linux: Press <kbd>Ctrl+Shift+B</kbd>.
-4. Open the Code Mavi Developer Mode window:
+4. Open the Code Mavi IDE Developer Mode window:
    - Windows: `./scripts/code.bat`.
    - Mac: `./scripts/code.sh`.
    - Linux: `./scripts/code.sh`.
-5. You're good to start editing Code Mavi's code! 
+5. You're good to start editing Code Mavi IDE's code! 
    - You won't see your changes unless you press <kbd>Ctrl+R</kbd> (<kbd>Cmd+R</kbd>) inside the new window to reload. Alternatively, press <kbd>Ctrl+Shift+P</kbd> and `Reload Window`.
    - You might want to add the flags `--user-data-dir ./.tmp/user-data --extensions-dir ./.tmp/extensions` to the command in step 4, which lets you reset any IDE changes you made by deleting the `.tmp` folder.
 	- You can kill any of the build scripts by pressing `Ctrl+D` in its terminal. If you press `Ctrl+C` the script will close but will keep running in the background.
@@ -78,7 +78,7 @@ If you get any errors, scroll down for common fixes.
 - Make sure you followed the prerequisite steps above.
 - Make sure you have Node version `20.18.2` (the version in `.nvmrc`).
     - You can do this without changing your global Node version using [nvm](https://github.com/nvm-sh/nvm): run `nvm install`, followed by `nvm use` to install the version in `.nvmrc` locally.
-- Make sure the path to your Code Mavi folder does not have any spaces in it.
+- Make sure the path to your Code Mavi IDE folder does not have any spaces in it.
 - If you get `"TypeError: Failed to fetch dynamically imported module"`, make sure all imports end with `.js`.
 - If you get an error with React, try running `NODE_OPTIONS="--max-old-space-size=8192" npm run buildreact`.
 - If you see missing styles, wait a few seconds and then reload.
@@ -89,9 +89,9 @@ If you get any errors, scroll down for common fixes.
 
 
 
-#### Building Code Mavi from Terminal
+#### Building Code Mavi IDE from Terminal
 
-To build Code Mavi from the terminal instead of from inside VSCode, follow the steps above, but instead of pressing <kbd>Cmd+Shift+B</kbd>, run `npm run watch`. The build is done when you see something like this:
+To build Code Mavi IDE from the terminal instead of from inside VSCode, follow the steps above, but instead of pressing <kbd>Cmd+Shift+B</kbd>, run `npm run watch`. The build is done when you see something like this:
 
 ```
 [watch-extensions] [00:37:39] Finished compilation extensions with 0 errors after 19303 ms
@@ -103,19 +103,19 @@ To build Code Mavi from the terminal instead of from inside VSCode, follow the s
 
 
 ### Distributing
-Code Mavi's maintainers distribute Code Mavi on our website and in releases. Our build pipeline is a fork of VSCodium, and it works by running GitHub Actions which create the downloadables. The build repo with more instructions lives [here](https://github.com/mavi/mavi-builder).
+Code Mavi IDE's maintainers distribute Code Mavi IDE on our website and in releases. Our build pipeline is a fork of VSCodium, and it works by running GitHub Actions which create the downloadables. The build repo with more instructions lives [here](https://github.com/mavi/mavi-builder).
 
-If you want to completely control Code Mavi's build pipeline for your own internal usage, which comes with a lot of time cost (and is typically not recommended), see our [`mavi-builder`](https://github.com/mavi/mavi-builder) repo which builds Code Mavi and contains a few important notes about auto-updating and rebasing.
+If you want to completely control Code Mavi IDE's build pipeline for your own internal usage, which comes with a lot of time cost (and is typically not recommended), see our [`mavi-builder`](https://github.com/mavi/mavi-builder) repo which builds Code Mavi IDE and contains a few important notes about auto-updating and rebasing.
 
 
 #### Building a Local Executible
-We don't usually recommend building a local executible of Code Mavi - typically you should follow the steps above to distribute a complete executible with the advantages of VSCodium baked-in, or you should just use Developer Mode to run Code Mavi locally which is much faster. If you're certain this is what you want, see details below.
+We don't usually recommend building a local executible of Code Mavi IDE - typically you should follow the steps above to distribute a complete executible with the advantages of VSCodium baked-in, or you should just use Developer Mode to run Code Mavi IDE locally which is much faster. If you're certain this is what you want, see details below.
 
 <details>
 	<summary> Building Locally (not recommended)</summary>
-If you're certain you want to build a local executible of Code Mavi, follow these steps. It can take ~25 minutes.
+If you're certain you want to build a local executible of Code Mavi IDE, follow these steps. It can take ~25 minutes.
 
-Make sure you've already entered Developer Mode with Code Mavi first, then run one of the following commands. This will create a folder named `VSCode-darwin-arm64` or similar outside of the mavi/ repo (see below). 
+Make sure you've already entered Developer Mode with Code Mavi IDE first, then run one of the following commands. This will create a folder named `VSCode-darwin-arm64` or similar outside of the mavi/ repo (see below). 
 
 
 ##### Mac
@@ -136,7 +136,7 @@ Make sure you've already entered Developer Mode with Code Mavi first, then run o
 The local executible will be located in a folder outside of `mavi/`:
 ```bash
 workspace/
-├── mavi/   # Your Code Mavi fork
+├── mavi/   # Your Code Mavi IDE fork
 └── VSCode-darwin-arm64/ # Generated output
 ```
 

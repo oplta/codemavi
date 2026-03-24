@@ -170,7 +170,7 @@ function getTelemetryLevelSettingDescription(): string {
 	const restartString = !isWeb ? localize('telemetry.restart', 'Microsoft says \"Some third party extensions might not respect this setting. Consult the specific extension\'s documentation to be sure. A full restart of the application is necessary for crash reporting changes to take effect.\"') : '';
 
 
-	// Mavi removed these
+	// Code Mavi IDE IDE removed these
 	// const crashReportsHeader = localize('telemetry.crashReports', "Crash Reports");
 	// const errorsHeader = localize('telemetry.errors', "Error Telemetry");
 	// const usageHeader = localize('telemetry.usage', "Usage Data");
@@ -191,7 +191,7 @@ ${telemetryText}
 
 ${restartString}
 
-Mavi separately records basic usage like the number of messages people are sending. If you'd like to disable Mavi metrics, you may do so in Mavi's Settings.
+Code Mavi IDE separately records basic usage like the number of messages people are sending. If you'd like to disable Code Mavi IDE metrics, you may do so in Code Mavi IDE's Settings.
 `;
 
 	return telemetryDescription;
