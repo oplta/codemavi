@@ -23,22 +23,22 @@ Code Mavi IDE is an open-source, agent-first IDE that brings powerful AI-assiste
 
 ### Method 1: Download Pre-built Binary (Recommended)
 
-1. **Visit the Releases Page:**
+   1. **Visit the Releases Page:**
    - Go to [GitHub Releases](https://github.com/mavi/mavi/releases)
    - Download the appropriate version for your OS:
-     - `CodeCode Mavi IDE-darwin-x64.zip` for macOS
-     - `CodeCode Mavi IDE-win32-x64.zip` for Windows
-     - `CodeCode Mavi IDE-linux-x64.tar.gz` for Linux
+       - `Code Mavi IDE-darwin-x64.zip` for macOS
+      - `Code Mavi IDE-win32-x64.zip` for Windows
+      - `Code Mavi IDE-linux-x64.tar.gz` for Linux
 
-2. **Installation Steps:**
+ 2. **Installation Steps:**
 
    **macOS:**
    ```bash
    # Extract the archive
-   unzip CodeCode Mavi IDE-darwin-x64.zip
+   unzip "Code Mavi IDE-darwin-x64.zip"
    
    # Move to Applications
-   mv Code\ Code Mavi IDE.app /Applications/
+   mv "Code Mavi IDE.app" /Applications/
    
    # Launch from Applications folder or Spotlight
    ```
@@ -51,14 +51,14 @@ Code Mavi IDE is an open-source, agent-first IDE that brings powerful AI-assiste
    **Linux:**
    ```bash
    # Extract the archive
-   tar -xzf CodeCode Mavi IDE-linux-x64.tar.gz
+   tar -xzf "Code Mavi IDE-linux-x64.tar.gz"
    
    # Run Code Mavi IDE
-   ./CodeCode Mavi IDE/code-mavi
+   ./Code\ Mavi\ IDE/code-mavi
    
    # (Optional) Create desktop entry
-   sudo cp -r CodeCode Mavi IDE /opt/
-   sudo ln -s /opt/CodeCode Mavi IDE/code-mavi /usr/local/bin/code-mavi
+   sudo cp -r Code Mavi IDE /opt/
+   sudo ln -s /opt/Code Mavi IDE/code-mavi /usr/local/bin/code-mavi
    ```
 
 ### Method 2: Build from Source

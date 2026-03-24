@@ -1,6 +1,19 @@
 # 🟦 Code Mavi IDE: The Agentic Open-Source IDE
 
 > **"A tool that doesn't just assist, but thinks, acts, and verifies."**
+> 
+> Geçmişin ışığı geleceğin yolunu aydınlatır. (Ata Sözü)
+
+## Table of Contents
+- Quick Start
+- Documentation
+- Development
+- Contributing
+- Roadmap
+- Troubleshooting
+- Wiki
+- License
+- Acknowledgments
 
 Code Mavi IDE is an **"Agent-First"** open-source IDE designed to revolutionize AI-assisted software development. Built as a fork of VS Code (via Void), it combines the convenience of tools like Cursor with the transparency and extensibility of open-source software.
 
@@ -91,6 +104,9 @@ npm run watch
 - [Agent System Explained](docs/agents/overview.md) - Understanding the triple agent architecture
 - [Custom Rules Guide](docs/user-guide/custom-rules.md) - Creating project-specific agent rules
 - [Auto Dev Mode Tutorial](docs/user-guide/auto-dev-mode.md) - Automated project completion
+
+### Wiki
+- [Wiki Home](wiki/Home.md) - Quick access to branding, architecture, and contribution docs
 
 ### For Developers
 - [Architecture Overview](docs/architecture/overview.md) - System design and components

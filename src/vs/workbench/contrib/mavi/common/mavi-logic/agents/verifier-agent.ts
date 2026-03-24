@@ -11,13 +11,11 @@ import {
 	BaseAgent,
 	AgentTask,
 	AgentResult,
-	AgentContext,
 	ToolDefinition,
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
-import { Event, Emitter } from "../../../../../../base/common/event.js";
-import { CancellationToken } from "../../../../../../base/common/cancellation.js";
+import { Emitter } from "../../../../../../base/common/event.js";
 
 export interface VerificationRequest {
 	taskId: string;
@@ -187,7 +185,6 @@ export class VerifierAgent extends BaseAgent {
 	}>();
 	readonly onWarningFound = this._onWarningFound.event;
 
-	private readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 	private readonly DEFAULT_TIMEOUT_MS = 30000; // 30 seconds
 	private readonly MAX_PARALLEL_CHECKS = 3;
 
@@ -205,13 +202,13 @@ export class VerifierAgent extends BaseAgent {
 		);
 	}
 
-	async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
+	override async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
 		await super.initialize(semanticSearch);
 		this.registerVerifierTools();
 		console.log(`[VerifierAgent] Initialized with ${this.tools.size} tools`);
 	}
 
-	async execute(task: AgentTask): Promise<AgentResult> {
+	override async execute(task: AgentTask): Promise<AgentResult> {
 		const startTime = Date.now();
 
 		try {

@@ -1,28 +1,28 @@
 {
-	"nameShort": "Code Mavi IDE",
-	"nameLong": "Code Mavi IDE",
-	"applicationName": "codemavi",
-	"dataFolderName": ".codemavi-editor",
-	"win32MutexName": "codemavieditor",
-	"licenseName": "MIT",
-	"licenseUrl": "https://github.com/oplta/codemavi/blob/main/LICENSE.txt",
-	"serverLicenseUrl": "https://github.com/oplta/codemavi/blob/main/LICENSE.txt",
-	"serverApplicationName": "codemavi-server",
-	"serverDataFolderName": ".codemavi-server",
-	"tunnelApplicationName": "codemavi-tunnel",
-	"win32DirName": "CodeMavi",
-	"win32NameVersion": "CodeMavi",
-	"win32RegValueName": "CodeMaviEditor",
-	"win32AppUserModelId": "CodeMavi.Editor",
-	"darwinBundleIdentifier": "com.codemavi.code",
-	"linuxIconName": "codemavi-editor",
-	"urlProtocol": "codemavi",
+    "nameShort": "Code Mavi IDE",
+    "nameLong": "Code Mavi IDE",
+    "applicationName": "Code Mavi IDE",
+    "dataFolderName": ".codemavi-ide-editor",
+    "win32MutexName": "codemavi-ide",
+    "licenseName": "MIT",
+    "licenseUrl": "https://github.com/oplta/codemavi-ide/blob/main/LICENSE.txt",
+    "serverLicenseUrl": "https://github.com/oplta/codemavi-ide/blob/main/LICENSE.txt",
+    "serverApplicationName": "codemavi-ide-server",
+    "serverDataFolderName": ".codemavi-ide-server",
+    "tunnelApplicationName": "codemavi-ide-tunnel",
+    "win32DirName": "CodeMaviIDE",
+    "win32NameVersion": "CodeMavi IDE",
+    "win32RegValueName": "CodeMaviIDEEditor",
+    "win32AppUserModelId": "CodeMaviIDE.Editor",
+    "darwinBundleIdentifier": "com.codemavi.code-mavi-ide",
+    "linuxIconName": "codemavi-ide",
+    "urlProtocol": "codemavi-ide",
 	"extensionsGallery": {
 		"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
 		"itemUrl": "https://marketplace.visualstudio.com/items"
 	},
-	"linkProtectionTrustedDomains": [
-		"https://github.com/oplta/codemavi",
-		"https://ollama.com"
-	]
+    "linkProtectionTrustedDomains": [
+        "https://github.com/oplta/codemavi-ide",
+        "https://ollama.com"
+    ]
 }

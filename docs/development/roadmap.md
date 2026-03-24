@@ -185,9 +185,9 @@ This roadmap outlines the development phases for Code Mavi IDE, following the st
 6. **Community Infrastructure** - Support channels and contribution guidelines
 
 ### Release Artifacts:
-- `CodeCode Mavi IDE-darwin-x64.zip` (macOS)
-- `CodeCode Mavi IDE-win32-x64.zip` (Windows)
-- `CodeCode Mavi IDE-linux-x64.tar.gz` (Linux)
+ - `Code Mavi IDE-darwin-x64.zip` (macOS)
+ - `Code Mavi IDE-win32-x64.zip` (Windows)
+ - `Code Mavi IDE-linux-x64.tar.gz` (Linux)
 - Source code archive
 - Documentation website
 - Example projects and tutorials

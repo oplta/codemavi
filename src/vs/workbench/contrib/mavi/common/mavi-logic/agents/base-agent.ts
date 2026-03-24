@@ -380,15 +380,6 @@ export abstract class BaseAgent extends Disposable {
 		message: string,
 		data?: any
 	): boolean {
-		const timestamp = new Date().toISOString();
-		const logEntry = {
-			timestamp,
-			agent: this.role,
-			level,
-			message,
-			data
-		};
-
 		switch (level) {
 			case 'error':
 				console.error(`[${this.role}]`, message, data);
