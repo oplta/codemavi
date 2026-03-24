@@ -35,19 +35,19 @@ import { assertNoRpc } from '../utils';
 		suite('ShellExecution', () => {
 			test('Execution from onDidEndTaskProcess and onDidStartTaskProcess are equal to original', async () => {
 				window.terminals.forEach(terminal => terminal.dispose());
-				const executeDoneEvent: EventEmitter<codemavi> = new EventEmitter();
-				const taskExecutionShouldBeSet: Promise<codemavi> = new Promise(resolve => {
+				const executeDoneEvent: EventEmitter<void> = new EventEmitter();
+				const taskExecutionShouldBeSet: Promise<void> = new Promise(resolve => {
 					const disposable = executeDoneEvent.event(() => {
 						resolve();
 						disposable.dispose();
 					});
 				});
 
-				const progressMade: EventEmitter<codemavi> = new EventEmitter();
+				const progressMade: EventEmitter<void> = new EventEmitter();
 				let count = 2;
 				let startSucceeded = false;
 				let endSucceeded = false;
-				const testDonePromise = new Promise<codemavi>(resolve => {
+				const testDonePromise = new Promise<void>(resolve => {
 					disposables.push(progressMade.event(() => {
 						count--;
 						if ((count === 0) && startSucceeded && endSucceeded) {
@@ -99,7 +99,7 @@ import { assertNoRpc } from '../utils';
 					}
 				], ConfigurationTarget.Workspace);
 
-				const waitForTaskToFinish = new Promise<codemavi>(resolve => {
+				const waitForTaskToFinish = new Promise<void>(resolve => {
 					tasks.onDidEndTask(e => {
 						if (e.execution.task.name === 'Run this task') {
 							resolve();
@@ -203,7 +203,7 @@ import { assertNoRpc } from '../utils';
 				});
 
 				// Verify the output
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidWriteTerminalData(e => {
 						if (e.terminal !== terminal) {
 							return;
@@ -217,7 +217,7 @@ import { assertNoRpc } from '../utils';
 				});
 
 				// Dispose the terminal
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal((e) => {
 						if (e !== terminal) {
 							return;
@@ -254,7 +254,7 @@ import { assertNoRpc } from '../utils';
 								customProp1: 'testing task one'
 							};
 							const writeEmitter = new EventEmitter<string>();
-							const closeEmitter = new EventEmitter<codemavi>();
+							const closeEmitter = new EventEmitter<void>();
 							const execution = new CustomExecution((): Thenable<Pseudoterminal> => {
 								const pty: Pseudoterminal = {
 									onDidWrite: writeEmitter.event,
@@ -279,7 +279,7 @@ import { assertNoRpc } from '../utils';
 				});
 
 				// Verify the output
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidWriteTerminalData(e => {
 						if (e.terminal !== terminal) {
 							return;
@@ -290,7 +290,7 @@ import { assertNoRpc } from '../utils';
 				});
 
 				// Dispose the terminal
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});
@@ -300,19 +300,19 @@ import { assertNoRpc } from '../utils';
 				class CustomTerminal implements Pseudoterminal {
 					private readonly writeEmitter = new EventEmitter<string>();
 					public readonly onDidWrite: Event<string> = this.writeEmitter.event;
-					public async close(): Promise<codemavi> { }
-					private closeEmitter = new EventEmitter<codemavi>();
-					onDidClose: Event<codemavi> = this.closeEmitter.event;
-					private readonly _onDidOpen = new EventEmitter<codemavi>();
+					public async close(): Promise<void> { }
+					private closeEmitter = new EventEmitter<void>();
+					onDidClose: Event<void> = this.closeEmitter.event;
+					private readonly _onDidOpen = new EventEmitter<void>();
 					public readonly onDidOpen = this._onDidOpen.event;
-					public open(): codemavi {
+					public open(): void {
 						this._onDidOpen.fire();
 						this.closeEmitter.fire();
 					}
 				}
 
 				const customTerminal = new CustomTerminal();
-				const terminalOpenedPromise = new Promise<codemavi>(resolve => {
+				const terminalOpenedPromise = new Promise<void>(resolve => {
 					const disposable = customTerminal.onDidOpen(() => {
 						disposable.dispose();
 						resolve();

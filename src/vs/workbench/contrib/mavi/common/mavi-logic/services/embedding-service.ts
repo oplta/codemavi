@@ -1,12 +1,12 @@
 /**
- * Code Mavi - Embedding Service
+ * Mavi - Embedding Service
  *
  * Multiple embedding model support with fallback mechanisms
  * Supports local (Ollama) and cloud (OpenAI) embedding models
  */
 
-import { URI } from '../../../../base/common/uri.js';
-import { Disposable } from '../../../../base/common/lifecycle.js';
+import { URI } from '../../../../../../base/common/uri.js';
+import { Disposable } from '../../../../../../base/common/lifecycle.js';
 
 export interface EmbeddingConfig {
   provider: 'ollama' | 'openai' | 'local';

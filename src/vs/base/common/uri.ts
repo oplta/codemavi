@@ -12,7 +12,7 @@ const _schemePattern = /^\w[\w\d+.-]*$/;
 const _singleSlashStart = /^\//;
 const _doubleSlashStart = /^\/\//;
 
-function _validateUri(ret: URI, _strict?: boolean): codemavi {
+function _validateUri(ret: URI, _strict?: boolean): void {
 
 	// scheme, must be set
 	if (!ret.scheme && _strict) {

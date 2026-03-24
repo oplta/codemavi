@@ -68,7 +68,7 @@ export function checkActivateWorkspaceContainsExtension(host: IExtensionActivati
 	return promise;
 }
 
-async function _activateIfFileName(host: IExtensionActivationHost, fileName: string, activate: (activationEvent: string) => codemavi): Promise<codemavi> {
+async function _activateIfFileName(host: IExtensionActivationHost, fileName: string, activate: (activationEvent: string) => void): Promise<void> {
 	// find exact path
 	for (const uri of host.folders) {
 		if (await host.exists(resources.joinPath(URI.revive(uri), fileName))) {
@@ -79,7 +79,7 @@ async function _activateIfFileName(host: IExtensionActivationHost, fileName: str
 	}
 }
 
-async function _activateIfGlobPatterns(host: IExtensionActivationHost, extensionId: ExtensionIdentifier, globPatterns: string[], activate: (activationEvent: string) => codemavi): Promise<codemavi> {
+async function _activateIfGlobPatterns(host: IExtensionActivationHost, extensionId: ExtensionIdentifier, globPatterns: string[], activate: (activationEvent: string) => void): Promise<void> {
 	if (globPatterns.length === 0) {
 		return Promise.resolve(undefined);
 	}

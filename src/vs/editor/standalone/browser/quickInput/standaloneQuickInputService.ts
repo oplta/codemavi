@@ -133,35 +133,35 @@ export class StandaloneQuickInputService implements IQuickInputService {
 		return this.activeService.createQuickWidget();
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		return this.activeService.focus();
 	}
 
-	toggle(): codemavi {
+	toggle(): void {
 		return this.activeService.toggle();
 	}
 
-	navigate(next: boolean, quickNavigate?: IQuickNavigateConfiguration | undefined): codemavi {
+	navigate(next: boolean, quickNavigate?: IQuickNavigateConfiguration | undefined): void {
 		return this.activeService.navigate(next, quickNavigate);
 	}
 
-	accept(): Promise<codemavi> {
+	accept(): Promise<void> {
 		return this.activeService.accept();
 	}
 
-	back(): Promise<codemavi> {
+	back(): Promise<void> {
 		return this.activeService.back();
 	}
 
-	cancel(): Promise<codemavi> {
+	cancel(): Promise<void> {
 		return this.activeService.cancel();
 	}
 
-	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): codemavi {
+	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): void {
 		return this.activeService.setAlignment(alignment);
 	}
 
-	toggleHover(): codemavi {
+	toggleHover(): void {
 		return this.activeService.toggleHover();
 	}
 }
@@ -178,7 +178,7 @@ export class QuickInputEditorContribution implements IEditorContribution {
 
 	constructor(private editor: ICodeEditor) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.widget.dispose();
 	}
 }
@@ -207,7 +207,7 @@ export class QuickInputEditorWidget implements IOverlayWidget {
 		return { preference: OverlayWidgetPositionPreference.TOP_CENTER };
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.codeEditor.removeOverlayWidget(this);
 	}
 }

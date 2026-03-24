@@ -185,13 +185,13 @@ class ScanCodeKeyCodeMapper {
 		this._keyCodeToScanCode = [];
 	}
 
-	public registrationComplete(): codemavi {
+	public registrationComplete(): void {
 		// IntlHash and IntlBackslash are rare keys, so ensure they don't end up being the preferred...
 		this._moveToEnd(ScanCode.IntlHash);
 		this._moveToEnd(ScanCode.IntlBackslash);
 	}
 
-	private _moveToEnd(scanCode: ScanCode): codemavi {
+	private _moveToEnd(scanCode: ScanCode): void {
 		for (let mod = 0; mod < 8; mod++) {
 			const encodedKeyCodeCombos = this._scanCodeToKeyCode[(scanCode << 3) + mod];
 			if (!encodedKeyCodeCombos) {
@@ -217,7 +217,7 @@ class ScanCodeKeyCodeMapper {
 		}
 	}
 
-	public registerIfUnknown(scanCodeCombo: ScanCodeCombo, keyCodeCombo: KeyCodeCombo): codemavi {
+	public registerIfUnknown(scanCodeCombo: ScanCodeCombo, keyCodeCombo: KeyCodeCombo): void {
 		if (keyCodeCombo.keyCode === KeyCode.Unknown) {
 			return;
 		}
@@ -235,7 +235,7 @@ class ScanCodeKeyCodeMapper {
 			if (existingKeyCodeCombos) {
 				for (let i = 0, len = existingKeyCodeCombos.length; i < len; i++) {
 					if (existingKeyCodeCombos[i] === keyCodeComboEncoded) {
-						// acodemavi duplicates
+						// avoid duplicates
 						return;
 					}
 				}
@@ -381,14 +381,14 @@ export class MacLinuxKeyboardMapper implements IKeyboardMapper {
 		const _registerIfUnknown = (
 			hwCtrlKey: 0 | 1, hwShiftKey: 0 | 1, hwAltKey: 0 | 1, scanCode: ScanCode,
 			kbCtrlKey: 0 | 1, kbShiftKey: 0 | 1, kbAltKey: 0 | 1, keyCode: KeyCode,
-		): codemavi => {
+		): void => {
 			this._scanCodeKeyCodeMapper.registerIfUnknown(
 				new ScanCodeCombo(hwCtrlKey ? true : false, hwShiftKey ? true : false, hwAltKey ? true : false, scanCode),
 				new KeyCodeCombo(kbCtrlKey ? true : false, kbShiftKey ? true : false, kbAltKey ? true : false, keyCode)
 			);
 		};
 
-		const _registerAllCombos = (_ctrlKey: 0 | 1, _shiftKey: 0 | 1, _altKey: 0 | 1, scanCode: ScanCode, keyCode: KeyCode): codemavi => {
+		const _registerAllCombos = (_ctrlKey: 0 | 1, _shiftKey: 0 | 1, _altKey: 0 | 1, scanCode: ScanCode, keyCode: KeyCode): void => {
 			for (let ctrlKey = _ctrlKey; ctrlKey <= 1; ctrlKey++) {
 				for (let shiftKey = _shiftKey; shiftKey <= 1; shiftKey++) {
 					for (let altKey = _altKey; altKey <= 1; altKey++) {
@@ -452,7 +452,7 @@ export class MacLinuxKeyboardMapper implements IKeyboardMapper {
 				}
 			}
 
-			const _registerLetterIfMissing = (charCode: CharCode, scanCode: ScanCode, value: string, withShift: string): codemavi => {
+			const _registerLetterIfMissing = (charCode: CharCode, scanCode: ScanCode, value: string, withShift: string): void => {
 				if (!producesLatinLetter[charCode]) {
 					missingLatinLettersOverride[ScanCodeUtils.toString(scanCode)] = {
 						value: value,
@@ -767,7 +767,7 @@ export class MacLinuxKeyboardMapper implements IKeyboardMapper {
 	}
 
 	public keyCodeChordToScanCodeChord(chord: KeyCodeChord): ScanCodeChord[] {
-		// Acodemavi double Enter bindings (both ScanCode.NumpadEnter and ScanCode.Enter point to KeyCode.Enter)
+		// Avoid double Enter bindings (both ScanCode.NumpadEnter and ScanCode.Enter point to KeyCode.Enter)
 		if (chord.keyCode === KeyCode.Enter) {
 			return [new ScanCodeChord(chord.ctrlKey, chord.shiftKey, chord.altKey, chord.metaKey, ScanCode.Enter)];
 		}
@@ -1062,7 +1062,7 @@ export class MacLinuxKeyboardMapper implements IKeyboardMapper {
 }
 
 (function () {
-	function define(charCode: number, keyCode: KeyCode, shiftKey: boolean): codemavi {
+	function define(charCode: number, keyCode: KeyCode, shiftKey: boolean): void {
 		for (let i = CHAR_CODE_TO_KEY_CODE.length; i < charCode; i++) {
 			CHAR_CODE_TO_KEY_CODE[i] = null;
 		}

@@ -33,11 +33,11 @@ export class ConfigurationCache implements IConfigurationCache {
 		return this.getCachedConfiguration(key).read();
 	}
 
-	write(key: ConfigurationKey, content: string): Promise<codemavi> {
+	write(key: ConfigurationKey, content: string): Promise<void> {
 		return this.getCachedConfiguration(key).save(content);
 	}
 
-	remove(key: ConfigurationKey): Promise<codemavi> {
+	remove(key: ConfigurationKey): Promise<void> {
 		return this.getCachedConfiguration(key).remove();
 	}
 
@@ -54,7 +54,7 @@ export class ConfigurationCache implements IConfigurationCache {
 
 class CachedConfiguration {
 
-	private queue: Queue<codemavi>;
+	private queue: Queue<void>;
 	private cachedConfigurationFolderResource: URI;
 	private cachedConfigurationFileResource: URI;
 
@@ -65,7 +65,7 @@ class CachedConfiguration {
 	) {
 		this.cachedConfigurationFolderResource = joinPath(cacheHome, 'CachedConfigurations', type, key);
 		this.cachedConfigurationFileResource = joinPath(this.cachedConfigurationFolderResource, type === 'workspaces' ? 'workspace.json' : 'configuration.json');
-		this.queue = new Queue<codemavi>();
+		this.queue = new Queue<void>();
 	}
 
 	async read(): Promise<string> {
@@ -77,7 +77,7 @@ class CachedConfiguration {
 		}
 	}
 
-	async save(content: string): Promise<codemavi> {
+	async save(content: string): Promise<void> {
 		const created = await this.createCachedFolder();
 		if (created) {
 			await this.queue.queue(async () => {
@@ -86,7 +86,7 @@ class CachedConfiguration {
 		}
 	}
 
-	async remove(): Promise<codemavi> {
+	async remove(): Promise<void> {
 		try {
 			await this.queue.queue(() => this.fileService.del(this.cachedConfigurationFolderResource, { recursive: true, useTrash: false }));
 		} catch (error) {

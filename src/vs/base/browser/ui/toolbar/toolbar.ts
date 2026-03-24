@@ -163,7 +163,7 @@ export class ToolBar extends Disposable {
 		return this.element;
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this.actionBar.focus();
 	}
 
@@ -187,11 +187,11 @@ export class ToolBar extends Disposable {
 		return this.actionBar.length();
 	}
 
-	setAriaLabel(label: string): codemavi {
+	setAriaLabel(label: string): void {
 		this.actionBar.setAriaLabel(label);
 	}
 
-	setActions(primaryActions: ReadonlyArray<IAction>, secondaryActions?: ReadonlyArray<IAction>): codemavi {
+	setActions(primaryActions: ReadonlyArray<IAction>, secondaryActions?: ReadonlyArray<IAction>): void {
 		this.clear();
 
 		const primaryActionsToSet = primaryActions ? primaryActions.slice(0) : [];
@@ -218,13 +218,13 @@ export class ToolBar extends Disposable {
 		return key?.getLabel() ?? undefined;
 	}
 
-	private clear(): codemavi {
+	private clear(): void {
 		this.submenuActionViewItems = [];
 		this.disposables.clear();
 		this.actionBar.clear();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.clear();
 		this.disposables.dispose();
 		super.dispose();
@@ -236,9 +236,9 @@ export class ToggleMenuAction extends Action {
 	static readonly ID = 'toolbar.toggle.more';
 
 	private _menuActions: ReadonlyArray<IAction>;
-	private toggleDropdownMenu: () => codemavi;
+	private toggleDropdownMenu: () => void;
 
-	constructor(toggleDropdownMenu: () => codemavi, title?: string) {
+	constructor(toggleDropdownMenu: () => void, title?: string) {
 		title = title || nls.localize('moreActions', "More Actions...");
 		super(ToggleMenuAction.ID, title, undefined, true);
 
@@ -246,7 +246,7 @@ export class ToggleMenuAction extends Action {
 		this.toggleDropdownMenu = toggleDropdownMenu;
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.toggleDropdownMenu();
 	}
 

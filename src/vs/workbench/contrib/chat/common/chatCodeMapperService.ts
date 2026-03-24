@@ -11,8 +11,8 @@ import { createDecorator } from '../../../../platform/instantiation/common/insta
 import { ICellEditOperation } from '../../notebook/common/notebookCommon.js';
 
 export interface ICodeMapperResponse {
-	textEdit: (resource: URI, textEdit: TextEdit[]) => codemavi;
-	notebookEdit: (resource: URI, edit: ICellEditOperation[]) => codemavi;
+	textEdit: (resource: URI, textEdit: TextEdit[]) => void;
+	notebookEdit: (resource: URI, edit: ICellEditOperation[]) => void;
 }
 
 export interface ICodeMapperCodeBlock {

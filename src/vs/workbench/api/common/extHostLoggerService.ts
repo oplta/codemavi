@@ -23,7 +23,7 @@ export class ExtHostLoggerService extends AbstractLoggerService implements ExtHo
 		this._proxy = rpc.getProxy(MainContext.MainThreadLogger);
 	}
 
-	$setLogLevel(logLevel: LogLevel, resource?: UriComponents): codemavi {
+	$setLogLevel(logLevel: LogLevel, resource?: UriComponents): void {
 		if (resource) {
 			this.setLogLevel(URI.revive(resource), logLevel);
 		} else {
@@ -31,7 +31,7 @@ export class ExtHostLoggerService extends AbstractLoggerService implements ExtHo
 		}
 	}
 
-	override setVisibility(resource: URI, visibility: boolean): codemavi {
+	override setVisibility(resource: URI, visibility: boolean): void {
 		super.setVisibility(resource, visibility);
 		this._proxy.$setVisibility(resource, visibility);
 	}
@@ -74,7 +74,7 @@ class Logger extends AbstractMessageLogger {
 		this.proxy.$log(this.file, messages);
 	}
 
-	override flush(): codemavi {
+	override flush(): void {
 		this.proxy.$flush(this.file);
 	}
 }

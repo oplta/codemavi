@@ -32,7 +32,7 @@ function _format(message: string, args: (string | number | boolean | undefined |
 			let result = match;
 			if (typeof arg === 'string') {
 				result = arg;
-			} else if (typeof arg === 'number' || typeof arg === 'boolean' || arg === codemavi 0 || arg === null) {
+			} else if (typeof arg === 'number' || typeof arg === 'boolean' || arg === void 0 || arg === null) {
 				result = String(arg);
 			}
 			return result;

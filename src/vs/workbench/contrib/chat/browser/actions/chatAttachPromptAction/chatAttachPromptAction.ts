@@ -48,7 +48,7 @@ export class AttachPromptAction extends Action2 {
 	public override async run(
 		accessor: ServicesAccessor,
 		options: IChatAttachPromptActionOptions,
-	): Promise<codemavi> {
+	): Promise<void> {
 		const fileService = accessor.get(IFileService);
 		const chatService = accessor.get(IChatService);
 		const labelService = accessor.get(ILabelService);

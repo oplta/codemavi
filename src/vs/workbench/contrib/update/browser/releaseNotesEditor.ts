@@ -424,13 +424,13 @@ export class ReleaseNotesManager {
 		</html>`;
 	}
 
-	private onDidChangeConfiguration(e: IConfigurationChangeEvent): codemavi {
+	private onDidChangeConfiguration(e: IConfigurationChangeEvent): void {
 		if (e.affectsConfiguration('update.showReleaseNotes')) {
 			this.updateCheckboxWebview();
 		}
 	}
 
-	private onDidChangeActiveWebviewEditor(input: WebviewInput | undefined): codemavi {
+	private onDidChangeActiveWebviewEditor(input: WebviewInput | undefined): void {
 		if (input && input === this._currentReleaseNotes) {
 			this.updateCheckboxWebview();
 		}

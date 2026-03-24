@@ -112,7 +112,7 @@ export class TerminalFindWidget extends SimpleFindWidget {
 		}
 	}
 
-	override reveal(): codemavi {
+	override reveal(): void {
 		const initialInput = this._instance.hasSelection() && !this._instance.selection!.includes('\n') ? this._instance.selection : undefined;
 		const inputValue = initialInput ?? this.inputValue;
 		const xterm = this._instance.xterm;

@@ -8,13 +8,13 @@ import { SyncDescriptor0 } from '../../../../../platform/instantiation/common/de
 
 
 export interface IMcpDiscovery extends IDisposable {
-	start(): codemavi;
+	start(): void;
 }
 
 class McpDiscoveryRegistry {
 	private readonly _discovery: SyncDescriptor0<IMcpDiscovery>[] = [];
 
-	register(discovery: SyncDescriptor0<IMcpDiscovery>): codemavi {
+	register(discovery: SyncDescriptor0<IMcpDiscovery>): void {
 		this._discovery.push(discovery);
 	}
 

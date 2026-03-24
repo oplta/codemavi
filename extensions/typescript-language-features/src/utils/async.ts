@@ -14,7 +14,7 @@ export class Delayer<T> {
 	public defaultDelay: number;
 	private timeout: any; // Timer
 	private completionPromise: Promise<T | undefined> | null;
-	private onSuccess: ((value: T | PromiseLike<T> | undefined) => codemavi) | null;
+	private onSuccess: ((value: T | PromiseLike<T> | undefined) => void) | null;
 	private task: ITask<T> | null;
 
 	constructor(defaultDelay: number) {
@@ -53,7 +53,7 @@ export class Delayer<T> {
 		return this.completionPromise;
 	}
 
-	private cancelTimeout(): codemavi {
+	private cancelTimeout(): void {
 		if (this.timeout !== null) {
 			clearTimeout(this.timeout);
 			this.timeout = null;
@@ -61,7 +61,7 @@ export class Delayer<T> {
 	}
 }
 
-export function setImmediate(callback: (...args: any[]) => codemavi, ...args: any[]): Disposable {
+export function setImmediate(callback: (...args: any[]) => void, ...args: any[]): Disposable {
 	if (global.setImmediate) {
 		const handle = global.setImmediate(callback, ...args);
 		return { dispose: () => global.clearImmediate(handle) };
@@ -157,13 +157,13 @@ export class Throttler {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.isDisposed = true;
 	}
 }
 
-export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => codemavi): Promise<T | undefined> {
-	let promiseResolve: ((value: T | undefined) => codemavi) | undefined = undefined;
+export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?: () => void): Promise<T | undefined> {
+	let promiseResolve: ((value: T | undefined) => void) | undefined = undefined;
 
 	const timer = setTimeout(() => {
 		promiseResolve?.(undefined);

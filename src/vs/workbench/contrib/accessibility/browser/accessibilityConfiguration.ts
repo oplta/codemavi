@@ -815,7 +815,7 @@ export class DynamicSpeechAccessibilityConfiguration extends Disposable implemen
 		this._register(Event.runAndSubscribe(speechService.onDidChangeHasSpeechProvider, () => this.updateConfiguration()));
 	}
 
-	private updateConfiguration(): codemavi {
+	private updateConfiguration(): void {
 		if (!this.speechService.hasSpeechProvider) {
 			return; // these settings require a speech provider
 		}

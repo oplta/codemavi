@@ -128,7 +128,7 @@ export class TestLineTokens implements IViewLineTokens {
 		throw new Error('Method not implemented.');
 	}
 
-	public forEach(callback: (tokenIndex: number) => codemavi): codemavi {
+	public forEach(callback: (tokenIndex: number) => void): void {
 		throw new Error('Not implemented');
 	}
 

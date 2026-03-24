@@ -110,7 +110,7 @@ class NavBar extends Disposable {
 		this.actionbar = this._register(new ActionBar(element));
 	}
 
-	push(id: string, label: string, tooltip: string): codemavi {
+	push(id: string, label: string, tooltip: string): void {
 		const action = new Action(id, label, undefined, true, () => this.update(id, true));
 
 		action.tooltip = tooltip;
@@ -123,7 +123,7 @@ class NavBar extends Disposable {
 		}
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.actions = dispose(this.actions);
 		this.actionbar.clear();
 	}
@@ -137,7 +137,7 @@ class NavBar extends Disposable {
 		return false;
 	}
 
-	private update(id: string, focus?: boolean): codemavi {
+	private update(id: string, focus?: boolean): void {
 		this._currentId = id;
 		this._onChange.fire({ id, focus: !!focus });
 		this.actions.forEach(a => a.checked = a.id === id);
@@ -145,11 +145,11 @@ class NavBar extends Disposable {
 }
 
 interface ILayoutParticipant {
-	layout(): codemavi;
+	layout(): void;
 }
 
 interface IActiveElement {
-	focus(): codemavi;
+	focus(): void;
 }
 
 interface IExtensionEditorTemplate {
@@ -199,7 +199,7 @@ class VersionWidget extends ExtensionWithDifferentGalleryVersionWidget {
 		this._register(hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), this.element, localize('extension version', "Extension Version")));
 		this.render();
 	}
-	render(): codemavi {
+	render(): void {
 		if (this.extension?.preRelease) {
 			show(this.element);
 		} else {
@@ -261,7 +261,7 @@ export class ExtensionEditor extends EditorPane {
 		return this._scopedContextKeyService.value;
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		const root = append(parent, $('.extension-editor'));
 		this._scopedContextKeyService.value = this.contextKeyService.createScoped(root);
 		this._scopedContextKeyService.value.createKey('inExtensionEditor', true);
@@ -459,7 +459,7 @@ export class ExtensionEditor extends EditorPane {
 		};
 	}
 
-	override async setInput(input: ExtensionsInput, options: IExtensionEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: ExtensionsInput, options: IExtensionEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		await super.setInput(input, options, context, token);
 		this.updatePreReleaseVersionContext();
 		if (this.template) {
@@ -467,7 +467,7 @@ export class ExtensionEditor extends EditorPane {
 		}
 	}
 
-	override setOptions(options: IExtensionEditorOptions | undefined): codemavi {
+	override setOptions(options: IExtensionEditorOptions | undefined): void {
 		const currentOptions: IExtensionEditorOptions | undefined = this.options;
 		super.setOptions(options);
 		this.updatePreReleaseVersionContext();
@@ -483,7 +483,7 @@ export class ExtensionEditor extends EditorPane {
 
 	}
 
-	private updatePreReleaseVersionContext(): codemavi {
+	private updatePreReleaseVersionContext(): void {
 		let showPreReleaseVersion = (<IExtensionEditorOptions | undefined>this.options)?.showPreReleaseVersion;
 		if (isUndefined(showPreReleaseVersion)) {
 			showPreReleaseVersion = !!(<ExtensionsInput>this.input).extension.gallery?.properties.isPreReleaseVersion;
@@ -491,7 +491,7 @@ export class ExtensionEditor extends EditorPane {
 		this.showPreReleaseVersionContextKey?.set(showPreReleaseVersion);
 	}
 
-	async openTab(tab: ExtensionEditorTab): Promise<codemavi> {
+	async openTab(tab: ExtensionEditorTab): Promise<void> {
 		if (!this.input || !this.template) {
 			return;
 		}
@@ -526,7 +526,7 @@ export class ExtensionEditor extends EditorPane {
 		return (await this.extensionGalleryService.getExtensions([{ ...extension.identifier, preRelease, hasPreRelease: extension.hasPreReleaseVersion }], CancellationToken.None))[0] || null;
 	}
 
-	private async render(extension: IExtension, template: IExtensionEditorTemplate, preserveFocus: boolean): Promise<codemavi> {
+	private async render(extension: IExtension, template: IExtensionEditorTemplate, preserveFocus: boolean): Promise<void> {
 		this.activeElement = null;
 		this.transientDisposables.clear();
 
@@ -590,7 +590,7 @@ export class ExtensionEditor extends EditorPane {
 
 	}
 
-	private renderNavbar(extension: IExtension, manifest: IExtensionManifest | null, template: IExtensionEditorTemplate, preserveFocus: boolean): codemavi {
+	private renderNavbar(extension: IExtension, manifest: IExtensionManifest | null, template: IExtensionEditorTemplate, preserveFocus: boolean): void {
 		template.content.innerText = '';
 		template.navbar.clear();
 
@@ -622,23 +622,23 @@ export class ExtensionEditor extends EditorPane {
 		template.navbar.onChange(e => this.onNavbarChange(extension, e, template), this, this.transientDisposables);
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		this.contentDisposables.clear();
 		this.transientDisposables.clear();
 
 		super.clearInput();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.activeElement?.focus();
 	}
 
-	showFind(): codemavi {
+	showFind(): void {
 		this.activeWebview?.showFind();
 	}
 
-	runFindAction(previous: boolean): codemavi {
+	runFindAction(previous: boolean): void {
 		this.activeWebview?.runFindAction(previous);
 	}
 
@@ -649,7 +649,7 @@ export class ExtensionEditor extends EditorPane {
 		return this.activeElement as IWebview;
 	}
 
-	private onNavbarChange(extension: IExtension, { id, focus }: { id: string | null; focus: boolean }, template: IExtensionEditorTemplate): codemavi {
+	private onNavbarChange(extension: IExtension, { id, focus }: { id: string | null; focus: boolean }, template: IExtensionEditorTemplate): void {
 		this.contentDisposables.clear();
 		template.content.innerText = '';
 		this.activeElement = null;
@@ -889,7 +889,7 @@ export class ExtensionEditor extends EditorPane {
 		return { focus: () => extensionPackContent.focus() };
 	}
 
-	private renderAdditionalDetails(container: HTMLElement, extension: IExtension): codemavi {
+	private renderAdditionalDetails(container: HTMLElement, extension: IExtension): void {
 		const content = $('div', { class: 'additional-details-content', tabindex: '0' });
 		const scrollableContent = new DomScrollableElement(content, {});
 		const layout = () => scrollableContent.scanDomNode();
@@ -1003,12 +1003,12 @@ export class ExtensionEditor extends EditorPane {
 		return result.promise;
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		this.dimension = dimension;
 		this.layoutParticipants.forEach(p => p.layout());
 	}
 
-	private onError(err: any): codemavi {
+	private onError(err: any): void {
 		if (isCancellationError(err)) {
 			return;
 		}
@@ -1042,7 +1042,7 @@ class AdditionalDetailsWidget extends Disposable {
 		}));
 	}
 
-	private render(extension: IExtension): codemavi {
+	private render(extension: IExtension): void {
 		this.container.innerText = '';
 		this.disposables.clear();
 
@@ -1056,7 +1056,7 @@ class AdditionalDetailsWidget extends Disposable {
 		this.renderExtensionResources(this.container, extension);
 	}
 
-	private renderCategories(container: HTMLElement, extension: IExtension): codemavi {
+	private renderCategories(container: HTMLElement, extension: IExtension): void {
 		if (extension.categories.length) {
 			const categoriesContainer = append(container, $('.categories-container.additional-details-element'));
 			append(categoriesContainer, $('.additional-details-title', undefined, localize('categories', "Categories")));
@@ -1075,7 +1075,7 @@ class AdditionalDetailsWidget extends Disposable {
 		}
 	}
 
-	private renderExtensionResources(container: HTMLElement, extension: IExtension): codemavi {
+	private renderExtensionResources(container: HTMLElement, extension: IExtension): void {
 		const resources: [string, URI][] = [];
 		if (extension.url) {
 			resources.push([localize('Marketplace', "Marketplace"), URI.parse(extension.url)]);
@@ -1110,7 +1110,7 @@ class AdditionalDetailsWidget extends Disposable {
 		}
 	}
 
-	private renderInstallInfo(container: HTMLElement, extension: ILocalExtension): codemavi {
+	private renderInstallInfo(container: HTMLElement, extension: ILocalExtension): void {
 		const installInfoContainer = append(container, $('.more-info-container.additional-details-element'));
 		append(installInfoContainer, $('.additional-details-title', undefined, localize('Install Info', "Installation")));
 		const installInfo = append(installInfoContainer, $('.more-info'));
@@ -1198,7 +1198,7 @@ class AdditionalDetailsWidget extends Disposable {
 		return extensionCacheLocation;
 	}
 
-	private renderMarketplaceInfo(container: HTMLElement, extension: IExtension): codemavi {
+	private renderMarketplaceInfo(container: HTMLElement, extension: IExtension): void {
 		const gallery = extension.gallery;
 		const moreInfoContainer = append(container, $('.more-info-container.additional-details-element'));
 		append(moreInfoContainer, $('.additional-details-title', undefined, localize('Marketplace Info', "Marketplace")));
@@ -1244,7 +1244,7 @@ registerAction2(class ShowExtensionEditorFindAction extends Action2 {
 			}
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const extensionEditor = getExtensionEditor(accessor);
 		extensionEditor?.showFind();
 	}
@@ -1264,7 +1264,7 @@ registerAction2(class StartExtensionEditorFindNextAction extends Action2 {
 			}
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const extensionEditor = getExtensionEditor(accessor);
 		extensionEditor?.runFindAction(false);
 	}
@@ -1284,7 +1284,7 @@ registerAction2(class StartExtensionEditorFindPreviousAction extends Action2 {
 			}
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const extensionEditor = getExtensionEditor(accessor);
 		extensionEditor?.runFindAction(true);
 	}

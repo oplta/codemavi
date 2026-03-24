@@ -50,7 +50,7 @@ export abstract class AbstractTextResourceEditor extends AbstractTextCodeEditor<
 		super(id, group, telemetryService, instantiationService, storageService, textResourceConfigurationService, themeService, editorService, editorGroupService, fileService);
 	}
 
-	override async setInput(input: AbstractTextResourceEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: AbstractTextResourceEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 
 		// Set input and resolve
 		await super.setInput(input, options, context, token);
@@ -99,7 +99,7 @@ export abstract class AbstractTextResourceEditor extends AbstractTextCodeEditor<
 	/**
 	 * Reveals the last line of this editor if it has a model set.
 	 */
-	revealLastLine(): codemavi {
+	revealLastLine(): void {
 		const control = this.editorControl;
 		if (!control) {
 			return;
@@ -113,7 +113,7 @@ export abstract class AbstractTextResourceEditor extends AbstractTextCodeEditor<
 		}
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		super.clearInput();
 
 		// Clear Model
@@ -146,7 +146,7 @@ export class TextResourceEditor extends AbstractTextResourceEditor {
 		super(TextResourceEditor.ID, group, telemetryService, instantiationService, storageService, textResourceConfigurationService, themeService, editorGroupService, editorService, fileService);
 	}
 
-	protected override createEditorControl(parent: HTMLElement, configuration: ICodeEditorOptions): codemavi {
+	protected override createEditorControl(parent: HTMLElement, configuration: ICodeEditorOptions): void {
 		super.createEditorControl(parent, configuration);
 
 		// Install a listener for paste to update this editors
@@ -157,7 +157,7 @@ export class TextResourceEditor extends AbstractTextResourceEditor {
 		}
 	}
 
-	private onDidEditorPaste(e: IPasteEvent, codeEditor: ICodeEditor): codemavi {
+	private onDidEditorPaste(e: IPasteEvent, codeEditor: ICodeEditor): void {
 		if (this.input instanceof UntitledTextEditorInput && this.input.hasLanguageSetExplicitly) {
 			return; // do not override language if it was set explicitly
 		}

@@ -1764,7 +1764,7 @@ suite('EditorService', () => {
 			visibleEditorChangeEventFired = false;
 		}
 
-		async function closeEditorAndWaitForNextToOpen(group: IEditorGroup, input: EditorInput): Promise<codemavi> {
+		async function closeEditorAndWaitForNextToOpen(group: IEditorGroup, input: EditorInput): Promise<void> {
 			await group.closeEditor(input);
 			await timeout(0); // closing an editor will not immediately open the next one, so we need to wait
 		}
@@ -2267,7 +2267,7 @@ suite('EditorService', () => {
 		return testFileDeleteEditorClose(true);
 	});
 
-	async function testFileDeleteEditorClose(dirty: boolean): Promise<codemavi> {
+	async function testFileDeleteEditorClose(dirty: boolean): Promise<void> {
 		const [part, service, accessor] = await createEditorService();
 
 		const input1 = createTestFileEditorInput(URI.parse('my://resource1'), TEST_EDITOR_INPUT_ID);
@@ -2326,7 +2326,7 @@ suite('EditorService', () => {
 		assert.strictEqual(rootGroup.activeEditor, movedInput);
 	});
 
-	function awaitActiveEditorChange(editorService: IEditorService): Promise<codemavi> {
+	function awaitActiveEditorChange(editorService: IEditorService): Promise<void> {
 		return Event.toPromise(Event.once(editorService.onDidActiveEditorChange));
 	}
 

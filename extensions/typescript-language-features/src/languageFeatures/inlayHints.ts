@@ -30,7 +30,7 @@ class TypeScriptInlayHintsProvider extends Disposable implements vscode.InlayHin
 
 	public static readonly minVersion = API.v440;
 
-	private readonly _onDidChangeInlayHints = this._register(new vscode.EventEmitter<codemavi>());
+	private readonly _onDidChangeInlayHints = this._register(new vscode.EventEmitter<void>());
 	public readonly onDidChangeInlayHints = this._onDidChangeInlayHints.event;
 
 	private hasReportedTelemetry = false;

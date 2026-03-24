@@ -58,8 +58,8 @@ export interface ISimpleSuggestWidgetFontInfo {
 
 export class SimpleSuggestWidgetItemRenderer implements IListRenderer<SimpleCompletionItem, ISimpleSuggestionTemplateData> {
 
-	private readonly _onDidToggleDetails = new Emitter<codemavi>();
-	readonly onDidToggleDetails: Event<codemavi> = this._onDidToggleDetails.event;
+	private readonly _onDidToggleDetails = new Emitter<void>();
+	readonly onDidToggleDetails: Event<void> = this._onDidToggleDetails.event;
 
 	private readonly _disposables = new DisposableStore();
 
@@ -67,12 +67,12 @@ export class SimpleSuggestWidgetItemRenderer implements IListRenderer<SimpleComp
 
 	constructor(
 		private readonly _getFontInfo: () => ISimpleSuggestWidgetFontInfo,
-		private readonly _onDidFontConfigurationChange: Event<codemavi>,
+		private readonly _onDidFontConfigurationChange: Event<void>,
 		@IThemeService private readonly _themeService: IThemeService,
 		@IModelService private readonly _modelService: IModelService,
 		@ILanguageService private readonly _languageService: ILanguageService) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidToggleDetails.dispose();
 		this._disposables.dispose();
 	}
@@ -127,7 +127,7 @@ export class SimpleSuggestWidgetItemRenderer implements IListRenderer<SimpleComp
 		return { root, left, right, icon, colorspan, iconLabel, iconContainer, parametersLabel, qualifierLabel, detailsLabel, disposables };
 	}
 
-	renderElement(element: SimpleCompletionItem, index: number, data: ISimpleSuggestionTemplateData): codemavi {
+	renderElement(element: SimpleCompletionItem, index: number, data: ISimpleSuggestionTemplateData): void {
 		const { completion } = element;
 		data.root.id = getAriaId(index);
 		data.colorspan.style.backgroundColor = '';
@@ -210,7 +210,7 @@ export class SimpleSuggestWidgetItemRenderer implements IListRenderer<SimpleComp
 		// }
 	}
 
-	disposeTemplate(templateData: ISimpleSuggestionTemplateData): codemavi {
+	disposeTemplate(templateData: ISimpleSuggestionTemplateData): void {
 		templateData.disposables.dispose();
 	}
 }

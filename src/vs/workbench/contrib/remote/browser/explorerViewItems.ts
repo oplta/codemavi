@@ -20,7 +20,7 @@ import { Disposable, DisposableMap } from '../../../../base/common/lifecycle.js'
 interface IRemoteSelectItem extends ISelectOptionItem {
 	authority: string[];
 	virtualWorkspace?: string;
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export const SELECTED_REMOTE_IN_EXPLORER = new RawContextKey<string>('selectedRemoteInExplorer', '');
@@ -130,7 +130,7 @@ export class SwitchRemoteViewItem extends Disposable {
 							}
 						});
 					}
-					async run(): Promise<codemavi> {
+					async run(): Promise<void> {
 						thisCapture.select(authority);
 					}
 				});

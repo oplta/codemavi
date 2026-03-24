@@ -49,7 +49,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		}, undefined, this._toDispose);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._toDispose.dispose();
 	}
 
@@ -112,7 +112,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		return this._proxy.$tryCreateDocument(options).then(data => URI.revive(data));
 	}
 
-	public $acceptModelLanguageChanged(uriComponents: UriComponents, newLanguageId: string): codemavi {
+	public $acceptModelLanguageChanged(uriComponents: UriComponents, newLanguageId: string): void {
 		const uri = URI.revive(uriComponents);
 		const data = this._documentsAndEditors.getDocument(uri);
 		if (!data) {
@@ -125,7 +125,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		this._onDidAddDocument.fire(data.document);
 	}
 
-	public $acceptModelSaved(uriComponents: UriComponents): codemavi {
+	public $acceptModelSaved(uriComponents: UriComponents): void {
 		const uri = URI.revive(uriComponents);
 		const data = this._documentsAndEditors.getDocument(uri);
 		if (!data) {
@@ -135,7 +135,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		this._onDidSaveDocument.fire(data.document);
 	}
 
-	public $acceptDirtyStateChanged(uriComponents: UriComponents, isDirty: boolean): codemavi {
+	public $acceptDirtyStateChanged(uriComponents: UriComponents, isDirty: boolean): void {
 		const uri = URI.revive(uriComponents);
 		const data = this._documentsAndEditors.getDocument(uri);
 		if (!data) {
@@ -149,7 +149,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		});
 	}
 
-	public $acceptEncodingChanged(uriComponents: UriComponents, encoding: string): codemavi {
+	public $acceptEncodingChanged(uriComponents: UriComponents, encoding: string): void {
 		const uri = URI.revive(uriComponents);
 		const data = this._documentsAndEditors.getDocument(uri);
 		if (!data) {
@@ -163,7 +163,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		});
 	}
 
-	public $acceptModelChanged(uriComponents: UriComponents, events: IModelChangedEvent, isDirty: boolean): codemavi {
+	public $acceptModelChanged(uriComponents: UriComponents, events: IModelChangedEvent, isDirty: boolean): void {
 		const uri = URI.revive(uriComponents);
 		const data = this._documentsAndEditors.getDocument(uri);
 		if (!data) {
@@ -193,7 +193,7 @@ export class ExtHostDocuments implements ExtHostDocumentsShape {
 		}));
 	}
 
-	public setWordDefinitionFor(languageId: string, wordDefinition: RegExp | undefined): codemavi {
+	public setWordDefinitionFor(languageId: string, wordDefinition: RegExp | undefined): void {
 		setWordDefinitionFor(languageId, wordDefinition);
 	}
 }

@@ -139,7 +139,7 @@ export class LanguageFeatureRegistry<T> {
 		return result;
 	}
 
-	private _orderedForEach(model: ITextModel, recursive: boolean, callback: (provider: Entry<T>) => any): codemavi {
+	private _orderedForEach(model: ITextModel, recursive: boolean, callback: (provider: Entry<T>) => any): void {
 
 		this._updateScores(model, recursive);
 
@@ -152,7 +152,7 @@ export class LanguageFeatureRegistry<T> {
 
 	private _lastCandidate: MatchCandidate | undefined;
 
-	private _updateScores(model: ITextModel, recursive: boolean): codemavi {
+	private _updateScores(model: ITextModel, recursive: boolean): void {
 
 		const notebookInfo = this._notebookInfoResolver?.(model.uri);
 

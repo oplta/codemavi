@@ -15,7 +15,7 @@ export abstract class ObservableDisposable extends Disposable {
 	/**
 	 * Private emitter for the `onDispose` event.
 	 */
-	private readonly _onDispose = this._register(new Emitter<codemavi>());
+	private readonly _onDispose = this._register(new Emitter<void>());
 
 	/**
 	 * The event is fired when this object is disposed.
@@ -23,7 +23,7 @@ export abstract class ObservableDisposable extends Disposable {
 	 *
 	 * @param callback The callback function to be called on updates.
 	 */
-	public onDispose(callback: () => codemavi): this {
+	public onDispose(callback: () => void): this {
 		// if already disposed, execute the callback immediately
 		if (this.disposed) {
 			callback();
@@ -52,7 +52,7 @@ export abstract class ObservableDisposable extends Disposable {
 	 * Dispose current object if not already disposed.
 	 * @returns
 	 */
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this.disposed) {
 			return;
 		}

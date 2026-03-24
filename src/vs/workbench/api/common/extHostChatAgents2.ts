@@ -76,7 +76,7 @@ class ChatAgentResponseStream {
 				}
 			}
 
-			const _report = (progress: IChatProgressDto, task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart | vscode.ChatResponseReferencePart>) => Thenable<string | codemavi>) => {
+			const _report = (progress: IChatProgressDto, task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart | vscode.ChatResponseReferencePart>) => Thenable<string | void>) => {
 				// Measure the time to the first progress update with real markdown content
 				if (typeof this._firstProgress === 'undefined' && (progress.kind === 'markdownContent' || progress.kind === 'markdownVuln')) {
 					this._firstProgress = this._stopWatch.elapsed();
@@ -153,7 +153,7 @@ class ChatAgentResponseStream {
 					_report(dto);
 					return this;
 				},
-				progress(value, task?: ((progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | codemavi>)) {
+				progress(value, task?: ((progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | void>)) {
 					throwIfDone(this.progress);
 					const part = new extHostTypes.ChatResponseProgressPart2(value, task);
 					const dto = task ? typeConvert.ChatTask.from(part) : typeConvert.ChatResponseProgressPart.from(part);
@@ -208,7 +208,7 @@ class ChatAgentResponseStream {
 
 					return this;
 				},
-				codeCitation(value: vscode.Uri, license: string, snippet: string): codemavi {
+				codeCitation(value: vscode.Uri, license: string, snippet: string): void {
 					throwIfDone(this.codeCitation);
 					checkProposedApiEnabled(that._extension, 'chatParticipantAdditions');
 
@@ -348,7 +348,7 @@ export class ExtHostChatAgents2 extends Disposable implements ExtHostChatAgentsS
 		});
 	}
 
-	transferActiveChat(newWorkspace: vscode.Uri): codemavi {
+	transferActiveChat(newWorkspace: vscode.Uri): void {
 		this._proxy.$transferActiveChatSession(newWorkspace);
 	}
 
@@ -595,7 +595,7 @@ export class ExtHostChatAgents2 extends Disposable implements ExtHostChatAgentsS
 		return res;
 	}
 
-	$releaseSession(sessionId: string): codemavi {
+	$releaseSession(sessionId: string): void {
 		this._sessionDisposables.deleteAndDispose(sessionId);
 		this._onDidDisposeChatSession.fire(sessionId);
 	}
@@ -624,7 +624,7 @@ export class ExtHostChatAgents2 extends Disposable implements ExtHostChatAgentsS
 			.map(f => typeConvert.ChatFollowup.from(f, request));
 	}
 
-	$acceptFeedback(handle: number, result: IChatAgentResult, voteAction: IChatVoteAction): codemavi {
+	$acceptFeedback(handle: number, result: IChatAgentResult, voteAction: IChatVoteAction): void {
 		const agent = this._agents.get(handle);
 		if (!agent) {
 			return;
@@ -649,7 +649,7 @@ export class ExtHostChatAgents2 extends Disposable implements ExtHostChatAgentsS
 		agent.acceptFeedback(Object.freeze(feedback));
 	}
 
-	$acceptAction(handle: number, result: IChatAgentResult, event: IChatUserActionEvent): codemavi {
+	$acceptAction(handle: number, result: IChatAgentResult, event: IChatUserActionEvent): void {
 		const agent = this._agents.get(handle);
 		if (!agent) {
 			return;
@@ -970,7 +970,7 @@ class ExtHostChatAgent {
 		} satisfies vscode.ChatParticipant;
 	}
 
-	invoke(request: vscode.ChatRequest, context: vscode.ChatContext, response: vscode.ChatResponseStream, token: CancellationToken): vscode.ProviderResult<vscode.ChatResult | codemavi> {
+	invoke(request: vscode.ChatRequest, context: vscode.ChatContext, response: vscode.ChatResponseStream, token: CancellationToken): vscode.ProviderResult<vscode.ChatResult | void> {
 		return this._requestHandler(request, context, response, token);
 	}
 }

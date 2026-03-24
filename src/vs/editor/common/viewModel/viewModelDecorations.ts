@@ -48,27 +48,27 @@ export class ViewModelDecorations implements IDisposable {
 		this._cachedModelDecorationsResolverViewRange = null;
 	}
 
-	private _clearCachedModelDecorationsResolver(): codemavi {
+	private _clearCachedModelDecorationsResolver(): void {
 		this._cachedModelDecorationsResolver = null;
 		this._cachedModelDecorationsResolverViewRange = null;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._decorationsCache = Object.create(null);
 		this._clearCachedModelDecorationsResolver();
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._decorationsCache = Object.create(null);
 		this._clearCachedModelDecorationsResolver();
 	}
 
-	public onModelDecorationsChanged(): codemavi {
+	public onModelDecorationsChanged(): void {
 		this._decorationsCache = Object.create(null);
 		this._clearCachedModelDecorationsResolver();
 	}
 
-	public onLineMappingChanged(): codemavi {
+	public onLineMappingChanged(): void {
 		this._decorationsCache = Object.create(null);
 
 		this._clearCachedModelDecorationsResolver();

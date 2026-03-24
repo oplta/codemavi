@@ -295,7 +295,7 @@ export class SCMViewService implements ISCMViewService {
 		}, this, this.disposables);
 	}
 
-	private onDidAddRepository(repository: ISCMRepository): codemavi {
+	private onDidAddRepository(repository: ISCMRepository): void {
 		if (!this.didFinishLoading) {
 			this.eventuallyFinishLoading();
 		}
@@ -359,7 +359,7 @@ export class SCMViewService implements ISCMViewService {
 		}
 	}
 
-	private onDidRemoveRepository(repository: ISCMRepository): codemavi {
+	private onDidRemoveRepository(repository: ISCMRepository): void {
 		if (!this.didFinishLoading) {
 			this.eventuallyFinishLoading();
 		}
@@ -389,7 +389,7 @@ export class SCMViewService implements ISCMViewService {
 		return this._repositories.find(r => r.repository === repository)?.selectionIndex !== -1;
 	}
 
-	toggleVisibility(repository: ISCMRepository, visible?: boolean): codemavi {
+	toggleVisibility(repository: ISCMRepository, visible?: boolean): void {
 		if (typeof visible === 'undefined') {
 			visible = !this.isVisible(repository);
 		} else if (this.isVisible(repository) === visible) {
@@ -410,7 +410,7 @@ export class SCMViewService implements ISCMViewService {
 		}
 	}
 
-	toggleSortKey(sortKey: ISCMRepositorySortKey): codemavi {
+	toggleSortKey(sortKey: ISCMRepositorySortKey): void {
 		this._repositoriesSortKey = sortKey;
 		this._sortKeyContextKey.set(this._repositoriesSortKey);
 		this._repositories.sort(this.compareRepositories.bind(this));
@@ -418,7 +418,7 @@ export class SCMViewService implements ISCMViewService {
 		this._onDidChangeRepositories.fire({ added: Iterable.empty(), removed: Iterable.empty() });
 	}
 
-	focus(repository: ISCMRepository | undefined): codemavi {
+	focus(repository: ISCMRepository | undefined): void {
 		if (repository && !this.isVisible(repository)) {
 			return;
 		}
@@ -430,7 +430,7 @@ export class SCMViewService implements ISCMViewService {
 		}
 	}
 
-	pinActiveRepository(repository: ISCMRepository | undefined): codemavi {
+	pinActiveRepository(repository: ISCMRepository | undefined): void {
 		this._activeRepositoryPinnedObs.set(repository, undefined);
 	}
 
@@ -476,12 +476,12 @@ export class SCMViewService implements ISCMViewService {
 		}
 	}
 
-	private insertRepositoryView(repositories: ISCMRepositoryView[], repositoryView: ISCMRepositoryView): codemavi {
+	private insertRepositoryView(repositories: ISCMRepositoryView[], repositoryView: ISCMRepositoryView): void {
 		const index = binarySearch(repositories, repositoryView, this.compareRepositories.bind(this));
 		repositories.splice(index < 0 ? ~index : index, 0, repositoryView);
 	}
 
-	private onWillSaveState(): codemavi {
+	private onWillSaveState(): void {
 		if (!this.didFinishLoading) { // don't remember state, if the workbench didn't really finish loading
 			return;
 		}
@@ -494,11 +494,11 @@ export class SCMViewService implements ISCMViewService {
 	}
 
 	@debounce(5000)
-	private eventuallyFinishLoading(): codemavi {
+	private eventuallyFinishLoading(): void {
 		this.finishLoading();
 	}
 
-	private finishLoading(): codemavi {
+	private finishLoading(): void {
 		if (this.didFinishLoading) {
 			return;
 		}
@@ -506,7 +506,7 @@ export class SCMViewService implements ISCMViewService {
 		this.didFinishLoading = true;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 		this._onDidChangeRepositories.dispose();
 		this._onDidSetVisibleRepositories.dispose();

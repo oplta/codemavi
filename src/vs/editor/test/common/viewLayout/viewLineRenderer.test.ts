@@ -53,7 +53,7 @@ suite('viewLineRenderer.renderLine', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertCharacterReplacement(lineContent: string, tabSize: number, expected: string, expectedCharOffsetInPart: number[]): codemavi {
+	function assertCharacterReplacement(lineContent: string, tabSize: number, expected: string, expectedCharOffsetInPart: number[]): void {
 		const _actual = renderViewLine(new RenderLineInput(
 			false,
 			true,
@@ -107,7 +107,7 @@ suite('viewLineRenderer.renderLine', () => {
 		assertCharacterReplacement('xxxx\t', 4, 'xxxx\u00a0\u00a0\u00a0\u00a0', [0, 1, 2, 3, 4, 8]);
 	});
 
-	function assertParts(lineContent: string, tabSize: number, parts: TestLineToken[], expected: string, info: CharacterMappingInfo[]): codemavi {
+	function assertParts(lineContent: string, tabSize: number, parts: TestLineToken[], expected: string, info: CharacterMappingInfo[]): void {
 		const _actual = renderViewLine(new RenderLineInput(
 			false,
 			true,
@@ -631,7 +631,7 @@ suite('viewLineRenderer.renderLine', () => {
 		//               1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234
 		const _lineText = 'This is just a long line that contains very interesting text. This is just a long line that contains very interesting text.';
 
-		function assertSplitsTokens(message: string, lineText: string, expectedOutput: string[]): codemavi {
+		function assertSplitsTokens(message: string, lineText: string, expectedOutput: string[]): void {
 			const lineParts = createViewLineTokens([createPart(lineText.length, 1)]);
 			const actual = renderViewLine(new RenderLineInput(
 				false,
@@ -735,7 +735,7 @@ suite('viewLineRenderer.renderLine', () => {
 		//               1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234
 		const _lineText = 'This is just a long line that contains very interesting text. This is just a long line that contains very interesting text.';
 
-		function assertSplitsTokens(message: string, lineText: string, expectedOutput: string[]): codemavi {
+		function assertSplitsTokens(message: string, lineText: string, expectedOutput: string[]): void {
 			const lineParts = createViewLineTokens([createPart(lineText.length, 1)]);
 			const actual = renderViewLine(new RenderLineInput(
 				false,
@@ -878,7 +878,7 @@ suite('viewLineRenderer.renderLine', () => {
 	});
 
 	test('issue #19673: Monokai Theme bad-highlighting in line wrap', () => {
-		const lineText = '    MongoCallback<string>): codemavi {';
+		const lineText = '    MongoCallback<string>): void {';
 		const lineParts = createViewLineTokens([
 			createPart(17, 1),
 			createPart(18, 2),
@@ -920,7 +920,7 @@ suite('viewLineRenderer.renderLine', () => {
 				'<span class="mtk4">&gt;)</span>',
 				'<span class="mtk5">:</span>',
 				'<span class="mtk6">\u00a0</span>',
-				'<span class="mtk7">codemavi</span>',
+				'<span class="mtk7">mavi</span>',
 				'<span class="mtk8">\u00a0{</span>'
 			],
 			mapping: [
@@ -940,7 +940,7 @@ suite('viewLineRenderer.renderLine', () => {
 
 type CharacterMappingInfo = [number, [number, number]];
 
-function assertCharacterMapping3(actual: CharacterMapping, expectedInfo: CharacterMappingInfo[]): codemavi {
+function assertCharacterMapping3(actual: CharacterMapping, expectedInfo: CharacterMappingInfo[]): void {
 	for (let i = 0; i < expectedInfo.length; i++) {
 		const [horizontalOffset, [partIndex, charIndex]] = expectedInfo[i];
 
@@ -2723,7 +2723,7 @@ suite('viewLineRenderer.renderLine 2', () => {
 		});
 	});
 
-	function createTestGetColumnOfLinePartOffset(lineContent: string, tabSize: number, parts: TestLineToken[], expectedPartLengths: number[]): (partIndex: number, partLength: number, offset: number, expected: number) => codemavi {
+	function createTestGetColumnOfLinePartOffset(lineContent: string, tabSize: number, parts: TestLineToken[], expectedPartLengths: number[]): (partIndex: number, partLength: number, offset: number, expected: number) => void {
 		const renderLineOutput = renderViewLine(new RenderLineInput(
 			false,
 			true,

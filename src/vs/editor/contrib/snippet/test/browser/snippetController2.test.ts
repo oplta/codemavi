@@ -35,7 +35,7 @@ suite('SnippetController2', function () {
 		assert.strictEqual(s.length, 0);
 	}
 
-	function assertContextKeys(service: MockContextKeyService, inSnippet: boolean, hasPrev: boolean, hasNext: boolean): codemavi {
+	function assertContextKeys(service: MockContextKeyService, inSnippet: boolean, hasPrev: boolean, hasNext: boolean): void {
 		const state = getContextState(service);
 		assert.strictEqual(state.inSnippet, inSnippet, `inSnippetMode`);
 		assert.strictEqual(state.hasPrev, hasPrev, `HasPrevTabstop`);

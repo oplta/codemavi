@@ -45,7 +45,7 @@ export class UserDataSyncEnablementService extends Disposable implements IUserDa
 		return this.userDataSyncStoreManagementService.userDataSyncStore !== undefined && this.environmentService.sync === undefined;
 	}
 
-	setEnablement(enabled: boolean): codemavi {
+	setEnablement(enabled: boolean): void {
 		if (enabled && !this.canToggleEnablement()) {
 			return;
 		}
@@ -64,7 +64,7 @@ export class UserDataSyncEnablementService extends Disposable implements IUserDa
 		return (storedValue !== undefined);
 	}
 
-	setResourceEnablement(resource: SyncResource, enabled: boolean): codemavi {
+	setResourceEnablement(resource: SyncResource, enabled: boolean): void {
 		if (this.isResourceEnabled(resource) !== enabled) {
 			const resourceEnablementKey = getEnablementKey(resource);
 			this.storeResourceEnablement(resourceEnablementKey, enabled);
@@ -75,11 +75,11 @@ export class UserDataSyncEnablementService extends Disposable implements IUserDa
 		return undefined;
 	}
 
-	private storeResourceEnablement(resourceEnablementKey: string, enabled: boolean): codemavi {
+	private storeResourceEnablement(resourceEnablementKey: string, enabled: boolean): void {
 		this.storageService.store(resourceEnablementKey, enabled, StorageScope.APPLICATION, isWeb ? StorageTarget.USER /* sync in web */ : StorageTarget.MACHINE);
 	}
 
-	private onDidStorageChange(storageChangeEvent: IApplicationStorageValueChangeEvent): codemavi {
+	private onDidStorageChange(storageChangeEvent: IApplicationStorageValueChangeEvent): void {
 		if (enablementKey === storageChangeEvent.key) {
 			this._onDidChangeEnablement.fire(this.isEnabled());
 			return;

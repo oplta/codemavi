@@ -115,8 +115,8 @@ export class ClickLinkGesture extends Disposable {
 	private readonly _onExecute: Emitter<ClickLinkMouseEvent> = this._register(new Emitter<ClickLinkMouseEvent>());
 	public readonly onExecute: Event<ClickLinkMouseEvent> = this._onExecute.event;
 
-	private readonly _onCancel: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onCancel: Event<codemavi> = this._onCancel.event;
+	private readonly _onCancel: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onCancel: Event<void> = this._onCancel.event;
 
 	private readonly _editor: ICodeEditor;
 	private readonly _extractLineNumberFromMouseEvent: (e: ClickLinkMouseEvent) => number;
@@ -167,19 +167,19 @@ export class ClickLinkGesture extends Disposable {
 		}));
 	}
 
-	private _onDidChangeCursorSelection(e: ICursorSelectionChangedEvent): codemavi {
+	private _onDidChangeCursorSelection(e: ICursorSelectionChangedEvent): void {
 		if (e.selection && e.selection.startColumn !== e.selection.endColumn) {
 			this._resetHandler(); // immediately stop this feature if the user starts to select (https://github.com/microsoft/vscode/issues/7827)
 		}
 	}
 
-	private _onEditorMouseMove(mouseEvent: ClickLinkMouseEvent): codemavi {
+	private _onEditorMouseMove(mouseEvent: ClickLinkMouseEvent): void {
 		this._lastMouseMoveEvent = mouseEvent;
 
 		this._onMouseMoveOrRelevantKeyDown.fire([mouseEvent, null]);
 	}
 
-	private _onEditorMouseDown(mouseEvent: ClickLinkMouseEvent): codemavi {
+	private _onEditorMouseDown(mouseEvent: ClickLinkMouseEvent): void {
 		// We need to record if we had the trigger key on mouse down because someone might select something in the editor
 		// holding the mouse down and then while mouse is down start to press Ctrl/Cmd to start a copy operation and then
 		// release the mouse button without wanting to do the navigation.
@@ -188,14 +188,14 @@ export class ClickLinkGesture extends Disposable {
 		this._lineNumberOnMouseDown = this._extractLineNumberFromMouseEvent(mouseEvent);
 	}
 
-	private _onEditorMouseUp(mouseEvent: ClickLinkMouseEvent): codemavi {
+	private _onEditorMouseUp(mouseEvent: ClickLinkMouseEvent): void {
 		const currentLineNumber = this._extractLineNumberFromMouseEvent(mouseEvent);
 		if (this._hasTriggerKeyOnMouseDown && this._lineNumberOnMouseDown && this._lineNumberOnMouseDown === currentLineNumber) {
 			this._onExecute.fire(mouseEvent);
 		}
 	}
 
-	private _onEditorKeyDown(e: ClickLinkKeyboardEvent): codemavi {
+	private _onEditorKeyDown(e: ClickLinkKeyboardEvent): void {
 		if (
 			this._lastMouseMoveEvent
 			&& (
@@ -209,13 +209,13 @@ export class ClickLinkGesture extends Disposable {
 		}
 	}
 
-	private _onEditorKeyUp(e: ClickLinkKeyboardEvent): codemavi {
+	private _onEditorKeyUp(e: ClickLinkKeyboardEvent): void {
 		if (e.keyCodeIsTriggerKey) {
 			this._onCancel.fire();
 		}
 	}
 
-	private _resetHandler(): codemavi {
+	private _resetHandler(): void {
 		this._lastMouseMoveEvent = null;
 		this._hasTriggerKeyOnMouseDown = false;
 		this._onCancel.fire();

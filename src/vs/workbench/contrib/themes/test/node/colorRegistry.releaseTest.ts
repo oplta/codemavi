@@ -86,7 +86,7 @@ suite('Color Registry', function () {
 	});
 
 	test('all colors listed in theme-color.md', async function () {
-		// acodemavi importing the TestEnvironmentService as it brings in a duplicate registration of the file editor input factory.
+		// avoid importing the TestEnvironmentService as it brings in a duplicate registration of the file editor input factory.
 		const environmentService = new class extends mock<INativeEnvironmentService>() { override args = { _: [] }; };
 
 		const docUrl = 'https://raw.githubusercontent.com/microsoft/vscode-docs/main/api/references/theme-color.md';

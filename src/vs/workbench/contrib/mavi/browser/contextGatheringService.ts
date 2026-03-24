@@ -25,7 +25,7 @@ interface IVisitedInterval {
 
 export interface IContextGatheringService {
 	readonly _serviceBrand: undefined;
-	updateCache(model: ITextModel, pos: Position): Promise<codemavi>;
+	updateCache(model: ITextModel, pos: Position): Promise<void>;
 	getCachedSnippets(): string[];
 }
 
@@ -49,7 +49,7 @@ class ContextGatheringService extends Disposable implements IContextGatheringSer
 		this._register(this._modelService.onModelAdded(model => this._subscribeToModel(model)));
 	}
 
-	private _subscribeToModel(model: ITextModel): codemavi {
+	private _subscribeToModel(model: ITextModel): void {
 		console.log('Subscribing to model:', model.uri.toString());
 		this._register(model.onDidChangeContent(() => {
 			const editor = this._codeEditorService.getFocusedCodeEditor();
@@ -63,7 +63,7 @@ class ContextGatheringService extends Disposable implements IContextGatheringSer
 		}));
 	}
 
-	public async updateCache(model: ITextModel, pos: Position): Promise<codemavi> {
+	public async updateCache(model: ITextModel, pos: Position): Promise<void> {
 		const snippets = new Set<string>();
 		this._snippetIntervals = []; // Reset intervals for new cache update
 
@@ -121,7 +121,7 @@ class ContextGatheringService extends Disposable implements IContextGatheringSer
 		range: IRange,
 		snippets: Set<string>,
 		visited: IVisitedInterval[]
-	): codemavi {
+	): void {
 		const startLine = range.startLineNumber;
 		const endLine = range.endLineNumber;
 		const uri = model.uri.toString();
@@ -142,7 +142,7 @@ class ContextGatheringService extends Disposable implements IContextGatheringSer
 		depth: number,
 		snippets: Set<string>,
 		visited: IVisitedInterval[]
-	): Promise<codemavi> {
+	): Promise<void> {
 		if (depth <= 0) return;
 
 		const startLine = Math.max(pos.lineNumber - numLines, 1);
@@ -172,7 +172,7 @@ class ContextGatheringService extends Disposable implements IContextGatheringSer
 		depth: number,
 		snippets: Set<string>,
 		visited: IVisitedInterval[]
-	): Promise<codemavi> {
+	): Promise<void> {
 		if (depth <= 0) return;
 
 		const container = await this._findContainerFunction(model, pos);

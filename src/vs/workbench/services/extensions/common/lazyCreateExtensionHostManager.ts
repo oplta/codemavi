@@ -84,19 +84,19 @@ export class LazyCreateExtensionHostManager extends Disposable implements IExten
 		return actual;
 	}
 
-	public async ready(): Promise<codemavi> {
+	public async ready(): Promise<void> {
 		await this._startCalled.wait();
 		if (this._actual) {
 			await this._actual.ready();
 		}
 	}
-	public async disconnect(): Promise<codemavi> {
+	public async disconnect(): Promise<void> {
 		await this._actual?.disconnect();
 	}
 	public representsRunningLocation(runningLocation: ExtensionRunningLocation): boolean {
 		return this._extensionHost.runningLocation.equals(runningLocation);
 	}
-	public async deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
+	public async deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<void> {
 		await this._startCalled.wait();
 		if (this._actual) {
 			return this._actual.deltaExtensions(extensionsDelta);
@@ -118,7 +118,7 @@ export class LazyCreateExtensionHostManager extends Disposable implements IExten
 		}
 		return false;
 	}
-	public async activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
+	public async activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
 		if (activationKind === ActivationKind.Immediate) {
 			// this is an immediate request, so we cannot wait for start to be called
 			if (this._actual) {
@@ -165,7 +165,7 @@ export class LazyCreateExtensionHostManager extends Disposable implements IExten
 		}
 		throw new Error(`Cannot resolve canonical URI`);
 	}
-	public async start(extensionRegistryVersionId: number, allExtensions: IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<codemavi> {
+	public async start(extensionRegistryVersionId: number, allExtensions: IExtensionDescription[], myExtensions: ExtensionIdentifier[]): Promise<void> {
 		if (myExtensions.length > 0) {
 			// there are actual extensions, so let's launch the extension host
 			const actual = this._createActual(`contains ${myExtensions.length} extension(s): ${myExtensions.map(extId => extId.value)}.`);
@@ -182,7 +182,7 @@ export class LazyCreateExtensionHostManager extends Disposable implements IExten
 		const actual = await this._getOrCreateActualAndStart(`execute tests.`);
 		return actual.extensionTestsExecute();
 	}
-	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi> {
+	public async setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void> {
 		await this._startCalled.wait();
 		if (this._actual) {
 			return this._actual.setRemoteEnvironment(env);

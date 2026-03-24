@@ -49,8 +49,8 @@ class NotebookTextModelLikeId {
 }
 
 class SourceAction extends Disposable implements ISourceAction {
-	execution: Promise<codemavi> | undefined;
-	private readonly _onDidChangeState = this._register(new Emitter<codemavi>());
+	execution: Promise<void> | undefined;
+	private readonly _onDidChangeState = this._register(new Emitter<void>());
 	readonly onDidChangeState = this._onDidChangeState.event;
 
 	constructor(
@@ -73,7 +73,7 @@ class SourceAction extends Disposable implements ISourceAction {
 		this._onDidChangeState.fire();
 	}
 
-	private async _runAction(): Promise<codemavi> {
+	private async _runAction(): Promise<void> {
 		try {
 			await this.action.run({
 				uri: this.model.uri,
@@ -103,7 +103,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 	private readonly _onDidChangeNotebookKernelBinding = this._register(new Emitter<ISelectedNotebooksChangeEvent>());
 	private readonly _onDidAddKernel = this._register(new Emitter<INotebookKernel>());
 	private readonly _onDidRemoveKernel = this._register(new Emitter<INotebookKernel>());
-	private readonly _onDidChangeNotebookAffinity = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeNotebookAffinity = this._register(new Emitter<void>());
 	private readonly _onDidChangeSourceActions = this._register(new Emitter<INotebookSourceActionChangeEvent>());
 	private readonly _onDidNotebookVariablesChange = this._register(new Emitter<URI>());
 	private readonly _kernelSources = new Map<string, IKernelInfoCache>();
@@ -115,7 +115,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 	readonly onDidChangeSelectedNotebooks: Event<ISelectedNotebooksChangeEvent> = this._onDidChangeNotebookKernelBinding.event;
 	readonly onDidAddKernel: Event<INotebookKernel> = this._onDidAddKernel.event;
 	readonly onDidRemoveKernel: Event<INotebookKernel> = this._onDidRemoveKernel.event;
-	readonly onDidChangeNotebookAffinity: Event<codemavi> = this._onDidChangeNotebookAffinity.event;
+	readonly onDidChangeNotebookAffinity: Event<void> = this._onDidChangeNotebookAffinity.event;
 	readonly onDidChangeSourceActions: Event<INotebookSourceActionChangeEvent> = this._onDidChangeSourceActions.event;
 	readonly onDidChangeKernelDetectionTasks: Event<string> = this._onDidChangeKernelDetectionTasks.event;
 	readonly onDidNotebookVariablesUpdate: Event<URI> = this._onDidNotebookVariablesChange.event;
@@ -168,7 +168,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 
 	private _persistSoonHandle?: IDisposable;
 
-	private _persistMementos(): codemavi {
+	private _persistMementos(): void {
 		this._persistSoonHandle?.dispose();
 		this._persistSoonHandle = runWhenWindowIdle(getActiveWindow(), () => {
 			this._storageService.store(NotebookKernelService._storageNotebookBinding, JSON.stringify(this._notebookBindings), StorageScope.WORKSPACE, StorageTarget.MACHINE);
@@ -185,7 +185,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 		}
 	}
 
-	private _tryAutoBindNotebook(notebook: INotebookTextModel, onlyThisKernel?: INotebookKernel): codemavi {
+	private _tryAutoBindNotebook(notebook: INotebookTextModel, onlyThisKernel?: INotebookKernel): void {
 
 		const id = this._notebookBindings.get(NotebookTextModelLikeId.str(notebook));
 		if (!id) {
@@ -202,7 +202,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 		}
 	}
 
-	notifyVariablesChange(notebookUri: URI): codemavi {
+	notifyVariablesChange(notebookUri: URI): void {
 		this._onDidNotebookVariablesChange.fire(notebookUri);
 	}
 
@@ -275,7 +275,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 
 	// a notebook has one kernel, a kernel has N notebooks
 	// notebook <-1----N-> kernel
-	selectKernelForNotebook(kernel: INotebookKernel | undefined, notebook: INotebookTextModelLike): codemavi {
+	selectKernelForNotebook(kernel: INotebookKernel | undefined, notebook: INotebookTextModelLike): void {
 		const key = NotebookTextModelLikeId.str(notebook);
 		const oldKernel = this._notebookBindings.get(key);
 		if (oldKernel !== kernel?.id) {
@@ -289,7 +289,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 		}
 	}
 
-	preselectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): codemavi {
+	preselectKernelForNotebook(kernel: INotebookKernel, notebook: INotebookTextModelLike): void {
 		const key = NotebookTextModelLikeId.str(notebook);
 		const oldKernel = this._notebookBindings.get(key);
 		if (oldKernel !== kernel?.id) {
@@ -298,7 +298,7 @@ export class NotebookKernelService extends Disposable implements INotebookKernel
 		}
 	}
 
-	updateKernelNotebookAffinity(kernel: INotebookKernel, notebook: URI, preference: number | undefined): codemavi {
+	updateKernelNotebookAffinity(kernel: INotebookKernel, notebook: URI, preference: number | undefined): void {
 		const info = this._kernels.get(kernel.id);
 		if (!info) {
 			throw new Error(`UNKNOWN kernel '${kernel.id}'`);

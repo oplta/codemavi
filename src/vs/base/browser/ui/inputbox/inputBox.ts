@@ -214,26 +214,26 @@ export class InputBox extends Widget {
 		this.applyStyles();
 	}
 
-	protected onBlur(): codemavi {
+	protected onBlur(): void {
 		this._hideMessage();
 		if (this.options.showPlaceholderOnFocus) {
 			this.input.setAttribute('placeholder', '');
 		}
 	}
 
-	protected onFocus(): codemavi {
+	protected onFocus(): void {
 		this._showMessage();
 		if (this.options.showPlaceholderOnFocus) {
 			this.input.setAttribute('placeholder', this.placeholder || '');
 		}
 	}
 
-	public setPlaceHolder(placeHolder: string): codemavi {
+	public setPlaceHolder(placeHolder: string): void {
 		this.placeholder = placeHolder;
 		this.input.setAttribute('placeholder', placeHolder);
 	}
 
-	public setTooltip(tooltip: string): codemavi {
+	public setTooltip(tooltip: string): void {
 		this.tooltip = tooltip;
 		if (!this.hover.value) {
 			this.hover.value = this._register(getBaseLayerHoverDelegate().setupDelayedHoverAtMouse(this.input, () => ({
@@ -245,7 +245,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	public setAriaLabel(label: string): codemavi {
+	public setAriaLabel(label: string): void {
 		this.ariaLabel = label;
 
 		if (label) {
@@ -290,11 +290,11 @@ export class InputBox extends Widget {
 		return typeof this.cachedHeight === 'number' ? this.cachedHeight : dom.getTotalHeight(this.element);
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		this.input.focus();
 	}
 
-	public blur(): codemavi {
+	public blur(): void {
 		this.input.blur();
 	}
 
@@ -302,7 +302,7 @@ export class InputBox extends Widget {
 		return dom.isActiveElement(this.input);
 	}
 
-	public select(range: IRange | null = null): codemavi {
+	public select(range: IRange | null = null): void {
 		this.input.select();
 
 		if (range) {
@@ -329,17 +329,17 @@ export class InputBox extends Widget {
 		};
 	}
 
-	public enable(): codemavi {
+	public enable(): void {
 		this.input.removeAttribute('disabled');
 	}
 
-	public disable(): codemavi {
+	public disable(): void {
 		this.blur();
 		this.input.disabled = true;
 		this._hideMessage();
 	}
 
-	public setEnabled(enabled: boolean): codemavi {
+	public setEnabled(enabled: boolean): void {
 		if (enabled) {
 			this.enable();
 		} else {
@@ -371,7 +371,7 @@ export class InputBox extends Widget {
 	}
 
 	public set paddingRight(paddingRight: number) {
-		// Set width to acodemavi hint text overlapping buttons
+		// Set width to avoid hint text overlapping buttons
 		this.input.style.width = `calc(100% - ${paddingRight}px)`;
 
 		if (this.mirror) {
@@ -379,7 +379,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	private updateScrollDimensions(): codemavi {
+	private updateScrollDimensions(): void {
 		if (typeof this.cachedContentHeight !== 'number' || typeof this.cachedHeight !== 'number' || !this.scrollableElement) {
 			return;
 		}
@@ -392,7 +392,7 @@ export class InputBox extends Widget {
 		this.scrollableElement.setScrollPosition({ scrollTop });
 	}
 
-	public showMessage(message: IMessage, force?: boolean): codemavi {
+	public showMessage(message: IMessage, force?: boolean): void {
 		if (this.state === 'open' && equals(this.message, message)) {
 			// Already showing
 			return;
@@ -414,7 +414,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	public hideMessage(): codemavi {
+	public hideMessage(): void {
 		this.message = null;
 
 		this.element.classList.remove('info');
@@ -466,7 +466,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	private _showMessage(): codemavi {
+	private _showMessage(): void {
 		if (!this.contextViewProvider || !this.message) {
 			return;
 		}
@@ -525,7 +525,7 @@ export class InputBox extends Widget {
 		this.state = 'open';
 	}
 
-	private _hideMessage(): codemavi {
+	private _hideMessage(): void {
 		if (!this.contextViewProvider) {
 			return;
 		}
@@ -537,7 +537,7 @@ export class InputBox extends Widget {
 		this.state = 'idle';
 	}
 
-	private onValueChange(): codemavi {
+	private onValueChange(): void {
 		this._onDidChange.fire(this.value);
 
 		this.validate();
@@ -549,7 +549,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	private updateMirror(): codemavi {
+	private updateMirror(): void {
 		if (!this.mirror) {
 			return;
 		}
@@ -569,7 +569,7 @@ export class InputBox extends Widget {
 		this.layout();
 	}
 
-	protected applyStyles(): codemavi {
+	protected applyStyles(): void {
 		const styles = this.options.inputBoxStyles;
 
 		const background = styles.inputBackground ?? '';
@@ -585,7 +585,7 @@ export class InputBox extends Widget {
 		this.element.style.border = `1px solid ${cssJs.asCssValueWithDefault(border, 'transparent')}`;
 	}
 
-	public layout(): codemavi {
+	public layout(): void {
 		if (!this.mirror) {
 			return;
 		}
@@ -600,7 +600,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	public insertAtCursor(text: string): codemavi {
+	public insertAtCursor(text: string): void {
 		const inputElement = this.inputElement;
 		const start = inputElement.selectionStart;
 		const end = inputElement.selectionEnd;
@@ -613,7 +613,7 @@ export class InputBox extends Widget {
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._hideMessage();
 
 		this.message = null;
@@ -633,10 +633,10 @@ export class HistoryInputBox extends InputBox implements IHistoryNavigationWidge
 	private readonly history: HistoryNavigator<string>;
 	private observer: MutationObserver | undefined;
 
-	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
+	private readonly _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onDidBlur = this._register(new Emitter<codemavi>());
+	private readonly _onDidBlur = this._register(new Emitter<void>());
 	readonly onDidBlur = this._onDidBlur.event;
 
 	constructor(container: HTMLElement, contextViewProvider: IContextViewProvider | undefined, options: IHistoryInputOptions) {
@@ -708,13 +708,13 @@ export class HistoryInputBox extends InputBox implements IHistoryNavigationWidge
 		}
 	}
 
-	public addToHistory(always?: boolean): codemavi {
+	public addToHistory(always?: boolean): void {
 		if (this.value && (always || this.value !== this.getCurrentValue())) {
 			this.history.add(this.value);
 		}
 	}
 
-	public prependHistory(restoredHistory: string[]): codemavi {
+	public prependHistory(restoredHistory: string[]): void {
 		const newHistory = this.getHistory();
 		this.clearHistory();
 
@@ -743,7 +743,7 @@ export class HistoryInputBox extends InputBox implements IHistoryNavigationWidge
 		return this.history.isNowhere();
 	}
 
-	public showNextValue(): codemavi {
+	public showNextValue(): void {
 		if (!this.history.has(this.value)) {
 			this.addToHistory();
 		}
@@ -757,7 +757,7 @@ export class HistoryInputBox extends InputBox implements IHistoryNavigationWidge
 		aria.status(this.value ? this.value : nls.localize('clearedInput', "Cleared Input"));
 	}
 
-	public showPreviousValue(): codemavi {
+	public showPreviousValue(): void {
 		if (!this.history.has(this.value)) {
 			this.addToHistory();
 		}
@@ -773,21 +773,21 @@ export class HistoryInputBox extends InputBox implements IHistoryNavigationWidge
 		}
 	}
 
-	public clearHistory(): codemavi {
+	public clearHistory(): void {
 		this.history.clear();
 	}
 
-	public override setPlaceHolder(placeHolder: string): codemavi {
+	public override setPlaceHolder(placeHolder: string): void {
 		super.setPlaceHolder(placeHolder);
 		this.setTooltip(placeHolder);
 	}
 
-	protected override onBlur(): codemavi {
+	protected override onBlur(): void {
 		super.onBlur();
 		this._onDidBlur.fire();
 	}
 
-	protected override onFocus(): codemavi {
+	protected override onFocus(): void {
 		super.onFocus();
 		this._onDidFocus.fire();
 	}

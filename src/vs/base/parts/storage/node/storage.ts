@@ -25,8 +25,8 @@ export interface ISQLiteStorageDatabaseOptions {
 }
 
 export interface ISQLiteStorageDatabaseLoggingOptions {
-	logError?: (error: string | Error) => codemavi;
-	logTrace?: (msg: string) => codemavi;
+	logError?: (error: string | Error) => void;
+	logTrace?: (msg: string) => void;
 }
 
 export class SQLiteStorageDatabase implements IStorageDatabase {
@@ -68,13 +68,13 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		return items;
 	}
 
-	async updateItems(request: IUpdateRequest): Promise<codemavi> {
+	async updateItems(request: IUpdateRequest): Promise<void> {
 		const connection = await this.whenConnected;
 
 		return this.doUpdateItems(connection, request);
 	}
 
-	private doUpdateItems(connection: IDatabaseConnection, request: IUpdateRequest): Promise<codemavi> {
+	private doUpdateItems(connection: IDatabaseConnection, request: IUpdateRequest): Promise<void> {
 		if (this.logger.isTracing) {
 			this.logger.trace(`[storage ${this.name}] updateItems(): insert(${request.insert ? mapToString(request.insert) : '0'}), delete(${request.delete ? setToString(request.delete) : '0'})`);
 		}
@@ -152,7 +152,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		});
 	}
 
-	async optimize(): Promise<codemavi> {
+	async optimize(): Promise<void> {
 		this.logger.trace(`[storage ${this.name}] vacuum()`);
 
 		const connection = await this.whenConnected;
@@ -160,7 +160,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		return this.exec(connection, 'VACUUM');
 	}
 
-	async close(recovery?: () => Map<string, string>): Promise<codemavi> {
+	async close(recovery?: () => Map<string, string>): Promise<void> {
 		this.logger.trace(`[storage ${this.name}] close()`);
 
 		const connection = await this.whenConnected;
@@ -168,7 +168,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		return this.doClose(connection, recovery);
 	}
 
-	private doClose(connection: IDatabaseConnection, recovery?: () => Map<string, string>): Promise<codemavi> {
+	private doClose(connection: IDatabaseConnection, recovery?: () => Map<string, string>): Promise<void> {
 		return new Promise((resolve, reject) => {
 			connection.db.close(closeError => {
 				if (closeError) {
@@ -229,7 +229,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		});
 	}
 
-	private backup(): Promise<codemavi> {
+	private backup(): Promise<void> {
 		const backupPath = this.toBackupPath(this.path);
 
 		return Promises.copy(this.path, backupPath, { preserveSymlinks: false });
@@ -306,7 +306,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		}
 	}
 
-	private handleSQLiteError(connection: IDatabaseConnection, msg: string): codemavi {
+	private handleSQLiteError(connection: IDatabaseConnection, msg: string): void {
 		connection.isErroneous = true;
 		connection.lastError = msg;
 
@@ -349,7 +349,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		});
 	}
 
-	private exec(connection: IDatabaseConnection, sql: string): Promise<codemavi> {
+	private exec(connection: IDatabaseConnection, sql: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			connection.db.exec(sql, error => {
 				if (error) {
@@ -391,7 +391,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		});
 	}
 
-	private transaction(connection: IDatabaseConnection, transactions: () => codemavi): Promise<codemavi> {
+	private transaction(connection: IDatabaseConnection, transactions: () => void): Promise<void> {
 		return new Promise((resolve, reject) => {
 			connection.db.serialize(() => {
 				connection.db.run('BEGIN TRANSACTION');
@@ -411,7 +411,7 @@ export class SQLiteStorageDatabase implements IStorageDatabase {
 		});
 	}
 
-	private prepare(connection: IDatabaseConnection, sql: string, runCallback: (stmt: Statement) => codemavi, errorDetails: () => string): codemavi {
+	private prepare(connection: IDatabaseConnection, sql: string, runCallback: (stmt: Statement) => void, errorDetails: () => string): void {
 		const stmt = connection.db.prepare(sql);
 
 		const statementErrorListener = (error: Error) => {
@@ -439,8 +439,8 @@ class SQLiteStorageDatabaseLogger {
 	// might hide useful output to look at
 	private static readonly VSCODE_TRACE_STORAGE = 'VSCODE_TRACE_STORAGE';
 
-	private readonly logTrace: ((msg: string) => codemavi) | undefined;
-	private readonly logError: ((error: string | Error) => codemavi) | undefined;
+	private readonly logTrace: ((msg: string) => void) | undefined;
+	private readonly logError: ((error: string | Error) => void) | undefined;
 
 	constructor(options?: ISQLiteStorageDatabaseLoggingOptions) {
 		if (options && typeof options.logTrace === 'function' && process.env[SQLiteStorageDatabaseLogger.VSCODE_TRACE_STORAGE]) {
@@ -456,11 +456,11 @@ class SQLiteStorageDatabaseLogger {
 		return !!this.logTrace;
 	}
 
-	trace(msg: string): codemavi {
+	trace(msg: string): void {
 		this.logTrace?.(msg);
 	}
 
-	error(error: string | Error): codemavi {
+	error(error: string | Error): void {
 		this.logError?.(error);
 	}
 }

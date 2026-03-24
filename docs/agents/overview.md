@@ -132,9 +132,9 @@ Code Mavi uses a hierarchical prompt system that combines:
 ```
 1. Base Agent Prompt (System-defined)
    ↓
-2. Global User Rules (~/.codemavi/global-rules.md)
+2. Global User Rules (~/.mavi/global-rules.md)
    ↓
-3. Project Rules (.codemavi/rules.md)
+3. Project Rules (.mavi/rules.md)
    ↓
 4. Dynamic Context (Current session state)
    ↓
@@ -154,7 +154,7 @@ Unlike closed systems, Code Mavi exposes all prompts:
 
 Users can define rules at multiple levels:
 
-**Global Rules (`~/.codemavi/global-rules.md`):**
+**Global Rules (`~/.mavi/global-rules.md`):**
 ```markdown
 # Global Development Rules
 - Always write descriptive commit messages
@@ -163,7 +163,7 @@ Users can define rules at multiple levels:
 - Document public APIs
 ```
 
-**Project Rules (`.codemavi/rules.md`):**
+**Project Rules (`.mavi/rules.md`):**
 ```markdown
 # Project-Specific Rules
 - Use TypeScript strict mode
@@ -364,7 +364,7 @@ New tools can be added through:
 - No user escalation
 
 **Solutions:**
-1. Check `.codemavi/rules.md` for conflicting rules
+1. Check `.mavi/rules.md` for conflicting rules
 2. Review agent logs for error patterns
 3. Use checkpoint to rollback and retry
 4. Simplify the task and try again

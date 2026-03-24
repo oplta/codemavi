@@ -42,7 +42,7 @@ export const CutAction = supportsCut ? registerCommand(new MultiCommand({
 	precondition: undefined,
 	kbOpts: (
 		// Do not bind cut keybindings in the browser,
-		// since browsers do that for us and it acodemavis security prompts
+		// since browsers do that for us and it avoids security prompts
 		platform.isNative ? {
 			primary: KeyMod.CtrlCmd | KeyCode.KeyX,
 			win: { primary: KeyMod.CtrlCmd | KeyCode.KeyX, secondary: [KeyMod.Shift | KeyCode.Delete] },
@@ -79,7 +79,7 @@ export const CopyAction = supportsCopy ? registerCommand(new MultiCommand({
 	precondition: undefined,
 	kbOpts: (
 		// Do not bind copy keybindings in the browser,
-		// since browsers do that for us and it acodemavis security prompts
+		// since browsers do that for us and it avoids security prompts
 		platform.isNative ? {
 			primary: KeyMod.CtrlCmd | KeyCode.KeyC,
 			win: { primary: KeyMod.CtrlCmd | KeyCode.KeyC, secondary: [KeyMod.CtrlCmd | KeyCode.Insert] },
@@ -119,7 +119,7 @@ export const PasteAction = supportsPaste ? registerCommand(new MultiCommand({
 	precondition: undefined,
 	kbOpts: (
 		// Do not bind paste keybindings in the browser,
-		// since browsers do that for us and it acodemavis security prompts
+		// since browsers do that for us and it avoids security prompts
 		platform.isNative ? {
 			primary: KeyMod.CtrlCmd | KeyCode.KeyV,
 			win: { primary: KeyMod.CtrlCmd | KeyCode.KeyV, secondary: [KeyMod.Shift | KeyCode.Insert] },
@@ -167,7 +167,7 @@ class ExecCommandCopyWithSyntaxHighlightingAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -185,7 +185,7 @@ class ExecCommandCopyWithSyntaxHighlightingAction extends EditorAction {
 	}
 }
 
-function registerExecCommandImpl(target: MultiCommand | undefined, browserCommand: 'cut' | 'copy'): codemavi {
+function registerExecCommandImpl(target: MultiCommand | undefined, browserCommand: 'cut' | 'copy'): void {
 	if (!target) {
 		return;
 	}

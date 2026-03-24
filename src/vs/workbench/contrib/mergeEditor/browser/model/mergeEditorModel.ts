@@ -115,13 +115,13 @@ export class MergeEditorModel extends EditorModel {
 		});
 	}
 
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		if (this.options.resetResult) {
 			await this.reset();
 		}
 	}
 
-	public async reset(): Promise<codemavi> {
+	public async reset(): Promise<void> {
 		await waitForState(this.inputDiffComputingState, state => state === MergeEditorModelState.upToDate);
 		const states = this.modifiedBaseRangeResultStates.get();
 
@@ -325,7 +325,7 @@ export class MergeEditorModel extends EditorModel {
 	public readonly onInitialized = waitForState(this.diffComputingState, state => state === MergeEditorModelState.upToDate).then(() => { });
 
 	private firstRun = true;
-	private updateBaseRangeAcceptedState(resultDiffs: DetailedLineRangeMapping[], states: Map<ModifiedBaseRange, ModifiedBaseRangeData>, tx: ITransaction): codemavi {
+	private updateBaseRangeAcceptedState(resultDiffs: DetailedLineRangeMapping[], states: Map<ModifiedBaseRange, ModifiedBaseRangeData>, tx: ITransaction): void {
 		const baseRangeWithStoreAndTouchingDiffs = leftJoin(
 			states,
 			resultDiffs,
@@ -414,7 +414,7 @@ export class MergeEditorModel extends EditorModel {
 		_markInputAsHandled: boolean | InputNumber,
 		tx: ITransaction,
 		_pushStackElement: boolean = false
-	): codemavi {
+	): void {
 		if (!this.isUpToDate.get()) {
 			throw new BugIndicatingError('Cannot set state while updating');
 		}
@@ -459,7 +459,7 @@ export class MergeEditorModel extends EditorModel {
 		existingState.handledInput2.set(true, tx);
 	}
 
-	public resetDirtyConflictsToBase(): codemavi {
+	public resetDirtyConflictsToBase(): void {
 		transaction(tx => {
 			/** @description Reset Unknown Base Range States */
 			this.resultTextModel.pushStackElement();
@@ -481,7 +481,7 @@ export class MergeEditorModel extends EditorModel {
 		return inputNumber === 1 ? state.handledInput1 : state.handledInput2;
 	}
 
-	public setInputHandled(baseRange: ModifiedBaseRange, inputNumber: InputNumber, handled: boolean, tx: ITransaction): codemavi {
+	public setInputHandled(baseRange: ModifiedBaseRange, inputNumber: InputNumber, handled: boolean, tx: ITransaction): void {
 		const state = this.modifiedBaseRangeResultStates.get().get(baseRange)!;
 		if (state.handled.get() === handled) {
 			return;
@@ -530,7 +530,7 @@ export class MergeEditorModel extends EditorModel {
 		}
 	}
 
-	public setHandled(baseRange: ModifiedBaseRange, handled: boolean, tx: ITransaction): codemavi {
+	public setHandled(baseRange: ModifiedBaseRange, handled: boolean, tx: ITransaction): void {
 		const state = this.modifiedBaseRangeResultStates.get().get(baseRange)!;
 		if (state.handled.get() === handled) {
 			return;
@@ -553,7 +553,7 @@ export class MergeEditorModel extends EditorModel {
 
 	public readonly hasUnhandledConflicts = this.unhandledConflictsCount.map(value => /** @description hasUnhandledConflicts */ value > 0);
 
-	public setLanguageId(languageId: string, source?: string): codemavi {
+	public setLanguageId(languageId: string, source?: string): void {
 		const language = this.languageService.createById(languageId);
 		this.base.setLanguage(language, source);
 		this.input1.textModel.setLanguage(language, source);

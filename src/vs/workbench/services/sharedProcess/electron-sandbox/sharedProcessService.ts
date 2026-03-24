@@ -52,7 +52,7 @@ export class SharedProcessService extends Disposable implements ISharedProcessSe
 		return this._register(new MessagePortClient(port, `window:${this.windowId}`));
 	}
 
-	notifyRestored(): codemavi {
+	notifyRestored(): void {
 		if (!this.restoredBarrier.isOpen()) {
 			this.restoredBarrier.open();
 		}
@@ -62,7 +62,7 @@ export class SharedProcessService extends Disposable implements ISharedProcessSe
 		return getDelayedChannel(this.withSharedProcessConnection.then(connection => connection.getChannel(channelName)));
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<string>): codemavi {
+	registerChannel(channelName: string, channel: IServerChannel<string>): void {
 		this.withSharedProcessConnection.then(connection => connection.registerChannel(channelName, channel));
 	}
 

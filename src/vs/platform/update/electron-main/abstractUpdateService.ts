@@ -39,7 +39,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		return this._state;
 	}
 
-	protected setState(state: State): codemavi {
+	protected setState(state: State): void {
 		this.logService.info('update#setState', state.type);
 		this._state = state;
 		this._onStateChange.fire(state);
@@ -59,10 +59,10 @@ export abstract class AbstractUpdateService implements IUpdateService {
 
 	/**
 	 * This must be called before any other call. This is a performance
-	 * optimization, to acodemavi using extra CPU cycles before first window open.
+	 * optimization, to avoid using extra CPU cycles before first window open.
 	 * https://github.com/microsoft/vscode/issues/89784
 	 */
-	protected async initialize(): Promise<codemavi> {
+	protected async initialize(): Promise<void> {
 		if (!this.environmentMainService.isBuilt) {
 			this.setState(State.Disabled(DisablementReason.NotBuilt));
 			return; // updates are never enabled when running out of sources
@@ -125,7 +125,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		return updateMode === 'none' ? undefined : this.productService.quality;
 	}
 
-	private scheduleCheckForUpdates(delay = 60 * 60 * 1000): Promise<codemavi> {
+	private scheduleCheckForUpdates(delay = 60 * 60 * 1000): Promise<void> {
 		return timeout(delay)
 			.then(() => this.checkForUpdates(false))
 			.then(() => {
@@ -134,7 +134,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 			});
 	}
 
-	async checkForUpdates(explicit: boolean): Promise<codemavi> {
+	async checkForUpdates(explicit: boolean): Promise<void> {
 		this.logService.trace('update#checkForUpdates, state = ', this.state.type);
 
 		if (this.state.type !== StateType.Idle) {
@@ -144,7 +144,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		this.doCheckForUpdates(explicit);
 	}
 
-	async downloadUpdate(): Promise<codemavi> {
+	async downloadUpdate(): Promise<void> {
 		this.logService.trace('update#downloadUpdate, state = ', this.state.type);
 
 		if (this.state.type !== StateType.AvailableForDownload) {
@@ -154,11 +154,11 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		await this.doDownloadUpdate(this.state);
 	}
 
-	protected async doDownloadUpdate(state: AvailableForDownload): Promise<codemavi> {
+	protected async doDownloadUpdate(state: AvailableForDownload): Promise<void> {
 		// noop
 	}
 
-	async applyUpdate(): Promise<codemavi> {
+	async applyUpdate(): Promise<void> {
 		this.logService.trace('update#applyUpdate, state = ', this.state.type);
 
 		if (this.state.type !== StateType.Downloaded) {
@@ -168,11 +168,11 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		await this.doApplyUpdate();
 	}
 
-	protected async doApplyUpdate(): Promise<codemavi> {
+	protected async doApplyUpdate(): Promise<void> {
 		// noop
 	}
 
-	quitAndInstall(): Promise<codemavi> {
+	quitAndInstall(): Promise<void> {
 		this.logService.trace('update#quitAndInstall, state = ', this.state.type);
 
 		if (this.state.type !== StateType.Ready) {
@@ -218,7 +218,7 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		}
 	}
 
-	async _applySpecificUpdate(packagePath: string): Promise<codemavi> {
+	async _applySpecificUpdate(packagePath: string): Promise<void> {
 		// noop
 	}
 
@@ -226,10 +226,10 @@ export abstract class AbstractUpdateService implements IUpdateService {
 		return UpdateType.Archive;
 	}
 
-	protected doQuitAndInstall(): codemavi {
+	protected doQuitAndInstall(): void {
 		// noop
 	}
 
 	protected abstract buildUpdateFeedUrl(quality: string): string | undefined;
-	protected abstract doCheckForUpdates(context: any): codemavi;
+	protected abstract doCheckForUpdates(context: any): void;
 }

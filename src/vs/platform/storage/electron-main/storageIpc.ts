@@ -33,7 +33,7 @@ export class StorageDatabaseChannel extends Disposable implements IServerChannel
 
 	//#region Storage Change Events
 
-	private registerStorageChangeListeners(storage: IStorageMain, emitter: Emitter<ISerializableItemsChangeEvent>): codemavi {
+	private registerStorageChangeListeners(storage: IStorageMain, emitter: Emitter<ISerializableItemsChangeEvent>): void {
 
 		// Listen for changes in provided storage to send to listeners
 		// that are listening. Use a debouncer to reduce IPC traffic.

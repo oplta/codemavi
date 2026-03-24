@@ -86,7 +86,7 @@ export class MouseWheelClassifier {
 		return (score <= 0.5);
 	}
 
-	public acceptStandardWheelEvent(e: StandardWheelEvent): codemavi {
+	public acceptStandardWheelEvent(e: StandardWheelEvent): void {
 		if (isChrome) {
 			const targetWindow = dom.getWindow(e.browserEvent);
 			const pageZoomFactor = getZoomFactor(targetWindow);
@@ -98,7 +98,7 @@ export class MouseWheelClassifier {
 		}
 	}
 
-	public accept(timestamp: number, deltaX: number, deltaY: number): codemavi {
+	public accept(timestamp: number, deltaX: number, deltaY: number): void {
 		let previousItem = null;
 		const item = new MouseWheelClassifierItem(timestamp, deltaX, deltaY);
 
@@ -148,7 +148,7 @@ export class MouseWheelClassifier {
 			const absPreviousDeltaX = Math.abs(previousItem.deltaX);
 			const absPreviousDeltaY = Math.abs(previousItem.deltaY);
 
-			// Min 1 to acodemavi division by zero, module 1 will still be 0.
+			// Min 1 to avoid division by zero, module 1 will still be 0.
 			const minDeltaX = Math.max(Math.min(absDeltaX, absPreviousDeltaX), 1);
 			const minDeltaY = Math.max(Math.min(absDeltaY, absPreviousDeltaY), 1);
 
@@ -268,7 +268,7 @@ export abstract class AbstractScrollableElement extends Widget {
 		this._revealOnScroll = true;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._mouseWheelToDispose = dispose(this._mouseWheelToDispose);
 		super.dispose();
 	}
@@ -291,7 +291,7 @@ export abstract class AbstractScrollableElement extends Widget {
 	 * Delegate a pointer down event to the vertical scrollbar.
 	 * This is to help with clicking somewhere else and having the scrollbar react.
 	 */
-	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): codemavi {
+	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): void {
 		this._verticalScrollbar.delegatePointerDown(browserEvent);
 	}
 
@@ -299,14 +299,14 @@ export abstract class AbstractScrollableElement extends Widget {
 		return this._scrollable.getScrollDimensions();
 	}
 
-	public setScrollDimensions(dimensions: INewScrollDimensions): codemavi {
+	public setScrollDimensions(dimensions: INewScrollDimensions): void {
 		this._scrollable.setScrollDimensions(dimensions, false);
 	}
 
 	/**
 	 * Update the class name of the scrollable element.
 	 */
-	public updateClassName(newClassName: string): codemavi {
+	public updateClassName(newClassName: string): void {
 		this._options.className = newClassName;
 		// Defaults are different on Macs
 		if (platform.isMacintosh) {
@@ -318,7 +318,7 @@ export abstract class AbstractScrollableElement extends Widget {
 	/**
 	 * Update configuration options for the scrollbar.
 	 */
-	public updateOptions(newOptions: ScrollableElementChangeOptions): codemavi {
+	public updateOptions(newOptions: ScrollableElementChangeOptions): void {
 		if (typeof newOptions.handleMouseWheel !== 'undefined') {
 			this._options.handleMouseWheel = newOptions.handleMouseWheel;
 			this._setListeningToMouseWheel(this._options.handleMouseWheel);
@@ -365,7 +365,7 @@ export abstract class AbstractScrollableElement extends Widget {
 
 	// -------------------- mouse wheel scrolling --------------------
 
-	private _setListeningToMouseWheel(shouldListen: boolean): codemavi {
+	private _setListeningToMouseWheel(shouldListen: boolean): void {
 		const isListening = (this._mouseWheelToDispose.length > 0);
 
 		if (isListening === shouldListen) {
@@ -386,7 +386,7 @@ export abstract class AbstractScrollableElement extends Widget {
 		}
 	}
 
-	private _onMouseWheel(e: StandardWheelEvent): codemavi {
+	private _onMouseWheel(e: StandardWheelEvent): void {
 		if (e.browserEvent?.defaultPrevented) {
 			return;
 		}
@@ -488,7 +488,7 @@ export abstract class AbstractScrollableElement extends Widget {
 		}
 	}
 
-	private _onDidScroll(e: ScrollEvent): codemavi {
+	private _onDidScroll(e: ScrollEvent): void {
 		this._shouldRender = this._horizontalScrollbar.onDidScroll(e) || this._shouldRender;
 		this._shouldRender = this._verticalScrollbar.onDidScroll(e) || this._shouldRender;
 
@@ -509,7 +509,7 @@ export abstract class AbstractScrollableElement extends Widget {
 	 * Render / mutate the DOM now.
 	 * Should be used together with the ctor option `lazyRender`.
 	 */
-	public renderNow(): codemavi {
+	public renderNow(): void {
 		if (!this._options.lazyRender) {
 			throw new Error('Please use `lazyRender` together with `renderNow`!');
 		}
@@ -517,7 +517,7 @@ export abstract class AbstractScrollableElement extends Widget {
 		this._render();
 	}
 
-	private _render(): codemavi {
+	private _render(): void {
 		if (!this._shouldRender) {
 			return;
 		}
@@ -543,40 +543,40 @@ export abstract class AbstractScrollableElement extends Widget {
 
 	// -------------------- fade in / fade out --------------------
 
-	private _onDragStart(): codemavi {
+	private _onDragStart(): void {
 		this._isDragging = true;
 		this._reveal();
 	}
 
-	private _onDragEnd(): codemavi {
+	private _onDragEnd(): void {
 		this._isDragging = false;
 		this._hide();
 	}
 
-	private _onMouseLeave(e: IMouseEvent): codemavi {
+	private _onMouseLeave(e: IMouseEvent): void {
 		this._mouseIsOver = false;
 		this._hide();
 	}
 
-	private _onMouseOver(e: IMouseEvent): codemavi {
+	private _onMouseOver(e: IMouseEvent): void {
 		this._mouseIsOver = true;
 		this._reveal();
 	}
 
-	private _reveal(): codemavi {
+	private _reveal(): void {
 		this._verticalScrollbar.beginReveal();
 		this._horizontalScrollbar.beginReveal();
 		this._scheduleHide();
 	}
 
-	private _hide(): codemavi {
+	private _hide(): void {
 		if (!this._mouseIsOver && !this._isDragging) {
 			this._verticalScrollbar.beginHide();
 			this._horizontalScrollbar.beginHide();
 		}
 	}
 
-	private _scheduleHide(): codemavi {
+	private _scheduleHide(): void {
 		if (!this._mouseIsOver && !this._isDragging) {
 			this._hideTimeout.cancelAndSet(() => this._hide(), HIDE_TIMEOUT);
 		}
@@ -597,7 +597,7 @@ export class ScrollableElement extends AbstractScrollableElement {
 		this._register(scrollable);
 	}
 
-	public setScrollPosition(update: INewScrollPosition): codemavi {
+	public setScrollPosition(update: INewScrollPosition): void {
 		this._scrollable.setScrollPositionNow(update);
 	}
 
@@ -612,7 +612,7 @@ export class SmoothScrollableElement extends AbstractScrollableElement {
 		super(element, options, scrollable);
 	}
 
-	public setScrollPosition(update: INewScrollPosition & { reuseAnimation?: boolean }): codemavi {
+	public setScrollPosition(update: INewScrollPosition & { reuseAnimation?: boolean }): void {
 		if (update.reuseAnimation) {
 			this._scrollable.setScrollPositionSmooth(update, update.reuseAnimation);
 		} else {
@@ -652,7 +652,7 @@ export class DomScrollableElement extends AbstractScrollableElement {
 		this.scanDomNode();
 	}
 
-	public setScrollPosition(update: INewScrollPosition): codemavi {
+	public setScrollPosition(update: INewScrollPosition): void {
 		this._scrollable.setScrollPositionNow(update);
 	}
 
@@ -660,7 +660,7 @@ export class DomScrollableElement extends AbstractScrollableElement {
 		return this._scrollable.getCurrentScrollPosition();
 	}
 
-	public scanDomNode(): codemavi {
+	public scanDomNode(): void {
 		// width, scrollLeft, scrollWidth, height, scrollTop, scrollHeight
 		this.setScrollDimensions({
 			width: this._element.clientWidth,

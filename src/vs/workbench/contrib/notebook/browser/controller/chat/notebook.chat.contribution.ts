@@ -169,7 +169,7 @@ export class SelectAndInsertKernelVariableAction extends Action2 {
 
 	static readonly ID = 'notebook.chat.selectAndInsertKernelVariable';
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const notebookKernelService = accessor.get(INotebookKernelService);
 		const quickInputService = accessor.get(IQuickInputService);
@@ -274,7 +274,7 @@ registerAction2(class CopyCellOutputAction extends Action2 {
 		return getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 	}
 
-	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, outputContext: INotebookOutputActionContext | { outputViewModel: ICellOutputViewModel } | undefined): Promise<void> {
 		const notebookEditor = this.getNoteboookEditor(accessor.get(IEditorService), outputContext);
 
 		if (!notebookEditor) {

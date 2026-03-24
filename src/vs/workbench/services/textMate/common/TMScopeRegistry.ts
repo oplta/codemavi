@@ -35,11 +35,11 @@ export class TMScopeRegistry {
 		this._scopeNameToLanguageRegistration = Object.create(null);
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._scopeNameToLanguageRegistration = Object.create(null);
 	}
 
-	public register(def: IValidGrammarDefinition): codemavi {
+	public register(def: IValidGrammarDefinition): void {
 		if (this._scopeNameToLanguageRegistration[def.scopeName]) {
 			const existingRegistration = this._scopeNameToLanguageRegistration[def.scopeName];
 			if (!resources.isEqual(existingRegistration.location, def.location)) {

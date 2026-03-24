@@ -5,7 +5,7 @@
 
 import { promisify } from 'util'
 import { exec as _exec } from 'child_process'
-import { IMaviSCMService } from '../common/codemaviSCMTypes.js'
+import { IMaviSCMService } from '../common/maviSCMTypes.js'
 
 interface NumStat {
 	file: string
@@ -53,7 +53,7 @@ const hasStagedChanges = async (path: string): Promise<boolean> => {
 	return output.length > 0
 }
 
-export class Code MaviSCMService implements IMaviSCMService {
+export class MaviSCMService implements IMaviSCMService {
 	readonly _serviceBrand: undefined
 
 	async gitStat(path: string): Promise<string> {

@@ -67,7 +67,7 @@ export class ViewOverlayWidgets extends ViewPart {
 		this.overflowingOverlayWidgetsDomNode.setClassName('overflowingOverlayWidgets');
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._widgets = {};
 	}
@@ -92,7 +92,7 @@ export class ViewOverlayWidgets extends ViewPart {
 
 	// ---- end view event handlers
 
-	public addWidget(widget: IOverlayWidget): codemavi {
+	public addWidget(widget: IOverlayWidget): void {
 		const domNode = createFastDomNode(widget.getDomNode());
 
 		this._widgets[widget.getId()] = {
@@ -132,7 +132,7 @@ export class ViewOverlayWidgets extends ViewPart {
 		return true;
 	}
 
-	public removeWidget(widget: IOverlayWidget): codemavi {
+	public removeWidget(widget: IOverlayWidget): void {
 		const widgetId = widget.getId();
 		if (this._widgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._widgets[widgetId];
@@ -145,7 +145,7 @@ export class ViewOverlayWidgets extends ViewPart {
 		}
 	}
 
-	private _updateMaxMinWidth(): codemavi {
+	private _updateMaxMinWidth(): void {
 		let maxMinWidth = 0;
 		const keys = Object.keys(this._widgets);
 		for (let i = 0, len = keys.length; i < len; i++) {
@@ -159,7 +159,7 @@ export class ViewOverlayWidgets extends ViewPart {
 		this._context.viewLayout.setOverlayWidgetsMinWidth(maxMinWidth);
 	}
 
-	private _renderWidget(widgetData: IWidgetData, stackCoordinates: number[]): codemavi {
+	private _renderWidget(widgetData: IWidgetData, stackCoordinates: number[]): void {
 		const domNode = widgetData.domNode;
 
 		if (widgetData.preference === null) {
@@ -208,11 +208,11 @@ export class ViewOverlayWidgets extends ViewPart {
 		}
 	}
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		this._viewDomNodeRect = dom.getDomNodePagePosition(this._viewDomNode.domNode);
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		this._domNode.setWidth(this._editorWidth);
 
 		const keys = Object.keys(this._widgets);

@@ -26,17 +26,17 @@ class ViewContainerActivityByView extends Disposable {
 		this._register(Event.filter(this.viewDescriptorService.onDidChangeLocation, e => e.views.some(view => view.id === viewId))(() => this.update()));
 	}
 
-	setActivity(activity: IActivity): codemavi {
+	setActivity(activity: IActivity): void {
 		this.activity = activity;
 		this.update();
 	}
 
-	clearActivity(): codemavi {
+	clearActivity(): void {
 		this.activity = undefined;
 		this.update();
 	}
 
-	private update(): codemavi {
+	private update(): void {
 		this.activityDisposable.dispose();
 		const container = this.viewDescriptorService.getViewContainerByViewId(this.viewId);
 		if (container && this.activity) {

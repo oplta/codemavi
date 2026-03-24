@@ -34,7 +34,7 @@ export class ExtensionManagementCLI {
 		return undefined;
 	}
 
-	public async listExtensions(showVersions: boolean, category?: string, profileLocation?: URI): Promise<codemavi> {
+	public async listExtensions(showVersions: boolean, category?: string, profileLocation?: URI): Promise<void> {
 		let extensions = await this.extensionManagementService.getInstalled(ExtensionType.User, profileLocation);
 		const categories = EXTENSION_CATEGORIES.map(c => c.toLowerCase());
 		if (category && category !== '') {
@@ -70,7 +70,7 @@ export class ExtensionManagementCLI {
 		}
 	}
 
-	public async installExtensions(extensions: (string | URI)[], builtinExtensions: (string | URI)[], installOptions: InstallOptions, force: boolean): Promise<codemavi> {
+	public async installExtensions(extensions: (string | URI)[], builtinExtensions: (string | URI)[], installOptions: InstallOptions, force: boolean): Promise<void> {
 		const failed: string[] = [];
 
 		try {
@@ -127,7 +127,7 @@ export class ExtensionManagementCLI {
 		}
 	}
 
-	public async updateExtensions(profileLocation?: URI): Promise<codemavi> {
+	public async updateExtensions(profileLocation?: URI): Promise<void> {
 		const installedExtensions = await this.extensionManagementService.getInstalled(ExtensionType.User, profileLocation);
 
 		const installedExtensionsQuery: IExtensionInfo[] = [];
@@ -247,7 +247,7 @@ export class ExtensionManagementCLI {
 		return failed;
 	}
 
-	private async installVSIX(vsix: URI, installOptions: InstallOptions, force: boolean, installedExtensions: ILocalExtension[]): Promise<codemavi> {
+	private async installVSIX(vsix: URI, installOptions: InstallOptions, force: boolean, installedExtensions: ILocalExtension[]): Promise<void> {
 
 		const manifest = await this.extensionManagementService.getManifest(vsix);
 		if (!manifest) {
@@ -305,7 +305,7 @@ export class ExtensionManagementCLI {
 		return this.validateExtensionKind(manifest);
 	}
 
-	public async uninstallExtensions(extensions: (string | URI)[], force: boolean, profileLocation?: URI): Promise<codemavi> {
+	public async uninstallExtensions(extensions: (string | URI)[], force: boolean, profileLocation?: URI): Promise<void> {
 		const getId = async (extensionDescription: string | URI): Promise<string> => {
 			if (extensionDescription instanceof URI) {
 				const manifest = await this.extensionManagementService.getManifest(extensionDescription);
@@ -345,7 +345,7 @@ export class ExtensionManagementCLI {
 		}
 	}
 
-	public async locateExtension(extensions: string[]): Promise<codemavi> {
+	public async locateExtension(extensions: string[]): Promise<void> {
 		const installed = await this.extensionManagementService.getInstalled();
 		extensions.forEach(e => {
 			installed.forEach(i => {

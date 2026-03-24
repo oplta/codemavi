@@ -68,7 +68,7 @@ export interface TelemetryReporter {
 		[key: string]: string;
 	}, measurements?: {
 		[key: string]: number;
-	}): codemavi;
+	}): void;
 }
 
 export type LanguageClientConstructor = (name: string, description: string, clientOptions: LanguageClientOptions) => BaseLanguageClient;
@@ -80,12 +80,12 @@ export interface Runtime {
 	fileFs?: FileSystemProvider;
 	telemetry?: TelemetryReporter;
 	readonly timer: {
-		setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): Disposable;
+		setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): Disposable;
 	};
 }
 
 export interface AsyncDisposable {
-	dispose(): Promise<codemavi>;
+	dispose(): Promise<void>;
 }
 
 export async function startClient(context: ExtensionContext, newLanguageClient: LanguageClientConstructor, runtime: Runtime): Promise<AsyncDisposable> {
@@ -224,7 +224,7 @@ async function startClientWithParticipants(languageParticipants: LanguagePartici
 	});
 	toDispose.push(disposable2);
 
-	// manually register / deregister format provider based on the `html.format.enable` setting acodemaviing issues with late registration. See #71652.
+	// manually register / deregister format provider based on the `html.format.enable` setting avoiding issues with late registration. See #71652.
 	updateFormatterRegistration();
 	toDispose.push({ dispose: () => rangeFormatting && rangeFormatting.dispose() });
 	toDispose.push(workspace.onDidChangeConfiguration(e => e.affectsConfiguration(SettingIds.formatEnable) && updateFormatterRegistration()));

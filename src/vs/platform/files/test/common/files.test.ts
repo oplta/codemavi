@@ -154,7 +154,7 @@ suite('Files', () => {
 		assert.strictEqual(event.correlates(120), false);
 	});
 
-	function testIsEqual(testMethod: (pA: string, pB: string, ignoreCase: boolean) => boolean): codemavi {
+	function testIsEqual(testMethod: (pA: string, pB: string, ignoreCase: boolean) => boolean): void {
 
 		// corner cases
 		assert(testMethod('', '', true));

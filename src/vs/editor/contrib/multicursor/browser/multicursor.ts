@@ -29,7 +29,7 @@ import { ILanguageFeaturesService } from '../../../common/services/languageFeatu
 import { getSelectionHighlightDecorationOptions } from '../../wordHighlighter/browser/highlightDecorations.js';
 import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
 
-function announceCursorChange(previousCursorState: CursorState[], cursorState: CursorState[]): codemavi {
+function announceCursorChange(previousCursorState: CursorState[], cursorState: CursorState[]): void {
 	const cursorDiff = cursorState.filter(cs => !previousCursorState.find(pcs => pcs.equals(cs)));
 	if (cursorDiff.length >= 1) {
 		const cursorPositions = cursorDiff.map(cs => `line ${cs.viewState.position.lineNumber} column ${cs.viewState.position.column}`).join(', ');
@@ -63,7 +63,7 @@ export class InsertCursorAbove extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -115,7 +115,7 @@ export class InsertCursorBelow extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -163,7 +163,7 @@ class InsertCursorAtEndOfEachLineSelected extends EditorAction {
 		});
 	}
 
-	private getCursorsForSelection(selection: Selection, model: ITextModel, result: Selection[]): codemavi {
+	private getCursorsForSelection(selection: Selection, model: ITextModel, result: Selection[]): void {
 		if (selection.isEmpty()) {
 			return;
 		}
@@ -177,7 +177,7 @@ class InsertCursorAtEndOfEachLineSelected extends EditorAction {
 		}
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -206,7 +206,7 @@ class InsertCursorAtEndOfLineSelected extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -238,7 +238,7 @@ class InsertCursorAtTopOfLineSelected extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -467,12 +467,12 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		this._session = null;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._endSession();
 		super.dispose();
 	}
 
-	private _beginSessionIfNeeded(findController: CommonFindController): codemavi {
+	private _beginSessionIfNeeded(findController: CommonFindController): void {
 		if (!this._session) {
 			// Create a new session
 			const session = MultiCursorSession.create(this._editor, findController);
@@ -507,7 +507,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		}
 	}
 
-	private _endSession(): codemavi {
+	private _endSession(): void {
 		this._sessionDispose.clear();
 		if (this._session && this._session.isDisconnectedFromFindController) {
 			const newState: INewFindReplaceState = {
@@ -520,7 +520,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		this._session = null;
 	}
 
-	private _setSelections(selections: Selection[]): codemavi {
+	private _setSelections(selections: Selection[]): void {
 		this._ignoreSelectionChange = true;
 		this._editor.setSelections(selections);
 		this._ignoreSelectionChange = false;
@@ -537,7 +537,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		return new Selection(selection.startLineNumber, word.startColumn, selection.startLineNumber, word.endColumn);
 	}
 
-	private _applySessionResult(result: MultiCursorSessionResult | null): codemavi {
+	private _applySessionResult(result: MultiCursorSessionResult | null): void {
 		if (!result) {
 			return;
 		}
@@ -551,7 +551,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		return this._session;
 	}
 
-	public addSelectionToNextFindMatch(findController: CommonFindController): codemavi {
+	public addSelectionToNextFindMatch(findController: CommonFindController): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -579,28 +579,28 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		}
 	}
 
-	public addSelectionToPreviousFindMatch(findController: CommonFindController): codemavi {
+	public addSelectionToPreviousFindMatch(findController: CommonFindController): void {
 		this._beginSessionIfNeeded(findController);
 		if (this._session) {
 			this._applySessionResult(this._session.addSelectionToPreviousFindMatch());
 		}
 	}
 
-	public moveSelectionToNextFindMatch(findController: CommonFindController): codemavi {
+	public moveSelectionToNextFindMatch(findController: CommonFindController): void {
 		this._beginSessionIfNeeded(findController);
 		if (this._session) {
 			this._applySessionResult(this._session.moveSelectionToNextFindMatch());
 		}
 	}
 
-	public moveSelectionToPreviousFindMatch(findController: CommonFindController): codemavi {
+	public moveSelectionToPreviousFindMatch(findController: CommonFindController): void {
 		this._beginSessionIfNeeded(findController);
 		if (this._session) {
 			this._applySessionResult(this._session.moveSelectionToPreviousFindMatch());
 		}
 	}
 
-	public selectAll(findController: CommonFindController): codemavi {
+	public selectAll(findController: CommonFindController): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -649,7 +649,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 		}
 	}
 
-	public selectAllUsingSelections(selections: Selection[]): codemavi {
+	public selectAllUsingSelections(selections: Selection[]): void {
 		if (selections.length > 0) {
 			this._setSelections(selections);
 		}
@@ -658,7 +658,7 @@ export class MultiCursorSelectionController extends Disposable implements IEdito
 
 export abstract class MultiCursorSelectionControllerAction extends EditorAction {
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const multiCursorController = MultiCursorSelectionController.get(editor);
 		if (!multiCursorController) {
 			return;
@@ -679,7 +679,7 @@ export abstract class MultiCursorSelectionControllerAction extends EditorAction 
 		}
 	}
 
-	protected abstract _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi;
+	protected abstract _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void;
 }
 
 export class AddSelectionToNextFindMatchAction extends MultiCursorSelectionControllerAction {
@@ -701,7 +701,7 @@ export class AddSelectionToNextFindMatchAction extends MultiCursorSelectionContr
 			}
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.addSelectionToNextFindMatch(findController);
 	}
 }
@@ -720,7 +720,7 @@ export class AddSelectionToPreviousFindMatchAction extends MultiCursorSelectionC
 			}
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.addSelectionToPreviousFindMatch(findController);
 	}
 }
@@ -738,7 +738,7 @@ export class MoveSelectionToNextFindMatchAction extends MultiCursorSelectionCont
 			}
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.moveSelectionToNextFindMatch(findController);
 	}
 }
@@ -751,7 +751,7 @@ export class MoveSelectionToPreviousFindMatchAction extends MultiCursorSelection
 			precondition: undefined
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.moveSelectionToPreviousFindMatch(findController);
 	}
 }
@@ -775,7 +775,7 @@ export class SelectHighlightsAction extends MultiCursorSelectionControllerAction
 			}
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.selectAll(findController);
 	}
 }
@@ -797,7 +797,7 @@ export class CompatChangeAll extends MultiCursorSelectionControllerAction {
 			}
 		});
 	}
-	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): codemavi {
+	protected _run(multiCursorController: MultiCursorSelectionController, findController: CommonFindController): void {
 		multiCursorController.selectAll(findController);
 	}
 }
@@ -896,7 +896,7 @@ export class SelectionHighlighter extends Disposable implements IEditorContribut
 		this.updateSoon.schedule();
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		this._setState(SelectionHighlighter._createState(this.state, this._isEnabled, this.editor));
 	}
 
@@ -976,7 +976,7 @@ export class SelectionHighlighter extends Disposable implements IEditorContribut
 		return new SelectionHighlighterState(editor.getModel(), r.searchText, r.matchCase, r.wholeWord ? editor.getOption(EditorOption.wordSeparators) : null, oldState);
 	}
 
-	private _setState(newState: SelectionHighlighterState | null): codemavi {
+	private _setState(newState: SelectionHighlighterState | null): void {
 		this.state = newState;
 
 		if (!this.state) {
@@ -1039,7 +1039,7 @@ export class SelectionHighlighter extends Disposable implements IEditorContribut
 		this._decorations.set(decorations);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._setState(null);
 		super.dispose();
 	}
@@ -1078,7 +1078,7 @@ export class FocusNextCursor extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -1116,7 +1116,7 @@ export class FocusPreviousCursor extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}

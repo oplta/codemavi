@@ -29,7 +29,7 @@ class ToggleKeybindingsLogAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const logging = accessor.get(IKeybindingService).toggleLogging();
 		if (logging) {
 			const commandService = accessor.get(ICommandService);
@@ -63,7 +63,7 @@ class ToggleKeybindingsLogAction extends Action2 {
 
 		const onKeyDown = disposables.add(new Emitter<KeyboardEvent>());
 
-		function registerWindowListeners(window: Window, disposables: DisposableStore): codemavi {
+		function registerWindowListeners(window: Window, disposables: DisposableStore): void {
 			disposables.add(disposables.add(new DomEmitter(window, 'keydown', true)).event(e => onKeyDown.fire(e)));
 		}
 

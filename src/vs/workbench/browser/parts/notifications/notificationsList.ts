@@ -43,7 +43,7 @@ export class NotificationsList extends Disposable {
 		super();
 	}
 
-	show(): codemavi {
+	show(): void {
 		if (this.isVisible) {
 			return; // already visible
 		}
@@ -57,7 +57,7 @@ export class NotificationsList extends Disposable {
 		this.isVisible = true;
 	}
 
-	private createNotificationsList(): codemavi {
+	private createNotificationsList(): void {
 
 		// List Container
 		this.listContainer = $('.notifications-list-container');
@@ -182,7 +182,7 @@ export class NotificationsList extends Disposable {
 		}
 	}
 
-	updateNotificationHeight(item: INotificationViewItem): codemavi {
+	updateNotificationHeight(item: INotificationViewItem): void {
 		const index = this.viewModel.indexOf(item);
 		if (index === -1) {
 			return;
@@ -193,7 +193,7 @@ export class NotificationsList extends Disposable {
 		list.layout();
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		if (!this.isVisible || !this.list) {
 			return; // already hidden
 		}
@@ -208,7 +208,7 @@ export class NotificationsList extends Disposable {
 		this.viewModel = [];
 	}
 
-	focusFirst(): codemavi {
+	focusFirst(): void {
 		if (!this.list) {
 			return; // not created yet
 		}
@@ -225,7 +225,7 @@ export class NotificationsList extends Disposable {
 		return isAncestorOfActiveElement(this.listContainer);
 	}
 
-	layout(width: number, maxHeight?: number): codemavi {
+	layout(width: number, maxHeight?: number): void {
 		if (this.listContainer && this.list) {
 			this.listContainer.style.width = `${width}px`;
 
@@ -237,7 +237,7 @@ export class NotificationsList extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.hide();
 
 		super.dispose();

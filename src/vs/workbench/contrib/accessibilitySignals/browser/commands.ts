@@ -29,7 +29,7 @@ export class ShowSignalSoundHelp extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const accessibilitySignalService = accessor.get(IAccessibilitySignalService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const configurationService = accessor.get(IConfigurationService);
@@ -101,7 +101,7 @@ export class ShowAccessibilityAnnouncementHelp extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const accessibilitySignalService = accessor.get(IAccessibilitySignalService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const configurationService = accessor.get(IConfigurationService);

@@ -274,7 +274,7 @@ suite('Async', () => {
 
 		suite('ThrottledDelayer', () => {
 			test('promise should resolve if disposed', async () => {
-				const throttledDelayer = new async.ThrottledDelayer<codemavi>(100);
+				const throttledDelayer = new async.ThrottledDelayer<void>(100);
 				const promise = throttledDelayer.trigger(async () => { }, 0);
 				throttledDelayer.dispose();
 
@@ -287,7 +287,7 @@ suite('Async', () => {
 			});
 
 			test('trigger after dispose throws', async () => {
-				const throttledDelayer = new async.ThrottledDelayer<codemavi>(100);
+				const throttledDelayer = new async.ThrottledDelayer<void>(100);
 				throttledDelayer.dispose();
 				await assert.rejects(() => throttledDelayer.trigger(async () => { }, 0));
 			});
@@ -774,7 +774,7 @@ suite('Async', () => {
 			assert.strictEqual(done2, true);
 
 			// schedule some work
-			const w1 = new async.DeferredPromise<codemavi>();
+			const w1 = new async.DeferredPromise<void>();
 			queue.queueFor(URI.file('/some/path'), () => w1.p);
 
 			let drained = false;
@@ -785,8 +785,8 @@ suite('Async', () => {
 			assert.strictEqual(drained, true);
 
 			// schedule some work
-			const w2 = new async.DeferredPromise<codemavi>();
-			const w3 = new async.DeferredPromise<codemavi>();
+			const w2 = new async.DeferredPromise<void>();
+			const w3 = new async.DeferredPromise<void>();
 			queue.queueFor(URI.file('/some/path'), () => w2.p);
 			queue.queueFor(URI.file('/some/other/path'), () => w3.p);
 

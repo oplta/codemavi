@@ -29,7 +29,7 @@ suite('ResourceWorkingCopy', function () {
 		isDirty(): boolean { return false; }
 		async backup(token: CancellationToken): Promise<IWorkingCopyBackup> { throw new Error('Method not implemented.'); }
 		async save(options?: ISaveOptions): Promise<boolean> { return false; }
-		async revert(options?: IRevertOptions): Promise<codemavi> { }
+		async revert(options?: IRevertOptions): Promise<void> { }
 
 	}
 

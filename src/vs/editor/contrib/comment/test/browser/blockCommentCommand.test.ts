@@ -13,7 +13,7 @@ import { BlockCommentCommand } from '../../browser/blockCommentCommand.js';
 import { testCommand } from '../../../../test/browser/testCommand.js';
 import { ServicesAccessor } from '../../../../../platform/instantiation/common/instantiation.js';
 
-function _testCommentCommand(lines: string[], selection: Selection, commandFactory: (accessor: ServicesAccessor, selection: Selection) => ICommand, expectedLines: string[], expectedSelection: Selection): codemavi {
+function _testCommentCommand(lines: string[], selection: Selection, commandFactory: (accessor: ServicesAccessor, selection: Selection) => ICommand, expectedLines: string[], expectedSelection: Selection): void {
 	const languageId = 'commentMode';
 	const prepare = (accessor: ServicesAccessor, disposables: DisposableStore) => {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
@@ -26,7 +26,7 @@ function _testCommentCommand(lines: string[], selection: Selection, commandFacto
 	testCommand(lines, languageId, selection, commandFactory, expectedLines, expectedSelection, undefined, prepare);
 }
 
-function testBlockCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
+function testBlockCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
 	_testCommentCommand(lines, selection, (accessor, sel) => new BlockCommentCommand(sel, true, accessor.get(ILanguageConfigurationService)), expectedLines, expectedSelection);
 }
 
@@ -489,7 +489,7 @@ suite('Editor Contrib - Block Comment Command', () => {
 	});
 
 	test('insertSpace false', () => {
-		function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
+		function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
 			_testCommentCommand(lines, selection, (accessor, sel) => new BlockCommentCommand(sel, false, accessor.get(ILanguageConfigurationService)), expectedLines, expectedSelection);
 		}
 
@@ -506,7 +506,7 @@ suite('Editor Contrib - Block Comment Command', () => {
 	});
 
 	test('insertSpace false does not remove space', () => {
-		function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
+		function testLineCommentCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
 			_testCommentCommand(lines, selection, (accessor, sel) => new BlockCommentCommand(sel, false, accessor.get(ILanguageConfigurationService)), expectedLines, expectedSelection);
 		}
 

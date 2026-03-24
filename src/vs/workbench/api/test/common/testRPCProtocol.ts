@@ -58,7 +58,7 @@ export class TestRPCProtocol implements IExtHostContext, IExtHostRpcService {
 		this._proxies = Object.create(null);
 	}
 
-	drain(): Promise<codemavi> {
+	drain(): Promise<void> {
 		return Promise.resolve();
 	}
 
@@ -150,7 +150,7 @@ export class TestRPCProtocol implements IExtHostContext, IExtHostRpcService {
 		throw new Error('Not implemented!');
 	}
 
-	public assertRegistered(identifiers: ProxyIdentifier<any>[]): codemavi {
+	public assertRegistered(identifiers: ProxyIdentifier<any>[]): void {
 		throw new Error('Not implemented!');
 	}
 }

@@ -15,7 +15,7 @@ import { GoogleAuth } from 'google-auth-library'
 /* eslint-enable */
 
 import { AnthropicLLMChatMessage, GeminiLLMChatMessage, LLMChatMessage, LLMFIMMessage, ModelListParams, OllamaModelResponse, OnError, OnFinalMessage, OnText, RawToolCallObj, RawToolParamsObj } from '../../common/sendLLMMessageTypes.js';
-import { ChatMode, displayInfoOfProviderName, ModelSelectionOptions, OverridesOfModel, ProviderName, SettingsOfProvider } from '../../common/codemaviSettingsTypes.js';
+import { ChatMode, displayInfoOfProviderName, ModelSelectionOptions, OverridesOfModel, ProviderName, SettingsOfProvider } from '../../common/maviSettingsTypes.js';
 import { getSendableReasoningInfo, getModelCapabilities, getProviderCapabilities, defaultProviderSettings, getReservedOutputTokenSpace } from '../../common/modelCapabilities.js';
 import { extractReasoningWrapper, extractXMLToolsWrapper } from './extractGrammar.js';
 import { availableTools, InternalToolInfo } from '../../common/prompt/prompts.js';
@@ -41,7 +41,7 @@ type InternalCommonMessageParams = {
 	modelSelectionOptions: ModelSelectionOptions | undefined;
 	overridesOfModel: OverridesOfModel | undefined;
 	modelName: string;
-	_setAborter: (aborter: () => codemavi) => codemavi;
+	_setAborter: (aborter: () => void) => void;
 }
 
 type SendChatParams_Internal = InternalCommonMessageParams & {
@@ -100,8 +100,8 @@ const newOpenAICompatibleSDK = async ({ settingsOfProvider, providerName, includ
 			baseURL: 'https://openrouter.ai/api/v1',
 			apiKey: thisConfig.apiKey,
 			defaultHeaders: {
-				'HTTP-Referer': 'https://codemavieditor.com', // Optional, for including your app on openrouter.ai rankings.
-				'X-Title': 'Code Mavi', // Optional. Shows in rankings on openrouter.ai.
+				'HTTP-Referer': 'https://mavieditor.com', // Optional, for including your app on openrouter.ai rankings.
+				'X-Title': 'Mavi', // Optional. Shows in rankings on openrouter.ai.
 			},
 			...commonPayloadOpts,
 		})
@@ -168,7 +168,7 @@ const newOpenAICompatibleSDK = async ({ settingsOfProvider, providerName, includ
 		return new OpenAI({ baseURL: 'https://api.mistral.ai/v1', apiKey: thisConfig.apiKey, ...commonPayloadOpts })
 	}
 
-	else throw new Error(`Code Mavi providerName was invalid: ${providerName}.`)
+	else throw new Error(`Mavi providerName was invalid: ${providerName}.`)
 }
 
 
@@ -372,7 +372,7 @@ const _sendOpenAICompatibleChat = async ({ messages, onText, onFinalMessage, onE
 			}
 			// on final
 			if (!fullTextSoFar && !fullReasoningSoFar && !toolName) {
-				onError({ message: 'Code Mavi: Response from model was empty.', fullError: null })
+				onError({ message: 'Mavi: Response from model was empty.', fullError: null })
 			}
 			else {
 				const toolCall = rawToolCallObjOfParamsStr(toolName, toolParamsStr, toolId)
@@ -620,7 +620,7 @@ const sendMistralFIM = ({ messages, onFinalMessage, onError, settingsOfProvider,
 // ------------ OLLAMA ------------
 const newOllamaSDK = ({ endpoint }: { endpoint: string }) => {
 	// if endpoint is empty, normally ollama will send to 11434, but we want it to fail - the user should type it in
-	if (!endpoint) throw new Error(`Ollama Endpoint was empty (please enter ${defaultProviderSettings.ollama.endpoint} in Code Mavi if you want the default url).`)
+	if (!endpoint) throw new Error(`Ollama Endpoint was empty (please enter ${defaultProviderSettings.ollama.endpoint} in Mavi if you want the default url).`)
 	const ollama = new Ollama({ host: endpoint })
 	return ollama
 }
@@ -817,7 +817,7 @@ const sendGeminiChat = async ({
 
 			// on final
 			if (!fullTextSoFar && !fullReasoningSoFar && !toolName) {
-				onError({ message: 'Code Mavi: Response from model was empty.', fullError: null })
+				onError({ message: 'Mavi: Response from model was empty.', fullError: null })
 			} else {
 				if (!toolId) toolId = generateUuid() // ids are empty, but other providers might expect an id
 				const toolCall = rawToolCallObjOfParamsStr(toolName, toolParamsStr, toolId)
@@ -848,9 +848,9 @@ const sendGeminiChat = async ({
 
 type CallFnOfProvider = {
 	[providerName in ProviderName]: {
-		sendChat: (params: SendChatParams_Internal) => Promise<codemavi>;
-		sendFIM: ((params: SendFIMParams_Internal) => codemavi) | null;
-		list: ((params: ListParams_Internal<any>) => codemavi) | null;
+		sendChat: (params: SendChatParams_Internal) => Promise<void>;
+		sendFIM: ((params: SendFIMParams_Internal) => void) | null;
+		list: ((params: ListParams_Internal<any>) => void) | null;
 	}
 }
 

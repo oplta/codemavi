@@ -61,7 +61,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 
 		// This property is intentionally `Lazy` and not using `realcase()` as the counterpart
 		// in the recursive watcher because of the amount of paths this watcher is dealing with.
-		// We try as much as possible to acodemavi even needing `realpath()` if we can because even
+		// We try as much as possible to avoid even needing `realpath()` if we can because even
 		// that method does an `lstat()` per segment of the path.
 
 		let result = this.request.path;
@@ -79,7 +79,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		return result;
 	});
 
-	readonly ready: Promise<codemavi>;
+	readonly ready: Promise<void>;
 
 	private _isReusingRecursiveWatcher = false;
 	get isReusingRecursiveWatcher(): boolean { return this._isReusingRecursiveWatcher; }
@@ -90,9 +90,9 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 	constructor(
 		private readonly request: INonRecursiveWatchRequest,
 		private readonly recursiveWatcher: IRecursiveWatcherWithSubscribe | undefined,
-		private readonly onDidFilesChange: (changes: IFileChange[]) => codemavi,
-		private readonly onDidWatchFail?: () => codemavi,
-		private readonly onLogMessage?: (msg: ILogMessage) => codemavi,
+		private readonly onDidFilesChange: (changes: IFileChange[]) => void,
+		private readonly onDidWatchFail?: () => void,
+		private readonly onLogMessage?: (msg: ILogMessage) => void,
 		private verboseLogging?: boolean
 	) {
 		super();
@@ -104,7 +104,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		this.ready = this.watch();
 	}
 
-	private async watch(): Promise<codemavi> {
+	private async watch(): Promise<void> {
 		try {
 			const stat = await promises.stat(this.request.path);
 
@@ -124,7 +124,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		}
 	}
 
-	private notifyWatchFailed(): codemavi {
+	private notifyWatchFailed(): void {
 		this.didFail = true;
 
 		this.onDidWatchFail?.();
@@ -187,7 +187,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		return false;
 	}
 
-	private async doWatchWithNodeJS(isDirectory: boolean, disposables: DisposableStore): Promise<codemavi> {
+	private async doWatchWithNodeJS(isDirectory: boolean, disposables: DisposableStore): Promise<void> {
 		const realPath = await this.realPath.value;
 
 		// macOS: watching samba shares can crash VSCode so we do
@@ -437,7 +437,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		}
 	}
 
-	private onWatchedPathDeleted(resource: URI): codemavi {
+	private onWatchedPathDeleted(resource: URI): void {
 		this.warn('Watcher shutdown because watched path got deleted');
 
 		// Emit events and flush in case the watcher gets disposed
@@ -447,7 +447,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		this.notifyWatchFailed();
 	}
 
-	private onFileChange(event: IFileChange, skipIncludeExcludeChecks = false): codemavi {
+	private onFileChange(event: IFileChange, skipIncludeExcludeChecks = false): void {
 		if (this.cts.token.isCancellationRequested) {
 			return;
 		}
@@ -471,7 +471,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		}
 	}
 
-	private handleFileChanges(fileChanges: IFileChange[]): codemavi {
+	private handleFileChanges(fileChanges: IFileChange[]): void {
 
 		// Coalesce events: merge events of same kind
 		const coalescedFileChanges = coalesceEvents(fileChanges);
@@ -531,35 +531,35 @@ export class NodeJSFileWatcherLibrary extends Disposable {
 		}
 	}
 
-	setVerboseLogging(verboseLogging: boolean): codemavi {
+	setVerboseLogging(verboseLogging: boolean): void {
 		this.verboseLogging = verboseLogging;
 	}
 
-	private error(error: string): codemavi {
+	private error(error: string): void {
 		if (!this.cts.token.isCancellationRequested) {
 			this.onLogMessage?.({ type: 'error', message: `[File Watcher (node.js)] ${error}` });
 		}
 	}
 
-	private warn(message: string): codemavi {
+	private warn(message: string): void {
 		if (!this.cts.token.isCancellationRequested) {
 			this.onLogMessage?.({ type: 'warn', message: `[File Watcher (node.js)] ${message}` });
 		}
 	}
 
-	private trace(message: string): codemavi {
+	private trace(message: string): void {
 		if (!this.cts.token.isCancellationRequested && this.verboseLogging) {
 			this.onLogMessage?.({ type: 'trace', message: `[File Watcher (node.js)] ${message}` });
 		}
 	}
 
-	private traceWithCorrelation(message: string): codemavi {
+	private traceWithCorrelation(message: string): void {
 		if (!this.cts.token.isCancellationRequested && this.verboseLogging) {
 			this.trace(`${message}${typeof this.request.correlationId === 'number' ? ` <${this.request.correlationId}> ` : ``}`);
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.cts.dispose(true);
 
 		super.dispose();
@@ -570,7 +570,7 @@ export class NodeJSFileWatcherLibrary extends Disposable {
  * Watch the provided `path` for changes and return
  * the data in chunks of `Uint8Array` for further use.
  */
-export async function watchFileContents(path: string, onData: (chunk: Uint8Array) => codemavi, onReady: () => codemavi, token: CancellationToken, bufferSize = 512): Promise<codemavi> {
+export async function watchFileContents(path: string, onData: (chunk: Uint8Array) => void, onReady: () => void, token: CancellationToken, bufferSize = 512): Promise<void> {
 	const handle = await Promises.open(path, 'r');
 	const buffer = Buffer.allocUnsafe(bufferSize);
 
@@ -616,7 +616,7 @@ export async function watchFileContents(path: string, onData: (chunk: Uint8Array
 	await watcher.ready;
 	onReady();
 
-	return new Promise<codemavi>((resolve, reject) => {
+	return new Promise<void>((resolve, reject) => {
 		cts.token.onCancellationRequested(async () => {
 			watcher.dispose();
 

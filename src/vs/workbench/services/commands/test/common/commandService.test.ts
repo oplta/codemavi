@@ -27,7 +27,7 @@ suite('CommandService', function () {
 		let lastEvent: string;
 
 		const service = new CommandService(new InstantiationService(), new class extends NullExtensionService {
-			override activateByEvent(activationEvent: string): Promise<codemavi> {
+			override activateByEvent(activationEvent: string): Promise<void> {
 				lastEvent = activationEvent;
 				return super.activateByEvent(activationEvent);
 			}
@@ -46,7 +46,7 @@ suite('CommandService', function () {
 	test('fwd activation error', async function () {
 
 		const extensionService = new class extends NullExtensionService {
-			override activateByEvent(activationEvent: string): Promise<codemavi> {
+			override activateByEvent(activationEvent: string): Promise<void> {
 				return Promise.reject(new Error('bad_activate'));
 			}
 		};
@@ -107,7 +107,7 @@ suite('CommandService', function () {
 		const events: string[] = [];
 		const service = new CommandService(new InstantiationService(), new class extends NullExtensionService {
 
-			override activateByEvent(event: string): Promise<codemavi> {
+			override activateByEvent(event: string): Promise<void> {
 				events.push(event);
 				if (event === '*') {
 					return new Promise(() => { }); //forever promise...
@@ -142,7 +142,7 @@ suite('CommandService', function () {
 		const disposables = new DisposableStore();
 		const service = new CommandService(new InstantiationService(), new class extends NullExtensionService {
 
-			override activateByEvent(event: string): Promise<codemavi> {
+			override activateByEvent(event: string): Promise<void> {
 				if (event === '*') {
 					return new Promise(() => { }); //forever promise...
 				}

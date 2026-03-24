@@ -43,9 +43,9 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 	readonly onDidChangeActiveGroup = this._onDidChangeActiveGroup.event;
 	private readonly _onDidDisposeGroup = this._register(new Emitter<ITerminalGroup>());
 	readonly onDidDisposeGroup = this._onDidDisposeGroup.event;
-	private readonly _onDidChangeGroups = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeGroups = this._register(new Emitter<void>());
 	readonly onDidChangeGroups = this._onDidChangeGroups.event;
-	private readonly _onDidShow = this._register(new Emitter<codemavi>());
+	private readonly _onDidShow = this._register(new Emitter<void>());
 	readonly onDidShow = this._onDidShow.event;
 
 	private readonly _onDidDisposeInstance = this._register(new Emitter<ITerminalInstance>());
@@ -54,7 +54,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 	readonly onDidFocusInstance = this._onDidFocusInstance.event;
 	private readonly _onDidChangeActiveInstance = this._register(new Emitter<ITerminalInstance | undefined>());
 	readonly onDidChangeActiveInstance = this._onDidChangeActiveInstance.event;
-	private readonly _onDidChangeInstances = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeInstances = this._register(new Emitter<void>());
 	readonly onDidChangeInstances = this._onDidChangeInstances.event;
 	private readonly _onDidChangeInstanceCapability = this._register(new Emitter<ITerminalInstance>());
 	readonly onDidChangeInstanceCapability = this._onDidChangeInstanceCapability.event;
@@ -80,7 +80,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		this._register(this._quickInputService.onHide(() => this._isQuickInputOpened = false));
 	}
 
-	hidePanel(): codemavi {
+	hidePanel(): void {
 		// Hide the panel if the terminal is in the panel and it has no sibling views
 		const panel = this._viewDescriptorService.getViewContainerByViewId(TERMINAL_VIEW_ID);
 		if (panel && this._viewDescriptorService.getViewContainerModel(panel).visibleViewDescriptors.length === 1) {
@@ -125,7 +125,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		this.groups.forEach(group => group.attachToElement(container));
 	}
 
-	async focusTabs(): Promise<codemavi> {
+	async focusTabs(): Promise<void> {
 		if (this.instances.length === 0) {
 			return;
 		}
@@ -134,7 +134,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		pane?.terminalTabbedView?.focusTabs();
 	}
 
-	async focusHover(): Promise<codemavi> {
+	async focusHover(): Promise<void> {
 		if (this.instances.length === 0) {
 			return;
 		}
@@ -143,11 +143,11 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		pane?.terminalTabbedView?.focusHover();
 	}
 
-	async focusInstance(_: ITerminalInstance): Promise<codemavi> {
+	async focusInstance(_: ITerminalInstance): Promise<void> {
 		return this.showPanel(true);
 	}
 
-	async focusActiveInstance(): Promise<codemavi> {
+	async focusActiveInstance(): Promise<void> {
 		return this.showPanel(true);
 	}
 
@@ -177,7 +177,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		return group;
 	}
 
-	async showPanel(focus?: boolean): Promise<codemavi> {
+	async showPanel(focus?: boolean): Promise<void> {
 		const pane = this._viewsService.getActiveViewWithId(TERMINAL_VIEW_ID)
 			?? await this._viewsService.openView(TERMINAL_VIEW_ID, focus);
 		pane?.setExpanded(true);
@@ -370,7 +370,7 @@ export class TerminalGroupService extends Disposable implements ITerminalGroupSe
 		this._onDidChangeInstances.fire();
 	}
 
-	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): codemavi {
+	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): void {
 		source = asArray(source);
 		const sourceGroups = this._getValidTerminalGroups(source);
 		if (sourceGroups.size === 0) {

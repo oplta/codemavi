@@ -64,7 +64,7 @@ export class ListService implements IListService {
 
 	constructor() { }
 
-	private setLastFocusedList(widget: WorkbenchListWidget | undefined): codemavi {
+	private setLastFocusedList(widget: WorkbenchListWidget | undefined): void {
 		if (widget === this._lastFocusedWidget) {
 			return;
 		}
@@ -100,7 +100,7 @@ export class ListService implements IListService {
 		);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }
@@ -200,7 +200,7 @@ class MultipleSelectionController<T> extends Disposable implements IMultipleSele
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration(multiSelectModifierSettingKey)) {
 				this.useAltAsMultipleSelectionModifier = useAltAsMultipleSelectionModifier(this.configurationService);
@@ -361,7 +361,7 @@ export class WorkbenchList<T> extends List<T> {
 		this.disposables.add(this.navigator);
 	}
 
-	override updateOptions(options: IWorkbenchListOptionsUpdate): codemavi {
+	override updateOptions(options: IWorkbenchListOptionsUpdate): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles !== undefined) {
@@ -373,7 +373,7 @@ export class WorkbenchList<T> extends List<T> {
 		}
 	}
 
-	private updateStyles(styles: IStyleOverride<IListStyles> | undefined): codemavi {
+	private updateStyles(styles: IStyleOverride<IListStyles> | undefined): void {
 		this.style(styles ? getListStyles(styles) : defaultListStyles);
 	}
 
@@ -475,7 +475,7 @@ export class WorkbenchPagedList<T> extends PagedList<T> {
 		this.disposables.add(this.navigator);
 	}
 
-	override updateOptions(options: IWorkbenchListOptionsUpdate): codemavi {
+	override updateOptions(options: IWorkbenchListOptionsUpdate): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles !== undefined) {
@@ -487,7 +487,7 @@ export class WorkbenchPagedList<T> extends PagedList<T> {
 		}
 	}
 
-	private updateStyles(styles: IStyleOverride<IListStyles> | undefined): codemavi {
+	private updateStyles(styles: IStyleOverride<IListStyles> | undefined): void {
 		this.style(styles ? getListStyles(styles) : defaultListStyles);
 	}
 
@@ -495,7 +495,7 @@ export class WorkbenchPagedList<T> extends PagedList<T> {
 		return this._useAltAsMultipleSelectionModifier;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disposables.dispose();
 		super.dispose();
 	}
@@ -620,7 +620,7 @@ export class WorkbenchTable<TRow> extends Table<TRow> {
 		this.disposables.add(this.navigator);
 	}
 
-	override updateOptions(options: IWorkbenchTableOptionsUpdate): codemavi {
+	override updateOptions(options: IWorkbenchTableOptionsUpdate): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles !== undefined) {
@@ -632,7 +632,7 @@ export class WorkbenchTable<TRow> extends Table<TRow> {
 		}
 	}
 
-	private updateStyles(styles: IStyleOverride<ITableStyles> | undefined): codemavi {
+	private updateStyles(styles: IStyleOverride<ITableStyles> | undefined): void {
 		this.style(styles ? getListStyles(styles) : defaultListStyles);
 	}
 
@@ -640,7 +640,7 @@ export class WorkbenchTable<TRow> extends Table<TRow> {
 		return this._useAltAsMultipleSelectionModifier;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disposables.dispose();
 		super.dispose();
 	}
@@ -709,7 +709,7 @@ abstract class ResourceNavigator<T> extends Disposable {
 		}
 	}
 
-	private onSelectionFromKeyboard(event: ITreeEvent<any>): codemavi {
+	private onSelectionFromKeyboard(event: ITreeEvent<any>): void {
 		if (event.elements.length !== 1) {
 			return;
 		}
@@ -722,7 +722,7 @@ abstract class ResourceNavigator<T> extends Disposable {
 		this._open(this.getSelectedElement(), preserveFocus, pinned, sideBySide, event.browserEvent);
 	}
 
-	private onPointer(element: T | undefined, browserEvent: MouseEvent): codemavi {
+	private onPointer(element: T | undefined, browserEvent: MouseEvent): void {
 		if (!this.openOnSingleClick) {
 			return;
 		}
@@ -741,7 +741,7 @@ abstract class ResourceNavigator<T> extends Disposable {
 		this._open(element, preserveFocus, pinned, sideBySide, browserEvent);
 	}
 
-	private onMouseDblClick(element: T | undefined, browserEvent?: MouseEvent): codemavi {
+	private onMouseDblClick(element: T | undefined, browserEvent?: MouseEvent): void {
 		if (!browserEvent) {
 			return;
 		}
@@ -762,7 +762,7 @@ abstract class ResourceNavigator<T> extends Disposable {
 		this._open(element, preserveFocus, pinned, sideBySide, browserEvent);
 	}
 
-	private _open(element: T | undefined, preserveFocus: boolean, pinned: boolean, sideBySide: boolean, browserEvent?: UIEvent): codemavi {
+	private _open(element: T | undefined, preserveFocus: boolean, pinned: boolean, sideBySide: boolean, browserEvent?: UIEvent): void {
 		if (!element) {
 			return;
 		}
@@ -863,7 +863,7 @@ export interface IWorkbenchObjectTreeOptions<T, TFilterData> extends IObjectTree
 	readonly scrollToActiveElement?: boolean;
 }
 
-export class WorkbenchObjectTree<T extends NonNullable<any>, TFilterData = codemavi> extends ObjectTree<T, TFilterData> {
+export class WorkbenchObjectTree<T extends NonNullable<any>, TFilterData = void> extends ObjectTree<T, TFilterData> {
 
 	private internals: WorkbenchTreeInternals<any, T, TFilterData>;
 	get contextKeyService(): IContextKeyService { return this.internals.contextKeyService; }
@@ -888,7 +888,7 @@ export class WorkbenchObjectTree<T extends NonNullable<any>, TFilterData = codem
 		this.disposables.add(this.internals);
 	}
 
-	override updateOptions(options: IAbstractTreeOptionsUpdate): codemavi {
+	override updateOptions(options: IAbstractTreeOptionsUpdate): void {
 		super.updateOptions(options);
 		this.internals.updateOptions(options);
 	}
@@ -903,7 +903,7 @@ export interface IWorkbenchCompressibleObjectTreeOptions<T, TFilterData> extends
 	readonly selectionNavigation?: boolean;
 }
 
-export class WorkbenchCompressibleObjectTree<T extends NonNullable<any>, TFilterData = codemavi> extends CompressibleObjectTree<T, TFilterData> {
+export class WorkbenchCompressibleObjectTree<T extends NonNullable<any>, TFilterData = void> extends CompressibleObjectTree<T, TFilterData> {
 
 	private internals: WorkbenchTreeInternals<any, T, TFilterData>;
 	get contextKeyService(): IContextKeyService { return this.internals.contextKeyService; }
@@ -928,7 +928,7 @@ export class WorkbenchCompressibleObjectTree<T extends NonNullable<any>, TFilter
 		this.disposables.add(this.internals);
 	}
 
-	override updateOptions(options: IWorkbenchCompressibleObjectTreeOptionsUpdate = {}): codemavi {
+	override updateOptions(options: IWorkbenchCompressibleObjectTreeOptionsUpdate = {}): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles) {
@@ -948,7 +948,7 @@ export interface IWorkbenchDataTreeOptions<T, TFilterData> extends IWorkbenchDat
 	readonly selectionNavigation?: boolean;
 }
 
-export class WorkbenchDataTree<TInput, T, TFilterData = codemavi> extends DataTree<TInput, T, TFilterData> {
+export class WorkbenchDataTree<TInput, T, TFilterData = void> extends DataTree<TInput, T, TFilterData> {
 
 	private internals: WorkbenchTreeInternals<TInput, T, TFilterData>;
 	get contextKeyService(): IContextKeyService { return this.internals.contextKeyService; }
@@ -974,7 +974,7 @@ export class WorkbenchDataTree<TInput, T, TFilterData = codemavi> extends DataTr
 		this.disposables.add(this.internals);
 	}
 
-	override updateOptions(options: IWorkbenchDataTreeOptionsUpdate = {}): codemavi {
+	override updateOptions(options: IWorkbenchDataTreeOptionsUpdate = {}): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles !== undefined) {
@@ -994,7 +994,7 @@ export interface IWorkbenchAsyncDataTreeOptions<T, TFilterData> extends IWorkben
 	readonly selectionNavigation?: boolean;
 }
 
-export class WorkbenchAsyncDataTree<TInput, T, TFilterData = codemavi> extends AsyncDataTree<TInput, T, TFilterData> {
+export class WorkbenchAsyncDataTree<TInput, T, TFilterData = void> extends AsyncDataTree<TInput, T, TFilterData> {
 
 	private internals: WorkbenchTreeInternals<TInput, T, TFilterData>;
 	get contextKeyService(): IContextKeyService { return this.internals.contextKeyService; }
@@ -1020,7 +1020,7 @@ export class WorkbenchAsyncDataTree<TInput, T, TFilterData = codemavi> extends A
 		this.disposables.add(this.internals);
 	}
 
-	override updateOptions(options: IWorkbenchAsyncDataTreeOptionsUpdate = {}): codemavi {
+	override updateOptions(options: IWorkbenchAsyncDataTreeOptionsUpdate = {}): void {
 		super.updateOptions(options);
 
 		if (options.overrideStyles) {
@@ -1037,7 +1037,7 @@ export interface IWorkbenchCompressibleAsyncDataTreeOptions<T, TFilterData> exte
 	readonly selectionNavigation?: boolean;
 }
 
-export class WorkbenchCompressibleAsyncDataTree<TInput, T, TFilterData = codemavi> extends CompressibleAsyncDataTree<TInput, T, TFilterData> {
+export class WorkbenchCompressibleAsyncDataTree<TInput, T, TFilterData = void> extends CompressibleAsyncDataTree<TInput, T, TFilterData> {
 
 	private internals: WorkbenchTreeInternals<TInput, T, TFilterData>;
 	get contextKeyService(): IContextKeyService { return this.internals.contextKeyService; }
@@ -1064,7 +1064,7 @@ export class WorkbenchCompressibleAsyncDataTree<TInput, T, TFilterData = codemav
 		this.disposables.add(this.internals);
 	}
 
-	override updateOptions(options: ICompressibleAsyncDataTreeOptionsUpdate): codemavi {
+	override updateOptions(options: ICompressibleAsyncDataTreeOptionsUpdate): void {
 		super.updateOptions(options);
 		this.internals.updateOptions(options);
 	}
@@ -1350,17 +1350,17 @@ class WorkbenchTreeInternals<TInput, T, TFilterData> {
 		return this._useAltAsMultipleSelectionModifier;
 	}
 
-	updateOptions(options: IWorkbenchTreeInternalsOptionsUpdate): codemavi {
+	updateOptions(options: IWorkbenchTreeInternalsOptionsUpdate): void {
 		if (options.multipleSelectionSupport !== undefined) {
 			this.listSupportsMultiSelect.set(!!options.multipleSelectionSupport);
 		}
 	}
 
-	updateStyleOverrides(overrideStyles?: IStyleOverride<IListStyles>): codemavi {
+	updateStyleOverrides(overrideStyles?: IStyleOverride<IListStyles>): void {
 		this.tree.style(overrideStyles ? getListStyles(overrideStyles) : defaultListStyles);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables = dispose(this.disposables);
 	}
 }

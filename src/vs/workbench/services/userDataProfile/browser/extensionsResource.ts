@@ -41,7 +41,7 @@ export class ExtensionsResourceInitializer implements IProfileResourceInitialize
 	) {
 	}
 
-	async initialize(content: string): Promise<codemavi> {
+	async initialize(content: string): Promise<void> {
 		const profileExtensions: IProfileExtension[] = JSON.parse(content);
 		const installedExtensions = await this.extensionManagementService.getInstalled(undefined, this.userDataProfileService.currentProfile.extensionsResource);
 		const extensionsToEnableOrDisable: { extension: IExtensionIdentifier; enable: boolean }[] = [];
@@ -117,7 +117,7 @@ export class ExtensionsResource implements IProfileResource {
 		return JSON.stringify(exclude?.length ? extensions.filter(e => !exclude.includes(e.identifier.id.toLowerCase())) : extensions);
 	}
 
-	async apply(content: string, profile: IUserDataProfile, progress?: (message: string) => codemavi, token?: CancellationToken): Promise<codemavi> {
+	async apply(content: string, profile: IUserDataProfile, progress?: (message: string) => void, token?: CancellationToken): Promise<void> {
 		return this.withProfileScopedServices(profile, async (extensionEnablementService) => {
 			const profileExtensions: IProfileExtension[] = await this.getProfileExtensions(content);
 			const installedExtensions = await this.extensionManagementService.getInstalled(undefined, profile.extensionsResource);
@@ -192,7 +192,7 @@ export class ExtensionsResource implements IProfileResource {
 		});
 	}
 
-	async copy(from: IUserDataProfile, to: IUserDataProfile, disableExtensions: boolean): Promise<codemavi> {
+	async copy(from: IUserDataProfile, to: IUserDataProfile, disableExtensions: boolean): Promise<void> {
 		await this.extensionManagementService.copyExtensions(from.extensionsResource, to.extensionsResource);
 		const extensionsToDisable = await this.withProfileScopedServices(from, async (extensionEnablementService) =>
 			extensionEnablementService.getDisabledExtensions());

@@ -314,19 +314,19 @@ export class Resource implements SourceControlResourceState {
 		private _renameResourceUri?: Uri,
 	) { }
 
-	async open(): Promise<codemavi> {
+	async open(): Promise<void> {
 		const command = this.command;
-		await commands.executeCommand<codemavi>(command.command, ...(command.arguments || []));
+		await commands.executeCommand<void>(command.command, ...(command.arguments || []));
 	}
 
-	async openFile(): Promise<codemavi> {
+	async openFile(): Promise<void> {
 		const command = this._commandResolver.resolveFileCommand(this);
-		await commands.executeCommand<codemavi>(command.command, ...(command.arguments || []));
+		await commands.executeCommand<void>(command.command, ...(command.arguments || []));
 	}
 
-	async openChange(): Promise<codemavi> {
+	async openChange(): Promise<void> {
 		const command = this._commandResolver.resolveChangeCommand(this);
-		await commands.executeCommand<codemavi>(command.command, ...(command.arguments || []));
+		await commands.executeCommand<void>(command.command, ...(command.arguments || []));
 	}
 
 	clone(resourceGroupType?: ResourceGroupType) {
@@ -361,7 +361,7 @@ class ProgressManager {
 		});
 	}
 
-	private updateEnablement(): codemavi {
+	private updateEnablement(): void {
 		const config = workspace.getConfiguration('git', Uri.file(this.repository.root));
 
 		if (config.get<boolean>('showProgress')) {
@@ -371,7 +371,7 @@ class ProgressManager {
 		}
 	}
 
-	private enable(): codemavi {
+	private enable(): void {
 		if (this.enabled) {
 			return;
 		}
@@ -390,7 +390,7 @@ class ProgressManager {
 		this.enabled = true;
 	}
 
-	private disable(): codemavi {
+	private disable(): void {
 		if (!this.enabled) {
 			return;
 		}
@@ -400,7 +400,7 @@ class ProgressManager {
 		this.enabled = false;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disable();
 	}
 }
@@ -419,7 +419,7 @@ class FileEventLogger {
 		this.onDidChangeLogLevel(logger.logLevel);
 	}
 
-	private onDidChangeLogLevel(logLevel: LogLevel): codemavi {
+	private onDidChangeLogLevel(logLevel: LogLevel): void {
 		this.eventDisposable.dispose();
 
 		if (logLevel > LogLevel.Debug) {
@@ -432,7 +432,7 @@ class FileEventLogger {
 		]);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.eventDisposable.dispose();
 		this.logLevelDisposable.dispose();
 	}
@@ -680,8 +680,8 @@ export class Repository implements Disposable {
 	private _onDidChangeState = new EventEmitter<RepositoryState>();
 	readonly onDidChangeState: Event<RepositoryState> = this._onDidChangeState.event;
 
-	private _onDidChangeStatus = new EventEmitter<codemavi>();
-	readonly onDidRunGitStatus: Event<codemavi> = this._onDidChangeStatus.event;
+	private _onDidChangeStatus = new EventEmitter<void>();
+	readonly onDidRunGitStatus: Event<void> = this._onDidChangeStatus.event;
 
 	private _onDidChangeOriginalResource = new EventEmitter<Uri>();
 	readonly onDidChangeOriginalResource: Event<Uri> = this._onDidChangeOriginalResource.event;
@@ -692,11 +692,11 @@ export class Repository implements Disposable {
 	private _onDidRunOperation = new EventEmitter<OperationResult>();
 	readonly onDidRunOperation: Event<OperationResult> = this._onDidRunOperation.event;
 
-	private _onDidChangeBranchProtection = new EventEmitter<codemavi>();
-	readonly onDidChangeBranchProtection: Event<codemavi> = this._onDidChangeBranchProtection.event;
+	private _onDidChangeBranchProtection = new EventEmitter<void>();
+	readonly onDidChangeBranchProtection: Event<void> = this._onDidChangeBranchProtection.event;
 
 	@memoize
-	get onDidChangeOperations(): Event<codemavi> {
+	get onDidChangeOperations(): Event<void> {
 		return anyEvent(this.onRunOperation as Event<any>, this.onDidRunOperation as Event<any>);
 	}
 
@@ -1107,12 +1107,12 @@ export class Repository implements Disposable {
 	}
 
 	@throttle
-	async status(): Promise<codemavi> {
+	async status(): Promise<void> {
 		await this.run(Operation.Status);
 	}
 
 	@throttle
-	async refresh(): Promise<codemavi> {
+	async refresh(): Promise<void> {
 		await this.run(Operation.Refresh);
 	}
 
@@ -1178,7 +1178,7 @@ export class Repository implements Disposable {
 		return this.run(Operation.HashObject, () => this.repository.hashObject(data));
 	}
 
-	async add(resources: Uri[], opts?: { update?: boolean }): Promise<codemavi> {
+	async add(resources: Uri[], opts?: { update?: boolean }): Promise<void> {
 		await this.run(
 			Operation.Add(!this.optimisticUpdateEnabled()),
 			async () => {
@@ -1216,11 +1216,11 @@ export class Repository implements Disposable {
 			});
 	}
 
-	async rm(resources: Uri[]): Promise<codemavi> {
+	async rm(resources: Uri[]): Promise<void> {
 		await this.run(Operation.Remove, () => this.repository.rm(resources.map(r => r.fsPath)));
 	}
 
-	async stage(resource: Uri, contents: string, encoding: string): Promise<codemavi> {
+	async stage(resource: Uri, contents: string, encoding: string): Promise<void> {
 		await this.run(Operation.Stage, async () => {
 			const data = await workspace.encode(contents, resource, { encoding });
 			await this.repository.stage(resource.fsPath, data);
@@ -1230,7 +1230,7 @@ export class Repository implements Disposable {
 		});
 	}
 
-	async revert(resources: Uri[]): Promise<codemavi> {
+	async revert(resources: Uri[]): Promise<void> {
 		await this.run(
 			Operation.RevertFiles(!this.optimisticUpdateEnabled()),
 			async () => {
@@ -1277,7 +1277,7 @@ export class Repository implements Disposable {
 			});
 	}
 
-	async commit(message: string | undefined, opts: CommitOptions = Object.create(null)): Promise<codemavi> {
+	async commit(message: string | undefined, opts: CommitOptions = Object.create(null)): Promise<void> {
 		const indexResources = [...this.indexGroup.resourceStates.map(r => r.resourceUri.fsPath)];
 		const workingGroupResources = opts.all && opts.all !== 'tracked' ?
 			[...this.workingTreeGroup.resourceStates.map(r => r.resourceUri.fsPath)] : [];
@@ -1347,7 +1347,7 @@ export class Repository implements Disposable {
 		return { indexGroup: [], mergeGroup: [], untrackedGroup, workingTreeGroup };
 	}
 
-	async clean(resources: Uri[]): Promise<codemavi> {
+	async clean(resources: Uri[]): Promise<void> {
 		const config = workspace.getConfiguration('git');
 		const discardUntrackedChangesToTrash = config.get<boolean>('discardUntrackedChangesToTrash', true) && !isRemote && !isLinuxSnap;
 
@@ -1390,7 +1390,7 @@ export class Repository implements Disposable {
 
 				if (toClean.length > 0) {
 					if (discardUntrackedChangesToTrash) {
-						const limiter = new Limiter<codemavi>(5);
+						const limiter = new Limiter<void>(5);
 						await Promise.all(toClean.map(fsPath => limiter.queue(
 							async () => await workspace.fs.delete(Uri.file(fsPath), { useTrash: true }))));
 					} else {
@@ -1429,7 +1429,7 @@ export class Repository implements Disposable {
 			});
 	}
 
-	closeDiffEditors(indexResources: string[] | undefined, workingTreeResources: string[] | undefined, ignoreSetting = false): codemavi {
+	closeDiffEditors(indexResources: string[] | undefined, workingTreeResources: string[] | undefined, ignoreSetting = false): void {
 		const config = workspace.getConfiguration('git', Uri.file(this.root));
 		if (!config.get<boolean>('closeDiffOnOperation', false) && !ignoreSetting) { return; }
 
@@ -1460,23 +1460,23 @@ export class Repository implements Disposable {
 		window.tabGroups.close(diffEditorTabsToClose, true);
 	}
 
-	async branch(name: string, _checkout: boolean, _ref?: string): Promise<codemavi> {
+	async branch(name: string, _checkout: boolean, _ref?: string): Promise<void> {
 		await this.run(Operation.Branch, () => this.repository.branch(name, _checkout, _ref));
 	}
 
-	async deleteBranch(name: string, force?: boolean): Promise<codemavi> {
+	async deleteBranch(name: string, force?: boolean): Promise<void> {
 		return this.run(Operation.DeleteBranch, async () => {
 			await this.repository.deleteBranch(name, force);
 			await this.repository.config('unset', 'local', `branch.${name}.vscode-merge-base`);
 		});
 	}
 
-	async renameBranch(name: string): Promise<codemavi> {
+	async renameBranch(name: string): Promise<void> {
 		await this.run(Operation.RenameBranch, () => this.repository.renameBranch(name));
 	}
 
 	@throttle
-	async fastForwardBranch(name: string): Promise<codemavi> {
+	async fastForwardBranch(name: string): Promise<void> {
 		// Get branch details
 		const branch = await this.getBranch(name);
 		if (!branch.upstream?.remote || !branch.upstream?.name || !branch.name) {
@@ -1496,15 +1496,15 @@ export class Repository implements Disposable {
 		}
 	}
 
-	async cherryPick(commitHash: string): Promise<codemavi> {
+	async cherryPick(commitHash: string): Promise<void> {
 		await this.run(Operation.CherryPick, () => this.repository.cherryPick(commitHash));
 	}
 
-	async cherryPickAbort(): Promise<codemavi> {
+	async cherryPickAbort(): Promise<void> {
 		await this.run(Operation.CherryPick, () => this.repository.cherryPickAbort());
 	}
 
-	async move(from: string, to: string): Promise<codemavi> {
+	async move(from: string, to: string): Promise<void> {
 		await this.run(Operation.Move, () => this.repository.move(from, to));
 	}
 
@@ -1639,35 +1639,35 @@ export class Repository implements Disposable {
 		return await this.run(Operation.GetRemoteRefs, () => this.repository.getRemoteRefs(remote, opts));
 	}
 
-	async setBranchUpstream(name: string, upstream: string): Promise<codemavi> {
+	async setBranchUpstream(name: string, upstream: string): Promise<void> {
 		await this.run(Operation.SetBranchUpstream, () => this.repository.setBranchUpstream(name, upstream));
 	}
 
-	async merge(ref: string): Promise<codemavi> {
+	async merge(ref: string): Promise<void> {
 		await this.run(Operation.Merge, () => this.repository.merge(ref));
 	}
 
-	async mergeAbort(): Promise<codemavi> {
+	async mergeAbort(): Promise<void> {
 		await this.run(Operation.MergeAbort, async () => await this.repository.mergeAbort());
 	}
 
-	async rebase(branch: string): Promise<codemavi> {
+	async rebase(branch: string): Promise<void> {
 		await this.run(Operation.Rebase, () => this.repository.rebase(branch));
 	}
 
-	async tag(options: { name: string; message?: string; ref?: string }): Promise<codemavi> {
+	async tag(options: { name: string; message?: string; ref?: string }): Promise<void> {
 		await this.run(Operation.Tag, () => this.repository.tag(options));
 	}
 
-	async deleteTag(name: string): Promise<codemavi> {
+	async deleteTag(name: string): Promise<void> {
 		await this.run(Operation.DeleteTag, () => this.repository.deleteTag(name));
 	}
 
-	async deleteRemoteRef(remoteName: string, refName: string, options?: { force?: boolean }): Promise<codemavi> {
+	async deleteRemoteRef(remoteName: string, refName: string, options?: { force?: boolean }): Promise<void> {
 		await this.run(Operation.DeleteRemoteRef, () => this.repository.deleteRemoteRef(remoteName, refName, options));
 	}
 
-	async checkout(treeish: string, opts?: { detached?: boolean; pullBeforeCheckout?: boolean }): Promise<codemavi> {
+	async checkout(treeish: string, opts?: { detached?: boolean; pullBeforeCheckout?: boolean }): Promise<void> {
 		const refLabel = opts?.detached ? getCommitShortHash(Uri.file(this.root), treeish) : treeish;
 
 		await this.run(Operation.Checkout(refLabel),
@@ -1685,7 +1685,7 @@ export class Repository implements Disposable {
 			});
 	}
 
-	async checkoutTracking(treeish: string, opts: { detached?: boolean } = {}): Promise<codemavi> {
+	async checkoutTracking(treeish: string, opts: { detached?: boolean } = {}): Promise<void> {
 		const refLabel = opts.detached ? getCommitShortHash(Uri.file(this.root), treeish) : treeish;
 		await this.run(Operation.CheckoutTracking(refLabel), () => this.repository.checkout(treeish, [], { ...opts, track: true }));
 	}
@@ -1707,11 +1707,11 @@ export class Repository implements Disposable {
 		return this._EMPTY_TREE;
 	}
 
-	async reset(treeish: string, hard?: boolean): Promise<codemavi> {
+	async reset(treeish: string, hard?: boolean): Promise<void> {
 		await this.run(Operation.Reset, () => this.repository.reset(treeish, hard));
 	}
 
-	async deleteRef(ref: string): Promise<codemavi> {
+	async deleteRef(ref: string): Promise<void> {
 		await this.run(Operation.DeleteRef, () => this.repository.deleteRef(ref));
 	}
 
@@ -1723,38 +1723,38 @@ export class Repository implements Disposable {
 		return this.remotes.find(r => r.name === 'origin') ?? this.remotes[0];
 	}
 
-	async addRemote(name: string, url: string): Promise<codemavi> {
+	async addRemote(name: string, url: string): Promise<void> {
 		await this.run(Operation.Remote, () => this.repository.addRemote(name, url));
 	}
 
-	async removeRemote(name: string): Promise<codemavi> {
+	async removeRemote(name: string): Promise<void> {
 		await this.run(Operation.Remote, () => this.repository.removeRemote(name));
 	}
 
-	async renameRemote(name: string, newName: string): Promise<codemavi> {
+	async renameRemote(name: string, newName: string): Promise<void> {
 		await this.run(Operation.Remote, () => this.repository.renameRemote(name, newName));
 	}
 
 	@throttle
-	async fetchDefault(options: { silent?: boolean } = {}): Promise<codemavi> {
+	async fetchDefault(options: { silent?: boolean } = {}): Promise<void> {
 		await this._fetch({ silent: options.silent });
 	}
 
 	@throttle
-	async fetchPrune(): Promise<codemavi> {
+	async fetchPrune(): Promise<void> {
 		await this._fetch({ prune: true });
 	}
 
 	@throttle
-	async fetchAll(options: { silent?: boolean } = {}, cancellationToken?: CancellationToken): Promise<codemavi> {
+	async fetchAll(options: { silent?: boolean } = {}, cancellationToken?: CancellationToken): Promise<void> {
 		await this._fetch({ all: true, silent: options.silent, cancellationToken });
 	}
 
-	async fetch(options: FetchOptions): Promise<codemavi> {
+	async fetch(options: FetchOptions): Promise<void> {
 		await this._fetch(options);
 	}
 
-	private async _fetch(options: { remote?: string; ref?: string; all?: boolean; prune?: boolean; depth?: number; silent?: boolean; cancellationToken?: CancellationToken } = {}): Promise<codemavi> {
+	private async _fetch(options: { remote?: string; ref?: string; all?: boolean; prune?: boolean; depth?: number; silent?: boolean; cancellationToken?: CancellationToken } = {}): Promise<void> {
 		if (!options.prune) {
 			const config = workspace.getConfiguration('git', Uri.file(this.root));
 			const prune = config.get<boolean>('pruneOnFetch');
@@ -1765,7 +1765,7 @@ export class Repository implements Disposable {
 	}
 
 	@throttle
-	async pullWithRebase(head: Branch | undefined): Promise<codemavi> {
+	async pullWithRebase(head: Branch | undefined): Promise<void> {
 		let remote: string | undefined;
 		let branch: string | undefined;
 
@@ -1778,7 +1778,7 @@ export class Repository implements Disposable {
 	}
 
 	@throttle
-	async pull(head?: Branch, unshallow?: boolean): Promise<codemavi> {
+	async pull(head?: Branch, unshallow?: boolean): Promise<void> {
 		let remote: string | undefined;
 		let branch: string | undefined;
 
@@ -1790,7 +1790,7 @@ export class Repository implements Disposable {
 		return this.pullFrom(false, remote, branch, unshallow);
 	}
 
-	async pullFrom(rebase?: boolean, remote?: string, branch?: string, unshallow?: boolean): Promise<codemavi> {
+	async pullFrom(rebase?: boolean, remote?: string, branch?: string, unshallow?: boolean): Promise<void> {
 		await this.run(Operation.Pull, async () => {
 			await this.maybeAutoStash(async () => {
 				const config = workspace.getConfiguration('git', Uri.file(this.root));
@@ -1810,7 +1810,7 @@ export class Repository implements Disposable {
 		});
 	}
 
-	private async _pullAndHandleTagConflict(rebase?: boolean, remote?: string, branch?: string, options: PullOptions = {}): Promise<codemavi> {
+	private async _pullAndHandleTagConflict(rebase?: boolean, remote?: string, branch?: string, options: PullOptions = {}): Promise<void> {
 		try {
 			await this.repository.pull(rebase, remote, branch, options);
 		}
@@ -1827,7 +1827,7 @@ export class Repository implements Disposable {
 	}
 
 	@throttle
-	async push(head: Branch, forcePushMode?: ForcePushMode): Promise<codemavi> {
+	async push(head: Branch, forcePushMode?: ForcePushMode): Promise<void> {
 		let remote: string | undefined;
 		let branch: string | undefined;
 
@@ -1839,15 +1839,15 @@ export class Repository implements Disposable {
 		await this.run(Operation.Push, () => this._push(remote, branch, undefined, undefined, forcePushMode));
 	}
 
-	async pushTo(remote?: string, name?: string, setUpstream = false, forcePushMode?: ForcePushMode): Promise<codemavi> {
+	async pushTo(remote?: string, name?: string, setUpstream = false, forcePushMode?: ForcePushMode): Promise<void> {
 		await this.run(Operation.Push, () => this._push(remote, name, setUpstream, undefined, forcePushMode));
 	}
 
-	async pushFollowTags(remote?: string, forcePushMode?: ForcePushMode): Promise<codemavi> {
+	async pushFollowTags(remote?: string, forcePushMode?: ForcePushMode): Promise<void> {
 		await this.run(Operation.Push, () => this._push(remote, undefined, false, true, forcePushMode));
 	}
 
-	async pushTags(remote?: string, forcePushMode?: ForcePushMode): Promise<codemavi> {
+	async pushTags(remote?: string, forcePushMode?: ForcePushMode): Promise<void> {
 		await this.run(Operation.Push, () => this._push(remote, undefined, false, false, forcePushMode, true));
 	}
 
@@ -1860,11 +1860,11 @@ export class Repository implements Disposable {
 	}
 
 	@throttle
-	sync(head: Branch, rebase: boolean): Promise<codemavi> {
+	sync(head: Branch, rebase: boolean): Promise<void> {
 		return this._sync(head, rebase);
 	}
 
-	private async _sync(head: Branch, rebase: boolean): Promise<codemavi> {
+	private async _sync(head: Branch, rebase: boolean): Promise<void> {
 		let remoteName: string | undefined;
 		let pullBranch: string | undefined;
 		let pushBranch: string | undefined;
@@ -2003,7 +2003,7 @@ export class Repository implements Disposable {
 		return this.run(Operation.Show, () => this.repository.detectObjectType(object));
 	}
 
-	async apply(patch: string, reverse?: boolean): Promise<codemavi> {
+	async apply(patch: string, reverse?: boolean): Promise<void> {
 		return await this.run(Operation.Apply, () => this.repository.apply(patch, reverse));
 	}
 
@@ -2011,7 +2011,7 @@ export class Repository implements Disposable {
 		return this.run(Operation.Stash, () => this.repository.getStashes());
 	}
 
-	async createStash(message?: string, includeUntracked?: boolean, staged?: boolean): Promise<codemavi> {
+	async createStash(message?: string, includeUntracked?: boolean, staged?: boolean): Promise<void> {
 		const indexResources = [...this.indexGroup.resourceStates.map(r => r.resourceUri.fsPath)];
 		const workingGroupResources = [
 			...!staged ? this.workingTreeGroup.resourceStates.map(r => r.resourceUri.fsPath) : [],
@@ -2023,15 +2023,15 @@ export class Repository implements Disposable {
 		});
 	}
 
-	async popStash(index?: number): Promise<codemavi> {
+	async popStash(index?: number): Promise<void> {
 		return await this.run(Operation.Stash, () => this.repository.popStash(index));
 	}
 
-	async dropStash(index?: number): Promise<codemavi> {
+	async dropStash(index?: number): Promise<void> {
 		return await this.run(Operation.Stash, () => this.repository.dropStash(index));
 	}
 
-	async applyStash(index?: number): Promise<codemavi> {
+	async applyStash(index?: number): Promise<void> {
 		return await this.run(Operation.Stash, () => this.repository.applyStash(index));
 	}
 
@@ -2043,7 +2043,7 @@ export class Repository implements Disposable {
 		return await this.run(Operation.GetCommitTemplate, async () => this.repository.getCommitTemplate());
 	}
 
-	async ignore(files: Uri[]): Promise<codemavi> {
+	async ignore(files: Uri[]): Promise<void> {
 		return await this.run(Operation.Ignore, async () => {
 			const ignoreFile = `${this.repository.root}${path.sep}.gitignore`;
 			const textToAppend = files
@@ -2067,7 +2067,7 @@ export class Repository implements Disposable {
 		});
 	}
 
-	async rebaseAbort(): Promise<codemavi> {
+	async rebaseAbort(): Promise<void> {
 		await this.run(Operation.RebaseAbort, async () => await this.repository.rebaseAbort());
 	}
 
@@ -2137,7 +2137,7 @@ export class Repository implements Disposable {
 		return ignored;
 	}
 
-	private async _push(remote?: string, refspec?: string, setUpstream = false, followTags = false, forcePushMode?: ForcePushMode, tags = false): Promise<codemavi> {
+	private async _push(remote?: string, refspec?: string, setUpstream = false, followTags = false, forcePushMode?: ForcePushMode, tags = false): Promise<void> {
 		try {
 			await this.repository.push(remote, refspec, setUpstream, followTags, forcePushMode, tags);
 		} catch (err) {
@@ -2250,7 +2250,7 @@ export class Repository implements Disposable {
 		await this._updateModelState(optimisticResourcesGroups, this.updateModelStateCancellationTokenSource.token);
 	}
 
-	private async _updateModelState(optimisticResourcesGroups?: GitResourceGroups, cancellationToken?: CancellationToken): Promise<codemavi> {
+	private async _updateModelState(optimisticResourcesGroups?: GitResourceGroups, cancellationToken?: CancellationToken): Promise<void> {
 		try {
 			// Optimistically update resource groups
 			if (optimisticResourcesGroups) {
@@ -2307,7 +2307,7 @@ export class Repository implements Disposable {
 		}
 	}
 
-	private _updateResourceGroupsState(resourcesGroups: GitResourceGroups): codemavi {
+	private _updateResourceGroupsState(resourcesGroups: GitResourceGroups): void {
 		// set resource groups
 		if (resourcesGroups.indexGroup) { this.indexGroup.resourceStates = resourcesGroups.indexGroup; }
 		if (resourcesGroups.mergeGroup) { this.mergeGroup.resourceStates = resourcesGroups.mergeGroup; }
@@ -2461,7 +2461,7 @@ export class Repository implements Disposable {
 		return { indexGroup, mergeGroup, untrackedGroup, workingTreeGroup };
 	}
 
-	private setCountBadge(): codemavi {
+	private setCountBadge(): void {
 		const config = workspace.getConfiguration('git', Uri.file(this.repository.root));
 		const countBadge = config.get<'all' | 'tracked' | 'off'>('countBadge');
 		const untrackedChanges = config.get<'mixed' | 'separate' | 'hidden'>('untrackedChanges');
@@ -2539,7 +2539,7 @@ export class Repository implements Disposable {
 		}
 	}
 
-	private onFileChange(_uri: Uri): codemavi {
+	private onFileChange(_uri: Uri): void {
 		const config = workspace.getConfiguration('git');
 		const autorefresh = config.get<boolean>('autorefresh');
 
@@ -2562,18 +2562,18 @@ export class Repository implements Disposable {
 	}
 
 	@debounce(1000)
-	private eventuallyUpdateWhenIdleAndWait(): codemavi {
+	private eventuallyUpdateWhenIdleAndWait(): void {
 		this.updateWhenIdleAndWait();
 	}
 
 	@throttle
-	private async updateWhenIdleAndWait(): Promise<codemavi> {
+	private async updateWhenIdleAndWait(): Promise<void> {
 		await this.whenIdleAndFocused();
 		await this.status();
 		await timeout(5000);
 	}
 
-	async whenIdleAndFocused(): Promise<codemavi> {
+	async whenIdleAndFocused(): Promise<void> {
 		while (true) {
 			if (!this.operations.isIdle()) {
 				await eventToPromise(this.onDidRunOperation);
@@ -2647,7 +2647,7 @@ export class Repository implements Disposable {
 		}
 	}
 
-	private updateInputBoxPlaceholder(): codemavi {
+	private updateInputBoxPlaceholder(): void {
 		const branchName = this.headShortName;
 
 		if (branchName) {
@@ -2658,7 +2658,7 @@ export class Repository implements Disposable {
 		}
 	}
 
-	private updateBranchProtectionMatchers(root: Uri): codemavi {
+	private updateBranchProtectionMatchers(root: Uri): void {
 		this.branchProtection.clear();
 
 		for (const provider of this.branchProtectionProviderRegistry.getBranchProtectionProviders(root)) {
@@ -2792,7 +2792,7 @@ export class Repository implements Disposable {
 		return this.unpublishedCommits;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables = dispose(this.disposables);
 	}
 }

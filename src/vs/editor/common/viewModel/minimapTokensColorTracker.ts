@@ -21,8 +21,8 @@ export class MinimapTokensColorTracker extends Disposable {
 	private _colors!: RGBA8[];
 	private _backgroundIsLight!: boolean;
 
-	private readonly _onDidChange = new Emitter<codemavi>();
-	public readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	public readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private constructor() {
 		super();
@@ -34,7 +34,7 @@ export class MinimapTokensColorTracker extends Disposable {
 		}));
 	}
 
-	private _updateColorMap(): codemavi {
+	private _updateColorMap(): void {
 		const colorMap = TokenizationRegistry.getColorMap();
 		if (!colorMap) {
 			this._colors = [RGBA8.Empty];

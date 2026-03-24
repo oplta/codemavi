@@ -104,7 +104,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		this._waitThenShutdown(true);
 	}
 
-	public async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<codemavi> {
+	public async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
 		// Only serve GET requests
 		if (req.method !== 'GET') {
 			return serveError(req, res, 405, `Unsupported method ${req.method}`);
@@ -133,14 +133,14 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		// Version
 		if (pathname === '/version') {
 			res.writeHead(200, { 'Content-Type': 'text/plain' });
-			return codemavi res.end(this._productService.commit || '');
+			return void res.end(this._productService.commit || '');
 		}
 
 		// Delay shutdown
 		if (pathname === '/delay-shutdown') {
 			this._delayShutdown();
 			res.writeHead(200);
-			return codemavi res.end('OK');
+			return void res.end('OK');
 		}
 
 		if (!httpRequestHasValidConnectionToken(this._connectionToken, req, parsedUrl)) {
@@ -188,7 +188,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 
 		res.writeHead(404, { 'Content-Type': 'text/plain' });
-		return codemavi res.end('Not found');
+		return void res.end('Not found');
 	}
 
 	public handleUpgrade(req: http.IncomingMessage, socket: net.Socket) {
@@ -264,7 +264,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 	}
 
-	public handleServerError(err: Error): codemavi {
+	public handleServerError(err: Error): void {
 		this._logService.error(`Error occurred in server`);
 		this._logService.error(err);
 	}
@@ -281,7 +281,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		return _socket.remoteAddress || `<unknown>`;
 	}
 
-	private async _rejectWebSocketConnection(logPrefix: string, protocol: PersistentProtocol, reason: string): Promise<codemavi> {
+	private async _rejectWebSocketConnection(logPrefix: string, protocol: PersistentProtocol, reason: string): Promise<void> {
 		const socket = protocol.getSocket();
 		this._logService.error(`${logPrefix} ${reason}.`);
 		const errMessage: ErrorMessage = {
@@ -295,11 +295,11 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 	}
 
 	/**
-	 * NOTE: Acodemavi using await in this method!
+	 * NOTE: Avoid using await in this method!
 	 * The problem is that await introduces a process.nextTick due to the implicit Promise.then
 	 * This can lead to some bytes being received and interpreted and a control message being emitted before the next listener has a chance to be registered.
 	 */
-	private _handleWebSocketConnection(socket: NodeSocket | WebSocketNodeSocket, isReconnection: boolean, reconnectionToken: string): codemavi {
+	private _handleWebSocketConnection(socket: NodeSocket | WebSocketNodeSocket, isReconnection: boolean, reconnectionToken: string): void {
 		const remoteAddress = this._getRemoteAddress(socket);
 		const logPrefix = `[${remoteAddress}][${reconnectionToken.substr(0, 8)}]`;
 		const protocol = new PersistentProtocol({ socket });
@@ -425,7 +425,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		});
 	}
 
-	private async _handleConnectionType(remoteAddress: string, _logPrefix: string, protocol: PersistentProtocol, socket: NodeSocket | WebSocketNodeSocket, isReconnection: boolean, reconnectionToken: string, msg: ConnectionTypeRequest): Promise<codemavi> {
+	private async _handleConnectionType(remoteAddress: string, _logPrefix: string, protocol: PersistentProtocol, socket: NodeSocket | WebSocketNodeSocket, isReconnection: boolean, reconnectionToken: string, msg: ConnectionTypeRequest): Promise<void> {
 		const logPrefix = (
 			msg.desiredConnectionType === ConnectionType.Management
 				? `${_logPrefix}[ManagementConnection]`
@@ -536,7 +536,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 	}
 
-	private async _createTunnel(protocol: PersistentProtocol, tunnelStartParams: ITunnelConnectionStartParams): Promise<codemavi> {
+	private async _createTunnel(protocol: PersistentProtocol, tunnelStartParams: ITunnelConnectionStartParams): Promise<void> {
 		const remoteSocket = (<NodeSocket>protocol.getSocket()).socket;
 		const dataChunk = protocol.readEntireBuffer();
 		protocol.dispose();
@@ -591,7 +591,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		return Promise.resolve(startParams);
 	}
 
-	private async _onDidCloseExtHostConnection(): Promise<codemavi> {
+	private async _onDidCloseExtHostConnection(): Promise<void> {
 		if (!this._environmentService.args['enable-remote-auto-shutdown']) {
 			return;
 		}
@@ -606,7 +606,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 	}
 
-	private _waitThenShutdown(initial = false): codemavi {
+	private _waitThenShutdown(initial = false): void {
 		if (!this._environmentService.args['enable-remote-auto-shutdown']) {
 			return;
 		}
@@ -622,7 +622,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 	}
 
-	private _shutdown(): codemavi {
+	private _shutdown(): void {
 		const hasActiveExtHosts = !!Object.keys(this._extHostConnections).length;
 		if (hasActiveExtHosts) {
 			console.log('New EH opened, aborting shutdown');
@@ -639,7 +639,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 	/**
 	 * If the server is in a shutdown timeout, cancel it and start over
 	 */
-	private _delayShutdown(): codemavi {
+	private _delayShutdown(): void {
 		if (this.shutdownTimer) {
 			console.log('Got delay-shutdown request while in shutdown timeout, delaying');
 			this._logService.info('Got delay-shutdown request while in shutdown timeout, delaying');
@@ -648,7 +648,7 @@ class RemoteExtensionHostAgentServer extends Disposable implements IServerAPI {
 		}
 	}
 
-	private _cancelShutdown(): codemavi {
+	private _cancelShutdown(): void {
 		if (this.shutdownTimer) {
 			console.log('Cancelling previous shutdown timeout');
 			this._logService.info('Cancelling previous shutdown timeout');
@@ -662,19 +662,19 @@ export interface IServerAPI {
 	/**
 	 * Do not remove!!. Called from server-main.js
 	 */
-	handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<codemavi>;
+	handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void>;
 	/**
 	 * Do not remove!!. Called from server-main.js
 	 */
-	handleUpgrade(req: http.IncomingMessage, socket: net.Socket): codemavi;
+	handleUpgrade(req: http.IncomingMessage, socket: net.Socket): void;
 	/**
 	 * Do not remove!!. Called from server-main.js
 	 */
-	handleServerError(err: Error): codemavi;
+	handleServerError(err: Error): void;
 	/**
 	 * Do not remove!!. Called from server-main.js
 	 */
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export async function createServer(address: string | net.AddressInfo | null, args: ServerParsedArgs, REMOTE_DATA_FOLDER: string): Promise<IServerAPI> {
@@ -687,7 +687,7 @@ export async function createServer(address: string | net.AddressInfo | null, arg
 
 	// setting up error handlers, first with console.error, then, once available, using the log service
 
-	function initUnexpectedErrorHandler(handler: (err: any) => codemavi) {
+	function initUnexpectedErrorHandler(handler: (err: any) => void) {
 		setUnexpectedErrorHandler(err => {
 			// See https://github.com/microsoft/vscode-remote-release/issues/6481
 			// In some circumstances, console.error will throw an asynchronous error. This asynchronous error
@@ -720,7 +720,7 @@ export async function createServer(address: string | net.AddressInfo | null, arg
 	const disposables = new DisposableStore();
 	const { socketServer, instantiationService } = await setupServerServices(connectionToken, args, REMOTE_DATA_FOLDER, disposables);
 
-	// Set the unexpected error handler after the services have been initialized, to acodemavi having
+	// Set the unexpected error handler after the services have been initialized, to avoid having
 	// the telemetry service overwrite our handler
 	instantiationService.invokeFunction((accessor) => {
 		const logService = accessor.get(ILogService);

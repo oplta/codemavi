@@ -36,7 +36,7 @@ export class ExeBasedRecommendations extends ExtensionRecommendations {
 		return { important, others };
 	}
 
-	protected async doActivate(): Promise<codemavi> {
+	protected async doActivate(): Promise<void> {
 		this._otherTips = await this.extensionTipsService.getOtherExecutableBasedTips();
 		await this.fetchImportantExeBasedRecommendations();
 	}

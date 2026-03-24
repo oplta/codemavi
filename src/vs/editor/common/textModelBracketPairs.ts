@@ -14,7 +14,7 @@ export interface IBracketPairsTextModelPart {
 	/**
 	 * Is fired when bracket pairs change, either due to a text or a settings change.
 	*/
-	onDidChange: Event<codemavi>;
+	onDidChange: Event<void>;
 
 	/**
 	 * Gets all bracket pairs that intersect the given position.

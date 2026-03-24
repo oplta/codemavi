@@ -16,7 +16,7 @@ import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { MCPConfigFileJSON, MCPConfigFileEntryJSON, MCPServer, RawMCPToolCall, MCPToolErrorResponse, MCPServerEventResponse, MCPToolCallParams, removeMCPToolNamePrefix } from '../common/mcpServiceTypes.js';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { MCPUserStateOfName } from '../common/codemaviSettingsTypes.js';
+import { MCPUserStateOfName } from '../common/maviSettingsTypes.js';
 
 const getClientConfig = (serverName: string) => {
 	return {
@@ -101,7 +101,7 @@ export class MCPChannel implements IServerChannel {
 				return response
 			}
 			else {
-				throw new Error(`Code Mavi sendLLM: command "${command}" not recognized.`)
+				throw new Error(`Mavi sendLLM: command "${command}" not recognized.`)
 			}
 		}
 		catch (e) {

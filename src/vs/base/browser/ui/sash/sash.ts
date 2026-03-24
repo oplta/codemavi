@@ -146,14 +146,14 @@ export const enum SashState {
 
 let globalSize = 4;
 const onDidChangeGlobalSize = new Emitter<number>();
-export function setGlobalSashSize(size: number): codemavi {
+export function setGlobalSashSize(size: number): void {
 	globalSize = size;
 	onDidChangeGlobalSize.fire(size);
 }
 
 let globalHoverDelay = 300;
 const onDidChangeHoverDelay = new Emitter<number>();
-export function setGlobalHoverDelay(size: number): codemavi {
+export function setGlobalHoverDelay(size: number): void {
 	globalHoverDelay = size;
 	onDidChangeHoverDelay.fire(size);
 }
@@ -169,7 +169,7 @@ interface PointerEvent extends EventLike {
 interface IPointerEventFactory {
 	readonly onPointerMove: Event<PointerEvent>;
 	readonly onPointerUp: Event<PointerEvent>;
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 class MouseEventFactory implements IPointerEventFactory {
@@ -188,7 +188,7 @@ class MouseEventFactory implements IPointerEventFactory {
 		return this.disposables.add(new DomEmitter(getWindow(this.el), 'mouseup')).event;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }
@@ -209,7 +209,7 @@ class GestureEventFactory implements IPointerEventFactory {
 
 	constructor(private el: HTMLElement) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }
@@ -228,7 +228,7 @@ class OrthogonalPointerEventFactory implements IPointerEventFactory {
 
 	constructor(private factory: IPointerEventFactory) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		// noop
 	}
 }
@@ -261,8 +261,8 @@ export class Sash extends Disposable {
 	private readonly onDidEnablementChange = this._register(new Emitter<SashState>());
 	private readonly _onDidStart = this._register(new Emitter<ISashEvent>());
 	private readonly _onDidChange = this._register(new Emitter<ISashEvent>());
-	private readonly _onDidReset = this._register(new Emitter<codemavi>());
-	private readonly _onDidEnd = this._register(new Emitter<codemavi>());
+	private readonly _onDidReset = this._register(new Emitter<void>());
+	private readonly _onDidEnd = this._register(new Emitter<void>());
 	private readonly orthogonalStartSashDisposables = this._register(new DisposableStore());
 	private _orthogonalStartSash: Sash | undefined;
 	private readonly orthogonalStartDragHandleDisposables = this._register(new DisposableStore());
@@ -307,12 +307,12 @@ export class Sash extends Disposable {
 	/**
 	 * An event which fires whenever the user double clicks this sash.
 	 */
-	readonly onDidReset: Event<codemavi> = this._onDidReset.event;
+	readonly onDidReset: Event<void> = this._onDidReset.event;
 
 	/**
 	 * An event which fires whenever the user stops dragging this sash.
 	 */
-	readonly onDidEnd: Event<codemavi> = this._onDidEnd.event;
+	readonly onDidEnd: Event<void> = this._onDidEnd.event;
 
 	/**
 	 * A linked sash will be forwarded the same user interactions and events
@@ -493,7 +493,7 @@ export class Sash extends Disposable {
 		this.layout();
 	}
 
-	private onPointerStart(event: PointerEvent, pointerEventFactory: IPointerEventFactory): codemavi {
+	private onPointerStart(event: PointerEvent, pointerEventFactory: IPointerEventFactory): void {
 		EventHelper.stop(event);
 
 		let isMultisashResize = false;
@@ -593,7 +593,7 @@ export class Sash extends Disposable {
 		disposables.add(pointerEventFactory);
 	}
 
-	private onPointerDoublePress(e: MouseEvent): codemavi {
+	private onPointerDoublePress(e: MouseEvent): void {
 		const orthogonalSash = this.getOrthogonalSash(e);
 
 		if (orthogonalSash) {
@@ -607,7 +607,7 @@ export class Sash extends Disposable {
 		this._onDidReset.fire();
 	}
 
-	private static onMouseEnter(sash: Sash, fromLinkedSash: boolean = false): codemavi {
+	private static onMouseEnter(sash: Sash, fromLinkedSash: boolean = false): void {
 		if (sash.el.classList.contains('active')) {
 			sash.hoverDelayer.cancel();
 			sash.el.classList.add('hover');
@@ -620,7 +620,7 @@ export class Sash extends Disposable {
 		}
 	}
 
-	private static onMouseLeave(sash: Sash, fromLinkedSash: boolean = false): codemavi {
+	private static onMouseLeave(sash: Sash, fromLinkedSash: boolean = false): void {
 		sash.hoverDelayer.cancel();
 		sash.el.classList.remove('hover');
 
@@ -634,7 +634,7 @@ export class Sash extends Disposable {
 	 * Useful when hiding a parent component, while the user is still
 	 * interacting with the sash.
 	 */
-	clearSashHoverState(): codemavi {
+	clearSashHoverState(): void {
 		Sash.onMouseLeave(this);
 	}
 
@@ -642,7 +642,7 @@ export class Sash extends Disposable {
 	 * Layout the sash. The sash will size and position itself
 	 * based on its provided {@link ISashLayoutProvider layout provider}.
 	 */
-	layout(): codemavi {
+	layout(): void {
 		if (this.orientation === Orientation.VERTICAL) {
 			const verticalProvider = (<IVerticalSashLayoutProvider>this.layoutProvider);
 			this.el.style.left = verticalProvider.getVerticalSashLeft(this) - (this.size / 2) + 'px';
@@ -682,7 +682,7 @@ export class Sash extends Disposable {
 		return undefined;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this.el.remove();
 	}

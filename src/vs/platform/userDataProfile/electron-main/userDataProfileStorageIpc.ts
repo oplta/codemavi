@@ -60,7 +60,7 @@ export class ProfileStorageChangesListenerChannel extends Disposable implements 
 		return disposables;
 	}
 
-	private onDidChangeApplicationStorage(keys: string[]): codemavi {
+	private onDidChangeApplicationStorage(keys: string[]): void {
 		const targetChangedProfiles: IUserDataProfile[] = keys.includes(TARGET_KEY) ? [this.userDataProfilesService.defaultProfile] : [];
 		const profileStorageValueChanges: IProfileStorageValueChanges[] = [];
 		keys = keys.filter(key => key !== TARGET_KEY);
@@ -71,7 +71,7 @@ export class ProfileStorageChangesListenerChannel extends Disposable implements 
 		this.triggerEvents(targetChangedProfiles, profileStorageValueChanges);
 	}
 
-	private onDidChangeProfileStorage(changes: Map<string, { profile: IUserDataProfile; keys: string[]; storage: IStorageMain }>): codemavi {
+	private onDidChangeProfileStorage(changes: Map<string, { profile: IUserDataProfile; keys: string[]; storage: IStorageMain }>): void {
 		const targetChangedProfiles: IUserDataProfile[] = [];
 		const profileStorageValueChanges = new Map<string, IProfileStorageValueChanges>();
 		for (const [profileId, profileChanges] of changes.entries()) {
@@ -87,7 +87,7 @@ export class ProfileStorageChangesListenerChannel extends Disposable implements 
 		this.triggerEvents(targetChangedProfiles, [...profileStorageValueChanges.values()]);
 	}
 
-	private triggerEvents(targetChanges: IUserDataProfile[], valueChanges: IProfileStorageValueChanges[]): codemavi {
+	private triggerEvents(targetChanges: IUserDataProfile[], valueChanges: IProfileStorageValueChanges[]): void {
 		if (targetChanges.length || valueChanges.length) {
 			this._onDidChange.fire({ valueChanges, targetChanges });
 		}

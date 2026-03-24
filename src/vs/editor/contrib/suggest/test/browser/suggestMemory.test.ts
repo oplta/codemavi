@@ -39,12 +39,12 @@ suite('SuggestMemories', function () {
 			constructor() {
 				super('first');
 			}
-			memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi {
+			memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void {
 				throw new Error('Method not implemented.');
 			} toJSON(): object {
 				throw new Error('Method not implemented.');
 			}
-			fromJSON(data: object): codemavi {
+			fromJSON(data: object): void {
 				throw new Error('Method not implemented.');
 			}
 		};

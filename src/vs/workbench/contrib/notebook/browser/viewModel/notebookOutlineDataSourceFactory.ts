@@ -15,7 +15,7 @@ class NotebookCellOutlineDataSourceReferenceCollection extends ReferenceCollecti
 	protected override createReferencedObject(_key: string, editor: INotebookEditor): NotebookCellOutlineDataSource {
 		return this.instantiationService.createInstance(NotebookCellOutlineDataSource, editor);
 	}
-	protected override destroyReferencedObject(_key: string, object: NotebookCellOutlineDataSource): codemavi {
+	protected override destroyReferencedObject(_key: string, object: NotebookCellOutlineDataSource): void {
 		object.dispose();
 	}
 }

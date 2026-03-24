@@ -19,7 +19,7 @@ declare module 'vscode' {
 		 * Fires when the current history item refs (local, remote, base)
 		 * change after a user action (ex: commit, checkout, fetch, pull, push)
 		 */
-		onDidChangeCurrentHistoryItemRefs: Event<codemavi>;
+		onDidChangeCurrentHistoryItemRefs: Event<void>;
 
 		/**
 		 * Fires when history item refs change

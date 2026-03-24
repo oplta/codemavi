@@ -206,7 +206,7 @@ export class ConfigurationModel implements IConfigurationModel {
 		return new ConfigurationModel(contents, this.keys, this.overrides, undefined, this.logService);
 	}
 
-	private mergeContents(source: any, target: any): codemavi {
+	private mergeContents(source: any, target: any): void {
 		for (const key of Object.keys(target)) {
 			if (key in source) {
 				if (types.isObject(source[key]) && types.isObject(target[key])) {
@@ -252,15 +252,15 @@ export class ConfigurationModel implements IConfigurationModel {
 
 	// Update methods
 
-	public addValue(key: string, value: any): codemavi {
+	public addValue(key: string, value: any): void {
 		this.updateValue(key, value, true);
 	}
 
-	public setValue(key: string, value: any): codemavi {
+	public setValue(key: string, value: any): void {
 		this.updateValue(key, value, false);
 	}
 
-	public removeValue(key: string): codemavi {
+	public removeValue(key: string): void {
 		const index = this.keys.indexOf(key);
 		if (index === -1) {
 			return;
@@ -272,7 +272,7 @@ export class ConfigurationModel implements IConfigurationModel {
 		}
 	}
 
-	private updateValue(key: string, value: any, add: boolean): codemavi {
+	private updateValue(key: string, value: any, add: boolean): void {
 		addToValueTree(this.contents, key, value, e => this.logService.error(e));
 		add = add || this.keys.indexOf(key) === -1;
 		if (add) {
@@ -327,20 +327,20 @@ export class ConfigurationModelParser {
 		return this._parseErrors;
 	}
 
-	public parse(content: string | null | undefined, options?: ConfigurationParseOptions): codemavi {
+	public parse(content: string | null | undefined, options?: ConfigurationParseOptions): void {
 		if (!types.isUndefinedOrNull(content)) {
 			const raw = this.doParseContent(content);
 			this.parseRaw(raw, options);
 		}
 	}
 
-	public reparse(options: ConfigurationParseOptions): codemavi {
+	public reparse(options: ConfigurationParseOptions): void {
 		if (this._raw) {
 			this.parseRaw(this._raw, options);
 		}
 	}
 
-	public parseRaw(raw: any, options?: ConfigurationParseOptions): codemavi {
+	public parseRaw(raw: any, options?: ConfigurationParseOptions): void {
 		this._raw = raw;
 		const { contents, keys, overrides, restricted, hasExcludedProperties } = this.doParseRaw(raw, options);
 		this._configurationModel = new ConfigurationModel(contents, keys, overrides, hasExcludedProperties ? [raw] : undefined /* raw has not changed */, this.logService);
@@ -467,7 +467,7 @@ export class ConfigurationModelParser {
 		return options.scopes.includes(scope);
 	}
 
-	private toOverrides(raw: any, conflictReporter: (message: string) => codemavi): IOverrides[] {
+	private toOverrides(raw: any, conflictReporter: (message: string) => void): IOverrides[] {
 		const overrides: IOverrides[] = [];
 		for (const key of Object.keys(raw)) {
 			if (OVERRIDE_PROPERTY_REGEX.test(key)) {
@@ -490,8 +490,8 @@ export class ConfigurationModelParser {
 export class UserSettings extends Disposable {
 
 	private readonly parser: ConfigurationModelParser;
-	protected readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	protected readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	constructor(
 		private readonly userSettingsResource: URI,
@@ -731,7 +731,7 @@ export class Configuration {
 		return consolidateConfigurationModel.getValue(section);
 	}
 
-	updateValue(key: string, value: any, overrides: IConfigurationUpdateOverrides = {}): codemavi {
+	updateValue(key: string, value: any, overrides: IConfigurationUpdateOverrides = {}): void {
 		let memoryConfiguration: ConfigurationModel | undefined;
 		if (overrides.resource) {
 			memoryConfiguration = this._memoryConfigurationByResource.get(overrides.resource);
@@ -800,48 +800,48 @@ export class Configuration {
 		};
 	}
 
-	updateDefaultConfiguration(defaultConfiguration: ConfigurationModel): codemavi {
+	updateDefaultConfiguration(defaultConfiguration: ConfigurationModel): void {
 		this._defaultConfiguration = defaultConfiguration;
 		this._workspaceConsolidatedConfiguration = null;
 		this._foldersConsolidatedConfigurations.clear();
 	}
 
-	updatePolicyConfiguration(policyConfiguration: ConfigurationModel): codemavi {
+	updatePolicyConfiguration(policyConfiguration: ConfigurationModel): void {
 		this._policyConfiguration = policyConfiguration;
 	}
 
-	updateApplicationConfiguration(applicationConfiguration: ConfigurationModel): codemavi {
+	updateApplicationConfiguration(applicationConfiguration: ConfigurationModel): void {
 		this._applicationConfiguration = applicationConfiguration;
 		this._workspaceConsolidatedConfiguration = null;
 		this._foldersConsolidatedConfigurations.clear();
 	}
 
-	updateLocalUserConfiguration(localUserConfiguration: ConfigurationModel): codemavi {
+	updateLocalUserConfiguration(localUserConfiguration: ConfigurationModel): void {
 		this._localUserConfiguration = localUserConfiguration;
 		this._userConfiguration = null;
 		this._workspaceConsolidatedConfiguration = null;
 		this._foldersConsolidatedConfigurations.clear();
 	}
 
-	updateRemoteUserConfiguration(remoteUserConfiguration: ConfigurationModel): codemavi {
+	updateRemoteUserConfiguration(remoteUserConfiguration: ConfigurationModel): void {
 		this._remoteUserConfiguration = remoteUserConfiguration;
 		this._userConfiguration = null;
 		this._workspaceConsolidatedConfiguration = null;
 		this._foldersConsolidatedConfigurations.clear();
 	}
 
-	updateWorkspaceConfiguration(workspaceConfiguration: ConfigurationModel): codemavi {
+	updateWorkspaceConfiguration(workspaceConfiguration: ConfigurationModel): void {
 		this._workspaceConfiguration = workspaceConfiguration;
 		this._workspaceConsolidatedConfiguration = null;
 		this._foldersConsolidatedConfigurations.clear();
 	}
 
-	updateFolderConfiguration(resource: URI, configuration: ConfigurationModel): codemavi {
+	updateFolderConfiguration(resource: URI, configuration: ConfigurationModel): void {
 		this._folderConfigurations.set(resource, configuration);
 		this._foldersConsolidatedConfigurations.delete(resource);
 	}
 
-	deleteFolderConfiguration(resource: URI): codemavi {
+	deleteFolderConfiguration(resource: URI): void {
 		this.folderConfigurations.delete(resource);
 		this._foldersConsolidatedConfigurations.delete(resource);
 	}

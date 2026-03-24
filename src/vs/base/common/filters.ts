@@ -213,7 +213,7 @@ interface ICamelCaseAnalysis {
 	numericPercent: number;
 }
 
-// Heuristic to acodemavi computing camel case matcher for words that don't
+// Heuristic to avoid computing camel case matcher for words that don't
 // look like camelCaseWords.
 function analyzeCamelCaseWord(word: string): ICamelCaseAnalysis {
 	let upper = 0, lower = 0, alpha = 0, numeric = 0, code = 0;
@@ -245,7 +245,7 @@ function isCamelCaseWord(analysis: ICamelCaseAnalysis): boolean {
 	return lowerPercent > 0.2 && upperPercent < 0.8 && alphaPercent > 0.6 && numericPercent < 0.2;
 }
 
-// Heuristic to acodemavi computing camel case matcher for words that don't
+// Heuristic to avoid computing camel case matcher for words that don't
 // look like camel case patterns.
 function isCamelCasePattern(word: string): boolean {
 	let upper = 0, lower = 0, code = 0, whitespace = 0;
@@ -512,7 +512,7 @@ function printTable(table: number[][], pattern: string, patternLen: number, word
 	return ret;
 }
 
-function printTables(pattern: string, patternStart: number, word: string, wordStart: number): codemavi {
+function printTables(pattern: string, patternStart: number, word: string, wordStart: number): void {
 	pattern = pattern.substr(patternStart);
 	word = word.substr(wordStart);
 	console.log(printTable(_table, pattern, pattern.length, word, word.length));

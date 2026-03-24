@@ -32,7 +32,7 @@ class StaticVersionProvider implements ITypeScriptVersionProvider {
 		private readonly _version: TypeScriptVersion
 	) { }
 
-	updateConfiguration(_configuration: TypeScriptServiceConfiguration): codemavi {
+	updateConfiguration(_configuration: TypeScriptServiceConfiguration): void {
 		// noop
 	}
 
@@ -106,7 +106,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<Api> {
 	return getExtensionApi(onCompletionAccepted.event, pluginManager);
 }
 
-async function startPreloadWorkspaceContentsIfNeeded(context: vscode.ExtensionContext, logger: Logger): Promise<codemavi> {
+async function startPreloadWorkspaceContentsIfNeeded(context: vscode.ExtensionContext, logger: Logger): Promise<void> {
 	if (!isWebAndHasSharedArrayBuffers()) {
 		return;
 	}
@@ -134,7 +134,7 @@ async function startPreloadWorkspaceContentsIfNeeded(context: vscode.ExtensionCo
 
 class RemoteWorkspaceContentsPreloader extends Disposable {
 
-	private _preload: Promise<codemavi> | undefined;
+	private _preload: Promise<void> | undefined;
 
 	constructor(
 		private readonly workspaceUri: vscode.Uri,
@@ -156,7 +156,7 @@ class RemoteWorkspaceContentsPreloader extends Disposable {
 		return this._preload;
 	}
 
-	private async doPreload(): Promise<codemavi> {
+	private async doPreload(): Promise<void> {
 		try {
 			const remoteHubApi = await RemoteRepositories.getApi();
 			if (await remoteHubApi.loadWorkspaceContents?.(this.workspaceUri)) {

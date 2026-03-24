@@ -109,7 +109,7 @@ export class ElectronExtensionHostDebugBroadcastChannel<TContext> extends Extens
 			});
 		});
 
-		await new Promise<codemavi>(r => server.listen(0, r));
+		await new Promise<void>(r => server.listen(0, r));
 		win.on('close', () => server.close());
 
 		return { rendererDebugPort: (server.address() as AddressInfo).port, success: true };

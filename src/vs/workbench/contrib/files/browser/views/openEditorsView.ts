@@ -108,7 +108,7 @@ export class OpenEditorsView extends ViewPane {
 		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.updateDirtyIndicator(workingCopy)));
 	}
 
-	private registerUpdateEvents(): codemavi {
+	private registerUpdateEvents(): void {
 		const updateWholeList = () => {
 			if (!this.isBodyVisible() || !this.list) {
 				this.needsRefresh = true;
@@ -171,7 +171,7 @@ export class OpenEditorsView extends ViewPane {
 		}));
 	}
 
-	protected override renderHeaderTitle(container: HTMLElement): codemavi {
+	protected override renderHeaderTitle(container: HTMLElement): void {
 		super.renderHeaderTitle(container, this.title);
 
 		const count = dom.append(container, $('.open-editors-dirty-count-container'));
@@ -184,7 +184,7 @@ export class OpenEditorsView extends ViewPane {
 		this.updateDirtyIndicator();
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		container.classList.add('open-editors');
@@ -338,13 +338,13 @@ export class OpenEditorsView extends ViewPane {
 		}));
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		this.list?.domFocus();
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.list?.layout(height, width);
 	}
@@ -403,7 +403,7 @@ export class OpenEditorsView extends ViewPane {
 		return this.elements.findIndex(e => e instanceof OpenEditor && e.editor === editor && e.group.id === group.id);
 	}
 
-	private openEditor(element: OpenEditor, options: { preserveFocus?: boolean; pinned?: boolean; sideBySide?: boolean }): codemavi {
+	private openEditor(element: OpenEditor, options: { preserveFocus?: boolean; pinned?: boolean; sideBySide?: boolean }): void {
 		if (element) {
 			this.telemetryService.publicLog2<WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification>('workbenchActionExecuted', { id: 'workbench.files.openFile', from: 'openEditors' });
 
@@ -416,7 +416,7 @@ export class OpenEditorsView extends ViewPane {
 		}
 	}
 
-	private onListContextMenu(e: IListContextMenuEvent<OpenEditor | IEditorGroup>): codemavi {
+	private onListContextMenu(e: IListContextMenuEvent<OpenEditor | IEditorGroup>): void {
 		if (!e.element) {
 			return;
 		}
@@ -432,7 +432,7 @@ export class OpenEditorsView extends ViewPane {
 		});
 	}
 
-	private withActiveEditorFocusTrackingDisabled(fn: () => codemavi): codemavi {
+	private withActiveEditorFocusTrackingDisabled(fn: () => void): void {
 		this.blockFocusActiveEditorTracking = true;
 		try {
 			fn();
@@ -441,7 +441,7 @@ export class OpenEditorsView extends ViewPane {
 		}
 	}
 
-	private focusActiveEditor(): codemavi {
+	private focusActiveEditor(): void {
 		if (!this.list || this.blockFocusActiveEditorTracking) {
 			return;
 		}
@@ -464,7 +464,7 @@ export class OpenEditorsView extends ViewPane {
 		this.list.setSelection([]);
 	}
 
-	private onConfigurationChange(event: IConfigurationChangeEvent): codemavi {
+	private onConfigurationChange(event: IConfigurationChangeEvent): void {
 		if (event.affectsConfiguration('explorer.openEditors')) {
 			this.updateSize();
 		}
@@ -478,13 +478,13 @@ export class OpenEditorsView extends ViewPane {
 		}
 	}
 
-	private updateSize(): codemavi {
+	private updateSize(): void {
 		// Adjust expanded body size
 		this.minimumBodySize = this.orientation === Orientation.VERTICAL ? this.getMinExpandedBodySize() : 170;
 		this.maximumBodySize = this.orientation === Orientation.VERTICAL ? this.getMaxExpandedBodySize() : Number.POSITIVE_INFINITY;
 	}
 
-	private updateDirtyIndicator(workingCopy?: IWorkingCopy): codemavi {
+	private updateDirtyIndicator(workingCopy?: IWorkingCopy): void {
 		if (workingCopy) {
 			const gotDirty = workingCopy.isDirty();
 			if (gotDirty && !(workingCopy.capabilities & WorkingCopyCapabilities.Untitled) && this.filesConfigurationService.hasShortAutoSaveDelay(workingCopy.resource)) {
@@ -534,7 +534,7 @@ export class OpenEditorsView extends ViewPane {
 		return itemsToShow * OpenEditorsDelegate.ITEM_HEIGHT;
 	}
 
-	setStructuralRefreshDelay(delay: number): codemavi {
+	setStructuralRefreshDelay(delay: number): void {
 		this.structuralRefreshDelay = delay;
 	}
 
@@ -567,7 +567,7 @@ interface IEditorGroupTemplateData {
 class OpenEditorActionRunner extends ActionRunner {
 	public editor: OpenEditor | undefined;
 
-	override async run(action: IAction): Promise<codemavi> {
+	override async run(action: IAction): Promise<void> {
 		if (!this.editor) {
 			return;
 		}
@@ -624,13 +624,13 @@ class EditorGroupRenderer implements IListRenderer<IEditorGroup, IEditorGroupTem
 		return editorGroupTemplate;
 	}
 
-	renderElement(editorGroup: IEditorGroup, _index: number, templateData: IEditorGroupTemplateData): codemavi {
+	renderElement(editorGroup: IEditorGroup, _index: number, templateData: IEditorGroupTemplateData): void {
 		templateData.editorGroup = editorGroup;
 		templateData.name.textContent = editorGroup.label;
 		templateData.actionBar.context = { groupId: editorGroup.id };
 	}
 
-	disposeTemplate(templateData: IEditorGroupTemplateData): codemavi {
+	disposeTemplate(templateData: IEditorGroupTemplateData): void {
 		templateData.actionBar.dispose();
 	}
 }
@@ -664,7 +664,7 @@ class OpenEditorRenderer implements IListRenderer<OpenEditor, IOpenEditorTemplat
 		return editorTemplate;
 	}
 
-	renderElement(openedEditor: OpenEditor, _index: number, templateData: IOpenEditorTemplateData): codemavi {
+	renderElement(openedEditor: OpenEditor, _index: number, templateData: IOpenEditorTemplateData): void {
 		const editor = openedEditor.editor;
 		templateData.actionRunner.editor = openedEditor;
 		templateData.container.classList.toggle('dirty', editor.isDirty() && !editor.isSaving());
@@ -689,7 +689,7 @@ class OpenEditorRenderer implements IListRenderer<OpenEditor, IOpenEditorTemplat
 		}
 	}
 
-	disposeTemplate(templateData: IOpenEditorTemplateData): codemavi {
+	disposeTemplate(templateData: IOpenEditorTemplateData): void {
 		templateData.actionBar.dispose();
 		templateData.root.dispose();
 		templateData.actionRunner.dispose();
@@ -734,7 +734,7 @@ class OpenEditorsDragAndDrop implements IListDragAndDrop<OpenEditor | IEditorGro
 		return element instanceof OpenEditor ? element.editor.getName() : element.label;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
 		const items = (data as ElementsDragAndDropData<OpenEditor | IEditorGroup>).elements;
 		const editors: IEditorIdentifier[] = [];
 		if (items) {
@@ -781,7 +781,7 @@ class OpenEditorsDragAndDrop implements IListDragAndDrop<OpenEditor | IEditorGro
 		return { accept: true, effect: { type: ListDragOverEffectType.Move, position: dropEffectPosition }, feedback: [_targetIndex] };
 	}
 
-	drop(data: IDragAndDropData, targetElement: OpenEditor | IEditorGroup | undefined, _targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi {
+	drop(data: IDragAndDropData, targetElement: OpenEditor | IEditorGroup | undefined, _targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void {
 		let group = targetElement instanceof OpenEditor ? targetElement.group : targetElement || this.editorGroupService.groups[this.editorGroupService.count - 1];
 		let targetEditorIndex = targetElement instanceof OpenEditor ? targetElement.group.getIndexOfEditor(targetElement.editor) : 0;
 
@@ -816,7 +816,7 @@ class OpenEditorsDragAndDrop implements IListDragAndDrop<OpenEditor | IEditorGro
 		}
 	}
 
-	dispose(): codemavi { }
+	dispose(): void { }
 }
 
 class OpenEditorsAccessibilityProvider implements IListAccessibilityProvider<OpenEditor | IEditorGroup> {
@@ -856,7 +856,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorGroupService = accessor.get(IEditorGroupsService);
 		const newOrientation = (editorGroupService.orientation === GroupOrientation.VERTICAL) ? GroupOrientation.HORIZONTAL : GroupOrientation.VERTICAL;
 		editorGroupService.setGroupOrientation(newOrientation);
@@ -892,7 +892,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		await commandService.executeCommand(SAVE_ALL_COMMAND_ID);
 	}
@@ -914,7 +914,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const instantiationService = accessor.get(IInstantiationService);
 
 		const closeAll = new CloseAllEditorsAction();
@@ -938,7 +938,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		await commandService.executeCommand(NEW_UNTITLED_FILE_COMMAND_ID);
 	}

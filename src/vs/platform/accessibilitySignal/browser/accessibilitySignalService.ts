@@ -20,24 +20,24 @@ export const IAccessibilitySignalService = createDecorator<IAccessibilitySignalS
 
 export interface IAccessibilitySignalService {
 	readonly _serviceBrand: undefined;
-	playSignal(signal: AccessibilitySignal, options?: IAccessbilitySignalOptions): Promise<codemavi>;
-	playSignals(signals: (AccessibilitySignal | { signal: AccessibilitySignal; source: string })[]): Promise<codemavi>;
+	playSignal(signal: AccessibilitySignal, options?: IAccessbilitySignalOptions): Promise<void>;
+	playSignals(signals: (AccessibilitySignal | { signal: AccessibilitySignal; source: string })[]): Promise<void>;
 	playSignalLoop(signal: AccessibilitySignal, milliseconds: number): IDisposable;
 
 	getEnabledState(signal: AccessibilitySignal, userGesture: boolean, modality?: AccessibilityModality | undefined): IValueWithChangeEvent<boolean>;
 	getDelayMs(signal: AccessibilitySignal, modality: AccessibilityModality, mode: 'line' | 'positional'): number;
 	/**
-	 * Acodemavi this method and prefer `.playSignal`!
+	 * Avoid this method and prefer `.playSignal`!
 	 * Only use it when you want to play the sound regardless of enablement, e.g. in the settings quick pick.
 	 */
-	playSound(signal: Sound, allowManyInParallel: boolean, token: typeof AcknowledgeDocCommentsToken): Promise<codemavi>;
+	playSound(signal: Sound, allowManyInParallel: boolean, token: typeof AcknowledgeDocCommentsToken): Promise<void>;
 
 	/** @deprecated Use getEnabledState(...).onChange */
 	isSoundEnabled(signal: AccessibilitySignal): boolean;
 	/** @deprecated Use getEnabledState(...).value */
 	isAnnouncementEnabled(signal: AccessibilitySignal): boolean;
 	/** @deprecated Use getEnabledState(...).onChange */
-	onSoundEnabledChanged(signal: AccessibilitySignal): Event<codemavi>;
+	onSoundEnabledChanged(signal: AccessibilitySignal): Event<void>;
 }
 
 /** Make sure you understand the doc comments of the method you want to call when using this token! */
@@ -84,7 +84,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 		return new ValueWithChangeEventFromObservable(this._signalEnabledState.get({ signal, userGesture, modality }));
 	}
 
-	public async playSignal(signal: AccessibilitySignal, options: IAccessbilitySignalOptions = {}): Promise<codemavi> {
+	public async playSignal(signal: AccessibilitySignal, options: IAccessbilitySignalOptions = {}): Promise<void> {
 		const shouldPlayAnnouncement = options.modality === 'announcement' || options.modality === undefined;
 		const announcementMessage = signal.announcementMessage;
 		if (shouldPlayAnnouncement && this.isAnnouncementEnabled(signal, options.userGesture) && announcementMessage) {
@@ -98,7 +98,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 		}
 	}
 
-	public async playSignals(signals: (AccessibilitySignal | { signal: AccessibilitySignal; source: string })[]): Promise<codemavi> {
+	public async playSignals(signals: (AccessibilitySignal | { signal: AccessibilitySignal; source: string })[]): Promise<void> {
 		for (const signal of signals) {
 			this.sendSignalTelemetry('signal' in signal ? signal.signal : signal, 'source' in signal ? signal.source : undefined);
 		}
@@ -115,7 +115,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 	}
 
 
-	private sendSignalTelemetry(signal: AccessibilitySignal, source: string | undefined): codemavi {
+	private sendSignalTelemetry(signal: AccessibilitySignal, source: string | undefined): void {
 		const isScreenReaderOptimized = this.accessibilityService.isScreenReaderOptimized();
 		const key = signal.name + (source ? `::${source}` : '') + (isScreenReaderOptimized ? '{screenReaderOptimized}' : '');
 		// Only send once per user session
@@ -154,7 +154,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 
 	private readonly playingSounds = new Set<Sound>();
 
-	public async playSound(sound: Sound, allowManyInParallel = false): Promise<codemavi> {
+	public async playSound(sound: Sound, allowManyInParallel = false): Promise<void> {
 		if (!allowManyInParallel && this.playingSounds.has(sound)) {
 			return;
 		}
@@ -236,7 +236,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 		return this._signalEnabledState.get({ signal, userGesture: !!userGesture, modality: 'sound' }).get();
 	}
 
-	public onSoundEnabledChanged(signal: AccessibilitySignal): Event<codemavi> {
+	public onSoundEnabledChanged(signal: AccessibilitySignal): Event<void> {
 		return this.getEnabledState(signal, false).onDidChange;
 	}
 

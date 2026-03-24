@@ -101,7 +101,7 @@ class NotebookOutlineRenderer implements ITreeRenderer<OutlineEntry, FuzzyScore,
 		return new NotebookOutlineTemplate(container, iconClass, iconLabel, decoration, actionMenu, elementDisposables);
 	}
 
-	renderElement(node: ITreeNode<OutlineEntry, FuzzyScore>, _index: number, template: NotebookOutlineTemplate, _height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<OutlineEntry, FuzzyScore>, _index: number, template: NotebookOutlineTemplate, _height: number | undefined): void {
 		const extraClasses: string[] = [];
 		const options: IIconLabelValueOptions = {
 			matches: createMatches(node.filterData),
@@ -190,12 +190,12 @@ class NotebookOutlineRenderer implements ITreeRenderer<OutlineEntry, FuzzyScore,
 		}
 	}
 
-	disposeTemplate(templateData: NotebookOutlineTemplate): codemavi {
+	disposeTemplate(templateData: NotebookOutlineTemplate): void {
 		templateData.iconLabel.dispose();
 		templateData.elementDisposables.dispose();
 	}
 
-	disposeElement(element: ITreeNode<OutlineEntry, FuzzyScore>, index: number, templateData: NotebookOutlineTemplate, height: number | undefined): codemavi {
+	disposeElement(element: ITreeNode<OutlineEntry, FuzzyScore>, index: number, templateData: NotebookOutlineTemplate, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 		DOM.clearNode(templateData.actionMenu);
 	}
@@ -214,10 +214,10 @@ class NotebookOutlineRenderer implements ITreeRenderer<OutlineEntry, FuzzyScore,
 		}
 	}
 
-	private setupToolbarListeners(editor: INotebookEditor, toolbar: ToolBar, menu: IMenu, initActions: { primary: IAction[]; secondary: IAction[] }, entry: OutlineEntry, templateData: NotebookOutlineTemplate): codemavi {
+	private setupToolbarListeners(editor: INotebookEditor, toolbar: ToolBar, menu: IMenu, initActions: { primary: IAction[]; secondary: IAction[] }, entry: OutlineEntry, templateData: NotebookOutlineTemplate): void {
 		// same fix as in cellToolbars setupListeners re #103926
 		let dropdownIsVisible = false;
-		let deferredUpdate: (() => codemavi) | undefined;
+		let deferredUpdate: (() => void) | undefined;
 
 		toolbar.setActions(initActions.primary, initActions.secondary);
 		templateData.elementDisposables.add(menu.onDidChange(() => {
@@ -341,7 +341,7 @@ export class NotebookQuickPickProvider implements IQuickPickDataSource<OutlineEn
 		return result;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 }
@@ -443,7 +443,7 @@ export class NotebookOutlinePaneProvider implements IDataSource<NotebookCellOutl
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 }
@@ -478,7 +478,7 @@ export class NotebookBreadcrumbsProvider implements IBreadcrumbsDataSource<Outli
 		return result;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 }
@@ -508,10 +508,10 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 	private readonly _onDidChange = new Emitter<OutlineChangeEvent>();
 	readonly onDidChange: Event<OutlineChangeEvent> = this._onDidChange.event;
 
-	private readonly delayerRecomputeState: Delayer<codemavi> = this._disposables.add(new Delayer<codemavi>(300));
-	private readonly delayerRecomputeActive: Delayer<codemavi> = this._disposables.add(new Delayer<codemavi>(200));
+	private readonly delayerRecomputeState: Delayer<void> = this._disposables.add(new Delayer<void>(300));
+	private readonly delayerRecomputeActive: Delayer<void> = this._disposables.add(new Delayer<void>(200));
 	// this can be long, because it will force a recompute at the end, so ideally we only do this once all nb language features are registered
-	private readonly delayerRecomputeSymbols: Delayer<codemavi> = this._disposables.add(new Delayer<codemavi>(2000));
+	private readonly delayerRecomputeSymbols: Delayer<void> = this._disposables.add(new Delayer<void>(2000));
 
 	readonly config: IOutlineListConfig<OutlineEntry>;
 	private _outlineDataSourceReference: IReference<NotebookCellOutlineDataSource> | undefined;
@@ -663,7 +663,7 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 	/**
 	 * set up the primary data source + three viewing sources for the various outline views
 	 */
-	private setDataSources(): codemavi {
+	private setDataSources(): void {
 		const notebookEditor = this._editor.getControl();
 		this._outlineDataSourceReference?.dispose();
 		this._dataSourceDisposables.clear();
@@ -687,7 +687,7 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 	/**
 	 * set up the listeners for the outline content, these respond to model changes in the notebook
 	 */
-	private setModelListeners(): codemavi {
+	private setModelListeners(): void {
 		this._modelDisposables.clear();
 		if (!this._editor.textModel) {
 			return;
@@ -713,10 +713,10 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 	private async computeSymbols(cancelToken: CancellationToken = CancellationToken.None) {
 		if (this._target === OutlineTarget.OutlinePane && this.outlineShowCodeCellSymbols) {
 			// No need to wait for this, we want the outline to show up quickly.
-			codemavi this.doComputeSymbols(cancelToken);
+			void this.doComputeSymbols(cancelToken);
 		}
 	}
-	public async doComputeSymbols(cancelToken: CancellationToken): Promise<codemavi> {
+	public async doComputeSymbols(cancelToken: CancellationToken): Promise<void> {
 		await this._outlineDataSourceReference?.object?.computeFullSymbols(cancelToken);
 	}
 	private async delayedComputeSymbols() {
@@ -736,7 +736,7 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 		this.delayerRecomputeActive.trigger(() => { this.recomputeActive(); });
 	}
 
-	async reveal(entry: OutlineEntry, options: IEditorOptions, sideBySide: boolean): Promise<codemavi> {
+	async reveal(entry: OutlineEntry, options: IEditorOptions, sideBySide: boolean): Promise<void> {
 		const notebookEditorOptions: INotebookEditorOptions = {
 			...options,
 			override: this._editor.input?.editorId,
@@ -811,7 +811,7 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this._disposables.dispose();
 		this._modelDisposables.dispose();
@@ -822,7 +822,7 @@ export class NotebookCellOutline implements IOutline<OutlineEntry> {
 
 export class NotebookOutlineCreator implements IOutlineCreator<NotebookEditor, OutlineEntry> {
 
-	readonly dispose: () => codemavi;
+	readonly dispose: () => void;
 
 	constructor(
 		@IOutlineService outlineService: IOutlineService,

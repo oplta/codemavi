@@ -22,7 +22,7 @@ export const readScripts = (document: TextDocument, buffer = document.getText())
 	let start: Position | undefined;
 	let end: Position | undefined;
 	let inScripts = false;
-	let buildingScript: { name: string; nameRange: Range } | codemavi;
+	let buildingScript: { name: string; nameRange: Range } | void;
 	let level = 0;
 
 	const scripts: INpmScriptReference[] = [];

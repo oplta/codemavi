@@ -99,7 +99,7 @@ export class InlineChatNotebookContribution {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 }

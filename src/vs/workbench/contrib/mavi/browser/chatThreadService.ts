@@ -14,8 +14,8 @@ import { ILLMMessageService } from '../common/sendLLMMessageService.js';
 import { chat_userMessageContent, isABuiltinToolName } from '../common/prompt/prompts.js';
 import { AnthropicReasoning, getErrorMessage, RawToolCallObj, RawToolParamsObj } from '../common/sendLLMMessageTypes.js';
 import { generateUuid } from '../../../../base/common/uuid.js';
-import { FeatureName, ModelSelection, ModelSelectionOptions } from '../common/codemaviSettingsTypes.js';
-import { IMaviSettingsService } from '../common/codemaviSettingsService.js';
+import { FeatureName, ModelSelection, ModelSelectionOptions } from '../common/maviSettingsTypes.js';
+import { IMaviSettingsService } from '../common/maviSettingsService.js';
 import { approvalTypeOfBuiltinToolName, BuiltinToolCallParams, ToolCallParams, ToolName, ToolResult } from '../common/toolsServiceTypes.js';
 import { IToolsService } from './toolsService.js';
 import { CancellationToken } from '../../../../base/common/cancellation.js';
@@ -24,10 +24,10 @@ import { ChatMessage, CheckpointEntry, CodespanLocationLink, StagingSelectionIte
 import { Position } from '../../../../editor/common/core/position.js';
 import { IMetricsService } from '../common/metricsService.js';
 import { shorten } from '../../../../base/common/labels.js';
-import { IMaviModelService } from '../common/codemaviModelService.js';
+import { IMaviModelService } from '../common/maviModelService.js';
 import { findLast, findLastIdx } from '../../../../base/common/arraysFind.js';
 import { IEditCodeService } from './editCodeServiceInterface.js';
-import { Code MaviFileSnapshot } from '../common/editCodeServiceTypes.js';
+import { MaviFileSnapshot } from '../common/editCodeServiceTypes.js';
 import { INotificationService, Severity } from '../../../../platform/notification/common/notification.js';
 import { truncate } from '../../../../base/common/strings.js';
 import { THREAD_STORAGE_KEY } from '../common/storageKeys.js';
@@ -106,7 +106,7 @@ const defaultMessageState: UserMessageState = {
 
 type WhenMounted = {
 	textAreaRef: { current: HTMLTextAreaElement | null }; // the textarea that this thread has, gets set in SidebarChat
-	scrollToBottom: () => codemavi;
+	scrollToBottom: () => void;
 }
 
 
@@ -135,7 +135,7 @@ export type ThreadType = {
 
 		mountedInfo?: {
 			whenMounted: Promise<WhenMounted>
-			_whenMountedResolver: (res: WhenMounted) => codemavi
+			_whenMountedResolver: (res: WhenMounted) => void
 			mountedIsResolvedRef: { current: boolean };
 		}
 
@@ -176,7 +176,7 @@ export type ThreadStreamState = {
 			toolCallSoFar: RawToolCallObj | null;
 		};
 		toolInfo?: undefined;
-		interrupt: Promise<() => codemavi>; // calling this should have no effect on state - would be too confusing. it just cancels the tool
+		interrupt: Promise<() => void>; // calling this should have no effect on state - would be too confusing. it just cancels the tool
 	} | { // a tool is being run
 		isRunning: 'tool';
 		error?: undefined;
@@ -189,7 +189,7 @@ export type ThreadStreamState = {
 			rawParams: RawToolParamsObj;
 			mcpServerName: string | undefined;
 		};
-		interrupt: Promise<() => codemavi>;
+		interrupt: Promise<() => void>;
 	} | {
 		isRunning: 'awaiting_user';
 		error?: undefined;
@@ -201,7 +201,7 @@ export type ThreadStreamState = {
 		error?: undefined;
 		llmInfo?: undefined;
 		toolInfo?: undefined;
-		interrupt: 'not_needed' | Promise<() => codemavi>; // calling this should have no effect on state - would be too confusing. it just cancels the tool
+		interrupt: 'not_needed' | Promise<() => void>; // calling this should have no effect on state - would be too confusing. it just cancels the tool
 	}
 }
 
@@ -233,73 +233,73 @@ export interface IChatThreadService {
 	readonly state: ThreadsState;
 	readonly streamState: ThreadStreamState; // not persistent
 
-	onDidChangeCurrentThread: Event<codemavi>;
+	onDidChangeCurrentThread: Event<void>;
 	onDidChangeStreamState: Event<{ threadId: string }>
 
 	getCurrentThread(): ThreadType;
-	openNewThread(): codemavi;
-	switchToThread(threadId: string): codemavi;
+	openNewThread(): void;
+	switchToThread(threadId: string): void;
 
 	// thread selector
-	deleteThread(threadId: string): codemavi;
-	duplicateThread(threadId: string): codemavi;
+	deleteThread(threadId: string): void;
+	duplicateThread(threadId: string): void;
 
 	// exposed getters/setters
 	// these all apply to current thread
 	getCurrentMessageState: (messageIdx: number) => UserMessageState
-	setCurrentMessageState: (messageIdx: number, newState: Partial<UserMessageState>) => codemavi
+	setCurrentMessageState: (messageIdx: number, newState: Partial<UserMessageState>) => void
 	getCurrentThreadState: () => ThreadType['state']
-	setCurrentThreadState: (newState: Partial<ThreadType['state']>) => codemavi
+	setCurrentThreadState: (newState: Partial<ThreadType['state']>) => void
 
 	// you can edit multiple messages - the one you're currently editing is "focused", and we add items to that one when you press cmd+L.
 	getCurrentFocusedMessageIdx(): number | undefined;
 	isCurrentlyFocusingMessage(): boolean;
-	setCurrentlyFocusedMessageIdx(messageIdx: number | undefined): codemavi;
+	setCurrentlyFocusedMessageIdx(messageIdx: number | undefined): void;
 
-	popStagingSelections(numPops?: number): codemavi;
-	addNewStagingSelection(newSelection: StagingSelectionItem): codemavi;
+	popStagingSelections(numPops?: number): void;
+	addNewStagingSelection(newSelection: StagingSelectionItem): void;
 
-	dangerousSetState: (newState: ThreadsState) => codemavi;
-	resetState: () => codemavi;
+	dangerousSetState: (newState: ThreadsState) => void;
+	resetState: () => void;
 
 	// // current thread's staging selections
-	// closeCurrentStagingSelectionsInMessage(opts: { messageIdx: number }): codemavi;
-	// closeCurrentStagingSelectionsInThread(): codemavi;
+	// closeCurrentStagingSelectionsInMessage(opts: { messageIdx: number }): void;
+	// closeCurrentStagingSelectionsInThread(): void;
 
 	// codespan links (link to symbols in the markdown)
 	getCodespanLink(opts: { codespanStr: string, messageIdx: number, threadId: string }): CodespanLocationLink | undefined;
-	addCodespanLink(opts: { newLinkText: string, newLinkLocation: CodespanLocationLink, messageIdx: number, threadId: string }): codemavi;
+	addCodespanLink(opts: { newLinkText: string, newLinkLocation: CodespanLocationLink, messageIdx: number, threadId: string }): void;
 	generateCodespanLink(opts: { codespanStr: string, threadId: string }): Promise<CodespanLocationLink>;
 	getRelativeStr(uri: URI): string | undefined
 
 	// entry pts
-	abortRunning(threadId: string): Promise<codemavi>;
-	dismissStreamError(threadId: string): codemavi;
+	abortRunning(threadId: string): Promise<void>;
+	dismissStreamError(threadId: string): void;
 
 	// call to edit a message
-	editUserMessageAndStreamResponse({ userMessage, messageIdx, threadId }: { userMessage: string, messageIdx: number, threadId: string }): Promise<codemavi>;
+	editUserMessageAndStreamResponse({ userMessage, messageIdx, threadId }: { userMessage: string, messageIdx: number, threadId: string }): Promise<void>;
 
 	// call to add a message
-	addUserMessageAndStreamResponse({ userMessage, threadId }: { userMessage: string, threadId: string }): Promise<codemavi>;
+	addUserMessageAndStreamResponse({ userMessage, threadId }: { userMessage: string, threadId: string }): Promise<void>;
 
 	// approve/reject
-	approveLatestToolRequest(threadId: string): codemavi;
-	rejectLatestToolRequest(threadId: string): codemavi;
+	approveLatestToolRequest(threadId: string): void;
+	rejectLatestToolRequest(threadId: string): void;
 
 	// jump to history
-	jumpToCheckpointBeforeMessageIdx(opts: { threadId: string, messageIdx: number, jumpToUserModified: boolean }): codemavi;
+	jumpToCheckpointBeforeMessageIdx(opts: { threadId: string, messageIdx: number, jumpToUserModified: boolean }): void;
 
-	focusCurrentChat: () => Promise<codemavi>
-	blurCurrentChat: () => Promise<codemavi>
+	focusCurrentChat: () => Promise<void>
+	blurCurrentChat: () => Promise<void>
 }
 
-export const IChatThreadService = createDecorator<IChatThreadService>('codemaviChatThreadService');
+export const IChatThreadService = createDecorator<IChatThreadService>('maviChatThreadService');
 class ChatThreadService extends Disposable implements IChatThreadService {
 	_serviceBrand: undefined;
 
 	// this fires when the current thread changes at all (a switch of currentThread, or a message added to it, etc)
-	private readonly _onDidChangeCurrentThread = new Emitter<codemavi>();
-	readonly onDidChangeCurrentThread: Event<codemavi> = this._onDidChangeCurrentThread.event;
+	private readonly _onDidChangeCurrentThread = new Emitter<void>();
+	readonly onDidChangeCurrentThread: Event<void> = this._onDidChangeCurrentThread.event;
 
 	private readonly _onDidChangeStreamState = new Emitter<{ threadId: string }>();
 	readonly onDidChangeStreamState: Event<{ threadId: string }> = this._onDidChangeStreamState.event;
@@ -314,7 +314,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 
 	constructor(
 		@IStorageService private readonly _storageService: IStorageService,
-		@IMaviModelService private readonly _codemaviModelService: IMaviModelService,
+		@IMaviModelService private readonly _maviModelService: IMaviModelService,
 		@ILLMMessageService private readonly _llmMessageService: ILLMMessageService,
 		@IToolsService private readonly _toolsService: IToolsService,
 		@IMaviSettingsService private readonly _settingsService: IMaviSettingsService,
@@ -392,7 +392,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 	}
 
 	// !!! this is important for properly restoring URIs from storage
-	// should probably re-use code from codemavi/src/vs/base/common/marshalling.ts instead. but this is simple enough
+	// should probably re-use code from mavi/src/vs/base/common/marshalling.ts instead. but this is simple enough
 	private _convertThreadDataFromStorage(threadsStr: string): ChatThreads {
 		return JSON.parse(threadsStr, (key, value) => {
 			if (value && typeof value === 'object' && value.$mid === 1) { // $mid is the MarshalledId. $mid === 1 means it is a URI
@@ -443,11 +443,11 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 			// set streamState
 			const messages = newState.allThreads[threadId]?.messages
 			const lastMessage = messages && messages[messages.length - 1]
-			// if awaiting user but stream state doesn't indicate it (happens if restart Code Mavi)
+			// if awaiting user but stream state doesn't indicate it (happens if restart Mavi)
 			if (lastMessage && lastMessage.role === 'tool' && lastMessage.type === 'tool_request')
 				this._setStreamState(threadId, { isRunning: 'awaiting_user', })
 
-			// if running now but stream state doesn't indicate it (happens if restart Code Mavi), cancel that last tool
+			// if running now but stream state doesn't indicate it (happens if restart Mavi), cancel that last tool
 			if (lastMessage && lastMessage.role === 'tool' && lastMessage.type === 'running_now') {
 
 				this._updateLatestTool(threadId, { role: 'tool', type: 'rejected', content: lastMessage.content, id: lastMessage.id, rawParams: lastMessage.rawParams, result: null, name: lastMessage.name, params: lastMessage.params, mcpServerName: lastMessage.mcpServerName })
@@ -459,7 +459,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 		// if we did not just set the state to true, set mount info
 		if (doNotRefreshMountInfo) return
 
-		let whenMountedResolver: (w: WhenMounted) => codemavi
+		let whenMountedResolver: (w: WhenMounted) => void
 		const whenMountedPromise = new Promise<WhenMounted>((res) => whenMountedResolver = res)
 
 		this._setThreadState(threadId, {
@@ -598,7 +598,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 	}
 
 
-	// private readonly _currentlyRunningToolInterruptor: { [threadId: string]: (() => codemavi) | undefined } = {}
+	// private readonly _currentlyRunningToolInterruptor: { [threadId: string]: (() => void) | undefined } = {}
 
 
 	// returns true when the tool call is waiting for user approval
@@ -667,8 +667,8 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 
 
 		let interrupted = false
-		let resolveInterruptor: (r: () => codemavi) => codemavi = () => { }
-		const interruptorPromise = new Promise<() => codemavi>(res => { resolveInterruptor = res })
+		let resolveInterruptor: (r: () => void) => void = () => { }
+		const interruptorPromise = new Promise<() => void>(res => { resolveInterruptor = res })
 		try {
 
 			// set stream state
@@ -799,7 +799,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 					| { type: 'llmError', error?: { message: string; fullError: Error | null; } }
 					| { type: 'llmAborted' }
 
-				let resMessageIsDonePromise: (res: ResTypes) => codemavi // resolves when user approves this tool use (or if tool doesn't require approval)
+				let resMessageIsDonePromise: (res: ResTypes) => void // resolves when user approves this tool use (or if tool doesn't require approval)
 				const messageIsDonePromise = new Promise<ResTypes>((res, rej) => { resMessageIsDonePromise = res })
 
 				const llmCancelToken = this._llmMessageService.sendLLMMessage({
@@ -945,11 +945,11 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 
 
 	private _getCheckpointInfo = (checkpointMessage: ChatMessage & { role: 'checkpoint' }, fsPath: string, opts: { includeUserModifiedChanges: boolean }) => {
-		const codemaviFileSnapshot = checkpointMessage.codemaviFileSnapshotOfURI ? checkpointMessage.codemaviFileSnapshotOfURI[fsPath] ?? null : null
-		if (!opts.includeUserModifiedChanges) { return { codemaviFileSnapshot, } }
+		const maviFileSnapshot = checkpointMessage.maviFileSnapshotOfURI ? checkpointMessage.maviFileSnapshotOfURI[fsPath] ?? null : null
+		if (!opts.includeUserModifiedChanges) { return { maviFileSnapshot, } }
 
-		const userModifiedCode MaviFileSnapshot = fsPath in checkpointMessage.userModifications.codemaviFileSnapshotOfURI ? checkpointMessage.userModifications.codemaviFileSnapshotOfURI[fsPath] ?? null : null
-		return { codemaviFileSnapshot: userModifiedCode MaviFileSnapshot ?? codemaviFileSnapshot, }
+		const userModifiedMaviFileSnapshot = fsPath in checkpointMessage.userModifications.maviFileSnapshotOfURI ? checkpointMessage.userModifications.maviFileSnapshotOfURI[fsPath] ?? null : null
+		return { maviFileSnapshot: userModifiedMaviFileSnapshot ?? maviFileSnapshot, }
 	}
 
 	private _computeNewCheckpointInfo({ threadId }: { threadId: string }) {
@@ -959,59 +959,59 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 		const lastCheckpointIdx = findLastIdx(thread.messages, (m) => m.role === 'checkpoint') ?? -1
 		if (lastCheckpointIdx === -1) return
 
-		const codemaviFileSnapshotOfURI: { [fsPath: string]: Code MaviFileSnapshot | undefined } = {}
+		const maviFileSnapshotOfURI: { [fsPath: string]: MaviFileSnapshot | undefined } = {}
 
 		// add a change for all the URIs in the checkpoint history
 		const { lastIdxOfURI } = this._getCheckpointsBetween({ threadId, loIdx: 0, hiIdx: lastCheckpointIdx, }) ?? {}
 		for (const fsPath in lastIdxOfURI ?? {}) {
-			const { model } = this._codemaviModelService.getModelFromFsPath(fsPath)
+			const { model } = this._maviModelService.getModelFromFsPath(fsPath)
 			if (!model) continue
 			const checkpoint2 = thread.messages[lastIdxOfURI[fsPath]] || null
 			if (!checkpoint2) continue
 			if (checkpoint2.role !== 'checkpoint') continue
 			const res = this._getCheckpointInfo(checkpoint2, fsPath, { includeUserModifiedChanges: false })
 			if (!res) continue
-			const { codemaviFileSnapshot: oldCode MaviFileSnapshot } = res
+			const { maviFileSnapshot: oldMaviFileSnapshot } = res
 
 			// if there was any change to the str or diffAreaSnapshot, update. rough approximation of equality, oldDiffAreasSnapshot === diffAreasSnapshot is not perfect
-			const codemaviFileSnapshot = this._editCodeService.getCode MaviFileSnapshot(URI.file(fsPath))
-			if (oldCode MaviFileSnapshot === codemaviFileSnapshot) continue
-			codemaviFileSnapshotOfURI[fsPath] = codemaviFileSnapshot
+			const maviFileSnapshot = this._editCodeService.getMaviFileSnapshot(URI.file(fsPath))
+			if (oldMaviFileSnapshot === maviFileSnapshot) continue
+			maviFileSnapshotOfURI[fsPath] = maviFileSnapshot
 		}
 
 		// // add a change for all user-edited files (that aren't in the history)
 		// for (const fsPath of this._userModifiedFilesToCheckInCheckpoints.keys()) {
 		// 	if (fsPath in lastIdxOfURI) continue // if already visisted, don't visit again
-		// 	const { model } = this._codemaviModelService.getModelFromFsPath(fsPath)
+		// 	const { model } = this._maviModelService.getModelFromFsPath(fsPath)
 		// 	if (!model) continue
 		// 	currStrOfFsPath[fsPath] = model.getValue(EndOfLinePreference.LF)
 		// }
 
-		return { codemaviFileSnapshotOfURI }
+		return { maviFileSnapshotOfURI }
 	}
 
 
 	private _addUserCheckpoint({ threadId }: { threadId: string }) {
-		const { codemaviFileSnapshotOfURI } = this._computeNewCheckpointInfo({ threadId }) ?? {}
+		const { maviFileSnapshotOfURI } = this._computeNewCheckpointInfo({ threadId }) ?? {}
 		this._addCheckpoint(threadId, {
 			role: 'checkpoint',
 			type: 'user_edit',
-			codemaviFileSnapshotOfURI: codemaviFileSnapshotOfURI ?? {},
-			userModifications: { codemaviFileSnapshotOfURI: {}, },
+			maviFileSnapshotOfURI: maviFileSnapshotOfURI ?? {},
+			userModifications: { maviFileSnapshotOfURI: {}, },
 		})
 	}
 	// call this right after LLM edits a file
 	private _addToolEditCheckpoint({ threadId, uri, }: { threadId: string, uri: URI }) {
 		const thread = this.state.allThreads[threadId]
 		if (!thread) return
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) return // should never happen
-		const diffAreasSnapshot = this._editCodeService.getCode MaviFileSnapshot(uri)
+		const diffAreasSnapshot = this._editCodeService.getMaviFileSnapshot(uri)
 		this._addCheckpoint(threadId, {
 			role: 'checkpoint',
 			type: 'tool_edit',
-			codemaviFileSnapshotOfURI: { [uri.fsPath]: diffAreasSnapshot },
-			userModifications: { codemaviFileSnapshotOfURI: {} },
+			maviFileSnapshotOfURI: { [uri.fsPath]: diffAreasSnapshot },
+			userModifications: { maviFileSnapshotOfURI: {} },
 		})
 	}
 
@@ -1035,7 +1035,7 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 		for (let i = loIdx; i <= hiIdx; i += 1) {
 			const message = thread.messages[i]
 			if (message?.role !== 'checkpoint') continue
-			for (const fsPath in message.codemaviFileSnapshotOfURI) { // do not include userModified.beforeStrOfURI here, jumping should not include those changes
+			for (const fsPath in message.maviFileSnapshotOfURI) { // do not include userModified.beforeStrOfURI here, jumping should not include those changes
 				lastIdxOfURI[fsPath] = i
 			}
 		}
@@ -1055,13 +1055,13 @@ class ChatThreadService extends Disposable implements IChatThreadService {
 		return [checkpoint, currCheckpointIdx]
 	}
 	private _addUserModificationsToCurrCheckpoint({ threadId }: { threadId: string }) {
-		const { codemaviFileSnapshotOfURI } = this._computeNewCheckpointInfo({ threadId }) ?? {}
+		const { maviFileSnapshotOfURI } = this._computeNewCheckpointInfo({ threadId }) ?? {}
 		const res = this._readCurrentCheckpoint(threadId)
 		if (!res) return
 		const [checkpoint, checkpointIdx] = res
 		this._editMessageInThread(threadId, checkpointIdx, {
 			...checkpoint,
-			userModifications: { codemaviFileSnapshotOfURI: codemaviFileSnapshotOfURI ?? {}, },
+			userModifications: { maviFileSnapshotOfURI: maviFileSnapshotOfURI ?? {}, },
 		})
 	}
 
@@ -1139,9 +1139,9 @@ We only need to do it for files that were edited since `to`, ie files between to
 					if (message.role !== 'checkpoint') continue
 					const res = this._getCheckpointInfo(message, fsPath, { includeUserModifiedChanges: jumpToUserModified })
 					if (!res) continue
-					const { codemaviFileSnapshot } = res
-					if (!codemaviFileSnapshot) continue
-					this._editCodeService.restoreCode MaviFileSnapshot(URI.file(fsPath), codemaviFileSnapshot)
+					const { maviFileSnapshot } = res
+					if (!maviFileSnapshot) continue
+					this._editCodeService.restoreMaviFileSnapshot(URI.file(fsPath), maviFileSnapshot)
 					break
 				}
 			}
@@ -1173,9 +1173,9 @@ We only need to do it for files that were edited since `from`, ie files between 
 					if (message.role !== 'checkpoint') continue
 					const res = this._getCheckpointInfo(message, fsPath, { includeUserModifiedChanges: jumpToUserModified })
 					if (!res) continue
-					const { codemaviFileSnapshot } = res
-					if (!codemaviFileSnapshot) continue
-					this._editCodeService.restoreCode MaviFileSnapshot(URI.file(fsPath), codemaviFileSnapshot)
+					const { maviFileSnapshot } = res
+					if (!maviFileSnapshot) continue
+					this._editCodeService.restoreMaviFileSnapshot(URI.file(fsPath), maviFileSnapshot)
 					break
 				}
 			}
@@ -1185,7 +1185,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 	}
 
 
-	private _wrapRunAgentToNotify(p: Promise<codemavi>, threadId: string) {
+	private _wrapRunAgentToNotify(p: Promise<void>, threadId: string) {
 		const notify = ({ error }: { error: string | null }) => {
 			const thread = this.state.allThreads[threadId]
 			if (!thread) return
@@ -1201,7 +1201,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 				sticky: true,
 				actions: {
 					primary: [{
-						id: 'codemavi.goToChat',
+						id: 'mavi.goToChat',
 						enabled: true,
 						label: `Jump to Chat`,
 						tooltip: '',
@@ -1226,7 +1226,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 		})
 	}
 
-	dismissStreamError(threadId: string): codemavi {
+	dismissStreamError(threadId: string): void {
 		this._setStreamState(threadId, undefined)
 	}
 
@@ -1463,7 +1463,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 			// check all prevUris for the target
 			for (const uri of prevUris) {
 
-				const modelRef = await this._codemaviModelService.getModelSafe(uri)
+				const modelRef = await this._maviModelService.getModelSafe(uri)
 				const { model } = modelRef
 				if (!model) continue
 
@@ -1648,7 +1648,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 	}
 
 
-	deleteThread(threadId: string): codemavi {
+	deleteThread(threadId: string): void {
 		const { allThreads: currentThreads } = this.state
 
 		// delete the thread
@@ -1723,7 +1723,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 	}
 
 
-	addNewStagingSelection(newSelection: StagingSelectionItem): codemavi {
+	addNewStagingSelection(newSelection: StagingSelectionItem): void {
 
 		const focusedMessageIdx = this.getCurrentFocusedMessageIdx()
 
@@ -1756,7 +1756,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 
 
 	// Pops the staging selections from the current thread's state
-	popStagingSelections(numPops: number): codemavi {
+	popStagingSelections(numPops: number): void {
 
 		numPops = numPops ?? 1;
 
@@ -1781,7 +1781,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 	}
 
 	// set message.state
-	private _setCurrentMessageState(state: Partial<UserMessageState>, messageIdx: number): codemavi {
+	private _setCurrentMessageState(state: Partial<UserMessageState>, messageIdx: number): void {
 
 		const threadId = this.state.currentThreadId
 		const thread = this.state.allThreads[threadId]
@@ -1808,7 +1808,7 @@ We only need to do it for files that were edited since `from`, ie files between 
 	}
 
 	// set thread.state
-	private _setThreadState(threadId: string, state: Partial<ThreadType['state']>, doNotRefreshMountInfo?: boolean): codemavi {
+	private _setThreadState(threadId: string, state: Partial<ThreadType['state']>, doNotRefreshMountInfo?: boolean): void {
 		const thread = this.state.allThreads[threadId]
 		if (!thread) return
 

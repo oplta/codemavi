@@ -18,7 +18,7 @@ export class MainThreadChatStatus extends Disposable implements MainThreadChatSt
 		super();
 	}
 
-	$setEntry(id: string, entry: ChatStatusItemDto): codemavi {
+	$setEntry(id: string, entry: ChatStatusItemDto): void {
 		this._chatStatusItemService.setOrUpdateEntry({
 			id,
 			label: entry.title,
@@ -27,7 +27,7 @@ export class MainThreadChatStatus extends Disposable implements MainThreadChatSt
 		});
 	}
 
-	$disposeEntry(id: string): codemavi {
+	$disposeEntry(id: string): void {
 		this._chatStatusItemService.deleteEntry(id);
 	}
 }

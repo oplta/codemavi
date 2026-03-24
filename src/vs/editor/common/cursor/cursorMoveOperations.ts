@@ -13,7 +13,7 @@ import { CursorConfiguration, ICursorSimpleModel, SelectionStartKind, SingleCurs
 import { PositionAffinity } from '../model.js';
 
 export class CursorPosition {
-	_cursorPositionBrand: codemavi = undefined;
+	_cursorPositionBrand: void = undefined;
 
 	public readonly lineNumber: number;
 	public readonly column: number;

@@ -76,19 +76,19 @@ export class DialogService extends Disposable implements IDialogService {
 		return await handle.result as IInputResult;
 	}
 
-	async info(message: string, detail?: string): Promise<codemavi> {
+	async info(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Info, message, detail });
 	}
 
-	async warn(message: string, detail?: string): Promise<codemavi> {
+	async warn(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Warning, message, detail });
 	}
 
-	async error(message: string, detail?: string): Promise<codemavi> {
+	async error(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Error, message, detail });
 	}
 
-	async about(): Promise<codemavi> {
+	async about(): Promise<void> {
 		if (this.skipDialogs()) {
 			throw new Error('DialogService: refused to show about dialog in tests.');
 		}

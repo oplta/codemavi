@@ -27,7 +27,7 @@ const MULTIROOT_QUERIES: IFolderQuery[] = [
 
 const numThreads = undefined;
 
-async function doSearchTest(query: IFileQuery, expectedResultCount: number | Function): Promise<codemavi> {
+async function doSearchTest(query: IFileQuery, expectedResultCount: number | Function): Promise<void> {
 	const svc = new SearchService();
 
 	const results: ISerializedSearchProgressItem[] = [];

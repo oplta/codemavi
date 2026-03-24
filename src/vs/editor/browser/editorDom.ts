@@ -17,7 +17,7 @@ import { ThemeColor } from '../../base/common/themables.js';
  * Coordinates relative to the whole document (e.g. mouse event's pageX and pageY)
  */
 export class PageCoordinates {
-	_pageCoordinatesBrand: codemavi = undefined;
+	_pageCoordinatesBrand: void = undefined;
 
 	constructor(
 		public readonly x: number,
@@ -37,7 +37,7 @@ export class PageCoordinates {
  * of whether the page is scrolled horizontally.
  */
 export class ClientCoordinates {
-	_clientCoordinatesBrand: codemavi = undefined;
+	_clientCoordinatesBrand: void = undefined;
 
 	constructor(
 		public readonly clientX: number,
@@ -53,7 +53,7 @@ export class ClientCoordinates {
  * The position of the editor in the page.
  */
 export class EditorPagePosition {
-	_editorPagePositionBrand: codemavi = undefined;
+	_editorPagePositionBrand: void = undefined;
 
 	constructor(
 		public readonly x: number,
@@ -70,7 +70,7 @@ export class EditorPagePosition {
  * **NOTE**: These coordinates could be negative if the mouse position is outside the editor.
  */
 export class CoordinatesRelativeToEditor {
-	_positionRelativeToEditorBrand: codemavi = undefined;
+	_positionRelativeToEditorBrand: void = undefined;
 
 	constructor(
 		public readonly x: number,
@@ -103,7 +103,7 @@ export function createCoordinatesRelativeToEditor(editorViewDomNode: HTMLElement
 }
 
 export class EditorMouseEvent extends StandardMouseEvent {
-	_editorMouseEventBrand: codemavi = undefined;
+	_editorMouseEventBrand: void = undefined;
 
 	/**
 	 * If the event is a result of using `setPointerCapture`, the `event.target`
@@ -149,37 +149,37 @@ export class EditorMouseEventFactory {
 		return new EditorMouseEvent(e, false, this._editorViewDomNode);
 	}
 
-	public onContextMenu(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onContextMenu(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.CONTEXT_MENU, (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onMouseUp(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onMouseUp(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.MOUSE_UP, (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onMouseDown(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onMouseDown(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.MOUSE_DOWN, (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onPointerDown(target: HTMLElement, callback: (e: EditorMouseEvent, pointerId: number) => codemavi): IDisposable {
+	public onPointerDown(target: HTMLElement, callback: (e: EditorMouseEvent, pointerId: number) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.POINTER_DOWN, (e: PointerEvent) => {
 			callback(this._create(e), e.pointerId);
 		});
 	}
 
-	public onMouseLeave(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onMouseLeave(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.MOUSE_LEAVE, (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onMouseMove(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onMouseMove(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.MOUSE_MOVE, (e) => callback(this._create(e)));
 	}
 }
@@ -196,25 +196,25 @@ export class EditorPointerEventFactory {
 		return new EditorMouseEvent(e, false, this._editorViewDomNode);
 	}
 
-	public onPointerUp(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onPointerUp(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, 'pointerup', (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onPointerDown(target: HTMLElement, callback: (e: EditorMouseEvent, pointerId: number) => codemavi): IDisposable {
+	public onPointerDown(target: HTMLElement, callback: (e: EditorMouseEvent, pointerId: number) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.POINTER_DOWN, (e: PointerEvent) => {
 			callback(this._create(e), e.pointerId);
 		});
 	}
 
-	public onPointerLeave(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onPointerLeave(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, dom.EventType.POINTER_LEAVE, (e: MouseEvent) => {
 			callback(this._create(e));
 		});
 	}
 
-	public onPointerMove(target: HTMLElement, callback: (e: EditorMouseEvent) => codemavi): IDisposable {
+	public onPointerMove(target: HTMLElement, callback: (e: EditorMouseEvent) => void): IDisposable {
 		return dom.addDisposableListener(target, 'pointermove', (e) => callback(this._create(e)));
 	}
 }
@@ -236,9 +236,9 @@ export class GlobalEditorPointerMoveMonitor extends Disposable {
 		initialElement: Element,
 		pointerId: number,
 		initialButtons: number,
-		pointerMoveCallback: (e: EditorMouseEvent) => codemavi,
-		onStopCallback: (browserEvent?: PointerEvent | KeyboardEvent) => codemavi
-	): codemavi {
+		pointerMoveCallback: (e: EditorMouseEvent) => void,
+		onStopCallback: (browserEvent?: PointerEvent | KeyboardEvent) => void
+	): void {
 
 		// Add a <<capture>> keydown event listener that will cancel the monitoring
 		// if something other than a modifier key is pressed
@@ -265,7 +265,7 @@ export class GlobalEditorPointerMoveMonitor extends Disposable {
 		);
 	}
 
-	public stopMonitoring(): codemavi {
+	public stopMonitoring(): void {
 		this._globalPointerMoveMonitor.stopMonitoring(true);
 	}
 }
@@ -391,16 +391,16 @@ class RefCountedCssRule {
 		return str;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._styleElementDisposables.dispose();
 		this._styleElement = undefined;
 	}
 
-	public increaseRefCount(): codemavi {
+	public increaseRefCount(): void {
 		this._referenceCount++;
 	}
 
-	public decreaseRefCount(): codemavi {
+	public decreaseRefCount(): void {
 		this._referenceCount--;
 	}
 

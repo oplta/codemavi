@@ -33,7 +33,7 @@ export class ExtHostNotebookDocumentSaveParticipant implements ExtHostNotebookDo
 
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 	}
 
 	getOnWillSaveNotebookDocumentEvent(extension: IExtensionDescription): Event<NotebookDocumentWillSaveEvent> {

@@ -340,19 +340,19 @@ export class TernarySearchTree<K, V> {
 		this._iter = segments;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._root = undefined;
 	}
 
 	/**
 	 * Fill the tree with the same value of the given keys
 	 */
-	fill(element: V, keys: readonly K[]): codemavi;
+	fill(element: V, keys: readonly K[]): void;
 	/**
 	 * Fill the tree with given [key,value]-tuples
 	 */
-	fill(values: readonly [K, V][]): codemavi;
-	fill(values: readonly [K, V][] | V, keys?: readonly K[]): codemavi {
+	fill(values: readonly [K, V][]): void;
+	fill(values: readonly [K, V][] | V, keys?: readonly K[]): void {
 		if (keys) {
 			const arr = keys.slice(0);
 			shuffle(arr);
@@ -506,15 +506,15 @@ export class TernarySearchTree<K, V> {
 		return !(node?.value === undefined && node?.mid === undefined);
 	}
 
-	delete(key: K): codemavi {
+	delete(key: K): void {
 		return this._delete(key, false);
 	}
 
-	deleteSuperstr(key: K): codemavi {
+	deleteSuperstr(key: K): void {
 		return this._delete(key, true);
 	}
 
-	private _delete(key: K, superStr: boolean): codemavi {
+	private _delete(key: K, superStr: boolean): void {
 		const iter = this._iter.reset(key);
 		const stack: [Dir, TernarySearchTreeNode<K, V>][] = [];
 		let node = this._root;
@@ -708,7 +708,7 @@ export class TernarySearchTree<K, V> {
 		return this._findSuperstrOrElement(key, true) !== undefined;
 	}
 
-	forEach(callback: (value: V, index: K) => unknown): codemavi {
+	forEach(callback: (value: V, index: K) => unknown): void {
 		for (const [key, value] of this) {
 			callback(value, key);
 		}

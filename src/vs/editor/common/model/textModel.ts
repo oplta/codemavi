@@ -55,10 +55,10 @@ export function createTextBufferFactory(text: string): model.ITextBufferFactory 
 }
 
 interface ITextStream {
-	on(event: 'data', callback: (data: string) => codemavi): codemavi;
-	on(event: 'error', callback: (err: Error) => codemavi): codemavi;
-	on(event: 'end', callback: () => codemavi): codemavi;
-	on(event: string, callback: any): codemavi;
+	on(event: 'data', callback: (data: string) => void): void;
+	on(event: 'error', callback: (err: Error) => void): void;
+	on(event: 'end', callback: () => void): void;
+	on(event: string, callback: any): void;
 }
 
 export function createTextBufferFactoryFromStream(stream: ITextStream): Promise<model.ITextBufferFactory>;
@@ -210,8 +210,8 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 	}
 
 	//#region Events
-	private readonly _onWillDispose: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onWillDispose: Event<codemavi> = this._onWillDispose.event;
+	private readonly _onWillDispose: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onWillDispose: Event<void> = this._onWillDispose.event;
 
 	private readonly _onDidChangeDecorations: DidChangeDecorationsEmitter = this._register(new DidChangeDecorationsEmitter(affectedInjectedTextLines => this.handleBeforeFireDecorationsChangedEvent(affectedInjectedTextLines)));
 	public readonly onDidChangeDecorations: Event<IModelDecorationsChangedEvent> = this._onDidChangeDecorations.event;
@@ -223,16 +223,16 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 	private readonly _onDidChangeOptions: Emitter<IModelOptionsChangedEvent> = this._register(new Emitter<IModelOptionsChangedEvent>());
 	public readonly onDidChangeOptions: Event<IModelOptionsChangedEvent> = this._onDidChangeOptions.event;
 
-	private readonly _onDidChangeAttached: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onDidChangeAttached: Event<codemavi> = this._onDidChangeAttached.event;
+	private readonly _onDidChangeAttached: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onDidChangeAttached: Event<void> = this._onDidChangeAttached.event;
 
 	private readonly _onDidChangeInjectedText: Emitter<ModelInjectedTextChangedEvent> = this._register(new Emitter<ModelInjectedTextChangedEvent>());
 
 	private readonly _eventEmitter: DidChangeContentEmitter = this._register(new DidChangeContentEmitter());
-	public onDidChangeContent(listener: (e: IModelContentChangedEvent) => codemavi): IDisposable {
+	public onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable {
 		return this._eventEmitter.slowEvent((e: InternalModelContentChangeEvent) => listener(e.contentChangedEvent));
 	}
-	public onDidChangeContentOrInjectedText(listener: (e: InternalModelContentChangeEvent | ModelInjectedTextChangedEvent) => codemavi): IDisposable {
+	public onDidChangeContentOrInjectedText(listener: (e: InternalModelContentChangeEvent | ModelInjectedTextChangedEvent) => void): IDisposable {
 		return combinedDisposable(
 			this._eventEmitter.fastEvent(e => listener(e)),
 			this._onDidChangeInjectedText.event(e => listener(e))
@@ -389,7 +389,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.__isDisposing = true;
 		this._onWillDispose.fire();
 		this._tokenizationTextModelPart.dispose();
@@ -397,7 +397,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		super.dispose();
 		this._bufferDisposable.dispose();
 		this.__isDisposing = false;
-		// Manually release reference to previous text buffer to acodemavi large leaks
+		// Manually release reference to previous text buffer to avoid large leaks
 		// in case someone leaks a TextModel reference
 		const emptyDisposedTextBuffer = new PieceTreeTextBuffer([], '', '\n', false, false, true, true);
 		emptyDisposedTextBuffer.dispose();
@@ -417,7 +417,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		);
 	}
 
-	private _assertNotDisposed(): codemavi {
+	private _assertNotDisposed(): void {
 		if (this._isDisposed) {
 			throw new BugIndicatingError('Model is disposed!');
 		}
@@ -433,7 +433,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._buffer;
 	}
 
-	private _emitContentChangedEvent(rawChange: ModelRawContentChangedEvent, change: IModelContentChangedEvent): codemavi {
+	private _emitContentChangedEvent(rawChange: ModelRawContentChangedEvent, change: IModelContentChangedEvent): void {
 		if (this.__isDisposing) {
 			// Do not confuse listeners by emitting any event after disposing
 			return;
@@ -443,7 +443,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		this._eventEmitter.fire(new InternalModelContentChangeEvent(rawChange, change));
 	}
 
-	public setValue(value: string | model.ITextSnapshot): codemavi {
+	public setValue(value: string | model.ITextSnapshot): void {
 		this._assertNotDisposed();
 
 		if (value === null || value === undefined) {
@@ -471,7 +471,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		};
 	}
 
-	private _setValueFromTextBuffer(textBuffer: model.ITextBuffer, textBufferDisposable: IDisposable): codemavi {
+	private _setValueFromTextBuffer(textBuffer: model.ITextBuffer, textBufferDisposable: IDisposable): void {
 		this._assertNotDisposed();
 		const oldFullModelRange = this.getFullModelRange();
 		const oldModelValueLength = this.getValueLengthInRange(oldFullModelRange);
@@ -504,7 +504,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		);
 	}
 
-	public setEOL(eol: model.EndOfLineSequence): codemavi {
+	public setEOL(eol: model.EndOfLineSequence): void {
 		this._assertNotDisposed();
 		const newEOL = (eol === model.EndOfLineSequence.CRLF ? '\r\n' : '\n');
 		if (this._buffer.getEOL() === newEOL) {
@@ -535,12 +535,12 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		);
 	}
 
-	private _onBeforeEOLChange(): codemavi {
+	private _onBeforeEOLChange(): void {
 		// Ensure all decorations get their `range` set.
 		this._decorationsTree.ensureAllNodesHaveRanges(this);
 	}
 
-	private _onAfterEOLChange(): codemavi {
+	private _onAfterEOLChange(): void {
 		// Transform back `range` to offsets
 		const versionId = this.getVersionId();
 		const allDecorations = this._decorationsTree.collectNodesPostOrder();
@@ -573,7 +573,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._attachedViews.attachView();
 	}
 
-	public onBeforeDetached(view: model.IAttachedView): codemavi {
+	public onBeforeDetached(view: model.IAttachedView): void {
 		this._attachedEditorCount--;
 		if (this._attachedEditorCount === 0) {
 			this._tokenizationTextModelPart.handleDidChangeAttached();
@@ -646,7 +646,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		};
 	}
 
-	public updateOptions(_newOpts: model.ITextModelUpdateOptions): codemavi {
+	public updateOptions(_newOpts: model.ITextModelUpdateOptions): void {
 		this._assertNotDisposed();
 		const tabSize = (typeof _newOpts.tabSize !== 'undefined') ? _newOpts.tabSize : this._options.tabSize;
 		const indentSize = (typeof _newOpts.indentSize !== 'undefined') ? _newOpts.indentSize : this._options.originalIndentSize;
@@ -675,7 +675,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		this._onDidChangeOptions.fire(e);
 	}
 
-	public detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): codemavi {
+	public detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): void {
 		this._assertNotDisposed();
 		const guessedIndentation = guessIndentation(this._buffer, defaultTabSize, defaultInsertSpaces);
 		this.updateOptions({
@@ -707,7 +707,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._buffer.mightContainUnusualLineTerminators();
 	}
 
-	public removeUnusualLineTerminators(selections: Selection[] | null = null): codemavi {
+	public removeUnusualLineTerminators(selections: Selection[] | null = null): void {
 		const matches = this.findMatches(strings.UNUSUAL_LINE_TERMINATORS.source, false, true, false, null, false, Constants.MAX_SAFE_SMALL_INTEGER);
 		this._buffer.resetMightContainUnusualLineTerminators();
 		this.pushEditOperations(selections, matches.map(m => ({ range: m.range, text: null })), () => null);
@@ -739,20 +739,20 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._buffer.getPositionAt(offset);
 	}
 
-	private _increaseVersionId(): codemavi {
+	private _increaseVersionId(): void {
 		this._versionId = this._versionId + 1;
 		this._alternativeVersionId = this._versionId;
 	}
 
-	public _overwriteVersionId(versionId: number): codemavi {
+	public _overwriteVersionId(versionId: number): void {
 		this._versionId = versionId;
 	}
 
-	public _overwriteAlternativeVersionId(newAlternativeVersionId: number): codemavi {
+	public _overwriteAlternativeVersionId(newAlternativeVersionId: number): void {
 		this._alternativeVersionId = newAlternativeVersionId;
 	}
 
-	public _overwriteInitialUndoRedoSnapshot(newInitialUndoRedoSnapshot: ResourceEditStackSnapshot | null): codemavi {
+	public _overwriteInitialUndoRedoSnapshot(newInitialUndoRedoSnapshot: ResourceEditStackSnapshot | null): void {
 		this._initialUndoRedoSnapshot = newInitialUndoRedoSnapshot;
 	}
 
@@ -1024,7 +1024,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		const validationType = StringOffsetValidationType.SurrogatePairs;
 		this._assertNotDisposed();
 
-		// Acodemavi object allocation and cover most likely case
+		// Avoid object allocation and cover most likely case
 		if (position instanceof Position) {
 			if (this._isValidPosition(position.lineNumber, position.column, validationType)) {
 				return position;
@@ -1071,7 +1071,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		const validationType = StringOffsetValidationType.SurrogatePairs;
 		this._assertNotDisposed();
 
-		// Acodemavi object allocation and cover most likely case
+		// Avoid object allocation and cover most likely case
 		if ((_range instanceof Range) && !(_range instanceof Selection)) {
 			if (this._isValidRange(_range, validationType)) {
 				return _range;
@@ -1226,15 +1226,15 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 
 	//#region Editing
 
-	public pushStackElement(): codemavi {
+	public pushStackElement(): void {
 		this._commandManager.pushStackElement();
 	}
 
-	public popStackElement(): codemavi {
+	public popStackElement(): void {
 		this._commandManager.popStackElement();
 	}
 
-	public pushEOL(eol: model.EndOfLineSequence): codemavi {
+	public pushEOL(eol: model.EndOfLineSequence): void {
 		const currentEOL = (this.getEOL() === '\n' ? model.EndOfLineSequence.LF : model.EndOfLineSequence.CRLF);
 		if (currentEOL === eol) {
 			return;
@@ -1375,7 +1375,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._commandManager.pushEditOperation(beforeCursorState, editOperations, cursorStateComputer, group);
 	}
 
-	_applyUndo(changes: TextChange[], eol: model.EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): codemavi {
+	_applyUndo(changes: TextChange[], eol: model.EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): void {
 		const edits = changes.map<ISingleEditOperation>((change) => {
 			const rangeStart = this.getPositionAt(change.newPosition);
 			const rangeEnd = this.getPositionAt(change.newEnd);
@@ -1387,7 +1387,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		this._applyUndoRedoEdits(edits, eol, true, false, resultingAlternativeVersionId, resultingSelection);
 	}
 
-	_applyRedo(changes: TextChange[], eol: model.EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): codemavi {
+	_applyRedo(changes: TextChange[], eol: model.EndOfLineSequence, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): void {
 		const edits = changes.map<ISingleEditOperation>((change) => {
 			const rangeStart = this.getPositionAt(change.oldPosition);
 			const rangeEnd = this.getPositionAt(change.oldEnd);
@@ -1399,7 +1399,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		this._applyUndoRedoEdits(edits, eol, false, true, resultingAlternativeVersionId, resultingSelection);
 	}
 
-	private _applyUndoRedoEdits(edits: ISingleEditOperation[], eol: model.EndOfLineSequence, isUndoing: boolean, isRedoing: boolean, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): codemavi {
+	private _applyUndoRedoEdits(edits: ISingleEditOperation[], eol: model.EndOfLineSequence, isUndoing: boolean, isRedoing: boolean, resultingAlternativeVersionId: number, resultingSelection: Selection[] | null): void {
 		try {
 			this._onDidChangeDecorations.beginDeferredEmit();
 			this._eventEmitter.beginDeferredEmit();
@@ -1416,10 +1416,10 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		}
 	}
 
-	public applyEdits(operations: readonly model.IIdentifiedSingleEditOperation[]): codemavi;
-	public applyEdits(operations: readonly model.IIdentifiedSingleEditOperation[], computeUndoEdits: false): codemavi;
+	public applyEdits(operations: readonly model.IIdentifiedSingleEditOperation[]): void;
+	public applyEdits(operations: readonly model.IIdentifiedSingleEditOperation[], computeUndoEdits: false): void;
 	public applyEdits(operations: readonly model.IIdentifiedSingleEditOperation[], computeUndoEdits: true): model.IValidEditOperation[];
-	public applyEdits(rawOperations: readonly model.IIdentifiedSingleEditOperation[], computeUndoEdits: boolean = false): codemavi | model.IValidEditOperation[] {
+	public applyEdits(rawOperations: readonly model.IIdentifiedSingleEditOperation[], computeUndoEdits: boolean = false): void | model.IValidEditOperation[] {
 		try {
 			this._onDidChangeDecorations.beginDeferredEmit();
 			this._eventEmitter.beginDeferredEmit();
@@ -1431,7 +1431,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		}
 	}
 
-	private _doApplyEdits(rawOperations: model.ValidAnnotatedEditOperation[], computeUndoEdits: boolean): codemavi | model.IValidEditOperation[] {
+	private _doApplyEdits(rawOperations: model.ValidAnnotatedEditOperation[], computeUndoEdits: boolean): void | model.IValidEditOperation[] {
 
 		const oldLineCount = this._buffer.getLineCount();
 		const result = this._buffer.applyEdits(rawOperations, this._options.trimAutoWhitespace, computeUndoEdits);
@@ -1556,7 +1556,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return (result.reverseEdits === null ? undefined : result.reverseEdits);
 	}
 
-	public undo(): codemavi | Promise<codemavi> {
+	public undo(): void | Promise<void> {
 		return this._undoRedoService.undo(this.uri);
 	}
 
@@ -1564,7 +1564,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._undoRedoService.canUndo(this.uri);
 	}
 
-	public redo(): codemavi | Promise<codemavi> {
+	public redo(): void | Promise<void> {
 		return this._undoRedoService.redo(this.uri);
 	}
 
@@ -1576,7 +1576,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 
 	//#region Decorations
 
-	private handleBeforeFireDecorationsChangedEvent(affectedInjectedTextLines: Set<number> | null): codemavi {
+	private handleBeforeFireDecorationsChangedEvent(affectedInjectedTextLines: Set<number> | null): void {
 		// This is called before the decoration changed event is fired.
 
 		if (affectedInjectedTextLines === null || affectedInjectedTextLines.size === 0) {
@@ -1605,13 +1605,13 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 			addDecoration: (range: IRange, options: model.IModelDecorationOptions): string => {
 				return this._deltaDecorationsImpl(ownerId, [], [{ range: range, options: options }])[0];
 			},
-			changeDecoration: (id: string, newRange: IRange): codemavi => {
+			changeDecoration: (id: string, newRange: IRange): void => {
 				this._changeDecorationImpl(id, newRange);
 			},
 			changeDecorationOptions: (id: string, options: model.IModelDecorationOptions) => {
 				this._changeDecorationOptionsImpl(id, _normalizeOptions(options));
 			},
-			removeDecoration: (id: string): codemavi => {
+			removeDecoration: (id: string): void => {
 				this._deltaDecorationsImpl(ownerId, [id], []);
 			},
 			deltaDecorations: (oldDecorations: string[], newDecorations: model.IModelDeltaDecoration[]): string[] => {
@@ -1697,7 +1697,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return node.id;
 	}
 
-	public removeAllDecorationsWithOwnerId(ownerId: number): codemavi {
+	public removeAllDecorationsWithOwnerId(ownerId: number): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -1789,7 +1789,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this._buffer.getRangeAt(start, end - start);
 	}
 
-	private _changeDecorationImpl(decorationId: string, _range: IRange): codemavi {
+	private _changeDecorationImpl(decorationId: string, _range: IRange): void {
 		const node = this._decorations[decorationId];
 		if (!node) {
 			return;
@@ -1821,7 +1821,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		}
 	}
 
-	private _changeDecorationOptionsImpl(decorationId: string, options: ModelDecorationOptions): codemavi {
+	private _changeDecorationOptionsImpl(decorationId: string, options: ModelDecorationOptions): void {
 		const node = this._decorations[decorationId];
 		if (!node) {
 			return;
@@ -1952,7 +1952,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		return this.tokenization.getLanguageId();
 	}
 
-	public setLanguage(languageIdOrSelection: string | ILanguageSelection, source?: string): codemavi {
+	public setLanguage(languageIdOrSelection: string | ILanguageSelection, source?: string): void {
 		if (typeof languageIdOrSelection === 'string') {
 			this._languageSelectionListener.clear();
 			this._setLanguage(languageIdOrSelection, source);
@@ -1962,7 +1962,7 @@ export class TextModel extends Disposable implements model.ITextModel, IDecorati
 		}
 	}
 
-	private _setLanguage(languageId: string, source?: string): codemavi {
+	private _setLanguage(languageId: string, source?: string): void {
 		this.tokenization.setLanguageId(languageId, source);
 		this._languageService.requestRichLanguageFeatures(languageId);
 	}
@@ -2052,7 +2052,7 @@ class DecorationsTrees {
 		this._injectedTextDecorationsTree = new IntervalTree();
 	}
 
-	public ensureAllNodesHaveRanges(host: IDecorationsTreesHost): codemavi {
+	public ensureAllNodesHaveRanges(host: IDecorationsTreesHost): void {
 		this.getAll(host, 0, false, false, false);
 	}
 
@@ -2121,7 +2121,7 @@ class DecorationsTrees {
 		return r0.concat(r1).concat(r2);
 	}
 
-	public insert(node: IntervalNode): codemavi {
+	public insert(node: IntervalNode): void {
 		if (isNodeInjectedText(node)) {
 			this._injectedTextDecorationsTree.insert(node);
 		} else if (isNodeInOverviewRuler(node)) {
@@ -2131,7 +2131,7 @@ class DecorationsTrees {
 		}
 	}
 
-	public delete(node: IntervalNode): codemavi {
+	public delete(node: IntervalNode): void {
 		if (isNodeInjectedText(node)) {
 			this._injectedTextDecorationsTree.delete(node);
 		} else if (isNodeInOverviewRuler(node)) {
@@ -2152,7 +2152,7 @@ class DecorationsTrees {
 		return node.range;
 	}
 
-	private _resolveNode(node: IntervalNode, cachedVersionId: number): codemavi {
+	private _resolveNode(node: IntervalNode, cachedVersionId: number): void {
 		if (isNodeInjectedText(node)) {
 			this._injectedTextDecorationsTree.resolveNode(node, cachedVersionId);
 		} else if (isNodeInOverviewRuler(node)) {
@@ -2162,7 +2162,7 @@ class DecorationsTrees {
 		}
 	}
 
-	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): codemavi {
+	public acceptReplace(offset: number, length: number, textLength: number, forceMoveMarkers: boolean): void {
 		this._decorationsTree0.acceptReplace(offset, length, textLength, forceMoveMarkers);
 		this._decorationsTree1.acceptReplace(offset, length, textLength, forceMoveMarkers);
 		this._injectedTextDecorationsTree.acceptReplace(offset, length, textLength, forceMoveMarkers);
@@ -2205,7 +2205,7 @@ export class ModelDecorationOverviewRulerOptions extends DecorationOptions {
 		return this._resolvedColor;
 	}
 
-	public invalidateCachedColor(): codemavi {
+	public invalidateCachedColor(): void {
 		this._resolvedColor = null;
 	}
 
@@ -2256,7 +2256,7 @@ export class ModelDecorationMinimapOptions extends DecorationOptions {
 		return this._resolvedColor;
 	}
 
-	public invalidateCachedColor(): codemavi {
+	public invalidateCachedColor(): void {
 		this._resolvedColor = undefined;
 	}
 
@@ -2404,7 +2404,7 @@ class DidChangeDecorationsEmitter extends Disposable {
 	private _affectsGlyphMargin: boolean;
 	private _affectsLineNumber: boolean;
 
-	constructor(private readonly handleBeforeFire: (affectedInjectedTextLines: Set<number> | null) => codemavi) {
+	constructor(private readonly handleBeforeFire: (affectedInjectedTextLines: Set<number> | null) => void) {
 		super();
 		this._deferredCnt = 0;
 		this._shouldFireDeferred = false;
@@ -2418,11 +2418,11 @@ class DidChangeDecorationsEmitter extends Disposable {
 		return this._actual.hasListeners();
 	}
 
-	public beginDeferredEmit(): codemavi {
+	public beginDeferredEmit(): void {
 		this._deferredCnt++;
 	}
 
-	public endDeferredEmit(): codemavi {
+	public endDeferredEmit(): void {
 		this._deferredCnt--;
 		if (this._deferredCnt === 0) {
 			if (this._shouldFireDeferred) {
@@ -2434,14 +2434,14 @@ class DidChangeDecorationsEmitter extends Disposable {
 		}
 	}
 
-	public recordLineAffectedByInjectedText(lineNumber: number): codemavi {
+	public recordLineAffectedByInjectedText(lineNumber: number): void {
 		if (!this._affectedInjectedTextLines) {
 			this._affectedInjectedTextLines = new Set();
 		}
 		this._affectedInjectedTextLines.add(lineNumber);
 	}
 
-	public checkAffectedAndFire(options: ModelDecorationOptions): codemavi {
+	public checkAffectedAndFire(options: ModelDecorationOptions): void {
 		this._affectsMinimap ||= !!options.minimap?.position;
 		this._affectsOverviewRuler ||= !!options.overviewRuler?.color;
 		this._affectsGlyphMargin ||= !!options.glyphMarginClassName;
@@ -2449,7 +2449,7 @@ class DidChangeDecorationsEmitter extends Disposable {
 		this.tryFire();
 	}
 
-	public fire(): codemavi {
+	public fire(): void {
 		this._affectsMinimap = true;
 		this._affectsOverviewRuler = true;
 		this._affectsGlyphMargin = true;
@@ -2509,11 +2509,11 @@ class DidChangeContentEmitter extends Disposable {
 		);
 	}
 
-	public beginDeferredEmit(): codemavi {
+	public beginDeferredEmit(): void {
 		this._deferredCnt++;
 	}
 
-	public endDeferredEmit(resultingSelection: Selection[] | null = null): codemavi {
+	public endDeferredEmit(resultingSelection: Selection[] | null = null): void {
 		this._deferredCnt--;
 		if (this._deferredCnt === 0) {
 			if (this._deferredEvent !== null) {
@@ -2526,7 +2526,7 @@ class DidChangeContentEmitter extends Disposable {
 		}
 	}
 
-	public fire(e: InternalModelContentChangeEvent): codemavi {
+	public fire(e: InternalModelContentChangeEvent): void {
 		if (this._deferredCnt > 0) {
 			if (this._deferredEvent) {
 				this._deferredEvent = this._deferredEvent.merge(e);

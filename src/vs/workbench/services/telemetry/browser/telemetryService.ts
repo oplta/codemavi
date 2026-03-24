@@ -96,7 +96,7 @@ export class TelemetryService extends Disposable implements ITelemetryService {
 		return this.impl;
 	}
 
-	setExperimentProperty(name: string, value: string): codemavi {
+	setExperimentProperty(name: string, value: string): void {
 		return this.impl.setExperimentProperty(name, value);
 	}
 

@@ -1,8 +1,8 @@
 /**
- * Code Mavi - Orchestrator Service
+ * Mavi - Orchestrator Service
  * 
  * Ana agent servisi - tüm agent akışını yönetir
- * Code Mavi'un chatThreadService.ts dosyasına entegre edilecek
+ * Mavi'un chatThreadService.ts dosyasına entegre edilecek
  */
 
 import { URI } from '../../../../base/common/uri.js'
@@ -74,7 +74,7 @@ export interface IOrchestratorService {
 	executePlan(
 		plan: ExecutionPlan,
 		token: CancellationToken
-	): Promise<codemavi>
+	): Promise<void>
 
 	/**
 	 * Executor'a görev delegate et
@@ -139,7 +139,7 @@ export class OrchestratorServiceImpl implements IOrchestratorService {
 		}
 	}
 
-	async executePlan(plan: ExecutionPlan, token: CancellationToken): Promise<codemavi> {
+	async executePlan(plan: ExecutionPlan, token: CancellationToken): Promise<void> {
 		this._tasks = plan.tasks
 		
 		for (const task of this._tasks) {

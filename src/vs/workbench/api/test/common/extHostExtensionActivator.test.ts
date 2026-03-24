@@ -202,7 +202,7 @@ suite('ExtensionsActivator', () => {
 		public readonly activateCalls: ExtensionIdentifier[] = [];
 		public readonly errors: [ExtensionIdentifier, Error | null, MissingExtensionDependency | null][] = [];
 
-		onExtensionActivationError(extensionId: ExtensionIdentifier, error: Error | null, missingExtensionDependency: MissingExtensionDependency | null): codemavi {
+		onExtensionActivationError(extensionId: ExtensionIdentifier, error: Error | null, missingExtensionDependency: MissingExtensionDependency | null): void {
 			this.errors.push([extensionId, error, missingExtensionDependency]);
 		}
 
@@ -232,19 +232,19 @@ suite('ExtensionsActivator', () => {
 	}
 
 	class ExtensionActivationPromiseSource {
-		private readonly _resolve: (value: ActivatedExtension) => codemavi;
-		private readonly _reject: (err: Error) => codemavi;
+		private readonly _resolve: (value: ActivatedExtension) => void;
+		private readonly _reject: (err: Error) => void;
 		public readonly promise: Promise<ActivatedExtension>;
 
 		constructor() {
 			({ promise: this.promise, resolve: this._resolve, reject: this._reject } = promiseWithResolvers<ActivatedExtension>());
 		}
 
-		public resolve(): codemavi {
+		public resolve(): void {
 			this._resolve(new EmptyExtension(ExtensionActivationTimes.NONE));
 		}
 
-		public reject(err: Error): codemavi {
+		public reject(err: Error): void {
 			this._reject(err);
 		}
 	}

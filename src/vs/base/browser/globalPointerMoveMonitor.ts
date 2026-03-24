@@ -7,11 +7,11 @@ import * as dom from './dom.js';
 import { DisposableStore, IDisposable, toDisposable } from '../common/lifecycle.js';
 
 export interface IPointerMoveCallback {
-	(event: PointerEvent): codemavi;
+	(event: PointerEvent): void;
 }
 
 export interface IOnStopCallback {
-	(browserEvent?: PointerEvent | KeyboardEvent): codemavi;
+	(browserEvent?: PointerEvent | KeyboardEvent): void;
 }
 
 export class GlobalPointerMoveMonitor implements IDisposable {
@@ -20,12 +20,12 @@ export class GlobalPointerMoveMonitor implements IDisposable {
 	private _pointerMoveCallback: IPointerMoveCallback | null = null;
 	private _onStopCallback: IOnStopCallback | null = null;
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.stopMonitoring(false);
 		this._hooks.dispose();
 	}
 
-	public stopMonitoring(invokeStopCallback: boolean, browserEvent?: PointerEvent | KeyboardEvent): codemavi {
+	public stopMonitoring(invokeStopCallback: boolean, browserEvent?: PointerEvent | KeyboardEvent): void {
 		if (!this.isMonitoring()) {
 			// Not monitoring
 			return;
@@ -52,7 +52,7 @@ export class GlobalPointerMoveMonitor implements IDisposable {
 		initialButtons: number,
 		pointerMoveCallback: IPointerMoveCallback,
 		onStopCallback: IOnStopCallback
-	): codemavi {
+	): void {
 		if (this.isMonitoring()) {
 			this.stopMonitoring(false);
 		}

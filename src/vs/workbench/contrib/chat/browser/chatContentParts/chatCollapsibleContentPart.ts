@@ -25,7 +25,7 @@ export abstract class ChatCollapsibleContentPart extends Disposable implements I
 
 	private _domNode?: HTMLElement;
 
-	protected readonly _onDidChangeHeight = this._register(new Emitter<codemavi>());
+	protected readonly _onDidChangeHeight = this._register(new Emitter<void>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	protected readonly hasFollowingContent: boolean;
@@ -90,11 +90,11 @@ export abstract class ChatCollapsibleContentPart extends Disposable implements I
 
 	abstract hasSameContent(other: IChatRendererContent, followingContent: IChatRendererContent[], element: ChatTreeItem): boolean;
 
-	private updateAriaLabel(element: HTMLElement, label: string, expanded?: boolean): codemavi {
+	private updateAriaLabel(element: HTMLElement, label: string, expanded?: boolean): void {
 		element.ariaLabel = expanded ? localize('usedReferencesExpanded', "{0}, expanded", label) : localize('usedReferencesCollapsed', "{0}, collapsed", label);
 	}
 
-	addDisposable(disposable: IDisposable): codemavi {
+	addDisposable(disposable: IDisposable): void {
 		this._register(disposable);
 	}
 
@@ -106,7 +106,7 @@ export abstract class ChatCollapsibleContentPart extends Disposable implements I
 		return this._isExpanded.get();
 	}
 
-	protected setExpanded(value: boolean): codemavi {
+	protected setExpanded(value: boolean): void {
 		this._isExpanded.set(value, undefined);
 	}
 }
@@ -143,7 +143,7 @@ export class ChatCollapsibleEditorContentPart extends ChatCollapsibleContentPart
 		}];
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._editorReference?.dispose();
 		super.dispose();
 	}
@@ -177,7 +177,7 @@ export class ChatCollapsibleEditorContentPart extends ChatCollapsibleContentPart
 		return false;
 	}
 
-	layout(width: number): codemavi {
+	layout(width: number): void {
 		this._currentWidth = width;
 		this._editorReference.object.layout(width);
 	}

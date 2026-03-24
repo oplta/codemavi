@@ -47,7 +47,7 @@ export interface IVisibleRangeProvider {
 }
 
 class VisibleTextAreaData {
-	_visibleTextAreaBrand: codemavi = undefined;
+	_visibleTextAreaBrand: void = undefined;
 
 	public startPosition: Position | null = null;
 	public endPosition: Position | null = null;
@@ -59,7 +59,7 @@ class VisibleTextAreaData {
 	 * When doing composition, the currently composed text might be split up into
 	 * multiple tokens, then merged again into a single token, etc. Here we attempt
 	 * to keep the presentation of the <textarea> stable by using the previous used
-	 * style if multiple tokens come into play. This acodemavis flickering.
+	 * style if multiple tokens come into play. This avoids flickering.
 	 */
 	private _previousPresentation: ITokenPresentation | null = null;
 
@@ -72,7 +72,7 @@ class VisibleTextAreaData {
 	) {
 	}
 
-	prepareRender(visibleRangeProvider: IVisibleRangeProvider): codemavi {
+	prepareRender(visibleRangeProvider: IVisibleRangeProvider): void {
 		const startModelPosition = new Position(this.modelLineNumber, this.distanceToModelLineStart + 1);
 		const endModelPosition = new Position(this.modelLineNumber, this._context.viewModel.model.getLineMaxColumn(this.modelLineNumber) - this.distanceToModelLineEnd);
 
@@ -91,7 +91,7 @@ class VisibleTextAreaData {
 
 	definePresentation(tokenPresentation: ITokenPresentation | null): ITokenPresentation {
 		if (!this._previousPresentation) {
-			// To acodemavi flickering, once set, always reuse a presentation throughout the entire IME session
+			// To avoid flickering, once set, always reuse a presentation throughout the entire IME session
 			if (tokenPresentation) {
 				this._previousPresentation = tokenPresentation;
 			} else {
@@ -470,7 +470,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		return this.textArea;
 	}
 
-	public writeScreenReaderContent(reason: string): codemavi {
+	public writeScreenReaderContent(reason: string): void {
 		this._textAreaInput.writeNativeTextAreaContent(reason);
 	}
 
@@ -478,7 +478,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		return this.textArea.domNode;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this.textArea.domNode.remove();
 		this.textAreaCover.domNode.remove();
@@ -554,7 +554,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		return '';
 	}
 
-	private _setAccessibilityOptions(options: IComputedEditorOptions): codemavi {
+	private _setAccessibilityOptions(options: IComputedEditorOptions): void {
 		this._accessibilitySupport = options.get(EditorOption.accessibilitySupport);
 		const accessibilityPageSize = options.get(EditorOption.accessibilityPageSize);
 		if (this._accessibilitySupport === AccessibilitySupport.Enabled && accessibilityPageSize === EditorOptions.accessibilityPageSize.defaultValue) {
@@ -652,7 +652,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		return this._textAreaInput.isFocused();
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		this._textAreaInput.focusTextArea();
 	}
 
@@ -664,7 +664,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		return this._lastRenderPosition;
 	}
 
-	public setAriaOptions(options: IEditorAriaOptions): codemavi {
+	public setAriaOptions(options: IEditorAriaOptions): void {
 		if (options.activeDescendant) {
 			this.textArea.setAttribute('aria-haspopup', 'true');
 			this.textArea.setAttribute('aria-autocomplete', 'list');
@@ -681,7 +681,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 
 	// --- end view API
 
-	private _ensureReadOnlyAttribute(): codemavi {
+	private _ensureReadOnlyAttribute(): void {
 		const options = this._context.configuration.options;
 		// When someone requests to disable IME, we set the "readonly" attribute on the <textarea>.
 		// This will prevent composition.
@@ -696,18 +696,18 @@ export class TextAreaEditContext extends AbstractEditContext {
 	private _primaryCursorPosition: Position = new Position(1, 1);
 	private _primaryCursorVisibleRange: HorizontalPosition | null = null;
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		this._primaryCursorPosition = new Position(this._selections[0].positionLineNumber, this._selections[0].positionColumn);
 		this._primaryCursorVisibleRange = ctx.visibleRangeForPosition(this._primaryCursorPosition);
 		this._visibleTextArea?.prepareRender(ctx);
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		this._textAreaInput.writeNativeTextAreaContent('render');
 		this._render();
 	}
 
-	private _render(): codemavi {
+	private _render(): void {
 		if (this._visibleTextArea) {
 			// The text area is visible for composition reasons
 
@@ -722,7 +722,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 				let scrollLeft = this._visibleTextArea.widthOfHiddenLineTextBefore;
 				let left = (this._contentLeft + visibleStart.left - this._scrollLeft);
 				// See https://github.com/microsoft/vscode/issues/141725#issuecomment-1050670841
-				// Here we are adding +1 to acodemavi flickering that might be caused by having a width that is too small.
+				// Here we are adding +1 to avoid flickering that might be caused by having a width that is too small.
 				// This could be caused by rounding errors that might only show up with certain font families.
 				// In other words, a pixel might be lost when doing something like
 				//      `Math.round(end) - Math.round(start)`
@@ -824,7 +824,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		});
 	}
 
-	private _renderAtTopLeft(): codemavi {
+	private _renderAtTopLeft(): void {
 		// (in WebKit the textarea is 1px by 1px because it cannot handle input to a 0x0 textarea)
 		// specifically, when doing Korean IME, setting the textarea to 0x0 breaks IME badly.
 		this._doRender({
@@ -837,7 +837,7 @@ export class TextAreaEditContext extends AbstractEditContext {
 		});
 	}
 
-	private _doRender(renderData: IRenderData): codemavi {
+	private _doRender(renderData: IRenderData): void {
 		this._lastRenderPosition = renderData.lastRenderPosition;
 
 		const ta = this.textArea;

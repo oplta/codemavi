@@ -52,7 +52,7 @@ class SelectListRenderer implements IListRenderer<ISelectOptionItem, ISelectList
 		return data;
 	}
 
-	renderElement(element: ISelectOptionItem, index: number, templateData: ISelectListTemplateData): codemavi {
+	renderElement(element: ISelectOptionItem, index: number, templateData: ISelectListTemplateData): void {
 		const data: ISelectListTemplateData = templateData;
 
 		const text = element.text;
@@ -74,7 +74,7 @@ class SelectListRenderer implements IListRenderer<ISelectOptionItem, ISelectList
 		}
 	}
 
-	disposeTemplate(_templateData: ISelectListTemplateData): codemavi {
+	disposeTemplate(_templateData: ISelectListTemplateData): void {
 		// noop
 	}
 }
@@ -153,7 +153,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 
 	}
 
-	private setTitle(title: string): codemavi {
+	private setTitle(title: string): void {
 		if (!this._hover && title) {
 			this._hover = this._register(getBaseLayerHoverDelegate().setupManagedHover(getDefaultHoverDelegate('mouse'), this.selectElement, title));
 		} else if (this._hover) {
@@ -279,7 +279,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		return this._onDidSelect.event;
 	}
 
-	public setOptions(options: ISelectOptionItem[], selected?: number): codemavi {
+	public setOptions(options: ISelectOptionItem[], selected?: number): void {
 		if (!arrays.equals(this.options, options)) {
 			this.options = options;
 			this.selectElement.options.length = 0;
@@ -301,7 +301,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}
 	}
 
-	public setEnabled(enable: boolean): codemavi {
+	public setEnabled(enable: boolean): void {
 		this.selectElement.disabled = !enable;
 	}
 
@@ -312,7 +312,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		this.selectList?.splice(0, this.selectList.length, this.options);
 	}
 
-	public select(index: number): codemavi {
+	public select(index: number): void {
 
 		if (index >= 0 && index < this.options.length) {
 			this.selected = index;
@@ -330,37 +330,37 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}
 	}
 
-	public setAriaLabel(label: string): codemavi {
+	public setAriaLabel(label: string): void {
 		this.selectBoxOptions.ariaLabel = label;
 		this.selectElement.setAttribute('aria-label', this.selectBoxOptions.ariaLabel);
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		if (this.selectElement) {
 			this.selectElement.tabIndex = 0;
 			this.selectElement.focus();
 		}
 	}
 
-	public blur(): codemavi {
+	public blur(): void {
 		if (this.selectElement) {
 			this.selectElement.tabIndex = -1;
 			this.selectElement.blur();
 		}
 	}
 
-	public setFocusable(focusable: boolean): codemavi {
+	public setFocusable(focusable: boolean): void {
 		this.selectElement.tabIndex = focusable ? 0 : -1;
 	}
 
-	public render(container: HTMLElement): codemavi {
+	public render(container: HTMLElement): void {
 		this.container = container;
 		container.classList.add('select-container');
 		container.appendChild(this.selectElement);
 		this.styleSelectElement();
 	}
 
-	private initStyleSheet(): codemavi {
+	private initStyleSheet(): void {
 
 		const content: string[] = [];
 
@@ -415,7 +415,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		this.styleElement.textContent = content.join('\n');
 	}
 
-	private styleSelectElement(): codemavi {
+	private styleSelectElement(): void {
 		const background = this.styles.selectBackground ?? '';
 		const foreground = this.styles.selectForeground ?? '';
 		const border = this.styles.selectBorder ?? '';
@@ -543,7 +543,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 
 	private layoutSelectDropDown(preLayoutPosition?: boolean): boolean {
 
-		// Acodemavi recursion from layout called in onListFocus
+		// Avoid recursion from layout called in onListFocus
 		if (this._skipLayout) {
 			return false;
 		}
@@ -720,7 +720,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		return elementWidth;
 	}
 
-	private createSelectList(parent: HTMLElement): codemavi {
+	private createSelectList(parent: HTMLElement): void {
 
 		// If we have already constructive list on open, skip
 		if (this.selectList) {
@@ -804,7 +804,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 
 	// List mouse controller - active exit, select option, fire onDidSelect if change, return focus to parent select
 	// Also takes in touchend events
-	private onPointerUp(e: PointerEvent): codemavi {
+	private onPointerUp(e: PointerEvent): void {
 
 		if (!this.selectList.length) {
 			return;
@@ -858,7 +858,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 	}
 
 	// List Exit - passive - implicit no selection change, hide drop-down
-	private onListBlur(): codemavi {
+	private onListBlur(): void {
 		if (this._sticky) { return; }
 		if (this.selected !== this._currentSelection) {
 			// Reset selected to current if no change
@@ -901,7 +901,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		this.updateDetail(e.indexes[0]);
 	}
 
-	private updateDetail(selectedIndex: number): codemavi {
+	private updateDetail(selectedIndex: number): void {
 		this.selectionDetailsPane.innerText = '';
 		const option = this.options[selectedIndex];
 		const description = option?.description ?? '';
@@ -919,7 +919,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 			this.selectionDetailsPane.style.display = 'none';
 		}
 
-		// Acodemavi recursion
+		// Avoid recursion
 		this._skipLayout = true;
 		this.contextViewProvider.layout();
 		this._skipLayout = false;
@@ -928,7 +928,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 	// List keyboard controller
 
 	// List exit - active - hide ContextView dropdown, reset selection, return focus to parent select
-	private onEscape(e: StandardKeyboardEvent): codemavi {
+	private onEscape(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		// Reset selection to value when opened
@@ -937,7 +937,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 	}
 
 	// List exit - active - hide ContextView dropdown, return focus to parent select, fire onDidSelect if change
-	private onEnter(e: StandardKeyboardEvent): codemavi {
+	private onEnter(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		// Only fire if selection change
@@ -956,7 +956,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 	}
 
 	// List navigation - have to handle a disabled option (jump over)
-	private onDownArrow(e: StandardKeyboardEvent): codemavi {
+	private onDownArrow(e: StandardKeyboardEvent): void {
 		if (this.selected < this.options.length - 1) {
 			dom.EventHelper.stop(e, true);
 
@@ -978,7 +978,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}
 	}
 
-	private onUpArrow(e: StandardKeyboardEvent): codemavi {
+	private onUpArrow(e: StandardKeyboardEvent): void {
 		if (this.selected > 0) {
 			dom.EventHelper.stop(e, true);
 			// Skip disabled options
@@ -995,7 +995,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}
 	}
 
-	private onPageUp(e: StandardKeyboardEvent): codemavi {
+	private onPageUp(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		this.selectList.focusPreviousPage();
@@ -1014,7 +1014,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}, 1);
 	}
 
-	private onPageDown(e: StandardKeyboardEvent): codemavi {
+	private onPageDown(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		this.selectList.focusNextPage();
@@ -1033,7 +1033,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}, 1);
 	}
 
-	private onHome(e: StandardKeyboardEvent): codemavi {
+	private onHome(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		if (this.options.length < 2) {
@@ -1048,7 +1048,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		this.select(this.selected);
 	}
 
-	private onEnd(e: StandardKeyboardEvent): codemavi {
+	private onEnd(e: StandardKeyboardEvent): void {
 		dom.EventHelper.stop(e);
 
 		if (this.options.length < 2) {
@@ -1064,7 +1064,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 	}
 
 	// Mimic option first character navigation of native select
-	private onCharacter(e: StandardKeyboardEvent): codemavi {
+	private onCharacter(e: StandardKeyboardEvent): void {
 		const ch = KeyCodeUtils.toString(e.keyCode);
 		let optionIndex = -1;
 
@@ -1080,7 +1080,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.hideSelectDropDown(false);
 		super.dispose();
 	}

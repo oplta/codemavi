@@ -50,7 +50,7 @@ class StackOperation implements IWorkspaceUndoRedoElement {
 		readonly textModel: NotebookTextModel,
 		readonly undoRedoGroup: UndoRedoGroup | undefined,
 		private _pauseableEmitter: PauseableEmitter<NotebookTextModelChangedEvent>,
-		private _postUndoRedo: (alternativeVersionId: string) => codemavi,
+		private _postUndoRedo: (alternativeVersionId: string) => void,
 		selectionState: ISelectionState | undefined,
 		beginAlternativeVersionId: string
 	) {
@@ -82,7 +82,7 @@ class StackOperation implements IWorkspaceUndoRedoElement {
 		this._resultAlternativeVersionId = alternativeVersionId;
 	}
 
-	async undo(): Promise<codemavi> {
+	async undo(): Promise<void> {
 		this._pauseableEmitter.pause();
 		try {
 			for (let i = this._operations.length - 1; i >= 0; i--) {
@@ -100,7 +100,7 @@ class StackOperation implements IWorkspaceUndoRedoElement {
 		}
 	}
 
-	async redo(): Promise<codemavi> {
+	async redo(): Promise<void> {
 		this._pauseableEmitter.pause();
 		try {
 			for (let i = 0; i < this._operations.length; i++) {
@@ -127,7 +127,7 @@ class NotebookOperationManager {
 		private readonly _textModel: NotebookTextModel,
 		private _undoService: IUndoRedoService,
 		private _pauseableEmitter: PauseableEmitter<NotebookTextModelChangedEvent>,
-		private _postUndoRedo: (alternativeVersionId: string) => codemavi
+		private _postUndoRedo: (alternativeVersionId: string) => void
 	) {
 	}
 
@@ -194,10 +194,10 @@ class NotebookEventEmitter extends PauseableEmitter<NotebookTextModelChangedEven
 export class NotebookTextModel extends Disposable implements INotebookTextModel {
 
 	private _isDisposed = false;
-	private readonly _onWillDispose: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose: Emitter<void> = this._register(new Emitter<void>());
 	private readonly _onWillAddRemoveCells = this._register(new Emitter<NotebookTextModelWillAddRemoveEvent>());
 	private readonly _onDidChangeContent = this._register(new Emitter<NotebookTextModelChangedEvent>());
-	readonly onWillDispose: Event<codemavi> = this._onWillDispose.event;
+	readonly onWillDispose: Event<void> = this._onWillDispose.event;
 	readonly onWillAddRemoveCells = this._onWillAddRemoveCells.event;
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 	private _cellhandlePool: number = 0;
@@ -441,7 +441,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		return this.cells.findIndex(c => !!c.outputs.find(o => o.outputId === outputId));
 	}
 
-	reset(cells: ICellDto2[], metadata: NotebookDocumentMetadata, transientOptions: TransientOptions): codemavi {
+	reset(cells: ICellDto2[], metadata: NotebookDocumentMetadata, transientOptions: TransientOptions): void {
 		this.transientOptions = transientOptions;
 		const executions = this._notebookExecutionStateService.getCellExecutionsForNotebook(this.uri);
 		const executingCellHandles = executions.filter(exe => exe.state === NotebookCellExecutionState.Executing).map(exe => exe.cellHandle);
@@ -497,7 +497,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		return data;
 	}
 
-	restoreSnapshot(snapshot: NotebookData, transientOptions?: TransientOptions): codemavi {
+	restoreSnapshot(snapshot: NotebookData, transientOptions?: TransientOptions): void {
 		this.reset(snapshot.cells, snapshot.metadata, transientOptions ?? this.transientOptions);
 	}
 
@@ -651,7 +651,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		}
 	}
 
-	private _doApplyEdits(rawEdits: ICellEditOperation[], synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): codemavi {
+	private _doApplyEdits(rawEdits: ICellEditOperation[], synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): void {
 		const editsWithDetails = rawEdits.map((edit, index) => {
 			let cellIndex: number = -1;
 			if ('index' in edit) {
@@ -822,7 +822,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		return cellDto.collapseState ?? (defaultConfig ?? undefined);
 	}
 
-	private _replaceCells(index: number, count: number, cellDtos: ICellDto2[], synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): codemavi {
+	private _replaceCells(index: number, count: number, cellDtos: ICellDto2[], synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): void {
 
 		if (count === 0 && cellDtos.length === 0) {
 			return;
@@ -905,7 +905,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		});
 	}
 
-	private _increaseVersionId(transient: boolean): codemavi {
+	private _increaseVersionId(transient: boolean): void {
 		this._versionId = this._versionId + 1;
 		if (!transient) {
 			this._notebookSpecificAlternativeId = this._versionId;
@@ -913,7 +913,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		this._alternativeVersionId = this._generateAlternativeId();
 	}
 
-	private _overwriteAlternativeVersionId(newAlternativeVersionId: string): codemavi {
+	private _overwriteAlternativeVersionId(newAlternativeVersionId: string): void {
 		this._alternativeVersionId = newAlternativeVersionId;
 		this._notebookSpecificAlternativeId = Number(newAlternativeVersionId.substring(0, newAlternativeVersionId.indexOf('_')));
 	}
@@ -951,7 +951,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		});
 	}
 
-	private _insertNewCell(index: number, cells: NotebookCellTextModel[], synchronous: boolean, endSelections: ISelectionState | undefined): codemavi {
+	private _insertNewCell(index: number, cells: NotebookCellTextModel[], synchronous: boolean, endSelections: ISelectionState | undefined): void {
 		for (let i = 0; i < cells.length; i++) {
 			const dirtyStateListener = cells[i].onDidChangeContent((e) => {
 				this._bindCellContentHandler(cells[i], e);
@@ -1174,7 +1174,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		});
 	}
 
-	private _spliceNotebookCellOutputs2(cell: NotebookCellTextModel, outputs: IOutputDto[], computeUndoRedo: boolean): codemavi {
+	private _spliceNotebookCellOutputs2(cell: NotebookCellTextModel, outputs: IOutputDto[], computeUndoRedo: boolean): void {
 		if (outputs.length === 0 && cell.outputs.length === 0) {
 			return;
 		}
@@ -1197,7 +1197,7 @@ export class NotebookTextModel extends Disposable implements INotebookTextModel 
 		});
 	}
 
-	private _spliceNotebookCellOutputs(cell: NotebookCellTextModel, splice: NotebookCellOutputsSplice, append: boolean, computeUndoRedo: boolean): codemavi {
+	private _spliceNotebookCellOutputs(cell: NotebookCellTextModel, splice: NotebookCellOutputsSplice, append: boolean, computeUndoRedo: boolean): void {
 		cell.spliceNotebookCellOutputs(splice);
 		this._pauseableEmitter.fire({
 			rawEvents: [{

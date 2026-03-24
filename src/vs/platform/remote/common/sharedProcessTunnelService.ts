@@ -34,9 +34,9 @@ export interface ISharedProcessTunnelService {
 	 * Set the remote address info for a previously created tunnel.
 	 * Should be called as often as the resolver resolves.
 	 */
-	setAddress(id: string, address: IAddress): Promise<codemavi>;
+	setAddress(id: string, address: IAddress): Promise<void>;
 	/**
 	 * Destroy a previously created tunnel.
 	 */
-	destroyTunnel(id: string): Promise<codemavi>;
+	destroyTunnel(id: string): Promise<void>;
 }

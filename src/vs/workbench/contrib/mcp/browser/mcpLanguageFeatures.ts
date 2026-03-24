@@ -59,7 +59,7 @@ export class McpLanguageFeatures extends Disposable implements IWorkbenchContrib
 		}));
 	}
 
-	/** Simple mechanism to acodemavi extra json parsing for hints+lenses */
+	/** Simple mechanism to avoid extra json parsing for hints+lenses */
 	private _parseModel(model: ITextModel) {
 		if (this._cachedMcpSection.value?.model === model) {
 			return this._cachedMcpSection.value;
@@ -140,7 +140,7 @@ export class McpLanguageFeatures extends Disposable implements IWorkbenchContrib
 		}
 	}
 
-	private _provideCodeLenses(model: ITextModel, onDidChangeCodeLens: () => codemavi): CodeLensList | undefined {
+	private _provideCodeLenses(model: ITextModel, onDidChangeCodeLens: () => void): CodeLensList | undefined {
 		const parsed = this._parseModel(model);
 		if (!parsed) {
 			return undefined;
@@ -358,7 +358,7 @@ export class McpLanguageFeatures extends Disposable implements IWorkbenchContrib
 
 
 
-function forEachPropertyWithReplacement(node: Node, callback: (node: Node) => codemavi) {
+function forEachPropertyWithReplacement(node: Node, callback: (node: Node) => void) {
 	if (node.type === 'string' && typeof node.value === 'string' && node.value.includes(ConfigurationResolverExpression.VARIABLE_LHS)) {
 		callback(node);
 	} else if (node.type === 'property') {

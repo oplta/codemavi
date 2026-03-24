@@ -19,7 +19,7 @@ import { isString } from '../../../../base/common/types.js';
 import { IHistoryService } from '../../../services/history/common/history.js';
 import { ILogService } from '../../../../platform/log/common/log.js';
 
-export function mergeEnvironments(parent: IProcessEnvironment, other: ITerminalEnvironment | undefined): codemavi {
+export function mergeEnvironments(parent: IProcessEnvironment, other: ITerminalEnvironment | undefined): void {
 	if (!other) {
 		return;
 	}
@@ -50,7 +50,7 @@ export function mergeEnvironments(parent: IProcessEnvironment, other: ITerminalE
 	}
 }
 
-function _mergeEnvironmentValue(env: ITerminalEnvironment, key: string, value: string | null): codemavi {
+function _mergeEnvironmentValue(env: ITerminalEnvironment, key: string, value: string | null): void {
 	if (typeof value === 'string') {
 		env[key] = value;
 	} else {
@@ -58,7 +58,7 @@ function _mergeEnvironmentValue(env: ITerminalEnvironment, key: string, value: s
 	}
 }
 
-export function addTerminalEnvironmentKeys(env: IProcessEnvironment, version: string | undefined, locale: string | undefined, detectLocale: 'auto' | 'off' | 'on'): codemavi {
+export function addTerminalEnvironmentKeys(env: IProcessEnvironment, version: string | undefined, locale: string | undefined, detectLocale: 'auto' | 'off' | 'on'): void {
 	env['TERM_PROGRAM'] = 'vscode';
 	if (version) {
 		env['TERM_PROGRAM_VERSION'] = version;

@@ -71,7 +71,7 @@ export interface IDiffResult {
 
 class Debug {
 
-	public static Assert(condition: boolean, message: string): codemavi {
+	public static Assert(condition: boolean, message: string): void {
 		if (!condition) {
 			throw new Error(message);
 		}
@@ -152,7 +152,7 @@ class DiffChangeHelper {
 	/**
 	 * Marks the beginning of the next change in the set of differences.
 	 */
-	public MarkNextChange(): codemavi {
+	public MarkNextChange(): void {
 		// Only add to the list if there is something to add
 		if (this.m_originalCount > 0 || this.m_modifiedCount > 0) {
 			// Add the new change to our list
@@ -189,7 +189,7 @@ class DiffChangeHelper {
 	 * @param originalIndex The index of the original element that provides corresponding position in the original sequence.
 	 * @param modifiedIndex The index of the modified element to add.
 	 */
-	public AddModifiedElement(originalIndex: number, modifiedIndex: number): codemavi {
+	public AddModifiedElement(originalIndex: number, modifiedIndex: number): void {
 		// The 'true' start index is the smallest of the ones we've seen
 		this.m_originalStart = Math.min(this.m_originalStart, originalIndex);
 		this.m_modifiedStart = Math.min(this.m_modifiedStart, modifiedIndex);
@@ -931,7 +931,7 @@ export class LcsDiff {
 				const aModifiedStart = aChange.modifiedStart;
 				const bModifiedEnd = bChange.modifiedStart + bChange.modifiedLength;
 				const abModifiedLength = bModifiedEnd - aModifiedStart;
-				// Acodemavi wasting a lot of time with these searches
+				// Avoid wasting a lot of time with these searches
 				if (matchedLength < 5 && abOriginalLength < 20 && abModifiedLength < 20) {
 					const t = this._findBetterContiguousSequence(
 						aOriginalStart, abOriginalLength,

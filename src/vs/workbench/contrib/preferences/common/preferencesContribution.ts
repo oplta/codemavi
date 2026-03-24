@@ -50,7 +50,7 @@ export class PreferencesContribution extends Disposable implements IWorkbenchCon
 		this._register(fileService.registerProvider(SettingsFileSystemProvider.SCHEMA, fileSystemProvider));
 	}
 
-	private handleSettingsEditorRegistration(): codemavi {
+	private handleSettingsEditorRegistration(): void {
 
 		// dispose any old listener we had
 		dispose(this.editorOpeningListener);
@@ -97,7 +97,7 @@ export class PreferencesContribution extends Disposable implements IWorkbenchCon
 			);
 		}
 	}
-	override dispose(): codemavi {
+	override dispose(): void {
 		dispose(this.editorOpeningListener);
 		super.dispose();
 	}

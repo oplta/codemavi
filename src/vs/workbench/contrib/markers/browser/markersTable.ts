@@ -82,7 +82,7 @@ class MarkerSeverityColumnRenderer implements ITableRenderer<MarkerTableItem, IM
 		return { actionBar, icon };
 	}
 
-	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerIconColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerIconColumnTemplateData, height: number | undefined): void {
 		const toggleQuickFix = (enabled?: boolean) => {
 			if (!isUndefinedOrNull(enabled)) {
 				const container = DOM.findParentWithClass(templateData.icon, 'monaco-table-td')!;
@@ -110,7 +110,7 @@ class MarkerSeverityColumnRenderer implements ITableRenderer<MarkerTableItem, IM
 		}
 	}
 
-	disposeTemplate(templateData: IMarkerIconColumnTemplateData): codemavi { }
+	disposeTemplate(templateData: IMarkerIconColumnTemplateData): void { }
 }
 
 class MarkerCodeColumnRenderer implements ITableRenderer<MarkerTableItem, IMarkerCodeColumnTemplateData> {
@@ -138,7 +138,7 @@ class MarkerCodeColumnRenderer implements ITableRenderer<MarkerTableItem, IMarke
 		return { codeColumn, sourceLabel, codeLabel, codeLink, templateDisposable };
 	}
 
-	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerCodeColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerCodeColumnTemplateData, height: number | undefined): void {
 		templateData.codeColumn.classList.remove('code-label');
 		templateData.codeColumn.classList.remove('code-link');
 
@@ -168,7 +168,7 @@ class MarkerCodeColumnRenderer implements ITableRenderer<MarkerTableItem, IMarke
 		}
 	}
 
-	disposeTemplate(templateData: IMarkerCodeColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IMarkerCodeColumnTemplateData): void {
 		templateData.templateDisposable.dispose();
 	}
 }
@@ -186,12 +186,12 @@ class MarkerMessageColumnRenderer implements ITableRenderer<MarkerTableItem, IMa
 		return { columnElement, highlightedLabel };
 	}
 
-	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerHighlightedLabelColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerHighlightedLabelColumnTemplateData, height: number | undefined): void {
 		templateData.columnElement.title = element.marker.message;
 		templateData.highlightedLabel.set(element.marker.message, element.messageMatches);
 	}
 
-	disposeTemplate(templateData: IMarkerHighlightedLabelColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IMarkerHighlightedLabelColumnTemplateData): void {
 		templateData.highlightedLabel.dispose();
 	}
 }
@@ -216,7 +216,7 @@ class MarkerFileColumnRenderer implements ITableRenderer<MarkerTableItem, IMarke
 		return { columnElement, fileLabel, positionLabel };
 	}
 
-	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerFileColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerFileColumnTemplateData, height: number | undefined): void {
 		const positionLabel = Messages.MARKERS_PANEL_AT_LINE_COL_NUMBER(element.marker.startLineNumber, element.marker.startColumn);
 
 		templateData.columnElement.title = `${this.labelService.getUriLabel(element.marker.resource, { relative: false })} ${positionLabel}`;
@@ -224,7 +224,7 @@ class MarkerFileColumnRenderer implements ITableRenderer<MarkerTableItem, IMarke
 		templateData.positionLabel.set(positionLabel, undefined);
 	}
 
-	disposeTemplate(templateData: IMarkerFileColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IMarkerFileColumnTemplateData): void {
 		templateData.fileLabel.dispose();
 		templateData.positionLabel.dispose();
 	}
@@ -242,12 +242,12 @@ class MarkerSourceColumnRenderer implements ITableRenderer<MarkerTableItem, IMar
 		return { columnElement, highlightedLabel };
 	}
 
-	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerHighlightedLabelColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(element: MarkerTableItem, index: number, templateData: IMarkerHighlightedLabelColumnTemplateData, height: number | undefined): void {
 		templateData.columnElement.title = element.marker.source ?? '';
 		templateData.highlightedLabel.set(element.marker.source ?? '', element.sourceMatches);
 	}
 
-	disposeTemplate(templateData: IMarkerHighlightedLabelColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IMarkerHighlightedLabelColumnTemplateData): void {
 		templateData.highlightedLabel.dispose();
 	}
 }
@@ -376,13 +376,13 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		return this.table.onDidChangeSelection;
 	}
 
-	collapseMarkers(): codemavi { }
+	collapseMarkers(): void { }
 
-	domFocus(): codemavi {
+	domFocus(): void {
 		this.table.domFocus();
 	}
 
-	filterMarkers(resourceMarkers: ResourceMarkers[], filterOptions: FilterOptions): codemavi {
+	filterMarkers(resourceMarkers: ResourceMarkers[], filterOptions: FilterOptions): void {
 		this.filterOptions = filterOptions;
 		this.reset(resourceMarkers);
 	}
@@ -413,12 +413,12 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		return !this.container.classList.contains('hidden');
 	}
 
-	layout(height: number, width: number): codemavi {
+	layout(height: number, width: number): void {
 		this.container.style.height = `${height}px`;
 		this.table.layout(height, width);
 	}
 
-	reset(resourceMarkers: ResourceMarkers[]): codemavi {
+	reset(resourceMarkers: ResourceMarkers[]): void {
 		this.resourceMarkers = resourceMarkers;
 
 		const items: MarkerTableItem[] = [];
@@ -482,7 +482,7 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		}));
 	}
 
-	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): codemavi {
+	revealMarkers(activeResource: ResourceMarkers | null, focus: boolean, lastSelectedRelativeTop: number): void {
 		if (activeResource) {
 			const activeResourceIndex = this.resourceMarkers.indexOf(activeResource);
 
@@ -509,11 +509,11 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		}
 	}
 
-	setAriaLabel(label: string): codemavi {
+	setAriaLabel(label: string): void {
 		this.table.domNode.ariaLabel = label;
 	}
 
-	setMarkerSelection(selection?: Marker[], focus?: Marker[]): codemavi {
+	setMarkerSelection(selection?: Marker[], focus?: Marker[]): void {
 		if (this.isVisible()) {
 			if (selection && selection.length > 0) {
 				this.table.setSelection(selection.map(m => this.findMarkerIndex(m)));
@@ -533,11 +533,11 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		}
 	}
 
-	toggleVisibility(hide: boolean): codemavi {
+	toggleVisibility(hide: boolean): void {
 		this.container.classList.toggle('hidden', hide);
 	}
 
-	update(resourceMarkers: ResourceMarkers[]): codemavi {
+	update(resourceMarkers: ResourceMarkers[]): void {
 		for (const resourceMarker of resourceMarkers) {
 			const index = this.resourceMarkers.indexOf(resourceMarker);
 			this.resourceMarkers.splice(index, 1, resourceMarker);
@@ -545,7 +545,7 @@ export class MarkersTable extends Disposable implements IProblemsWidget {
 		this.reset(this.resourceMarkers);
 	}
 
-	updateMarker(marker: Marker): codemavi {
+	updateMarker(marker: Marker): void {
 		this.table.rerender();
 	}
 

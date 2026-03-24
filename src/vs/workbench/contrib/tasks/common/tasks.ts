@@ -47,7 +47,7 @@ export enum ShellQuoting {
 export const CUSTOMIZED_TASK_TYPE = '$customized';
 
 export namespace ShellQuoting {
-	export function from(this: codemavi, value: string): ShellQuoting {
+	export function from(this: void, value: string): ShellQuoting {
 		if (!value) {
 			return ShellQuoting.Strong;
 		}
@@ -146,7 +146,7 @@ export enum RevealKind {
 }
 
 export namespace RevealKind {
-	export function fromString(this: codemavi, value: string): RevealKind {
+	export function fromString(this: void, value: string): RevealKind {
 		switch (value.toLowerCase()) {
 			case 'always':
 				return RevealKind.Always;
@@ -179,7 +179,7 @@ export enum RevealProblemKind {
 }
 
 export namespace RevealProblemKind {
-	export function fromString(this: codemavi, value: string): RevealProblemKind {
+	export function fromString(this: void, value: string): RevealProblemKind {
 		switch (value.toLowerCase()) {
 			case 'always':
 				return RevealProblemKind.Always;
@@ -1324,7 +1324,7 @@ export const enum TasksSchemaProperties {
 }
 
 export namespace TaskDefinition {
-	export function createTaskIdentifier(external: ITaskIdentifier, reporter: { error(message: string): codemavi }): KeyedTaskIdentifier | undefined {
+	export function createTaskIdentifier(external: ITaskIdentifier, reporter: { error(message: string): void }): KeyedTaskIdentifier | undefined {
 		const definition = TaskDefinitionRegistry.get(external.type);
 		if (definition === undefined) {
 			// We have no task definition so we can't sanitize the literal. Take it as is

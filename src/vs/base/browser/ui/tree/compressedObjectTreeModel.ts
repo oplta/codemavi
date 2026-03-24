@@ -117,7 +117,7 @@ const wrapIdentityProvider = <T>(base: IIdentityProvider<T>): IIdentityProvider<
 });
 
 // Exported only for test reasons, do not use directly
-export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = codemavi> implements ITreeModel<ICompressedTreeNode<T> | null, TFilterData, T | null> {
+export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = void> implements ITreeModel<ICompressedTreeNode<T> | null, TFilterData, T | null> {
 
 	readonly rootRef = null;
 
@@ -146,7 +146,7 @@ export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData e
 		element: T | null,
 		children: Iterable<ICompressedTreeElement<T>> = Iterable.empty(),
 		options: IObjectTreeModelSetChildrenOptions<T, TFilterData>,
-	): codemavi {
+	): void {
 		// Diffs must be deep, since the compression can affect nested elements.
 		// @see https://github.com/microsoft/vscode/pull/114237#issuecomment-759425034
 
@@ -194,7 +194,7 @@ export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData e
 		return this.enabled;
 	}
 
-	setCompressionEnabled(enabled: boolean): codemavi {
+	setCompressionEnabled(enabled: boolean): void {
 		if (enabled === this.enabled) {
 			return;
 		}
@@ -218,7 +218,7 @@ export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData e
 		node: ICompressedTreeNode<T> | null,
 		children: Iterable<IObjectTreeElement<ICompressedTreeNode<T>>>,
 		options: IIndexTreeModelSpliceOptions<ICompressedTreeNode<T>, TFilterData>,
-	): codemavi {
+	): void {
 		const insertedElements = new Set<T | null>();
 		const onDidCreateNode = (node: ITreeNode<ICompressedTreeNode<T>, TFilterData>) => {
 			for (const element of node.element.elements) {
@@ -314,21 +314,21 @@ export class CompressedObjectTreeModel<T extends NonNullable<any>, TFilterData e
 		return this.model.setCollapsed(compressedNode, collapsed, recursive);
 	}
 
-	expandTo(location: T | null): codemavi {
+	expandTo(location: T | null): void {
 		const compressedNode = this.getCompressedNode(location);
 		this.model.expandTo(compressedNode);
 	}
 
-	rerender(location: T | null): codemavi {
+	rerender(location: T | null): void {
 		const compressedNode = this.getCompressedNode(location);
 		this.model.rerender(compressedNode);
 	}
 
-	refilter(): codemavi {
+	refilter(): void {
 		this.model.refilter();
 	}
 
-	resort(location: T | null = null, recursive = true): codemavi {
+	resort(location: T | null = null, recursive = true): void {
 		const compressedNode = this.getCompressedNode(location);
 		this.model.resort(compressedNode, recursive);
 	}
@@ -405,7 +405,7 @@ export interface ICompressibleObjectTreeModelOptions<T, TFilterData> extends IOb
 	readonly elementMapper?: ElementMapper<T>;
 }
 
-export class CompressibleObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = codemavi> implements IObjectTreeModel<T, TFilterData> {
+export class CompressibleObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = void> implements IObjectTreeModel<T, TFilterData> {
 
 	readonly rootRef = null;
 
@@ -454,7 +454,7 @@ export class CompressibleObjectTreeModel<T extends NonNullable<any>, TFilterData
 		element: T | null,
 		children: Iterable<ICompressedTreeElement<T>> = Iterable.empty(),
 		options: IObjectTreeModelSetChildrenOptions<T, TFilterData> = {},
-	): codemavi {
+	): void {
 		this.model.setChildren(element, children, options);
 	}
 
@@ -462,7 +462,7 @@ export class CompressibleObjectTreeModel<T extends NonNullable<any>, TFilterData
 		return this.model.isCompressionEnabled();
 	}
 
-	setCompressionEnabled(enabled: boolean): codemavi {
+	setCompressionEnabled(enabled: boolean): void {
 		this.model.setCompressionEnabled(enabled);
 	}
 
@@ -526,19 +526,19 @@ export class CompressibleObjectTreeModel<T extends NonNullable<any>, TFilterData
 		return this.model.setCollapsed(location, collapsed, recursive);
 	}
 
-	expandTo(location: T | null): codemavi {
+	expandTo(location: T | null): void {
 		return this.model.expandTo(location);
 	}
 
-	rerender(location: T | null): codemavi {
+	rerender(location: T | null): void {
 		return this.model.rerender(location);
 	}
 
-	refilter(): codemavi {
+	refilter(): void {
 		return this.model.refilter();
 	}
 
-	resort(element: T | null = null, recursive = true): codemavi {
+	resort(element: T | null = null, recursive = true): void {
 		return this.model.resort(element, recursive);
 	}
 

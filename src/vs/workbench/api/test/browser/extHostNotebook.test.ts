@@ -149,7 +149,7 @@ suite('NotebookCell#Document', function () {
 
 	test('cell document is vscode.TextDocument after changing it', async function () {
 
-		const p = new Promise<codemavi>((resolve, reject) => {
+		const p = new Promise<void>((resolve, reject) => {
 
 			disposables.add(extHostNotebookDocuments.onDidChangeNotebookDocument(e => {
 				try {

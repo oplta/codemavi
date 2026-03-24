@@ -160,7 +160,7 @@ export class OpenerService implements IOpenerService {
 		return { dispose: remove };
 	}
 
-	setDefaultExternalOpener(externalOpener: IExternalOpener): codemavi {
+	setDefaultExternalOpener(externalOpener: IExternalOpener): void {
 		this._defaultExternalOpener = externalOpener;
 	}
 

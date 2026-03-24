@@ -10,11 +10,11 @@ import { MainContext, MainThreadErrorsShape } from '../common/extHost.protocol.j
 @extHostNamedCustomer(MainContext.MainThreadErrors)
 export class MainThreadErrors implements MainThreadErrorsShape {
 
-	dispose(): codemavi {
+	dispose(): void {
 		//
 	}
 
-	$onUnexpectedError(err: any | SerializedError): codemavi {
+	$onUnexpectedError(err: any | SerializedError): void {
 		if (err && err.$isError) {
 			err = transformErrorFromSerialization(err);
 		}

@@ -115,7 +115,7 @@ export class OutputViewPane extends FilterViewPane {
 		this._register(outputService.filters.onDidChange(() => this.checkMoreFilters()));
 	}
 
-	showChannel(channel: IOutputChannel, preserveFocus: boolean): codemavi {
+	showChannel(channel: IOutputChannel, preserveFocus: boolean): void {
 		if (this.channelId !== channel.id) {
 			this.setInput(channel);
 		}
@@ -124,16 +124,16 @@ export class OutputViewPane extends FilterViewPane {
 		}
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.editorPromise?.then(() => this.editor.focus());
 	}
 
-	public clearFilterText(): codemavi {
+	public clearFilterText(): void {
 		this.filterWidget.setFilterText('');
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 		this.editor.create(container);
 		container.classList.add('output-view');
@@ -162,18 +162,18 @@ export class OutputViewPane extends FilterViewPane {
 		}));
 	}
 
-	protected layoutBodyContent(height: number, width: number): codemavi {
+	protected layoutBodyContent(height: number, width: number): void {
 		this.editor.layout(new Dimension(width, height));
 	}
 
-	private onDidChangeVisibility(visible: boolean): codemavi {
+	private onDidChangeVisibility(visible: boolean): void {
 		this.editor.setVisible(visible);
 		if (!visible) {
 			this.clearInput();
 		}
 	}
 
-	private setInput(channel: IOutputChannel): codemavi {
+	private setInput(channel: IOutputChannel): void {
 		this.channelId = channel.id;
 		this.checkMoreFilters();
 
@@ -186,12 +186,12 @@ export class OutputViewPane extends FilterViewPane {
 
 	}
 
-	private checkMoreFilters(): codemavi {
+	private checkMoreFilters(): void {
 		const filters = this.outputService.filters;
 		this.filterWidget.checkMoreFilters(!filters.trace || !filters.debug || !filters.info || !filters.warning || !filters.error || (!!this.channelId && filters.categories.includes(`,${this.channelId}:`)));
 	}
 
-	private clearInput(): codemavi {
+	private clearInput(): void {
 		this.channelId = undefined;
 		this.editor.clearInput();
 		this.editorPromise = null;
@@ -201,7 +201,7 @@ export class OutputViewPane extends FilterViewPane {
 		return this.instantiationService.createInstance(TextResourceEditorInput, channel.uri, nls.localize('output model title', "{0} - Output", channel.label), nls.localize('channel', "Output channel for '{0}'", channel.label), undefined, undefined);
 	}
 
-	override saveState(): codemavi {
+	override saveState(): void {
 		const filters = this.outputService.filters;
 		this.panelState['filter'] = filters.text;
 		this.panelState['showTrace'] = filters.trace;
@@ -286,7 +286,7 @@ export class OutputEditor extends AbstractTextResourceEditor {
 		return this.input ? computeEditorAriaLabel(this.input, undefined, undefined, this.editorGroupService.count) : this.getAriaLabel();
 	}
 
-	override async setInput(input: TextResourceEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: TextResourceEditorInput, options: ITextEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		const focus = !(options && options.preserveFocus);
 		if (this.input && input.matches(this.input)) {
 			return;
@@ -306,7 +306,7 @@ export class OutputEditor extends AbstractTextResourceEditor {
 		this.revealLastLine();
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		if (this.input) {
 			// Dispose current input (Output panel is not a workbench editor)
 			this.input.dispose();
@@ -316,7 +316,7 @@ export class OutputEditor extends AbstractTextResourceEditor {
 		this.resourceContext.reset();
 	}
 
-	protected override createEditor(parent: HTMLElement): codemavi {
+	protected override createEditor(parent: HTMLElement): void {
 
 		parent.setAttribute('role', 'document');
 
@@ -364,7 +364,7 @@ export class FilterController extends Disposable implements IEditorContribution 
 		this._register(this.outputService.filters.onDidChange(() => editor.hasModel() && this.filter(editor.getModel())));
 	}
 
-	private onDidChangeModel(): codemavi {
+	private onDidChangeModel(): void {
 		this.modelDisposables.clear();
 		this.hiddenAreas = [];
 		this.categories.clear();
@@ -393,13 +393,13 @@ export class FilterController extends Disposable implements IEditorContribution 
 		}));
 	}
 
-	private filter(model: ITextModel): codemavi {
+	private filter(model: ITextModel): void {
 		this.hiddenAreas = [];
 		this.decorationsCollection.clear();
 		this.filterIncremental(model, 1);
 	}
 
-	private filterIncremental(model: ITextModel, fromLineNumber: number): codemavi {
+	private filterIncremental(model: ITextModel, fromLineNumber: number): void {
 		const { findMatches, hiddenAreas, categories: sources } = this.compute(model, fromLineNumber);
 		this.hiddenAreas.push(...hiddenAreas);
 		this.editor.setHiddenAreas(this.hiddenAreas, this);
@@ -426,7 +426,7 @@ export class FilterController extends Disposable implements IEditorContribution 
 							}
 						});
 					}
-					async run(): Promise<codemavi> {
+					async run(): Promise<void> {
 						that.outputService.filters.toggleCategory(categoryFilter);
 					}
 				}));

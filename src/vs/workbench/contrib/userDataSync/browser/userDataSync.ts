@@ -234,7 +234,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private async acceptLocal(syncResource: IUserDataSyncResource, conflict: IResourcePreview): Promise<codemavi> {
+	private async acceptLocal(syncResource: IUserDataSyncResource, conflict: IResourcePreview): Promise<void> {
 		try {
 			await this.userDataSyncService.accept(syncResource, conflict.localResource, undefined, this.userDataSyncEnablementService.isEnabled());
 		} catch (e) {
@@ -242,7 +242,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private onAutoSyncError(error: UserDataSyncError): codemavi {
+	private onAutoSyncError(error: UserDataSyncError): void {
 		switch (error.code) {
 			case UserDataSyncErrorCode.SessionExpired:
 				this.notificationService.notify({
@@ -373,7 +373,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private handleTooLargeError(resource: SyncResource, message: string, error: UserDataSyncError): codemavi {
+	private handleTooLargeError(resource: SyncResource, message: string, error: UserDataSyncError): void {
 		const operationId = error.operationId ? localize('operationId', "Operation Id: {0}", error.operationId) : undefined;
 		this.notificationService.notify({
 			severity: Severity.Error,
@@ -389,7 +389,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 	}
 
 	private readonly invalidContentErrorDisposables = new Map<string, IDisposable>();
-	private onSynchronizerErrors(errors: IUserDataSyncResourceError[]): codemavi {
+	private onSynchronizerErrors(errors: IUserDataSyncResourceError[]): void {
 		if (errors.length) {
 			for (const { profile, syncResource: resource, error } of errors) {
 				switch (error.code) {
@@ -412,7 +412,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private handleInvalidContentError({ profile, syncResource: source }: IUserDataSyncResource): codemavi {
+	private handleInvalidContentError({ profile, syncResource: source }: IUserDataSyncResource): void {
 		if (this.userDataProfileService.currentProfile.id !== profile.id) {
 			return;
 		}
@@ -457,7 +457,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		return this.userDataSyncService.conflicts.reduce((result, { conflicts }) => { return result + conflicts.length; }, 0);
 	}
 
-	private async updateGlobalActivityBadge(): Promise<codemavi> {
+	private async updateGlobalActivityBadge(): Promise<void> {
 		this.globalActivityBadgeDisposable.clear();
 
 		let badge: IBadge | undefined = undefined;
@@ -472,7 +472,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private async updateAccountBadge(): Promise<codemavi> {
+	private async updateAccountBadge(): Promise<void> {
 		this.accountBadgeDisposable.clear();
 
 		let badge: IBadge | undefined = undefined;
@@ -486,7 +486,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private async turnOn(): Promise<codemavi> {
+	private async turnOn(): Promise<void> {
 		try {
 			if (!this.userDataSyncWorkbenchService.authenticationProviders.length) {
 				throw new Error(localize('no authentication providers', "No authentication providers are available."));
@@ -629,7 +629,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		return result;
 	}
 
-	private updateConfiguration(items: ConfigureSyncQuickPickItem[], selectedItems: ReadonlyArray<ConfigureSyncQuickPickItem>): codemavi {
+	private updateConfiguration(items: ConfigureSyncQuickPickItem[], selectedItems: ReadonlyArray<ConfigureSyncQuickPickItem>): void {
 		for (const item of items) {
 			const wasEnabled = this.userDataSyncEnablementService.isResourceEnabled(item.id);
 			const isEnabled = !!selectedItems.filter(selected => selected.id === item.id)[0];
@@ -639,7 +639,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private async configureSyncOptions(): Promise<codemavi> {
+	private async configureSyncOptions(): Promise<void> {
 		return new Promise((c, e) => {
 			const disposables: DisposableStore = new DisposableStore();
 			const quickPick = this.quickInputService.createQuickPick<ConfigureSyncQuickPickItem>();
@@ -666,7 +666,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		});
 	}
 
-	private async turnOff(): Promise<codemavi> {
+	private async turnOff(): Promise<void> {
 		const result = await this.dialogService.confirm({
 			message: localize('turn off sync confirmation', "Do you want to turn off sync?"),
 			detail: localize('turn off sync detail', "Your settings, keybindings, extensions, snippets and UI State will no longer be synced."),
@@ -680,7 +680,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private disableSync(source: SyncResource): codemavi {
+	private disableSync(source: SyncResource): void {
 		switch (source) {
 			case SyncResource.Settings: return this.userDataSyncEnablementService.setResourceEnablement(SyncResource.Settings, false);
 			case SyncResource.Keybindings: return this.userDataSyncEnablementService.setResourceEnablement(SyncResource.Keybindings, false);
@@ -692,12 +692,12 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private showSyncActivity(): Promise<codemavi> {
+	private showSyncActivity(): Promise<void> {
 		return this.outputService.showChannel(USER_DATA_SYNC_LOG_ID);
 	}
 
-	private async selectSettingsSyncService(userDataSyncStore: IUserDataSyncStore): Promise<codemavi> {
-		return new Promise<codemavi>((c, e) => {
+	private async selectSettingsSyncService(userDataSyncStore: IUserDataSyncStore): Promise<void> {
+		return new Promise<void>((c, e) => {
 			const disposables: DisposableStore = new DisposableStore();
 			const quickPick = disposables.add(this.quickInputService.createQuickPick<{ id: UserDataSyncStoreType; label: string; description?: string }>());
 			quickPick.title = localize('switchSyncService.title', "{0}: Select Service", SYNC_TITLE.value);
@@ -738,7 +738,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		});
 	}
 
-	private registerActions(): codemavi {
+	private registerActions(): void {
 		if (this.userDataSyncEnablementService.canToggleEnablement()) {
 			this.registerTurnOnSyncAction();
 			this.registerTurnOffSyncAction();
@@ -763,7 +763,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private registerTurnOnSyncAction(): codemavi {
+	private registerTurnOnSyncAction(): void {
 		const that = this;
 		const when = ContextKeyExpr.and(CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized), CONTEXT_SYNC_ENABLEMENT.toNegated(), CONTEXT_TURNING_ON_STATE.negate());
 		this._register(registerAction2(class TurningOnSyncAction extends Action2 {
@@ -798,7 +798,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerTurningOnSyncAction(): codemavi {
+	private registerTurningOnSyncAction(): void {
 		const when = ContextKeyExpr.and(CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized), CONTEXT_SYNC_ENABLEMENT.toNegated(), CONTEXT_TURNING_ON_STATE);
 		this._register(registerAction2(class TurningOnSyncAction extends Action2 {
 			constructor() {
@@ -822,7 +822,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerCancelTurnOnSyncAction(): codemavi {
+	private registerCancelTurnOnSyncAction(): void {
 		const that = this;
 		this._register(registerAction2(class TurningOnSyncAction extends Action2 {
 			constructor() {
@@ -844,7 +844,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerSignInAction(): codemavi {
+	private registerSignInAction(): void {
 		const that = this;
 		const id = 'workbench.userData.actions.signin';
 		const when = ContextKeyExpr.and(CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized), CONTEXT_SYNC_ENABLEMENT, CONTEXT_ACCOUNT_STATE.isEqualTo(AccountStatus.Unavailable));
@@ -884,7 +884,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 	}
 
 	private readonly conflictsActionDisposable = this._register(new MutableDisposable());
-	private registerShowConflictsAction(): codemavi {
+	private registerShowConflictsAction(): void {
 		this.conflictsActionDisposable.value = undefined;
 		const that = this;
 		this.conflictsActionDisposable.value = registerAction2(class TurningOnSyncAction extends Action2 {
@@ -914,7 +914,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		});
 	}
 
-	private registerManageSyncAction(): codemavi {
+	private registerManageSyncAction(): void {
 		const that = this;
 		const when = ContextKeyExpr.and(CONTEXT_SYNC_ENABLEMENT, CONTEXT_ACCOUNT_STATE.notEqualsTo(AccountStatus.Unavailable), CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized));
 		this._register(registerAction2(class SyncStatusAction extends Action2 {
@@ -945,7 +945,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 				});
 			}
 			run(accessor: ServicesAccessor): unknown {
-				return new Promise<codemavi>((c, e) => {
+				return new Promise<void>((c, e) => {
 					const quickInputService = accessor.get(IQuickInputService);
 					const commandService = accessor.get(ICommandService);
 					const disposables = new DisposableStore();
@@ -982,7 +982,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerEnableSyncViewsAction(): codemavi {
+	private registerEnableSyncViewsAction(): void {
 		const that = this;
 		const when = ContextKeyExpr.and(CONTEXT_ACCOUNT_STATE.isEqualTo(AccountStatus.Available), CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized));
 		this._register(registerAction2(class SyncStatusAction extends Action2 {
@@ -998,13 +998,13 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 					}
 				});
 			}
-			run(accessor: ServicesAccessor): Promise<codemavi> {
+			run(accessor: ServicesAccessor): Promise<void> {
 				return that.userDataSyncWorkbenchService.showSyncActivity();
 			}
 		}));
 	}
 
-	private registerSyncNowAction(): codemavi {
+	private registerSyncNowAction(): void {
 		const that = this;
 		this._register(registerAction2(class SyncNowAction extends Action2 {
 			constructor() {
@@ -1024,7 +1024,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerTurnOffSyncAction(): codemavi {
+	private registerTurnOffSyncAction(): void {
 		const that = this;
 		this._register(registerAction2(class StopSyncAction extends Action2 {
 			constructor() {
@@ -1050,7 +1050,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerConfigureSyncAction(): codemavi {
+	private registerConfigureSyncAction(): void {
 		const that = this;
 		const when = ContextKeyExpr.and(CONTEXT_SYNC_STATE.notEqualsTo(SyncStatus.Uninitialized), CONTEXT_SYNC_ENABLEMENT);
 		this._register(registerAction2(class ConfigureSyncAction extends Action2 {
@@ -1076,7 +1076,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerShowLogAction(): codemavi {
+	private registerShowLogAction(): void {
 		const that = this;
 		this._register(registerAction2(class ShowSyncActivityAction extends Action2 {
 			constructor() {
@@ -1100,7 +1100,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerShowSettingsAction(): codemavi {
+	private registerShowSettingsAction(): void {
 		this._register(registerAction2(class ShowSyncSettingsAction extends Action2 {
 			constructor() {
 				super({
@@ -1113,13 +1113,13 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 					},
 				});
 			}
-			run(accessor: ServicesAccessor): codemavi {
+			run(accessor: ServicesAccessor): void {
 				accessor.get(IPreferencesService).openUserSettings({ jsonEditor: false, query: '@tag:sync' });
 			}
 		}));
 	}
 
-	private registerHelpAction(): codemavi {
+	private registerHelpAction(): void {
 		const that = this;
 		this._register(registerAction2(class HelpAction extends Action2 {
 			constructor() {
@@ -1145,7 +1145,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		});
 	}
 
-	private registerAcceptMergesAction(): codemavi {
+	private registerAcceptMergesAction(): void {
 		const that = this;
 		this._register(registerAction2(class AcceptMergesAction extends Action2 {
 			constructor() {
@@ -1159,7 +1159,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 				});
 			}
 
-			async run(accessor: ServicesAccessor, previewResource: URI): Promise<codemavi> {
+			async run(accessor: ServicesAccessor, previewResource: URI): Promise<void> {
 				const textFileService = accessor.get(ITextFileService);
 				await textFileService.save(previewResource);
 				const content = await textFileService.read(previewResource);
@@ -1176,12 +1176,12 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerDownloadSyncActivityAction(): codemavi {
+	private registerDownloadSyncActivityAction(): void {
 		this._register(registerAction2(class DownloadSyncActivityAction extends Action2 {
 			constructor() {
 				super(DOWNLOAD_ACTIVITY_ACTION_DESCRIPTOR);
 			}
-			async run(accessor: ServicesAccessor): Promise<codemavi> {
+			async run(accessor: ServicesAccessor): Promise<void> {
 				const userDataSyncWorkbenchService = accessor.get(IUserDataSyncWorkbenchService);
 				const notificationService = accessor.get(INotificationService);
 				const folder = await userDataSyncWorkbenchService.downloadSyncActivity();
@@ -1193,7 +1193,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerViews(): codemavi {
+	private registerViews(): void {
 		const container = this.registerViewContainer();
 		this.registerDataViews(container);
 	}
@@ -1212,7 +1212,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 			}, ViewContainerLocation.Sidebar);
 	}
 
-	private registerResetSyncDataAction(): codemavi {
+	private registerResetSyncDataAction(): void {
 		const that = this;
 		this._register(registerAction2(class extends Action2 {
 			constructor() {
@@ -1230,7 +1230,7 @@ export class UserDataSyncWorkbenchContribution extends Disposable implements IWo
 		}));
 	}
 
-	private registerDataViews(container: ViewContainer): codemavi {
+	private registerDataViews(container: ViewContainer): void {
 		this._register(this.instantiationService.createInstance(UserDataSyncDataViews, container));
 	}
 

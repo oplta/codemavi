@@ -24,7 +24,7 @@ export class HoverColorPickerContribution extends Disposable implements IEditorC
 		this._register(_editor.onMouseDown((e) => this.onMouseDown(e)));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 	}
 

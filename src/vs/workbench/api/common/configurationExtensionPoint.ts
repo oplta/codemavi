@@ -242,7 +242,7 @@ configurationExtPoint.setHandler((extensions, { added, removed }) => {
 		return configuration;
 	}
 
-	function validateProperties(configuration: IConfigurationNode, extension: IExtensionPointUser<any>): codemavi {
+	function validateProperties(configuration: IConfigurationNode, extension: IExtensionPointUser<any>): void {
 		const properties = configuration.properties;
 		const extensionConfigurationPolicy = product.extensionConfigurationPolicy;
 		if (properties) {

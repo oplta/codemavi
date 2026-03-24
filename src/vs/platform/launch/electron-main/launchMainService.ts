@@ -31,7 +31,7 @@ export interface ILaunchMainService {
 
 	readonly _serviceBrand: undefined;
 
-	start(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<codemavi>;
+	start(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<void>;
 
 	getMainProcessId(): Promise<number>;
 }
@@ -47,7 +47,7 @@ export class LaunchMainService implements ILaunchMainService {
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 	) { }
 
-	async start(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<codemavi> {
+	async start(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<void> {
 		this.logService.trace('Received data from other instance: ', args, userEnv);
 
 		// macOS: Electron > 7.x changed its behaviour to not
@@ -109,7 +109,7 @@ export class LaunchMainService implements ILaunchMainService {
 		return [];
 	}
 
-	private async startOpenWindow(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<codemavi> {
+	private async startOpenWindow(args: NativeParsedArgs, userEnv: IProcessEnvironment): Promise<void> {
 		const context = isLaunchedFromCli(userEnv) ? OpenContext.CLI : OpenContext.DESKTOP;
 		let usedWindows: ICodeWindow[] = [];
 

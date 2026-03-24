@@ -85,7 +85,7 @@ class FastLabelNode {
 		this._element.style.marginLeft = empty ? '0' : '';
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposed = true;
 	}
 }
@@ -129,7 +129,7 @@ export class IconLabel extends Disposable {
 		return this.domNode.element;
 	}
 
-	setLabel(label: string | string[], description?: string, options?: IIconLabelValueOptions): codemavi {
+	setLabel(label: string | string[], description?: string, options?: IIconLabelValueOptions): void {
 		const labelClasses = ['monaco-icon-label'];
 		const containerClasses = ['monaco-icon-label-container'];
 		let ariaLabel: string = '';
@@ -202,7 +202,7 @@ export class IconLabel extends Disposable {
 		}
 	}
 
-	private setupHover(htmlElement: HTMLElement, tooltip: string | IManagedHoverTooltipMarkdownString | undefined): codemavi {
+	private setupHover(htmlElement: HTMLElement, tooltip: string | IManagedHoverTooltipMarkdownString | undefined): void {
 		const previousCustomHover = this.customHovers.get(htmlElement);
 		if (previousCustomHover) {
 			previousCustomHover.dispose();
@@ -223,7 +223,7 @@ export class IconLabel extends Disposable {
 		}
 
 		if (this.hoverDelegate.showNativeHover) {
-			function setupNativeHover(htmlElement: HTMLElement, tooltip: string | IManagedHoverTooltipMarkdownString | undefined): codemavi {
+			function setupNativeHover(htmlElement: HTMLElement, tooltip: string | IManagedHoverTooltipMarkdownString | undefined): void {
 				if (isString(tooltip)) {
 					// Icons don't render in the native hover so we strip them out
 					htmlElement.title = stripIcons(tooltip);
@@ -281,7 +281,7 @@ class Label {
 
 	constructor(private container: HTMLElement) { }
 
-	setLabel(label: string | string[], options?: IIconLabelValueOptions): codemavi {
+	setLabel(label: string | string[], options?: IIconLabelValueOptions): void {
 		if (this.label === label && equals(this.options, options)) {
 			return;
 		}
@@ -346,7 +346,7 @@ class LabelWithHighlights extends Disposable {
 		super();
 	}
 
-	setLabel(label: string | string[], options?: IIconLabelValueOptions): codemavi {
+	setLabel(label: string | string[], options?: IIconLabelValueOptions): void {
 		if (this.label === label && equals(this.options, options)) {
 			return;
 		}

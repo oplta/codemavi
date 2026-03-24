@@ -247,7 +247,7 @@ namespace MarkedHighlight {
 
 		return {
 			async: !!options.async,
-			walkTokens(token: marked.Token): Promise<codemavi> | codemavi {
+			walkTokens(token: marked.Token): Promise<void> | void {
 				if (token.type !== 'code') {
 					return;
 				}

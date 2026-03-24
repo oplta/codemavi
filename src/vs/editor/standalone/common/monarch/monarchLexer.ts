@@ -230,8 +230,8 @@ class MonarchLineState implements languages.IState {
 }
 
 interface IMonarchTokensCollector {
-	enterLanguage(languageId: string): codemavi;
-	emit(startOffset: number, type: string): codemavi;
+	enterLanguage(languageId: string): void;
+	emit(startOffset: number, type: string): void;
 	nestedLanguageTokenize(embeddedLanguageLine: string, hasEOL: boolean, embeddedLanguageData: EmbeddedLanguageData, offsetDelta: number): languages.IState;
 }
 
@@ -249,11 +249,11 @@ class MonarchClassicTokensCollector implements IMonarchTokensCollector {
 		this._lastTokenLanguage = null;
 	}
 
-	public enterLanguage(languageId: string): codemavi {
+	public enterLanguage(languageId: string): void {
 		this._languageId = languageId;
 	}
 
-	public emit(startOffset: number, type: string): codemavi {
+	public emit(startOffset: number, type: string): void {
 		if (this._lastTokenType === type && this._lastTokenLanguage === this._languageId) {
 			return;
 		}
@@ -310,11 +310,11 @@ class MonarchModernTokensCollector implements IMonarchTokensCollector {
 		this._lastTokenMetadata = 0;
 	}
 
-	public enterLanguage(languageId: string): codemavi {
+	public enterLanguage(languageId: string): void {
 		this._currentLanguageId = this._languageService.languageIdCodec.encodeLanguageId(languageId);
 	}
 
-	public emit(startOffset: number, type: string): codemavi {
+	public emit(startOffset: number, type: string): void {
 		const metadata = this._theme.match(this._currentLanguageId, type) | MetadataConsts.BALANCED_BRACKETS_MASK;
 		if (this._lastTokenMetadata === metadata) {
 			return;
@@ -385,7 +385,7 @@ class MonarchModernTokensCollector implements IMonarchTokensCollector {
 	}
 }
 
-export type ILoadStatus = { loaded: true } | { loaded: false; promise: Promise<codemavi> };
+export type ILoadStatus = { loaded: true } | { loaded: false; promise: Promise<void> };
 
 export class MonarchTokenizer extends Disposable implements languages.ITokenizationSupport, IDisposable {
 
@@ -394,7 +394,7 @@ export class MonarchTokenizer extends Disposable implements languages.ITokenizat
 	private readonly _languageId: string;
 	private readonly _lexer: monarchCommon.ILexer;
 	private readonly _embeddedLanguages: { [languageId: string]: boolean };
-	public embeddedLoaded: Promise<codemavi>;
+	public embeddedLoaded: Promise<void>;
 	private _maxTokenizationLineLength: number;
 
 	constructor(languageService: ILanguageService, standaloneThemeService: IStandaloneThemeService, languageId: string, lexer: monarchCommon.ILexer, @IConfigurationService private readonly _configurationService: IConfigurationService) {

@@ -38,7 +38,7 @@ export class TextFileEditorTracker extends Disposable implements IWorkbenchContr
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Ensure dirty text file and untitled models are always opened as editors
 		this._register(this.textFileService.files.onDidChangeDirty(model => this.ensureDirtyFilesAreOpenedWorker.work(model.resource)));
@@ -60,7 +60,7 @@ export class TextFileEditorTracker extends Disposable implements IWorkbenchContr
 		return 800; // encapsulated in a method for tests to override
 	}
 
-	private ensureDirtyTextFilesAreOpened(resources: URI[]): codemavi {
+	private ensureDirtyTextFilesAreOpened(resources: URI[]): void {
 		this.doEnsureDirtyTextFilesAreOpened(distinct(resources.filter(resource => {
 			if (!this.textFileService.isDirty(resource)) {
 				return false; // resource must be dirty
@@ -91,7 +91,7 @@ export class TextFileEditorTracker extends Disposable implements IWorkbenchContr
 		}), resource => resource.toString()));
 	}
 
-	private doEnsureDirtyTextFilesAreOpened(resources: URI[]): codemavi {
+	private doEnsureDirtyTextFilesAreOpened(resources: URI[]): void {
 		if (!resources.length) {
 			return;
 		}
@@ -106,7 +106,7 @@ export class TextFileEditorTracker extends Disposable implements IWorkbenchContr
 
 	//#region Window Focus Change: Update visible code editors when focus is gained that have a known text file model
 
-	private reloadVisibleTextFileEditors(): codemavi {
+	private reloadVisibleTextFileEditors(): void {
 		// the window got focus and we use this as a hint that files might have been changed outside
 		// of this window. since file events can be unreliable, we queue a load for models that
 		// are visible in any editor. since this is a fast operation in the case nothing has changed,

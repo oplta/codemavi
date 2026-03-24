@@ -17,7 +17,7 @@ export function constObservable<T>(value: T): IObservable<T> {
 	return new ConstObservable(value);
 }
 
-class ConstObservable<T> extends ConvenientObservable<T, codemavi> {
+class ConstObservable<T> extends ConvenientObservable<T, void> {
 	constructor(private readonly value: T) {
 		super();
 	}
@@ -29,14 +29,14 @@ class ConstObservable<T> extends ConvenientObservable<T, codemavi> {
 	public get(): T {
 		return this.value;
 	}
-	public addObserver(observer: IObserver): codemavi {
+	public addObserver(observer: IObserver): void {
 		// NO OP
 	}
-	public removeObserver(observer: IObserver): codemavi {
+	public removeObserver(observer: IObserver): void {
 		// NO OP
 	}
 
-	override log(): IObservableWithChange<T, codemavi> {
+	override log(): IObservableWithChange<T, void> {
 		return this;
 	}
 
@@ -125,7 +125,7 @@ export class FromEventObservable<TArgs, T> extends BaseObservable<T> {
 		return 'From Event' + (name ? `: ${name}` : '');
 	}
 
-	protected override onFirstObserverAdded(): codemavi {
+	protected override onFirstObserverAdded(): void {
 		this._subscription = this.event(this.handleEvent);
 	}
 
@@ -165,7 +165,7 @@ export class FromEventObservable<TArgs, T> extends BaseObservable<T> {
 		}
 	};
 
-	protected override onLastObserverRemoved(): codemavi {
+	protected override onLastObserverRemoved(): void {
 		this._subscription!.dispose();
 		this._subscription = undefined;
 		this._hasValue = false;
@@ -193,7 +193,7 @@ export class FromEventObservable<TArgs, T> extends BaseObservable<T> {
 export namespace observableFromEvent {
 	export const Observer = FromEventObservable;
 
-	export function batchEventsGlobally(tx: ITransaction, fn: () => codemavi): codemavi {
+	export function batchEventsGlobally(tx: ITransaction, fn: () => void): void {
 		let didSet = false;
 		if (FromEventObservable.globalTransaction === undefined) {
 			FromEventObservable.globalTransaction = tx;
@@ -212,11 +212,11 @@ export namespace observableFromEvent {
 export function observableSignalFromEvent(
 	owner: DebugOwner | string,
 	event: Event<any>
-): IObservable<codemavi> {
+): IObservable<void> {
 	return new FromEventObservableSignal(typeof owner === 'string' ? owner : new DebugNameData(owner, undefined, undefined), event);
 }
 
-class FromEventObservableSignal extends BaseObservable<codemavi> {
+class FromEventObservableSignal extends BaseObservable<void> {
 	private subscription: IDisposable | undefined;
 
 	public readonly debugName: string;
@@ -230,7 +230,7 @@ class FromEventObservableSignal extends BaseObservable<codemavi> {
 			: debugNameDataOrName.getDebugName(this) ?? 'Observable Signal From Event';
 	}
 
-	protected override onFirstObserverAdded(): codemavi {
+	protected override onFirstObserverAdded(): void {
 		this.subscription = this.event(this.handleEvent);
 	}
 
@@ -246,12 +246,12 @@ class FromEventObservableSignal extends BaseObservable<codemavi> {
 		);
 	};
 
-	protected override onLastObserverRemoved(): codemavi {
+	protected override onLastObserverRemoved(): void {
 		this.subscription!.dispose();
 		this.subscription = undefined;
 	}
 
-	public override get(): codemavi {
+	public override get(): void {
 		// NO OP
 	}
 }
@@ -261,9 +261,9 @@ class FromEventObservableSignal extends BaseObservable<codemavi> {
  * Signals don't have a value - when they are triggered they indicate a change.
  * However, signals can carry a delta that is passed to observers.
  */
-export function observableSignal<TDelta = codemavi>(debugName: string): IObservableSignal<TDelta>;
-export function observableSignal<TDelta = codemavi>(owner: object): IObservableSignal<TDelta>;
-export function observableSignal<TDelta = codemavi>(debugNameOrOwner: string | object): IObservableSignal<TDelta> {
+export function observableSignal<TDelta = void>(debugName: string): IObservableSignal<TDelta>;
+export function observableSignal<TDelta = void>(owner: object): IObservableSignal<TDelta>;
+export function observableSignal<TDelta = void>(debugNameOrOwner: string | object): IObservableSignal<TDelta> {
 	if (typeof debugNameOrOwner === 'string') {
 		return new ObservableSignal<TDelta>(debugNameOrOwner);
 	} else {
@@ -271,11 +271,11 @@ export function observableSignal<TDelta = codemavi>(debugNameOrOwner: string | o
 	}
 }
 
-export interface IObservableSignal<TChange> extends IObservableWithChange<codemavi, TChange> {
-	trigger(tx: ITransaction | undefined, change: TChange): codemavi;
+export interface IObservableSignal<TChange> extends IObservableWithChange<void, TChange> {
+	trigger(tx: ITransaction | undefined, change: TChange): void;
 }
 
-class ObservableSignal<TChange> extends BaseObservable<codemavi, TChange> implements IObservableSignal<TChange> {
+class ObservableSignal<TChange> extends BaseObservable<void, TChange> implements IObservableSignal<TChange> {
 	public get debugName() {
 		return new DebugNameData(this._owner, this._debugName, undefined).getDebugName(this) ?? 'Observable Signal';
 	}
@@ -291,7 +291,7 @@ class ObservableSignal<TChange> extends BaseObservable<codemavi, TChange> implem
 		super();
 	}
 
-	public trigger(tx: ITransaction | undefined, change: TChange): codemavi {
+	public trigger(tx: ITransaction | undefined, change: TChange): void {
 		if (!tx) {
 			transaction(tx => {
 				this.trigger(tx, change);
@@ -305,12 +305,12 @@ class ObservableSignal<TChange> extends BaseObservable<codemavi, TChange> implem
 		}
 	}
 
-	public override get(): codemavi {
+	public override get(): void {
 		// NO OP
 	}
 }
 
-export function signalFromObservable<T>(owner: DebugOwner | undefined, observable: IObservable<T>): IObservable<codemavi> {
+export function signalFromObservable<T>(owner: DebugOwner | undefined, observable: IObservable<T>): IObservable<void> {
 	return derivedOpts({
 		owner,
 		equalsFn: () => false,
@@ -354,7 +354,7 @@ export function debouncedObservable<T>(observable: IObservable<T>, debounceMs: n
 
 	let timeout: any = undefined;
 
-	return observableFromEvent<T, codemavi>(cb => {
+	return observableFromEvent<T, void>(cb => {
 		const d = autorun(reader => {
 			const value = observable.read(reader);
 
@@ -422,7 +422,7 @@ _setKeepObserved(keepObserved);
 /**
  * This converts the given observable into an autorun.
  */
-export function recomputeInitiallyAndOnChange<T>(observable: IObservable<T>, handleValue?: (value: T) => codemavi): IDisposable {
+export function recomputeInitiallyAndOnChange<T>(observable: IObservable<T>, handleValue?: (value: T) => void): IDisposable {
 	const o = new KeepAliveObserver(true, handleValue);
 	observable.addObserver(o);
 	try {
@@ -443,14 +443,14 @@ export class KeepAliveObserver implements IObserver {
 
 	constructor(
 		private readonly _forceRecompute: boolean,
-		private readonly _handleValue: ((value: any) => codemavi) | undefined,
+		private readonly _handleValue: ((value: any) => void) | undefined,
 	) { }
 
-	beginUpdate<T>(observable: IObservable<T>): codemavi {
+	beginUpdate<T>(observable: IObservable<T>): void {
 		this._counter++;
 	}
 
-	endUpdate<T>(observable: IObservable<T>): codemavi {
+	endUpdate<T>(observable: IObservable<T>): void {
 		if (this._counter === 1 && this._forceRecompute) {
 			if (this._handleValue) {
 				this._handleValue(observable.get());
@@ -461,11 +461,11 @@ export class KeepAliveObserver implements IObserver {
 		this._counter--;
 	}
 
-	handlePossibleChange<T>(observable: IObservable<T>): codemavi {
+	handlePossibleChange<T>(observable: IObservable<T>): void {
 		// NO OP
 	}
 
-	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): codemavi {
+	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): void {
 		// NO OP
 	}
 }
@@ -480,7 +480,7 @@ export function derivedObservableWithCache<T>(owner: DebugOwner, computeFn: (rea
 }
 
 export function derivedObservableWithWritableCache<T>(owner: object, computeFn: (reader: IReader, lastValue: T | undefined) => T): IObservable<T>
-	& { clearCache(transaction: ITransaction): codemavi; setCache(newValue: T | undefined, tx: ITransaction | undefined): codemavi } {
+	& { clearCache(transaction: ITransaction): void; setCache(newValue: T | undefined, tx: ITransaction | undefined): void } {
 	let lastValue: T | undefined = undefined;
 	const onChange = observableSignal('derivedObservableWithWritableCache');
 	const observable = derived(owner, reader => {
@@ -528,12 +528,12 @@ class ArrayMap<TIn, TOut, TKey> implements IDisposable {
 	) {
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._cache.forEach(entry => entry.store.dispose());
 		this._cache.clear();
 	}
 
-	public setItems(items: readonly TIn[]): codemavi {
+	public setItems(items: readonly TIn[]): void {
 		const newItems: TOut[] = [];
 		const itemsToRemove = new Set(this._cache.keys());
 
@@ -570,7 +570,7 @@ export class ValueWithChangeEventFromObservable<T> implements IValueWithChangeEv
 	constructor(public readonly observable: IObservable<T>) {
 	}
 
-	get onDidChange(): Event<codemavi> {
+	get onDidChange(): Event<void> {
 		return Event.fromObservableLight(this.observable);
 	}
 
@@ -600,7 +600,7 @@ export function latestChangedValue<T extends IObservable<any>[]>(owner: DebugOwn
 	let hasLastChangedValue = false;
 	let lastChangedValue: any = undefined;
 
-	const result = observableFromEvent<any, codemavi>(owner, cb => {
+	const result = observableFromEvent<any, void>(owner, cb => {
 		const store = new DisposableStore();
 		for (const o of observables) {
 			store.add(autorunOpts({ debugName: () => getDebugName(result, new DebugNameData(owner, undefined, undefined)) + '.updateLastChangedValue' }, reader => {
@@ -637,7 +637,7 @@ export function derivedConstOnceDefined<T>(owner: DebugOwner, fn: (reader: IRead
 
 type RemoveUndefined<T> = T extends undefined ? never : T;
 
-export function runOnChange<T, TChange>(observable: IObservableWithChange<T, TChange>, cb: (value: T, previousValue: undefined | T, deltas: RemoveUndefined<TChange>[]) => codemavi): IDisposable {
+export function runOnChange<T, TChange>(observable: IObservableWithChange<T, TChange>, cb: (value: T, previousValue: undefined | T, deltas: RemoveUndefined<TChange>[]) => void): IDisposable {
 	let _previousValue: T | undefined;
 	return autorunWithStoreHandleChanges({
 		createEmptyChangeSummary: () => ({ deltas: [] as RemoveUndefined<TChange>[], didChange: false }),
@@ -661,7 +661,7 @@ export function runOnChange<T, TChange>(observable: IObservableWithChange<T, TCh
 	});
 }
 
-export function runOnChangeWithStore<T, TChange>(observable: IObservableWithChange<T, TChange>, cb: (value: T, previousValue: undefined | T, deltas: RemoveUndefined<TChange>[], store: DisposableStore) => codemavi): IDisposable {
+export function runOnChangeWithStore<T, TChange>(observable: IObservableWithChange<T, TChange>, cb: (value: T, previousValue: undefined | T, deltas: RemoveUndefined<TChange>[], store: DisposableStore) => void): IDisposable {
 	const store = new DisposableStore();
 	const disposable = runOnChange(observable, (value, previousValue: undefined | T, deltas) => {
 		store.clear();

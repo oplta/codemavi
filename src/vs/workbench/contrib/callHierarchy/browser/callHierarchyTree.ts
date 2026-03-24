@@ -116,7 +116,7 @@ export class CallRenderer implements ITreeRenderer<Call, FuzzyScore, CallRenderi
 		return new CallRenderingTemplate(icon, label);
 	}
 
-	renderElement(node: ITreeNode<Call, FuzzyScore>, _index: number, template: CallRenderingTemplate): codemavi {
+	renderElement(node: ITreeNode<Call, FuzzyScore>, _index: number, template: CallRenderingTemplate): void {
 		const { element, filterData } = node;
 		const deprecated = element.item.tags?.includes(SymbolTag.Deprecated);
 		template.icon.className = '';
@@ -127,7 +127,7 @@ export class CallRenderer implements ITreeRenderer<Call, FuzzyScore, CallRenderi
 			{ labelEscapeNewLines: true, matches: createMatches(filterData), strikethrough: deprecated }
 		);
 	}
-	disposeTemplate(template: CallRenderingTemplate): codemavi {
+	disposeTemplate(template: CallRenderingTemplate): void {
 		template.label.dispose();
 	}
 }

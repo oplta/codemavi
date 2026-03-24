@@ -13,7 +13,7 @@ import { Emitter, Event, EventBufferer } from '../../../common/event.js';
 import { Iterable } from '../../../common/iterator.js';
 
 // Exported for tests
-export interface IIndexTreeNode<T, TFilterData = codemavi> extends ITreeNode<T, TFilterData> {
+export interface IIndexTreeNode<T, TFilterData = void> extends ITreeNode<T, TFilterData> {
 	readonly parent: IIndexTreeNode<T, TFilterData> | undefined;
 	readonly children: IIndexTreeNode<T, TFilterData>[];
 	visibleChildrenCount: number;
@@ -66,12 +66,12 @@ export interface IIndexTreeModelSpliceOptions<T, TFilterData> {
 	/**
 	 * Callback for when a node is created.
 	 */
-	onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => codemavi;
+	onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => void;
 
 	/**
 	 * Callback for when a node is deleted.
 	 */
-	onDidDeleteNode?: (node: ITreeNode<T, TFilterData>) => codemavi;
+	onDidDeleteNode?: (node: ITreeNode<T, TFilterData>) => void;
 }
 
 interface CollapsibleStateUpdate {
@@ -89,7 +89,7 @@ function isCollapsibleStateUpdate(update: CollapseStateUpdate): update is Collap
 	return typeof (update as any).collapsible === 'boolean';
 }
 
-export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = codemavi> implements ITreeModel<T, TFilterData, number[]> {
+export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = void> implements ITreeModel<T, TFilterData, number[]> {
 
 	readonly rootRef = [];
 
@@ -146,7 +146,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		deleteCount: number,
 		toInsert: Iterable<ITreeElement<T>> = Iterable.empty(),
 		options: IIndexTreeModelSpliceOptions<T, TFilterData> = {},
-	): codemavi {
+	): void {
 		if (location.length === 0) {
 			throw new TreeError(this.user, 'Invalid tree location');
 		}
@@ -320,7 +320,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 
 		while (node) {
 			if (node.visibility === TreeVisibility.Recurse) {
-				// delayed to acodemavi excessive refiltering, see #135941
+				// delayed to avoid excessive refiltering, see #135941
 				this.refilterDelayer.trigger(() => this.refilter());
 				break;
 			}
@@ -329,7 +329,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		}
 	}
 
-	rerender(location: number[]): codemavi {
+	rerender(location: number[]): void {
 		if (location.length === 0) {
 			throw new TreeError(this.user, 'Invalid tree location');
 		}
@@ -458,7 +458,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		return result;
 	}
 
-	expandTo(location: number[]): codemavi {
+	expandTo(location: number[]): void {
 		this.eventBufferer.bufferEvents(() => {
 			let node = this.getTreeNode(location);
 
@@ -473,7 +473,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		});
 	}
 
-	refilter(): codemavi {
+	refilter(): void {
 		const previousRenderNodeCount = this.root.renderNodeCount;
 		const toInsert = this.updateNodeAfterFilterChange(this.root);
 		this._onDidSpliceRenderedNodes.fire({ start: 0, deleteCount: previousRenderNodeCount, elements: toInsert });
@@ -486,7 +486,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		parentVisibility: TreeVisibility,
 		revealed: boolean,
 		treeListElements: ITreeNode<T, TFilterData>[],
-		onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => codemavi
+		onDidCreateNode?: (node: ITreeNode<T, TFilterData>) => void
 	): IIndexTreeNode<T, TFilterData> {
 		const node: IIndexTreeNode<T, TFilterData> = {
 			parent,
@@ -642,7 +642,7 @@ export class IndexTreeModel<T extends Exclude<any, undefined>, TFilterData = cod
 		return node.visible;
 	}
 
-	private _updateAncestorsRenderNodeCount(node: IIndexTreeNode<T, TFilterData> | undefined, diff: number): codemavi {
+	private _updateAncestorsRenderNodeCount(node: IIndexTreeNode<T, TFilterData> | undefined, diff: number): void {
 		if (diff === 0) {
 			return;
 		}

@@ -26,7 +26,7 @@ import { ITelemetryService } from '../../telemetry/common/telemetry.js';
 import { AvailableForDownload, DisablementReason, IUpdate, State, StateType, UpdateType } from '../common/update.js';
 import { AbstractUpdateService, createUpdateURL, UpdateErrorClassification } from './abstractUpdateService.js';
 
-async function pollUntil(fn: () => boolean, millis = 1000): Promise<codemavi> {
+async function pollUntil(fn: () => boolean, millis = 1000): Promise<void> {
 	while (!fn()) {
 		await timeout(millis);
 	}
@@ -89,7 +89,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 		return true;
 	}
 
-	protected override async initialize(): Promise<codemavi> {
+	protected override async initialize(): Promise<void> {
 		if (this.productService.target === 'user' && await this.nativeHostMainService.isAdmin(undefined)) {
 			this.setState(State.Disabled(DisablementReason.RunningAsAdmin));
 			this.logService.info('update#ctor - updates are disabled due to running as Admin in user setup');
@@ -111,7 +111,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 		return createUpdateURL(platform, quality, this.productService);
 	}
 
-	protected doCheckForUpdates(context: any): codemavi {
+	protected doCheckForUpdates(context: any): void {
 		if (!this.url) {
 			return;
 		}
@@ -175,7 +175,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 			});
 	}
 
-	protected override async doDownloadUpdate(state: AvailableForDownload): Promise<codemavi> {
+	protected override async doDownloadUpdate(state: AvailableForDownload): Promise<void> {
 		if (state.update.url) {
 			this.nativeHostMainService.openExternal(undefined, state.update.url);
 		}
@@ -187,7 +187,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 		return path.join(cachePath, `CodeSetup-${this.productService.quality}-${version}.exe`);
 	}
 
-	private async cleanup(exceptVersion: string | null = null): Promise<codemavi> {
+	private async cleanup(exceptVersion: string | null = null): Promise<void> {
 		const filter = exceptVersion ? (one: string) => !(new RegExp(`${this.productService.quality}-${exceptVersion}\\.exe$`).test(one)) : () => true;
 
 		const cachePath = await this.cachePath;
@@ -204,7 +204,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 		await Promise.all(promises);
 	}
 
-	protected override async doApplyUpdate(): Promise<codemavi> {
+	protected override async doApplyUpdate(): Promise<void> {
 		if (this.state.type !== StateType.Downloaded) {
 			return Promise.resolve(undefined);
 		}
@@ -240,7 +240,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 			.then(() => this.setState(State.Ready(update)));
 	}
 
-	protected override doQuitAndInstall(): codemavi {
+	protected override doQuitAndInstall(): void {
 		if (this.state.type !== StateType.Ready || !this.availableUpdate) {
 			return;
 		}
@@ -261,7 +261,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 		return getUpdateType();
 	}
 
-	override async _applySpecificUpdate(packagePath: string): Promise<codemavi> {
+	override async _applySpecificUpdate(packagePath: string): Promise<void> {
 		if (this.state.type !== StateType.Idle) {
 			return;
 		}

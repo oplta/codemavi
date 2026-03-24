@@ -165,7 +165,7 @@ export class MarkersModel {
 		this.resourcesByUri = new Map<string, ResourceMarkers>();
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		const removed = new Set<ResourceMarkers>();
 		for (const resourceMarker of this.resourcesByUri.values()) {
 			removed.add(resourceMarker);
@@ -184,7 +184,7 @@ export class MarkersModel {
 		return this.resourcesByUri.get(extUri.getComparisonKey(resource, true)) ?? null;
 	}
 
-	setResourceMarkers(resourcesMarkers: [URI, IMarker[]][]): codemavi {
+	setResourceMarkers(resourcesMarkers: [URI, IMarker[]][]): void {
 		const change: MarkerChangesEvent = { added: new Set(), removed: new Set(), updated: new Set() };
 		for (const [resource, rawMarkers] of resourcesMarkers) {
 
@@ -249,7 +249,7 @@ export class MarkersModel {
 		return `${hash(values)}`;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this.resourcesByUri.clear();
 	}

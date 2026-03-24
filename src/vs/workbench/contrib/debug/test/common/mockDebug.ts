@@ -54,7 +54,7 @@ export class MockDebugService implements IDebugService {
 		throw new Error('Method not implemented.');
 	}
 
-	focusStackFrame(focusedStackFrame: IStackFrame): Promise<codemavi> {
+	focusStackFrame(focusedStackFrame: IStackFrame): Promise<void> {
 		throw new Error('not implemented');
 	}
 
@@ -70,15 +70,15 @@ export class MockDebugService implements IDebugService {
 		throw new Error('not implemented');
 	}
 
-	updateBreakpoints(uri: uri, data: Map<string, IBreakpointUpdateData>, sendOnResourceSaved: boolean): Promise<codemavi> {
+	updateBreakpoints(uri: uri, data: Map<string, IBreakpointUpdateData>, sendOnResourceSaved: boolean): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	enableOrDisableBreakpoints(enabled: boolean): Promise<codemavi> {
+	enableOrDisableBreakpoints(enabled: boolean): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	setBreakpointsActivated(): Promise<codemavi> {
+	setBreakpointsActivated(): Promise<void> {
 		throw new Error('not implemented');
 	}
 
@@ -86,61 +86,61 @@ export class MockDebugService implements IDebugService {
 		throw new Error('not implemented');
 	}
 
-	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): Promise<codemavi> {
+	addInstructionBreakpoint(opts: IInstructionBreakpointOptions): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	removeInstructionBreakpoints(address?: string): Promise<codemavi> {
+	removeInstructionBreakpoints(address?: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	setExceptionBreakpointCondition(breakpoint: IExceptionBreakpoint, condition: string): Promise<codemavi> {
+	setExceptionBreakpointCondition(breakpoint: IExceptionBreakpoint, condition: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	setExceptionBreakpointsForSession(session: IDebugSession, data: DebugProtocol.ExceptionBreakpointsFilter[]): codemavi {
+	setExceptionBreakpointsForSession(session: IDebugSession, data: DebugProtocol.ExceptionBreakpointsFilter[]): void {
 		throw new Error('Method not implemented.');
 	}
 
-	addFunctionBreakpoint(): codemavi { }
+	addFunctionBreakpoint(): void { }
 
-	moveWatchExpression(id: string, position: number): codemavi { }
+	moveWatchExpression(id: string, position: number): void { }
 
-	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): Promise<codemavi> {
+	updateFunctionBreakpoint(id: string, update: { name?: string; hitCondition?: string; condition?: string }): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	removeFunctionBreakpoints(id?: string): Promise<codemavi> {
+	removeFunctionBreakpoints(id?: string): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	addDataBreakpoint(): Promise<codemavi> {
+	addDataBreakpoint(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): Promise<codemavi> {
+	updateDataBreakpoint(id: string, update: { hitCondition?: string; condition?: string }): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	removeDataBreakpoints(id?: string | undefined): Promise<codemavi> {
+	removeDataBreakpoints(id?: string | undefined): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	addReplExpression(name: string): Promise<codemavi> {
+	addReplExpression(name: string): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	removeReplExpressions(): codemavi { }
+	removeReplExpressions(): void { }
 
-	addWatchExpression(name?: string): Promise<codemavi> {
+	addWatchExpression(name?: string): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	renameWatchExpression(id: string, newName: string): Promise<codemavi> {
+	renameWatchExpression(id: string, newName: string): Promise<void> {
 		throw new Error('not implemented');
 	}
 
-	removeWatchExpressions(id?: string): codemavi { }
+	removeWatchExpressions(id?: string): void { }
 
 	startDebugging(launch: ILaunch, configOrName?: IConfig | string, options?: IDebugSessionOptions): Promise<boolean> {
 		return Promise.resolve(true);
@@ -162,13 +162,13 @@ export class MockDebugService implements IDebugService {
 		throw new Error('not implemented');
 	}
 
-	sourceIsNotAvailable(uri: uri): codemavi { }
+	sourceIsNotAvailable(uri: uri): void { }
 
 	tryToAutoFocusStackFrame(thread: IThread): Promise<any> {
 		throw new Error('not implemented');
 	}
 
-	runTo(uri: uri, lineNumber: number, column?: number): Promise<codemavi> {
+	runTo(uri: uri, lineNumber: number, column?: number): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 }
@@ -195,7 +195,7 @@ export class MockSession implements IDebugSession {
 		throw new Error('Method not implemented.');
 	}
 
-	cancelCorrelatedTestRun(): codemavi {
+	cancelCorrelatedTestRun(): void {
 
 	}
 
@@ -235,7 +235,7 @@ export class MockSession implements IDebugSession {
 		throw new Error('Method not implemented.');
 	}
 
-	sendDataBreakpoints(dbps: IDataBreakpoint[]): Promise<codemavi> {
+	sendDataBreakpoints(dbps: IDataBreakpoint[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -245,7 +245,7 @@ export class MockSession implements IDebugSession {
 		return false;
 	}
 
-	setSubId(subId: string | undefined): codemavi {
+	setSubId(subId: string | undefined): void {
 		throw new Error('Method not implemented.');
 	}
 
@@ -261,16 +261,16 @@ export class MockSession implements IDebugSession {
 		return true;
 	}
 
-	removeReplExpressions(): codemavi { }
+	removeReplExpressions(): void { }
 	get onDidChangeReplElements(): Event<IReplElement | undefined> {
 		throw new Error('not implemented');
 	}
 
-	addReplExpression(stackFrame: IStackFrame, name: string): Promise<codemavi> {
+	addReplExpression(stackFrame: IStackFrame, name: string): Promise<void> {
 		return Promise.resolve(undefined);
 	}
 
-	appendToRepl(data: INewReplElementData): codemavi { }
+	appendToRepl(data: INewReplElementData): void { }
 
 	configuration: IConfig = { type: 'mock', name: 'mock', request: 'launch' };
 	unresolvedConfiguration: IConfig = { type: 'mock', name: 'mock', request: 'launch' };
@@ -290,7 +290,7 @@ export class MockSession implements IDebugSession {
 		return 'mockname';
 	}
 
-	setName(name: string): codemavi {
+	setName(name: string): void {
 		throw new Error('not implemented');
 	}
 
@@ -314,7 +314,7 @@ export class MockSession implements IDebugSession {
 		throw new Error('not implemented');
 	}
 
-	get onDidChangeState(): Event<codemavi> {
+	get onDidChangeState(): Event<void> {
 		throw new Error('not implemented');
 	}
 
@@ -356,29 +356,29 @@ export class MockSession implements IDebugSession {
 		throw new Error('not implemented');
 	}
 
-	clearThreads(removeThreads: boolean, reference?: number): codemavi { }
+	clearThreads(removeThreads: boolean, reference?: number): void { }
 
-	rawUpdate(data: IRawModelUpdate): codemavi { }
+	rawUpdate(data: IRawModelUpdate): void { }
 
-	initialize(dbgr: IDebugger): Promise<codemavi> {
+	initialize(dbgr: IDebugger): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	launchOrAttach(config: IConfig): Promise<codemavi> {
+	launchOrAttach(config: IConfig): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	restart(): Promise<codemavi> {
+	restart(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	sendBreakpoints(modelUri: uri, bpts: IBreakpoint[], sourceModified: boolean): Promise<codemavi> {
+	sendBreakpoints(modelUri: uri, bpts: IBreakpoint[], sourceModified: boolean): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	sendFunctionBreakpoints(fbps: IFunctionBreakpoint[]): Promise<codemavi> {
+	sendFunctionBreakpoints(fbps: IFunctionBreakpoint[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<codemavi> {
+	sendExceptionBreakpoints(exbpts: IExceptionBreakpoint[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	sendInstructionBreakpoints(dbps: IInstructionBreakpoint[]): Promise<codemavi> {
+	sendInstructionBreakpoints(dbps: IInstructionBreakpoint[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	getDebugProtocolBreakpoint(breakpointId: string): DebugProtocol.Breakpoint | undefined {
@@ -402,31 +402,31 @@ export class MockSession implements IDebugSession {
 	evaluate(expression: string, frameId: number, context?: string): Promise<DebugProtocol.EvaluateResponse> {
 		throw new Error('Method not implemented.');
 	}
-	restartFrame(frameId: number, threadId: number): Promise<codemavi> {
+	restartFrame(frameId: number, threadId: number): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
+	next(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
+	stepIn(threadId: number, targetId?: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
+	stepOut(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<codemavi> {
+	stepBack(threadId: number, granularity?: DebugProtocol.SteppingGranularity): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	continue(threadId: number): Promise<codemavi> {
+	continue(threadId: number): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	reverseContinue(threadId: number): Promise<codemavi> {
+	reverseContinue(threadId: number): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	pause(threadId: number): Promise<codemavi> {
+	pause(threadId: number): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	terminateThreads(threadIds: number[]): Promise<codemavi> {
+	terminateThreads(threadIds: number[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	setVariable(variablesReference: number, name: string, value: string): Promise<DebugProtocol.SetVariableResponse> {
@@ -442,10 +442,10 @@ export class MockSession implements IDebugSession {
 		throw new Error('Method not implemented.');
 	}
 
-	terminate(restart = false): Promise<codemavi> {
+	terminate(restart = false): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	disconnect(restart = false): Promise<codemavi> {
+	disconnect(restart = false): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -599,15 +599,15 @@ export class MockDebugAdapter extends AbstractDebugAdapter {
 
 	private pendingResponses = new Map<string, DeferredPromise<DebugProtocol.Response>>();
 
-	startSession(): Promise<codemavi> {
+	startSession(): Promise<void> {
 		return Promise.resolve();
 	}
 
-	stopSession(): Promise<codemavi> {
+	stopSession(): Promise<void> {
 		return Promise.resolve();
 	}
 
-	sendMessage(message: DebugProtocol.ProtocolMessage): codemavi {
+	sendMessage(message: DebugProtocol.ProtocolMessage): void {
 		if (message.type === 'request') {
 			setTimeout(() => {
 				const request = message as DebugProtocol.Request;

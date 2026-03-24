@@ -51,14 +51,14 @@ export interface IChatViewModel {
 	readonly model: IChatModel;
 	readonly initState: ChatModelInitState;
 	readonly sessionId: string;
-	readonly onDidDisposeModel: Event<codemavi>;
+	readonly onDidDisposeModel: Event<void>;
 	readonly onDidChange: Event<IChatViewModelChangeEvent>;
 	readonly requestInProgress: boolean;
 	readonly requestPausibility: ChatPauseState;
 	readonly inputPlaceholder?: string;
 	getItems(): (IChatRequestViewModel | IChatResponseViewModel)[];
-	setInputPlaceholder(text: string): codemavi;
-	resetInputPlaceholder(): codemavi;
+	setInputPlaceholder(text: string): void;
+	resetInputPlaceholder(): void;
 }
 
 export interface IChatRequestViewModel {
@@ -191,16 +191,16 @@ export interface IChatResponseViewModel {
 	readonly isPaused: IObservable<boolean>;
 	renderData?: IChatResponseRenderData;
 	currentRenderedHeight: number | undefined;
-	setVote(vote: ChatAgentVoteDirection): codemavi;
-	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): codemavi;
+	setVote(vote: ChatAgentVoteDirection): void;
+	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): void;
 	usedReferencesExpanded?: boolean;
 	vulnerabilitiesListExpanded: boolean;
-	setEditApplied(edit: IChatTextEditGroup, editCount: number): codemavi;
+	setEditApplied(edit: IChatTextEditGroup, editCount: number): void;
 }
 
 export class ChatViewModel extends Disposable implements IChatViewModel {
 
-	private readonly _onDidDisposeModel = this._register(new Emitter<codemavi>());
+	private readonly _onDidDisposeModel = this._register(new Emitter<void>());
 	readonly onDidDisposeModel = this._onDidDisposeModel.event;
 
 	private readonly _onDidChange = this._register(new Emitter<IChatViewModelChangeEvent>());
@@ -217,12 +217,12 @@ export class ChatViewModel extends Disposable implements IChatViewModel {
 		return this._model;
 	}
 
-	setInputPlaceholder(text: string): codemavi {
+	setInputPlaceholder(text: string): void {
 		this._inputPlaceholder = text;
 		this._onDidChange.fire({ kind: 'changePlaceholder' });
 	}
 
-	resetInputPlaceholder(): codemavi {
+	resetInputPlaceholder(): void {
 		this._inputPlaceholder = undefined;
 		this._onDidChange.fire({ kind: 'changePlaceholder' });
 	}
@@ -412,7 +412,7 @@ export class ChatRequestViewModel implements IChatRequestViewModel {
 export class ChatResponseViewModel extends Disposable implements IChatResponseViewModel {
 	private _modelChangeCount = 0;
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	get model() {
@@ -621,12 +621,12 @@ export class ChatResponseViewModel extends Disposable implements IChatResponseVi
 		this.logService.trace(`ChatResponseViewModel#${tag}: ${message}`);
 	}
 
-	setVote(vote: ChatAgentVoteDirection): codemavi {
+	setVote(vote: ChatAgentVoteDirection): void {
 		this._modelChangeCount++;
 		this._model.setVote(vote);
 	}
 
-	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): codemavi {
+	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): void {
 		this._modelChangeCount++;
 		this._model.setVoteDownReason(reason);
 	}

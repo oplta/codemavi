@@ -37,7 +37,7 @@ export class PreviewDocumentVersion {
 interface MarkdownPreviewDelegate {
 	getTitle?(resource: vscode.Uri): string;
 	getAdditionalState(): {};
-	openPreviewLinkToMarkdownFile(markdownLink: vscode.Uri, fragment: string | undefined): codemavi;
+	openPreviewLinkToMarkdownFile(markdownLink: vscode.Uri, fragment: string | undefined): void;
 }
 
 class MarkdownPreview extends Disposable implements WebviewResourceProvider {
@@ -230,7 +230,7 @@ class MarkdownPreview extends Disposable implements WebviewResourceProvider {
 		});
 	}
 
-	private async _updatePreview(forceUpdate?: boolean): Promise<codemavi> {
+	private async _updatePreview(forceUpdate?: boolean): Promise<void> {
 		clearTimeout(this._throttleTimer);
 		this._throttleTimer = undefined;
 
@@ -301,7 +301,7 @@ class MarkdownPreview extends Disposable implements WebviewResourceProvider {
 		}
 	}
 
-	private async _onDidClickPreview(line: number): Promise<codemavi> {
+	private async _onDidClickPreview(line: number): Promise<void> {
 		// fix #82457, find currently opened but unfocused source tab
 		await vscode.commands.executeCommand('markdown.showSource');
 
@@ -333,7 +333,7 @@ class MarkdownPreview extends Disposable implements WebviewResourceProvider {
 		this._webviewPanel.webview.html = this._contentProvider.renderFileNotFoundDocument(this._resource);
 	}
 
-	private _updateWebviewContent(html: string, reloadPage: boolean): codemavi {
+	private _updateWebviewContent(html: string, reloadPage: boolean): void {
 		if (this._disposed) {
 			return;
 		}
@@ -439,13 +439,13 @@ export interface IManagedMarkdownPreview {
 	readonly resource: vscode.Uri;
 	readonly resourceColumn: vscode.ViewColumn;
 
-	readonly onDispose: vscode.Event<codemavi>;
+	readonly onDispose: vscode.Event<void>;
 	readonly onDidChangeViewState: vscode.Event<vscode.WebviewPanelOnDidChangeViewStateEvent>;
 
-	copyImage(id: string): codemavi;
-	dispose(): codemavi;
-	refresh(): codemavi;
-	updateConfiguration(): codemavi;
+	copyImage(id: string): void;
+	dispose(): void;
+	refresh(): void;
+	updateConfiguration(): void;
 
 	matchesResource(
 		otherResource: vscode.Uri,
@@ -524,7 +524,7 @@ export class StaticMarkdownPreview extends Disposable implements IManagedMarkdow
 		});
 	}
 
-	private readonly _onDispose = this._register(new vscode.EventEmitter<codemavi>());
+	private readonly _onDispose = this._register(new vscode.EventEmitter<void>());
 	public readonly onDispose = this._onDispose.event;
 
 	private readonly _onDidChangeViewState = this._register(new vscode.EventEmitter<vscode.WebviewPanelOnDidChangeViewStateEvent>());
@@ -679,7 +679,7 @@ export class DynamicMarkdownPreview extends Disposable implements IManagedMarkdo
 		});
 	}
 
-	private readonly _onDisposeEmitter = this._register(new vscode.EventEmitter<codemavi>());
+	private readonly _onDisposeEmitter = this._register(new vscode.EventEmitter<void>());
 	public readonly onDispose = this._onDisposeEmitter.event;
 
 	private readonly _onDidChangeViewStateEmitter = this._register(new vscode.EventEmitter<vscode.WebviewPanelOnDidChangeViewStateEvent>());

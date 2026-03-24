@@ -107,7 +107,7 @@ suite('EditorAutoSave', () => {
 		await editorPane?.group.closeAllEditors();
 	});
 
-	function awaitModelSaved(model: ITextFileEditorModel): Promise<codemavi> {
+	function awaitModelSaved(model: ITextFileEditorModel): Promise<void> {
 		return Event.toPromise(Event.once(model.onDidChangeDirty));
 	}
 

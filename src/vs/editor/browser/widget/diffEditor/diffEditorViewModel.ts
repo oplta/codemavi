@@ -57,11 +57,11 @@ export class DiffEditorViewModel extends Disposable implements IDiffEditorViewMo
 
 	public readonly activeMovedText = derived(this, r => this.movedTextToCompare.read(r) ?? this._hoveredMovedText.read(r) ?? this._activeMovedText.read(r));
 
-	public setActiveMovedText(movedText: MovedText | undefined): codemavi {
+	public setActiveMovedText(movedText: MovedText | undefined): void {
 		this._activeMovedText.set(movedText, undefined);
 	}
 
-	public setHoveredMovedText(movedText: MovedText | undefined): codemavi {
+	public setHoveredMovedText(movedText: MovedText | undefined): void {
 		this._hoveredMovedText.set(movedText, undefined);
 	}
 
@@ -321,7 +321,7 @@ export class DiffEditorViewModel extends Disposable implements IDiffEditorViewMo
 		}));
 	}
 
-	public ensureModifiedLineIsVisible(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): codemavi {
+	public ensureModifiedLineIsVisible(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): void {
 		if (this.diff.get()?.mappings.length === 0) {
 			return;
 		}
@@ -334,7 +334,7 @@ export class DiffEditorViewModel extends Disposable implements IDiffEditorViewMo
 		}
 	}
 
-	public ensureOriginalLineIsVisible(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): codemavi {
+	public ensureOriginalLineIsVisible(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): void {
 		if (this.diff.get()?.mappings.length === 0) {
 			return;
 		}
@@ -347,7 +347,7 @@ export class DiffEditorViewModel extends Disposable implements IDiffEditorViewMo
 		}
 	}
 
-	public async waitForDiff(): Promise<codemavi> {
+	public async waitForDiff(): Promise<void> {
 		await waitForState(this.isDiffUpToDate, s => s);
 	}
 
@@ -358,7 +358,7 @@ export class DiffEditorViewModel extends Disposable implements IDiffEditorViewMo
 		};
 	}
 
-	public restoreSerializedState(state: SerializedState): codemavi {
+	public restoreSerializedState(state: SerializedState): void {
 		const ranges = state.collapsedRegions?.map(r => LineRange.deserialize(r.range));
 		const regions = this._unchangedRegions.get();
 		if (!regions || !ranges) {
@@ -593,21 +593,21 @@ export class UnchangedRegion {
 		return this.lineCount - this._visibleLineCountTop.get();
 	}
 
-	public showMoreAbove(count = 10, tx: ITransaction | undefined): codemavi {
+	public showMoreAbove(count = 10, tx: ITransaction | undefined): void {
 		const maxVisibleLineCountTop = this.getMaxVisibleLineCountTop();
 		this._visibleLineCountTop.set(Math.min(this._visibleLineCountTop.get() + count, maxVisibleLineCountTop), tx);
 	}
 
-	public showMoreBelow(count = 10, tx: ITransaction | undefined): codemavi {
+	public showMoreBelow(count = 10, tx: ITransaction | undefined): void {
 		const maxVisibleLineCountBottom = this.lineCount - this._visibleLineCountTop.get();
 		this._visibleLineCountBottom.set(Math.min(this._visibleLineCountBottom.get() + count, maxVisibleLineCountBottom), tx);
 	}
 
-	public showAll(tx: ITransaction | undefined): codemavi {
+	public showAll(tx: ITransaction | undefined): void {
 		this._visibleLineCountBottom.set(this.lineCount - this._visibleLineCountTop.get(), tx);
 	}
 
-	public showModifiedLine(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): codemavi {
+	public showModifiedLine(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): void {
 		const top = lineNumber + 1 - (this.modifiedLineNumber + this._visibleLineCountTop.get());
 		const bottom = (this.modifiedLineNumber - this._visibleLineCountBottom.get() + this.lineCount) - lineNumber;
 		if (preference === RevealPreference.FromCloserSide && top < bottom || preference === RevealPreference.FromTop) {
@@ -617,7 +617,7 @@ export class UnchangedRegion {
 		}
 	}
 
-	public showOriginalLine(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): codemavi {
+	public showOriginalLine(lineNumber: number, preference: RevealPreference, tx: ITransaction | undefined): void {
 		const top = lineNumber - this.originalLineNumber;
 		const bottom = (this.originalLineNumber + this.lineCount) - lineNumber;
 		if (preference === RevealPreference.FromCloserSide && top < bottom || preference === RevealPreference.FromTop) {
@@ -627,12 +627,12 @@ export class UnchangedRegion {
 		}
 	}
 
-	public collapseAll(tx: ITransaction | undefined): codemavi {
+	public collapseAll(tx: ITransaction | undefined): void {
 		this._visibleLineCountTop.set(0, tx);
 		this._visibleLineCountBottom.set(0, tx);
 	}
 
-	public setState(visibleLineCountTop: number, visibleLineCountBottom: number, tx: ITransaction | undefined): codemavi {
+	public setState(visibleLineCountTop: number, visibleLineCountBottom: number, tx: ITransaction | undefined): void {
 		visibleLineCountTop = Math.max(Math.min(visibleLineCountTop, this.lineCount), 0);
 		visibleLineCountBottom = Math.max(Math.min(visibleLineCountBottom, this.lineCount - visibleLineCountTop), 0);
 

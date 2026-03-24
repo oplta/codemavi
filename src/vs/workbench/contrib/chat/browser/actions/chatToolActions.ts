@@ -106,7 +106,7 @@ export class AttachToolsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 
 		const quickPickService = accessor.get(IQuickInputService);
 		const mcpService = accessor.get(IMcpService);
@@ -143,7 +143,7 @@ export class AttachToolsAction extends Action2 {
 		const enum BucketOrdinal { Extension, Mcp, Other }
 		type BucketPick = IQuickPickItem & { picked: boolean; ordinal: BucketOrdinal; status?: string; children: ToolPick[]; source: ToolDataSource };
 		type ToolPick = IQuickPickItem & { picked: boolean; tool: IToolData; parent: BucketPick };
-		type AddPick = IQuickPickItem & { pickable: false; run: () => codemavi };
+		type AddPick = IQuickPickItem & { pickable: false; run: () => void };
 		type MyPick = ToolPick | BucketPick | AddPick;
 
 		const addMcpPick: AddPick = { type: 'item', label: localize('addServer', "Add MCP Server..."), iconClass: ThemeIcon.asClassName(Codicon.add), pickable: false, run: () => commandService.executeCommand(AddConfigurationAction.ID) };

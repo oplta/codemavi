@@ -37,11 +37,11 @@ class QueueProtocol implements IMessagePassingProtocol {
 	readonly onMessage = this._onMessage.event;
 	other!: QueueProtocol;
 
-	send(buffer: VSBuffer): codemavi {
+	send(buffer: VSBuffer): void {
 		this.other.receive(buffer);
 	}
 
-	protected receive(buffer: VSBuffer): codemavi {
+	protected receive(buffer: VSBuffer): void {
 		if (this.buffering) {
 			this.buffers.push(buffer);
 		} else {
@@ -61,14 +61,14 @@ function createProtocolPair(): [IMessagePassingProtocol, IMessagePassingProtocol
 
 class TestIPCClient extends IPCClient<string> {
 
-	private readonly _onDidDisconnect = new Emitter<codemavi>();
+	private readonly _onDidDisconnect = new Emitter<void>();
 	readonly onDidDisconnect = this._onDidDisconnect.event;
 
 	constructor(protocol: IMessagePassingProtocol, id: string) {
 		super(protocol, id);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._onDidDisconnect.fire();
 		super.dispose();
 	}
@@ -101,9 +101,9 @@ const TestChannelId = 'testchannel';
 
 interface ITestService {
 	marco(): Promise<string>;
-	error(message: string): Promise<codemavi>;
-	neverComplete(): Promise<codemavi>;
-	neverCompleteCT(cancellationToken: CancellationToken): Promise<codemavi>;
+	error(message: string): Promise<void>;
+	neverComplete(): Promise<void>;
+	neverCompleteCT(cancellationToken: CancellationToken): Promise<void>;
 	buffersLength(buffers: VSBuffer[]): Promise<number>;
 	marshall(uri: URI): Promise<URI>;
 	context(): Promise<unknown>;
@@ -122,15 +122,15 @@ class TestService implements ITestService {
 		return Promise.resolve('polo');
 	}
 
-	error(message: string): Promise<codemavi> {
+	error(message: string): Promise<void> {
 		return Promise.reject(new Error(message));
 	}
 
-	neverComplete(): Promise<codemavi> {
+	neverComplete(): Promise<void> {
 		return new Promise(_ => { });
 	}
 
-	neverCompleteCT(cancellationToken: CancellationToken): Promise<codemavi> {
+	neverCompleteCT(cancellationToken: CancellationToken): Promise<void> {
 		if (cancellationToken.isCancellationRequested) {
 			return Promise.reject(canceled());
 		}
@@ -142,7 +142,7 @@ class TestService implements ITestService {
 		return Promise.resolve(buffers.reduce((r, b) => r + b.buffer.length, 0));
 	}
 
-	ping(msg: string): codemavi {
+	ping(msg: string): void {
 		this._onPong.fire(msg);
 	}
 
@@ -194,15 +194,15 @@ class TestChannelClient implements ITestService {
 		return this.channel.call('marco');
 	}
 
-	error(message: string): Promise<codemavi> {
+	error(message: string): Promise<void> {
 		return this.channel.call('error', message);
 	}
 
-	neverComplete(): Promise<codemavi> {
+	neverComplete(): Promise<void> {
 		return this.channel.call('neverComplete');
 	}
 
-	neverCompleteCT(cancellationToken: CancellationToken): Promise<codemavi> {
+	neverCompleteCT(cancellationToken: CancellationToken): Promise<void> {
 		return this.channel.call('neverCompleteCT', undefined, cancellationToken);
 	}
 

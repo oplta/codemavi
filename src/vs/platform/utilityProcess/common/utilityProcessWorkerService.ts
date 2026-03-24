@@ -104,5 +104,5 @@ export interface IUtilityProcessWorkerService {
 	/**
 	 * Terminates the process for the provided configuration if any.
 	 */
-	disposeWorker(configuration: IUtilityProcessWorkerConfiguration): Promise<codemavi>;
+	disposeWorker(configuration: IUtilityProcessWorkerConfiguration): Promise<void>;
 }

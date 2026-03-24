@@ -72,7 +72,7 @@ export class ViewZones extends ViewPart {
 		this._zones = {};
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._zones = {};
 	}
@@ -206,13 +206,13 @@ export class ViewZones extends ViewPart {
 					zonesHaveChanged = true;
 					return this._addZone(whitespaceAccessor, zone);
 				},
-				removeZone: (id: string): codemavi => {
+				removeZone: (id: string): void => {
 					if (!id) {
 						return;
 					}
 					zonesHaveChanged = this._removeZone(whitespaceAccessor, id) || zonesHaveChanged;
 				},
-				layoutZone: (id: string): codemavi => {
+				layoutZone: (id: string): void => {
 					if (!id) {
 						return;
 					}
@@ -333,7 +333,7 @@ export class ViewZones extends ViewPart {
 		return 0;
 	}
 
-	private _safeCallOnComputedHeight(zone: IViewZone, height: number): codemavi {
+	private _safeCallOnComputedHeight(zone: IViewZone, height: number): void {
 		if (typeof zone.onComputedHeight === 'function') {
 			try {
 				zone.onComputedHeight(height);
@@ -343,7 +343,7 @@ export class ViewZones extends ViewPart {
 		}
 	}
 
-	private _safeCallOnDomNodeTop(zone: IViewZone, top: number): codemavi {
+	private _safeCallOnDomNodeTop(zone: IViewZone, top: number): void {
 		if (typeof zone.onDomNodeTop === 'function') {
 			try {
 				zone.onDomNodeTop(top);
@@ -353,11 +353,11 @@ export class ViewZones extends ViewPart {
 		}
 	}
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		const visibleWhitespaces = ctx.viewportData.whitespaceViewportData;
 		const visibleZones: { [id: string]: IViewWhitespaceViewportData } = {};
 

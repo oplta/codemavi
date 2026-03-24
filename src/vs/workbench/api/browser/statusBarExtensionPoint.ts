@@ -52,7 +52,7 @@ export interface IExtensionStatusBarItemService {
 
 	setOrUpdateEntry(id: string, statusId: string, extensionId: string | undefined, name: string, text: string, tooltip: IMarkdownString | string | undefined | IManagedHoverTooltipMarkdownString, command: Command | undefined, color: string | ThemeColor | undefined, backgroundColor: ThemeColor | undefined, alignLeft: boolean, priority: number | undefined, accessibilityInformation: IAccessibilityInformation | undefined): StatusBarUpdateKind;
 
-	unsetEntry(id: string): codemavi;
+	unsetEntry(id: string): void;
 
 	getEntries(): Iterable<ExtensionStatusBarEntry>;
 }
@@ -69,7 +69,7 @@ class ExtensionStatusBarItemService implements IExtensionStatusBarItemService {
 
 	constructor(@IStatusbarService private readonly _statusbarService: IStatusbarService) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._entries.forEach(entry => entry.accessor.dispose());
 		this._entries.clear();
 		this._onDidChange.dispose();
@@ -156,7 +156,7 @@ class ExtensionStatusBarItemService implements IExtensionStatusBarItemService {
 		}
 	}
 
-	unsetEntry(entryId: string): codemavi {
+	unsetEntry(entryId: string): void {
 		this._entries.get(entryId)?.disposable.dispose();
 		this._entries.delete(entryId);
 	}

@@ -28,8 +28,8 @@ export class MarkerCoordinate {
 
 export class MarkerList {
 
-	private readonly _onDidChange = new Emitter<codemavi>();
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private readonly _resourceFilter?: (uri: URI) => boolean;
 	private readonly _dispoables = new DisposableStore();
@@ -99,7 +99,7 @@ export class MarkerList {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._dispoables.dispose();
 		this._onDidChange.dispose();
 	}
@@ -119,7 +119,7 @@ export class MarkerList {
 		return marker && new MarkerCoordinate(marker, this._nextIdx + 1, this._markers.length);
 	}
 
-	private _initIdx(model: ITextModel, position: Position, fwd: boolean): codemavi {
+	private _initIdx(model: ITextModel, position: Position, fwd: boolean): void {
 
 		let idx = this._markers.findIndex(marker => isEqual(marker.resource, model.uri));
 		if (idx < 0) {

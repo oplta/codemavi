@@ -74,7 +74,7 @@ export class CompletionItem {
 
 	// resolving
 	private _resolveDuration?: number;
-	private _resolveCache?: Promise<codemavi>;
+	private _resolveCache?: Promise<void>;
 
 	constructor(
 		readonly position: IPosition,
@@ -427,7 +427,7 @@ CommandsRegistry.registerCommand('_executeCompletionItemProvider', async (access
 });
 
 interface SuggestController extends IEditorContribution {
-	triggerSuggest(onlyFrom?: Set<languages.CompletionItemProvider>, auto?: boolean, noFilter?: boolean): codemavi;
+	triggerSuggest(onlyFrom?: Set<languages.CompletionItemProvider>, auto?: boolean, noFilter?: boolean): void;
 }
 
 export function showSimpleSuggestions(editor: ICodeEditor, provider: languages.CompletionItemProvider) {

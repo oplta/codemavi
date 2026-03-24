@@ -113,7 +113,7 @@ suite('Fuzzy Scorer', () => {
 		scores.push(_doScore(target, 'h', true)); // direct mix-case prefix
 		scores.push(_doScore(target, 'W', true)); // direct case word prefix
 		scores.push(_doScore(target, 'Ld', true)); // in-string case match (multiple)
-		scores.push(_doScore(target, 'ld', true)); // in-string mix-case match (consecutive, acodemavis scattered hit)
+		scores.push(_doScore(target, 'ld', true)); // in-string mix-case match (consecutive, avoids scattered hit)
 		scores.push(_doScore(target, 'w', true)); // direct mix-case word prefix
 		scores.push(_doScore(target, 'L', true)); // in-string case match
 		scores.push(_doScore(target, 'l', true)); // in-string mix-case match
@@ -307,7 +307,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(pathRes.descriptionMatch[0].end, 26);
 	});
 
-	test('scoreItem - acodemavi match scattering (bug #36119)', function () {
+	test('scoreItem - avoid match scattering (bug #36119)', function () {
 		const resource = URI.file('projects/ui/cula/ats/target.mk');
 
 		const pathRes = scoreItem(resource, 'tcltarget.mk', true, ResourceAccessor);
@@ -727,7 +727,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[1], resourceA);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #34210)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #34210)', function () {
 		const resourceA = URI.file('node_modules1/bundle/lib/model/modules/ot1/index.js');
 		const resourceB = URI.file('node_modules1/bundle/lib/model/modules/un1/index.js');
 		const resourceC = URI.file('node_modules1/bundle/lib/model/modules/modu1/index.js');
@@ -750,7 +750,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #21019 1.)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #21019 1.)', function () {
 		const resourceA = URI.file('app/containers/Services/NetworkData/ServiceDetails/ServiceLoad/index.js');
 		const resourceB = URI.file('app/containers/Services/NetworkData/ServiceDetails/ServiceDistribution/index.js');
 		const resourceC = URI.file('app/containers/Services/NetworkData/ServiceDetailTabs/ServiceTabs/StatVideo/index.js');
@@ -764,7 +764,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceC);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #21019 2.)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #21019 2.)', function () {
 		const resourceA = URI.file('src/build-helper/store/redux.ts');
 		const resourceB = URI.file('src/repository/store/redux.ts');
 
@@ -777,7 +777,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #26649)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #26649)', function () {
 		const resourceA = URI.file('photobook/src/components/AddPagesButton/index.js');
 		const resourceB = URI.file('photobook/src/components/ApprovalPageHeader/index.js');
 		const resourceC = URI.file('photobook/src/canvasComponents/BookPage/index.js');
@@ -791,7 +791,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceC);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #33247)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #33247)', function () {
 		const resourceA = URI.file('ui/src/utils/constants.js');
 		const resourceB = URI.file('ui/src/ui/Icons/index.js');
 
@@ -804,7 +804,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #33247 comment)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #33247 comment)', function () {
 		const resourceA = URI.file('ui/src/components/IDInput/index.js');
 		const resourceB = URI.file('ui/src/ui/Input/index.js');
 
@@ -817,7 +817,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #36166)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #36166)', function () {
 		const resourceA = URI.file('django/contrib/sites/locale/ga/LC_MESSAGES/django.mo');
 		const resourceB = URI.file('django/core/signals.py');
 
@@ -830,7 +830,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #32918)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #32918)', function () {
 		const resourceA = URI.file('adsys/protected/config.php');
 		const resourceB = URI.file('adsys/protected/framework/smarty/sysplugins/smarty_internal_config.php');
 		const resourceC = URI.file('duowanVideo/wap/protected/config.php');
@@ -848,7 +848,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[2], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #14879)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #14879)', function () {
 		const resourceA = URI.file('pkg/search/gradient/testdata/constraint_attrMatchString.yml');
 		const resourceB = URI.file('cmd/gradient/main.go');
 
@@ -861,7 +861,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #14727 1)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #14727 1)', function () {
 		const resourceA = URI.file('alpha-beta-cappa.txt');
 		const resourceB = URI.file('abc.txt');
 
@@ -874,7 +874,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #14727 2)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #14727 2)', function () {
 		const resourceA = URI.file('xerxes-yak-zubba/index.js');
 		const resourceB = URI.file('xyz/index.js');
 
@@ -887,7 +887,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #18381)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #18381)', function () {
 		const resourceA = URI.file('AssymblyInfo.cs');
 		const resourceB = URI.file('IAsynchronousTask.java');
 
@@ -900,7 +900,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #35572)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #35572)', function () {
 		const resourceA = URI.file('static/app/source/angluar/-admin/-organization/-settings/layout/layout.js');
 		const resourceB = URI.file('static/app/source/angular/-admin/-project/-settings/_settings/settings.js');
 
@@ -913,7 +913,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #36810)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #36810)', function () {
 		const resourceA = URI.file('Trilby.TrilbyTV.Web.Portal/Views/Systems/Index.cshtml');
 		const resourceB = URI.file('Trilby.TrilbyTV.Web.Portal/Areas/Admins/Views/Tips/Index.cshtml');
 
@@ -939,7 +939,7 @@ suite('Fuzzy Scorer', () => {
 		assert.strictEqual(res[0], resourceB);
 	});
 
-	test('compareFilesByScore - acodemavi match scattering (bug #12095)', function () {
+	test('compareFilesByScore - avoid match scattering (bug #12095)', function () {
 		const resourceA = URI.file('src/vs/workbench/contrib/files/common/explorerViewModel.ts');
 		const resourceB = URI.file('src/vs/workbench/contrib/files/browser/views/explorerView.ts');
 		const resourceC = URI.file('src/vs/workbench/contrib/files/browser/views/explorerViewer.ts');

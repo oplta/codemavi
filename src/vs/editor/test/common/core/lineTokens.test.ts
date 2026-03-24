@@ -164,7 +164,7 @@ suite('LineTokens', () => {
 		foreground: number;
 	}
 
-	function assertViewLineTokens(_actual: IViewLineTokens, expected: ITestViewLineToken[]): codemavi {
+	function assertViewLineTokens(_actual: IViewLineTokens, expected: ITestViewLineToken[]): void {
 		const actual: ITestViewLineToken[] = [];
 		for (let i = 0, len = _actual.getCount(); i < len; i++) {
 			actual[i] = {

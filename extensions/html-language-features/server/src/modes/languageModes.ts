@@ -86,21 +86,21 @@ export interface LanguageMode {
 	doAutoInsert?: (document: TextDocument, position: Position, kind: 'autoClose' | 'autoQuote') => Promise<string | null>;
 	findMatchingTagPosition?: (document: TextDocument, position: Position) => Promise<Position | null>;
 	getFoldingRanges?: (document: TextDocument) => Promise<FoldingRange[]>;
-	onDocumentRemoved(document: TextDocument): codemavi;
+	onDocumentRemoved(document: TextDocument): void;
 	getSemanticTokens?(document: TextDocument): Promise<SemanticTokenData[]>;
 	getSemanticTokenLegend?(): { types: string[]; modifiers: string[] };
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export interface LanguageModes {
-	updateDataProviders(dataProviders: IHTMLDataProvider[]): codemavi;
+	updateDataProviders(dataProviders: IHTMLDataProvider[]): void;
 	getModeAtPosition(document: TextDocument, position: Position): LanguageMode | undefined;
 	getModesInRange(document: TextDocument, range: Range): LanguageModeRange[];
 	getAllModes(): LanguageMode[];
 	getAllModesInDocument(document: TextDocument): LanguageMode[];
 	getMode(languageId: string): LanguageMode | undefined;
-	onDocumentRemoved(document: TextDocument): codemavi;
-	dispose(): codemavi;
+	onDocumentRemoved(document: TextDocument): void;
+	dispose(): void;
 }
 
 export interface LanguageModeRange extends Range {
@@ -127,7 +127,7 @@ export function getLanguageModes(supportedLanguages: { [languageId: string]: boo
 		modes['typescript'] = getJavaScriptMode(documentRegions, 'typescript', workspace);
 	}
 	return {
-		async updateDataProviders(dataProviders: IHTMLDataProvider[]): Promise<codemavi> {
+		async updateDataProviders(dataProviders: IHTMLDataProvider[]): Promise<void> {
 			htmlLanguageService.setDataProviders(true, dataProviders);
 		},
 		getModeAtPosition(document: TextDocument, position: Position): LanguageMode | undefined {
@@ -176,7 +176,7 @@ export function getLanguageModes(supportedLanguages: { [languageId: string]: boo
 				modes[mode].onDocumentRemoved(document);
 			}
 		},
-		dispose(): codemavi {
+		dispose(): void {
 			modelCaches.forEach(mc => mc.dispose());
 			modelCaches = [];
 			for (const mode in modes) {

@@ -7,7 +7,7 @@ import type { IReference } from '../../../base/common/lifecycle.js';
 import { isFunction } from '../../../base/common/types.js';
 
 export namespace GPULifecycle {
-	export async function requestDevice(fallback?: (message: string) => codemavi): Promise<IReference<GPUDevice>> {
+	export async function requestDevice(fallback?: (message: string) => void): Promise<IReference<GPUDevice>> {
 		try {
 			if (!navigator.gpu) {
 				throw new Error('This browser does not support WebGPU');
@@ -38,7 +38,7 @@ export namespace GPULifecycle {
 	}
 }
 
-function wrapDestroyableInDisposable<T extends { destroy(): codemavi }>(value: T): IReference<T> {
+function wrapDestroyableInDisposable<T extends { destroy(): void }>(value: T): IReference<T> {
 	return {
 		object: value,
 		dispose: () => value.destroy()

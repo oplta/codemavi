@@ -293,7 +293,7 @@ into the file.  By default, less prompts with a colon`,
 			description: `Suppresses line numbers.  The default (to use line numbers) may
 cause less to run more slowly in some cases, especially with a
 very large input file.  Suppressing line numbers with the -n
-option will acodemavi this problem.  Using line numbers means: the
+option will avoid this problem.  Using line numbers means: the
 line number will be displayed in the verbose prompt and in the =
 command, and the v command will pass the current line number to
 the editor (see also the discussion of LESSEDIT in PROMPTS

@@ -3,7 +3,7 @@
  *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
  *--------------------------------------------------------------------------------------*/
 
-import { FeatureName, ModelSelectionOptions, OverridesOfModel, ProviderName } from './codemaviSettingsTypes.js';
+import { FeatureName, ModelSelectionOptions, OverridesOfModel, ProviderName } from './maviSettingsTypes.js';
 
 
 
@@ -159,8 +159,8 @@ export const defaultModelsOfProvider = {
 
 
 
-export type Code MaviStaticModelInfo = { // not stateful
-	// Code Mavi uses the information below to know how to handle each model.
+export type MaviStaticModelInfo = { // not stateful
+	// Mavi uses the information below to know how to handle each model.
 	// for some examples, see openAIModelOptions and anthropicModelOptions (below).
 
 	contextWindow: number; // input tokens
@@ -216,7 +216,7 @@ export const modelOverrideKeys = [
 ] as const
 
 export type ModelOverrides = Pick<
-	Code MaviStaticModelInfo,
+	MaviStaticModelInfo,
 	(typeof modelOverrideKeys)[number]
 >
 
@@ -233,10 +233,10 @@ type ProviderReasoningIOSettings = {
 	| { nameOfFieldInDelta?: undefined, needsManualParse?: true, };
 }
 
-type Code MaviStaticProviderInfo = { // doesn't change (not stateful)
+type MaviStaticProviderInfo = { // doesn't change (not stateful)
 	providerReasoningIOSettings?: ProviderReasoningIOSettings; // input/output settings around thinking (allowed to be empty) - only applied if the model supports reasoning output
-	modelOptions: { [key: string]: Code MaviStaticModelInfo };
-	modelOptionsFallback: (modelName: string, fallbackKnownValues?: Partial<Code MaviStaticModelInfo>) => (Code MaviStaticModelInfo & { modelName: string, recognizedModelName: string }) | null;
+	modelOptions: { [key: string]: MaviStaticModelInfo };
+	modelOptionsFallback: (modelName: string, fallbackKnownValues?: Partial<MaviStaticModelInfo>) => (MaviStaticModelInfo & { modelName: string, recognizedModelName: string }) | null;
 }
 
 
@@ -249,7 +249,7 @@ const defaultModelOptions = {
 	supportsSystemMessage: false,
 	supportsFIM: false,
 	reasoningCapabilities: false,
-} as const satisfies Code MaviStaticModelInfo
+} as const satisfies MaviStaticModelInfo
 
 // TODO!!! double check all context sizes below
 // TODO!!! add openrouter common models
@@ -385,18 +385,18 @@ const openSourceModelOptions_assumingOAICompat = {
 		reasoningCapabilities: false,
 		contextWindow: 1_000_000, reservedOutputTokenSpace: 32_000,
 	}
-} as const satisfies { [s: string]: Partial<Code MaviStaticModelInfo> }
+} as const satisfies { [s: string]: Partial<MaviStaticModelInfo> }
 
 
 
 
 // keep modelName, but use the fallback's defaults
-const extensiveModelOptionsFallback: Code MaviStaticProviderInfo['modelOptionsFallback'] = (modelName, fallbackKnownValues) => {
+const extensiveModelOptionsFallback: MaviStaticProviderInfo['modelOptionsFallback'] = (modelName, fallbackKnownValues) => {
 
 	const lower = modelName.toLowerCase()
 
-	const toFallback = <T extends { [s: string]: Omit<Code MaviStaticModelInfo, 'cost' | 'downloadable'> },>(obj: T, recognizedModelName: string & keyof T)
-		: Code MaviStaticModelInfo & { modelName: string, recognizedModelName: string } => {
+	const toFallback = <T extends { [s: string]: Omit<MaviStaticModelInfo, 'cost' | 'downloadable'> },>(obj: T, recognizedModelName: string & keyof T)
+		: MaviStaticModelInfo & { modelName: string, recognizedModelName: string } => {
 
 		const opts = obj[recognizedModelName]
 		const supportsSystemMessage = opts.supportsSystemMessage === 'separated'
@@ -567,9 +567,9 @@ const anthropicModelOptions = {
 		supportsSystemMessage: 'separated',
 		reasoningCapabilities: false,
 	}
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
-const anthropicSettings: Code MaviStaticProviderInfo = {
+const anthropicSettings: MaviStaticProviderInfo = {
 	providerReasoningIOSettings: {
 		input: {
 			includeInPayload: (reasoningInfo) => {
@@ -700,7 +700,7 @@ const openAIModelOptions = { // https://platform.openai.com/docs/pricing
 		supportsSystemMessage: 'system-role', // ??
 		reasoningCapabilities: false,
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
 
 // https://platform.openai.com/docs/guides/reasoning?api-mode=chat
@@ -713,7 +713,7 @@ const openAICompatIncludeInPayloadReasoning = (reasoningInfo: SendableReasoningI
 
 }
 
-const openAISettings: Code MaviStaticProviderInfo = {
+const openAISettings: MaviStaticProviderInfo = {
 	modelOptions: openAIModelOptions,
 	modelOptionsFallback: (modelName) => {
 		const lower = modelName.toLowerCase()
@@ -784,9 +784,9 @@ const xAIModelOptions = {
 		specialToolFormat: 'openai-style',
 		reasoningCapabilities: { supportsReasoning: true, canTurnOffReasoning: false, canIOReasoning: false, reasoningSlider: { type: 'effort_slider', values: ['low', 'high'], default: 'low' } },
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
-const xAISettings: Code MaviStaticProviderInfo = {
+const xAISettings: MaviStaticProviderInfo = {
 	modelOptions: xAIModelOptions,
 	modelOptionsFallback: (modelName) => {
 		const lower = modelName.toLowerCase()
@@ -915,9 +915,9 @@ const geminiModelOptions = { // https://ai.google.dev/gemini-api/docs/pricing
 		specialToolFormat: 'gemini-style',
 		reasoningCapabilities: false,
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
-const geminiSettings: Code MaviStaticProviderInfo = {
+const geminiSettings: MaviStaticProviderInfo = {
 	modelOptions: geminiModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 }
@@ -940,10 +940,10 @@ const deepseekModelOptions = {
 		cost: { cache_read: .14, input: .55, output: 2.19, },
 		downloadable: false,
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
 
-const deepseekSettings: Code MaviStaticProviderInfo = {
+const deepseekSettings: MaviStaticProviderInfo = {
 	modelOptions: deepseekModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1030,9 +1030,9 @@ const mistralModelOptions = { // https://mistral.ai/products/la-plateforme#prici
 		supportsSystemMessage: 'system-role',
 		reasoningCapabilities: false,
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
-const mistralSettings: Code MaviStaticProviderInfo = {
+const mistralSettings: MaviStaticProviderInfo = {
 	modelOptions: mistralModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1079,8 +1079,8 @@ const groqModelOptions = { // https://console.groq.com/docs/models, https://groq
 		supportsSystemMessage: 'system-role',
 		reasoningCapabilities: { supportsReasoning: true, canIOReasoning: true, canTurnOffReasoning: false, openSourceThinkTags: ['<think>', '</think>'] }, // we're using reasoning_format:parsed so really don't need to know openSourceThinkTags
 	},
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
-const groqSettings: Code MaviStaticProviderInfo = {
+} as const satisfies { [s: string]: MaviStaticModelInfo }
+const groqSettings: MaviStaticProviderInfo = {
 	modelOptions: groqModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1101,8 +1101,8 @@ const groqSettings: Code MaviStaticProviderInfo = {
 
 // ---------------- GOOGLE VERTEX ----------------
 const googleVertexModelOptions = {
-} as const satisfies Record<string, Code MaviStaticModelInfo>
-const googleVertexSettings: Code MaviStaticProviderInfo = {
+} as const satisfies Record<string, MaviStaticModelInfo>
+const googleVertexSettings: MaviStaticProviderInfo = {
 	modelOptions: googleVertexModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1112,8 +1112,8 @@ const googleVertexSettings: Code MaviStaticProviderInfo = {
 
 // ---------------- MICROSOFT AZURE ----------------
 const microsoftAzureModelOptions = {
-} as const satisfies Record<string, Code MaviStaticModelInfo>
-const microsoftAzureSettings: Code MaviStaticProviderInfo = {
+} as const satisfies Record<string, MaviStaticModelInfo>
+const microsoftAzureSettings: MaviStaticProviderInfo = {
 	modelOptions: microsoftAzureModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1123,9 +1123,9 @@ const microsoftAzureSettings: Code MaviStaticProviderInfo = {
 
 // ---------------- AWS BEDROCK ----------------
 const awsBedrockModelOptions = {
-} as const satisfies Record<string, Code MaviStaticModelInfo>
+} as const satisfies Record<string, MaviStaticModelInfo>
 
-const awsBedrockSettings: Code MaviStaticProviderInfo = {
+const awsBedrockSettings: MaviStaticProviderInfo = {
 	modelOptions: awsBedrockModelOptions,
 	modelOptionsFallback: (modelName) => { return null },
 	providerReasoningIOSettings: {
@@ -1209,12 +1209,12 @@ const ollamaModelOptions = {
 		reasoningCapabilities: false,
 	},
 
-} as const satisfies Record<string, Code MaviStaticModelInfo>
+} as const satisfies Record<string, MaviStaticModelInfo>
 
 export const ollamaRecommendedModels = ['qwen2.5-coder:1.5b', 'llama3.1', 'qwq', 'deepseek-r1', 'devstral:latest'] as const satisfies (keyof typeof ollamaModelOptions)[]
 
 
-const vLLMSettings: Code MaviStaticProviderInfo = {
+const vLLMSettings: MaviStaticProviderInfo = {
 	modelOptionsFallback: (modelName) => extensiveModelOptionsFallback(modelName, { downloadable: { sizeGb: 'not-known' } }),
 	modelOptions: {},
 	providerReasoningIOSettings: {
@@ -1224,7 +1224,7 @@ const vLLMSettings: Code MaviStaticProviderInfo = {
 	},
 }
 
-const lmStudioSettings: Code MaviStaticProviderInfo = {
+const lmStudioSettings: MaviStaticProviderInfo = {
 	modelOptionsFallback: (modelName) => extensiveModelOptionsFallback(modelName, { downloadable: { sizeGb: 'not-known' }, contextWindow: 4_096 }),
 	modelOptions: {},
 	providerReasoningIOSettings: {
@@ -1233,7 +1233,7 @@ const lmStudioSettings: Code MaviStaticProviderInfo = {
 	},
 }
 
-const ollamaSettings: Code MaviStaticProviderInfo = {
+const ollamaSettings: MaviStaticProviderInfo = {
 	modelOptionsFallback: (modelName) => extensiveModelOptionsFallback(modelName, { downloadable: { sizeGb: 'not-known' } }),
 	modelOptions: ollamaModelOptions,
 	providerReasoningIOSettings: {
@@ -1243,7 +1243,7 @@ const ollamaSettings: Code MaviStaticProviderInfo = {
 	},
 }
 
-const openaiCompatible: Code MaviStaticProviderInfo = {
+const openaiCompatible: MaviStaticProviderInfo = {
 	modelOptionsFallback: (modelName) => extensiveModelOptionsFallback(modelName),
 	modelOptions: {},
 	providerReasoningIOSettings: {
@@ -1253,7 +1253,7 @@ const openaiCompatible: Code MaviStaticProviderInfo = {
 	},
 }
 
-const liteLLMSettings: Code MaviStaticProviderInfo = { // https://docs.litellm.ai/docs/reasoning_content
+const liteLLMSettings: MaviStaticProviderInfo = { // https://docs.litellm.ai/docs/reasoning_content
 	modelOptionsFallback: (modelName) => extensiveModelOptionsFallback(modelName, { downloadable: { sizeGb: 'not-known' } }),
 	modelOptions: {},
 	providerReasoningIOSettings: {
@@ -1407,9 +1407,9 @@ const openRouterModelOptions_assumingOpenAICompat = {
 		cost: { input: 0.07, output: 0.16 },
 		downloadable: false,
 	}
-} as const satisfies { [s: string]: Code MaviStaticModelInfo }
+} as const satisfies { [s: string]: MaviStaticModelInfo }
 
-const openRouterSettings: Code MaviStaticProviderInfo = {
+const openRouterSettings: MaviStaticProviderInfo = {
 	modelOptions: openRouterModelOptions_assumingOpenAICompat,
 	modelOptionsFallback: (modelName) => {
 		const res = extensiveModelOptionsFallback(modelName)
@@ -1451,7 +1451,7 @@ const openRouterSettings: Code MaviStaticProviderInfo = {
 
 // ---------------- model settings of everything above ----------------
 
-const modelSettingsOfProvider: { [providerName in ProviderName]: Code MaviStaticProviderInfo } = {
+const modelSettingsOfProvider: { [providerName in ProviderName]: MaviStaticProviderInfo } = {
 	openAI: openAISettings,
 	anthropic: anthropicSettings,
 	xAI: xAISettings,
@@ -1484,7 +1484,7 @@ export const getModelCapabilities = (
 	providerName: ProviderName,
 	modelName: string,
 	overridesOfModel: OverridesOfModel | undefined
-): Code MaviStaticModelInfo & (
+): MaviStaticModelInfo & (
 	| { modelName: string; recognizedModelName: string; isUnrecognizedModel: false }
 	| { modelName: string; recognizedModelName?: undefined; isUnrecognizedModel: true }
 ) => {

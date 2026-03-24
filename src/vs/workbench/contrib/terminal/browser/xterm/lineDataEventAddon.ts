@@ -19,7 +19,7 @@ export class LineDataEventAddon extends Disposable implements ITerminalAddon {
 	private readonly _onLineData = this._register(new Emitter<string>());
 	readonly onLineData = this._onLineData.event;
 
-	constructor(private readonly _initializationPromise?: Promise<codemavi>) {
+	constructor(private readonly _initializationPromise?: Promise<void>) {
 		super();
 	}
 
@@ -65,7 +65,7 @@ export class LineDataEventAddon extends Disposable implements ITerminalAddon {
 		}
 	}
 
-	private _sendLineData(buffer: IBuffer, lineIndex: number): codemavi {
+	private _sendLineData(buffer: IBuffer, lineIndex: number): void {
 		let line = buffer.getLine(lineIndex);
 		if (!line) {
 			return;

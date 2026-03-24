@@ -17,7 +17,7 @@ class UpdatePastedLinksEditProvider implements vscode.DocumentPasteEditProvider 
 		private readonly _client: MdLanguageClient,
 	) { }
 
-	async prepareDocumentPaste(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<codemavi> {
+	async prepareDocumentPaste(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
 		if (!this._isEnabled(document)) {
 			return;
 		}

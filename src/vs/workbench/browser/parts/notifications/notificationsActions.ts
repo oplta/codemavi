@@ -35,7 +35,7 @@ export class ClearNotificationAction extends Action {
 		super(id, label, ThemeIcon.asClassName(clearIcon));
 	}
 
-	override async run(notification: INotificationViewItem): Promise<codemavi> {
+	override async run(notification: INotificationViewItem): Promise<void> {
 		this.commandService.executeCommand(CLEAR_NOTIFICATION, notification);
 	}
 }
@@ -53,7 +53,7 @@ export class ClearAllNotificationsAction extends Action {
 		super(id, label, ThemeIcon.asClassName(clearAllIcon));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.commandService.executeCommand(CLEAR_ALL_NOTIFICATIONS);
 	}
 }
@@ -71,7 +71,7 @@ export class ToggleDoNotDisturbAction extends Action {
 		super(id, label, ThemeIcon.asClassName(doNotDisturbIcon));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.commandService.executeCommand(TOGGLE_DO_NOT_DISTURB_MODE);
 	}
 }
@@ -89,7 +89,7 @@ export class ToggleDoNotDisturbBySourceAction extends Action {
 		super(id, label);
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.commandService.executeCommand(TOGGLE_DO_NOT_DISTURB_MODE_BY_SOURCE);
 	}
 }
@@ -120,7 +120,7 @@ export class HideNotificationsCenterAction extends Action {
 		super(id, label, ThemeIcon.asClassName(hideIcon));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.commandService.executeCommand(HIDE_NOTIFICATIONS_CENTER);
 	}
 }
@@ -138,7 +138,7 @@ export class ExpandNotificationAction extends Action {
 		super(id, label, ThemeIcon.asClassName(expandIcon));
 	}
 
-	override async run(notification: INotificationViewItem): Promise<codemavi> {
+	override async run(notification: INotificationViewItem): Promise<void> {
 		this.commandService.executeCommand(EXPAND_NOTIFICATION, notification);
 	}
 }
@@ -156,7 +156,7 @@ export class CollapseNotificationAction extends Action {
 		super(id, label, ThemeIcon.asClassName(collapseIcon));
 	}
 
-	override async run(notification: INotificationViewItem): Promise<codemavi> {
+	override async run(notification: INotificationViewItem): Promise<void> {
 		this.commandService.executeCommand(COLLAPSE_NOTIFICATION, notification);
 	}
 }
@@ -188,7 +188,7 @@ export class CopyNotificationMessageAction extends Action {
 		super(id, label);
 	}
 
-	override run(notification: INotificationViewItem): Promise<codemavi> {
+	override run(notification: INotificationViewItem): Promise<void> {
 		return this.clipboardService.writeText(notification.message.raw);
 	}
 }

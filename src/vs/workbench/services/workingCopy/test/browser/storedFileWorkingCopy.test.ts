@@ -27,23 +27,23 @@ export class TestStoredFileWorkingCopyModel extends Disposable implements IStore
 	private readonly _onDidChangeContent = this._register(new Emitter<IStoredFileWorkingCopyModelContentChangedEvent>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	constructor(readonly resource: URI, public contents: string) {
 		super();
 	}
 
-	fireContentChangeEvent(event: IStoredFileWorkingCopyModelContentChangedEvent): codemavi {
+	fireContentChangeEvent(event: IStoredFileWorkingCopyModelContentChangedEvent): void {
 		this._onDidChangeContent.fire(event);
 	}
 
-	updateContents(newContents: string): codemavi {
+	updateContents(newContents: string): void {
 		this.doUpdate(newContents);
 	}
 
 	private throwOnSnapshot = false;
-	setThrowOnSnapshot(): codemavi {
+	setThrowOnSnapshot(): void {
 		this.throwOnSnapshot = true;
 	}
 
@@ -58,11 +58,11 @@ export class TestStoredFileWorkingCopyModel extends Disposable implements IStore
 		return stream;
 	}
 
-	async update(contents: VSBufferReadableStream, token: CancellationToken): Promise<codemavi> {
+	async update(contents: VSBufferReadableStream, token: CancellationToken): Promise<void> {
 		this.doUpdate((await streamToBuffer(contents)).toString());
 	}
 
-	private doUpdate(newContents: string): codemavi {
+	private doUpdate(newContents: string): void {
 		this.contents = newContents;
 
 		this.versionId++;
@@ -74,11 +74,11 @@ export class TestStoredFileWorkingCopyModel extends Disposable implements IStore
 
 	pushedStackElement = false;
 
-	pushStackElement(): codemavi {
+	pushStackElement(): void {
 		this.pushedStackElement = true;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._onWillDispose.fire();
 
 		super.dispose();
@@ -89,7 +89,7 @@ export class TestStoredFileWorkingCopyModelWithCustomSave extends TestStoredFile
 
 	saveCounter = 0;
 	throwOnSave = false;
-	saveOperation: Promise<codemavi> | undefined = undefined;
+	saveOperation: Promise<void> | undefined = undefined;
 
 	async save(options: IWriteFileOptions, token: CancellationToken): Promise<IFileStatWithMetadata> {
 		if (this.throwOnSave) {
@@ -214,7 +214,7 @@ suite('StoredFileWorkingCopy (with custom save)', function () {
 		}));
 
 		await workingCopy.resolve();
-		let resolve: () => codemavi;
+		let resolve: () => void;
 		(workingCopy.model as TestStoredFileWorkingCopyModelWithCustomSave).saveOperation = new Promise(r => resolve = r);
 
 		workingCopy.model?.updateContents('first');
@@ -942,7 +942,7 @@ suite('StoredFileWorkingCopy', function () {
 		await testSaveFromSaveParticipant(workingCopy, true);
 	});
 
-	async function testSaveFromSaveParticipant(workingCopy: StoredFileWorkingCopy<TestStoredFileWorkingCopyModel>, async: boolean): Promise<codemavi> {
+	async function testSaveFromSaveParticipant(workingCopy: StoredFileWorkingCopy<TestStoredFileWorkingCopyModel>, async: boolean): Promise<void> {
 		const from = URI.file('testFrom');
 		assert.strictEqual(accessor.workingCopyFileService.hasSaveParticipants, false);
 

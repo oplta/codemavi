@@ -29,11 +29,11 @@ import { workbenchInstantiationService } from '../../../../test/browser/workbenc
 import { TestExtensionService } from '../../../../test/common/workbenchTestServices.js';
 
 class TestTerminalProfileService extends TerminalProfileService implements Partial<ITerminalProfileService> {
-	hasRefreshedProfiles: Promise<codemavi> | undefined;
-	override refreshAvailableProfiles(): codemavi {
+	hasRefreshedProfiles: Promise<void> | undefined;
+	override refreshAvailableProfiles(): void {
 		this.hasRefreshedProfiles = this._refreshAvailableProfilesNow();
 	}
-	refreshAndAwaitAvailableProfiles(): Promise<codemavi> {
+	refreshAndAwaitAvailableProfiles(): Promise<void> {
 		this.refreshAvailableProfiles();
 		if (!this.hasRefreshedProfiles) {
 			throw new Error('has not refreshed profiles yet');
@@ -43,7 +43,7 @@ class TestTerminalProfileService extends TerminalProfileService implements Parti
 }
 
 class MockTerminalProfileService implements Partial<ITerminalProfileService> {
-	hasRefreshedProfiles: Promise<codemavi> | undefined;
+	hasRefreshedProfiles: Promise<void> | undefined;
 	_defaultProfileName: string | undefined;
 	availableProfiles?: ITerminalProfile[] | undefined = [];
 	contributedProfiles?: IExtensionTerminalProfile[] | undefined = [];
@@ -53,11 +53,11 @@ class MockTerminalProfileService implements Partial<ITerminalProfileService> {
 	getDefaultProfileName(): string | undefined {
 		return this._defaultProfileName;
 	}
-	setProfiles(profiles: ITerminalProfile[], contributed: IExtensionTerminalProfile[]): codemavi {
+	setProfiles(profiles: ITerminalProfile[], contributed: IExtensionTerminalProfile[]): void {
 		this.availableProfiles = profiles;
 		this.contributedProfiles = contributed;
 	}
-	setDefaultProfileName(name: string): codemavi {
+	setDefaultProfileName(name: string): void {
 		this._defaultProfileName = name;
 	}
 }
@@ -83,13 +83,13 @@ class TestTerminalProfileQuickpick extends TerminalProfileQuickpick {
 }
 
 class TestTerminalExtensionService extends TestExtensionService {
-	readonly _onDidChangeExtensions = new Emitter<codemavi>();
+	readonly _onDidChangeExtensions = new Emitter<void>();
 }
 
 class TestTerminalContributionService implements ITerminalContributionService {
 	_serviceBrand: undefined;
 	terminalProfiles: readonly IExtensionTerminalProfile[] = [];
-	setProfiles(profiles: IExtensionTerminalProfile[]): codemavi {
+	setProfiles(profiles: IExtensionTerminalProfile[]): void {
 		this.terminalProfiles = profiles;
 	}
 }

@@ -40,7 +40,7 @@ export interface IPromptInputModel extends IPromptInputModelState {
 	 */
 	getCombinedString(emptyStringWhenEmpty?: boolean): string;
 
-	setShellType(shellType?: TerminalShellType): codemavi;
+	setShellType(shellType?: TerminalShellType): void;
 }
 
 export interface IPromptInputModelState {
@@ -109,7 +109,7 @@ export class PromptInputModel extends Disposable implements IPromptInputModel {
 	constructor(
 		private readonly _xterm: Terminal,
 		onCommandStart: Event<ITerminalCommand>,
-		onCommandStartChanged: Event<codemavi>,
+		onCommandStartChanged: Event<void>,
 		onCommandExecuted: Event<ITerminalCommand>,
 		@ILogService private readonly _logService: ILogService
 	) {
@@ -139,21 +139,21 @@ export class PromptInputModel extends Disposable implements IPromptInputModel {
 		}
 	}
 
-	setShellType(shellType: TerminalShellType): codemavi {
+	setShellType(shellType: TerminalShellType): void {
 		this._shellType = shellType;
 	}
 
-	setContinuationPrompt(value: string): codemavi {
+	setContinuationPrompt(value: string): void {
 		this._continuationPrompt = value;
 		this._sync();
 	}
 
-	setLastPromptLine(value: string): codemavi {
+	setLastPromptLine(value: string): void {
 		this._lastPromptLine = value;
 		this._sync();
 	}
 
-	setConfidentCommandLine(value: string): codemavi {
+	setConfidentCommandLine(value: string): void {
 		if (this._value !== value) {
 			this._value = value;
 			this._cursorIndex = -1;
@@ -190,7 +190,7 @@ export class PromptInputModel extends Disposable implements IPromptInputModel {
 		};
 	}
 
-	deserialize(serialized: ISerializedPromptInputModel): codemavi {
+	deserialize(serialized: ISerializedPromptInputModel): void {
 		this._value = serialized.modelState.value;
 		this._cursorIndex = serialized.modelState.cursorIndex;
 		this._ghostTextIndex = serialized.modelState.ghostTextIndex;

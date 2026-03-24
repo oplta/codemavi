@@ -32,13 +32,13 @@ export interface IExtensionHostProxy {
 	 * Returns `null` if no resolver for `remoteAuthority` is found.
 	 */
 	getCanonicalURI(remoteAuthority: string, uri: URI): Promise<URI | null>;
-	startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi>;
+	startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<void>;
 	extensionTestsExecute(): Promise<number>;
-	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi>;
+	activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void>;
 	activate(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<boolean>;
-	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi>;
-	updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<codemavi>;
-	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi>;
+	setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void>;
+	updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<void>;
+	deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<void>;
 	test_latency(n: number): Promise<number>;
 	test_up(b: VSBuffer): Promise<number>;
 	test_down(size: number): Promise<VSBuffer>;

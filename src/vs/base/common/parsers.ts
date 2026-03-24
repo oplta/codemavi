@@ -38,10 +38,10 @@ export class ValidationStatus {
 }
 
 export interface IProblemReporter {
-	info(message: string): codemavi;
-	warn(message: string): codemavi;
-	error(message: string): codemavi;
-	fatal(message: string): codemavi;
+	info(message: string): void;
+	warn(message: string): void;
+	error(message: string): void;
+	fatal(message: string): void;
 	status: ValidationStatus;
 }
 
@@ -53,7 +53,7 @@ export abstract class Parser {
 		this._problemReporter = problemReporter;
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._problemReporter.status.state = ValidationState.OK;
 	}
 
@@ -61,19 +61,19 @@ export abstract class Parser {
 		return this._problemReporter;
 	}
 
-	public info(message: string): codemavi {
+	public info(message: string): void {
 		this._problemReporter.info(message);
 	}
 
-	public warn(message: string): codemavi {
+	public warn(message: string): void {
 		this._problemReporter.warn(message);
 	}
 
-	public error(message: string): codemavi {
+	public error(message: string): void {
 		this._problemReporter.error(message);
 	}
 
-	public fatal(message: string): codemavi {
+	public fatal(message: string): void {
 		this._problemReporter.fatal(message);
 	}
 }

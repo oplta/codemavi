@@ -543,7 +543,7 @@ suite('vscode API - workspace', () => {
 		assert.strictEqual(callCount, 1);
 		assert.strictEqual(doc.getText(), 'call0');
 
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 
 			const subscription = vscode.workspace.onDidChangeTextDocument(event => {
 				assert.ok(event.document === doc);
@@ -726,7 +726,7 @@ suite('vscode API - workspace', () => {
 		await testEditRenameEdit(oldUri => oldUri);
 	});
 
-	async function testEditRenameEdit(newUriCreator: (oldUri: vscode.Uri) => vscode.Uri): Promise<codemavi> {
+	async function testEditRenameEdit(newUriCreator: (oldUri: vscode.Uri) => vscode.Uri): Promise<void> {
 		const oldUri = await createRandomFile();
 		const newUri = newUriCreator(oldUri);
 		const edit = new vscode.WorkspaceEdit();
@@ -938,7 +938,7 @@ suite('vscode API - workspace', () => {
 		await test77735(false);
 	});
 
-	async function test77735(withOpenedEditor: boolean): Promise<codemavi> {
+	async function test77735(withOpenedEditor: boolean): Promise<void> {
 		const docUriOriginal = await createRandomFile();
 		const docUriMoved = docUriOriginal.with({ path: `${docUriOriginal.path}.moved` });
 		await deleteFile(docUriMoved);
@@ -1340,7 +1340,7 @@ suite('vscode API - workspace', () => {
 		assert.strictEqual(doc1.encoding, 'cp1252');
 
 		let listener: vscode.Disposable | undefined;
-		const documentChangePromise = new Promise<codemavi>(resolve => {
+		const documentChangePromise = new Promise<void>(resolve => {
 			listener = vscode.workspace.onDidChangeTextDocument(e => {
 				if (e.document.uri.toString() === uri1.toString()) {
 					resolve();

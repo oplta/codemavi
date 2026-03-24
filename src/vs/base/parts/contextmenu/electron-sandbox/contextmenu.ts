@@ -8,7 +8,7 @@ import { ipcRenderer } from '../../sandbox/electron-sandbox/globals.js';
 
 let contextMenuIdPool = 0;
 
-export function popup(items: IContextMenuItem[], options?: IPopupOptions, onHide?: () => codemavi): codemavi {
+export function popup(items: IContextMenuItem[], options?: IPopupOptions, onHide?: () => void): void {
 	const processedItems: IContextMenuItem[] = [];
 
 	const contextMenuId = contextMenuIdPool++;

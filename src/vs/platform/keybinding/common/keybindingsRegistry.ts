@@ -65,7 +65,7 @@ export const enum KeybindingWeight {
 	WorkbenchContrib = 200,
 	BuiltinExtension = 300,
 	ExternalExtension = 400,
-	Code MaviExtension = 605, // Code Mavi -  must trump any external extension
+	MaviExtension = 605, // Mavi -  must trump any external extension
 }
 
 export interface ICommandAndKeybindingRule extends IKeybindingRule {
@@ -75,7 +75,7 @@ export interface ICommandAndKeybindingRule extends IKeybindingRule {
 
 export interface IKeybindingsRegistry {
 	registerKeybindingRule(rule: IKeybindingRule): IDisposable;
-	setExtensionKeybindings(rules: IExtensionKeybindingRule[]): codemavi;
+	setExtensionKeybindings(rules: IExtensionKeybindingRule[]): void;
 	registerCommandAndKeybindingRule(desc: ICommandAndKeybindingRule): IDisposable;
 	getDefaultKeybindings(): IKeybindingItem[];
 }
@@ -139,7 +139,7 @@ class KeybindingsRegistryImpl implements IKeybindingsRegistry {
 		return result;
 	}
 
-	public setExtensionKeybindings(rules: IExtensionKeybindingRule[]): codemavi {
+	public setExtensionKeybindings(rules: IExtensionKeybindingRule[]): void {
 		const result: IKeybindingItem[] = [];
 		let keybindingsLen = 0;
 		for (const rule of rules) {

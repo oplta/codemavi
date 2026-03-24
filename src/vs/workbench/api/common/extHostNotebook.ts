@@ -267,7 +267,7 @@ export class ExtHostNotebookController implements ExtHostNotebookShape {
 		};
 	}
 
-	$releaseNotebookCellStatusBarItems(cacheId: number): codemavi {
+	$releaseNotebookCellStatusBarItems(cacheId: number): void {
 		this._statusBarCache.delete(cacheId);
 	}
 
@@ -413,7 +413,7 @@ export class ExtHostNotebookController implements ExtHostNotebookShape {
 
 		const finalMatchedTargets = new ResourceSet();
 
-		const runFileQueries = async (includes: NotebookPriorityInfo[], token: CancellationToken, textQuery: ITextQuery): Promise<codemavi> => {
+		const runFileQueries = async (includes: NotebookPriorityInfo[], token: CancellationToken, textQuery: ITextQuery): Promise<void> => {
 			await Promise.all(includes.map(async include =>
 				await Promise.all(include.filenamePatterns.map(filePattern => {
 					const query: IFileQuery = {
@@ -599,7 +599,7 @@ export class ExtHostNotebookController implements ExtHostNotebookShape {
 		this._editors.set(editorId, editor);
 	}
 
-	$acceptDocumentAndEditorsDelta(delta: SerializableObjectWithBuffers<INotebookDocumentsAndEditorsDelta>): codemavi {
+	$acceptDocumentAndEditorsDelta(delta: SerializableObjectWithBuffers<INotebookDocumentsAndEditorsDelta>): void {
 
 		if (delta.value.removedDocuments) {
 			for (const uri of delta.value.removedDocuments) {
@@ -733,7 +733,7 @@ export class ExtHostNotebookController implements ExtHostNotebookShape {
 		extHostCommands.registerApiCommand(commandNotebookToData);
 	}
 
-	private trace(msg: string): codemavi {
+	private trace(msg: string): void {
 		this._logService.trace(`[Extension Host Notebook] ${msg}`);
 	}
 }

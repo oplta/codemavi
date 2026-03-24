@@ -16,7 +16,7 @@ import { IEditorService } from '../../../services/editor/common/editorService.js
 
 const PRIORITY = 100;
 
-function overrideCommandForWebview(command: MultiCommand | undefined, f: (webview: IWebview) => codemavi) {
+function overrideCommandForWebview(command: MultiCommand | undefined, f: (webview: IWebview) => void) {
 	command?.addImplementation(PRIORITY, 'webview', accessor => {
 		const webviewService = accessor.get(IWebviewService);
 		const webview = webviewService.activeWebview;

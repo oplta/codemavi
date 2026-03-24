@@ -58,12 +58,12 @@ export class GitFileSystemProvider implements FileSystemProvider {
 		setInterval(() => this.cleanup(), FIVE_MINUTES);
 	}
 
-	private onDidChangeRepository({ repository }: ModelChangeEvent): codemavi {
+	private onDidChangeRepository({ repository }: ModelChangeEvent): void {
 		this.changedRepositoryRoots.add(repository.root);
 		this.eventuallyFireChangeEvents();
 	}
 
-	private onDidChangeOriginalResource({ uri }: OriginalResourceChangeEvent): codemavi {
+	private onDidChangeOriginalResource({ uri }: OriginalResourceChangeEvent): void {
 		if (uri.scheme !== 'file') {
 			return;
 		}
@@ -79,12 +79,12 @@ export class GitFileSystemProvider implements FileSystemProvider {
 	}
 
 	@debounce(1100)
-	private eventuallyFireChangeEvents(): codemavi {
+	private eventuallyFireChangeEvents(): void {
 		this.fireChangeEvents();
 	}
 
 	@throttle
-	private async fireChangeEvents(): Promise<codemavi> {
+	private async fireChangeEvents(): Promise<void> {
 		if (!window.state.focused) {
 			const onDidFocusWindow = filterEvent(window.onDidChangeWindowState, e => e.focused);
 			await eventToPromise(onDidFocusWindow);
@@ -111,7 +111,7 @@ export class GitFileSystemProvider implements FileSystemProvider {
 		this.changedRepositoryRoots.clear();
 	}
 
-	private cleanup(): codemavi {
+	private cleanup(): void {
 		const now = new Date().getTime();
 		const cache = new Map<string, CacheRow>();
 
@@ -165,7 +165,7 @@ export class GitFileSystemProvider implements FileSystemProvider {
 		throw new Error('Method not implemented.');
 	}
 
-	createDirectory(): codemavi {
+	createDirectory(): void {
 		throw new Error('Method not implemented.');
 	}
 
@@ -217,19 +217,19 @@ export class GitFileSystemProvider implements FileSystemProvider {
 		}
 	}
 
-	writeFile(): codemavi {
+	writeFile(): void {
 		throw new Error('Method not implemented.');
 	}
 
-	delete(): codemavi {
+	delete(): void {
 		throw new Error('Method not implemented.');
 	}
 
-	rename(): codemavi {
+	rename(): void {
 		throw new Error('Method not implemented.');
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.forEach(d => d.dispose());
 	}
 }

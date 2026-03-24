@@ -25,7 +25,7 @@ export class OpenExtensionsFolderAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const nativeHostService = accessor.get(INativeHostService);
 		const fileService = accessor.get(IFileService);
 		const environmentService = accessor.get(INativeWorkbenchEnvironmentService);
@@ -57,7 +57,7 @@ export class CleanUpExtensionsFolderAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const extensionManagementService = accessor.get(IExtensionManagementService);
 		return extensionManagementService.cleanUp();
 	}

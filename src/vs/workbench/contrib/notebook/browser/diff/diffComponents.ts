@@ -102,10 +102,10 @@ class PropertyHeader extends Disposable {
 		readonly propertyHeaderContainer: HTMLElement,
 		readonly notebookEditor: INotebookTextDiffEditor,
 		readonly accessor: {
-			updateInfoRendering: (renderOutput: boolean) => codemavi;
+			updateInfoRendering: (renderOutput: boolean) => void;
 			checkIfModified: () => false | { reason: string | undefined };
 			getFoldingState: () => PropertyFoldingState;
-			updateFoldingState: (newState: PropertyFoldingState) => codemavi;
+			updateFoldingState: (newState: PropertyFoldingState) => void;
 			unChangedLabel: string;
 			changedLabel: string;
 			prefix: string;
@@ -124,7 +124,7 @@ class PropertyHeader extends Disposable {
 		super();
 	}
 
-	buildHeader(): codemavi {
+	buildHeader(): void {
 		this._foldingIndicator = DOM.append(this.propertyHeaderContainer, DOM.$('.property-folding-indicator'));
 		this._foldingIndicator.classList.add(this.accessor.prefix);
 		const metadataStatus = DOM.append(this.propertyHeaderContainer, DOM.$('div.property-status'));
@@ -264,7 +264,7 @@ export class NotebookDocumentMetadataElement extends Disposable {
 		this.updateBorders();
 	}
 
-	buildBody(): codemavi {
+	buildBody(): void {
 		const body = this.templateData.body;
 		body.classList.remove('full');
 		body.classList.add('full');
@@ -289,7 +289,7 @@ export class NotebookDocumentMetadataElement extends Disposable {
 		this.templateData.rightBorder.style.height = `${this.viewModel.layoutInfo.totalHeight - 32}px`;
 		this.templateData.bottomBorder.style.top = `${this.viewModel.layoutInfo.totalHeight - 32}px`;
 	}
-	updateSourceEditor(): codemavi {
+	updateSourceEditor(): void {
 		this._cellHeaderContainer.style.display = 'flex';
 		this._cellHeaderContainer.innerText = '';
 		this._editorContainer.classList.add('diff');
@@ -562,14 +562,14 @@ abstract class AbstractElementRenderer extends Disposable {
 		}));
 	}
 
-	abstract init(): codemavi;
-	abstract styleContainer(container: HTMLElement): codemavi;
-	abstract _buildOutput(): codemavi;
-	abstract _disposeOutput(): codemavi;
-	abstract _buildMetadata(): codemavi;
-	abstract _disposeMetadata(): codemavi;
+	abstract init(): void;
+	abstract styleContainer(container: HTMLElement): void;
+	abstract _buildOutput(): void;
+	abstract _disposeOutput(): void;
+	abstract _buildMetadata(): void;
+	abstract _disposeMetadata(): void;
 
-	buildBody(): codemavi {
+	buildBody(): void {
 		const body = this.templateData.body;
 		this._diffEditorContainer = this.templateData.diffEditorContainer;
 		body.classList.remove('left', 'right', 'full');
@@ -721,9 +721,9 @@ abstract class AbstractElementRenderer extends Disposable {
 		this.cell.layoutChange();
 	}
 
-	abstract _buildOutputRendererContainer(): codemavi;
-	abstract _hideOutputsRenderer(): codemavi;
-	abstract _showOutputsRenderer(): codemavi;
+	abstract _buildOutputRendererContainer(): void;
+	abstract _hideOutputsRenderer(): void;
+	abstract _showOutputsRenderer(): void;
 
 	private _applySanitizedMetadataChanges(currentMetadata: NotebookCellMetadata, newMetadata: any) {
 		const result: { [key: string]: any } = {};
@@ -1010,8 +1010,8 @@ abstract class AbstractElementRenderer extends Disposable {
 		super.dispose();
 	}
 
-	abstract updateSourceEditor(): codemavi;
-	abstract layout(state: IDiffElementLayoutState): codemavi;
+	abstract updateSourceEditor(): void;
+	abstract layout(state: IDiffElementLayoutState): void;
 }
 
 abstract class SingleSideDiffElement extends AbstractElementRenderer {
@@ -1127,7 +1127,7 @@ abstract class SingleSideDiffElement extends AbstractElementRenderer {
 		}));
 	}
 
-	override updateSourceEditor(): codemavi {
+	override updateSourceEditor(): void {
 		this._cellHeaderContainer = this.templateData.cellHeaderContainer;
 		this._cellHeaderContainer.style.display = 'flex';
 		this._cellHeaderContainer.innerText = '';
@@ -1472,7 +1472,7 @@ export class InsertElement extends SingleSideDiffElement {
 		return false;
 	}
 
-	styleContainer(container: HTMLElement): codemavi {
+	styleContainer(container: HTMLElement): void {
 		container.classList.remove('removed');
 		container.classList.add('inserted');
 	}
@@ -1606,11 +1606,11 @@ export class ModifiedElement extends AbstractElementRenderer {
 	}
 
 	init() { }
-	styleContainer(container: HTMLElement): codemavi {
+	styleContainer(container: HTMLElement): void {
 		container.classList.remove('inserted', 'removed');
 	}
 
-	override buildBody(): codemavi {
+	override buildBody(): void {
 		super.buildBody();
 		if (this.cell.displayIconToHideUnmodifiedCells) {
 			this._register(this.templateData.marginOverlay.onAction(() => this.cell.hideUnchangedCells()));
@@ -1859,7 +1859,7 @@ export class ModifiedElement extends AbstractElementRenderer {
 		}
 	}
 
-	updateSourceEditor(): codemavi {
+	updateSourceEditor(): void {
 		this._cellHeaderContainer = this.templateData.cellHeaderContainer;
 		this._cellHeaderContainer.style.display = 'flex';
 		this._cellHeaderContainer.innerText = '';
@@ -2121,7 +2121,7 @@ export class CollapsedCellOverlayWidget extends Disposable implements IDiffCellM
 		),
 	]);
 
-	private readonly _action = this._register(new Emitter<codemavi>());
+	private readonly _action = this._register(new Emitter<void>());
 	public readonly onAction = this._action.event;
 	constructor(
 		private readonly container: HTMLElement
@@ -2162,7 +2162,7 @@ export class UnchangedCellOverlayWidget extends Disposable implements IDiffCellM
 		),
 	]);
 
-	private readonly _action = this._register(new Emitter<codemavi>());
+	private readonly _action = this._register(new Emitter<void>());
 	public readonly onAction = this._action.event;
 	constructor(
 		private readonly container: HTMLElement

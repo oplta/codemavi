@@ -23,7 +23,7 @@ suite('CancellationToken', function () {
 
 		assert.strictEqual(source.token.isCancellationRequested, true);
 
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			source.token.onCancellationRequested(() => resolve());
 		});
 	});

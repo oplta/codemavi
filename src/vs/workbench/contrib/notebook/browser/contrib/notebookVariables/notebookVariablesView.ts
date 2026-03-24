@@ -79,7 +79,7 @@ export class NotebookVariablesView extends ViewPane {
 		this.updateScheduler = new RunOnceScheduler(() => this.tree?.updateChildren(), 100);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 		this.element.classList.add('debug-pane');
 
@@ -103,7 +103,7 @@ export class NotebookVariablesView extends ViewPane {
 		this._register(this.tree.onContextMenu(e => this.onContextMenu(e)));
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<INotebookVariableElement>): codemavi {
+	private onContextMenu(e: ITreeContextMenuEvent<INotebookVariableElement>): void {
 		if (!e.element) {
 			return;
 		}
@@ -135,12 +135,12 @@ export class NotebookVariablesView extends ViewPane {
 		});
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.tree?.domFocus();
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.tree?.layout(height, width);
 	}

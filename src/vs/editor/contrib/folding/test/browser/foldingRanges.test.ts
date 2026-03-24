@@ -56,7 +56,7 @@ suite('FoldingRanges', () => {
 		/* 1*/	'#region',
 		/* 2*/	'#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',

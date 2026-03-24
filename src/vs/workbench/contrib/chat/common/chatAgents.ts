@@ -77,8 +77,8 @@ export function isChatWelcomeMessageContent(obj: any): obj is IChatWelcomeMessag
 }
 
 export interface IChatAgentImplementation {
-	invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult>;
-	setRequestPaused?(requestId: string, isPaused: boolean): codemavi;
+	invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult>;
+	setRequestPaused?(requestId: string, isPaused: boolean): void;
 	provideFollowups?(request: IChatAgentRequest, result: IChatAgentResult, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatFollowup[]>;
 	provideWelcomeMessage?(token: CancellationToken): ProviderResult<IChatWelcomeMessageContent | undefined>;
 	provideChatTitle?: (history: IChatAgentHistoryEntry[], token: CancellationToken) => Promise<string | undefined>;
@@ -199,8 +199,8 @@ export interface IChatAgentService {
 	registerChatParticipantDetectionProvider(handle: number, provider: IChatParticipantDetectionProvider): IDisposable;
 	detectAgentOrCommand(request: IChatAgentRequest, history: IChatAgentHistoryEntry[], options: { location: ChatAgentLocation }, token: CancellationToken): Promise<{ agent: IChatAgentData; command?: IChatAgentCommand } | undefined>;
 	hasChatParticipantDetectionProviders(): boolean;
-	invokeAgent(agent: string, request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult>;
-	setRequestPaused(agent: string, requestId: string, isPaused: boolean): codemavi;
+	invokeAgent(agent: string, request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult>;
+	setRequestPaused(agent: string, requestId: string, isPaused: boolean): void;
 	getFollowups(id: string, request: IChatAgentRequest, result: IChatAgentResult, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatFollowup[]>;
 	getChatTitle(id: string, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<string | undefined>;
 	getAgent(id: string, includeDisabled?: boolean): IChatAgentData | undefined;
@@ -219,7 +219,7 @@ export interface IChatAgentService {
 	 * Get the default agent data that has been contributed (may not be activated yet)
 	 */
 	getContributedDefaultAgent(location: ChatAgentLocation): IChatAgentData | undefined;
-	updateAgent(id: string, updateMetadata: IChatAgentMetadata): codemavi;
+	updateAgent(id: string, updateMetadata: IChatAgentMetadata): void;
 }
 
 export class ChatAgentService extends Disposable implements IChatAgentService {
@@ -285,7 +285,7 @@ export class ChatAgentService extends Disposable implements IChatAgentService {
 		});
 	}
 
-	private _updateAgentsContextKeys(): codemavi {
+	private _updateAgentsContextKeys(): void {
 		// Update the set of context keys used by all agents
 		this._agentsContextKeys.clear();
 		for (const agent of this._agents.values()) {
@@ -298,7 +298,7 @@ export class ChatAgentService extends Disposable implements IChatAgentService {
 		}
 	}
 
-	private _updateContextKeys(): codemavi {
+	private _updateContextKeys(): void {
 		let editingAgentRegistered = false;
 		let defaultAgentRegistered = false;
 		let toolsAgentRegistered = false;
@@ -372,7 +372,7 @@ export class ChatAgentService extends Disposable implements IChatAgentService {
 		return await this._agentCompletionProviders.get(id)?.(query, token) ?? [];
 	}
 
-	updateAgent(id: string, updateMetadata: IChatAgentMetadata): codemavi {
+	updateAgent(id: string, updateMetadata: IChatAgentMetadata): void {
 		const agent = this._agents.get(id);
 		if (!agent?.impl) {
 			throw new Error(`No activated agent with id ${JSON.stringify(id)} registered`);
@@ -472,7 +472,7 @@ export class ChatAgentService extends Disposable implements IChatAgentService {
 			.filter(a => a.extensionId.value !== agent.extensionId.value).length > 0;
 	}
 
-	async invokeAgent(id: string, request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> {
+	async invokeAgent(id: string, request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> {
 		const data = this._agents.get(id);
 		if (!data?.impl) {
 			throw new Error(`No activated agent with id "${id}"`);
@@ -594,11 +594,11 @@ export class MergedChatAgent implements IChatAgent {
 	get locations(): ChatAgentLocation[] { return this.data.locations; }
 	get disambiguation(): { category: string; description: string; examples: string[] }[] { return this.data.disambiguation; }
 
-	async invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> {
+	async invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => void, history: IChatAgentHistoryEntry[], token: CancellationToken): Promise<IChatAgentResult> {
 		return this.impl.invoke(request, progress, history, token);
 	}
 
-	setRequestPaused(requestId: string, isPaused: boolean): codemavi {
+	setRequestPaused(requestId: string, isPaused: boolean): void {
 		if (this.impl.setRequestPaused) {
 			this.impl.setRequestPaused(requestId, isPaused);
 		}
@@ -680,7 +680,7 @@ export class ChatAgentNameService implements IChatAgentNameService {
 		this.refresh();
 	}
 
-	private refresh(): codemavi {
+	private refresh(): void {
 		if (this.disposed) {
 			return;
 		}
@@ -691,7 +691,7 @@ export class ChatAgentNameService implements IChatAgentNameService {
 			.then(() => this.refresh());
 	}
 
-	private async update(): Promise<codemavi> {
+	private async update(): Promise<void> {
 		const context = await this.requestService.request({ type: 'GET', url: this.url }, CancellationToken.None);
 
 		if (context.res.statusCode !== 200) {

@@ -4,19 +4,19 @@ This is the official guide on how to contribute to Code Mavi. We want to make it
 
 There are a few ways to contribute:
 
-- 💫 Complete items on the [Roadmap](https://github.com/orgs/codemavi/projects/2).
+- 💫 Complete items on the [Roadmap](https://github.com/orgs/mavi/projects/2).
 - 💡 Make suggestions in our [Discord](https://discord.gg/RSNjgaugJs).
-- 🪴 Start new Issues - see [Issues](https://github.com/codemavi/codemavi/issues).
+- 🪴 Start new Issues - see [Issues](https://github.com/mavi/mavi/issues).
 
 
 
 ### Codebase Guide
 
-We [highly recommend reading this](https://github.com/codemavi/codemavi/blob/main/VOID_CODEBASE_GUIDE.md) guide that we put together on Code Mavi's sourcecode if you'd like to add new features.
+We [highly recommend reading this](https://github.com/mavi/mavi/blob/main/VOID_CODEBASE_GUIDE.md) guide that we put together on Code Mavi's sourcecode if you'd like to add new features.
 
 The repo is not as intimidating as it first seems if you read the guide!
 
-Most of Code Mavi's code lives in the folder `src/vs/workbench/contrib/codemavi/`.
+Most of Code Mavi's code lives in the folder `src/vs/workbench/contrib/mavi/`.
 
 
 
@@ -56,7 +56,7 @@ First, run `npm install -g node-gyp`. Then:
 
 Here's how to start changing Code Mavi's code. These steps cover everything from cloning Code Mavi, to opening a Developer Mode window where you can play around with your updates.
 
-1. `git clone https://github.com/codemavi/codemavi` to clone the repo.
+1. `git clone https://github.com/mavi/mavi` to clone the repo.
 2. `npm install` to install all dependencies.
 3. Open Code Mavi or VSCode, and initialize Developer Mode (this can take ~5 min to finish, it's done when 2 of the 3 spinners turn to check marks):
    - Windows: Press <kbd>Ctrl+Shift+B</kbd>.
@@ -85,7 +85,7 @@ If you get any errors, scroll down for common fixes.
 - If you get errors like `npm error libtool:   error: unrecognised option: '-static'`,  when running ./scripts/code.sh, make sure you have GNU libtool instead of BSD libtool (BSD is the default in macos)
 - If you get errors like `The SUID sandbox helper binary was found, but is not configured correctly` when running ./scripts/code.sh, run
 `sudo chown root:root .build/electron/chrome-sandbox && sudo chmod 4755 .build/electron/chrome-sandbox` and then run `./scripts/code.sh` again.
-- If you have any other questions, feel free to [submit an issue](https://github.com/codemavi/codemavi/issues/new). You can also refer to VSCode's complete [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute) page.
+- If you have any other questions, feel free to [submit an issue](https://github.com/mavi/mavi/issues/new). You can also refer to VSCode's complete [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute) page.
 
 
 
@@ -103,9 +103,9 @@ To build Code Mavi from the terminal instead of from inside VSCode, follow the s
 
 
 ### Distributing
-Code Mavi's maintainers distribute Code Mavi on our website and in releases. Our build pipeline is a fork of VSCodium, and it works by running GitHub Actions which create the downloadables. The build repo with more instructions lives [here](https://github.com/codemavi/codemavi-builder).
+Code Mavi's maintainers distribute Code Mavi on our website and in releases. Our build pipeline is a fork of VSCodium, and it works by running GitHub Actions which create the downloadables. The build repo with more instructions lives [here](https://github.com/mavi/mavi-builder).
 
-If you want to completely control Code Mavi's build pipeline for your own internal usage, which comes with a lot of time cost (and is typically not recommended), see our [`codemavi-builder`](https://github.com/codemavi/codemavi-builder) repo which builds Code Mavi and contains a few important notes about auto-updating and rebasing.
+If you want to completely control Code Mavi's build pipeline for your own internal usage, which comes with a lot of time cost (and is typically not recommended), see our [`mavi-builder`](https://github.com/mavi/mavi-builder) repo which builds Code Mavi and contains a few important notes about auto-updating and rebasing.
 
 
 #### Building a Local Executible
@@ -115,7 +115,7 @@ We don't usually recommend building a local executible of Code Mavi - typically 
 	<summary> Building Locally (not recommended)</summary>
 If you're certain you want to build a local executible of Code Mavi, follow these steps. It can take ~25 minutes.
 
-Make sure you've already entered Developer Mode with Code Mavi first, then run one of the following commands. This will create a folder named `VSCode-darwin-arm64` or similar outside of the codemavi/ repo (see below). 
+Make sure you've already entered Developer Mode with Code Mavi first, then run one of the following commands. This will create a folder named `VSCode-darwin-arm64` or similar outside of the mavi/ repo (see below). 
 
 
 ##### Mac
@@ -133,10 +133,10 @@ Make sure you've already entered Developer Mode with Code Mavi first, then run o
 
 ##### Local Executible Output
 
-The local executible will be located in a folder outside of `codemavi/`:
+The local executible will be located in a folder outside of `mavi/`:
 ```bash
 workspace/
-├── codemavi/   # Your Code Mavi fork
+├── mavi/   # Your Code Mavi fork
 └── VSCode-darwin-arm64/ # Generated output
 ```
 

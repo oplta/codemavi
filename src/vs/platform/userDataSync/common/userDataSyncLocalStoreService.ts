@@ -30,7 +30,7 @@ export class UserDataSyncLocalStoreService extends Disposable implements IUserDa
 		this.cleanUp();
 	}
 
-	private async cleanUp(): Promise<codemavi> {
+	private async cleanUp(): Promise<void> {
 		for (const profile of this.userDataProfilesService.profiles) {
 			for (const resource of ALL_SYNC_RESOURCES) {
 				try {
@@ -96,7 +96,7 @@ export class UserDataSyncLocalStoreService extends Disposable implements IUserDa
 		}
 	}
 
-	async writeResource(resourceKey: SyncResource, content: string, cTime: Date, collection?: string, root?: URI): Promise<codemavi> {
+	async writeResource(resourceKey: SyncResource, content: string, cTime: Date, collection?: string, root?: URI): Promise<void> {
 		const folder = this.getResourceBackupHome(resourceKey, collection, root);
 		const resource = joinPath(folder, `${toLocalISOString(cTime).replace(/-|:|\.\d+Z$/g, '')}.json`);
 		try {
@@ -110,7 +110,7 @@ export class UserDataSyncLocalStoreService extends Disposable implements IUserDa
 		return joinPath(root, ...(collection ? [collection, resource] : [resource]));
 	}
 
-	private async cleanUpBackup(folder: URI): Promise<codemavi> {
+	private async cleanUpBackup(folder: URI): Promise<void> {
 		try {
 			try {
 				if (!(await this.fileService.exists(folder))) {

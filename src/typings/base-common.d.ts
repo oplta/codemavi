@@ -12,8 +12,8 @@ declare global {
 		timeRemaining(): number;
 	}
 
-	function requestIdleCallback(callback: (args: IdleDeadline) => codemavi, options?: { timeout: number }): number;
-	function cancelIdleCallback(handle: number): codemavi;
+	function requestIdleCallback(callback: (args: IdleDeadline) => void, options?: { timeout: number }): number;
+	function cancelIdleCallback(handle: number): void;
 
 }
 

@@ -30,7 +30,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const nativeHostService = accessor.get(INativeHostService);
 

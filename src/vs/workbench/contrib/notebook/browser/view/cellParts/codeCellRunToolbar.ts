@@ -57,7 +57,7 @@ export class RunToolbar extends CellContentPart {
 		this._register(this.notebookEditor.notebookOptions.onDidChangeOptions(updateActions));
 	}
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		this.cellDisposables.add(registerCellToolbarStickyScroll(this.notebookEditor, element, this.runButtonContainer));
 
 		if (this.notebookEditor.hasModel()) {

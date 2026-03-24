@@ -57,7 +57,7 @@ export interface INotebookService {
 
 	readonly onAddViewType: Event<string>;
 	readonly onWillRemoveViewType: Event<string>;
-	readonly onDidChangeOutputRenderers: Event<codemavi>;
+	readonly onDidChangeOutputRenderers: Event<void>;
 	readonly onWillAddNotebookDocument: Event<NotebookTextModel>;
 	readonly onDidAddNotebookDocument: Event<NotebookTextModel>;
 
@@ -77,8 +77,8 @@ export interface INotebookService {
 	getStaticPreloads(viewType: string): Iterable<INotebookStaticPreloadInfo>;
 
 	/** Updates the preferred renderer for the given mimetype in the workspace. */
-	updateMimePreferredRenderer(viewType: string, mimeType: string, rendererId: string, otherMimetypes: readonly string[]): codemavi;
-	saveMimeDisplayOrder(target: ConfigurationTarget): codemavi;
+	updateMimePreferredRenderer(viewType: string, mimeType: string, rendererId: string, otherMimetypes: readonly string[]): void;
+	saveMimeDisplayOrder(target: ConfigurationTarget): void;
 
 	createNotebookTextModel(viewType: string, uri: URI, stream?: VSBufferReadableStream): Promise<NotebookTextModel>;
 	createNotebookTextDocumentSnapshot(uri: URI, context: SnapshotContext, token: CancellationToken): Promise<VSBufferReadableStream>;
@@ -94,7 +94,7 @@ export interface INotebookService {
 	hasSupportedNotebooks(resource: URI): boolean;
 	getNotebookProviderResourceRoots(): URI[];
 
-	setToCopy(items: NotebookCellTextModel[], isCopy: boolean): codemavi;
+	setToCopy(items: NotebookCellTextModel[], isCopy: boolean): void;
 	getToCopy(): { items: NotebookCellTextModel[]; isCopy: boolean } | undefined;
-	clearEditorCache(): codemavi;
+	clearEditorCache(): void;
 }

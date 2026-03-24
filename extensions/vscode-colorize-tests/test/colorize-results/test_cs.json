@@ -238,8 +238,8 @@
 		}
 	},
 	{
-		"c": "codemavi",
-		"t": "source.cs keyword.type.codemavi.cs",
+		"c": "mavi",
+		"t": "source.cs keyword.type.mavi.cs",
 		"r": {
 			"dark_plus": "keyword: #569CD6",
 			"light_plus": "keyword: #0000FF",
@@ -2282,8 +2282,8 @@
 		}
 	},
 	{
-		"c": "codemavi",
-		"t": "source.cs keyword.type.codemavi.cs",
+		"c": "mavi",
+		"t": "source.cs keyword.type.mavi.cs",
 		"r": {
 			"dark_plus": "keyword: #569CD6",
 			"light_plus": "keyword: #0000FF",

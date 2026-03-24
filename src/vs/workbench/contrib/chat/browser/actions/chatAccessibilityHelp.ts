@@ -151,7 +151,7 @@ export function getChatAccessibilityHelpProvider(accessor: ServicesAccessor, edi
 
 			} else if (type === 'inlineChat') {
 				// TODO@jrieken find a better way for this
-				const ctrl = <{ focus(): codemavi } | undefined>editor?.getContribution(INLINE_CHAT_ID);
+				const ctrl = <{ focus(): void } | undefined>editor?.getContribution(INLINE_CHAT_ID);
 				ctrl?.focus();
 
 			}

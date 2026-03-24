@@ -8,7 +8,7 @@ import { GitExtension, Repository, API } from './git';
 import { ApiRepository, ApiImpl } from './api1';
 import { Event, EventEmitter } from 'vscode';
 
-export function deprecated(_target: any, key: string, descriptor: any): codemavi {
+export function deprecated(_target: any, key: string, descriptor: any): void {
 	if (typeof descriptor.value !== 'function') {
 		throw new Error('not supported');
 	}

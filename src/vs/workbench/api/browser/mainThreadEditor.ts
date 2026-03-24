@@ -24,8 +24,8 @@ import { MainThreadDocuments } from './mainThreadDocuments.js';
 import { ISnippetEdit } from '../../../editor/contrib/snippet/browser/snippetSession.js';
 
 export interface IFocusTracker {
-	onGainedFocus(): codemavi;
-	onLostFocus(): codemavi;
+	onGainedFocus(): void;
+	onLostFocus(): void;
 }
 
 export class MainThreadTextEditorProperties {
@@ -203,20 +203,20 @@ export class MainThreadTextEditor {
 		this._updatePropertiesNow(null);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._modelListeners.dispose();
 		this._codeEditor = null;
 		this._codeEditorListeners.dispose();
 	}
 
-	private _updatePropertiesNow(selectionChangeSource: string | null): codemavi {
+	private _updatePropertiesNow(selectionChangeSource: string | null): void {
 		this._setProperties(
 			MainThreadTextEditorProperties.readFromEditor(this._properties, this._model, this._codeEditor),
 			selectionChangeSource
 		);
 	}
 
-	private _setProperties(newProperties: MainThreadTextEditorProperties, selectionChangeSource: string | null): codemavi {
+	private _setProperties(newProperties: MainThreadTextEditorProperties, selectionChangeSource: string | null): void {
 		const delta = newProperties.generateDelta(this._properties, selectionChangeSource);
 		this._properties = newProperties;
 		if (delta) {
@@ -240,7 +240,7 @@ export class MainThreadTextEditor {
 		return (this._codeEditor === codeEditor);
 	}
 
-	public setCodeEditor(codeEditor: ICodeEditor | null): codemavi {
+	public setCodeEditor(codeEditor: ICodeEditor | null): void {
 		if (this.hasCodeEditor(codeEditor)) {
 			// Nothing to do...
 			return;
@@ -339,7 +339,7 @@ export class MainThreadTextEditor {
 		return this._onPropertiesChanged.event;
 	}
 
-	public setSelections(selections: ISelection[]): codemavi {
+	public setSelections(selections: ISelection[]): void {
 		if (this._codeEditor) {
 			this._codeEditor.setSelections(selections);
 			return;
@@ -352,7 +352,7 @@ export class MainThreadTextEditor {
 		);
 	}
 
-	private _setIndentConfiguration(newConfiguration: ITextEditorConfigurationUpdate): codemavi {
+	private _setIndentConfiguration(newConfiguration: ITextEditorConfigurationUpdate): void {
 		const creationOpts = this._modelService.getCreationOptions(this._model.getLanguageId(), this._model.uri, this._model.isForSimpleWidget);
 
 		if (newConfiguration.tabSize === 'auto' || newConfiguration.insertSpaces === 'auto') {
@@ -385,7 +385,7 @@ export class MainThreadTextEditor {
 		this._model.updateOptions(newOpts);
 	}
 
-	public setConfiguration(newConfiguration: ITextEditorConfigurationUpdate): codemavi {
+	public setConfiguration(newConfiguration: ITextEditorConfigurationUpdate): void {
 		this._setIndentConfiguration(newConfiguration);
 
 		if (!this._codeEditor) {
@@ -420,14 +420,14 @@ export class MainThreadTextEditor {
 		}
 	}
 
-	public setDecorations(key: string, ranges: IDecorationOptions[]): codemavi {
+	public setDecorations(key: string, ranges: IDecorationOptions[]): void {
 		if (!this._codeEditor) {
 			return;
 		}
 		this._codeEditor.setDecorationsByType('exthost-api', key, ranges);
 	}
 
-	public setDecorationsFast(key: string, _ranges: number[]): codemavi {
+	public setDecorationsFast(key: string, _ranges: number[]): void {
 		if (!this._codeEditor) {
 			return;
 		}
@@ -438,7 +438,7 @@ export class MainThreadTextEditor {
 		this._codeEditor.setDecorationsByTypeFast(key, ranges);
 	}
 
-	public revealRange(range: IRange, revealType: TextEditorRevealType): codemavi {
+	public revealRange(range: IRange, revealType: TextEditorRevealType): void {
 		if (!this._codeEditor) {
 			return;
 		}

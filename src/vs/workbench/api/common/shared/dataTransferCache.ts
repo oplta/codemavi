@@ -12,7 +12,7 @@ export class DataTransferFileCache {
 	private requestIdPool = 0;
 	private readonly dataTransferFiles = new Map</* requestId */ number, ReadonlyArray<IDataTransferFile>>();
 
-	public add(dataTransfer: IReadonlyVSDataTransfer): { id: number; dispose: () => codemavi } {
+	public add(dataTransfer: IReadonlyVSDataTransfer): { id: number; dispose: () => void } {
 		const requestId = this.requestIdPool++;
 		this.dataTransferFiles.set(requestId, coalesce(Array.from(dataTransfer, ([, item]) => item.asFile())));
 		return {

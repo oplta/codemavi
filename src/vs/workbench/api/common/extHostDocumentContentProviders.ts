@@ -45,7 +45,7 @@ export class ExtHostDocumentContentProvider implements ExtHostDocumentContentPro
 		let subscription: IDisposable | undefined;
 		if (typeof provider.onDidChange === 'function') {
 
-			let lastEvent: Promise<codemavi> | undefined;
+			let lastEvent: Promise<void> | undefined;
 
 			subscription = provider.onDidChange(async uri => {
 				if (uri.scheme !== scheme) {

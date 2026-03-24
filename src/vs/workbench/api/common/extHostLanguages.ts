@@ -31,7 +31,7 @@ export class ExtHostLanguages implements ExtHostLanguagesShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadLanguages);
 	}
 
-	$acceptLanguageIds(ids: string[]): codemavi {
+	$acceptLanguageIds(ids: string[]): void {
 		this._languageIds = ids;
 	}
 

@@ -57,7 +57,7 @@ suite('Workbench - TextModelResolverService', () => {
 		assert.ok(model);
 		assert.strictEqual(snapshotToString(((model as TextResourceEditorModel).createSnapshot()!)), 'Hello Test');
 		let disposed = false;
-		const disposedPromise = new Promise<codemavi>(resolve => {
+		const disposedPromise = new Promise<void>(resolve => {
 			Event.once(model.onWillDispose)(() => {
 				disposed = true;
 				resolve();
@@ -199,7 +199,7 @@ suite('Workbench - TextModelResolverService', () => {
 		modelRef1.dispose();
 		assert(!textModel.isDisposed(), 'the text model should still not be disposed');
 
-		const p1 = new Promise<codemavi>(resolve => disposables.add(textModel.onWillDispose(resolve)));
+		const p1 = new Promise<void>(resolve => disposables.add(textModel.onWillDispose(resolve)));
 		modelRef2.dispose();
 
 		await p1;

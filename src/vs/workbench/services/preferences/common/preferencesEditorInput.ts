@@ -54,7 +54,7 @@ export class SettingsEditor2Input extends EditorInput {
 		return this._settingsModel;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._settingsModel.dispose();
 
 		super.dispose();

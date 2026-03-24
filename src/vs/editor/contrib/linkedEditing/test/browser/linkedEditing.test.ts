@@ -31,8 +31,8 @@ interface TestEditor {
 	setPosition(pos: Position): Promise<any>;
 	setSelection(sel: IRange): Promise<any>;
 	trigger(source: string | null | undefined, handlerId: string, payload: any): Promise<any>;
-	undo(): codemavi;
-	redo(): codemavi;
+	undo(): void;
+	redo(): void;
 }
 
 const languageId = 'linkedEditingTestLangage';
@@ -69,7 +69,7 @@ suite('linked editing', () => {
 	function testCase(
 		name: string,
 		initialState: { text: string | string[]; responseWordPattern?: RegExp },
-		operations: (editor: TestEditor) => Promise<codemavi>,
+		operations: (editor: TestEditor) => Promise<void>,
 		expectedEndText: string | string[]
 	) {
 		test(name, async () => {
@@ -127,7 +127,7 @@ suite('linked editing', () => {
 
 				await operations(testEditor);
 
-				return new Promise<codemavi>((resolve) => {
+				return new Promise<void>((resolve) => {
 					setTimeout(() => {
 						if (typeof expectedEndText === 'string') {
 							assert.strictEqual(editor.getModel()!.getValue(), expectedEndText);

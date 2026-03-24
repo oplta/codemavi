@@ -167,7 +167,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Emit when part visibility changes
 	 */
-	readonly onDidChangePartVisibility: Event<codemavi>;
+	readonly onDidChangePartVisibility: Event<void>;
 
 	/**
 	 * Emit when notifications (toasts or center) visibility changes.
@@ -182,7 +182,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Run a layout of the workbench.
 	 */
-	layout(): codemavi;
+	layout(): void;
 
 	/**
 	 * Asks the part service if all parts have been fully restored. For editor part
@@ -193,7 +193,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * A promise for to await the `isRestored()` condition to be `true`.
 	 */
-	readonly whenRestored: Promise<codemavi>;
+	readonly whenRestored: Promise<void>;
 
 	/**
 	 * Returns whether the given part has the keyboard focus or not.
@@ -203,9 +203,9 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Focuses the part in the target window. If the part is not visible this is a noop.
 	 */
-	focusPart(part: SINGLE_WINDOW_PARTS): codemavi;
-	focusPart(part: MULTI_WINDOW_PARTS, targetWindow: Window): codemavi;
-	focusPart(part: Parts, targetWindow: Window): codemavi;
+	focusPart(part: SINGLE_WINDOW_PARTS): void;
+	focusPart(part: MULTI_WINDOW_PARTS, targetWindow: Window): void;
+	focusPart(part: Parts, targetWindow: Window): void;
 
 	/**
 	 * Returns the target window container or parts HTML element within, if there is one.
@@ -223,15 +223,15 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Set part hidden or not in the target window.
 	 */
-	setPartHidden(hidden: boolean, part: Exclude<SINGLE_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>): codemavi;
-	setPartHidden(hidden: boolean, part: Exclude<MULTI_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): codemavi;
-	setPartHidden(hidden: boolean, part: Exclude<Parts, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): codemavi;
+	setPartHidden(hidden: boolean, part: Exclude<SINGLE_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>): void;
+	setPartHidden(hidden: boolean, part: Exclude<MULTI_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): void;
+	setPartHidden(hidden: boolean, part: Exclude<Parts, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): void;
 
 	/**
 	 * Maximizes the panel height if the panel is not already maximized.
 	 * Shrinks the panel to the default starting size if the panel is maximized.
 	 */
-	toggleMaximizedPanel(): codemavi;
+	toggleMaximizedPanel(): void;
 
 	/**
 	 * Returns true if the main window has a border.
@@ -256,7 +256,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Toggles the menu bar visibility.
 	 */
-	toggleMenuBar(): codemavi;
+	toggleMenuBar(): void;
 
 	/*
 	 * Gets the current panel position. Note that the panel can be hidden too.
@@ -266,7 +266,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Sets the panel position.
 	 */
-	setPanelPosition(position: Position): codemavi;
+	setPanelPosition(position: Position): void;
 
 	/**
 	 * Gets the panel alignement.
@@ -276,7 +276,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Sets the panel alignment.
 	 */
-	setPanelAlignment(alignment: PanelAlignment): codemavi;
+	setPanelAlignment(alignment: PanelAlignment): void;
 
 	/**
 	 * Gets the maximum possible size for editor in the given container.
@@ -286,7 +286,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Toggles the workbench in and out of zen mode - parts get hidden and window goes fullscreen.
 	 */
-	toggleZenMode(): codemavi;
+	toggleZenMode(): void;
 
 	/**
 	 * Returns whether the centered editor layout is active on the main editor part.
@@ -296,7 +296,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Sets the main editor part in and out of centered layout.
 	 */
-	centerMainEditorLayout(active: boolean): codemavi;
+	centerMainEditorLayout(active: boolean): void;
 
 	/**
 	 * Get the provided parts size in the main window.
@@ -306,12 +306,12 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Set the provided parts size in the main window.
 	 */
-	setSize(part: Parts, size: IViewSize): codemavi;
+	setSize(part: Parts, size: IViewSize): void;
 
 	/**
 	 * Resize the provided part in the main window.
 	 */
-	resizePart(part: Parts, sizeChangeWidth: number, sizeChangeHeight: number): codemavi;
+	resizePart(part: Parts, sizeChangeWidth: number, sizeChangeHeight: number): void;
 
 	/**
 	 * Register a part to participate in the layout.
@@ -326,7 +326,7 @@ export interface IWorkbenchLayoutService extends ILayoutService {
 	/**
 	 * Updates the maximized state of the target window.
 	 */
-	updateWindowMaximizedState(targetWindow: Window, maximized: boolean): codemavi;
+	updateWindowMaximizedState(targetWindow: Window, maximized: boolean): void;
 
 	/**
 	 * Returns the next visible view part in a given direction in the main window.

@@ -92,19 +92,19 @@ export class TextMateWorkerTokenizerController extends Disposable {
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._worker.$acceptRemovedModel(this.controllerId);
 	}
 
-	public requestTokens(startLineNumber: number, endLineNumberExclusive: number): codemavi {
+	public requestTokens(startLineNumber: number, endLineNumberExclusive: number): void {
 		this._worker.$retokenize(this.controllerId, startLineNumber, endLineNumberExclusive);
 	}
 
 	/**
 	 * This method is called from the worker through the worker host.
 	 */
-	public async setTokensAndStates(controllerId: number, versionId: number, rawTokens: ArrayBuffer, stateDeltas: StateDeltas[]): Promise<codemavi> {
+	public async setTokensAndStates(controllerId: number, versionId: number, rawTokens: ArrayBuffer, stateDeltas: StateDeltas[]): Promise<void> {
 		if (this.controllerId !== controllerId) {
 			// This event is for an outdated controller (the worker didn't receive the delete/create messages yet), ignore the event.
 			return;

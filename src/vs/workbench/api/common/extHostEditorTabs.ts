@@ -278,7 +278,7 @@ export class ExtHostEditorTabs implements IExtHostEditorTabs {
 		return this._apiObject;
 	}
 
-	$acceptEditorTabModel(tabGroups: IEditorTabGroupDto[]): codemavi {
+	$acceptEditorTabModel(tabGroups: IEditorTabGroupDto[]): void {
 
 		const groupIdsBefore = new Set(this._extHostTabGroups.map(group => group.groupId));
 		const groupIdsAfter = new Set(tabGroups.map(dto => dto.groupId));

@@ -206,7 +206,7 @@ export class SuggestModel implements IDisposable {
 		this._updateTriggerCharacters();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._triggerCharacterListener);
 		dispose([this._onDidCancel, this._onDidSuggest, this._onDidTrigger, this._triggerQuickSuggest]);
 		this._toDispose.dispose();
@@ -214,7 +214,7 @@ export class SuggestModel implements IDisposable {
 		this.cancel();
 	}
 
-	private _updateTriggerCharacters(): codemavi {
+	private _updateTriggerCharacters(): void {
 		this._triggerCharacterListener.clear();
 
 		if (this._editor.getOption(EditorOption.readOnly)
@@ -309,7 +309,7 @@ export class SuggestModel implements IDisposable {
 		}
 	}
 
-	cancel(retrigger: boolean = false): codemavi {
+	cancel(retrigger: boolean = false): void {
 		if (this._triggerState !== undefined) {
 			this._triggerQuickSuggest.cancel();
 			this._requestToken?.cancel();
@@ -325,7 +325,7 @@ export class SuggestModel implements IDisposable {
 		this._completionDisposables.clear();
 	}
 
-	private _updateActiveSuggestSession(): codemavi {
+	private _updateActiveSuggestSession(): void {
 		if (this._triggerState !== undefined) {
 			if (!this._editor.hasModel() || !this._languageFeaturesService.completionProvider.has(this._editor.getModel())) {
 				this.cancel();
@@ -335,7 +335,7 @@ export class SuggestModel implements IDisposable {
 		}
 	}
 
-	private _onCursorChange(e: ICursorSelectionChangedEvent): codemavi {
+	private _onCursorChange(e: ICursorSelectionChangedEvent): void {
 
 		if (!this._editor.hasModel()) {
 			return;
@@ -368,7 +368,7 @@ export class SuggestModel implements IDisposable {
 		}
 	}
 
-	private _onCompositionEnd(): codemavi {
+	private _onCompositionEnd(): void {
 		// trigger or refilter when composition ends
 		if (this._triggerState === undefined) {
 			this._doTriggerQuickSuggest();
@@ -377,7 +377,7 @@ export class SuggestModel implements IDisposable {
 		}
 	}
 
-	private _doTriggerQuickSuggest(): codemavi {
+	private _doTriggerQuickSuggest(): void {
 
 		if (QuickSuggestionsOptions.isAllOff(this._editor.getOption(EditorOption.quickSuggestions))) {
 			// not enabled
@@ -434,7 +434,7 @@ export class SuggestModel implements IDisposable {
 		}, this._editor.getOption(EditorOption.quickSuggestionsDelay));
 	}
 
-	private _refilterCompletionItems(): codemavi {
+	private _refilterCompletionItems(): void {
 		assertType(this._editor.hasModel());
 		assertType(this._triggerState !== undefined);
 
@@ -444,7 +444,7 @@ export class SuggestModel implements IDisposable {
 		this._onNewContext(ctx);
 	}
 
-	trigger(options: SuggestTriggerOptions): codemavi {
+	trigger(options: SuggestTriggerOptions): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -567,7 +567,7 @@ export class SuggestModel implements IDisposable {
 	 * Report durations telemetry with a 1% sampling rate.
 	 * The telemetry is reported only if a random number between 0 and 100 is less than or equal to 1.
 	 */
-	private _reportDurationsTelemetry(durations: CompletionDurations): codemavi {
+	private _reportDurationsTelemetry(durations: CompletionDurations): void {
 		if (Math.random() > 0.0001) { // 0.01%
 			return;
 		}
@@ -628,7 +628,7 @@ export class SuggestModel implements IDisposable {
 		return { itemKind: result, showDeprecated: suggestOptions.showDeprecated };
 	}
 
-	private _onNewContext(ctx: LineContext): codemavi {
+	private _onNewContext(ctx: LineContext): void {
 
 		if (!this._context) {
 			// happens when 24x7 IntelliSense is enabled and still in its delay

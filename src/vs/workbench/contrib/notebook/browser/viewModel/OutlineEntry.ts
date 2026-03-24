@@ -65,7 +65,7 @@ export class OutlineEntry {
 		return undefined;
 	}
 
-	updateMarkers(markerService: IMarkerService): codemavi {
+	updateMarkers(markerService: IMarkerService): void {
 		if (this.cell.cellKind === CellKind.Code) {
 			// a code cell can have marker
 			const marker = markerService.read({ resource: this.cell.uri, severities: MarkerSeverity.Error | MarkerSeverity.Warning });
@@ -88,7 +88,7 @@ export class OutlineEntry {
 		}
 	}
 
-	clearMarkers(): codemavi {
+	clearMarkers(): void {
 		this._markerInfo = undefined;
 		for (const child of this.children) {
 			child.clearMarkers();
@@ -110,7 +110,7 @@ export class OutlineEntry {
 		return undefined;
 	}
 
-	asFlatList(bucket: OutlineEntry[]): codemavi {
+	asFlatList(bucket: OutlineEntry[]): void {
 		bucket.push(this);
 		for (const child of this.children) {
 			child.asFlatList(bucket);

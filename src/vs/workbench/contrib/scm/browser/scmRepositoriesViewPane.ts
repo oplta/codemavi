@@ -59,7 +59,7 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		super({ ...options, titleMenuId: MenuId.SCMSourceControlTitle }, keybindingService, contextMenuService, configurationService, contextKeyService, viewDescriptorService, instantiationService, openerService, themeService, hoverService);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		const listContainer = append(container, $('.scm-view.scm-repositories-view'));
@@ -110,22 +110,22 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		this.updateListSelection();
 	}
 
-	private onDidChangeRepositories(): codemavi {
+	private onDidChangeRepositories(): void {
 		this.list.splice(0, this.list.length, this.scmViewService.repositories);
 		this.updateBodySize();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.list.domFocus();
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.list.layout(height, width);
 	}
 
-	private updateBodySize(): codemavi {
+	private updateBodySize(): void {
 		if (this.orientation === Orientation.HORIZONTAL) {
 			return;
 		}
@@ -138,7 +138,7 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		this.maximumBodySize = visibleCount === 0 ? Number.POSITIVE_INFINITY : empty ? Number.POSITIVE_INFINITY : size;
 	}
 
-	private onListContextMenu(e: IListContextMenuEvent<ISCMRepository>): codemavi {
+	private onListContextMenu(e: IListContextMenuEvent<ISCMRepository>): void {
 		if (!e.element) {
 			return;
 		}
@@ -162,7 +162,7 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		});
 	}
 
-	private onListSelectionChange(e: IListEvent<ISCMRepository>): codemavi {
+	private onListSelectionChange(e: IListEvent<ISCMRepository>): void {
 		if (e.browserEvent && e.elements.length > 0) {
 			const scrollTop = this.list.scrollTop;
 			this.scmViewService.visibleRepositories = e.elements;
@@ -170,13 +170,13 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		}
 	}
 
-	private onDidChangeFocus(e: IListEvent<ISCMRepository>): codemavi {
+	private onDidChangeFocus(e: IListEvent<ISCMRepository>): void {
 		if (e.browserEvent && e.elements.length > 0) {
 			this.scmViewService.focus(e.elements[0]);
 		}
 	}
 
-	private updateListSelection(): codemavi {
+	private updateListSelection(): void {
 		const oldSelection = this.list.getSelection();
 		const oldSet = new Set(Iterable.map(oldSelection, i => this.list.element(i)));
 		const set = new Set(this.scmViewService.visibleRepositories);
@@ -204,7 +204,7 @@ export class SCMRepositoriesViewPane extends ViewPane {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disposables.dispose();
 		super.dispose();
 	}

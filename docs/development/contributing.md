@@ -31,8 +31,8 @@ We are committed to fostering a welcoming and inclusive community. Please read o
 1. **Fork the Repository**
    ```bash
    # Fork on GitHub first, then:
-   git clone https://github.com/YOUR_USERNAME/codemavi.git
-   cd codemavi
+   git clone https://github.com/YOUR_USERNAME/mavi.git
+   cd mavi
    ```
 
 2. **Install Dependencies**
@@ -199,7 +199,7 @@ We welcome contributions in all areas! Here are some specific areas where help i
 ## Development Workflow
 
 ### 1. Find an Issue
-- Check [GitHub Issues](https://github.com/codemavi/codemavi/issues)
+- Check [GitHub Issues](https://github.com/mavi/mavi/issues)
 - Look for issues labeled `good-first-issue` or `help-wanted`
 - Or create a new issue if you have an idea
 

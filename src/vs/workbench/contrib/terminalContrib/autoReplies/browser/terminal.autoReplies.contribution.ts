@@ -28,7 +28,7 @@ export class TerminalAutoRepliesContribution extends Disposable implements IWork
 		this._register(terminalInstanceService.onDidRegisterBackend(async e => this._installListenersOnBackend(e)));
 	}
 
-	private _installListenersOnBackend(backend: ITerminalBackend): codemavi {
+	private _installListenersOnBackend(backend: ITerminalBackend): void {
 		// Listen for config changes
 		const initialConfig = this._configurationService.getValue<ITerminalAutoRepliesConfiguration>(TERMINAL_CONFIG_SECTION);
 		for (const match of Object.keys(initialConfig.autoReplies)) {

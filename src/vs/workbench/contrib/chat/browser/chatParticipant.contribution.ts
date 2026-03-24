@@ -44,7 +44,7 @@ import { ChatViewId } from './chat.js';
 
 // --- Chat Container &  View Registration
 
-// Code Mavi commented this out
+// Mavi commented this out
 // const chatViewContainer: ViewContainer = Registry.as<IViewContainersRegistry>(ViewExtensions.ViewContainersRegistry).registerViewContainer({
 // 	id: CHAT_SIDEBAR_PANEL_ID,
 // 	title: localize2('chat.viewContainer.label', "Chat"),
@@ -86,7 +86,7 @@ import { ChatViewId } from './chat.js';
 // Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews(chatViewDescriptor, chatViewContainer);
 
 // --- Edits Container &  View Registration
-// Code Mavi commented this out
+// Mavi commented this out
 
 // const editsViewContainer: ViewContainer = Registry.as<IViewContainersRegistry>(ViewExtensions.ViewContainersRegistry).registerViewContainer({
 // 	id: CHAT_EDITING_SIDEBAR_PANEL_ID,
@@ -221,7 +221,7 @@ const chatParticipantExtensionPoint = extensionsRegistry.ExtensionsRegistry.regi
 			}
 		}
 	},
-	activationEventsGenerator: (contributions: IRawChatParticipantContribution[], result: { push(item: string): codemavi }) => {
+	activationEventsGenerator: (contributions: IRawChatParticipantContribution[], result: { push(item: string): void }) => {
 		for (const contrib of contributions) {
 			result.push(`onChatParticipant:${contrib.id}`);
 		}
@@ -241,7 +241,7 @@ export class ChatExtensionPointHandler implements IWorkbenchContribution {
 		this.handleAndRegisterChatExtensions();
 	}
 
-	private handleAndRegisterChatExtensions(): codemavi {
+	private handleAndRegisterChatExtensions(): void {
 		chatParticipantExtensionPoint.setHandler((extensions, delta) => {
 			for (const extension of delta.added) {
 				for (const providerDescriptor of extension.value) {
@@ -435,7 +435,7 @@ Registry.as<IExtensionFeaturesRegistry>(Extensions.ExtensionFeaturesRegistry).re
 });
 
 
-// Code Mavi commented this out
+// Mavi commented this out
 // // TODO@roblourens remove after a few months
 
 // export class MovedChatEditsViewPane extends ViewPane {
@@ -523,7 +523,7 @@ Registry.as<IExtensionFeaturesRegistry>(Extensions.ExtensionFeaturesRegistry).re
 // 		Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews([editsViewToRegister], editsViewContainer);
 // 	}
 
-// 	private registerWelcomeView(): codemavi {
+// 	private registerWelcomeView(): void {
 // 		const welcomeViewMainMessage = localize('editsMovedMainMessage', "Copilot Edits has been moved to the [main Chat view](command:workbench.action.chat.open). You can switch between modes by using the dropdown in the Chat input box.");
 // 		const okButton = `[${localize('ok', "Got it")}](command:_movedEditsView.ok)`;
 // 		const welcomeViewFooterMessage = localize('editsMovedFooterMessage', "[Learn more](command:_movedEditsView.learnMore) about the Chat view.");
@@ -536,7 +536,7 @@ Registry.as<IExtensionFeaturesRegistry>(Extensions.ExtensionFeaturesRegistry).re
 // 		}));
 // 	}
 
-// 	private markViewToHide(): codemavi {
+// 	private markViewToHide(): void {
 // 		this.storageService.store(EditsViewContribution.HideMovedEditsViewKey, true, StorageScope.APPLICATION, StorageTarget.USER);
 // 		this.updateContextKey();
 // 	}
@@ -550,13 +550,13 @@ Registry.as<IExtensionFeaturesRegistry>(Extensions.ExtensionFeaturesRegistry).re
 // 		}
 // 	}
 
-// 	private updateContextKey(): codemavi {
+// 	private updateContextKey(): void {
 // 		const hidden = this.storageService.getBoolean(EditsViewContribution.HideMovedEditsViewKey, StorageScope.APPLICATION, false);
 // 		const hasChats = this.chatService.hasSessions();
 // 		this.showWelcomeViewCtx.set(!hidden && hasChats);
 // 	}
 
-// 	private registerCommands(): codemavi {
+// 	private registerCommands(): void {
 // 		this._register(CommandsRegistry.registerCommand({
 // 			id: '_movedEditsView.ok',
 // 			handler: async (accessor: ServicesAccessor) => {

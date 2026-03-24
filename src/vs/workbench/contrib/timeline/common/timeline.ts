@@ -145,13 +145,13 @@ export interface ITimelineService {
 	onDidChangeUri: Event<URI>;
 
 	registerTimelineProvider(provider: TimelineProvider): IDisposable;
-	unregisterTimelineProvider(id: string): codemavi;
+	unregisterTimelineProvider(id: string): void;
 
 	getSources(): TimelineSource[];
 
 	getTimeline(id: string, uri: URI, options: TimelineOptions, tokenSource: CancellationTokenSource): TimelineRequest | undefined;
 
-	setUri(uri: URI): codemavi;
+	setUri(uri: URI): void;
 }
 
 const TIMELINE_SERVICE_ID = 'timeline';

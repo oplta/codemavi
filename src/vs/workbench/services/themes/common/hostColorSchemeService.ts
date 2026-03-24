@@ -14,6 +14,6 @@ export interface IHostColorSchemeService {
 
 	readonly dark: boolean;
 	readonly highContrast: boolean;
-	readonly onDidChangeColorScheme: Event<codemavi>;
+	readonly onDidChangeColorScheme: Event<void>;
 
 }

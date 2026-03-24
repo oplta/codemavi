@@ -69,12 +69,12 @@ class TypeHierarchyController implements IEditorContribution {
 		this._disposables.add(this._sessionDisposables);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 
 	// Peek
-	async startTypeHierarchyFromEditor(): Promise<codemavi> {
+	async startTypeHierarchyFromEditor(): Promise<void> {
 		this._sessionDisposables.clear();
 
 		if (!this._editor.hasModel()) {
@@ -128,7 +128,7 @@ class TypeHierarchyController implements IEditorContribution {
 		});
 	}
 
-	async startTypeHierarchyFromTypeHierarchy(): Promise<codemavi> {
+	async startTypeHierarchyFromTypeHierarchy(): Promise<void> {
 		if (!this._widget) {
 			return;
 		}
@@ -152,17 +152,17 @@ class TypeHierarchyController implements IEditorContribution {
 		);
 	}
 
-	showSupertypes(): codemavi {
+	showSupertypes(): void {
 		this._widget?.updateDirection(TypeHierarchyDirection.Supertypes);
 		this._ctxDirection.set(TypeHierarchyDirection.Supertypes);
 	}
 
-	showSubtypes(): codemavi {
+	showSubtypes(): void {
 		this._widget?.updateDirection(TypeHierarchyDirection.Subtypes);
 		this._ctxDirection.set(TypeHierarchyDirection.Subtypes);
 	}
 
-	endTypeHierarchy(): codemavi {
+	endTypeHierarchy(): void {
 		this._sessionDisposables.clear();
 		this._ctxIsVisible.set(false);
 		this._editor.focus();
@@ -195,7 +195,7 @@ registerAction2(class PeekTypeHierarchyAction extends EditorAction2 {
 		});
 	}
 
-	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		return TypeHierarchyController.get(editor)?.startTypeHierarchyFromEditor();
 	}
 });
@@ -265,7 +265,7 @@ registerAction2(class extends EditorAction2 {
 		});
 	}
 
-	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		return TypeHierarchyController.get(editor)?.startTypeHierarchyFromTypeHierarchy();
 	}
 });
@@ -290,7 +290,7 @@ registerAction2(class extends EditorAction2 {
 		});
 	}
 
-	runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		return TypeHierarchyController.get(editor)?.endTypeHierarchy();
 	}
 });

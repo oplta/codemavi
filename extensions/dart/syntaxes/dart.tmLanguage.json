@@ -240,7 +240,7 @@
 					"name": "support.class.dart"
 				},
 				{
-					"match": "(?<!\\$)\\bcodemavi\\b(?!\\$)",
+					"match": "(?<!\\$)\\bmavi\\b(?!\\$)",
 					"name": "storage.type.primitive.dart"
 				},
 				{
@@ -347,7 +347,7 @@
 				},
 				{
 					"name": "storage.type.primitive.dart",
-					"match": "(?<!\\$)\\b(?:codemavi|var)\\b(?!\\$)"
+					"match": "(?<!\\$)\\b(?: void|var)\\b(?!\\$)"
 				}
 			]
 		},

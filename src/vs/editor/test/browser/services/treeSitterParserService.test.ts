@@ -17,17 +17,17 @@ import { TreeSitterLanguages } from '../../../common/services/treeSitter/treeSit
 
 class MockParser implements Parser.Parser {
 	language: Parser.Language | null = null;
-	delete(): codemavi { }
+	delete(): void { }
 	setLanguage(language: Parser.Language | null) { return this; }
 	parse(callback: string | Parser.ParseCallback, oldTree?: Parser.Tree | null, options?: Parser.ParseOptions): Parser.Tree | null {
 		return new MockTree();
 	}
-	reset(): codemavi { }
+	reset(): void { }
 	getIncludedRanges(): Parser.Range[] {
 		return [];
 	}
 	getTimeoutMicros(): number { return 0; }
-	setTimeoutMicros(timeout: number): codemavi { }
+	setTimeoutMicros(timeout: number): void { }
 	setLogger(callback: Parser.LogCallback | boolean | null): this {
 		throw new Error('Method not implemented.');
 	}
@@ -61,7 +61,7 @@ class MockTree implements Parser.Tree {
 	copy(): Parser.Tree {
 		throw new Error('Method not implemented.');
 	}
-	delete(): codemavi { }
+	delete(): void { }
 	edit(edit: Parser.Edit): Parser.Tree {
 		return this;
 	}
@@ -151,7 +151,7 @@ suite('TreeSitterParserService', function () {
 
 	test('TextModelTreeSitter race condition: first language is slow to load', async function () {
 		class MockTreeSitterLanguages extends TreeSitterLanguages {
-			private async _fetchJavascript(): Promise<codemavi> {
+			private async _fetchJavascript(): Promise<void> {
 				await timeout(200);
 				const language = new MockLanguage();
 				language.languageId = 'javascript';

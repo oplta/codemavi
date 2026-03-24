@@ -39,11 +39,11 @@ export class LoggerChannel implements IServerChannel {
 		throw new Error(`Call not found: ${command}`);
 	}
 
-	private createLogger(file: URI, options: ILoggerOptions, windowId: number | undefined): codemavi {
+	private createLogger(file: URI, options: ILoggerOptions, windowId: number | undefined): void {
 		this.loggers.set(file, this.loggerService.createLogger(file, options, windowId));
 	}
 
-	private consoleLog(level: LogLevel, args: any[]): codemavi {
+	private consoleLog(level: LogLevel, args: any[]): void {
 		let consoleFn = console.log;
 
 		switch (level) {
@@ -61,7 +61,7 @@ export class LoggerChannel implements IServerChannel {
 		consoleFn.call(console, ...args);
 	}
 
-	private log(file: URI, messages: [LogLevel, string][]): codemavi {
+	private log(file: URI, messages: [LogLevel, string][]): void {
 		const logger = this.loggers.get(file);
 		if (!logger) {
 			throw new Error('Create the logger before logging');

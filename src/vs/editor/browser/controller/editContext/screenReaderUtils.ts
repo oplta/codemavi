@@ -52,7 +52,7 @@ export class PagedScreenReaderStrategy {
 
 	public static fromEditorSelection(model: ISimpleModel, selection: Range, linesPerPage: number, trimLongText: boolean): ScreenReaderContentState {
 		// Chromium handles very poorly text even of a few thousand chars
-		// Cut text to acodemavi stalling the entire UI
+		// Cut text to avoid stalling the entire UI
 		const LIMIT_CHARS = 500;
 
 		const selectionStartPage = PagedScreenReaderStrategy._getPageOfLine(selection.startLineNumber, linesPerPage);

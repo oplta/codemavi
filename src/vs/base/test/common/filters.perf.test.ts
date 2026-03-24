@@ -10,7 +10,7 @@ const patterns = ['cci', 'ida', 'pos', 'CCI', 'enbled', 'callback', 'gGame', 'co
 
 const _enablePerf = false;
 
-function perfSuite(name: string, callback: (this: Mocha.Suite) => codemavi) {
+function perfSuite(name: string, callback: (this: Mocha.Suite) => void) {
 	if (_enablePerf) {
 		suite(name, callback);
 	}

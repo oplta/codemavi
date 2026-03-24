@@ -1,17 +1,17 @@
 /**
- * Code Mavi - AST Service
+ * Mavi - AST Service
  *
  * tree-sitter based AST parsing and code analysis service
  * Provides language-aware code parsing, symbol extraction, and chunking
  */
 
-import { URI } from '../../../../base/common/uri.js';
+import { URI } from '../../../../../../base/common/uri.js';
 import Parser from 'tree-sitter';
 import JavaScript from 'tree-sitter-javascript';
 import TypeScript from 'tree-sitter-typescript';
 import Python from 'tree-sitter-python';
 import Rust from 'tree-sitter-rust';
-import { Disposable } from '../../../../base/common/lifecycle.js';
+import { Disposable } from '../../../../../../base/common/lifecycle.js';
 
 export interface ASTNode {
   type: string;

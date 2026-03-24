@@ -7,12 +7,12 @@ import { Disposable } from '../../../../base/common/lifecycle.js';
 import { IEnvironmentMainService } from '../../../../platform/environment/electron-main/environmentMainService.js';
 import { IProductService } from '../../../../platform/product/common/productService.js';
 import { IUpdateService, StateType } from '../../../../platform/update/common/update.js';
-import { IMaviUpdateService } from '../common/codemaviUpdateService.js';
-import { Code MaviCheckUpdateRespose } from '../common/codemaviUpdateServiceTypes.js';
+import { IMaviUpdateService } from '../common/maviUpdateService.js';
+import { MaviCheckUpdateRespose } from '../common/maviUpdateServiceTypes.js';
 
 
 
-export class Code MaviMainUpdateService extends Disposable implements IMaviUpdateService {
+export class MaviMainUpdateService extends Disposable implements IMaviUpdateService {
 	_serviceBrand: undefined;
 
 	constructor(
@@ -24,7 +24,7 @@ export class Code MaviMainUpdateService extends Disposable implements IMaviUpdat
 	}
 
 
-	async check(explicit: boolean): Promise<Code MaviCheckUpdateRespose> {
+	async check(explicit: boolean): Promise<MaviCheckUpdateRespose> {
 
 		const isDevMode = !this._envMainService.isBuilt // found in abstractUpdateService.ts
 
@@ -79,7 +79,7 @@ export class Code MaviMainUpdateService extends Disposable implements IMaviUpdat
 
 		if (this._updateService.state.type === StateType.Ready) {
 			// Update is ready
-			return { message: 'Restart Code Mavi to update!', action: 'restart' } as const
+			return { message: 'Restart Mavi to update!', action: 'restart' } as const
 		}
 
 		if (this._updateService.state.type === StateType.Disabled) {
@@ -93,9 +93,9 @@ export class Code MaviMainUpdateService extends Disposable implements IMaviUpdat
 
 
 
-	private async _manualCheckGHTagIfDisabled(explicit: boolean): Promise<Code MaviCheckUpdateRespose> {
+	private async _manualCheckGHTagIfDisabled(explicit: boolean): Promise<MaviCheckUpdateRespose> {
 		try {
-			const response = await fetch('https://api.github.com/repos/codemavieditor/binaries/releases/latest');
+			const response = await fetch('https://api.github.com/repos/mavieditor/binaries/releases/latest');
 
 			const data = await response.json();
 			const version = data.tag_name;
@@ -112,11 +112,11 @@ export class Code MaviMainUpdateService extends Disposable implements IMaviUpdat
 			if (explicit) {
 				if (response.ok) {
 					if (!isUpToDate) {
-						message = 'A new version of Code Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
+						message = 'A new version of Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
 						action = 'reinstall'
 					}
 					else {
-						message = 'Code Mavi is up-to-date!'
+						message = 'Mavi is up-to-date!'
 					}
 				}
 				else {
@@ -127,7 +127,7 @@ export class Code MaviMainUpdateService extends Disposable implements IMaviUpdat
 			// not explicit
 			else {
 				if (response.ok && !isUpToDate) {
-					message = 'A new version of Code Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
+					message = 'A new version of Mavi is available! Please reinstall (auto-updates are disabled on this OS) - it only takes a second!'
 					action = 'reinstall'
 				}
 				else {

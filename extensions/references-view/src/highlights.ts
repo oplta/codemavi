@@ -39,7 +39,7 @@ export class EditorHighlights<T> {
 		}
 	}
 
-	private _show(): codemavi {
+	private _show(): void {
 		const { activeTextEditor: editor } = vscode.window;
 		if (!editor || !editor.viewColumn) {
 			return;
@@ -57,13 +57,13 @@ export class EditorHighlights<T> {
 		}
 	}
 
-	private _hide(): codemavi {
+	private _hide(): void {
 		for (const editor of vscode.window.visibleTextEditors) {
 			editor.setDecorations(this._decorationType, []);
 		}
 	}
 
-	update(): codemavi {
+	update(): void {
 		this._hide();
 		this._show();
 	}

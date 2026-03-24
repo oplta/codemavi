@@ -83,7 +83,7 @@ export interface IIPCOptions {
 
 export class Client implements IChannelClient, IDisposable {
 
-	private disposeDelayer: Delayer<codemavi> | undefined;
+	private disposeDelayer: Delayer<void> | undefined;
 	private activeRequests = new Set<IDisposable>();
 	private child: ChildProcess | null;
 	private _client: IPCClient | null;
@@ -94,7 +94,7 @@ export class Client implements IChannelClient, IDisposable {
 
 	constructor(private modulePath: string, private options: IIPCOptions) {
 		const timeout = options && options.timeout ? options.timeout : 60000;
-		this.disposeDelayer = new Delayer<codemavi>(timeout);
+		this.disposeDelayer = new Delayer<void>(timeout);
 		this.child = null;
 		this._client = null;
 	}

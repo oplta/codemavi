@@ -33,7 +33,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 
 	private _webExtensionContributedProfileContextKey: IContextKey<boolean>;
 	private _profilesReadyBarrier: AutoOpenBarrier | undefined;
-	private _profilesReadyPromise: Promise<codemavi>;
+	private _profilesReadyPromise: Promise<void>;
 	private _availableProfiles: ITerminalProfile[] | undefined;
 	private _automationProfile: unknown;
 	private _contributedProfiles: IExtensionTerminalProfile[] = [];
@@ -45,7 +45,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 	private readonly _onDidChangeAvailableProfiles = this._register(new Emitter<ITerminalProfile[]>());
 	get onDidChangeAvailableProfiles(): Event<ITerminalProfile[]> { return this._onDidChangeAvailableProfiles.event; }
 
-	get profilesReady(): Promise<codemavi> { return this._profilesReadyPromise; }
+	get profilesReady(): Promise<void> { return this._profilesReadyPromise; }
 	get availableProfiles(): ITerminalProfile[] {
 		if (!this._platformConfigJustRefreshed) {
 			this.refreshAvailableProfiles();
@@ -87,7 +87,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 		this._setupConfigListener();
 	}
 
-	private async _setupConfigListener(): Promise<codemavi> {
+	private async _setupConfigListener(): Promise<void> {
 		const platformKey = await this.getPlatformKey();
 
 		this._register(this._configurationService.onDidChangeConfiguration(async e => {
@@ -126,7 +126,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 		}
 
 		// IMPORTANT: Only allow the default profile name to find non-auto detected profiles as
-		// to acodemavi unsafe path profiles being picked up.
+		// to avoid unsafe path profiles being picked up.
 		return this.availableProfiles.find(e => e.profileName === defaultProfileName && !e.isAutoDetected);
 	}
 
@@ -140,11 +140,11 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 
 
 	@throttle(2000)
-	refreshAvailableProfiles(): codemavi {
+	refreshAvailableProfiles(): void {
 		this._refreshAvailableProfilesNow();
 	}
 
-	protected async _refreshAvailableProfilesNow(): Promise<codemavi> {
+	protected async _refreshAvailableProfilesNow(): Promise<void> {
 		// Profiles
 		const profiles = await this._detectProfiles(true);
 		const profilesChanged = !arrays.equals(profiles, this._availableProfiles, profilesEqual);
@@ -195,7 +195,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 		return primaryBackend.getProfiles(this._configurationService.getValue(`${TerminalSettingPrefix.Profiles}${platform}`), this._defaultProfileName, includeDetectedProfiles);
 	}
 
-	private _updateWebContextKey(): codemavi {
+	private _updateWebContextKey(): void {
 		this._webExtensionContributedProfileContextKey.set(isWeb && this._contributedProfiles.length > 0);
 	}
 
@@ -223,7 +223,7 @@ export class TerminalProfileService extends Disposable implements ITerminalProfi
 		return toDisposable(() => this._profileProviders.delete(id));
 	}
 
-	async registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<codemavi> {
+	async registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<void> {
 		const platformKey = await this.getPlatformKey();
 		const profilesConfig = await this._configurationService.getValue(`${TerminalSettingPrefix.Profiles}${platformKey}`);
 		if (typeof profilesConfig === 'object') {

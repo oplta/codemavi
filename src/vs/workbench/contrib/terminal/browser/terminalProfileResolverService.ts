@@ -82,7 +82,7 @@ export abstract class BaseTerminalProfileResolverService extends Disposable impl
 		}
 	}
 
-	resolveIcon(shellLaunchConfig: IShellLaunchConfig, os: OperatingSystem): codemavi {
+	resolveIcon(shellLaunchConfig: IShellLaunchConfig, os: OperatingSystem): void {
 		if (shellLaunchConfig.icon) {
 			shellLaunchConfig.icon = this._getCustomIcon(shellLaunchConfig.icon) || this.getDefaultIcon();
 			return;
@@ -107,7 +107,7 @@ export abstract class BaseTerminalProfileResolverService extends Disposable impl
 		return this._iconRegistry.getIcon(this._configurationService.getValue(TerminalSettingId.TabsDefaultIcon, { resource })) || Codicon.terminal;
 	}
 
-	async resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<codemavi> {
+	async resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<void> {
 		// Resolve the shell and shell args
 		let resolvedProfile: ITerminalProfile;
 		if (shellLaunchConfig.executable) {

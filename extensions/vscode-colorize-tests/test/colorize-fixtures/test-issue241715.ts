@@ -31,7 +31,7 @@ const enum EnumName {
     one = 1,
 }
 
-codemavi 0;
+void 0;
 
 function* makeIterator(start = 0, end = Infinity, step = 1) {
 }

@@ -41,7 +41,7 @@ export interface IWordWrapTransientState {
 /**
  * Store (in memory) the word wrap state for a particular model.
  */
-export function writeTransientState(model: ITextModel, state: IWordWrapTransientState | null, codeEditorService: ICodeEditorService): codemavi {
+export function writeTransientState(model: ITextModel, state: IWordWrapTransientState | null, codeEditorService: ICodeEditorService): void {
 	codeEditorService.setTransientModelProperty(model, transientWordWrapState, state);
 }
 
@@ -68,7 +68,7 @@ class ToggleWordWrapAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const codeEditorService = accessor.get(ICodeEditorService);
 		const instaService = accessor.get(IInstantiationService);
 
@@ -165,7 +165,7 @@ class ToggleWordWrapController extends Disposable implements IEditorContribution
 		};
 	}
 
-	private _applyWordWrapState(state: IWordWrapTransientState | null): codemavi {
+	private _applyWordWrapState(state: IWordWrapTransientState | null): void {
 		const wordWrapOverride2 = state ? state.wordWrapOverride : 'inherit';
 		this._editor.updateOptions({
 			wordWrapOverride2: wordWrapOverride2
@@ -188,7 +188,7 @@ class DiffToggleWordWrapController extends Disposable implements IDiffEditorCont
 		}));
 	}
 
-	private _ensureSyncedWordWrapToggle(): codemavi {
+	private _ensureSyncedWordWrapToggle(): void {
 		const originalEditor = this._diffEditor.getOriginalEditor();
 		const modifiedEditor = this._diffEditor.getModifiedEditor();
 
@@ -263,7 +263,7 @@ class EditorWordWrapContextKeyTracker extends Disposable implements IWorkbenchCo
 		this._update();
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		const activeEditor = this._codeEditorService.getFocusedCodeEditor() || this._codeEditorService.getActiveCodeEditor();
 		if (this._activeEditor === activeEditor) {
 			// no change
@@ -283,7 +283,7 @@ class EditorWordWrapContextKeyTracker extends Disposable implements IWorkbenchCo
 		}
 	}
 
-	private _updateFromCodeEditor(): codemavi {
+	private _updateFromCodeEditor(): void {
 		if (!canToggleWordWrap(this._codeEditorService, this._activeEditor)) {
 			return this._setValues(false, false);
 		} else {
@@ -292,7 +292,7 @@ class EditorWordWrapContextKeyTracker extends Disposable implements IWorkbenchCo
 		}
 	}
 
-	private _setValues(canToggleWordWrap: boolean, isWordWrap: boolean): codemavi {
+	private _setValues(canToggleWordWrap: boolean, isWordWrap: boolean): void {
 		this._canToggleWordWrap.set(canToggleWordWrap);
 		this._editorWordWrap.set(isWordWrap);
 	}

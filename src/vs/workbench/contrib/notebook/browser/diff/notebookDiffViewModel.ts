@@ -33,7 +33,7 @@ export class NotebookDiffViewModel extends Disposable implements INotebookDiffVi
 	private readonly _onDidChangeItems = this._register(new Emitter<INotebookDiffViewModelUpdateEvent>());
 	public readonly onDidChangeItems = this._onDidChangeItems.event;
 	private readonly disposables = this._register(new DisposableStore());
-	private _onDidChange = this._register(new Emitter<codemavi>());
+	private _onDidChange = this._register(new Emitter<void>());
 	private diffEditorItems: NotebookMultiDiffEditorItem[] = [];
 	public onDidChange = this._onDidChange.event;
 	private notebookMetadataViewModel?: NotebookDocumentMetadataViewModel;
@@ -132,7 +132,7 @@ export class NotebookDiffViewModel extends Disposable implements INotebookDiffVi
 		this._items.splice(0, this._items.length);
 	}
 
-	async computeDiff(token: CancellationToken): Promise<codemavi> {
+	async computeDiff(token: CancellationToken): Promise<void> {
 		const diffResult = await raceCancellation(this.notebookEditorWorkerService.computeDiff(this.model.original.resource, this.model.modified.resource), token);
 		if (!diffResult || token.isCancellationRequested) {
 			// after await the editor might be disposed.
@@ -268,7 +268,7 @@ export class NotebookDiffViewModel extends Disposable implements INotebookDiffVi
 		});
 
 		// Note, ensure all of the height calculations are done before firing the event.
-		// This is to ensure that the diff editor is not resized multiple times, thereby acodemaviing flickering.
+		// This is to ensure that the diff editor is not resized multiple times, thereby avoiding flickering.
 		this._onDidChangeItems.fire({ start: 0, deleteCount: oldLength, elements: this._items, firstChangeIndex });
 	}
 	private async createDiffViewModels(computedCellDiffs: CellDiffInfo[], metadataChanged: boolean) {

@@ -130,7 +130,7 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		return this._userDataSyncStoreClientPromise;
 	}
 
-	private async initializeUserDataSyncStore(authenticationSession: AuthenticationSessionInfo): Promise<codemavi> {
+	private async initializeUserDataSyncStore(authenticationSession: AuthenticationSessionInfo): Promise<void> {
 		const userDataSyncStore = this.userDataSyncStoreManagementService.userDataSyncStore;
 		if (!userDataSyncStore?.canSwitch) {
 			return;
@@ -161,7 +161,7 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		}
 	}
 
-	async whenInitializationFinished(): Promise<codemavi> {
+	async whenInitializationFinished(): Promise<void> {
 		await this.initializationFinished.wait();
 	}
 
@@ -171,12 +171,12 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		return !!userDataSyncStoreClient;
 	}
 
-	async initializeRequiredResources(): Promise<codemavi> {
+	async initializeRequiredResources(): Promise<void> {
 		this.logService.trace(`UserDataInitializationService#initializeRequiredResources`);
 		return this.initialize([SyncResource.Settings, SyncResource.GlobalState]);
 	}
 
-	async initializeOtherResources(instantiationService: IInstantiationService): Promise<codemavi> {
+	async initializeOtherResources(instantiationService: IInstantiationService): Promise<void> {
 		try {
 			this.logService.trace(`UserDataInitializationService#initializeOtherResources`);
 			await Promise.allSettled([this.initialize([SyncResource.Keybindings, SyncResource.Snippets, SyncResource.Tasks]), this.initializeExtensions(instantiationService)]);
@@ -185,7 +185,7 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		}
 	}
 
-	private async initializeExtensions(instantiationService: IInstantiationService): Promise<codemavi> {
+	private async initializeExtensions(instantiationService: IInstantiationService): Promise<void> {
 		try {
 			await Promise.all([this.initializeInstalledExtensions(instantiationService), this.initializeNewExtensions(instantiationService)]);
 		} finally {
@@ -193,8 +193,8 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		}
 	}
 
-	private initializeInstalledExtensionsPromise: Promise<codemavi> | undefined;
-	async initializeInstalledExtensions(instantiationService: IInstantiationService): Promise<codemavi> {
+	private initializeInstalledExtensionsPromise: Promise<void> | undefined;
+	async initializeInstalledExtensions(instantiationService: IInstantiationService): Promise<void> {
 		if (!this.initializeInstalledExtensionsPromise) {
 			this.initializeInstalledExtensionsPromise = (async () => {
 				this.logService.trace(`UserDataInitializationService#initializeInstalledExtensions`);
@@ -207,8 +207,8 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		return this.initializeInstalledExtensionsPromise;
 	}
 
-	private initializeNewExtensionsPromise: Promise<codemavi> | undefined;
-	private async initializeNewExtensions(instantiationService: IInstantiationService): Promise<codemavi> {
+	private initializeNewExtensionsPromise: Promise<void> | undefined;
+	private async initializeNewExtensions(instantiationService: IInstantiationService): Promise<void> {
 		if (!this.initializeNewExtensionsPromise) {
 			this.initializeNewExtensionsPromise = (async () => {
 				this.logService.trace(`UserDataInitializationService#initializeNewExtensions`);
@@ -236,7 +236,7 @@ export class UserDataSyncInitializer implements IUserDataInitializer {
 		return this.extensionsPreviewInitializerPromise;
 	}
 
-	private async initialize(syncResources: SyncResource[]): Promise<codemavi> {
+	private async initialize(syncResources: SyncResource[]): Promise<void> {
 		const userDataSyncStoreClient = await this.createUserDataSyncStoreClient();
 		if (!userDataSyncStoreClient) {
 			return;
@@ -300,11 +300,11 @@ class ExtensionsPreviewInitializer extends AbstractExtensionsInitializer {
 		return this.previewPromise;
 	}
 
-	override initialize(): Promise<codemavi> {
+	override initialize(): Promise<void> {
 		throw new Error('should not be called directly');
 	}
 
-	protected override async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
+	protected override async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
 		const remoteExtensions = await this.parseExtensions(remoteUserData);
 		if (!remoteExtensions) {
 			this.logService.info('Skipping initializing extensions because remote extensions does not exist.');
@@ -325,7 +325,7 @@ class InstalledExtensionsInitializer implements IUserDataSyncResourceInitializer
 	) {
 	}
 
-	async initialize(): Promise<codemavi> {
+	async initialize(): Promise<void> {
 		const preview = await this.extensionsPreviewInitializer.getPreview();
 		if (!preview) {
 			return;
@@ -364,7 +364,7 @@ class NewExtensionsInitializer implements IUserDataSyncResourceInitializer {
 	) {
 	}
 
-	async initialize(): Promise<codemavi> {
+	async initialize(): Promise<void> {
 		const preview = await this.extensionsPreviewInitializer.getPreview();
 		if (!preview) {
 			return;
@@ -401,7 +401,7 @@ class NewExtensionsInitializer implements IUserDataSyncResourceInitializer {
 
 		const canEnabledExtensions = newlyEnabledExtensions.filter(e => this.extensionService.canAddExtension(toExtensionDescription(e)));
 		if (!(await this.areExtensionsRunning(canEnabledExtensions))) {
-			await new Promise<codemavi>((c, e) => {
+			await new Promise<void>((c, e) => {
 				const disposable = this.extensionService.onDidChangeExtensions(async () => {
 					try {
 						if (await this.areExtensionsRunning(canEnabledExtensions)) {

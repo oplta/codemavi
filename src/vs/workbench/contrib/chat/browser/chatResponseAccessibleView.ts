@@ -68,7 +68,7 @@ class ChatResponseAccessibleProvider extends Disposable implements IAccessibleVi
 		return renderMarkdownAsPlaintext(new MarkdownString(responseContent), true);
 	}
 
-	onClose(): codemavi {
+	onClose(): void {
 		this._widget.reveal(this._focusedItem);
 		if (this._chatInputFocused) {
 			this._widget.focusInput();

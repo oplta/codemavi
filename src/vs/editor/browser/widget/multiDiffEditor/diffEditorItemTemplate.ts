@@ -25,7 +25,7 @@ import { IWorkbenchUIElementFactory } from './workbenchUIElementFactory.js';
 export class TemplateData implements IObjectData {
 	constructor(
 		public readonly viewModel: DocumentDiffItemViewModel,
-		public readonly deltaScrollVertical: (delta: number) => codemavi,
+		public readonly deltaScrollVertical: (delta: number) => void,
 	) { }
 
 
@@ -170,7 +170,7 @@ export class DiffEditorItemTemplate extends Disposable implements IPooledObject<
 		}));
 	}
 
-	public setScrollLeft(left: number): codemavi {
+	public setScrollLeft(left: number): void {
 		if (this._modifiedContentWidth.get() - this._modifiedWidth.get() > this._originalContentWidth.get() - this._originalWidth.get()) {
 			this.editor.getModifiedEditor().setScrollLeft(left);
 		} else {
@@ -182,7 +182,7 @@ export class DiffEditorItemTemplate extends Disposable implements IPooledObject<
 
 	private _data: TemplateData | undefined;
 
-	public setData(data: TemplateData | undefined): codemavi {
+	public setData(data: TemplateData | undefined): void {
 		this._data = data;
 		function updateOptions(options: IDiffEditorOptions): IDiffEditorOptions {
 			return {
@@ -266,7 +266,7 @@ export class DiffEditorItemTemplate extends Disposable implements IPooledObject<
 	private _lastScrollTop = -1;
 	private _isSettingScrollTop = false;
 
-	public render(verticalRange: OffsetRange, width: number, editorScroll: number, viewPort: OffsetRange): codemavi {
+	public render(verticalRange: OffsetRange, width: number, editorScroll: number, viewPort: OffsetRange): void {
 		this._elements.root.style.visibility = 'visible';
 		this._elements.root.style.top = `${verticalRange.start}px`;
 		this._elements.root.style.height = `${verticalRange.length}px`;
@@ -296,7 +296,7 @@ export class DiffEditorItemTemplate extends Disposable implements IPooledObject<
 		this._elements.header.classList.toggle('collapsed', delta === maxDelta);
 	}
 
-	public hide(): codemavi {
+	public hide(): void {
 		this._elements.root.style.top = `-100000px`;
 		this._elements.root.style.visibility = 'hidden'; // Some editor parts are still visible
 	}

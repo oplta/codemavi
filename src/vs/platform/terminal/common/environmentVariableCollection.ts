@@ -60,7 +60,7 @@ export class MergedEnvironmentVariableCollection implements IMergedEnvironmentVa
 		});
 	}
 
-	async applyToProcessEnvironment(env: IProcessEnvironment, scope: EnvironmentVariableScope | undefined, variableResolver?: VariableResolver): Promise<codemavi> {
+	async applyToProcessEnvironment(env: IProcessEnvironment, scope: EnvironmentVariableScope | undefined, variableResolver?: VariableResolver): Promise<void> {
 		let lowerToActualVariableNames: { [lowerKey: string]: string | undefined } | undefined;
 		if (isWindows) {
 			lowerToActualVariableNames = {};
@@ -159,7 +159,7 @@ export class MergedEnvironmentVariableCollection implements IMergedEnvironmentVa
 		return result;
 	}
 
-	private populateDescriptionMap(collection: IEnvironmentVariableCollection, extensionIdentifier: string): codemavi {
+	private populateDescriptionMap(collection: IEnvironmentVariableCollection, extensionIdentifier: string): void {
 		if (!collection.descriptionMap) {
 			return;
 		}

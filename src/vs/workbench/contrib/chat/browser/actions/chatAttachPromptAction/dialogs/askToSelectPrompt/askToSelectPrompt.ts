@@ -67,7 +67,7 @@ export interface ISelectPromptOptions {
  */
 export const askToSelectPrompt = async (
 	options: ISelectPromptOptions,
-): Promise<codemavi> => {
+): Promise<void> => {
 	const { promptFiles, resource, quickInputService, labelService } = options;
 
 	const fileOptions = promptFiles.map((promptFile) => {
@@ -136,7 +136,7 @@ export const askToSelectPrompt = async (
 	quickPick.items = fileOptions;
 
 	const { openerService } = options;
-	return await new Promise<codemavi>(resolve => {
+	return await new Promise<void>(resolve => {
 		const disposables = new DisposableStore();
 
 		let lastActiveWidget = options.widget;

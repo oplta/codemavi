@@ -70,13 +70,13 @@ export class TextFileSaveErrorHandler extends Disposable implements ISaveErrorHa
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.textFileService.files.onDidSave(e => this.onFileSavedOrReverted(e.model.resource)));
 		this._register(this.textFileService.files.onDidRevert(model => this.onFileSavedOrReverted(model.resource)));
 		this._register(this.editorService.onDidActiveEditorChange(() => this.onActiveEditorChanged()));
 	}
 
-	private onActiveEditorChanged(): codemavi {
+	private onActiveEditorChanged(): void {
 		let isActiveEditorSaveConflictResolution = false;
 		let activeConflictResolutionResource: URI | undefined;
 
@@ -93,7 +93,7 @@ export class TextFileSaveErrorHandler extends Disposable implements ISaveErrorHa
 		this.activeConflictResolutionResource = activeConflictResolutionResource;
 	}
 
-	private onFileSavedOrReverted(resource: URI): codemavi {
+	private onFileSavedOrReverted(resource: URI): void {
 		const messageHandle = this.messages.get(resource);
 		if (messageHandle) {
 			messageHandle.close();
@@ -101,7 +101,7 @@ export class TextFileSaveErrorHandler extends Disposable implements ISaveErrorHa
 		}
 	}
 
-	onSaveError(error: unknown, model: ITextFileEditorModel, options: ITextFileSaveOptions): codemavi {
+	onSaveError(error: unknown, model: ITextFileEditorModel, options: ITextFileSaveOptions): void {
 		const fileOperationError = error as FileOperationError;
 		const resource = model.resource;
 
@@ -189,7 +189,7 @@ export class TextFileSaveErrorHandler extends Disposable implements ISaveErrorHa
 		this.messages.set(model.resource, handle);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.messages.clear();
@@ -197,7 +197,7 @@ export class TextFileSaveErrorHandler extends Disposable implements ISaveErrorHa
 }
 
 const pendingResolveSaveConflictMessages: INotificationHandle[] = [];
-function clearPendingResolveSaveConflictMessages(): codemavi {
+function clearPendingResolveSaveConflictMessages(): void {
 	while (pendingResolveSaveConflictMessages.length > 0) {
 		const item = pendingResolveSaveConflictMessages.pop();
 		item?.close();
@@ -212,7 +212,7 @@ class ResolveConflictLearnMoreAction extends Action {
 		super('workbench.files.action.resolveConflictLearnMore', localize('learnMore', "Learn More"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		await this.openerService.open(URI.parse('https://go.microsoft.com/fwlink/?linkid=868264'));
 	}
 }
@@ -225,7 +225,7 @@ class DoNotShowResolveConflictLearnMoreAction extends Action {
 		super('workbench.files.action.resolveConflictLearnMoreDoNotShowAgain', localize('dontShowAgain', "Don't Show Again"));
 	}
 
-	override async run(notification: IDisposable): Promise<codemavi> {
+	override async run(notification: IDisposable): Promise<void> {
 
 		// Remember this as application state
 		this.storageService.store(LEARN_MORE_DIRTY_WRITE_IGNORE_KEY, true, StorageScope.APPLICATION, StorageTarget.USER);
@@ -247,7 +247,7 @@ class ResolveSaveConflictAction extends Action {
 		super('workbench.files.action.resolveConflict', localize('compareChanges', "Compare"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			const resource = this.model.resource;
 			const name = basename(resource);
@@ -280,7 +280,7 @@ class SaveModelElevatedAction extends Action {
 		super('workbench.files.action.saveModelElevated', triedToUnlock ? isWindows ? localize('overwriteElevated', "Overwrite as Admin...") : localize('overwriteElevatedSudo', "Overwrite as Sudo...") : isWindows ? localize('saveElevated', "Retry as Admin...") : localize('saveElevatedSudo', "Retry as Sudo..."));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			await this.model.save({
 				...this.options,
@@ -301,7 +301,7 @@ class RetrySaveModelAction extends Action {
 		super('workbench.files.action.saveModel', localize('retry', "Retry"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			await this.model.save({ ...this.options, reason: SaveReason.EXPLICIT });
 		}
@@ -316,7 +316,7 @@ class RevertModelAction extends Action {
 		super('workbench.files.action.revertModel', localize('revert', "Revert"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			await this.model.revert();
 		}
@@ -332,7 +332,7 @@ class SaveModelAsAction extends Action {
 		super('workbench.files.action.saveModelAs', SAVE_FILE_AS_LABEL.value);
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			const editor = this.findEditor();
 			if (editor) {
@@ -371,7 +371,7 @@ class UnlockModelAction extends Action {
 		super('workbench.files.action.unlock', localize('overwrite', "Overwrite"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			await this.model.save({ ...this.options, writeUnlock: true, reason: SaveReason.EXPLICIT });
 		}
@@ -387,7 +387,7 @@ class SaveModelIgnoreModifiedSinceAction extends Action {
 		super('workbench.files.action.saveIgnoreModifiedSince', localize('overwrite', "Overwrite"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		if (!this.model.isDisposed()) {
 			await this.model.save({ ...this.options, ignoreModifiedSince: true, reason: SaveReason.EXPLICIT });
 		}
@@ -402,7 +402,7 @@ class ConfigureSaveConflictAction extends Action {
 		super('workbench.files.action.configureSaveConflict', localize('configure', "Configure"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		this.preferencesService.openSettings({ query: 'files.saveConflictResolution' });
 	}
 }

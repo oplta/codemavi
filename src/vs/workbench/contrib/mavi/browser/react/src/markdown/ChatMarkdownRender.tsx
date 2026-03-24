@@ -14,7 +14,7 @@ import { isAbsolute } from '../../../../../../../base/common/path.js'
 import { separateOutFirstLine } from '../../../../common/helpers/util.js'
 import { BlockCode } from '../util/inputs.js'
 import { CodespanLocationLink } from '../../../../common/chatThreadServiceTypes.js'
-import { getBasename, getRelative, codemaviOpenFileFn } from '../sidebar-tsx/SidebarChat.js'
+import { getBasename, getRelative, maviOpenFileFn } from '../sidebar-tsx/SidebarChat.js'
 
 
 export type ChatMessageLocation = {
@@ -73,7 +73,7 @@ const LatexRender = ({ latex }: { latex: string }) => {
 	// 		? 'katex-block my-2 text-center'
 	// 		: 'katex-inline';
 
-	// 	// Use the ref approach to acodemavi dangerouslySetInnerHTML
+	// 	// Use the ref approach to avoid dangerouslySetInnerHTML
 	// 	const mathRef = React.useRef<HTMLSpanElement>(null);
 
 	// 	React.useEffect(() => {
@@ -89,15 +89,15 @@ const LatexRender = ({ latex }: { latex: string }) => {
 	// }
 }
 
-const Codespan = ({ text, className, onClick, tooltip }: { text: string, className?: string, onClick?: () => codemavi, tooltip?: string }) => {
+const Codespan = ({ text, className, onClick, tooltip }: { text: string, className?: string, onClick?: () => void, tooltip?: string }) => {
 
 	// TODO compute this once for efficiency. we should use `labels.ts/shorten` to display duplicates properly
 
 	return <code
-		className={`font-mono font-medium rounded-sm bg-codemavi-bg-1 px-1 ${className}`}
+		className={`font-mono font-medium rounded-sm bg-mavi-bg-1 px-1 ${className}`}
 		onClick={onClick}
 		{...tooltip ? {
-			'data-tooltip-id': 'codemavi-tooltip',
+			'data-tooltip-id': 'mavi-tooltip',
 			'data-tooltip-content': tooltip,
 			'data-tooltip-place': 'top',
 		} : {}}
@@ -150,11 +150,11 @@ const CodespanWithLink = ({ text, rawText, chatMessageLocation }: { text: string
 
 	const onClick = () => {
 		if (!link) return;
-		// Use the updated codemaviOpenFileFn to open the file and handle selection
+		// Use the updated maviOpenFileFn to open the file and handle selection
 		if (link.selection)
-			codemaviOpenFileFn(link.uri, accessor, [link.selection.startLineNumber, link.selection.endLineNumber]);
+			maviOpenFileFn(link.uri, accessor, [link.selection.startLineNumber, link.selection.endLineNumber]);
 		else
-			codemaviOpenFileFn(link.uri, accessor);
+			maviOpenFileFn(link.uri, accessor);
 	}
 
 	return <Codespan
@@ -375,13 +375,13 @@ const RenderToken = ({ token, inPTag, codeURI, chatMessageLocation, tokenIdx, ..
 		)
 		// return (
 		// 	<div>
-		// 		<table className={'min-w-full border border-codemavi-bg-2'}>
+		// 		<table className={'min-w-full border border-mavi-bg-2'}>
 		// 			<thead>
-		// 				<tr className='bg-codemavi-bg-1'>
+		// 				<tr className='bg-mavi-bg-1'>
 		// 					{t.header.map((cell: any, index: number) => (
 		// 						<th
 		// 							key={index}
-		// 							className='px-4 py-2 border border-codemavi-bg-2 font-semibold'
+		// 							className='px-4 py-2 border border-mavi-bg-2 font-semibold'
 		// 							style={{ textAlign: t.align[index] || 'left' }}
 		// 						>
 		// 							{cell.raw}
@@ -391,11 +391,11 @@ const RenderToken = ({ token, inPTag, codeURI, chatMessageLocation, tokenIdx, ..
 		// 			</thead>
 		// 			<tbody>
 		// 				{t.rows.map((row: any[], rowIndex: number) => (
-		// 					<tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-codemavi-bg-1'}>
+		// 					<tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-mavi-bg-1'}>
 		// 						{row.map((cell: any, cellIndex: number) => (
 		// 							<td
 		// 								key={cellIndex}
-		// 								className={'px-4 py-2 border border-codemavi-bg-2'}
+		// 								className={'px-4 py-2 border border-mavi-bg-2'}
 		// 								style={{ textAlign: t.align[cellIndex] || 'left' }}
 		// 							>
 		// 								{cell.raw}
@@ -487,7 +487,7 @@ const RenderToken = ({ token, inPTag, codeURI, chatMessageLocation, tokenIdx, ..
 				onClick={() => { window.open(t.href) }}
 				href={t.href}
 				title={t.title ?? undefined}
-				className='underline cursor-pointer hover:brightness-90 transition-all duration-200 text-codemavi-fg-2'
+				className='underline cursor-pointer hover:brightness-90 transition-all duration-200 text-mavi-fg-2'
 			>
 				{t.text}
 			</a>

@@ -27,7 +27,7 @@ export class NativeMcpDiscovery extends NativeFilesystemMcpDiscovery {
 		super(null, labelService, fileService, instantiationService, mcpRegistry, configurationService);
 	}
 
-	public override start(): codemavi {
+	public override start(): void {
 		const service = ProxyChannel.toService<INativeMcpDiscoveryHelperService>(
 			this.mainProcess.getChannel(NativeMcpDiscoveryHelperChannelName));
 

@@ -57,7 +57,7 @@ export interface IExtHostTesting extends ExtHostTesting {
 export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	declare readonly _serviceBrand: undefined;
 
-	private readonly resultsChangedEmitter = this._register(new Emitter<codemavi>());
+	private readonly resultsChangedEmitter = this._register(new Emitter<void>());
 	protected readonly controllers = new Map</* controller ID */ string, ControllerInfo>();
 	private readonly proxy: MainThreadTestingShape;
 	private readonly runTracker: TestRunCoordinator;
@@ -127,7 +127,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	/**
 	 * Implements vscode.test.registerTestProvider
 	 */
-	public createTestController(extension: IExtensionDescription, controllerId: string, label: string, refreshHandler?: (token: CancellationToken) => Thenable<codemavi> | codemavi): vscode.TestController {
+	public createTestController(extension: IExtensionDescription, controllerId: string, label: string, refreshHandler?: (token: CancellationToken) => Thenable<void> | void): vscode.TestController {
 		if (this.controllers.has(controllerId)) {
 			throw new Error(`Attempt to insert a duplicate controller with ID "${controllerId}"`);
 		}
@@ -170,7 +170,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 			get refreshHandler() {
 				return refreshHandler;
 			},
-			set refreshHandler(value: ((token: CancellationToken) => Thenable<codemavi> | codemavi) | undefined) {
+			set refreshHandler(value: ((token: CancellationToken) => Thenable<void> | void) | undefined) {
 				refreshHandler = value;
 				proxy.$updateController(controllerId, { capabilities: getCapability() });
 			},
@@ -213,7 +213,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 				collection.resolveHandler = fn;
 			},
 			get resolveHandler() {
-				return collection.resolveHandler as undefined | ((item?: vscode.TestItem) => codemavi);
+				return collection.resolveHandler as undefined | ((item?: vscode.TestItem) => void);
 			},
 			dispose: () => {
 				disposable.dispose();
@@ -330,7 +330,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	/**
 	 * @inheritdoc
 	 */
-	$syncTests(): Promise<codemavi> {
+	$syncTests(): Promise<void> {
 		for (const { collection } of this.controllers.values()) {
 			collection.flushDiff();
 		}
@@ -359,7 +359,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	}
 
 	/** @inheritdoc */
-	$setDefaultRunProfiles(profiles: Record</* controller id */string, /* profile id */ number[]>): codemavi {
+	$setDefaultRunProfiles(profiles: Record</* controller id */string, /* profile id */ number[]>): void {
 		const evt: DefaultProfileChangeEvent = new Map();
 		for (const [controllerId, profileIds] of Object.entries(profiles)) {
 			const ctrl = this.controllers.get(controllerId);
@@ -394,7 +394,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	 * Updates test results shown to extensions.
 	 * @override
 	 */
-	public $publishTestResults(results: ISerializedTestResults[]): codemavi {
+	public $publishTestResults(results: ISerializedTestResults[]): void {
 		this.results = Object.freeze(
 			results
 				.map(r => {
@@ -432,7 +432,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 	 * Receives a test update from the main thread. Called (eventually) whenever
 	 * tests change.
 	 */
-	public $acceptDiff(diff: TestsDiffOp.Serialized[]): codemavi {
+	public $acceptDiff(diff: TestsDiffOp.Serialized[]): void {
 		this.observer.applyDiff(diff.map(d => TestsDiffOp.deserialize({ asCanonicalUri: u => u }, d)));
 	}
 
@@ -454,7 +454,7 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 		const cts = new CancellationTokenSource(token);
 		const res = await Promise.all(reqs.map(req => this.runControllerTestRequest(req, true, cts.token)));
 
-		// acodemavi returning until cancellation is requested, otherwise ipc disposes of the token
+		// avoid returning until cancellation is requested, otherwise ipc disposes of the token
 		if (!token.isCancellationRequested && !res.some(r => r.error)) {
 			await new Promise(r => token.onCancellationRequested(r));
 		}
@@ -494,13 +494,13 @@ export class ExtHostTesting extends Disposable implements ExtHostTestingShape {
 		});
 	}
 
-	$disposeTestFollowups(id: number[]): codemavi {
+	$disposeTestFollowups(id: number[]): void {
 		for (const i of id) {
 			this.testFollowups.delete(i);
 		}
 	}
 
-	$executeTestFollowup(id: number): Promise<codemavi> {
+	$executeTestFollowup(id: number): Promise<void> {
 		const command = this.testFollowups.get(id);
 		if (!command) {
 			return Promise.resolve();
@@ -608,8 +608,8 @@ class TestRunTracker extends Disposable {
 	private readonly tasks = new Map</* task ID */string, { cts: CancellationTokenSource; run: vscode.TestRun }>();
 	private readonly sharedTestIds = new Set<string>();
 	private readonly cts: CancellationTokenSource;
-	private readonly endEmitter = this._register(new Emitter<codemavi>());
-	private readonly onDidDispose: Event<codemavi>;
+	private readonly endEmitter = this._register(new Emitter<void>());
+	private readonly onDidDispose: Event<void>;
 	private readonly publishedCoverage = new Map<string, { report: vscode.FileCoverage; extIds: string[] }>();
 
 	/**
@@ -645,7 +645,7 @@ class TestRunTracker extends Disposable {
 		const forciblyEnd = this._register(new RunOnceScheduler(() => this.forciblyEndTasks(), RUN_CANCEL_DEADLINE));
 		this._register(this.cts.token.onCancellationRequested(() => forciblyEnd.schedule()));
 
-		const didDisposeEmitter = new Emitter<codemavi>();
+		const didDisposeEmitter = new Emitter<void>();
 		this.onDidDispose = didDisposeEmitter.event;
 		this._register(toDisposable(() => {
 			didDisposeEmitter.fire();
@@ -712,7 +712,7 @@ class TestRunTracker extends Disposable {
 		const ctrlId = this.dto.controllerId;
 		const taskId = generateUuid();
 
-		const guardTestMutation = <Args extends unknown[]>(fn: (test: vscode.TestItem, ...args: Args) => codemavi) =>
+		const guardTestMutation = <Args extends unknown[]>(fn: (test: vscode.TestItem, ...args: Args) => void) =>
 			(test: vscode.TestItem, ...args: Args) => {
 				if (ended) {
 					this.logService.warn(`Setting the state of test "${test.id}" is a no-op after the run ends.`);
@@ -878,7 +878,7 @@ class TestRunTracker extends Disposable {
 		this.proxy.$addTestsToRun(this.dto.controllerId, this.dto.id, chain);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.markEnded();
 		super.dispose();
 	}
@@ -1053,14 +1053,14 @@ class MirroredChangeCollector implements IncrementalChangeCollector<MirroredColl
 	/**
 	 * @inheritdoc
 	 */
-	public add(node: MirroredCollectionTestItem): codemavi {
+	public add(node: MirroredCollectionTestItem): void {
 		this.added.add(node);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public update(node: MirroredCollectionTestItem): codemavi {
+	public update(node: MirroredCollectionTestItem): void {
 		Object.assign(node.revived, Convert.TestItem.toPlain(node.item));
 		if (!this.added.has(node)) {
 			this.updated.add(node);
@@ -1070,7 +1070,7 @@ class MirroredChangeCollector implements IncrementalChangeCollector<MirroredColl
 	/**
 	 * @inheritdoc
 	 */
-	public remove(node: MirroredCollectionTestItem): codemavi {
+	public remove(node: MirroredCollectionTestItem): void {
 		if (this.added.has(node)) {
 			this.added.delete(node);
 			return;
@@ -1227,7 +1227,7 @@ export class TestRunProfileImpl extends TestRunProfileBase implements vscode.Tes
 	readonly #onDidChangeDefaultProfiles: Event<DefaultProfileChangeEvent>;
 	#initialPublish?: ITestRunProfile;
 	#profiles?: Map<number, vscode.TestRunProfile>;
-	private _configureHandler?: (() => codemavi);
+	private _configureHandler?: (() => void);
 
 	public get label() {
 		return this._label;
@@ -1286,7 +1286,7 @@ export class TestRunProfileImpl extends TestRunProfileBase implements vscode.Tes
 		return this._configureHandler;
 	}
 
-	public set configureHandler(handler: undefined | (() => codemavi)) {
+	public set configureHandler(handler: undefined | (() => void)) {
 		if (handler !== this._configureHandler) {
 			this._configureHandler = handler;
 			updateProfile(this, this.#proxy, this.#initialPublish, { hasConfigurationHandler: !!handler });
@@ -1309,7 +1309,7 @@ export class TestRunProfileImpl extends TestRunProfileBase implements vscode.Tes
 		profileId: number,
 		private _label: string,
 		kind: vscode.TestRunProfileKind,
-		public runHandler: (request: vscode.TestRunRequest, token: vscode.CancellationToken) => Thenable<codemavi> | codemavi,
+		public runHandler: (request: vscode.TestRunRequest, token: vscode.CancellationToken) => Thenable<void> | void,
 		_isDefault = false,
 		public _tag: vscode.TestTag | undefined = undefined,
 		private _supportsContinuousRun = false,
@@ -1348,7 +1348,7 @@ export class TestRunProfileImpl extends TestRunProfileBase implements vscode.Tes
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this.#profiles?.delete(this.profileId)) {
 			this.#profiles = undefined;
 			this.#proxy.$removeTestProfile(this.controllerId, this.profileId);

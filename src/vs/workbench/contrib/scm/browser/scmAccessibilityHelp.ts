@@ -51,7 +51,7 @@ class SCMAccessibilityHelpContentProvider extends Disposable implements IAccessi
 		this._focusedView = this._viewsService.getFocusedViewName();
 	}
 
-	onClose(): codemavi {
+	onClose(): void {
 		switch (this._focusedView) {
 			case 'Source Control':
 				this._commandService.executeCommand('workbench.scm');

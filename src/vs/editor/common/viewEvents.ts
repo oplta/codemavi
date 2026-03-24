@@ -202,7 +202,7 @@ export class ViewRevealRangeRequestEvent {
 		 */
 		public readonly source: string | null | undefined,
 		/**
-		 * Reduce the revealing to a minimum (e.g. acodemavi scrolling if the bounding box is visible and near the viewport edge).
+		 * Reduce the revealing to a minimum (e.g. avoid scrolling if the bounding box is visible and near the viewport edge).
 		 */
 		public readonly minimalReveal: boolean,
 		/**

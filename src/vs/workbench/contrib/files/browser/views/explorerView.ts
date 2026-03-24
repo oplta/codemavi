@@ -142,8 +142,8 @@ export function getContext(focus: ExplorerItem[], selection: ExplorerItem[], res
 }
 
 export interface IExplorerViewContainerDelegate {
-	willOpenElement(event?: UIEvent): codemavi;
-	didOpenElement(event?: UIEvent): codemavi;
+	willOpenElement(event?: UIEvent): void;
+	didOpenElement(event?: UIEvent): void;
 }
 
 export interface IExplorerViewPaneOptions extends IViewPaneOptions {
@@ -177,7 +177,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 	private viewHasSomeCollapsibleRootItem: IContextKey<boolean>;
 	private viewVisibleContextKey: IContextKey<boolean>;
 
-	private setTreeInputPromise: Promise<codemavi> | undefined;
+	private setTreeInputPromise: Promise<void> | undefined;
 	private horizontalScrolling: boolean | undefined;
 
 	private dragHandler!: DelayedDragHandler;
@@ -253,7 +253,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		// noop
 	}
 
-	override setVisible(visible: boolean): codemavi {
+	override setVisible(visible: boolean): void {
 		this.viewVisibleContextKey.set(visible);
 		super.setVisible(visible);
 	}
@@ -268,7 +268,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 
 	// Split view methods
 
-	protected override renderHeader(container: HTMLElement): codemavi {
+	protected override renderHeader(container: HTMLElement): void {
 		super.renderHeader(container);
 
 		// Expand on drag over
@@ -287,12 +287,12 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		setHeader();
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.tree.layout(height, width);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this.container = container;
@@ -337,7 +337,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}));
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.tree.domFocus();
 
@@ -357,11 +357,11 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		return this.tree.getFocus();
 	}
 
-	focusNext(): codemavi {
+	focusNext(): void {
 		this.tree.focusNext();
 	}
 
-	focusLast(): codemavi {
+	focusLast(): void {
 		this.tree.focusLast();
 	}
 
@@ -384,7 +384,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		return this.tree.isCollapsed(item);
 	}
 
-	async setEditable(stat: ExplorerItem, isEditing: boolean): Promise<codemavi> {
+	async setEditable(stat: ExplorerItem, isEditing: boolean): Promise<void> {
 		if (isEditing) {
 			this.horizontalScrolling = this.tree.options.horizontalScrolling;
 
@@ -412,7 +412,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	private async selectActiveFile(reveal = this._autoReveal): Promise<codemavi> {
+	private async selectActiveFile(reveal = this._autoReveal): Promise<void> {
 		if (this._autoReveal) {
 			const activeFile = EditorResourceAccessor.getCanonicalUri(this.editorService.activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY });
 
@@ -428,7 +428,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	private createTree(container: HTMLElement): codemavi {
+	private createTree(container: HTMLElement): void {
 		this.filter = this.instantiationService.createInstance(FilesFilter);
 		this._register(this.filter);
 		this._register(this.filter.onDidChange(() => this.refresh(true)));
@@ -576,7 +576,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 
 	// React on events
 
-	private onConfigurationUpdated(event: IConfigurationChangeEvent | undefined): codemavi {
+	private onConfigurationUpdated(event: IConfigurationChangeEvent | undefined): void {
 		if (!event || event.affectsConfiguration('explorer.autoReveal')) {
 			const configuration = this.configurationService.getValue<IFilesConfiguration>();
 			this._autoReveal = configuration?.explorer?.autoReveal;
@@ -592,7 +592,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		this.storageService.store(ExplorerView.TREE_VIEW_STATE_STORAGE_KEY, JSON.stringify(this.tree.getViewState()), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	private setContextKeys(stat: ExplorerItem | null | undefined): codemavi {
+	private setContextKeys(stat: ExplorerItem | null | undefined): void {
 		const folders = this.contextService.getWorkspace().folders;
 		const resource = stat ? stat.resource : folders[folders.length - 1].uri;
 		stat = stat || this.explorerService.findClosest(resource);
@@ -610,7 +610,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	private async onContextMenu(e: ITreeContextMenuEvent<ExplorerItem>): Promise<codemavi> {
+	private async onContextMenu(e: ITreeContextMenuEvent<ExplorerItem>): Promise<void> {
 		if (DOM.isEditableElement(e.browserEvent.target as HTMLElement)) {
 			return;
 		}
@@ -664,7 +664,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		});
 	}
 
-	private onFocusChanged(elements: readonly ExplorerItem[]): codemavi {
+	private onFocusChanged(elements: readonly ExplorerItem[]): void {
 		const stat = elements && elements.length ? elements[0] : undefined;
 		this.setContextKeys(stat);
 
@@ -695,7 +695,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 	 * Refresh the contents of the explorer to get up to date data from the disk about the file structure.
 	 * If the item is passed we refresh only that level of the tree, otherwise we do a full refresh.
 	 */
-	refresh(recursive: boolean, item?: ExplorerItem, cancelEditing: boolean = true): Promise<codemavi> {
+	refresh(recursive: boolean, item?: ExplorerItem, cancelEditing: boolean = true): Promise<void> {
 		if (!this.tree || !this.isBodyVisible() || (item && !this.tree.hasNode(item)) || (this.findProvider?.isShowingFilterResults() && recursive)) {
 			// Tree node doesn't exist yet, when it becomes visible we will refresh
 			return Promise.resolve(undefined);
@@ -716,7 +716,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		return DOM.getLargestChildWidth(parentNode, childNodes);
 	}
 
-	async setTreeInput(): Promise<codemavi> {
+	async setTreeInput(): Promise<void> {
 		if (!this.isBodyVisible()) {
 			return Promise.resolve(undefined);
 		}
@@ -794,7 +794,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	public async selectResource(resource: URI | undefined, reveal = this._autoReveal, retry = 0): Promise<codemavi> {
+	public async selectResource(resource: URI | undefined, reveal = this._autoReveal, retry = 0): Promise<void> {
 		// do no retry more than once to prevent infinite loops in cases of inconsistent model
 		if (retry === 2) {
 			return;
@@ -858,7 +858,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	itemsCopied(stats: ExplorerItem[], cut: boolean, previousCut: ExplorerItem[] | undefined): codemavi {
+	itemsCopied(stats: ExplorerItem[], cut: boolean, previousCut: ExplorerItem[] | undefined): void {
 		this.fileCopiedContextKey.set(stats.length > 0);
 		this.resourceCutContextKey.set(cut && stats.length > 0);
 		previousCut?.forEach(item => this.tree.rerender(item));
@@ -867,7 +867,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		}
 	}
 
-	expandAll(): codemavi {
+	expandAll(): void {
 		if (this.explorerService.isEditable(undefined)) {
 			this.tree.domFocus();
 		}
@@ -875,7 +875,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		this.tree.expandAll();
 	}
 
-	collapseAll(): codemavi {
+	collapseAll(): void {
 		if (this.explorerService.isEditable(undefined)) {
 			this.tree.domFocus();
 		}
@@ -894,7 +894,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		this.tree.collapseAll();
 	}
 
-	previousCompressedStat(): codemavi {
+	previousCompressedStat(): void {
 		const focused = this.tree.getFocus();
 		if (!focused.length) {
 			return;
@@ -907,7 +907,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		});
 	}
 
-	nextCompressedStat(): codemavi {
+	nextCompressedStat(): void {
 		const focused = this.tree.getFocus();
 		if (!focused.length) {
 			return;
@@ -920,7 +920,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		});
 	}
 
-	firstCompressedStat(): codemavi {
+	firstCompressedStat(): void {
 		const focused = this.tree.getFocus();
 		if (!focused.length) {
 			return;
@@ -933,7 +933,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		});
 	}
 
-	lastCompressedStat(): codemavi {
+	lastCompressedStat(): void {
 		const focused = this.tree.getFocus();
 		if (!focused.length) {
 			return;
@@ -946,12 +946,12 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		});
 	}
 
-	private updateCompressedNavigationContextKeys(controller: ICompressedNavigationController): codemavi {
+	private updateCompressedNavigationContextKeys(controller: ICompressedNavigationController): void {
 		this.compressedFocusFirstContext.set(controller.index === 0);
 		this.compressedFocusLastContext.set(controller.index === controller.count - 1);
 	}
 
-	private updateAnyCollapsedContext(): codemavi {
+	private updateAnyCollapsedContext(): void {
 		const treeInput = this.tree.getInput();
 		if (treeInput === undefined) {
 			return;
@@ -967,7 +967,7 @@ export class ExplorerView extends ViewPane implements IExplorerView {
 		return !!this.findProvider?.isShowingFilterResults();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.dragHandler?.dispose();
 		super.dispose();
 	}
@@ -1010,7 +1010,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const commandService = accessor.get(ICommandService);
 		commandService.executeCommand(NEW_FILE_COMMAND_ID);
 	}
@@ -1033,7 +1033,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const commandService = accessor.get(ICommandService);
 		commandService.executeCommand(NEW_FOLDER_COMMAND_ID);
 	}
@@ -1059,7 +1059,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewsService = accessor.get(IViewsService);
 		const explorerService = accessor.get(IExplorerService);
 		await viewsService.openView(VIEW_ID);

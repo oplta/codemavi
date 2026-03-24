@@ -120,7 +120,7 @@ export class VariablesView extends ViewPane implements IDebugViewWithVariables {
 		}, 400);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this.element.classList.add('debug-pane');
@@ -201,21 +201,21 @@ export class VariablesView extends ViewPane implements IDebugViewWithVariables {
 		}));
 	}
 
-	protected override layoutBody(width: number, height: number): codemavi {
+	protected override layoutBody(width: number, height: number): void {
 		super.layoutBody(height, width);
 		this.tree.layout(width, height);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.tree.domFocus();
 	}
 
-	collapseAll(): codemavi {
+	collapseAll(): void {
 		this.tree.collapseAll();
 	}
 
-	private onMouseDblClick(e: ITreeMouseEvent<IExpression | IScope>): codemavi {
+	private onMouseDblClick(e: ITreeMouseEvent<IExpression | IScope>): void {
 		if (this.canSetExpressionValue(e.element)) {
 			this.debugService.getViewModel().setSelectedExpression(e.element, false);
 		}
@@ -234,7 +234,7 @@ export class VariablesView extends ViewPane implements IDebugViewWithVariables {
 		return e instanceof Variable && !e.presentationHint?.attributes?.includes('readOnly') && !e.presentationHint?.lazy;
 	}
 
-	private async onContextMenu(e: ITreeContextMenuEvent<IExpression | IScope>): Promise<codemavi> {
+	private async onContextMenu(e: ITreeContextMenuEvent<IExpression | IScope>): Promise<void> {
 		const variable = e.element;
 		if (!(variable instanceof Variable) || !variable.value) {
 			return;
@@ -381,11 +381,11 @@ class ScopesRenderer implements ITreeRenderer<IScope, FuzzyScore, IScopeTemplate
 		return { name, label };
 	}
 
-	renderElement(element: ITreeNode<IScope, FuzzyScore>, index: number, templateData: IScopeTemplateData): codemavi {
+	renderElement(element: ITreeNode<IScope, FuzzyScore>, index: number, templateData: IScopeTemplateData): void {
 		templateData.label.set(element.element.name, createMatches(element.filterData));
 	}
 
-	disposeTemplate(templateData: IScopeTemplateData): codemavi {
+	disposeTemplate(templateData: IScopeTemplateData): void {
 		templateData.label.dispose();
 	}
 }
@@ -408,11 +408,11 @@ class ScopeErrorRenderer implements ITreeRenderer<IScope, FuzzyScore, IScopeErro
 		return { error };
 	}
 
-	renderElement(element: ITreeNode<IScope, FuzzyScore>, index: number, templateData: IScopeErrorTemplateData): codemavi {
+	renderElement(element: ITreeNode<IScope, FuzzyScore>, index: number, templateData: IScopeErrorTemplateData): void {
 		templateData.error.innerText = element.element.name;
 	}
 
-	disposeTemplate(): codemavi {
+	disposeTemplate(): void {
 		// noop
 	}
 }
@@ -451,12 +451,12 @@ export class VisualizedVariableRenderer extends AbstractExpressionsRenderer {
 		return VisualizedVariableRenderer.ID;
 	}
 
-	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): codemavi {
+	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): void {
 		data.elementDisposable.clear();
 		super.renderExpressionElement(node.element, node, data);
 	}
 
-	protected override renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): codemavi {
+	protected override renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): void {
 		const viz = expression as VisualizedExpression;
 
 		let text = viz.name;
@@ -534,14 +534,14 @@ export class VariablesRenderer extends AbstractExpressionsRenderer {
 		return VariablesRenderer.ID;
 	}
 
-	protected renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): codemavi {
+	protected renderExpression(expression: IExpression, data: IExpressionTemplateData, highlights: IHighlight[]): void {
 		data.elementDisposable.add(this.expressionRenderer.renderVariable(data, expression as Variable, {
 			highlights,
 			showChanged: true,
 		}));
 	}
 
-	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): codemavi {
+	public override renderElement(node: ITreeNode<IExpression, FuzzyScore>, index: number, data: IExpressionTemplateData): void {
 		data.elementDisposable.clear();
 		super.renderExpressionElement(node.element, node, data);
 	}

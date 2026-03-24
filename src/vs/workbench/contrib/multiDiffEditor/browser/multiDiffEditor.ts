@@ -65,7 +65,7 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		);
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		this._multiDiffEditorWidget = this._register(this.instantiationService.createInstance(
 			MultiDiffEditorWidget,
 			parent,
@@ -77,7 +77,7 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		}));
 	}
 
-	override async setInput(input: MultiDiffEditorInput, options: IMultiDiffEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: MultiDiffEditorInput, options: IMultiDiffEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		await super.setInput(input, options, context, token);
 		this._viewModel = await input.getViewModel();
 		this._multiDiffEditorWidget!.setViewModel(this._viewModel);
@@ -89,11 +89,11 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		this._applyOptions(options);
 	}
 
-	override setOptions(options: IMultiDiffEditorOptions | undefined): codemavi {
+	override setOptions(options: IMultiDiffEditorOptions | undefined): void {
 		this._applyOptions(options);
 	}
 
-	private _applyOptions(options: IMultiDiffEditorOptions | undefined): codemavi {
+	private _applyOptions(options: IMultiDiffEditorOptions | undefined): void {
 		const viewState = options?.viewState;
 		if (!viewState || !viewState.revealData) {
 			return;
@@ -104,12 +104,12 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		});
 	}
 
-	override async clearInput(): Promise<codemavi> {
+	override async clearInput(): Promise<void> {
 		await super.clearInput();
 		this._multiDiffEditorWidget!.setViewModel(undefined);
 	}
 
-	layout(dimension: DOM.Dimension): codemavi {
+	layout(dimension: DOM.Dimension): void {
 		this._multiDiffEditorWidget!.layout(dimension);
 	}
 
@@ -117,7 +117,7 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		return this._multiDiffEditorWidget!.getActiveControl();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		this._multiDiffEditorWidget?.getActiveControl()?.focus();
@@ -150,7 +150,7 @@ export class MultiDiffEditor extends AbstractEditorWithViewState<IMultiDiffEdito
 		return i2.multiDiffEditorItem;
 	}
 
-	public async showWhile(promise: Promise<unknown>): Promise<codemavi> {
+	public async showWhile(promise: Promise<unknown>): Promise<void> {
 		return this.editorProgressService.showWhile(promise);
 	}
 }

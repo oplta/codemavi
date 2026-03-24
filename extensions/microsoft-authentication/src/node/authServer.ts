@@ -56,7 +56,7 @@ interface ILoopbackServer {
 	 * @throws If the server is not started.
 	 * @throws If the server fails to stop.
 	 */
-	stop(): Promise<codemavi>;
+	stop(): Promise<void>;
 	/**
 	 * Returns a promise that resolves to the result of the OAuth flow.
 	 */
@@ -90,7 +90,7 @@ export class LoopbackAuthServer implements ILoopbackServer {
 			throw new Error('startingRedirect must be defined');
 		}
 		this._startingRedirect = new URL(startingRedirect);
-		let deferred: { resolve: (result: IOAuthResult) => codemavi; reject: (reason: any) => codemavi };
+		let deferred: { resolve: (result: IOAuthResult) => void; reject: (reason: any) => void };
 		this._resultPromise = new Promise<IOAuthResult>((resolve, reject) => deferred = { resolve, reject });
 
 		this._server = http.createServer((req, res) => {
@@ -186,8 +186,8 @@ export class LoopbackAuthServer implements ILoopbackServer {
 		});
 	}
 
-	public stop(): Promise<codemavi> {
-		return new Promise<codemavi>((resolve, reject) => {
+	public stop(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			if (!this._server.listening) {
 				throw new Error('Server is not started');
 			}

@@ -6,11 +6,11 @@
 import { KeybindingsRegistry, KeybindingWeight } from '../../../../platform/keybinding/common/keybindingsRegistry.js';
 import { ITerminalGroupService } from './terminal.js';
 
-export function setupTerminalCommands(): codemavi {
+export function setupTerminalCommands(): void {
 	registerOpenTerminalAtIndexCommands();
 }
 
-function registerOpenTerminalAtIndexCommands(): codemavi {
+function registerOpenTerminalAtIndexCommands(): void {
 	for (let i = 0; i < 9; i++) {
 		const terminalIndex = i;
 		const visibleIndex = i + 1;

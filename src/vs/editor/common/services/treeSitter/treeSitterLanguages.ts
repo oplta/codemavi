@@ -54,7 +54,7 @@ export class TreeSitterLanguages extends Disposable {
 		}
 	}
 
-	private async _addLanguage(languageId: string): Promise<codemavi> {
+	private async _addLanguage(languageId: string): Promise<void> {
 		const languagePromise = this._languages.get(languageId);
 		if (!languagePromise) {
 			this._languages.set(languageId, this._fetchLanguage(languageId));

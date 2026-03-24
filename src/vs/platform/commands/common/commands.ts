@@ -29,7 +29,7 @@ export interface ICommandService {
 export type ICommandsMap = Map<string, ICommand>;
 
 export interface ICommandHandler {
-	(accessor: ServicesAccessor, ...args: any[]): codemavi;
+	(accessor: ServicesAccessor, ...args: any[]): void;
 }
 
 export interface ICommand {

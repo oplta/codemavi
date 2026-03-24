@@ -34,7 +34,7 @@ class OpenUrlAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const quickInputService = accessor.get(IQuickInputService);
 		const urlService = accessor.get(IURLService);
 

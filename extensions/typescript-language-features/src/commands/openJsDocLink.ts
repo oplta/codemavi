@@ -23,13 +23,13 @@ export interface OpenJsDocLinkCommand_Args {
 /**
  * Proxy command for opening links in jsdoc comments.
  *
- * This is needed to acodemavi incorrectly rewriting uris.
+ * This is needed to avoid incorrectly rewriting uris.
  */
 export class OpenJsDocLinkCommand implements Command {
 	public static readonly id = '_typescript.openJsDocLink';
 	public readonly id = OpenJsDocLinkCommand.id;
 
-	public async execute(args: OpenJsDocLinkCommand_Args): Promise<codemavi> {
+	public async execute(args: OpenJsDocLinkCommand_Args): Promise<void> {
 		const { line, character } = args.position;
 		const position = new vscode.Position(line, character);
 		await vscode.commands.executeCommand('vscode.open', vscode.Uri.from(args.file), {

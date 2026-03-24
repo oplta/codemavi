@@ -101,7 +101,7 @@ export class ParameterHintsModel extends Disposable {
 		this._state = value;
 	}
 
-	cancel(silent: boolean = false): codemavi {
+	cancel(silent: boolean = false): void {
 		this.state = ParameterHintState.Default;
 
 		this.throttledDelayer.cancel();
@@ -111,7 +111,7 @@ export class ParameterHintsModel extends Disposable {
 		}
 	}
 
-	trigger(context: TriggerContext, delay?: number): codemavi {
+	trigger(context: TriggerContext, delay?: number): void {
 		const model = this.editor.getModel();
 		if (!model || !this.providers.has(model)) {
 			return;
@@ -126,7 +126,7 @@ export class ParameterHintsModel extends Disposable {
 			.catch(onUnexpectedError);
 	}
 
-	public next(): codemavi {
+	public next(): void {
 		if (this.state.type !== ParameterHintState.Type.Active) {
 			return;
 		}
@@ -145,7 +145,7 @@ export class ParameterHintsModel extends Disposable {
 		this.updateActiveSignature(last && cycle ? 0 : activeSignature + 1);
 	}
 
-	public previous(): codemavi {
+	public previous(): void {
 		if (this.state.type !== ParameterHintState.Type.Active) {
 			return;
 		}
@@ -247,7 +247,7 @@ export class ParameterHintsModel extends Disposable {
 			|| this.throttledDelayer.isTriggered();
 	}
 
-	private onModelChanged(): codemavi {
+	private onModelChanged(): void {
 		this.cancel();
 
 		this.triggerChars.clear();
@@ -293,7 +293,7 @@ export class ParameterHintsModel extends Disposable {
 		}
 	}
 
-	private onCursorChange(e: ICursorSelectionChangedEvent): codemavi {
+	private onCursorChange(e: ICursorSelectionChangedEvent): void {
 		if (e.source === 'mouse') {
 			this.cancel();
 		} else if (this.isTriggered) {
@@ -301,13 +301,13 @@ export class ParameterHintsModel extends Disposable {
 		}
 	}
 
-	private onModelContentChange(): codemavi {
+	private onModelContentChange(): void {
 		if (this.isTriggered) {
 			this.trigger({ triggerKind: languages.SignatureHelpTriggerKind.ContentChange });
 		}
 	}
 
-	private onEditorConfigurationChange(): codemavi {
+	private onEditorConfigurationChange(): void {
 		this.triggerOnType = this.editor.getOption(EditorOption.parameterHints).enabled;
 
 		if (!this.triggerOnType) {
@@ -315,7 +315,7 @@ export class ParameterHintsModel extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.cancel(true);
 		super.dispose();
 	}

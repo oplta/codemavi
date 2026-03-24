@@ -7,16 +7,16 @@ export type ObsDebuggerApi = {
 	channelId: 'observableDevTools',
 	host: {
 		notifications: {
-			handleChange(update: ObsStateUpdate, clearState: boolean): codemavi;
+			handleChange(update: ObsStateUpdate, clearState: boolean): void;
 		}
 		requests: {},
 	};
 	client: {
 		notifications: {
-			setDeclarationIdFilter(declarationIds: ObsDeclarationId[]): codemavi;
-			logObservableValue(observableId: ObsInstanceId): codemavi;
-			flushUpdates(): codemavi;
-			resetUpdates(): codemavi;
+			setDeclarationIdFilter(declarationIds: ObsDeclarationId[]): void;
+			logObservableValue(observableId: ObsInstanceId): void;
+			flushUpdates(): void;
+			resetUpdates(): void;
 		},
 		requests: {
 			getDeclarations(): IObsDeclarations;
@@ -24,7 +24,7 @@ export type ObsDebuggerApi = {
 			getDerivedInfo(instanceId: ObsInstanceId): IDerivedObservableDetailedInfo;
 			getAutorunInfo(instanceId: ObsInstanceId): IAutorunDetailedInfo;
 			getObservableValueInfo(instanceId: ObsInstanceId): IObservableValueInfo;
-			setValue(instanceId: ObsInstanceId, jsonValue: unknown): codemavi;
+			setValue(instanceId: ObsInstanceId, jsonValue: unknown): void;
 			getValue(instanceId: ObsInstanceId): unknown;
 
 			getTransactionState(): ITransactionState | undefined;

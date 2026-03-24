@@ -1,12 +1,12 @@
 /**
- * Code Mavi - Executor Agent
+ * Mavi - Executor Agent
  *
  * The implementation specialist of the triple-agent system
  * Receives specific tasks from Orchestrator, reads files, makes changes,
  * and produces semantic diffs for the Apply Model
  */
 
-import { URI } from "../../../../base/common/uri.js";
+import { URI } from "../../../../../../base/common/uri.js";
 import {
 	BaseAgent,
 	AgentTask,
@@ -16,7 +16,7 @@ import {
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
-import { Event, Emitter } from "../../../../base/common/event.js";
+import { Event, Emitter } from "../../../../../../base/common/event.js";
 import { createHash } from "crypto";
 
 export interface SemanticDiff {

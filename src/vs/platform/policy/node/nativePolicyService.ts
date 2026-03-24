@@ -22,12 +22,12 @@ export class NativePolicyService extends AbstractPolicyService implements IPolic
 		super();
 	}
 
-	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<codemavi> {
+	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<void> {
 		this.logService.trace(`NativePolicyService#_updatePolicyDefinitions - Found ${Object.keys(policyDefinitions).length} policy definitions`);
 
 		const { createWatcher } = await import('@vscode/policy-watcher');
 
-		await this.throttler.queue(() => new Promise<codemavi>((c, e) => {
+		await this.throttler.queue(() => new Promise<void>((c, e) => {
 			try {
 				this.watcher.value = createWatcher(this.productName, policyDefinitions, update => {
 					this._onDidPolicyChange(update);
@@ -40,7 +40,7 @@ export class NativePolicyService extends AbstractPolicyService implements IPolic
 		}));
 	}
 
-	private _onDidPolicyChange(update: PolicyUpdate<IStringDictionary<PolicyDefinition>>): codemavi {
+	private _onDidPolicyChange(update: PolicyUpdate<IStringDictionary<PolicyDefinition>>): void {
 		this.logService.trace(`NativePolicyService#_onDidPolicyChange - Updated policy values: ${JSON.stringify(update)}`);
 
 		for (const key in update) {

@@ -43,12 +43,12 @@ export class MainThreadNotebooks implements MainThreadNotebookShape {
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostNotebook);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		dispose(this._notebookSerializer.values());
 	}
 
-	$registerNotebookSerializer(handle: number, extension: NotebookExtensionDescription, viewType: string, options: TransientOptions, data: INotebookContributionData | undefined): codemavi {
+	$registerNotebookSerializer(handle: number, extension: NotebookExtensionDescription, viewType: string, options: TransientOptions, data: INotebookContributionData | undefined): void {
 		const disposables = new DisposableStore();
 
 		disposables.add(this._notebookService.registerNotebookSerializer(viewType, extension, {
@@ -136,19 +136,19 @@ export class MainThreadNotebooks implements MainThreadNotebookShape {
 		});
 	}
 
-	$unregisterNotebookSerializer(handle: number): codemavi {
+	$unregisterNotebookSerializer(handle: number): void {
 		this._notebookSerializer.get(handle)?.dispose();
 		this._notebookSerializer.delete(handle);
 	}
 
-	$emitCellStatusBarEvent(eventHandle: number): codemavi {
+	$emitCellStatusBarEvent(eventHandle: number): void {
 		const emitter = this._notebookCellStatusBarRegistrations.get(eventHandle);
 		if (emitter instanceof Emitter) {
 			emitter.fire(undefined);
 		}
 	}
 
-	async $registerNotebookCellStatusBarItemProvider(handle: number, eventHandle: number | undefined, viewType: string): Promise<codemavi> {
+	async $registerNotebookCellStatusBarItemProvider(handle: number, eventHandle: number | undefined, viewType: string): Promise<void> {
 		const that = this;
 		const provider: INotebookCellStatusBarItemProvider = {
 			async provideCellStatusBarItems(uri: URI, index: number, token: CancellationToken) {
@@ -166,7 +166,7 @@ export class MainThreadNotebooks implements MainThreadNotebookShape {
 		};
 
 		if (typeof eventHandle === 'number') {
-			const emitter = new Emitter<codemavi>();
+			const emitter = new Emitter<void>();
 			this._notebookCellStatusBarRegistrations.set(eventHandle, emitter);
 			provider.onDidChangeStatusBarItems = emitter.event;
 		}
@@ -175,7 +175,7 @@ export class MainThreadNotebooks implements MainThreadNotebookShape {
 		this._notebookCellStatusBarRegistrations.set(handle, disposable);
 	}
 
-	async $unregisterNotebookCellStatusBarItemProvider(handle: number, eventHandle: number | undefined): Promise<codemavi> {
+	async $unregisterNotebookCellStatusBarItemProvider(handle: number, eventHandle: number | undefined): Promise<void> {
 		const unregisterThing = (handle: number) => {
 			const entry = this._notebookCellStatusBarRegistrations.get(handle);
 			if (entry) {

@@ -50,7 +50,7 @@ export class TestExclusions extends Disposable {
 	/**
 	 * Sets whether a test is excluded.
 	 */
-	public toggle(test: InternalTestItem, exclude?: boolean): codemavi {
+	public toggle(test: InternalTestItem, exclude?: boolean): void {
 		if (exclude !== true && this.excluded.value.has(test.item.extId)) {
 			this.excluded.value = new Set(Iterable.filter(this.excluded.value, e => e !== test.item.extId));
 		} else if (exclude !== false && !this.excluded.value.has(test.item.extId)) {
@@ -68,7 +68,7 @@ export class TestExclusions extends Disposable {
 	/**
 	 * Removes all test exclusions.
 	 */
-	public clear(): codemavi {
+	public clear(): void {
 		this.excluded.value = new Set();
 	}
 }

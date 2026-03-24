@@ -40,18 +40,18 @@ function find(element: Element, id: string): Element | undefined {
 	return undefined;
 }
 
-class Renderer implements ICompressibleTreeRenderer<Element, codemavi, HTMLElement> {
+class Renderer implements ICompressibleTreeRenderer<Element, void, HTMLElement> {
 	readonly templateId = 'default';
 	renderTemplate(container: HTMLElement): HTMLElement {
 		return container;
 	}
-	renderElement(element: ITreeNode<Element, codemavi>, index: number, templateData: HTMLElement): codemavi {
+	renderElement(element: ITreeNode<Element, void>, index: number, templateData: HTMLElement): void {
 		templateData.textContent = element.element.id + (element.element.suffix || '');
 	}
-	disposeTemplate(templateData: HTMLElement): codemavi {
+	disposeTemplate(templateData: HTMLElement): void {
 		// noop
 	}
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<Element>, codemavi>, index: number, templateData: HTMLElement, height: number | undefined): codemavi {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<Element>, void>, index: number, templateData: HTMLElement, height: number | undefined): void {
 		const result: string[] = [];
 
 		for (const element of node.element.elements) {

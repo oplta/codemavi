@@ -364,7 +364,7 @@ async function searchWithFolderCommand(accessor: ServicesAccessor, isFromExplore
 	}
 }
 
-function getMultiSelectedSearchResources(viewer: WorkbenchCompressibleAsyncDataTree<ISearchResult, RenderableMatch, codemavi>, currElement: RenderableMatch | undefined, sortConfig: ISearchConfigurationProperties): URI[] {
+function getMultiSelectedSearchResources(viewer: WorkbenchCompressibleAsyncDataTree<ISearchResult, RenderableMatch, void>, currElement: RenderableMatch | undefined, sortConfig: ISearchConfigurationProperties): URI[] {
 	return getElementsToOperateOn(viewer, currElement, sortConfig)
 		.map((renderableMatch) => ((isSearchTreeMatch(renderableMatch)) ? null : renderableMatch.resource))
 		.filter((renderableMatch): renderableMatch is URI => (renderableMatch !== null));

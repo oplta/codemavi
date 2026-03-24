@@ -80,7 +80,7 @@ function getItemIdentifier(item: QuickPickItem): string {
 	return item.type === 'separator' ? '' : item.id || `${item.label}${item.description}${item.detail}}`;
 }
 
-function updateButtons(item: QuickPickItem, removePin: boolean): codemavi {
+function updateButtons(item: QuickPickItem, removePin: boolean): void {
 	if (item.type === 'separator') {
 		return;
 	}

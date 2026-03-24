@@ -165,7 +165,7 @@ declare namespace Fig {
 	 * @param param - A param of type `R`
 	 * @returns Something of type `R`
 	 */
-	type Function<T = codemavi, R = codemavi> = (param: T) => R;
+	type Function<T = void, R = void> = (param: T) => R;
 
 	/**
 	 * A utility type to modify a property type
@@ -178,7 +178,7 @@ declare namespace Fig {
 	 * @param param - A param of type `R`
 	 * @returns Something of type `R`
 	 */
-	type StringOrFunction<T = codemavi, R = codemavi> = string | Function<T, R>;
+	type StringOrFunction<T = void, R = void> = string | Function<T, R>;
 
 	/**
 	 * @excluded

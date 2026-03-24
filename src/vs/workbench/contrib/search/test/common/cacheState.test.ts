@@ -177,9 +177,9 @@ suite('FileQueryCacheState', () => {
 
 		public cacheKeys: string[] = [];
 		public loading: { [cacheKey: string]: DeferredPromise<any> } = {};
-		public disposing: { [cacheKey: string]: DeferredPromise<codemavi> } = {};
+		public disposing: { [cacheKey: string]: DeferredPromise<void> } = {};
 
-		private _awaitDisposal: (() => codemavi)[][] = [];
+		private _awaitDisposal: (() => void)[][] = [];
 
 		public baseQuery: IFileQuery = {
 			type: QueryType.File,
@@ -197,8 +197,8 @@ suite('FileQueryCacheState', () => {
 			return promise.p;
 		}
 
-		public dispose(cacheKey: string): Promise<codemavi> {
-			const promise = new DeferredPromise<codemavi>();
+		public dispose(cacheKey: string): Promise<void> {
+			const promise = new DeferredPromise<void>();
 			this.disposing[cacheKey] = promise;
 			const n = Object.keys(this.disposing).length;
 			for (const done of this._awaitDisposal[n] || []) {
@@ -209,7 +209,7 @@ suite('FileQueryCacheState', () => {
 		}
 
 		public awaitDisposal(n: number) {
-			return new Promise<codemavi>(resolve => {
+			return new Promise<void>(resolve => {
 				if (n === Object.keys(this.disposing).length) {
 					resolve();
 				} else {

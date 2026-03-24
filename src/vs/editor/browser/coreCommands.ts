@@ -35,7 +35,7 @@ import { EnterOperation } from '../common/cursor/cursorTypeEditOperations.js';
 const CORE_WEIGHT = KeybindingWeight.EditorCore;
 
 export abstract class CoreEditorCommand<T> extends EditorCommand {
-	public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args?: Partial<T> | null): codemavi {
+	public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args?: Partial<T> | null): void {
 		const viewModel = editor._getViewModel();
 		if (!viewModel) {
 			// the editor has no view => has no cursors
@@ -44,7 +44,7 @@ export abstract class CoreEditorCommand<T> extends EditorCommand {
 		this.runCoreEditorCommand(viewModel, args || {});
 	}
 
-	public abstract runCoreEditorCommand(viewModel: IViewModel, args: Partial<T>): codemavi;
+	public abstract runCoreEditorCommand(viewModel: IViewModel, args: Partial<T>): void;
 }
 
 export namespace EditorScroll_ {
@@ -337,7 +337,7 @@ abstract class EditorOrNativeTextInputCommand {
 		});
 	}
 
-	public _runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): boolean | Promise<codemavi> {
+	public _runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): boolean | Promise<void> {
 		const result = this.runEditorCommand(accessor, editor, args);
 		if (result) {
 			return result;
@@ -345,8 +345,8 @@ abstract class EditorOrNativeTextInputCommand {
 		return true;
 	}
 
-	public abstract runDOMCommand(activeElement: Element): codemavi;
-	public abstract runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): codemavi | Promise<codemavi>;
+	public abstract runDOMCommand(activeElement: Element): void;
+	public abstract runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): void | Promise<void>;
 }
 
 export const enum NavigationCommandRevealType {
@@ -385,7 +385,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -416,7 +416,7 @@ export namespace CoreNavigationCommands {
 	}));
 
 	abstract class ColumnSelectCommand<T extends BaseCommandOptions = BaseCommandOptions> extends CoreEditorCommand<T> {
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<T>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<T>): void {
 			viewModel.model.pushStackElement();
 			const result = this._getColumnSelectResult(viewModel, viewModel.getPrimaryCursorState(), viewModel.getCursorColumnSelectData(), args);
 			if (result === null) {
@@ -594,7 +594,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions & CursorMove_.RawArguments>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions & CursorMove_.RawArguments>): void {
 			const parsed = CursorMove_.parse(args);
 			if (!parsed) {
 				// illegal arguments
@@ -603,7 +603,7 @@ export namespace CoreNavigationCommands {
 			this._runCursorMove(viewModel, args.source, parsed);
 		}
 
-		private _runCursorMove(viewModel: IViewModel, source: string | null | undefined, args: CursorMove_.ParsedArguments): codemavi {
+		private _runCursorMove(viewModel: IViewModel, source: string | null | undefined, args: CursorMove_.ParsedArguments): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				source,
@@ -661,7 +661,7 @@ export namespace CoreNavigationCommands {
 			this._staticArgs = opts.args;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, dynamicArgs: Partial<CursorMoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, dynamicArgs: Partial<CursorMoveCommandOptions>): void {
 			let args = this._staticArgs;
 			if (this._staticArgs.value === Constants.PAGE_SIZE_MARKER) {
 				// -1 is a marker for page size
@@ -897,7 +897,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<CreateCursorCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<CreateCursorCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -959,7 +959,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -987,7 +987,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1031,7 +1031,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1089,7 +1089,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<EndCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<EndCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1167,7 +1167,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1222,7 +1222,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1266,7 +1266,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1334,7 +1334,7 @@ export namespace CoreNavigationCommands {
 			return null;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<EditorScrollCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<EditorScrollCommandOptions>): void {
 			const parsed = EditorScroll_.parse(args);
 			if (!parsed) {
 				// illegal arguments
@@ -1348,7 +1348,7 @@ export namespace CoreNavigationCommands {
 			runEditorScroll(viewModel, args.source, parsed);
 		}
 
-		_runVerticalEditorScroll(viewModel: IViewModel, source: string | null | undefined, args: EditorScroll_.ParsedArguments): codemavi {
+		_runVerticalEditorScroll(viewModel: IViewModel, source: string | null | undefined, args: EditorScroll_.ParsedArguments): void {
 
 			const desiredScrollTop = this._computeDesiredScrollTop(viewModel, args);
 
@@ -1408,7 +1408,7 @@ export namespace CoreNavigationCommands {
 			return viewModel.viewLayout.getCurrentScrollTop() + deltaLines * viewModel.cursorConfig.lineHeight;
 		}
 
-		_runHorizontalEditorScroll(viewModel: IViewModel, source: string | null | undefined, args: EditorScroll_.ParsedArguments): codemavi {
+		_runHorizontalEditorScroll(viewModel: IViewModel, source: string | null | undefined, args: EditorScroll_.ParsedArguments): void {
 			const desiredScrollLeft = this._computeDesiredScrollLeft(viewModel, args);
 			viewModel.viewLayout.setScrollPosition({ scrollLeft: desiredScrollLeft }, ScrollType.Smooth);
 		}
@@ -1435,7 +1435,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Up,
 				by: EditorScroll_.RawUnit.WrappedLine,
@@ -1462,7 +1462,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Up,
 				by: EditorScroll_.RawUnit.Page,
@@ -1486,7 +1486,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Up,
 				by: EditorScroll_.RawUnit.Editor,
@@ -1512,7 +1512,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Down,
 				by: EditorScroll_.RawUnit.WrappedLine,
@@ -1539,7 +1539,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Down,
 				by: EditorScroll_.RawUnit.Page,
@@ -1563,7 +1563,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Down,
 				by: EditorScroll_.RawUnit.Editor,
@@ -1587,7 +1587,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Left,
 				by: EditorScroll_.RawUnit.Column,
@@ -1611,7 +1611,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			EditorScroll.runCoreEditorCommand(viewModel, {
 				to: EditorScroll_.RawDirection.Right,
 				by: EditorScroll_.RawUnit.Column,
@@ -1632,7 +1632,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -1670,7 +1670,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -1698,7 +1698,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -1736,7 +1736,7 @@ export namespace CoreNavigationCommands {
 			this._inSelectionMode = opts.inSelectionMode;
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<MoveCommandOptions>): void {
 			if (!args.position) {
 				return;
 			}
@@ -1781,7 +1781,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1808,7 +1808,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<BaseCommandOptions>): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				args.source,
@@ -1833,7 +1833,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<RevealLineCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<RevealLineCommandOptions>): void {
 			const revealLineArg = args;
 			const lineNumberArg = revealLineArg.lineNumber || 0;
 			let lineNumber = typeof lineNumberArg === 'number' ? (lineNumberArg + 1) : (parseInt(lineNumberArg) + 1);
@@ -1877,7 +1877,7 @@ export namespace CoreNavigationCommands {
 		constructor() {
 			super(SelectAllCommand);
 		}
-		public runDOMCommand(activeElement: Element): codemavi {
+		public runDOMCommand(activeElement: Element): void {
 			if (isFirefox) {
 				(<HTMLInputElement>activeElement).focus();
 				(<HTMLInputElement>activeElement).select();
@@ -1885,7 +1885,7 @@ export namespace CoreNavigationCommands {
 
 			activeElement.ownerDocument.execCommand('selectAll');
 		}
-		public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: unknown): codemavi {
+		public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: unknown): void {
 			const viewModel = editor._getViewModel();
 			if (!viewModel) {
 				// the editor has no view => has no cursors
@@ -1893,7 +1893,7 @@ export namespace CoreNavigationCommands {
 			}
 			this.runCoreEditorCommand(viewModel, args);
 		}
-		public runCoreEditorCommand(viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: unknown): void {
 			viewModel.model.pushStackElement();
 			viewModel.setCursorStates(
 				'keyboard',
@@ -1917,7 +1917,7 @@ export namespace CoreNavigationCommands {
 			});
 		}
 
-		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<SetSelectionCommandOptions>): codemavi {
+		public runCoreEditorCommand(viewModel: IViewModel, args: Partial<SetSelectionCommandOptions>): void {
 			if (!args.selection) {
 				return;
 			}
@@ -1937,7 +1937,7 @@ const columnSelectionCondition = ContextKeyExpr.and(
 	EditorContextKeys.textInputFocus,
 	EditorContextKeys.columnSelection
 );
-function registerColumnSelection(id: string, keybinding: number): codemavi {
+function registerColumnSelection(id: string, keybinding: number): void {
 	KeybindingsRegistry.registerKeybindingRule({
 		id: id,
 		primary: keybinding,
@@ -1961,7 +1961,7 @@ function registerCommand<T extends Command>(command: T): T {
 export namespace CoreEditingCommands {
 
 	export abstract class CoreEditingCommand extends EditorCommand {
-		public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: unknown): codemavi {
+		public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: unknown): void {
 			const viewModel = editor._getViewModel();
 			if (!viewModel) {
 				// the editor has no view => has no cursors
@@ -1970,7 +1970,7 @@ export namespace CoreEditingCommands {
 			this.runCoreEditingCommand(editor, viewModel, args || {});
 		}
 
-		public abstract runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi;
+		public abstract runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void;
 	}
 
 	export const LineBreakInsert: EditorCommand = registerEditorCommand(new class extends CoreEditingCommand {
@@ -1987,7 +1987,7 @@ export namespace CoreEditingCommands {
 			});
 		}
 
-		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void {
 			editor.pushUndoStop();
 			editor.executeCommands(this.id, EnterOperation.lineBreakInsert(viewModel.cursorConfig, viewModel.model, viewModel.getCursorStates().map(s => s.modelState.selection)));
 		}
@@ -2009,7 +2009,7 @@ export namespace CoreEditingCommands {
 			});
 		}
 
-		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void {
 			editor.pushUndoStop();
 			editor.executeCommands(this.id, TypeOperations.outdent(viewModel.cursorConfig, viewModel.model, viewModel.getCursorStates().map(s => s.modelState.selection)));
 			editor.pushUndoStop();
@@ -2032,7 +2032,7 @@ export namespace CoreEditingCommands {
 			});
 		}
 
-		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void {
 			editor.pushUndoStop();
 			editor.executeCommands(this.id, TypeOperations.tab(viewModel.cursorConfig, viewModel.model, viewModel.getCursorStates().map(s => s.modelState.selection)));
 			editor.pushUndoStop();
@@ -2054,7 +2054,7 @@ export namespace CoreEditingCommands {
 			});
 		}
 
-		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void {
 			const [shouldPushStackElementBefore, commands] = DeleteOperations.deleteLeft(viewModel.getPrevEditOperationType(), viewModel.cursorConfig, viewModel.model, viewModel.getCursorStates().map(s => s.modelState.selection), viewModel.getCursorAutoClosedCharacters());
 			if (shouldPushStackElementBefore) {
 				editor.pushUndoStop();
@@ -2078,7 +2078,7 @@ export namespace CoreEditingCommands {
 			});
 		}
 
-		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): codemavi {
+		public runCoreEditingCommand(editor: ICodeEditor, viewModel: IViewModel, args: unknown): void {
 			const [shouldPushStackElementBefore, commands] = DeleteOperations.deleteRight(viewModel.getPrevEditOperationType(), viewModel.cursorConfig, viewModel.model, viewModel.getCursorStates().map(s => s.modelState.selection));
 			if (shouldPushStackElementBefore) {
 				editor.pushUndoStop();
@@ -2092,10 +2092,10 @@ export namespace CoreEditingCommands {
 		constructor() {
 			super(UndoCommand);
 		}
-		public runDOMCommand(activeElement: Element): codemavi {
+		public runDOMCommand(activeElement: Element): void {
 			activeElement.ownerDocument.execCommand('undo');
 		}
-		public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): codemavi | Promise<codemavi> {
+		public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): void | Promise<void> {
 			if (!editor.hasModel() || editor.getOption(EditorOption.readOnly) === true) {
 				return;
 			}
@@ -2107,10 +2107,10 @@ export namespace CoreEditingCommands {
 		constructor() {
 			super(RedoCommand);
 		}
-		public runDOMCommand(activeElement: Element): codemavi {
+		public runDOMCommand(activeElement: Element): void {
 			activeElement.ownerDocument.execCommand('redo');
 		}
-		public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): codemavi | Promise<codemavi> {
+		public runEditorCommand(accessor: ServicesAccessor | null, editor: ICodeEditor, args: unknown): void | Promise<void> {
 			if (!editor.hasModel() || editor.getOption(EditorOption.readOnly) === true) {
 				return;
 			}
@@ -2135,7 +2135,7 @@ class EditorHandlerCommand extends Command {
 		this._handlerId = handlerId;
 	}
 
-	public runCommand(accessor: ServicesAccessor, args: unknown): codemavi {
+	public runCommand(accessor: ServicesAccessor, args: unknown): void {
 		const editor = accessor.get(ICodeEditorService).getFocusedCodeEditor();
 		if (!editor) {
 			return;
@@ -2145,7 +2145,7 @@ class EditorHandlerCommand extends Command {
 	}
 }
 
-function registerOverwritableCommand(handlerId: string, metadata?: ICommandMetadata): codemavi {
+function registerOverwritableCommand(handlerId: string, metadata?: ICommandMetadata): void {
 	registerCommand(new EditorHandlerCommand('default:' + handlerId, handlerId));
 	registerCommand(new EditorHandlerCommand(handlerId, handlerId, metadata));
 }

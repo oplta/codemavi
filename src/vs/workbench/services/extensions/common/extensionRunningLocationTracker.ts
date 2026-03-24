@@ -265,7 +265,7 @@ export class ExtensionRunningLocationTracker {
 		return { runningLocation: result, maxLocalProcessAffinity: maxAffinity, maxLocalWebWorkerAffinity: maxLocalWebWorkerAffinity };
 	}
 
-	public initializeRunningLocation(localExtensions: IExtensionDescription[], remoteExtensions: IExtensionDescription[]): codemavi {
+	public initializeRunningLocation(localExtensions: IExtensionDescription[], remoteExtensions: IExtensionDescription[]): void {
 		const { runningLocation, maxLocalProcessAffinity, maxLocalWebWorkerAffinity } = this._doComputeRunningLocation(this._runningLocation, localExtensions, remoteExtensions, true);
 		this._runningLocation = runningLocation;
 		this._maxLocalProcessAffinity = maxLocalProcessAffinity;
@@ -293,7 +293,7 @@ export class ExtensionRunningLocationTracker {
 	/**
 	 * Update `this._runningLocation` with running locations for newly enabled/installed extensions.
 	 */
-	private _updateRunningLocationForAddedExtensions(toAdd: IExtensionDescription[]): codemavi {
+	private _updateRunningLocationForAddedExtensions(toAdd: IExtensionDescription[]): void {
 		// Determine new running location
 		const localProcessExtensions: IExtensionDescription[] = [];
 		const localWebWorkerExtensions: IExtensionDescription[] = [];

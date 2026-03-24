@@ -23,8 +23,8 @@ import * as dom from '../../../../base/browser/dom.js';
 import { Widget } from '../../../../base/browser/ui/widget.js';
 import { URI } from '../../../../base/common/uri.js';
 import { IConsistentEditorItemService, IConsistentItemService } from './helperServices/consistentItemService.js';
-import { codemaviPrefixAndSuffix, ctrlKStream_userMessage, ctrlKStream_systemMessage, defaultQuickEditFimTags, rewriteCode_systemMessage, rewriteCode_userMessage, searchReplaceGivenDescription_systemMessage, searchReplaceGivenDescription_userMessage, tripleTick, } from '../common/prompt/prompts.js';
-import { IMaviCommandBarService } from './codemaviCommandBarService.js';
+import { maviPrefixAndSuffix, ctrlKStream_userMessage, ctrlKStream_systemMessage, defaultQuickEditFimTags, rewriteCode_systemMessage, rewriteCode_userMessage, searchReplaceGivenDescription_systemMessage, searchReplaceGivenDescription_userMessage, tripleTick, } from '../common/prompt/prompts.js';
+import { IMaviCommandBarService } from './maviCommandBarService.js';
 import { IKeybindingService } from '../../../../platform/keybinding/common/keybinding.js';
 import { MAVI_ACCEPT_DIFF_ACTION_ID, MAVI_REJECT_DIFF_ACTION_ID } from './actionIDs.js';
 
@@ -39,15 +39,15 @@ import { ILLMMessageService } from '../common/sendLLMMessageService.js';
 import { LLMChatMessage } from '../common/sendLLMMessageTypes.js';
 import { IMetricsService } from '../common/metricsService.js';
 import { IEditCodeService, AddCtrlKOpts, StartApplyingOpts, CallBeforeStartApplyingOpts, } from './editCodeServiceInterface.js';
-import { IMaviSettingsService } from '../common/codemaviSettingsService.js';
-import { FeatureName } from '../common/codemaviSettingsTypes.js';
-import { IMaviModelService } from '../common/codemaviModelService.js';
+import { IMaviSettingsService } from '../common/maviSettingsService.js';
+import { FeatureName } from '../common/maviSettingsTypes.js';
+import { IMaviModelService } from '../common/maviModelService.js';
 import { deepClone } from '../../../../base/common/objects.js';
 import { acceptBg, acceptBorder, buttonFontSize, buttonTextColor, rejectBg, rejectBorder } from '../common/helpers/colors.js';
-import { DiffArea, Diff, CtrlKZone, Code MaviFileSnapshot, DiffAreaSnapshotEntry, diffAreaSnapshotKeys, DiffZone, TrackingZone, ComputedDiff } from '../common/editCodeServiceTypes.js';
+import { DiffArea, Diff, CtrlKZone, MaviFileSnapshot, DiffAreaSnapshotEntry, diffAreaSnapshotKeys, DiffZone, TrackingZone, ComputedDiff } from '../common/editCodeServiceTypes.js';
 import { IConvertToLLMMessageService } from './convertToLLMMessageService.js';
 // import { isMacintosh } from '../../../../base/common/platform.js';
-// import { MAVI_OPEN_SETTINGS_ACTION_ID } from './codemaviSettingsPane.js';
+// import { MAVI_OPEN_SETTINGS_ACTION_ID } from './maviSettingsPane.js';
 
 const numLinesOfStr = (str: string) => str.split('\n').length
 
@@ -194,7 +194,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		// @ICommandService private readonly _commandService: ICommandService,
 		@IMaviSettingsService private readonly _settingsService: IMaviSettingsService,
 		// @IFileService private readonly _fileService: IFileService,
-		@IMaviModelService private readonly _codemaviModelService: IMaviModelService,
+		@IMaviModelService private readonly _maviModelService: IMaviModelService,
 		@IConvertToLLMMessageService private readonly _convertToLLMMessageService: IConvertToLLMMessageService,
 	) {
 		super();
@@ -203,7 +203,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		const registeredModelURIs = new Set<string>()
 		const initializeModel = async (model: ITextModel) => {
 
-			await this._codemaviModelService.initializeModel(model.uri)
+			await this._maviModelService.initializeModel(model.uri)
 
 			// do not add listeners to the same model twice - important, or will see duplicates
 			if (registeredModelURIs.has(model.uri.fsPath)) return
@@ -279,18 +279,18 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	// 	const details = errorDetails(e.fullError)
 	// 	this._notificationService.notify({
 	// 		severity: Severity.Warning,
-	// 		message: `Code Mavi Error: ${e.message}`,
+	// 		message: `Mavi Error: ${e.message}`,
 	// 		actions: {
 	// 			secondary: [{
-	// 				id: 'codemavi.onerror.opensettings',
+	// 				id: 'mavi.onerror.opensettings',
 	// 				enabled: true,
-	// 				label: `Open Code Mavi's settings`,
+	// 				label: `Open Mavi's settings`,
 	// 				tooltip: '',
 	// 				class: undefined,
 	// 				run: () => { this._commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID) }
 	// 			}]
 	// 		},
-	// 		source: details ? `(Hold ${isMacintosh ? 'Option' : 'Alt'} to hover) - ${details}\n\nIf this persists, feel free to [report](https://github.com/codemavieditor/codemavi/issues/new) it.` : undefined
+	// 		source: details ? `(Hold ${isMacintosh ? 'Option' : 'Alt'} to hover) - ${details}\n\nIf this persists, feel free to [report](https://github.com/mavieditor/mavi/issues/new) it.` : undefined
 	// 	})
 	// }
 
@@ -315,7 +315,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 
 	private _addDiffAreaStylesToURI = (uri: URI) => {
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 
 		for (const diffareaid of this.diffAreasOfURI[uri.fsPath] || []) {
 			const diffArea = this.diffAreaOfId[diffareaid]
@@ -324,10 +324,10 @@ class EditCodeService extends Disposable implements IEditCodeService {
 				// add sweep styles to the diffZone
 				if (diffArea._streamState.isStreaming) {
 					// sweepLine ... sweepLine
-					const fn1 = this._addLineDecoration(model, diffArea._streamState.line, diffArea._streamState.line, 'codemavi-sweepIdxBG')
+					const fn1 = this._addLineDecoration(model, diffArea._streamState.line, diffArea._streamState.line, 'mavi-sweepIdxBG')
 					// sweepLine+1 ... endLine
 					const fn2 = diffArea._streamState.line + 1 <= diffArea.endLine ?
-						this._addLineDecoration(model, diffArea._streamState.line + 1, diffArea.endLine, 'codemavi-sweepBG')
+						this._addLineDecoration(model, diffArea._streamState.line + 1, diffArea.endLine, 'mavi-sweepBG')
 						: null
 					diffArea._removeStylesFns.add(() => { fn1?.(); fn2?.(); })
 
@@ -336,7 +336,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 			else if (diffArea.type === 'CtrlKZone' && diffArea._linkedStreamingDiffZone === null) {
 				// highlight zone's text
-				const fn = this._addLineDecoration(model, diffArea.startLine, diffArea.endLine, 'codemavi-highlightBG')
+				const fn = this._addLineDecoration(model, diffArea.startLine, diffArea.endLine, 'mavi-highlightBG')
 				diffArea._removeStylesFns.add(() => fn?.());
 			}
 		}
@@ -344,7 +344,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 
 	private _computeDiffsAndAddStylesToURI = (uri: URI) => {
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (model === null) return
 		const fullFileText = model.getValue(EndOfLinePreference.LF)
 
@@ -404,7 +404,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			})
 
 			// mount react
-			let disposeFn: (() => codemavi) | undefined = undefined
+			let disposeFn: (() => void) | undefined = undefined
 			this._instantiationService.invokeFunction(accessor => {
 				disposeFn = mountCtrlK(domNode, accessor, {
 
@@ -475,13 +475,13 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	private _addDiffStylesToURI = (uri: URI, diff: Diff) => {
 		const { type, diffid } = diff
 
-		const disposeInThisEditorFns: (() => codemavi)[] = []
+		const disposeInThisEditorFns: (() => void)[] = []
 
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 
 		// green decoration and minimap decoration
 		if (type !== 'deletion') {
-			const fn = this._addLineDecoration(model, diff.startLine, diff.endLine, 'codemavi-greenBG', {
+			const fn = this._addLineDecoration(model, diff.startLine, diff.endLine, 'mavi-greenBG', {
 				minimap: { color: { id: 'minimapGutter.addedBackground' }, position: 2 },
 				overviewRuler: { color: { id: 'editorOverviewRuler.addedForeground' }, position: 7 }
 			})
@@ -496,7 +496,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 				fn: (editor) => {
 
 					const domNode = document.createElement('div');
-					domNode.className = 'codemavi-redBG'
+					domNode.className = 'mavi-redBG'
 
 					const renderOptions = RenderOptions.fromEditor(editor)
 
@@ -585,7 +585,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 							offsetLines = 1
 						}
 					}
-					else { throw new Error('Code Mavi 1') }
+					else { throw new Error('Mavi 1') }
 
 					const buttonsWidget = this._instantiationService.createInstance(AcceptRejectInlineWidget, {
 						editor,
@@ -625,7 +625,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 	weAreWriting = false
 	private _writeURIText(uri: URI, text: string, range_: IRange | 'wholeFileRange', { shouldRealignDiffAreas, }: { shouldRealignDiffAreas: boolean, }) {
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) {
 			this._refreshStylesAndDiffsInURI(uri) // at the end of a write, we still expect to refresh all styles. e.g. sometimes we expect to restore all the decorations even if no edits were made when _writeText is used
 			return
@@ -663,8 +663,8 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 
 
-	private _getCurrentCode MaviFileSnapshot = (uri: URI): Code MaviFileSnapshot => {
-		const { model } = this._codemaviModelService.getModel(uri)
+	private _getCurrentMaviFileSnapshot = (uri: URI): MaviFileSnapshot => {
+		const { model } = this._maviModelService.getModel(uri)
 		const snapshottedDiffAreaOfId: Record<string, DiffAreaSnapshotEntry> = {}
 
 		for (const diffareaid in this.diffAreaOfId) {
@@ -687,7 +687,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	}
 
 
-	private _restoreCode MaviFileSnapshot = async (uri: URI, snapshot: Code MaviFileSnapshot) => {
+	private _restoreMaviFileSnapshot = async (uri: URI, snapshot: MaviFileSnapshot) => {
 		// for each diffarea in this uri, stop streaming if currently streaming
 		for (const diffareaid in this.diffAreaOfId) {
 			const diffArea = this.diffAreaOfId[diffareaid]
@@ -736,35 +736,35 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		// this._noLongerNeedModelReference(uri)
 	}
 
-	private _addToHistory(uri: URI, opts?: { onWillUndo?: () => codemavi }) {
-		const beforeSnapshot: Code MaviFileSnapshot = this._getCurrentCode MaviFileSnapshot(uri)
-		let afterSnapshot: Code MaviFileSnapshot | null = null
+	private _addToHistory(uri: URI, opts?: { onWillUndo?: () => void }) {
+		const beforeSnapshot: MaviFileSnapshot = this._getCurrentMaviFileSnapshot(uri)
+		let afterSnapshot: MaviFileSnapshot | null = null
 
 		const elt: IUndoRedoElement = {
 			type: UndoRedoElementType.Resource,
 			resource: uri,
-			label: 'Code Mavi Agent',
+			label: 'Mavi Agent',
 			code: 'undoredo.editCode',
-			undo: async () => { opts?.onWillUndo?.(); await this._restoreCode MaviFileSnapshot(uri, beforeSnapshot) },
-			redo: async () => { if (afterSnapshot) await this._restoreCode MaviFileSnapshot(uri, afterSnapshot) }
+			undo: async () => { opts?.onWillUndo?.(); await this._restoreMaviFileSnapshot(uri, beforeSnapshot) },
+			redo: async () => { if (afterSnapshot) await this._restoreMaviFileSnapshot(uri, afterSnapshot) }
 		}
 		this._undoRedoService.pushElement(elt)
 
 		const onFinishEdit = async () => {
-			afterSnapshot = this._getCurrentCode MaviFileSnapshot(uri)
-			await this._codemaviModelService.saveModel(uri)
+			afterSnapshot = this._getCurrentMaviFileSnapshot(uri)
+			await this._maviModelService.saveModel(uri)
 		}
 		return { onFinishEdit }
 	}
 
 
-	public getCode MaviFileSnapshot(uri: URI) {
-		return this._getCurrentCode MaviFileSnapshot(uri)
+	public getMaviFileSnapshot(uri: URI) {
+		return this._getCurrentMaviFileSnapshot(uri)
 	}
 
 
-	public restoreCode MaviFileSnapshot(uri: URI, snapshot: Code MaviFileSnapshot): codemavi {
-		this._restoreCode MaviFileSnapshot(uri, snapshot)
+	public restoreMaviFileSnapshot(uri: URI, snapshot: MaviFileSnapshot): void {
+		this._restoreMaviFileSnapshot(uri, snapshot)
 	}
 
 
@@ -997,7 +997,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			else if (lastDiff.type === 'deletion')
 				endLineInLlmTextSoFar = lastDiff.startLine
 			else
-				throw new Error(`Code Mavi: diff.type not recognized on: ${lastDiff}`)
+				throw new Error(`Mavi: diff.type not recognized on: ${lastDiff}`)
 		}
 
 		// at the start, add a newline between the stream and originalCode to make reasoning easier
@@ -1127,14 +1127,14 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	public async callBeforeApplyOrEdit(givenURI: URI | 'current') {
 		const uri = this._uriOfGivenURI(givenURI)
 		if (!uri) return
-		await this._codemaviModelService.initializeModel(uri)
-		await this._codemaviModelService.saveModel(uri) // save the URI
+		await this._maviModelService.initializeModel(uri)
+		await this._maviModelService.saveModel(uri) // save the URI
 	}
 
 
 	// the applyDonePromise this returns can reject, and should be caught with .catch
-	public startApplying(opts: StartApplyingOpts): [URI, Promise<codemavi>] | null {
-		let res: [DiffZone, Promise<codemavi>] | undefined = undefined
+	public startApplying(opts: StartApplyingOpts): [URI, Promise<void>] | null {
+		let res: [DiffZone, Promise<void>] | undefined = undefined
 
 		if (opts.from === 'QuickEdit') {
 			res = this._initializeWriteoverStream(opts) // rewrite
@@ -1267,9 +1267,9 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		startBehavior: 'accept-conflicts' | 'reject-conflicts' | 'keep-conflicts',
 		streamRequestIdRef: { current: string | null },
 		linkedCtrlKZone: CtrlKZone | null,
-		onWillUndo: () => codemavi,
+		onWillUndo: () => void,
 	}) {
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) return
 
 		// treat like full file, unless linkedCtrlKZone was provided in which case use its diff's range
@@ -1349,7 +1349,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	}
 
 
-	private _initializeWriteoverStream(opts: StartApplyingOpts): [DiffZone, Promise<codemavi>] | undefined {
+	private _initializeWriteoverStream(opts: StartApplyingOpts): [DiffZone, Promise<void>] | undefined {
 
 		const { from, } = opts
 		const featureName: FeatureName = opts.from === 'ClickApply' ? 'Apply' : 'Ctrl+K'
@@ -1376,10 +1376,10 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			startRange = [startLine_, endLine_]
 		}
 		else {
-			throw new Error(`Code Mavi: diff.type not recognized on: ${from}`)
+			throw new Error(`Mavi: diff.type not recognized on: ${from}`)
 		}
 
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) return
 
 		let streamRequestIdRef: { current: string | null } = { current: null } // can use this as a proxy to set the diffArea's stream state requestId
@@ -1408,7 +1408,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 			const startLine = startRange === 'fullFile' ? 1 : startRange[0]
 			const endLine = startRange === 'fullFile' ? model.getLineCount() : startRange[1]
-			const { prefix, suffix } = codemaviPrefixAndSuffix({ fullFileStr: originalFileCode, startLine, endLine })
+			const { prefix, suffix } = maviPrefixAndSuffix({ fullFileStr: originalFileCode, startLine, endLine })
 			const userContent = ctrlKStream_userMessage({ selection: originalCode, instructions: instructions, prefix, suffix, fimTags: quickEditFIMTags, language })
 
 			const { messages: a, separateSystemMessage: b } = this._convertToLLMMessageService.prepareLLMSimpleMessages({
@@ -1480,7 +1480,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			else if (from === 'ClickApply') {
 				return extractCodeFromRegular({ text: fullText, recentlyAddedTextLen })
 			}
-			throw new Error('Code Mavi 1')
+			throw new Error('Mavi 1')
 		}
 
 		// refresh now in case onText takes a while to get 1st message
@@ -1494,8 +1494,8 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			while (shouldSendAnotherMessage) {
 				shouldSendAnotherMessage = false
 
-				let resMessageDonePromise: () => codemavi = () => { }
-				const messageDonePromise = new Promise<codemavi>((res_) => { resMessageDonePromise = res_ })
+				let resMessageDonePromise: () => void = () => { }
+				const messageDonePromise = new Promise<void>((res_) => { resMessageDonePromise = res_ })
 
 				// state used in onText:
 				let fullTextSoFar = '' // so far (INCLUDING ignored suffix)
@@ -1561,7 +1561,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			} // end while
 		} // end writeover
 
-		const applyDonePromise = new Promise<codemavi>((res, rej) => { runWriteover().then(res).catch(rej) })
+		const applyDonePromise = new Promise<void>((res, rej) => { runWriteover().then(res).catch(rej) })
 		return [diffZone, applyDonePromise]
 	}
 
@@ -1578,7 +1578,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 	_fileLengthOfGivenURI(givenURI: URI | 'current') {
 		const uri = this._uriOfGivenURI(givenURI)
 		if (!uri) return null
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) return null
 		const numCharsInFile = model.getValueLength(EndOfLinePreference.LF)
 		return numCharsInFile
@@ -1617,7 +1617,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		const blocks = extractSearchReplaceBlocks(blocksStr)
 		if (blocks.length === 0) throw new Error(`No Search/Replace blocks were received!`)
 
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) throw new Error(`Error applying Search/Replace blocks: File does not exist.`)
 		const modelStr = model.getValue(EndOfLinePreference.LF)
 		// .split('\n').map(l => '\t' + l).join('\n') // for testing purposes only, remember to remove this
@@ -1668,7 +1668,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		)
 	}
 
-	private _initializeSearchAndReplaceStream(opts: StartApplyingOpts & { from: 'ClickApply' }): [DiffZone, Promise<codemavi>] | undefined {
+	private _initializeSearchAndReplaceStream(opts: StartApplyingOpts & { from: 'ClickApply' }): [DiffZone, Promise<void>] | undefined {
 		const { from, applyStr, } = opts
 		const featureName: FeatureName = 'Apply'
 		const overridesOfModel = this._settingsService.state.overridesOfModel
@@ -1678,7 +1678,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 		const uri = this._getURIBeforeStartApplying(opts)
 		if (!uri) return
 
-		const { model } = this._codemaviModelService.getModel(uri)
+		const { model } = this._maviModelService.getModel(uri)
 		if (!model) return
 
 		let streamRequestIdRef: { current: string | null } = { current: null } // can use this as a proxy to set the diffArea's stream state requestId
@@ -1793,8 +1793,8 @@ class EditCodeService extends Disposable implements IEditCodeService {
 					break
 				}
 
-				let resMessageDonePromise: () => codemavi = () => { }
-				const messageDonePromise = new Promise<codemavi>((res, rej) => { resMessageDonePromise = res })
+				let resMessageDonePromise: () => void = () => { }
+				const messageDonePromise = new Promise<void>((res, rej) => { resMessageDonePromise = res })
 
 
 				const onText = (params: { fullText: string; fullReasoning: string }) => {
@@ -1857,7 +1857,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 								console.log('block.orig:', block.orig)
 								console.log('---------')
 								const content = this._errContentOfInvalidStr(errorMessage, block.orig)
-								const retryMsg = 'All of your previous outputs have been ignored. Please re-output ALL SEARCH/REPLACE blocks starting from the first one, and acodemavi the error this time.'
+								const retryMsg = 'All of your previous outputs have been ignored. Please re-output ALL SEARCH/REPLACE blocks starting from the first one, and avoid the error this time.'
 								messages.push(
 									{ role: 'assistant', content: fullText }, // latest output
 									{ role: 'user', content: content + '\n' + retryMsg } // user explanation of what's wrong
@@ -1968,7 +1968,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 						const blocks = extractSearchReplaceBlocks(fullText)
 						if (blocks.length === 0) {
-							this._notificationService.info(`Code Mavi: We ran Fast Apply, but the LLM didn't output any changes.`)
+							this._notificationService.info(`Mavi: We ran Fast Apply, but the LLM didn't output any changes.`)
 						}
 						this._writeURIText(uri, originalFileCode, 'wholeFileRange', { shouldRealignDiffAreas: true })
 
@@ -2004,7 +2004,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 		} // end retryLoop
 
-		const applyDonePromise = new Promise<codemavi>((res, rej) => { runSearchReplace().then(res).catch(rej) })
+		const applyDonePromise = new Promise<void>((res, rej) => { runSearchReplace().then(res).catch(rej) })
 		return [diffZone, applyDonePromise]
 	}
 
@@ -2114,7 +2114,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 
 
-	// called on codemavi.acceptDiff
+	// called on mavi.acceptDiff
 	public async acceptDiff({ diffid }: { diffid: number }) {
 
 		// TODO could use an ITextModelto do this instead, would be much simpler
@@ -2158,7 +2158,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			].join('\n')
 		}
 		else {
-			throw new Error(`Code Mavi error: ${diff}.type not recognized`)
+			throw new Error(`Mavi error: ${diff}.type not recognized`)
 		}
 
 		// console.log('DIFF', diff)
@@ -2185,7 +2185,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 
 
 
-	// called on codemavi.rejectDiff
+	// called on mavi.rejectDiff
 	public async rejectDiff({ diffid }: { diffid: number }) {
 
 		const diff = this.diffOfId[diffid]
@@ -2250,7 +2250,7 @@ class EditCodeService extends Disposable implements IEditCodeService {
 			toRange = { startLineNumber: diff.startLine, startColumn: 1, endLineNumber: diff.endLine, endColumn: Number.MAX_SAFE_INTEGER } // 1-indexed
 		}
 		else {
-			throw new Error(`Code Mavi error: ${diff}.type not recognized`)
+			throw new Error(`Mavi error: ${diff}.type not recognized`)
 		}
 
 		// update the file
@@ -2299,13 +2299,13 @@ class AcceptRejectInlineWidget extends Widget implements IOverlayWidget {
 	constructor(
 		{ editor, onAccept, onReject, diffid, startLine, offsetLines }: {
 			editor: ICodeEditor;
-			onAccept: () => codemavi;
-			onReject: () => codemavi;
+			onAccept: () => void;
+			onReject: () => void;
 			diffid: string,
 			startLine: number,
 			offsetLines: number
 		},
-		@IMaviCommandBarService private readonly _codemaviCommandBarService: IMaviCommandBarService,
+		@IMaviCommandBarService private readonly _maviCommandBarService: IMaviCommandBarService,
 		@IKeybindingService private readonly _keybindingService: IKeybindingService,
 		@IEditCodeService private readonly _editCodeService: IEditCodeService,
 	) {
@@ -2336,7 +2336,7 @@ class AcceptRejectInlineWidget extends Widget implements IOverlayWidget {
 			const acceptKeybindLabel = this._editCodeService.processRawKeybindingText(acceptKeybinding && acceptKeybinding.getLabel() || '');
 			const rejectKeybindLabel = this._editCodeService.processRawKeybindingText(rejectKeybinding && rejectKeybinding.getLabel() || '');
 
-			const commandBarStateAtUri = this._codemaviCommandBarService.stateOfURI[uri.fsPath];
+			const commandBarStateAtUri = this._maviCommandBarService.stateOfURI[uri.fsPath];
 			const selectedDiffIdx = commandBarStateAtUri?.diffIdx ?? 0; // 0th item is selected by default
 			const thisDiffIdx = commandBarStateAtUri?.sortedDiffIds.indexOf(diffid) ?? null;
 
@@ -2435,7 +2435,7 @@ class AcceptRejectInlineWidget extends Widget implements IOverlayWidget {
 
 
 		// Listen for state changes in the command bar service
-		this._register(this._codemaviCommandBarService.onDidChangeState(e => {
+		this._register(this._maviCommandBarService.onDidChangeState(e => {
 			if (uri && e.uri.fsPath === uri.fsPath) {
 
 				const { acceptText, rejectText } = getAcceptRejectText()
@@ -2452,7 +2452,7 @@ class AcceptRejectInlineWidget extends Widget implements IOverlayWidget {
 		// console.log('created elt', this._domNode)
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.editor.removeOverlayWidget(this);
 		super.dispose();
 	}

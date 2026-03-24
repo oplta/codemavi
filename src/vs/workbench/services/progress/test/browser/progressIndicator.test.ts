@@ -58,9 +58,9 @@ class TestProgressBar {
 		return this.done();
 	}
 
-	show(): codemavi { }
+	show(): void { }
 
-	hide(): codemavi { }
+	hide(): void { }
 }
 
 suite('Progress Indicator', () => {
@@ -76,7 +76,7 @@ suite('Progress Indicator', () => {
 		const progressScope = disposables.add(new class extends AbstractProgressScope {
 			constructor() { super('test.scopeId', true); }
 			testOnScopeOpened(scopeId: string) { super.onScopeOpened(scopeId); }
-			testOnScopeClosed(scopeId: string): codemavi { super.onScopeClosed(scopeId); }
+			testOnScopeClosed(scopeId: string): void { super.onScopeClosed(scopeId); }
 		}());
 		const testObject = disposables.add(new ScopedProgressIndicator((<any>testProgressBar), progressScope));
 

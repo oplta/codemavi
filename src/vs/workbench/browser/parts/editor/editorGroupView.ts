@@ -84,10 +84,10 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#region events
 
-	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
+	private readonly _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	private readonly _onDidModelChange = this._register(new Emitter<IGroupModelChangeEvent>());
@@ -136,7 +136,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	private readonly containerToolBarMenuDisposable = this._register(new MutableDisposable());
 
-	private readonly whenRestoredPromise = new DeferredPromise<codemavi>();
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
 	readonly whenRestored = this.whenRestoredPromise.p;
 
 	constructor(
@@ -246,7 +246,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.registerListeners();
 	}
 
-	private handleGroupContextKeys(): codemavi {
+	private handleGroupContextKeys(): void {
 		const groupActiveEditorDirtyContext = this.editorPartsView.bind(ActiveEditorDirtyContext, this);
 		const groupActiveEditorPinnedContext = this.editorPartsView.bind(ActiveEditorPinnedContext, this);
 		const groupActiveEditorFirstContext = this.editorPartsView.bind(ActiveEditorFirstInGroupContext, this);
@@ -374,7 +374,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		updateGroupContextKeys({ kind: GroupModelChangeKind.GROUP_LOCKED });
 	}
 
-	private registerContainerListeners(): codemavi {
+	private registerContainerListeners(): void {
 
 		// Open new file via doubleclick on empty container
 		this._register(addDisposableListener(this.element, EventType.DBLCLICK, e => {
@@ -401,7 +401,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}));
 	}
 
-	private createContainerToolbar(): codemavi {
+	private createContainerToolbar(): void {
 
 		// Toolbar Container
 		const toolbarContainer = $('.editor-group-container-toolbar');
@@ -435,12 +435,12 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this._register(containerToolbarMenu.onDidChange(updateContainerToolbar));
 	}
 
-	private createContainerContextMenu(): codemavi {
+	private createContainerContextMenu(): void {
 		this._register(addDisposableListener(this.element, EventType.CONTEXT_MENU, e => this.onShowContainerContextMenu(e)));
 		this._register(addDisposableListener(this.element, TouchEventType.Contextmenu, () => this.onShowContainerContextMenu()));
 	}
 
-	private onShowContainerContextMenu(e?: MouseEvent): codemavi {
+	private onShowContainerContextMenu(e?: MouseEvent): void {
 		if (!this.isEmpty) {
 			return; // only for empty editor groups
 		}
@@ -460,7 +460,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		});
 	}
 
-	private doTrackFocus(): codemavi {
+	private doTrackFocus(): void {
 
 		// Container
 		const containerFocusTracker = this._register(trackFocus(this.element));
@@ -471,7 +471,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}));
 
 		// Title Container
-		const handleTitleClickOrTouch = (e: MouseEvent | GestureEvent): codemavi => {
+		const handleTitleClickOrTouch = (e: MouseEvent | GestureEvent): void => {
 			let target: HTMLElement;
 			if (isMouseEvent(e)) {
 				if (e.button !== 0 /* middle/right mouse button */ || (isMacintosh && e.ctrlKey /* macOS context menu */)) {
@@ -504,7 +504,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}));
 	}
 
-	private updateContainer(): codemavi {
+	private updateContainer(): void {
 
 		// Empty Container: add some empty container attributes
 		if (this.isEmpty) {
@@ -524,12 +524,12 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.updateStyles();
 	}
 
-	private updateTitleContainer(): codemavi {
+	private updateTitleContainer(): void {
 		this.titleContainer.classList.toggle('tabs', this.groupsView.partOptions.showTabs === 'multiple');
 		this.titleContainer.classList.toggle('show-file-icons', this.groupsView.partOptions.showIcons);
 	}
 
-	private restoreEditors(from: IEditorGroupView | ISerializedEditorGroupModel | null, groupViewOptions?: IEditorGroupViewOptions): Promise<codemavi> | undefined {
+	private restoreEditors(from: IEditorGroupView | ISerializedEditorGroupModel | null, groupViewOptions?: IEditorGroupViewOptions): Promise<void> | undefined {
 		if (this.count === 0) {
 			return; // nothing to show
 		}
@@ -580,7 +580,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#region event handling
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Model Events
 		this._register(this.model.onDidModelChange(e => this.onDidGroupModelChange(e)));
@@ -595,7 +595,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this._register(this.onDidFocus(() => this.onDidGainFocus()));
 	}
 
-	private onDidGroupModelChange(e: IGroupModelChangeEvent): codemavi {
+	private onDidGroupModelChange(e: IGroupModelChangeEvent): void {
 
 		// Re-emit to outside
 		this._onDidModelChange.fire(e);
@@ -641,7 +641,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private onDidOpenEditor(editor: EditorInput, editorIndex: number): codemavi {
+	private onDidOpenEditor(editor: EditorInput, editorIndex: number): void {
 
 		/* __GDPR__
 			"editorOpened" : {
@@ -657,7 +657,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.updateContainer();
 	}
 
-	private handleOnDidCloseEditor(editor: EditorInput, editorIndex: number, context: EditorCloseContext, sticky: boolean): codemavi {
+	private handleOnDidCloseEditor(editor: EditorInput, editorIndex: number, context: EditorCloseContext, sticky: boolean): void {
 
 		// Before close
 		this._onWillCloseEditor.fire({ groupId: this.id, editor, context, index: editorIndex, sticky });
@@ -755,7 +755,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return descriptor;
 	}
 
-	private onWillDisposeEditor(editor: EditorInput): codemavi {
+	private onWillDisposeEditor(editor: EditorInput): void {
 
 		// To prevent race conditions, we handle disposed editors in our worker with a timeout
 		// because it can happen that an input is being disposed with the intent to replace
@@ -763,7 +763,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.disposedEditorsWorker.work(editor);
 	}
 
-	private handleDisposedEditors(disposedEditors: EditorInput[]): codemavi {
+	private handleDisposedEditors(disposedEditors: EditorInput[]): void {
 
 		// Split between visible and hidden editors
 		let activeEditor: EditorInput | undefined;
@@ -797,7 +797,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private onDidChangeEditorPartOptions(event: IEditorPartOptionsChangeEvent): codemavi {
+	private onDidChangeEditorPartOptions(event: IEditorPartOptionsChangeEvent): void {
 
 		// Title container
 		this.updateTitleContainer();
@@ -832,7 +832,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private onDidChangeEditorDirty(editor: EditorInput): codemavi {
+	private onDidChangeEditorDirty(editor: EditorInput): void {
 
 		// Always show dirty editors pinned
 		this.pinEditor(editor);
@@ -841,7 +841,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.titleControl.updateEditorDirty(editor);
 	}
 
-	private onDidChangeEditorTransient(editor: EditorInput): codemavi {
+	private onDidChangeEditorTransient(editor: EditorInput): void {
 		const transient = this.model.isTransient(editor);
 
 		// Transient state overrides the `enablePreview` setting,
@@ -852,25 +852,25 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private onDidChangeEditorLabel(editor: EditorInput): codemavi {
+	private onDidChangeEditorLabel(editor: EditorInput): void {
 
 		// Forward to title control
 		this.titleControl.updateEditorLabel(editor);
 	}
 
-	private onDidChangeEditorSelection(): codemavi {
+	private onDidChangeEditorSelection(): void {
 
 		// Forward to title control
 		this.titleControl.updateEditorSelections();
 	}
 
-	private onDidVisibilityChange(visible: boolean): codemavi {
+	private onDidVisibilityChange(visible: boolean): void {
 
 		// Forward to active editor pane
 		this.editorPane.setVisible(visible);
 	}
 
-	private onDidGainFocus(): codemavi {
+	private onDidGainFocus(): void {
 		if (this.activeEditor) {
 
 			// We aggressively clear the transient state of editors
@@ -919,21 +919,21 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return this.titleControl.getHeight();
 	}
 
-	notifyIndexChanged(newIndex: number): codemavi {
+	notifyIndexChanged(newIndex: number): void {
 		if (this._index !== newIndex) {
 			this._index = newIndex;
 			this.model.setIndex(newIndex);
 		}
 	}
 
-	notifyLabelChanged(newLabel: string): codemavi {
+	notifyLabelChanged(newLabel: string): void {
 		if (this.groupsLabel !== newLabel) {
 			this.groupsLabel = newLabel;
 			this.model.setLabel(newLabel);
 		}
 	}
 
-	setActive(isActive: boolean): codemavi {
+	setActive(isActive: boolean): void {
 		this.active = isActive;
 
 		// Clear selection when group no longer active
@@ -1015,7 +1015,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return this.model.isActive(editor);
 	}
 
-	async setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): Promise<codemavi> {
+	async setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): Promise<void> {
 		if (!this.isActive(activeSelectedEditor)) {
 			// The active selected editor is not yet opened, so we go
 			// through `openEditor` to show it. We pass the inactive
@@ -1077,7 +1077,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return this.model.isLast(editor);
 	}
 
-	focus(): codemavi {
+	focus(): void {
 
 		// Pass focus to editor panes
 		if (this.activeEditorPane) {
@@ -1090,7 +1090,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this._onDidFocus.fire();
 	}
 
-	pinEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): codemavi {
+	pinEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): void {
 		if (candidate && !this.model.isPinned(candidate)) {
 
 			// Update model
@@ -1103,15 +1103,15 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	stickEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): codemavi {
+	stickEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): void {
 		this.doStickEditor(candidate, true);
 	}
 
-	unstickEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): codemavi {
+	unstickEditor(candidate: EditorInput | undefined = this.activeEditor || undefined): void {
 		this.doStickEditor(candidate, false);
 	}
 
-	private doStickEditor(candidate: EditorInput | undefined, sticky: boolean): codemavi {
+	private doStickEditor(candidate: EditorInput | undefined, sticky: boolean): void {
 		if (candidate && this.model.isSticky(candidate) !== sticky) {
 			const oldIndexOfEditor = this.getIndexOfEditor(candidate);
 
@@ -1396,7 +1396,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private doMoveEditorInsideGroup(candidate: EditorInput, options?: IEditorOpenOptions): codemavi {
+	private doMoveEditorInsideGroup(candidate: EditorInput, options?: IEditorOpenOptions): void {
 		const moveToIndex = options ? options.index : undefined;
 		if (typeof moveToIndex !== 'number') {
 			return; // do nothing if we move into same group without index
@@ -1479,7 +1479,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#region copyEditor()
 
-	copyEditors(editors: { editor: EditorInput; options?: IEditorOptions }[], target: EditorGroupView): codemavi {
+	copyEditors(editors: { editor: EditorInput; options?: IEditorOptions }[], target: EditorGroupView): void {
 
 		// Optimization: knowing that we move many editors, we
 		// delay the title update to a later point for this group
@@ -1502,7 +1502,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	copyEditor(editor: EditorInput, target: EditorGroupView, options?: IEditorOptions, internalOptions?: IInternalEditorTitleControlOptions): codemavi {
+	copyEditor(editor: EditorInput, target: EditorGroupView, options?: IEditorOptions, internalOptions?: IInternalEditorTitleControlOptions): void {
 
 		// Move within same group because we do not support to show the same editor
 		// multiple times in the same group
@@ -1541,7 +1541,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return true;
 	}
 
-	private doCloseEditor(editor: EditorInput, preserveFocus = (this.groupsView.activeGroup !== this), internalOptions?: IInternalEditorCloseOptions): codemavi {
+	private doCloseEditor(editor: EditorInput, preserveFocus = (this.groupsView.activeGroup !== this), internalOptions?: IInternalEditorCloseOptions): void {
 
 		// Forward to title control unless skipped via internal options
 		if (!internalOptions?.skipTitleUpdate) {
@@ -1564,7 +1564,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		}
 	}
 
-	private doCloseActiveEditor(preserveFocus = (this.groupsView.activeGroup !== this), internalOptions?: IInternalEditorCloseOptions): codemavi {
+	private doCloseActiveEditor(preserveFocus = (this.groupsView.activeGroup !== this), internalOptions?: IInternalEditorCloseOptions): void {
 		const editorToClose = this.activeEditor;
 		const restoreFocus = !preserveFocus && this.shouldRestoreFocus(this.element);
 
@@ -1659,7 +1659,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return isAncestor(activeElement, target);
 	}
 
-	private doCloseInactiveEditor(editor: EditorInput, internalOptions?: IInternalEditorCloseOptions): codemavi {
+	private doCloseInactiveEditor(editor: EditorInput, internalOptions?: IInternalEditorCloseOptions): void {
 
 		// Update model
 		this.model.closeEditor(editor, internalOptions?.context);
@@ -1898,7 +1898,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return editorsToClose;
 	}
 
-	private doCloseEditors(editors: EditorInput[], options?: ICloseEditorOptions): codemavi {
+	private doCloseEditors(editors: EditorInput[], options?: ICloseEditorOptions): void {
 
 		// Close all inactive editors first
 		let closeActiveEditor = false;
@@ -1956,7 +1956,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return true;
 	}
 
-	private doCloseAllEditors(options?: ICloseAllEditorsOptions): codemavi {
+	private doCloseAllEditors(options?: ICloseAllEditorsOptions): void {
 		let editors = this.model.getEditors(EditorsOrder.SEQUENTIAL, options);
 		if (options?.excludeConfirming) {
 			editors = editors.filter(editor => !this.shouldConfirmClose(editor));
@@ -1987,7 +1987,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#region replaceEditors()
 
-	async replaceEditors(editors: EditorReplacement[]): Promise<codemavi> {
+	async replaceEditors(editors: EditorReplacement[]): Promise<void> {
 
 		// Extract active vs. inactive replacements
 		let activeReplacement: EditorReplacement | undefined;
@@ -2065,7 +2065,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		return this.model.isLocked;
 	}
 
-	lock(locked: boolean): codemavi {
+	lock(locked: boolean): void {
 		this.model.lock(locked);
 	}
 
@@ -2095,7 +2095,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		} else {
 			// If there is no active pane in the group (it's the last group and it's empty)
 			// Trigger the change event when the active editor changes
-			const _onDidChange = disposables.add(new Emitter<codemavi>());
+			const _onDidChange = disposables.add(new Emitter<void>());
 			onDidChange = _onDidChange.event;
 			disposables.add(this.onDidActiveEditorChange(() => _onDidChange.fire()));
 		}
@@ -2107,7 +2107,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#region Themable
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		const isEmpty = this.isEmpty;
 
 		// Container
@@ -2156,7 +2156,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 	private _onDidChange = this._register(new Relay<{ width: number; height: number } | undefined>());
 	readonly onDidChange = this._onDidChange.event;
 
-	layout(width: number, height: number, top: number, left: number): codemavi {
+	layout(width: number, height: number, top: number, left: number): void {
 		this.lastLayout = { width, height, top, left };
 		this.element.classList.toggle('max-height-478px', height <= 478);
 
@@ -2175,14 +2175,14 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 		this.editorPane.layout({ width, height: editorHeight, top: top + titleControlSize.height, left });
 	}
 
-	relayout(): codemavi {
+	relayout(): void {
 		if (this.lastLayout) {
 			const { width, height, top, left } = this.lastLayout;
 			this.layout(width, height, top, left);
 		}
 	}
 
-	setBoundarySashes(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes(sashes: IBoundarySashes): void {
 		this.editorPane.setBoundarySashes(sashes);
 	}
 
@@ -2192,7 +2192,7 @@ export class EditorGroupView extends Themable implements IEditorGroupView {
 
 	//#endregion
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._disposed = true;
 
 		this._onWillDispose.fire();

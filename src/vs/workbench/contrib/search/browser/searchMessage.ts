@@ -25,7 +25,7 @@ export const renderSearchMessage = (
 	openerService: IOpenerService,
 	commandService: ICommandService,
 	disposableStore: DisposableStore,
-	triggerSearch: () => codemavi,
+	triggerSearch: () => void,
 ): HTMLElement => {
 	const div = dom.$('div.providerMessage');
 	const linkedText = parseLinkedText(message.text);

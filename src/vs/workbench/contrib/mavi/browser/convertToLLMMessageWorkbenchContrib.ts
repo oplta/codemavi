@@ -7,22 +7,22 @@ import { Disposable } from '../../../../base/common/lifecycle.js';
 import { URI } from '../../../../base/common/uri.js';
 import { IWorkspaceContextService } from '../../../../platform/workspace/common/workspace.js';
 import { IWorkbenchContribution, registerWorkbenchContribution2, WorkbenchPhase } from '../../../common/contributions.js';
-import { IMaviModelService } from '../common/codemaviModelService.js';
+import { IMaviModelService } from '../common/maviModelService.js';
 
 class ConvertContribWorkbenchContribution extends Disposable implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.codemavi.convertcontrib'
+	static readonly ID = 'workbench.contrib.mavi.convertcontrib'
 	_serviceBrand: undefined;
 
 	constructor(
-		@IMaviModelService private readonly codemaviModelService: IMaviModelService,
+		@IMaviModelService private readonly maviModelService: IMaviModelService,
 		@IWorkspaceContextService private readonly workspaceContext: IWorkspaceContextService,
 	) {
 		super()
 
 		const initializeURI = (uri: URI) => {
 			this.workspaceContext.getWorkspace()
-			const codemaviRulesURI = URI.joinPath(uri, '.codemavirules')
-			this.codemaviModelService.initializeModel(codemaviRulesURI)
+			const maviRulesURI = URI.joinPath(uri, '.mavirules')
+			this.maviModelService.initializeModel(maviRulesURI)
 		}
 
 		// call

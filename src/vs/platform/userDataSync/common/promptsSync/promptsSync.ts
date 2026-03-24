@@ -160,7 +160,7 @@ export class PromptsSynchronizer extends AbstractSynchroniser implements IUserDa
 		throw new Error(`Invalid Resource: ${resource.toString()}`);
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IPromptsResourcePreview, IAcceptResult][], force: boolean): Promise<codemavi> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IPromptsResourcePreview, IAcceptResult][], force: boolean): Promise<void> {
 		const accptedResourcePreviews: IPromptsAcceptedResourcePreview[] = resourcePreviews.map(([resourcePreview, acceptResult]) => ({ ...resourcePreview, acceptResult }));
 		if (accptedResourcePreviews.every(({ localChange, remoteChange }) => localChange === Change.None && remoteChange === Change.None)) {
 			this.logService.info(`${this.syncResourceLogLabel}: No changes found during synchronizing prompts.`);
@@ -425,7 +425,7 @@ export class PromptsSynchronizer extends AbstractSynchroniser implements IUserDa
 		return false;
 	}
 
-	private async updateLocalBackup(resourcePreviews: IFileResourcePreview[]): Promise<codemavi> {
+	private async updateLocalBackup(resourcePreviews: IFileResourcePreview[]): Promise<void> {
 		const local: IStringDictionary<IFileContent> = {};
 		for (const resourcePreview of resourcePreviews) {
 			if (resourcePreview.fileContent) {
@@ -435,7 +435,7 @@ export class PromptsSynchronizer extends AbstractSynchroniser implements IUserDa
 		await this.backupLocal(JSON.stringify(this.toPromptContents(local)));
 	}
 
-	private async updateLocalPrompts(resourcePreviews: IPromptsAcceptedResourcePreview[], force: boolean): Promise<codemavi> {
+	private async updateLocalPrompts(resourcePreviews: IPromptsAcceptedResourcePreview[], force: boolean): Promise<void> {
 		for (const { fileContent, acceptResult, localResource, remoteResource, localChange } of resourcePreviews) {
 			if (localChange !== Change.None) {
 				const key = remoteResource ? this.extUri.basename(remoteResource) : this.extUri.basename(localResource);

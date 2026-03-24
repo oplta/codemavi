@@ -22,7 +22,7 @@ class ExtHostSaveParticipant implements ITextFileSaveParticipant {
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostDocumentSaveParticipant);
 	}
 
-	async participate(editorModel: ITextFileEditorModel, context: ITextFileSaveParticipantContext, _progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	async participate(editorModel: ITextFileEditorModel, context: ITextFileSaveParticipantContext, _progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 
 		if (!editorModel.textEditorModel || !shouldSynchronizeModel(editorModel.textEditorModel)) {
 			// the model never made it to the extension
@@ -62,7 +62,7 @@ export class SaveParticipant {
 		this._saveParticipantDisposable = this._textFileService.files.addSaveParticipant(instantiationService.createInstance(ExtHostSaveParticipant, extHostContext));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._saveParticipantDisposable.dispose();
 	}
 }

@@ -41,7 +41,7 @@ export class EditorResolverService extends Disposable implements IEditorResolver
 	readonly _serviceBrand: undefined;
 
 	// Events
-	private readonly _onDidChangeEditorRegistrations = this._register(new PauseableEmitter<codemavi>());
+	private readonly _onDidChangeEditorRegistrations = this._register(new PauseableEmitter<void>());
 	readonly onDidChangeEditorRegistrations = this._onDidChangeEditorRegistrations.event;
 
 	// Constants
@@ -217,7 +217,7 @@ export class EditorResolverService extends Disposable implements IEditorResolver
 		};
 	}
 
-	bufferChangeEvents(callback: Function): codemavi {
+	bufferChangeEvents(callback: Function): void {
 		this._onDidChangeEditorRegistrations.pause();
 		try {
 			callback();
@@ -339,7 +339,7 @@ export class EditorResolverService extends Disposable implements IEditorResolver
 		return Array.from(this._flattenedEditors.values()).flat();
 	}
 
-	updateUserAssociations(globPattern: string, editorID: string): codemavi {
+	updateUserAssociations(globPattern: string, editorID: string): void {
 		const newAssociation: EditorAssociation = { viewType: editorID, filenamePattern: globPattern };
 		const currentAssociations = this.getAllUserAssociations();
 		const newSettingObject = Object.create(null);

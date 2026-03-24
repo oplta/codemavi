@@ -35,7 +35,7 @@ export class WorkingCopyBackupsModel {
 
 	private constructor(private backupRoot: URI, private fileService: IFileService) { }
 
-	private async resolve(): Promise<codemavi> {
+	private async resolve(): Promise<void> {
 		try {
 			const backupRootStat = await this.fileService.resolve(this.backupRoot);
 			if (backupRootStat.children) {
@@ -68,14 +68,14 @@ export class WorkingCopyBackupsModel {
 		}
 	}
 
-	add(resource: URI, versionId = 0, meta?: IWorkingCopyBackupMeta): codemavi {
+	add(resource: URI, versionId = 0, meta?: IWorkingCopyBackupMeta): void {
 		this.cache.set(resource, {
 			versionId,
 			meta: deepClone(meta)
 		});
 	}
 
-	update(resource: URI, meta?: IWorkingCopyBackupMeta): codemavi {
+	update(resource: URI, meta?: IWorkingCopyBackupMeta): void {
 		const entry = this.cache.get(resource);
 		if (entry) {
 			entry.meta = deepClone(meta);
@@ -107,11 +107,11 @@ export class WorkingCopyBackupsModel {
 		return Array.from(this.cache.keys());
 	}
 
-	remove(resource: URI): codemavi {
+	remove(resource: URI): void {
 		this.cache.delete(resource);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.cache.clear();
 	}
 }
@@ -140,7 +140,7 @@ export abstract class WorkingCopyBackupService extends Disposable implements IWo
 		return new InMemoryWorkingCopyBackupService();
 	}
 
-	reinitialize(backupWorkspaceHome: URI | undefined): codemavi {
+	reinitialize(backupWorkspaceHome: URI | undefined): void {
 
 		// Re-init implementation (unless we are running in-memory)
 		if (this.impl instanceof WorkingCopyBackupServiceImpl) {
@@ -160,15 +160,15 @@ export abstract class WorkingCopyBackupService extends Disposable implements IWo
 		return this.impl.hasBackupSync(identifier, versionId, meta);
 	}
 
-	backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<codemavi> {
+	backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<void> {
 		return this.impl.backup(identifier, content, versionId, meta, token);
 	}
 
-	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<codemavi> {
+	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<void> {
 		return this.impl.discardBackup(identifier, token);
 	}
 
-	discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<codemavi> {
+	discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<void> {
 		return this.impl.discardBackups(filter);
 	}
 
@@ -184,7 +184,7 @@ export abstract class WorkingCopyBackupService extends Disposable implements IWo
 		return this.impl.toBackupResource(identifier);
 	}
 
-	joinBackups(): Promise<codemavi> {
+	joinBackups(): Promise<void> {
 		return this.impl.joinBackups();
 	}
 }
@@ -213,7 +213,7 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		this.initialize(backupWorkspaceHome);
 	}
 
-	initialize(backupWorkspaceResource: URI): codemavi {
+	initialize(backupWorkspaceResource: URI): void {
 		this.backupWorkspaceHome = backupWorkspaceResource;
 
 		this.ready = this.doInitialize();
@@ -246,7 +246,7 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		return this.model.has(backupResource, versionId, meta);
 	}
 
-	async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<codemavi> {
+	async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<void> {
 		const model = await this.ready;
 		if (token?.isCancellationRequested) {
 			return;
@@ -306,7 +306,7 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		return `${identifier.resource.toString()}${WorkingCopyBackupServiceImpl.PREAMBLE_META_SEPARATOR}${JSON.stringify({ ...meta, typeId: identifier.typeId })}${WorkingCopyBackupServiceImpl.PREAMBLE_END_MARKER}`;
 	}
 
-	async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<codemavi> {
+	async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<void> {
 		const model = await this.ready;
 
 		// Discard all but some backups
@@ -332,13 +332,13 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		}
 	}
 
-	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<codemavi> {
+	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<void> {
 		const backupResource = this.toBackupResource(identifier);
 
 		return this.doDiscardBackup(backupResource, token);
 	}
 
-	private async doDiscardBackup(backupResource: URI, token?: CancellationToken): Promise<codemavi> {
+	private async doDiscardBackup(backupResource: URI, token?: CancellationToken): Promise<void> {
 		const model = await this.ready;
 		if (token?.isCancellationRequested) {
 			return;
@@ -362,7 +362,7 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		});
 	}
 
-	private async deleteIgnoreFileNotFound(backupResource: URI): Promise<codemavi> {
+	private async deleteIgnoreFileNotFound(backupResource: URI): Promise<void> {
 		try {
 			await this.fileService.del(backupResource, { recursive: true });
 		} catch (error) {
@@ -530,7 +530,7 @@ class WorkingCopyBackupServiceImpl extends Disposable implements IWorkingCopyBac
 		return joinPath(this.backupWorkspaceHome, identifier.resource.scheme, hashIdentifier(identifier));
 	}
 
-	joinBackups(): Promise<codemavi> {
+	joinBackups(): Promise<void> {
 		return this.ioOperationQueues.whenDrained();
 	}
 }
@@ -555,7 +555,7 @@ export class InMemoryWorkingCopyBackupService extends Disposable implements IWor
 		return this.backups.has(backupResource);
 	}
 
-	async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<codemavi> {
+	async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<void> {
 		const backupResource = this.toBackupResource(identifier);
 		this.backups.set(backupResource, {
 			typeId: identifier.typeId,
@@ -578,11 +578,11 @@ export class InMemoryWorkingCopyBackupService extends Disposable implements IWor
 		return Array.from(this.backups.entries()).map(([resource, backup]) => ({ typeId: backup.typeId, resource }));
 	}
 
-	async discardBackup(identifier: IWorkingCopyIdentifier): Promise<codemavi> {
+	async discardBackup(identifier: IWorkingCopyIdentifier): Promise<void> {
 		this.backups.delete(this.toBackupResource(identifier));
 	}
 
-	async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<codemavi> {
+	async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<void> {
 		const except = filter?.except;
 		if (Array.isArray(except) && except.length > 0) {
 			const exceptMap = new ResourceMap<boolean>();
@@ -604,7 +604,7 @@ export class InMemoryWorkingCopyBackupService extends Disposable implements IWor
 		return URI.from({ scheme: Schemas.inMemory, path: hashIdentifier(identifier) });
 	}
 
-	async joinBackups(): Promise<codemavi> {
+	async joinBackups(): Promise<void> {
 		return;
 	}
 }

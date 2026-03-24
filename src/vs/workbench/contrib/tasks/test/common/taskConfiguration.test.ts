@@ -37,19 +37,19 @@ class ProblemReporter implements IProblemReporter {
 	public receivedMessage: boolean = false;
 	public lastMessage: string | undefined = undefined;
 
-	public info(message: string): codemavi {
+	public info(message: string): void {
 		this.log(message);
 	}
 
-	public warn(message: string): codemavi {
+	public warn(message: string): void {
 		this.log(message);
 	}
 
-	public error(message: string): codemavi {
+	public error(message: string): void {
 		this.log(message);
 	}
 
-	public fatal(message: string): codemavi {
+	public fatal(message: string): void {
 		this.log(message);
 	}
 
@@ -57,12 +57,12 @@ class ProblemReporter implements IProblemReporter {
 		return this._validationStatus;
 	}
 
-	private log(message: string): codemavi {
+	private log(message: string): void {
 		this.receivedMessage = true;
 		this.lastMessage = message;
 	}
 
-	public clearMessage(): codemavi {
+	public clearMessage(): void {
 		this.lastMessage = undefined;
 	}
 }
@@ -84,7 +84,7 @@ class ConfigurationBuilder {
 		return builder;
 	}
 
-	public done(): codemavi {
+	public done(): void {
 		for (const builder of this.builders) {
 			builder.done();
 		}
@@ -129,7 +129,7 @@ class PresentationBuilder {
 		return this;
 	}
 
-	public done(): codemavi {
+	public done(): void {
 	}
 }
 
@@ -186,7 +186,7 @@ class CommandConfigurationBuilder {
 		return this.presentationBuilder;
 	}
 
-	public done(taskName: string): codemavi {
+	public done(taskName: string): void {
 		this.result.args = this.result.args!.map(arg => arg === '$name' ? taskName : arg);
 		this.presentationBuilder.done();
 	}
@@ -247,7 +247,7 @@ class CustomTaskBuilder {
 		return this.commandBuilder;
 	}
 
-	public done(): codemavi {
+	public done(): void {
 		this.commandBuilder.done(this.result.configurationProperties.name!);
 	}
 }
@@ -387,7 +387,7 @@ function testDefaultProblemMatcher(external: IExternalTaskRunnerConfiguration, r
 	assert.strictEqual(task.configurationProperties.problemMatchers!.length, resolved);
 }
 
-function testConfiguration(external: IExternalTaskRunnerConfiguration, builder: ConfigurationBuilder): codemavi {
+function testConfiguration(external: IExternalTaskRunnerConfiguration, builder: ConfigurationBuilder): void {
 	builder.done();
 	const reporter = new ProblemReporter();
 	const result = parse(workspaceFolder, workspace, Platform.platform, external, reporter, TaskConfigSource.TasksJson, new TasksMockContextKeyService());
@@ -404,7 +404,7 @@ class TaskGroupMap {
 		this._store = Object.create(null);
 	}
 
-	public add(group: string, task: Tasks.Task): codemavi {
+	public add(group: string, task: Tasks.Task): void {
 		let tasks = this._store[group];
 		if (!tasks) {
 			tasks = [];
@@ -413,7 +413,7 @@ class TaskGroupMap {
 		tasks.push(task);
 	}
 
-	public static assert(actual: TaskGroupMap, expected: TaskGroupMap): codemavi {
+	public static assert(actual: TaskGroupMap, expected: TaskGroupMap): void {
 		const actualKeys = Object.keys(actual._store);
 		const expectedKeys = Object.keys(expected._store);
 		if (actualKeys.length === 0 && expectedKeys.length === 0) {
@@ -438,7 +438,7 @@ class TaskGroupMap {
 	}
 }
 
-function assertConfiguration(result: IParseResult, expected: Tasks.Task[]): codemavi {
+function assertConfiguration(result: IParseResult, expected: Tasks.Task[]): void {
 	assert.ok(result.validationStatus.isOK());
 	const actual = result.custom;
 	assert.strictEqual(typeof actual, typeof expected);
@@ -1864,7 +1864,7 @@ suite('Task configuration conversions', () => {
 	});
 });
 
-function assertTaskParseResult(actual: ITaskParseResult, expected: ITestTaskParseResult | undefined, problemReporter: ProblemReporter, expectedMessage?: string): codemavi {
+function assertTaskParseResult(actual: ITaskParseResult, expected: ITestTaskParseResult | undefined, problemReporter: ProblemReporter, expectedMessage?: string): void {
 	if (expectedMessage === undefined) {
 		assert.strictEqual(problemReporter.lastMessage, undefined);
 	} else {

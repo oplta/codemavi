@@ -24,7 +24,7 @@ export interface INotificationsModel {
 
 	addNotification(notification: INotification): INotificationHandle;
 
-	setFilter(filter: Partial<INotificationsFilter>): codemavi;
+	setFilter(filter: Partial<INotificationsFilter>): void;
 
 	//#endregion
 
@@ -113,19 +113,19 @@ export interface IStatusMessageChangeEvent {
 
 export class NotificationHandle extends Disposable implements INotificationHandle {
 
-	private readonly _onDidClose = this._register(new Emitter<codemavi>());
+	private readonly _onDidClose = this._register(new Emitter<void>());
 	readonly onDidClose = this._onDidClose.event;
 
 	private readonly _onDidChangeVisibility = this._register(new Emitter<boolean>());
 	readonly onDidChangeVisibility = this._onDidChangeVisibility.event;
 
-	constructor(private readonly item: INotificationViewItem, private readonly onClose: (item: INotificationViewItem) => codemavi) {
+	constructor(private readonly item: INotificationViewItem, private readonly onClose: (item: INotificationViewItem) => void) {
 		super();
 
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Visibility
 		this._register(this.item.onDidChangeVisibility(visible => this._onDidChangeVisibility.fire(visible)));
@@ -142,19 +142,19 @@ export class NotificationHandle extends Disposable implements INotificationHandl
 		return this.item.progress;
 	}
 
-	updateSeverity(severity: Severity): codemavi {
+	updateSeverity(severity: Severity): void {
 		this.item.updateSeverity(severity);
 	}
 
-	updateMessage(message: NotificationMessage): codemavi {
+	updateMessage(message: NotificationMessage): void {
 		this.item.updateMessage(message);
 	}
 
-	updateActions(actions?: INotificationActions): codemavi {
+	updateActions(actions?: INotificationActions): void {
 		this.item.updateActions(actions);
 	}
 
-	close(): codemavi {
+	close(): void {
 		this.onClose(this.item);
 
 		this.dispose();
@@ -190,7 +190,7 @@ export class NotificationsModel extends Disposable implements INotificationsMode
 		sources: new Map<string, NotificationsFilter>()
 	};
 
-	setFilter(filter: Partial<INotificationsFilter>): codemavi {
+	setFilter(filter: Partial<INotificationsFilter>): void {
 		let globalChanged = false;
 		if (typeof filter.global === 'number') {
 			globalChanged = this.filter.global !== filter.global;
@@ -231,7 +231,7 @@ export class NotificationsModel extends Disposable implements INotificationsMode
 		return new NotificationHandle(item, item => this.onClose(item));
 	}
 
-	private onClose(item: INotificationViewItem): codemavi {
+	private onClose(item: INotificationViewItem): void {
 		const liveItem = this.findNotification(item);
 		if (liveItem && liveItem !== item) {
 			liveItem.close(); // item could have been replaced with another one, make sure to close the live item
@@ -312,22 +312,22 @@ export interface INotificationViewItem {
 	readonly canCollapse: boolean;
 	readonly hasProgress: boolean;
 
-	readonly onDidChangeExpansion: Event<codemavi>;
+	readonly onDidChangeExpansion: Event<void>;
 	readonly onDidChangeVisibility: Event<boolean>;
 	readonly onDidChangeContent: Event<INotificationViewItemContentChangeEvent>;
-	readonly onDidClose: Event<codemavi>;
+	readonly onDidClose: Event<void>;
 
-	expand(): codemavi;
-	collapse(skipEvents?: boolean): codemavi;
-	toggle(): codemavi;
+	expand(): void;
+	collapse(skipEvents?: boolean): void;
+	toggle(): void;
 
-	updateSeverity(severity: Severity): codemavi;
-	updateMessage(message: NotificationMessage): codemavi;
-	updateActions(actions?: INotificationActions): codemavi;
+	updateSeverity(severity: Severity): void;
+	updateMessage(message: NotificationMessage): void;
+	updateActions(actions?: INotificationActions): void;
 
-	updateVisibility(visible: boolean): codemavi;
+	updateVisibility(visible: boolean): void;
 
-	close(): codemavi;
+	close(): void;
 
 	equals(item: INotificationViewItem): boolean;
 }
@@ -357,13 +357,13 @@ export interface INotificationViewItemProgressState {
 export interface INotificationViewItemProgress extends INotificationProgress {
 	readonly state: INotificationViewItemProgressState;
 
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export class NotificationViewItemProgress extends Disposable implements INotificationViewItemProgress {
 	private readonly _state: INotificationViewItemProgressState;
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	constructor() {
@@ -376,7 +376,7 @@ export class NotificationViewItemProgress extends Disposable implements INotific
 		return this._state;
 	}
 
-	infinite(): codemavi {
+	infinite(): void {
 		if (this._state.infinite) {
 			return;
 		}
@@ -390,7 +390,7 @@ export class NotificationViewItemProgress extends Disposable implements INotific
 		this._onDidChange.fire();
 	}
 
-	done(): codemavi {
+	done(): void {
 		if (this._state.done) {
 			return;
 		}
@@ -404,7 +404,7 @@ export class NotificationViewItemProgress extends Disposable implements INotific
 		this._onDidChange.fire();
 	}
 
-	total(value: number): codemavi {
+	total(value: number): void {
 		if (this._state.total === value) {
 			return;
 		}
@@ -417,7 +417,7 @@ export class NotificationViewItemProgress extends Disposable implements INotific
 		this._onDidChange.fire();
 	}
 
-	worked(value: number): codemavi {
+	worked(value: number): void {
 		if (typeof this._state.worked === 'number') {
 			this._state.worked += value;
 		} else {
@@ -455,10 +455,10 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 	private _actions: INotificationActions | undefined;
 	private _progress: NotificationViewItemProgress | undefined;
 
-	private readonly _onDidChangeExpansion = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeExpansion = this._register(new Emitter<void>());
 	readonly onDidChangeExpansion = this._onDidChangeExpansion.event;
 
-	private readonly _onDidClose = this._register(new Emitter<codemavi>());
+	private readonly _onDidClose = this._register(new Emitter<void>());
 	readonly onDidClose = this._onDidClose.event;
 
 	private readonly _onDidChangeContent = this._register(new Emitter<INotificationViewItemContentChangeEvent>());
@@ -550,7 +550,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		this.setActions(actions);
 	}
 
-	private setProgress(progress: INotificationProgressProperties): codemavi {
+	private setProgress(progress: INotificationProgressProperties): void {
 		if (progress.infinite) {
 			this.progress.infinite();
 		} else if (progress.total) {
@@ -562,7 +562,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		}
 	}
 
-	private setActions(actions: INotificationActions = { primary: [], secondary: [] }): codemavi {
+	private setActions(actions: INotificationActions = { primary: [], secondary: [] }): void {
 		this._actions = {
 			primary: Array.isArray(actions.primary) ? actions.primary : [],
 			secondary: Array.isArray(actions.secondary) ? actions.secondary : []
@@ -649,7 +649,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		return this._visible;
 	}
 
-	updateSeverity(severity: Severity): codemavi {
+	updateSeverity(severity: Severity): void {
 		if (severity === this._severity) {
 			return;
 		}
@@ -658,7 +658,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		this._onDidChangeContent.fire({ kind: NotificationViewItemContentChangeKind.SEVERITY });
 	}
 
-	updateMessage(input: NotificationMessage): codemavi {
+	updateMessage(input: NotificationMessage): void {
 		const message = NotificationViewItem.parseNotificationMessage(input);
 		if (!message || message.raw === this._message.raw) {
 			return;
@@ -668,12 +668,12 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		this._onDidChangeContent.fire({ kind: NotificationViewItemContentChangeKind.MESSAGE });
 	}
 
-	updateActions(actions?: INotificationActions): codemavi {
+	updateActions(actions?: INotificationActions): void {
 		this.setActions(actions);
 		this._onDidChangeContent.fire({ kind: NotificationViewItemContentChangeKind.ACTIONS });
 	}
 
-	updateVisibility(visible: boolean): codemavi {
+	updateVisibility(visible: boolean): void {
 		if (this._visible !== visible) {
 			this._visible = visible;
 
@@ -681,7 +681,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		}
 	}
 
-	expand(): codemavi {
+	expand(): void {
 		if (this._expanded || !this.canCollapse) {
 			return;
 		}
@@ -690,7 +690,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		this._onDidChangeExpansion.fire();
 	}
 
-	collapse(skipEvents?: boolean): codemavi {
+	collapse(skipEvents?: boolean): void {
 		if (!this._expanded || !this.canCollapse) {
 			return;
 		}
@@ -702,7 +702,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		}
 	}
 
-	toggle(): codemavi {
+	toggle(): void {
 		if (this._expanded) {
 			this.collapse();
 		} else {
@@ -710,7 +710,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 		}
 	}
 
-	close(): codemavi {
+	close(): void {
 		this._onDidClose.fire();
 
 		this.dispose();
@@ -745,7 +745,7 @@ export class NotificationViewItem extends Disposable implements INotificationVie
 
 export class ChoiceAction extends Action {
 
-	private readonly _onDidRun = this._register(new Emitter<codemavi>());
+	private readonly _onDidRun = this._register(new Emitter<void>());
 	readonly onDidRun = this._onDidRun.event;
 
 	private readonly _keepOpen: boolean;

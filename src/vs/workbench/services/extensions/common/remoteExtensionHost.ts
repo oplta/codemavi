@@ -182,9 +182,9 @@ export class RemoteExtensionHost extends Disposable implements IExtensionHost {
 		});
 	}
 
-	private _onExtHostConnectionLost(reconnectionToken: string): codemavi {
+	private _onExtHostConnectionLost(reconnectionToken: string): void {
 		if (this._hasLostConnection) {
-			// acodemavi re-entering this method
+			// avoid re-entering this method
 			return;
 		}
 		this._hasLostConnection = true;
@@ -273,7 +273,7 @@ export class RemoteExtensionHost extends Disposable implements IExtensionHost {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this._terminating = true;

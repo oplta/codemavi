@@ -38,7 +38,7 @@ export class JoinCellEdit implements IResourceUndoRedoElement {
 		this._deletedRawCell = this.removedCell.model;
 	}
 
-	async undo(): Promise<codemavi> {
+	async undo(): Promise<void> {
 		if (!this.editingDelegate.insertCell || !this.editingDelegate.createCellViewModel) {
 			throw new Error('Notebook Insert Cell not implemented for Undo/Redo');
 		}
@@ -61,7 +61,7 @@ export class JoinCellEdit implements IResourceUndoRedoElement {
 		}
 	}
 
-	async redo(): Promise<codemavi> {
+	async redo(): Promise<void> {
 		if (!this.editingDelegate.deleteCell) {
 			throw new Error('Notebook Delete Cell not implemented for Undo/Redo');
 		}

@@ -101,7 +101,7 @@ export async function wrapWithAbbreviation(args: any): Promise<boolean> {
 	}, [] as vscode.Range[]);
 
 	// Backup orginal selections and update selections
-	// Also helps with https://github.com/microsoft/vscode/issues/113930 by acodemaviing `editor.linkedEditing`
+	// Also helps with https://github.com/microsoft/vscode/issues/113930 by avoiding `editor.linkedEditing`
 	// execution if selection is inside an open or close tag
 	const oldSelections = editor.selections;
 	editor.selections = operationRanges.map(range => new vscode.Selection(range.start, range.end));
@@ -693,7 +693,7 @@ function expandAbbr(input: ExpandAbbreviationInput): string | undefined {
 	try {
 		expandedText = helper.expandAbbreviation(input.abbreviation, expandOptions);
 	} catch (e) {
-		codemavi vscode.window.showErrorMessage('Failed to expand abbreviation');
+		void vscode.window.showErrorMessage('Failed to expand abbreviation');
 	}
 
 	return expandedText;

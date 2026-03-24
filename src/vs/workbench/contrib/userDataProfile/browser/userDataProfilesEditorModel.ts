@@ -216,7 +216,7 @@ export abstract class AbstractUserDataProfileElement extends Disposable {
 		return this.flags?.[key] ?? false;
 	}
 
-	setFlag(key: ProfileResourceType, value: boolean): codemavi {
+	setFlag(key: ProfileResourceType, value: boolean): void {
 		const flags = this.flags ? { ...this.flags } : {};
 		if (value) {
 			flags[key] = true;
@@ -226,7 +226,7 @@ export abstract class AbstractUserDataProfileElement extends Disposable {
 		this.flags = flags;
 	}
 
-	validate(): codemavi {
+	validate(): void {
 		if (!this.name) {
 			this.message = localize('name required', "Profile name is required and must be a non-empty value.");
 			return;
@@ -343,7 +343,7 @@ export abstract class AbstractUserDataProfileElement extends Disposable {
 		return workspace.configuration ?? workspace.folders[0]?.uri;
 	}
 
-	openWorkspace(workspace: URI): codemavi {
+	openWorkspace(workspace: URI): void {
 		if (this.uriIdentityService.extUri.extname(workspace) === WORKSPACE_SUFFIX) {
 			this.hostService.openWindow([{ workspaceUri: workspace }], { forceNewWindow: true });
 		} else {
@@ -351,7 +351,7 @@ export abstract class AbstractUserDataProfileElement extends Disposable {
 		}
 	}
 
-	save(): codemavi {
+	save(): void {
 		this.saveScheduler.schedule();
 	}
 
@@ -394,7 +394,7 @@ export abstract class AbstractUserDataProfileElement extends Disposable {
 	abstract readonly titleButtons: [Action[], Action[]];
 	abstract readonly actions: [IAction[], IAction[]];
 
-	protected abstract doSave(): Promise<codemavi>;
+	protected abstract doSave(): Promise<void>;
 	protected abstract getProfileToWatch(): IUserDataProfile | undefined;
 }
 
@@ -462,14 +462,14 @@ export class UserDataProfileElement extends AbstractUserDataProfileElement {
 		return this.profile;
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		this.name = this._profile.name;
 		this.icon = this._profile.icon;
 		this.flags = this._profile.useDefaultFlags;
 		this.workspaces = this._profile.workspaces;
 	}
 
-	public updateWorkspaces(toAdd: URI[], toRemove: URI[]): codemavi {
+	public updateWorkspaces(toAdd: URI[], toRemove: URI[]): void {
 		const workspaces = new ResourceSet(this.workspaces ?? []);
 		for (const workspace of toAdd) {
 			workspaces.add(workspace);
@@ -480,7 +480,7 @@ export class UserDataProfileElement extends AbstractUserDataProfileElement {
 		this.workspaces = [...workspaces.values()];
 	}
 
-	public async toggleNewWindowProfile(): Promise<codemavi> {
+	public async toggleNewWindowProfile(): Promise<void> {
 		if (this._isNewWindowProfile) {
 			await this.configurationService.updateValue(CONFIG_NEW_WINDOW_PROFILE, null);
 		} else {
@@ -497,7 +497,7 @@ export class UserDataProfileElement extends AbstractUserDataProfileElement {
 		}
 	}
 
-	public async toggleCurrentWindowProfile(): Promise<codemavi> {
+	public async toggleCurrentWindowProfile(): Promise<void> {
 		if (this.userDataProfileService.currentProfile.id === this.profile.id) {
 			await this.userDataProfileManagementService.switchProfile(this.userDataProfilesService.defaultProfile);
 		} else {
@@ -505,7 +505,7 @@ export class UserDataProfileElement extends AbstractUserDataProfileElement {
 		}
 	}
 
-	protected override async doSave(): Promise<codemavi> {
+	protected override async doSave(): Promise<void> {
 		await this.saveProfile(this.profile);
 	}
 
@@ -549,7 +549,7 @@ export class NewProfileElement extends AbstractUserDataProfileElement {
 	private _copyFromTemplates = new ResourceMap<string>();
 	get copyFromTemplates(): ResourceMap<string> { return this._copyFromTemplates; }
 
-	private templatePromise: CancelablePromise<codemavi> | undefined;
+	private templatePromise: CancelablePromise<void> | undefined;
 	private template: IUserDataProfileTemplate | null = null;
 
 	private defaultName: string;
@@ -661,7 +661,7 @@ export class NewProfileElement extends AbstractUserDataProfileElement {
 		} : undefined;
 	}
 
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		this.disabled = true;
 		try {
 			if (this.copyFrom instanceof URI) {
@@ -752,7 +752,7 @@ export class NewProfileElement extends AbstractUserDataProfileElement {
 		return this.copyFlags?.[key] ?? false;
 	}
 
-	setCopyFlag(key: ProfileResourceType, value: boolean): codemavi {
+	setCopyFlag(key: ProfileResourceType, value: boolean): void {
 		const flags = this.copyFlags ? { ...this.copyFlags } : {};
 		flags[key] = value;
 		this.copyFlags = flags;
@@ -838,7 +838,7 @@ export class NewProfileElement extends AbstractUserDataProfileElement {
 		return this.previewProfile?.name ?? '';
 	}
 
-	protected override async doSave(): Promise<codemavi> {
+	protected override async doSave(): Promise<void> {
 		if (this.previewProfile) {
 			const profile = await this.saveProfile(this.previewProfile);
 			if (profile) {
@@ -908,7 +908,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		this._register(userDataProfilesService.onDidChangeProfiles(e => this.onDidChangeProfiles(e)));
 	}
 
-	private onDidChangeProfiles(e: DidChangeProfilesEvent): codemavi {
+	private onDidChangeProfiles(e: DidChangeProfilesEvent): void {
 		let changed = false;
 		for (const profile of e.added) {
 			if (!profile.isTransient && profile.name !== this.newProfileElement?.name) {
@@ -1109,12 +1109,12 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		return this.newProfileElement;
 	}
 
-	revert(): codemavi {
+	revert(): void {
 		this.removeNewProfile();
 		this._onDidChange.fire(undefined);
 	}
 
-	private removeNewProfile(): codemavi {
+	private removeNewProfile(): void {
 		if (this.newProfileElement) {
 			const index = this._profiles.findIndex(([p]) => p === this.newProfileElement);
 			if (index !== -1) {
@@ -1124,7 +1124,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		}
 	}
 
-	private async previewNewProfile(token: CancellationToken): Promise<codemavi> {
+	private async previewNewProfile(token: CancellationToken): Promise<void> {
 		if (!this.newProfileElement) {
 			return;
 		}
@@ -1142,7 +1142,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		}
 	}
 
-	private async exportNewProfile(token: CancellationToken): Promise<codemavi> {
+	private async exportNewProfile(token: CancellationToken): Promise<void> {
 		if (!this.newProfileElement) {
 			return;
 		}
@@ -1260,7 +1260,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		return profile;
 	}
 
-	private async discardNewProfile(): Promise<codemavi> {
+	private async discardNewProfile(): Promise<void> {
 		if (!this.newProfileElement) {
 			return;
 		}
@@ -1272,7 +1272,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		this._onDidChange.fire(undefined);
 	}
 
-	private async removeProfile(profile: IUserDataProfile): Promise<codemavi> {
+	private async removeProfile(profile: IUserDataProfile): Promise<void> {
 		const result = await this.dialogService.confirm({
 			type: 'info',
 			message: localize('deleteProfile', "Are you sure you want to delete the profile '{0}'?", profile.name),
@@ -1284,7 +1284,7 @@ export class UserDataProfilesEditorModel extends EditorModel {
 		}
 	}
 
-	private async openWindow(profile: IUserDataProfile): Promise<codemavi> {
+	private async openWindow(profile: IUserDataProfile): Promise<void> {
 		await this.hostService.openWindow({ forceProfile: profile.name });
 	}
 }

@@ -18,25 +18,25 @@ export interface MessagePortMain extends NodeJS.EventEmitter {
 	/**
 	 * Emitted when a MessagePortMain object receives a message.
 	 */
-	on(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	off(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	once(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	addListener(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
+	on(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	off(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	once(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	addListener(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
 	/**
 	 * Disconnects the port, so it is no longer active.
 	 */
-	close(): codemavi;
+	close(): void;
 	/**
 	 * Sends a message from the port, and optionally, transfers ownership of objects to
 	 * other browsing contexts.
 	 */
-	postMessage(message: any, transfer?: MessagePortMain[]): codemavi;
+	postMessage(message: any, transfer?: MessagePortMain[]): void;
 	/**
 	 * Starts the sending of messages queued on the port. Messages will be queued until
 	 * this method is called.
 	 */
-	start(): codemavi;
+	start(): void;
 }
 
 export interface MessageEvent {
@@ -52,15 +52,15 @@ export interface ParentPort extends NodeJS.EventEmitter {
 	 * Emitted when the process receives a message. Messages received on this port will
 	 * be queued up until a handler is registered for this event.
 	 */
-	on(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	off(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	once(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	addListener(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
-	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => codemavi): this;
+	on(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	off(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	once(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	addListener(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
+	removeListener(event: 'message', listener: (messageEvent: MessageEvent) => void): this;
 	/**
 	 * Sends a message from the process to its parent.
 	 */
-	postMessage(message: any): codemavi;
+	postMessage(message: any): void;
 }
 
 export interface UtilityNodeJSProcess extends NodeJS.Process {

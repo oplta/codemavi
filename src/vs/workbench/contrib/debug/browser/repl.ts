@@ -109,7 +109,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 	private replInputContainer!: HTMLElement;
 	private bodyContentDimension: dom.Dimension | undefined;
 	private model: ITextModel | undefined;
-	private setHistoryNavigationEnablement!: (enabled: boolean) => codemavi;
+	private setHistoryNavigationEnablement!: (enabled: boolean) => void;
 	private scopedInstantiationService!: IInstantiationService;
 	private replElementsChangeListener: IDisposable | undefined;
 	private styleElement: HTMLStyleElement | undefined;
@@ -167,7 +167,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		if (this.debugService.getViewModel().focusedSession) {
 			this.onDidFocusSession(this.debugService.getViewModel().focusedSession);
 		}
@@ -252,7 +252,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}));
 	}
 
-	private async onDidFocusSession(session: IDebugSession | undefined): Promise<codemavi> {
+	private async onDidFocusSession(session: IDebugSession | undefined): Promise<void> {
 		if (session) {
 			sessionsToIgnore.delete(session);
 			this.completionItemProvider?.dispose();
@@ -342,27 +342,27 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		return true;
 	}
 
-	showPreviousValue(): codemavi {
+	showPreviousValue(): void {
 		if (!this.isReadonly) {
 			this.navigateHistory(true);
 		}
 	}
 
-	showNextValue(): codemavi {
+	showNextValue(): void {
 		if (!this.isReadonly) {
 			this.navigateHistory(false);
 		}
 	}
 
-	focusFilter(): codemavi {
+	focusFilter(): void {
 		this.filterWidget.focus();
 	}
 
-	openFind(): codemavi {
+	openFind(): void {
 		this.tree?.openFind();
 	}
 
-	private setMode(): codemavi {
+	private setMode(): void {
 		if (!this.isVisible()) {
 			return;
 		}
@@ -377,7 +377,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}
 	}
 
-	private onDidStyleChange(): codemavi {
+	private onDidStyleChange(): void {
 		if (!this.isVisible()) {
 			this.styleChangedWhenInvisible = true;
 			return;
@@ -415,7 +415,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}
 	}
 
-	private navigateHistory(previous: boolean): codemavi {
+	private navigateHistory(previous: boolean): void {
 		const historyInput = (previous ?
 			(this.history.previous() ?? this.history.first()) : this.history.next())
 			?? '';
@@ -426,7 +426,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.setHistoryNavigationEnablement(true);
 	}
 
-	async selectSession(session?: IDebugSession): Promise<codemavi> {
+	async selectSession(session?: IDebugSession): Promise<void> {
 		const treeInput = this.tree?.getInput();
 		if (!session) {
 			const focusedSession = this.debugService.getViewModel().focusedSession;
@@ -459,7 +459,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.updateInputDecoration();
 	}
 
-	async clearRepl(): Promise<codemavi> {
+	async clearRepl(): Promise<void> {
 		const session = this.tree?.getInput();
 		if (session) {
 			session.removeReplExpressions();
@@ -473,7 +473,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.replInput.focus();
 	}
 
-	acceptReplInput(): codemavi {
+	acceptReplInput(): void {
 		const session = this.tree?.getInput();
 		if (session && !this.isReadonly) {
 			session.addReplExpression(this.debugService.getViewModel().focusedStackFrame, this.replInput.getValue());
@@ -487,7 +487,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}
 	}
 
-	sendReplInput(input: string): codemavi {
+	sendReplInput(input: string): void {
 		const session = this.tree?.getInput();
 		if (session && !this.isReadonly) {
 			session.addReplExpression(this.debugService.getViewModel().focusedStackFrame, input);
@@ -516,7 +516,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		return removeAnsiEscapeCodes(text);
 	}
 
-	protected layoutBodyContent(height: number, width: number): codemavi {
+	protected layoutBodyContent(height: number, width: number): void {
 		this.bodyContentDimension = new dom.Dimension(width, height);
 		const replInputHeight = Math.min(this.replInput.getContentHeight(), height);
 		if (this.tree) {
@@ -533,7 +533,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.replInput.layout({ width: width - 30, height: replInputHeight });
 	}
 
-	collapseAll(): codemavi {
+	collapseAll(): void {
 		this.tree?.collapseAll();
 	}
 
@@ -553,11 +553,11 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		return this.tree?.getFocus()?.[0];
 	}
 
-	focusTree(): codemavi {
+	focusTree(): void {
 		this.tree?.domFocus();
 	}
 
-	override async focus(): Promise<codemavi> {
+	override async focus(): Promise<void> {
 		super.focus();
 		await timeout(0); // wait a task for the repl to get attached to the DOM, #83387
 		this.replInput.focus();
@@ -615,7 +615,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 
 	// --- Creation
 
-	override render(): codemavi {
+	override render(): void {
 		super.render();
 		this._register(registerNavigableContainer({
 			name: 'repl',
@@ -639,7 +639,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}));
 	}
 
-	protected override renderBody(parent: HTMLElement): codemavi {
+	protected override renderBody(parent: HTMLElement): void {
 		super.renderBody(parent);
 		this.container = dom.append(parent, $('.repl'));
 		this.treeContainer = dom.append(this.container, $(`.repl-tree.${MOUSE_CURSOR_TEXT_CSS_CLASS_NAME}`));
@@ -647,7 +647,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.createReplTree();
 	}
 
-	private createReplTree(): codemavi {
+	private createReplTree(): void {
 		this.replDelegate = new ReplDelegate(this.configurationService, this.replOptions);
 		const wordWrap = this.configurationService.getValue<IDebugConfiguration>('debug').console.wordWrap;
 		this.treeContainer.classList.toggle('word-wrap', wordWrap);
@@ -719,7 +719,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.onDidStyleChange();
 	}
 
-	private createReplInput(container: HTMLElement): codemavi {
+	private createReplInput(container: HTMLElement): void {
 		this.replInputContainer = dom.append(container, $('.repl-input-wrapper'));
 		dom.append(this.replInputContainer, $('.repl-input-chevron' + ThemeIcon.asCSSSelector(debugConsoleEvaluationPrompt)));
 
@@ -776,7 +776,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		return ariaLabel;
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<IReplElement>): codemavi {
+	private onContextMenu(e: ITreeContextMenuEvent<IReplElement>): void {
 		const actions = getFlatContextMenuActions(this.menu.getActions({ arg: e.element, shouldForwardArgs: false }));
 		this.contextMenuService.showContextMenu({
 			getAnchor: () => e.anchor,
@@ -787,7 +787,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 
 	// --- Update
 
-	private refreshReplElements(noDelay: boolean): codemavi {
+	private refreshReplElements(noDelay: boolean): void {
 		if (this.tree && this.isVisible()) {
 			if (this.refreshScheduler.isScheduled()) {
 				return;
@@ -797,7 +797,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		}
 	}
 
-	private updateInputDecoration(): codemavi {
+	private updateInputDecoration(): void {
 		if (!this.replInput) {
 			return;
 		}
@@ -824,7 +824,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		this.replInput.setDecorationsByType('repl-decoration', DECORATION_KEY, decorations);
 	}
 
-	override saveState(): codemavi {
+	override saveState(): void {
 		const replHistory = this.history.getHistory();
 		if (replHistory.length) {
 			this.storageService.store(HISTORY_STORAGE_KEY, JSON.stringify(replHistory), StorageScope.WORKSPACE, StorageTarget.MACHINE);
@@ -847,7 +847,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 		super.saveState();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.replInput?.dispose(); // Disposed before rendered? #174558
 		this.replElementsChangeListener?.dispose();
 		this.refreshScheduler.dispose();
@@ -859,7 +859,7 @@ export class Repl extends FilterViewPane implements IHistoryNavigationWidget {
 class ReplOptions extends Disposable implements IReplOptions {
 	private static readonly lineHeightEm = 1.4;
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private _replConfig!: IReplConfiguration;
@@ -921,7 +921,7 @@ class AcceptReplInputAction extends EditorAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi | Promise<codemavi> {
+	run(accessor: ServicesAccessor, editor: ICodeEditor): void | Promise<void> {
 		SuggestController.get(editor)?.cancelSuggestWidget();
 		const repl = getReplView(accessor.get(IViewsService));
 		repl?.acceptReplInput();
@@ -944,7 +944,7 @@ class FilterReplAction extends ViewAction<Repl> {
 		});
 	}
 
-	runInView(accessor: ServicesAccessor, repl: Repl): codemavi | Promise<codemavi> {
+	runInView(accessor: ServicesAccessor, repl: Repl): void | Promise<void> {
 		repl.focusFilter();
 	}
 }
@@ -977,7 +977,7 @@ class FindReplAction extends ViewAction<Repl> {
 		});
 	}
 
-	runInView(accessor: ServicesAccessor, view: Repl): codemavi | Promise<codemavi> {
+	runInView(accessor: ServicesAccessor, view: Repl): void | Promise<void> {
 		view.openFind();
 	}
 }
@@ -993,7 +993,7 @@ class ReplCopyAllAction extends EditorAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi | Promise<codemavi> {
+	run(accessor: ServicesAccessor, editor: ICodeEditor): void | Promise<void> {
 		const clipboardService = accessor.get(IClipboardService);
 		const repl = getReplView(accessor.get(IViewsService));
 		if (repl) {
@@ -1092,7 +1092,7 @@ registerAction2(class extends ViewAction<Repl> {
 		});
 	}
 
-	runInView(_accessor: ServicesAccessor, view: Repl): codemavi {
+	runInView(_accessor: ServicesAccessor, view: Repl): void {
 		const accessibilitySignalService = _accessor.get(IAccessibilitySignalService);
 		view.clearRepl();
 		accessibilitySignalService.playSignal(AccessibilitySignal.clear);
@@ -1113,7 +1113,7 @@ registerAction2(class extends ViewAction<Repl> {
 		});
 	}
 
-	runInView(_accessor: ServicesAccessor, view: Repl): codemavi {
+	runInView(_accessor: ServicesAccessor, view: Repl): void {
 		view.collapseAll();
 		view.focus();
 	}
@@ -1134,7 +1134,7 @@ registerAction2(class extends ViewAction<Repl> {
 		});
 	}
 
-	async runInView(accessor: ServicesAccessor, view: Repl): Promise<codemavi> {
+	async runInView(accessor: ServicesAccessor, view: Repl): Promise<void> {
 		const clipboardService = accessor.get(IClipboardService);
 		const clipboardText = await clipboardService.readText();
 		if (clipboardText) {
@@ -1165,7 +1165,7 @@ registerAction2(class extends ViewAction<Repl> {
 		});
 	}
 
-	async runInView(accessor: ServicesAccessor, view: Repl): Promise<codemavi> {
+	async runInView(accessor: ServicesAccessor, view: Repl): Promise<void> {
 		const clipboardService = accessor.get(IClipboardService);
 		await clipboardService.writeText(view.getVisibleContent());
 	}
@@ -1184,7 +1184,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, element: IReplElement): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, element: IReplElement): Promise<void> {
 		const clipboardService = accessor.get(IClipboardService);
 		const debugService = accessor.get(IDebugService);
 		const nativeSelection = dom.getActiveWindow().getSelection();

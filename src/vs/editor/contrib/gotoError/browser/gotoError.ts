@@ -52,12 +52,12 @@ export class MarkerController implements IEditorContribution {
 		this._widgetVisible = CONTEXT_MARKERS_NAVIGATION_VISIBLE.bindTo(this._contextKeyService);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._cleanUp();
 		this._sessionDispoables.dispose();
 	}
 
-	private _cleanUp(): codemavi {
+	private _cleanUp(): void {
 		this._widgetVisible.reset();
 		this._sessionDispoables.clear();
 		this._widget = undefined;
@@ -120,14 +120,14 @@ export class MarkerController implements IEditorContribution {
 		return this._model;
 	}
 
-	close(focusEditor: boolean = true): codemavi {
+	close(focusEditor: boolean = true): void {
 		this._cleanUp();
 		if (focusEditor) {
 			this._editor.focus();
 		}
 	}
 
-	showAtMarker(marker: IMarker): codemavi {
+	showAtMarker(marker: IMarker): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -182,7 +182,7 @@ class MarkerNavigationAction extends EditorAction {
 		super(opts);
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		if (editor.hasModel()) {
 			await MarkerController.get(editor)?.navigate(this._next, this._multiFile);
 		}

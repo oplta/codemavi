@@ -45,7 +45,7 @@ export class ToggleTitleBarConfigAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		const value = configService.getValue(this.section);
 		configService.updateValue(this.section, !value);
@@ -82,7 +82,7 @@ registerAction2(class ToggleCustomTitleBar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		configService.updateValue(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY, CustomTitleBarVisibility.NEVER);
 	}
@@ -100,7 +100,7 @@ registerAction2(class ToggleCustomTitleBarWindowed extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		configService.updateValue(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY, CustomTitleBarVisibility.WINDOWED);
 	}
@@ -136,7 +136,7 @@ class ToggleCustomTitleBar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		const contextKeyService = accessor.get(IContextKeyService);
 		const titleBarVisibility = configService.getValue<CustomTitleBarVisibility>(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY);
@@ -172,7 +172,7 @@ registerAction2(class ShowCustomTitleBar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		configService.updateValue(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY, CustomTitleBarVisibility.AUTO);
 	}
@@ -188,7 +188,7 @@ registerAction2(class HideCustomTitleBar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		configService.updateValue(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY, CustomTitleBarVisibility.NEVER);
 	}
@@ -204,7 +204,7 @@ registerAction2(class HideCustomTitleBar extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		configService.updateValue(TitleBarSetting.CUSTOM_TITLE_BAR_VISIBILITY, CustomTitleBarVisibility.WINDOWED);
 	}
@@ -230,7 +230,7 @@ registerAction2(class ToggleEditorActions extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: any[]): void {
 		const configService = accessor.get(IConfigurationService);
 		const storageService = accessor.get(IStorageService);
 
@@ -272,7 +272,7 @@ if (isLinux && isNative) {
 			});
 		}
 
-		run(accessor: ServicesAccessor): codemavi {
+		run(accessor: ServicesAccessor): void {
 			const configService = accessor.get(IConfigurationService);
 			configService.updateValue(TitleBarSetting.TITLE_BAR_STYLE, TitlebarStyle.NATIVE);
 		}
@@ -287,7 +287,7 @@ export const ACCOUNTS_ACTIVITY_TILE_ACTION: IAction = {
 	tooltip: localize('accounts', "Accounts"),
 	class: undefined,
 	enabled: true,
-	run: function (): codemavi { }
+	run: function (): void { }
 };
 
 export const GLOBAL_ACTIVITY_TITLE_ACTION: IAction = {
@@ -296,5 +296,5 @@ export const GLOBAL_ACTIVITY_TITLE_ACTION: IAction = {
 	tooltip: localize('manage', "Manage"),
 	class: undefined,
 	enabled: true,
-	run: function (): codemavi { }
+	run: function (): void { }
 };

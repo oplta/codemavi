@@ -71,7 +71,7 @@ export class AuxiliaryEditorPart {
 			return editorPartHeightOffset;
 		}
 
-		function updateStatusbarVisibility(fromEvent: boolean): codemavi {
+		function updateStatusbarVisibility(fromEvent: boolean): void {
 			if (statusbarVisible) {
 				show(statusbarPart.container);
 			} else {
@@ -83,7 +83,7 @@ export class AuxiliaryEditorPart {
 			}
 		}
 
-		function updateTitlebarVisibility(fromEvent: boolean): codemavi {
+		function updateTitlebarVisibility(fromEvent: boolean): void {
 			if (!titlebarPart) {
 				return;
 			}
@@ -218,7 +218,7 @@ class AuxiliaryEditorPartImpl extends EditorPart implements IAuxiliaryEditorPart
 
 	private static COUNTER = 1;
 
-	private readonly _onWillClose = this._register(new Emitter<codemavi>());
+	private readonly _onWillClose = this._register(new Emitter<void>());
 	readonly onWillClose = this._onWillClose.event;
 
 	constructor(
@@ -238,7 +238,7 @@ class AuxiliaryEditorPartImpl extends EditorPart implements IAuxiliaryEditorPart
 		super(editorPartsView, `workbench.parts.auxiliaryEditor.${id}`, groupsLabel, windowId, instantiationService, themeService, configurationService, storageService, layoutService, hostService, contextKeyService);
 	}
 
-	override removeGroup(group: number | IEditorGroupView, preserveFocus?: boolean): codemavi {
+	override removeGroup(group: number | IEditorGroupView, preserveFocus?: boolean): void {
 
 		// Close aux window when last group removed
 		const groupView = this.assertGroupView(group);
@@ -252,7 +252,7 @@ class AuxiliaryEditorPartImpl extends EditorPart implements IAuxiliaryEditorPart
 		}
 	}
 
-	private doRemoveLastGroup(preserveFocus?: boolean): codemavi {
+	private doRemoveLastGroup(preserveFocus?: boolean): void {
 		const restoreFocus = !preserveFocus && this.shouldRestoreFocus(this.container);
 
 		// Activate next group
@@ -273,7 +273,7 @@ class AuxiliaryEditorPartImpl extends EditorPart implements IAuxiliaryEditorPart
 		return this.state;
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 		return; // disabled, auxiliary editor part state is tracked outside
 	}
 

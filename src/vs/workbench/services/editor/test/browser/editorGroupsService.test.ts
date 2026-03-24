@@ -2119,7 +2119,7 @@ suite('EditorGroupsService', () => {
 
 		// Create context key provider
 		let offset = 0;
-		const _onDidChange = new Emitter<codemavi>();
+		const _onDidChange = new Emitter<void>();
 
 		const rawContextKey = new RawContextKey<number>('testContextKey', parts.activeGroup.id);
 		const contextKeyProvider: IEditorGroupContextKeyProvider<number> = {

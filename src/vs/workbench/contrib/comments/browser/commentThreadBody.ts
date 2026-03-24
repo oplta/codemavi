@@ -204,7 +204,7 @@ export class CommentThreadBody<T extends IRange | ICellRange = IRange> extends D
 		let lastCommentElement: HTMLElement | null = null;
 		const newCommentNodeList: CommentNode<T>[] = [];
 		const newCommentsInEditMode: CommentNode<T>[] = [];
-		const startEditing: Promise<codemavi>[] = [];
+		const startEditing: Promise<void>[] = [];
 
 		for (let i = newCommentsLen - 1; i >= 0; i--) {
 			const currentComment = commentThread.comments![i];
@@ -233,7 +233,7 @@ export class CommentThreadBody<T extends IRange | ICellRange = IRange> extends D
 
 		this._commentThread = commentThread;
 		this._commentElements = newCommentNodeList;
-		// Start editing *after* updating the thread and elements to acodemavi a sequencing issue https://github.com/microsoft/vscode/issues/239191
+		// Start editing *after* updating the thread and elements to avoid a sequencing issue https://github.com/microsoft/vscode/issues/239191
 		await Promise.all(startEditing);
 
 		if (newCommentsInEditMode.length) {
@@ -297,7 +297,7 @@ export class CommentThreadBody<T extends IRange | ICellRange = IRange> extends D
 		return newCommentNode;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 
 		if (this._resizeObserver) {

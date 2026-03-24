@@ -82,7 +82,7 @@ export class TestFS implements vscode.FileSystemProvider {
 		throw vscode.FileSystemError.FileNotFound();
 	}
 
-	writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean }): codemavi {
+	writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean }): void {
 		const basename = path.posix.basename(uri.path);
 		const parent = this._lookupParentDirectory(uri);
 		let entry = parent.entries.get(basename);
@@ -109,7 +109,7 @@ export class TestFS implements vscode.FileSystemProvider {
 
 	// --- manage files/folders
 
-	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): codemavi {
+	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): void {
 
 		if (!options.overwrite && this._lookup(newUri, true)) {
 			throw vscode.FileSystemError.FileExists(newUri);
@@ -131,7 +131,7 @@ export class TestFS implements vscode.FileSystemProvider {
 		);
 	}
 
-	delete(uri: vscode.Uri): codemavi {
+	delete(uri: vscode.Uri): void {
 		const dirname = uri.with({ path: path.posix.dirname(uri.path) });
 		const basename = path.posix.basename(uri.path);
 		const parent = this._lookupAsDirectory(dirname, false);
@@ -144,7 +144,7 @@ export class TestFS implements vscode.FileSystemProvider {
 		this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { uri, type: vscode.FileChangeType.Deleted });
 	}
 
-	createDirectory(uri: vscode.Uri): codemavi {
+	createDirectory(uri: vscode.Uri): void {
 		const basename = path.posix.basename(uri.path);
 		const dirname = uri.with({ path: path.posix.dirname(uri.path) });
 		const parent = this._lookupAsDirectory(dirname, false);
@@ -227,7 +227,7 @@ export class TestFS implements vscode.FileSystemProvider {
 		return new vscode.Disposable(() => { });
 	}
 
-	private _fireSoon(...events: vscode.FileChangeEvent[]): codemavi {
+	private _fireSoon(...events: vscode.FileChangeEvent[]): void {
 		this._bufferedEvents.push(...events);
 
 		if (this._fireSoonHandle) {

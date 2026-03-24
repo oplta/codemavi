@@ -12,6 +12,6 @@ declare module 'vscode' {
 	}
 
 	export interface NotebookController {
-		updateNotebookAffinity(notebook: NotebookDocument, affinity: NotebookControllerAffinity | NotebookControllerAffinity2): codemavi;
+		updateNotebookAffinity(notebook: NotebookDocument, affinity: NotebookControllerAffinity | NotebookControllerAffinity2): void;
 	}
 }

@@ -20,7 +20,7 @@ import { URI } from '../../../base/common/uri.js';
 
 //#region --- Define, capture, and override some globals
 
-declare function postMessage(data: any, transferables?: Transferable[]): codemavi;
+declare function postMessage(data: any, transferables?: Transferable[]): void;
 declare const name: string; // https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope/name
 declare type _Fetch = typeof fetch;
 
@@ -64,7 +64,7 @@ function patchFetching(asBrowserUri: (uri: URI) => Promise<URI>) {
 	};
 
 	self.XMLHttpRequest = class extends XMLHttpRequest {
-		override open(method: string, url: string | URL, async?: boolean, username?: string | null, password?: string | null): codemavi {
+		override open(method: string, url: string | URL, async?: boolean, username?: string | null, password?: string | null): void {
 			(async () => {
 				if (shouldTransformUri(url.toString())) {
 					url = (await asBrowserUri(URI.parse(url.toString()))).toString(true);
@@ -123,7 +123,7 @@ if ((<any>self).Worker) {
 				return nativeFetch(asWorkerBrowserUrl(input), init);
 			};
 			self.XMLHttpRequest = class extends XMLHttpRequest {
-				override open(method: string, url: string | URL, async?: boolean, username?: string | null, password?: string | null): codemavi {
+				override open(method: string, url: string | URL, async?: boolean, username?: string | null, password?: string | null): void {
 					return super.open(method, asWorkerBrowserUrl(url), async ?? true, username, password);
 				}
 			};
@@ -156,7 +156,7 @@ if ((<any>self).Worker) {
 const hostUtil = new class implements IHostUtils {
 	declare readonly _serviceBrand: undefined;
 	public readonly pid = undefined;
-	exit(_code?: number | undefined): codemavi {
+	exit(_code?: number | undefined): void {
 		nativeClose();
 	}
 };
@@ -234,7 +234,7 @@ function isInitMessage(a: any): a is IInitMessage {
 	return !!a && typeof a === 'object' && a.type === 'vscode.init' && a.data instanceof Map;
 }
 
-export function create(): { onmessage: (message: any) => codemavi } {
+export function create(): { onmessage: (message: any) => void } {
 	performance.mark(`code/extHost/willConnectToRenderer`);
 	const res = new ExtensionWorker();
 

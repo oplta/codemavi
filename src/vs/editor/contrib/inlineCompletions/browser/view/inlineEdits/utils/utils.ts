@@ -124,7 +124,7 @@ export class StatusBarViewItem extends MenuEntryActionViewItem {
 		}
 	}
 
-	protected override updateTooltip(): codemavi {
+	protected override updateTooltip(): void {
 		// NOOP, disable tooltip
 	}
 }

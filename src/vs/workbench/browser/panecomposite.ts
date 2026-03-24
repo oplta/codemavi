@@ -41,23 +41,23 @@ export abstract class PaneComposite extends Composite implements IPaneComposite 
 		super(id, telemetryService, themeService, storageService);
 	}
 
-	override create(parent: HTMLElement): codemavi {
+	override create(parent: HTMLElement): void {
 		super.create(parent);
 		this.viewPaneContainer = this._register(this.createViewPaneContainer(parent));
 		this._register(this.viewPaneContainer.onTitleAreaUpdate(() => this.updateTitleArea()));
 		this.viewPaneContainer.create(parent);
 	}
 
-	override setVisible(visible: boolean): codemavi {
+	override setVisible(visible: boolean): void {
 		super.setVisible(visible);
 		this.viewPaneContainer?.setVisible(visible);
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		this.viewPaneContainer?.layout(dimension);
 	}
 
-	setBoundarySashes(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes(sashes: IBoundarySashes): void {
 		this.viewPaneContainer?.setBoundarySashes(sashes);
 	}
 
@@ -149,7 +149,7 @@ export abstract class PaneComposite extends Composite implements IPaneComposite 
 		return this.viewPaneContainer?.getTitle() ?? '';
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.viewPaneContainer?.focus();
 	}
@@ -200,14 +200,14 @@ export class PaneCompositeRegistry extends CompositeRegistry<PaneComposite> {
 	/**
 	 * Registers a viewlet to the platform.
 	 */
-	registerPaneComposite(descriptor: PaneCompositeDescriptor): codemavi {
+	registerPaneComposite(descriptor: PaneCompositeDescriptor): void {
 		super.registerComposite(descriptor);
 	}
 
 	/**
 	 * Deregisters a viewlet to the platform.
 	 */
-	deregisterPaneComposite(id: string): codemavi {
+	deregisterPaneComposite(id: string): void {
 		super.deregisterComposite(id);
 	}
 

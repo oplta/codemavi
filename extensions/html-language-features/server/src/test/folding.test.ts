@@ -16,7 +16,7 @@ interface ExpectedIndentRange {
 	kind?: string;
 }
 
-async function assertRanges(lines: string[], expected: ExpectedIndentRange[], message?: string, nRanges?: number): Promise<codemavi> {
+async function assertRanges(lines: string[], expected: ExpectedIndentRange[], message?: string, nRanges?: number): Promise<void> {
 	const document = TextDocument.create('test://foo/bar.html', 'html', 1, lines.join('\n'));
 	const workspace = {
 		settings: {},

@@ -61,7 +61,7 @@ export class GitEditor implements IIPCHandler, ITerminalEnvironmentProvider {
 		return config.get<boolean>('useEditorAsCommitInput') && config.get<boolean>('terminalGitEditor') ? this.env : {};
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposable.dispose();
 	}
 }

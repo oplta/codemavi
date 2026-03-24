@@ -285,7 +285,7 @@ declare namespace semver {
 		value: string;
 		loose: boolean;
 		options: Options;
-		parse(comp: string): codemavi;
+		parse(comp: string): void;
 		test(version: string | SemVer): boolean;
 		intersects(comp: Comparator, optionsOrLoose?: boolean | Options): boolean;
 	}

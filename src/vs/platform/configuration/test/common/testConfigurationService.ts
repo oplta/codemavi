@@ -42,11 +42,11 @@ export class TestConfigurationService implements IConfigurationService {
 		return configuration;
 	}
 
-	public updateValue(key: string, value: any): Promise<codemavi> {
+	public updateValue(key: string, value: any): Promise<void> {
 		return Promise.resolve(undefined);
 	}
 
-	public setUserConfiguration(key: any, value: any, root?: URI): Promise<codemavi> {
+	public setUserConfiguration(key: any, value: any, root?: URI): Promise<void> {
 		if (root) {
 			const configForRoot = this.configurationByRoot.get(root.fsPath) || Object.create(null);
 			configForRoot[key] = value;
@@ -59,7 +59,7 @@ export class TestConfigurationService implements IConfigurationService {
 	}
 
 	private overrideIdentifiers: Map<string, string[]> = new Map();
-	public setOverrideIdentifiers(key: string, identifiers: string[]): codemavi {
+	public setOverrideIdentifiers(key: string, identifiers: string[]): void {
 		this.overrideIdentifiers.set(key, identifiers);
 	}
 

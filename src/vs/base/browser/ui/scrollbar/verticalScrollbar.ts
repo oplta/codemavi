@@ -68,12 +68,12 @@ export class VerticalScrollbar extends AbstractScrollbar {
 		this._createSlider(0, Math.floor((options.verticalScrollbarSize - options.verticalSliderSize) / 2), options.verticalSliderSize, undefined);
 	}
 
-	protected _updateSlider(sliderSize: number, sliderPosition: number): codemavi {
+	protected _updateSlider(sliderSize: number, sliderPosition: number): void {
 		this.slider.setHeight(sliderSize);
 		this.slider.setTop(sliderPosition);
 	}
 
-	protected _renderDomNode(largeSize: number, smallSize: number): codemavi {
+	protected _renderDomNode(largeSize: number, smallSize: number): void {
 		this.domNode.setWidth(smallSize);
 		this.domNode.setHeight(largeSize);
 		this.domNode.setRight(0);
@@ -99,15 +99,15 @@ export class VerticalScrollbar extends AbstractScrollbar {
 		return e.pageX;
 	}
 
-	protected _updateScrollbarSize(size: number): codemavi {
+	protected _updateScrollbarSize(size: number): void {
 		this.slider.setWidth(size);
 	}
 
-	public writeScrollPosition(target: INewScrollPosition, scrollPosition: number): codemavi {
+	public writeScrollPosition(target: INewScrollPosition, scrollPosition: number): void {
 		target.scrollTop = scrollPosition;
 	}
 
-	public updateOptions(options: ScrollableElementResolvedOptions): codemavi {
+	public updateOptions(options: ScrollableElementResolvedOptions): void {
 		this.updateScrollbarSize(options.vertical === ScrollbarVisibility.Hidden ? 0 : options.verticalScrollbarSize);
 		// give priority to vertical scroll bar over horizontal and let it scroll all the way to the bottom
 		this._scrollbarState.setOppositeScrollbarSize(0);

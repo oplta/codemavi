@@ -91,11 +91,11 @@ export class FileService extends Disposable implements IFileService {
 		return this.provider.get(scheme);
 	}
 
-	async activateProvider(scheme: string): Promise<codemavi> {
+	async activateProvider(scheme: string): Promise<void> {
 
 		// Emit an event that we are about to activate a provider with the given scheme.
 		// Listeners can participate in the activation by registering a provider for it.
-		const joiners: Promise<codemavi>[] = [];
+		const joiners: Promise<void>[] = [];
 		this._onWillActivateFileSystemProvider.fire({
 			scheme,
 			join(promise) {
@@ -343,7 +343,7 @@ export class FileService extends Disposable implements IFileService {
 		return true;
 	}
 
-	private async doValidateCreateFile(resource: URI, options?: ICreateFileOptions): Promise<codemavi> {
+	private async doValidateCreateFile(resource: URI, options?: ICreateFileOptions): Promise<void> {
 
 		// validate overwrite
 		if (!options?.overwrite && await this.exists(resource)) {
@@ -489,7 +489,7 @@ export class FileService extends Disposable implements IFileService {
 		// one using the etag() function. Relying only on the mtime check has prooven to produce false
 		// positives due to file system weirdness (especially around remote file systems). As such, the
 		// check for size is a weaker check because it can return a false negative if the file has changed
-		// but to the same length. This is a compromise we take to acodemavi having to produce checksums of
+		// but to the same length. This is a compromise we take to avoid having to produce checksums of
 		// the file content for comparison which would be much slower to compute.
 		//
 		// Third, if the etag() turns out to be different, we do one attempt to compare the buffer we
@@ -735,7 +735,7 @@ export class FileService extends Disposable implements IFileService {
 		return stat;
 	}
 
-	private validateReadFileLimits(resource: URI, size: number, options?: IReadFileStreamOptions): codemavi {
+	private validateReadFileLimits(resource: URI, size: number, options?: IReadFileStreamOptions): void {
 		if (typeof options?.limits?.size === 'number' && size > options.limits.size) {
 			throw new TooLargeFileOperationError(localize('fileTooLargeError', "Unable to read file '{0}' that is too large to open", this.resourceForError(resource)), FileOperationResult.FILE_TOO_LARGE, size, options);
 		}
@@ -854,7 +854,7 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doCopyFile(sourceProvider: IFileSystemProvider, source: URI, targetProvider: IFileSystemProvider, target: URI): Promise<codemavi> {
+	private async doCopyFile(sourceProvider: IFileSystemProvider, source: URI, targetProvider: IFileSystemProvider, target: URI): Promise<void> {
 
 		// copy: source (buffered) => target (buffered)
 		if (hasOpenReadWriteCloseCapability(sourceProvider) && hasOpenReadWriteCloseCapability(targetProvider)) {
@@ -877,7 +877,7 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doCopyFolder(sourceProvider: IFileSystemProvider, sourceFolder: IFileStat, targetProvider: IFileSystemProvider, targetFolder: URI): Promise<codemavi> {
+	private async doCopyFolder(sourceProvider: IFileSystemProvider, sourceFolder: IFileStat, targetProvider: IFileSystemProvider, targetFolder: URI): Promise<void> {
 
 		// create folder in target
 		await targetProvider.mkdir(targetFolder);
@@ -962,7 +962,7 @@ export class FileService extends Disposable implements IFileService {
 		return fileStat;
 	}
 
-	private async mkdirp(provider: IFileSystemProvider, directory: URI): Promise<codemavi> {
+	private async mkdirp(provider: IFileSystemProvider, directory: URI): Promise<void> {
 		const directoriesToCreate: string[] = [];
 
 		// mkdir until we reach root
@@ -1067,7 +1067,7 @@ export class FileService extends Disposable implements IFileService {
 		return provider;
 	}
 
-	async del(resource: URI, options?: Partial<IFileDeleteOptions>): Promise<codemavi> {
+	async del(resource: URI, options?: Partial<IFileDeleteOptions>): Promise<void> {
 		const provider = await this.doValidateDelete(resource, options);
 
 		let deleteFileOptions = options;
@@ -1093,7 +1093,7 @@ export class FileService extends Disposable implements IFileService {
 
 	//#region Clone File
 
-	async cloneFile(source: URI, target: URI): Promise<codemavi> {
+	async cloneFile(source: URI, target: URI): Promise<void> {
 		const sourceProvider = await this.withProvider(source);
 		const targetProvider = this.throwIfFileSystemIsReadonly(await this.withWriteProvider(target), target);
 
@@ -1230,7 +1230,7 @@ export class FileService extends Disposable implements IFileService {
 		});
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		for (const [, watcher] of this.activeWatchers) {
@@ -1246,7 +1246,7 @@ export class FileService extends Disposable implements IFileService {
 
 	private readonly writeQueue = this._register(new ResourceQueue());
 
-	private async doWriteBuffered(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, resource: URI, options: IWriteFileOptions | undefined, readableOrStreamOrBufferedStream: VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<codemavi> {
+	private async doWriteBuffered(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, resource: URI, options: IWriteFileOptions | undefined, readableOrStreamOrBufferedStream: VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<void> {
 		return this.writeQueue.queueFor(resource, async () => {
 
 			// open handle
@@ -1269,7 +1269,7 @@ export class FileService extends Disposable implements IFileService {
 		}, this.getExtUri(provider).providerExtUri);
 	}
 
-	private async doWriteStreamBufferedQueued(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, streamOrBufferedStream: VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<codemavi> {
+	private async doWriteStreamBufferedQueued(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, streamOrBufferedStream: VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<void> {
 		let posInFile = 0;
 		let stream: VSBufferReadableStream;
 
@@ -1323,7 +1323,7 @@ export class FileService extends Disposable implements IFileService {
 		});
 	}
 
-	private async doWriteReadableBufferedQueued(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, readable: VSBufferReadable): Promise<codemavi> {
+	private async doWriteReadableBufferedQueued(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, readable: VSBufferReadable): Promise<void> {
 		let posInFile = 0;
 
 		let chunk: VSBuffer | null;
@@ -1334,7 +1334,7 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doWriteBuffer(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, buffer: VSBuffer, length: number, posInFile: number, posInBuffer: number): Promise<codemavi> {
+	private async doWriteBuffer(provider: IFileSystemProviderWithOpenReadWriteCloseCapability, handle: number, buffer: VSBuffer, length: number, posInFile: number, posInBuffer: number): Promise<void> {
 		let totalBytesWritten = 0;
 		while (totalBytesWritten < length) {
 
@@ -1344,11 +1344,11 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doWriteUnbuffered(provider: IFileSystemProviderWithFileReadWriteCapability, resource: URI, options: IWriteFileOptions | undefined, bufferOrReadableOrStreamOrBufferedStream: VSBuffer | VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<codemavi> {
+	private async doWriteUnbuffered(provider: IFileSystemProviderWithFileReadWriteCapability, resource: URI, options: IWriteFileOptions | undefined, bufferOrReadableOrStreamOrBufferedStream: VSBuffer | VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<void> {
 		return this.writeQueue.queueFor(resource, () => this.doWriteUnbufferedQueued(provider, resource, options, bufferOrReadableOrStreamOrBufferedStream), this.getExtUri(provider).providerExtUri);
 	}
 
-	private async doWriteUnbufferedQueued(provider: IFileSystemProviderWithFileReadWriteCapability, resource: URI, options: IWriteFileOptions | undefined, bufferOrReadableOrStreamOrBufferedStream: VSBuffer | VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<codemavi> {
+	private async doWriteUnbufferedQueued(provider: IFileSystemProviderWithFileReadWriteCapability, resource: URI, options: IWriteFileOptions | undefined, bufferOrReadableOrStreamOrBufferedStream: VSBuffer | VSBufferReadable | VSBufferReadableStream | VSBufferReadableBufferedStream): Promise<void> {
 		let buffer: VSBuffer;
 		if (bufferOrReadableOrStreamOrBufferedStream instanceof VSBuffer) {
 			buffer = bufferOrReadableOrStreamOrBufferedStream;
@@ -1364,11 +1364,11 @@ export class FileService extends Disposable implements IFileService {
 		await provider.writeFile(resource, buffer.buffer, { create: true, overwrite: true, unlock: options?.unlock ?? false, atomic: options?.atomic ?? false });
 	}
 
-	private async doPipeBuffered(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<codemavi> {
+	private async doPipeBuffered(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<void> {
 		return this.writeQueue.queueFor(target, () => this.doPipeBufferedQueued(sourceProvider, source, targetProvider, target), this.getExtUri(targetProvider).providerExtUri);
 	}
 
-	private async doPipeBufferedQueued(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<codemavi> {
+	private async doPipeBufferedQueued(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<void> {
 		let sourceHandle: number | undefined = undefined;
 		let targetHandle: number | undefined = undefined;
 
@@ -1410,19 +1410,19 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doPipeUnbuffered(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<codemavi> {
+	private async doPipeUnbuffered(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<void> {
 		return this.writeQueue.queueFor(target, () => this.doPipeUnbufferedQueued(sourceProvider, source, targetProvider, target), this.getExtUri(targetProvider).providerExtUri);
 	}
 
-	private async doPipeUnbufferedQueued(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<codemavi> {
+	private async doPipeUnbufferedQueued(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<void> {
 		return targetProvider.writeFile(target, await sourceProvider.readFile(source), { create: true, overwrite: true, unlock: false, atomic: false });
 	}
 
-	private async doPipeUnbufferedToBuffered(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<codemavi> {
+	private async doPipeUnbufferedToBuffered(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<void> {
 		return this.writeQueue.queueFor(target, () => this.doPipeUnbufferedToBufferedQueued(sourceProvider, source, targetProvider, target), this.getExtUri(targetProvider).providerExtUri);
 	}
 
-	private async doPipeUnbufferedToBufferedQueued(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<codemavi> {
+	private async doPipeUnbufferedToBufferedQueued(sourceProvider: IFileSystemProviderWithFileReadWriteCapability, source: URI, targetProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, target: URI): Promise<void> {
 
 		// Open handle
 		const targetHandle = await targetProvider.open(target, { create: true, unlock: false });
@@ -1438,7 +1438,7 @@ export class FileService extends Disposable implements IFileService {
 		}
 	}
 
-	private async doPipeBufferedToUnbuffered(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<codemavi> {
+	private async doPipeBufferedToUnbuffered(sourceProvider: IFileSystemProviderWithOpenReadWriteCloseCapability, source: URI, targetProvider: IFileSystemProviderWithFileReadWriteCapability, target: URI): Promise<void> {
 
 		// Read buffer via stream buffered
 		const buffer = await streamToBuffer(this.readFileBuffered(sourceProvider, source, CancellationToken.None));
@@ -1455,7 +1455,7 @@ export class FileService extends Disposable implements IFileService {
 		return provider;
 	}
 
-	private throwIfFileIsReadonly(resource: URI, stat: IStat): codemavi {
+	private throwIfFileIsReadonly(resource: URI, stat: IStat): void {
 		if ((stat.permissions ?? 0) & FilePermission.Readonly) {
 			throw new FileOperationError(localize('err.readonly', "Unable to modify read-only file '{0}'", this.resourceForError(resource)), FileOperationResult.FILE_PERMISSION_DENIED);
 		}

@@ -88,7 +88,7 @@ export class Delayer<T> {
 	public defaultDelay: number;
 	private _timeout: any; // Timer
 	private _cancelTimeout: Promise<T | null> | null;
-	private _onSuccess: ((value: T | PromiseLike<T> | undefined) => codemavi) | null;
+	private _onSuccess: ((value: T | PromiseLike<T> | undefined) => void) | null;
 	private _task: ITask<T> | null;
 
 	constructor(defaultDelay: number) {
@@ -131,7 +131,7 @@ export class Delayer<T> {
 		return this._cancelTimeout;
 	}
 
-	private _doCancelTimeout(): codemavi {
+	private _doCancelTimeout(): void {
 		if (this._timeout !== null) {
 			clearTimeout(this._timeout);
 			this._timeout = null;
@@ -198,7 +198,7 @@ export function generateUuid(): string {
 	return result;
 }
 
-export type ValueCallback<T = unknown> = (value: T | Promise<T>) => codemavi;
+export type ValueCallback<T = unknown> = (value: T | Promise<T>) => void;
 
 const enum DeferredOutcome {
 	Resolved,
@@ -212,7 +212,7 @@ const enum DeferredOutcome {
 export class DeferredPromise<T> {
 
 	private completeCallback!: ValueCallback<T>;
-	private errorCallback!: (err: unknown) => codemavi;
+	private errorCallback!: (err: unknown) => void;
 	private outcome?: { outcome: DeferredOutcome.Rejected; value: any } | { outcome: DeferredOutcome.Resolved; value: T };
 
 	public get isRejected() {
@@ -241,7 +241,7 @@ export class DeferredPromise<T> {
 	}
 
 	public complete(value: T) {
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			this.completeCallback(value);
 			this.outcome = { outcome: DeferredOutcome.Resolved, value };
 			resolve();
@@ -249,7 +249,7 @@ export class DeferredPromise<T> {
 	}
 
 	public error(err: unknown) {
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			this.errorCallback(err);
 			this.outcome = { outcome: DeferredOutcome.Rejected, value: err };
 			resolve();

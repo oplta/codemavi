@@ -32,9 +32,9 @@ const configOfBG = (color: Color) => {
 	return { dark: color, light: color, hcDark: color, hcLight: color, }
 }
 
-// gets converted to --vscode-codemavi-greenBG, see codemavi.css, asCssVariable
-registerColor('codemavi.greenBG', configOfBG(acceptBG), '', true);
-registerColor('codemavi.redBG', configOfBG(rejectBG), '', true);
-registerColor('codemavi.sweepBG', configOfBG(sweepBG), '', true);
-registerColor('codemavi.highlightBG', configOfBG(highlightBG), '', true);
-registerColor('codemavi.sweepIdxBG', configOfBG(sweepIdxBG), '', true);
+// gets converted to --vscode-mavi-greenBG, see mavi.css, asCssVariable
+registerColor('mavi.greenBG', configOfBG(acceptBG), '', true);
+registerColor('mavi.redBG', configOfBG(rejectBG), '', true);
+registerColor('mavi.sweepBG', configOfBG(sweepBG), '', true);
+registerColor('mavi.highlightBG', configOfBG(highlightBG), '', true);
+registerColor('mavi.sweepIdxBG', configOfBG(sweepIdxBG), '', true);

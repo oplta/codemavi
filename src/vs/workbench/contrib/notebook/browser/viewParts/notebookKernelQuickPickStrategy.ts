@@ -163,7 +163,7 @@ abstract class KernelPickerStrategyBase implements IKernelPickerStrategy {
 			? createCancelablePromise(token => this._showInstallKernelExtensionRecommendation(notebook, quickPick, this._extensionWorkbenchService, token))
 			: undefined;
 
-		const kernelChangeEventListener = Event.debounce<codemavi, codemavi>(
+		const kernelChangeEventListener = Event.debounce<void, void>(
 			Event.any(
 				this._notebookKernelService.onDidChangeSourceActions,
 				this._notebookKernelService.onDidAddKernel,
@@ -506,7 +506,7 @@ export class KernelPickerMRUStrategy extends KernelPickerStrategyBase {
 		return quickPickItems;
 	}
 
-	protected override _selecteKernel(notebook: NotebookTextModel, kernel: INotebookKernel): codemavi {
+	protected override _selecteKernel(notebook: NotebookTextModel, kernel: INotebookKernel): void {
 		const currentInfo = this._notebookKernelService.getMatchingKernel(notebook);
 		if (currentInfo.selected) {
 			// there is already a selected kernel
@@ -555,7 +555,7 @@ export class KernelPickerMRUStrategy extends KernelPickerStrategyBase {
 			disposables.add(quickPick.onDidTriggerItemButton(async (e) => {
 				if (isKernelSourceQuickPickItem(e.item) && e.item.documentation !== undefined) {
 					const uri = URI.isUri(e.item.documentation) ? URI.parse(e.item.documentation) : await this._commandService.executeCommand(e.item.documentation);
-					codemavi this._openerService.open(uri, { openExternal: true });
+					this._openerService.open(uri, { openExternal: true });
 				}
 			}));
 			disposables.add(quickPick.onDidAccept(async () => {
@@ -572,7 +572,7 @@ export class KernelPickerMRUStrategy extends KernelPickerStrategyBase {
 				}
 			});
 
-			disposables.add(Event.debounce<codemavi, codemavi>(
+			disposables.add(Event.debounce<void, void>(
 				Event.any(
 					this._notebookKernelService.onDidChangeSourceActions,
 					this._notebookKernelService.onDidAddKernel,
@@ -740,7 +740,7 @@ export class KernelPickerMRUStrategy extends KernelPickerStrategyBase {
 		quickPick.show();
 	}
 
-	private async _executeCommand<T>(notebook: NotebookTextModel, command: string | Command): Promise<T | undefined | codemavi> {
+	private async _executeCommand<T>(notebook: NotebookTextModel, command: string | Command): Promise<T | undefined> {
 		const id = typeof command === 'string' ? command : command.id;
 		const args = typeof command === 'string' ? [] : command.arguments ?? [];
 

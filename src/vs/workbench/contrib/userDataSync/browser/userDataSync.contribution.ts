@@ -32,7 +32,7 @@ class UserDataSyncReportIssueContribution extends Disposable implements IWorkben
 		this._register(userDataAutoSyncService.onError(error => this.onAutoSyncError(error)));
 	}
 
-	private onAutoSyncError(error: UserDataSyncError): codemavi {
+	private onAutoSyncError(error: UserDataSyncError): void {
 		switch (error.code) {
 			case UserDataSyncErrorCode.LocalTooManyRequests: {
 				const message = isWeb ? localize({ key: 'local too many requests - reload', comment: ['Settings Sync is the name of the feature'] }, "Settings sync is suspended temporarily because the current device is making too many requests. Please reload {0} to resume.", this.productService.nameLong)

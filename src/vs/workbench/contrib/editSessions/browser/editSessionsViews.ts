@@ -36,7 +36,7 @@ export class EditSessionsDataViews extends Disposable {
 		this.registerViews(container);
 	}
 
-	private registerViews(container: ViewContainer): codemavi {
+	private registerViews(container: ViewContainer): void {
 		const viewId = EDIT_SESSIONS_DATA_VIEW_ID;
 		const treeView = this.instantiationService.createInstance(TreeView, viewId, EDIT_SESSIONS_TITLE.value);
 		treeView.showCollapseAllAction = true;
@@ -82,7 +82,7 @@ export class EditSessionsDataViews extends Disposable {
 				});
 			}
 
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
 				const editSessionId = URI.parse(handle.$treeItemHandle).path.substring(1);
 				const commandService = accessor.get(ICommandService);
 				await commandService.executeCommand('workbench.editSessions.actions.resumeLatest', editSessionId, true);
@@ -99,7 +99,7 @@ export class EditSessionsDataViews extends Disposable {
 				});
 			}
 
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
 				const commandService = accessor.get(ICommandService);
 				await commandService.executeCommand('workbench.editSessions.actions.storeCurrent');
 				await treeView.refresh();
@@ -120,7 +120,7 @@ export class EditSessionsDataViews extends Disposable {
 				});
 			}
 
-			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<codemavi> {
+			async run(accessor: ServicesAccessor, handle: TreeViewItemHandleArg): Promise<void> {
 				const editSessionId = URI.parse(handle.$treeItemHandle).path.substring(1);
 				const dialogService = accessor.get(IDialogService);
 				const editSessionStorageService = accessor.get(IEditSessionsStorageService);
@@ -150,7 +150,7 @@ export class EditSessionsDataViews extends Disposable {
 				});
 			}
 
-			async run(accessor: ServicesAccessor): Promise<codemavi> {
+			async run(accessor: ServicesAccessor): Promise<void> {
 				const dialogService = accessor.get(IDialogService);
 				const editSessionStorageService = accessor.get(IEditSessionsStorageService);
 				const result = await dialogService.confirm({

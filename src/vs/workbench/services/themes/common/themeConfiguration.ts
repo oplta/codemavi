@@ -360,7 +360,7 @@ export class ThemeConfiguration {
 		return ConfigurationTarget.USER;
 	}
 
-	private async writeConfiguration(key: string, value: any, settingsTarget: ThemeSettingTarget): Promise<codemavi> {
+	private async writeConfiguration(key: string, value: any, settingsTarget: ThemeSettingTarget): Promise<void> {
 		if (settingsTarget === undefined || settingsTarget === 'preview') {
 			return;
 		}

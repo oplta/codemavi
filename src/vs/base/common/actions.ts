@@ -86,7 +86,7 @@ export class Action extends Disposable implements IAction {
 		this._setLabel(value);
 	}
 
-	private _setLabel(value: string): codemavi {
+	private _setLabel(value: string): void {
 		if (this._label !== value) {
 			this._label = value;
 			this._onDidChange.fire({ label: value });
@@ -101,7 +101,7 @@ export class Action extends Disposable implements IAction {
 		this._setTooltip(value);
 	}
 
-	protected _setTooltip(value: string): codemavi {
+	protected _setTooltip(value: string): void {
 		if (this._tooltip !== value) {
 			this._tooltip = value;
 			this._onDidChange.fire({ tooltip: value });
@@ -116,7 +116,7 @@ export class Action extends Disposable implements IAction {
 		this._setClass(value);
 	}
 
-	protected _setClass(value: string | undefined): codemavi {
+	protected _setClass(value: string | undefined): void {
 		if (this._cssClass !== value) {
 			this._cssClass = value;
 			this._onDidChange.fire({ class: value });
@@ -131,7 +131,7 @@ export class Action extends Disposable implements IAction {
 		this._setEnabled(value);
 	}
 
-	protected _setEnabled(value: boolean): codemavi {
+	protected _setEnabled(value: boolean): void {
 		if (this._enabled !== value) {
 			this._enabled = value;
 			this._onDidChange.fire({ enabled: value });
@@ -146,14 +146,14 @@ export class Action extends Disposable implements IAction {
 		this._setChecked(value);
 	}
 
-	protected _setChecked(value: boolean | undefined): codemavi {
+	protected _setChecked(value: boolean | undefined): void {
 		if (this._checked !== value) {
 			this._checked = value;
 			this._onDidChange.fire({ checked: value });
 		}
 	}
 
-	async run(event?: unknown, data?: ITelemetryData): Promise<codemavi> {
+	async run(event?: unknown, data?: ITelemetryData): Promise<void> {
 		if (this._actionCallback) {
 			await this._actionCallback(event);
 		}
@@ -173,7 +173,7 @@ export class ActionRunner extends Disposable implements IActionRunner {
 	private readonly _onDidRun = this._register(new Emitter<IRunEvent>());
 	readonly onDidRun = this._onDidRun.event;
 
-	async run(action: IAction, context?: unknown): Promise<codemavi> {
+	async run(action: IAction, context?: unknown): Promise<void> {
 		if (!action.enabled) {
 			return;
 		}
@@ -190,7 +190,7 @@ export class ActionRunner extends Disposable implements IActionRunner {
 		this._onDidRun.fire({ action, error });
 	}
 
-	protected async runAction(action: IAction, context?: unknown): Promise<codemavi> {
+	protected async runAction(action: IAction, context?: unknown): Promise<void> {
 		await action.run(context);
 	}
 }
@@ -246,7 +246,7 @@ export class SubmenuAction implements IAction {
 		this._actions = actions;
 	}
 
-	async run(): Promise<codemavi> { }
+	async run(): Promise<void> { }
 }
 
 export class EmptySubmenuAction extends Action {

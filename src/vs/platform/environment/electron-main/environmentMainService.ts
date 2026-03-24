@@ -33,8 +33,8 @@ export interface IEnvironmentMainService extends INativeEnvironmentService {
 	// --- config
 	readonly disableUpdates: boolean;
 
-	unsetSnapExportedVariables(): codemavi;
-	restoreSnapExportedVariables(): codemavi;
+	unsetSnapExportedVariables(): void;
+	restoreSnapExportedVariables(): void;
 }
 
 export class EnvironmentMainService extends NativeEnvironmentService implements IEnvironmentMainService {

@@ -65,7 +65,7 @@ export interface IFileWorkingCopyModel extends IDisposable {
 	/**
 	 * An event emitted right before disposing the model.
 	 */
-	readonly onWillDispose: Event<codemavi>;
+	readonly onWillDispose: Event<void>;
 
 	/**
 	 * Optional additional configuration for the model that drives
@@ -94,7 +94,7 @@ export interface IFileWorkingCopyModel extends IDisposable {
 	 * @param contents the contents to use for the model
 	 * @param token support for cancellation
 	 */
-	update(contents: VSBufferReadableStream, token: CancellationToken): Promise<codemavi>;
+	update(contents: VSBufferReadableStream, token: CancellationToken): Promise<void>;
 }
 
 export interface IFileWorkingCopy<M extends IFileWorkingCopyModel> extends IWorkingCopy, IDisposable {
@@ -102,12 +102,12 @@ export interface IFileWorkingCopy<M extends IFileWorkingCopyModel> extends IWork
 	/**
 	 * An event for when the file working copy has been reverted.
 	 */
-	readonly onDidRevert: Event<codemavi>;
+	readonly onDidRevert: Event<void>;
 
 	/**
 	 * An event for when the file working copy has been disposed.
 	 */
-	readonly onWillDispose: Event<codemavi>;
+	readonly onWillDispose: Event<void>;
 
 	/**
 	 * Provides access to the underlying model of this file
@@ -120,7 +120,7 @@ export interface IFileWorkingCopy<M extends IFileWorkingCopyModel> extends IWork
 	 * Resolves the file working copy and thus makes the `model`
 	 * available.
 	 */
-	resolve(): Promise<codemavi>;
+	resolve(): Promise<void>;
 
 	/**
 	 * Whether we have a resolved model or not.

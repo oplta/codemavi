@@ -75,7 +75,7 @@ export abstract class CodeEditorView extends Disposable {
 		}
 	);
 
-	public updateOptions(newOptions: Readonly<IEditorOptions>): codemavi {
+	public updateOptions(newOptions: Readonly<IEditorOptions>): void {
 		this.editor.updateOptions(newOptions);
 	}
 

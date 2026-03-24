@@ -35,12 +35,12 @@ export const INotebookExecutionService = createDecorator<INotebookExecutionServi
 export interface INotebookExecutionService {
 	_serviceBrand: undefined;
 
-	executeNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>, contextKeyService: IContextKeyService): Promise<codemavi>;
-	cancelNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>): Promise<codemavi>;
-	cancelNotebookCellHandles(notebook: INotebookTextModel, cells: Iterable<number>): Promise<codemavi>;
+	executeNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>, contextKeyService: IContextKeyService): Promise<void>;
+	cancelNotebookCells(notebook: INotebookTextModel, cells: Iterable<NotebookCellTextModel>): Promise<void>;
+	cancelNotebookCellHandles(notebook: INotebookTextModel, cells: Iterable<number>): Promise<void>;
 	registerExecutionParticipant(participant: ICellExecutionParticipant): IDisposable;
 }
 
 export interface ICellExecutionParticipant {
-	onWillExecuteCell(executions: INotebookCellExecution[]): Promise<codemavi>;
+	onWillExecuteCell(executions: INotebookCellExecution[]): Promise<void>;
 }

@@ -250,7 +250,7 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._clear();
 		this._store.dispose();
 	}
@@ -274,7 +274,7 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		this._diffVisualDecorations.clear();
 	}
 
-	private _updateDiffRendering(diff: IDocumentDiff2, reviewMode: boolean): codemavi {
+	private _updateDiffRendering(diff: IDocumentDiff2, reviewMode: boolean): void {
 
 		const chatDiffAddDecoration = ModelDecorationOptions.createDynamic({
 			...diffAddDecoration,
@@ -480,13 +480,13 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		}));
 	}
 
-	enableAccessibleDiffView(): codemavi {
+	enableAccessibleDiffView(): void {
 		this._accessibleDiffViewVisible.set(true, undefined);
 	}
 
 	// ---- navigation logic
 
-	reveal(firstOrLast: boolean): codemavi {
+	reveal(firstOrLast: boolean): void {
 
 		const decorations = this._diffLineDecorations
 			.getRanges()
@@ -581,7 +581,7 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		return closestWidget;
 	}
 
-	rejectNearestChange(closestWidget: IModifiedFileEntryChangeHunk | undefined): codemavi {
+	rejectNearestChange(closestWidget: IModifiedFileEntryChangeHunk | undefined): void {
 		closestWidget = closestWidget ?? this._findClosestWidget();
 		if (closestWidget instanceof DiffHunkWidget) {
 			closestWidget.reject();
@@ -589,7 +589,7 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		}
 	}
 
-	acceptNearestChange(closestWidget: IModifiedFileEntryChangeHunk | undefined): codemavi {
+	acceptNearestChange(closestWidget: IModifiedFileEntryChangeHunk | undefined): void {
 		closestWidget = closestWidget ?? this._findClosestWidget();
 		if (closestWidget instanceof DiffHunkWidget) {
 			closestWidget.accept();
@@ -597,7 +597,7 @@ export class ChatEditingCodeEditorIntegration implements IModifiedFileEntryEdito
 		}
 	}
 
-	async toggleDiff(widget: IModifiedFileEntryChangeHunk | undefined): Promise<codemavi> {
+	async toggleDiff(widget: IModifiedFileEntryChangeHunk | undefined): Promise<void> {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -700,7 +700,7 @@ class DiffHunkWidget implements IOverlayWidget, IModifiedFileEntryChangeHunk {
 		this._editor.addOverlayWidget(this);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 		this._editor.removeOverlayWidget(this);
 	}
@@ -709,7 +709,7 @@ class DiffHunkWidget implements IOverlayWidget, IModifiedFileEntryChangeHunk {
 		return this._id;
 	}
 
-	layout(startLineNumber: number): codemavi {
+	layout(startLineNumber: number): void {
 
 		const lineHeight = this._editor.getOption(EditorOption.lineHeight);
 		const { contentLeft, contentWidth, verticalScrollbarWidth } = this._editor.getLayoutInfo();

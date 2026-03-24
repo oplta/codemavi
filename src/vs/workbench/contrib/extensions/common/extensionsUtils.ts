@@ -39,7 +39,7 @@ export class KeymapExtensions extends Disposable implements IWorkbenchContributi
 		})));
 	}
 
-	private checkForOtherKeymaps(extensionIdentifier: IExtensionIdentifier): Promise<codemavi> {
+	private checkForOtherKeymaps(extensionIdentifier: IExtensionIdentifier): Promise<void> {
 		return this.instantiationService.invokeFunction(getInstalledExtensions).then(extensions => {
 			const keymaps = extensions.filter(extension => isKeymapExtension(this.tipsService, extension));
 			const extension = keymaps.find(extension => areSameExtensions(extension.identifier, extensionIdentifier));
@@ -53,14 +53,14 @@ export class KeymapExtensions extends Disposable implements IWorkbenchContributi
 		});
 	}
 
-	private promptForDisablingOtherKeymaps(newKeymap: IExtensionStatus, oldKeymaps: IExtensionStatus[]): codemavi {
+	private promptForDisablingOtherKeymaps(newKeymap: IExtensionStatus, oldKeymaps: IExtensionStatus[]): void {
 		const onPrompt = (confirmed: boolean) => {
 			if (confirmed) {
 				this.extensionEnablementService.setEnablement(oldKeymaps.map(keymap => keymap.local), EnablementState.DisabledGlobally);
 			}
 		};
 
-		this.notificationService.prompt(Severity.Info, localize('disableOtherKeymapsConfirmation', "Disable other keymaps ({0}) to acodemavi conflicts between keybindings?", oldKeymaps.map(k => `'${k.local.manifest.displayName}'`).join(', ')),
+		this.notificationService.prompt(Severity.Info, localize('disableOtherKeymapsConfirmation', "Disable other keymaps ({0}) to avoid conflicts between keybindings?", oldKeymaps.map(k => `'${k.local.manifest.displayName}'`).join(', ')),
 			[{
 				label: localize('yes', "Yes"),
 				run: () => onPrompt(true)

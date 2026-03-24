@@ -47,7 +47,7 @@ export class NotebookVariableDataSource implements IAsyncDataSource<INotebookSco
 		return element.kind === 'root' || element.hasNamedChildren || element.indexedChildrenCount > 0;
 	}
 
-	public cancel(): codemavi {
+	public cancel(): void {
 		this.cancellationTokenSource.cancel();
 		this.cancellationTokenSource.dispose();
 		this.cancellationTokenSource = new CancellationTokenSource();

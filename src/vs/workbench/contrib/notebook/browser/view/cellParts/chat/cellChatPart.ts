@@ -20,15 +20,15 @@ export class CellChatPart extends CellContentPart {
 		super();
 	}
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		super.didRenderCell(element);
 	}
 
-	override unrenderCell(element: ICellViewModel): codemavi {
+	override unrenderCell(element: ICellViewModel): void {
 		super.unrenderCell(element);
 	}
 
-	override updateInternalLayoutNow(element: ICellViewModel): codemavi {
+	override updateInternalLayoutNow(element: ICellViewModel): void {
 	}
 
 	override dispose() {

@@ -34,7 +34,7 @@ export interface ITestResultStorage {
 	/**
 	 * Persists the list of test results.
 	 */
-	persist(results: ReadonlyArray<ITestResult>): Promise<codemavi>;
+	persist(results: ReadonlyArray<ITestResult>): Promise<void>;
 }
 
 export const ITestResultStorage = createDecorator('ITestResultStorage');
@@ -105,7 +105,7 @@ export abstract class BaseTestResultStorage extends Disposable implements ITestR
 	/**
 	 * @override
 	 */
-	public async persist(results: ReadonlyArray<ITestResult>): Promise<codemavi> {
+	public async persist(results: ReadonlyArray<ITestResult>): Promise<void> {
 		const toDelete = new Map(this.stored.get([]).map(({ id, bytes }) => [id, bytes]));
 		const toStore: { rev: number; id: string; bytes: number }[] = [];
 		const todo: Promise<unknown>[] = [];
@@ -176,7 +176,7 @@ export abstract class BaseTestResultStorage extends Disposable implements ITestR
 	/**
 	 * Reads serialized results for the test. Is allowed to throw.
 	 */
-	protected abstract storeOutputForResultId(id: string, input: VSBufferWriteableStream): Promise<codemavi>;
+	protected abstract storeOutputForResultId(id: string, input: VSBufferWriteableStream): Promise<void>;
 }
 
 export class InMemoryResultStorage extends BaseTestResultStorage {
@@ -200,7 +200,7 @@ export class InMemoryResultStorage extends BaseTestResultStorage {
 		throw new Error('Method not implemented.');
 	}
 
-	protected storeOutputForResultId(id: string, input: VSBufferWriteableStream): Promise<codemavi> {
+	protected storeOutputForResultId(id: string, input: VSBufferWriteableStream): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 

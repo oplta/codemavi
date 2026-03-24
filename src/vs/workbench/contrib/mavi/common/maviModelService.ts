@@ -6,26 +6,26 @@ import { registerSingleton, InstantiationType } from '../../../../platform/insta
 import { createDecorator } from '../../../../platform/instantiation/common/instantiation.js';
 import { ITextFileService } from '../../../services/textfile/common/textfiles.js';
 
-type Code MaviModelType = {
+type MaviModelType = {
 	model: ITextModel | null;
 	editorModel: IResolvedTextEditorModel | null;
 };
 
 export interface IMaviModelService {
 	readonly _serviceBrand: undefined;
-	initializeModel(uri: URI): Promise<codemavi>;
-	getModel(uri: URI): Code MaviModelType;
-	getModelFromFsPath(fsPath: string): Code MaviModelType;
-	getModelSafe(uri: URI): Promise<Code MaviModelType>;
-	saveModel(uri: URI): Promise<codemavi>;
+	initializeModel(uri: URI): Promise<void>;
+	getModel(uri: URI): MaviModelType;
+	getModelFromFsPath(fsPath: string): MaviModelType;
+	getModelSafe(uri: URI): Promise<MaviModelType>;
+	saveModel(uri: URI): Promise<void>;
 
 }
 
-export const IMaviModelService = createDecorator<IMaviModelService>('codemaviCode MaviModelService');
+export const IMaviModelService = createDecorator<IMaviModelService>('maviMaviModelService');
 
-class Code MaviModelService extends Disposable implements IMaviModelService {
+class MaviModelService extends Disposable implements IMaviModelService {
 	_serviceBrand: undefined;
-	static readonly ID = 'codemaviCode MaviModelService';
+	static readonly ID = 'maviMaviModelService';
 	private readonly _modelRefOfURI: Record<string, IReference<IResolvedTextEditorModel>> = {};
 
 	constructor(
@@ -37,7 +37,7 @@ class Code MaviModelService extends Disposable implements IMaviModelService {
 
 	saveModel = async (uri: URI) => {
 		await this._textFileService.save(uri, { // we want [our change] -> [save] so it's all treated as one change.
-			skipSaveParticipants: true // acodemavi triggering extensions etc (if they reformat the page, it will add another item to the undo stack)
+			skipSaveParticipants: true // avoid triggering extensions etc (if they reformat the page, it will add another item to the undo stack)
 		})
 	}
 
@@ -53,7 +53,7 @@ class Code MaviModelService extends Disposable implements IMaviModelService {
 		}
 	};
 
-	getModelFromFsPath = (fsPath: string): Code MaviModelType => {
+	getModelFromFsPath = (fsPath: string): MaviModelType => {
 		const editorModelRef = this._modelRefOfURI[fsPath];
 		if (!editorModelRef) {
 			return { model: null, editorModel: null };
@@ -73,7 +73,7 @@ class Code MaviModelService extends Disposable implements IMaviModelService {
 	}
 
 
-	getModelSafe = async (uri: URI): Promise<Code MaviModelType> => {
+	getModelSafe = async (uri: URI): Promise<MaviModelType> => {
 		if (!(uri.fsPath in this._modelRefOfURI)) await this.initializeModel(uri);
 		return this.getModel(uri);
 
@@ -87,4 +87,4 @@ class Code MaviModelService extends Disposable implements IMaviModelService {
 	}
 }
 
-registerSingleton(IMaviModelService, Code MaviModelService, InstantiationType.Eager);
+registerSingleton(IMaviModelService, MaviModelService, InstantiationType.Eager);

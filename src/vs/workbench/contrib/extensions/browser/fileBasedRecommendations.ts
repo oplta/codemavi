@@ -95,7 +95,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 		}
 	}
 
-	protected async doActivate(): Promise<codemavi> {
+	protected async doActivate(): Promise<void> {
 		if (isEmptyObject(this.fileOpenRecommendations)) {
 			return;
 		}
@@ -116,7 +116,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 		this.modelService.getModels().forEach(model => this.onModelAdded(model));
 	}
 
-	private onModelAdded(model: ITextModel): codemavi {
+	private onModelAdded(model: ITextModel): void {
 		const uri = model.uri.scheme === Schemas.vscodeNotebookCell ? CellUri.parse(model.uri)?.notebook : model.uri;
 		if (!uri) {
 			return;
@@ -135,7 +135,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 	 * Prompt the user to either install the recommended extension for the file type in the current editor model
 	 * or prompt to search the marketplace if it has extensions that can support the file type
 	 */
-	private promptImportantRecommendations(uri: URI, model: ITextModel, extensionRecommendations?: IStringDictionary<IFileOpenCondition[]>): codemavi {
+	private promptImportantRecommendations(uri: URI, model: ITextModel, extensionRecommendations?: IStringDictionary<IFileOpenCondition[]>): void {
 		if (model.isDisposed()) {
 			return;
 		}
@@ -256,7 +256,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 		}
 	}
 
-	private promptFromRecommendations(uri: URI, model: ITextModel, extensionRecommendations: IStringDictionary<IFileOpenCondition[]>): codemavi {
+	private promptFromRecommendations(uri: URI, model: ITextModel, extensionRecommendations: IStringDictionary<IFileOpenCondition[]>): void {
 		let isImportantRecommendationForLanguage = false;
 		const importantRecommendations = new Set<string>();
 		const fileBasedRecommendations = new Set<string>();
@@ -316,7 +316,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 		return true;
 	}
 
-	private async promptImportantExtensionsInstallNotification(extensions: string[], name: string, language: string): Promise<codemavi> {
+	private async promptImportantExtensionsInstallNotification(extensions: string[], name: string, language: string): Promise<void> {
 		try {
 			const result = await this.extensionRecommendationNotificationService.promptImportantExtensionsInstallNotification({ extensions, name, source: RecommendationSource.FILE });
 			if (result === RecommendationsNotificationResult.Accepted) {
@@ -364,7 +364,7 @@ export class FileBasedRecommendations extends ExtensionRecommendations {
 		return result;
 	}
 
-	private storeCachedRecommendations(): codemavi {
+	private storeCachedRecommendations(): void {
 		const storedRecommendations: IStringDictionary<number> = {};
 		this.fileBasedRecommendations.forEach((value, key) => storedRecommendations[key] = value.recommendedTime);
 		this.storageService.store(recommendationsStorageKey, JSON.stringify(storedRecommendations), StorageScope.PROFILE, StorageTarget.MACHINE);

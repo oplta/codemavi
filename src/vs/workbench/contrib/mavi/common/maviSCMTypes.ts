@@ -33,4 +33,4 @@ export interface IMaviSCMService {
 	gitLog(path: string): Promise<string>
 }
 
-export const IMaviSCMService = createDecorator<IMaviSCMService>('codemaviSCMService')
+export const IMaviSCMService = createDecorator<IMaviSCMService>('maviSCMService')

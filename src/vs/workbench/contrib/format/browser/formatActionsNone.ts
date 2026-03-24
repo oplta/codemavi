@@ -32,7 +32,7 @@ registerEditorAction(class FormatDocumentMultipleAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		if (!editor.hasModel()) {
 			return;
 		}

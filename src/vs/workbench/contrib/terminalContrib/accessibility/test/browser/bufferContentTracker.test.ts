@@ -149,7 +149,7 @@ suite('Buffer Content Tracker', () => {
 	});
 });
 
-async function writeAndAssertBufferState(data: string, rows: number, terminal: Terminal, bufferTracker: BufferContentTracker): Promise<codemavi> {
+async function writeAndAssertBufferState(data: string, rows: number, terminal: Terminal, bufferTracker: BufferContentTracker): Promise<void> {
 	const content = `${data}\r\n`.repeat(rows).trimEnd();
 	await writeP(terminal, content);
 	bufferTracker.update();

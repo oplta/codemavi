@@ -23,33 +23,33 @@ import { URI } from '../../../../base/common/uri.js';
 import { ContextKeyExpr } from '../../../../platform/contextkey/common/contextkey.js';
 
 
-import { mountCode MaviSettings } from './react/out/codemavi-settings-tsx/index.js'
+import { mountMaviSettings } from './react/out/mavi-settings-tsx/index.js'
 import { Codicon } from '../../../../base/common/codicons.js';
 import { toDisposable } from '../../../../base/common/lifecycle.js';
 
 
 // refer to preferences.contribution.ts keybindings editor
 
-class Code MaviSettingsInput extends EditorInput {
+class MaviSettingsInput extends EditorInput {
 
-	static readonly ID: string = 'workbench.input.codemavi.settings';
+	static readonly ID: string = 'workbench.input.mavi.settings';
 
 	static readonly RESOURCE = URI.from({ // I think this scheme is invalid, it just shuts up TS
-		scheme: 'codemavi',  // Custom scheme for our editor (try Schemas.https)
+		scheme: 'mavi',  // Custom scheme for our editor (try Schemas.https)
 		path: 'settings'
 	})
-	readonly resource = Code MaviSettingsInput.RESOURCE;
+	readonly resource = MaviSettingsInput.RESOURCE;
 
 	constructor() {
 		super();
 	}
 
 	override get typeId(): string {
-		return Code MaviSettingsInput.ID;
+		return MaviSettingsInput.ID;
 	}
 
 	override getName(): string {
-		return nls.localize('codemaviSettingsInputsName', 'Code Mavi\'s Settings');
+		return nls.localize('maviSettingsInputsName', 'Mavi\'s Settings');
 	}
 
 	override getIcon() {
@@ -59,7 +59,7 @@ class Code MaviSettingsInput extends EditorInput {
 }
 
 
-class Code MaviSettingsPane extends EditorPane {
+class MaviSettingsPane extends EditorPane {
 	static readonly ID = 'workbench.test.myCustomPane';
 
 	// private _scrollbar: DomScrollableElement | undefined;
@@ -71,10 +71,10 @@ class Code MaviSettingsPane extends EditorPane {
 		@IStorageService storageService: IStorageService,
 		@IInstantiationService private readonly instantiationService: IInstantiationService
 	) {
-		super(Code MaviSettingsPane.ID, group, telemetryService, themeService, storageService);
+		super(MaviSettingsPane.ID, group, telemetryService, themeService, storageService);
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		parent.style.height = '100%';
 		parent.style.width = '100%';
 
@@ -90,7 +90,7 @@ class Code MaviSettingsPane extends EditorPane {
 
 		// Mount React into the scrollable content
 		this.instantiationService.invokeFunction(accessor => {
-			const disposeFn = mountCode MaviSettings(settingsElt, accessor)?.dispose;
+			const disposeFn = mountMaviSettings(settingsElt, accessor)?.dispose;
 			this._register(toDisposable(() => disposeFn?.()))
 
 			// setTimeout(() => { // this is a complete hack and I don't really understand how scrollbar works here
@@ -99,7 +99,7 @@ class Code MaviSettingsPane extends EditorPane {
 		});
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		// if (!settingsElt) return
 		// settingsElt.style.height = `${dimension.height}px`;
 		// settingsElt.style.width = `${dimension.width}px`;
@@ -112,8 +112,8 @@ class Code MaviSettingsPane extends EditorPane {
 
 // register Settings pane
 Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
-	EditorPaneDescriptor.create(Code MaviSettingsPane, Code MaviSettingsPane.ID, nls.localize('Code MaviSettingsPane', "Code Mavi\'s Settings Pane")),
-	[new SyncDescriptor(Code MaviSettingsInput)]
+	EditorPaneDescriptor.create(MaviSettingsPane, MaviSettingsPane.ID, nls.localize('MaviSettingsPane', "Mavi\'s Settings Pane")),
+	[new SyncDescriptor(MaviSettingsInput)]
 );
 
 
@@ -123,7 +123,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
-			title: nls.localize2('codemaviSettings', "Code Mavi: Toggle Settings"),
+			title: nls.localize2('maviSettings', "Mavi: Toggle Settings"),
 			icon: Codicon.settingsGear,
 			menu: [
 				{
@@ -139,14 +139,14 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
 		const instantiationService = accessor.get(IInstantiationService);
 
 		// if is open, close it
-		const openEditors = editorService.findEditors(Code MaviSettingsInput.RESOURCE); // should only have 0 or 1 elements...
+		const openEditors = editorService.findEditors(MaviSettingsInput.RESOURCE); // should only have 0 or 1 elements...
 		if (openEditors.length !== 0) {
 			const openEditor = openEditors[0].editor
 			const isCurrentlyOpen = editorService.activeEditor?.resource?.fsPath === openEditor.resource?.fsPath
@@ -159,7 +159,7 @@ registerAction2(class extends Action2 {
 
 
 		// else open it
-		const input = instantiationService.createInstance(Code MaviSettingsInput);
+		const input = instantiationService.createInstance(MaviSettingsInput);
 
 		await editorGroupService.activeGroup.openEditor(input);
 	}
@@ -172,23 +172,23 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_OPEN_SETTINGS_ACTION_ID,
-			title: nls.localize2('codemaviSettingsAction2', "Code Mavi: Open Settings"),
+			title: nls.localize2('maviSettingsAction2', "Mavi: Open Settings"),
 			f1: true,
 			icon: Codicon.settingsGear,
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const instantiationService = accessor.get(IInstantiationService);
 
 		// close all instances if found
-		const openEditors = editorService.findEditors(Code MaviSettingsInput.RESOURCE);
+		const openEditors = editorService.findEditors(MaviSettingsInput.RESOURCE);
 		if (openEditors.length > 0) {
 			await editorService.closeEditors(openEditors);
 		}
 
 		// then, open one single editor
-		const input = instantiationService.createInstance(Code MaviSettingsInput);
+		const input = instantiationService.createInstance(MaviSettingsInput);
 		await editorService.openEditor(input);
 	}
 })
@@ -202,7 +202,7 @@ MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
 	group: '0_command',
 	command: {
 		id: MAVI_TOGGLE_SETTINGS_ACTION_ID,
-		title: nls.localize('codemaviSettingsActionGear', "Code Mavi\'s Settings")
+		title: nls.localize('maviSettingsActionGear', "Mavi\'s Settings")
 	},
 	order: 1
 });

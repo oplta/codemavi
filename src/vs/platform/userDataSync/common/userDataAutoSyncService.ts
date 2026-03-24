@@ -33,7 +33,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 	private readonly autoSync = this._register(new MutableDisposable<AutoSync>());
 	private successiveFailures: number = 0;
 	private lastSyncTriggerTime: number | undefined = undefined;
-	private readonly syncTriggerDelayer: ThrottledDelayer<codemavi>;
+	private readonly syncTriggerDelayer: ThrottledDelayer<void>;
 	private suspendUntilRestart: boolean = false;
 
 	private readonly _onError: Emitter<UserDataSyncError> = this._register(new Emitter<UserDataSyncError>());
@@ -77,7 +77,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		@IStorageService private readonly storageService: IStorageService,
 	) {
 		super();
-		this.syncTriggerDelayer = this._register(new ThrottledDelayer<codemavi>(this.getSyncTriggerDelayTime()));
+		this.syncTriggerDelayer = this._register(new ThrottledDelayer<void>(this.getSyncTriggerDelayTime()));
 
 		this.lastSyncUrl = this.syncUrl;
 		this.syncUrl = userDataSyncStoreManagementService.userDataSyncStore?.url;
@@ -117,7 +117,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		}
 	}
 
-	private updateAutoSync(): codemavi {
+	private updateAutoSync(): void {
 		const { enabled, message } = this.isAutoSyncEnabled();
 		if (enabled) {
 			if (this.autoSync.value === undefined) {
@@ -163,13 +163,13 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		return { enabled: true };
 	}
 
-	async turnOn(): Promise<codemavi> {
+	async turnOn(): Promise<void> {
 		this.stopDisableMachineEventually();
 		this.lastSyncUrl = this.syncUrl;
 		this.updateEnablement(true);
 	}
 
-	async turnOff(everywhere: boolean, softTurnOffOnError?: boolean, donotRemoveMachine?: boolean): Promise<codemavi> {
+	async turnOff(everywhere: boolean, softTurnOffOnError?: boolean, donotRemoveMachine?: boolean): Promise<void> {
 		try {
 
 			// Remove machine
@@ -199,7 +199,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		}
 	}
 
-	private updateEnablement(enabled: boolean): codemavi {
+	private updateEnablement(enabled: boolean): void {
 		if (this.userDataSyncEnablementService.isEnabled() !== enabled) {
 			this.userDataSyncEnablementService.setEnablement(enabled);
 			this.updateAutoSync();
@@ -210,7 +210,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		return !!this.previousProductQuality && !!this.productQuality && this.previousProductQuality !== this.productQuality;
 	}
 
-	private async onDidFinishSync(error: Error | undefined): Promise<codemavi> {
+	private async onDidFinishSync(error: Error | undefined): Promise<void> {
 		this.logService.debug('[AutoSync] Sync Finished');
 		if (!error) {
 			// Sync finished without errors
@@ -302,7 +302,7 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		this._onError.fire(userDataSyncError);
 	}
 
-	private async disableMachineEventually(): Promise<codemavi> {
+	private async disableMachineEventually(): Promise<void> {
 		this.storageService.store(disableMachineEventuallyKey, true, StorageScope.APPLICATION, StorageTarget.MACHINE);
 		await timeout(1000 * 60 * 10);
 
@@ -323,12 +323,12 @@ export class UserDataAutoSyncService extends Disposable implements IUserDataAuto
 		return this.storageService.getBoolean(disableMachineEventuallyKey, StorageScope.APPLICATION, false);
 	}
 
-	private stopDisableMachineEventually(): codemavi {
+	private stopDisableMachineEventually(): void {
 		this.storageService.remove(disableMachineEventuallyKey, StorageScope.APPLICATION);
 	}
 
 	private sources: string[] = [];
-	async triggerSync(sources: string[], options?: SyncOptions): Promise<codemavi> {
+	async triggerSync(sources: string[], options?: SyncOptions): Promise<void> {
 		if (this.autoSync.value === undefined) {
 			return this.syncTriggerDelayer.cancel();
 		}
@@ -367,7 +367,7 @@ class AutoSync extends Disposable {
 
 	private readonly intervalHandler = this._register(new MutableDisposable<IDisposable>());
 
-	private readonly _onDidStartSync = this._register(new Emitter<codemavi>());
+	private readonly _onDidStartSync = this._register(new Emitter<void>());
 	readonly onDidStartSync = this._onDidStartSync.event;
 
 	private readonly _onDidFinishSync = this._register(new Emitter<Error | undefined>());
@@ -375,7 +375,7 @@ class AutoSync extends Disposable {
 
 	private manifest: IUserDataManifest | null = null;
 	private syncTask: IUserDataSyncTask | undefined;
-	private syncPromise: CancelablePromise<codemavi> | undefined;
+	private syncPromise: CancelablePromise<void> | undefined;
 
 	constructor(
 		private readonly lastSyncUrl: URI | undefined,
@@ -391,7 +391,7 @@ class AutoSync extends Disposable {
 		super();
 	}
 
-	start(): codemavi {
+	start(): void {
 		this._register(this.onDidFinishSync(() => this.waitUntilNextIntervalAndSync()));
 		this._register(toDisposable(() => {
 			if (this.syncPromise) {
@@ -405,14 +405,14 @@ class AutoSync extends Disposable {
 		this.sync(AutoSync.INTERVAL_SYNCING, false);
 	}
 
-	private waitUntilNextIntervalAndSync(): codemavi {
+	private waitUntilNextIntervalAndSync(): void {
 		this.intervalHandler.value = disposableTimeout(() => {
 			this.sync(AutoSync.INTERVAL_SYNCING, false);
 			this.intervalHandler.value = undefined;
 		}, this.interval);
 	}
 
-	sync(reason: string, disableCache: boolean): Promise<codemavi> {
+	sync(reason: string, disableCache: boolean): Promise<void> {
 		const syncPromise = createCancelablePromise(async token => {
 			if (this.syncPromise) {
 				try {
@@ -447,7 +447,7 @@ class AutoSync extends Disposable {
 				!isEqual(current.stableUrl, previous.stableUrl));
 	}
 
-	private async doSync(reason: string, disableCache: boolean, token: CancellationToken): Promise<codemavi> {
+	private async doSync(reason: string, disableCache: boolean, token: CancellationToken): Promise<void> {
 		this.logService.info(`[AutoSync] Triggered by ${reason}`);
 		this._onDidStartSync.fire();
 
@@ -474,7 +474,7 @@ class AutoSync extends Disposable {
 		this._onDidFinishSync.fire(error);
 	}
 
-	private async createAndRunSyncTask(disableCache: boolean, token: CancellationToken): Promise<codemavi> {
+	private async createAndRunSyncTask(disableCache: boolean, token: CancellationToken): Promise<void> {
 		this.syncTask = await this.userDataSyncService.createSyncTask(this.manifest, disableCache);
 		if (token.isCancellationRequested) {
 			return;

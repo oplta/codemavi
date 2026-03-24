@@ -67,7 +67,7 @@ class ServerKeyedAESCrypto implements ISecretStorageCrypto {
 	constructor(private readonly authEndpoint: string) { }
 
 	async seal(data: string): Promise<string> {
-		// Get a new key and IV on every change, to acodemavi the risk of reusing the same key and IV pair with AES-GCM
+		// Get a new key and IV on every change, to avoid the risk of reusing the same key and IV pair with AES-GCM
 		// (see also: https://developer.mozilla.org/en-US/docs/Web/API/AesGcmParams#properties)
 		const iv = mainWindow.crypto.getRandomValues(new Uint8Array(AESConstants.IV_LENGTH));
 		// crypto.getRandomValues isn't a good-enough PRNG to generate crypto keys, so we need to use crypto.subtle.generateKey and export the key instead
@@ -261,21 +261,21 @@ export class LocalStorageSecretStorageProvider implements ISecretStorageProvider
 		return secrets[key];
 	}
 
-	async set(key: string, value: string): Promise<codemavi> {
+	async set(key: string, value: string): Promise<void> {
 		const secrets = await this.secretsPromise;
 		secrets[key] = value;
 		this.secretsPromise = Promise.resolve(secrets);
 		this.save();
 	}
 
-	async delete(key: string): Promise<codemavi> {
+	async delete(key: string): Promise<void> {
 		const secrets = await this.secretsPromise;
 		delete secrets[key];
 		this.secretsPromise = Promise.resolve(secrets);
 		this.save();
 	}
 
-	private async save(): Promise<codemavi> {
+	private async save(): Promise<void> {
 		try {
 			const encrypted = await this.crypto.seal(JSON.stringify(await this.secretsPromise));
 			localStorage.setItem(this.storageKey, encrypted);
@@ -335,7 +335,7 @@ class LocalStorageURLCallbackProvider extends Disposable implements IURLCallback
 		return URI.parse(mainWindow.location.href).with({ path: this._callbackRoute, query: queryParams.join('&') });
 	}
 
-	private startListening(): codemavi {
+	private startListening(): void {
 		if (this.onDidChangeLocalStorageDisposable) {
 			return;
 		}
@@ -345,14 +345,14 @@ class LocalStorageURLCallbackProvider extends Disposable implements IURLCallback
 		this.onDidChangeLocalStorageDisposable = { dispose: () => mainWindow.removeEventListener('storage', fn) };
 	}
 
-	private stopListening(): codemavi {
+	private stopListening(): void {
 		this.onDidChangeLocalStorageDisposable?.dispose();
 		this.onDidChangeLocalStorageDisposable = undefined;
 	}
 
 	// this fires every time local storage changes, but we
 	// don't want to check more often than once a second
-	private async onDidChangeLocalStorage(): Promise<codemavi> {
+	private async onDidChangeLocalStorage(): Promise<void> {
 		const ellapsed = Date.now() - this.lastTimeChecked;
 
 		if (ellapsed > 1000) {
@@ -365,7 +365,7 @@ class LocalStorageURLCallbackProvider extends Disposable implements IURLCallback
 		}
 	}
 
-	private checkCallbacks(): codemavi {
+	private checkCallbacks(): void {
 		let pendingCallbacks: Set<number> | undefined;
 
 		for (const id of this.pendingCallbacks) {

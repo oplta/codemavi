@@ -12,7 +12,7 @@ suite('getNonWhitespacePrefix', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function assertGetNonWhitespacePrefix(line: string, column: number, expected: string): codemavi {
+	function assertGetNonWhitespacePrefix(line: string, column: number, expected: string): void {
 		const model = {
 			getLineContent: (lineNumber: number) => line
 		};

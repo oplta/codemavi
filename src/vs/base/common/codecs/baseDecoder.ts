@@ -32,7 +32,7 @@ export abstract class BaseDecoder<
 	private _ended = false;
 
 	protected readonly _onData = this._register(new Emitter<T>());
-	private readonly _onEnd = this._register(new Emitter<codemavi>());
+	private readonly _onEnd = this._register(new Emitter<void>());
 	private readonly _onError = this._register(new Emitter<Error>());
 
 	/**
@@ -44,7 +44,7 @@ export abstract class BaseDecoder<
 	 * This method is called when a new incoming data
 	 * is received from the input stream.
 	 */
-	protected abstract onStreamData(data: K): codemavi;
+	protected abstract onStreamData(data: K): void;
 
 	/**
 	 * @param stream The input stream to decode.
@@ -69,7 +69,7 @@ export abstract class BaseDecoder<
 	 * receiving the `end` event or by a disposal, but not when
 	 * the `error` event is received alone.
 	 */
-	private settledPromise = new DeferredPromise<codemavi>();
+	private settledPromise = new DeferredPromise<void>();
 
 	/**
 	 * Promise that resolves when the stream has ended, either by
@@ -79,7 +79,7 @@ export abstract class BaseDecoder<
 	 * @throws If the stream was not yet started to prevent this
 	 * 		   promise to block the consumer calls indefinitely.
 	 */
-	public get settled(): Promise<codemavi> {
+	public get settled(): Promise<void> {
 		// if the stream has not started yet, the promise might
 		// block the consumer calls indefinitely if they forget
 		// to call the `start()` method, or if the call happens
@@ -141,7 +141,7 @@ export abstract class BaseDecoder<
 	/**
 	 * Automatically catch and dispatch errors thrown inside `onStreamData`.
 	 */
-	private tryOnStreamData(data: K): codemavi {
+	private tryOnStreamData(data: K): void {
 		try {
 			this.onStreamData(data);
 		} catch (error) {
@@ -149,20 +149,20 @@ export abstract class BaseDecoder<
 		}
 	}
 
-	public on(event: 'data', callback: (data: T) => codemavi): codemavi;
-	public on(event: 'error', callback: (err: Error) => codemavi): codemavi;
-	public on(event: 'end', callback: () => codemavi): codemavi;
-	public on(event: TStreamListenerNames, callback: unknown): codemavi {
+	public on(event: 'data', callback: (data: T) => void): void;
+	public on(event: 'error', callback: (err: Error) => void): void;
+	public on(event: 'end', callback: () => void): void;
+	public on(event: TStreamListenerNames, callback: unknown): void {
 		if (event === 'data') {
-			return this.onData(callback as (data: T) => codemavi);
+			return this.onData(callback as (data: T) => void);
 		}
 
 		if (event === 'error') {
-			return this.onError(callback as (error: Error) => codemavi);
+			return this.onError(callback as (error: Error) => void);
 		}
 
 		if (event === 'end') {
-			return this.onEnd(callback as () => codemavi);
+			return this.onEnd(callback as () => void);
 		}
 
 		throw new Error(`Invalid event name: ${event}`);
@@ -172,7 +172,7 @@ export abstract class BaseDecoder<
 	 * Add listener for the `data` event.
 	 * @throws if the decoder stream has already ended.
 	 */
-	public onData(callback: (data: T) => codemavi): codemavi {
+	public onData(callback: (data: T) => void): void {
 		assert(
 			!this.ended,
 			'Cannot subscribe to the `data` event because the decoder stream has already ended.',
@@ -192,7 +192,7 @@ export abstract class BaseDecoder<
 	 * Add listener for the `error` event.
 	 * @throws if the decoder stream has already ended.
 	 */
-	public onError(callback: (error: Error) => codemavi): codemavi {
+	public onError(callback: (error: Error) => void): void {
 		assert(
 			!this.ended,
 			'Cannot subscribe to the `error` event because the decoder stream has already ended.',
@@ -212,7 +212,7 @@ export abstract class BaseDecoder<
 	 * Add listener for the `end` event.
 	 * @throws if the decoder stream has already ended.
 	 */
-	public onEnd(callback: () => codemavi): codemavi {
+	public onEnd(callback: () => void): void {
 		assert(
 			!this.ended,
 			'Cannot subscribe to the `end` event because the decoder stream has already ended.',
@@ -231,7 +231,7 @@ export abstract class BaseDecoder<
 	/**
 	 * Remove all existing event listeners.
 	 */
-	public removeAllListeners(): codemavi {
+	public removeAllListeners(): void {
 		// remove listeners set up by this class
 		this.stream.removeListener('data', this.tryOnStreamData);
 		this.stream.removeListener('error', this.onStreamError);
@@ -250,7 +250,7 @@ export abstract class BaseDecoder<
 	/**
 	 * Pauses the stream.
 	 */
-	public pause(): codemavi {
+	public pause(): void {
 		this.stream.pause();
 	}
 
@@ -258,7 +258,7 @@ export abstract class BaseDecoder<
 	 * Resumes the stream if it has been paused.
 	 * @throws if the decoder stream has already ended.
 	 */
-	public resume(): codemavi {
+	public resume(): void {
 		assert(
 			!this.ended,
 			'Cannot resume the stream because it has already ended.',
@@ -270,7 +270,7 @@ export abstract class BaseDecoder<
 	/**
 	 * Destroys(disposes) the stream.
 	 */
-	public destroy(): codemavi {
+	public destroy(): void {
 		this.dispose();
 	}
 
@@ -285,7 +285,7 @@ export abstract class BaseDecoder<
 	 *    not found, therefore passing incorrect `callback` function may
 	 *    result in silent unexpected behaviour
 	 */
-	public removeListener(event: string, callback: Function): codemavi {
+	public removeListener(event: string, callback: Function): void {
 		for (const [nameName, listeners] of this._listeners.entries()) {
 			if (nameName !== event) {
 				continue;
@@ -305,7 +305,7 @@ export abstract class BaseDecoder<
 	/**
 	 * This method is called when the input stream ends.
 	 */
-	protected onStreamEnd(): codemavi {
+	protected onStreamEnd(): void {
 		if (this._ended) {
 			return;
 		}
@@ -320,7 +320,7 @@ export abstract class BaseDecoder<
 	 * We re-emit the error here by default, but subclasses can
 	 * override this method to handle the error differently.
 	 */
-	protected onStreamError(error: Error): codemavi {
+	protected onStreamError(error: Error): void {
 		this._onError.fire(error);
 	}
 
@@ -362,7 +362,7 @@ export abstract class BaseDecoder<
 		return asyncDecoder[Symbol.asyncIterator]();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this.disposed) {
 			return;
 		}

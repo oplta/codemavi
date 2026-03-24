@@ -27,7 +27,7 @@ export class PromptAttachmentsCollectionWidget extends Disposable {
 	 *
 	 * See {@linkcode onAttachmentsCountChange}.
 	 */
-	private _onAttachmentsCountChange = this._register(new Emitter<codemavi>());
+	private _onAttachmentsCountChange = this._register(new Emitter<void>());
 	/**
 	 * Subscribe to the `onAttachmentsCountChange` event.
 	 * @param callback Function to invoke when number of attachments change.
@@ -174,7 +174,7 @@ export class PromptAttachmentsCollectionWidget extends Disposable {
 	 * Dispose of the widget, including all the child
 	 * widget instances.
 	 */
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		for (const child of this.children) {
 			child.dispose();
 		}

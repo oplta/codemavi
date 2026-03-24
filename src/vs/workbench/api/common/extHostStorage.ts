@@ -32,7 +32,7 @@ export class ExtHostStorage implements ExtHostStorageShape {
 		this._proxy = mainContext.getProxy(MainContext.MainThreadStorage);
 	}
 
-	registerExtensionStorageKeysToSync(extension: IExtensionIdWithVersion, keys: string[]): codemavi {
+	registerExtensionStorageKeysToSync(extension: IExtensionIdWithVersion, keys: string[]): void {
 		this._proxy.$registerExtensionStorageKeysToSync(extension, keys);
 	}
 
@@ -47,11 +47,11 @@ export class ExtHostStorage implements ExtHostStorageShape {
 		return parsedValue || defaultValue;
 	}
 
-	setValue(shared: boolean, key: string, value: object): Promise<codemavi> {
+	setValue(shared: boolean, key: string, value: object): Promise<void> {
 		return this._proxy.$setValue(shared, key, value);
 	}
 
-	$acceptValue(shared: boolean, key: string, value: string): codemavi {
+	$acceptValue(shared: boolean, key: string, value: string): void {
 		const parsedValue = this.safeParseValue(shared, key, value);
 		if (parsedValue) {
 			this._onDidChangeStorage.fire({ shared, key, value: parsedValue });

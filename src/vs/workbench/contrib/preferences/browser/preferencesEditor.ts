@@ -30,7 +30,7 @@ export class SettingsEditorContribution extends Disposable {
 		this._register(this.workspaceContextService.onDidChangeWorkbenchState(() => this._createPreferencesRenderer()));
 	}
 
-	private async _createPreferencesRenderer(): Promise<codemavi> {
+	private async _createPreferencesRenderer(): Promise<void> {
 		this.disposables.clear();
 		this.currentRenderer = undefined;
 

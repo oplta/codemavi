@@ -101,7 +101,7 @@ async function addCellAndRun(code: string, notebook: vscode.NotebookDocument) {
 		// Verify visible range has the last cell
 		if (!lastCellIsVisible(notebookEditor)) {
 			// scroll happens async, so give it some time to scroll
-			await new Promise<codemavi>((resolve) => setTimeout(() => {
+			await new Promise<void>((resolve) => setTimeout(() => {
 				assert.ok(lastCellIsVisible(notebookEditor), `Last cell is not visible`);
 				resolve();
 			}, 1000));

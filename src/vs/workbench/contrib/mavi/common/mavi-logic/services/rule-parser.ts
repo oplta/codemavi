@@ -1,16 +1,16 @@
 /**
- * Code Mavi - Rule Parser and Manager
+ * Mavi - Rule Parser and Manager
  *
  * Handles parsing, validation, and management of rule files for agent system prompts
  * Supports hierarchical rule inheritance: global → project → session
  */
 
-import { URI } from "../../../../base/common/uri.js";
-import { IFileService } from "../../../../platform/files/common/files.js";
-import { ILogService } from "../../../../platform/log/common/log.js";
-import { Event, Emitter } from "../../../../base/common/event.js";
-import { Disposable } from "../../../../base/common/lifecycle.js";
-import { createDecorator } from "../../../../platform/instantiation/common/instantiation.js";
+import { URI } from "../../../../../../base/common/uri.js";
+import { IFileService } from "../../../../../../platform/files/common/files.js";
+import { ILogService } from "../../../../../../platform/log/common/log.js";
+import { Event, Emitter } from "../../../../../../base/common/event.js";
+import { Disposable } from "../../../../../../base/common/lifecycle.js";
+import { createDecorator } from "../../../../../../platform/instantiation/common/instantiation.js";
 
 export interface Rule {
 	id: string;
@@ -244,9 +244,9 @@ export class RuleParserService
 
 	async loadGlobalRules(): Promise<ParsedRules> {
 		try {
-			// Default global rules path: ~/.codemavi/global-rules.md
+			// Default global rules path: ~/.mavi/global-rules.md
 			const homeDir = process.env.HOME || process.env.USERPROFILE || ".";
-			const globalRulesPath = `${homeDir}/.codemavi/global-rules.md`;
+			const globalRulesPath = `${homeDir}/.mavi/global-rules.md`;
 			const uri = URI.file(globalRulesPath);
 
 			// Check if file exists
@@ -267,7 +267,7 @@ export class RuleParserService
 
 	async loadProjectRules(projectRoot: URI): Promise<ParsedRules> {
 		try {
-			const rulesPath = URI.joinPath(projectRoot, ".codemavi", "rules.md");
+			const rulesPath = URI.joinPath(projectRoot, ".mavi", "rules.md");
 
 			// Check if file exists
 			const exists = await this.fileExists(rulesPath);
@@ -658,7 +658,7 @@ export class RuleParserService
 		rules: ParsedRules,
 		context?: Record<string, any>,
 	): Promise<string> {
-		let prompt = "# Code Mavi Agent Rules\n\n";
+		let prompt = "# Mavi Agent Rules\n\n";
 
 		// Add context information
 		if (context) {
@@ -770,7 +770,7 @@ export class RuleParserService
 				);
 
 			case "yaml":
-				const yamlContent = `# Code Mavi Rules Export
+				const yamlContent = `# Mavi Rules Export
 version: '1.0.0'
 exportedAt: ${Date.now()}
 rules:
@@ -910,7 +910,7 @@ ${rules
 			priority: template.priority!,
 			enabled: true,
 			metadata: {
-				author: "Code Mavi",
+				author: "Mavi",
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
 				version: "1.0.0",
@@ -1118,7 +1118,7 @@ ${rules
 	}
 
 	private generateRuleFileContent(rules: Rule[]): string {
-		let content = "# Code Mavi Rules\n\n";
+		let content = "# Mavi Rules\n\n";
 		content += `*Generated: ${new Date().toISOString()}*\n`;
 		content += `*Total rules: ${rules.length}*\n\n`;
 

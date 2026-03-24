@@ -56,7 +56,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDispose = this._register(new Emitter<codemavi>());
+	private readonly _onDispose = this._register(new Emitter<void>());
 
 	private readonly _onDidDefaultSettingsContentChanged = this._register(new Emitter<URI>());
 	readonly onDidDefaultSettingsContentChanged = this._onDidDefaultSettingsContentChanged.event;
@@ -319,7 +319,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		return this.open(folderSettingsUri, options);
 	}
 
-	async openGlobalKeybindingSettings(textual: boolean, options?: IOpenKeybindingsEditorOptions): Promise<codemavi> {
+	async openGlobalKeybindingSettings(textual: boolean, options?: IOpenKeybindingsEditorOptions): Promise<void> {
 		options = { pinned: true, revealIfOpened: true, ...options };
 		if (textual) {
 			const emptyContents = '// ' + nls.localize('emptyKeybindingsHeader', "Place your key bindings in this file to override the defaults") + '\n[\n]';
@@ -490,7 +490,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		return null;
 	}
 
-	private async createSettingsIfNotExists(target: ConfigurationTarget, resource: URI): Promise<codemavi> {
+	private async createSettingsIfNotExists(target: ConfigurationTarget, resource: URI): Promise<void> {
 		if (this.contextService.getWorkbenchState() === WorkbenchState.WORKSPACE && target === ConfigurationTarget.WORKSPACE) {
 			const workspaceConfig = this.contextService.getWorkspace().configuration;
 			if (!workspaceConfig) {
@@ -507,7 +507,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		await this.createIfNotExists(resource, emptyEditableSettingsContent);
 	}
 
-	private async createIfNotExists(resource: URI, contents: string): Promise<codemavi> {
+	private async createIfNotExists(resource: URI, contents: string): Promise<void> {
 		try {
 			await this.textFileService.read(resource, { acceptTextOnly: true });
 		} catch (error) {
@@ -542,7 +542,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		];
 	}
 
-	private async revealSetting(settingKey: string, edit: boolean, editor: IEditorPane, settingsResource: URI): Promise<codemavi> {
+	private async revealSetting(settingKey: string, edit: boolean, editor: IEditorPane, settingsResource: URI): Promise<void> {
 		const codeEditor = editor ? getCodeEditor(editor.getControl()) : null;
 		if (!codeEditor) {
 			return;
@@ -670,7 +670,7 @@ export class PreferencesService extends Disposable implements IPreferencesServic
 		return true;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._cachedSettingsEditor2Input && !this._cachedSettingsEditor2Input.isDisposed()) {
 			this._cachedSettingsEditor2Input.dispose();
 		}

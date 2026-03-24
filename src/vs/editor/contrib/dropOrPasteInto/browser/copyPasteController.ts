@@ -65,7 +65,7 @@ type PasteEditWithProvider = DocumentPasteEdit & {
 
 interface DocumentPasteWithProviderEditsSession {
 	edits: readonly PasteEditWithProvider[];
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export type PastePreference =
@@ -107,7 +107,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 
 	private readonly _editor: ICodeEditor;
 
-	private _currentPasteOperation?: CancelablePromise<codemavi>;
+	private _currentPasteOperation?: CancelablePromise<void>;
 	private _pasteAsActionContext?: { readonly preferred?: PastePreference };
 
 	private readonly _pasteProgressManager: InlineProgressManager;
@@ -163,7 +163,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 		return this._editor.getOption(EditorOption.pasteAs).enabled;
 	}
 
-	public async finishedPaste(): Promise<codemavi> {
+	public async finishedPaste(): Promise<void> {
 		await this._currentPasteOperation;
 	}
 
@@ -329,7 +329,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 		MessageController.get(this._editor)?.showMessage(localize('pasteAsError', "No paste edits for '{0}' found", kindLabel), selections[0].getStartPosition());
 	}
 
-	private doPasteInline(allProviders: readonly DocumentPasteEditProvider[], selections: readonly Selection[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined, clipboardEvent: ClipboardEvent): codemavi {
+	private doPasteInline(allProviders: readonly DocumentPasteEditProvider[], selections: readonly Selection[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined, clipboardEvent: ClipboardEvent): void {
 		const editor = this._editor;
 		if (!editor.hasModel()) {
 			return;
@@ -385,7 +385,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 						}
 
 						const resolveP = edit.provider.resolveDocumentPasteEdit(edit, resolveToken);
-						const showP = new DeferredPromise<codemavi>();
+						const showP = new DeferredPromise<void>();
 						const resolved = await this._pasteProgressManager.showWhile(selections[0].getEndPosition(), localize('resolveProcess', "Resolving paste edit for '{0}'. Click to cancel", edit.title), raceCancellation(Promise.race([showP.p, resolveP]), resolveToken), {
 							cancel: () => showP.cancel()
 						}, 0);
@@ -427,7 +427,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 		this._currentPasteOperation = p;
 	}
 
-	private showPasteAsPick(preference: PastePreference | undefined, allProviders: readonly DocumentPasteEditProvider[], selections: readonly Selection[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined): codemavi {
+	private showPasteAsPick(preference: PastePreference | undefined, allProviders: readonly DocumentPasteEditProvider[], selections: readonly Selection[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined): void {
 		const p = createCancelablePromise(async (token) => {
 			const editor = this._editor;
 			if (!editor.hasModel()) {
@@ -573,7 +573,7 @@ export class CopyPasteController extends Disposable implements IEditorContributi
 		return undefined;
 	}
 
-	private async mergeInDataFromCopy(allProviders: readonly DocumentPasteEditProvider[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined, token: CancellationToken): Promise<codemavi> {
+	private async mergeInDataFromCopy(allProviders: readonly DocumentPasteEditProvider[], dataTransfer: VSDataTransfer, metadata: CopyMetadata | undefined, token: CancellationToken): Promise<void> {
 		if (metadata?.id && CopyPasteController._currentCopyOperation?.handle === metadata.id) {
 			// Only resolve providers that have data we may care about
 			const toResolve = CopyPasteController._currentCopyOperation.operations

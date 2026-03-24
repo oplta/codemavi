@@ -26,9 +26,9 @@ export interface ISimplifiedPointerEvent {
 }
 
 export interface ScrollbarHost {
-	onMouseWheel(mouseWheelEvent: StandardWheelEvent): codemavi;
-	onDragStart(): codemavi;
-	onDragEnd(): codemavi;
+	onMouseWheel(mouseWheelEvent: StandardWheelEvent): void;
+	onDragStart(): void;
+	onDragEnd(): void;
 }
 
 export interface AbstractScrollbarOptions {
@@ -82,7 +82,7 @@ export abstract class AbstractScrollbar extends Widget {
 	/**
 	 * Creates the dom node for an arrow & adds it to the container
 	 */
-	protected _createArrow(opts: ScrollbarArrowOptions): codemavi {
+	protected _createArrow(opts: ScrollbarArrowOptions): void {
 		const arrow = this._register(new ScrollbarArrow(opts));
 		this.domNode.domNode.appendChild(arrow.bgDomNode);
 		this.domNode.domNode.appendChild(arrow.domNode);
@@ -91,7 +91,7 @@ export abstract class AbstractScrollbar extends Widget {
 	/**
 	 * Creates the slider dom node, adds it to the container & hooks up the events
 	 */
-	protected _createSlider(top: number, left: number, width: number | undefined, height: number | undefined): codemavi {
+	protected _createSlider(top: number, left: number, width: number | undefined, height: number | undefined): void {
 		this.slider = createFastDomNode(document.createElement('div'));
 		this.slider.setClassName('slider');
 		this.slider.setPosition('absolute');
@@ -163,15 +163,15 @@ export abstract class AbstractScrollbar extends Widget {
 
 	// ----------------- rendering
 
-	public beginReveal(): codemavi {
+	public beginReveal(): void {
 		this._visibilityController.setShouldBeVisible(true);
 	}
 
-	public beginHide(): codemavi {
+	public beginHide(): void {
 		this._visibilityController.setShouldBeVisible(false);
 	}
 
-	public render(): codemavi {
+	public render(): void {
 		if (!this._shouldRender) {
 			return;
 		}
@@ -182,14 +182,14 @@ export abstract class AbstractScrollbar extends Widget {
 	}
 	// ----------------- DOM events
 
-	private _domNodePointerDown(e: PointerEvent): codemavi {
+	private _domNodePointerDown(e: PointerEvent): void {
 		if (e.target !== this.domNode.domNode) {
 			return;
 		}
 		this._onPointerDown(e);
 	}
 
-	public delegatePointerDown(e: PointerEvent): codemavi {
+	public delegatePointerDown(e: PointerEvent): void {
 		const domTop = this.domNode.domNode.getClientRects()[0].top;
 		const sliderStart = domTop + this._scrollbarState.getSliderPosition();
 		const sliderStop = domTop + this._scrollbarState.getSliderPosition() + this._scrollbarState.getSliderSize();
@@ -206,7 +206,7 @@ export abstract class AbstractScrollbar extends Widget {
 		}
 	}
 
-	private _onPointerDown(e: PointerEvent): codemavi {
+	private _onPointerDown(e: PointerEvent): void {
 		let offsetX: number;
 		let offsetY: number;
 		if (e.target === this.domNode.domNode && typeof e.offsetX === 'number' && typeof e.offsetY === 'number') {
@@ -232,7 +232,7 @@ export abstract class AbstractScrollbar extends Widget {
 		}
 	}
 
-	private _sliderPointerDown(e: PointerEvent): codemavi {
+	private _sliderPointerDown(e: PointerEvent): void {
 		if (!e.target || !(e.target instanceof Element)) {
 			return;
 		}
@@ -268,7 +268,7 @@ export abstract class AbstractScrollbar extends Widget {
 		this._host.onDragStart();
 	}
 
-	private _setDesiredScrollPositionNow(_desiredScrollPosition: number): codemavi {
+	private _setDesiredScrollPositionNow(_desiredScrollPosition: number): void {
 
 		const desiredScrollPosition: INewScrollPosition = {};
 		this.writeScrollPosition(desiredScrollPosition, _desiredScrollPosition);
@@ -276,7 +276,7 @@ export abstract class AbstractScrollbar extends Widget {
 		this._scrollable.setScrollPositionNow(desiredScrollPosition);
 	}
 
-	public updateScrollbarSize(scrollbarSize: number): codemavi {
+	public updateScrollbarSize(scrollbarSize: number): void {
 		this._updateScrollbarSize(scrollbarSize);
 		this._scrollbarState.setScrollbarSize(scrollbarSize);
 		this._shouldRender = true;
@@ -291,13 +291,13 @@ export abstract class AbstractScrollbar extends Widget {
 
 	// ----------------- Overwrite these
 
-	protected abstract _renderDomNode(largeSize: number, smallSize: number): codemavi;
-	protected abstract _updateSlider(sliderSize: number, sliderPosition: number): codemavi;
+	protected abstract _renderDomNode(largeSize: number, smallSize: number): void;
+	protected abstract _updateSlider(sliderSize: number, sliderPosition: number): void;
 
 	protected abstract _pointerDownRelativePosition(offsetX: number, offsetY: number): number;
 	protected abstract _sliderPointerPosition(e: ISimplifiedPointerEvent): number;
 	protected abstract _sliderOrthogonalPointerPosition(e: ISimplifiedPointerEvent): number;
-	protected abstract _updateScrollbarSize(size: number): codemavi;
+	protected abstract _updateScrollbarSize(size: number): void;
 
-	public abstract writeScrollPosition(target: INewScrollPosition, scrollPosition: number): codemavi;
+	public abstract writeScrollPosition(target: INewScrollPosition, scrollPosition: number): void;
 }

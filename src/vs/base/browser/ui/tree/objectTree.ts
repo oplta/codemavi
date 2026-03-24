@@ -12,7 +12,7 @@ import { memoize } from '../../../common/decorators.js';
 import { Event } from '../../../common/event.js';
 import { Iterable } from '../../../common/iterator.js';
 
-export interface IObjectTreeOptions<T, TFilterData = codemavi> extends IAbstractTreeOptions<T, TFilterData> {
+export interface IObjectTreeOptions<T, TFilterData = void> extends IAbstractTreeOptions<T, TFilterData> {
 	readonly sorter?: ITreeSorter<T>;
 }
 
@@ -35,7 +35,7 @@ export interface IObjectTreeSetChildrenOptions<T> {
 	readonly diffIdentityProvider?: IIdentityProvider<T>;
 }
 
-export class ObjectTree<T extends NonNullable<any>, TFilterData = codemavi> extends AbstractTree<T | null, TFilterData, T | null> {
+export class ObjectTree<T extends NonNullable<any>, TFilterData = void> extends AbstractTree<T | null, TFilterData, T | null> {
 
 	protected declare model: IObjectTreeModel<T, TFilterData>;
 
@@ -51,11 +51,11 @@ export class ObjectTree<T extends NonNullable<any>, TFilterData = codemavi> exte
 		super(user, container, delegate, renderers, options as IObjectTreeOptions<T | null, TFilterData>);
 	}
 
-	setChildren(element: T | null, children: Iterable<IObjectTreeElement<T>> = Iterable.empty(), options?: IObjectTreeSetChildrenOptions<T>): codemavi {
+	setChildren(element: T | null, children: Iterable<IObjectTreeElement<T>> = Iterable.empty(), options?: IObjectTreeSetChildrenOptions<T>): void {
 		this.model.setChildren(element, children, options);
 	}
 
-	rerender(element?: T): codemavi {
+	rerender(element?: T): void {
 		if (element === undefined) {
 			this.view.rerender();
 			return;
@@ -64,7 +64,7 @@ export class ObjectTree<T extends NonNullable<any>, TFilterData = codemavi> exte
 		this.model.rerender(element);
 	}
 
-	updateElementHeight(element: T, height: number | undefined): codemavi {
+	updateElementHeight(element: T, height: number | undefined): void {
 		const elementIndex = this.model.getListIndex(element);
 		if (elementIndex === -1) {
 			return;
@@ -73,7 +73,7 @@ export class ObjectTree<T extends NonNullable<any>, TFilterData = codemavi> exte
 		this.view.updateElementHeight(elementIndex, height);
 	}
 
-	resort(element: T | null, recursive = true): codemavi {
+	resort(element: T | null, recursive = true): void {
 		this.model.resort(element, recursive);
 	}
 
@@ -90,9 +90,9 @@ interface ICompressedTreeNodeProvider<T, TFilterData> {
 	getCompressedTreeNode(location: T | null): ITreeNode<ICompressedTreeNode<T> | null, TFilterData>;
 }
 
-export interface ICompressibleTreeRenderer<T, TFilterData = codemavi, TTemplateData = codemavi> extends ITreeRenderer<T, TFilterData, TTemplateData> {
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<T>, TFilterData>, index: number, templateData: TTemplateData, height: number | undefined): codemavi;
-	disposeCompressedElements?(node: ITreeNode<ICompressedTreeNode<T>, TFilterData>, index: number, templateData: TTemplateData, height: number | undefined): codemavi;
+export interface ICompressibleTreeRenderer<T, TFilterData = void, TTemplateData = void> extends ITreeRenderer<T, TFilterData, TTemplateData> {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<T>, TFilterData>, index: number, templateData: TTemplateData, height: number | undefined): void;
+	disposeCompressedElements?(node: ITreeNode<ICompressedTreeNode<T>, TFilterData>, index: number, templateData: TTemplateData, height: number | undefined): void;
 }
 
 interface CompressibleTemplateData<T, TFilterData, TTemplateData> {
@@ -123,7 +123,7 @@ class CompressibleRenderer<T extends NonNullable<any>, TFilterData, TTemplateDat
 		return { compressedTreeNode: undefined, data };
 	}
 
-	renderElement(node: ITreeNode<T, TFilterData>, index: number, templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>, height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<T, TFilterData>, index: number, templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>, height: number | undefined): void {
 		let compressedTreeNode = this.stickyScrollDelegate.getCompressedNode(node);
 		if (!compressedTreeNode) {
 			compressedTreeNode = this.compressedTreeNodeProvider.getCompressedTreeNode(node.element) as ITreeNode<ICompressedTreeNode<T>, TFilterData>;
@@ -138,7 +138,7 @@ class CompressibleRenderer<T extends NonNullable<any>, TFilterData, TTemplateDat
 		}
 	}
 
-	disposeElement(node: ITreeNode<T, TFilterData>, index: number, templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>, height: number | undefined): codemavi {
+	disposeElement(node: ITreeNode<T, TFilterData>, index: number, templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>, height: number | undefined): void {
 		if (templateData.compressedTreeNode) {
 			this.renderer.disposeCompressedElements?.(templateData.compressedTreeNode, index, templateData.data, height);
 		} else {
@@ -146,7 +146,7 @@ class CompressibleRenderer<T extends NonNullable<any>, TFilterData, TTemplateDat
 		}
 	}
 
-	disposeTemplate(templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>): codemavi {
+	disposeTemplate(templateData: CompressibleTemplateData<T, TFilterData, TTemplateData>): void {
 		this.renderer.disposeTemplate(templateData.data);
 	}
 
@@ -245,7 +245,7 @@ export interface ICompressibleKeyboardNavigationLabelProvider<T> extends IKeyboa
 	getCompressedNodeKeyboardNavigationLabel(elements: T[]): { toString(): string | undefined } | undefined;
 }
 
-export interface ICompressibleObjectTreeOptions<T, TFilterData = codemavi> extends IObjectTreeOptions<T, TFilterData> {
+export interface ICompressibleObjectTreeOptions<T, TFilterData = void> extends IObjectTreeOptions<T, TFilterData> {
 	readonly compressionEnabled?: boolean;
 	readonly elementMapper?: ElementMapper<T>;
 	readonly keyboardNavigationLabelProvider?: ICompressibleKeyboardNavigationLabelProvider<T>;
@@ -278,7 +278,7 @@ export interface ICompressibleObjectTreeOptionsUpdate extends IAbstractTreeOptio
 	readonly compressionEnabled?: boolean;
 }
 
-export class CompressibleObjectTree<T extends NonNullable<any>, TFilterData = codemavi> extends ObjectTree<T, TFilterData> implements ICompressedTreeNodeProvider<T, TFilterData> {
+export class CompressibleObjectTree<T extends NonNullable<any>, TFilterData = void> extends ObjectTree<T, TFilterData> implements ICompressedTreeNodeProvider<T, TFilterData> {
 
 	protected declare model: CompressibleObjectTreeModel<T, TFilterData>;
 
@@ -296,7 +296,7 @@ export class CompressibleObjectTree<T extends NonNullable<any>, TFilterData = co
 		super(user, container, delegate, compressibleRenderers, { ...asObjectTreeOptions<T, TFilterData>(compressedTreeNodeProvider, options), stickyScrollDelegate });
 	}
 
-	override setChildren(element: T | null, children: Iterable<ICompressedTreeElement<T>> = Iterable.empty(), options?: IObjectTreeSetChildrenOptions<T>): codemavi {
+	override setChildren(element: T | null, children: Iterable<ICompressedTreeElement<T>> = Iterable.empty(), options?: IObjectTreeSetChildrenOptions<T>): void {
 		this.model.setChildren(element, children, options);
 	}
 
@@ -304,7 +304,7 @@ export class CompressibleObjectTree<T extends NonNullable<any>, TFilterData = co
 		return new CompressibleObjectTreeModel(user, options);
 	}
 
-	override updateOptions(optionsUpdate: ICompressibleObjectTreeOptionsUpdate = {}): codemavi {
+	override updateOptions(optionsUpdate: ICompressibleObjectTreeOptionsUpdate = {}): void {
 		super.updateOptions(optionsUpdate);
 
 		if (typeof optionsUpdate.compressionEnabled !== 'undefined') {

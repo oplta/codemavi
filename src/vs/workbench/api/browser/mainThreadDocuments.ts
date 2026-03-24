@@ -26,7 +26,7 @@ import { ErrorNoTelemetry } from '../../../base/common/errors.js';
 
 export class BoundModelReferenceCollection {
 
-	private _data = new Array<{ uri: URI; length: number; dispose(): codemavi }>();
+	private _data = new Array<{ uri: URI; length: number; dispose(): void }>();
 	private _length = 0;
 
 	constructor(
@@ -38,11 +38,11 @@ export class BoundModelReferenceCollection {
 		//
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._data = dispose(this._data);
 	}
 
-	remove(uri: URI): codemavi {
+	remove(uri: URI): void {
 		for (const entry of [...this._data] /* copy array because dispose will modify it */) {
 			if (this._extUri.isEqualOrParent(entry.uri, uri)) {
 				entry.dispose();
@@ -50,7 +50,7 @@ export class BoundModelReferenceCollection {
 		}
 	}
 
-	add(uri: URI, ref: IReference<any>, length: number = 0): codemavi {
+	add(uri: URI, ref: IReference<any>, length: number = 0): void {
 		// const length = ref.object.textEditorModel.getValueLength();
 		const dispose = () => {
 			const idx = this._data.indexOf(entry);
@@ -69,7 +69,7 @@ export class BoundModelReferenceCollection {
 		this._cleanup();
 	}
 
-	private _cleanup(): codemavi {
+	private _cleanup(): void {
 		// clean-up wrt total length
 		while (this._length > this._maxLength) {
 			this._data[0].dispose();
@@ -168,7 +168,7 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 		}));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		dispose(this._modelTrackers.values());
 		this._modelTrackers.clear();
 		super.dispose();
@@ -187,7 +187,7 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 		return !!model && shouldSynchronizeModel(model);
 	}
 
-	handleModelAdded(model: ITextModel): codemavi {
+	handleModelAdded(model: ITextModel): void {
 		// Same filter as in mainThreadEditorsTracker
 		if (!shouldSynchronizeModel(model)) {
 			// don't synchronize too large models
@@ -196,7 +196,7 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 		this._modelTrackers.set(model.uri, new ModelTracker(model, this._onIsCaughtUpWithContentChanges, this._proxy, this._textFileService));
 	}
 
-	private _onModelModeChanged(event: { model: ITextModel; oldLanguageId: string }): codemavi {
+	private _onModelModeChanged(event: { model: ITextModel; oldLanguageId: string }): void {
 		const { model } = event;
 		if (!this._modelTrackers.has(model.uri)) {
 			return;
@@ -204,7 +204,7 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 		this._proxy.$acceptModelLanguageChanged(model.uri, model.getLanguageId());
 	}
 
-	handleModelRemoved(modelUrl: URI): codemavi {
+	handleModelRemoved(modelUrl: URI): void {
 		if (!this._modelTrackers.has(modelUrl)) {
 			return;
 		}

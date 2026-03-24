@@ -49,7 +49,7 @@ export class ExtensionActivationProgress implements IWorkbenchContribution {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._listener.dispose();
 	}
 }

@@ -176,7 +176,7 @@ export interface IExecutionResult<T extends string | Buffer> {
 	stderr: string;
 }
 
-function cpErrorHandler(cb: (reason?: any) => codemavi): (reason?: any) => codemavi {
+function cpErrorHandler(cb: (reason?: any) => void): (reason?: any) => void {
 	return err => {
 		if (/ENOENT/.test(err.message)) {
 			err = new GitError({
@@ -194,7 +194,7 @@ export interface SpawnOptions extends cp.SpawnOptions {
 	input?: string;
 	log?: boolean;
 	cancellationToken?: CancellationToken;
-	onSpawn?: (childProcess: cp.ChildProcess) => codemavi;
+	onSpawn?: (childProcess: cp.ChildProcess) => void;
 }
 
 async function exec(child: cp.ChildProcess, cancellationToken?: CancellationToken): Promise<IExecutionResult<Buffer>> {
@@ -208,12 +208,12 @@ async function exec(child: cp.ChildProcess, cancellationToken?: CancellationToke
 
 	const disposables: IDisposable[] = [];
 
-	const once = (ee: NodeJS.EventEmitter, name: string, fn: (...args: any[]) => codemavi) => {
+	const once = (ee: NodeJS.EventEmitter, name: string, fn: (...args: any[]) => void) => {
 		ee.once(name, fn);
 		disposables.push(toDisposable(() => ee.removeListener(name, fn)));
 	};
 
-	const on = (ee: NodeJS.EventEmitter, name: string, fn: (...args: any[]) => codemavi) => {
+	const on = (ee: NodeJS.EventEmitter, name: string, fn: (...args: any[]) => void) => {
 		ee.on(name, fn);
 		disposables.push(toDisposable(() => ee.removeListener(name, fn)));
 	};
@@ -405,7 +405,7 @@ export class Git {
 		return new Repository(this, repositoryRoot, repositoryRootRealPath, dotGit, logger);
 	}
 
-	async init(repository: string, options: InitOptions = {}): Promise<codemavi> {
+	async init(repository: string, options: InitOptions = {}): Promise<void> {
 		const args = ['init'];
 
 		if (options.defaultBranch && options.defaultBranch !== '' && this.compareGitVersionTo('2.28.0') !== -1) {
@@ -680,7 +680,7 @@ export class Git {
 		return undefined;
 	}
 
-	private log(output: string): codemavi {
+	private log(output: string): void {
 		this._onOutput.emit('log', output);
 	}
 
@@ -705,7 +705,7 @@ export class Git {
 		}
 	}
 
-	async addSafeDirectory(repositoryPath: string): Promise<codemavi> {
+	async addSafeDirectory(repositoryPath: string): Promise<void> {
 		await this.exec(os.homedir(), ['config', '--global', '--add', 'safe.directory', repositoryPath]);
 		return;
 	}
@@ -786,7 +786,7 @@ export class GitStatusParser {
 		return this.result;
 	}
 
-	update(raw: string): codemavi {
+	update(raw: string): void {
 		let i = 0;
 		let nextI: number | undefined;
 
@@ -1322,7 +1322,7 @@ export class Repository {
 			args.push('--topo-order');
 			args.push('--decorate=full');
 
-			// In order to acodemavi hitting the command line limit due to large number of reference
+			// In order to avoid hitting the command line limit due to large number of reference
 			// names (can happen when the `all` filter is used in the Source Control Graph view),
 			// we are passing the reference names via stdin.
 			spawnOptions.input = options.refNames.join('\n');
@@ -1541,7 +1541,7 @@ export class Repository {
 		}
 	}
 
-	async apply(patch: string, reverse?: boolean): Promise<codemavi> {
+	async apply(patch: string, reverse?: boolean): Promise<void> {
 		const args = ['apply', patch];
 
 		if (reverse) {
@@ -1719,7 +1719,7 @@ export class Repository {
 		return result.stdout.trim();
 	}
 
-	async add(paths: string[], opts?: { update?: boolean }): Promise<codemavi> {
+	async add(paths: string[], opts?: { update?: boolean }): Promise<void> {
 		const args = ['add'];
 
 		if (opts && opts.update) {
@@ -1737,7 +1737,7 @@ export class Repository {
 		}
 	}
 
-	async rm(paths: string[]): Promise<codemavi> {
+	async rm(paths: string[]): Promise<void> {
 		const args = ['rm', '--'];
 
 		if (!paths || !paths.length) {
@@ -1749,7 +1749,7 @@ export class Repository {
 		await this.exec(args);
 	}
 
-	async stage(path: string, data: Uint8Array): Promise<codemavi> {
+	async stage(path: string, data: Uint8Array): Promise<void> {
 		const relativePath = sanitizeRelativePath(this.repositoryRoot, path);
 		const child = this.stream(['hash-object', '--stdin', '-w', '--path', relativePath], { stdio: [null, null, null] });
 		child.stdin!.end(data);
@@ -1783,7 +1783,7 @@ export class Repository {
 		await this.exec(['update-index', add, '--cacheinfo', mode, hash, relativePath]);
 	}
 
-	async checkout(treeish: string, paths: string[], opts: { track?: boolean; detached?: boolean } = Object.create(null)): Promise<codemavi> {
+	async checkout(treeish: string, paths: string[], opts: { track?: boolean; detached?: boolean } = Object.create(null)): Promise<void> {
 		const args = ['checkout', '-q'];
 
 		if (opts.track) {
@@ -1818,7 +1818,7 @@ export class Repository {
 		}
 	}
 
-	async commit(message: string | undefined, opts: CommitOptions = Object.create(null)): Promise<codemavi> {
+	async commit(message: string | undefined, opts: CommitOptions = Object.create(null)): Promise<void> {
 		const args = ['commit', '--quiet'];
 		const options: SpawnOptions = {};
 
@@ -1880,11 +1880,11 @@ export class Repository {
 		}
 	}
 
-	async rebaseAbort(): Promise<codemavi> {
+	async rebaseAbort(): Promise<void> {
 		await this.exec(['rebase', '--abort']);
 	}
 
-	async rebaseContinue(): Promise<codemavi> {
+	async rebaseContinue(): Promise<void> {
 		const args = ['rebase', '--continue'];
 
 		try {
@@ -1894,7 +1894,7 @@ export class Repository {
 		}
 	}
 
-	private async handleCommitError(commitErr: any): Promise<codemavi> {
+	private async handleCommitError(commitErr: any): Promise<void> {
 		if (/not possible because you have unmerged files/.test(commitErr.stderr || '')) {
 			commitErr.gitErrorCode = GitErrorCodes.UnmergedChanges;
 			throw commitErr;
@@ -1920,7 +1920,7 @@ export class Repository {
 		throw commitErr;
 	}
 
-	async branch(name: string, checkout: boolean, ref?: string): Promise<codemavi> {
+	async branch(name: string, checkout: boolean, ref?: string): Promise<void> {
 		const args = checkout ? ['checkout', '-q', '-b', name, '--no-track'] : ['branch', '-q', name];
 
 		if (ref) {
@@ -1930,32 +1930,32 @@ export class Repository {
 		await this.exec(args);
 	}
 
-	async deleteBranch(name: string, force?: boolean): Promise<codemavi> {
+	async deleteBranch(name: string, force?: boolean): Promise<void> {
 		const args = ['branch', force ? '-D' : '-d', name];
 		await this.exec(args);
 	}
 
-	async renameBranch(name: string): Promise<codemavi> {
+	async renameBranch(name: string): Promise<void> {
 		const args = ['branch', '-m', name];
 		await this.exec(args);
 	}
 
-	async move(from: string, to: string): Promise<codemavi> {
+	async move(from: string, to: string): Promise<void> {
 		const args = ['mv', from, to];
 		await this.exec(args);
 	}
 
-	async setBranchUpstream(name: string, upstream: string): Promise<codemavi> {
+	async setBranchUpstream(name: string, upstream: string): Promise<void> {
 		const args = ['branch', '--set-upstream-to', upstream, name];
 		await this.exec(args);
 	}
 
-	async deleteRef(ref: string): Promise<codemavi> {
+	async deleteRef(ref: string): Promise<void> {
 		const args = ['update-ref', '-d', ref];
 		await this.exec(args);
 	}
 
-	async merge(ref: string): Promise<codemavi> {
+	async merge(ref: string): Promise<void> {
 		const args = ['merge', ref];
 
 		try {
@@ -1969,11 +1969,11 @@ export class Repository {
 		}
 	}
 
-	async mergeAbort(): Promise<codemavi> {
+	async mergeAbort(): Promise<void> {
 		await this.exec(['merge', '--abort']);
 	}
 
-	async tag(options: { name: string; message?: string; ref?: string }): Promise<codemavi> {
+	async tag(options: { name: string; message?: string; ref?: string }): Promise<void> {
 		let args = ['tag'];
 
 		if (options.message) {
@@ -1989,12 +1989,12 @@ export class Repository {
 		await this.exec(args);
 	}
 
-	async deleteTag(name: string): Promise<codemavi> {
+	async deleteTag(name: string): Promise<void> {
 		const args = ['tag', '-d', name];
 		await this.exec(args);
 	}
 
-	async deleteRemoteRef(remoteName: string, refName: string, options?: { force?: boolean }): Promise<codemavi> {
+	async deleteRemoteRef(remoteName: string, refName: string, options?: { force?: boolean }): Promise<void> {
 		const args = ['push', remoteName, '--delete'];
 
 		if (options?.force) {
@@ -2005,7 +2005,7 @@ export class Repository {
 		await this.exec(args);
 	}
 
-	async clean(paths: string[]): Promise<codemavi> {
+	async clean(paths: string[]): Promise<void> {
 		const pathsByGroup = groupBy(paths.map(sanitizePath), p => path.dirname(p));
 		const groups = Object.keys(pathsByGroup).map(k => pathsByGroup[k]);
 
@@ -2022,7 +2022,7 @@ export class Repository {
 		await Promise.all(promises);
 	}
 
-	async undo(): Promise<codemavi> {
+	async undo(): Promise<void> {
 		await this.exec(['clean', '-fd']);
 
 		try {
@@ -2036,12 +2036,12 @@ export class Repository {
 		}
 	}
 
-	async reset(treeish: string, hard: boolean = false): Promise<codemavi> {
+	async reset(treeish: string, hard: boolean = false): Promise<void> {
 		const args = ['reset', hard ? '--hard' : '--soft', treeish];
 		await this.exec(args);
 	}
 
-	async revert(treeish: string, paths: string[]): Promise<codemavi> {
+	async revert(treeish: string, paths: string[]): Promise<void> {
 		const result = await this.exec(['branch']);
 		let args: string[];
 
@@ -2071,22 +2071,22 @@ export class Repository {
 		}
 	}
 
-	async addRemote(name: string, url: string): Promise<codemavi> {
+	async addRemote(name: string, url: string): Promise<void> {
 		const args = ['remote', 'add', name, url];
 		await this.exec(args);
 	}
 
-	async removeRemote(name: string): Promise<codemavi> {
+	async removeRemote(name: string): Promise<void> {
 		const args = ['remote', 'remove', name];
 		await this.exec(args);
 	}
 
-	async renameRemote(name: string, newName: string): Promise<codemavi> {
+	async renameRemote(name: string, newName: string): Promise<void> {
 		const args = ['remote', 'rename', name, newName];
 		await this.exec(args);
 	}
 
-	async fetch(options: { remote?: string; ref?: string; all?: boolean; prune?: boolean; depth?: number; silent?: boolean; readonly cancellationToken?: CancellationToken } = {}): Promise<codemavi> {
+	async fetch(options: { remote?: string; ref?: string; all?: boolean; prune?: boolean; depth?: number; silent?: boolean; readonly cancellationToken?: CancellationToken } = {}): Promise<void> {
 		const args = ['fetch'];
 		const spawnOptions: SpawnOptions = {
 			cancellationToken: options.cancellationToken,
@@ -2131,7 +2131,7 @@ export class Repository {
 		}
 	}
 
-	async fetchTags(options: { remote: string; tags: string[]; force?: boolean }): Promise<codemavi> {
+	async fetchTags(options: { remote: string; tags: string[]; force?: boolean }): Promise<void> {
 		const args = ['fetch'];
 		const spawnOptions: SpawnOptions = {
 			env: { 'GIT_HTTP_USER_AGENT': this.git.userAgent }
@@ -2150,7 +2150,7 @@ export class Repository {
 		await this.exec(args, spawnOptions);
 	}
 
-	async pull(rebase?: boolean, remote?: string, branch?: string, options: PullOptions = {}): Promise<codemavi> {
+	async pull(rebase?: boolean, remote?: string, branch?: string, options: PullOptions = {}): Promise<void> {
 		const args = ['pull'];
 
 		if (options.tags) {
@@ -2202,7 +2202,7 @@ export class Repository {
 		}
 	}
 
-	async rebase(branch: string, options: PullOptions = {}): Promise<codemavi> {
+	async rebase(branch: string, options: PullOptions = {}): Promise<void> {
 		const args = ['rebase'];
 
 		args.push(branch);
@@ -2220,7 +2220,7 @@ export class Repository {
 		}
 	}
 
-	async push(remote?: string, name?: string, setUpstream: boolean = false, followTags = false, forcePushMode?: ForcePushMode, tags = false): Promise<codemavi> {
+	async push(remote?: string, name?: string, setUpstream: boolean = false, followTags = false, forcePushMode?: ForcePushMode, tags = false): Promise<void> {
 		const args = ['push'];
 
 		if (forcePushMode === ForcePushMode.ForceWithLease || forcePushMode === ForcePushMode.ForceWithLeaseIfIncludes) {
@@ -2275,7 +2275,7 @@ export class Repository {
 		}
 	}
 
-	async cherryPick(commitHash: string): Promise<codemavi> {
+	async cherryPick(commitHash: string): Promise<void> {
 		try {
 			await this.exec(['cherry-pick', commitHash]);
 		} catch (err) {
@@ -2293,7 +2293,7 @@ export class Repository {
 		}
 	}
 
-	async cherryPickAbort(): Promise<codemavi> {
+	async cherryPickAbort(): Promise<void> {
 		await this.exec(['cherry-pick', '--abort']);
 	}
 
@@ -2330,7 +2330,7 @@ export class Repository {
 		}
 	}
 
-	async createStash(message?: string, includeUntracked?: boolean, staged?: boolean): Promise<codemavi> {
+	async createStash(message?: string, includeUntracked?: boolean, staged?: boolean): Promise<void> {
 		try {
 			const args = ['stash', 'push'];
 
@@ -2356,17 +2356,17 @@ export class Repository {
 		}
 	}
 
-	async popStash(index?: number): Promise<codemavi> {
+	async popStash(index?: number): Promise<void> {
 		const args = ['stash', 'pop'];
 		await this.popOrApplyStash(args, index);
 	}
 
-	async applyStash(index?: number): Promise<codemavi> {
+	async applyStash(index?: number): Promise<void> {
 		const args = ['stash', 'apply'];
 		await this.popOrApplyStash(args, index);
 	}
 
-	private async popOrApplyStash(args: string[], index?: number): Promise<codemavi> {
+	private async popOrApplyStash(args: string[], index?: number): Promise<void> {
 		try {
 			if (typeof index === 'number') {
 				args.push(`stash@{${index}}`);
@@ -2386,7 +2386,7 @@ export class Repository {
 		}
 	}
 
-	async dropStash(index?: number): Promise<codemavi> {
+	async dropStash(index?: number): Promise<void> {
 		const args = ['stash'];
 
 		if (typeof index === 'number') {
@@ -2955,7 +2955,7 @@ export class Repository {
 		}
 	}
 
-	async updateSubmodules(paths: string[]): Promise<codemavi> {
+	async updateSubmodules(paths: string[]): Promise<void> {
 		const args = ['submodule', 'update'];
 
 		for (const chunk of splitInChunks(paths.map(p => sanitizeRelativePath(this.repositoryRoot, p)), MAX_CLI_LENGTH)) {

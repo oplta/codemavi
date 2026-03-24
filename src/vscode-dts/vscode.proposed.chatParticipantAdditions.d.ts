@@ -88,8 +88,8 @@ declare module 'vscode' {
 
 	export class ChatResponseProgressPart2 extends ChatResponseProgressPart {
 		value: string;
-		task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | codemavi>;
-		constructor(value: string, task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | codemavi>);
+		task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | void>;
+		constructor(value: string, task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | void>);
 	}
 
 	export class ChatResponseReferencePart2 {
@@ -156,7 +156,7 @@ declare module 'vscode' {
 		 *
 		 * THis is currently only implemented for symbol links.
 		 */
-		resolve?(token: CancellationToken): Thenable<codemavi>;
+		resolve?(token: CancellationToken): Thenable<void>;
 	}
 
 	export interface ChatResponseStream {
@@ -169,19 +169,19 @@ declare module 'vscode' {
 		* @param task If provided, a task to run while the progress is displayed. When the Thenable resolves, the progress will be marked complete in the UI, and the progress message will be updated to the resolved string if one is specified.
 		* @returns This stream.
 		*/
-		progress(value: string, task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | codemavi>): codemavi;
+		progress(value: string, task?: (progress: Progress<ChatResponseWarningPart | ChatResponseReferencePart>) => Thenable<string | void>): void;
 
-		textEdit(target: Uri, edits: TextEdit | TextEdit[]): codemavi;
+		textEdit(target: Uri, edits: TextEdit | TextEdit[]): void;
 
-		textEdit(target: Uri, isDone: true): codemavi;
+		textEdit(target: Uri, isDone: true): void;
 
-		notebookEdit(target: Uri, edits: NotebookEdit | NotebookEdit[]): codemavi;
+		notebookEdit(target: Uri, edits: NotebookEdit | NotebookEdit[]): void;
 
-		notebookEdit(target: Uri, isDone: true): codemavi;
+		notebookEdit(target: Uri, isDone: true): void;
 
-		markdownWithVulnerabilities(value: string | MarkdownString, vulnerabilities: ChatVulnerability[]): codemavi;
-		codeblockUri(uri: Uri, isEdit?: boolean): codemavi;
-		push(part: ChatResponsePart | ChatResponseTextEditPart | ChatResponseWarningPart | ChatResponseProgressPart2): codemavi;
+		markdownWithVulnerabilities(value: string | MarkdownString, vulnerabilities: ChatVulnerability[]): void;
+		codeblockUri(uri: Uri, isEdit?: boolean): void;
+		push(part: ChatResponsePart | ChatResponseTextEditPart | ChatResponseWarningPart | ChatResponseProgressPart2): void;
 
 		/**
 		 * Show an inline message in the chat view asking the user to confirm an action.
@@ -193,7 +193,7 @@ declare module 'vscode' {
 		 * TODO@API should this be MarkdownString?
 		 * TODO@API should actually be a more generic function that takes an array of buttons
 		 */
-		confirmation(title: string, message: string, data: any, buttons?: string[]): codemavi;
+		confirmation(title: string, message: string, data: any, buttons?: string[]): void;
 
 		/**
 		 * Push a warning to this stream. Short-hand for
@@ -202,15 +202,15 @@ declare module 'vscode' {
 		 * @param message A warning message
 		 * @returns This stream.
 		 */
-		warning(message: string | MarkdownString): codemavi;
+		warning(message: string | MarkdownString): void;
 
-		reference(value: Uri | Location | { variableName: string; value?: Uri | Location }, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri }): codemavi;
+		reference(value: Uri | Location | { variableName: string; value?: Uri | Location }, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri }): void;
 
-		reference2(value: Uri | Location | string | { variableName: string; value?: Uri | Location }, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri }, options?: { status?: { description: string; kind: ChatResponseReferencePartStatusKind } }): codemavi;
+		reference2(value: Uri | Location | string | { variableName: string; value?: Uri | Location }, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri }, options?: { status?: { description: string; kind: ChatResponseReferencePartStatusKind } }): void;
 
-		codeCitation(value: Uri, license: string, snippet: string): codemavi;
+		codeCitation(value: Uri, license: string, snippet: string): void;
 
-		push(part: ExtendedChatResponsePart): codemavi;
+		push(part: ExtendedChatResponsePart): void;
 	}
 
 	export enum ChatResponseReferencePartStatusKind {
@@ -290,7 +290,7 @@ declare module 'vscode' {
 		constructor(id: string, label: string | CompletionItemLabel, values: ChatVariableValue[]);
 	}
 
-	export type ChatExtendedRequestHandler = (request: ChatRequest, context: ChatContext, response: ChatResponseStream, token: CancellationToken) => ProviderResult<ChatResult | codemavi>;
+	export type ChatExtendedRequestHandler = (request: ChatRequest, context: ChatContext, response: ChatResponseStream, token: CancellationToken) => ProviderResult<ChatResult | void>;
 
 	export interface ChatResult {
 		nextQuestion?: {

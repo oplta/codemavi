@@ -304,7 +304,7 @@ class AttachFileToChatAction extends AttachResourceAction {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const files = this.getResources(accessor, ...args);
 
@@ -330,7 +330,7 @@ class AttachFolderToChatAction extends AttachResourceAction {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const folders = this.getResources(accessor, ...args);
 
@@ -356,7 +356,7 @@ class AttachSelectionToChatAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const editorService = accessor.get(IEditorService);
 		const [_, matches] = args;
@@ -421,7 +421,7 @@ class AttachFileToEditingSessionAction extends AttachResourceAction {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const files = this.getResources(accessor, ...args);
 
@@ -502,7 +502,7 @@ class AttachFolderToEditingSessionAction extends AttachResourceAction {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const folders = this.getResources(accessor, ...args);
 
@@ -533,7 +533,7 @@ class AttachSelectionToEditingSessionAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const variablesService = accessor.get(IChatVariablesService);
 		const editorService = accessor.get(IEditorService);
 
@@ -773,7 +773,7 @@ export class AttachContextAction extends Action2 {
 		}
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const quickInputService = accessor.get(IQuickInputService);
 		const chatAgentService = accessor.get(IChatAgentService);
 		const commandService = accessor.get(ICommandService);
@@ -962,7 +962,7 @@ export class AttachContextAction extends Action2 {
 		}), clipboardService, editorService, labelService, viewsService, chatEditingService, hostService, fileService, textModelService, instantiationService, '', context?.placeholder);
 	}
 
-	private async _showDiagnosticsPick(instantiationService: IInstantiationService, onBackgroundAccept: (item: IChatContextQuickPickItem[]) => codemavi): Promise<IDiagnosticsQuickPickItemWithFilter | undefined> {
+	private async _showDiagnosticsPick(instantiationService: IInstantiationService, onBackgroundAccept: (item: IChatContextQuickPickItem[]) => void): Promise<IDiagnosticsQuickPickItemWithFilter | undefined> {
 		const convert = (item: IDiagnosticVariableEntryFilterData): IDiagnosticsQuickPickItemWithFilter => ({
 			kind: 'diagnostic-filter',
 			id: IDiagnosticVariableEntryFilterData.id(item),
@@ -1009,7 +1009,7 @@ export class AttachContextAction extends Action2 {
 			},
 			additionPicks: quickPickItems,
 			filter: (item: IChatContextQuickPickItem | IQuickPickSeparator) => {
-				// Acodemavi attaching the same context twice
+				// Avoid attaching the same context twice
 				const attachedContext = widget.attachmentModel.getAttachmentIDs();
 
 				if (isIOpenEditorsQuickPickItem(item)) {
@@ -1097,7 +1097,7 @@ registerAction2(class AttachFilesAction extends AttachContextAction {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const context = args[0];
 		const attachFilesContext = { ...context, showFilesOnly: true };
 		return super.run(accessor, attachFilesContext);

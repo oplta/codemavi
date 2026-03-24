@@ -35,7 +35,7 @@ interface IConfigurationResolverExpression<T> {
 	 * Resolves a replacement into the string value.
 	 * If the value is undefined, the original variable text will be preserved.
 	 */
-	resolve(replacement: Replacement, data: string | IResolvedValue): codemavi;
+	resolve(replacement: Replacement, data: string | IResolvedValue): void;
 
 	/**
 	 * Returns the complete object. Any unresolved replacements are left intact.
@@ -150,7 +150,7 @@ export class ConfigurationResolverExpression<T> implements IConfigurationResolve
 		};
 	}
 
-	private parseObject(obj: any): codemavi {
+	private parseObject(obj: any): void {
 		if (typeof obj !== 'object' || obj === null) {
 			return;
 		}
@@ -176,7 +176,7 @@ export class ConfigurationResolverExpression<T> implements IConfigurationResolve
 		}
 	}
 
-	private parseString(object: any, propertyName: string | number, value: string): codemavi {
+	private parseString(object: any, propertyName: string | number, value: string): void {
 		let pos = 0;
 		while (pos < value.length) {
 			const match = value.indexOf('${', pos);
@@ -203,7 +203,7 @@ export class ConfigurationResolverExpression<T> implements IConfigurationResolve
 		return Iterable.map(Iterable.filter(this.locations.values(), l => !!l.resolved), l => [l.replacement, l.resolved!]);
 	}
 
-	public resolve(replacement: Replacement, data: string | IResolvedValue): codemavi {
+	public resolve(replacement: Replacement, data: string | IResolvedValue): void {
 		if (typeof data !== 'object') {
 			data = { value: String(data) };
 		}

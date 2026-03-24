@@ -53,9 +53,9 @@ export interface IQuickInputOptions {
 	container: HTMLElement;
 	ignoreFocusOut(): boolean;
 	backKeybindingLabel(): string | undefined;
-	setContextKey(id?: string): codemavi;
-	linkOpenerDelegate(content: string): codemavi;
-	returnFocus(): codemavi;
+	setContextKey(id?: string): void;
+	linkOpenerDelegate(content: string): void;
+	returnFocus(): void;
 	/**
 	 * @todo With IHover in vs/editor, can we depend on the service directly
 	 * instead of passing it through a hover delegate?
@@ -118,17 +118,17 @@ export interface QuickInputUI {
 	customButton: Button;
 	progressBar: ProgressBar;
 	list: QuickInputTree;
-	onDidAccept: Event<codemavi>;
-	onDidCustom: Event<codemavi>;
+	onDidAccept: Event<void>;
+	onDidCustom: Event<void>;
 	onDidTriggerButton: Event<IQuickInputButton>;
 	ignoreFocusOut: boolean;
 	keyMods: Writeable<IKeyMods>;
-	show(controller: QuickInput): codemavi;
-	setVisibilities(visibilities: Visibilities): codemavi;
-	setEnabled(enabled: boolean): codemavi;
-	setContextKey(contextKey?: string): codemavi;
-	linkOpenerDelegate(content: string): codemavi;
-	hide(): codemavi;
+	show(controller: QuickInput): void;
+	setVisibilities(visibilities: Visibilities): void;
+	setEnabled(enabled: boolean): void;
+	setContextKey(contextKey?: string): void;
+	linkOpenerDelegate(content: string): void;
+	hide(): void;
 }
 
 export type Visibilities = {
@@ -174,7 +174,7 @@ abstract class QuickInput extends Disposable implements IQuickInput {
 	private readonly onDidTriggerButtonEmitter = this._register(new Emitter<IQuickInputButton>());
 	private readonly onDidHideEmitter = this._register(new Emitter<IQuickInputHideEvent>());
 	private readonly onWillHideEmitter = this._register(new Emitter<IQuickInputHideEvent>());
-	private readonly onDisposeEmitter = this._register(new Emitter<codemavi>());
+	private readonly onDisposeEmitter = this._register(new Emitter<void>());
 
 	protected readonly visibleDisposables = this._register(new DisposableStore());
 
@@ -330,7 +330,7 @@ abstract class QuickInput extends Disposable implements IQuickInput {
 
 	readonly onDidTriggerButton = this.onDidTriggerButtonEmitter.event;
 
-	show(): codemavi {
+	show(): void {
 		if (this.visible) {
 			return;
 		}
@@ -363,14 +363,14 @@ abstract class QuickInput extends Disposable implements IQuickInput {
 		this.update();
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		if (!this.visible) {
 			return;
 		}
 		this.ui.hide();
 	}
 
-	didHide(reason = QuickInputHideReason.Other): codemavi {
+	didHide(reason = QuickInputHideReason.Other): void {
 		this.visible = false;
 		this.visibleDisposables.clear();
 		this.onDidHideEmitter.fire({ reason });
@@ -378,7 +378,7 @@ abstract class QuickInput extends Disposable implements IQuickInput {
 
 	readonly onDidHide = this.onDidHideEmitter.event;
 
-	willHide(reason = QuickInputHideReason.Other): codemavi {
+	willHide(reason = QuickInputHideReason.Other): void {
 		this.onWillHideEmitter.fire({ reason });
 	}
 	readonly onWillHide = this.onWillHideEmitter.event;
@@ -522,7 +522,7 @@ abstract class QuickInput extends Disposable implements IQuickInput {
 
 	readonly onDispose = this.onDisposeEmitter.event;
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.hide();
 		this.onDisposeEmitter.fire();
 
@@ -540,7 +540,7 @@ export class QuickPick<T extends IQuickPickItem, O extends { useSeparators: bool
 	private readonly onDidChangeValueEmitter = this._register(new Emitter<string>());
 	private readonly onWillAcceptEmitter = this._register(new Emitter<IQuickPickWillAcceptEvent>());
 	private readonly onDidAcceptEmitter = this._register(new Emitter<IQuickPickDidAcceptEvent>());
-	private readonly onDidCustomEmitter = this._register(new Emitter<codemavi>());
+	private readonly onDidCustomEmitter = this._register(new Emitter<void>());
 	private _items: O extends { useSeparators: true } ? Array<T | IQuickPickSeparator> : Array<T> = [];
 	private itemsUpdated = false;
 	private _canSelectMany = false;
@@ -594,7 +594,7 @@ export class QuickPick<T extends IQuickPickItem, O extends { useSeparators: bool
 		this.doSetValue(value);
 	}
 
-	private doSetValue(value: string, skipUpdate?: boolean): codemavi {
+	private doSetValue(value: string, skipUpdate?: boolean): void {
 		if (this._value !== value) {
 			this._value = value;
 			if (!skipUpdate) {
@@ -945,7 +945,7 @@ export class QuickPick<T extends IQuickPickItem, O extends { useSeparators: bool
 		super.show(); // TODO: Why have show() bubble up while update() trickles down?
 	}
 
-	private handleAccept(inBackground: boolean): codemavi {
+	private handleAccept(inBackground: boolean): void {
 
 		// Figure out veto via `onWillAccept` event
 		let veto = false;
@@ -1134,7 +1134,7 @@ export class QuickPick<T extends IQuickPickItem, O extends { useSeparators: bool
 		}
 	}
 
-	focus(focus: QuickPickFocus): codemavi {
+	focus(focus: QuickPickFocus): void {
 		this.ui.list.focus(focus);
 		// To allow things like space to check/uncheck items
 		if (this.canSelectMany) {
@@ -1142,7 +1142,7 @@ export class QuickPick<T extends IQuickPickItem, O extends { useSeparators: bool
 		}
 	}
 
-	accept(inBackground?: boolean | undefined): codemavi {
+	accept(inBackground?: boolean | undefined): void {
 		if (inBackground && !this._canAcceptInBackground) {
 			return; // needs to be enabled
 		}
@@ -1163,7 +1163,7 @@ export class InputBox extends QuickInput implements IInputBox {
 	private _password = false;
 	private _prompt: string | undefined;
 	private readonly onDidValueChangeEmitter = this._register(new Emitter<string>());
-	private readonly onDidAcceptEmitter = this._register(new Emitter<codemavi>());
+	private readonly onDidAcceptEmitter = this._register(new Emitter<void>());
 
 	readonly type = QuickInputType.InputBox;
 

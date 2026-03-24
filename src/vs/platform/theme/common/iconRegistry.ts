@@ -92,7 +92,7 @@ export interface IconFontSource {
 
 export interface IIconRegistry {
 
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 
 	/**
 	 * Register a icon to the registry.
@@ -105,7 +105,7 @@ export interface IIconRegistry {
 	/**
 	 * Deregister a icon from the registry.
 	 */
-	deregisterIcon(id: IconIdentifier): codemavi;
+	deregisterIcon(id: IconIdentifier): void;
 
 	/**
 	 * Get all icon contributions
@@ -137,7 +137,7 @@ export interface IIconRegistry {
 	/**
 	 * Deregister an icon font to the registry.
 	 */
-	deregisterIconFont(id: string): codemavi;
+	deregisterIconFont(id: string): void;
 
 	/**
 	 * Get the icon font for the given id
@@ -158,8 +158,8 @@ export const fontIdErrorMessage = localize('schema.fontId.formatError', 'The fon
 
 class IconRegistry implements IIconRegistry {
 
-	private readonly _onDidChange = new Emitter<codemavi>();
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private iconsById: { [key: string]: IconContribution };
 	private iconSchema: IJSONSchema & { properties: IJSONSchemaMap } = {
@@ -218,7 +218,7 @@ class IconRegistry implements IIconRegistry {
 	}
 
 
-	public deregisterIcon(id: string): codemavi {
+	public deregisterIcon(id: string): void {
 		delete this.iconsById[id];
 		delete this.iconSchema.properties[id];
 		const index = this.iconReferenceSchema.enum.indexOf(id);
@@ -255,7 +255,7 @@ class IconRegistry implements IIconRegistry {
 		return definition;
 	}
 
-	public deregisterIconFont(id: string): codemavi {
+	public deregisterIconFont(id: string): void {
 		delete this.iconFontsById[id];
 	}
 

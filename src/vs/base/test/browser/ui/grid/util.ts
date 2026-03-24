@@ -28,7 +28,7 @@ export class TestView implements IView {
 	private _element: HTMLElement = document.createElement('div');
 	get element(): HTMLElement { this._onDidGetElement.fire(); return this._element; }
 
-	private readonly _onDidGetElement = new Emitter<codemavi>();
+	private readonly _onDidGetElement = new Emitter<void>();
 	readonly onDidGetElement = this._onDidGetElement.event;
 
 	private _width = 0;
@@ -48,8 +48,8 @@ export class TestView implements IView {
 	private readonly _onDidLayout = new Emitter<{ width: number; height: number; top: number; left: number }>();
 	readonly onDidLayout: Event<{ width: number; height: number; top: number; left: number }> = this._onDidLayout.event;
 
-	private readonly _onDidFocus = new Emitter<codemavi>();
-	readonly onDidFocus: Event<codemavi> = this._onDidFocus.event;
+	private readonly _onDidFocus = new Emitter<void>();
+	readonly onDidFocus: Event<void> = this._onDidFocus.event;
 
 	constructor(
 		private _minimumWidth: number,
@@ -61,7 +61,7 @@ export class TestView implements IView {
 		assert(_minimumHeight <= _maximumHeight, 'gridview view minimum height must be <= maximum height');
 	}
 
-	layout(width: number, height: number, top: number, left: number): codemavi {
+	layout(width: number, height: number, top: number, left: number): void {
 		this._width = width;
 		this._height = height;
 		this._top = top;
@@ -69,11 +69,11 @@ export class TestView implements IView {
 		this._onDidLayout.fire({ width, height, top, left });
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this._onDidFocus.fire();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this._onDidGetElement.dispose();
 		this._onDidLayout.dispose();

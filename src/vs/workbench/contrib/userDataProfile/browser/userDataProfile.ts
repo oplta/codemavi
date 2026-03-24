@@ -106,7 +106,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		return editor as IUserDataProfilesEditor;
 	}
 
-	private registerEditor(): codemavi {
+	private registerEditor(): void {
 		Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
 			EditorPaneDescriptor.create(
 				UserDataProfilesEditor,
@@ -120,7 +120,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		Registry.as<IEditorFactoryRegistry>(EditorExtensions.EditorFactory).registerEditorSerializer(UserDataProfilesEditorInput.ID, UserDataProfilesEditorInputSerializer);
 	}
 
-	private registerActions(): codemavi {
+	private registerActions(): void {
 		this.registerProfileSubMenu();
 		this._register(this.registerManageProfilesAction());
 		this._register(this.registerSwitchProfileAction());
@@ -139,7 +139,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		this.registerHelpAction();
 	}
 
-	private registerProfileSubMenu(): codemavi {
+	private registerProfileSubMenu(): void {
 		const getProfilesTitle = () => {
 			return localize('profiles', "Profile ({0})", this.userDataProfileService.currentProfile.name);
 		};
@@ -163,7 +163,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		});
 	}
 
-	private registerOpenProfileSubMenu(): codemavi {
+	private registerOpenProfileSubMenu(): void {
 		MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 			title: localize('New Profile Window', "New Window with Profile"),
 			submenu: OpenProfileMenu,
@@ -173,7 +173,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 	}
 
 	private readonly profilesDisposable = this._register(new MutableDisposable<DisposableStore>());
-	private registerProfilesActions(): codemavi {
+	private registerProfilesActions(): void {
 		this.profilesDisposable.value = new DisposableStore();
 		for (const profile of this.userDataProfilesService.profiles) {
 			if (!profile.isTransient) {
@@ -265,7 +265,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 				});
 			}
 
-			override run(accessor: ServicesAccessor): Promise<codemavi> {
+			override run(accessor: ServicesAccessor): Promise<void> {
 				const hostService = accessor.get(IHostService);
 				return hostService.openWindow({ remoteAuthority: null, forceProfile: profile.name });
 			}
@@ -393,7 +393,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 	}
 
 
-	private registerCreateFromCurrentProfileAction(): codemavi {
+	private registerCreateFromCurrentProfileAction(): void {
 		const that = this;
 		this._register(registerAction2(class CreateFromCurrentProfileAction extends Action2 {
 			constructor() {
@@ -412,7 +412,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		}));
 	}
 
-	private registerNewProfileAction(): codemavi {
+	private registerNewProfileAction(): void {
 		const that = this;
 		this._register(registerAction2(class CreateProfileAction extends Action2 {
 			constructor() {
@@ -438,7 +438,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		}));
 	}
 
-	private registerDeleteProfileAction(): codemavi {
+	private registerDeleteProfileAction(): void {
 		this._register(registerAction2(class DeleteProfileAction extends Action2 {
 			constructor() {
 				super({
@@ -482,7 +482,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		}));
 	}
 
-	private registerHelpAction(): codemavi {
+	private registerHelpAction(): void {
 		this._register(registerAction2(class HelpAction extends Action2 {
 			constructor() {
 				super({
@@ -500,7 +500,7 @@ export class UserDataProfilesWorkbenchContribution extends Disposable implements
 		}));
 	}
 
-	private async reportWorkspaceProfileInfo(): Promise<codemavi> {
+	private async reportWorkspaceProfileInfo(): Promise<void> {
 		await this.lifecycleService.when(LifecyclePhase.Eventually);
 
 		type UserProfilesCountClassification = {

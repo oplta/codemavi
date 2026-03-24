@@ -66,7 +66,7 @@ export class ViewLinesGpu extends ViewPart implements IViewLines {
 
 	private readonly _glyphRasterizer: MutableDisposable<GlyphRasterizer> = this._register(new MutableDisposable());
 	private readonly _renderStrategy: MutableDisposable<IGpuRenderStrategy> = this._register(new MutableDisposable());
-	private _rebuildBindGroup?: () => codemavi;
+	private _rebuildBindGroup?: () => void;
 
 	constructor(
 		context: ViewContext,
@@ -404,11 +404,11 @@ export class ViewLinesGpu extends ViewPart implements IViewLines {
 		}
 	}
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		throw new BugIndicatingError('Should not be called');
 	}
 
-	public override render(ctx: RestrictedRenderingContext): codemavi {
+	public override render(ctx: RestrictedRenderingContext): void {
 		throw new BugIndicatingError('Should not be called');
 	}
 
@@ -458,7 +458,7 @@ export class ViewLinesGpu extends ViewPart implements IViewLines {
 		}
 	}
 
-	public renderText(viewportData: ViewportData): codemavi {
+	public renderText(viewportData: ViewportData): void {
 		if (this._initialized) {
 			this._refreshRenderStrategy(viewportData);
 			return this._renderText(viewportData);
@@ -468,7 +468,7 @@ export class ViewLinesGpu extends ViewPart implements IViewLines {
 		}
 	}
 
-	private _renderText(viewportData: ViewportData): codemavi {
+	private _renderText(viewportData: ViewportData): void {
 		this._viewGpuContext.rectangleRenderer.draw(viewportData);
 
 		const options = new ViewLineOptions(this._context.configuration, this._context.theme.type);

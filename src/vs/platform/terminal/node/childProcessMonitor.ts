@@ -70,7 +70,7 @@ export class ChildProcessMonitor extends Disposable {
 	}
 
 	@debounce(Constants.ActiveDebounceDuration)
-	private async _refreshActive(): Promise<codemavi> {
+	private async _refreshActive(): Promise<void> {
 		if (this._store.isDisposed) {
 			return;
 		}
@@ -83,7 +83,7 @@ export class ChildProcessMonitor extends Disposable {
 	}
 
 	@throttle(Constants.InactiveThrottleDuration)
-	private _refreshInactive(): codemavi {
+	private _refreshInactive(): void {
 		this._refreshActive();
 	}
 

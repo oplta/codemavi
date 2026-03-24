@@ -43,8 +43,8 @@ import { observableValue } from '../../../../base/common/observable.js';
 import { IMenuService, MenuItemAction } from '../../../../platform/actions/common/actions.js';
 
 export interface IEditObserver {
-	start(): codemavi;
-	stop(): codemavi;
+	start(): void;
+	stop(): void;
 }
 
 export const enum HunkAction {
@@ -78,8 +78,8 @@ export class LiveStrategy {
 	});
 
 	protected readonly _store = new DisposableStore();
-	protected readonly _onDidAccept = this._store.add(new Emitter<codemavi>());
-	protected readonly _onDidDiscard = this._store.add(new Emitter<codemavi>());
+	protected readonly _onDidAccept = this._store.add(new Emitter<void>());
+	protected readonly _onDidDiscard = this._store.add(new Emitter<void>());
 	private readonly _ctxCurrentChangeHasDiff: IContextKey<boolean>;
 	private readonly _ctxCurrentChangeShowsDiff: IContextKey<boolean>;
 	private readonly _progressiveEditingDecorations: IEditorDecorationsCollection;
@@ -87,8 +87,8 @@ export class LiveStrategy {
 	private _editCount: number = 0;
 	private readonly _hunkData = new Map<HunkInformation, HunkDisplayData>();
 
-	readonly onDidAccept: Event<codemavi> = this._onDidAccept.event;
-	readonly onDidDiscard: Event<codemavi> = this._onDidDiscard.event;
+	readonly onDidAccept: Event<void> = this._onDidAccept.event;
+	readonly onDidDiscard: Event<void> = this._onDidDiscard.event;
 
 	constructor(
 		protected readonly _session: Session,
@@ -111,12 +111,12 @@ export class LiveStrategy {
 		this._lensActionsFactory = this._store.add(new ConflictActionsFactory(this._editor));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._resetDiff();
 		this._store.dispose();
 	}
 
-	private _resetDiff(): codemavi {
+	private _resetDiff(): void {
 		this._ctxCurrentChangeHasDiff.reset();
 		this._ctxCurrentChangeShowsDiff.reset();
 		this._zone.widget.updateStatus('');
@@ -141,11 +141,11 @@ export class LiveStrategy {
 		return this._session.hunkData.discardAll();
 	}
 
-	async makeChanges(edits: ISingleEditOperation[], obs: IEditObserver, undoStopBefore: boolean): Promise<codemavi> {
+	async makeChanges(edits: ISingleEditOperation[], obs: IEditObserver, undoStopBefore: boolean): Promise<void> {
 		return this._makeChanges(edits, obs, undefined, undefined, undoStopBefore);
 	}
 
-	async makeProgressiveChanges(edits: ISingleEditOperation[], obs: IEditObserver, opts: ProgressingEditsOptions, undoStopBefore: boolean): Promise<codemavi> {
+	async makeProgressiveChanges(edits: ISingleEditOperation[], obs: IEditObserver, opts: ProgressingEditsOptions, undoStopBefore: boolean): Promise<void> {
 
 		// add decorations once per line that got edited
 		const progress = new Progress<IValidEditOperation[]>(edits => {
@@ -168,7 +168,7 @@ export class LiveStrategy {
 		return this._makeChanges(edits, obs, opts, progress, undoStopBefore);
 	}
 
-	private async _makeChanges(edits: ISingleEditOperation[], obs: IEditObserver, opts: ProgressingEditsOptions | undefined, progress: Progress<IValidEditOperation[]> | undefined, undoStopBefore: boolean): Promise<codemavi> {
+	private async _makeChanges(edits: ISingleEditOperation[], obs: IEditObserver, opts: ProgressingEditsOptions | undefined, progress: Progress<IValidEditOperation[]> | undefined, undoStopBefore: boolean): Promise<void> {
 
 		// push undo stop before first edit
 		if (undoStopBefore) {
@@ -503,7 +503,7 @@ export class LiveStrategy {
 		return [];
 	}
 
-	private async _doApplyChanges(ignoreLocal: boolean): Promise<codemavi> {
+	private async _doApplyChanges(ignoreLocal: boolean): Promise<void> {
 
 		const untitledModels: IUntitledTextEditorModel[] = [];
 
@@ -560,16 +560,16 @@ type HunkDisplayData = {
 
 	distance: number;
 	position: Position;
-	acceptHunk: () => codemavi;
-	discardHunk: () => codemavi;
+	acceptHunk: () => void;
+	discardHunk: () => void;
 	toggleDiff?: () => any;
-	remove(): codemavi;
-	move: (next: boolean) => codemavi;
+	remove(): void;
+	move: (next: boolean) => void;
 
 	hunk: HunkInformation;
 };
 
-function changeDecorationsAndViewZones(editor: ICodeEditor, callback: (accessor: IModelDecorationsChangeAccessor, viewZoneAccessor: IViewZoneChangeAccessor) => codemavi): codemavi {
+function changeDecorationsAndViewZones(editor: ICodeEditor, callback: (accessor: IModelDecorationsChangeAccessor, viewZoneAccessor: IViewZoneChangeAccessor) => void): void {
 	editor.changeDecorations(decorationsAccessor => {
 		editor.changeViewZones(viewZoneAccessor => {
 			callback(decorationsAccessor, viewZoneAccessor);

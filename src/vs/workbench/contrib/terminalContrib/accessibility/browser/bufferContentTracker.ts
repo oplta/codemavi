@@ -32,13 +32,13 @@ export class BufferContentTracker extends Disposable {
 		super();
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		this._lines = [];
 		this._lastCachedMarker = undefined;
 		this.update();
 	}
 
-	update(): codemavi {
+	update(): void {
 		if (this._lastCachedMarker?.isDisposed) {
 			// the terminal was cleared, reset the cache
 			this._lines = [];
@@ -51,7 +51,7 @@ export class BufferContentTracker extends Disposable {
 		this._logService.debug('Buffer content tracker: set ', this._lines.length, ' lines');
 	}
 
-	private _updateCachedContent(): codemavi {
+	private _updateCachedContent(): void {
 		const buffer = this._xterm.raw.buffer.active;
 		const start = this._lastCachedMarker?.line ? this._lastCachedMarker.line - this._xterm.raw.rows + 1 : 0;
 		const end = buffer.baseY;
@@ -94,7 +94,7 @@ export class BufferContentTracker extends Disposable {
 		this._lines.push(...cachedLines);
 	}
 
-	private _removeViewportContent(): codemavi {
+	private _removeViewportContent(): void {
 		if (!this._lines.length) {
 			return;
 		}
@@ -110,7 +110,7 @@ export class BufferContentTracker extends Disposable {
 		this._logService.debug('Buffer content tracker: removed lines from viewport, now ', this._lines.length, ' lines cached');
 	}
 
-	private _updateViewportContent(): codemavi {
+	private _updateViewportContent(): void {
 		const buffer = this._xterm.raw.buffer.active;
 		this._priorEditorViewportLineCount = 0;
 		let currentLine: string = '';

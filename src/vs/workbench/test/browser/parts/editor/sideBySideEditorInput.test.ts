@@ -26,15 +26,15 @@ suite('SideBySideEditorInput', () => {
 			super();
 		}
 
-		fireCapabilitiesChangeEvent(): codemavi {
+		fireCapabilitiesChangeEvent(): void {
 			this._onDidChangeCapabilities.fire();
 		}
 
-		fireDirtyChangeEvent(): codemavi {
+		fireDirtyChangeEvent(): void {
 			this._onDidChangeDirty.fire();
 		}
 
-		fireLabelChangeEvent(): codemavi {
+		fireLabelChangeEvent(): void {
 			this._onDidChangeLabel.fire();
 		}
 

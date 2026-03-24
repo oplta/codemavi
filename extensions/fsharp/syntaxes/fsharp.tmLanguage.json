@@ -629,7 +629,7 @@
 				},
 				{
 					"name": "constant.other.fsharp",
-					"match": "\\b(null|codemavi)\\b"
+					"match": "\\b(null| void)\\b"
 				}
 			]
 		},

@@ -219,7 +219,7 @@ export const setTimeout0 = (() => {
 	if (setTimeout0IsFaster) {
 		interface IQueueElement {
 			id: number;
-			callback: () => codemavi;
+			callback: () => void;
 		}
 		const pending: IQueueElement[] = [];
 
@@ -236,7 +236,7 @@ export const setTimeout0 = (() => {
 			}
 		});
 		let lastId = 0;
-		return (callback: () => codemavi) => {
+		return (callback: () => void) => {
 			const myId = ++lastId;
 			pending.push({
 				id: myId,
@@ -245,7 +245,7 @@ export const setTimeout0 = (() => {
 			$globalThis.postMessage({ vscodeScheduleAsyncWork: myId }, '*');
 		};
 	}
-	return (callback: () => codemavi) => setTimeout(callback);
+	return (callback: () => void) => setTimeout(callback);
 })();
 
 export const enum OperatingSystem {

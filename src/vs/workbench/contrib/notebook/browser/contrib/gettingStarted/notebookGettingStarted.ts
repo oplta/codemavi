@@ -87,7 +87,7 @@ registerAction2(class NotebookClearNotebookLayoutAction extends Action2 {
 			category: Categories.Developer,
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const storageService = accessor.get(IStorageService);
 		const memento = new Memento('notebookGettingStarted', storageService);
 

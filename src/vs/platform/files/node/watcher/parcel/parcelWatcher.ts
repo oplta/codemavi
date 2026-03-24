@@ -25,10 +25,10 @@ import { Disposable, DisposableStore, IDisposable, toDisposable } from '../../..
 
 export class ParcelWatcherInstance extends Disposable {
 
-	private readonly _onDidStop = this._register(new Emitter<{ joinRestart?: Promise<codemavi> }>());
+	private readonly _onDidStop = this._register(new Emitter<{ joinRestart?: Promise<void> }>());
 	readonly onDidStop = this._onDidStop.event;
 
-	private readonly _onDidFail = this._register(new Emitter<codemavi>());
+	private readonly _onDidFail = this._register(new Emitter<void>());
 	readonly onDidFail = this._onDidFail.event;
 
 	private didFail = false;
@@ -40,7 +40,7 @@ export class ParcelWatcherInstance extends Disposable {
 	private readonly includes: ParsedPattern[] | undefined;
 	private readonly excludes: ParsedPattern[] | undefined;
 
-	private readonly subscriptions = new Map<string, Set<(change: IFileChange) => codemavi>>();
+	private readonly subscriptions = new Map<string, Set<(change: IFileChange) => void>>();
 
 	constructor(
 		/**
@@ -61,7 +61,7 @@ export class ParcelWatcherInstance extends Disposable {
 		 * An event aggregator to coalesce events and reduce duplicates.
 		 */
 		readonly worker: RunOnceWorker<IFileChange>,
-		private readonly stopFn: () => Promise<codemavi>
+		private readonly stopFn: () => Promise<void>
 	) {
 		super();
 
@@ -71,7 +71,7 @@ export class ParcelWatcherInstance extends Disposable {
 		this._register(toDisposable(() => this.subscriptions.clear()));
 	}
 
-	subscribe(path: string, callback: (change: IFileChange) => codemavi): IDisposable {
+	subscribe(path: string, callback: (change: IFileChange) => void): IDisposable {
 		path = URI.file(path).fsPath; // make sure to store the path in `fsPath` form to match it with events later
 
 		let subscriptions = this.subscriptions.get(path);
@@ -98,7 +98,7 @@ export class ParcelWatcherInstance extends Disposable {
 		return this.subscriptions.size;
 	}
 
-	notifyFileChange(path: string, change: IFileChange): codemavi {
+	notifyFileChange(path: string, change: IFileChange): void {
 		const subscriptions = this.subscriptions.get(path);
 		if (subscriptions) {
 			for (const subscription of subscriptions) {
@@ -107,7 +107,7 @@ export class ParcelWatcherInstance extends Disposable {
 		}
 	}
 
-	notifyWatchFailed(): codemavi {
+	notifyWatchFailed(): void {
 		this.didFail = true;
 
 		this._onDidFail.fire();
@@ -125,7 +125,7 @@ export class ParcelWatcherInstance extends Disposable {
 		return Boolean(this.excludes?.some(exclude => exclude(path)));
 	}
 
-	async stop(joinRestart: Promise<codemavi> | undefined): Promise<codemavi> {
+	async stop(joinRestart: Promise<void> | undefined): Promise<void> {
 		this.didStop = true;
 
 		try {
@@ -194,7 +194,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		const onUncaughtException = (error: unknown) => this.onUnexpectedError(error);
 		const onUnhandledRejection = (error: unknown) => this.onUnexpectedError(error);
 
@@ -207,7 +207,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		}));
 	}
 
-	protected override async doWatch(requests: IRecursiveWatchRequest[]): Promise<codemavi> {
+	protected override async doWatch(requests: IRecursiveWatchRequest[]): Promise<void> {
 
 		// Figure out duplicates to remove from the requests
 		requests = await this.removeDuplicateRequests(requests);
@@ -256,10 +256,10 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return isLinux ? path : path.toLowerCase() /* ignore path casing */;
 	}
 
-	private async startPolling(request: IRecursiveWatchRequest, pollingInterval: number, restarts = 0): Promise<codemavi> {
+	private async startPolling(request: IRecursiveWatchRequest, pollingInterval: number, restarts = 0): Promise<void> {
 		const cts = new CancellationTokenSource();
 
-		const instance = new DeferredPromise<codemavi>();
+		const instance = new DeferredPromise<void>();
 
 		const snapshotFile = randomPath(tmpdir(), 'vscode-watcher-snapshot');
 
@@ -331,7 +331,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		pollingWatcher.schedule(0);
 	}
 
-	private async startWatching(request: IRecursiveWatchRequest, restarts = 0): Promise<codemavi> {
+	private async startWatching(request: IRecursiveWatchRequest, restarts = 0): Promise<void> {
 		const cts = new CancellationTokenSource();
 
 		const instance = new DeferredPromise<parcelWatcher.AsyncSubscription | undefined>();
@@ -408,7 +408,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return excludes;
 	}
 
-	private onParcelEvents(parcelEvents: parcelWatcher.Event[], watcher: ParcelWatcherInstance, realPathDiffers: boolean, realPathLength: number): codemavi {
+	private onParcelEvents(parcelEvents: parcelWatcher.Event[], watcher: ParcelWatcherInstance, realPathDiffers: boolean, realPathLength: number): void {
 		if (parcelEvents.length === 0) {
 			return;
 		}
@@ -449,7 +449,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return events;
 	}
 
-	private handleParcelEvents(parcelEvents: IFileChange[], watcher: ParcelWatcherInstance): codemavi {
+	private handleParcelEvents(parcelEvents: IFileChange[], watcher: ParcelWatcherInstance): void {
 
 		// Coalesce events: merge events of same kind
 		const coalescedEvents = coalesceEvents(parcelEvents);
@@ -466,7 +466,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		}
 	}
 
-	private emitEvents(events: IFileChange[], watcher: ParcelWatcherInstance): codemavi {
+	private emitEvents(events: IFileChange[], watcher: ParcelWatcherInstance): void {
 		if (events.length === 0) {
 			return;
 		}
@@ -514,7 +514,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return { realPath, realPathDiffers, realPathLength };
 	}
 
-	private normalizeEvents(events: parcelWatcher.Event[], request: IRecursiveWatchRequest, realPathDiffers: boolean, realPathLength: number): codemavi {
+	private normalizeEvents(events: parcelWatcher.Event[], request: IRecursiveWatchRequest, realPathDiffers: boolean, realPathLength: number): void {
 		for (const event of events) {
 
 			// Mac uses NFD unicode form on disk, but we want NFC
@@ -568,20 +568,20 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return { events: filteredEvents, rootDeleted };
 	}
 
-	private onWatchedPathDeleted(watcher: ParcelWatcherInstance): codemavi {
+	private onWatchedPathDeleted(watcher: ParcelWatcherInstance): void {
 		this.warn('Watcher shutdown because watched path got deleted', watcher);
 
 		watcher.notifyWatchFailed();
 		this._onDidWatchFail.fire(watcher.request);
 	}
 
-	private onUnexpectedError(error: unknown, request?: IRecursiveWatchRequest): codemavi {
+	private onUnexpectedError(error: unknown, request?: IRecursiveWatchRequest): void {
 		const msg = toErrorMessage(error);
 
 		// Specially handle ENOSPC errors that can happen when
 		// the watcher consumes so many file descriptors that
 		// we are running into a limit. We only want to warn
-		// once in this case to acodemavi log spam.
+		// once in this case to avoid log spam.
 		// See https://github.com/microsoft/vscode/issues/7950
 		if (msg.indexOf('No space left on device') !== -1) {
 			if (!this.enospcErrorLogged) {
@@ -607,7 +607,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		}
 	}
 
-	override async stop(): Promise<codemavi> {
+	override async stop(): Promise<void> {
 		await super.stop();
 
 		for (const watcher of this.watchers) {
@@ -615,7 +615,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		}
 	}
 
-	protected restartWatching(watcher: ParcelWatcherInstance, delay = 800): codemavi {
+	protected restartWatching(watcher: ParcelWatcherInstance, delay = 800): void {
 
 		// Restart watcher delayed to accomodate for
 		// changes on disk that have triggered the
@@ -625,7 +625,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 				return; // return early when disposed
 			}
 
-			const restartPromise = new DeferredPromise<codemavi>();
+			const restartPromise = new DeferredPromise<void>();
 			try {
 
 				// Await the watcher having stopped, as this is
@@ -647,7 +647,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		watcher.token.onCancellationRequested(() => scheduler.dispose());
 	}
 
-	private async stopWatching(watcher: ParcelWatcherInstance, joinRestart?: Promise<codemavi>): Promise<codemavi> {
+	private async stopWatching(watcher: ParcelWatcherInstance, joinRestart?: Promise<void>): Promise<void> {
 		this.trace(`stopping file watcher`, watcher);
 
 		this._watchers.delete(this.requestToWatcherKey(watcher.request));
@@ -759,7 +759,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return true;
 	}
 
-	subscribe(path: string, callback: (error: true | null, change?: IFileChange) => codemavi): IDisposable | undefined {
+	subscribe(path: string, callback: (error: true | null, change?: IFileChange) => void): IDisposable | undefined {
 		for (const watcher of this.watchers) {
 			if (watcher.failed) {
 				continue; // watcher has already failed
@@ -795,7 +795,7 @@ export class ParcelWatcher extends BaseWatcher implements IRecursiveWatcherWithS
 		return undefined;
 	}
 
-	protected trace(message: string, watcher?: ParcelWatcherInstance): codemavi {
+	protected trace(message: string, watcher?: ParcelWatcherInstance): void {
 		if (this.verboseLogging) {
 			this._onDidLogMessage.fire({ type: 'trace', message: this.toMessage(message, watcher?.request) });
 		}

@@ -114,11 +114,11 @@ export class ScrollbarState {
 		return false;
 	}
 
-	public setScrollbarSize(scrollbarSize: number): codemavi {
+	public setScrollbarSize(scrollbarSize: number): void {
 		this._scrollbarSize = Math.round(scrollbarSize);
 	}
 
-	public setOppositeScrollbarSize(oppositeScrollbarSize: number): codemavi {
+	public setOppositeScrollbarSize(oppositeScrollbarSize: number): void {
 		this._oppositeScrollbarSize = Math.round(oppositeScrollbarSize);
 	}
 
@@ -155,7 +155,7 @@ export class ScrollbarState {
 		};
 	}
 
-	private _refreshComputedValues(): codemavi {
+	private _refreshComputedValues(): void {
 		const r = ScrollbarState._computeValues(this._oppositeScrollbarSize, this._arrowSize, this._visibleSize, this._scrollSize, this._scrollPosition);
 		this._computedAvailableSize = r.computedAvailableSize;
 		this._computedIsNeeded = r.computedIsNeeded;

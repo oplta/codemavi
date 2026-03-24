@@ -44,7 +44,7 @@ export class GotoLineQuickAccessProvider extends AbstractGotoLineQuickAccessProv
 		return this.editorService.activeTextEditorControl;
 	}
 
-	protected override gotoLocation(context: IQuickAccessTextEditorContext, options: { range: IRange; keyMods: IKeyMods; forceSideBySide?: boolean; preserveFocus?: boolean }): codemavi {
+	protected override gotoLocation(context: IQuickAccessTextEditorContext, options: { range: IRange; keyMods: IKeyMods; forceSideBySide?: boolean; preserveFocus?: boolean }): void {
 
 		// Check for sideBySide use
 		if ((options.keyMods.alt || (this.configuration.openEditorPinned && options.keyMods.ctrlCmd) || options.forceSideBySide) && this.editorService.activeEditor) {
@@ -84,7 +84,7 @@ class GotoLineAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		accessor.get(IQuickInputService).quickAccess.show(GotoLineQuickAccessProvider.PREFIX);
 	}
 }

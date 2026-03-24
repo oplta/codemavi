@@ -120,12 +120,12 @@ export class ExtHostConfiguration implements ExtHostConfigurationShape {
 		return this._barrier.wait().then(_ => this._actual!);
 	}
 
-	$initializeConfiguration(data: IConfigurationInitData): codemavi {
+	$initializeConfiguration(data: IConfigurationInitData): void {
 		this._actual = new ExtHostConfigProvider(this._proxy, this._extHostWorkspace, data, this._logService);
 		this._barrier.open();
 	}
 
-	$acceptConfigurationChanged(data: IConfigurationInitData, change: IConfigurationChange): codemavi {
+	$acceptConfigurationChanged(data: IConfigurationInitData, change: IConfigurationChange): void {
 		this.getConfigProvider().then(provider => provider.$acceptConfigurationChanged(data, change));
 	}
 }
@@ -307,7 +307,7 @@ export class ExtHostConfigProvider {
 		return readonlyProxy(result);
 	}
 
-	private _validateConfigurationAccess(key: string, overrides?: IConfigurationOverrides, extensionId?: ExtensionIdentifier): codemavi {
+	private _validateConfigurationAccess(key: string, overrides?: IConfigurationOverrides, extensionId?: ExtensionIdentifier): void {
 		const scope = OVERRIDE_PROPERTY_REGEX.test(key) ? ConfigurationScope.RESOURCE : this._configurationScopes.get(key);
 		const extensionIdText = extensionId ? `[${extensionId.value}] ` : '';
 		if (ConfigurationScope.RESOURCE === scope) {

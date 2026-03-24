@@ -23,7 +23,7 @@ function getDownloadUrl(updateUrl: string, commit: string, platform: string, qua
 	return `${updateUrl}/commit:${commit}/server-${platform}/${quality}`;
 }
 
-async function downloadVSCodeServerArchive(updateUrl: string, commit: string, quality: string, destDir: string, log: (messsage: string) => codemavi): Promise<string> {
+async function downloadVSCodeServerArchive(updateUrl: string, commit: string, quality: string, destDir: string, log: (messsage: string) => void): Promise<string> {
 	ensureFolderExists(destDir);
 
 	const platform = process.platform === 'win32' ? 'win32-x64' : process.platform === 'darwin' ? 'darwin' : 'linux-x64';
@@ -68,7 +68,7 @@ async function downloadVSCodeServerArchive(updateUrl: string, commit: string, qu
 /**
  * Unzip a .zip or .tar.gz VS Code archive
  */
-function unzipVSCodeServer(vscodeArchivePath: string, extractDir: string, destDir: string, log: (messsage: string) => codemavi) {
+function unzipVSCodeServer(vscodeArchivePath: string, extractDir: string, destDir: string, log: (messsage: string) => void) {
 	log(`Extracting ${vscodeArchivePath}`);
 	if (vscodeArchivePath.endsWith('.zip')) {
 		const tempDir = fs.mkdtempSync(path.join(destDir, 'vscode-server-extract'));
@@ -94,7 +94,7 @@ function unzipVSCodeServer(vscodeArchivePath: string, extractDir: string, destDi
 	}
 }
 
-export async function downloadAndUnzipVSCodeServer(updateUrl: string, commit: string, quality: string = 'stable', destDir: string, log: (messsage: string) => codemavi): Promise<string> {
+export async function downloadAndUnzipVSCodeServer(updateUrl: string, commit: string, quality: string = 'stable', destDir: string, log: (messsage: string) => void): Promise<string> {
 
 	const extractDir = path.join(destDir, commit);
 	if (fs.existsSync(extractDir)) {

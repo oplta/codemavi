@@ -32,7 +32,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Listen to `beforeUnload` to support to veto
 		this.beforeUnloadListener = addDisposableListener(mainWindow, EventType.BEFORE_UNLOAD, (e: BeforeUnloadEvent) => this.onBeforeUnload(e));
@@ -45,7 +45,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		this.unloadListener = addDisposableListener(mainWindow, EventType.PAGE_HIDE, () => this.onUnload());
 	}
 
-	private onBeforeUnload(event: BeforeUnloadEvent): codemavi {
+	private onBeforeUnload(event: BeforeUnloadEvent): void {
 
 		// Before unload ignored (once)
 		if (this.ignoreBeforeUnload) {
@@ -62,14 +62,14 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		}
 	}
 
-	private vetoBeforeUnload(event: BeforeUnloadEvent): codemavi {
+	private vetoBeforeUnload(event: BeforeUnloadEvent): void {
 		event.preventDefault();
 		event.returnValue = localize('lifecycleVeto', "Changes that you made may not be saved. Please check press 'Cancel' and try again.");
 	}
 
-	withExpectedShutdown(reason: ShutdownReason): Promise<codemavi>;
-	withExpectedShutdown(reason: { disableShutdownHandling: true }, callback: Function): codemavi;
-	withExpectedShutdown(reason: ShutdownReason | { disableShutdownHandling: true }, callback?: Function): Promise<codemavi> | codemavi {
+	withExpectedShutdown(reason: ShutdownReason): Promise<void>;
+	withExpectedShutdown(reason: { disableShutdownHandling: true }, callback: Function): void;
+	withExpectedShutdown(reason: ShutdownReason | { disableShutdownHandling: true }, callback?: Function): Promise<void> | void {
 
 		// Standard shutdown
 		if (typeof reason === 'number') {
@@ -90,7 +90,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		}
 	}
 
-	async shutdown(): Promise<codemavi> {
+	async shutdown(): Promise<void> {
 		this.logService.info('[lifecycle] shutdown triggered');
 
 		// An explicit shutdown renders our unload
@@ -105,7 +105,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		this.doShutdown();
 	}
 
-	private doShutdown(vetoShutdown?: () => codemavi): codemavi {
+	private doShutdown(vetoShutdown?: () => void): void {
 		const logService = this.logService;
 
 		// Optimistically trigger a UI state flush
@@ -155,7 +155,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		return this.onUnload();
 	}
 
-	private onUnload(): codemavi {
+	private onUnload(): void {
 		if (this.didUnload) {
 			return; // only once
 		}
@@ -185,7 +185,7 @@ export class BrowserLifecycleService extends AbstractLifecycleService {
 		this._onDidShutdown.fire();
 	}
 
-	private onLoadAfterUnload(event: PageTransitionEvent): codemavi {
+	private onLoadAfterUnload(event: PageTransitionEvent): void {
 
 		// We only really care about page-show events
 		// where the browser indicates to us that the

@@ -86,15 +86,15 @@ export class TestDiskFileSystemProvider extends DiskFileSystemProvider {
 		this._testCapabilities = capabilities;
 	}
 
-	setInvalidStatSize(enabled: boolean): codemavi {
+	setInvalidStatSize(enabled: boolean): void {
 		this.invalidStatSize = enabled;
 	}
 
-	setSmallStatSize(enabled: boolean): codemavi {
+	setSmallStatSize(enabled: boolean): void {
 		this.smallStatSize = enabled;
 	}
 
-	setReadonly(readonly: boolean): codemavi {
+	setReadonly(readonly: boolean): void {
 		this.readonly = readonly;
 	}
 
@@ -360,7 +360,7 @@ flakySuite('Disk File Service', function () {
 		return testResolveDirectoryWithTarget(true);
 	});
 
-	async function testResolveDirectoryWithTarget(withQueryParam: boolean): Promise<codemavi> {
+	async function testResolveDirectoryWithTarget(withQueryParam: boolean): Promise<void> {
 		const resolverFixturesPath = FileAccess.asFileUri('vs/platform/files/test/node/fixtures/resolver').fsPath;
 		const result = await service.resolve(URI.file(resolverFixturesPath).with({ query: withQueryParam ? 'test' : undefined }), {
 			resolveTo: [
@@ -500,7 +500,7 @@ flakySuite('Disk File Service', function () {
 		return testDeleteFile(true, false);
 	});
 
-	async function testDeleteFile(useTrash: boolean, recursive: boolean): Promise<codemavi> {
+	async function testDeleteFile(useTrash: boolean, recursive: boolean): Promise<void> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 
@@ -579,7 +579,7 @@ flakySuite('Disk File Service', function () {
 		return testDeleteFolderRecursive(true, false);
 	});
 
-	async function testDeleteFolderRecursive(useTrash: boolean, atomic: IFileAtomicOptions | false): Promise<codemavi> {
+	async function testDeleteFolderRecursive(useTrash: boolean, atomic: IFileAtomicOptions | false): Promise<void> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 
@@ -619,7 +619,7 @@ flakySuite('Disk File Service', function () {
 		return testDeleteEmptyFolder(false);
 	});
 
-	async function testDeleteEmptyFolder(recursive: boolean): Promise<codemavi> {
+	async function testDeleteEmptyFolder(recursive: boolean): Promise<void> {
 		const { resource } = await service.createFolder(URI.file(join(testDir, 'deep', 'empty')));
 
 		await service.del(resource, { recursive });
@@ -708,7 +708,7 @@ flakySuite('Disk File Service', function () {
 		return testMoveAcrossProviders('lorem.txt');
 	});
 
-	async function testMoveAcrossProviders(sourceFile = 'index.html'): Promise<codemavi> {
+	async function testMoveAcrossProviders(sourceFile = 'index.html'): Promise<void> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 
@@ -798,7 +798,7 @@ flakySuite('Disk File Service', function () {
 		return testMoveFolderAcrossProviders();
 	});
 
-	async function testMoveFolderAcrossProviders(): Promise<codemavi> {
+	async function testMoveFolderAcrossProviders(): Promise<void> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 
@@ -999,7 +999,7 @@ flakySuite('Disk File Service', function () {
 		await doTestCopy('lorem.txt');
 	});
 
-	function setCapabilities(provider: TestDiskFileSystemProvider, capabilities: FileSystemProviderCapabilities): codemavi {
+	function setCapabilities(provider: TestDiskFileSystemProvider, capabilities: FileSystemProviderCapabilities): void {
 		provider.capabilities = capabilities;
 		if (isLinux) {
 			provider.capabilities |= FileSystemProviderCapabilities.PathCaseSensitive;
@@ -1208,7 +1208,7 @@ flakySuite('Disk File Service', function () {
 		return testCloneFile();
 	});
 
-	async function testCloneFile(): Promise<codemavi> {
+	async function testCloneFile(): Promise<void> {
 		const source1 = URI.file(join(testDir, 'index.html'));
 		const source1Size = (await service.resolve(source1, { resolveMetadata: true })).size;
 
@@ -1327,7 +1327,7 @@ flakySuite('Disk File Service', function () {
 		return testReadFile(URI.file(join(testDir, 'lorem.txt')), { atomic: true });
 	});
 
-	async function testReadFile(resource: URI, options?: IReadFileOptions): Promise<codemavi> {
+	async function testReadFile(resource: URI, options?: IReadFileOptions): Promise<void> {
 		const content = await service.readFile(resource, options);
 
 		assert.strictEqual(content.value.toString(), readFileSync(resource.fsPath).toString());
@@ -1355,7 +1355,7 @@ flakySuite('Disk File Service', function () {
 		return testReadFileStream(URI.file(join(testDir, 'small.txt')));
 	});
 
-	async function testReadFileStream(resource: URI): Promise<codemavi> {
+	async function testReadFileStream(resource: URI): Promise<void> {
 		const content = await service.readFileStream(resource);
 
 		assert.strictEqual((await streamToBuffer(content.value)).toString(), readFileSync(resource.fsPath).toString());
@@ -1716,7 +1716,7 @@ flakySuite('Disk File Service', function () {
 		return assertCreateFile(contents => bufferToStream(VSBuffer.fromString(contents)));
 	});
 
-	async function assertCreateFile(converter: (content: string) => VSBuffer | VSBufferReadable | VSBufferReadableStream): Promise<codemavi> {
+	async function assertCreateFile(converter: (content: string) => VSBuffer | VSBufferReadable | VSBufferReadableStream): Promise<void> {
 		let event: FileOperationEvent;
 		disposables.add(service.onDidRunOperation(e => event = e));
 

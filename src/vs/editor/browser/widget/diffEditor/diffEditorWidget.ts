@@ -427,18 +427,18 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 
 	override getEditorType(): string { return EditorType.IDiffEditor; }
 
-	override onVisible(): codemavi {
+	override onVisible(): void {
 		// TODO: Only compute diffs when diff editor is visible
 		this._editors.original.onVisible();
 		this._editors.modified.onVisible();
 	}
 
-	override onHide(): codemavi {
+	override onHide(): void {
 		this._editors.original.onHide();
 		this._editors.modified.onHide();
 	}
 
-	override layout(dimension?: IDimension | undefined): codemavi {
+	override layout(dimension?: IDimension | undefined): void {
 		this._rootSizeObserver.observe(dimension);
 	}
 
@@ -454,7 +454,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		};
 	}
 
-	public override restoreViewState(s: IDiffEditorViewState): codemavi {
+	public override restoreViewState(s: IDiffEditorViewState): void {
 		if (s && s.original && s.modified) {
 			const diffEditorState = s as IDiffEditorViewState;
 			this._editors.original.restoreViewState(diffEditorState.original);
@@ -465,7 +465,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		}
 	}
 
-	public handleInitialized(): codemavi {
+	public handleInitialized(): void {
 		this._editors.original.handleInitialized();
 		this._editors.modified.handleInitialized();
 	}
@@ -476,14 +476,14 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 
 	override getModel(): IDiffEditorModel | null { return this._diffModel.get()?.model ?? null; }
 
-	override setModel(model: IDiffEditorModel | null | IDiffEditorViewModel): codemavi {
+	override setModel(model: IDiffEditorModel | null | IDiffEditorViewModel): void {
 		const vm = !model ? null
 			: ('model' in model) ? RefCounted.create(model).createNewRef(this)
 				: RefCounted.create(this.createViewModel(model), this);
 		this.setDiffModel(vm);
 	}
 
-	setDiffModel(viewModel: RefCounted<IDiffEditorViewModel> | null, tx?: ITransaction): codemavi {
+	setDiffModel(viewModel: RefCounted<IDiffEditorViewModel> | null, tx?: ITransaction): void {
 		const currentModel = this._diffModel.get();
 
 		if (!viewModel && currentModel) {
@@ -513,7 +513,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 	/**
 	 * @param changedOptions Only has values for top-level options that have actually changed.
 	 */
-	override updateOptions(changedOptions: IDiffEditorOptions): codemavi {
+	override updateOptions(changedOptions: IDiffEditorOptions): void {
 		this._options.updateOptions(changedOptions);
 	}
 
@@ -522,12 +522,12 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 	getOriginalEditor(): ICodeEditor { return this._editors.original; }
 	getModifiedEditor(): ICodeEditor { return this._editors.modified; }
 
-	setBoundarySashes(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes(sashes: IBoundarySashes): void {
 		this._boundarySashes.set(sashes, undefined);
 	}
 
 	private readonly _diffValue = this._diffModel.map((m, r) => m?.diff.read(r));
-	readonly onDidUpdateDiff: Event<codemavi> = Event.fromObservableLight(this._diffValue);
+	readonly onDidUpdateDiff: Event<void> = Event.fromObservableLight(this._diffValue);
 
 	get ignoreTrimWhitespace(): boolean { return this._options.ignoreTrimWhitespace.get(); }
 
@@ -556,7 +556,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		};
 	}
 
-	revert(diff: LineRangeMapping): codemavi {
+	revert(diff: LineRangeMapping): void {
 		const model = this._diffModel.get();
 		if (!model || !model.isDiffUpToDate.get()) { return; }
 
@@ -568,7 +568,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		]);
 	}
 
-	revertRangeMappings(diffs: RangeMapping[]): codemavi {
+	revertRangeMappings(diffs: RangeMapping[]): void {
 		const model = this._diffModel.get();
 		if (!model || !model.isDiffUpToDate.get()) { return; }
 
@@ -580,12 +580,12 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		this._editors.modified.executeEdits('diffEditor', changes);
 	}
 
-	private _goTo(diff: DiffMapping): codemavi {
+	private _goTo(diff: DiffMapping): void {
 		this._editors.modified.setPosition(new Position(diff.lineRangeMapping.modified.startLineNumber, 1));
 		this._editors.modified.revealRangeInCenter(diff.lineRangeMapping.modified.toExclusiveRange());
 	}
 
-	goToDiff(target: 'previous' | 'next'): codemavi {
+	goToDiff(target: 'previous' | 'next'): void {
 		const diffs = this._diffModel.get()?.diff.get()?.mappings;
 		if (!diffs || diffs.length === 0) {
 			return;
@@ -610,7 +610,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		}
 	}
 
-	revealFirstDiff(): codemavi {
+	revealFirstDiff(): void {
 		const diffModel = this._diffModel.get();
 		if (!diffModel) {
 			return;
@@ -625,11 +625,11 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		});
 	}
 
-	accessibleDiffViewerNext(): codemavi { this._accessibleDiffViewer.get().next(); }
+	accessibleDiffViewerNext(): void { this._accessibleDiffViewer.get().next(); }
 
-	accessibleDiffViewerPrev(): codemavi { this._accessibleDiffViewer.get().prev(); }
+	accessibleDiffViewerPrev(): void { this._accessibleDiffViewer.get().prev(); }
 
-	async waitForDiff(): Promise<codemavi> {
+	async waitForDiff(): Promise<void> {
 		const diffModel = this._diffModel.get();
 		if (!diffModel) { return; }
 		await diffModel.waitForDiff();
@@ -654,7 +654,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		return { destination, destinationSelection };
 	}
 
-	switchSide(): codemavi {
+	switchSide(): void {
 		const { destination, destinationSelection } = this.mapToOtherSide();
 		destination.focus();
 		if (destinationSelection) {
@@ -662,13 +662,13 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		}
 	}
 
-	exitCompareMove(): codemavi {
+	exitCompareMove(): void {
 		const model = this._diffModel.get();
 		if (!model) { return; }
 		model.movedTextToCompare.set(undefined, undefined);
 	}
 
-	collapseAllUnchangedRegions(): codemavi {
+	collapseAllUnchangedRegions(): void {
 		const unchangedRegions = this._diffModel.get()?.unchangedRegions.get();
 		if (!unchangedRegions) { return; }
 		transaction(tx => {
@@ -678,7 +678,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		});
 	}
 
-	showAllUnchangedRegions(): codemavi {
+	showAllUnchangedRegions(): void {
 		const unchangedRegions = this._diffModel.get()?.unchangedRegions.get();
 		if (!unchangedRegions) { return; }
 		transaction(tx => {
@@ -688,7 +688,7 @@ export class DiffEditorWidget extends DelegatingEditor implements IDiffEditor {
 		});
 	}
 
-	private _handleCursorPositionChange(e: ICursorPositionChangedEvent | undefined, isModifiedEditor: boolean): codemavi {
+	private _handleCursorPositionChange(e: ICursorPositionChangedEvent | undefined, isModifiedEditor: boolean): void {
 		if (e?.reason === CursorChangeReason.Explicit) {
 			const diff = this._diffModel.get()?.diff.get()?.mappings.find(m => isModifiedEditor ? m.lineRangeMapping.modified.contains(e.position.lineNumber) : m.lineRangeMapping.original.contains(e.position.lineNumber));
 			if (diff?.lineRangeMapping.modified.isEmpty) {

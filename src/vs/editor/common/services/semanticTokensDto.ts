@@ -25,7 +25,7 @@ const enum EncodedSemanticTokensType {
 	Delta = 2
 }
 
-function reverseEndianness(arr: Uint8Array): codemavi {
+function reverseEndianness(arr: Uint8Array): void {
 	for (let i = 0, len = arr.length; i < len; i += 4) {
 		// flip bytes 0<->3 and 1<->2
 		const b0 = arr[i + 0];

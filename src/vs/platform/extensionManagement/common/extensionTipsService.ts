@@ -171,7 +171,7 @@ export abstract class AbstractNativeExtensionTipsService extends ExtensionTipsSe
 		return this.getValidExecutableBasedExtensionTips(this.allOtherExecutableTips);
 	}
 
-	private async collectTips(): Promise<codemavi> {
+	private async collectTips(): Promise<void> {
 		const highImportanceExeTips = await this.getValidExecutableBasedExtensionTips(this.highImportanceExecutableTips);
 		const mediumImportanceExeTips = await this.getValidExecutableBasedExtensionTips(this.mediumImportanceExecutableTips);
 		const local = await this.extensionManagementService.getInstalled();
@@ -220,7 +220,7 @@ export abstract class AbstractNativeExtensionTipsService extends ExtensionTipsSe
 	/**
 	 * High importance tips are prompted once per restart session
 	 */
-	private promptHighImportanceExeBasedTip(): codemavi {
+	private promptHighImportanceExeBasedTip(): void {
 		if (this.highImportanceTipsByExe.size === 0) {
 			return;
 		}
@@ -254,7 +254,7 @@ export abstract class AbstractNativeExtensionTipsService extends ExtensionTipsSe
 	/**
 	 * Medium importance tips are prompted once per 7 days
 	 */
-	private promptMediumImportanceExeBasedTip(): codemavi {
+	private promptMediumImportanceExeBasedTip(): void {
 		if (this.mediumImportanceTipsByExe.size === 0) {
 			return;
 		}
@@ -323,7 +323,7 @@ export abstract class AbstractNativeExtensionTipsService extends ExtensionTipsSe
 		return value;
 	}
 
-	private updateLastPromptedMediumExeTime(value: number): codemavi {
+	private updateLastPromptedMediumExeTime(value: number): void {
 		this.storageService.store(lastPromptedMediumImpExeTimeStorageKey, value, StorageScope.APPLICATION, StorageTarget.MACHINE);
 	}
 

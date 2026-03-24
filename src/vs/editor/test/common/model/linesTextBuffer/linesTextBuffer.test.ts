@@ -34,7 +34,7 @@ suite('PieceTreeTextBuffer._getInverseEdits', () => {
 		return new Range(startLineNumber, startColumn, endLineNumber, endColumn);
 	}
 
-	function assertInverseEdits(ops: IValidatedEditOperation[], expected: Range[]): codemavi {
+	function assertInverseEdits(ops: IValidatedEditOperation[], expected: Range[]): void {
 		const actual = PieceTreeTextBuffer._getInverseEditRanges(ops);
 		assert.deepStrictEqual(actual, expected);
 	}
@@ -286,7 +286,7 @@ suite('PieceTreeTextBuffer._toSingleEditOperation', () => {
 		};
 	}
 
-	function testToSingleEditOperation(original: string[], edits: IValidatedEditOperation[], expected: IValidatedEditOperation): codemavi {
+	function testToSingleEditOperation(original: string[], edits: IValidatedEditOperation[], expected: IValidatedEditOperation): void {
 		const { disposable, textBuffer } = createTextBufferFactory(original.join('\n')).create(DefaultEndOfLine.LF);
 
 		const actual = (<PieceTreeTextBuffer>textBuffer)._toSingleEditOperation(edits);

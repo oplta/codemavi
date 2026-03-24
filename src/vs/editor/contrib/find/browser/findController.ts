@@ -96,7 +96,7 @@ export class CommonFindController extends Disposable implements IEditorContribut
 	protected _editor: ICodeEditor;
 	private readonly _findWidgetVisible: IContextKey<boolean>;
 	protected _state: FindReplaceState;
-	protected _updateHistoryDelayer: Delayer<codemavi>;
+	protected _updateHistoryDelayer: Delayer<void>;
 	private _model: FindModelBoundToEditorModel | null;
 	protected readonly _storageService: IStorageService;
 	private readonly _clipboardService: IClipboardService;
@@ -129,7 +129,7 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		this._notificationService = notificationService;
 		this._hoverService = hoverService;
 
-		this._updateHistoryDelayer = new Delayer<codemavi>(500);
+		this._updateHistoryDelayer = new Delayer<void>(500);
 		this._state = this._register(new FindReplaceState());
 		this.loadQueryState();
 		this._register(this._state.onFindReplaceStateChange((e) => this._onStateChanged(e)));
@@ -164,19 +164,19 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.disposeModel();
 		super.dispose();
 	}
 
-	private disposeModel(): codemavi {
+	private disposeModel(): void {
 		if (this._model) {
 			this._model.dispose();
 			this._model = null;
 		}
 	}
 
-	private _onStateChanged(e: FindReplaceStateChangedEvent): codemavi {
+	private _onStateChanged(e: FindReplaceStateChangedEvent): void {
 		this.saveQueryState(e);
 
 		if (e.isRevealed) {
@@ -224,7 +224,7 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		return this._state;
 	}
 
-	public closeFindWidget(): codemavi {
+	public closeFindWidget(): void {
 		this._state.change({
 			isRevealed: false,
 			searchScope: null
@@ -232,35 +232,35 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		this._editor.focus();
 	}
 
-	public toggleCaseSensitive(): codemavi {
+	public toggleCaseSensitive(): void {
 		this._state.change({ matchCase: !this._state.matchCase }, false);
 		if (!this._state.isRevealed) {
 			this.highlightFindOptions();
 		}
 	}
 
-	public toggleWholeWords(): codemavi {
+	public toggleWholeWords(): void {
 		this._state.change({ wholeWord: !this._state.wholeWord }, false);
 		if (!this._state.isRevealed) {
 			this.highlightFindOptions();
 		}
 	}
 
-	public toggleRegex(): codemavi {
+	public toggleRegex(): void {
 		this._state.change({ isRegex: !this._state.isRegex }, false);
 		if (!this._state.isRevealed) {
 			this.highlightFindOptions();
 		}
 	}
 
-	public togglePreserveCase(): codemavi {
+	public togglePreserveCase(): void {
 		this._state.change({ preserveCase: !this._state.preserveCase }, false);
 		if (!this._state.isRevealed) {
 			this.highlightFindOptions();
 		}
 	}
 
-	public toggleSearchScope(): codemavi {
+	public toggleSearchScope(): void {
 		if (this._state.searchScope) {
 			this._state.change({ searchScope: null }, true);
 		} else {
@@ -286,18 +286,18 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		}
 	}
 
-	public setSearchString(searchString: string): codemavi {
+	public setSearchString(searchString: string): void {
 		if (this._state.isRegex) {
 			searchString = strings.escapeRegExpCharacters(searchString);
 		}
 		this._state.change({ searchString: searchString }, false);
 	}
 
-	public highlightFindOptions(ignoreWhenVisible: boolean = false): codemavi {
+	public highlightFindOptions(ignoreWhenVisible: boolean = false): void {
 		// overwritten in subclass
 	}
 
-	protected async _start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<codemavi> {
+	protected async _start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<void> {
 		this.disposeModel();
 
 		if (!this._editor.hasModel()) {
@@ -362,7 +362,7 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		}
 	}
 
-	public start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<codemavi> {
+	public start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<void> {
 		return this._start(opts, newState);
 	}
 
@@ -429,7 +429,7 @@ export class CommonFindController extends Disposable implements IEditorContribut
 		return '';
 	}
 
-	public setGlobalBufferTerm(text: string): codemavi {
+	public setGlobalBufferTerm(text: string): void {
 		if (this._editor.getOption(EditorOption.find).globalFindClipboard
 			&& this._editor.hasModel()
 			&& !this._editor.getModel().isTooLargeForSyncing()
@@ -465,7 +465,7 @@ export class FindController extends CommonFindController implements IFindControl
 		this._replaceWidgetHistory = ReplaceWidgetHistory.getOrCreate(_storageService);
 	}
 
-	protected override async _start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<codemavi> {
+	protected override async _start(opts: IFindStartOptions, newState?: INewFindReplaceState): Promise<void> {
 		if (!this._widget) {
 			this._createFindWidget();
 		}
@@ -502,7 +502,7 @@ export class FindController extends CommonFindController implements IFindControl
 		}
 	}
 
-	public override highlightFindOptions(ignoreWhenVisible: boolean = false): codemavi {
+	public override highlightFindOptions(ignoreWhenVisible: boolean = false): void {
 		if (!this._widget) {
 			this._createFindWidget();
 		}
@@ -522,7 +522,7 @@ export class FindController extends CommonFindController implements IFindControl
 		return this._widget?.getViewState();
 	}
 
-	restoreViewState(state: any): codemavi {
+	restoreViewState(state: any): void {
 		this._widget?.setViewState(state);
 	}
 }
@@ -544,7 +544,7 @@ export const StartFindAction = registerMultiEditorAction(new MultiEditorAction({
 	}
 }));
 
-StartFindAction.addImplementation(0, (accessor: ServicesAccessor, editor: ICodeEditor, args: any): boolean | Promise<codemavi> => {
+StartFindAction.addImplementation(0, (accessor: ServicesAccessor, editor: ICodeEditor, args: any): boolean | Promise<void> => {
 	const controller = CommonFindController.get(editor);
 	if (!controller) {
 		return false;
@@ -595,7 +595,7 @@ export class StartFindWithArgsAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor, args?: IFindStartArguments): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor, args?: IFindStartArguments): Promise<void> {
 		const controller = CommonFindController.get(editor);
 		if (controller) {
 			const newState: INewFindReplaceState = args ? {
@@ -646,7 +646,7 @@ export class StartFindWithSelectionAction extends EditorAction {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<void> {
 		const controller = CommonFindController.get(editor);
 		if (controller) {
 			await controller.start({
@@ -665,7 +665,7 @@ export class StartFindWithSelectionAction extends EditorAction {
 	}
 }
 export abstract class MatchFindAction extends EditorAction {
-	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<void> {
 		const controller = CommonFindController.get(editor);
 		if (controller && !this._run(controller)) {
 			await controller.start({
@@ -754,7 +754,7 @@ export class MoveToMatchFindAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi | Promise<codemavi> {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void | Promise<void> {
 		const controller = CommonFindController.get(editor);
 		if (!controller) {
 			return;
@@ -828,13 +828,13 @@ export class MoveToMatchFindAction extends EditorAction {
 		inputBox.show();
 	}
 
-	private clearDecorations(editor: ICodeEditor): codemavi {
+	private clearDecorations(editor: ICodeEditor): void {
 		editor.changeDecorations(changeAccessor => {
 			this._highlightDecorations = changeAccessor.deltaDecorations(this._highlightDecorations, []);
 		});
 	}
 
-	private addDecorations(editor: ICodeEditor, range: IRange): codemavi {
+	private addDecorations(editor: ICodeEditor, range: IRange): void {
 		editor.changeDecorations(changeAccessor => {
 			this._highlightDecorations = changeAccessor.deltaDecorations(this._highlightDecorations, [
 				{
@@ -861,7 +861,7 @@ export class MoveToMatchFindAction extends EditorAction {
 }
 
 export abstract class SelectionMatchFindAction extends EditorAction {
-	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor | null, editor: ICodeEditor): Promise<void> {
 		const controller = CommonFindController.get(editor);
 		if (!controller) {
 			return;
@@ -947,7 +947,7 @@ export const StartFindReplaceAction = registerMultiEditorAction(new MultiEditorA
 	}
 }));
 
-StartFindReplaceAction.addImplementation(0, (accessor: ServicesAccessor, editor: ICodeEditor, args: any): boolean | Promise<codemavi> => {
+StartFindReplaceAction.addImplementation(0, (accessor: ServicesAccessor, editor: ICodeEditor, args: any): boolean | Promise<void> => {
 	if (!editor.hasModel() || editor.getOption(EditorOption.readOnly)) {
 		return false;
 	}

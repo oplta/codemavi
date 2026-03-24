@@ -70,9 +70,9 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 	 */
 	private get _proxy(): IPtyService { return this._directProxy || this._localPtyService; }
 
-	private readonly _whenReady = new DeferredPromise<codemavi>();
-	get whenReady(): Promise<codemavi> { return this._whenReady.p; }
-	setReady(): codemavi { this._whenReady.complete(); }
+	private readonly _whenReady = new DeferredPromise<void>();
+	get whenReady(): Promise<void> { return this._whenReady.p; }
+	setReady(): void { this._whenReady.complete(); }
 
 	private readonly _onDidRequestDetach = this._register(new Emitter<{ requestId: number; workspaceId: string; instanceId: number }>());
 	readonly onDidRequestDetach = this._onDidRequestDetach.event;
@@ -108,7 +108,7 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 	/**
 	 * Request a direct connection to the pty host, this will launch the pty host process if necessary.
 	 */
-	private async _connectToDirectProxy(): Promise<codemavi> {
+	private async _connectToDirectProxy(): Promise<void> {
 		// Check if connecting is in progress
 		if (this._directProxyClientEventually) {
 			await this._directProxyClientEventually.p;
@@ -169,7 +169,7 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 		return this._proxy.requestDetachInstance(workspaceId, instanceId);
 	}
 
-	async acceptDetachInstanceReply(requestId: number, persistentProcessId?: number): Promise<codemavi> {
+	async acceptDetachInstanceReply(requestId: number, persistentProcessId?: number): Promise<void> {
 		if (!persistentProcessId) {
 			this._logService.warn('Cannot attach to feature terminals, custom pty terminals, or those without a persistentProcessId');
 			return;
@@ -177,21 +177,21 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 		return this._proxy.acceptDetachInstanceReply(requestId, persistentProcessId);
 	}
 
-	async persistTerminalState(): Promise<codemavi> {
+	async persistTerminalState(): Promise<void> {
 		const ids = Array.from(this._ptys.keys());
 		const serialized = await this._proxy.serializeTerminalState(ids);
 		this._storageService.store(TerminalStorageKeys.TerminalBufferState, serialized, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<codemavi> {
+	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<void> {
 		await this._proxy.updateTitle(id, title, titleSource);
 	}
 
-	async updateIcon(id: number, userInitiated: boolean, icon: URI | { light: URI; dark: URI } | { id: string; color?: { id: string } }, color?: string): Promise<codemavi> {
+	async updateIcon(id: number, userInitiated: boolean, icon: URI | { light: URI; dark: URI } | { id: string; color?: { id: string } }, color?: string): Promise<void> {
 		await this._proxy.updateIcon(id, userInitiated, icon, color);
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(id: number, property: ProcessPropertyType, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(id: number, property: ProcessPropertyType, value: IProcessPropertyMap[T]): Promise<void> {
 		return this._proxy.updateProperty(id, property, value);
 	}
 
@@ -270,7 +270,7 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 		return this._proxy.getPerformanceMarks();
 	}
 
-	async reduceConnectionGraceTime(): Promise<codemavi> {
+	async reduceConnectionGraceTime(): Promise<void> {
 		this._proxy.reduceConnectionGraceTime();
 	}
 
@@ -296,7 +296,7 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 		return this._proxy.getWslPath(original, direction);
 	}
 
-	async setTerminalLayoutInfo(layoutInfo?: ITerminalsLayoutInfoById): Promise<codemavi> {
+	async setTerminalLayoutInfo(layoutInfo?: ITerminalsLayoutInfoById): Promise<void> {
 		const args: ISetTerminalLayoutInfoArgs = {
 			workspaceId: this._getWorkspaceId(),
 			tabs: layoutInfo ? layoutInfo.tabs : []
@@ -324,7 +324,7 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 				// Re-resolve the environments and replace it on the state so local terminals use a fresh
 				// environment
 				mark('code/terminal/willGetReviveEnvironments');
-				await Promise.all(reviveBufferState.map(state => new Promise<codemavi>(r => {
+				await Promise.all(reviveBufferState.map(state => new Promise<void>(r => {
 					this._resolveEnvironmentForRevive(variableResolver, state.shellLaunchConfig).then(freshEnv => {
 						state.processLaunchConfig.env = freshEnv;
 						r();
@@ -371,10 +371,10 @@ class LocalTerminalBackend extends BaseTerminalBackend implements ITerminalBacke
 
 	// #region Pty service contribution RPC calls
 
-	installAutoReply(match: string, reply: string): Promise<codemavi> {
+	installAutoReply(match: string, reply: string): Promise<void> {
 		return this._proxy.installAutoReply(match, reply);
 	}
-	uninstallAllAutoReplies(): Promise<codemavi> {
+	uninstallAllAutoReplies(): Promise<void> {
 		return this._proxy.uninstallAllAutoReplies();
 	}
 

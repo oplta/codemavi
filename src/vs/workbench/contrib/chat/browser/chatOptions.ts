@@ -51,7 +51,7 @@ export interface IChatResultEditorOptions {
 export class ChatEditorOptions extends Disposable {
 	private static readonly lineHeightEm = 1.4;
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private _config!: IChatEditorConfiguration;

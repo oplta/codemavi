@@ -68,7 +68,7 @@ export class PolicyChannelClient extends AbstractPolicyService implements IPolic
 		});
 	}
 
-	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<codemavi> {
+	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<void> {
 		const result = await this.channel.call<{ [name: PolicyName]: PolicyValue }>('updatePolicyDefinitions', policyDefinitions);
 		for (const name in result) {
 			this.policies.set(name, result[name]);

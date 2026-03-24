@@ -78,7 +78,7 @@ export class BetweenCellToolbar extends CellOverlayPart {
 		return betweenCellToolbar;
 	}
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		const betweenCellToolbar = this._initialize();
 		if (this._notebookEditor.hasModel()) {
 			betweenCellToolbar.context = {
@@ -100,7 +100,7 @@ export class BetweenCellToolbar extends CellOverlayPart {
 
 
 export interface ICssClassDelegate {
-	toggle: (className: string, force?: boolean) => codemavi;
+	toggle: (className: string, force?: boolean) => void;
 }
 
 interface CellTitleToolbarModel {
@@ -118,8 +118,8 @@ interface CellTitleToolbarView {
 export class CellTitleToolbarPart extends CellOverlayPart {
 	private _model: CellTitleToolbarModel | undefined;
 	private _view: CellTitleToolbarView | undefined;
-	private readonly _onDidUpdateActions: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onDidUpdateActions: Event<codemavi> = this._onDidUpdateActions.event;
+	private readonly _onDidUpdateActions: Emitter<void> = this._register(new Emitter<void>());
+	readonly onDidUpdateActions: Event<void> = this._onDidUpdateActions.event;
 
 	get hasActions(): boolean {
 		if (!this._model) {
@@ -195,11 +195,11 @@ export class CellTitleToolbarPart extends CellOverlayPart {
 		return this._view;
 	}
 
-	override prepareRenderCell(element: ICellViewModel): codemavi {
+	override prepareRenderCell(element: ICellViewModel): void {
 		this._initializeModel();
 	}
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		const model = this._initializeModel();
 		const view = this._initialize(model, element);
 		this.cellDisposables.add(registerCellToolbarStickyScroll(this._notebookEditor, element, this.toolbarContainer, { extraOffset: 4, min: -14 }));
@@ -222,10 +222,10 @@ export class CellTitleToolbarPart extends CellOverlayPart {
 		view.deleteToolbar.context = toolbarContext;
 	}
 
-	private setupChangeListeners(toolbar: ToolBar, menu: IMenu, initActions: { primary: IAction[]; secondary: IAction[] }): codemavi {
+	private setupChangeListeners(toolbar: ToolBar, menu: IMenu, initActions: { primary: IAction[]; secondary: IAction[] }): void {
 		// #103926
 		let dropdownIsVisible = false;
-		let deferredUpdate: (() => codemavi) | undefined;
+		let deferredUpdate: (() => void) | undefined;
 
 		this.updateActions(toolbar, initActions);
 		this._register(menu.onDidChange(() => {

@@ -150,7 +150,7 @@ suite('Decorators', () => {
 					(a: number, b: number) => a + b,
 					() => 0
 				)
-				report(p: number): codemavi {
+				report(p: number): void {
 					this._handle(p);
 				}
 			}

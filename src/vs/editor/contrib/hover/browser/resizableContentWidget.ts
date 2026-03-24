@@ -102,7 +102,7 @@ export abstract class ResizableContentWidget extends Disposable implements ICont
 		return renderingAbove;
 	}
 
-	protected _resize(dimension: dom.Dimension): codemavi {
+	protected _resize(dimension: dom.Dimension): void {
 		this._resizableNode.layout(dimension.height, dimension.width);
 	}
 }

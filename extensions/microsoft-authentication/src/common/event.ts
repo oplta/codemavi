@@ -84,7 +84,7 @@ export class EventBufferer {
 		};
 	}
 
-	bufferEvents<R = codemavi>(fn: () => R): R {
+	bufferEvents<R = void>(fn: () => R): R {
 		const data = { buffers: new Array<Function>() };
 		this.data.push(data);
 		const r = fn();
@@ -93,7 +93,7 @@ export class EventBufferer {
 		return r;
 	}
 
-	async bufferEventsAsync<R = codemavi>(fn: () => Promise<R>): Promise<R> {
+	async bufferEventsAsync<R = void>(fn: () => Promise<R>): Promise<R> {
 		const data = { buffers: new Array<Function>() };
 		this.data.push(data);
 		try {

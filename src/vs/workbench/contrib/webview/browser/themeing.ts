@@ -24,7 +24,7 @@ export class WebviewThemeDataProvider extends Disposable {
 
 	private _cachedWebViewThemeData: WebviewThemeData | undefined = undefined;
 
-	private readonly _onThemeDataChanged = this._register(new Emitter<codemavi>());
+	private readonly _onThemeDataChanged = this._register(new Emitter<void>());
 	public readonly onThemeDataChanged = this._onThemeDataChanged.event;
 
 	constructor(

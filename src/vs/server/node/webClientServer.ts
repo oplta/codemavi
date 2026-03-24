@@ -41,7 +41,7 @@ const textMimeType: { [ext: string]: string | undefined } = {
 /**
  * Return an error to the client.
  */
-export async function serveError(req: http.IncomingMessage, res: http.ServerResponse, errorCode: number, errorMessage: string): Promise<codemavi> {
+export async function serveError(req: http.IncomingMessage, res: http.ServerResponse, errorCode: number, errorMessage: string): Promise<void> {
 	res.writeHead(errorCode, { 'Content-Type': 'text/plain' });
 	res.end(errorMessage);
 }
@@ -53,7 +53,7 @@ export const enum CacheControl {
 /**
  * Serve a file at a given path or 404 if the file is missing.
  */
-export async function serveFile(filePath: string, cacheControl: CacheControl, logService: ILogService, req: http.IncomingMessage, res: http.ServerResponse, responseHeaders: Record<string, string>): Promise<codemavi> {
+export async function serveFile(filePath: string, cacheControl: CacheControl, logService: ILogService, req: http.IncomingMessage, res: http.ServerResponse, responseHeaders: Record<string, string>): Promise<void> {
 	try {
 		const stat = await promises.stat(filePath); // throws an error if file doesn't exist
 		if (cacheControl === CacheControl.ETAG) {
@@ -62,7 +62,7 @@ export async function serveFile(filePath: string, cacheControl: CacheControl, lo
 			const etag = `W/"${[stat.ino, stat.size, stat.mtime.getTime()].join('-')}"`; // weak validator (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag)
 			if (req.headers['if-none-match'] === etag) {
 				res.writeHead(304);
-				return codemavi res.end();
+				return void res.end();
 			}
 
 			responseHeaders['Etag'] = etag;
@@ -87,7 +87,7 @@ export async function serveFile(filePath: string, cacheControl: CacheControl, lo
 		}
 
 		res.writeHead(404, { 'Content-Type': 'text/plain' });
-		return codemavi res.end('Not found');
+		return void res.end('Not found');
 	}
 }
 
@@ -121,7 +121,7 @@ export class WebClientServer {
 	 * @param parsedUrl The URL to handle, including base and product path
 	 * @param pathname The pathname of the URL, without base and product path
 	 */
-	async handle(req: http.IncomingMessage, res: http.ServerResponse, parsedUrl: url.UrlWithParsedQuery, pathname: string): Promise<codemavi> {
+	async handle(req: http.IncomingMessage, res: http.ServerResponse, parsedUrl: url.UrlWithParsedQuery, pathname: string): Promise<void> {
 		try {
 			if (pathname.startsWith(STATIC_PATH) && pathname.charCodeAt(STATIC_PATH.length) === CharCode.Slash) {
 				return this._handleStatic(req, res, pathname.substring(STATIC_PATH.length));
@@ -150,7 +150,7 @@ export class WebClientServer {
 	 * Handle HTTP requests for /static/*
 	 * @param resourcePath The path after /static/
 	 */
-	private async _handleStatic(req: http.IncomingMessage, res: http.ServerResponse, resourcePath: string): Promise<codemavi> {
+	private async _handleStatic(req: http.IncomingMessage, res: http.ServerResponse, resourcePath: string): Promise<void> {
 		const headers: Record<string, string> = Object.create(null);
 
 		// Strip the this._staticRoute from the path
@@ -173,7 +173,7 @@ export class WebClientServer {
 	 * Handle extension resources
 	 * @param resourcePath The path after /web-extension-resource/
 	 */
-	private async _handleWebExtensionResource(req: http.IncomingMessage, res: http.ServerResponse, resourcePath: string): Promise<codemavi> {
+	private async _handleWebExtensionResource(req: http.IncomingMessage, res: http.ServerResponse, resourcePath: string): Promise<void> {
 		if (!this._webExtensionResourceUrlTemplate) {
 			return serveError(req, res, 500, 'No extension gallery service configured.');
 		}
@@ -232,13 +232,13 @@ export class WebClientServer {
 		setResponseHeader('Content-Type');
 		res.writeHead(200, responseHeaders);
 		const buffer = await streamToBuffer(context.stream);
-		return codemavi res.end(buffer.buffer);
+		return void res.end(buffer.buffer);
 	}
 
 	/**
 	 * Handle HTTP requests for /
 	 */
-	private async _handleRoot(req: http.IncomingMessage, res: http.ServerResponse, parsedUrl: url.UrlWithParsedQuery): Promise<codemavi> {
+	private async _handleRoot(req: http.IncomingMessage, res: http.ServerResponse, parsedUrl: url.UrlWithParsedQuery): Promise<void> {
 
 		const getFirstHeader = (headerName: string) => {
 			const val = req.headers[headerName];
@@ -272,7 +272,7 @@ export class WebClientServer {
 			responseHeaders['Location'] = newLocation;
 
 			res.writeHead(302, responseHeaders);
-			return codemavi res.end();
+			return void res.end();
 		}
 
 		const replacePort = (host: string, port: string) => {
@@ -409,7 +409,7 @@ export class WebClientServer {
 			data = workbenchTemplate.replace(/\{\{([^}]+)\}\}/g, (_, key) => values[key] ?? 'undefined');
 		} catch (e) {
 			res.writeHead(404, { 'Content-Type': 'text/plain' });
-			return codemavi res.end('Not found');
+			return void res.end('Not found');
 		}
 
 		const webWorkerExtensionHostIframeScriptSHA = 'sha256-2Q+j4hfT09+1+imS46J2YlkCtHWQt0/BE79PXjJ0ZJ8=';
@@ -447,7 +447,7 @@ export class WebClientServer {
 		}
 
 		res.writeHead(200, headers);
-		return codemavi res.end(data);
+		return void res.end(data);
 	}
 
 	private _getScriptCspHashes(content: string): string[] {
@@ -472,7 +472,7 @@ export class WebClientServer {
 	/**
 	 * Handle HTTP requests for /callback
 	 */
-	private async _handleCallback(res: http.ServerResponse): Promise<codemavi> {
+	private async _handleCallback(res: http.ServerResponse): Promise<void> {
 		const filePath = FileAccess.asFileUri('vs/code/browser/workbench/callback.html').fsPath;
 		const data = (await promises.readFile(filePath)).toString();
 		const cspDirectives = [
@@ -488,6 +488,6 @@ export class WebClientServer {
 			'Content-Type': 'text/html',
 			'Content-Security-Policy': cspDirectives
 		});
-		return codemavi res.end(data);
+		return void res.end(data);
 	}
 }

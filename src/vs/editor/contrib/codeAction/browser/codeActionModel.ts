@@ -39,7 +39,7 @@ class CodeActionOracle extends Disposable {
 	constructor(
 		private readonly _editor: ICodeEditor,
 		private readonly _markerService: IMarkerService,
-		private readonly _signalChange: (triggered: TriggeredCodeAction | undefined) => codemavi,
+		private readonly _signalChange: (triggered: TriggeredCodeAction | undefined) => void,
 		private readonly _delay: number = 250,
 	) {
 		super();
@@ -47,12 +47,12 @@ class CodeActionOracle extends Disposable {
 		this._register(this._editor.onDidChangeCursorPosition(() => this._tryAutoTrigger()));
 	}
 
-	public trigger(trigger: CodeActionTrigger): codemavi {
+	public trigger(trigger: CodeActionTrigger): void {
 		const selection = this._getRangeOfSelectionUnlessWhitespaceEnclosed(trigger);
 		this._signalChange(selection ? { trigger, selection } : undefined);
 	}
 
-	private _onMarkerChanges(resources: readonly URI[]): codemavi {
+	private _onMarkerChanges(resources: readonly URI[]): void {
 		const model = this._editor.getModel();
 		if (model && resources.some(resource => isEqual(resource, model.uri))) {
 			this._tryAutoTrigger();
@@ -189,7 +189,7 @@ export class CodeActionModel extends Disposable {
 		this._update();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		if (this._disposed) {
 			return;
 		}
@@ -204,7 +204,7 @@ export class CodeActionModel extends Disposable {
 		return this._configurationService ? this._configurationService.getValue('editor.codeActionWidget.includeNearbyQuickFixes', { resource: model?.uri }) : false;
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		if (this._disposed) {
 			return;
 		}

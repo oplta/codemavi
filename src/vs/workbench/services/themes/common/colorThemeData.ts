@@ -525,15 +525,15 @@ export class ColorThemeData implements IWorkbenchColorTheme {
 		}
 	}
 
-	public ensureLoaded(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<codemavi> {
+	public ensureLoaded(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
 		return !this.isLoaded ? this.load(extensionResourceLoaderService) : Promise.resolve(undefined);
 	}
 
-	public reload(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<codemavi> {
+	public reload(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
 		return this.load(extensionResourceLoaderService);
 	}
 
-	private load(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<codemavi> {
+	private load(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
 		if (!this.location) {
 			return Promise.resolve(undefined);
 		}

@@ -10,7 +10,7 @@ import { StagingSelectionItem } from '../chatThreadServiceTypes.js';
 import { os } from '../helpers/systemInfo.js';
 import { RawToolParamsObj } from '../sendLLMMessageTypes.js';
 import { approvalTypeOfBuiltinToolName, BuiltinToolCallParams, BuiltinToolName, BuiltinToolResultType, ToolName } from '../toolsServiceTypes.js';
-import { ChatMode } from '../codemaviSettingsTypes.js';
+import { ChatMode } from '../maviSettingsTypes.js';
 
 // Triple backtick wrapper used throughout the prompts for code blocks
 export const tripleTick = ['```', '```']
@@ -695,7 +695,7 @@ ${tripleTick[1]}`
 
 
 
-export const codemaviPrefixAndSuffix = ({ fullFileStr, startLine, endLine }: { fullFileStr: string, startLine: number, endLine: number }) => {
+export const maviPrefixAndSuffix = ({ fullFileStr, startLine, endLine }: { fullFileStr: string, startLine: number, endLine: number }) => {
 
 	const fullFileLines = fullFileStr.split('\n')
 
@@ -839,12 +839,12 @@ For example, if the user is asking you to "make this variable a better name", ma
 
 
 
-// export const aiRegex_computeReplacementsForFile_userMessage = async ({ searchClause, replaceClause, fileURI, codemaviFileService }: { searchClause: string, replaceClause: string, fileURI: URI, codemaviFileService: IMaviFileService }) => {
+// export const aiRegex_computeReplacementsForFile_userMessage = async ({ searchClause, replaceClause, fileURI, maviFileService }: { searchClause: string, replaceClause: string, fileURI: URI, maviFileService: IMaviFileService }) => {
 
 // 	// we may want to do this in batches
 // 	const fileSelection: FileSelection = { type: 'File', fileURI, selectionStr: null, range: null, state: { isOpened: false } }
 
-// 	const file = await stringifyFileSelections([fileSelection], codemaviFileService)
+// 	const file = await stringifyFileSelections([fileSelection], maviFileService)
 
 // 	return `\
 // ## FILE
@@ -975,7 +975,7 @@ INSTRUCTIONS
 memoize results
 
 ## ACCEPTED OUTPUT
-To implement memoization in your Fibonacci function, you can use a JavaScript object to store previously computed results. This will help acodemavi redundant calculations and improve performance. Here's how you can modify your function:
+To implement memoization in your Fibonacci function, you can use a JavaScript object to store previously computed results. This will help avoid redundant calculations and improve performance. Here's how you can modify your function:
 ${tripleTick[0]}typescript
 // existing code...
 const fib = (n, memo = {}) => {

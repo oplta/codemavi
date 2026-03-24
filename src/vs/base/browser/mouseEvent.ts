@@ -23,8 +23,8 @@ export interface IMouseEvent {
 	readonly metaKey: boolean;
 	readonly timestamp: number;
 
-	preventDefault(): codemavi;
-	stopPropagation(): codemavi;
+	preventDefault(): void;
+	stopPropagation(): void;
 }
 
 export class StandardMouseEvent implements IMouseEvent {
@@ -79,11 +79,11 @@ export class StandardMouseEvent implements IMouseEvent {
 		this.posy -= iframeOffsets.top;
 	}
 
-	public preventDefault(): codemavi {
+	public preventDefault(): void {
 		this.browserEvent.preventDefault();
 	}
 
-	public stopPropagation(): codemavi {
+	public stopPropagation(): void {
 		this.browserEvent.stopPropagation();
 	}
 }
@@ -219,11 +219,11 @@ export class StandardWheelEvent {
 		}
 	}
 
-	public preventDefault(): codemavi {
+	public preventDefault(): void {
 		this.browserEvent?.preventDefault();
 	}
 
-	public stopPropagation(): codemavi {
+	public stopPropagation(): void {
 		this.browserEvent?.stopPropagation();
 	}
 }

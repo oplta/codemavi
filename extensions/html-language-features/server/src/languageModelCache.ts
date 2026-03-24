@@ -7,8 +7,8 @@ import { TextDocument } from 'vscode-html-languageservice';
 
 export interface LanguageModelCache<T> {
 	get(document: TextDocument): T;
-	onDocumentRemoved(document: TextDocument): codemavi;
-	dispose(): codemavi;
+	onDocumentRemoved(document: TextDocument): void;
+	dispose(): void;
 }
 
 export function getLanguageModelCache<T>(maxEntries: number, cleanupIntervalTimeInSec: number, parse: (document: TextDocument) => T): LanguageModelCache<T> {

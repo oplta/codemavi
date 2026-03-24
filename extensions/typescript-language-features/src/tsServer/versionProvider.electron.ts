@@ -18,7 +18,7 @@ export class DiskTypeScriptVersionProvider implements ITypeScriptVersionProvider
 		private configuration?: TypeScriptServiceConfiguration
 	) { }
 
-	public updateConfiguration(configuration: TypeScriptServiceConfiguration): codemavi {
+	public updateConfiguration(configuration: TypeScriptServiceConfiguration): void {
 		this.configuration = configuration;
 	}
 

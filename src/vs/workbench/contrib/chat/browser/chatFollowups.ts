@@ -21,7 +21,7 @@ export class ChatFollowups<T extends IChatFollowup> extends Disposable {
 		followups: T[],
 		private readonly location: ChatAgentLocation,
 		private readonly options: IButtonStyles | undefined,
-		private readonly clickHandler: (followup: T) => codemavi,
+		private readonly clickHandler: (followup: T) => void,
 		@IChatAgentService private readonly chatAgentService: IChatAgentService
 	) {
 		super();
@@ -30,7 +30,7 @@ export class ChatFollowups<T extends IChatFollowup> extends Disposable {
 		followups.forEach(followup => this.renderFollowup(followupsContainer, followup));
 	}
 
-	private renderFollowup(container: HTMLElement, followup: T): codemavi {
+	private renderFollowup(container: HTMLElement, followup: T): void {
 
 		if (!this.chatAgentService.getDefaultAgent(this.location)) {
 			// No default agent yet, which affects how followups are rendered, so can't render this yet

@@ -26,7 +26,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onRecentlyOpenedChange = this._register(new Emitter<codemavi>());
+	private readonly _onRecentlyOpenedChange = this._register(new Emitter<void>());
 	readonly onDidChangeRecentlyOpened = this._onRecentlyOpenedChange.event;
 
 	constructor(
@@ -46,7 +46,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Storage
 		this._register(this.storageService.onDidChangeValue(StorageScope.APPLICATION, BrowserWorkspacesService.RECENTLY_OPENED_KEY, this._store)(() => this._onRecentlyOpenedChange.fire()));
@@ -55,7 +55,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		this._register(this.contextService.onDidChangeWorkspaceFolders(e => this.onDidChangeWorkspaceFolders(e)));
 	}
 
-	private onDidChangeWorkspaceFolders(e: IWorkspaceFoldersChangeEvent): codemavi {
+	private onDidChangeWorkspaceFolders(e: IWorkspaceFoldersChangeEvent): void {
 		if (!isTemporaryWorkspace(this.contextService.getWorkspace())) {
 			return;
 		}
@@ -68,7 +68,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		}
 	}
 
-	private addWorkspaceToRecentlyOpened(): codemavi {
+	private addWorkspaceToRecentlyOpened(): void {
 		const workspace = this.contextService.getWorkspace();
 		const remoteAuthority = this.environmentService.remoteAuthority;
 		switch (this.contextService.getWorkbenchState()) {
@@ -111,7 +111,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		return { workspaces: [], files: [] };
 	}
 
-	async addRecentlyOpened(recents: IRecent[]): Promise<codemavi> {
+	async addRecentlyOpened(recents: IRecent[]): Promise<void> {
 		const recentlyOpened = await this.getRecentlyOpened();
 
 		for (const recent of recents) {
@@ -130,7 +130,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		return this.saveRecentlyOpened(recentlyOpened);
 	}
 
-	async removeRecentlyOpened(paths: URI[]): Promise<codemavi> {
+	async removeRecentlyOpened(paths: URI[]): Promise<void> {
 		const recentlyOpened = await this.getRecentlyOpened();
 
 		this.doRemoveRecentlyOpened(recentlyOpened, paths);
@@ -138,7 +138,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		return this.saveRecentlyOpened(recentlyOpened);
 	}
 
-	private doRemoveRecentlyOpened(recentlyOpened: IRecentlyOpened, paths: URI[]): codemavi {
+	private doRemoveRecentlyOpened(recentlyOpened: IRecentlyOpened, paths: URI[]): void {
 		recentlyOpened.files = recentlyOpened.files.filter(file => {
 			return !paths.some(path => path.toString() === file.fileUri.toString());
 		});
@@ -148,11 +148,11 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		});
 	}
 
-	private async saveRecentlyOpened(data: IRecentlyOpened): Promise<codemavi> {
+	private async saveRecentlyOpened(data: IRecentlyOpened): Promise<void> {
 		return this.storageService.store(BrowserWorkspacesService.RECENTLY_OPENED_KEY, JSON.stringify(toStoreData(data)), StorageScope.APPLICATION, StorageTarget.USER);
 	}
 
-	async clearRecentlyOpened(): Promise<codemavi> {
+	async clearRecentlyOpened(): Promise<void> {
 		this.storageService.remove(BrowserWorkspacesService.RECENTLY_OPENED_KEY, StorageScope.APPLICATION);
 	}
 
@@ -183,7 +183,7 @@ export class BrowserWorkspacesService extends Disposable implements IWorkspacesS
 		return this.getWorkspaceIdentifier(newUntitledWorkspacePath);
 	}
 
-	async deleteUntitledWorkspace(workspace: IWorkspaceIdentifier): Promise<codemavi> {
+	async deleteUntitledWorkspace(workspace: IWorkspaceIdentifier): Promise<void> {
 		try {
 			await this.fileService.del(workspace.configPath);
 		} catch (error) {

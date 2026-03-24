@@ -33,7 +33,7 @@ export class Graph<T> {
 		return ret;
 	}
 
-	insertEdge(from: T, to: T): codemavi {
+	insertEdge(from: T, to: T): void {
 		const fromNode = this.lookupOrInsertNode(from);
 		const toNode = this.lookupOrInsertNode(to);
 
@@ -41,7 +41,7 @@ export class Graph<T> {
 		toNode.incoming.set(fromNode.key, fromNode);
 	}
 
-	removeNode(data: T): codemavi {
+	removeNode(data: T): void {
 		const key = this._hashFn(data);
 		this._nodes.delete(key);
 		for (const node of this._nodes.values()) {

@@ -355,11 +355,11 @@ export function registerNewChatActions() {
 	});
 }
 
-function announceChatCleared(accessibilitySignalService: IAccessibilitySignalService): codemavi {
+function announceChatCleared(accessibilitySignalService: IAccessibilitySignalService): void {
 	accessibilitySignalService.playSignal(AccessibilitySignal.clear);
 }
 
-export async function waitForChatSessionCleared(sessionId: string, chatService: IChatService): Promise<codemavi> {
+export async function waitForChatSessionCleared(sessionId: string, chatService: IChatService): Promise<void> {
 	if (!chatService.getSession(sessionId)) {
 		return;
 	}

@@ -89,7 +89,7 @@ declare module 'vscode' {
 		 * @param token A token that can be used to signal cancellation to the underlying search engine.
 		 * @return A thenable that resolves when the search is complete.
 		 */
-		export function findTextInFiles(query: TextSearchQuery, callback: (result: TextSearchResult) => codemavi, token?: CancellationToken): Thenable<TextSearchComplete>;
+		export function findTextInFiles(query: TextSearchQuery, callback: (result: TextSearchResult) => void, token?: CancellationToken): Thenable<TextSearchComplete>;
 
 		/**
 		 * Search text in files across all {@link workspace.workspaceFolders workspace folders} in the workspace.
@@ -99,6 +99,6 @@ declare module 'vscode' {
 		 * @param token A token that can be used to signal cancellation to the underlying search engine.
 		 * @return A thenable that resolves when the search is complete.
 		 */
-		export function findTextInFiles(query: TextSearchQuery, options: FindTextInFilesOptions, callback: (result: TextSearchResult) => codemavi, token?: CancellationToken): Thenable<TextSearchComplete>;
+		export function findTextInFiles(query: TextSearchQuery, options: FindTextInFilesOptions, callback: (result: TextSearchResult) => void, token?: CancellationToken): Thenable<TextSearchComplete>;
 	}
 }

@@ -26,7 +26,7 @@ export interface IExtHostMpcService extends ExtHostMcpShape {
 
 export class ExtHostMcpService extends Disposable implements IExtHostMpcService {
 	protected _proxy: MainThreadMcpShape;
-	private readonly _initialProviderPromises = new Set<Promise<codemavi>>();
+	private readonly _initialProviderPromises = new Set<Promise<void>>();
 	private readonly _sseEventSources = this._register(new DisposableMap<number, McpSSEHandle>());
 	private readonly _eventSource = new Lazy(async () => {
 		const es = await importAMDNodeModule<typeof ES>('@c4312/eventsource-umd', 'dist/index.umd.js');
@@ -40,11 +40,11 @@ export class ExtHostMcpService extends Disposable implements IExtHostMpcService 
 		this._proxy = extHostRpc.getProxy(MainContext.MainThreadMcp);
 	}
 
-	$startMcp(id: number, launch: McpServerLaunch.Serialized): codemavi {
+	$startMcp(id: number, launch: McpServerLaunch.Serialized): void {
 		this._startMcp(id, McpServerLaunch.fromSerialized(launch));
 	}
 
-	protected _startMcp(id: number, launch: McpServerLaunch): codemavi {
+	protected _startMcp(id: number, launch: McpServerLaunch): void {
 		if (launch.type === McpServerTransportType.SSE) {
 			this._sseEventSources.set(id, new McpSSEHandle(this._eventSource.value, id, launch, this._proxy));
 			return;
@@ -53,18 +53,18 @@ export class ExtHostMcpService extends Disposable implements IExtHostMpcService 
 		throw new Error('not implemented');
 	}
 
-	$stopMcp(id: number): codemavi {
+	$stopMcp(id: number): void {
 		if (this._sseEventSources.has(id)) {
 			this._sseEventSources.deleteAndDispose(id);
 			this._proxy.$onDidChangeState(id, { state: McpConnectionState.Kind.Stopped });
 		}
 	}
 
-	$sendMessage(id: number, message: string): codemavi {
+	$sendMessage(id: number, message: string): void {
 		this._sseEventSources.get(id)?.send(message);
 	}
 
-	async $waitForInitialCollectionProviders(): Promise<codemavi> {
+	async $waitForInitialCollectionProviders(): Promise<void> {
 		await Promise.all(this._initialProviderPromises);
 	}
 
@@ -126,7 +126,7 @@ export class ExtHostMcpService extends Disposable implements IExtHostMpcService 
 			store.add(provider.onDidChange(update));
 		}
 
-		const promise = new Promise<codemavi>(resolve => {
+		const promise = new Promise<void>(resolve => {
 			setTimeout(() => update().finally(() => {
 				this._initialProviderPromises.delete(promise);
 				resolve();

@@ -283,7 +283,7 @@ suite('NotebookFileWorkingCopyModel', function () {
 		};
 		(serializer as any).test = 'yes';
 
-		let resolveSerializer: (serializer: INotebookSerializer) => codemavi = () => { };
+		let resolveSerializer: (serializer: INotebookSerializer) => void = () => { };
 		const serializerPromise = new Promise<INotebookSerializer>(resolve => {
 			resolveSerializer = resolve;
 		});

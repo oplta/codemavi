@@ -92,7 +92,7 @@ export class NodeTestWorkingCopyBackupService extends NativeWorkingCopyBackupSer
 	private discardBackupJoiners: Function[];
 	discardedBackups: IWorkingCopyIdentifier[];
 	discardedAllBackups: boolean;
-	private pendingBackupsArr: Promise<codemavi>[];
+	private pendingBackupsArr: Promise<void>[];
 
 	readonly _fileService: IFileService;
 
@@ -122,15 +122,15 @@ export class NodeTestWorkingCopyBackupService extends NativeWorkingCopyBackupSer
 		return this.fileService;
 	}
 
-	async waitForAllBackups(): Promise<codemavi> {
+	async waitForAllBackups(): Promise<void> {
 		await Promise.all(this.pendingBackupsArr);
 	}
 
-	joinBackupResource(): Promise<codemavi> {
+	joinBackupResource(): Promise<void> {
 		return new Promise(resolve => this.backupResourceJoiners.push(resolve));
 	}
 
-	override async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: any, token?: CancellationToken): Promise<codemavi> {
+	override async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: any, token?: CancellationToken): Promise<void> {
 		const p = super.backup(identifier, content, versionId, meta, token);
 		const removeFromPendingBackups = insert(this.pendingBackupsArr, p.then(undefined, undefined));
 
@@ -145,11 +145,11 @@ export class NodeTestWorkingCopyBackupService extends NativeWorkingCopyBackupSer
 		}
 	}
 
-	joinDiscardBackup(): Promise<codemavi> {
+	joinDiscardBackup(): Promise<void> {
 		return new Promise(resolve => this.discardBackupJoiners.push(resolve));
 	}
 
-	override async discardBackup(identifier: IWorkingCopyIdentifier): Promise<codemavi> {
+	override async discardBackup(identifier: IWorkingCopyIdentifier): Promise<void> {
 		await super.discardBackup(identifier);
 		this.discardedBackups.push(identifier);
 
@@ -158,7 +158,7 @@ export class NodeTestWorkingCopyBackupService extends NativeWorkingCopyBackupSer
 		}
 	}
 
-	override async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<codemavi> {
+	override async discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<void> {
 		this.discardedAllBackups = true;
 
 		return super.discardBackups(filter);
@@ -1047,7 +1047,7 @@ suite('WorkingCopyBackupService', () => {
 			await testShouldRestoreOriginalContentsWithBrokenBackup(toTypedWorkingCopyId(fooFile));
 		});
 
-		async function testShouldRestoreOriginalContentsWithBrokenBackup(identifier: IWorkingCopyIdentifier): Promise<codemavi> {
+		async function testShouldRestoreOriginalContentsWithBrokenBackup(identifier: IWorkingCopyIdentifier): Promise<void> {
 			const contents = [
 				'Lorem ipsum ',
 				'dolor öäü sit amet ',
@@ -1084,7 +1084,7 @@ suite('WorkingCopyBackupService', () => {
 			await testShouldUpdateMetaFromFileWhenResolving(toTypedWorkingCopyId(fooFile));
 		});
 
-		async function testShouldUpdateMetaFromFileWhenResolving(identifier: IWorkingCopyIdentifier): Promise<codemavi> {
+		async function testShouldUpdateMetaFromFileWhenResolving(identifier: IWorkingCopyIdentifier): Promise<void> {
 			const contents = 'Foo Bar';
 
 			const meta = {

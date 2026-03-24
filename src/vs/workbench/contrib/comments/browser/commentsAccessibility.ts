@@ -39,7 +39,7 @@ export class CommentsAccessibilityHelpProvider extends Disposable implements IAc
 	provideContent(): string {
 		return [CommentAccessibilityHelpNLS.tabFocus, CommentAccessibilityHelpNLS.commentCommands, CommentAccessibilityHelpNLS.escape, CommentAccessibilityHelpNLS.addComment, CommentAccessibilityHelpNLS.submitComment, CommentAccessibilityHelpNLS.nextRange, CommentAccessibilityHelpNLS.previousRange].join('\n');
 	}
-	onClose(): codemavi {
+	onClose(): void {
 		this._element?.focus();
 	}
 }

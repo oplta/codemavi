@@ -120,7 +120,7 @@ export abstract class NativeFilesystemMcpDiscovery extends FilesystemMcpDiscover
 		];
 	}
 
-	public abstract start(): codemavi;
+	public abstract start(): void;
 
 	protected setDetails(detailsDto: Dto<INativeMcpDiscoveryData> | undefined) {
 		if (!detailsDto) {

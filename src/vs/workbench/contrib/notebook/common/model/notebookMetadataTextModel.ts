@@ -38,7 +38,7 @@ export class NotebookDocumentMetadataTextModel extends Disposable implements INo
 	public get metadata(): NotebookDocumentMetadata {
 		return this.notebookModel.metadata;
 	}
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	public readonly onDidChange = this._onDidChange.event;
 
 	private _textBufferHash: string | null = null;

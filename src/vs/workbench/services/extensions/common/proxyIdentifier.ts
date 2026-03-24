@@ -20,19 +20,19 @@ export interface IRPCProtocol {
 	/**
 	 * Assert these identifiers are already registered via `.set`.
 	 */
-	assertRegistered(identifiers: ProxyIdentifier<any>[]): codemavi;
+	assertRegistered(identifiers: ProxyIdentifier<any>[]): void;
 
 	/**
 	 * Wait for the write buffer (if applicable) to become empty.
 	 */
-	drain(): Promise<codemavi>;
+	drain(): Promise<void>;
 
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export class ProxyIdentifier<T> {
 	public static count = 0;
-	_proxyIdentifierBrand: codemavi = undefined;
+	_proxyIdentifierBrand: void = undefined;
 
 	public readonly sid: string;
 	public readonly nid: number;

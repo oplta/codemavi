@@ -66,7 +66,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.onDidChangeMementoValue(StorageScope.WORKSPACE, this._store)(e => this.onDidChangeMementoState(e)));
 		this.whenReady.then(() => this.registerGroupsContextKeyListeners());
 	}
@@ -130,7 +130,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return disposables;
 	}
 
-	protected override unregisterPart(part: EditorPart): codemavi {
+	protected override unregisterPart(part: EditorPart): void {
 		super.unregisterPart(part);
 
 		// Notify all parts about a groups label change
@@ -145,7 +145,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		});
 	}
 
-	private registerEditorPartListeners(part: EditorPart, disposables: DisposableStore): codemavi {
+	private registerEditorPartListeners(part: EditorPart, disposables: DisposableStore): void {
 		disposables.add(part.onDidFocus(() => {
 			this.doUpdateMostRecentActive(part, true);
 
@@ -166,7 +166,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		disposables.add(part.onDidChangeGroupLocked(group => this._onDidChangeGroupLocked.fire(group)));
 	}
 
-	private doUpdateMostRecentActive(part: EditorPart, makeMostRecentlyActive?: boolean): codemavi {
+	private doUpdateMostRecentActive(part: EditorPart, makeMostRecentlyActive?: boolean): void {
 		const index = this.mostRecentActiveParts.indexOf(part);
 
 		// Remove from MRU list
@@ -228,13 +228,13 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 	private _isReady = false;
 	get isReady(): boolean { return this._isReady; }
 
-	private readonly whenReadyPromise = new DeferredPromise<codemavi>();
+	private readonly whenReadyPromise = new DeferredPromise<void>();
 	readonly whenReady = this.whenReadyPromise.p;
 
-	private readonly whenRestoredPromise = new DeferredPromise<codemavi>();
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
 	readonly whenRestored = this.whenRestoredPromise.p;
 
-	private async restoreParts(): Promise<codemavi> {
+	private async restoreParts(): Promise<void> {
 
 		// Join on the main part being ready to pick
 		// the right moment to begin restoring.
@@ -268,7 +268,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.workspaceMemento[EditorParts.EDITOR_PARTS_UI_STATE_STORAGE_KEY];
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 		const state = this.createState();
 		if (state.auxiliary.length === 0) {
 			delete this.workspaceMemento[EditorParts.EDITOR_PARTS_UI_STATE_STORAGE_KEY];
@@ -291,7 +291,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		};
 	}
 
-	private async restoreState(state: IEditorPartsUIState): Promise<codemavi> {
+	private async restoreState(state: IEditorPartsUIState): Promise<void> {
 		if (state.auxiliary.length) {
 			const auxiliaryEditorPartPromises: Promise<IAuxiliaryEditorPart>[] = [];
 
@@ -319,7 +319,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.parts.some(part => part.hasRestorableState);
 	}
 
-	private onDidChangeMementoState(e: IStorageValueChangeEvent): codemavi {
+	private onDidChangeMementoState(e: IStorageValueChangeEvent): void {
 		if (e.external && e.scope === StorageScope.WORKSPACE) {
 			this.reloadMemento(e.scope);
 
@@ -397,7 +397,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.editorWorkingSets.map(workingSet => ({ id: workingSet.id, name: workingSet.name }));
 	}
 
-	deleteWorkingSet(workingSet: IEditorWorkingSet): codemavi {
+	deleteWorkingSet(workingSet: IEditorWorkingSet): void {
 		const index = this.indexOfWorkingSet(workingSet);
 		if (typeof index === 'number') {
 			this.editorWorkingSets.splice(index, 1);
@@ -450,7 +450,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return undefined;
 	}
 
-	private saveWorkingSets(): codemavi {
+	private saveWorkingSets(): void {
 		this.storageService.store(EditorParts.EDITOR_WORKING_SETS_STORAGE_KEY, JSON.stringify(this.editorWorkingSets), StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
@@ -557,19 +557,19 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.getPart(group).getSize(group);
 	}
 
-	setSize(group: IEditorGroupView | GroupIdentifier, size: { width: number; height: number }): codemavi {
+	setSize(group: IEditorGroupView | GroupIdentifier, size: { width: number; height: number }): void {
 		this.getPart(group).setSize(group, size);
 	}
 
-	arrangeGroups(arrangement: GroupsArrangement, group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): codemavi {
+	arrangeGroups(arrangement: GroupsArrangement, group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): void {
 		this.getPart(group).arrangeGroups(arrangement, group);
 	}
 
-	toggleMaximizeGroup(group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): codemavi {
+	toggleMaximizeGroup(group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): void {
 		this.getPart(group).toggleMaximizeGroup(group);
 	}
 
-	toggleExpandGroup(group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): codemavi {
+	toggleExpandGroup(group: IEditorGroupView | GroupIdentifier = this.activePart.activeGroup): void {
 		this.getPart(group).toggleExpandGroup(group);
 	}
 
@@ -577,7 +577,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.getPart(group).restoreGroup(group);
 	}
 
-	applyLayout(layout: EditorGroupLayout): codemavi {
+	applyLayout(layout: EditorGroupLayout): void {
 		this.activePart.applyLayout(layout);
 	}
 
@@ -589,7 +589,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.activePart.orientation;
 	}
 
-	setGroupOrientation(orientation: GroupOrientation): codemavi {
+	setGroupOrientation(orientation: GroupOrientation): void {
 		this.activePart.setGroupOrientation(orientation);
 	}
 
@@ -639,7 +639,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.getPart(location).addGroup(location, direction);
 	}
 
-	removeGroup(group: IEditorGroupView | GroupIdentifier): codemavi {
+	removeGroup(group: IEditorGroupView | GroupIdentifier): void {
 		this.getPart(group).removeGroup(group);
 	}
 
@@ -670,7 +670,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 	private readonly globalContextKeys = new Map<string, IContextKey<ContextKeyValue>>();
 	private readonly scopedContextKeys = new Map<GroupIdentifier, Map<string, IContextKey<ContextKeyValue>>>();
 
-	private registerGroupsContextKeyListeners(): codemavi {
+	private registerGroupsContextKeyListeners(): void {
 		this._register(this.onDidChangeActiveGroup(() => this.updateGlobalContextKeys()));
 		this.groups.forEach(group => this.registerGroupContextKeyProvidersListeners(group));
 		this._register(this.onDidAddGroup(group => this.registerGroupContextKeyProvidersListeners(group)));
@@ -681,7 +681,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		}));
 	}
 
-	private updateGlobalContextKeys(): codemavi {
+	private updateGlobalContextKeys(): void {
 		const activeGroupScopedContextKeys = this.scopedContextKeys.get(this.activeGroup.id);
 		if (!activeGroupScopedContextKeys) {
 			return;
@@ -723,13 +723,13 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 			get(): T | undefined {
 				return scopedContextKey.get() as T | undefined;
 			},
-			set(value: T): codemavi {
+			set(value: T): void {
 				if (that.activeGroup === group) {
 					globalContextKey.set(value);
 				}
 				scopedContextKey.set(value);
 			},
-			reset(): codemavi {
+			reset(): void {
 				if (that.activeGroup === group) {
 					globalContextKey.reset();
 				}
@@ -770,7 +770,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 	}
 
 	private readonly contextKeyProviderDisposables = this._register(new DisposableMap<GroupIdentifier, IDisposable>());
-	private registerGroupContextKeyProvidersListeners(group: IEditorGroupView): codemavi {
+	private registerGroupContextKeyProvidersListeners(group: IEditorGroupView): void {
 
 		// Update context keys from providers for the group when its active editor changes
 		const disposable = group.onDidActiveEditorChange(() => {
@@ -782,7 +782,7 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		this.contextKeyProviderDisposables.set(group.id, disposable);
 	}
 
-	private updateRegisteredContextKey<T extends ContextKeyValue>(group: IEditorGroupView, provider: IEditorGroupContextKeyProvider<T>): codemavi {
+	private updateRegisteredContextKey<T extends ContextKeyValue>(group: IEditorGroupView, provider: IEditorGroupContextKeyProvider<T>): void {
 
 		// Get the group scoped context keys for the provider
 		// If the providers context key has not yet been bound

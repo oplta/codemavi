@@ -40,7 +40,7 @@ export class RequestQueue {
 		return this.queue.length;
 	}
 
-	public enqueue(item: RequestItem): codemavi {
+	public enqueue(item: RequestItem): void {
 		if (item.queueingType === RequestQueueingType.Normal) {
 			let index = this.queue.length - 1;
 			while (index >= 0) {

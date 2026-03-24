@@ -5,13 +5,13 @@
 
 import { NewWorkerMessage, TerminateWorkerMessage } from '../common/polyfillNestedWorker.protocol.js';
 
-declare function postMessage(data: any, transferables?: Transferable[]): codemavi;
+declare function postMessage(data: any, transferables?: Transferable[]): void;
 
 declare type MessageEventHandler = ((ev: MessageEvent<any>) => any) | null;
 
 const _bootstrapFnSource = (function _bootstrapFn(workerUrl: string) {
 
-	const listener: EventListener = (event: Event): codemavi => {
+	const listener: EventListener = (event: Event): void => {
 		// uninstall handler
 		globalThis.removeEventListener('message', listener);
 
@@ -60,8 +60,8 @@ export class NestedWorker extends EventTarget implements Worker {
 	onmessageerror: ((this: Worker, ev: MessageEvent<any>) => any) | null = null;
 	onerror: ((this: AbstractWorker, ev: ErrorEvent) => any) | null = null;
 
-	readonly terminate: () => codemavi;
-	readonly postMessage: (message: any, options?: any) => codemavi;
+	readonly terminate: () => void;
+	readonly postMessage: (message: any, options?: any) => void;
 
 	constructor(nativePostMessage: typeof postMessage, stringOrUrl: string | URL, options?: WorkerOptions) {
 		super();

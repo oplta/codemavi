@@ -65,13 +65,13 @@ export interface ICommentController {
 	contextValue?: string;
 	owner: string;
 	activeComment: { thread: CommentThread; comment?: Comment } | undefined;
-	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined, editorId?: string): Promise<codemavi>;
-	updateCommentThreadTemplate(threadHandle: number, range: IRange): Promise<codemavi>;
-	deleteCommentThreadMain(commentThreadId: string): codemavi;
-	toggleReaction(uri: URI, thread: CommentThread, comment: Comment, reaction: CommentReaction, token: CancellationToken): Promise<codemavi>;
+	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined, editorId?: string): Promise<void>;
+	updateCommentThreadTemplate(threadHandle: number, range: IRange): Promise<void>;
+	deleteCommentThreadMain(commentThreadId: string): void;
+	toggleReaction(uri: URI, thread: CommentThread, comment: Comment, reaction: CommentReaction, token: CancellationToken): Promise<void>;
 	getDocumentComments(resource: URI, token: CancellationToken): Promise<ICommentInfo<IRange>>;
 	getNotebookComments(resource: URI, token: CancellationToken): Promise<INotebookCommentInfo>;
-	setActiveCommentAndThread(commentInfo: { thread: CommentThread; comment?: Comment } | undefined): Promise<codemavi>;
+	setActiveCommentAndThread(commentInfo: { thread: CommentThread; comment?: Comment } | undefined): Promise<void>;
 }
 
 export interface IContinueOnCommentProvider {
@@ -88,34 +88,34 @@ export interface ICommentService {
 	readonly onDidChangeCurrentCommentThread: Event<CommentThread | undefined>;
 	readonly onDidUpdateCommentingRanges: Event<{ uniqueOwner: string }>;
 	readonly onDidChangeActiveCommentingRange: Event<{ range: Range; commentingRangesInfo: CommentingRanges }>;
-	readonly onDidSetDataProvider: Event<codemavi>;
+	readonly onDidSetDataProvider: Event<void>;
 	readonly onDidDeleteDataProvider: Event<string | undefined>;
 	readonly onDidChangeCommentingEnabled: Event<boolean>;
-	readonly onResourceHasCommentingRanges: Event<codemavi>;
+	readonly onResourceHasCommentingRanges: Event<void>;
 	readonly isCommentingEnabled: boolean;
 	readonly commentsModel: ICommentsModel;
 	readonly lastActiveCommentcontroller: ICommentController | undefined;
-	setDocumentComments(resource: URI, commentInfos: ICommentInfo[]): codemavi;
-	setWorkspaceComments(uniqueOwner: string, commentsByResource: CommentThread<IRange | ICellRange>[]): codemavi;
-	removeWorkspaceComments(uniqueOwner: string): codemavi;
-	registerCommentController(uniqueOwner: string, commentControl: ICommentController): codemavi;
-	unregisterCommentController(uniqueOwner?: string): codemavi;
+	setDocumentComments(resource: URI, commentInfos: ICommentInfo[]): void;
+	setWorkspaceComments(uniqueOwner: string, commentsByResource: CommentThread<IRange | ICellRange>[]): void;
+	removeWorkspaceComments(uniqueOwner: string): void;
+	registerCommentController(uniqueOwner: string, commentControl: ICommentController): void;
+	unregisterCommentController(uniqueOwner?: string): void;
 	getCommentController(uniqueOwner: string): ICommentController | undefined;
-	createCommentThreadTemplate(uniqueOwner: string, resource: URI, range: Range | undefined, editorId?: string): Promise<codemavi>;
-	updateCommentThreadTemplate(uniqueOwner: string, threadHandle: number, range: Range): Promise<codemavi>;
+	createCommentThreadTemplate(uniqueOwner: string, resource: URI, range: Range | undefined, editorId?: string): Promise<void>;
+	updateCommentThreadTemplate(uniqueOwner: string, threadHandle: number, range: Range): Promise<void>;
 	getCommentMenus(uniqueOwner: string): CommentMenus;
-	updateComments(ownerId: string, event: CommentThreadChangedEvent<IRange>): codemavi;
-	updateNotebookComments(ownerId: string, event: CommentThreadChangedEvent<ICellRange>): codemavi;
-	disposeCommentThread(ownerId: string, threadId: string): codemavi;
+	updateComments(ownerId: string, event: CommentThreadChangedEvent<IRange>): void;
+	updateNotebookComments(ownerId: string, event: CommentThreadChangedEvent<ICellRange>): void;
+	disposeCommentThread(ownerId: string, threadId: string): void;
 	getDocumentComments(resource: URI): Promise<(ICommentInfo | null)[]>;
 	getNotebookComments(resource: URI): Promise<(INotebookCommentInfo | null)[]>;
-	updateCommentingRanges(ownerId: string, resourceHints?: CommentingRangeResourceHint): codemavi;
+	updateCommentingRanges(ownerId: string, resourceHints?: CommentingRangeResourceHint): void;
 	hasReactionHandler(uniqueOwner: string): boolean;
-	toggleReaction(uniqueOwner: string, resource: URI, thread: CommentThread<IRange | ICellRange>, comment: Comment, reaction: CommentReaction): Promise<codemavi>;
-	setActiveEditingCommentThread(commentThread: CommentThread<IRange | ICellRange> | null): codemavi;
-	setCurrentCommentThread(commentThread: CommentThread<IRange | ICellRange> | undefined): codemavi;
-	setActiveCommentAndThread(uniqueOwner: string, commentInfo: { thread: CommentThread<IRange | ICellRange>; comment?: Comment } | undefined): Promise<codemavi>;
-	enableCommenting(enable: boolean): codemavi;
+	toggleReaction(uniqueOwner: string, resource: URI, thread: CommentThread<IRange | ICellRange>, comment: Comment, reaction: CommentReaction): Promise<void>;
+	setActiveEditingCommentThread(commentThread: CommentThread<IRange | ICellRange> | null): void;
+	setCurrentCommentThread(commentThread: CommentThread<IRange | ICellRange> | undefined): void;
+	setActiveCommentAndThread(uniqueOwner: string, commentInfo: { thread: CommentThread<IRange | ICellRange>; comment?: Comment } | undefined): Promise<void>;
+	enableCommenting(enable: boolean): void;
 	registerContinueOnCommentProvider(provider: IContinueOnCommentProvider): IDisposable;
 	removeContinueOnComment(pendingComment: { range: IRange | undefined; uri: URI; uniqueOwner: string; isReply?: boolean }): PendingCommentThread | undefined;
 	resourceHasCommentingRanges(resource: URI): boolean;
@@ -126,8 +126,8 @@ const CONTINUE_ON_COMMENTS = 'comments.continueOnComments';
 export class CommentService extends Disposable implements ICommentService {
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidSetDataProvider: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onDidSetDataProvider: Event<codemavi> = this._onDidSetDataProvider.event;
+	private readonly _onDidSetDataProvider: Emitter<void> = this._register(new Emitter<void>());
+	readonly onDidSetDataProvider: Event<void> = this._onDidSetDataProvider.event;
 
 	private readonly _onDidDeleteDataProvider: Emitter<string | undefined> = this._register(new Emitter<string | undefined>());
 	readonly onDidDeleteDataProvider: Event<string | undefined> = this._onDidDeleteDataProvider.event;
@@ -156,7 +156,7 @@ export class CommentService extends Disposable implements ICommentService {
 	private readonly _onDidChangeCommentingEnabled = this._register(new Emitter<boolean>());
 	readonly onDidChangeCommentingEnabled = this._onDidChangeCommentingEnabled.event;
 
-	private readonly _onResourceHasCommentingRanges = this._register(new Emitter<codemavi>());
+	private readonly _onResourceHasCommentingRanges = this._register(new Emitter<void>());
 	readonly onResourceHasCommentingRanges = this._onResourceHasCommentingRanges.event;
 
 	private readonly _onDidChangeActiveCommentingRange: Emitter<{
@@ -290,7 +290,7 @@ export class CommentService extends Disposable implements ICommentService {
 		return this._isCommentingEnabled;
 	}
 
-	enableCommenting(enable: boolean): codemavi {
+	enableCommenting(enable: boolean): void {
 		if (enable !== this._isCommentingEnabled) {
 			this._isCommentingEnabled = enable;
 			this._commentingEnabled.set(enable);
@@ -333,7 +333,7 @@ export class CommentService extends Disposable implements ICommentService {
 		return commentController.setActiveCommentAndThread(commentInfo);
 	}
 
-	setDocumentComments(resource: URI, commentInfos: ICommentInfo[]): codemavi {
+	setDocumentComments(resource: URI, commentInfos: ICommentInfo[]): void {
 		this._onDidSetResourceCommentInfos.fire({ resource, commentInfos });
 	}
 
@@ -347,7 +347,7 @@ export class CommentService extends Disposable implements ICommentService {
 		this._onDidUpdateCommentThreads.fire(event);
 	}
 
-	setWorkspaceComments(uniqueOwner: string, commentsByResource: CommentThread[]): codemavi {
+	setWorkspaceComments(uniqueOwner: string, commentsByResource: CommentThread[]): void {
 
 		if (commentsByResource.length) {
 			this._workspaceHasCommenting.set(true);
@@ -358,19 +358,19 @@ export class CommentService extends Disposable implements ICommentService {
 		}
 	}
 
-	removeWorkspaceComments(uniqueOwner: string): codemavi {
+	removeWorkspaceComments(uniqueOwner: string): void {
 		const control = this._commentControls.get(uniqueOwner);
 		if (control) {
 			this.setModelThreads(uniqueOwner, control.owner, control.label, []);
 		}
 	}
 
-	registerCommentController(uniqueOwner: string, commentControl: ICommentController): codemavi {
+	registerCommentController(uniqueOwner: string, commentControl: ICommentController): void {
 		this._commentControls.set(uniqueOwner, commentControl);
 		this._onDidSetDataProvider.fire();
 	}
 
-	unregisterCommentController(uniqueOwner?: string): codemavi {
+	unregisterCommentController(uniqueOwner?: string): void {
 		if (uniqueOwner) {
 			this._commentControls.delete(uniqueOwner);
 		} else {
@@ -384,7 +384,7 @@ export class CommentService extends Disposable implements ICommentService {
 		return this._commentControls.get(uniqueOwner);
 	}
 
-	async createCommentThreadTemplate(uniqueOwner: string, resource: URI, range: Range | undefined, editorId?: string): Promise<codemavi> {
+	async createCommentThreadTemplate(uniqueOwner: string, resource: URI, range: Range | undefined, editorId?: string): Promise<void> {
 		const commentController = this._commentControls.get(uniqueOwner);
 
 		if (!commentController) {
@@ -419,7 +419,7 @@ export class CommentService extends Disposable implements ICommentService {
 		return menu;
 	}
 
-	updateComments(ownerId: string, event: CommentThreadChangedEvent<IRange>): codemavi {
+	updateComments(ownerId: string, event: CommentThreadChangedEvent<IRange>): void {
 		const control = this._commentControls.get(ownerId);
 		if (control) {
 			const evt: ICommentThreadChangedEvent = Object.assign({}, event, { uniqueOwner: ownerId, ownerLabel: control.label, owner: control.owner });
@@ -427,7 +427,7 @@ export class CommentService extends Disposable implements ICommentService {
 		}
 	}
 
-	updateNotebookComments(ownerId: string, event: CommentThreadChangedEvent<ICellRange>): codemavi {
+	updateNotebookComments(ownerId: string, event: CommentThreadChangedEvent<ICellRange>): void {
 		const evt: INotebookCommentThreadChangedEvent = Object.assign({}, event, { uniqueOwner: ownerId });
 		this._onDidUpdateNotebookCommentThreads.fire(evt);
 	}
@@ -442,7 +442,7 @@ export class CommentService extends Disposable implements ICommentService {
 		this._onDidUpdateCommentingRanges.fire({ uniqueOwner: ownerId });
 	}
 
-	async toggleReaction(uniqueOwner: string, resource: URI, thread: CommentThread, comment: Comment, reaction: CommentReaction): Promise<codemavi> {
+	async toggleReaction(uniqueOwner: string, resource: URI, thread: CommentThread, comment: Comment, reaction: CommentReaction): Promise<void> {
 		const commentController = this._commentControls.get(uniqueOwner);
 
 		if (commentController) {

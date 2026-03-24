@@ -62,7 +62,7 @@ class TreeTestItemElement extends TestItemTreeElement {
 	constructor(
 		test: InternalTestItem,
 		parent: null | TreeTestItemElement,
-		protected readonly addedOrRemoved: (n: TestItemTreeElement) => codemavi,
+		protected readonly addedOrRemoved: (n: TestItemTreeElement) => void,
 	) {
 		super({ ...test, item: { ...test.item } }, parent);
 		this.updateErrorVisibility();
@@ -96,7 +96,7 @@ class TreeTestItemElement extends TestItemTreeElement {
  * Projection that lists tests in their traditional tree view.
  */
 export class TreeProjection extends Disposable implements ITestTreeProjection {
-	private readonly updateEmitter = new Emitter<codemavi>();
+	private readonly updateEmitter = new Emitter<void>();
 
 	private readonly changedParents = new Set<TestItemTreeElement | null>();
 	private readonly resortedParents = new Set<TestItemTreeElement | null>();
@@ -274,7 +274,7 @@ export class TreeProjection extends Disposable implements ITestTreeProjection {
 	/**
 	 * @inheritdoc
 	 */
-	public expandElement(element: TestItemTreeElement, depth: number): codemavi {
+	public expandElement(element: TestItemTreeElement, depth: number): void {
 		if (!(element instanceof TreeTestItemElement)) {
 			return;
 		}

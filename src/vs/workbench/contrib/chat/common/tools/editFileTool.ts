@@ -26,7 +26,7 @@ import { IToolInputProcessor } from './tools.js';
 
 const codeInstructions = `
 The user is very smart and can understand how to apply your edits to their files, you just need to provide minimal hints.
-Acodemavi repeating existing code, instead use comments to represent regions of unchanged code. The user prefers that you are as concise as possible. For example:
+Avoid repeating existing code, instead use comments to represent regions of unchanged code. The user prefers that you are as concise as possible. For example:
 // ...existing code...
 { changed code }
 // ...existing code...
@@ -115,7 +115,7 @@ export class EditTool implements IToolImpl {
 		// Undo stops mark groups of response data in the output. Operations, such
 		// as text edits, that happen between undo stops are all done or undone together.
 		if (request.response?.response.getMarkdown().length) {
-			// slightly hacky way to acodemavi an extra 'no-op' undo stop at the start of responses that are just edits
+			// slightly hacky way to avoid an extra 'no-op' undo stop at the start of responses that are just edits
 			model.acceptResponseProgress(request, {
 				kind: 'undoStop',
 				id: generateUuid(),

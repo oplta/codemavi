@@ -39,7 +39,7 @@ export class AccessibilityStatus extends Disposable implements IWorkbenchContrib
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.accessibilityService.onDidChangeScreenReaderOptimized(() => this.onScreenReaderModeChange()));
 
 		this._register(this.configurationService.onDidChangeConfiguration(c => {
@@ -49,7 +49,7 @@ export class AccessibilityStatus extends Disposable implements IWorkbenchContrib
 		}));
 	}
 
-	private showScreenReaderNotification(): codemavi {
+	private showScreenReaderNotification(): void {
 		this.screenReaderNotification = this.notificationService.prompt(
 			Severity.Info,
 			localize('screenReaderDetectedExplanation.question', "Screen reader usage detected. Do you want to enable {0} to optimize the editor for screen reader usage?", 'editor.accessibilitySupport'),
@@ -78,7 +78,7 @@ export class AccessibilityStatus extends Disposable implements IWorkbenchContrib
 
 		Event.once(this.screenReaderNotification.onDidClose)(() => this.screenReaderNotification = null);
 	}
-	private updateScreenReaderModeElement(visible: boolean): codemavi {
+	private updateScreenReaderModeElement(visible: boolean): void {
 		if (visible) {
 			if (!this.screenReaderModeElement.value) {
 				const text = localize('screenReaderDetected', "Screen Reader Optimized");
@@ -96,7 +96,7 @@ export class AccessibilityStatus extends Disposable implements IWorkbenchContrib
 		}
 	}
 
-	private onScreenReaderModeChange(): codemavi {
+	private onScreenReaderModeChange(): void {
 
 		// We only support text based editors
 		const screenReaderDetected = this.accessibilityService.isScreenReaderOptimized();

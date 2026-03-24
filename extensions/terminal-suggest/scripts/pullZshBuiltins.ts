@@ -129,7 +129,7 @@ interface ICommandDetails {
 
 let zshBuiltinsCommandDescriptionsCache = new Map<string, ICommandDetails>();
 
-async function createCommandDescriptionsCache(): Promise<codemavi> {
+async function createCommandDescriptionsCache(): Promise<void> {
 	const cachedCommandDescriptions: Map<string, { shortDescription?: string; description: string; args: string | undefined }> = new Map();
 	let output = '';
 	const zshVersionOutput = await execAsync('zsh --version').then(r => r.stdout);

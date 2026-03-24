@@ -34,9 +34,9 @@ export const IActionWidgetService = createDecorator<IActionWidgetService>('actio
 export interface IActionWidgetService {
 	readonly _serviceBrand: undefined;
 
-	show<T>(user: string, supportsPreview: boolean, items: readonly IActionListItem<T>[], delegate: IActionListDelegate<T>, anchor: IAnchor, container: HTMLElement | undefined, actionBarActions?: readonly IAction[]): codemavi;
+	show<T>(user: string, supportsPreview: boolean, items: readonly IActionListItem<T>[], delegate: IActionListDelegate<T>, anchor: IAnchor, container: HTMLElement | undefined, actionBarActions?: readonly IAction[]): void;
 
-	hide(didCancel?: boolean): codemavi;
+	hide(didCancel?: boolean): void;
 
 	readonly isVisible: boolean;
 }
@@ -58,7 +58,7 @@ class ActionWidgetService extends Disposable implements IActionWidgetService {
 		super();
 	}
 
-	show<T>(user: string, supportsPreview: boolean, items: readonly IActionListItem<T>[], delegate: IActionListDelegate<T>, anchor: IAnchor, container: HTMLElement | undefined, actionBarActions?: readonly IAction[]): codemavi {
+	show<T>(user: string, supportsPreview: boolean, items: readonly IActionListItem<T>[], delegate: IActionListDelegate<T>, anchor: IAnchor, container: HTMLElement | undefined, actionBarActions?: readonly IAction[]): void {
 		const visibleContext = ActionWidgetContextKeys.Visible.bindTo(this._contextKeyService);
 
 		const list = this._instantiationService.createInstance(ActionList, user, supportsPreview, items, delegate);
@@ -155,7 +155,7 @@ class ActionWidgetService extends Disposable implements IActionWidgetService {
 		return actionBar;
 	}
 
-	private _onWidgetClosed(didCancel?: boolean): codemavi {
+	private _onWidgetClosed(didCancel?: boolean): void {
 		this._list.value?.hide(didCancel);
 	}
 }
@@ -178,7 +178,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IActionWidgetService).hide(true);
 	}
 });
@@ -198,7 +198,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const widgetService = accessor.get(IActionWidgetService);
 		if (widgetService instanceof ActionWidgetService) {
 			widgetService.focusPrevious();
@@ -221,7 +221,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const widgetService = accessor.get(IActionWidgetService);
 		if (widgetService instanceof ActionWidgetService) {
 			widgetService.focusNext();
@@ -243,7 +243,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const widgetService = accessor.get(IActionWidgetService);
 		if (widgetService instanceof ActionWidgetService) {
 			widgetService.acceptSelected();
@@ -264,7 +264,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const widgetService = accessor.get(IActionWidgetService);
 		if (widgetService instanceof ActionWidgetService) {
 			widgetService.acceptSelected(true);

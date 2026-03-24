@@ -187,7 +187,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		}));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._editor.removeContentWidget(this);
 		if (this._gutterDecorationID) {
@@ -330,7 +330,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		this._editor.layoutContentWidget(this);
 	}
 
-	public hide(): codemavi {
+	public hide(): void {
 		if (this.state === LightBulbState.Hidden) {
 			return;
 		}
@@ -339,7 +339,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		this._editor.layoutContentWidget(this);
 	}
 
-	public gutterHide(): codemavi {
+	public gutterHide(): void {
 		if (this.gutterState === LightBulbState.Hidden) {
 			return;
 		}
@@ -365,7 +365,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		this._updateGutterLightBulbTitleAndIcon();
 	}
 
-	private _updateLightBulbTitleAndIcon(): codemavi {
+	private _updateLightBulbTitleAndIcon(): void {
 		this._domNode.classList.remove(...this._iconClasses);
 		this._iconClasses = [];
 		if (this.state.type !== LightBulbState.Type.Showing) {
@@ -394,7 +394,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		this._domNode.classList.add(...this._iconClasses);
 	}
 
-	private _updateGutterLightBulbTitleAndIcon(): codemavi {
+	private _updateGutterLightBulbTitleAndIcon(): void {
 		if (this.gutterState.type !== LightBulbState.Type.Showing) {
 			return;
 		}
@@ -429,7 +429,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 	}
 
 	/* Gutter Helper Functions */
-	private renderGutterLightbub(): codemavi {
+	private renderGutterLightbub(): void {
 		const selection = this._editor.getSelection();
 		if (!selection) {
 			return;
@@ -462,7 +462,7 @@ export class LightBulbWidget extends Disposable implements IContentWidget {
 		});
 	}
 
-	private _updateLightbulbTitle(autoFix: boolean, autoRun: boolean): codemavi {
+	private _updateLightbulbTitle(autoFix: boolean, autoRun: boolean): void {
 		if (this.state.type !== LightBulbState.Type.Showing) {
 			return;
 		}

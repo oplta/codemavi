@@ -18,7 +18,7 @@ suite('NotebookVariableDataSource', () => {
 	const notebookModel = { uri: 'one.ipynb', languages: ['python'] } as unknown as NotebookTextModel;
 	let provideVariablesCalled: boolean;
 
-	type VariablesResultWithAction = VariablesResult & { action?: () => codemavi };
+	type VariablesResultWithAction = VariablesResult & { action?: () => void };
 	let results: VariablesResultWithAction[];
 
 	const kernel = new class extends mock<INotebookKernel>() {

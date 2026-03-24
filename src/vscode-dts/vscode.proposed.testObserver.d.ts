@@ -13,7 +13,7 @@ declare module 'vscode' {
 		 * @param run Run options to use.
 		 * @param token Cancellation token for the test run
 		 */
-		export function runTests(run: TestRunRequest, token?: CancellationToken): Thenable<codemavi>;
+		export function runTests(run: TestRunRequest, token?: CancellationToken): Thenable<void>;
 
 		/**
 		 * Registers a provider that can provide follow-up actions for a test failure.
@@ -33,7 +33,7 @@ declare module 'vscode' {
 		/**
 		 * Event that fires when the {@link testResults} array is updated.
 		 */
-		export const onDidChangeTestResults: Event<codemavi>;
+		export const onDidChangeTestResults: Event<void>;
 	}
 
 	export interface TestFollowupProvider {
@@ -57,7 +57,7 @@ declare module 'vscode' {
 		 * Dispose of the observer, allowing the editor to eventually tell test
 		 * providers that they no longer need to update tests.
 		 */
-		dispose(): codemavi;
+		dispose(): void;
 	}
 
 	export interface TestsChangeEvent {

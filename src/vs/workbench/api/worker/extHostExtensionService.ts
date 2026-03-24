@@ -38,7 +38,7 @@ export class ExtHostExtensionService extends AbstractExtHostExtensionService {
 
 	private _fakeModules?: WorkerRequireInterceptor;
 
-	protected async _beforeAlmostReadyToRunExtensions(): Promise<codemavi> {
+	protected async _beforeAlmostReadyToRunExtensions(): Promise<void> {
 		// make sure console.log calls make it to the render
 		this._instaService.createInstance(ExtHostConsoleForwarder);
 
@@ -125,7 +125,7 @@ export class ExtHostExtensionService extends AbstractExtHostExtensionService {
 		}
 	}
 
-	async $setRemoteEnvironment(_env: { [key: string]: string | null }): Promise<codemavi> {
+	async $setRemoteEnvironment(_env: { [key: string]: string | null }): Promise<void> {
 		return;
 	}
 

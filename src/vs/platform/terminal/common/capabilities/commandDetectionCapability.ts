@@ -61,7 +61,7 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 
 	private readonly _onCommandStarted = this._register(new Emitter<ITerminalCommand>());
 	readonly onCommandStarted = this._onCommandStarted.event;
-	private readonly _onCommandStartChanged = this._register(new Emitter<codemavi>());
+	private readonly _onCommandStartChanged = this._register(new Emitter<void>());
 	readonly onCommandStartChanged = this._onCommandStartChanged.event;
 	private readonly _onBeforeCommandFinished = this._register(new Emitter<ITerminalCommand>());
 	readonly onBeforeCommandFinished = this._onBeforeCommandFinished.event;
@@ -173,7 +173,7 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		}
 	}
 
-	private _clearCommandsInViewport(): codemavi {
+	private _clearCommandsInViewport(): void {
 		// Find the number of commands on the tail end of the array that are within the viewport
 		let count = 0;
 		for (let i = this._commands.length - 1; i >= 0; i--) {
@@ -189,7 +189,7 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		}
 	}
 
-	setContinuationPrompt(value: string): codemavi {
+	setContinuationPrompt(value: string): void {
 		this._promptInputModel.setContinuationPrompt(value);
 	}
 
@@ -227,12 +227,12 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		}
 	}
 
-	setHasRichCommandDetection(value: boolean): codemavi {
+	setHasRichCommandDetection(value: boolean): void {
 		this._hasRichCommandDetection = value;
 		this._onSetRichCommandDetection.fire(value);
 	}
 
-	setIsCommandStorageDisabled(): codemavi {
+	setIsCommandStorageDisabled(): void {
 		this.__isCommandStorageDisabled = true;
 	}
 
@@ -278,7 +278,7 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		return undefined;
 	}
 
-	handlePromptStart(options?: IHandleCommandOptions): codemavi {
+	handlePromptStart(options?: IHandleCommandOptions): void {
 		// Adjust the last command's finished marker when needed. The standard position for the
 		// finished marker `D` to appear is at the same position as the following prompt started
 		// `A`.
@@ -293,12 +293,12 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		this._logService.debug('CommandDetectionCapability#handlePromptStart', this._terminal.buffer.active.cursorX, this._currentCommand.promptStartMarker?.line);
 	}
 
-	handleContinuationStart(): codemavi {
+	handleContinuationStart(): void {
 		this._currentCommand.currentContinuationMarker = this._terminal.registerMarker(0);
 		this._logService.debug('CommandDetectionCapability#handleContinuationStart', this._currentCommand.currentContinuationMarker);
 	}
 
-	handleContinuationEnd(): codemavi {
+	handleContinuationEnd(): void {
 		if (!this._currentCommand.currentContinuationMarker) {
 			this._logService.warn('CommandDetectionCapability#handleContinuationEnd Received continuation end without start');
 			return;
@@ -314,17 +314,17 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		this._logService.debug('CommandDetectionCapability#handleContinuationEnd', this._currentCommand.continuations[this._currentCommand.continuations.length - 1]);
 	}
 
-	handleRightPromptStart(): codemavi {
+	handleRightPromptStart(): void {
 		this._currentCommand.commandRightPromptStartX = this._terminal.buffer.active.cursorX;
 		this._logService.debug('CommandDetectionCapability#handleRightPromptStart', this._currentCommand.commandRightPromptStartX);
 	}
 
-	handleRightPromptEnd(): codemavi {
+	handleRightPromptEnd(): void {
 		this._currentCommand.commandRightPromptEndX = this._terminal.buffer.active.cursorX;
 		this._logService.debug('CommandDetectionCapability#handleRightPromptEnd', this._currentCommand.commandRightPromptEndX);
 	}
 
-	handleCommandStart(options?: IHandleCommandOptions): codemavi {
+	handleCommandStart(options?: IHandleCommandOptions): void {
 		this._handleCommandStartOptions = options;
 		this._currentCommand.cwd = this._cwd;
 		// Only update the column if the line has already been set
@@ -338,12 +338,12 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		this._ptyHeuristics.value.handleCommandStart(options);
 	}
 
-	handleCommandExecuted(options?: IHandleCommandOptions): codemavi {
+	handleCommandExecuted(options?: IHandleCommandOptions): void {
 		this._ptyHeuristics.value.handleCommandExecuted(options);
 		this._currentCommand.markExecutedTime();
 	}
 
-	handleCommandFinished(exitCode: number | undefined, options?: IHandleCommandOptions): codemavi {
+	handleCommandFinished(exitCode: number | undefined, options?: IHandleCommandOptions): void {
 		// Command executed may not have happened yet, if not handle it now so the expected events
 		// properly propogate. This may cause the output to show up in the computed command line,
 		// but the command line confidence will be low in the extension host for example and
@@ -416,7 +416,7 @@ export class CommandDetectionCapability extends Disposable implements ICommandDe
 		};
 	}
 
-	deserialize(serialized: ISerializedCommandDetectionCapability): codemavi {
+	deserialize(serialized: ISerializedCommandDetectionCapability): void {
 		if (serialized.isWindowsPty) {
 			this.setIsWindowsPty(serialized.isWindowsPty);
 		}
@@ -470,7 +470,7 @@ interface ICommandDetectionHeuristicsHooks {
 
 	commandMarkers: IMarker[];
 
-	clearCommandsInViewport(): codemavi;
+	clearCommandsInViewport(): void;
 }
 
 type IPtyHeuristics = (
@@ -809,7 +809,7 @@ class WindowsPtyHeuristics extends Disposable {
 		this._evaluateCommandMarkers();
 	}
 
-	postHandleCommandFinished(): codemavi {
+	postHandleCommandFinished(): void {
 		const currentCommand = this._capability.currentCommand;
 		const commandText = currentCommand.command;
 		const commandLine = currentCommand.commandStartMarker?.line;
@@ -864,7 +864,7 @@ class WindowsPtyHeuristics extends Disposable {
 		}
 	}
 
-	private _evaluateCommandMarkers(): codemavi {
+	private _evaluateCommandMarkers(): void {
 		// On Windows, use the gathered cursor move markers to correct the command start and
 		// executed markers.
 		if (this._hooks.commandMarkers.length === 0) {
@@ -897,11 +897,11 @@ class WindowsPtyHeuristics extends Disposable {
 		return cursorYAbsolute > lastCommandYAbsolute;
 	}
 
-	private _waitForCursorMove(): Promise<codemavi> {
+	private _waitForCursorMove(): Promise<void> {
 		const cursorX = this._terminal.buffer.active.cursorX;
 		const cursorY = this._terminal.buffer.active.cursorY;
 		let totalDelay = 0;
-		return new Promise<codemavi>((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			const interval = setInterval(() => {
 				if (cursorX !== this._terminal.buffer.active.cursorX || cursorY !== this._terminal.buffer.active.cursorY) {
 					resolve();

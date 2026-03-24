@@ -38,7 +38,7 @@ export class LinesDecoder extends BaseDecoder<TLineToken, VSBuffer> {
 	/**
 	 * Process data received from the input stream.
 	 */
-	protected override onStreamData(chunk: VSBuffer): codemavi {
+	protected override onStreamData(chunk: VSBuffer): void {
 		this.buffer = VSBuffer.concat([this.buffer, chunk]);
 
 		this.processData(false);
@@ -184,7 +184,7 @@ export class LinesDecoder extends BaseDecoder<TLineToken, VSBuffer> {
 	private emitLine(
 		lineNumber: number, // Note! 1-based indexing
 		lineBytes: VSBuffer,
-	): codemavi {
+	): void {
 
 		const line = new Line(lineNumber, lineBytes.toString());
 		this._onData.fire(line);
@@ -201,7 +201,7 @@ export class LinesDecoder extends BaseDecoder<TLineToken, VSBuffer> {
 	 * Handle the end of the input stream - if the buffer still has some data,
 	 * emit it as the last available line token before firing the `onEnd` event.
 	 */
-	protected override onStreamEnd(): codemavi {
+	protected override onStreamEnd(): void {
 		// if the input data buffer is not empty when the input stream ends, emit
 		// the remaining data as the last line before firing the `onEnd` event
 		if (this.buffer.byteLength > 0) {

@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 export interface Command {
 	readonly id: string;
 
-	execute(...args: any[]): codemavi;
+	execute(...args: any[]): void;
 }
 
 export class CommandManager {
@@ -28,7 +28,7 @@ export class CommandManager {
 		});
 	}
 
-	private _registerCommand(id: string, impl: (...args: any[]) => codemavi, thisArg?: any) {
+	private _registerCommand(id: string, impl: (...args: any[]) => void, thisArg?: any) {
 		if (this._commands.has(id)) {
 			return;
 		}

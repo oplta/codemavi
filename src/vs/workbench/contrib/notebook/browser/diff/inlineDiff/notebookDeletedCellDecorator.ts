@@ -77,7 +77,7 @@ export class NotebookDeletedCellDecorator extends Disposable implements INoteboo
 		}
 	}
 
-	public apply(diffInfo: CellDiffInfo[], original: NotebookTextModel): codemavi {
+	public apply(diffInfo: CellDiffInfo[], original: NotebookTextModel): void {
 		this.clear();
 
 		let currentIndex = -1;

@@ -38,7 +38,7 @@ export class ExtHostProgress implements ExtHostProgressShape {
 			this._mapHandleToCancellationSource.set(handle, source);
 		}
 
-		const progressEnd = (handle: number): codemavi => {
+		const progressEnd = (handle: number): void => {
 			this._proxy.$progressEnd(handle);
 			this._mapHandleToCancellationSource.delete(handle);
 			source?.dispose();
@@ -57,7 +57,7 @@ export class ExtHostProgress implements ExtHostProgressShape {
 		return p;
 	}
 
-	public $acceptProgressCanceled(handle: number): codemavi {
+	public $acceptProgressCanceled(handle: number): void {
 		const source = this._mapHandleToCancellationSource.get(handle);
 		if (source) {
 			source.cancel();
@@ -85,7 +85,7 @@ class ProgressCallback extends Progress<IProgressStep> {
 	}
 
 	@throttle(100, (result: IProgressStep, currentValue: IProgressStep) => mergeProgress(result, currentValue), () => Object.create(null))
-	throttledReport(p: IProgressStep): codemavi {
+	throttledReport(p: IProgressStep): void {
 		this._proxy.$progressReport(this._handle, p);
 	}
 }

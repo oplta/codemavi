@@ -121,7 +121,7 @@ registerAction2(class PrintEventProfiling extends Action2 {
 		});
 	}
 
-	run(): codemavi {
+	run(): void {
 		if (EventProfiling.all.size === 0) {
 			console.log('USE `EmitterOptions._profName` to enable profiling');
 			return;

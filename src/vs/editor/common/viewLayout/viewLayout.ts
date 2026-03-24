@@ -79,7 +79,7 @@ class EditorScrollable extends Disposable {
 	private readonly _onDidContentSizeChange = this._register(new Emitter<ContentSizeChangedEvent>());
 	public readonly onDidContentSizeChange: Event<ContentSizeChangedEvent> = this._onDidContentSizeChange.event;
 
-	constructor(smoothScrollDuration: number, scheduleAtNextAnimationFrame: (callback: () => codemavi) => IDisposable) {
+	constructor(smoothScrollDuration: number, scheduleAtNextAnimationFrame: (callback: () => void) => IDisposable) {
 		super();
 		this._dimensions = new EditorScrollDimensions(0, 0, 0, 0);
 		this._scrollable = this._register(new Scrollable({
@@ -94,7 +94,7 @@ class EditorScrollable extends Disposable {
 		return this._scrollable;
 	}
 
-	public setSmoothScrollDuration(smoothScrollDuration: number): codemavi {
+	public setSmoothScrollDuration(smoothScrollDuration: number): void {
 		this._scrollable.setSmoothScrollDuration(smoothScrollDuration);
 	}
 
@@ -106,7 +106,7 @@ class EditorScrollable extends Disposable {
 		return this._dimensions;
 	}
 
-	public setScrollDimensions(dimensions: EditorScrollDimensions): codemavi {
+	public setScrollDimensions(dimensions: EditorScrollDimensions): void {
 		if (this._dimensions.equals(dimensions)) {
 			return;
 		}
@@ -139,11 +139,11 @@ class EditorScrollable extends Disposable {
 		return this._scrollable.getCurrentScrollPosition();
 	}
 
-	public setScrollPositionNow(update: INewScrollPosition): codemavi {
+	public setScrollPositionNow(update: INewScrollPosition): void {
 		this._scrollable.setScrollPositionNow(update);
 	}
 
-	public setScrollPositionSmooth(update: INewScrollPosition): codemavi {
+	public setScrollPositionSmooth(update: INewScrollPosition): void {
 		this._scrollable.setScrollPositionSmooth(update);
 	}
 
@@ -163,7 +163,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 	public readonly onDidScroll: Event<ScrollEvent>;
 	public readonly onDidContentSizeChange: Event<ContentSizeChangedEvent>;
 
-	constructor(configuration: IEditorConfiguration, lineCount: number, scheduleAtNextAnimationFrame: (callback: () => codemavi) => IDisposable) {
+	constructor(configuration: IEditorConfiguration, lineCount: number, scheduleAtNextAnimationFrame: (callback: () => void) => IDisposable) {
 		super();
 
 		this._configuration = configuration;
@@ -190,7 +190,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		this._updateHeight();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 
@@ -198,17 +198,17 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		return this._scrollable.getScrollable();
 	}
 
-	public onHeightMaybeChanged(): codemavi {
+	public onHeightMaybeChanged(): void {
 		this._updateHeight();
 	}
 
-	private _configureSmoothScrollDuration(): codemavi {
+	private _configureSmoothScrollDuration(): void {
 		this._scrollable.setSmoothScrollDuration(this._configuration.options.get(EditorOption.smoothScrolling) ? SMOOTH_SCROLLING_TIME : 0);
 	}
 
 	// ---- begin view event handlers
 
-	public onConfigurationChanged(e: ConfigurationChangedEvent): codemavi {
+	public onConfigurationChanged(e: ConfigurationChangedEvent): void {
 		const options = this._configuration.options;
 		if (e.hasChanged(EditorOption.lineHeight)) {
 			this._linesLayout.setLineHeight(options.get(EditorOption.lineHeight));
@@ -236,13 +236,13 @@ export class ViewLayout extends Disposable implements IViewLayout {
 			this._configureSmoothScrollDuration();
 		}
 	}
-	public onFlushed(lineCount: number): codemavi {
+	public onFlushed(lineCount: number): void {
 		this._linesLayout.onFlushed(lineCount);
 	}
-	public onLinesDeleted(fromLineNumber: number, toLineNumber: number): codemavi {
+	public onLinesDeleted(fromLineNumber: number, toLineNumber: number): void {
 		this._linesLayout.onLinesDeleted(fromLineNumber, toLineNumber);
 	}
-	public onLinesInserted(fromLineNumber: number, toLineNumber: number): codemavi {
+	public onLinesInserted(fromLineNumber: number, toLineNumber: number): void {
 		this._linesLayout.onLinesInserted(fromLineNumber, toLineNumber);
 	}
 
@@ -275,7 +275,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		return result;
 	}
 
-	private _updateHeight(): codemavi {
+	private _updateHeight(): void {
 		const scrollDimensions = this._scrollable.getScrollDimensions();
 		const width = scrollDimensions.width;
 		const height = scrollDimensions.height;
@@ -335,17 +335,17 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		}
 	}
 
-	public setMaxLineWidth(maxLineWidth: number): codemavi {
+	public setMaxLineWidth(maxLineWidth: number): void {
 		this._maxLineWidth = maxLineWidth;
 		this._updateContentWidth();
 	}
 
-	public setOverlayWidgetsMinWidth(maxMinWidth: number): codemavi {
+	public setOverlayWidgetsMinWidth(maxMinWidth: number): void {
 		this._overlayWidgetsMinWidth = maxMinWidth;
 		this._updateContentWidth();
 	}
 
-	private _updateContentWidth(): codemavi {
+	private _updateContentWidth(): void {
 		const scrollDimensions = this._scrollable.getScrollDimensions();
 		this._scrollable.setScrollDimensions(new EditorScrollDimensions(
 			scrollDimensions.width,
@@ -373,7 +373,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 	}
 
 	// ----
-	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => codemavi): boolean {
+	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => void): boolean {
 		const hadAChange = this._linesLayout.changeWhitespace(callback);
 		if (hadAChange) {
 			this.onHeightMaybeChanged();
@@ -458,7 +458,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		return this._scrollable.validateScrollPosition(scrollPosition);
 	}
 
-	public setScrollPosition(position: INewScrollPosition, type: ScrollType): codemavi {
+	public setScrollPosition(position: INewScrollPosition, type: ScrollType): void {
 		if (type === ScrollType.Immediate) {
 			this._scrollable.setScrollPositionNow(position);
 		} else {
@@ -470,7 +470,7 @@ export class ViewLayout extends Disposable implements IViewLayout {
 		return this._scrollable.hasPendingScrollAnimation();
 	}
 
-	public deltaScrollNow(deltaScrollLeft: number, deltaScrollTop: number): codemavi {
+	public deltaScrollNow(deltaScrollLeft: number, deltaScrollTop: number): void {
 		const currentScrollPosition = this._scrollable.getCurrentScrollPosition();
 		this._scrollable.setScrollPositionNow({
 			scrollLeft: currentScrollPosition.scrollLeft + deltaScrollLeft,

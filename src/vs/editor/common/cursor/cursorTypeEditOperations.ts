@@ -180,7 +180,7 @@ export class AutoClosingOpenCharTypeOperation {
 		// This means that we need to work with a text buffer where sometimes `ch` is not
 		// there (it is being typed right now) or with a text buffer where `ch` has already been typed
 		//
-		// In order to acodemavi adding checks for `chIsAlreadyTyped` in all places, we will work
+		// In order to avoid adding checks for `chIsAlreadyTyped` in all places, we will work
 		// with two conceptual positions, the position before `ch` and the position after `ch`
 		//
 		const positions: { lineNumber: number; beforeColumn: number; afterColumn: number }[] = selections.map((s) => {
@@ -922,7 +922,7 @@ class TypeWithIndentationAndAutoClosingCommand extends BaseTypeWithAutoClosingCo
 		this._autoClosingEdit = { range: selection, text };
 	}
 
-	public override getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public override getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._autoIndentationEdit.range, this._autoIndentationEdit.text);
 		builder.addTrackedEditOperation(this._autoClosingEdit.range, this._autoClosingEdit.text);
 	}

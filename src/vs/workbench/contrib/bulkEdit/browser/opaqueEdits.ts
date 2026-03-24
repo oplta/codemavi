@@ -32,8 +32,8 @@ export class ResourceAttachmentEdit extends ResourceEdit implements ICustomEdit 
 
 	constructor(
 		readonly resource: URI,
-		readonly undo: () => Promise<codemavi> | codemavi,
-		readonly redo: () => Promise<codemavi> | codemavi,
+		readonly undo: () => Promise<void> | void,
+		readonly redo: () => Promise<void> | void,
 		metadata?: WorkspaceEditMetadata
 	) {
 		super(metadata);
@@ -45,7 +45,7 @@ export class OpaqueEdits {
 	constructor(
 		private readonly _undoRedoGroup: UndoRedoGroup,
 		private readonly _undoRedoSource: UndoRedoSource | undefined,
-		private readonly _progress: IProgress<codemavi>,
+		private readonly _progress: IProgress<void>,
 		private readonly _token: CancellationToken,
 		private readonly _edits: ResourceAttachmentEdit[],
 		@IUndoRedoService private readonly _undoRedoService: IUndoRedoService,

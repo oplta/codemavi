@@ -12,7 +12,7 @@ import { getLogger } from './logging/logging.js';
  * Runs immediately and whenever a transaction ends and an observed observable changed.
  * {@link fn} should start with a JS Doc using `@description` to name the autorun.
  */
-export function autorun(fn: (reader: IReader) => codemavi): IDisposable {
+export function autorun(fn: (reader: IReader) => void): IDisposable {
 	return new AutorunObserver(
 		new DebugNameData(undefined, undefined, fn),
 		fn,
@@ -25,7 +25,7 @@ export function autorun(fn: (reader: IReader) => codemavi): IDisposable {
  * Runs immediately and whenever a transaction ends and an observed observable changed.
  * {@link fn} should start with a JS Doc using `@description` to name the autorun.
  */
-export function autorunOpts(options: IDebugNameData & {}, fn: (reader: IReader) => codemavi): IDisposable {
+export function autorunOpts(options: IDebugNameData & {}, fn: (reader: IReader) => void): IDisposable {
 	return new AutorunObserver(
 		new DebugNameData(options.owner, options.debugName, options.debugReferenceFn ?? fn),
 		fn,
@@ -50,7 +50,7 @@ export function autorunHandleChanges<TChangeSummary>(
 		createEmptyChangeSummary?: () => TChangeSummary;
 		handleChange: (context: IChangeContext, changeSummary: TChangeSummary) => boolean;
 	},
-	fn: (reader: IReader, changeSummary: TChangeSummary) => codemavi
+	fn: (reader: IReader, changeSummary: TChangeSummary) => void
 ): IDisposable {
 	return new AutorunObserver(
 		new DebugNameData(options.owner, options.debugName, options.debugReferenceFn ?? fn),
@@ -68,7 +68,7 @@ export function autorunWithStoreHandleChanges<TChangeSummary>(
 		createEmptyChangeSummary?: () => TChangeSummary;
 		handleChange: (context: IChangeContext, changeSummary: TChangeSummary) => boolean;
 	},
-	fn: (reader: IReader, changeSummary: TChangeSummary, store: DisposableStore) => codemavi
+	fn: (reader: IReader, changeSummary: TChangeSummary, store: DisposableStore) => void
 ): IDisposable {
 	const store = new DisposableStore();
 	const disposable = autorunHandleChanges(
@@ -93,7 +93,7 @@ export function autorunWithStoreHandleChanges<TChangeSummary>(
 /**
  * @see autorun (but with a disposable store that is cleared before the next run or on dispose)
  */
-export function autorunWithStore(fn: (reader: IReader, store: DisposableStore) => codemavi): IDisposable {
+export function autorunWithStore(fn: (reader: IReader, store: DisposableStore) => void): IDisposable {
 	const store = new DisposableStore();
 	const disposable = autorunOpts(
 		{
@@ -114,7 +114,7 @@ export function autorunWithStore(fn: (reader: IReader, store: DisposableStore) =
 
 export function autorunDelta<T>(
 	observable: IObservable<T>,
-	handler: (args: { lastValue: T | undefined; newValue: T }) => codemavi
+	handler: (args: { lastValue: T | undefined; newValue: T }) => void
 ): IDisposable {
 	let _lastValue: T | undefined;
 	return autorunOpts({ debugReferenceFn: handler }, (reader) => {
@@ -127,7 +127,7 @@ export function autorunDelta<T>(
 
 export function autorunIterableDelta<T>(
 	getValue: (reader: IReader) => Iterable<T>,
-	handler: (args: { addedValues: T[]; removedValues: T[] }) => codemavi,
+	handler: (args: { addedValues: T[]; removedValues: T[] }) => void,
 	getUniqueIdentifier: (value: T) => unknown = v => v,
 ) {
 	const lastValues = new Map<unknown, T>();
@@ -182,7 +182,7 @@ export class AutorunObserver<TChangeSummary = any> implements IObserver, IReader
 
 	constructor(
 		public readonly _debugNameData: DebugNameData,
-		public readonly _runFn: (reader: IReader, changeSummary: TChangeSummary) => codemavi,
+		public readonly _runFn: (reader: IReader, changeSummary: TChangeSummary) => void,
 		private readonly createChangeSummary: (() => TChangeSummary) | undefined,
 		private readonly _handleChange: ((context: IChangeContext, summary: TChangeSummary) => boolean) | undefined,
 	) {
@@ -193,7 +193,7 @@ export class AutorunObserver<TChangeSummary = any> implements IObserver, IReader
 		trackDisposable(this);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._disposed = true;
 		for (const o of this._dependencies) {
 			o.removeObserver(this); // Warning: external call!
@@ -243,14 +243,14 @@ export class AutorunObserver<TChangeSummary = any> implements IObserver, IReader
 	}
 
 	// IObserver implementation
-	public beginUpdate(_observable: IObservable<any>): codemavi {
+	public beginUpdate(_observable: IObservable<any>): void {
 		if (this._state === AutorunState.upToDate) {
 			this._state = AutorunState.dependenciesMightHaveChanged;
 		}
 		this._updateCount++;
 	}
 
-	public endUpdate(_observable: IObservable<any>): codemavi {
+	public endUpdate(_observable: IObservable<any>): void {
 		try {
 			if (this._updateCount === 1) {
 				do {
@@ -277,13 +277,13 @@ export class AutorunObserver<TChangeSummary = any> implements IObserver, IReader
 		assertFn(() => this._updateCount >= 0);
 	}
 
-	public handlePossibleChange(observable: IObservable<any>): codemavi {
+	public handlePossibleChange(observable: IObservable<any>): void {
 		if (this._state === AutorunState.upToDate && this._isDependency(observable)) {
 			this._state = AutorunState.dependenciesMightHaveChanged;
 		}
 	}
 
-	public handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): codemavi {
+	public handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): void {
 		if (this._isDependency(observable)) {
 			getLogger()?.handleAutorunDependencyChanged(this, observable, change);
 			try {
@@ -332,7 +332,7 @@ export class AutorunObserver<TChangeSummary = any> implements IObserver, IReader
 		};
 	}
 
-	public debugRerun(): codemavi {
+	public debugRerun(): void {
 		if (!this._isRunning) {
 			this._run();
 		} else {

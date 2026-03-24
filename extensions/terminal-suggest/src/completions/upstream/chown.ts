@@ -79,7 +79,7 @@ const completionSpec: Fig.Spec = {
 		{
 			name: "-n",
 			description:
-				"Interpret user ID and group ID as numeric, acodemaviing name lookups",
+				"Interpret user ID and group ID as numeric, avoiding name lookups",
 		},
 		{
 			name: "-v",

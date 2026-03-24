@@ -112,7 +112,7 @@ export class TypeRenderer implements ITreeRenderer<Type, FuzzyScore, TypeRenderi
 		return new TypeRenderingTemplate(icon, label);
 	}
 
-	renderElement(node: ITreeNode<Type, FuzzyScore>, _index: number, template: TypeRenderingTemplate): codemavi {
+	renderElement(node: ITreeNode<Type, FuzzyScore>, _index: number, template: TypeRenderingTemplate): void {
 		const { element, filterData } = node;
 		const deprecated = element.item.tags?.includes(SymbolTag.Deprecated);
 		template.icon.classList.add('inline', ...ThemeIcon.asClassNameArray(SymbolKinds.toIcon(element.item.kind)));
@@ -122,7 +122,7 @@ export class TypeRenderer implements ITreeRenderer<Type, FuzzyScore, TypeRenderi
 			{ labelEscapeNewLines: true, matches: createMatches(filterData), strikethrough: deprecated }
 		);
 	}
-	disposeTemplate(template: TypeRenderingTemplate): codemavi {
+	disposeTemplate(template: TypeRenderingTemplate): void {
 		template.label.dispose();
 	}
 }

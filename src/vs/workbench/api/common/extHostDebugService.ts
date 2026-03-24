@@ -49,10 +49,10 @@ export interface IExtHostDebugService extends ExtHostDebugServiceShape {
 	onDidChangeActiveStackItem: Event<vscode.DebugThread | vscode.DebugStackFrame | undefined>;
 	activeStackItem: vscode.DebugThread | vscode.DebugStackFrame | undefined;
 
-	addBreakpoints(breakpoints0: readonly vscode.Breakpoint[]): Promise<codemavi>;
-	removeBreakpoints(breakpoints0: readonly vscode.Breakpoint[]): Promise<codemavi>;
+	addBreakpoints(breakpoints0: readonly vscode.Breakpoint[]): Promise<void>;
+	removeBreakpoints(breakpoints0: readonly vscode.Breakpoint[]): Promise<void>;
 	startDebugging(folder: vscode.WorkspaceFolder | undefined, nameOrConfig: string | vscode.DebugConfiguration, options: vscode.DebugSessionOptions): Promise<boolean>;
-	stopDebugging(session?: vscode.DebugSession): Promise<codemavi>;
+	stopDebugging(session?: vscode.DebugSession): Promise<void>;
 	registerDebugConfigurationProvider(type: string, provider: vscode.DebugConfigurationProvider, trigger: vscode.DebugConfigurationProviderTriggerKind): vscode.Disposable;
 	registerDebugAdapterDescriptorFactory(extension: IExtensionDescription, type: string, factory: vscode.DebugAdapterDescriptorFactory): vscode.Disposable;
 	registerDebugAdapterTrackerFactory(type: string, factory: vscode.DebugAdapterTrackerFactory): vscode.Disposable;
@@ -210,7 +210,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		return this.convertVisualizerTreeItem(e.provider, r || e.item);
 	}
 
-	public $disposeVisualizedTree(element: number): codemavi {
+	public $disposeVisualizedTree(element: number): void {
 		const root = this._debugVisualizationElements.get(element);
 		if (!root) {
 			return;
@@ -324,7 +324,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		return this.serializeVisualization(extensionId, v.visualization)!;
 	}
 
-	public async $executeDebugVisualizerCommand(id: number): Promise<codemavi> {
+	public async $executeDebugVisualizerCommand(id: number): Promise<void> {
 		const visualizer = this._visualizers.get(id);
 		if (!visualizer) {
 			throw new Error(`No debug visualizer found with id '${id}'`);
@@ -375,7 +375,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		});
 	}
 
-	public $disposeDebugVisualizers(ids: number[]): codemavi {
+	public $disposeDebugVisualizers(ids: number[]): void {
 		for (const id of ids) {
 			this._visualizers.delete(id);
 		}
@@ -400,7 +400,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		});
 	}
 
-	public addBreakpoints(breakpoints0: vscode.Breakpoint[]): Promise<codemavi> {
+	public addBreakpoints(breakpoints0: vscode.Breakpoint[]): Promise<void> {
 		// filter only new breakpoints
 		const breakpoints = breakpoints0.filter(bp => {
 			const id = bp.id;
@@ -457,7 +457,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		return this._debugServiceProxy.$registerBreakpoints(dtos);
 	}
 
-	public removeBreakpoints(breakpoints0: vscode.Breakpoint[]): Promise<codemavi> {
+	public removeBreakpoints(breakpoints0: vscode.Breakpoint[]): Promise<void> {
 		// remove from array
 		const breakpoints = breakpoints0.filter(b => this._breakpoints.delete(b.id));
 
@@ -493,7 +493,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		});
 	}
 
-	public stopDebugging(session?: vscode.DebugSession): Promise<codemavi> {
+	public stopDebugging(session?: vscode.DebugSession): Promise<void> {
 		return this._debugServiceProxy.$stopDebugging(session ? session.id : undefined);
 	}
 
@@ -593,7 +593,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		return undefined;
 	}
 
-	public async $startDASession(debugAdapterHandle: number, sessionDto: IDebugSessionDto): Promise<codemavi> {
+	public async $startDASession(debugAdapterHandle: number, sessionDto: IDebugSessionDto): Promise<void> {
 		const mythis = this;
 
 		const session = await this.getSession(sessionDto);
@@ -692,7 +692,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		});
 	}
 
-	public $sendDAMessage(debugAdapterHandle: number, message: DebugProtocol.ProtocolMessage): codemavi {
+	public $sendDAMessage(debugAdapterHandle: number, message: DebugProtocol.ProtocolMessage): void {
 
 		// VS Code -> DA
 		message = convertToDAPaths(message, false);
@@ -706,7 +706,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		da?.sendMessage(message);
 	}
 
-	public $stopDASession(debugAdapterHandle: number): Promise<codemavi> {
+	public $stopDASession(debugAdapterHandle: number): Promise<void> {
 
 		const tracker = this._debugAdaptersTrackers.get(debugAdapterHandle);
 		this._debugAdaptersTrackers.delete(debugAdapterHandle);
@@ -719,11 +719,11 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		if (da) {
 			return da.stopSession();
 		} else {
-			return Promise.resolve(codemavi 0);
+			return Promise.resolve(void 0);
 		}
 	}
 
-	public $acceptBreakpointsDelta(delta: IBreakpointsDeltaDto): codemavi {
+	public $acceptBreakpointsDelta(delta: IBreakpointsDeltaDto): void {
 
 		const a: vscode.Breakpoint[] = [];
 		const r: vscode.Breakpoint[] = [];
@@ -788,7 +788,7 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		this.fireBreakpointChanges(a, r, c);
 	}
 
-	public async $acceptStackFrameFocus(focusDto: IThreadFocusDto | IStackFrameFocusDto | undefined): Promise<codemavi> {
+	public async $acceptStackFrameFocus(focusDto: IThreadFocusDto | IStackFrameFocusDto | undefined): Promise<void> {
 		let focus: vscode.DebugThread | vscode.DebugStackFrame | undefined;
 		if (focusDto) {
 			const session = await this.getSession(focusDto.sessionId);
@@ -864,12 +864,12 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		});
 	}
 
-	public async $acceptDebugSessionStarted(sessionDto: IDebugSessionDto): Promise<codemavi> {
+	public async $acceptDebugSessionStarted(sessionDto: IDebugSessionDto): Promise<void> {
 		const session = await this.getSession(sessionDto);
 		this._onDidStartDebugSession.fire(session.api);
 	}
 
-	public async $acceptDebugSessionTerminated(sessionDto: IDebugSessionDto): Promise<codemavi> {
+	public async $acceptDebugSessionTerminated(sessionDto: IDebugSessionDto): Promise<void> {
 		const session = await this.getSession(sessionDto);
 		if (session) {
 			this._onDidTerminateDebugSession.fire(session.api);
@@ -877,17 +877,17 @@ export abstract class ExtHostDebugServiceBase extends DisposableCls implements I
 		}
 	}
 
-	public async $acceptDebugSessionActiveChanged(sessionDto: IDebugSessionDto | undefined): Promise<codemavi> {
+	public async $acceptDebugSessionActiveChanged(sessionDto: IDebugSessionDto | undefined): Promise<void> {
 		this._activeDebugSession = sessionDto ? await this.getSession(sessionDto) : undefined;
 		this._onDidChangeActiveDebugSession.fire(this._activeDebugSession?.api);
 	}
 
-	public async $acceptDebugSessionNameChanged(sessionDto: IDebugSessionDto, name: string): Promise<codemavi> {
+	public async $acceptDebugSessionNameChanged(sessionDto: IDebugSessionDto, name: string): Promise<void> {
 		const session = await this.getSession(sessionDto);
 		session?._acceptNameChanged(name);
 	}
 
-	public async $acceptDebugSessionCustomEvent(sessionDto: IDebugSessionDto, event: any): Promise<codemavi> {
+	public async $acceptDebugSessionCustomEvent(sessionDto: IDebugSessionDto, event: any): Promise<void> {
 		const session = await this.getSession(sessionDto);
 		const ee: vscode.DebugSessionCustomEvent = {
 			session: session.api,
@@ -1184,10 +1184,10 @@ export class ExtHostDebugConsole {
 	constructor(proxy: MainThreadDebugServiceShape) {
 
 		this.value = Object.freeze({
-			append(value: string): codemavi {
+			append(value: string): void {
 				proxy.$appendDebugConsole(value);
 			},
-			appendLine(value: string): codemavi {
+			appendLine(value: string): void {
 				this.append(value + '\n');
 			}
 		});
@@ -1217,27 +1217,27 @@ class MultiTracker implements vscode.DebugAdapterTracker {
 	constructor(private trackers: vscode.DebugAdapterTracker[]) {
 	}
 
-	onWillStartSession(): codemavi {
+	onWillStartSession(): void {
 		this.trackers.forEach(t => t.onWillStartSession ? t.onWillStartSession() : undefined);
 	}
 
-	onWillReceiveMessage(message: any): codemavi {
+	onWillReceiveMessage(message: any): void {
 		this.trackers.forEach(t => t.onWillReceiveMessage ? t.onWillReceiveMessage(message) : undefined);
 	}
 
-	onDidSendMessage(message: any): codemavi {
+	onDidSendMessage(message: any): void {
 		this.trackers.forEach(t => t.onDidSendMessage ? t.onDidSendMessage(message) : undefined);
 	}
 
-	onWillStopSession(): codemavi {
+	onWillStopSession(): void {
 		this.trackers.forEach(t => t.onWillStopSession ? t.onWillStopSession() : undefined);
 	}
 
-	onError(error: Error): codemavi {
+	onError(error: Error): void {
 		this.trackers.forEach(t => t.onError ? t.onError(error) : undefined);
 	}
 
-	onExit(code: number, signal: string): codemavi {
+	onExit(code: number, signal: string): void {
 		this.trackers.forEach(t => t.onExit ? t.onExit(code, signal) : undefined);
 	}
 }
@@ -1255,15 +1255,15 @@ class DirectDebugAdapter extends AbstractDebugAdapter {
 		});
 	}
 
-	startSession(): Promise<codemavi> {
+	startSession(): Promise<void> {
 		return Promise.resolve(undefined);
 	}
 
-	sendMessage(message: DebugProtocol.ProtocolMessage): codemavi {
+	sendMessage(message: DebugProtocol.ProtocolMessage): void {
 		this.implementation.handleMessage(message);
 	}
 
-	stopSession(): Promise<codemavi> {
+	stopSession(): Promise<void> {
 		this.implementation.dispose();
 		return Promise.resolve(undefined);
 	}

@@ -35,7 +35,7 @@ export class BufferLogger extends AbstractMessageLogger {
 		this.buffer = [];
 	}
 
-	protected log(level: LogLevel, message: string): codemavi {
+	protected log(level: LogLevel, message: string): void {
 		if (this._logger) {
 			log(this._logger, level, message);
 		} else if (this.getLevel() <= level) {
@@ -43,12 +43,12 @@ export class BufferLogger extends AbstractMessageLogger {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._logger?.dispose();
 		super.dispose();
 	}
 
-	override flush(): codemavi {
+	override flush(): void {
 		this._logger?.flush();
 	}
 }

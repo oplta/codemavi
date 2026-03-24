@@ -6,7 +6,7 @@
 import { URI } from '../../../base/common/uri.js';
 
 export interface ICommonMenubarService {
-	updateMenubar(windowId: number, menuData: IMenubarData): Promise<codemavi>;
+	updateMenubar(windowId: number, menuData: IMenubarData): Promise<void>;
 }
 
 export interface IMenubarData {

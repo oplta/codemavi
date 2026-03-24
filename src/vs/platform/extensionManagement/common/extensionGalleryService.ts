@@ -430,7 +430,7 @@ export function sortExtensionVersions(versions: IRawGalleryExtensionVersion[], p
 	return versions;
 }
 
-function setTelemetry(extension: IGalleryExtension, index: number, querySource?: string): codemavi {
+function setTelemetry(extension: IGalleryExtension, index: number, querySource?: string): void {
 	/* __GDPR__FRAGMENT__
 	"GalleryExtensionTelemetryData2" : {
 		"index" : { "classification": "SystemMetaData", "purpose": "FeatureInsight", "isMeasurement": true },
@@ -1469,7 +1469,7 @@ export abstract class AbstractExtensionGalleryService implements IExtensionGalle
 		}
 	}
 
-	async reportStatistic(publisher: string, name: string, version: string, type: StatisticType): Promise<codemavi> {
+	async reportStatistic(publisher: string, name: string, version: string, type: StatisticType): Promise<void> {
 		const manifest = await this.extensionGalleryManifestService.getExtensionGalleryManifest();
 		if (!manifest) {
 			return undefined;
@@ -1503,7 +1503,7 @@ export abstract class AbstractExtensionGalleryService implements IExtensionGalle
 		} catch (error) { /* Ignore */ }
 	}
 
-	async download(extension: IGalleryExtension, location: URI, operation: InstallOperation): Promise<codemavi> {
+	async download(extension: IGalleryExtension, location: URI, operation: InstallOperation): Promise<void> {
 		this.logService.trace('ExtensionGalleryService#download', extension.identifier.id);
 		const data = getGalleryExtensionTelemetryData(extension);
 		const startTime = new Date().getTime();
@@ -1541,7 +1541,7 @@ export abstract class AbstractExtensionGalleryService implements IExtensionGalle
 		this.telemetryService.publicLog('galleryService:downloadVSIX', { ...data, duration: new Date().getTime() - startTime });
 	}
 
-	async downloadSignatureArchive(extension: IGalleryExtension, location: URI): Promise<codemavi> {
+	async downloadSignatureArchive(extension: IGalleryExtension, location: URI): Promise<void> {
 		if (!extension.assets.signature) {
 			throw new Error('No signature asset found');
 		}

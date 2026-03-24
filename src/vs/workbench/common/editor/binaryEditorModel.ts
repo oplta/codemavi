@@ -54,7 +54,7 @@ export class BinaryEditorModel extends EditorModel {
 		return this.etag;
 	}
 
-	override async resolve(): Promise<codemavi> {
+	override async resolve(): Promise<void> {
 
 		// Make sure to resolve up to date stat for file resources
 		if (this.fileService.hasProvider(this.resource)) {

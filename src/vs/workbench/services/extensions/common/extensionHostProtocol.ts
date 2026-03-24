@@ -82,10 +82,10 @@ export interface IStaticWorkspaceData {
 }
 
 export interface MessagePortLike {
-	postMessage(message: any, transfer?: any[]): codemavi;
-	addEventListener(type: 'message', listener: (e: any) => unknown): codemavi;
-	removeEventListener(type: 'message', listener: (e: any) => unknown): codemavi;
-	start(): codemavi;
+	postMessage(message: any, transfer?: any[]): void;
+	addEventListener(type: 'message', listener: (e: any) => unknown): void;
+	removeEventListener(type: 'message', listener: (e: any) => unknown): void;
+	start(): void;
 }
 
 export enum UIKind {

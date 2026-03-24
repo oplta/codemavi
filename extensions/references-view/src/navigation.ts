@@ -21,7 +21,7 @@ export class Navigation {
 		);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		vscode.Disposable.from(...this._disposables).dispose();
 	}
 
@@ -51,7 +51,7 @@ export class Navigation {
 		});
 	}
 
-	previous(preserveFocus: boolean): codemavi {
+	previous(preserveFocus: boolean): void {
 		if (!this._delegate) {
 			return;
 		}
@@ -67,7 +67,7 @@ export class Navigation {
 		}
 	}
 
-	next(preserveFocus: boolean): codemavi {
+	next(preserveFocus: boolean): void {
 		if (!this._delegate) {
 			return;
 		}

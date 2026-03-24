@@ -67,7 +67,7 @@ suite('SmartSelect', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	async function assertGetRangesToPosition(text: string[], lineNumber: number, column: number, ranges: Range[], selectLeadingAndTrailingWhitespace = true): Promise<codemavi> {
+	async function assertGetRangesToPosition(text: string[], lineNumber: number, column: number, ranges: Range[], selectLeadingAndTrailingWhitespace = true): Promise<void> {
 		const uri = URI.file('test.js');
 		const model = modelService.createModel(text.join('\n'), new StaticLanguageSelector(languageId), uri);
 		const [actual] = await provideSelectionRanges(providers, model, [new Position(lineNumber, column)], { selectLeadingAndTrailingWhitespace, selectSubwords: true }, CancellationToken.None);
@@ -212,7 +212,7 @@ suite('SmartSelect', () => {
 
 	// -- bracket selections
 
-	async function assertRanges(provider: SelectionRangeProvider, value: string, ...expected: IRange[]): Promise<codemavi> {
+	async function assertRanges(provider: SelectionRangeProvider, value: string, ...expected: IRange[]): Promise<void> {
 		const index = value.indexOf('|');
 		value = value.replace('|', ''); // CodeQL [SM02383] js/incomplete-sanitization this is purpose only the first | character
 

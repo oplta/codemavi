@@ -216,15 +216,15 @@
 		"wellformed-html": {
 			"patterns": [
 				{
-					"include": "#codemavi-tag"
+					"include": "#mavi-tag"
 				},
 				{
-					"include": "#non-codemavi-tag"
+					"include": "#non-mavi-tag"
 				}
 			]
 		},
-		"codemavi-tag": {
-			"name": "meta.tag.structure.$3.codemavi.html",
+		"mavi-tag": {
+			"name": "meta.tag.structure.$3.mavi.html",
 			"begin": "(?i)(<)(!)?(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)(?=\\s|/?>)",
 			"beginCaptures": {
 				"1": {
@@ -249,7 +249,7 @@
 				}
 			}
 		},
-		"non-codemavi-tag": {
+		"non-mavi-tag": {
 			"begin": "(?=<(!)?([^/\\s>]+)(\\s|/?>))",
 			"end": "(</)(\\2)\\s*(>)|(/>)",
 			"endCaptures": {

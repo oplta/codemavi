@@ -23,7 +23,7 @@ const getUniqueId = () => `topReplElement:${topReplElementCounter++}`;
 export class ReplOutputElement implements INestingReplElement {
 
 	private _count = 1;
-	private _onDidChangeCount = new Emitter<codemavi>();
+	private _onDidChangeCount = new Emitter<void>();
 
 	constructor(
 		public session: IDebugSession,
@@ -61,7 +61,7 @@ export class ReplOutputElement implements INestingReplElement {
 		return this._count;
 	}
 
-	get onDidChangeCount(): Event<codemavi> {
+	get onDidChangeCount(): Event<void> {
 		return this._onDidChangeCount.event;
 	}
 
@@ -133,7 +133,7 @@ export class RawObjectReplElement implements IExpression, INestingReplElement {
 		return (Array.isArray(this.valueObj) && this.valueObj.length > 0) || (isObject(this.valueObj) && Object.getOwnPropertyNames(this.valueObj).length > 0);
 	}
 
-	evaluateLazy(): Promise<codemavi> {
+	evaluateLazy(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -223,7 +223,7 @@ export class ReplGroup implements INestingReplElement {
 		return this.name + sourceStr;
 	}
 
-	addChild(child: IReplElement): codemavi {
+	addChild(child: IReplElement): void {
 		const lastElement = this.children.length ? this.children[this.children.length - 1] : undefined;
 		if (lastElement instanceof ReplGroup && !lastElement.hasEnded) {
 			lastElement.addChild(child);
@@ -236,7 +236,7 @@ export class ReplGroup implements INestingReplElement {
 		return this.children;
 	}
 
-	end(): codemavi {
+	end(): void {
 		const lastElement = this.children.length ? this.children[this.children.length - 1] : undefined;
 		if (lastElement instanceof ReplGroup && !lastElement.hasEnded) {
 			lastElement.end();
@@ -279,14 +279,14 @@ export class ReplModel {
 		return this.replElements;
 	}
 
-	async addReplExpression(session: IDebugSession, stackFrame: IStackFrame | undefined, expression: string): Promise<codemavi> {
+	async addReplExpression(session: IDebugSession, stackFrame: IStackFrame | undefined, expression: string): Promise<void> {
 		this.addReplElement(new ReplEvaluationInput(expression));
 		const result = new ReplEvaluationResult(expression);
 		await result.evaluateExpression(expression, session, stackFrame, 'repl');
 		this.addReplElement(result);
 	}
 
-	appendToRepl(session: IDebugSession, { output, expression, sev, source }: INewReplElementData): codemavi {
+	appendToRepl(session: IDebugSession, { output, expression, sev, source }: INewReplElementData): void {
 		const clearAnsiSequence = '\u001b[2J';
 		const clearAnsiIndex = output.lastIndexOf(clearAnsiSequence);
 		if (clearAnsiIndex !== -1) {
@@ -325,19 +325,19 @@ export class ReplModel {
 		this.addReplElement(element);
 	}
 
-	startGroup(session: IDebugSession, name: string, autoExpand: boolean, sourceData?: IReplElementSource): codemavi {
+	startGroup(session: IDebugSession, name: string, autoExpand: boolean, sourceData?: IReplElementSource): void {
 		const group = new ReplGroup(session, name, autoExpand, sourceData);
 		this.addReplElement(group);
 	}
 
-	endGroup(): codemavi {
+	endGroup(): void {
 		const lastElement = this.replElements[this.replElements.length - 1];
 		if (lastElement instanceof ReplGroup) {
 			lastElement.end();
 		}
 	}
 
-	private addReplElement(newElement: IReplElement): codemavi {
+	private addReplElement(newElement: IReplElement): void {
 		const lastElement = this.replElements.length ? this.replElements[this.replElements.length - 1] : undefined;
 		if (lastElement instanceof ReplGroup && !lastElement.hasEnded) {
 			lastElement.addChild(newElement);
@@ -350,7 +350,7 @@ export class ReplModel {
 		this._onDidChangeElements.fire(newElement);
 	}
 
-	removeReplExpressions(): codemavi {
+	removeReplExpressions(): void {
 		if (this.replElements.length > 0) {
 			this.replElements = [];
 			this._onDidChangeElements.fire(undefined);

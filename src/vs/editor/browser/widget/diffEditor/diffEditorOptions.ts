@@ -83,13 +83,13 @@ export class DiffEditorOptions {
 	public readonly hideUnchangedRegionsContextLineCount = derived(this, reader => this._options.read(reader).hideUnchangedRegions.contextLineCount!);
 	public readonly hideUnchangedRegionsMinimumLineCount = derived(this, reader => this._options.read(reader).hideUnchangedRegions.minimumLineCount!);
 
-	public updateOptions(changedOptions: IDiffEditorOptions): codemavi {
+	public updateOptions(changedOptions: IDiffEditorOptions): void {
 		const newDiffEditorOptions = validateDiffEditorOptions(changedOptions, this._options.get());
 		const newOptions = { ...this._options.get(), ...changedOptions, ...newDiffEditorOptions };
 		this._options.set(newOptions, undefined, { changedOptions: changedOptions });
 	}
 
-	public setWidth(width: number): codemavi {
+	public setWidth(width: number): void {
 		this._diffEditorWidth.set(width, undefined);
 	}
 

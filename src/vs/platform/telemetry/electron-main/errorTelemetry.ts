@@ -16,7 +16,7 @@ export default class ErrorTelemetry extends BaseErrorTelemetry {
 		super(telemetryService);
 	}
 
-	protected override installErrorListeners(): codemavi {
+	protected override installErrorListeners(): void {
 		// We handle uncaught exceptions here to prevent electron from opening a dialog to the user
 		setUnexpectedErrorHandler(error => this.onUnexpectedError(error));
 
@@ -29,7 +29,7 @@ export default class ErrorTelemetry extends BaseErrorTelemetry {
 		process.on('unhandledRejection', (reason: unknown) => onUnexpectedError(reason));
 	}
 
-	private onUnexpectedError(error: Error): codemavi {
+	private onUnexpectedError(error: Error): void {
 		this.logService.error(`[uncaught exception in main]: ${error}`);
 		if (error.stack) {
 			this.logService.error(error.stack);

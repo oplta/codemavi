@@ -139,11 +139,11 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.onConfigurationUpdated(e)));
 	}
 
-	private onConfigurationUpdated(event: IConfigurationChangeEvent): codemavi {
+	private onConfigurationUpdated(event: IConfigurationChangeEvent): void {
 		if (event.affectsConfiguration(SideBySideEditor.SIDE_BY_SIDE_LAYOUT_SETTING)) {
 			this.orientation = this.configurationService.getValue<'vertical' | 'horizontal'>(SideBySideEditor.SIDE_BY_SIDE_LAYOUT_SETTING) === 'vertical' ? Orientation.VERTICAL : Orientation.HORIZONTAL;
 
@@ -156,7 +156,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		}
 	}
 
-	private recreateSplitview(): codemavi {
+	private recreateSplitview(): void {
 		const container = assertIsDefined(this.getContainer());
 
 		// Clear old (if any) but remember ratio
@@ -190,7 +190,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return ratio;
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		parent.classList.add('side-by-side-editor');
 
 		// Editor pane containers
@@ -201,7 +201,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		this.createSplitView(parent);
 	}
 
-	private createSplitView(parent: HTMLElement, ratio?: number): codemavi {
+	private createSplitView(parent: HTMLElement, ratio?: number): void {
 
 		// Splitview widget
 		this.splitview = this.splitviewDisposables.add(new SplitView(parent, { orientation: this.orientation }));
@@ -258,7 +258,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return localize('sideBySideEditor', "Side by Side Editor");
 	}
 
-	override async setInput(input: SideBySideEditorInput, options: ISideBySideEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: SideBySideEditorInput, options: ISideBySideEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		const oldInput = this.input;
 		await super.setInput(input, options, context, token);
 
@@ -325,7 +325,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return { primary: primaryOptions, secondary: secondaryOptions, viewState };
 	}
 
-	private createEditors(newInput: SideBySideEditorInput): codemavi {
+	private createEditors(newInput: SideBySideEditorInput): void {
 
 		// Create editors
 		this.secondaryEditorPane = this.doCreateEditor(newInput.secondary, assertIsDefined(this.secondaryEditorContainer));
@@ -368,7 +368,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return editorPane;
 	}
 
-	private onDidFocusChange(side: Side.PRIMARY | Side.SECONDARY): codemavi {
+	private onDidFocusChange(side: Side.PRIMARY | Side.SECONDARY): void {
 		this.lastFocusedSide = side;
 
 		// Signal to outside that our active control changed
@@ -387,7 +387,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return undefined;
 	}
 
-	override setOptions(options: ISideBySideEditorOptions | undefined): codemavi {
+	override setOptions(options: ISideBySideEditorOptions | undefined): void {
 		super.setOptions(options);
 
 		// Update focus if target is provided
@@ -399,7 +399,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		this.getLastFocusedEditorPane()?.setOptions(options);
 	}
 
-	protected override setEditorVisible(visible: boolean): codemavi {
+	protected override setEditorVisible(visible: boolean): void {
 
 		// Forward to both sides
 		this.primaryEditorPane?.setVisible(visible);
@@ -408,7 +408,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		super.setEditorVisible(visible);
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		super.clearInput();
 
 		// Forward to both sides
@@ -420,7 +420,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		this.disposeEditors();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		this.getLastFocusedEditorPane()?.focus();
@@ -434,7 +434,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return this.primaryEditorPane;
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		this.dimension = dimension;
 
 		const splitview = assertIsDefined(this.splitview);
@@ -449,7 +449,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		}
 	}
 
-	private layoutPane(pane: EditorPane | undefined, size: number): codemavi {
+	private layoutPane(pane: EditorPane | undefined, size: number): void {
 		pane?.layout(this.orientation === Orientation.HORIZONTAL ? new Dimension(size, this.dimension.height) : new Dimension(this.dimension.width, size));
 	}
 
@@ -506,7 +506,7 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		return URI.from({ scheme: 'sideBySide', path: `${multibyteAwareBtoa(secondary.toString())}${multibyteAwareBtoa(primary.toString())}` });
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		super.updateStyles();
 
 		if (this.primaryEditorContainer) {
@@ -526,13 +526,13 @@ export class SideBySideEditor extends AbstractEditorWithViewState<ISideBySideEdi
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disposeEditors();
 
 		super.dispose();
 	}
 
-	private disposeEditors(): codemavi {
+	private disposeEditors(): void {
 		this.editorDisposables.clear();
 
 		this.secondaryEditorPane = undefined;

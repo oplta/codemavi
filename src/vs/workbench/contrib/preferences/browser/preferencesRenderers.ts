@@ -48,10 +48,10 @@ import { IUserDataProfileService } from '../../../services/userDataProfile/commo
 import { EXPERIMENTAL_INDICATOR_DESCRIPTION, PREVIEW_INDICATOR_DESCRIPTION } from '../common/preferences.js';
 
 export interface IPreferencesRenderer extends IDisposable {
-	render(): codemavi;
-	updatePreference(key: string, value: any, source: ISetting): codemavi;
-	focusPreference(setting: ISetting): codemavi;
-	clearFocus(setting: ISetting): codemavi;
+	render(): void;
+	updatePreference(key: string, value: any, source: ISetting): void;
+	focusPreference(setting: ISetting): void;
+	clearFocus(setting: ISetting): void;
 	editPreference(setting: ISetting): boolean;
 }
 
@@ -59,7 +59,7 @@ export class UserSettingsRenderer extends Disposable implements IPreferencesRend
 
 	private settingHighlighter: SettingHighlighter;
 	private editSettingActionRenderer: EditSettingRenderer;
-	private modelChangeDelayer: Delayer<codemavi> = new Delayer<codemavi>(200);
+	private modelChangeDelayer: Delayer<void> = new Delayer<void>(200);
 	private associatedPreferencesModel!: IPreferencesEditorModel<ISetting>;
 
 	private unsupportedSettingsRenderer: UnsupportedSettingsRenderer;
@@ -77,19 +77,19 @@ export class UserSettingsRenderer extends Disposable implements IPreferencesRend
 		this.unsupportedSettingsRenderer = this._register(instantiationService.createInstance(UnsupportedSettingsRenderer, editor, preferencesModel));
 	}
 
-	render(): codemavi {
+	render(): void {
 		this.editSettingActionRenderer.render(this.preferencesModel.settingsGroups, this.associatedPreferencesModel);
 		this.unsupportedSettingsRenderer.render();
 	}
 
-	updatePreference(key: string, value: any, source: IIndexedSetting): codemavi {
+	updatePreference(key: string, value: any, source: IIndexedSetting): void {
 		const overrideIdentifiers = source.overrideOf ? overrideIdentifiersFromKey(source.overrideOf.key) : null;
 		const resource = this.preferencesModel.uri;
 		this.configurationService.updateValue(key, value, { overrideIdentifiers, resource }, this.preferencesModel.configurationTarget)
 			.then(() => this.onSettingUpdated(source));
 	}
 
-	private onModelChanged(): codemavi {
+	private onModelChanged(): void {
 		if (!this.editor.hasModel()) {
 			// model could have been disposed during the delay
 			return;
@@ -122,7 +122,7 @@ export class UserSettingsRenderer extends Disposable implements IPreferencesRend
 		return this.preferencesModel.getPreference(key);
 	}
 
-	focusPreference(setting: ISetting): codemavi {
+	focusPreference(setting: ISetting): void {
 		const s = this.getSetting(setting);
 		if (s) {
 			this.settingHighlighter.highlight(s, true);
@@ -132,7 +132,7 @@ export class UserSettingsRenderer extends Disposable implements IPreferencesRend
 		}
 	}
 
-	clearFocus(setting: ISetting): codemavi {
+	clearFocus(setting: ISetting): void {
 		this.settingHighlighter.clear(true);
 	}
 
@@ -156,7 +156,7 @@ export class WorkspaceSettingsRenderer extends UserSettingsRenderer implements I
 		this.workspaceConfigurationRenderer = this._register(instantiationService.createInstance(WorkspaceConfigurationRenderer, editor, preferencesModel));
 	}
 
-	override render(): codemavi {
+	override render(): void {
 		super.render();
 		this.workspaceConfigurationRenderer.render();
 	}
@@ -174,7 +174,7 @@ class EditSettingRenderer extends Disposable {
 
 	private settingsGroups: ISettingsGroup[] = [];
 	associatedPreferencesModel!: IPreferencesEditorModel<ISetting>;
-	private toggleEditPreferencesForMouseMoveDelayer: Delayer<codemavi>;
+	private toggleEditPreferencesForMouseMoveDelayer: Delayer<void>;
 
 	private readonly _onUpdateSetting: Emitter<{ key: string; value: any; source: IIndexedSetting }> = this._register(new Emitter<{ key: string; value: any; source: IIndexedSetting }>());
 	readonly onUpdateSetting: Event<{ key: string; value: any; source: IIndexedSetting }> = this._onUpdateSetting.event;
@@ -189,7 +189,7 @@ class EditSettingRenderer extends Disposable {
 
 		this.editPreferenceWidgetForCursorPosition = this._register(this.instantiationService.createInstance(EditPreferenceWidget<IIndexedSetting>, editor));
 		this.editPreferenceWidgetForMouseMove = this._register(this.instantiationService.createInstance(EditPreferenceWidget<IIndexedSetting>, editor));
-		this.toggleEditPreferencesForMouseMoveDelayer = new Delayer<codemavi>(75);
+		this.toggleEditPreferencesForMouseMoveDelayer = new Delayer<void>(75);
 
 		this._register(this.editPreferenceWidgetForCursorPosition.onClick(e => this.onEditSettingClicked(this.editPreferenceWidgetForCursorPosition, e)));
 		this._register(this.editPreferenceWidgetForMouseMove.onClick(e => this.onEditSettingClicked(this.editPreferenceWidgetForMouseMove, e)));
@@ -199,7 +199,7 @@ class EditSettingRenderer extends Disposable {
 		this._register(this.editor.onDidChangeConfiguration(() => this.onConfigurationChanged()));
 	}
 
-	render(settingsGroups: ISettingsGroup[], associatedPreferencesModel: IPreferencesEditorModel<ISetting>): codemavi {
+	render(settingsGroups: ISettingsGroup[], associatedPreferencesModel: IPreferencesEditorModel<ISetting>): void {
 		this.editPreferenceWidgetForCursorPosition.hide();
 		this.editPreferenceWidgetForMouseMove.hide();
 		this.settingsGroups = settingsGroups;
@@ -215,7 +215,7 @@ class EditSettingRenderer extends Disposable {
 		return this.primarySettingsModel instanceof DefaultSettingsEditorModel;
 	}
 
-	private onConfigurationChanged(): codemavi {
+	private onConfigurationChanged(): void {
 		if (!this.editor.getOption(EditorOption.glyphMargin)) {
 			this.editPreferenceWidgetForCursorPosition.hide();
 			this.editPreferenceWidgetForMouseMove.hide();
@@ -232,7 +232,7 @@ class EditSettingRenderer extends Disposable {
 		}
 	}
 
-	private onMouseMoved(mouseMoveEvent: IEditorMouseEvent): codemavi {
+	private onMouseMoved(mouseMoveEvent: IEditorMouseEvent): void {
 		const editPreferenceWidget = this.getEditPreferenceWidgetUnderMouse(mouseMoveEvent);
 		if (editPreferenceWidget) {
 			this.onMouseOver(editPreferenceWidget);
@@ -255,7 +255,7 @@ class EditSettingRenderer extends Disposable {
 		return undefined;
 	}
 
-	private toggleEditPreferenceWidgetForMouseMove(mouseMoveEvent: IEditorMouseEvent): codemavi {
+	private toggleEditPreferenceWidgetForMouseMove(mouseMoveEvent: IEditorMouseEvent): void {
 		const settings = mouseMoveEvent.target.position ? this.getSettings(mouseMoveEvent.target.position.lineNumber) : null;
 		if (settings && settings.length) {
 			this.showEditPreferencesWidget(this.editPreferenceWidgetForMouseMove, settings);
@@ -349,11 +349,11 @@ class EditSettingRenderer extends Disposable {
 		return settings;
 	}
 
-	private onMouseOver(editPreferenceWidget: EditPreferenceWidget<ISetting>): codemavi {
+	private onMouseOver(editPreferenceWidget: EditPreferenceWidget<ISetting>): void {
 		this.settingHighlighter.highlight(editPreferenceWidget.preferences[0]);
 	}
 
-	private onEditSettingClicked(editPreferenceWidget: EditPreferenceWidget<IIndexedSetting>, e: IEditorMouseEvent): codemavi {
+	private onEditSettingClicked(editPreferenceWidget: EditPreferenceWidget<IIndexedSetting>, e: IEditorMouseEvent): void {
 		EventHelper.stop(e.event, true);
 
 		const actions = this.getSettings(editPreferenceWidget.getLine()).length === 1 ? this.getActions(editPreferenceWidget.preferences[0], this.getConfigurationsMap()[editPreferenceWidget.preferences[0].key])
@@ -442,7 +442,7 @@ class EditSettingRenderer extends Disposable {
 		return [];
 	}
 
-	private updateSetting(key: string, value: any, source: IIndexedSetting): codemavi {
+	private updateSetting(key: string, value: any, source: IIndexedSetting): void {
 		this._onUpdateSetting.fire({ key, value, source });
 	}
 }
@@ -471,7 +471,7 @@ class SettingHighlighter extends Disposable {
 		this.editor.revealLineInCenterIfOutsideViewport(setting.valueRange.startLineNumber, editorCommon.ScrollType.Smooth);
 	}
 
-	clear(fix: boolean = false): codemavi {
+	clear(fix: boolean = false): void {
 		this.volatileHighlighter.removeHighlightRange();
 		if (fix) {
 			this.fixedHighlighter.removeHighlightRange();
@@ -481,7 +481,7 @@ class SettingHighlighter extends Disposable {
 
 class UnsupportedSettingsRenderer extends Disposable implements languages.CodeActionProvider {
 
-	private renderingDelayer: Delayer<codemavi> = new Delayer<codemavi>(200);
+	private renderingDelayer: Delayer<void> = new Delayer<void>(200);
 
 	private readonly codeActions = new ResourceMap<[Range, languages.CodeAction[]][]>(uri => this.uriIdentityService.extUri.getComparisonKey(uri));
 
@@ -504,11 +504,11 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		this._register(userDataProfileService.onDidChangeCurrentProfile(() => this.delayedRender()));
 	}
 
-	private delayedRender(): codemavi {
+	private delayedRender(): void {
 		this.renderingDelayer.trigger(() => this.render());
 	}
 
-	public render(): codemavi {
+	public render(): void {
 		this.codeActions.clear();
 		const markerData: IMarkerData[] = this.generateMarkerData();
 		if (markerData.length) {
@@ -594,7 +594,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		return true;
 	}
 
-	private handleOverrides(overrides: ISetting[], configurationRegistry: IStringDictionary<IRegisteredConfigurationPropertySchema>, markerData: IMarkerData[]): codemavi {
+	private handleOverrides(overrides: ISetting[], configurationRegistry: IStringDictionary<IRegisteredConfigurationPropertySchema>, markerData: IMarkerData[]): void {
 		for (const setting of overrides || []) {
 			const configuration = configurationRegistry[setting.key];
 			if (configuration) {
@@ -612,7 +612,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		}
 	}
 
-	private handleLocalUserConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): codemavi {
+	private handleLocalUserConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): void {
 		if (!this.userDataProfileService.currentProfile.isDefault && !this.userDataProfileService.currentProfile.useDefaultFlags?.settings) {
 			if (isEqual(this.userDataProfilesService.defaultProfile.settingsResource, this.settingsEditorModel.uri) && !this.configurationService.isSettingAppliedForAllProfiles(setting.key)) {
 				// If we're in the default profile setting file, and the setting cannot be applied in all profiles
@@ -647,13 +647,13 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		}
 	}
 
-	private handleRemoteUserConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): codemavi {
+	private handleRemoteUserConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): void {
 		if (configuration.scope === ConfigurationScope.APPLICATION) {
 			markerData.push(this.generateUnsupportedApplicationSettingMarker(setting));
 		}
 	}
 
-	private handleWorkspaceConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): codemavi {
+	private handleWorkspaceConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): void {
 		if (configuration.scope && APPLICATION_SCOPES.includes(configuration.scope)) {
 			markerData.push(this.generateUnsupportedApplicationSettingMarker(setting));
 		}
@@ -670,7 +670,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		}
 	}
 
-	private handleWorkspaceFolderConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): codemavi {
+	private handleWorkspaceFolderConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): void {
 		if (configuration.scope && APPLICATION_SCOPES.includes(configuration.scope)) {
 			markerData.push(this.generateUnsupportedApplicationSettingMarker(setting));
 		}
@@ -696,7 +696,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		}
 	}
 
-	private handleUnstableSettingConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): codemavi {
+	private handleUnstableSettingConfiguration(setting: ISetting, configuration: IConfigurationPropertySchema, markerData: IMarkerData[]): void {
 		if (configuration.tags?.includes('preview')) {
 			markerData.push(this.generatePreviewSettingMarker(setting));
 		} else if (configuration.tags?.includes('experimental')) {
@@ -767,7 +767,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		};
 	}
 
-	private addCodeActions(range: IRange, codeActions: languages.CodeAction[]): codemavi {
+	private addCodeActions(range: IRange, codeActions: languages.CodeAction[]): void {
 		let actions = this.codeActions.get(this.settingsEditorModel.uri);
 		if (!actions) {
 			actions = [];
@@ -776,7 +776,7 @@ class UnsupportedSettingsRenderer extends Disposable implements languages.CodeAc
 		actions.push([Range.lift(range), codeActions]);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.markerService.remove('UnsupportedSettingsRenderer', [this.settingsEditorModel.uri]);
 		this.codeActions.clear();
 		super.dispose();
@@ -788,7 +788,7 @@ class WorkspaceConfigurationRenderer extends Disposable {
 	private static readonly supportedKeys = ['folders', 'tasks', 'launch', 'extensions', 'settings', 'remoteAuthority', 'transient'];
 
 	private readonly decorations: editorCommon.IEditorDecorationsCollection;
-	private renderingDelayer: Delayer<codemavi> = new Delayer<codemavi>(200);
+	private renderingDelayer: Delayer<void> = new Delayer<void>(200);
 
 	constructor(private editor: ICodeEditor, private workspaceSettingsEditorModel: SettingsEditorModel,
 		@IWorkspaceContextService private readonly workspaceContextService: IWorkspaceContextService,
@@ -799,7 +799,7 @@ class WorkspaceConfigurationRenderer extends Disposable {
 		this._register(this.editor.getModel()!.onDidChangeContent(() => this.renderingDelayer.trigger(() => this.render())));
 	}
 
-	render(): codemavi {
+	render(): void {
 		const markerData: IMarkerData[] = [];
 		if (this.workspaceContextService.getWorkbenchState() === WorkbenchState.WORKSPACE && this.workspaceSettingsEditorModel instanceof WorkspaceConfigurationEditorModel) {
 			const ranges: IRange[] = [];
@@ -839,7 +839,7 @@ class WorkspaceConfigurationRenderer extends Disposable {
 		};
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.markerService.remove('WorkspaceConfigurationRenderer', [this.workspaceSettingsEditorModel.uri]);
 		this.decorations.clear();
 		super.dispose();

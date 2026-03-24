@@ -75,7 +75,7 @@ export interface ITextFileService extends IDisposable {
 	 * @param resource the resource of the file to revert.
 	 * @param force to force revert even when the file is not dirty
 	 */
-	revert(resource: URI, options?: IRevertOptions): Promise<codemavi>;
+	revert(resource: URI, options?: IRevertOptions): Promise<void>;
 
 	/**
 	 * Read the contents of a file identified by the resource.
@@ -206,7 +206,7 @@ export interface ISaveErrorHandler {
 	/**
 	 * Called whenever a save fails.
 	 */
-	onSaveError(error: Error, model: ITextFileEditorModel, options: ITextFileSaveAsOptions): codemavi;
+	onSaveError(error: Error, model: ITextFileEditorModel, options: ITextFileSaveAsOptions): void;
 }
 
 /**
@@ -357,7 +357,7 @@ export interface ITextFileSaveParticipant {
 		context: ITextFileSaveParticipantContext,
 		progress: IProgress<IProgressStep>,
 		token: CancellationToken
-	): Promise<codemavi>;
+	): Promise<void>;
 }
 
 export interface ITextFileEditorModelManager {
@@ -402,7 +402,7 @@ export interface ITextFileEditorModelManager {
 	/**
 	 * Runs the registered save participants on the provided model.
 	 */
-	runSaveParticipants(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi>;
+	runSaveParticipants(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void>;
 
 	/**
 	 * Waits for the model to be ready to be disposed. There may be conditions
@@ -504,7 +504,7 @@ export interface IEncodingSupport {
 	/**
 	 * Sets the encoding for the object for saving.
 	 */
-	setEncoding(encoding: string, mode: EncodingMode): Promise<codemavi>;
+	setEncoding(encoding: string, mode: EncodingMode): Promise<void>;
 }
 
 export interface ILanguageSupport {
@@ -512,7 +512,7 @@ export interface ILanguageSupport {
 	/**
 	 * Sets the language id of the object.
 	 */
-	setLanguageId(languageId: string, source?: string): codemavi;
+	setLanguageId(languageId: string, source?: string): void;
 }
 
 export interface ITextFileEditorModelSaveEvent extends IWorkingCopySaveEvent {
@@ -526,20 +526,20 @@ export interface ITextFileEditorModelSaveEvent extends IWorkingCopySaveEvent {
 export interface ITextFileEditorModel extends ITextEditorModel, IEncodingSupport, ILanguageSupport, IWorkingCopy {
 
 	readonly onDidSave: Event<ITextFileEditorModelSaveEvent>;
-	readonly onDidSaveError: Event<codemavi>;
-	readonly onDidChangeOrphaned: Event<codemavi>;
-	readonly onDidChangeReadonly: Event<codemavi>;
-	readonly onDidChangeEncoding: Event<codemavi>;
+	readonly onDidSaveError: Event<void>;
+	readonly onDidChangeOrphaned: Event<void>;
+	readonly onDidChangeReadonly: Event<void>;
+	readonly onDidChangeEncoding: Event<void>;
 
 	hasState(state: TextFileEditorModelState): boolean;
-	joinState(state: TextFileEditorModelState.PENDING_SAVE): Promise<codemavi>;
+	joinState(state: TextFileEditorModelState.PENDING_SAVE): Promise<void>;
 
-	updatePreferredEncoding(encoding: string | undefined): codemavi;
+	updatePreferredEncoding(encoding: string | undefined): void;
 
 	save(options?: ITextFileSaveAsOptions): Promise<boolean>;
-	revert(options?: IRevertOptions): Promise<codemavi>;
+	revert(options?: IRevertOptions): Promise<void>;
 
-	resolve(options?: ITextFileResolveOptions): Promise<codemavi>;
+	resolve(options?: ITextFileResolveOptions): Promise<void>;
 
 	isDirty(): this is IResolvedTextFileEditorModel;
 

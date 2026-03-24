@@ -178,7 +178,7 @@ export class UtilityProcess extends Disposable {
 		super();
 	}
 
-	protected log(msg: string, severity: Severity): codemavi {
+	protected log(msg: string, severity: Severity): void {
 		let logMsg: string;
 		if (this.configuration?.correlationId) {
 			logMsg = `[UtilityProcess id: ${this.configuration?.correlationId}, type: ${this.configuration?.type}, pid: ${this.processPid ?? '<none>'}]: ${msg}`;
@@ -284,7 +284,7 @@ export class UtilityProcess extends Disposable {
 		return env;
 	}
 
-	private registerListeners(process: ElectronUtilityProcess, configuration: IUtilityProcessConfiguration, serviceName: string): codemavi {
+	private registerListeners(process: ElectronUtilityProcess, configuration: IUtilityProcessConfiguration, serviceName: string): void {
 
 		// Stdout
 		if (process.stdout) {
@@ -302,7 +302,7 @@ export class UtilityProcess extends Disposable {
 		this._register(Event.fromNodeEventEmitter(process, 'message')(msg => this._onMessage.fire(msg)));
 
 		// Spawn
-		this._register(Event.fromNodeEventEmitter<codemavi>(process, 'spawn')(() => {
+		this._register(Event.fromNodeEventEmitter<void>(process, 'spawn')(() => {
 			this.processPid = process.pid;
 
 			if (typeof process.pid === 'number') {
@@ -397,7 +397,7 @@ export class UtilityProcess extends Disposable {
 		}));
 	}
 
-	once(message: unknown, callback: () => codemavi): codemavi {
+	once(message: unknown, callback: () => void): void {
 		const disposable = this._register(this._onMessage.event(msg => {
 			if (msg === message) {
 				disposable.dispose();
@@ -447,7 +447,7 @@ export class UtilityProcess extends Disposable {
 		return false;
 	}
 
-	kill(): codemavi {
+	kill(): void {
 		if (!this.process) {
 			return; // already killed, crashed or never started
 		}
@@ -462,7 +462,7 @@ export class UtilityProcess extends Disposable {
 		}
 	}
 
-	private onDidExitOrCrashOrKill(): codemavi {
+	private onDidExitOrCrashOrKill(): void {
 		if (typeof this.processPid === 'number') {
 			UtilityProcess.all.delete(this.processPid);
 		}
@@ -470,7 +470,7 @@ export class UtilityProcess extends Disposable {
 		this.process = undefined;
 	}
 
-	async waitForExit(maxWaitTimeMs: number): Promise<codemavi> {
+	async waitForExit(maxWaitTimeMs: number): Promise<void> {
 		if (!this.process) {
 			return; // already killed, crashed or never started
 		}
@@ -520,7 +520,7 @@ export class WindowUtilityProcess extends UtilityProcess {
 		return true;
 	}
 
-	private registerWindowListeners(window: BrowserWindow, configuration: IWindowUtilityProcessConfiguration): codemavi {
+	private registerWindowListeners(window: BrowserWindow, configuration: IWindowUtilityProcessConfiguration): void {
 
 		// If the lifecycle of the utility process is bound to the window,
 		// we kill the process if the window closes or changes

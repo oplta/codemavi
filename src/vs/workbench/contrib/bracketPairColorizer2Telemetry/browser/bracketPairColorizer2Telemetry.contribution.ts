@@ -21,7 +21,7 @@ class BracketPairColorizer2TelemetryContribution {
 		this.init().catch(onUnexpectedError);
 	}
 
-	private async init(): Promise<codemavi> {
+	private async init(): Promise<void> {
 		const bracketPairColorizerId = 'coenraads.bracket-pair-colorizer-2';
 
 		await this.extensionsWorkbenchService.queryLocal();

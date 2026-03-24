@@ -38,7 +38,7 @@ export interface SampleData {
 	source: string;
 }
 
-export function reportSample(data: SampleData, telemetryService: ITelemetryService, logService: ILogService, sendAsErrorTelemtry: boolean): codemavi {
+export function reportSample(data: SampleData, telemetryService: ITelemetryService, logService: ILogService, sendAsErrorTelemtry: boolean): void {
 
 	const { sample, perfBaseline, source } = data;
 
@@ -68,7 +68,7 @@ class PerformanceError extends Error {
 
 	constructor(data: SampleData) {
 		// Since the stacks are available via the sample
-		// we can acodemavi collecting them when constructing the error.
+		// we can avoid collecting them when constructing the error.
 		if (Error.hasOwnProperty('stackTraceLimit')) {
 			const Err = Error as any as { stackTraceLimit: number }; // For the monaco editor checks.
 			const stackTraceLimit = Err.stackTraceLimit;

@@ -26,15 +26,15 @@ export interface ITerminalToolService {
 		| { type: 'persistent', persistentTerminalId: string }
 		| { type: 'temporary', cwd: string | null, terminalId: string }
 		// | { type: 'apply', terminalId: string }
-	): Promise<{ interrupt: () => codemavi; resPromise: Promise<{ result: string, resolveReason: TerminalResolveReason }> }>;
+	): Promise<{ interrupt: () => void; resPromise: Promise<{ result: string, resolveReason: TerminalResolveReason }> }>;
 
-	focusPersistentTerminal(terminalId: string): Promise<codemavi>
+	focusPersistentTerminal(terminalId: string): Promise<void>
 	persistentTerminalExists(terminalId: string): boolean
 
 	readTerminal(terminalId: string): Promise<string>
 
 	createPersistentTerminal(opts: { cwd: string | null }): Promise<string>
-	killPersistentTerminal(terminalId: string): Promise<codemavi>
+	killPersistentTerminal(terminalId: string): Promise<void>
 
 	getPersistentTerminal(terminalId: string): ITerminalInstance | undefined
 	getTemporaryTerminal(terminalId: string): ITerminalInstance | undefined
@@ -53,13 +53,13 @@ export const ITerminalToolService = createDecorator<ITerminalToolService>('Termi
 
 
 export const persistentTerminalNameOfId = (id: string) => {
-	if (id === '1') return 'Code Mavi Agent'
-	return `Code Mavi Agent (${id})`
+	if (id === '1') return 'Mavi Agent'
+	return `Mavi Agent (${id})`
 }
 export const idOfPersistentTerminalName = (name: string) => {
-	if (name === 'Code Mavi Agent') return '1'
+	if (name === 'Mavi Agent') return '1'
 
-	const match = name.match(/Code Mavi Agent \((\d+)\)/)
+	const match = name.match(/Mavi Agent \((\d+)\)/)
 	if (!match) return null
 	if (Number.isInteger(match[1]) && Number(match[1]) >= 1) return match[1]
 	return null
@@ -145,7 +145,7 @@ export class TerminalToolService extends Disposable implements ITerminalToolServ
 
 		// // when a new terminal is created, there is an initial command that gets run which is empty, wait for it to end before returning
 		// const disposables: IDisposable[] = []
-		// const waitForMount = new Promise<codemavi>(res => {
+		// const waitForMount = new Promise<void>(res => {
 		// 	let data = ''
 		// 	const d = terminal.onData(newData => {
 		// 		data += newData
@@ -153,7 +153,7 @@ export class TerminalToolService extends Disposable implements ITerminalToolServ
 		// 	})
 		// 	disposables.push(d)
 		// })
-		// const waitForTimeout = new Promise<codemavi>(res => { setTimeout(() => { res() }, 5000) })
+		// const waitForTimeout = new Promise<void>(res => { setTimeout(() => { res() }, 5000) })
 
 		// await Promise.any([waitForMount, waitForTimeout,])
 		// disposables.forEach(d => d.dispose())
@@ -297,11 +297,11 @@ export class TerminalToolService extends Disposable implements ITerminalToolServ
 
 
 			const cmdCap = await this._waitForCommandDetectionCapability(terminal)
-			// if (!cmdCap) throw new Error(`There was an error using the terminal: CommandDetection capability did not mount yet. Please try again in a few seconds or report this to the Code Mavi team.`)
+			// if (!cmdCap) throw new Error(`There was an error using the terminal: CommandDetection capability did not mount yet. Please try again in a few seconds or report this to the Mavi team.`)
 
 			// Prefer the structured command-detection capability when available
 
-			const waitUntilDone = new Promise<codemavi>(resolve => {
+			const waitUntilDone = new Promise<void>(resolve => {
 				if (!cmdCap) return
 				const l = cmdCap.onCommandFinished(cmd => {
 					if (resolveReason) return // already resolved
@@ -319,14 +319,14 @@ export class TerminalToolService extends Disposable implements ITerminalToolServ
 
 			const waitUntilInterrupt = isPersistent ?
 				// timeout after X seconds
-				new Promise<codemavi>((res) => {
+				new Promise<void>((res) => {
 					setTimeout(() => {
 						resolveReason = { type: 'timeout' };
 						res()
 					}, MAX_TERMINAL_BG_COMMAND_TIME * 1000)
 				})
 				// inactivity-based timeout
-				: new Promise<codemavi>(res => {
+				: new Promise<void>(res => {
 					let globalTimeoutId: ReturnType<typeof setTimeout>;
 					const resetTimer = () => {
 						clearTimeout(globalTimeoutId);

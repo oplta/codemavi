@@ -78,7 +78,7 @@ export class WorkingCopyHistoryTracker extends Disposable implements IWorkbenchC
 		this._register(this.workingCopyService.onDidSave(e => this.onDidSave(e)));
 	}
 
-	private async onDidRunFileOperation(e: FileOperationEvent): Promise<codemavi> {
+	private async onDidRunFileOperation(e: FileOperationEvent): Promise<void> {
 		if (!this.shouldTrackHistoryFromFileOperationEvent(e)) {
 			return; // return early for working copies we are not interested in
 		}
@@ -99,7 +99,7 @@ export class WorkingCopyHistoryTracker extends Disposable implements IWorkbenchC
 		}
 	}
 
-	private onDidChangeContent(workingCopy: IWorkingCopy): codemavi {
+	private onDidChangeContent(workingCopy: IWorkingCopy): void {
 
 		// Increment content version ID for resource
 		const contentVersionId = this.getContentVersion(workingCopy.resource);
@@ -110,7 +110,7 @@ export class WorkingCopyHistoryTracker extends Disposable implements IWorkbenchC
 		return this.workingCopyContentVersion.get(resource) || 0;
 	}
 
-	private onDidSave(e: IWorkingCopySaveEvent): codemavi {
+	private onDidSave(e: IWorkingCopySaveEvent): void {
 		if (!this.shouldTrackHistoryFromSaveEvent(e)) {
 			return; // return early for working copies we are not interested in
 		}

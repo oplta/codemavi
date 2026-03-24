@@ -29,7 +29,7 @@ export class ChatEditingNewNotebookContentEdits {
 	) {
 	}
 
-	acceptTextEdits(edits: TextEdit[]): codemavi {
+	acceptTextEdits(edits: TextEdit[]): void {
 		if (edits.length) {
 			this.textEdits.push(...edits);
 		}

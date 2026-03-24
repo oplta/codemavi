@@ -136,7 +136,7 @@ export class EmptyTextEditorHintContribution implements IEditorContribution {
 		return hasEditorAgents || shouldRenderDefaultHint;
 	}
 
-	protected update(): codemavi {
+	protected update(): void {
 		const shouldRenderHint = this._shouldRenderHint();
 		if (shouldRenderHint && !this.textHintContentWidget) {
 			this.textHintContentWidget = new EmptyTextEditorHintContentWidget(
@@ -158,7 +158,7 @@ export class EmptyTextEditorHintContribution implements IEditorContribution {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this.toDispose);
 		this.textHintContentWidget?.dispose();
 	}
@@ -434,7 +434,7 @@ class EmptyTextEditorHintContentWidget implements IContentWidget {
 		};
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.editor.removeContentWidget(this);
 		dispose(this.toDispose);
 	}

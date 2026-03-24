@@ -54,7 +54,7 @@ export class HideStandaloneColorPicker extends EditorAction {
 			}
 		});
 	}
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		StandaloneColorPickerController.get(editor)?.hide();
 	}
 }
@@ -79,7 +79,7 @@ export class InsertColorWithStandaloneColorPicker extends EditorAction {
 			}
 		});
 	}
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		StandaloneColorPickerController.get(editor)?.insertColor();
 	}
 }

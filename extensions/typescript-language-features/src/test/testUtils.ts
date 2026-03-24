@@ -49,7 +49,7 @@ export const CURSOR = '$$CURSOR$$';
 export function withRandomFileEditor(
 	contents: string,
 	fileExtension: string,
-	run: (editor: vscode.TextEditor, doc: vscode.TextDocument) => Thenable<codemavi>
+	run: (editor: vscode.TextEditor, doc: vscode.TextDocument) => Thenable<void>
 ): Thenable<boolean> {
 	const cursorIndex = contents.indexOf(CURSOR);
 	return createRandomFile(contents.replace(CURSOR, ''), fileExtension).then(file => {
@@ -73,7 +73,7 @@ export function withRandomFileEditor(
 	});
 }
 
-export const wait = (ms: number) => new Promise<codemavi>(resolve => setTimeout(() => resolve(), ms));
+export const wait = (ms: number) => new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 
 export const joinLines = (...args: string[]) => args.join(os.platform() === 'win32' ? '\r\n' : '\n');
 
@@ -84,7 +84,7 @@ export async function createTestEditor(uri: vscode.Uri, ...lines: string[]) {
 	return editor;
 }
 
-export function assertEditorContents(editor: vscode.TextEditor, expectedDocContent: string, message?: string): codemavi {
+export function assertEditorContents(editor: vscode.TextEditor, expectedDocContent: string, message?: string): void {
 	const cursorIndex = expectedDocContent.indexOf(CURSOR);
 
 	assert.strictEqual(
@@ -110,7 +110,7 @@ export async function updateConfig(documentUri: vscode.Uri, newConfig: VsCodeCon
 
 	for (const configKey of Object.keys(newConfig)) {
 		oldConfig[configKey] = config.get(configKey);
-		await new Promise<codemavi>((resolve, reject) =>
+		await new Promise<void>((resolve, reject) =>
 			config.update(configKey, newConfig[configKey], vscode.ConfigurationTarget.Global)
 				.then(() => resolve(), reject));
 	}
@@ -133,8 +133,8 @@ export async function enumerateConfig(
 	documentUri: vscode.Uri,
 	configKey: string,
 	values: readonly string[],
-	f: (message: string) => Promise<codemavi>
-): Promise<codemavi> {
+	f: (message: string) => Promise<void>
+): Promise<void> {
 	for (const value of values) {
 		const newConfig = { [configKey]: value };
 		await updateConfig(documentUri, newConfig);

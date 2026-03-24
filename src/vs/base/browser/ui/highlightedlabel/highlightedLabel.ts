@@ -93,7 +93,7 @@ export class HighlightedLabel extends Disposable {
 		this.render();
 	}
 
-	private render(): codemavi {
+	private render(): void {
 
 		const children: Array<HTMLSpanElement | string> = [];
 		let pos = 0;

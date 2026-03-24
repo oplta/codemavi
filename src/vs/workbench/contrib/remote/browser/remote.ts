@@ -57,7 +57,7 @@ import { mainWindow } from '../../../../base/browser/window.js';
 import { IHoverService } from '../../../../platform/hover/browser/hover.js';
 
 interface IViewModel {
-	onDidChangeHelpInformation: Event<codemavi>;
+	onDidChangeHelpInformation: Event<void>;
 	helpInformation: HelpInformation[];
 }
 
@@ -86,7 +86,7 @@ class HelpTreeRenderer implements ITreeRenderer<HelpModel | IHelpItem, IHelpItem
 		return { parent, icon };
 	}
 
-	renderElement(element: ITreeNode<IHelpItem, IHelpItem>, index: number, templateData: IHelpItemTemplateData, height: number | undefined): codemavi {
+	renderElement(element: ITreeNode<IHelpItem, IHelpItem>, index: number, templateData: IHelpItemTemplateData, height: number | undefined): void {
 		const container = templateData.parent;
 		dom.append(container, templateData.icon);
 		templateData.icon.classList.add(...element.element.iconClasses);
@@ -94,7 +94,7 @@ class HelpTreeRenderer implements ITreeRenderer<HelpModel | IHelpItem, IHelpItem
 		labelContainer.innerText = element.element.label;
 	}
 
-	disposeTemplate(templateData: IHelpItemTemplateData): codemavi {
+	disposeTemplate(templateData: IHelpItemTemplateData): void {
 
 	}
 }
@@ -117,7 +117,7 @@ interface IHelpItem {
 	iconClasses: string[];
 	label: string;
 	values: HelpItemValue[];
-	handleClick(): Promise<codemavi>;
+	handleClick(): Promise<void>;
 }
 
 class HelpModel {
@@ -353,7 +353,7 @@ abstract class HelpItemBase implements IHelpItem {
 
 	}
 
-	protected abstract takeAction(extensionDescription: IExtensionDescription, url?: string): Promise<codemavi>;
+	protected abstract takeAction(extensionDescription: IExtensionDescription, url?: string): Promise<void>;
 }
 
 class GetStartedHelpItem extends HelpItemBase {
@@ -371,7 +371,7 @@ class GetStartedHelpItem extends HelpItemBase {
 		super(icon, label, values, quickInputService, environmentService, remoteExplorerService, workspaceContextService);
 	}
 
-	protected async takeAction(extensionDescription: IExtensionDescription, urlOrWalkthroughId: string): Promise<codemavi> {
+	protected async takeAction(extensionDescription: IExtensionDescription, urlOrWalkthroughId: string): Promise<void> {
 		if ([Schemas.http, Schemas.https].includes(URI.parse(urlOrWalkthroughId).scheme)) {
 			this.openerService.open(urlOrWalkthroughId, { allowCommands: true });
 			return;
@@ -395,7 +395,7 @@ class HelpItem extends HelpItemBase {
 		super(icon, label, values, quickInputService, environmentService, remoteExplorerService, workspaceContextService);
 	}
 
-	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<codemavi> {
+	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<void> {
 		await this.openerService.open(URI.parse(url), { allowCommands: true });
 	}
 }
@@ -431,7 +431,7 @@ class IssueReporterItem extends HelpItemBase {
 		}));
 	}
 
-	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<codemavi> {
+	protected async takeAction(extensionDescription: IExtensionDescription, url: string): Promise<void> {
 		if (!url) {
 			await this.commandService.executeCommand('workbench.action.openIssueReporter', [extensionDescription.identifier.value]);
 		} else {
@@ -467,7 +467,7 @@ class HelpPanel extends ViewPane {
 		super(options, keybindingService, contextMenuService, configurationService, contextKeyService, viewDescriptorService, instantiationService, openerService, themeService, hoverService);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		container.classList.add('remote-help');
@@ -500,7 +500,7 @@ class HelpPanel extends ViewPane {
 		}));
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.tree.layout(height, width);
 	}
@@ -523,8 +523,8 @@ class HelpPanelDescriptor implements IViewDescriptor {
 class RemoteViewPaneContainer extends FilterViewPaneContainer implements IViewModel {
 	private helpPanelDescriptor = new HelpPanelDescriptor(this);
 	helpInformation: HelpInformation[] = [];
-	private _onDidChangeHelpInformation = new Emitter<codemavi>();
-	public onDidChangeHelpInformation: Event<codemavi> = this._onDidChangeHelpInformation.event;
+	private _onDidChangeHelpInformation = new Emitter<void>();
+	public onDidChangeHelpInformation: Event<void> = this._onDidChangeHelpInformation.event;
 	private hasRegisteredHelpView: boolean = false;
 	private remoteSwitcher: SwitchRemoteViewItem | undefined;
 
@@ -617,7 +617,7 @@ class RemoteViewPaneContainer extends FilterViewPaneContainer implements IViewMo
 		return isStringArray(viewDescriptor.remoteAuthority) ? viewDescriptor.remoteAuthority[0] : viewDescriptor.remoteAuthority;
 	}
 
-	protected setFilter(viewDescriptor: IViewDescriptor): codemavi {
+	protected setFilter(viewDescriptor: IViewDescriptor): void {
 		this.remoteExplorerService.targetType = isStringArray(viewDescriptor.remoteAuthority) ? viewDescriptor.remoteAuthority : [viewDescriptor.remoteAuthority!];
 	}
 
@@ -681,7 +681,7 @@ class VisibleProgress {
 	public readonly location: ProgressLocation;
 	private _isDisposed: boolean;
 	private _lastReport: string | null;
-	private _currentProgressPromiseResolve: (() => codemavi) | null;
+	private _currentProgressPromiseResolve: (() => void) | null;
 	private _currentProgress: IProgress<IProgressStep> | null;
 	private _currentTimer: ReconnectionTimer | null;
 
@@ -689,7 +689,7 @@ class VisibleProgress {
 		return this._lastReport;
 	}
 
-	constructor(progressService: IProgressService, location: ProgressLocation, initialReport: string | null, buttons: string[], onDidCancel: (choice: number | undefined, lastReport: string | null) => codemavi) {
+	constructor(progressService: IProgressService, location: ProgressLocation, initialReport: string | null, buttons: string[], onDidCancel: (choice: number | undefined, lastReport: string | null) => void) {
 		this.location = location;
 		this._isDisposed = false;
 		this._lastReport = initialReport;
@@ -697,7 +697,7 @@ class VisibleProgress {
 		this._currentProgress = null;
 		this._currentTimer = null;
 
-		const promise = new Promise<codemavi>((resolve) => this._currentProgressPromiseResolve = resolve);
+		const promise = new Promise<void>((resolve) => this._currentProgressPromiseResolve = resolve);
 
 		progressService.withProgress(
 			{ location: location, buttons: buttons },
@@ -710,7 +710,7 @@ class VisibleProgress {
 		}
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._isDisposed = true;
 		if (this._currentProgressPromiseResolve) {
 			this._currentProgressPromiseResolve();
@@ -733,12 +733,12 @@ class VisibleProgress {
 		}
 	}
 
-	public startTimer(completionTime: number): codemavi {
+	public startTimer(completionTime: number): void {
 		this.stopTimer();
 		this._currentTimer = new ReconnectionTimer(this, completionTime);
 	}
 
-	public stopTimer(): codemavi {
+	public stopTimer(): void {
 		if (this._currentTimer) {
 			this._currentTimer.dispose();
 			this._currentTimer = null;
@@ -758,7 +758,7 @@ class ReconnectionTimer implements IDisposable {
 		this._render();
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._renderInterval.dispose();
 	}
 
@@ -806,7 +806,7 @@ export class RemoteAgentConnectionStatusListener extends Disposable implements I
 			let reconnectWaitEvent: ReconnectionWaitEvent | null = null;
 			let disposableListener: IDisposable | null = null;
 
-			function showProgress(location: ProgressLocation.Dialog | ProgressLocation.Notification | null, buttons: { label: string; callback: () => codemavi }[], initialReport: string | null = null): VisibleProgress {
+			function showProgress(location: ProgressLocation.Dialog | ProgressLocation.Notification | null, buttons: { label: string; callback: () => void }[], initialReport: string | null = null): VisibleProgress {
 				if (visibleProgress) {
 					visibleProgress.dispose();
 					visibleProgress = null;

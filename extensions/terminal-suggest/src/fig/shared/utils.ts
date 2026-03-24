@@ -121,7 +121,7 @@ export function compareNamedObjectsAlphabetically<
 	return getName(a).localeCompare(getName(b));
 }
 
-export const sleep = (ms: number): Promise<codemavi> =>
+export const sleep = (ms: number): Promise<void> =>
 	new Promise((resolve) => {
 		setTimeout(resolve, ms);
 	});

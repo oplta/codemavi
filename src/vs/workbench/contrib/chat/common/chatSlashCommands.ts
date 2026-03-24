@@ -31,7 +31,7 @@ export interface IChatSlashData {
 export interface IChatSlashFragment {
 	content: string | { treeData: IChatResponseProgressFileTreeData };
 }
-export type IChatSlashCallback = { (prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | codemavi> };
+export type IChatSlashCallback = { (prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | void> };
 
 export const IChatSlashCommandService = createDecorator<IChatSlashCommandService>('chatSlashCommandService');
 
@@ -40,9 +40,9 @@ export const IChatSlashCommandService = createDecorator<IChatSlashCommandService
  */
 export interface IChatSlashCommandService {
 	_serviceBrand: undefined;
-	readonly onDidChangeCommands: Event<codemavi>;
+	readonly onDidChangeCommands: Event<void>;
 	registerSlashCommand(data: IChatSlashData, command: IChatSlashCallback): IDisposable;
-	executeCommand(id: string, prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | codemavi>;
+	executeCommand(id: string, prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | void>;
 	getCommands(location: ChatAgentLocation, mode: ChatMode): Array<IChatSlashData>;
 	hasCommand(id: string): boolean;
 }
@@ -55,14 +55,14 @@ export class ChatSlashCommandService extends Disposable implements IChatSlashCom
 
 	private readonly _commands = new Map<string, Tuple>();
 
-	private readonly _onDidChangeCommands = this._register(new Emitter<codemavi>());
-	readonly onDidChangeCommands: Event<codemavi> = this._onDidChangeCommands.event;
+	private readonly _onDidChangeCommands = this._register(new Emitter<void>());
+	readonly onDidChangeCommands: Event<void> = this._onDidChangeCommands.event;
 
 	constructor(@IExtensionService private readonly _extensionService: IExtensionService) {
 		super();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._commands.clear();
 	}
@@ -92,7 +92,7 @@ export class ChatSlashCommandService extends Disposable implements IChatSlashCom
 		return this._commands.has(id);
 	}
 
-	async executeCommand(id: string, prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | codemavi> {
+	async executeCommand(id: string, prompt: string, progress: IProgress<IChatProgress>, history: IChatMessage[], location: ChatAgentLocation, token: CancellationToken): Promise<{ followUp: IChatFollowup[] } | void> {
 		const data = this._commands.get(id);
 		if (!data) {
 			throw new Error('No command with id ${id} NOT registered');

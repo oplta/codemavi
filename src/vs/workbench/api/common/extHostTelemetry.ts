@@ -79,7 +79,7 @@ export class ExtHostTelemetry extends Disposable implements ExtHostTelemetryShap
 		return logger.apiTelemetryLogger;
 	}
 
-	$initializeTelemetryLevel(level: TelemetryLevel, supportsTelemetry: boolean, productConfig?: { usage: boolean; error: boolean }): codemavi {
+	$initializeTelemetryLevel(level: TelemetryLevel, supportsTelemetry: boolean, productConfig?: { usage: boolean; error: boolean }): void {
 		this._level = level;
 		this._productConfig = productConfig ?? { usage: true, error: true };
 	}
@@ -115,7 +115,7 @@ export class ExtHostTelemetry extends Disposable implements ExtHostTelemetryShap
 		return commonProperties;
 	}
 
-	$onDidChangeTelemetryLevel(level: TelemetryLevel): codemavi {
+	$onDidChangeTelemetryLevel(level: TelemetryLevel): void {
 		this._oldTelemetryEnablement = this.getTelemetryConfiguration();
 		this._level = level;
 		const telemetryDetails = this.getTelemetryDetails();
@@ -162,7 +162,7 @@ export class ExtHostTelemetry extends Disposable implements ExtHostTelemetryShap
 
 export class ExtHostTelemetryLogger {
 
-	static validateSender(sender: vscode.TelemetrySender): codemavi {
+	static validateSender(sender: vscode.TelemetrySender): void {
 		if (typeof sender !== 'object') {
 			throw new TypeError('TelemetrySender argument is invalid');
 		}
@@ -202,7 +202,7 @@ export class ExtHostTelemetryLogger {
 		this._telemetryEnablements = { isUsageEnabled: telemetryEnablements.isUsageEnabled, isErrorsEnabled: telemetryEnablements.isErrorsEnabled };
 	}
 
-	updateTelemetryEnablements(isUsageEnabled: boolean, isErrorsEnabled: boolean): codemavi {
+	updateTelemetryEnablements(isUsageEnabled: boolean, isErrorsEnabled: boolean): void {
 		if (this._apiObject) {
 			this._telemetryEnablements = { isUsageEnabled, isErrorsEnabled };
 			this._onDidChangeEnableStates.fire(this._apiObject);
@@ -234,7 +234,7 @@ export class ExtHostTelemetryLogger {
 		return data;
 	}
 
-	private logEvent(eventName: string, data?: Record<string, any>): codemavi {
+	private logEvent(eventName: string, data?: Record<string, any>): void {
 		// No sender means likely disposed of, we should no-op
 		if (!this._sender) {
 			return;
@@ -252,14 +252,14 @@ export class ExtHostTelemetryLogger {
 		this._logger.trace(eventName, data);
 	}
 
-	logUsage(eventName: string, data?: Record<string, any>): codemavi {
+	logUsage(eventName: string, data?: Record<string, any>): void {
 		if (!this._telemetryEnablements.isUsageEnabled) {
 			return;
 		}
 		this.logEvent(eventName, data);
 	}
 
-	logError(eventNameOrException: Error | string, data?: Record<string, any>): codemavi {
+	logError(eventNameOrException: Error | string, data?: Record<string, any>): void {
 		if (!this._telemetryEnablements.isErrorsEnabled || !this._sender) {
 			return;
 		}
@@ -311,7 +311,7 @@ export class ExtHostTelemetryLogger {
 		return !this._sender;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this._sender?.flush) {
 			let tempSender: vscode.TelemetrySender | undefined = this._sender;
 			this._sender = undefined;

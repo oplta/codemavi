@@ -58,7 +58,7 @@ abstract class ChatEditingEditorAction extends Action2 {
 		return instaService.invokeFunction(this.runChatEditingCommand.bind(this), session, entry, ctrl, ...args);
 	}
 
-	abstract runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<codemavi> | codemavi;
+	abstract runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<void> | void;
 }
 
 abstract class NavigateAction extends ChatEditingEditorAction {
@@ -93,7 +93,7 @@ abstract class NavigateAction extends ChatEditingEditorAction {
 		});
 	}
 
-	override async runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, ctrl: IModifiedFileEntryEditorIntegration): Promise<codemavi> {
+	override async runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, ctrl: IModifiedFileEntryEditorIntegration): Promise<void> {
 
 		const instaService = accessor.get(IInstantiationService);
 
@@ -190,7 +190,7 @@ abstract class AcceptDiscardAction extends ChatEditingEditorAction {
 		});
 	}
 
-	override async runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, _integration: IModifiedFileEntryEditorIntegration): Promise<codemavi> {
+	override async runChatEditingCommand(accessor: ServicesAccessor, session: IChatEditingSession, entry: IModifiedFileEntry, _integration: IModifiedFileEntryEditorIntegration): Promise<void> {
 
 		const instaService = accessor.get(IInstantiationService);
 
@@ -247,7 +247,7 @@ abstract class AcceptRejectHunkAction extends ChatEditingEditorAction {
 		);
 	}
 
-	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, ctrl: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<codemavi> | codemavi {
+	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, ctrl: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<void> | void {
 		if (this._accept) {
 			ctrl.acceptNearestChange(args[0]);
 		} else {
@@ -285,7 +285,7 @@ class ToggleDiffAction extends ChatEditingEditorAction {
 		});
 	}
 
-	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<codemavi> | codemavi {
+	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration, ...args: any[]): Promise<void> | void {
 		integration.toggleDiff(args[0]);
 	}
 }
@@ -305,7 +305,7 @@ class ToggleAccessibleDiffViewAction extends ChatEditingEditorAction {
 		});
 	}
 
-	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration): Promise<codemavi> | codemavi {
+	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, _entry: IModifiedFileEntry, integration: IModifiedFileEntryEditorIntegration): Promise<void> | void {
 		integration.enableAccessibleDiffView();
 	}
 }
@@ -326,7 +326,7 @@ export class ReviewChangesAction extends ChatEditingEditorAction {
 		});
 	}
 
-	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, entry: IModifiedFileEntry, _integration: IModifiedFileEntryEditorIntegration, ..._args: any[]): codemavi {
+	override runChatEditingCommand(_accessor: ServicesAccessor, _session: IChatEditingSession, entry: IModifiedFileEntry, _integration: IModifiedFileEntryEditorIntegration, ..._args: any[]): void {
 		entry.enableReviewModeUntilSettled();
 	}
 }
@@ -350,7 +350,7 @@ abstract class MultiDiffAcceptDiscardAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 		const chatEditingService = accessor.get(IChatEditingService);
 		const editorService = accessor.get(IEditorService);
 		const editorGroupsService = accessor.get(IEditorGroupsService);

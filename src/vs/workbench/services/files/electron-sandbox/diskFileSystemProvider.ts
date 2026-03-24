@@ -47,7 +47,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Forward events from the embedded provider
 		this._register(this.provider.onDidChangeFile(changes => this._onDidChangeFile.fire(changes)));
@@ -56,7 +56,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	//#region File Capabilities
 
-	get onDidChangeCapabilities(): Event<codemavi> { return this.provider.onDidChangeCapabilities; }
+	get onDidChangeCapabilities(): Event<void> { return this.provider.onDidChangeCapabilities; }
 
 	get capabilities(): FileSystemProviderCapabilities { return this.provider.capabilities; }
 
@@ -84,7 +84,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return this.provider.readFileStream(resource, opts, token);
 	}
 
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 		return this.provider.writeFile(resource, content, opts);
 	}
 
@@ -92,7 +92,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return this.provider.open(resource, opts);
 	}
 
-	close(fd: number): Promise<codemavi> {
+	close(fd: number): Promise<void> {
 		return this.provider.close(fd);
 	}
 
@@ -108,19 +108,19 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	//#region Move/Copy/Delete/Create Folder
 
-	mkdir(resource: URI): Promise<codemavi> {
+	mkdir(resource: URI): Promise<void> {
 		return this.provider.mkdir(resource);
 	}
 
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
 		return this.provider.delete(resource, opts);
 	}
 
-	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		return this.provider.rename(from, to, opts);
 	}
 
-	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		return this.provider.copy(from, to, opts);
 	}
 
@@ -128,7 +128,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	//#region Clone File
 
-	cloneFile(from: URI, to: URI): Promise<codemavi> {
+	cloneFile(from: URI, to: URI): Promise<void> {
 		return this.provider.cloneFile(from, to);
 	}
 
@@ -137,8 +137,8 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 	//#region File Watching
 
 	protected createUniversalWatcher(
-		onChange: (changes: IFileChange[]) => codemavi,
-		onLogMessage: (msg: ILogMessage) => codemavi,
+		onChange: (changes: IFileChange[]) => void,
+		onLogMessage: (msg: ILogMessage) => void,
 		verboseLogging: boolean
 	): AbstractUniversalWatcherClient {
 		return new UniversalWatcherClient(changes => onChange(changes), msg => onLogMessage(msg), verboseLogging, this.utilityProcessWorkerWorkbenchService);
@@ -157,7 +157,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return this._watcherLogService;
 	}
 
-	protected override logWatcherMessage(msg: ILogMessage): codemavi {
+	protected override logWatcherMessage(msg: ILogMessage): void {
 		this.watcherLogService[msg.type](msg.message);
 
 		if (msg.type !== 'trace' && msg.type !== 'debug') {

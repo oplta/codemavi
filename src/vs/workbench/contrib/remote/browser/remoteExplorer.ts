@@ -347,7 +347,7 @@ class OnAutoForwardedAction extends Disposable {
 		this.lastNotifyTime.setFullYear(this.lastNotifyTime.getFullYear() - 1);
 	}
 
-	public async doAction(tunnels: RemoteTunnel[]): Promise<codemavi> {
+	public async doAction(tunnels: RemoteTunnel[]): Promise<void> {
 		this.logService.trace(`ForwardedPorts: (OnAutoForwardedAction) Starting action for ${tunnels[0]?.tunnelRemotePort}`);
 		this.doActionTunnels = tunnels;
 		const tunnel = await this.portNumberHeuristicDelay();
@@ -652,7 +652,7 @@ class ProcAutomaticPortForwarding extends Disposable {
 
 	private async initialize() {
 		if (!this.remoteExplorerService.tunnelModel.environmentTunnelsSet) {
-			await new Promise<codemavi>(resolve => this.remoteExplorerService.tunnelModel.onEnvironmentTunnelsSet(() => resolve()));
+			await new Promise<void>(resolve => this.remoteExplorerService.tunnelModel.onEnvironmentTunnelsSet(() => resolve()));
 		}
 
 		this._register(this.configurationService.onDidChangeConfiguration(async (e) => {
@@ -705,7 +705,7 @@ class ProcAutomaticPortForwarding extends Disposable {
 		}
 		let startingCandidates = this.remoteExplorerService.tunnelModel.candidatesOrUndefined;
 		if (!startingCandidates) {
-			await new Promise<codemavi>(resolve => this.remoteExplorerService.tunnelModel.onCandidatesChanged(() => resolve()));
+			await new Promise<void>(resolve => this.remoteExplorerService.tunnelModel.onCandidatesChanged(() => resolve()));
 			startingCandidates = this.remoteExplorerService.tunnelModel.candidates;
 		}
 

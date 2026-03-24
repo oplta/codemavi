@@ -15,7 +15,7 @@ suite(`Notebook Model Store Sync`, () => {
 	let notebook: NotebookDocument;
 	let token: CancellationTokenSource;
 	let editsApplied: WorkspaceEdit[] = [];
-	let pendingPromises: Promise<codemavi>[] = [];
+	let pendingPromises: Promise<void>[] = [];
 	let cellMetadataUpdates: NotebookEdit[] = [];
 	let applyEditStub: sinon.SinonStub<[edit: WorkspaceEdit, metadata?: WorkspaceEditMetadata | undefined], Thenable<boolean>>;
 	setup(() => {
@@ -434,7 +434,7 @@ suite(`Notebook Model Store Sync`, () => {
 		await onWillSaveNotebookDocument.fireAsync({ notebook, reason: TextDocumentSaveReason.Manual }, token.token);
 	});
 	test('Wait for pending updates to complete when saving', async () => {
-		let resolveApplyEditPromise: (value: boolean) => codemavi;
+		let resolveApplyEditPromise: (value: boolean) => void;
 		const promise = new Promise<boolean>((resolve) => resolveApplyEditPromise = resolve);
 		applyEditStub.restore();
 		sinon.stub(workspace, 'applyEdit').callsFake((edit: WorkspaceEdit) => {
@@ -490,17 +490,17 @@ suite(`Notebook Model Store Sync`, () => {
 
 	interface IWaitUntil {
 		token: CancellationToken;
-		waitUntil(thenable: Promise<unknown>): codemavi;
+		waitUntil(thenable: Promise<unknown>): void;
 	}
 
 	interface IWaitUntil {
 		token: CancellationToken;
-		waitUntil(thenable: Promise<unknown>): codemavi;
+		waitUntil(thenable: Promise<unknown>): void;
 	}
 	type IWaitUntilData<T> = Omit<Omit<T, 'waitUntil'>, 'token'>;
 
 	class AsyncEmitter<T extends IWaitUntil> {
-		private listeners: ((d: T) => codemavi)[] = [];
+		private listeners: ((d: T) => void)[] = [];
 		get event(): (listener: (e: T) => any, thisArgs?: any, disposables?: Disposable[]) => Disposable {
 
 			return (listener, thisArgs, _disposables) => {
@@ -515,7 +515,7 @@ suite(`Notebook Model Store Sync`, () => {
 		dispose() {
 			this.listeners = [];
 		}
-		async fireAsync(data: IWaitUntilData<T>, token: CancellationToken): Promise<codemavi> {
+		async fireAsync(data: IWaitUntilData<T>, token: CancellationToken): Promise<void> {
 			if (!this.listeners.length) {
 				return;
 			}

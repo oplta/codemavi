@@ -183,7 +183,7 @@ export namespace inputLatency {
 		}
 	}
 
-	function addMeasure(entryName: string, cumulativeMeasurement: ICumulativeMeasurement): codemavi {
+	function addMeasure(entryName: string, cumulativeMeasurement: ICumulativeMeasurement): void {
 		const duration = performance.getEntriesByName(entryName)[0].duration;
 		cumulativeMeasurement.total += duration;
 		cumulativeMeasurement.min = Math.min(cumulativeMeasurement.min, duration);
@@ -263,7 +263,7 @@ export namespace inputLatency {
 		};
 	}
 
-	function clearCumulativeMeasurement(cumulative: ICumulativeMeasurement): codemavi {
+	function clearCumulativeMeasurement(cumulative: ICumulativeMeasurement): void {
 		cumulative.total = 0;
 		cumulative.min = Number.MAX_VALUE;
 		cumulative.max = 0;

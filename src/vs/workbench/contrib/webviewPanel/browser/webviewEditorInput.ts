@@ -90,7 +90,7 @@ export class WebviewInput extends EditorInput {
 		return undefined;
 	}
 
-	public setName(value: string): codemavi {
+	public setName(value: string): void {
 		this._name = value;
 		this.webview.setTitle(value);
 		this._onDidChangeLabel.fire();
@@ -121,7 +121,7 @@ export class WebviewInput extends EditorInput {
 		return this._group;
 	}
 
-	public updateGroup(group: GroupIdentifier): codemavi {
+	public updateGroup(group: GroupIdentifier): void {
 		this._group = group;
 	}
 
@@ -134,7 +134,7 @@ export class WebviewInput extends EditorInput {
 		return other;
 	}
 
-	public claim(claimant: unknown, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): codemavi {
+	public claim(claimant: unknown, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): void {
 		return this._webview.claim(claimant, targetWindow, scopedContextKeyService);
 	}
 }

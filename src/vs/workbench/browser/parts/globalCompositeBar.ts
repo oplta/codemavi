@@ -111,7 +111,7 @@ export class GlobalCompositeBar extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this.extensionService.whenInstalledExtensionsRegistered().then(() => {
 			if (!this._store.isDisposed) {
 				this._register(this.storageService.onDidChangeValue(StorageScope.PROFILE, AccountsActivityActionViewItem.ACCOUNTS_VISIBILITY_PREFERENCE_KEY, this._store)(() => this.toggleAccountsActivity()));
@@ -119,11 +119,11 @@ export class GlobalCompositeBar extends Disposable {
 		});
 	}
 
-	create(parent: HTMLElement): codemavi {
+	create(parent: HTMLElement): void {
 		parent.appendChild(this.element);
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this.globalActivityActionBar.focus(true);
 	}
 
@@ -182,11 +182,11 @@ abstract class AbstractGlobalActivityActionViewItem extends CompositeBarActionVi
 		}));
 	}
 
-	private updateItemActivity(): codemavi {
+	private updateItemActivity(): void {
 		(this.action as CompositeBarAction).activities = this.activityService.getActivity(this.compositeBarActionItem.id);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 
 		this._register(addDisposableListener(this.container, EventType.MOUSE_DOWN, async (e: MouseEvent) => {
@@ -233,7 +233,7 @@ abstract class AbstractGlobalActivityActionViewItem extends CompositeBarActionVi
 		return this.contextMenuActionsProvider();
 	}
 
-	private async run(): Promise<codemavi> {
+	private async run(): Promise<void> {
 		const disposables = new DisposableStore();
 		const menu = disposables.add(this.menuService.createMenu(this.menuId, this.contextKeyService));
 		const actions = await this.resolveMainMenuActions(menu, disposables);
@@ -269,7 +269,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 		contextMenuActionsProvider: () => IAction[],
 		options: ICompositeBarActionViewItemOptions,
 		contextMenuAlignmentOptions: () => Readonly<{ anchorAlignment: AnchorAlignment; anchorAxisAlignment: AnchorAxisAlignment }> | undefined,
-		private readonly fillContextMenuActions: (actions: IAction[]) => codemavi,
+		private readonly fillContextMenuActions: (actions: IAction[]) => void,
 		@IThemeService themeService: IThemeService,
 		@ILifecycleService private readonly lifecycleService: ILifecycleService,
 		@IHoverService hoverService: IHoverService,
@@ -298,7 +298,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 		this.initialize();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.authenticationService.onDidRegisterAuthenticationProvider(async (e) => {
 			await this.addAccountsFromProvider(e.id);
 		}));
@@ -326,7 +326,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 
 	// This function exists to ensure that the accounts are added for auth providers that had already been registered
 	// before the menu was created.
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		// Resolving the menu doesn't need to happen immediately, so we can wait until after the workbench has been restored
 		// and only run this when the system is idle.
 		await this.lifecycleService.when(LifecyclePhase.Restored);
@@ -339,7 +339,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 		}));
 	}
 
-	private async doInitialize(): Promise<codemavi> {
+	private async doInitialize(): Promise<void> {
 		const providerIds = this.authenticationService.getProviderIds();
 		const results = await Promise.allSettled(providerIds.map(providerId => this.addAccountsFromProvider(providerId)));
 
@@ -438,7 +438,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 
 	//#region groupedAccounts helpers
 
-	private async addOrUpdateAccount(providerId: string, account: AuthenticationSessionAccount): Promise<codemavi> {
+	private async addOrUpdateAccount(providerId: string, account: AuthenticationSessionAccount): Promise<void> {
 		let accounts = this.groupedAccounts.get(providerId);
 		if (!accounts) {
 			accounts = [];
@@ -471,7 +471,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 		}
 	}
 
-	private removeAccount(providerId: string, account: AuthenticationSessionAccount): codemavi {
+	private removeAccount(providerId: string, account: AuthenticationSessionAccount): void {
 		const accounts = this.groupedAccounts.get(providerId);
 		if (!accounts) {
 			return;
@@ -488,7 +488,7 @@ export class AccountsActivityActionViewItem extends AbstractGlobalActivityAction
 		}
 	}
 
-	private async addAccountsFromProvider(providerId: string): Promise<codemavi> {
+	private async addAccountsFromProvider(providerId: string): Promise<void> {
 		try {
 			const sessions = await this.authenticationService.getSessions(providerId);
 			this.problematicProviders.delete(providerId);
@@ -545,7 +545,7 @@ export class GlobalActivityActionViewItem extends AbstractGlobalActivityActionVi
 		}));
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 
 		this.profileBadge = append(container, $('.profile-badge'));
@@ -553,7 +553,7 @@ export class GlobalActivityActionViewItem extends AbstractGlobalActivityActionVi
 		this.updateProfileBadge();
 	}
 
-	private updateProfileBadge(): codemavi {
+	private updateProfileBadge(): void {
 		if (!this.profileBadge || !this.profileBadgeContent) {
 			return;
 		}
@@ -578,7 +578,7 @@ export class GlobalActivityActionViewItem extends AbstractGlobalActivityActionVi
 		this.profileBadgeContent.textContent = this.userDataProfileService.currentProfile.name.substring(0, 2).toUpperCase();
 	}
 
-	protected override updateActivity(): codemavi {
+	protected override updateActivity(): void {
 		super.updateActivity();
 		this.updateProfileBadge();
 	}

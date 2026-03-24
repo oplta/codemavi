@@ -43,7 +43,7 @@ class TestMcpHostDelegate extends Disposable implements IMcpHostDelegate {
 		return this._transport;
 	}
 
-	waitForInitialProviderPromises(): Promise<codemavi> {
+	waitForInitialProviderPromises(): Promise<void> {
 		return Promise.resolve();
 	}
 }

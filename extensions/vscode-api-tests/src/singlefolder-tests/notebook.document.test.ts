@@ -65,7 +65,7 @@ suite('Notebook Document', function () {
 		const uri = await utils.createRandomFile(undefined, undefined, '.nbdtest');
 		let didHappen = false;
 
-		const p = new Promise<codemavi>((resolve, reject) => {
+		const p = new Promise<void>((resolve, reject) => {
 			const sub = vscode.workspace.onDidOpenTextDocument(doc => {
 				if (doc.uri.scheme !== 'vscode-notebook-cell') {
 					// ignore other open events

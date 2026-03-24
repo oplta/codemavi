@@ -17,9 +17,9 @@ import { ContextKeyExpr } from '../../../../platform/contextkey/common/contextke
 
 export type QuickEditPropsType = {
 	diffareaid: number,
-	textAreaRef: (ref: HTMLTextAreaElement | null) => codemavi;
-	onChangeHeight: (height: number) => codemavi;
-	onChangeText: (text: string) => codemavi;
+	textAreaRef: (ref: HTMLTextAreaElement | null) => void;
+	onChangeHeight: (height: number) => void;
+	onChangeText: (text: string) => void;
 	initText: string | null;
 }
 
@@ -38,16 +38,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_CTRL_K_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviQuickEditAction', 'Code Mavi: Quick Edit'),
+			title: localize2('maviQuickEditAction', 'Mavi: Quick Edit'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyCode.KeyK,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 				when: ContextKeyExpr.deserialize('editorFocus && !terminalFocus'),
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 
 		const editorService = accessor.get(ICodeEditorService)
 		const metricsService = accessor.get(IMetricsService)

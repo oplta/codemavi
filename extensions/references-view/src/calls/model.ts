@@ -67,7 +67,7 @@ export class CallItem {
 		readonly locations: vscode.Location[] | undefined
 	) { }
 
-	remove(): codemavi {
+	remove(): void {
 		this.model.remove(this);
 	}
 }
@@ -118,7 +118,7 @@ class CallsModel implements SymbolItemNavigation<CallItem>, SymbolItemEditorHigh
 		return this._move(from, false) ?? from;
 	}
 
-	private _move(item: CallItem, fwd: boolean): CallItem | codemavi {
+	private _move(item: CallItem, fwd: boolean): CallItem | void {
 		if (item.children?.length) {
 			return fwd ? item.children[0] : tail(item.children);
 		}
@@ -168,7 +168,7 @@ class CallItemDataProvider implements vscode.TreeDataProvider<CallItem> {
 		this._modelListener = _model.onDidChange(e => this._emitter.fire(e instanceof CallItem ? e : undefined));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._emitter.dispose();
 		this._modelListener.dispose();
 	}

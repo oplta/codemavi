@@ -10,7 +10,7 @@ export abstract class EditorWorkerHost {
 	public static getChannel(workerServer: IWebWorkerServer): EditorWorkerHost {
 		return workerServer.getChannel<EditorWorkerHost>(EditorWorkerHost.CHANNEL_NAME);
 	}
-	public static setChannel(workerClient: IWebWorkerClient<any>, obj: EditorWorkerHost): codemavi {
+	public static setChannel(workerClient: IWebWorkerClient<any>, obj: EditorWorkerHost): void {
 		workerClient.setChannel<EditorWorkerHost>(EditorWorkerHost.CHANNEL_NAME, obj);
 	}
 

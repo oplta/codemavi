@@ -310,18 +310,18 @@ export interface IChatResponseModel {
 	readonly voteDownReason: ChatAgentVoteDownReason | undefined;
 	readonly followups?: IChatFollowup[] | undefined;
 	readonly result?: IChatAgentResult;
-	addUndoStop(undoStop: IChatUndoStop): codemavi;
-	setVote(vote: ChatAgentVoteDirection): codemavi;
-	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): codemavi;
+	addUndoStop(undoStop: IChatUndoStop): void;
+	setVote(vote: ChatAgentVoteDirection): void;
+	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): void;
 	setEditApplied(edit: IChatTextEditGroup, editCount: number): boolean;
-	setPaused(isPause: boolean, tx?: ITransaction): codemavi;
+	setPaused(isPause: boolean, tx?: ITransaction): void;
 	/**
 	 * Adopts any partially-undo {@link response} as the {@link entireResponse}.
 	 * Only valid when {@link isComplete}. This is needed because otherwise an
 	 * undone and then diverged state would start showing old data because the
 	 * undo stops would no longer exist in the model.
 	 */
-	finalizeUndoState(): codemavi;
+	finalizeUndoState(): void;
 }
 
 export type ChatResponseModelChangeReason =
@@ -527,7 +527,7 @@ class ResponseView extends AbstractResponse {
 }
 
 export class Response extends AbstractResponse implements IDisposable {
-	private _onDidChangeValue = new Emitter<codemavi>();
+	private _onDidChangeValue = new Emitter<void>();
 	public get onDidChangeValue() {
 		return this._onDidChangeValue.event;
 	}
@@ -541,17 +541,17 @@ export class Response extends AbstractResponse implements IDisposable {
 			'kind' in v ? v : { kind: 'treeData', treeData: v })));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChangeValue.dispose();
 	}
 
 
-	clear(): codemavi {
+	clear(): void {
 		this._responseParts = [];
 		this._updateRepr(true);
 	}
 
-	updateContent(progress: IChatProgressResponseContent | IChatTextEdit | IChatNotebookEdit | IChatTask | IChatUndoStop, quiet?: boolean): codemavi {
+	updateContent(progress: IChatProgressResponseContent | IChatTextEdit | IChatNotebookEdit | IChatTask | IChatUndoStop, quiet?: boolean): void {
 		if (progress.kind === 'markdownContent') {
 
 			// last response which is NOT a text edit group because we do want to support heterogenous streaming but not have
@@ -776,7 +776,7 @@ export class ChatResponseModel extends Disposable implements IChatResponseModel 
 	}
 
 	/** Functions run once the chat response is unpaused. */
-	private bufferedPauseContent?: (() => codemavi)[];
+	private bufferedPauseContent?: (() => void)[];
 
 	constructor(
 		_response: IMarkdownString | ReadonlyArray<IMarkdownString | IChatResponseProgressFileTreeData | IChatContentInlineReference | IChatAgentMarkdownContentWithVulnerability | IChatResponseCodeblockUriPart>,
@@ -847,12 +847,12 @@ export class ChatResponseModel extends Disposable implements IChatResponseModel 
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	setResult(result: IChatAgentResult): codemavi {
+	setResult(result: IChatAgentResult): void {
 		this._result = result;
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	complete(): codemavi {
+	complete(): void {
 		if (this._result?.errorDetails?.responseIsRedacted) {
 			this._response.clear();
 		}
@@ -861,23 +861,23 @@ export class ChatResponseModel extends Disposable implements IChatResponseModel 
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this._isComplete = true;
 		this._isCanceled = true;
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	setFollowups(followups: IChatFollowup[] | undefined): codemavi {
+	setFollowups(followups: IChatFollowup[] | undefined): void {
 		this._followups = followups;
 		this._onDidChange.fire(defaultChatResponseModelChangeReason); // Fire so that command followups get rendered on the row
 	}
 
-	setVote(vote: ChatAgentVoteDirection): codemavi {
+	setVote(vote: ChatAgentVoteDirection): void {
 		this._vote = vote;
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): codemavi {
+	setVoteDownReason(reason: ChatAgentVoteDownReason | undefined): void {
 		this._voteDownReason = reason;
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
@@ -899,7 +899,7 @@ export class ChatResponseModel extends Disposable implements IChatResponseModel 
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 	}
 
-	setPaused(isPause: boolean, tx?: ITransaction): codemavi {
+	setPaused(isPause: boolean, tx?: ITransaction): void {
 		this._isPaused.set(isPause, tx);
 		this._onDidChange.fire(defaultChatResponseModelChangeReason);
 
@@ -907,13 +907,13 @@ export class ChatResponseModel extends Disposable implements IChatResponseModel 
 		this.bufferedPauseContent = undefined;
 	}
 
-	finalizeUndoState(): codemavi {
+	finalizeUndoState(): void {
 		this._finalizedResponse = this.response;
 		this._responseView = undefined;
 		this._shouldBeRemovedOnSend = undefined;
 	}
 
-	private bufferWhenPaused(apply: () => codemavi) {
+	private bufferWhenPaused(apply: () => void) {
 		if (!this._isPaused.get()) {
 			apply();
 		} else {
@@ -935,7 +935,7 @@ export interface IChatRequestDisablement {
 }
 
 export interface IChatModel {
-	readonly onDidDispose: Event<codemavi>;
+	readonly onDidDispose: Event<void>;
 	readonly onDidChange: Event<IChatChangeEvent>;
 	readonly sessionId: string;
 	readonly initState: ChatModelInitState;
@@ -947,13 +947,13 @@ export interface IChatModel {
 	readonly inputPlaceholder?: string;
 	readonly editingSessionObs?: ObservablePromise<IChatEditingSession> | undefined;
 	readonly editingSession?: IChatEditingSession | undefined;
-	toggleLastRequestPaused(paused?: boolean): codemavi;
+	toggleLastRequestPaused(paused?: boolean): void;
 	/**
 	 * Sets requests as 'disabled', removing them from the UI. If a request ID
 	 * is given without undo stops, it's removed entirely. If an undo stop
 	 * is given, all content after that stop is removed.
 	 */
-	setDisabledRequests(requestIds: IChatRequestDisablement[]): codemavi;
+	setDisabledRequests(requestIds: IChatRequestDisablement[]): void;
 	getRequests(): IChatRequestModel[];
 	toExport(): IExportableChatData;
 	toJSON(): ISerializableChatData;
@@ -1062,7 +1062,7 @@ export function normalizeSerializableChatData(raw: ISerializableChatDataIn): ISe
 	return raw;
 }
 
-function normalizeOldFields(raw: ISerializableChatDataIn): codemavi {
+function normalizeOldFields(raw: ISerializableChatDataIn): void {
 	// Fill in fields that very old chat data may be missing
 	if (!raw.sessionId) {
 		raw.sessionId = generateUuid();
@@ -1192,7 +1192,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		return message.split('\n')[0].substring(0, 50);
 	}
 
-	private readonly _onDidDispose = this._register(new Emitter<codemavi>());
+	private readonly _onDidDispose = this._register(new Emitter<void>());
 	readonly onDidDispose = this._onDidDispose.event;
 
 	private readonly _onDidChange = this._register(new Emitter<IChatChangeEvent>());
@@ -1200,7 +1200,7 @@ export class ChatModel extends Disposable implements IChatModel {
 
 	private _requests: ChatRequestModel[];
 	private _initState: ChatModelInitState = ChatModelInitState.Created;
-	private _isInitializedDeferred = new DeferredPromise<codemavi>();
+	private _isInitializedDeferred = new DeferredPromise<void>();
 
 	private _sampleQuestions: IChatFollowup[] | undefined;
 	get sampleQuestions(): IChatFollowup[] | undefined {
@@ -1336,7 +1336,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		this._initialResponderAvatarIconUri = isUriComponents(initialData?.responderAvatarIconUri) ? URI.revive(initialData.responderAvatarIconUri) : initialData?.responderAvatarIconUri;
 	}
 
-	startEditingSession(isGlobalEditingSession?: boolean): codemavi {
+	startEditingSession(isGlobalEditingSession?: boolean): void {
 		const editingSessionPromise = isGlobalEditingSession ?
 			this.chatEditingService.startOrContinueGlobalEditingSession(this) :
 			this.chatEditingService.createEditingSession(this);
@@ -1429,19 +1429,19 @@ export class ChatModel extends Disposable implements IChatModel {
 		}
 	}
 
-	startInitialize(): codemavi {
+	startInitialize(): void {
 		if (this.initState !== ChatModelInitState.Created) {
 			throw new Error(`ChatModel is in the wrong state for startInitialize: ${ChatModelInitState[this.initState]}`);
 		}
 		this._initState = ChatModelInitState.Initializing;
 	}
 
-	deinitialize(): codemavi {
+	deinitialize(): void {
 		this._initState = ChatModelInitState.Created;
-		this._isInitializedDeferred = new DeferredPromise<codemavi>();
+		this._isInitializedDeferred = new DeferredPromise<void>();
 	}
 
-	initialize(sampleQuestions?: IChatFollowup[]): codemavi {
+	initialize(sampleQuestions?: IChatFollowup[]): void {
 		if (this.initState !== ChatModelInitState.Initializing) {
 			// Must call startInitialize before initialize, and only call it once
 			throw new Error(`ChatModel is in the wrong state for initialize: ${ChatModelInitState[this.initState]}`);
@@ -1454,7 +1454,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		this._onDidChange.fire({ kind: 'initialize' });
 	}
 
-	setInitializationError(error: Error): codemavi {
+	setInitializationError(error: Error): void {
 		if (this.initState !== ChatModelInitState.Initializing) {
 			throw new Error(`ChatModel is in the wrong state for setInitializationError: ${ChatModelInitState[this.initState]}`);
 		}
@@ -1464,7 +1464,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		}
 	}
 
-	waitForInitialization(): Promise<codemavi> {
+	waitForInitialization(): Promise<void> {
 		return this._isInitializedDeferred.p;
 	}
 
@@ -1502,7 +1502,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		return request;
 	}
 
-	setCustomTitle(title: string): codemavi {
+	setCustomTitle(title: string): void {
 		this._customTitle = title;
 	}
 
@@ -1511,7 +1511,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		this._onDidChange.fire({ kind: 'changedRequest', request });
 	}
 
-	adoptRequest(request: ChatRequestModel): codemavi {
+	adoptRequest(request: ChatRequestModel): void {
 		// this doesn't use `removeRequest` because it must not dispose the request object
 		const oldOwner = request.session;
 		const index = oldOwner._requests.findIndex(candidate => candidate.id === request.id);
@@ -1530,7 +1530,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		this._onDidChange.fire({ kind: 'addRequest', request });
 	}
 
-	acceptResponseProgress(request: ChatRequestModel, progress: IChatProgress, quiet?: boolean): codemavi {
+	acceptResponseProgress(request: ChatRequestModel, progress: IChatProgress, quiet?: boolean): void {
 		if (!request.response) {
 			request.response = new ChatResponseModel([], this, undefined, undefined, request.id);
 		}
@@ -1567,7 +1567,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		}
 	}
 
-	removeRequest(id: string, reason: ChatRequestRemovalReason = ChatRequestRemovalReason.Removal): codemavi {
+	removeRequest(id: string, reason: ChatRequestRemovalReason = ChatRequestRemovalReason.Removal): void {
 		const index = this._requests.findIndex(request => request.id === id);
 		const request = this._requests[index];
 
@@ -1578,13 +1578,13 @@ export class ChatModel extends Disposable implements IChatModel {
 		}
 	}
 
-	cancelRequest(request: ChatRequestModel): codemavi {
+	cancelRequest(request: ChatRequestModel): void {
 		if (request.response) {
 			request.response.cancel();
 		}
 	}
 
-	setResponse(request: ChatRequestModel, result: IChatAgentResult): codemavi {
+	setResponse(request: ChatRequestModel, result: IChatAgentResult): void {
 		if (!request.response) {
 			request.response = new ChatResponseModel([], this, undefined, undefined, request.id);
 		}
@@ -1592,7 +1592,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		request.response.setResult(result);
 	}
 
-	completeResponse(request: ChatRequestModel): codemavi {
+	completeResponse(request: ChatRequestModel): void {
 		if (!request.response) {
 			throw new Error('Call setResponse before completeResponse');
 		}
@@ -1601,7 +1601,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		this._onDidChange.fire({ kind: 'completedRequest', request });
 	}
 
-	setFollowups(request: ChatRequestModel, followups: IChatFollowup[] | undefined): codemavi {
+	setFollowups(request: ChatRequestModel, followups: IChatFollowup[] | undefined): void {
 		if (!request.response) {
 			// Maybe something went wrong?
 			return;
@@ -1610,7 +1610,7 @@ export class ChatModel extends Disposable implements IChatModel {
 		request.response.setFollowups(followups);
 	}
 
-	setResponseModel(request: ChatRequestModel, response: ChatResponseModel): codemavi {
+	setResponseModel(request: ChatRequestModel, response: ChatResponseModel): void {
 		request.response = response;
 		this._onDidChange.fire({ kind: 'addResponse', response });
 	}

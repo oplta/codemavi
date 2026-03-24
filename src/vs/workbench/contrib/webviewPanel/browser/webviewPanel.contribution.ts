@@ -48,7 +48,7 @@ class WebviewPanelContribution extends Disposable implements IWorkbenchContribut
 	private onEditorOpening(
 		editor: EditorInput,
 		group: IEditorGroup
-	): codemavi {
+	): void {
 		if (!(editor instanceof WebviewInput) || editor.typeId !== WebviewInput.typeId) {
 			return;
 		}

@@ -151,10 +151,10 @@ export class FileReferencesRenderer implements ITreeRenderer<FileReferences, Fuz
 	renderTemplate(container: HTMLElement): FileReferencesTemplate {
 		return this._instantiationService.createInstance(FileReferencesTemplate, container);
 	}
-	renderElement(node: ITreeNode<FileReferences, FuzzyScore>, index: number, template: FileReferencesTemplate): codemavi {
+	renderElement(node: ITreeNode<FileReferences, FuzzyScore>, index: number, template: FileReferencesTemplate): void {
 		template.set(node.element, createMatches(node.filterData));
 	}
-	disposeTemplate(templateData: FileReferencesTemplate): codemavi {
+	disposeTemplate(templateData: FileReferencesTemplate): void {
 		templateData.dispose();
 	}
 }
@@ -172,7 +172,7 @@ class OneReferenceTemplate extends Disposable {
 		this.label = this._register(new HighlightedLabel(container));
 	}
 
-	set(element: OneReference, score?: FuzzyScore): codemavi {
+	set(element: OneReference, score?: FuzzyScore): void {
 		const preview = element.parent.getPreview(element)?.preview(element.range);
 		if (!preview || !preview.value) {
 			// this means we FAILED to resolve the document or the value is the empty string
@@ -201,10 +201,10 @@ export class OneReferenceRenderer implements ITreeRenderer<OneReference, FuzzySc
 	renderTemplate(container: HTMLElement): OneReferenceTemplate {
 		return new OneReferenceTemplate(container);
 	}
-	renderElement(node: ITreeNode<OneReference, FuzzyScore>, index: number, templateData: OneReferenceTemplate): codemavi {
+	renderElement(node: ITreeNode<OneReference, FuzzyScore>, index: number, templateData: OneReferenceTemplate): void {
 		templateData.set(node.element, node.filterData);
 	}
-	disposeTemplate(templateData: OneReferenceTemplate): codemavi {
+	disposeTemplate(templateData: OneReferenceTemplate): void {
 		templateData.dispose();
 	}
 }

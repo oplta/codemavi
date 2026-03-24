@@ -21,7 +21,7 @@ export interface IResourceWorkingCopy extends IWorkingCopy, IDisposable {
 	/**
 	 * An event for when the orphaned state of the resource working copy changes.
 	 */
-	readonly onDidChangeOrphaned: Event<codemavi>;
+	readonly onDidChangeOrphaned: Event<void>;
 
 	/**
 	 * Whether the resource working copy is orphaned or not.
@@ -31,7 +31,7 @@ export interface IResourceWorkingCopy extends IWorkingCopy, IDisposable {
 	/**
 	 * An event for when the file working copy has been disposed.
 	 */
-	readonly onWillDispose: Event<codemavi>;
+	readonly onWillDispose: Event<void>;
 
 	/**
 	 * Whether the file working copy has been disposed or not.
@@ -52,7 +52,7 @@ export abstract class ResourceWorkingCopy extends Disposable implements IResourc
 
 	//#region Orphaned Tracking
 
-	private readonly _onDidChangeOrphaned = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeOrphaned = this._register(new Emitter<void>());
 	readonly onDidChangeOrphaned = this._onDidChangeOrphaned.event;
 
 	private orphaned = false;
@@ -61,7 +61,7 @@ export abstract class ResourceWorkingCopy extends Disposable implements IResourc
 		return this.orphaned;
 	}
 
-	private async onDidFilesChange(e: FileChangesEvent): Promise<codemavi> {
+	private async onDidFilesChange(e: FileChangesEvent): Promise<void> {
 		let fileEventImpactsUs = false;
 		let newInOrphanModeGuess: boolean | undefined;
 
@@ -107,7 +107,7 @@ export abstract class ResourceWorkingCopy extends Disposable implements IResourc
 		}
 	}
 
-	protected setOrphaned(orphaned: boolean): codemavi {
+	protected setOrphaned(orphaned: boolean): void {
 		if (this.orphaned !== orphaned) {
 			this.orphaned = orphaned;
 
@@ -120,14 +120,14 @@ export abstract class ResourceWorkingCopy extends Disposable implements IResourc
 
 	//#region Dispose
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	isDisposed(): boolean {
 		return this._store.isDisposed;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 
 		// State
 		this.orphaned = false;
@@ -154,15 +154,15 @@ export abstract class ResourceWorkingCopy extends Disposable implements IResourc
 	abstract name: string;
 	abstract capabilities: WorkingCopyCapabilities;
 
-	abstract onDidChangeDirty: Event<codemavi>;
-	abstract onDidChangeContent: Event<codemavi>;
+	abstract onDidChangeDirty: Event<void>;
+	abstract onDidChangeContent: Event<void>;
 	abstract onDidSave: Event<IWorkingCopySaveEvent>;
 
 	abstract isDirty(): boolean;
 
 	abstract backup(token: CancellationToken): Promise<IWorkingCopyBackup>;
 	abstract save(options?: ISaveOptions): Promise<boolean>;
-	abstract revert(options?: IRevertOptions): Promise<codemavi>;
+	abstract revert(options?: IRevertOptions): Promise<void>;
 
 	//#endregion
 }

@@ -84,7 +84,7 @@ export class RenderedContentHover extends Disposable {
 		return this._renderedHoverParts.hoverPartsCount;
 	}
 
-	public focusHoverPartWithIndex(index: number): codemavi {
+	public focusHoverPartWithIndex(index: number): void {
 		this._renderedHoverParts.focusHoverPartWithIndex(index);
 	}
 
@@ -96,7 +96,7 @@ export class RenderedContentHover extends Disposable {
 		return this._renderedHoverParts.getAccessibleHoverContentAtIndex(index);
 	}
 
-	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<codemavi> {
+	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<void> {
 		this._renderedHoverParts.updateHoverVerbosityLevel(action, index, focus);
 	}
 
@@ -341,7 +341,7 @@ class RenderedContentHoverParts extends Disposable {
 		this._colorHoverParticipant = participants.find(p => p instanceof HoverColorPickerParticipant);
 	}
 
-	public focusHoverPartWithIndex(index: number): codemavi {
+	public focusHoverPartWithIndex(index: number): void {
 		if (index < 0 || index >= this._renderedParts.length) {
 			return;
 		}
@@ -376,7 +376,7 @@ class RenderedContentHoverParts extends Disposable {
 		return renderedPart.participant.getAccessibleContent(renderedPart.hoverPart);
 	}
 
-	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<codemavi> {
+	public async updateHoverVerbosityLevel(action: HoverVerbosityAction, index: number, focus?: boolean): Promise<void> {
 		if (!this._markdownHoverParticipant) {
 			return;
 		}

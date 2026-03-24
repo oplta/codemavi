@@ -45,7 +45,7 @@ export class SparseMultilineTokens {
 		return this._tokens.toString(this._startLineNumber);
 	}
 
-	private _updateEndLineNumber(): codemavi {
+	private _updateEndLineNumber(): void {
 		this._endLineNumber = this._startLineNumber + this._tokens.getMaxDeltaLine();
 	}
 
@@ -68,7 +68,7 @@ export class SparseMultilineTokens {
 		return new Range(this._startLineNumber + deltaRange.startLineNumber, deltaRange.startColumn, this._startLineNumber + deltaRange.endLineNumber, deltaRange.endColumn);
 	}
 
-	public removeTokens(range: Range): codemavi {
+	public removeTokens(range: Range): void {
 		const startLineIndex = range.startLineNumber - this._startLineNumber;
 		const endLineIndex = range.endLineNumber - this._startLineNumber;
 
@@ -87,18 +87,18 @@ export class SparseMultilineTokens {
 		return [new SparseMultilineTokens(this._startLineNumber, a), new SparseMultilineTokens(this._startLineNumber + bDeltaLine, b)];
 	}
 
-	public applyEdit(range: IRange, text: string): codemavi {
+	public applyEdit(range: IRange, text: string): void {
 		const [eolCount, firstLineLength, lastLineLength] = countEOL(text);
 		this.acceptEdit(range, eolCount, firstLineLength, lastLineLength, text.length > 0 ? text.charCodeAt(0) : CharCode.Null);
 	}
 
-	public acceptEdit(range: IRange, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): codemavi {
+	public acceptEdit(range: IRange, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): void {
 		this._acceptDeleteRange(range);
 		this._acceptInsertText(new Position(range.startLineNumber, range.startColumn), eolCount, firstLineLength, lastLineLength, firstCharCode);
 		this._updateEndLineNumber();
 	}
 
-	private _acceptDeleteRange(range: IRange): codemavi {
+	private _acceptDeleteRange(range: IRange): void {
 		if (range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn) {
 			// Nothing to delete
 			return;
@@ -138,7 +138,7 @@ export class SparseMultilineTokens {
 		}
 	}
 
-	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): codemavi {
+	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): void {
 
 		if (eolCount === 0 && firstLineLength === 0) {
 			// Nothing to insert
@@ -259,7 +259,7 @@ class SparseMultilineTokensStorage {
 		return null;
 	}
 
-	public clear(): codemavi {
+	public clear(): void {
 		this._tokenCount = 0;
 	}
 
@@ -341,7 +341,7 @@ class SparseMultilineTokensStorage {
 		return [new SparseMultilineTokensStorage(new Uint32Array(aTokens)), new SparseMultilineTokensStorage(new Uint32Array(bTokens)), destFirstDeltaLine];
 	}
 
-	public acceptDeleteRange(horizontalShiftForFirstLineTokens: number, startDeltaLine: number, startCharacter: number, endDeltaLine: number, endCharacter: number): codemavi {
+	public acceptDeleteRange(horizontalShiftForFirstLineTokens: number, startDeltaLine: number, startCharacter: number, endDeltaLine: number, endCharacter: number): void {
 		// This is a bit complex, here are the cases I used to think about this:
 		//
 		// 1. The token starts before the deletion range
@@ -474,7 +474,7 @@ class SparseMultilineTokensStorage {
 		this._tokenCount = newTokenCount;
 	}
 
-	public acceptInsertText(deltaLine: number, character: number, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): codemavi {
+	public acceptInsertText(deltaLine: number, character: number, eolCount: number, firstLineLength: number, lastLineLength: number, firstCharCode: number): void {
 		// Here are the cases I used to think about this:
 		//
 		// 1. The token is completely before the insertion point

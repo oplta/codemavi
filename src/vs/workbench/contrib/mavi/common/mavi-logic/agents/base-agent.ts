@@ -1,12 +1,12 @@
 /**
- * Code Mavi - Base Agent Class
+ * Mavi - Base Agent Class
  *
  * Foundation for all agents in the triple-agent system
  * Provides common functionality and interfaces for Orchestrator, Executor, and Verifier agents
  */
 
-import { URI } from '../../../../base/common/uri.js';
-import { Disposable } from '../../../../base/common/lifecycle.js';
+import { URI } from '../../../../../../base/common/uri.js';
+import { Disposable } from '../../../../../../base/common/lifecycle.js';
 import { SemanticSearchService } from '../tools/semantic-search-service.js';
 
 export interface AgentContext {

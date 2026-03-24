@@ -62,7 +62,7 @@ export interface IPaneCompositePartService {
 	/**
 	 * Hide the active viewlet.
 	 */
-	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): codemavi;
+	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): void;
 
 	/**
 	 * Return the last active viewlet id.

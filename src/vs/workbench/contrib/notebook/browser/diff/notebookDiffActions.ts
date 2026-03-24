@@ -48,7 +48,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 
 		const activeEditor = editorService.activeEditorPane;
@@ -79,7 +79,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: unknown[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: unknown[]): void {
 		const configurationService = accessor.get(IConfigurationService);
 		const newValue = !configurationService.getValue<boolean>('diffEditor.hideUnchangedRegions.enabled');
 		configurationService.updateValue('diffEditor.hideUnchangedRegions.enabled', newValue);
@@ -102,7 +102,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 
 		const activeEditor = editorService.activeEditorPane;
@@ -143,7 +143,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: unknown[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: unknown[]): void {
 		const activeEditor = accessor.get(IEditorService).activeEditorPane;
 		if (!activeEditor) {
 			return;
@@ -170,7 +170,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, ...args: unknown[]): codemavi {
+	run(accessor: ServicesAccessor, ...args: unknown[]): void {
 		const activeEditor = accessor.get(IEditorService).activeEditorPane;
 		if (!activeEditor) {
 			return;
@@ -196,7 +196,7 @@ registerAction2(class GoToFileAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const uri = args[0] as URI;
 		const editorService = accessor.get(IEditorService);
 		const activeEditorPane = editorService.activeEditorPane;
@@ -266,7 +266,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const uri = args[0] as URI;
 		const editorService = accessor.get(IEditorService);
 		const activeEditorPane = editorService.activeEditorPane;
@@ -310,7 +310,7 @@ registerAction2(class extends Action2 {
 			}
 		);
 	}
-	async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const uri = args[0] as URI;
 		const editorService = accessor.get(IEditorService);
 		const activeEditorPane = editorService.activeEditorPane;
@@ -353,7 +353,7 @@ registerAction2(class extends Action2 {
 			}
 		);
 	}
-	async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const uri = args[0] as URI;
 		const editorService = accessor.get(IEditorService);
 		const activeEditorPane = editorService.activeEditorPane;
@@ -592,7 +592,7 @@ class ToggleRenderAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		if (this.toggleOutputs !== undefined) {

@@ -10,10 +10,10 @@ import { createDecorator } from '../../../../platform/instantiation/common/insta
 
 export interface ISearchHistoryService {
 	readonly _serviceBrand: undefined;
-	onDidClearHistory: Event<codemavi>;
-	clearHistory(): codemavi;
+	onDidClearHistory: Event<void>;
+	clearHistory(): void;
 	load(): ISearchHistoryValues;
-	save(history: ISearchHistoryValues): codemavi;
+	save(history: ISearchHistoryValues): void;
 }
 
 export const ISearchHistoryService = createDecorator<ISearchHistoryService>('searchHistoryService');
@@ -30,14 +30,14 @@ export class SearchHistoryService implements ISearchHistoryService {
 
 	public static readonly SEARCH_HISTORY_KEY = 'workbench.search.history';
 
-	private readonly _onDidClearHistory = new Emitter<codemavi>();
-	readonly onDidClearHistory: Event<codemavi> = this._onDidClearHistory.event;
+	private readonly _onDidClearHistory = new Emitter<void>();
+	readonly onDidClearHistory: Event<void> = this._onDidClearHistory.event;
 
 	constructor(
 		@IStorageService private readonly storageService: IStorageService
 	) { }
 
-	clearHistory(): codemavi {
+	clearHistory(): void {
 		this.storageService.remove(SearchHistoryService.SEARCH_HISTORY_KEY, StorageScope.WORKSPACE);
 		this._onDidClearHistory.fire();
 	}
@@ -57,7 +57,7 @@ export class SearchHistoryService implements ISearchHistoryService {
 		return result || {};
 	}
 
-	save(history: ISearchHistoryValues): codemavi {
+	save(history: ISearchHistoryValues): void {
 		if (isEmptyObject(history)) {
 			this.storageService.remove(SearchHistoryService.SEARCH_HISTORY_KEY, StorageScope.WORKSPACE);
 		} else {

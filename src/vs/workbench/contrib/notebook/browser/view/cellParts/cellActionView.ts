@@ -22,7 +22,7 @@ import { IHoverService } from '../../../../../../platform/hover/browser/hover.js
 
 export class CodiconActionViewItem extends MenuEntryActionViewItem {
 
-	protected override updateLabel(): codemavi {
+	protected override updateLabel(): void {
 		if (this.options.label && this.label) {
 			DOM.reset(this.label, ...renderLabelWithIcons(this._commandAction.label ?? ''));
 		}
@@ -32,7 +32,7 @@ export class CodiconActionViewItem extends MenuEntryActionViewItem {
 export class ActionViewWithLabel extends MenuEntryActionViewItem {
 	private _actionLabel?: HTMLAnchorElement;
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('notebook-action-view-item');
 		this._actionLabel = document.createElement('a');
@@ -66,7 +66,7 @@ export class UnifiedSubmenuActionView extends SubmenuEntryActionViewItem {
 		super(action, { ...options, hoverDelegate: options?.hoverDelegate ?? getDefaultHoverDelegate('element') }, _keybindingService, _contextMenuService, _themeService);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('notebook-action-view-item');
 		container.classList.add('notebook-action-view-item-unified');
@@ -82,7 +82,7 @@ export class UnifiedSubmenuActionView extends SubmenuEntryActionViewItem {
 		}
 	}
 
-	override onClick(event: DOM.EventLike, preserveFocus = false): codemavi {
+	override onClick(event: DOM.EventLike, preserveFocus = false): void {
 		DOM.EventHelper.stop(event, true);
 		const context = types.isUndefinedOrNull(this._context) ? this.options?.useEventAsContext ? event : { preserveFocus } : this._context;
 		this.actionRunner.run(this._primaryAction ?? this._action, context);

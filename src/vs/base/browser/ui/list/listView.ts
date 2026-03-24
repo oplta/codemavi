@@ -100,7 +100,7 @@ const DefaultOptions = {
 	dnd: {
 		getDragElements<T>(e: T) { return [e]; },
 		getDragURI() { return null; },
-		onDragStart(): codemavi { },
+		onDragStart(): void { },
 		onDragOver() { return false; },
 		drop() { },
 		dispose() { }
@@ -110,7 +110,7 @@ const DefaultOptions = {
 	alwaysConsumeMouseWheel: true,
 } satisfies IListViewOptions<any>;
 
-export class ElementsDragAndDropData<T, TContext = codemavi> implements IDragAndDropData {
+export class ElementsDragAndDropData<T, TContext = void> implements IDragAndDropData {
 
 	readonly elements: T[];
 
@@ -126,7 +126,7 @@ export class ElementsDragAndDropData<T, TContext = codemavi> implements IDragAnd
 		this.elements = elements;
 	}
 
-	update(): codemavi { }
+	update(): void { }
 
 	getData(): T[] {
 		return this.elements;
@@ -141,7 +141,7 @@ export class ExternalElementsDragAndDropData<T> implements IDragAndDropData {
 		this.elements = elements;
 	}
 
-	update(): codemavi { }
+	update(): void { }
 
 	getData(): T[] {
 		return this.elements;
@@ -158,7 +158,7 @@ export class NativeDragAndDropData implements IDragAndDropData {
 		this.files = [];
 	}
 
-	update(dataTransfer: DataTransfer): codemavi {
+	update(dataTransfer: DataTransfer): void {
 		if (dataTransfer.types) {
 			this.types.splice(0, this.types.length, ...dataTransfer.types);
 		}
@@ -262,17 +262,17 @@ export interface IListView<T> extends ISpliceable<T>, IDisposable {
 	indexOf(element: T): number;
 	indexAt(position: number): number;
 	indexAfter(position: number): number;
-	updateOptions(options: IListViewOptionsUpdate): codemavi;
+	updateOptions(options: IListViewOptionsUpdate): void;
 	getScrollTop(): number;
-	setScrollTop(scrollTop: number, reuseAnimation?: boolean): codemavi;
+	setScrollTop(scrollTop: number, reuseAnimation?: boolean): void;
 	getScrollLeft(): number;
-	setScrollLeft(scrollLeft: number): codemavi;
-	delegateScrollFromMouseWheelEvent(browserEvent: IMouseWheelEvent): codemavi;
-	delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): codemavi;
-	updateWidth(index: number): codemavi;
-	updateElementHeight(index: number, size: number | undefined, anchorIndex: number | null): codemavi;
-	rerender(): codemavi;
-	layout(height?: number, width?: number): codemavi;
+	setScrollLeft(scrollLeft: number): void;
+	delegateScrollFromMouseWheelEvent(browserEvent: IMouseWheelEvent): void;
+	delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): void;
+	updateWidth(index: number): void;
+	updateElementHeight(index: number, size: number | undefined, anchorIndex: number | null): void;
+	rerender(): void;
+	layout(height?: number, width?: number): void;
 }
 
 /**
@@ -305,7 +305,7 @@ export class ListView<T> implements IListView<T> {
 	private scrollableElement: SmoothScrollableElement;
 	private _scrollHeight: number = 0;
 	private scrollableElementUpdateDisposable: IDisposable | null = null;
-	private scrollableElementWidthDelayer = new Delayer<codemavi>(50);
+	private scrollableElementWidthDelayer = new Delayer<void>(50);
 	private splicing = false;
 	private dragOverAnimationDisposable: IDisposable | undefined;
 	private dragOverAnimationStopDisposable: IDisposable = Disposable.None;
@@ -474,7 +474,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private _setupFocusObserver(container: HTMLElement): codemavi {
+	private _setupFocusObserver(container: HTMLElement): void {
 		this.disposables.add(addDisposableListener(container, 'focus', () => {
 			const element = getActiveElement() as HTMLElement | null;
 			if (this.activeElement !== element && element !== null) {
@@ -555,7 +555,7 @@ export class ListView<T> implements IListView<T> {
 		this.scrollableElement.delegateVerticalScrollbarPointerDown(browserEvent);
 	}
 
-	updateElementHeight(index: number, size: number | undefined, anchorIndex: number | null): codemavi {
+	updateElementHeight(index: number, size: number | undefined, anchorIndex: number | null): void {
 		if (index < 0 || index >= this.items.length) {
 			return;
 		}
@@ -632,7 +632,7 @@ export class ListView<T> implements IListView<T> {
 		const deleteRange = { start, end: start + deleteCount };
 		const removeRange = Range.intersect(previousRenderRange, deleteRange);
 
-		// try to reuse rows, acodemavi removing them from DOM
+		// try to reuse rows, avoid removing them from DOM
 		const rowsToDispose = new Map<string, IRow[]>();
 		for (let i = removeRange.end - 1; i >= removeRange.start; i--) {
 			const item = this.items[i];
@@ -738,7 +738,7 @@ export class ListView<T> implements IListView<T> {
 		return deleted.map(i => i.element);
 	}
 
-	protected eventuallyUpdateScrollDimensions(): codemavi {
+	protected eventuallyUpdateScrollDimensions(): void {
 		this._scrollHeight = this.contentHeight;
 		this.rowsContainer.style.height = `${this._scrollHeight}px`;
 
@@ -751,7 +751,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private eventuallyUpdateScrollWidth(): codemavi {
+	private eventuallyUpdateScrollWidth(): void {
 		if (!this.horizontalScrolling) {
 			this.scrollableElementWidthDelayer.cancel();
 			return;
@@ -760,7 +760,7 @@ export class ListView<T> implements IListView<T> {
 		this.scrollableElementWidthDelayer.trigger(() => this.updateScrollWidth());
 	}
 
-	private updateScrollWidth(): codemavi {
+	private updateScrollWidth(): void {
 		if (!this.horizontalScrolling) {
 			return;
 		}
@@ -778,7 +778,7 @@ export class ListView<T> implements IListView<T> {
 		this._onDidChangeContentWidth.fire(this.scrollWidth);
 	}
 
-	updateWidth(index: number): codemavi {
+	updateWidth(index: number): void {
 		if (!this.horizontalScrolling || typeof this.scrollWidth === 'undefined') {
 			return;
 		}
@@ -793,7 +793,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	rerender(): codemavi {
+	rerender(): void {
 		if (!this.supportDynamicHeights) {
 			return;
 		}
@@ -867,7 +867,7 @@ export class ListView<T> implements IListView<T> {
 		return this.rangeMap.indexAfter(position);
 	}
 
-	layout(height?: number, width?: number): codemavi {
+	layout(height?: number, width?: number): void {
 		const scrollDimensions: INewScrollDimensions = {
 			height: typeof height === 'number' ? height : getContentHeight(this.domNode)
 		};
@@ -897,7 +897,7 @@ export class ListView<T> implements IListView<T> {
 
 	// Render
 
-	protected render(previousRenderRange: IRange, renderTop: number, renderHeight: number, renderLeft: number | undefined, scrollWidth: number | undefined, updateItemsInDOM: boolean = false): codemavi {
+	protected render(previousRenderRange: IRange, renderTop: number, renderHeight: number, renderLeft: number | undefined, scrollWidth: number | undefined, updateItemsInDOM: boolean = false): void {
 		const renderRange = this.getRenderRange(renderTop, renderHeight);
 
 		const rangesToInsert = Range.relativeComplement(renderRange, previousRenderRange).reverse();
@@ -941,7 +941,7 @@ export class ListView<T> implements IListView<T> {
 
 	// DOM operations
 
-	private insertItemInDOM(index: number, row?: IRow): codemavi {
+	private insertItemInDOM(index: number, row?: IRow): void {
 		const item = this.items[index];
 
 		if (!item.row) {
@@ -1000,7 +1000,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private measureItemWidth(item: IItem<T>): codemavi {
+	private measureItemWidth(item: IItem<T>): void {
 		if (!item.row || !item.row.domNode) {
 			return;
 		}
@@ -1020,7 +1020,7 @@ export class ListView<T> implements IListView<T> {
 		item.row.domNode.style.width = '';
 	}
 
-	private updateItemInDOM(item: IItem<T>, index: number): codemavi {
+	private updateItemInDOM(item: IItem<T>, index: number): void {
 		item.row!.domNode.style.top = `${this.elementTop(index)}px`;
 
 		if (this.setRowHeight) {
@@ -1041,7 +1041,7 @@ export class ListView<T> implements IListView<T> {
 		item.row!.domNode.classList.toggle('drop-target', item.dropTarget);
 	}
 
-	private removeItemFromDOM(index: number): codemavi {
+	private removeItemFromDOM(index: number): void {
 		const item = this.items[index];
 		item.dragStartDisposable.dispose();
 		item.checkedDisposable.dispose();
@@ -1067,7 +1067,7 @@ export class ListView<T> implements IListView<T> {
 		return scrollPosition.scrollTop;
 	}
 
-	setScrollTop(scrollTop: number, reuseAnimation?: boolean): codemavi {
+	setScrollTop(scrollTop: number, reuseAnimation?: boolean): void {
 		if (this.scrollableElementUpdateDisposable) {
 			this.scrollableElementUpdateDisposable.dispose();
 			this.scrollableElementUpdateDisposable = null;
@@ -1082,7 +1082,7 @@ export class ListView<T> implements IListView<T> {
 		return scrollPosition.scrollLeft;
 	}
 
-	setScrollLeft(scrollLeft: number): codemavi {
+	setScrollLeft(scrollLeft: number): void {
 		if (this.scrollableElementUpdateDisposable) {
 			this.scrollableElementUpdateDisposable.dispose();
 			this.scrollableElementUpdateDisposable = null;
@@ -1148,7 +1148,7 @@ export class ListView<T> implements IListView<T> {
 		return { browserEvent, index, element, sector };
 	}
 
-	private onScroll(e: ScrollEvent): codemavi {
+	private onScroll(e: ScrollEvent): void {
 		try {
 			const previousRenderRange = this.getRenderRange(this.lastRenderTop, this.lastRenderHeight);
 			this.render(previousRenderRange, e.scrollTop, e.height, e.scrollLeft, e.scrollWidth);
@@ -1162,7 +1162,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private onTouchChange(event: GestureEvent): codemavi {
+	private onTouchChange(event: GestureEvent): void {
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -1171,7 +1171,7 @@ export class ListView<T> implements IListView<T> {
 
 	// DND
 
-	private onDragStart(element: T, uri: string, event: DragEvent): codemavi {
+	private onDragStart(element: T, uri: string, event: DragEvent): void {
 		if (!event.dataTransfer) {
 			return;
 		}
@@ -1382,7 +1382,7 @@ export class ListView<T> implements IListView<T> {
 		return true;
 	}
 
-	private onDragLeave(event: IListDragEvent<T>): codemavi {
+	private onDragLeave(event: IListDragEvent<T>): void {
 		this.onDragLeaveTimeout.dispose();
 		this.onDragLeaveTimeout = disposableTimeout(() => this.clearDragOverFeedback(), 100, this.disposables);
 		if (this.currentDragData) {
@@ -1390,7 +1390,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private onDrop(event: IListDragEvent<T>): codemavi {
+	private onDrop(event: IListDragEvent<T>): void {
 		if (!this.canDrop) {
 			return;
 		}
@@ -1411,7 +1411,7 @@ export class ListView<T> implements IListView<T> {
 		this.dnd.drop(dragData, event.element, event.index, event.sector, event.browserEvent);
 	}
 
-	private onDragEnd(event: DragEvent): codemavi {
+	private onDragEnd(event: DragEvent): void {
 		this.canDrop = false;
 		this.teardownDragAndDropScrollTopAnimation();
 		this.clearDragOverFeedback();
@@ -1422,7 +1422,7 @@ export class ListView<T> implements IListView<T> {
 		this.dnd.onDragEnd?.(event);
 	}
 
-	private clearDragOverFeedback(): codemavi {
+	private clearDragOverFeedback(): void {
 		this.currentDragFeedback = undefined;
 		this.currentDragFeedbackPosition = undefined;
 		this.currentDragFeedbackDisposable.dispose();
@@ -1431,7 +1431,7 @@ export class ListView<T> implements IListView<T> {
 
 	// DND scroll top animation
 
-	private setupDragAndDropScrollTopAnimation(event: DragEvent | MouseEvent): codemavi {
+	private setupDragAndDropScrollTopAnimation(event: DragEvent | MouseEvent): void {
 		if (!this.dragOverAnimationDisposable) {
 			const viewTop = getTopLeftOffset(this.domNode).top;
 			this.dragOverAnimationDisposable = animate(getWindow(this.domNode), this.animateDragAndDropScrollTop.bind(this, viewTop));
@@ -1448,7 +1448,7 @@ export class ListView<T> implements IListView<T> {
 		this.dragOverMouseY = event.pageY;
 	}
 
-	private animateDragAndDropScrollTop(viewTop: number): codemavi {
+	private animateDragAndDropScrollTop(viewTop: number): void {
 		if (this.dragOverMouseY === undefined) {
 			return;
 		}
@@ -1463,7 +1463,7 @@ export class ListView<T> implements IListView<T> {
 		}
 	}
 
-	private teardownDragAndDropScrollTopAnimation(): codemavi {
+	private teardownDragAndDropScrollTopAnimation(): void {
 		this.dragOverAnimationStopDisposable.dispose();
 
 		if (this.dragOverAnimationDisposable) {
@@ -1527,7 +1527,7 @@ export class ListView<T> implements IListView<T> {
 	 * Given a stable rendered state, checks every rendered element whether it needs
 	 * to be probed for dynamic height. Adjusts scroll height and top if necessary.
 	 */
-	protected _rerender(renderTop: number, renderHeight: number, inSmoothScrolling?: boolean): codemavi {
+	protected _rerender(renderTop: number, renderHeight: number, inSmoothScrolling?: boolean): void {
 		const previousRenderRange = this.getRenderRange(renderTop, renderHeight);
 
 		// Let's remember the second element's position, this helps in scrolling up
@@ -1592,7 +1592,7 @@ export class ListView<T> implements IListView<T> {
 
 				if (typeof anchorElementIndex === 'number') {
 					// To compute a destination scroll top, we need to take into account the current smooth scrolling
-					// animation, and then reuse it with a new target (to acodemavi prolonging the scroll)
+					// animation, and then reuse it with a new target (to avoid prolonging the scroll)
 					// See https://github.com/microsoft/vscode/issues/104144
 					// See https://github.com/microsoft/vscode/pull/104284
 					// See https://github.com/microsoft/vscode/issues/107704

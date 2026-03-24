@@ -264,7 +264,7 @@ function scoreSeparatorAtPos(charCode: number): number {
 	}
 }
 
-// function printMatrix(query: string, target: string, matches: number[], scores: number[]): codemavi {
+// function printMatrix(query: string, target: string, matches: number[], scores: number[]): void {
 // 	console.log('\t' + target.split('').join('\t'));
 // 	for (let queryIndex = 0; queryIndex < query.length; queryIndex++) {
 // 		let line = query[queryIndex] + '\t';

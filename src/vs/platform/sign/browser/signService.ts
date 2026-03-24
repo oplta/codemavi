@@ -16,7 +16,7 @@ declare module vsdaWeb {
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export class validator {
-		free(): codemavi;
+		free(): void;
 		constructor();
 		createNewMessage(original: string): string;
 		validate(signed_message: string): 'ok' | 'error';
@@ -61,7 +61,7 @@ export class SignService extends AbstractSignService implements ISignService {
 		const checkInterval = new WindowIntervalTimer();
 		let [wasm] = await Promise.all([
 			this.getWasmBytes(),
-			new Promise<codemavi>((resolve, reject) => {
+			new Promise<void>((resolve, reject) => {
 				importAMDNodeModule('vsda', 'rust/web/vsda.js').then(() => resolve(), reject);
 
 				// todo@connor4312: there seems to be a bug(?) in vscode-loader with

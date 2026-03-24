@@ -18,7 +18,7 @@ export interface IWebContentExtractorService {
 }
 
 /*
- * A service that extracts image content from a given arbitrary URI. This is done in the shared process to acodemavi running non trusted application code in the main process.
+ * A service that extracts image content from a given arbitrary URI. This is done in the shared process to avoid running non trusted application code in the main process.
  */
 export interface ISharedWebContentExtractorService {
 	_serviceBrand: undefined;

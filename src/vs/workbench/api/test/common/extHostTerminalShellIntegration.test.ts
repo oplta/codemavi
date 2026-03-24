@@ -45,7 +45,7 @@ suite('InternalTerminalShellIntegration', () => {
 	let terminal: Terminal;
 	let onDidStartTerminalShellExecution: Emitter<TerminalShellExecutionStartEvent>;
 	let trackedEvents: ITrackedEvent[];
-	let readIteratorsFlushed: Promise<codemavi>[];
+	let readIteratorsFlushed: Promise<void>[];
 
 	async function startExecutionAwaitObject(commandLine: string | TerminalShellExecutionCommandLine, cwd?: URI): Promise<TerminalShellExecution> {
 		return await new Promise<TerminalShellExecution>(r => {
@@ -63,10 +63,10 @@ suite('InternalTerminalShellIntegration', () => {
 		});
 	}
 
-	async function emitData(data: string): Promise<codemavi> {
+	async function emitData(data: string): Promise<void> {
 		// AsyncIterableObjects are initialized in a microtask, this doesn't matter in practice
 		// since the events will always come through in different events.
-		await new Promise<codemavi>(r => queueMicrotask(r));
+		await new Promise<void>(r => queueMicrotask(r));
 		si.emitData(data);
 	}
 
@@ -95,7 +95,7 @@ suite('InternalTerminalShellIntegration', () => {
 				commandLine: e.execution.commandLine.value,
 			});
 			const stream = e.execution.read();
-			const readIteratorsFlushedDeferred = new DeferredPromise<codemavi>();
+			const readIteratorsFlushedDeferred = new DeferredPromise<void>();
 			readIteratorsFlushed.push(readIteratorsFlushedDeferred.p);
 			for await (const data of stream) {
 				trackedEvents.push({

@@ -29,12 +29,12 @@ export class MultiplexPolicyService extends AbstractPolicyService implements IPo
 		return Iterable.reduce(this.policies.entries(), (r, [name, value]) => ({ ...r, [name]: value }), {});
 	}
 
-	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<codemavi> {
+	protected async _updatePolicyDefinitions(policyDefinitions: IStringDictionary<PolicyDefinition>): Promise<void> {
 		await Promise.all(this.policyServices.map(service => service.updatePolicyDefinitions(policyDefinitions)));
 		this.updatePolicies();
 	}
 
-	private updatePolicies(): codemavi {
+	private updatePolicies(): void {
 		this.policies.clear();
 		const updated: string[] = [];
 		for (const service of this.policyServices) {

@@ -277,7 +277,7 @@ function validateIcon(icon: string | TerminalIcon | undefined): TerminalIcon | u
 	return icon;
 }
 
-async function initializeWindowsProfiles(testPwshSourcePaths?: string[]): Promise<codemavi> {
+async function initializeWindowsProfiles(testPwshSourcePaths?: string[]): Promise<void> {
 	if (profileSources && !testPwshSourcePaths) {
 		return;
 	}
@@ -309,7 +309,7 @@ async function getGitBashPaths(): Promise<string[]> {
 		const gitExeDir = dirname(gitExePath);
 		gitDirs.add(resolve(gitExeDir, '../..'));
 	}
-	function addTruthy<T>(set: Set<T>, value: T | undefined): codemavi {
+	function addTruthy<T>(set: Set<T>, value: T | undefined): void {
 		if (value) {
 			set.add(value);
 		}

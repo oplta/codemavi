@@ -80,7 +80,7 @@ export interface IFilesConfigurationService {
 
 	//#region Auto Save
 
-	readonly onDidChangeAutoSaveConfiguration: Event<codemavi>;
+	readonly onDidChangeAutoSaveConfiguration: Event<void>;
 
 	readonly onDidChangeAutoSaveDisabled: Event<URI>;
 
@@ -90,7 +90,7 @@ export interface IFilesConfigurationService {
 
 	getAutoSaveMode(resourceOrEditor: EditorInput | URI | undefined, saveReason?: SaveReason): IAutoSaveMode;
 
-	toggleAutoSave(): Promise<codemavi>;
+	toggleAutoSave(): Promise<void>;
 
 	enableAutoSaveAfterShortDelay(resourceOrEditor: EditorInput | URI): IDisposable;
 	disableAutoSave(resourceOrEditor: EditorInput | URI): IDisposable;
@@ -99,15 +99,15 @@ export interface IFilesConfigurationService {
 
 	//#region Configured Readonly
 
-	readonly onDidChangeReadonly: Event<codemavi>;
+	readonly onDidChangeReadonly: Event<void>;
 
 	isReadonly(resource: URI, stat?: IBaseFileStat): boolean | IMarkdownString;
 
-	updateReadonly(resource: URI, readonly: true | false | 'toggle' | 'reset'): Promise<codemavi>;
+	updateReadonly(resource: URI, readonly: true | false | 'toggle' | 'reset'): Promise<void>;
 
 	//#endregion
 
-	readonly onDidChangeFilesAssociation: Event<codemavi>;
+	readonly onDidChangeFilesAssociation: Event<void>;
 
 	readonly isHotExitEnabled: boolean;
 
@@ -131,16 +131,16 @@ export class FilesConfigurationService extends Disposable implements IFilesConfi
 		fileReadonly: { value: localize('fileReadonly', "Editor is read-only because the file is read-only."), isTrusted: true }
 	};
 
-	private readonly _onDidChangeAutoSaveConfiguration = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeAutoSaveConfiguration = this._register(new Emitter<void>());
 	readonly onDidChangeAutoSaveConfiguration = this._onDidChangeAutoSaveConfiguration.event;
 
 	private readonly _onDidChangeAutoSaveDisabled = this._register(new Emitter<URI>());
 	readonly onDidChangeAutoSaveDisabled = this._onDidChangeAutoSaveDisabled.event;
 
-	private readonly _onDidChangeFilesAssociation = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeFilesAssociation = this._register(new Emitter<void>());
 	readonly onDidChangeFilesAssociation = this._onDidChangeFilesAssociation.event;
 
-	private readonly _onDidChangeReadonly = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeReadonly = this._register(new Emitter<void>());
 	readonly onDidChangeReadonly = this._onDidChangeReadonly.event;
 
 	private currentGlobalAutoSaveConfiguration: IAutoSaveConfiguration;
@@ -239,7 +239,7 @@ export class FilesConfigurationService extends Disposable implements IFilesConfi
 		return false;
 	}
 
-	async updateReadonly(resource: URI, readonly: true | false | 'toggle' | 'reset'): Promise<codemavi> {
+	async updateReadonly(resource: URI, readonly: true | false | 'toggle' | 'reset'): Promise<void> {
 		if (readonly === 'toggle') {
 			let stat: IFileStatWithMetadata | undefined = undefined;
 			try {
@@ -260,7 +260,7 @@ export class FilesConfigurationService extends Disposable implements IFilesConfi
 		this._onDidChangeReadonly.fire();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Files configuration changes
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
@@ -270,7 +270,7 @@ export class FilesConfigurationService extends Disposable implements IFilesConfi
 		}));
 	}
 
-	protected onFilesConfigurationChange(configuration: IFilesConfiguration, fromEvent: boolean): codemavi {
+	protected onFilesConfigurationChange(configuration: IFilesConfiguration, fromEvent: boolean): void {
 
 		// Auto Save
 		this.currentGlobalAutoSaveConfiguration = this.computeAutoSaveConfiguration(undefined, configuration.files);
@@ -447,7 +447,7 @@ export class FilesConfigurationService extends Disposable implements IFilesConfi
 		}
 	}
 
-	async toggleAutoSave(): Promise<codemavi> {
+	async toggleAutoSave(): Promise<void> {
 		const currentSetting = this.configurationService.getValue('files.autoSave');
 
 		let newAutoSaveValue: string;

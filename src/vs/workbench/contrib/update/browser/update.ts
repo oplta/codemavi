@@ -204,7 +204,7 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 		this.registerGlobalActivityActions();
 	}
 
-	private async onUpdateStateChange(state: UpdateState): Promise<codemavi> {
+	private async onUpdateStateChange(state: UpdateState): Promise<void> {
 		this.updateStateContextKey.set(state.type);
 
 		switch (state.type) {
@@ -276,7 +276,7 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 		this.state = state;
 	}
 
-	private onError(error: string): codemavi {
+	private onError(error: string): void {
 		if (/The request timed out|The network connection was lost/i.test(error)) {
 			return;
 		}
@@ -290,12 +290,12 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 		});
 	}
 
-	private onUpdateNotAvailable(): codemavi {
+	private onUpdateNotAvailable(): void {
 		this.dialogService.info(nls.localize('noUpdatesAvailable', "There are currently no updates available."));
 	}
 
 	// linux
-	private onUpdateAvailable(update: IUpdate): codemavi {
+	private onUpdateAvailable(update: IUpdate): void {
 		if (!this.shouldShowNotification()) {
 			return;
 		}
@@ -324,7 +324,7 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 	}
 
 	// windows fast updates
-	private onUpdateDownloaded(update: IUpdate): codemavi {
+	private onUpdateDownloaded(update: IUpdate): void {
 		if (isMacintosh) {
 			return;
 		}
@@ -360,7 +360,7 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 	}
 
 	// windows and mac
-	private onUpdateReady(update: IUpdate): codemavi {
+	private onUpdateReady(update: IUpdate): void {
 		if (!(isWindows && this.productService.target !== 'user') && !this.shouldShowNotification()) {
 			return;
 		}
@@ -409,7 +409,7 @@ export class UpdateContribution extends Disposable implements IWorkbenchContribu
 		return diffDays > 5;
 	}
 
-	private registerGlobalActivityActions(): codemavi {
+	private registerGlobalActivityActions(): void {
 		CommandsRegistry.registerCommand('update.check', () => this.updateService.checkForUpdates(true));
 		MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
 			group: '7_update',
@@ -524,7 +524,7 @@ export class SwitchProductQualityContribution extends Disposable implements IWor
 		this.registerGlobalActivityActions();
 	}
 
-	private registerGlobalActivityActions(): codemavi {
+	private registerGlobalActivityActions(): void {
 		const quality = this.productService.quality;
 		const productQualityChangeHandler = this.environmentService.options?.productQualityChangeHandler;
 		if (productQualityChangeHandler && (quality === 'stable' || quality === 'insider')) {
@@ -545,7 +545,7 @@ export class SwitchProductQualityContribution extends Disposable implements IWor
 					});
 				}
 
-				async run(accessor: ServicesAccessor): Promise<codemavi> {
+				async run(accessor: ServicesAccessor): Promise<void> {
 					const dialogService = accessor.get(IDialogService);
 					const userDataSyncEnablementService = accessor.get(IUserDataSyncEnablementService);
 					const userDataSyncStoreManagementService = accessor.get(IUserDataSyncStoreManagementService);

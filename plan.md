@@ -157,7 +157,7 @@ Sonuç Orchestrator'a döner:
 
 Cursor'un en büyük sırrı bu. Biz açık yapacağız.
 
-### `.codemavi/rules.md` — Proje Kuralları
+### `.mavi/rules.md` — Proje Kuralları
 
 ```markdown
 # Proje Kuralları (Code Mavi Agent'ı okur)
@@ -183,7 +183,7 @@ Cursor'daki `.cursorrules` ile aynı fikir ama bizimki şeffaf ve genişletilebi
 ### Global Kullanıcı Kuralları
 
 ```markdown
-# Global Kurallar (~/.codemavi/global-rules.md)
+# Global Kurallar (~/.mavi/global-rules.md)
 - Kod yorumları her zaman Türkçe
 - commit message: conventional commits
 - Büyük refactor öncesi mutlaka onay iste
@@ -193,8 +193,8 @@ Cursor'daki `.cursorrules` ile aynı fikir ama bizimki şeffaf ve genişletilebi
 
 ```
 1. Code Mavi base prompt (biz yazıyoruz, açık kaynak)
-2. ~/.codemavi/global-rules.md (kullanıcı global tercihleri)
-3. .codemavi/rules.md (proje kuralları)
+2. ~/.mavi/global-rules.md (kullanıcı global tercihleri)
+3. .mavi/rules.md (proje kuralları)
 4. Otomatik context: açık dosyalar, hata mesajları, son değişiklikler
 5. Kullanıcının mesajı
 ```
@@ -292,8 +292,8 @@ Bu projenin kalbi. Void'un hiç yapmadığı şey.
 
 ## Faz 4 — System Prompt + Rules (8-9. Hafta)
 
-- [ ] `.codemavi/rules.md` dosya sistemi
-- [ ] Global `~/.codemavi/global-rules.md`
+- [ ] `.mavi/rules.md` dosya sistemi
+- [ ] Global `~/.mavi/global-rules.md`
 - [ ] System prompt katman birleştirici
 - [ ] UI: system prompt'u canlı göster/düzenle
 - [ ] "Prompt Inspector" — her agent çağrısının tam prompt'unu göster

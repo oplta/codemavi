@@ -58,7 +58,7 @@ export class DynamicEditorConfigurations extends Disposable implements IWorkbenc
 	private static readonly AUTO_LOCK_REMOVE_EDITORS = new Set<string>([
 
 		// List some editor types that the above `AUTO_LOCK_EXTRA_EDITORS`
-		// already covers to acodemavi duplicates.
+		// already covers to avoid duplicates.
 
 		'vscode-interactive-input',
 		'interactive',
@@ -91,13 +91,13 @@ export class DynamicEditorConfigurations extends Disposable implements IWorkbenc
 		})();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Registered editors (debounced to reduce perf overhead)
 		this._register(Event.debounce(this.editorResolverService.onDidChangeEditorRegistrations, (_, e) => e)(() => this.updateDynamicEditorConfigurations()));
 	}
 
-	private updateDynamicEditorConfigurations(): codemavi {
+	private updateDynamicEditorConfigurations(): void {
 		const lockableEditors = [...this.editorResolverService.getEditors(), ...DynamicEditorConfigurations.AUTO_LOCK_EXTRA_EDITORS].filter(e => !DynamicEditorConfigurations.AUTO_LOCK_REMOVE_EDITORS.has(e.id));
 		const binaryEditorCandidates = this.editorResolverService.getEditors().filter(e => e.priority !== RegisteredEditorPriority.exclusive).map(e => e.id);
 

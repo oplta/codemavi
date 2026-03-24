@@ -22,27 +22,27 @@ export class UserDataSyncLogService extends AbstractLogger implements IUserDataS
 		this.logger = this._register(loggerService.createLogger(joinPath(environmentService.logsHome, `${USER_DATA_SYNC_LOG_ID}.log`), { id: USER_DATA_SYNC_LOG_ID, name: localize('userDataSyncLog', "Settings Sync") }));
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		this.logger.trace(message, ...args);
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		this.logger.debug(message, ...args);
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		this.logger.info(message, ...args);
 	}
 
-	warn(message: string, ...args: any[]): codemavi {
+	warn(message: string, ...args: any[]): void {
 		this.logger.warn(message, ...args);
 	}
 
-	error(message: string | Error, ...args: any[]): codemavi {
+	error(message: string | Error, ...args: any[]): void {
 		this.logger.error(message, ...args);
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		this.logger.flush();
 	}
 

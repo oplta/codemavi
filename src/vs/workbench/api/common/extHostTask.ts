@@ -44,10 +44,10 @@ export interface IExtHostTask extends ExtHostTaskShape {
 	onDidEndTaskProblemMatchers: Event<vscode.TaskProblemMatcherEndedEvent>;
 
 	registerTaskProvider(extension: IExtensionDescription, type: string, provider: vscode.TaskProvider): vscode.Disposable;
-	registerTaskSystem(scheme: string, info: tasks.ITaskSystemInfoDTO): codemavi;
+	registerTaskSystem(scheme: string, info: tasks.ITaskSystemInfoDTO): void;
 	fetchTasks(filter?: vscode.TaskFilter): Promise<vscode.Task[]>;
 	executeTask(extension: IExtensionDescription, task: vscode.Task): Promise<vscode.TaskExecution>;
-	terminateTask(execution: vscode.TaskExecution): Promise<codemavi>;
+	terminateTask(execution: vscode.TaskExecution): Promise<void>;
 }
 
 namespace TaskDefinitionDTO {
@@ -369,14 +369,14 @@ class TaskExecutionImpl implements vscode.TaskExecution {
 		return this._task;
 	}
 
-	public terminate(): codemavi {
+	public terminate(): void {
 		this.#tasks.terminateTask(this);
 	}
 
-	public fireDidStartProcess(value: tasks.ITaskProcessStartedDTO): codemavi {
+	public fireDidStartProcess(value: tasks.ITaskProcessStartedDTO): void {
 	}
 
-	public fireDidEndProcess(value: tasks.ITaskProcessEndedDTO): codemavi {
+	public fireDidEndProcess(value: tasks.ITaskProcessEndedDTO): void {
 	}
 }
 
@@ -452,7 +452,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		});
 	}
 
-	public registerTaskSystem(scheme: string, info: tasks.ITaskSystemInfoDTO): codemavi {
+	public registerTaskSystem(scheme: string, info: tasks.ITaskSystemInfoDTO): void {
 		this._proxy.$registerTaskSystem(scheme, info);
 	}
 
@@ -477,7 +477,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return result;
 	}
 
-	public terminateTask(execution: vscode.TaskExecution): Promise<codemavi> {
+	public terminateTask(execution: vscode.TaskExecution): Promise<void> {
 		if (!(execution instanceof TaskExecutionImpl)) {
 			throw new Error('No valid task execution provided');
 		}
@@ -488,7 +488,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidExecuteTask.event;
 	}
 
-	public async $onDidStartTask(execution: tasks.ITaskExecutionDTO, terminalId: number, resolvedDefinition: tasks.ITaskDefinitionDTO): Promise<codemavi> {
+	public async $onDidStartTask(execution: tasks.ITaskExecutionDTO, terminalId: number, resolvedDefinition: tasks.ITaskDefinitionDTO): Promise<void> {
 		const customExecution: types.CustomExecution | undefined = this._providedCustomExecutions2.get(execution.id);
 		if (customExecution) {
 			// Clone the custom execution to keep the original untouched. This is important for multiple runs of the same task.
@@ -506,7 +506,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidTerminateTask.event;
 	}
 
-	public async $OnDidEndTask(execution: tasks.ITaskExecutionDTO): Promise<codemavi> {
+	public async $OnDidEndTask(execution: tasks.ITaskExecutionDTO): Promise<void> {
 		if (!this._taskExecutionPromises.has(execution.id)) {
 			// Event already fired by the main thread
 			// See https://github.com/microsoft/vscode/commit/aaf73920aeae171096d205efb2c58804a32b6846
@@ -525,7 +525,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidTaskProcessStarted.event;
 	}
 
-	public async $onDidStartTaskProcess(value: tasks.ITaskProcessStartedDTO): Promise<codemavi> {
+	public async $onDidStartTaskProcess(value: tasks.ITaskProcessStartedDTO): Promise<void> {
 		const execution = await this.getTaskExecution(value.id);
 		this._onDidTaskProcessStarted.fire({
 			execution: execution,
@@ -537,7 +537,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidTaskProcessEnded.event;
 	}
 
-	public async $onDidEndTaskProcess(value: tasks.ITaskProcessEndedDTO): Promise<codemavi> {
+	public async $onDidEndTaskProcess(value: tasks.ITaskProcessEndedDTO): Promise<void> {
 		const execution = await this.getTaskExecution(value.id);
 		this._onDidTaskProcessEnded.fire({
 			execution: execution,
@@ -549,7 +549,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidStartTaskProblemMatchers.event;
 	}
 
-	public async $onDidStartTaskProblemMatchers(value: ITaskProblemMatcherStartedDto): Promise<codemavi> {
+	public async $onDidStartTaskProblemMatchers(value: ITaskProblemMatcherStartedDto): Promise<void> {
 		let execution;
 		try {
 			execution = await this.getTaskExecution(value.execution.id);
@@ -565,7 +565,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._onDidEndTaskProblemMatchers.event;
 	}
 
-	public async $onDidEndTaskProblemMatchers(value: ITaskProblemMatcherEndedDto): Promise<codemavi> {
+	public async $onDidEndTaskProblemMatchers(value: ITaskProblemMatcherEndedDto): Promise<void> {
 		let execution;
 		try {
 			execution = await this.getTaskExecution(value.execution.id);
@@ -577,7 +577,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		this._onDidEndTaskProblemMatchers.fire({ execution, hasErrors: value.hasErrors });
 	}
 
-	protected abstract provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<codemavi>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription };
+	protected abstract provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<void>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription };
 
 	public $provideTasks(handle: number, validTypes: { [key: string]: boolean }): Promise<tasks.ITaskSetDTO> {
 		const handler = this._handlers.get(handle);
@@ -593,7 +593,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		// The task start event is also the first time we see the ID from the main
 		// thread, which is too late for us because we need to save an map
 		// from an ID to the custom execution function. (Kind of a cart before the horse problem).
-		const taskIdPromises: Promise<codemavi>[] = [];
+		const taskIdPromises: Promise<void>[] = [];
 		const fetchPromise = asPromise(() => handler.provider.provideTasks(CancellationToken.None)).then(value => {
 			return this.provideTasksInternal(validTypes, taskIdPromises, handler, value);
 		});
@@ -653,7 +653,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		return this._handleCounter++;
 	}
 
-	protected async addCustomExecution(taskDTO: tasks.ITaskDTO, task: vscode.Task, isProvided: boolean): Promise<codemavi> {
+	protected async addCustomExecution(taskDTO: tasks.ITaskDTO, task: vscode.Task, isProvided: boolean): Promise<void> {
 		const taskId = await this._proxy.$createTaskId(taskDTO);
 		if (!isProvided && !this._providedCustomExecutions2.has(taskId)) {
 			this._notProvidedCustomExecutions.add(taskId);
@@ -702,7 +702,7 @@ export abstract class ExtHostTaskBase implements ExtHostTaskShape, IExtHostTask 
 		}
 	}
 
-	private customExecutionComplete(execution: tasks.ITaskExecutionDTO): codemavi {
+	private customExecutionComplete(execution: tasks.ITaskExecutionDTO): void {
 		const extensionCallback2: vscode.CustomExecution | undefined = this._activeCustomExecutions2.get(execution.id);
 		if (extensionCallback2) {
 			this._activeCustomExecutions2.delete(execution.id);
@@ -776,7 +776,7 @@ export class WorkerExtHostTask extends ExtHostTaskBase {
 		return execution;
 	}
 
-	protected provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<codemavi>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription } {
+	protected provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<void>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription } {
 		const taskDTOs: tasks.ITaskDTO[] = [];
 		if (value) {
 			for (const task of value) {

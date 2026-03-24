@@ -41,7 +41,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		}
 	}
 
-	private async report(): Promise<codemavi> {
+	private async report(): Promise<void> {
 		// Windows-only Edition Event
 		this.reportWindowsEdition();
 
@@ -57,7 +57,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		this.getWorkspaceInformation().then(stats => this.diagnosticsService.reportWorkspaceStats(stats));
 	}
 
-	private async reportWindowsEdition(): Promise<codemavi> {
+	private async reportWindowsEdition(): Promise<void> {
 		if (!isWindows) {
 			return;
 		}
@@ -85,7 +85,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		};
 	}
 
-	private reportWorkspaceTags(tags: Tags): codemavi {
+	private reportWorkspaceTags(tags: Tags): void {
 		/* __GDPR__
 			"workspce.tags" : {
 				"owner": "lramos15",
@@ -97,7 +97,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		this.telemetryService.publicLog('workspce.tags', tags);
 	}
 
-	private reportRemoteDomains(workspaceUris: URI[]): codemavi {
+	private reportRemoteDomains(workspaceUris: URI[]): void {
 		Promise.all<string[]>(workspaceUris.map(workspaceUri => {
 			const path = workspaceUri.path;
 			const uri = workspaceUri.with({ path: `${path !== '/' ? path : ''}/.git/config` });
@@ -124,7 +124,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		}, onUnexpectedError);
 	}
 
-	private reportRemotes(workspaceUris: URI[]): codemavi {
+	private reportRemotes(workspaceUris: URI[]): void {
 		Promise.all<string[]>(workspaceUris.map(workspaceUri => {
 			return this.workspaceTagsService.getHashedRemotesFromUri(workspaceUri, true);
 		})).then(() => { }, onUnexpectedError);
@@ -204,7 +204,7 @@ export class WorkspaceTags implements IWorkbenchContribution {
 		}).then(undefined, onUnexpectedError);
 	}
 
-	private reportCloudStats(): codemavi {
+	private reportCloudStats(): void {
 		const uris = this.contextService.getWorkspace().folders.map(folder => folder.uri);
 		if (uris.length && this.fileService) {
 			this.reportRemoteDomains(uris);

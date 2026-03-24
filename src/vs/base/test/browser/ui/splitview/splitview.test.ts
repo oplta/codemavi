@@ -23,7 +23,7 @@ class TestView implements IView<number> {
 	private _element: HTMLElement = document.createElement('div');
 	get element(): HTMLElement { this._onDidGetElement.fire(); return this._element; }
 
-	private readonly _onDidGetElement = new Emitter<codemavi>();
+	private readonly _onDidGetElement = new Emitter<void>();
 	readonly onDidGetElement = this._onDidGetElement.event;
 
 	private _size = 0;
@@ -33,7 +33,7 @@ class TestView implements IView<number> {
 	private readonly _onDidLayout = new Emitter<{ size: number; orthogonalSize: number | undefined }>();
 	readonly onDidLayout = this._onDidLayout.event;
 
-	private readonly _onDidFocus = new Emitter<codemavi>();
+	private readonly _onDidFocus = new Emitter<void>();
 	readonly onDidFocus = this._onDidFocus.event;
 
 	constructor(
@@ -44,17 +44,17 @@ class TestView implements IView<number> {
 		assert(_minimumSize <= _maximumSize, 'splitview view minimum size must be <= maximum size');
 	}
 
-	layout(size: number, _offset: number, orthogonalSize: number | undefined): codemavi {
+	layout(size: number, _offset: number, orthogonalSize: number | undefined): void {
 		this._size = size;
 		this._orthogonalSize = orthogonalSize;
 		this._onDidLayout.fire({ size, orthogonalSize });
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this._onDidFocus.fire();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this._onDidGetElement.dispose();
 		this._onDidLayout.dispose();

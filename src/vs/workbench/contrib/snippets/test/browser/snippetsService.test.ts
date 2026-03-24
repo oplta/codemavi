@@ -38,10 +38,10 @@ class SimpleSnippetService implements ISnippetsService {
 	isEnabled(): boolean {
 		throw new Error();
 	}
-	updateEnablement(): codemavi {
+	updateEnablement(): void {
 		throw new Error();
 	}
-	updateUsageTimestamp(snippet: Snippet): codemavi {
+	updateUsageTimestamp(snippet: Snippet): void {
 		throw new Error();
 	}
 }

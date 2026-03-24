@@ -31,8 +31,8 @@ export class FoldingModel implements IDisposable {
 		return this._regions;
 	}
 
-	private readonly _onDidFoldingRegionChanges = new Emitter<codemavi>();
-	readonly onDidFoldingRegionChanged: Event<codemavi> = this._onDidFoldingRegionChanges.event;
+	private readonly _onDidFoldingRegionChanges = new Emitter<void>();
+	readonly onDidFoldingRegionChanged: Event<void> = this._onDidFoldingRegionChanges.event;
 
 	private _foldingRangeDecorationIds: string[] = [];
 

@@ -35,7 +35,7 @@ export class MergeEditorOpenContentsFromJSON extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, args?: { data?: MergeEditorContents; resultState?: 'initial' | 'current' }): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, args?: { data?: MergeEditorContents; resultState?: 'initial' | 'current' }): Promise<void> {
 		const quickInputService = accessor.get(IQuickInputService);
 		const clipboardService = accessor.get(IClipboardService);
 		const editorService = accessor.get(IEditorService);
@@ -74,7 +74,7 @@ export class MergeEditorOpenContentsFromJSON extends Action2 {
 		const resultUri = URI.joinPath(targetDir, `/result${extension}`);
 		const initialResultUri = URI.joinPath(targetDir, `/initialResult${extension}`);
 
-		async function writeFile(uri: URI, content: string): Promise<codemavi> {
+		async function writeFile(uri: URI, content: string): Promise<void> {
 			await fileService.writeFile(uri, VSBuffer.fromString(content));
 		}
 
@@ -111,7 +111,7 @@ abstract class MergeEditorAction extends Action2 {
 		super(desc);
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const { activeEditorPane } = accessor.get(IEditorService);
 		if (activeEditorPane instanceof MergeEditor) {
 			const vm = activeEditorPane.viewModel.get();
@@ -122,7 +122,7 @@ abstract class MergeEditorAction extends Action2 {
 		}
 	}
 
-	abstract runWithViewModel(viewModel: MergeEditorViewModel, accessor: ServicesAccessor): codemavi;
+	abstract runWithViewModel(viewModel: MergeEditorViewModel, accessor: ServicesAccessor): void;
 }
 
 export class OpenSelectionInTemporaryMergeEditor extends MergeEditorAction {

@@ -164,7 +164,7 @@ export class CodeCell extends Disposable {
 
 	private _pendingLayout: IDisposable | undefined;
 
-	private updateForLayout(): codemavi {
+	private updateForLayout(): void {
 		this._pendingLayout?.dispose();
 		this._pendingLayout = DOM.modify(DOM.getWindow(this.notebookEditor.getDomNode()), () => {
 			this.cellParts.updateInternalLayoutNow(this.viewCell);
@@ -248,7 +248,7 @@ export class CodeCell extends Disposable {
 		});
 	}
 
-	private updateForOutputs(): codemavi {
+	private updateForOutputs(): void {
 		DOM.setVisibility(this.viewCell.outputsViewModels.length > 0, this.templateData.focusSinkElement);
 	}
 
@@ -527,7 +527,7 @@ export class CodeCell extends Disposable {
 		this._outputContainerRenderer.viewUpdateShowOutputs(initRendering);
 	}
 
-	private initialViewUpdateExpanded(): codemavi {
+	private initialViewUpdateExpanded(): void {
 		this.templateData.container.classList.toggle('input-collapsed', false);
 		DOM.show(this.templateData.editorPart);
 		DOM.hide(this.templateData.cellInputCollapsedContainer);
@@ -535,7 +535,7 @@ export class CodeCell extends Disposable {
 		this._showOutput(true);
 	}
 
-	private layoutEditor(dimension: IDimension): codemavi {
+	private layoutEditor(dimension: IDimension): void {
 		const editorLayout = this.notebookEditor.getLayoutInfo();
 		const maxHeight = Math.min(
 			editorLayout.height
@@ -549,7 +549,7 @@ export class CodeCell extends Disposable {
 		}, true);
 	}
 
-	private onCellWidthChange(): codemavi {
+	private onCellWidthChange(): void {
 		if (!this.templateData.editor.hasModel()) {
 			return;
 		}
@@ -565,7 +565,7 @@ export class CodeCell extends Disposable {
 		);
 	}
 
-	private onCellEditorHeightChange(newHeight: number): codemavi {
+	private onCellEditorHeightChange(newHeight: number): void {
 		const viewLayout = this.templateData.editor.getLayoutInfo();
 		this.viewCell.editorHeight = newHeight;
 		this.relayoutCell();

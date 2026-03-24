@@ -38,7 +38,7 @@ export class SettingsSearchFilterDropdownMenuActionViewItem extends DropdownMenu
 		this.suggestController = SuggestController.get(this.searchWidget.inputWidget);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 	}
 

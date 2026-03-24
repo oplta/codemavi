@@ -184,7 +184,7 @@
 			"name": "keyword.operator.$1.coffee"
 		},
 		{
-			"match": "\\b(?<![\\.\\$])(case|function|var|codemavi|with|const|let|enum|native|__hasProp|__extends|__slice|__bind|__indexOf|implements|interface|package|private|protected|public|static)(?!\\s*:)\\b",
+			"match": "\\b(?<![\\.\\$])(case|function|var|void |with|const|let|enum|native|__hasProp|__extends|__slice|__bind|__indexOf|implements|interface|package|private|protected|public|static)(?!\\s*:)\\b",
 			"name": "keyword.reserved.coffee"
 		},
 		{

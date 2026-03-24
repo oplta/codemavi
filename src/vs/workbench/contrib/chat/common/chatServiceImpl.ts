@@ -199,7 +199,7 @@ export class ChatService extends Disposable implements IChatService {
 		return this.chatAgentService.getContributedDefaultAgent(location) !== undefined;
 	}
 
-	private saveState(): codemavi {
+	private saveState(): void {
 		const liveChats = Array.from(this._sessionModels.values())
 			.filter(session => session.initialLocation === ChatAgentLocation.Panel || session.initialLocation === ChatAgentLocation.EditingSession);
 
@@ -253,8 +253,8 @@ export class ChatService extends Disposable implements IChatService {
 		this._deletedChatIds.clear();
 	}
 
-	private syncEmptyWindowChats(thisWindowChats: ChatModel[]): codemavi {
-		// Note- an unacodemaviable race condition exists here. If there are multiple empty windows open, and the user quits the application, then the focused
+	private syncEmptyWindowChats(thisWindowChats: ChatModel[]): void {
+		// Note- an unavoidable race condition exists here. If there are multiple empty windows open, and the user quits the application, then the focused
 		// window may lose active chats, because all windows are reading and writing to storageService at the same time. This can't be fixed without some
 		// kind of locking, but in reality, the focused window will likely have run `saveState` at some point, like on a window focus change, and it will
 		// generally be fine.
@@ -303,12 +303,12 @@ export class ChatService extends Disposable implements IChatService {
 		this.storageService.store(serializedChatKey, data, StorageScope.APPLICATION, StorageTarget.MACHINE);
 	}
 
-	notifyUserAction(action: IChatUserActionEvent): codemavi {
+	notifyUserAction(action: IChatUserActionEvent): void {
 		this._chatServiceTelemetry.notifyUserAction(action);
 		this._onDidPerformUserAction.fire(action);
 	}
 
-	async setChatSessionTitle(sessionId: string, title: string): Promise<codemavi> {
+	async setChatSessionTitle(sessionId: string, title: string): Promise<void> {
 		const model = this._sessionModels.get(sessionId);
 		if (model) {
 			model.setCustomTitle(title);
@@ -326,7 +326,7 @@ export class ChatService extends Disposable implements IChatService {
 		}
 	}
 
-	private trace(method: string, message?: string): codemavi {
+	private trace(method: string, message?: string): void {
 		if (message) {
 			this.logService.trace(`ChatService#${method}: ${message}`);
 		} else {
@@ -334,7 +334,7 @@ export class ChatService extends Disposable implements IChatService {
 		}
 	}
 
-	private error(method: string, message: string): codemavi {
+	private error(method: string, message: string): void {
 		this.logService.error(`ChatService#${method} ${message}`);
 	}
 
@@ -445,7 +445,7 @@ export class ChatService extends Disposable implements IChatService {
 		return [...liveSessionItems, ...persistedSessionItems];
 	}
 
-	async removeHistoryEntry(sessionId: string): Promise<codemavi> {
+	async removeHistoryEntry(sessionId: string): Promise<void> {
 		if (this.useFileStorage) {
 			await this._chatSessionStore.deleteSession(sessionId);
 			return;
@@ -458,7 +458,7 @@ export class ChatService extends Disposable implements IChatService {
 		}
 	}
 
-	async clearAllHistoryEntries(): Promise<codemavi> {
+	async clearAllHistoryEntries(): Promise<void> {
 		if (this.useFileStorage) {
 			await this._chatSessionStore.clearAllSessions();
 			return;
@@ -485,7 +485,7 @@ export class ChatService extends Disposable implements IChatService {
 		return model;
 	}
 
-	private async initializeSession(model: ChatModel, token: CancellationToken): Promise<codemavi> {
+	private async initializeSession(model: ChatModel, token: CancellationToken): Promise<void> {
 		try {
 			this.trace('initializeSession', `Initialize session ${model.sessionId}`);
 			model.startInitialize();
@@ -570,7 +570,7 @@ export class ChatService extends Disposable implements IChatService {
 		return this._startSession(data, data.initialLocation ?? ChatAgentLocation.Panel, true, CancellationToken.None);
 	}
 
-	async resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions): Promise<codemavi> {
+	async resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions): Promise<void> {
 		const model = this._sessionModels.get(request.session.sessionId);
 		if (!model && model !== request.session) {
 			throw new Error(`Unknown session: ${request.session.sessionId}`);
@@ -604,7 +604,7 @@ export class ChatService extends Disposable implements IChatService {
 		this.trace('sendRequest', `sessionId: ${sessionId}, message: ${request.substring(0, 20)}${request.length > 20 ? '[...]' : ''}}`);
 
 		// if text is not provided, but chat input has `prompt instructions`
-		// attached, use the default prompt text to acodemavi empty messages
+		// attached, use the default prompt text to avoid empty messages
 		if (!request.trim() && options?.hasInstructionAttachments) {
 			request = 'Follow these instructions.';
 		}
@@ -691,7 +691,7 @@ export class ChatService extends Disposable implements IChatService {
 
 		const responseCreated = new DeferredPromise<IChatResponseModel>();
 		let responseCreatedComplete = false;
-		function completeResponseCreated(): codemavi {
+		function completeResponseCreated(): void {
 			if (!responseCreatedComplete && request?.response) {
 				responseCreated.complete(request.response);
 				responseCreatedComplete = true;
@@ -933,7 +933,7 @@ export class ChatService extends Disposable implements IChatService {
 		};
 	}
 
-	private async checkAgentAllowed(agent: IChatAgentData): Promise<codemavi> {
+	private async checkAgentAllowed(agent: IChatAgentData): Promise<void> {
 		if (agent.isToolsAgent) {
 			const enabled = await this.experimentService.getTreatment<boolean>('chatAgentEnabled');
 			if (enabled === false) {
@@ -1006,7 +1006,7 @@ export class ChatService extends Disposable implements IChatService {
 		return history;
 	}
 
-	async removeRequest(sessionId: string, requestId: string): Promise<codemavi> {
+	async removeRequest(sessionId: string, requestId: string): Promise<void> {
 		const model = this._sessionModels.get(sessionId);
 		if (!model) {
 			throw new Error(`Unknown session: ${sessionId}`);
@@ -1046,7 +1046,7 @@ export class ChatService extends Disposable implements IChatService {
 		}
 	}
 
-	async addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): Promise<codemavi> {
+	async addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): Promise<void> {
 		this.trace('addCompleteRequest', `message: ${message}`);
 
 		const model = this._sessionModels.get(sessionId);
@@ -1074,13 +1074,13 @@ export class ChatService extends Disposable implements IChatService {
 		model.completeResponse(request);
 	}
 
-	cancelCurrentRequestForSession(sessionId: string): codemavi {
+	cancelCurrentRequestForSession(sessionId: string): void {
 		this.trace('cancelCurrentRequestForSession', `sessionId: ${sessionId}`);
 		this._pendingRequests.get(sessionId)?.cancel();
 		this._pendingRequests.deleteAndDispose(sessionId);
 	}
 
-	async clearSession(sessionId: string): Promise<codemavi> {
+	async clearSession(sessionId: string): Promise<void> {
 		this.trace('clearSession', `sessionId: ${sessionId}`);
 		const model = this._sessionModels.get(sessionId);
 		if (!model) {
@@ -1121,7 +1121,7 @@ export class ChatService extends Disposable implements IChatService {
 		}
 	}
 
-	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): codemavi {
+	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): void {
 		const model = Iterable.find(this._sessionModels.values(), model => model.sessionId === transferredSessionData.sessionId);
 		if (!model) {
 			throw new Error(`Failed to transfer session. Unknown session ID: ${transferredSessionData.sessionId}`);
@@ -1149,7 +1149,7 @@ export class ChatService extends Disposable implements IChatService {
 		return this._chatSessionStore.getChatStorageFolder();
 	}
 
-	logChatIndex(): codemavi {
+	logChatIndex(): void {
 		this._chatSessionStore.logIndex();
 	}
 }

@@ -50,7 +50,7 @@ class TestLinkManager extends TerminalLinkManager {
 				return this._links?.fileLinks?.[y] ? [this._links?.fileLinks?.[y]] : undefined;
 		}
 	}
-	setLinks(links: IDetectedLinks): codemavi {
+	setLinks(links: IDetectedLinks): void {
 		this._links = links;
 	}
 }

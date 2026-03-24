@@ -168,7 +168,7 @@ export class ChatUsedReferencesListContentPart extends ChatCollapsibleListConten
 		);
 	}
 
-	protected override setExpanded(value: boolean): codemavi {
+	protected override setExpanded(value: boolean): void {
 		const element = this.context.element as IChatResponseViewModel;
 		element.usedReferencesExpanded = !this.isExpanded();
 	}
@@ -329,7 +329,7 @@ class CollapsibleListRenderer implements IListRenderer<IChatCollapsibleListItem,
 		}
 	}
 
-	renderElement(data: IChatCollapsibleListItem, index: number, templateData: ICollapsibleListTemplate, height: number | undefined): codemavi {
+	renderElement(data: IChatCollapsibleListItem, index: number, templateData: ICollapsibleListTemplate, height: number | undefined): void {
 		if (data.kind === 'warning') {
 			templateData.label.setResource({ name: data.content.value }, { icon: Codicon.warning });
 			return;
@@ -421,7 +421,7 @@ class CollapsibleListRenderer implements IListRenderer<IChatCollapsibleListItem,
 		}
 	}
 
-	disposeTemplate(templateData: ICollapsibleListTemplate): codemavi {
+	disposeTemplate(templateData: ICollapsibleListTemplate): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -462,7 +462,7 @@ registerAction2(class AddToChatAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, resource: URI): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, resource: URI): Promise<void> {
 		const chatWidgetService = accessor.get(IChatWidgetService);
 		const variablesService = accessor.get(IChatVariablesService);
 
@@ -499,7 +499,7 @@ registerAction2(class OpenChatReferenceLinkAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, resource: URI): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, resource: URI): Promise<void> {
 		await accessor.get(IClipboardService).writeResources([resource]);
 	}
 });

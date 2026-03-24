@@ -62,7 +62,7 @@ export class ChatEditingEditorContextKeys implements IWorkbenchContribution {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 }
@@ -134,7 +134,7 @@ class ContextKeyGroup {
 		}));
 	}
 
-	private _reset(): codemavi {
+	private _reset(): void {
 		this._ctxIsGlobalEditingSession.reset();
 		this._ctxHasEditorModification.reset();
 		this._ctxHasRequestInProgress.reset();
@@ -142,7 +142,7 @@ class ContextKeyGroup {
 		this._ctxRequestCount.reset();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 		this._reset();
 	}

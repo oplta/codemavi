@@ -71,7 +71,7 @@ suite('Common Editor Config', () => {
 		}
 	}
 
-	function assertWrapping(config: TestConfiguration, isViewportWrapping: boolean, wrappingColumn: number): codemavi {
+	function assertWrapping(config: TestConfiguration, isViewportWrapping: boolean, wrappingColumn: number): void {
 		const options = config.options;
 		const wrappingInfo = options.get(EditorOption.wrappingInfo);
 		assert.strictEqual(wrappingInfo.isViewportWrapping, isViewportWrapping);

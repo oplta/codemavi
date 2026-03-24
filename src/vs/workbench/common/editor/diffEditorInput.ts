@@ -241,7 +241,7 @@ export class DiffEditorInput extends SideBySideEditorInput implements IDiffEdito
 		return false;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 
 		// Free the diff editor model but do not propagate the dispose() call to the two inputs
 		// We never created the two inputs (original and modified) so we can not dispose

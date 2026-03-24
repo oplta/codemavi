@@ -42,7 +42,7 @@ export class WorkspacesFinderContribution extends Disposable implements IWorkben
 		this.findWorkspaces();
 	}
 
-	private async findWorkspaces(): Promise<codemavi> {
+	private async findWorkspaces(): Promise<void> {
 		const folder = this.contextService.getWorkspace().folders[0];
 		if (!folder || this.contextService.getWorkbenchState() !== WorkbenchState.FOLDER || isVirtualWorkspace(this.contextService.getWorkspace())) {
 			return; // require a single (non virtual) root folder
@@ -57,7 +57,7 @@ export class WorkspacesFinderContribution extends Disposable implements IWorkben
 		}
 	}
 
-	private doHandleWorkspaceFiles(folder: URI, workspaces: string[]): codemavi {
+	private doHandleWorkspaceFiles(folder: URI, workspaces: string[]): void {
 		const neverShowAgain: INeverShowAgainOptions = { id: 'workspaces.dontPromptToOpen', scope: NeverShowAgainScope.WORKSPACE, isSecondary: true };
 
 		// Prompt to open one workspace
@@ -126,7 +126,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, uri: URI): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, uri: URI): Promise<void> {
 		const hostService = accessor.get(IHostService);
 		const contextService = accessor.get(IWorkspaceContextService);
 		const notificationService = accessor.get(INotificationService);

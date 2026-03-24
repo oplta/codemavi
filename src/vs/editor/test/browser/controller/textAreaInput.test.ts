@@ -40,7 +40,7 @@ suite('TextAreaInput', () => {
 	}
 	type OutoingEvent = OutgoingType | OutgoingCompositionStart | OutgoingCompositionUpdate | OutgoingCompositionEnd;
 
-	function yieldNow(): Promise<codemavi> {
+	function yieldNow(): Promise<void> {
 		return new Promise((resolve, reject) => {
 			queueMicrotask(resolve);
 		});
@@ -107,13 +107,13 @@ suite('TextAreaInput', () => {
 				this._currDispatchingEvent = null;
 			}
 
-			public _initialize(state: IRecordedTextareaState): codemavi {
+			public _initialize(state: IRecordedTextareaState): void {
 				this._state.value = state.value;
 				this._state.selectionStart = state.selectionStart;
 				this._state.selectionEnd = state.selectionEnd;
 			}
 
-			public _dispatchRecordedEvent(event: IRecordedEvent): codemavi {
+			public _dispatchRecordedEvent(event: IRecordedEvent): void {
 				this._currDispatchingEvent = event;
 				this._state.value = event.state.value;
 				this._state.selectionStart = event.state.selectionStart;
@@ -179,7 +179,7 @@ suite('TextAreaInput', () => {
 			getValue(): string {
 				return this._state.value;
 			}
-			setValue(reason: string, value: string): codemavi {
+			setValue(reason: string, value: string): void {
 				if (this._currDispatchingEvent?.type === 'compositionstart') {
 					assert.fail('should not change the state of the textarea in a compositionstart');
 				}
@@ -191,7 +191,7 @@ suite('TextAreaInput', () => {
 			getSelectionEnd(): number {
 				return this._state.selectionDirection === 'backward' ? this._state.selectionStart : this._state.selectionEnd;
 			}
-			setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): codemavi {
+			setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): void {
 				if (this._currDispatchingEvent?.type === 'compositionstart') {
 					assert.fail('should not change the state of the textarea in a compositionstart');
 				}
@@ -200,9 +200,9 @@ suite('TextAreaInput', () => {
 				this._state.selectionDirection = (selectionStart !== selectionEnd ? 'forward' : 'none');
 			}
 
-			public setIgnoreSelectionChangeTime(reason: string): codemavi { }
+			public setIgnoreSelectionChangeTime(reason: string): void { }
 			public getIgnoreSelectionChangeTime(): number { return Date.now(); }
-			public resetSelectionChangeTime(): codemavi { }
+			public resetSelectionChangeTime(): void { }
 
 			public hasFocus(): boolean { return true; }
 		});

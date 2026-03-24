@@ -62,7 +62,7 @@ export class UriIdentityService implements IUriIdentityService {
 		this._canonicalUris = new SkipList((a, b) => this.extUri.compare(a, b, true), this._limit);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._dispooables.dispose();
 		this._canonicalUris.clear();
 	}
@@ -87,7 +87,7 @@ export class UriIdentityService implements IUriIdentityService {
 		return uri;
 	}
 
-	private _checkTrim(): codemavi {
+	private _checkTrim(): void {
 		if (this._canonicalUris.size < this._limit) {
 			return;
 		}

@@ -27,7 +27,7 @@ class OpenChatStorageFolderAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const chatService = accessor.get(IChatService);
 		const nativeHostService = accessor.get(INativeHostService);
 		const storagePath = chatService.getChatStorageFolder();

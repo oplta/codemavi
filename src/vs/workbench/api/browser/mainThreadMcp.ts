@@ -27,7 +27,7 @@ export class MainThreadMcp extends Disposable implements MainThreadMcpShape {
 	private readonly _collectionDefinitions = this._register(new DisposableMap<string, {
 		fromExtHost: McpCollectionDefinition.FromExtHost;
 		servers: ISettableObservable<readonly McpServerDefinition[]>;
-		dispose(): codemavi;
+		dispose(): void;
 	}>());
 	private readonly _mcpEnabled: IObservable<boolean>;
 
@@ -71,7 +71,7 @@ export class MainThreadMcp extends Disposable implements MainThreadMcpShape {
 		}));
 	}
 
-	$upsertMcpCollection(collection: McpCollectionDefinition.FromExtHost, serversDto: McpServerDefinition.Serialized[]): codemavi {
+	$upsertMcpCollection(collection: McpCollectionDefinition.FromExtHost, serversDto: McpServerDefinition.Serialized[]): void {
 		const servers = serversDto.map(McpServerDefinition.fromSerialized);
 		const existing = this._collectionDefinitions.get(collection.id);
 		if (existing) {
@@ -101,11 +101,11 @@ export class MainThreadMcp extends Disposable implements MainThreadMcpShape {
 		}
 	}
 
-	$deleteMcpCollection(collectionId: string): codemavi {
+	$deleteMcpCollection(collectionId: string): void {
 		this._collectionDefinitions.deleteAndDispose(collectionId);
 	}
 
-	$onDidChangeState(id: number, update: McpConnectionState): codemavi {
+	$onDidChangeState(id: number, update: McpConnectionState): void {
 		const server = this._servers.get(id);
 		if (!server) {
 			return;
@@ -118,7 +118,7 @@ export class MainThreadMcp extends Disposable implements MainThreadMcpShape {
 		}
 	}
 
-	$onDidPublishLog(id: number, level: LogLevel, log: string): codemavi {
+	$onDidPublishLog(id: number, level: LogLevel, log: string): void {
 		if (typeof level === 'string') {
 			level = LogLevel.Info;
 			log = level as unknown as string;
@@ -127,11 +127,11 @@ export class MainThreadMcp extends Disposable implements MainThreadMcpShape {
 		this._servers.get(id)?.pushLog(level, log);
 	}
 
-	$onDidReceiveMessage(id: number, message: string): codemavi {
+	$onDidReceiveMessage(id: number, message: string): void {
 		this._servers.get(id)?.pushMessage(message);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		for (const server of this._servers.values()) {
 			server.extHostDispose();
 		}
@@ -150,11 +150,11 @@ class ExtHostMcpServerLaunch extends Disposable implements IMcpMessageTransport 
 	private readonly _onDidReceiveMessage = this._register(new Emitter<MCP.JSONRPCMessage>());
 	public readonly onDidReceiveMessage = this._onDidReceiveMessage.event;
 
-	pushLog(level: LogLevel, message: string): codemavi {
+	pushLog(level: LogLevel, message: string): void {
 		this._onDidLog.fire({ message, level });
 	}
 
-	pushMessage(message: string): codemavi {
+	pushMessage(message: string): void {
 		let parsed: MCP.JSONRPCMessage | undefined;
 		try {
 			parsed = JSON.parse(message);
@@ -169,8 +169,8 @@ class ExtHostMcpServerLaunch extends Disposable implements IMcpMessageTransport 
 
 	constructor(
 		extHostKind: ExtensionHostKind,
-		public readonly stop: () => codemavi,
-		public readonly send: (message: MCP.JSONRPCMessage) => codemavi,
+		public readonly stop: () => void,
+		public readonly send: (message: MCP.JSONRPCMessage) => void,
 	) {
 		super();
 
@@ -187,7 +187,7 @@ class ExtHostMcpServerLaunch extends Disposable implements IMcpMessageTransport 
 		this.dispose();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (McpConnectionState.isRunning(this.state.get())) {
 			this.stop();
 		}

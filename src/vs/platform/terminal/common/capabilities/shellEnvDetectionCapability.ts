@@ -27,7 +27,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 	private readonly _onDidChangeEnv = this._register(new Emitter<TerminalShellIntegrationEnvironment>());
 	readonly onDidChangeEnv = this._onDidChangeEnv.event;
 
-	setEnvironment(env: { [key: string]: string | undefined }, isTrusted: boolean): codemavi {
+	setEnvironment(env: { [key: string]: string | undefined }, isTrusted: boolean): void {
 		if (equals(this.env.value, env)) {
 			return;
 		}
@@ -43,7 +43,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 		this._fireEnvChange();
 	}
 
-	startEnvironmentSingleVar(clear: boolean, isTrusted: boolean): codemavi {
+	startEnvironmentSingleVar(clear: boolean, isTrusted: boolean): void {
 		if (clear) {
 			this._pendingEnv = {
 				value: new Map(),
@@ -58,7 +58,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 
 	}
 
-	setEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): codemavi {
+	setEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): void {
 		if (!this._pendingEnv) {
 			return;
 		}
@@ -68,7 +68,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 		}
 	}
 
-	endEnvironmentSingleVar(isTrusted: boolean): codemavi {
+	endEnvironmentSingleVar(isTrusted: boolean): void {
 		if (!this._pendingEnv) {
 			return;
 		}
@@ -81,7 +81,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 		this._pendingEnv = undefined;
 	}
 
-	deleteEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): codemavi {
+	deleteEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): void {
 		if (!this._pendingEnv) {
 			return;
 		}
@@ -91,7 +91,7 @@ export class ShellEnvDetectionCapability extends Disposable implements IShellEnv
 		}
 	}
 
-	private _fireEnvChange(): codemavi {
+	private _fireEnvChange(): void {
 		this._onDidChangeEnv.fire(this._createStateObject());
 	}
 

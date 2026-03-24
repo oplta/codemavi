@@ -74,7 +74,7 @@ export interface IStatusbarEntryContainer extends IDisposable {
 	/**
 	 * Allows to update an entry's visibility with the provided ID.
 	 */
-	updateEntryVisibility(id: string, visible: boolean): codemavi;
+	updateEntryVisibility(id: string, visible: boolean): void;
 
 	/**
 	 * Allows to override the appearance of an entry with the provided ID.
@@ -84,17 +84,17 @@ export interface IStatusbarEntryContainer extends IDisposable {
 	/**
 	 * Focused the status bar. If one of the status bar entries was focused, focuses it directly.
 	 */
-	focus(preserveEntryFocus?: boolean): codemavi;
+	focus(preserveEntryFocus?: boolean): void;
 
 	/**
 	 * Focuses the next status bar entry. If none focused, focuses the first.
 	 */
-	focusNextEntry(): codemavi;
+	focusNextEntry(): void;
 
 	/**
 	 * Focuses the previous status bar entry. If none focused, focuses the last.
 	 */
-	focusPreviousEntry(): codemavi;
+	focusPreviousEntry(): void;
 
 	/**
 	 *	Returns true if a status bar entry is focused.
@@ -137,7 +137,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 
 	readonly onDidChangeEntryVisibility: Event<{ id: string; visible: boolean }>;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	private readonly onDidOverrideEntry = this._register(new Emitter<string>());
@@ -195,7 +195,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Entry visibility changes
 		this._register(this.onDidChangeEntryVisibility(() => this.updateCompactEntries()));
@@ -372,7 +372,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		return !this.viewModel.isHidden(id);
 	}
 
-	updateEntryVisibility(id: string, visible: boolean): codemavi {
+	updateEntryVisibility(id: string, visible: boolean): void {
 		if (visible) {
 			this.viewModel.show(id);
 		} else {
@@ -380,11 +380,11 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		}
 	}
 
-	focusNextEntry(): codemavi {
+	focusNextEntry(): void {
 		this.viewModel.focusNextEntry();
 	}
 
-	focusPreviousEntry(): codemavi {
+	focusPreviousEntry(): void {
 		this.viewModel.focusPreviousEntry();
 	}
 
@@ -392,7 +392,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		return this.viewModel.isEntryFocused();
 	}
 
-	focus(preserveEntryFocus = true): codemavi {
+	focus(preserveEntryFocus = true): void {
 		this.getContainer()?.focus();
 		const lastFocusedEntry = this.viewModel.lastFocusedEntry;
 		if (preserveEntryFocus && lastFocusedEntry) {
@@ -427,7 +427,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		return this.element;
 	}
 
-	private createInitialStatusbarEntries(): codemavi {
+	private createInitialStatusbarEntries(): void {
 
 		// Add items in order according to alignment
 		this.appendStatusbarEntries();
@@ -441,7 +441,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		}
 	}
 
-	private appendStatusbarEntries(): codemavi {
+	private appendStatusbarEntries(): void {
 		const leftItemsContainer = assertIsDefined(this.leftItemsContainer);
 		const rightItemsContainer = assertIsDefined(this.rightItemsContainer);
 
@@ -463,7 +463,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		this.updateCompactEntries();
 	}
 
-	private appendStatusbarEntry(entry: IStatusbarViewModelEntry): codemavi {
+	private appendStatusbarEntry(entry: IStatusbarViewModelEntry): void {
 		const entries = this.viewModel.getEntries(entry.alignment);
 
 		if (entry.alignment === StatusbarAlignment.RIGHT) {
@@ -483,7 +483,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		this.updateCompactEntries();
 	}
 
-	private updateCompactEntries(): codemavi {
+	private updateCompactEntries(): void {
 		const entries = this.viewModel.entries;
 
 		// Find visible entries and clear compact related CSS classes if any
@@ -568,7 +568,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		}
 	}
 
-	private showContextMenu(e: MouseEvent | GestureEvent): codemavi {
+	private showContextMenu(e: MouseEvent | GestureEvent): void {
 		EventHelper.stop(e, true);
 
 		const event = new StandardMouseEvent(getWindow(this.element), e);
@@ -629,7 +629,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		return actions;
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		super.updateStyles();
 
 		const container = assertIsDefined(this.getContainer());
@@ -680,7 +680,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 			`;
 	}
 
-	override layout(width: number, height: number, top: number, left: number): codemavi {
+	override layout(width: number, height: number, top: number, left: number): void {
 		super.layout(width, height, top, left);
 		super.layoutContents(width, height);
 	}
@@ -701,7 +701,7 @@ class StatusbarPart extends Part implements IStatusbarEntryContainer {
 		};
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._onWillDispose.fire();
 
 		super.dispose();
@@ -822,7 +822,7 @@ export class StatusbarService extends MultiWindowParts<StatusbarPart> implements
 		const accessors = new Set<IStatusbarEntryAccessor>();
 
 		let entry = originalEntry;
-		function addEntry(part: StatusbarPart | AuxiliaryStatusbarPart): codemavi {
+		function addEntry(part: StatusbarPart | AuxiliaryStatusbarPart): void {
 			const partDisposables = new DisposableStore();
 			partDisposables.add(part.onWillDispose(() => partDisposables.dispose()));
 
@@ -856,7 +856,7 @@ export class StatusbarService extends MultiWindowParts<StatusbarPart> implements
 		return this.mainPart.isEntryVisible(id);
 	}
 
-	updateEntryVisibility(id: string, visible: boolean): codemavi {
+	updateEntryVisibility(id: string, visible: boolean): void {
 		for (const part of this.parts) {
 			part.updateEntryVisibility(id, visible);
 		}
@@ -872,15 +872,15 @@ export class StatusbarService extends MultiWindowParts<StatusbarPart> implements
 		return disposables;
 	}
 
-	focus(preserveEntryFocus?: boolean): codemavi {
+	focus(preserveEntryFocus?: boolean): void {
 		this.activePart.focus(preserveEntryFocus);
 	}
 
-	focusNextEntry(): codemavi {
+	focusNextEntry(): void {
 		this.activePart.focusNextEntry();
 	}
 
-	focusPreviousEntry(): codemavi {
+	focusPreviousEntry(): void {
 		this.activePart.focusPreviousEntry();
 	}
 
@@ -936,7 +936,7 @@ export class ScopedStatusbarService extends Disposable implements IStatusbarServ
 		return this.statusbarEntryContainer.isEntryVisible(id);
 	}
 
-	updateEntryVisibility(id: string, visible: boolean): codemavi {
+	updateEntryVisibility(id: string, visible: boolean): void {
 		this.statusbarEntryContainer.updateEntryVisibility(id, visible);
 	}
 
@@ -944,15 +944,15 @@ export class ScopedStatusbarService extends Disposable implements IStatusbarServ
 		return this.statusbarEntryContainer.overrideEntry(id, override);
 	}
 
-	focus(preserveEntryFocus?: boolean): codemavi {
+	focus(preserveEntryFocus?: boolean): void {
 		this.statusbarEntryContainer.focus(preserveEntryFocus);
 	}
 
-	focusNextEntry(): codemavi {
+	focusNextEntry(): void {
 		this.statusbarEntryContainer.focusNextEntry();
 	}
 
-	focusPreviousEntry(): codemavi {
+	focusPreviousEntry(): void {
 		this.statusbarEntryContainer.focusPreviousEntry();
 	}
 

@@ -27,7 +27,7 @@ export class ToggleCellToolbarPositionAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context: any): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, context: any): Promise<void> {
 		const editor = context && context.ui ? (context as INotebookActionContext).notebookEditor : undefined;
 		if (editor && editor.hasModel()) {
 			// from toolbar

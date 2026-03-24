@@ -156,7 +156,7 @@ function assertActiveDocumentUri(expectedUri: vscode.Uri) {
 	);
 }
 
-async function withFileContents(file: vscode.Uri, contents: string): Promise<codemavi> {
+async function withFileContents(file: vscode.Uri, contents: string): Promise<void> {
 	debugLog('openTextDocument', file.toString(), Date.now());
 	const document = await vscode.workspace.openTextDocument(file);
 	debugLog('showTextDocument', file.toString(), Date.now());

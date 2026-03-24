@@ -55,7 +55,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.hostService.onDidChangeFocus(focused => this.onWindowFocusChange(focused)));
 		this._register(this.hostService.onDidChangeActiveWindow(() => this.onActiveWindowChange()));
 		this._register(this.editorService.onDidActiveEditorChange(() => this.onDidActiveEditorChange()));
@@ -72,7 +72,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		this._register(this.filesConfigurationService.onDidChangeAutoSaveDisabled(resource => this.onConditionChanged([resource], AutoSaveDisabledReason.DISABLED)));
 	}
 
-	private onConditionChanged(resources: readonly URI[], condition: AutoSaveDisabledReason.ERRORS | AutoSaveDisabledReason.DISABLED): codemavi {
+	private onConditionChanged(resources: readonly URI[], condition: AutoSaveDisabledReason.ERRORS | AutoSaveDisabledReason.DISABLED): void {
 		for (const resource of resources) {
 
 			// Waiting working copies
@@ -107,17 +107,17 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private onWindowFocusChange(focused: boolean): codemavi {
+	private onWindowFocusChange(focused: boolean): void {
 		if (!focused) {
 			this.maybeTriggerAutoSave(SaveReason.WINDOW_CHANGE);
 		}
 	}
 
-	private onActiveWindowChange(): codemavi {
+	private onActiveWindowChange(): void {
 		this.maybeTriggerAutoSave(SaveReason.WINDOW_CHANGE);
 	}
 
-	private onDidActiveEditorChange(): codemavi {
+	private onDidActiveEditorChange(): void {
 
 		// Treat editor change like a focus change for our last active editor if any
 		if (this.lastActiveEditor && typeof this.lastActiveGroupId === 'number') {
@@ -141,7 +141,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private maybeTriggerAutoSave(reason: SaveReason.WINDOW_CHANGE | SaveReason.FOCUS_CHANGE, editorIdentifier?: IEditorIdentifier): codemavi {
+	private maybeTriggerAutoSave(reason: SaveReason.WINDOW_CHANGE | SaveReason.FOCUS_CHANGE, editorIdentifier?: IEditorIdentifier): void {
 		if (editorIdentifier) {
 			if (
 				!editorIdentifier.editor.isDirty() ||
@@ -170,7 +170,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private onDidChangeAutoSaveConfiguration(): codemavi {
+	private onDidChangeAutoSaveConfiguration(): void {
 
 		// Trigger a save-all when auto save is enabled
 		let reason: SaveReason | undefined = undefined;
@@ -192,7 +192,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private saveAllDirtyAutoSaveables(reason: SaveReason): codemavi {
+	private saveAllDirtyAutoSaveables(reason: SaveReason): void {
 		for (const workingCopy of this.workingCopyService.dirtyWorkingCopies) {
 			if (workingCopy.capabilities & WorkingCopyCapabilities.Untitled) {
 				continue; // we never auto save untitled working copies
@@ -207,17 +207,17 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private onDidRegister(workingCopy: IWorkingCopy): codemavi {
+	private onDidRegister(workingCopy: IWorkingCopy): void {
 		if (workingCopy.isDirty()) {
 			this.scheduleAutoSave(workingCopy);
 		}
 	}
 
-	private onDidUnregister(workingCopy: IWorkingCopy): codemavi {
+	private onDidUnregister(workingCopy: IWorkingCopy): void {
 		this.discardAutoSave(workingCopy);
 	}
 
-	private onDidChangeDirty(workingCopy: IWorkingCopy): codemavi {
+	private onDidChangeDirty(workingCopy: IWorkingCopy): void {
 		if (workingCopy.isDirty()) {
 			this.scheduleAutoSave(workingCopy);
 		} else {
@@ -225,7 +225,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private onDidChangeContent(workingCopy: IWorkingCopy): codemavi {
+	private onDidChangeContent(workingCopy: IWorkingCopy): void {
 		if (workingCopy.isDirty()) {
 			// this listener will make sure that the auto save is
 			// pushed out for as long as the user is still changing
@@ -234,7 +234,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}
 	}
 
-	private scheduleAutoSave(workingCopy: IWorkingCopy): codemavi {
+	private scheduleAutoSave(workingCopy: IWorkingCopy): void {
 		if (workingCopy.capabilities & WorkingCopyCapabilities.Untitled) {
 			return; // we never auto save untitled working copies
 		}
@@ -276,7 +276,7 @@ export class EditorAutoSave extends Disposable implements IWorkbenchContribution
 		}));
 	}
 
-	private discardAutoSave(workingCopy: IWorkingCopy): codemavi {
+	private discardAutoSave(workingCopy: IWorkingCopy): void {
 		dispose(this.scheduledAutoSavesAfterDelay.get(workingCopy));
 		this.scheduledAutoSavesAfterDelay.delete(workingCopy);
 

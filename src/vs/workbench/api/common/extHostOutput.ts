@@ -44,21 +44,21 @@ class ExtHostOutputChannel extends AbstractMessageLogger implements vscode.LogOu
 		return this.getLevel();
 	}
 
-	appendLine(value: string): codemavi {
+	appendLine(value: string): void {
 		this.append(value + '\n');
 	}
 
-	append(value: string): codemavi {
+	append(value: string): void {
 		this.info(value);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		const till = this.offset;
 		this.logger.flush();
 		this.proxy.$update(this.id, OutputChannelUpdateMode.Clear, till);
 	}
 
-	replace(value: string): codemavi {
+	replace(value: string): void {
 		const till = this.offset;
 		this.info(value);
 		this.proxy.$update(this.id, OutputChannelUpdateMode.Replace, till);
@@ -67,16 +67,16 @@ class ExtHostOutputChannel extends AbstractMessageLogger implements vscode.LogOu
 		}
 	}
 
-	show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): codemavi {
+	show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): void {
 		this.logger.flush();
 		this.proxy.$reveal(this.id, !!(typeof columnOrPreserveFocus === 'boolean' ? columnOrPreserveFocus : preserveFocus));
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		this.proxy.$close(this.id);
 	}
 
-	protected log(level: LogLevel, message: string): codemavi {
+	protected log(level: LogLevel, message: string): void {
 		this.offset += VSBuffer.fromString(message).byteLength;
 		log(this.logger, level, message);
 		if (this.visible) {
@@ -89,7 +89,7 @@ class ExtHostOutputChannel extends AbstractMessageLogger implements vscode.LogOu
 
 class ExtHostLogOutputChannel extends ExtHostOutputChannel {
 
-	override appendLine(value: string): codemavi {
+	override appendLine(value: string): void {
 		this.append(value);
 	}
 
@@ -121,7 +121,7 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 		this.outputsLocation = this.extHostFileSystemInfo.extUri.joinPath(initData.logsLocation, `output_logging_${toLocalISOString(new Date()).replace(/-|:|\.\d+Z$/g, '')}`);
 	}
 
-	$setVisibleChannel(visibleChannelId: string | null): codemavi {
+	$setVisibleChannel(visibleChannelId: string | null): void {
 		this.visibleChannelId = visibleChannelId;
 		for (const [id, channel] of this.channels) {
 			channel.visible = id === this.visibleChannelId;
@@ -206,31 +206,31 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 		channelPromise.then(channel => channelDisposables.add(channel));
 		return {
 			get name(): string { return name; },
-			append(value: string): codemavi {
+			append(value: string): void {
 				validate();
 				channelPromise.then(channel => channel.append(value));
 			},
-			appendLine(value: string): codemavi {
+			appendLine(value: string): void {
 				validate();
 				channelPromise.then(channel => channel.appendLine(value));
 			},
-			clear(): codemavi {
+			clear(): void {
 				validate();
 				channelPromise.then(channel => channel.clear());
 			},
-			replace(value: string): codemavi {
+			replace(value: string): void {
 				validate();
 				channelPromise.then(channel => channel.replace(value));
 			},
-			show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): codemavi {
+			show(columnOrPreserveFocus?: vscode.ViewColumn | boolean, preserveFocus?: boolean): void {
 				validate();
 				channelPromise.then(channel => channel.show(columnOrPreserveFocus, preserveFocus));
 			},
-			hide(): codemavi {
+			hide(): void {
 				validate();
 				channelPromise.then(channel => channel.hide());
 			},
-			dispose(): codemavi {
+			dispose(): void {
 				channelDisposables.dispose();
 			}
 		};
@@ -243,7 +243,7 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 			}
 		};
 		const onDidChangeLogLevel = channelDisposables.add(new Emitter<LogLevel>());
-		function setLogLevel(newLogLevel: LogLevel): codemavi {
+		function setLogLevel(newLogLevel: LogLevel): void {
 			logLevel = newLogLevel;
 			onDidChangeLogLevel.fire(newLogLevel);
 		}
@@ -257,23 +257,23 @@ export class ExtHostOutputService implements ExtHostOutputServiceShape {
 			...this.createExtHostOutputChannel(name, channelPromise, channelDisposables),
 			get logLevel() { return logLevel; },
 			onDidChangeLogLevel: onDidChangeLogLevel.event,
-			trace(value: string, ...args: any[]): codemavi {
+			trace(value: string, ...args: any[]): void {
 				validate();
 				channelPromise.then(channel => channel.trace(value, ...args));
 			},
-			debug(value: string, ...args: any[]): codemavi {
+			debug(value: string, ...args: any[]): void {
 				validate();
 				channelPromise.then(channel => channel.debug(value, ...args));
 			},
-			info(value: string, ...args: any[]): codemavi {
+			info(value: string, ...args: any[]): void {
 				validate();
 				channelPromise.then(channel => channel.info(value, ...args));
 			},
-			warn(value: string, ...args: any[]): codemavi {
+			warn(value: string, ...args: any[]): void {
 				validate();
 				channelPromise.then(channel => channel.warn(value, ...args));
 			},
-			error(value: Error | string, ...args: any[]): codemavi {
+			error(value: Error | string, ...args: any[]): void {
 				validate();
 				channelPromise.then(channel => channel.error(value, ...args));
 			}

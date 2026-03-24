@@ -118,7 +118,7 @@ function getMergedDescription(collection: IMergedEnvironmentVariableCollection, 
 	return message.join('');
 }
 
-function addExtensionIdentifiers(extSet: Set<string>, diff: IterableIterator<IExtensionOwnedEnvironmentVariableMutator[]>): codemavi {
+function addExtensionIdentifiers(extSet: Set<string>, diff: IterableIterator<IExtensionOwnedEnvironmentVariableMutator[]>): void {
 	for (const mutators of diff) {
 		for (const mutator of mutators) {
 			extSet.add(mutator.extensionIdentifier);

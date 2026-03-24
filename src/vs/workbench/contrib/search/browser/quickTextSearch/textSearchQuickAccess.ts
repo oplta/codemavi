@@ -97,7 +97,7 @@ export class TextSearchQuickAccess extends PickerQuickAccessProvider<ITextSearch
 		this.editorSequencer = new Sequencer();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.searchModel.dispose();
 		super.dispose();
 	}
@@ -333,7 +333,7 @@ export class TextSearchQuickAccess extends PickerQuickAccessProvider<ITextSearch
 		return picks;
 	}
 
-	private async handleAccept(iFileInstanceMatch: ISearchTreeFileMatch, options: { keyMods?: IKeyMods; selection?: ITextEditorSelection; preserveFocus?: boolean; range?: IRange; forcePinned?: boolean; forceOpenSideBySide?: boolean }): Promise<codemavi> {
+	private async handleAccept(iFileInstanceMatch: ISearchTreeFileMatch, options: { keyMods?: IKeyMods; selection?: ITextEditorSelection; preserveFocus?: boolean; range?: IRange; forcePinned?: boolean; forceOpenSideBySide?: boolean }): Promise<void> {
 		const editorOptions = {
 			preserveFocus: options.preserveFocus,
 			pinned: options.keyMods?.ctrlCmd || options.forcePinned || this.configuration.openEditorPinned,

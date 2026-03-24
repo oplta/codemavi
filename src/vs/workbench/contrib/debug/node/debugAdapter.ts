@@ -33,7 +33,7 @@ export abstract class StreamDebugAdapter extends AbstractDebugAdapter {
 		super();
 	}
 
-	protected connect(readable: stream.Readable, writable: stream.Writable): codemavi {
+	protected connect(readable: stream.Readable, writable: stream.Writable): void {
 
 		this.outputStream = writable;
 		this.rawData = Buffer.allocUnsafe(0);
@@ -42,7 +42,7 @@ export abstract class StreamDebugAdapter extends AbstractDebugAdapter {
 		readable.on('data', (data: Buffer) => this.handleData(data));
 	}
 
-	sendMessage(message: DebugProtocol.ProtocolMessage): codemavi {
+	sendMessage(message: DebugProtocol.ProtocolMessage): void {
 
 		if (this.outputStream) {
 			const json = JSON.stringify(message);
@@ -50,7 +50,7 @@ export abstract class StreamDebugAdapter extends AbstractDebugAdapter {
 		}
 	}
 
-	private handleData(data: Buffer): codemavi {
+	private handleData(data: Buffer): void {
 
 		this.rawData = Buffer.concat([this.rawData, data]);
 
@@ -93,10 +93,10 @@ export abstract class NetworkDebugAdapter extends StreamDebugAdapter {
 
 	protected socket?: net.Socket;
 
-	protected abstract createConnection(connectionListener: () => codemavi): net.Socket;
+	protected abstract createConnection(connectionListener: () => void): net.Socket;
 
-	startSession(): Promise<codemavi> {
-		return new Promise<codemavi>((resolve, reject) => {
+	startSession(): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			let connected = false;
 
 			this.socket = this.createConnection(() => {
@@ -128,7 +128,7 @@ export abstract class NetworkDebugAdapter extends StreamDebugAdapter {
 		});
 	}
 
-	async stopSession(): Promise<codemavi> {
+	async stopSession(): Promise<void> {
 		await this.cancelPendingRequests();
 		if (this.socket) {
 			this.socket.end();
@@ -146,7 +146,7 @@ export class SocketDebugAdapter extends NetworkDebugAdapter {
 		super();
 	}
 
-	protected createConnection(connectionListener: () => codemavi): net.Socket {
+	protected createConnection(connectionListener: () => void): net.Socket {
 		return net.createConnection(this.adapterServer.port, this.adapterServer.host || '127.0.0.1', connectionListener);
 	}
 }
@@ -160,7 +160,7 @@ export class NamedPipeDebugAdapter extends NetworkDebugAdapter {
 		super();
 	}
 
-	protected createConnection(connectionListener: () => codemavi): net.Socket {
+	protected createConnection(connectionListener: () => void): net.Socket {
 		return net.createConnection(this.adapterServer.path, connectionListener);
 	}
 }
@@ -176,7 +176,7 @@ export class ExecutableDebugAdapter extends StreamDebugAdapter {
 		super();
 	}
 
-	async startSession(): Promise<codemavi> {
+	async startSession(): Promise<void> {
 
 		const command = this.adapterExecutable.command;
 		const args = this.adapterExecutable.args;
@@ -277,7 +277,7 @@ export class ExecutableDebugAdapter extends StreamDebugAdapter {
 		}
 	}
 
-	async stopSession(): Promise<codemavi> {
+	async stopSession(): Promise<void> {
 
 		if (!this.serverProcess) {
 			return Promise.resolve(undefined);
@@ -288,7 +288,7 @@ export class ExecutableDebugAdapter extends StreamDebugAdapter {
 		// processes. Therefore we use TASKKILL.EXE
 		await this.cancelPendingRequests();
 		if (platform.isWindows) {
-			return new Promise<codemavi>((c, e) => {
+			return new Promise<void>((c, e) => {
 				const killer = cp.exec(`taskkill /F /T /PID ${this.serverProcess!.pid}`, function (err, stdout, stderr) {
 					if (err) {
 						return e(err);

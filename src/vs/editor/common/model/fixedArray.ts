@@ -6,7 +6,7 @@
 import { arrayInsert } from '../../../base/common/arrays.js';
 
 /**
- * An array that acodemavis being sparse by always
+ * An array that avoids being sparse by always
  * filling up unused indices with a default value.
  */
 export class FixedArray<T> {
@@ -23,14 +23,14 @@ export class FixedArray<T> {
 		return this._default;
 	}
 
-	public set(index: number, value: T): codemavi {
+	public set(index: number, value: T): void {
 		while (index >= this._store.length) {
 			this._store[this._store.length] = this._default;
 		}
 		this._store[index] = value;
 	}
 
-	public replace(index: number, oldLength: number, newLength: number): codemavi {
+	public replace(index: number, oldLength: number, newLength: number): void {
 		if (index >= this._store.length) {
 			return;
 		}
@@ -49,14 +49,14 @@ export class FixedArray<T> {
 		this._store = before.concat(insertArr, after);
 	}
 
-	public delete(deleteIndex: number, deleteCount: number): codemavi {
+	public delete(deleteIndex: number, deleteCount: number): void {
 		if (deleteCount === 0 || deleteIndex >= this._store.length) {
 			return;
 		}
 		this._store.splice(deleteIndex, deleteCount);
 	}
 
-	public insert(insertIndex: number, insertCount: number): codemavi {
+	public insert(insertIndex: number, insertCount: number): void {
 		if (insertCount === 0 || insertIndex >= this._store.length) {
 			return;
 		}

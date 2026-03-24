@@ -27,7 +27,7 @@ export class TestParcelWatcher extends ParcelWatcher {
 
 	protected override readonly suspendedWatchRequestPollingInterval = 100;
 
-	private readonly _onDidWatch = this._register(new Emitter<codemavi>());
+	private readonly _onDidWatch = this._register(new Emitter<void>());
 	readonly onDidWatch = this._onDidWatch.event;
 
 	readonly onWatchFail = this._onDidWatchFail.event;
@@ -46,14 +46,14 @@ export class TestParcelWatcher extends ParcelWatcher {
 		return 0;
 	}
 
-	protected override async doWatch(requests: IRecursiveWatchRequest[]): Promise<codemavi> {
+	protected override async doWatch(requests: IRecursiveWatchRequest[]): Promise<void> {
 		await super.doWatch(requests);
 		await this.whenReady();
 
 		this._onDidWatch.fire();
 	}
 
-	async whenReady(): Promise<codemavi> {
+	async whenReady(): Promise<void> {
 		for (const watcher of this.watchers) {
 			await watcher.ready;
 		}
@@ -175,13 +175,13 @@ suite.skip('File Watcher (parcel)', function () {
 		return res;
 	}
 
-	function awaitMessage(watcher: TestParcelWatcher, type: 'trace' | 'warn' | 'error' | 'info' | 'debug'): Promise<codemavi> {
+	function awaitMessage(watcher: TestParcelWatcher, type: 'trace' | 'warn' | 'error' | 'info' | 'debug'): Promise<void> {
 		if (loggingEnabled) {
 			console.log(`Awaiting message of type ${type}`);
 		}
 
 		// Await the message
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			const disposable = watcher.onDidLogMessage(msg => {
 				if (msg.type === type) {
 					disposable.dispose();
@@ -364,7 +364,7 @@ suite.skip('File Watcher (parcel)', function () {
 		return basicCrudTest(join(testDir, 'deep', 'newFile.txt'));
 	});
 
-	async function basicCrudTest(filePath: string, correlationId?: number | null, expectedCount?: number): Promise<codemavi> {
+	async function basicCrudTest(filePath: string, correlationId?: number | null, expectedCount?: number): Promise<void> {
 
 		// New file
 		let changeFuture = awaitEvent(watcher, filePath, FileChangeType.ADDED, undefined, correlationId, expectedCount);

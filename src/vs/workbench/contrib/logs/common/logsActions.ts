@@ -35,7 +35,7 @@ export class SetLogLevelAction extends Action {
 		super(id, label);
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		const logLevelOrChannel = await this.selectLogLevelOrChannel();
 		if (logLevelOrChannel !== null) {
 			if (isLogLevel(logLevelOrChannel)) {
@@ -104,7 +104,7 @@ export class SetLogLevelAction extends Action {
 		});
 	}
 
-	private async setLogLevelForChannel(logChannel: LogChannelQuickPickItem): Promise<codemavi> {
+	private async setLogLevelForChannel(logChannel: LogChannelQuickPickItem): Promise<void> {
 		const defaultLogLevels = await this.defaultLogLevelsService.getDefaultLogLevels();
 		const defaultLogLevel = defaultLogLevels.extensions.find(e => e[0] === logChannel.channel.extensionId?.toLowerCase())?.[1] ?? defaultLogLevels.default;
 		const entries = this.getLogLevelEntries(defaultLogLevel, this.outputService.getLogLevel(logChannel.channel) ?? defaultLogLevel, !!logChannel.channel.extensionId);
@@ -172,7 +172,7 @@ export class OpenWindowSessionLogFileAction extends Action {
 		super(id, label);
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		const sessionResult = await this.quickInputService.pick(
 			this.getSessions().then(sessions => sessions.map((s, index): IQuickPickItem => ({
 				id: s.toString(),

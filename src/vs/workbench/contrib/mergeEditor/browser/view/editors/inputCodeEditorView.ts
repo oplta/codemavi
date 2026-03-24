@@ -248,7 +248,7 @@ export class ModifiedBaseRangeGutterItemModel implements IGutterItemInfo {
 		};
 	});
 
-	public setState(value: boolean, tx: ITransaction): codemavi {
+	public setState(value: boolean, tx: ITransaction): void {
 		this.viewModel.setState(
 			this.baseRange,
 			this.model
@@ -259,7 +259,7 @@ export class ModifiedBaseRangeGutterItemModel implements IGutterItemInfo {
 			this.inputNumber
 		);
 	}
-	public toggleBothSides(): codemavi {
+	public toggleBothSides(): void {
 		transaction(tx => {
 			/** @description Context Menu: toggle both sides */
 			const state = this.model
@@ -456,7 +456,7 @@ export class MergeConflictGutterItemView extends Disposable implements IGutterIt
 		);
 	}
 
-	layout(top: number, height: number, viewTop: number, viewHeight: number): codemavi {
+	layout(top: number, height: number, viewTop: number, viewHeight: number): void {
 		const checkboxHeight = this.checkboxDiv.clientHeight;
 		const middleHeight = height / 2 - checkboxHeight / 2;
 
@@ -487,7 +487,7 @@ export class MergeConflictGutterItemView extends Disposable implements IGutterIt
 		});
 	}
 
-	update(baseRange: ModifiedBaseRangeGutterItemModel): codemavi {
+	update(baseRange: ModifiedBaseRangeGutterItemModel): void {
 		transaction(tx => {
 			/** @description MergeConflictGutterItemView: Updating new base range */
 			this.item.set(baseRange, tx);

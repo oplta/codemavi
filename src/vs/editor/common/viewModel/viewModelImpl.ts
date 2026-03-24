@@ -67,7 +67,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		model: ITextModel,
 		domLineBreaksComputerFactory: ILineBreaksComputerFactory,
 		monospaceLineBreaksComputerFactory: ILineBreaksComputerFactory,
-		scheduleAtNextAnimationFrame: (callback: () => codemavi) => IDisposable,
+		scheduleAtNextAnimationFrame: (callback: () => void) => IDisposable,
 		private readonly languageConfigurationService: ILanguageConfigurationService,
 		private readonly _themeService: IThemeService,
 		private readonly _attachedView: IAttachedView,
@@ -161,7 +161,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		this._updateConfigurationViewLineCountNow();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		// First remove listeners, as disposing the lines might end up sending
 		// model decoration changed events ... and we no longer care about them ...
 		super.dispose();
@@ -175,15 +175,15 @@ export class ViewModel extends Disposable implements IViewModel {
 		return this._lines.createLineBreaksComputer();
 	}
 
-	public addViewEventHandler(eventHandler: ViewEventHandler): codemavi {
+	public addViewEventHandler(eventHandler: ViewEventHandler): void {
 		this._eventDispatcher.addViewEventHandler(eventHandler);
 	}
 
-	public removeViewEventHandler(eventHandler: ViewEventHandler): codemavi {
+	public removeViewEventHandler(eventHandler: ViewEventHandler): void {
 		this._eventDispatcher.removeViewEventHandler(eventHandler);
 	}
 
-	private _updateConfigurationViewLineCountNow(): codemavi {
+	private _updateConfigurationViewLineCountNow(): void {
 		this._configuration.setViewLineCount(this._lines.getViewLineCount());
 	}
 
@@ -199,32 +199,32 @@ export class ViewModel extends Disposable implements IViewModel {
 		return modelVisibleRanges;
 	}
 
-	public visibleLinesStabilized(): codemavi {
+	public visibleLinesStabilized(): void {
 		const modelVisibleRanges = this.getModelVisibleRanges();
 		this._attachedView.setVisibleLines(modelVisibleRanges, true);
 	}
 
-	private _handleVisibleLinesChanged(): codemavi {
+	private _handleVisibleLinesChanged(): void {
 		const modelVisibleRanges = this.getModelVisibleRanges();
 		this._attachedView.setVisibleLines(modelVisibleRanges, false);
 	}
 
-	public setHasFocus(hasFocus: boolean): codemavi {
+	public setHasFocus(hasFocus: boolean): void {
 		this._hasFocus = hasFocus;
 		this._cursor.setHasFocus(hasFocus);
 		this._eventDispatcher.emitSingleViewEvent(new viewEvents.ViewFocusChangedEvent(hasFocus));
 		this._eventDispatcher.emitOutgoingEvent(new FocusChangedEvent(!hasFocus, hasFocus));
 	}
 
-	public setHasWidgetFocus(hasWidgetFocus: boolean): codemavi {
+	public setHasWidgetFocus(hasWidgetFocus: boolean): void {
 		this._eventDispatcher.emitOutgoingEvent(new WidgetFocusChangedEvent(!hasWidgetFocus, hasWidgetFocus));
 	}
 
-	public onCompositionStart(): codemavi {
+	public onCompositionStart(): void {
 		this._eventDispatcher.emitSingleViewEvent(new viewEvents.ViewCompositionStartEvent());
 	}
 
-	public onCompositionEnd(): codemavi {
+	public onCompositionEnd(): void {
 		this._eventDispatcher.emitSingleViewEvent(new viewEvents.ViewCompositionEndEvent());
 	}
 
@@ -239,7 +239,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		return new StableViewport(null, 0);
 	}
 
-	private _onConfigurationChanged(eventsCollector: ViewModelEventsCollector, e: ConfigurationChangedEvent): codemavi {
+	private _onConfigurationChanged(eventsCollector: ViewModelEventsCollector, e: ConfigurationChangedEvent): void {
 		const stableViewport = this._captureStableViewport();
 		const options = this._configuration.options;
 		const fontInfo = options.get(EditorOption.fontInfo);
@@ -281,7 +281,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		}
 	}
 
-	private _registerModelEvents(): codemavi {
+	private _registerModelEvents(): void {
 
 		this._register(this.model.onDidChangeContentOrInjectedText((e) => {
 			try {
@@ -485,7 +485,7 @@ export class ViewModel extends Disposable implements IViewModel {
 	 * This is because the model might have changed, which resets the hidden areas, but not the last cached value.
 	 * This needs a better fix in the future.
 	*/
-	public setHiddenAreas(ranges: Range[], source?: unknown, forceUpdate?: boolean): codemavi {
+	public setHiddenAreas(ranges: Range[], source?: unknown, forceUpdate?: boolean): void {
 		this.hiddenAreasModel.setHiddenAreas(source, ranges);
 		const mergedRanges = this.hiddenAreasModel.getMergedRanges();
 		if (mergedRanges === this.previousHiddenAreas && !forceUpdate) {
@@ -663,7 +663,7 @@ export class ViewModel extends Disposable implements IViewModel {
 	/**
 	 * Gives a hint that a lot of requests are about to come in for these line numbers.
 	 */
-	public setViewport(startLineNumber: number, endLineNumber: number, centeredLineNumber: number): codemavi {
+	public setViewport(startLineNumber: number, endLineNumber: number, centeredLineNumber: number): void {
 		this._viewportStart.update(this, startLineNumber);
 	}
 
@@ -797,7 +797,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		return result.asArray;
 	}
 
-	private _invalidateDecorationsColorCache(): codemavi {
+	private _invalidateDecorationsColorCache(): void {
 		const decorations = this.model.getOverviewRulerDecorations();
 		for (const decoration of decorations) {
 			const opts1 = <ModelDecorationOverviewRulerOptions>decoration.options.overviewRuler;
@@ -1016,13 +1016,13 @@ export class ViewModel extends Disposable implements IViewModel {
 	public getCursorAutoClosedCharacters(): Range[] {
 		return this._cursor.getAutoClosedCharacters();
 	}
-	public setCursorColumnSelectData(columnSelectData: IColumnSelectData): codemavi {
+	public setCursorColumnSelectData(columnSelectData: IColumnSelectData): void {
 		this._cursor.setCursorColumnSelectData(columnSelectData);
 	}
 	public getPrevEditOperationType(): EditOperationType {
 		return this._cursor.getPrevEditOperationType();
 	}
-	public setPrevEditOperationType(type: EditOperationType): codemavi {
+	public setPrevEditOperationType(type: EditOperationType): void {
 		this._cursor.setPrevEditOperationType(type);
 	}
 	public getSelection(): Selection {
@@ -1034,17 +1034,17 @@ export class ViewModel extends Disposable implements IViewModel {
 	public getPosition(): Position {
 		return this._cursor.getPrimaryCursorState().modelState.position;
 	}
-	public setSelections(source: string | null | undefined, selections: readonly ISelection[], reason = CursorChangeReason.NotSet): codemavi {
+	public setSelections(source: string | null | undefined, selections: readonly ISelection[], reason = CursorChangeReason.NotSet): void {
 		this._withViewEventsCollector(eventsCollector => this._cursor.setSelections(eventsCollector, source, selections, reason));
 	}
 	public saveCursorState(): ICursorState[] {
 		return this._cursor.saveState();
 	}
-	public restoreCursorState(states: ICursorState[]): codemavi {
+	public restoreCursorState(states: ICursorState[]): void {
 		this._withViewEventsCollector(eventsCollector => this._cursor.restoreState(eventsCollector, states));
 	}
 
-	private _executeCursorEdit(callback: (eventsCollector: ViewModelEventsCollector) => codemavi): codemavi {
+	private _executeCursorEdit(callback: (eventsCollector: ViewModelEventsCollector) => void): void {
 		if (this._cursor.context.cursorConfig.readOnly) {
 			// we cannot edit when read only...
 			this._eventDispatcher.emitOutgoingEvent(new ReadOnlyEditAttemptEvent());
@@ -1052,57 +1052,57 @@ export class ViewModel extends Disposable implements IViewModel {
 		}
 		this._withViewEventsCollector(callback);
 	}
-	public executeEdits(source: string | null | undefined, edits: IIdentifiedSingleEditOperation[], cursorStateComputer: ICursorStateComputer): codemavi {
+	public executeEdits(source: string | null | undefined, edits: IIdentifiedSingleEditOperation[], cursorStateComputer: ICursorStateComputer): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.executeEdits(eventsCollector, source, edits, cursorStateComputer));
 	}
-	public startComposition(): codemavi {
+	public startComposition(): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.startComposition(eventsCollector));
 	}
-	public endComposition(source?: string | null | undefined): codemavi {
+	public endComposition(source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.endComposition(eventsCollector, source));
 	}
-	public type(text: string, source?: string | null | undefined): codemavi {
+	public type(text: string, source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.type(eventsCollector, text, source));
 	}
-	public compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number, source?: string | null | undefined): codemavi {
+	public compositionType(text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number, source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.compositionType(eventsCollector, text, replacePrevCharCnt, replaceNextCharCnt, positionDelta, source));
 	}
-	public paste(text: string, pasteOnNewLine: boolean, multicursorText?: string[] | null | undefined, source?: string | null | undefined): codemavi {
+	public paste(text: string, pasteOnNewLine: boolean, multicursorText?: string[] | null | undefined, source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.paste(eventsCollector, text, pasteOnNewLine, multicursorText, source));
 	}
-	public cut(source?: string | null | undefined): codemavi {
+	public cut(source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.cut(eventsCollector, source));
 	}
-	public executeCommand(command: ICommand, source?: string | null | undefined): codemavi {
+	public executeCommand(command: ICommand, source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.executeCommand(eventsCollector, command, source));
 	}
-	public executeCommands(commands: ICommand[], source?: string | null | undefined): codemavi {
+	public executeCommands(commands: ICommand[], source?: string | null | undefined): void {
 		this._executeCursorEdit(eventsCollector => this._cursor.executeCommands(eventsCollector, commands, source));
 	}
-	public revealAllCursors(source: string | null | undefined, revealHorizontal: boolean, minimalReveal: boolean = false): codemavi {
+	public revealAllCursors(source: string | null | undefined, revealHorizontal: boolean, minimalReveal: boolean = false): void {
 		this._withViewEventsCollector(eventsCollector => this._cursor.revealAll(eventsCollector, source, minimalReveal, viewEvents.VerticalRevealType.Simple, revealHorizontal, ScrollType.Smooth));
 	}
-	public revealPrimaryCursor(source: string | null | undefined, revealHorizontal: boolean, minimalReveal: boolean = false): codemavi {
+	public revealPrimaryCursor(source: string | null | undefined, revealHorizontal: boolean, minimalReveal: boolean = false): void {
 		this._withViewEventsCollector(eventsCollector => this._cursor.revealPrimary(eventsCollector, source, minimalReveal, viewEvents.VerticalRevealType.Simple, revealHorizontal, ScrollType.Smooth));
 	}
-	public revealTopMostCursor(source: string | null | undefined): codemavi {
+	public revealTopMostCursor(source: string | null | undefined): void {
 		const viewPosition = this._cursor.getTopMostViewPosition();
 		const viewRange = new Range(viewPosition.lineNumber, viewPosition.column, viewPosition.lineNumber, viewPosition.column);
 		this._withViewEventsCollector(eventsCollector => eventsCollector.emitViewEvent(new viewEvents.ViewRevealRangeRequestEvent(source, false, viewRange, null, viewEvents.VerticalRevealType.Simple, true, ScrollType.Smooth)));
 	}
-	public revealBottomMostCursor(source: string | null | undefined): codemavi {
+	public revealBottomMostCursor(source: string | null | undefined): void {
 		const viewPosition = this._cursor.getBottomMostViewPosition();
 		const viewRange = new Range(viewPosition.lineNumber, viewPosition.column, viewPosition.lineNumber, viewPosition.column);
 		this._withViewEventsCollector(eventsCollector => eventsCollector.emitViewEvent(new viewEvents.ViewRevealRangeRequestEvent(source, false, viewRange, null, viewEvents.VerticalRevealType.Simple, true, ScrollType.Smooth)));
 	}
-	public revealRange(source: string | null | undefined, revealHorizontal: boolean, viewRange: Range, verticalType: viewEvents.VerticalRevealType, scrollType: ScrollType): codemavi {
+	public revealRange(source: string | null | undefined, revealHorizontal: boolean, viewRange: Range, verticalType: viewEvents.VerticalRevealType, scrollType: ScrollType): void {
 		this._withViewEventsCollector(eventsCollector => eventsCollector.emitViewEvent(new viewEvents.ViewRevealRangeRequestEvent(source, false, viewRange, null, verticalType, revealHorizontal, scrollType)));
 	}
 
 	//#endregion
 
 	//#region viewLayout
-	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => codemavi): codemavi {
+	public changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => void): void {
 		const hadAChange = this.viewLayout.changeWhitespace(callback);
 		if (hadAChange) {
 			this._eventDispatcher.emitSingleViewEvent(new viewEvents.ViewZonesChangedEvent());
@@ -1122,7 +1122,7 @@ export class ViewModel extends Disposable implements IViewModel {
 		});
 	}
 
-	public batchEvents(callback: () => codemavi): codemavi {
+	public batchEvents(callback: () => void): void {
 		this._withViewEventsCollector(() => { callback(); });
 	}
 
@@ -1177,11 +1177,11 @@ class ViewportStart implements IDisposable {
 		private _startLineDelta: number,
 	) { }
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._model._setTrackedRange(this._modelTrackedRange, null, TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges);
 	}
 
-	public update(viewModel: IViewModel, startLineNumber: number): codemavi {
+	public update(viewModel: IViewModel, startLineNumber: number): void {
 		const position = viewModel.coordinatesConverter.convertViewPositionToModelPosition(new Position(startLineNumber, viewModel.getLineMinColumn(startLineNumber)));
 		const viewportStartLineTrackedRange = viewModel.model._setTrackedRange(this._modelTrackedRange, new Range(position.lineNumber, position.column, position.lineNumber, position.column), TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges);
 		const viewportStartLineTop = viewModel.viewLayout.getVerticalOffsetForLineNumber(startLineNumber);
@@ -1193,7 +1193,7 @@ class ViewportStart implements IDisposable {
 		this._startLineDelta = scrollTop - viewportStartLineTop;
 	}
 
-	public invalidate(): codemavi {
+	public invalidate(): void {
 		this._isValid = false;
 	}
 }
@@ -1203,7 +1203,7 @@ class OverviewRulerDecorations {
 	private readonly _asMap: { [color: string]: OverviewRulerDecorationsGroup } = Object.create(null);
 	readonly asArray: OverviewRulerDecorationsGroup[] = [];
 
-	public accept(color: string, zIndex: number, startLineNumber: number, endLineNumber: number, lane: number): codemavi {
+	public accept(color: string, zIndex: number, startLineNumber: number, endLineNumber: number, lane: number): void {
 		const prevGroup = this._asMap[color];
 
 		if (prevGroup) {
@@ -1233,7 +1233,7 @@ class HiddenAreasModel {
 	private shouldRecompute = false;
 	private ranges: Range[] = [];
 
-	setHiddenAreas(source: unknown, ranges: Range[]): codemavi {
+	setHiddenAreas(source: unknown, ranges: Range[]): void {
 		const existing = this.hiddenAreas.get(source);
 		if (existing && rangeArraysEqual(existing, ranges)) {
 			return;
@@ -1309,7 +1309,7 @@ class StableViewport {
 		public readonly startLineDelta: number
 	) { }
 
-	public recoverViewportStart(coordinatesConverter: ICoordinatesConverter, viewLayout: ViewLayout): codemavi {
+	public recoverViewportStart(coordinatesConverter: ICoordinatesConverter, viewLayout: ViewLayout): void {
 		if (!this.viewportStartModelPosition) {
 			return;
 		}

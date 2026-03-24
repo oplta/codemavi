@@ -225,7 +225,7 @@ export class InlineChatSessionServiceImpl implements IInlineChatSessionService {
 		return session;
 	}
 
-	moveSession(session: Session, target: ICodeEditor): codemavi {
+	moveSession(session: Session, target: ICodeEditor): void {
 		const newKey = this._key(target, session.targetUri);
 		const existing = this._sessions.get(newKey);
 		if (existing) {
@@ -253,11 +253,11 @@ export class InlineChatSessionServiceImpl implements IInlineChatSessionService {
 		}
 	}
 
-	releaseSession(session: Session): codemavi {
+	releaseSession(session: Session): void {
 		this._releaseSession(session, false);
 	}
 
-	private _releaseSession(session: Session, byServer: boolean): codemavi {
+	private _releaseSession(session: Session, byServer: boolean): void {
 
 		let tuple: [string, SessionData] | undefined;
 

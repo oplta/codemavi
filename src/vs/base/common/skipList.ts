@@ -42,7 +42,7 @@ export class SkipList<K, V> implements Map<K, V> {
 		return this._size;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._header = <any>new Node(this._maxLevel, NIL, NIL);
 		this._size = 0;
 	}
@@ -72,7 +72,7 @@ export class SkipList<K, V> implements Map<K, V> {
 
 	// --- iteration
 
-	forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void {
 		let node = this._header.forward[0];
 		while (node) {
 			callbackfn.call(thisArg, node.value, node.key, this);

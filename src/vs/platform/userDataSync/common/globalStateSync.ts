@@ -237,7 +237,7 @@ export class GlobalStateSynchroniser extends AbstractSynchroniser implements IUs
 		}
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IGlobalStateResourcePreview, IGlobalStateResourceMergeResult][], force: boolean): Promise<codemavi> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IGlobalStateResourcePreview, IGlobalStateResourceMergeResult][], force: boolean): Promise<void> {
 		const { localUserData } = resourcePreviews[0][0];
 		const { local, remote, localChange, remoteChange } = resourcePreviews[0][1];
 
@@ -357,12 +357,12 @@ export class LocalGlobalStateProvider {
 		return '{}';
 	}
 
-	async writeLocalGlobalState({ added, removed, updated }: { added: IStringDictionary<IStorageValue>; updated: IStringDictionary<IStorageValue>; removed: string[] }, profile: IUserDataProfile): Promise<codemavi> {
+	async writeLocalGlobalState({ added, removed, updated }: { added: IStringDictionary<IStorageValue>; updated: IStringDictionary<IStorageValue>; removed: string[] }, profile: IUserDataProfile): Promise<void> {
 		const syncResourceLogLabel = getSyncResourceLogLabel(SyncResource.GlobalState, profile);
 		const argv: IStringDictionary<any> = {};
 		const updatedStorage = new Map<string, string | undefined>();
 		const storageData = await this.userDataProfileStorageService.readStorageData(profile);
-		const handleUpdatedStorage = (keys: string[], storage?: IStringDictionary<IStorageValue>): codemavi => {
+		const handleUpdatedStorage = (keys: string[], storage?: IStringDictionary<IStorageValue>): void => {
 			for (const key of keys) {
 				if (key.startsWith(argvStoragePrefx)) {
 					argv[key.substring(argvStoragePrefx.length)] = storage ? storage[key].value : undefined;
@@ -420,7 +420,7 @@ export class GlobalStateInitializer extends AbstractInitializer {
 		super(SyncResource.GlobalState, userDataProfilesService, environmentService, logService, fileService, storageService, uriIdentityService);
 	}
 
-	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
+	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
 		const remoteGlobalState: IGlobalState = remoteUserData.syncData ? JSON.parse(remoteUserData.syncData.content) : null;
 		if (!remoteGlobalState) {
 			this.logService.info('Skipping initializing global state because remote global state does not exist.');
@@ -478,7 +478,7 @@ export class UserDataSyncStoreTypeSynchronizer {
 		return remoteGlobalState?.storage[SYNC_SERVICE_URL_TYPE]?.value as UserDataSyncStoreType;
 	}
 
-	async sync(userDataSyncStoreType: UserDataSyncStoreType): Promise<codemavi> {
+	async sync(userDataSyncStoreType: UserDataSyncStoreType): Promise<void> {
 		const syncHeaders = createSyncHeaders(generateUuid());
 		try {
 			return await this.doSync(userDataSyncStoreType, syncHeaders);
@@ -494,7 +494,7 @@ export class UserDataSyncStoreTypeSynchronizer {
 		}
 	}
 
-	private async doSync(userDataSyncStoreType: UserDataSyncStoreType, syncHeaders: IHeaders): Promise<codemavi> {
+	private async doSync(userDataSyncStoreType: UserDataSyncStoreType, syncHeaders: IHeaders): Promise<void> {
 		// Read the global state from remote
 		const globalStateUserData = await this.userDataSyncStoreClient.readResource(SyncResource.GlobalState, null, undefined, syncHeaders);
 		const remoteGlobalState = this.parseGlobalState(globalStateUserData) || { storage: {} };

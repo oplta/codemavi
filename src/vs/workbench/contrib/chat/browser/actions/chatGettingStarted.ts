@@ -46,7 +46,7 @@ export class ChatGettingStartedContribution extends Disposable implements IWorkb
 		this.registerListeners(defaultChatAgent);
 	}
 
-	private registerListeners(defaultChatAgent: IDefaultChatAgent): codemavi {
+	private registerListeners(defaultChatAgent: IDefaultChatAgent): void {
 
 		this._register(this.extensionManagementService.onDidInstallExtensions(async (result) => {
 			for (const e of result) {

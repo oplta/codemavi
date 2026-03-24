@@ -44,8 +44,8 @@ suite('DebugModel', () => {
 
 	suite('DebugModel', () => {
 		test('refreshTopOfCallstack resolves all returned promises when called multiple times', async () => {
-			const topFrameDeferred = new DeferredPromise<codemavi>();
-			const wholeStackDeferred = new DeferredPromise<codemavi>();
+			const topFrameDeferred = new DeferredPromise<void>();
+			const wholeStackDeferred = new DeferredPromise<void>();
 			const fakeThread = mockObject<Thread>()({
 				session: { capabilities: { supportsDelayedStackTraceLoading: true } } as any,
 				getCallStack: () => [],

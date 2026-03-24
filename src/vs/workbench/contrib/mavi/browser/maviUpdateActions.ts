@@ -10,18 +10,18 @@ import { localize2 } from '../../../../nls.js';
 import { Action2, registerAction2 } from '../../../../platform/actions/common/actions.js';
 import { INotificationActions, INotificationHandle, INotificationService } from '../../../../platform/notification/common/notification.js';
 import { IMetricsService } from '../common/metricsService.js';
-import { IMaviUpdateService } from '../common/codemaviUpdateService.js';
+import { IMaviUpdateService } from '../common/maviUpdateService.js';
 import { IWorkbenchContribution, registerWorkbenchContribution2, WorkbenchPhase } from '../../../common/contributions.js';
 import * as dom from '../../../../base/browser/dom.js';
 import { IUpdateService } from '../../../../platform/update/common/update.js';
-import { Code MaviCheckUpdateRespose } from '../common/codemaviUpdateServiceTypes.js';
+import { MaviCheckUpdateRespose } from '../common/maviUpdateServiceTypes.js';
 import { IAction } from '../../../../base/common/actions.js';
 
 
 
 
-const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, notifService: INotificationService, updateService: IUpdateService): INotificationHandle => {
-	const message = res?.message || 'This is a very old version of Code Mavi, please download the latest version! [Code Mavi Editor](https://codemavieditor.com/download-beta)!'
+const notifyUpdate = (res: MaviCheckUpdateRespose & { message: string }, notifService: INotificationService, updateService: IUpdateService): INotificationHandle => {
+	const message = res?.message || 'This is a very old version of Mavi, please download the latest version! [Mavi Editor](https://mavieditor.com/download-beta)!'
 
 	let actions: INotificationActions | undefined
 
@@ -31,13 +31,13 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 		if (res.action === 'reinstall') {
 			primary.push({
 				label: `Reinstall`,
-				id: 'codemavi.updater.reinstall',
+				id: 'mavi.updater.reinstall',
 				enabled: true,
 				tooltip: '',
 				class: undefined,
 				run: () => {
 					const { window } = dom.getActiveWindow()
-					window.open('https://codemavieditor.com/download-beta')
+					window.open('https://mavieditor.com/download-beta')
 				}
 			})
 		}
@@ -45,7 +45,7 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 		if (res.action === 'download') {
 			primary.push({
 				label: `Download`,
-				id: 'codemavi.updater.download',
+				id: 'mavi.updater.download',
 				enabled: true,
 				tooltip: '',
 				class: undefined,
@@ -59,7 +59,7 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 		if (res.action === 'apply') {
 			primary.push({
 				label: `Apply`,
-				id: 'codemavi.updater.apply',
+				id: 'mavi.updater.apply',
 				enabled: true,
 				tooltip: '',
 				class: undefined,
@@ -72,7 +72,7 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 		if (res.action === 'restart') {
 			primary.push({
 				label: `Restart`,
-				id: 'codemavi.updater.restart',
+				id: 'mavi.updater.restart',
 				enabled: true,
 				tooltip: '',
 				class: undefined,
@@ -83,21 +83,21 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 		}
 
 		primary.push({
-			id: 'codemavi.updater.site',
+			id: 'mavi.updater.site',
 			enabled: true,
-			label: `Code Mavi Site`,
+			label: `Mavi Site`,
 			tooltip: '',
 			class: undefined,
 			run: () => {
 				const { window } = dom.getActiveWindow()
-				window.open('https://codemavieditor.com/')
+				window.open('https://mavieditor.com/')
 			}
 		})
 
 		actions = {
 			primary: primary,
 			secondary: [{
-				id: 'codemavi.updater.close',
+				id: 'mavi.updater.close',
 				enabled: true,
 				label: `Keep current version`,
 				tooltip: '',
@@ -127,7 +127,7 @@ const notifyUpdate = (res: Code MaviCheckUpdateRespose & { message: string }, no
 	// })
 }
 const notifyErrChecking = (notifService: INotificationService): INotificationHandle => {
-	const message = `Code Mavi Error: There was an error checking for updates. If this persists, please get in touch or reinstall Code Mavi [here](https://codemavieditor.com/download-beta)!`
+	const message = `Mavi Error: There was an error checking for updates. If this persists, please get in touch or reinstall Mavi [here](https://mavieditor.com/download-beta)!`
 	const notifController = notifService.notify({
 		severity: Severity.Info,
 		message: message,
@@ -137,31 +137,31 @@ const notifyErrChecking = (notifService: INotificationService): INotificationHan
 }
 
 
-const performCode MaviCheck = async (
+const performMaviCheck = async (
 	explicit: boolean,
 	notifService: INotificationService,
-	codemaviUpdateService: IMaviUpdateService,
+	maviUpdateService: IMaviUpdateService,
 	metricsService: IMetricsService,
 	updateService: IUpdateService,
 ): Promise<INotificationHandle | null> => {
 
 	const metricsTag = explicit ? 'Manual' : 'Auto'
 
-	metricsService.capture(`Code Mavi Update ${metricsTag}: Checking...`, {})
-	const res = await codemaviUpdateService.check(explicit)
+	metricsService.capture(`Mavi Update ${metricsTag}: Checking...`, {})
+	const res = await maviUpdateService.check(explicit)
 	if (!res) {
 		const notifController = notifyErrChecking(notifService);
-		metricsService.capture(`Code Mavi Update ${metricsTag}: Error`, { res })
+		metricsService.capture(`Mavi Update ${metricsTag}: Error`, { res })
 		return notifController
 	}
 	else {
 		if (res.message) {
 			const notifController = notifyUpdate(res, notifService, updateService)
-			metricsService.capture(`Code Mavi Update ${metricsTag}: Yes`, { res })
+			metricsService.capture(`Mavi Update ${metricsTag}: Yes`, { res })
 			return notifController
 		}
 		else {
-			metricsService.capture(`Code Mavi Update ${metricsTag}: No`, { res })
+			metricsService.capture(`Mavi Update ${metricsTag}: No`, { res })
 			return null
 		}
 	}
@@ -176,19 +176,19 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			f1: true,
-			id: 'codemavi.codemaviCheckUpdate',
-			title: localize2('codemaviCheckUpdate', 'Code Mavi: Check for Updates'),
+			id: 'mavi.maviCheckUpdate',
+			title: localize2('maviCheckUpdate', 'Mavi: Check for Updates'),
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
-		const codemaviUpdateService = accessor.get(IMaviUpdateService)
+	async run(accessor: ServicesAccessor): Promise<void> {
+		const maviUpdateService = accessor.get(IMaviUpdateService)
 		const notifService = accessor.get(INotificationService)
 		const metricsService = accessor.get(IMetricsService)
 		const updateService = accessor.get(IUpdateService)
 
 		const currNotifController = lastNotifController
 
-		const newController = await performCode MaviCheck(true, notifService, codemaviUpdateService, metricsService, updateService)
+		const newController = await performMaviCheck(true, notifService, maviUpdateService, metricsService, updateService)
 
 		if (newController) {
 			currNotifController?.close()
@@ -198,10 +198,10 @@ registerAction2(class extends Action2 {
 })
 
 // on mount
-class Code MaviUpdateWorkbenchContribution extends Disposable implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.codemavi.codemaviUpdate'
+class MaviUpdateWorkbenchContribution extends Disposable implements IWorkbenchContribution {
+	static readonly ID = 'workbench.contrib.mavi.maviUpdate'
 	constructor(
-		@IMaviUpdateService codemaviUpdateService: IMaviUpdateService,
+		@IMaviUpdateService maviUpdateService: IMaviUpdateService,
 		@IMetricsService metricsService: IMetricsService,
 		@INotificationService notifService: INotificationService,
 		@IUpdateService updateService: IUpdateService,
@@ -209,7 +209,7 @@ class Code MaviUpdateWorkbenchContribution extends Disposable implements IWorkbe
 		super()
 
 		const autoCheck = () => {
-			performCode MaviCheck(false, notifService, codemaviUpdateService, metricsService, updateService)
+			performMaviCheck(false, notifService, maviUpdateService, metricsService, updateService)
 		}
 
 		// check once 5 seconds after mount
@@ -225,4 +225,4 @@ class Code MaviUpdateWorkbenchContribution extends Disposable implements IWorkbe
 
 	}
 }
-registerWorkbenchContribution2(Code MaviUpdateWorkbenchContribution.ID, Code MaviUpdateWorkbenchContribution, WorkbenchPhase.BlockRestore);
+registerWorkbenchContribution2(MaviUpdateWorkbenchContribution.ID, MaviUpdateWorkbenchContribution, WorkbenchPhase.BlockRestore);

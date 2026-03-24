@@ -50,7 +50,7 @@ suite('Files - TextFileEditorTracker', () => {
 		disposables.clear();
 	});
 
-	async function createTracker(autoSaveEnabled = false): Promise<{ accessor: TestServiceAccessor; cleanup: () => Promise<codemavi> }> {
+	async function createTracker(autoSaveEnabled = false): Promise<{ accessor: TestServiceAccessor; cleanup: () => Promise<void> }> {
 		const instantiationService = workbenchInstantiationService(undefined, disposables);
 
 		const configurationService = new TestConfigurationService();
@@ -142,7 +142,7 @@ suite('Files - TextFileEditorTracker', () => {
 		await testDirtyTextFileModelOpensEditorDependingOnAutoSaveSetting(resource, true, true);
 	});
 
-	async function testDirtyTextFileModelOpensEditorDependingOnAutoSaveSetting(resource: URI, autoSave: boolean, error: boolean): Promise<codemavi> {
+	async function testDirtyTextFileModelOpensEditorDependingOnAutoSaveSetting(resource: URI, autoSave: boolean, error: boolean): Promise<void> {
 		const { accessor, cleanup } = await createTracker(autoSave);
 
 		assert.ok(!accessor.editorService.isOpened({ resource, typeId: FILE_EDITOR_INPUT_ID, editorId: DEFAULT_EDITOR_ASSOCIATION.id }));
@@ -180,7 +180,7 @@ suite('Files - TextFileEditorTracker', () => {
 		return testUntitledEditor(true);
 	});
 
-	async function testUntitledEditor(autoSaveEnabled: boolean): Promise<codemavi> {
+	async function testUntitledEditor(autoSaveEnabled: boolean): Promise<void> {
 		const { accessor, cleanup } = await createTracker(autoSaveEnabled);
 
 		const untitledTextEditor = await accessor.textEditorService.resolveTextEditor({ resource: undefined, forceUntitled: true }) as UntitledTextEditorInput;
@@ -196,7 +196,7 @@ suite('Files - TextFileEditorTracker', () => {
 		await cleanup();
 	}
 
-	function awaitEditorOpening(editorService: IEditorService): Promise<codemavi> {
+	function awaitEditorOpening(editorService: IEditorService): Promise<void> {
 		return Event.toPromise(Event.once(editorService.onDidActiveEditorChange));
 	}
 
@@ -215,7 +215,7 @@ suite('Files - TextFileEditorTracker', () => {
 		await cleanup();
 	});
 
-	function awaitModelResolveEvent(textFileService: ITextFileService, resource: URI): Promise<codemavi> {
+	function awaitModelResolveEvent(textFileService: ITextFileService, resource: URI): Promise<void> {
 		return new Promise(resolve => {
 			const listener = textFileService.files.onDidResolve(e => {
 				if (isEqual(e.model.resource, resource)) {

@@ -23,7 +23,7 @@ export class CommentFormActions implements IDisposable {
 		private readonly contextKeyService: IContextKeyService,
 		private readonly contextMenuService: IContextMenuService,
 		private container: HTMLElement,
-		private actionHandler: (action: IAction) => codemavi,
+		private actionHandler: (action: IAction) => void,
 		private readonly maxActions?: number,
 		private readonly supportDropdowns?: boolean,
 	) { }
@@ -53,7 +53,7 @@ export class CommentFormActions implements IDisposable {
 					contextMenuProvider: this.contextMenuService,
 					actions: dropDownActions,
 					actionRunner: this._toDispose.add(new class extends ActionRunner {
-						protected override async runAction(action: IAction, context?: unknown): Promise<codemavi> {
+						protected override async runAction(action: IAction, context?: unknown): Promise<void> {
 							return actionHandler(action);
 						}
 					}),

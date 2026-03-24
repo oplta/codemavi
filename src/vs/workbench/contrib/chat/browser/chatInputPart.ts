@@ -138,13 +138,13 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 	private _onDidLoadInputState = this._register(new Emitter<any>());
 	readonly onDidLoadInputState = this._onDidLoadInputState.event;
 
-	private _onDidChangeHeight = this._register(new Emitter<codemavi>());
+	private _onDidChangeHeight = this._register(new Emitter<void>());
 	readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
-	private _onDidFocus = this._register(new Emitter<codemavi>());
+	private _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private _onDidBlur = this._register(new Emitter<codemavi>());
+	private _onDidBlur = this._register(new Emitter<void>());
 	readonly onDidBlur = this._onDidBlur.event;
 
 	private _onDidChangeContext = this._register(new Emitter<{ removed?: IChatRequestVariableEntry[]; added?: IChatRequestVariableEntry[] }>());
@@ -279,7 +279,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return this._currentLanguageModel?.identifier;
 	}
 
-	private _onDidChangeCurrentChatMode = this._register(new Emitter<codemavi>());
+	private _onDidChangeCurrentChatMode = this._register(new Emitter<void>());
 	readonly onDidChangeCurrentChatMode = this._onDidChangeCurrentChatMode.event;
 
 	private _currentMode: ChatMode = ChatMode.Ask;
@@ -445,7 +445,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		}));
 	}
 
-	public switchToNextModel(): codemavi {
+	public switchToNextModel(): void {
 		const models = this.getModels();
 		if (models.length > 0) {
 			const currentIndex = models.findIndex(model => model.identifier === this._currentLanguageModel?.identifier);
@@ -454,13 +454,13 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		}
 	}
 
-	private checkModelSupported(): codemavi {
+	private checkModelSupported(): void {
 		if (this._currentLanguageModel && !this.modelSupportedForDefaultAgent(this._currentLanguageModel)) {
 			this.setCurrentLanguageModelToDefault();
 		}
 	}
 
-	setChatMode(mode: ChatMode): codemavi {
+	setChatMode(mode: ChatMode): void {
 		if (!this.options.supportsChangingModes) {
 			return;
 		}
@@ -541,7 +541,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return localize('chatInput', "Chat Input");
 	}
 
-	initForNewChatModel(state: IChatViewState, modelIsEmpty: boolean): codemavi {
+	initForNewChatModel(state: IChatViewState, modelIsEmpty: boolean): void {
 		this.history = this.loadHistory();
 		this.history.add({
 			text: state.inputValue ?? this.history.current().text,
@@ -614,12 +614,12 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return `chat.${tag}.hasSetDefaultModeByExperiment`;
 	}
 
-	logInputHistory(): codemavi {
+	logInputHistory(): void {
 		const historyStr = [...this.history].map(entry => JSON.stringify(entry)).join('\n');
 		this.logService.info(`[${this.location}] Chat input history:`, historyStr);
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		this._onDidChangeVisibility.fire(visible);
 	}
 
@@ -627,7 +627,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return this.container;
 	}
 
-	async showPreviousValue(): Promise<codemavi> {
+	async showPreviousValue(): Promise<void> {
 		const inputState = this.getInputState();
 		if (this.history.isAtEnd()) {
 			this.saveCurrentValue(inputState);
@@ -642,7 +642,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		this.navigateHistory(true);
 	}
 
-	async showNextValue(): Promise<codemavi> {
+	async showNextValue(): Promise<void> {
 		const inputState = this.getInputState();
 		if (this.history.isAtEnd()) {
 			return;
@@ -657,7 +657,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		this.navigateHistory(false);
 	}
 
-	private async navigateHistory(previous: boolean): Promise<codemavi> {
+	private async navigateHistory(previous: boolean): Promise<void> {
 		const historyEntry = previous ?
 			this.history.previous() : this.history.next();
 
@@ -713,7 +713,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		}
 	}
 
-	setValue(value: string, transient: boolean): codemavi {
+	setValue(value: string, transient: boolean): void {
 		this.inputEditor.setValue(value);
 		// always leave cursor at the end
 		this.inputEditor.setPosition({ lineNumber: 1, column: value.length + 1 });
@@ -723,7 +723,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		}
 	}
 
-	private saveCurrentValue(inputState: IChatInputState): codemavi {
+	private saveCurrentValue(inputState: IChatInputState): void {
 		const newEntry = this.getFilteredEntry(this._inputEditor.getValue(), inputState);
 		this.history.replaceLast(newEntry);
 	}
@@ -740,7 +740,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 	 * Reset the input and update history.
 	 * @param userQuery If provided, this will be added to the history. Followups and programmatic queries should not be passed.
 	 */
-	async acceptInput(isUserQuery?: boolean): Promise<codemavi> {
+	async acceptInput(isUserQuery?: boolean): Promise<void> {
 		if (isUserQuery) {
 			const userQuery = this._inputEditor.getValue();
 			const inputState = this.getInputState();
@@ -760,7 +760,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		}
 	}
 
-	validateCurrentMode(): codemavi {
+	validateCurrentMode(): void {
 		if (!this.agentService.hasToolsAgent && this._currentMode === ChatMode.Agent) {
 			this.setChatMode(ChatMode.Edit);
 		}
@@ -786,7 +786,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return newEntry;
 	}
 
-	private _acceptInputForVoiceover(): codemavi {
+	private _acceptInputForVoiceover(): void {
 		const domNode = this._inputEditor.getDomNode();
 		if (!domNode) {
 			return;
@@ -965,7 +965,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 				shouldForwardArgs: true
 			},
 			hoverDelegate,
-			hiddenItemStrategy: HiddenItemStrategy.Ignore, // keep it lean when hiding items and acodemavi a "..." overflow menu
+			hiddenItemStrategy: HiddenItemStrategy.Ignore, // keep it lean when hiding items and avoid a "..." overflow menu
 			actionViewItemProvider: (action, options) => {
 				if (this.location === ChatAgentLocation.Panel || this.location === ChatAgentLocation.Editor) {
 					if ((action.id === ChatSubmitAction.ID || action.id === CancelAction.ID || action.id === ChatEditingSessionSubmitAction.ID) && action instanceof MenuItemAction) {
@@ -1343,7 +1343,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		this._onDidChangeHeight.fire();
 	}
 
-	async renderFollowups(items: IChatFollowup[] | undefined, response: IChatResponseViewModel | undefined): Promise<codemavi> {
+	async renderFollowups(items: IChatFollowup[] | undefined, response: IChatResponseViewModel | undefined): Promise<void> {
 		if (!this.options.renderFollowups) {
 			return;
 		}
@@ -1368,7 +1368,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 	}
 
 	private previousInputEditorDimension: IDimension | undefined;
-	private _layout(height: number, width: number, allowRecurse = true): codemavi {
+	private _layout(height: number, width: number, allowRecurse = true): void {
 		const data = this.getLayoutData();
 		const inputEditorHeight = Math.min(data.inputPartEditorHeight, height - data.followupsHeight - data.attachmentsHeight - data.inputPartVerticalPadding - data.toolbarsHeight);
 
@@ -1420,7 +1420,7 @@ export class ChatInputPart extends Disposable implements IHistoryNavigationWidge
 		return this.getInputState();
 	}
 
-	saveState(): codemavi {
+	saveState(): void {
 		if (this.history.isAtEnd()) {
 			this.saveCurrentValue(this.getInputState());
 		}
@@ -1478,7 +1478,7 @@ class ChatSubmitDropdownActionItem extends DropdownWithPrimaryActionViewItem {
 
 interface ModelPickerDelegate {
 	onDidChangeModel: Event<ILanguageModelChatMetadataAndIdentifier>;
-	setModel(selectedModelId: ILanguageModelChatMetadataAndIdentifier): codemavi;
+	setModel(selectedModelId: ILanguageModelChatMetadataAndIdentifier): void;
 	getModels(): ILanguageModelChatMetadataAndIdentifier[];
 }
 
@@ -1554,7 +1554,7 @@ class ModelPickerActionViewItem extends DropdownMenuActionViewItemWithKeybinding
 		return null;
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('chat-modelPicker-item');
 	}
@@ -1564,7 +1564,7 @@ const chatInputEditorContainerSelector = '.interactive-input-editor';
 setupSimpleEditorSelectionStyling(chatInputEditorContainerSelector);
 
 interface IModePickerDelegate {
-	onDidChangeMode: Event<codemavi>;
+	onDidChangeMode: Event<void>;
 	getMode(): ChatMode;
 }
 
@@ -1634,7 +1634,7 @@ class ToggleChatModeActionViewItem extends DropdownMenuActionViewItemWithKeybind
 		return null;
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('chat-modelPicker-item');
 	}
@@ -1645,7 +1645,7 @@ class AddFilesButton extends ActionViewItem {
 		super(context, action, options);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('chat-attached-context-attachment', 'chat-add-files');
 	}

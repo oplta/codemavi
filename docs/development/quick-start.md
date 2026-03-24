@@ -11,8 +11,8 @@ Based on the strategic plan in `plan.md`, here are the essential first commands 
 gh repo fork voideditor/void --clone --org code-mavi
 
 # Or if starting fresh with existing Code Mavi codebase:
-git clone https://github.com/codemavi/codemavi.git
-cd codemavi
+git clone https://github.com/mavi/mavi.git
+cd mavi
 ```
 
 ### 2. Build and Launch
@@ -190,7 +190,7 @@ toolRegistry.register('semantic_search', new SemanticSearchTool());
 
 ## Add new rules section:
 ### Project-Specific Guidelines
-- Always check .codemavi/rules.md first
+- Always check .mavi/rules.md first
 - Follow existing code patterns
 - Ask for clarification when unsure
 

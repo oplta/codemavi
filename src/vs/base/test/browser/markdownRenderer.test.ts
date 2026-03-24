@@ -81,7 +81,7 @@ suite('MarkdownRenderer', () => {
 
 		test('asyncRenderCallback should be invoked for code blocks', () => {
 			const markdown = { value: '```js\n1 + 1;\n```' };
-			return new Promise<codemavi>(resolve => {
+			return new Promise<void>(resolve => {
 				store.add(renderMarkdown(markdown, {
 					asyncRenderCallback: resolve,
 					codeBlockRenderer: simpleCodeBlockRenderer
@@ -91,7 +91,7 @@ suite('MarkdownRenderer', () => {
 
 		test('asyncRenderCallback should not be invoked if result is immediately disposed', () => {
 			const markdown = { value: '```js\n1 + 1;\n```' };
-			return new Promise<codemavi>((resolve, reject) => {
+			return new Promise<void>((resolve, reject) => {
 				const result = renderMarkdown(markdown, {
 					asyncRenderCallback: reject,
 					codeBlockRenderer: simpleCodeBlockRenderer
@@ -103,8 +103,8 @@ suite('MarkdownRenderer', () => {
 
 		test('asyncRenderCallback should not be invoked if dispose is called before code block is rendered', () => {
 			const markdown = { value: '```js\n1 + 1;\n```' };
-			return new Promise<codemavi>((resolve, reject) => {
-				let resolveCodeBlockRendering: (x: HTMLElement) => codemavi;
+			return new Promise<void>((resolve, reject) => {
+				let resolveCodeBlockRendering: (x: HTMLElement) => void;
 				const result = renderMarkdown(markdown, {
 					asyncRenderCallback: reject,
 					codeBlockRenderer: () => {
@@ -349,7 +349,7 @@ suite('MarkdownRenderer', () => {
 	});
 
 	suite('fillInIncompleteTokens', () => {
-		function ignoreRaw(...tokenLists: marked.Token[][]): codemavi {
+		function ignoreRaw(...tokenLists: marked.Token[][]): void {
 			tokenLists.forEach(tokens => {
 				tokens.forEach(t => t.raw = '');
 			});
@@ -484,7 +484,7 @@ suite('MarkdownRenderer', () => {
 			});
 		});
 
-		function simpleMarkdownTestSuite(name: string, delimiter: string): codemavi {
+		function simpleMarkdownTestSuite(name: string, delimiter: string): void {
 			test(`incomplete ${name}`, () => {
 				const incomplete = `${delimiter}code`;
 				const tokens = marked.marked.lexer(incomplete);

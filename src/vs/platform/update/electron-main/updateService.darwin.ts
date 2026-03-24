@@ -23,8 +23,8 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 	private readonly disposables = new DisposableStore();
 
 	@memoize private get onRawError(): Event<string> { return Event.fromNodeEventEmitter(electron.autoUpdater, 'error', (_, message) => message); }
-	@memoize private get onRawUpdateNotAvailable(): Event<codemavi> { return Event.fromNodeEventEmitter<codemavi>(electron.autoUpdater, 'update-not-available'); }
-	@memoize private get onRawUpdateAvailable(): Event<codemavi> { return Event.fromNodeEventEmitter(electron.autoUpdater, 'update-available'); }
+	@memoize private get onRawUpdateNotAvailable(): Event<void> { return Event.fromNodeEventEmitter<void>(electron.autoUpdater, 'update-not-available'); }
+	@memoize private get onRawUpdateAvailable(): Event<void> { return Event.fromNodeEventEmitter(electron.autoUpdater, 'update-available'); }
 	@memoize private get onRawUpdateDownloaded(): Event<IUpdate> { return Event.fromNodeEventEmitter(electron.autoUpdater, 'update-downloaded', (_, releaseNotes, version, timestamp) => ({ version, productVersion: version, timestamp })); }
 
 	constructor(
@@ -56,7 +56,7 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		return true;
 	}
 
-	protected override async initialize(): Promise<codemavi> {
+	protected override async initialize(): Promise<void> {
 		await super.initialize();
 		this.onRawError(this.onError, this, this.disposables);
 		this.onRawUpdateAvailable(this.onUpdateAvailable, this, this.disposables);
@@ -64,7 +64,7 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		this.onRawUpdateNotAvailable(this.onUpdateNotAvailable, this, this.disposables);
 	}
 
-	private onError(err: string): codemavi {
+	private onError(err: string): void {
 		this.telemetryService.publicLog2<{ messageHash: string }, UpdateErrorClassification>('update:error', { messageHash: String(hash(String(err))) });
 		this.logService.error('UpdateService error:', err);
 
@@ -91,12 +91,12 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		return url;
 	}
 
-	protected doCheckForUpdates(context: any): codemavi {
+	protected doCheckForUpdates(context: any): void {
 		this.setState(State.CheckingForUpdates(context));
 		electron.autoUpdater.checkForUpdates();
 	}
 
-	private onUpdateAvailable(): codemavi {
+	private onUpdateAvailable(): void {
 		if (this.state.type !== StateType.CheckingForUpdates) {
 			return;
 		}
@@ -104,7 +104,7 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		this.setState(State.Downloading);
 	}
 
-	private onUpdateDownloaded(update: IUpdate): codemavi {
+	private onUpdateDownloaded(update: IUpdate): void {
 		if (this.state.type !== StateType.Downloading) {
 			return;
 		}
@@ -121,7 +121,7 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		this.setState(State.Ready(update));
 	}
 
-	private onUpdateNotAvailable(): codemavi {
+	private onUpdateNotAvailable(): void {
 		if (this.state.type !== StateType.CheckingForUpdates) {
 			return;
 		}
@@ -129,12 +129,12 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
 		this.setState(State.Idle(UpdateType.Archive));
 	}
 
-	protected override doQuitAndInstall(): codemavi {
+	protected override doQuitAndInstall(): void {
 		this.logService.trace('update#quitAndInstall(): running raw#quitAndInstall()');
 		electron.autoUpdater.quitAndInstall();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }

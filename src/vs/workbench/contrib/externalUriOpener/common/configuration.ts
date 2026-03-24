@@ -64,7 +64,7 @@ export const externalUriOpenersConfigurationNode: IConfigurationNode = {
 	}
 };
 
-export function updateContributedOpeners(enumValues: string[], enumDescriptions: string[]): codemavi {
+export function updateContributedOpeners(enumValues: string[], enumDescriptions: string[]): void {
 	externalUriOpenerIdSchemaAddition.enum = enumValues;
 	externalUriOpenerIdSchemaAddition.enumDescriptions = enumDescriptions;
 

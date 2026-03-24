@@ -18,7 +18,7 @@ suite('EditorModel - EditableTextModel.applyEdits updates mightContainRTL', () =
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testApplyEdits(original: string[], edits: ISingleEditOperation[], before: boolean, after: boolean): codemavi {
+	function testApplyEdits(original: string[], edits: ISingleEditOperation[], before: boolean, after: boolean): void {
 		const model = createTextModel(original.join('\n'));
 		model.setEOL(EndOfLineSequence.LF);
 
@@ -66,7 +66,7 @@ suite('EditorModel - EditableTextModel.applyEdits updates mightContainNonBasicAS
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testApplyEdits(original: string[], edits: ISingleEditOperation[], before: boolean, after: boolean): codemavi {
+	function testApplyEdits(original: string[], edits: ISingleEditOperation[], before: boolean, after: boolean): void {
 		const model = createTextModel(original.join('\n'));
 		model.setEOL(EndOfLineSequence.LF);
 
@@ -860,7 +860,7 @@ suite('EditorModel - EditableTextModel.applyEdits', () => {
 		);
 	});
 
-	function testApplyEditsFails(original: string[], edits: ISingleEditOperation[]): codemavi {
+	function testApplyEditsFails(original: string[], edits: ISingleEditOperation[]): void {
 		const model = createTextModel(original.join('\n'));
 
 		let hasThrown = false;

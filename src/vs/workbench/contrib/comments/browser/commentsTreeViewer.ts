@@ -117,7 +117,7 @@ export class ResourceWithCommentsRenderer implements IListRenderer<ITreeNode<Res
 		return { resourceLabel, owner, separator };
 	}
 
-	renderElement(node: ITreeNode<ResourceWithCommentThreads>, index: number, templateData: IResourceTemplateData, height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<ResourceWithCommentThreads>, index: number, templateData: IResourceTemplateData, height: number | undefined): void {
 		templateData.resourceLabel.setFile(node.element.resource);
 		templateData.separator.innerText = '\u00b7';
 
@@ -130,7 +130,7 @@ export class ResourceWithCommentsRenderer implements IListRenderer<ITreeNode<Res
 		}
 	}
 
-	disposeTemplate(templateData: IResourceTemplateData): codemavi {
+	disposeTemplate(templateData: IResourceTemplateData): void {
 		templateData.resourceLabel.dispose();
 	}
 }
@@ -280,7 +280,7 @@ export class CommentNodeRenderer implements IListRenderer<ITreeNode<CommentNode>
 		}
 	}
 
-	renderElement(node: ITreeNode<CommentNode>, index: number, templateData: ICommentThreadTemplateData, height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<CommentNode>, index: number, templateData: ICommentThreadTemplateData, height: number | undefined): void {
 		templateData.actionBar.clear();
 
 		const commentCount = node.element.replies.length + 1;
@@ -354,7 +354,7 @@ export class CommentNodeRenderer implements IListRenderer<ITreeNode<CommentNode>
 		return (state !== undefined) ? getCommentThreadStateIconColor(state, theme) : undefined;
 	}
 
-	disposeTemplate(templateData: ICommentThreadTemplateData): codemavi {
+	disposeTemplate(templateData: ICommentThreadTemplateData): void {
 		templateData.disposables.forEach(disposeable => disposeable.dispose());
 		templateData.actionBar.dispose();
 	}
@@ -514,7 +514,7 @@ export class CommentsList extends WorkbenchObjectTree<CommentsModel | ResourceWi
 		this.disposables.add(this.onContextMenu(e => this.commentsOnContextMenu(e)));
 	}
 
-	private commentsOnContextMenu(treeEvent: ITreeContextMenuEvent<CommentsModel | ResourceWithCommentThreads | CommentNode | null>): codemavi {
+	private commentsOnContextMenu(treeEvent: ITreeContextMenuEvent<CommentsModel | ResourceWithCommentThreads | CommentNode | null>): void {
 		const node: CommentsModel | ResourceWithCommentThreads | CommentNode | null = treeEvent.element;
 		if (!(node instanceof CommentNode)) {
 			return;
@@ -553,7 +553,7 @@ export class CommentsList extends WorkbenchObjectTree<CommentsModel | ResourceWi
 		});
 	}
 
-	filterComments(): codemavi {
+	filterComments(): void {
 		this.refilter();
 	}
 

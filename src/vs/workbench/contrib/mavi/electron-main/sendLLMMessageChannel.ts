@@ -25,7 +25,7 @@ export class LLMMessageChannel implements IServerChannel {
 	}
 
 	// aborters for above
-	private readonly _infoOfRunningRequest: Record<string, { waitForSend: Promise<codemavi> | undefined, abortRef: AbortRef }> = {}
+	private readonly _infoOfRunningRequest: Record<string, { waitForSend: Promise<void> | undefined, abortRef: AbortRef }> = {}
 
 
 	// list
@@ -81,7 +81,7 @@ export class LLMMessageChannel implements IServerChannel {
 				this._callOpenAICompatibleList(params)
 			}
 			else {
-				throw new Error(`Code Mavi sendLLM: command "${command}" not recognized.`)
+				throw new Error(`Mavi sendLLM: command "${command}" not recognized.`)
 			}
 		}
 		catch (e) {

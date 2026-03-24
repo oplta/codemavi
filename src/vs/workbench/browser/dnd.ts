@@ -97,7 +97,7 @@ export class ResourcesDropHandler {
 	) {
 	}
 
-	async handleDrop(event: DragEvent, targetWindow: Window, resolveTargetGroup?: () => IEditorGroup | undefined, afterDrop?: (targetGroup: IEditorGroup | undefined) => codemavi, options?: IEditorOptions): Promise<codemavi> {
+	async handleDrop(event: DragEvent, targetWindow: Window, resolveTargetGroup?: () => IEditorGroup | undefined, afterDrop?: (targetGroup: IEditorGroup | undefined) => void, options?: IEditorOptions): Promise<void> {
 		const editors = await this.instantiationService.invokeFunction(accessor => extractEditorsAndFilesDropData(accessor, event));
 		if (!editors.length) {
 			return;
@@ -188,10 +188,10 @@ export class ResourcesDropHandler {
 	}
 }
 
-export function fillEditorsDragData(accessor: ServicesAccessor, resources: URI[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): codemavi;
-export function fillEditorsDragData(accessor: ServicesAccessor, resources: IResourceStat[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): codemavi;
-export function fillEditorsDragData(accessor: ServicesAccessor, editors: IEditorIdentifier[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): codemavi;
-export function fillEditorsDragData(accessor: ServicesAccessor, resourcesOrEditors: Array<URI | IResourceStat | IEditorIdentifier>, event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): codemavi {
+export function fillEditorsDragData(accessor: ServicesAccessor, resources: URI[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): void;
+export function fillEditorsDragData(accessor: ServicesAccessor, resources: IResourceStat[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): void;
+export function fillEditorsDragData(accessor: ServicesAccessor, editors: IEditorIdentifier[], event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): void;
+export function fillEditorsDragData(accessor: ServicesAccessor, resourcesOrEditors: Array<URI | IResourceStat | IEditorIdentifier>, event: DragMouseEvent | DragEvent, options?: { disableStandardTransfer: boolean }): void {
 	if (resourcesOrEditors.length === 0 || !event.dataTransfer) {
 		return;
 	}
@@ -374,25 +374,25 @@ export type Before2D = {
 };
 
 export interface ICompositeDragAndDrop {
-	drop(data: IDragAndDropData, target: string | undefined, originalEvent: DragEvent, before?: Before2D): codemavi;
+	drop(data: IDragAndDropData, target: string | undefined, originalEvent: DragEvent, before?: Before2D): void;
 	onDragOver(data: IDragAndDropData, target: string | undefined, originalEvent: DragEvent): boolean;
 	onDragEnter(data: IDragAndDropData, target: string | undefined, originalEvent: DragEvent): boolean;
 }
 
 export interface ICompositeDragAndDropObserverCallbacks {
-	onDragEnter?: (e: IDraggedCompositeData) => codemavi;
-	onDragLeave?: (e: IDraggedCompositeData) => codemavi;
-	onDrop?: (e: IDraggedCompositeData) => codemavi;
-	onDragOver?: (e: IDraggedCompositeData) => codemavi;
-	onDragStart?: (e: IDraggedCompositeData) => codemavi;
-	onDragEnd?: (e: IDraggedCompositeData) => codemavi;
+	onDragEnter?: (e: IDraggedCompositeData) => void;
+	onDragLeave?: (e: IDraggedCompositeData) => void;
+	onDrop?: (e: IDraggedCompositeData) => void;
+	onDragOver?: (e: IDraggedCompositeData) => void;
+	onDragStart?: (e: IDraggedCompositeData) => void;
+	onDragEnd?: (e: IDraggedCompositeData) => void;
 }
 
 export class CompositeDragAndDropData implements IDragAndDropData {
 
 	constructor(private type: 'view' | 'composite', private id: string) { }
 
-	update(dataTransfer: DataTransfer): codemavi {
+	update(dataTransfer: DataTransfer): void {
 		// no-op
 	}
 
@@ -471,7 +471,7 @@ export class CompositeDragAndDropObserver extends Disposable {
 		return undefined;
 	}
 
-	private writeDragData(id: string, type: ViewType): codemavi {
+	private writeDragData(id: string, type: ViewType): void {
 		this.transferData.setData([type === 'view' ? new DraggedViewIdentifier(id) : new DraggedCompositeIdentifier(id)], type === 'view' ? DraggedViewIdentifier.prototype : DraggedCompositeIdentifier.prototype);
 	}
 
@@ -644,7 +644,7 @@ export class ResourceListDnDHandler<T> implements IListDragAndDrop<T> {
 		return resources.length === 1 ? basename(resources[0]) : resources.length > 1 ? String(resources.length) : undefined;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
 		const resources: URI[] = [];
 		const elements = (data as ElementsDragAndDropData<T>).elements;
 		for (const element of elements) {
@@ -660,7 +660,7 @@ export class ResourceListDnDHandler<T> implements IListDragAndDrop<T> {
 		}
 	}
 
-	protected onWillDragElements(elements: readonly T[], originalEvent: DragEvent): codemavi {
+	protected onWillDragElements(elements: readonly T[], originalEvent: DragEvent): void {
 		// noop
 	}
 
@@ -668,9 +668,9 @@ export class ResourceListDnDHandler<T> implements IListDragAndDrop<T> {
 		return false;
 	}
 
-	drop(data: IDragAndDropData, targetElement: T, targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi { }
+	drop(data: IDragAndDropData, targetElement: T, targetIndex: number, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void { }
 
-	dispose(): codemavi { }
+	dispose(): void { }
 }
 
 //#endregion
@@ -687,7 +687,7 @@ class GlobalWindowDraggedOverTracker extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(Event.runAndSubscribe(onDidRegisterWindow, ({ window, disposables }) => {
 			disposables.add(addDisposableListener(window, EventType.DRAG_OVER, () => this.markDraggedOver(false), true));
 			disposables.add(addDisposableListener(window, EventType.DRAG_LEAVE, () => this.clearDraggedOver(false), true));
@@ -705,7 +705,7 @@ class GlobalWindowDraggedOverTracker extends Disposable {
 	private draggedOver = false;
 	get isDraggedOver(): boolean { return this.draggedOver; }
 
-	private markDraggedOver(fromBroadcast: boolean): codemavi {
+	private markDraggedOver(fromBroadcast: boolean): void {
 		if (this.draggedOver === true) {
 			return; // alrady marked
 		}
@@ -717,7 +717,7 @@ class GlobalWindowDraggedOverTracker extends Disposable {
 		}
 	}
 
-	private clearDraggedOver(fromBroadcast: boolean): codemavi {
+	private clearDraggedOver(fromBroadcast: boolean): void {
 		if (this.draggedOver === false) {
 			return; // alrady cleared
 		}

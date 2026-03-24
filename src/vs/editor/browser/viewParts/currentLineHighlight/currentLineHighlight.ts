@@ -52,7 +52,7 @@ export abstract class AbstractLineHighlightOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._context.removeEventHandler(this);
 		super.dispose();
 	}
@@ -123,7 +123,7 @@ export abstract class AbstractLineHighlightOverlay extends DynamicViewOverlay {
 	}
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		if (!this._shouldRenderThis()) {
 			this._renderData = null;
 			return;

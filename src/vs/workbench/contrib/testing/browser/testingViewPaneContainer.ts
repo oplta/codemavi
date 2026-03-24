@@ -36,7 +36,7 @@ export class TestingViewPaneContainer extends ViewPaneContainer {
 		super(Testing.ViewletId, { mergeViewWithContainerWhenSingleView: true }, instantiationService, configurationService, layoutService, contextMenuService, telemetryService, extensionService, themeService, storageService, contextService, viewDescriptorService, logService);
 	}
 
-	override create(parent: HTMLElement): codemavi {
+	override create(parent: HTMLElement): void {
 		super.create(parent);
 		parent.classList.add('testing-view-pane');
 	}

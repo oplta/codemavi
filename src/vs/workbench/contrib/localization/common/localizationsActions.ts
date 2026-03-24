@@ -29,7 +29,7 @@ export class ConfigureDisplayLanguageAction extends Action2 {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor): Promise<void> {
 		const languagePackService: ILanguagePackService = accessor.get(ILanguagePackService);
 		const quickInputService: IQuickInputService = accessor.get(IQuickInputService);
 		const localeService: ILocaleService = accessor.get(ILocaleService);
@@ -112,7 +112,7 @@ export class ClearDisplayLanguageAction extends Action2 {
 		});
 	}
 
-	public async run(accessor: ServicesAccessor): Promise<codemavi> {
+	public async run(accessor: ServicesAccessor): Promise<void> {
 		const localeService: ILocaleService = accessor.get(ILocaleService);
 		await localeService.clearLocalePreference();
 	}

@@ -87,7 +87,7 @@ export class BrowserStartupTimings extends StartupTimings implements IWorkbenchC
 		this.logPerfMarks();
 	}
 
-	private async logPerfMarks(): Promise<codemavi> {
+	private async logPerfMarks(): Promise<void> {
 		if (!this.environmentService.profDurationMarkers) {
 			return;
 		}

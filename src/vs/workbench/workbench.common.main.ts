@@ -12,8 +12,8 @@ import './browser/workbench.contribution.js';
 
 //#endregion
 
-//#region --- Code Mavi
-import './contrib/codemavi/browser/codemavi.contribution.js'; // Code Mavi added this
+//#region --- Mavi
+import './contrib/mavi/browser/mavi.contribution.js'; // Mavi added this
 //#endregion
 
 //#region --- workbench actions
@@ -192,7 +192,7 @@ import './contrib/notebook/browser/notebook.contribution.js';
 import './contrib/speech/browser/speech.contribution.js';
 
 // Chat
-// Code Mavi - this is still registered to acodemavi console errors, we just commented it out in chatParticipant.contribution.ts
+// Mavi - this is still registered to avoid console errors, we just commented it out in chatParticipant.contribution.ts
 import './contrib/chat/browser/chat.contribution.js';
 import './contrib/inlineChat/browser/inlineChat.contribution.js';
 import './contrib/mcp/browser/mcp.contribution.js';
@@ -328,7 +328,7 @@ import './contrib/surveys/browser/nps.contribution.js';
 import './contrib/surveys/browser/languageSurveys.contribution.js';
 
 // Welcome
-// Code Mavi commented this out
+// Mavi commented this out
 // import './contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js';
 import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
 import './contrib/welcomeViews/common/viewsWelcome.contribution.js';

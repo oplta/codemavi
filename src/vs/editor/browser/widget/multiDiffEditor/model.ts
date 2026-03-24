@@ -25,6 +25,6 @@ export interface IDocumentDiffItem {
 	 */
 	readonly modified: ITextModel | undefined;
 	readonly options?: IDiffEditorOptions;
-	readonly onOptionsDidChange?: Event<codemavi>;
+	readonly onOptionsDidChange?: Event<void>;
 	readonly contextKeys?: Record<string, ContextKeyValue>;
 }

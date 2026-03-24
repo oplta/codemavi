@@ -13,7 +13,7 @@ import { IStorageService, StorageScope, StorageTarget } from '../../../../platfo
 import { IMetricsService } from './metricsService.js';
 import { defaultProviderSettings, getModelCapabilities, ModelOverrides } from './modelCapabilities.js';
 import { MAVI_SETTINGS_STORAGE_KEY } from './storageKeys.js';
-import { defaultSettingsOfProvider, FeatureName, ProviderName, ModelSelectionOfFeature, SettingsOfProvider, SettingName, providerNames, ModelSelection, modelSelectionsEqual, featureNames, Code MaviStatefulModelInfo, GlobalSettings, GlobalSettingName, defaultGlobalSettings, ModelSelectionOptions, OptionsOfModelSelection, ChatMode, OverridesOfModel, defaultOverridesOfModel, MCPUserStateOfName as MCPUserStateOfName, MCPUserState } from './codemaviSettingsTypes.js';
+import { defaultSettingsOfProvider, FeatureName, ProviderName, ModelSelectionOfFeature, SettingsOfProvider, SettingName, providerNames, ModelSelection, modelSelectionsEqual, featureNames, MaviStatefulModelInfo, GlobalSettings, GlobalSettingName, defaultGlobalSettings, ModelSelectionOptions, OptionsOfModelSelection, ChatMode, OverridesOfModel, defaultOverridesOfModel, MCPUserStateOfName as MCPUserStateOfName, MCPUserState } from './maviSettingsTypes.js';
 
 
 // name is the name in the dropdown
@@ -25,19 +25,19 @@ type SetSettingOfProviderFn = <S extends SettingName>(
 	providerName: ProviderName,
 	settingName: S,
 	newVal: SettingsOfProvider[ProviderName][S extends keyof SettingsOfProvider[ProviderName] ? S : never],
-) => Promise<codemavi>;
+) => Promise<void>;
 
 type SetModelSelectionOfFeatureFn = <K extends FeatureName>(
 	featureName: K,
 	newVal: ModelSelectionOfFeature[K],
-) => Promise<codemavi>;
+) => Promise<void>;
 
-type SetGlobalSettingFn = <T extends GlobalSettingName>(settingName: T, newVal: GlobalSettings[T]) => codemavi;
+type SetGlobalSettingFn = <T extends GlobalSettingName>(settingName: T, newVal: GlobalSettings[T]) => void;
 
-type SetOptionsOfModelSelection = (featureName: FeatureName, providerName: ProviderName, modelName: string, newVal: Partial<ModelSelectionOptions>) => codemavi
+type SetOptionsOfModelSelection = (featureName: FeatureName, providerName: ProviderName, modelName: string, newVal: Partial<ModelSelectionOptions>) => void
 
 
-export type Code MaviSettingsState = {
+export type MaviSettingsState = {
 	readonly settingsOfProvider: SettingsOfProvider; // optionsOfProvider
 	readonly modelSelectionOfFeature: ModelSelectionOfFeature; // stateOfFeature
 	readonly optionsOfModelSelection: OptionsOfModelSelection;
@@ -48,46 +48,46 @@ export type Code MaviSettingsState = {
 	readonly _modelOptions: ModelOption[] // computed based on the two above items
 }
 
-// type RealCode MaviSettings = Exclude<keyof Code MaviSettingsState, '_modelOptions'>
-// type EventProp<T extends RealCode MaviSettings = RealCode MaviSettings> = T extends 'globalSettings' ? [T, keyof Code MaviSettingsState[T]] : T | 'all'
+// type RealMaviSettings = Exclude<keyof MaviSettingsState, '_modelOptions'>
+// type EventProp<T extends RealMaviSettings = RealMaviSettings> = T extends 'globalSettings' ? [T, keyof MaviSettingsState[T]] : T | 'all'
 
 
 export interface IMaviSettingsService {
 	readonly _serviceBrand: undefined;
-	readonly state: Code MaviSettingsState; // in order to play nicely with react, you should immutably change state
-	readonly waitForInitState: Promise<codemavi>;
+	readonly state: MaviSettingsState; // in order to play nicely with react, you should immutably change state
+	readonly waitForInitState: Promise<void>;
 
-	onDidChangeState: Event<codemavi>;
+	onDidChangeState: Event<void>;
 
 	setSettingOfProvider: SetSettingOfProviderFn;
 	setModelSelectionOfFeature: SetModelSelectionOfFeatureFn;
 	setOptionsOfModelSelection: SetOptionsOfModelSelection;
 	setGlobalSetting: SetGlobalSettingFn;
-	// setMCPServerStates: (newStates: MCPServerStates) => Promise<codemavi>;
+	// setMCPServerStates: (newStates: MCPServerStates) => Promise<void>;
 
 	// setting to undefined CLEARS it, unlike others:
-	setOverridesOfModel(providerName: ProviderName, modelName: string, overrides: Partial<ModelOverrides> | undefined): Promise<codemavi>;
+	setOverridesOfModel(providerName: ProviderName, modelName: string, overrides: Partial<ModelOverrides> | undefined): Promise<void>;
 
-	dangerousSetState(newState: Code MaviSettingsState): Promise<codemavi>;
-	resetState(): Promise<codemavi>;
+	dangerousSetState(newState: MaviSettingsState): Promise<void>;
+	resetState(): Promise<void>;
 
-	setAutodetectedModels(providerName: ProviderName, modelNames: string[], logging: object): codemavi;
-	toggleModelHidden(providerName: ProviderName, modelName: string): codemavi;
-	addModel(providerName: ProviderName, modelName: string): codemavi;
+	setAutodetectedModels(providerName: ProviderName, modelNames: string[], logging: object): void;
+	toggleModelHidden(providerName: ProviderName, modelName: string): void;
+	addModel(providerName: ProviderName, modelName: string): void;
 	deleteModel(providerName: ProviderName, modelName: string): boolean;
 
-	addMCPUserStateOfNames(userStateOfName: MCPUserStateOfName): Promise<codemavi>;
-	removeMCPUserStateOfNames(serverNames: string[]): Promise<codemavi>;
-	setMCPServerState(serverName: string, state: MCPUserState): Promise<codemavi>;
+	addMCPUserStateOfNames(userStateOfName: MCPUserStateOfName): Promise<void>;
+	removeMCPUserStateOfNames(serverNames: string[]): Promise<void>;
+	setMCPServerState(serverName: string, state: MCPUserState): Promise<void>;
 }
 
 
 
 
-const _modelsWithSwappedInNewModels = (options: { existingModels: Code MaviStatefulModelInfo[], models: string[], type: 'autodetected' | 'default' }) => {
+const _modelsWithSwappedInNewModels = (options: { existingModels: MaviStatefulModelInfo[], models: string[], type: 'autodetected' | 'default' }) => {
 	const { existingModels, models, type } = options
 
-	const existingModelsMap: Record<string, Code MaviStatefulModelInfo> = {}
+	const existingModelsMap: Record<string, MaviStatefulModelInfo> = {}
 	for (const existingModel of existingModels) {
 		existingModelsMap[existingModel.modelName] = existingModel
 	}
@@ -120,7 +120,7 @@ export const modelFilterOfFeatureName: {
 }
 
 
-const _stateWithMergedDefaultModels = (state: Code MaviSettingsState): Code MaviSettingsState => {
+const _stateWithMergedDefaultModels = (state: MaviSettingsState): MaviSettingsState => {
 	let newSettingsOfProvider = state.settingsOfProvider
 
 	// recompute default models
@@ -143,7 +143,7 @@ const _stateWithMergedDefaultModels = (state: Code MaviSettingsState): Code Mavi
 	}
 }
 
-const _validatedModelState = (state: Omit<Code MaviSettingsState, '_modelOptions'>): Code MaviSettingsState => {
+const _validatedModelState = (state: Omit<MaviSettingsState, '_modelOptions'>): MaviSettingsState => {
 
 	let newSettingsOfProvider = state.settingsOfProvider
 
@@ -202,7 +202,7 @@ const _validatedModelState = (state: Omit<Code MaviSettingsState, '_modelOptions
 		modelSelectionOfFeature: newModelSelectionOfFeature,
 		overridesOfModel: state.overridesOfModel,
 		_modelOptions: newModelOptions,
-	} satisfies Code MaviSettingsState
+	} satisfies MaviSettingsState
 
 	return newState
 }
@@ -212,7 +212,7 @@ const _validatedModelState = (state: Omit<Code MaviSettingsState, '_modelOptions
 
 
 const defaultState = () => {
-	const d: Code MaviSettingsState = {
+	const d: MaviSettingsState = {
 		settingsOfProvider: deepClone(defaultSettingsOfProvider),
 		modelSelectionOfFeature: { 'Chat': null, 'Ctrl+K': null, 'Autocomplete': null, 'Apply': null, 'SCM': null },
 		globalSettings: deepClone(defaultGlobalSettings),
@@ -225,17 +225,17 @@ const defaultState = () => {
 }
 
 
-export const IMaviSettingsService = createDecorator<IMaviSettingsService>('Code MaviSettingsService');
-class Code MaviSettingsService extends Disposable implements IMaviSettingsService {
+export const IMaviSettingsService = createDecorator<IMaviSettingsService>('MaviSettingsService');
+class MaviSettingsService extends Disposable implements IMaviSettingsService {
 	_serviceBrand: undefined;
 
-	private readonly _onDidChangeState = new Emitter<codemavi>();
-	readonly onDidChangeState: Event<codemavi> = this._onDidChangeState.event; // this is primarily for use in react, so react can listen + update on state changes
+	private readonly _onDidChangeState = new Emitter<void>();
+	readonly onDidChangeState: Event<void> = this._onDidChangeState.event; // this is primarily for use in react, so react can listen + update on state changes
 
-	state: Code MaviSettingsState;
+	state: MaviSettingsState;
 
-	private readonly _resolver: () => codemavi
-	waitForInitState: Promise<codemavi> // await this if you need a valid state initially
+	private readonly _resolver: () => void
+	waitForInitState: Promise<void> // await this if you need a valid state initially
 
 	constructor(
 		@IStorageService private readonly _storageService: IStorageService,
@@ -248,7 +248,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 		// at the start, we haven't read the partial config yet, but we need to set state to something
 		this.state = defaultState()
-		let resolver: () => codemavi = () => { }
+		let resolver: () => void = () => { }
 		this.waitForInitState = new Promise((res, rej) => resolver = res)
 		this._resolver = resolver
 
@@ -258,7 +258,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 
 
-	dangerousSetState = async (newState: Code MaviSettingsState) => {
+	dangerousSetState = async (newState: MaviSettingsState) => {
 		this.state = _validatedModelState(newState)
 		await this._storeState()
 		this._onDidChangeState.fire()
@@ -273,7 +273,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 
 	async readAndInitializeState() {
-		let readS: Code MaviSettingsState
+		let readS: MaviSettingsState
 		try {
 			readS = await this._readState();
 			// 1.0.3 addition, remove when enough users have had this code run
@@ -347,7 +347,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 	}
 
 
-	private async _readState(): Promise<Code MaviSettingsState> {
+	private async _readState(): Promise<MaviSettingsState> {
 		const encryptedState = this._storageService.get(MAVI_SETTINGS_STORAGE_KEY, StorageScope.APPLICATION)
 
 		if (!encryptedState)
@@ -410,7 +410,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 	}
 
 	setGlobalSetting: SetGlobalSettingFn = async (settingName, newVal) => {
-		const newState: Code MaviSettingsState = {
+		const newState: MaviSettingsState = {
 			...this.state,
 			globalSettings: {
 				...this.state.globalSettings,
@@ -429,7 +429,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 
 	setModelSelectionOfFeature: SetModelSelectionOfFeatureFn = async (featureName, newVal) => {
-		const newState: Code MaviSettingsState = {
+		const newState: MaviSettingsState = {
 			...this.state,
 			modelSelectionOfFeature: {
 				...this.state.modelSelectionOfFeature,
@@ -452,7 +452,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 
 	setOptionsOfModelSelection = async (featureName: FeatureName, providerName: ProviderName, modelName: string, newVal: Partial<ModelSelectionOptions>) => {
-		const newState: Code MaviSettingsState = {
+		const newState: MaviSettingsState = {
 			...this.state,
 			optionsOfModelSelection: {
 				...this.state.optionsOfModelSelection,
@@ -475,7 +475,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 	}
 
 	setOverridesOfModel = async (providerName: ProviderName, modelName: string, overrides: Partial<ModelOverrides> | undefined) => {
-		const newState: Code MaviSettingsState = {
+		const newState: MaviSettingsState = {
 			...this.state,
 			overridesOfModel: {
 				...this.state.overridesOfModel,
@@ -522,7 +522,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 		const modelIdx = models.findIndex(m => m.modelName === modelName)
 		if (modelIdx === -1) return
 		const newIsHidden = !models[modelIdx].isHidden
-		const newModels: Code MaviStatefulModelInfo[] = [
+		const newModels: MaviStatefulModelInfo[] = [
 			...models.slice(0, modelIdx),
 			{ ...models[modelIdx], isHidden: newIsHidden },
 			...models.slice(modelIdx + 1, Infinity)
@@ -562,7 +562,7 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 
 	// MCP Server State
 	private _setMCPUserStateOfName = async (newStates: MCPUserStateOfName) => {
-		const newState: Code MaviSettingsState = {
+		const newState: MaviSettingsState = {
 			...this.state,
 			mcpUserStateOfName: {
 				...this.state.mcpUserStateOfName,
@@ -612,4 +612,4 @@ class Code MaviSettingsService extends Disposable implements IMaviSettingsServic
 }
 
 
-registerSingleton(IMaviSettingsService, Code MaviSettingsService, InstantiationType.Eager);
+registerSingleton(IMaviSettingsService, MaviSettingsService, InstantiationType.Eager);

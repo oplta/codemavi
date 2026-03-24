@@ -28,7 +28,7 @@ export class MainThreadAiRelatedInformation extends Disposable implements MainTh
 		return this._aiRelatedInformationService.getRelatedInformation(query, types, CancellationToken.None);
 	}
 
-	$registerAiRelatedInformationProvider(handle: number, type: RelatedInformationType): codemavi {
+	$registerAiRelatedInformationProvider(handle: number, type: RelatedInformationType): void {
 		const provider: IAiRelatedInformationProvider = {
 			provideAiRelatedInformation: (query, token) => {
 				return this._proxy.$provideAiRelatedInformation(handle, query, token);
@@ -37,7 +37,7 @@ export class MainThreadAiRelatedInformation extends Disposable implements MainTh
 		this._registrations.set(handle, this._aiRelatedInformationService.registerAiRelatedInformationProvider(type, provider));
 	}
 
-	$unregisterAiRelatedInformationProvider(handle: number): codemavi {
+	$unregisterAiRelatedInformationProvider(handle: number): void {
 		this._registrations.deleteAndDispose(handle);
 	}
 }

@@ -90,7 +90,7 @@ export class SearchEditor extends AbstractTextCodeEditor<SearchEditorViewState> 
 	private pauseSearching: boolean = false;
 	private showingIncludesExcludes: boolean = false;
 	private searchOperation: LongRunningOperation;
-	private searchHistoryDelayer: Delayer<codemavi>;
+	private searchHistoryDelayer: Delayer<void>;
 	private readonly messageDisposables: DisposableStore;
 	private container: HTMLElement;
 	private searchModel: SearchModelImpl;
@@ -125,7 +125,7 @@ export class SearchEditor extends AbstractTextCodeEditor<SearchEditorViewState> 
 		this.searchOperation = this._register(new LongRunningOperation(progressService));
 		this._register(this.messageDisposables = new DisposableStore());
 
-		this.searchHistoryDelayer = new Delayer<codemavi>(2000);
+		this.searchHistoryDelayer = new Delayer<void>(2000);
 
 		this.searchModel = this._register(this.instantiationService.createInstance(SearchModelImpl));
 	}
@@ -657,7 +657,7 @@ export class SearchEditor extends AbstractTextCodeEditor<SearchEditorViewState> 
 		DOM.append(messageBox, renderSearchMessage(message, this.instantiationService, this.notificationService, this.openerService, this.commandService, this.messageDisposables, () => this.triggerSearch()));
 	}
 
-	private async retrieveFileStats(searchResult: ISearchResult): Promise<codemavi> {
+	private async retrieveFileStats(searchResult: ISearchResult): Promise<void> {
 		const files = searchResult.matches().filter(f => !f.fileStat).map(f => f.resolveFileStat(this.fileService));
 		await Promise.all(files);
 	}
@@ -703,7 +703,7 @@ export class SearchEditor extends AbstractTextCodeEditor<SearchEditorViewState> 
 		if (config.showIncludesExcludes !== undefined) { this.toggleIncludesExcludes(config.showIncludesExcludes); }
 	}
 
-	override async setInput(newInput: SearchEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(newInput: SearchEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		await super.setInput(newInput, options, context, token);
 		if (token.isCancellationRequested) {
 			return;
@@ -743,7 +743,7 @@ export class SearchEditor extends AbstractTextCodeEditor<SearchEditorViewState> 
 		}
 	}
 
-	private toggleIncludesExcludes(_shouldShow?: boolean): codemavi {
+	private toggleIncludesExcludes(_shouldShow?: boolean): void {
 		const cls = 'expanded';
 		const shouldShow = _shouldShow ?? !this.includesExcludesContainer.classList.contains(cls);
 

@@ -19,18 +19,18 @@ export class TestSecretStorageService implements ISecretStorageService {
 		return this._storage.get(key);
 	}
 
-	async set(key: string, value: string): Promise<codemavi> {
+	async set(key: string, value: string): Promise<void> {
 		this._storage.set(key, value);
 		this._onDidChangeSecretEmitter.fire(key);
 	}
 
-	async delete(key: string): Promise<codemavi> {
+	async delete(key: string): Promise<void> {
 		this._storage.delete(key);
 		this._onDidChangeSecretEmitter.fire(key);
 	}
 
 	// Helper method for tests to clear all secrets
-	clear(): codemavi {
+	clear(): void {
 		this._storage.clear();
 	}
 }

@@ -39,7 +39,7 @@ export class DebugExtensionHostAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const nativeHostService = accessor.get(INativeHostService);
 		const dialogService = accessor.get(IDialogService);
 		const extensionService = accessor.get(IExtensionService);

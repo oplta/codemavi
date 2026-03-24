@@ -64,13 +64,13 @@ class FileSearchEngine {
 		this.globalExcludePattern = config.excludePattern && glob.parse(config.excludePattern);
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this.isCanceled = true;
 		this.activeCancellationTokens.forEach(t => t.cancel());
 		this.activeCancellationTokens = new Set();
 	}
 
-	search(_onResult: (match: IInternalFileMatch) => codemavi): Promise<IInternalSearchComplete> {
+	search(_onResult: (match: IInternalFileMatch) => void): Promise<IInternalSearchComplete> {
 		const folderQueries = this.config.folderQueries || [];
 
 		return new Promise((resolve, reject) => {
@@ -114,7 +114,7 @@ class FileSearchEngine {
 	}
 
 
-	private async doSearch(fqs: IFolderQuery<URI>[], onResult: (match: IInternalFileMatch) => codemavi): Promise<IFileSearchProviderStats | null> {
+	private async doSearch(fqs: IFolderQuery<URI>[], onResult: (match: IInternalFileMatch) => void): Promise<IFileSearchProviderStats | null> {
 		const cancellation = new CancellationTokenSource();
 		const folderOptions = fqs.map(fq => this.getSearchOptionsForFolder(fq));
 		const session = this.provider instanceof OldFileSearchProviderConverter ? this.sessionLifecycle?.tokenSource.token : this.sessionLifecycle?.obj;
@@ -222,7 +222,7 @@ class FileSearchEngine {
 		return tree;
 	}
 
-	private addDirectoryEntries({ pathToEntries }: IDirectoryTree, base: URI, relativeFile: string, onResult: (result: IInternalFileMatch) => codemavi) {
+	private addDirectoryEntries({ pathToEntries }: IDirectoryTree, base: URI, relativeFile: string, onResult: (result: IInternalFileMatch) => void) {
 		// Support relative paths to files from a root resource (ignores excludes)
 		if (relativeFile === this.filePattern) {
 			const basename = path.basename(this.filePattern);
@@ -247,7 +247,7 @@ class FileSearchEngine {
 		add(relativeFile);
 	}
 
-	private matchDirectoryTree({ rootEntries, pathToEntries }: IDirectoryTree, queryTester: QueryGlobTester, onResult: (result: IInternalFileMatch) => codemavi) {
+	private matchDirectoryTree({ rootEntries, pathToEntries }: IDirectoryTree, queryTester: QueryGlobTester, onResult: (result: IInternalFileMatch) => void) {
 		const self = this;
 		const filePattern = this.filePattern;
 		function matchDirectory(entries: IDirectoryEntry[]) {
@@ -283,7 +283,7 @@ class FileSearchEngine {
 		matchDirectory(rootEntries);
 	}
 
-	private matchFile(onResult: (result: IInternalFileMatch) => codemavi, candidate: IInternalFileMatch): codemavi {
+	private matchFile(onResult: (result: IInternalFileMatch) => void, candidate: IInternalFileMatch): void {
 		if (!this.includePattern || (candidate.relativePath && this.includePattern(candidate.relativePath, candidate.basename))) {
 			if (this.exists || (this.maxResults && this.resultCount >= this.maxResults)) {
 				this.isLimitHit = true;
@@ -334,7 +334,7 @@ export class FileSearchManager {
 
 	private readonly sessions = new Map<string, SessionLifecycle>();
 
-	fileSearch(config: IFileQuery, provider: FileSearchProvider2, onBatch: (matches: IFileMatch[]) => codemavi, token: CancellationToken): Promise<ISearchCompleteStats> {
+	fileSearch(config: IFileQuery, provider: FileSearchProvider2, onBatch: (matches: IFileMatch[]) => void, token: CancellationToken): Promise<ISearchCompleteStats> {
 		const sessionTokenSource = this.getSessionTokenSource(config.cacheKey);
 		const engine = new FileSearchEngine(config, provider, sessionTokenSource);
 
@@ -359,7 +359,7 @@ export class FileSearchManager {
 			});
 	}
 
-	clearCache(cacheKey: string): codemavi {
+	clearCache(cacheKey: string): void {
 		// cancel the token
 		this.sessions.get(cacheKey)?.cancel();
 		// with no reference to this, it will be removed from WeakMaps
@@ -391,7 +391,7 @@ export class FileSearchManager {
 		}
 	}
 
-	private doSearch(engine: FileSearchEngine, batchSize: number, onResultBatch: (matches: IInternalFileMatch[]) => codemavi, token: CancellationToken): Promise<IInternalSearchComplete> {
+	private doSearch(engine: FileSearchEngine, batchSize: number, onResultBatch: (matches: IInternalFileMatch[]) => void, token: CancellationToken): Promise<IInternalSearchComplete> {
 		const listener = token.onCancellationRequested(() => {
 			engine.cancel();
 		});

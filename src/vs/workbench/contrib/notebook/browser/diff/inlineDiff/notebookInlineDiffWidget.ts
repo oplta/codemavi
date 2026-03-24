@@ -98,7 +98,7 @@ export class NotebookInlineDiffWidget extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		if (this.widget.value) {
 			this.widget.value.dispose();

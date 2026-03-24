@@ -200,7 +200,7 @@ export class WorkbenchContextKeysHandler extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this.editorGroupService.whenReady.then(() => {
 			this.updateEditorAreaContextKeys();
 			this.updateActiveEditorGroupContextKeys();
@@ -256,7 +256,7 @@ export class WorkbenchContextKeysHandler extends Disposable {
 		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.dirtyWorkingCopiesContext.set(workingCopy.isDirty() || this.workingCopyService.hasDirty)));
 	}
 
-	private updateVisiblePanesContextKeys(): codemavi {
+	private updateVisiblePanesContextKeys(): void {
 		const visibleEditorPanes = this.editorService.visibleEditorPanes;
 		if (visibleEditorPanes.length > 0) {
 			this.editorsVisibleContext.set(true);
@@ -266,7 +266,7 @@ export class WorkbenchContextKeysHandler extends Disposable {
 	}
 
 	// Context keys depending on the state of the editor group itself
-	private updateActiveEditorGroupContextKeys(): codemavi {
+	private updateActiveEditorGroupContextKeys(): void {
 		if (!this.editorService.activeEditor) {
 			this.activeEditorGroupEmpty.set(true);
 		} else {
@@ -281,7 +281,7 @@ export class WorkbenchContextKeysHandler extends Disposable {
 	}
 
 	// Context keys depending on the state of other editor groups
-	private updateEditorGroupsContextKeys(): codemavi {
+	private updateEditorGroupsContextKeys(): void {
 		const groupCount = this.editorGroupService.count;
 		if (groupCount > 1) {
 			this.multipleEditorGroupsContext.set(true);
@@ -293,11 +293,11 @@ export class WorkbenchContextKeysHandler extends Disposable {
 		this.activeEditorGroupLast.set(activeGroup.index === groupCount - 1);
 	}
 
-	private updateEditorAreaContextKeys(): codemavi {
+	private updateEditorAreaContextKeys(): void {
 		this.editorTabsVisibleContext.set(this.editorGroupService.partOptions.showTabs === 'multiple');
 	}
 
-	private updateInputContextKeys(ownerDocument: Document): codemavi {
+	private updateInputContextKeys(ownerDocument: Document): void {
 
 		function activeElementIsInput(): boolean {
 			return !!ownerDocument.activeElement && isEditableElement(ownerDocument.activeElement);
@@ -327,15 +327,15 @@ export class WorkbenchContextKeysHandler extends Disposable {
 		}
 	}
 
-	private updateWorkbenchStateContextKey(): codemavi {
+	private updateWorkbenchStateContextKey(): void {
 		this.workbenchStateContext.set(this.getWorkbenchStateString());
 	}
 
-	private updateWorkspaceFolderCountContextKey(): codemavi {
+	private updateWorkspaceFolderCountContextKey(): void {
 		this.workspaceFolderCountContext.set(this.contextService.getWorkspace().folders.length);
 	}
 
-	private updateSplitEditorsVerticallyContext(): codemavi {
+	private updateSplitEditorsVerticallyContext(): void {
 		const direction = preferredSideBySideGroupDirection(this.configurationService);
 		this.splitEditorsVerticallyContext.set(direction === GroupDirection.DOWN);
 	}
@@ -348,16 +348,16 @@ export class WorkbenchContextKeysHandler extends Disposable {
 		}
 	}
 
-	private updateSideBarContextKeys(): codemavi {
+	private updateSideBarContextKeys(): void {
 		this.sideBarVisibleContext.set(this.layoutService.isVisible(Parts.SIDEBAR_PART));
 	}
 
-	private updateTitleBarContextKeys(): codemavi {
+	private updateTitleBarContextKeys(): void {
 		this.titleAreaVisibleContext.set(this.layoutService.isVisible(Parts.TITLEBAR_PART, mainWindow));
 		this.titleBarStyleContext.set(getTitleBarStyle(this.configurationService));
 	}
 
-	private updateWorkspaceContextKeys(): codemavi {
+	private updateWorkspaceContextKeys(): void {
 		this.virtualWorkspaceContext.set(getVirtualWorkspaceScheme(this.contextService.getWorkspace()) || '');
 		this.temporaryWorkspaceContext.set(isTemporaryWorkspace(this.contextService.getWorkspace()));
 	}

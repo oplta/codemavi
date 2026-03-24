@@ -163,7 +163,7 @@ export class FoldingDecorationProvider implements IDecorationProvider {
 		return this.editor.changeDecorations(callback);
 	}
 
-	removeDecorations(decorationIds: string[]): codemavi {
+	removeDecorations(decorationIds: string[]): void {
 		this.editor.removeDecorations(decorationIds);
 	}
 }

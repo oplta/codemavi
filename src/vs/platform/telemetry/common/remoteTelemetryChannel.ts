@@ -62,7 +62,7 @@ export class ServerTelemetryChannel extends Disposable implements IServerChannel
 	 * Disposing the channel also disables the telemetryService as there is
 	 * no longer a way to control it
 	 */
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.telemetryService.updateInjectedTelemetryLevel(TelemetryLevel.NONE);
 		super.dispose();
 	}

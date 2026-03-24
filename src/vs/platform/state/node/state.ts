@@ -20,10 +20,10 @@ export interface IStateService extends IStateReadService {
 
 	readonly _serviceBrand: undefined;
 
-	setItem(key: string, data?: object | string | number | boolean | undefined | null): codemavi;
-	setItems(items: readonly { key: string; data?: object | string | number | boolean | undefined | null }[]): codemavi;
+	setItem(key: string, data?: object | string | number | boolean | undefined | null): void;
+	setItems(items: readonly { key: string; data?: object | string | number | boolean | undefined | null }[]): void;
 
-	removeItem(key: string): codemavi;
+	removeItem(key: string): void;
 
-	close(): Promise<codemavi>;
+	close(): Promise<void>;
 }

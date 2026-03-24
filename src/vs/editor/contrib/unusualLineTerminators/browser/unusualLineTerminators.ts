@@ -16,7 +16,7 @@ import { IConfirmationResult, IDialogService } from '../../../../platform/dialog
 
 const ignoreUnusualLineTerminators = 'ignoreUnusualLineTerminators';
 
-function writeIgnoreState(codeEditorService: ICodeEditorService, model: ITextModel, state: boolean): codemavi {
+function writeIgnoreState(codeEditorService: ICodeEditorService, model: ITextModel, state: boolean): void {
 	codeEditorService.setModelProperty(model.uri, ignoreUnusualLineTerminators, state);
 }
 
@@ -61,7 +61,7 @@ export class UnusualLineTerminatorsDetector extends Disposable implements IEdito
 		this._checkForUnusualLineTerminators();
 	}
 
-	private async _checkForUnusualLineTerminators(): Promise<codemavi> {
+	private async _checkForUnusualLineTerminators(): Promise<void> {
 		if (this._config === 'off') {
 			return;
 		}
@@ -90,7 +90,7 @@ export class UnusualLineTerminatorsDetector extends Disposable implements IEdito
 
 		if (this._isPresentingDialog) {
 			// we're currently showing the dialog, which is async.
-			// acodemavi spamming the user
+			// avoid spamming the user
 			return;
 		}
 

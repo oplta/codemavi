@@ -25,13 +25,13 @@ export interface MessageEvent {
 
 export interface MessagePort {
 
-	addEventListener(type: 'message', listener: (this: MessagePort, e: MessageEvent) => unknown): codemavi;
-	removeEventListener(type: 'message', listener: (this: MessagePort, e: MessageEvent) => unknown): codemavi;
+	addEventListener(type: 'message', listener: (this: MessagePort, e: MessageEvent) => unknown): void;
+	removeEventListener(type: 'message', listener: (this: MessagePort, e: MessageEvent) => unknown): void;
 
-	postMessage(message: Uint8Array): codemavi;
+	postMessage(message: Uint8Array): void;
 
-	start(): codemavi;
-	close(): codemavi;
+	start(): void;
+	close(): void;
 }
 
 /**
@@ -54,11 +54,11 @@ export class Protocol implements IMessagePassingProtocol {
 		port.start();
 	}
 
-	send(message: VSBuffer): codemavi {
+	send(message: VSBuffer): void {
 		this.port.postMessage(message.buffer);
 	}
 
-	disconnect(): codemavi {
+	disconnect(): void {
 		this.port.close();
 	}
 }
@@ -77,7 +77,7 @@ export class Client extends IPCClient implements IDisposable {
 		this.protocol = protocol;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.protocol.disconnect();
 
 		super.dispose();

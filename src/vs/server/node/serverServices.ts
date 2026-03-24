@@ -273,7 +273,7 @@ export class SocketServer<TContext = string> extends IPCServer<TContext> {
 		this._onDidConnectEmitter = emitter;
 	}
 
-	public acceptConnection(protocol: IMessagePassingProtocol, onDidClientDisconnect: Event<codemavi>): codemavi {
+	public acceptConnection(protocol: IMessagePassingProtocol, onDidClientDisconnect: Event<void>): void {
 		this._onDidConnectEmitter.fire({ protocol, onDidClientDisconnect });
 	}
 }
@@ -287,7 +287,7 @@ class ServerLogger extends AbstractLogger {
 		this.useColors = Boolean(process.stdout.isTTY);
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Trace)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[${now()}]\x1b[0m`, message, ...args);
@@ -297,7 +297,7 @@ class ServerLogger extends AbstractLogger {
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Debug)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[${now()}]\x1b[0m`, message, ...args);
@@ -307,7 +307,7 @@ class ServerLogger extends AbstractLogger {
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Info)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[${now()}]\x1b[0m`, message, ...args);
@@ -317,7 +317,7 @@ class ServerLogger extends AbstractLogger {
 		}
 	}
 
-	warn(message: string | Error, ...args: any[]): codemavi {
+	warn(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Warning)) {
 			if (this.useColors) {
 				console.warn(`\x1b[93m[${now()}]\x1b[0m`, message, ...args);
@@ -327,7 +327,7 @@ class ServerLogger extends AbstractLogger {
 		}
 	}
 
-	error(message: string, ...args: any[]): codemavi {
+	error(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Error)) {
 			if (this.useColors) {
 				console.error(`\x1b[91m[${now()}]\x1b[0m`, message, ...args);
@@ -337,7 +337,7 @@ class ServerLogger extends AbstractLogger {
 		}
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		// noop
 	}
 }
@@ -357,7 +357,7 @@ function twodigits(n: number): string {
 /**
  * Cleans up older logs, while keeping the 10 most recent ones.
  */
-async function cleanupOlderLogs(logsPath: string): Promise<codemavi> {
+async function cleanupOlderLogs(logsPath: string): Promise<void> {
 	const currentLog = path.basename(logsPath);
 	const logsRoot = path.dirname(logsPath);
 	const children = await Promises.readdir(logsRoot);

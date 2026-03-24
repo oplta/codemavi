@@ -26,25 +26,25 @@ export interface IExplorerService {
 
 	getContext(respectMultiSelection: boolean, ignoreNestedChildren?: boolean): ExplorerItem[];
 	hasViewFocus(): boolean;
-	setEditable(stat: ExplorerItem, data: IEditableData | null): Promise<codemavi>;
+	setEditable(stat: ExplorerItem, data: IEditableData | null): Promise<void>;
 	getEditable(): { stat: ExplorerItem; data: IEditableData } | undefined;
 	getEditableData(stat: ExplorerItem): IEditableData | undefined;
 	// If undefined is passed checks if any element is currently being edited.
 	isEditable(stat: ExplorerItem | undefined): boolean;
 	findClosest(resource: URI): ExplorerItem | null;
 	findClosestRoot(resource: URI): ExplorerItem | null;
-	refresh(): Promise<codemavi>;
-	setToCopy(stats: ExplorerItem[], cut: boolean): Promise<codemavi>;
+	refresh(): Promise<void>;
+	setToCopy(stats: ExplorerItem[], cut: boolean): Promise<void>;
 	isCut(stat: ExplorerItem): boolean;
-	applyBulkEdit(edit: ResourceFileEdit[], options: { undoLabel: string; progressLabel: string; confirmBeforeUndo?: boolean; progressLocation?: ProgressLocation.Explorer | ProgressLocation.Window }): Promise<codemavi>;
+	applyBulkEdit(edit: ResourceFileEdit[], options: { undoLabel: string; progressLabel: string; confirmBeforeUndo?: boolean; progressLocation?: ProgressLocation.Explorer | ProgressLocation.Window }): Promise<void>;
 
 	/**
 	 * Selects and reveal the file element provided by the given resource if its found in the explorer.
 	 * Will try to resolve the path in case the explorer is not yet expanded to the file yet.
 	 */
-	select(resource: URI, reveal?: boolean | string): Promise<codemavi>;
+	select(resource: URI, reveal?: boolean | string): Promise<void>;
 
-	registerView(contextAndRefreshProvider: IExplorerView): codemavi;
+	registerView(contextAndRefreshProvider: IExplorerView): void;
 }
 
 export const IExplorerService = createDecorator<IExplorerService>('explorerService');
@@ -52,17 +52,17 @@ export const IExplorerService = createDecorator<IExplorerService>('explorerServi
 export interface IExplorerView {
 	autoReveal: boolean | 'force' | 'focusNoScroll';
 	getContext(respectMultiSelection: boolean): ExplorerItem[];
-	refresh(recursive: boolean, item?: ExplorerItem, cancelEditing?: boolean): Promise<codemavi>;
-	selectResource(resource: URI | undefined, reveal?: boolean | string, retry?: number): Promise<codemavi>;
-	setTreeInput(): Promise<codemavi>;
-	itemsCopied(tats: ExplorerItem[], cut: boolean, previousCut: ExplorerItem[] | undefined): codemavi;
-	setEditable(stat: ExplorerItem, isEditing: boolean): Promise<codemavi>;
+	refresh(recursive: boolean, item?: ExplorerItem, cancelEditing?: boolean): Promise<void>;
+	selectResource(resource: URI | undefined, reveal?: boolean | string, retry?: number): Promise<void>;
+	setTreeInput(): Promise<void>;
+	itemsCopied(tats: ExplorerItem[], cut: boolean, previousCut: ExplorerItem[] | undefined): void;
+	setEditable(stat: ExplorerItem, isEditing: boolean): Promise<void>;
 	isItemVisible(item: ExplorerItem): boolean;
 	isItemCollapsed(item: ExplorerItem): boolean;
 	hasFocus(): boolean;
 	getFocus(): ExplorerItem[];
-	focusNext(): codemavi;
-	focusLast(): codemavi;
+	focusNext(): void;
+	focusLast(): void;
 	hasPhantomElements(): boolean;
 }
 

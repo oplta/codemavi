@@ -26,7 +26,7 @@ export class TrimTrailingWhitespaceCommand implements ICommand {
 		this._trimInRegexesAndStrings = trimInRegexesAndStrings;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const ops = trimTrailingWhitespace(model, this._cursors, this._trimInRegexesAndStrings);
 		for (let i = 0, len = ops.length; i < len; i++) {
 			const op = ops[i];

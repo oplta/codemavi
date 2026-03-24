@@ -31,7 +31,7 @@ export class GutterIndicatorMenuContent {
 
 	constructor(
 		private readonly _model: IInlineEditModel,
-		private readonly _close: (focusEditor: boolean) => codemavi,
+		private readonly _close: (focusEditor: boolean) => void,
 		private readonly _editorObs: ObservableCodeEditor,
 		@IContextKeyService private readonly _contextKeyService: IContextKeyService,
 		@IKeybindingService private readonly _keybindingService: IKeybindingService,
@@ -166,8 +166,8 @@ function option(props: {
 	icon: IObservable<ThemeIcon> | ThemeIcon;
 	keybinding: IObservable<ResolvedKeybinding | undefined>;
 	isActive?: IObservable<boolean>;
-	onHoverChange?: (isHovered: boolean) => codemavi;
-	onAction?: () => codemavi;
+	onHoverChange?: (isHovered: boolean) => void;
+	onAction?: () => void;
 }) {
 	return derivedWithStore((_reader, store) => n.div({
 		class: ['monaco-menu-option', props.isActive?.map(v => v && 'active')],

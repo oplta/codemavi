@@ -146,7 +146,7 @@ export class NativeExtensionService extends AbstractExtensionService implements 
 		return this._extensionScanner.scannedExtensions;
 	}
 
-	protected override _onExtensionHostCrashed(extensionHost: IExtensionHostManager, code: number, signal: string | null): codemavi {
+	protected override _onExtensionHostCrashed(extensionHost: IExtensionHostManager, code: number, signal: string | null): void {
 
 		const activatedExtensions: ExtensionIdentifier[] = [];
 		const extensionsStatus = this.getExtensionsStatus();
@@ -227,7 +227,7 @@ export class NativeExtensionService extends AbstractExtensionService implements 
 		}
 	}
 
-	private _sendExtensionHostCrashTelemetry(code: number, signal: string | null, activatedExtensions: ExtensionIdentifier[]): codemavi {
+	private _sendExtensionHostCrashTelemetry(code: number, signal: string | null, activatedExtensions: ExtensionIdentifier[]): void {
 		type ExtensionHostCrashClassification = {
 			owner: 'alexdima';
 			comment: 'The extension host has terminated unexpectedly';
@@ -321,7 +321,7 @@ export class NativeExtensionService extends AbstractExtensionService implements 
 		return new AsyncIterableObject(emitter => this._doResolveExtensions(emitter));
 	}
 
-	private async _doResolveExtensions(emitter: AsyncIterableEmitter<ResolvedExtensions>): Promise<codemavi> {
+	private async _doResolveExtensions(emitter: AsyncIterableEmitter<ResolvedExtensions>): Promise<void> {
 		this._extensionScanner.startScanningExtensions();
 
 		const remoteAuthority = this._environmentService.remoteAuthority;
@@ -429,7 +429,7 @@ export class NativeExtensionService extends AbstractExtensionService implements 
 		return this._startLocalExtensionHost(emitter, remoteExtensions);
 	}
 
-	private async _startLocalExtensionHost(emitter: AsyncIterableEmitter<ResolvedExtensions>, remoteExtensions: IExtensionDescription[] = []): Promise<codemavi> {
+	private async _startLocalExtensionHost(emitter: AsyncIterableEmitter<ResolvedExtensions>, remoteExtensions: IExtensionDescription[] = []): Promise<void> {
 		// Ensure that the workspace trust state has been fully initialized so
 		// that the extension host can start with the correct set of extensions.
 		await this._workspaceTrustManagementService.workspaceTrustInitialized;
@@ -441,11 +441,11 @@ export class NativeExtensionService extends AbstractExtensionService implements 
 		emitter.emitOne(new LocalExtensions(await this._scanAllLocalExtensions()));
 	}
 
-	protected async _onExtensionHostExit(code: number): Promise<codemavi> {
+	protected async _onExtensionHostExit(code: number): Promise<void> {
 		// Dispose everything associated with the extension host
 		await this._doStopExtensionHosts();
 
-		// Dispose the management connection to acodemavi reconnecting after the extension host exits
+		// Dispose the management connection to avoid reconnecting after the extension host exits
 		const connection = this._remoteAgentService.getConnection();
 		connection?.dispose();
 
@@ -731,7 +731,7 @@ class RestartExtensionHostAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const extensionService = accessor.get(IExtensionService);
 
 		const stopped = await extensionService.stopExtensionHosts(nls.localize('restartExtensionHost.reason', "An explicit request"));

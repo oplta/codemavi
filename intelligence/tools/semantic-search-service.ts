@@ -1,5 +1,5 @@
 /**
- * Code Mavi - Semantic Search Service
+ * Mavi - Semantic Search Service
  *
  * SQLite + vec0 (vector similarity search) extension ile
  * codebase indexing ve semantic search
@@ -87,7 +87,7 @@ export interface ISemanticSearchService {
 // ============================================
 
 export const SEMANTIC_SEARCH_SCHEMA = `
--- Code Mavi Semantic Search Database Schema
+-- Mavi Semantic Search Database Schema
 -- Version: 1.0.0
 
 -- Metadata table for tracking database state
@@ -468,7 +468,7 @@ export class SemanticSearchServiceImpl extends Disposable implements ISemanticSe
 
 		try {
 			// Determine database path
-			const dbPath = path.join(process.env.HOME || process.env.USERPROFILE || '.', '.codemavi', 'semantic-search.db')
+			const dbPath = path.join(process.env.HOME || process.env.USERPROFILE || '.', '.mavi', 'semantic-search.db')
 
 			this.database = new SemanticSearchDatabase(dbPath)
 			await this.database.initialize()
@@ -677,7 +677,7 @@ export const ISemanticSearchService = createDecorator<ISemanticSearchService>('s
 			if (this.database) {
 				await this.database.close()
 
-				const dbPath = path.join(process.env.HOME || process.env.USERPROFILE || '.', '.codemavi', 'semantic-search.db')
+				const dbPath = path.join(process.env.HOME || process.env.USERPROFILE || '.', '.mavi', 'semantic-search.db')
 				if (fs.existsSync(dbPath)) {
 					fs.unlinkSync(dbPath)
 				}

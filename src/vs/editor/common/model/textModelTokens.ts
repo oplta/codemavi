@@ -55,7 +55,7 @@ export class TokenizerWithStateStoreAndTextModel<TState extends IState = IState>
 		super(lineCount, tokenizationSupport);
 	}
 
-	public updateTokensUntilLine(builder: ContiguousMultilineTokensBuilder, lineNumber: number): codemavi {
+	public updateTokensUntilLine(builder: ContiguousMultilineTokensBuilder, lineNumber: number): void {
 		const languageId = this._textModel.getLanguageId();
 
 		while (true) {
@@ -242,7 +242,7 @@ export class TrackingTokenizationStateStore<TState extends IState> {
 		return r;
 	}
 
-	public acceptChange(range: LineRange, newLineCount: number): codemavi {
+	public acceptChange(range: LineRange, newLineCount: number): void {
 		this.lineCount += newLineCount - range.length;
 		this._tokenizationStateStore.acceptChange(range, newLineCount);
 		this._invalidEndStatesLineNumbers.addRangeAndResize(new OffsetRange(range.startLineNumber, range.endLineNumberExclusive), newLineCount);
@@ -255,7 +255,7 @@ export class TrackingTokenizationStateStore<TState extends IState> {
 		}
 	}
 
-	public invalidateEndStateRange(range: LineRange): codemavi {
+	public invalidateEndStateRange(range: LineRange): void {
 		this._invalidEndStatesLineNumbers.addRange(new OffsetRange(range.startLineNumber, range.endLineNumberExclusive));
 	}
 
@@ -303,7 +303,7 @@ export class TokenizationStateStore<TState extends IState> {
 		return true;
 	}
 
-	public acceptChange(range: LineRange, newLineCount: number): codemavi {
+	public acceptChange(range: LineRange, newLineCount: number): void {
 		let length = range.length;
 		if (newLineCount > 0 && length > 0) {
 			// Keep the last state, even though it is unrelated.
@@ -327,9 +327,9 @@ interface RangePriorityQueue {
 	get min(): number | null;
 	removeMin(): number | null;
 
-	addRange(range: OffsetRange): codemavi;
+	addRange(range: OffsetRange): void;
 
-	addRangeAndResize(range: OffsetRange, newLength: number): codemavi;
+	addRangeAndResize(range: OffsetRange, newLength: number): void;
 }
 
 export class RangePriorityQueueImpl implements RangePriorityQueue {
@@ -359,7 +359,7 @@ export class RangePriorityQueueImpl implements RangePriorityQueue {
 		return range.start;
 	}
 
-	public delete(value: number): codemavi {
+	public delete(value: number): void {
 		const idx = this._ranges.findIndex(r => r.contains(value));
 		if (idx !== -1) {
 			const range = this._ranges[idx];
@@ -379,11 +379,11 @@ export class RangePriorityQueueImpl implements RangePriorityQueue {
 		}
 	}
 
-	public addRange(range: OffsetRange): codemavi {
+	public addRange(range: OffsetRange): void {
 		OffsetRange.addRange(range, this._ranges);
 	}
 
-	public addRangeAndResize(range: OffsetRange, newLength: number): codemavi {
+	public addRangeAndResize(range: OffsetRange, newLength: number): void {
 		let idxFirstMightBeIntersecting = 0;
 		while (!(idxFirstMightBeIntersecting >= this._ranges.length || range.start <= this._ranges[idxFirstMightBeIntersecting].endExclusive)) {
 			idxFirstMightBeIntersecting++;
@@ -450,16 +450,16 @@ export class DefaultBackgroundTokenizer implements IBackgroundTokenizer {
 	) {
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._isDisposed = true;
 	}
 
-	public handleChanges(): codemavi {
+	public handleChanges(): void {
 		this._beginBackgroundTokenization();
 	}
 
 	private _isScheduled = false;
-	private _beginBackgroundTokenization(): codemavi {
+	private _beginBackgroundTokenization(): void {
 		if (this._isScheduled || !this._tokenizerWithStateStore._textModel.isAttachedToEditor() || !this._hasLinesToTokenize()) {
 			return;
 		}
@@ -475,7 +475,7 @@ export class DefaultBackgroundTokenizer implements IBackgroundTokenizer {
 	/**
 	 * Tokenize until the deadline occurs, but try to yield every 1-2ms.
 	 */
-	private _backgroundTokenizeWithDeadline(deadline: IdleDeadline): codemavi {
+	private _backgroundTokenizeWithDeadline(deadline: IdleDeadline): void {
 		// Read the time remaining from the `deadline` immediately because it is unclear
 		// if the `deadline` object will be valid after execution leaves this function.
 		const endTime = Date.now() + deadline.timeRemaining();
@@ -503,7 +503,7 @@ export class DefaultBackgroundTokenizer implements IBackgroundTokenizer {
 	/**
 	 * Tokenize for at least 1ms.
 	 */
-	private _backgroundTokenizeForAtLeast1ms(): codemavi {
+	private _backgroundTokenizeForAtLeast1ms(): void {
 		const lineCount = this._tokenizerWithStateStore._textModel.getLineCount();
 		const builder = new ContiguousMultilineTokensBuilder();
 		const sw = StopWatch.create(false);
@@ -543,7 +543,7 @@ export class DefaultBackgroundTokenizer implements IBackgroundTokenizer {
 		return firstInvalidLine.lineNumber;
 	}
 
-	public checkFinished(): codemavi {
+	public checkFinished(): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -552,7 +552,7 @@ export class DefaultBackgroundTokenizer implements IBackgroundTokenizer {
 		}
 	}
 
-	public requestTokens(startLineNumber: number, endLineNumberExclusive: number): codemavi {
+	public requestTokens(startLineNumber: number, endLineNumberExclusive: number): void {
 		this._tokenizerWithStateStore.store.invalidateEndStateRange(new LineRange(startLineNumber, endLineNumberExclusive));
 	}
 }

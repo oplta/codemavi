@@ -63,8 +63,8 @@ export class ExtHostWebview implements vscode.Webview {
 	/* internal */ readonly _onMessageEmitter = new Emitter<any>();
 	public readonly onDidReceiveMessage: Event<any> = this._onMessageEmitter.event;
 
-	readonly #onDidDisposeEmitter = new Emitter<codemavi>();
-	/* internal */ readonly _onDidDispose: Event<codemavi> = this.#onDidDisposeEmitter.event;
+	readonly #onDidDisposeEmitter = new Emitter<void>();
+	/* internal */ readonly _onDidDispose: Event<void> = this.#onDidDisposeEmitter.event;
 
 	public dispose() {
 		this.#isDisposed = true;
@@ -208,7 +208,7 @@ export class ExtHostWebviews extends Disposable implements extHostProtocol.ExtHo
 		this._webviewProxy = mainContext.getProxy(extHostProtocol.MainContext.MainThreadWebviews);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 
 		for (const webview of this._webviews.values()) {
@@ -221,7 +221,7 @@ export class ExtHostWebviews extends Disposable implements extHostProtocol.ExtHo
 		handle: extHostProtocol.WebviewHandle,
 		jsonMessage: string,
 		buffers: SerializableObjectWithBuffers<VSBuffer[]>
-	): codemavi {
+	): void {
 		const webview = this.getWebview(handle);
 		if (webview) {
 			const { message } = deserializeWebviewMessage(jsonMessage, buffers.value);
@@ -232,7 +232,7 @@ export class ExtHostWebviews extends Disposable implements extHostProtocol.ExtHo
 	public $onMissingCsp(
 		_handle: extHostProtocol.WebviewHandle,
 		extensionId: string
-	): codemavi {
+	): void {
 		this._logService.warn(`${extensionId} created a webview without a content security policy: https://aka.ms/vscode-webview-missing-csp`);
 	}
 

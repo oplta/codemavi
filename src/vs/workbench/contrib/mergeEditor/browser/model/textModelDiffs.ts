@@ -74,7 +74,7 @@ export class TextModelDiffs extends Disposable {
 
 	private _isInitializing = true;
 
-	private _recompute(reader: IReader): codemavi {
+	private _recompute(reader: IReader): void {
 		this._recomputeCount++;
 		const currentRecomputeIdx = this._recomputeCount;
 
@@ -116,13 +116,13 @@ export class TextModelDiffs extends Disposable {
 		});
 	}
 
-	private ensureUpToDate(): codemavi {
+	private ensureUpToDate(): void {
 		if (this.state.get() !== TextModelDiffState.upToDate) {
 			throw new BugIndicatingError('Cannot remove diffs when the model is not up to date');
 		}
 	}
 
-	public removeDiffs(diffToRemoves: DetailedLineRangeMapping[], transaction: ITransaction | undefined, group?: UndoRedoGroup): codemavi {
+	public removeDiffs(diffToRemoves: DetailedLineRangeMapping[], transaction: ITransaction | undefined, group?: UndoRedoGroup): void {
 		this.ensureUpToDate();
 
 		diffToRemoves.sort(compareBy((d) => d.inputRange.startLineNumber, numberComparator));
@@ -156,7 +156,7 @@ export class TextModelDiffs extends Disposable {
 	/**
 	 * Edit must be conflict free.
 	 */
-	public applyEditRelativeToOriginal(edit: LineRangeEdit, transaction: ITransaction | undefined, group?: UndoRedoGroup): codemavi {
+	public applyEditRelativeToOriginal(edit: LineRangeEdit, transaction: ITransaction | undefined, group?: UndoRedoGroup): void {
 		this.ensureUpToDate();
 
 		const editMapping = new DetailedLineRangeMapping(

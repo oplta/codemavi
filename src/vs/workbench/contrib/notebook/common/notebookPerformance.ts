@@ -14,7 +14,7 @@ export class NotebookPerfMarks {
 		return { ...this._marks };
 	}
 
-	mark(name: PerfName): codemavi {
+	mark(name: PerfName): void {
 		if (this._marks[name]) {
 			console.error(`Skipping overwrite of notebook perf value: ${name}`);
 			return;

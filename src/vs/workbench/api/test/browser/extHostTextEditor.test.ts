@@ -106,7 +106,7 @@ suite('ExtHostTextEditorOptions', () => {
 		calls = null!;
 	});
 
-	function assertState(opts: ExtHostTextEditorOptions, expected: Omit<IResolvedTextEditorConfiguration, 'originalIndentSize'>): codemavi {
+	function assertState(opts: ExtHostTextEditorOptions, expected: Omit<IResolvedTextEditorConfiguration, 'originalIndentSize'>): void {
 		const actual = {
 			tabSize: opts.value.tabSize,
 			indentSize: opts.value.indentSize,

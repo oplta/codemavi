@@ -36,7 +36,7 @@ export class SymbolsTree {
 		this._navigation = new Navigation(this._tree);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._history.dispose();
 		this._tree.dispose();
 		this._sessionDisposable?.dispose();
@@ -116,7 +116,7 @@ export class SymbolsTree {
 		this._sessionDisposable = vscode.Disposable.from(...disposables);
 	}
 
-	clearInput(): codemavi {
+	clearInput(): void {
 		this._sessionDisposable?.dispose();
 		this._input = undefined;
 		this._ctxHasResult.set(false);
@@ -216,7 +216,7 @@ class TreeDndDelegate implements vscode.TreeDragAndDropController<undefined> {
 		}
 	}
 
-	handleDrop(): codemavi | Thenable<codemavi> {
+	handleDrop(): void | Thenable<void> {
 		throw new Error('Method not implemented.');
 	}
 }
@@ -289,12 +289,12 @@ class TreeInputHistory implements vscode.TreeDataProvider<HistoryItem> {
 		);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		vscode.Disposable.from(...this._disposables).dispose();
 		this._onDidChangeTreeData.dispose();
 	}
 
-	private _reRunHistoryItem(item: HistoryItem): codemavi {
+	private _reRunHistoryItem(item: HistoryItem): void {
 		this._inputs.delete(item.key);
 		const newPosition = item.anchor.guessedTrackedPosition();
 		let newInput = item.input;
@@ -321,7 +321,7 @@ class TreeInputHistory implements vscode.TreeDataProvider<HistoryItem> {
 		this._ctxHasHistory.set(true);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._inputs.clear();
 		this._ctxHasHistory.set(false);
 		this._onDidChangeTreeData.fire(undefined);

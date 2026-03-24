@@ -150,7 +150,7 @@ export class CachedPublicClientApplicationManager implements ICachedPublicClient
 				this._pcaDisposables.delete(clientId);
 				this._pcas.delete(clientId);
 				this._logger.debug(`[_doCreatePublicClientApplication] [${clientId}] PCA disposed. Firing off storing of PCAs...`);
-				codemavi this._storePublicClientApplications();
+				void this._storePublicClientApplications();
 			})
 		);
 		this._pcaDisposables.set(clientId, disposable);
@@ -217,16 +217,16 @@ export class CachedPublicClientApplicationManager implements ICachedPublicClient
 interface IPublicClientApplicationSecretStorage {
 	get(): Promise<string[] | undefined>;
 	getOldValue(): Promise<{ clientId: string; authority: string }[] | undefined>;
-	store(value: string[]): Thenable<codemavi>;
-	delete(): Thenable<codemavi>;
-	onDidChange: Event<codemavi>;
+	store(value: string[]): Thenable<void>;
+	delete(): Thenable<void>;
+	onDidChange: Event<void>;
 }
 
 class PublicClientApplicationsSecretStorage implements IPublicClientApplicationSecretStorage, Disposable {
 	private _disposable: Disposable;
 
-	private readonly _onDidChangeEmitter = new EventEmitter<codemavi>;
-	readonly onDidChange: Event<codemavi> = this._onDidChangeEmitter.event;
+	private readonly _onDidChangeEmitter = new EventEmitter<void>;
+	readonly onDidChange: Event<void> = this._onDidChangeEmitter.event;
 
 	private readonly _oldKey = `publicClientApplications-${this._cloudName}`;
 	private readonly _key = `publicClients-${this._cloudName}`;
@@ -293,11 +293,11 @@ class PublicClientApplicationsSecretStorage implements IPublicClientApplicationS
 		return result;
 	}
 
-	store(value: string[]): Thenable<codemavi> {
+	store(value: string[]): Thenable<void> {
 		return this._secretStorage.store(this._key, JSON.stringify(value));
 	}
 
-	delete(): Thenable<codemavi> {
+	delete(): Thenable<void> {
 		return this._secretStorage.delete(this._key);
 	}
 

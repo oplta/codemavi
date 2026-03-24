@@ -20,13 +20,13 @@ export default class Tracer extends Disposable {
 		super();
 	}
 
-	public traceRequest(serverId: string, request: Proto.Request, responseExpected: boolean, queueLength: number): codemavi {
+	public traceRequest(serverId: string, request: Proto.Request, responseExpected: boolean, queueLength: number): void {
 		if (this.logger.logLevel === vscode.LogLevel.Trace) {
 			this.trace(serverId, `Sending request: ${request.command} (${request.seq}). Response expected: ${responseExpected ? 'yes' : 'no'}. Current queue length: ${queueLength}`, request.arguments);
 		}
 	}
 
-	public traceResponse(serverId: string, response: Proto.Response, meta: RequestExecutionMetadata): codemavi {
+	public traceResponse(serverId: string, response: Proto.Response, meta: RequestExecutionMetadata): void {
 		if (this.logger.logLevel === vscode.LogLevel.Trace) {
 			this.trace(serverId, `Response received: ${response.command} (${response.request_seq}). Request took ${Date.now() - meta.queuingStartTime} ms. Success: ${response.success} ${!response.success ? '. Message: ' + response.message : ''}`, response.body);
 		}
@@ -38,13 +38,13 @@ export default class Tracer extends Disposable {
 		}
 	}
 
-	public traceEvent(serverId: string, event: Proto.Event): codemavi {
+	public traceEvent(serverId: string, event: Proto.Event): void {
 		if (this.logger.logLevel === vscode.LogLevel.Trace) {
 			this.trace(serverId, `Event received: ${event.event} (${event.seq}).`, event.body);
 		}
 	}
 
-	public trace(serverId: string, message: string, data?: unknown): codemavi {
+	public trace(serverId: string, message: string, data?: unknown): void {
 		this.logger.trace(`<${serverId}> ${message}`, ...(data ? [JSON.stringify(data, null, 4)] : []));
 	}
 }

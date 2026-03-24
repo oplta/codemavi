@@ -31,7 +31,7 @@ export class ToggleTabFocusModeAction extends Action2 {
 		});
 	}
 
-	public run(): codemavi {
+	public run(): void {
 		const oldValue = TabFocus.getTabFocusMode();
 		const newValue = !oldValue;
 		TabFocus.setTabFocusMode(newValue);

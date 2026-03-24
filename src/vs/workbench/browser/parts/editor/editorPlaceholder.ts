@@ -64,7 +64,7 @@ export abstract class EditorPlaceholder extends EditorPane {
 		super(id, group, telemetryService, themeService, storageService);
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 
 		// Container
 		this.container = $('.monaco-editor-pane-placeholder', {
@@ -77,7 +77,7 @@ export abstract class EditorPlaceholder extends EditorPane {
 		parent.appendChild(this.scrollbar.getDomNode());
 	}
 
-	override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		await super.setInput(input, options, context, token);
 
 		// Check for cancellation
@@ -144,7 +144,7 @@ export abstract class EditorPlaceholder extends EditorPane {
 
 	protected abstract getContents(input: EditorInput, options: IEditorOptions | undefined, disposables: DisposableStore): Promise<IEditorPlaceholderContents>;
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		if (this.container) {
 			clearNode(this.container);
 		}
@@ -154,7 +154,7 @@ export abstract class EditorPlaceholder extends EditorPane {
 		super.clearInput();
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		const [container, scrollbar] = assertAllDefined(this.container, this.scrollbar);
 
 		// Pass on to Container
@@ -167,13 +167,13 @@ export abstract class EditorPlaceholder extends EditorPane {
 		container.classList.toggle('max-height-200px', dimension.height <= 200);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		this.container?.focus();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.container?.remove();
 
 		super.dispose();

@@ -44,12 +44,12 @@ export interface ITestCoverageService {
 	/**
 	 * Opens a test coverage report from a task, optionally focusing it in the editor.
 	 */
-	openCoverage(task: ITestRunTaskResults, focus?: boolean): Promise<codemavi>;
+	openCoverage(task: ITestRunTaskResults, focus?: boolean): Promise<void>;
 
 	/**
 	 * Closes any open coverage.
 	 */
-	closeCoverage(): codemavi;
+	closeCoverage(): void;
 }
 
 export class TestCoverageService extends Disposable implements ITestCoverageService {

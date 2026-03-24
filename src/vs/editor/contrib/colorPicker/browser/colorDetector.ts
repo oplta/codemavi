@@ -114,13 +114,13 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 		return editor.getContribution<ColorDetector>(this.ID);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.stop();
 		this.removeAllDecorations();
 		super.dispose();
 	}
 
-	private updateColors(): codemavi {
+	private updateColors(): void {
 		this.stop();
 
 		if (!this._isColorDecoratorsEnabled) {
@@ -144,7 +144,7 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 		this.beginCompute();
 	}
 
-	private async beginCompute(): Promise<codemavi> {
+	private async beginCompute(): Promise<void> {
 		this._computePromise = createCancelablePromise(async token => {
 			const model = this._editor.getModel();
 			if (!model) {
@@ -165,7 +165,7 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 		}
 	}
 
-	private stop(): codemavi {
+	private stop(): void {
 		if (this._timeoutTimer) {
 			this._timeoutTimer.cancel();
 			this._timeoutTimer = null;
@@ -177,7 +177,7 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 		this._localToDispose.clear();
 	}
 
-	private updateDecorations(colorDatas: IColorData[]): codemavi {
+	private updateDecorations(colorDatas: IColorData[]): void {
 		const decorations = colorDatas.map(c => ({
 			range: {
 				startLineNumber: c.colorInfo.range.startLineNumber,
@@ -198,7 +198,7 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 
 	private readonly _colorDecorationClassRefs = this._register(new DisposableStore());
 
-	private updateColorDecorators(colorData: IColorData[]): codemavi {
+	private updateColorDecorators(colorData: IColorData[]): void {
 		this._colorDecorationClassRefs.clear();
 
 		const decorations: IModelDeltaDecoration[] = [];
@@ -240,7 +240,7 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 		this._colorDecoratorIds.set(decorations);
 	}
 
-	private removeAllDecorations(): codemavi {
+	private removeAllDecorations(): void {
 		this._editor.removeDecorations(this._decorationsIds);
 		this._decorationsIds = [];
 		this._colorDecoratorIds.clear();
@@ -270,8 +270,8 @@ export class ColorDetector extends Disposable implements IEditorContribution {
 }
 
 export class DecoratorLimitReporter {
-	private _onDidChange = new Emitter<codemavi>();
-	public readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private _onDidChange = new Emitter<void>();
+	public readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private _computed: number = 0;
 	private _limited: number | false = false;

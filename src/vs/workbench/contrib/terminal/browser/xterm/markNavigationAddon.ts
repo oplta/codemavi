@@ -43,7 +43,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 	private _activeCommandGuide?: ITerminalCommand;
 	private readonly _commandGuideDecorations = this._register(new MutableDisposable<DisposableStore>());
 
-	activate(terminal: Terminal): codemavi {
+	activate(terminal: Terminal): void {
 		this._terminal = terminal;
 		this._register(this._terminal.onData(() => {
 			this._currentMarker = Boundary.Bottom;
@@ -101,7 +101,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		return undefined;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		// Clear the current marker so successive focus/selection actions are performed from the
 		// bottom of the buffer
 		this._currentMarker = Boundary.Bottom;
@@ -128,7 +128,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		return !this._getMarkers(true).includes(marker);
 	}
 
-	scrollToPreviousMark(scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false, skipEmptyCommands: boolean = true): codemavi {
+	scrollToPreviousMark(scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false, skipEmptyCommands: boolean = true): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -174,7 +174,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		this._scrollToCommand(this._currentMarker, scrollPosition);
 	}
 
-	scrollToNextMark(scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false, skipEmptyCommands: boolean = true): codemavi {
+	scrollToNextMark(scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false, skipEmptyCommands: boolean = true): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -220,7 +220,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		this._scrollToCommand(this._currentMarker, scrollPosition);
 	}
 
-	private _scrollToCommand(marker: IMarker, position: ScrollPosition): codemavi {
+	private _scrollToCommand(marker: IMarker, position: ScrollPosition): void {
 		const command = this._findCommand(marker);
 		if (command) {
 			this.revealCommand(command, position);
@@ -229,7 +229,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		}
 	}
 
-	private _scrollToMarker(start: IMarker | number, position: ScrollPosition, end?: IMarker | number, options?: IScrollToMarkerOptions): codemavi {
+	private _scrollToMarker(start: IMarker | number, position: ScrollPosition, end?: IMarker | number, options?: IScrollToMarkerOptions): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -259,7 +259,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		}
 	}
 
-	revealCommand(command: ITerminalCommand | ICurrentPartialCommand, position: ScrollPosition = ScrollPosition.Middle): codemavi {
+	revealCommand(command: ITerminalCommand | ICurrentPartialCommand, position: ScrollPosition = ScrollPosition.Middle): void {
 		const marker = 'getOutput' in command ? command.marker : command.commandStartMarker;
 		if (!this._terminal || !marker) {
 			return;
@@ -274,7 +274,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		);
 	}
 
-	revealRange(range: IBufferRange): codemavi {
+	revealRange(range: IBufferRange): void {
 		this._scrollToMarker(
 			range.start.y - 1,
 			ScrollPosition.Middle,
@@ -287,7 +287,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		);
 	}
 
-	showCommandGuide(command: ITerminalCommand | undefined): codemavi {
+	showCommandGuide(command: ITerminalCommand | undefined): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -309,7 +309,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 			}
 			const startLine = command.marker.line - (command.getPromptRowCount() - 1);
 			const decorationCount = toLineIndex(command.endMarker) - startLine;
-			// Abort if the command is excessively long to acodemavi performance on hover/leave
+			// Abort if the command is excessively long to avoid performance on hover/leave
 			if (decorationCount > 200) {
 				return;
 			}
@@ -343,18 +343,18 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 
 	private _scrollState: { viewportY: number } | undefined;
 
-	saveScrollState(): codemavi {
+	saveScrollState(): void {
 		this._scrollState = { viewportY: this._terminal?.buffer.active.viewportY ?? 0 };
 	}
 
-	restoreScrollState(): codemavi {
+	restoreScrollState(): void {
 		if (this._scrollState && this._terminal) {
 			this._terminal.scrollToLine(this._scrollState.viewportY);
 			this._scrollState = undefined;
 		}
 	}
 
-	private _highlightBufferRange(range: IBufferRange): codemavi {
+	private _highlightBufferRange(range: IBufferRange): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -384,7 +384,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		}
 	}
 
-	registerTemporaryDecoration(marker: IMarker | number, endMarker: IMarker | number | undefined, showOutline: boolean): codemavi {
+	registerTemporaryDecoration(marker: IMarker | number, endMarker: IMarker | number | undefined, showOutline: boolean): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -438,7 +438,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		}
 	}
 
-	scrollToLine(line: number, position: ScrollPosition): codemavi {
+	scrollToLine(line: number, position: ScrollPosition): void {
 		this._terminal?.scrollToLine(this.getTargetScrollLine(line, position));
 	}
 
@@ -457,7 +457,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		return line >= viewportY && line < viewportY + terminal.rows;
 	}
 
-	scrollToClosestMarker(startMarkerId: string, endMarkerId?: string, highlight?: boolean | undefined): codemavi {
+	scrollToClosestMarker(startMarkerId: string, endMarkerId?: string, highlight?: boolean | undefined): void {
 		const detectionCapability = this._capabilities.get(TerminalCapability.BufferMarkDetection);
 		if (!detectionCapability) {
 			return;
@@ -470,7 +470,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		this._scrollToMarker(startMarker, ScrollPosition.Top, endMarker, { hideDecoration: !highlight });
 	}
 
-	selectToPreviousMark(): codemavi {
+	selectToPreviousMark(): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -485,7 +485,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		selectLines(this._terminal, this._currentMarker, this._selectionStart);
 	}
 
-	selectToNextMark(): codemavi {
+	selectToNextMark(): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -500,7 +500,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		selectLines(this._terminal, this._currentMarker, this._selectionStart);
 	}
 
-	selectToPreviousLine(): codemavi {
+	selectToPreviousLine(): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -511,7 +511,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		selectLines(this._terminal, this._currentMarker, this._selectionStart);
 	}
 
-	selectToNextLine(): codemavi {
+	selectToNextLine(): void {
 		if (!this._terminal) {
 			return;
 		}
@@ -522,7 +522,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		selectLines(this._terminal, this._currentMarker, this._selectionStart);
 	}
 
-	scrollToPreviousLine(xterm: Terminal, scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false): codemavi {
+	scrollToPreviousLine(xterm: Terminal, scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false): void {
 		if (!retainSelection) {
 			this._selectionStart = null;
 		}
@@ -545,7 +545,7 @@ export class MarkNavigationAddon extends Disposable implements IMarkTracker, ITe
 		this._scrollToMarker(this._currentMarker, scrollPosition);
 	}
 
-	scrollToNextLine(xterm: Terminal, scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false): codemavi {
+	scrollToNextLine(xterm: Terminal, scrollPosition: ScrollPosition = ScrollPosition.Middle, retainSelection: boolean = false): void {
 		if (!retainSelection) {
 			this._selectionStart = null;
 		}
@@ -636,7 +636,7 @@ export function getLine(xterm: Terminal, marker: IMarker | Boundary): number {
 	return marker.line;
 }
 
-export function selectLines(xterm: Terminal, start: IMarker | Boundary, end: IMarker | Boundary | null): codemavi {
+export function selectLines(xterm: Terminal, start: IMarker | Boundary, end: IMarker | Boundary | null): void {
 	if (end === null) {
 		end = Boundary.Bottom;
 	}

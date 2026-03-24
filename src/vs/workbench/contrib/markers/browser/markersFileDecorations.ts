@@ -74,12 +74,12 @@ class MarkersFileDecorations implements IWorkbenchContribution {
 		this._updateEnablement();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._provider);
 		dispose(this._disposables);
 	}
 
-	private _updateEnablement(): codemavi {
+	private _updateEnablement(): void {
 		const problem = this._configurationService.getValue('problems.visibility');
 		if (problem === undefined) {
 			return;

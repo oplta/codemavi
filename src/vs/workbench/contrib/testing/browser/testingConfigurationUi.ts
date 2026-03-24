@@ -89,7 +89,7 @@ function buildPicker(accessor: ServicesAccessor, {
 	return quickpick;
 }
 
-const triggerButtonHandler = (service: ITestProfileService, resolve: (arg: undefined) => codemavi) =>
+const triggerButtonHandler = (service: ITestProfileService, resolve: (arg: undefined) => void) =>
 	(evt: IQuickPickItemButtonEvent<IQuickPickItem>) => {
 		const profile = (evt.item as { profile?: ITestRunProfile }).profile;
 		if (profile) {

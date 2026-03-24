@@ -88,7 +88,7 @@ export class ViewGpuContext extends Disposable {
 		this.canvas = createFastDomNode(document.createElement('canvas'));
 		this.canvas.setClassName('editorCanvas');
 
-		// Adjust the canvas size to acodemavi drawing under the scroll bar
+		// Adjust the canvas size to avoid drawing under the scroll bar
 		this._register(Event.runAndSubscribe(configurationService.onDidChangeConfiguration, e => {
 			if (!e || e.affectsConfiguration('editor.scrollbar.verticalScrollbarSize')) {
 				const verticalScrollbarSize = configurationService.getValue<IEditorOptions>('editor').scrollbar?.verticalScrollbarSize ?? 14;

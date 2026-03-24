@@ -18,8 +18,8 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 	private readonly _onProcessReady = this._register(new Emitter<IProcessReadyEvent>());
 	get onProcessReady(): Event<IProcessReadyEvent> { return this._onProcessReady.event; }
 
-	private readonly _onStart = this._register(new Emitter<codemavi>());
-	readonly onStart: Event<codemavi> = this._onStart.event;
+	private readonly _onStart = this._register(new Emitter<void>());
+	readonly onStart: Event<void> = this._onStart.event;
 	private readonly _onInput = this._register(new Emitter<string>());
 	readonly onInput: Event<string> = this._onInput.event;
 	private readonly _onBinary = this._register(new Emitter<string>());
@@ -30,17 +30,17 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 	readonly onAcknowledgeDataEvent: Event<number> = this._onAcknowledgeDataEvent.event;
 	private readonly _onShutdown = this._register(new Emitter<boolean>());
 	readonly onShutdown: Event<boolean> = this._onShutdown.event;
-	private readonly _onRequestInitialCwd = this._register(new Emitter<codemavi>());
-	readonly onRequestInitialCwd: Event<codemavi> = this._onRequestInitialCwd.event;
-	private readonly _onRequestCwd = this._register(new Emitter<codemavi>());
-	readonly onRequestCwd: Event<codemavi> = this._onRequestCwd.event;
+	private readonly _onRequestInitialCwd = this._register(new Emitter<void>());
+	readonly onRequestInitialCwd: Event<void> = this._onRequestInitialCwd.event;
+	private readonly _onRequestCwd = this._register(new Emitter<void>());
+	readonly onRequestCwd: Event<void> = this._onRequestCwd.event;
 	private readonly _onDidChangeProperty = this._register(new Emitter<IProcessProperty<any>>());
 	readonly onDidChangeProperty = this._onDidChangeProperty.event;
 	private readonly _onProcessExit = this._register(new Emitter<number | undefined>());
 	readonly onProcessExit: Event<number | undefined> = this._onProcessExit.event;
 
-	private _pendingInitialCwdRequests: ((value: string | PromiseLike<string>) => codemavi)[] = [];
-	private _pendingCwdRequests: ((value: string | PromiseLike<string>) => codemavi)[] = [];
+	private _pendingInitialCwdRequests: ((value: string | PromiseLike<string>) => void)[] = [];
+	private _pendingCwdRequests: ((value: string | PromiseLike<string>) => void)[] = [];
 
 	constructor(
 		public instanceId: number,
@@ -51,19 +51,19 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 		super();
 	}
 
-	emitData(data: string): codemavi {
+	emitData(data: string): void {
 		this._onProcessData.fire(data);
 	}
 
-	emitTitle(title: string): codemavi {
+	emitTitle(title: string): void {
 		this._onDidChangeProperty.fire({ type: ProcessPropertyType.Title, value: title });
 	}
 
-	emitReady(pid: number, cwd: string): codemavi {
+	emitReady(pid: number, cwd: string): void {
 		this._onProcessReady.fire({ pid, cwd, windowsPty: undefined });
 	}
 
-	emitProcessProperty({ type, value }: IProcessProperty<any>): codemavi {
+	emitProcessProperty({ type, value }: IProcessProperty<any>): void {
 		switch (type) {
 			case ProcessPropertyType.Cwd:
 				this.emitCwd(value);
@@ -83,26 +83,26 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 		}
 	}
 
-	emitExit(exitCode: number | undefined): codemavi {
+	emitExit(exitCode: number | undefined): void {
 		this._onProcessExit.fire(exitCode);
 		this.dispose();
 	}
 
-	emitOverrideDimensions(dimensions: ITerminalDimensions | undefined): codemavi {
+	emitOverrideDimensions(dimensions: ITerminalDimensions | undefined): void {
 		this._onDidChangeProperty.fire({ type: ProcessPropertyType.OverrideDimensions, value: dimensions });
 	}
 
-	emitResolvedShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig): codemavi {
+	emitResolvedShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig): void {
 		this._onDidChangeProperty.fire({ type: ProcessPropertyType.ResolvedShellLaunchConfig, value: shellLaunchConfig });
 	}
 
-	emitInitialCwd(initialCwd: string): codemavi {
+	emitInitialCwd(initialCwd: string): void {
 		while (this._pendingInitialCwdRequests.length > 0) {
 			this._pendingInitialCwdRequests.pop()!(initialCwd);
 		}
 	}
 
-	emitCwd(cwd: string): codemavi {
+	emitCwd(cwd: string): void {
 		while (this._pendingCwdRequests.length > 0) {
 			this._pendingCwdRequests.pop()!(cwd);
 		}
@@ -112,31 +112,31 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 		return this._terminalService.requestStartExtensionTerminal(this, this._cols, this._rows);
 	}
 
-	shutdown(immediate: boolean): codemavi {
+	shutdown(immediate: boolean): void {
 		this._onShutdown.fire(immediate);
 	}
 
-	input(data: string): codemavi {
+	input(data: string): void {
 		this._onInput.fire(data);
 	}
 
-	resize(cols: number, rows: number): codemavi {
+	resize(cols: number, rows: number): void {
 		this._onResize.fire({ cols, rows });
 	}
 
-	clearBuffer(): codemavi | Promise<codemavi> {
+	clearBuffer(): void | Promise<void> {
 		// no-op
 	}
 
-	acknowledgeDataEvent(): codemavi {
+	acknowledgeDataEvent(): void {
 		// Flow control is disabled for extension terminals
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
 		// No-op
 	}
 
-	async processBinary(data: string): Promise<codemavi> {
+	async processBinary(data: string): Promise<void> {
 		// Disabled for extension terminals
 		this._onBinary.fire(data);
 	}
@@ -159,7 +159,7 @@ export class TerminalProcessExtHostProxy extends Disposable implements ITerminal
 		// throws if called in extHostTerminalService
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
 		// throws if called in extHostTerminalService
 	}
 }

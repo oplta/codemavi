@@ -183,7 +183,7 @@ class CodeLensAdapter {
 		return symbol;
 	}
 
-	releaseCodeLenses(cachedId: number): codemavi {
+	releaseCodeLenses(cachedId: number): void {
 		this._disposables.get(cachedId)?.dispose();
 		this._disposables.delete(cachedId);
 		this._cache.delete(cachedId);
@@ -313,7 +313,7 @@ class HoverAdapter {
 		return hover;
 	}
 
-	releaseHover(id: number): codemavi {
+	releaseHover(id: number): void {
 		this._hoverMap.delete(id);
 	}
 }
@@ -574,7 +574,7 @@ class CodeActionAdapter {
 		return { edit: resolvedEdit, command: resolvedCommand };
 	}
 
-	releaseCodeActions(cachedId: number): codemavi {
+	releaseCodeActions(cachedId: number): void {
 		this._disposables.get(cachedId)?.dispose();
 		this._disposables.delete(cachedId);
 		this._cache.delete(cachedId);
@@ -1008,7 +1008,7 @@ class DocumentSemanticTokensAdapter {
 		return this._send(DocumentSemanticTokensAdapter._convertToEdits(previousResult, value), value);
 	}
 
-	async releaseDocumentSemanticColoring(semanticColoringResultId: number): Promise<codemavi> {
+	async releaseDocumentSemanticColoring(semanticColoringResultId: number): Promise<void> {
 		this._previousResults.delete(semanticColoringResultId);
 	}
 
@@ -1331,7 +1331,7 @@ class CompletionsAdapter {
 
 class InlineCompletionAdapter {
 	private readonly _references = new ReferenceMap<{
-		dispose(): codemavi;
+		dispose(): void;
 		items: readonly vscode.InlineCompletionItem[];
 	}>();
 
@@ -1536,7 +1536,7 @@ class InlineCompletionAdapter {
 		data?.dispose();
 	}
 
-	handleDidShowCompletionItem(pid: number, idx: number, updatedInsertText: string): codemavi {
+	handleDidShowCompletionItem(pid: number, idx: number, updatedInsertText: string): void {
 		const completionItem = this._references.get(pid)?.items[idx];
 		if (completionItem) {
 			if (this._provider.handleDidShowCompletionItem && this._isAdditionsProposedApiEnabled) {
@@ -1545,7 +1545,7 @@ class InlineCompletionAdapter {
 		}
 	}
 
-	handlePartialAccept(pid: number, idx: number, acceptedCharacters: number, info: languages.PartialAcceptInfo): codemavi {
+	handlePartialAccept(pid: number, idx: number, acceptedCharacters: number, info: languages.PartialAcceptInfo): void {
 		const completionItem = this._references.get(pid)?.items[idx];
 		if (completionItem) {
 			if (this._provider.handleDidPartiallyAcceptCompletionItem && this._isAdditionsProposedApiEnabled) {
@@ -1555,7 +1555,7 @@ class InlineCompletionAdapter {
 		}
 	}
 
-	handleRejection(pid: number, idx: number): codemavi {
+	handleRejection(pid: number, idx: number): void {
 		const completionItem = this._references.get(pid)?.items[idx];
 		if (completionItem) {
 			if (this._provider.handleDidRejectCompletionItem && this._isAdditionsProposedApiEnabled) {
@@ -1567,7 +1567,7 @@ class InlineCompletionAdapter {
 
 class InlineEditAdapter {
 	private readonly _references = new ReferenceMap<{
-		dispose(): codemavi;
+		dispose(): void;
 		item: vscode.InlineEdit;
 	}>();
 
@@ -2080,7 +2080,7 @@ class CallHierarchyAdapter {
 		});
 	}
 
-	releaseSession(sessionId: string): codemavi {
+	releaseSession(sessionId: string): void {
 		this._cache.delete(sessionId);
 	}
 
@@ -2154,7 +2154,7 @@ class TypeHierarchyAdapter {
 		});
 	}
 
-	releaseSession(sessionId: string): codemavi {
+	releaseSession(sessionId: string): void {
 		this._cache.delete(sessionId);
 	}
 
@@ -2373,7 +2373,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, CodeLensAdapter, adapter => adapter.resolveCodeLens(symbol, token), undefined, undefined, true);
 	}
 
-	$releaseCodeLenses(handle: number, cacheId: number): codemavi {
+	$releaseCodeLenses(handle: number, cacheId: number): void {
 		this._withAdapter(handle, CodeLensAdapter, adapter => Promise.resolve(adapter.releaseCodeLenses(cacheId)), undefined, undefined, true);
 	}
 
@@ -2431,7 +2431,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, HoverAdapter, adapter => adapter.provideHover(URI.revive(resource), position, context, token), undefined, token);
 	}
 
-	$releaseHover(handle: number, id: number): codemavi {
+	$releaseHover(handle: number, id: number): void {
 		this._withAdapter(handle, HoverAdapter, adapter => Promise.resolve(adapter.releaseHover(id)), undefined, undefined);
 	}
 
@@ -2548,7 +2548,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, CodeActionAdapter, adapter => adapter.resolveCodeAction(id, token), {}, undefined);
 	}
 
-	$releaseCodeActions(handle: number, cacheId: number): codemavi {
+	$releaseCodeActions(handle: number, cacheId: number): void {
 		this._withAdapter(handle, CodeActionAdapter, adapter => Promise.resolve(adapter.releaseCodeActions(cacheId)), undefined, undefined);
 	}
 
@@ -2605,7 +2605,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, NavigateTypeAdapter, adapter => adapter.resolveWorkspaceSymbol(symbol, token), undefined, undefined);
 	}
 
-	$releaseWorkspaceSymbols(handle: number, id: number): codemavi {
+	$releaseWorkspaceSymbols(handle: number, id: number): void {
 		this._withAdapter(handle, NavigateTypeAdapter, adapter => adapter.releaseWorkspaceSymbols(id), undefined, undefined);
 	}
 
@@ -2665,7 +2665,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, DocumentSemanticTokensAdapter, adapter => adapter.provideDocumentSemanticTokens(URI.revive(resource), previousResultId, token), null, token);
 	}
 
-	$releaseDocumentSemanticTokens(handle: number, semanticColoringResultId: number): codemavi {
+	$releaseDocumentSemanticTokens(handle: number, semanticColoringResultId: number): void {
 		this._withAdapter(handle, DocumentSemanticTokensAdapter, adapter => adapter.releaseDocumentSemanticColoring(semanticColoringResultId), undefined, undefined);
 	}
 
@@ -2697,7 +2697,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, CompletionsAdapter, adapter => adapter.resolveCompletionItem(id, token), undefined, token);
 	}
 
-	$releaseCompletionItems(handle: number, id: number): codemavi {
+	$releaseCompletionItems(handle: number, id: number): void {
 		this._withAdapter(handle, CompletionsAdapter, adapter => adapter.releaseCompletionItems(id), undefined, undefined);
 	}
 
@@ -2726,25 +2726,25 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, InlineCompletionAdapter, adapter => adapter.provideInlineEditsForRange(URI.revive(resource), range, context, token), undefined, token);
 	}
 
-	$handleInlineCompletionDidShow(handle: number, pid: number, idx: number, updatedInsertText: string): codemavi {
+	$handleInlineCompletionDidShow(handle: number, pid: number, idx: number, updatedInsertText: string): void {
 		this._withAdapter(handle, InlineCompletionAdapter, async adapter => {
 			adapter.handleDidShowCompletionItem(pid, idx, updatedInsertText);
 		}, undefined, undefined);
 	}
 
-	$handleInlineCompletionPartialAccept(handle: number, pid: number, idx: number, acceptedCharacters: number, info: languages.PartialAcceptInfo): codemavi {
+	$handleInlineCompletionPartialAccept(handle: number, pid: number, idx: number, acceptedCharacters: number, info: languages.PartialAcceptInfo): void {
 		this._withAdapter(handle, InlineCompletionAdapter, async adapter => {
 			adapter.handlePartialAccept(pid, idx, acceptedCharacters, info);
 		}, undefined, undefined);
 	}
 
-	$handleInlineCompletionRejection(handle: number, pid: number, idx: number): codemavi {
+	$handleInlineCompletionRejection(handle: number, pid: number, idx: number): void {
 		this._withAdapter(handle, InlineCompletionAdapter, async adapter => {
 			adapter.handleRejection(pid, idx);
 		}, undefined, undefined);
 	}
 
-	$freeInlineCompletionsList(handle: number, pid: number): codemavi {
+	$freeInlineCompletionsList(handle: number, pid: number): void {
 		this._withAdapter(handle, InlineCompletionAdapter, async adapter => { adapter.disposeCompletions(pid); }, undefined, undefined);
 	}
 
@@ -2761,7 +2761,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, InlineEditAdapter, adapter => adapter.provideInlineEdits(URI.revive(resource), context, token), undefined, token);
 	}
 
-	$freeInlineEdit(handle: number, pid: number): codemavi {
+	$freeInlineEdit(handle: number, pid: number): void {
 		this._withAdapter(handle, InlineEditAdapter, async adapter => { adapter.disposeEdit(pid); }, undefined, undefined);
 	}
 
@@ -2781,7 +2781,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, SignatureHelpAdapter, adapter => adapter.provideSignatureHelp(URI.revive(resource), position, context, token), undefined, token);
 	}
 
-	$releaseSignatureHelp(handle: number, id: number): codemavi {
+	$releaseSignatureHelp(handle: number, id: number): void {
 		this._withAdapter(handle, SignatureHelpAdapter, adapter => adapter.releaseSignatureHelp(id), undefined, undefined);
 	}
 
@@ -2810,7 +2810,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, InlayHintsAdapter, adapter => adapter.resolveInlayHint(id, token), undefined, token);
 	}
 
-	$releaseInlayHints(handle: number, id: number): codemavi {
+	$releaseInlayHints(handle: number, id: number): void {
 		this._withAdapter(handle, InlayHintsAdapter, adapter => adapter.releaseHints(id), undefined, undefined);
 	}
 
@@ -2830,7 +2830,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, LinkProviderAdapter, adapter => adapter.resolveLink(id, token), undefined, undefined, true);
 	}
 
-	$releaseDocumentLinks(handle: number, id: number): codemavi {
+	$releaseDocumentLinks(handle: number, id: number): void {
 		this._withAdapter(handle, LinkProviderAdapter, adapter => adapter.releaseLinks(id), undefined, undefined, true);
 	}
 
@@ -2907,7 +2907,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, CallHierarchyAdapter, adapter => adapter.provideCallsFrom(sessionId, itemId, token), undefined, token);
 	}
 
-	$releaseCallHierarchy(handle: number, sessionId: string): codemavi {
+	$releaseCallHierarchy(handle: number, sessionId: string): void {
 		this._withAdapter(handle, CallHierarchyAdapter, adapter => Promise.resolve(adapter.releaseSession(sessionId)), undefined, undefined);
 	}
 
@@ -2930,7 +2930,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, TypeHierarchyAdapter, adapter => adapter.provideSubtypes(sessionId, itemId, token), undefined, token);
 	}
 
-	$releaseTypeHierarchy(handle: number, sessionId: string): codemavi {
+	$releaseTypeHierarchy(handle: number, sessionId: string): void {
 		this._withAdapter(handle, TypeHierarchyAdapter, adapter => Promise.resolve(adapter.releaseSession(sessionId)), undefined, undefined);
 	}
 
@@ -2958,7 +2958,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, DocumentDropEditAdapter, adapter => adapter.resolveDropEdit(id, token), {}, undefined);
 	}
 
-	$releaseDocumentOnDropEdits(handle: number, cacheId: number): codemavi {
+	$releaseDocumentOnDropEdits(handle: number, cacheId: number): void {
 		this._withAdapter(handle, DocumentDropEditAdapter, adapter => Promise.resolve(adapter.releaseDropEdits(cacheId)), undefined, undefined);
 	}
 
@@ -2990,7 +2990,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._withAdapter(handle, DocumentPasteEditProvider, adapter => adapter.resolvePasteEdit(id, token), {}, undefined);
 	}
 
-	$releasePasteEdits(handle: number, cacheId: number): codemavi {
+	$releasePasteEdits(handle: number, cacheId: number): void {
 		this._withAdapter(handle, DocumentPasteEditProvider, adapter => Promise.resolve(adapter.releasePasteEdits(cacheId)), undefined, undefined);
 	}
 
@@ -3078,7 +3078,7 @@ export class ExtHostLanguageFeatures implements extHostProtocol.ExtHostLanguageF
 		return this._createDisposable(handle);
 	}
 
-	$setWordDefinitions(wordDefinitions: extHostProtocol.ILanguageWordDefinitionDto[]): codemavi {
+	$setWordDefinitions(wordDefinitions: extHostProtocol.ILanguageWordDefinitionDto[]): void {
 		for (const wordDefinition of wordDefinitions) {
 			this._documents.setWordDefinitionFor(wordDefinition.languageId, new RegExp(wordDefinition.regexSource, wordDefinition.regexFlags));
 		}

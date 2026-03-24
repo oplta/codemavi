@@ -83,7 +83,7 @@ export function getOccurrencesAcrossMultipleModels(registry: LanguageFeatureRegi
 interface IOccurenceAtPositionRequest {
 	readonly result: Promise<ResourceMap<DocumentHighlight[]>>;
 	isValid(model: ITextModel, selection: Selection, decorations: IEditorDecorationsCollection): boolean;
-	cancel(): codemavi;
+	cancel(): void;
 }
 
 interface IWordHighlighterQuery {
@@ -143,7 +143,7 @@ abstract class OccurenceAtPositionRequest implements IOccurenceAtPositionRequest
 		return requestIsValid;
 	}
 
-	public cancel(): codemavi {
+	public cancel(): void {
 		this.result.cancel();
 	}
 }
@@ -230,7 +230,7 @@ class WordHighlighter {
 	private readonly _hasWordHighlights: IContextKey<boolean>;
 	private _ignorePositionChangeEvent: boolean;
 
-	private readonly runDelayer: Delayer<codemavi> = this.toUnhook.add(new Delayer<codemavi>(50));
+	private readonly runDelayer: Delayer<void> = this.toUnhook.add(new Delayer<void>(50));
 
 	private static storedDecorationIDs: ResourceMap<string[]> = new ResourceMap();
 	private static query: IWordHighlighterQuery | null = null;
@@ -358,7 +358,7 @@ class WordHighlighter {
 		return (this.decorations.length > 0);
 	}
 
-	public restore(delay: number): codemavi {
+	public restore(delay: number): void {
 		if (this.occurrencesHighlightEnablement === 'off') {
 			return;
 		}
@@ -372,7 +372,7 @@ class WordHighlighter {
 		this._run(false, 0); // immediate rendering (delay = 0)
 	}
 
-	public stop(): codemavi {
+	public stop(): void {
 		if (this.occurrencesHighlightEnablement === 'off') {
 			return;
 		}
@@ -425,7 +425,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _removeSingleDecorations(): codemavi {
+	private _removeSingleDecorations(): void {
 		// return if no model
 		if (!this.editor.hasModel()) {
 			return;
@@ -445,7 +445,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _removeAllDecorations(preservedModel?: URI): codemavi {
+	private _removeAllDecorations(preservedModel?: URI): void {
 		const currentEditors = this.codeEditorService.listCodeEditors();
 		const deleteURI = [];
 		// iterate over editors and store models in currentModels
@@ -479,7 +479,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _stopSingular(): codemavi {
+	private _stopSingular(): void {
 		// Remove any existing decorations + a possible query, and re - run to update decorations
 		this._removeSingleDecorations();
 
@@ -513,7 +513,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _stopAll(preservedModel?: URI): codemavi {
+	private _stopAll(preservedModel?: URI): void {
 		// Remove any existing decorations
 		// TODO: @Yoyokrazy -- this triggers as notebooks scroll, causing highlights to disappear momentarily.
 		// maybe a nb type check?
@@ -538,7 +538,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _onPositionChanged(e: ICursorPositionChangedEvent): codemavi {
+	private _onPositionChanged(e: ICursorPositionChangedEvent): void {
 
 		// disabled
 		if (this.occurrencesHighlightEnablement === 'off') {
@@ -631,7 +631,7 @@ class WordHighlighter {
 		return currentModels;
 	}
 
-	private async _run(multiFileConfigChange?: boolean, delay?: number): Promise<codemavi> {
+	private async _run(multiFileConfigChange?: boolean, delay?: number): Promise<void> {
 
 		const hasTextFocus = this.editor.hasTextFocus();
 		if (!hasTextFocus) { // new nb cell scrolled in, didChangeModel fires
@@ -755,7 +755,7 @@ class WordHighlighter {
 		}
 	}
 
-	private _beginRenderDecorations(delay: number): codemavi {
+	private _beginRenderDecorations(delay: number): void {
 		const currentTime = (new Date()).getTime();
 		const minimumRenderTime = this.lastCursorPositionChangeTime + delay;
 
@@ -771,7 +771,7 @@ class WordHighlighter {
 		}
 	}
 
-	private renderDecorations(): codemavi {
+	private renderDecorations(): void {
 		this.renderDecorationsTimer = -1;
 		// create new loop, iterate over current editors using this.codeEditorService.listCodeEditors(),
 		// if the URI of that codeEditor is in the map, then add the decorations to the decorations array
@@ -817,7 +817,7 @@ class WordHighlighter {
 		this.workerRequest = null;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._stopSingular();
 		this.toUnhook.dispose();
 	}
@@ -882,7 +882,7 @@ export class WordHighlighterContribution extends Disposable implements IEditorCo
 		this._wordHighlighter?.moveBack();
 	}
 
-	public restoreViewState(state: boolean | undefined): codemavi {
+	public restoreViewState(state: boolean | undefined): void {
 		if (this._wordHighlighter && state) {
 			this._wordHighlighter.restore(250); // 250 ms delay to restoring view state, since only exts call this
 		}
@@ -892,7 +892,7 @@ export class WordHighlighterContribution extends Disposable implements IEditorCo
 		this._wordHighlighter?.stop();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._wordHighlighter) {
 			this._wordHighlighter.dispose();
 			this._wordHighlighter = null;
@@ -911,7 +911,7 @@ class WordHighlightNavigationAction extends EditorAction {
 		this._isNext = next;
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const controller = WordHighlighterContribution.get(editor);
 		if (!controller) {
 			return;
@@ -969,7 +969,7 @@ class TriggerWordHighlightAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		const controller = WordHighlighterContribution.get(editor);
 		if (!controller) {
 			return;

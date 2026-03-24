@@ -114,12 +114,12 @@ export interface RepositoryState {
 	readonly indexChanges: Change[];
 	readonly workingTreeChanges: Change[];
 
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 }
 
 export interface RepositoryUIState {
 	readonly selected: boolean;
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 }
 
 /**
@@ -187,11 +187,11 @@ export interface Repository {
 	show(ref: string, path: string): Promise<string>;
 	getCommit(ref: string): Promise<Commit>;
 
-	add(paths: string[]): Promise<codemavi>;
-	revert(paths: string[]): Promise<codemavi>;
-	clean(paths: string[]): Promise<codemavi>;
+	add(paths: string[]): Promise<void>;
+	revert(paths: string[]): Promise<void>;
+	clean(paths: string[]): Promise<void>;
 
-	apply(patch: string, reverse?: boolean): Promise<codemavi>;
+	apply(patch: string, reverse?: boolean): Promise<void>;
 	diff(cached?: boolean): Promise<string>;
 	diffWithHEAD(): Promise<Change[]>;
 	diffWithHEAD(path: string): Promise<string>;
@@ -207,33 +207,33 @@ export interface Repository {
 
 	hashObject(data: string): Promise<string>;
 
-	createBranch(name: string, checkout: boolean, ref?: string): Promise<codemavi>;
-	deleteBranch(name: string, force?: boolean): Promise<codemavi>;
+	createBranch(name: string, checkout: boolean, ref?: string): Promise<void>;
+	deleteBranch(name: string, force?: boolean): Promise<void>;
 	getBranch(name: string): Promise<Branch>;
 	getBranches(query: BranchQuery): Promise<Ref[]>;
-	setBranchUpstream(name: string, upstream: string): Promise<codemavi>;
+	setBranchUpstream(name: string, upstream: string): Promise<void>;
 
 	getMergeBase(ref1: string, ref2: string): Promise<string>;
 
-	tag(name: string, upstream: string): Promise<codemavi>;
-	deleteTag(name: string): Promise<codemavi>;
+	tag(name: string, upstream: string): Promise<void>;
+	deleteTag(name: string): Promise<void>;
 
-	status(): Promise<codemavi>;
-	checkout(treeish: string): Promise<codemavi>;
+	status(): Promise<void>;
+	checkout(treeish: string): Promise<void>;
 
-	addRemote(name: string, url: string): Promise<codemavi>;
-	removeRemote(name: string): Promise<codemavi>;
-	renameRemote(name: string, newName: string): Promise<codemavi>;
+	addRemote(name: string, url: string): Promise<void>;
+	removeRemote(name: string): Promise<void>;
+	renameRemote(name: string, newName: string): Promise<void>;
 
-	fetch(options?: FetchOptions): Promise<codemavi>;
-	fetch(remote?: string, ref?: string, depth?: number): Promise<codemavi>;
-	pull(unshallow?: boolean): Promise<codemavi>;
-	push(remoteName?: string, branchName?: string, setUpstream?: boolean, force?: ForcePushMode): Promise<codemavi>;
+	fetch(options?: FetchOptions): Promise<void>;
+	fetch(remote?: string, ref?: string, depth?: number): Promise<void>;
+	pull(unshallow?: boolean): Promise<void>;
+	push(remoteName?: string, branchName?: string, setUpstream?: boolean, force?: ForcePushMode): Promise<void>;
 
 	blame(path: string): Promise<string>;
 	log(options?: LogOptions): Promise<Commit[]>;
 
-	commit(message: string, opts?: CommitOptions): Promise<codemavi>;
+	commit(message: string, opts?: CommitOptions): Promise<void>;
 }
 
 export interface RemoteSource {
@@ -248,13 +248,13 @@ export interface RemoteSourceProvider {
 	readonly supportsQuery?: boolean;
 	getRemoteSources(query?: string): ProviderResult<RemoteSource[]>;
 	getBranches?(url: string): ProviderResult<string[]>;
-	publishRepository?(repository: Repository): Promise<codemavi>;
+	publishRepository?(repository: Repository): Promise<void>;
 }
 
 export interface RemoteSourcePublisher {
 	readonly name: string;
 	readonly icon?: string; // codicon name
-	publishRepository(repository: Repository): Promise<codemavi>;
+	publishRepository(repository: Repository): Promise<void>;
 }
 
 export interface Credentials {

@@ -23,7 +23,7 @@ export class ReadOnlyMessageController extends Disposable implements IEditorCont
 		this._register(this.editor.onDidAttemptReadOnlyEdit(() => this._onDidAttemptReadOnlyEdit()));
 	}
 
-	private _onDidAttemptReadOnlyEdit(): codemavi {
+	private _onDidAttemptReadOnlyEdit(): void {
 		const messageController = MessageController.get(this.editor);
 		if (messageController && this.editor.hasModel()) {
 			let message = this.editor.getOptions().get(EditorOption.readOnlyMessage);

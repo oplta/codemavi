@@ -77,7 +77,7 @@ export abstract class FilterViewPaneContainer extends ViewPaneContainer {
 
 	protected abstract getFilterOn(viewDescriptor: IViewDescriptor): string | undefined;
 
-	protected abstract setFilter(viewDescriptor: IViewDescriptor): codemavi;
+	protected abstract setFilter(viewDescriptor: IViewDescriptor): void;
 
 	private onFilterChanged(newFilterValue: string[]) {
 		if (this.allViews.size === 0) {

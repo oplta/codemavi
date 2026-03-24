@@ -50,7 +50,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('issue #134942: Equals in comparator expressions', () => {
-		function testEquals(expr: ContextKeyExpression | undefined, str: string): codemavi {
+		function testEquals(expr: ContextKeyExpression | undefined, str: string): void {
 			const deserialized = ContextKeyExpr.deserialize(str);
 			assert.ok(expr);
 			assert.ok(deserialized);
@@ -81,12 +81,12 @@ suite('ContextKeyExpr', () => {
 			'c': '5',
 			'd': 'd'
 		});
-		function testExpression(expr: string, expected: boolean): codemavi {
+		function testExpression(expr: string, expected: boolean): void {
 			// console.log(expr + ' ' + expected);
 			const rules = ContextKeyExpr.deserialize(expr);
 			assert.strictEqual(rules!.evaluate(context), expected, expr);
 		}
-		function testBatch(expr: string, value: any): codemavi {
+		function testBatch(expr: string, value: any): void {
 			/* eslint-disable eqeqeq */
 			testExpression(expr, !!value);
 			testExpression(expr + ' == true', !!value);
@@ -123,7 +123,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('negate', () => {
-		function testNegate(expr: string, expected: string): codemavi {
+		function testNegate(expr: string, expected: string): void {
 			const actual = ContextKeyExpr.deserialize(expr)!.negate().serialize();
 			assert.strictEqual(actual, expected);
 		}
@@ -137,7 +137,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('false, true', () => {
-		function testNormalize(expr: string, expected: string): codemavi {
+		function testNormalize(expr: string, expected: string): void {
 			const actual = ContextKeyExpr.deserialize(expr)!.serialize();
 			assert.strictEqual(actual, expected);
 		}
@@ -155,7 +155,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('issue #101015: distribute OR', () => {
-		function t(expr1: string, expr2: string, expected: string | undefined): codemavi {
+		function t(expr1: string, expr2: string, expected: string | undefined): void {
 			const e1 = ContextKeyExpr.deserialize(expr1);
 			const e2 = ContextKeyExpr.deserialize(expr2);
 			const actual = ContextKeyExpr.and(e1, e2)?.serialize();
@@ -298,7 +298,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('Greater, GreaterEquals, Smaller, SmallerEquals evaluate', () => {
-		function checkEvaluate(expr: string, ctx: any, expected: any): codemavi {
+		function checkEvaluate(expr: string, ctx: any, expected: any): void {
 			const _expr = ContextKeyExpr.deserialize(expr)!;
 			assert.strictEqual(_expr.evaluate(createContext(ctx)), expected);
 		}
@@ -343,7 +343,7 @@ suite('ContextKeyExpr', () => {
 	});
 
 	test('Greater, GreaterEquals, Smaller, SmallerEquals negate', () => {
-		function checkNegate(expr: string, expected: string): codemavi {
+		function checkNegate(expr: string, expected: string): void {
 			const a = ContextKeyExpr.deserialize(expr)!;
 			const b = a.negate();
 			assert.strictEqual(b.serialize(), expected);

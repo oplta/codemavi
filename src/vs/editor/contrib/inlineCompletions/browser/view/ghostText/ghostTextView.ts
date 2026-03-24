@@ -418,12 +418,12 @@ export class AdditionalLinesWidget extends Disposable {
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this.clear();
 	}
 
-	private clear(): codemavi {
+	private clear(): void {
 		this._viewZoneListener.clear();
 
 		this._editor.changeViewZones((changeAccessor) => {
@@ -431,7 +431,7 @@ export class AdditionalLinesWidget extends Disposable {
 		});
 	}
 
-	private updateLines(lineNumber: number, additionalLines: LineData[], minReservedLineCount: number): codemavi {
+	private updateLines(lineNumber: number, additionalLines: LineData[], minReservedLineCount: number): void {
 		const textModel = this._editor.getModel();
 		if (!textModel) {
 			return;
@@ -467,14 +467,14 @@ export class AdditionalLinesWidget extends Disposable {
 		});
 	}
 
-	private addViewZone(changeAccessor: IViewZoneChangeAccessor, afterLineNumber: number, heightInLines: number, domNode: HTMLElement): codemavi {
+	private addViewZone(changeAccessor: IViewZoneChangeAccessor, afterLineNumber: number, heightInLines: number, domNode: HTMLElement): void {
 		const id = changeAccessor.addZone({
 			afterLineNumber: afterLineNumber,
 			heightInLines: heightInLines,
 			domNode,
 			afterColumnAffinity: PositionAffinity.Right,
 			onComputedHeight: (height: number) => {
-				this._viewZoneHeight.set(height, undefined); // TODO: can a transaction be used to acodemavi flickering?
+				this._viewZoneHeight.set(height, undefined); // TODO: can a transaction be used to avoid flickering?
 			}
 		});
 
@@ -483,7 +483,7 @@ export class AdditionalLinesWidget extends Disposable {
 		this._viewZoneInfo = { viewZoneId: id, heightInLines, lineNumber: afterLineNumber };
 	}
 
-	private removeActiveViewZone(changeAccessor: IViewZoneChangeAccessor): codemavi {
+	private removeActiveViewZone(changeAccessor: IViewZoneChangeAccessor): void {
 		if (this._viewZoneInfo) {
 			changeAccessor.removeZone(this._viewZoneInfo.viewZoneId);
 
@@ -496,7 +496,7 @@ export class AdditionalLinesWidget extends Disposable {
 		}
 	}
 
-	private keepCursorStable(lineNumber: number, heightInLines: number): codemavi {
+	private keepCursorStable(lineNumber: number, heightInLines: number): void {
 		if (!this._shouldKeepCursorStable) {
 			return;
 		}
@@ -517,10 +517,10 @@ export interface LineData {
 	decorations: LineDecoration[];
 }
 
-function renderLines(domNode: HTMLElement, tabSize: number, lines: LineData[], opts: IComputedEditorOptions, isClickable: boolean): codemavi {
+function renderLines(domNode: HTMLElement, tabSize: number, lines: LineData[], opts: IComputedEditorOptions, isClickable: boolean): void {
 	const disableMonospaceOptimizations = opts.get(EditorOption.disableMonospaceOptimizations);
 	const stopRenderingLineAfter = opts.get(EditorOption.stopRenderingLineAfter);
-	// To acodemavi visual confusion, we don't want to render visible whitespace
+	// To avoid visual confusion, we don't want to render visible whitespace
 	const renderWhitespace = 'none';
 	const renderControlCharacters = opts.get(EditorOption.renderControlCharacters);
 	const fontLigatures = opts.get(EditorOption.fontLigatures);

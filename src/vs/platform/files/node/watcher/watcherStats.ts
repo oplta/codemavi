@@ -170,7 +170,7 @@ function isUniversalWatchRequest(obj: unknown): obj is IUniversalWatchRequest {
 	return typeof candidate?.path === 'string';
 }
 
-function fillRequestStats(lines: string[], request: IUniversalWatchRequest, watcher: ParcelWatcher | NodeJSWatcher): codemavi {
+function fillRequestStats(lines: string[], request: IUniversalWatchRequest, watcher: ParcelWatcher | NodeJSWatcher): void {
 	const decorations = [];
 	const suspended = watcher.isSuspended(request);
 	if (suspended !== false) {
@@ -188,7 +188,7 @@ function requestDetailsToString(request: IUniversalWatchRequest): string {
 	return `excludes: ${request.excludes.length > 0 ? request.excludes : '<none>'}, includes: ${request.includes && request.includes.length > 0 ? JSON.stringify(request.includes) : '<all>'}, filter: ${requestFilterToString(request.filter)}, correlationId: ${typeof request.correlationId === 'number' ? request.correlationId : '<none>'}`;
 }
 
-function fillRecursiveWatcherStats(lines: string[], recursiveWatcher: ParcelWatcher): codemavi {
+function fillRecursiveWatcherStats(lines: string[], recursiveWatcher: ParcelWatcher): void {
 	const watchers = sortByPathPrefix(Array.from(recursiveWatcher.watchers));
 
 	const { active, failed, stopped } = computeRecursiveWatchStatus(recursiveWatcher);
@@ -212,7 +212,7 @@ function fillRecursiveWatcherStats(lines: string[], recursiveWatcher: ParcelWatc
 	}
 }
 
-function fillNonRecursiveWatcherStats(lines: string[], nonRecursiveWatcher: NodeJSWatcher): codemavi {
+function fillNonRecursiveWatcherStats(lines: string[], nonRecursiveWatcher: NodeJSWatcher): void {
 	const allWatchers = sortByPathPrefix(Array.from(nonRecursiveWatcher.watchers));
 	const activeWatchers = allWatchers.filter(watcher => !watcher.instance.failed && !watcher.instance.isReusingRecursiveWatcher);
 	const failedWatchers = allWatchers.filter(watcher => watcher.instance.failed);

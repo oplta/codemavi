@@ -77,7 +77,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		this._register(lifecycleService.onWillShutdown(() => this._disposeAllDecorations()));
 	}
 
-	private _createCapabilityDisposables(c: TerminalCapability): codemavi {
+	private _createCapabilityDisposables(c: TerminalCapability): void {
 		const store = new DisposableStore();
 		const capability = this._capabilities.get(c);
 		if (!capability || this._capabilityDisposables.has(c)) {
@@ -98,7 +98,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		this._capabilityDisposables.set(c, store);
 	}
 
-	private _removeCapabilityDisposables(c: TerminalCapability): codemavi {
+	private _removeCapabilityDisposables(c: TerminalCapability): void {
 		this._capabilityDisposables.deleteAndDispose(c);
 	}
 
@@ -112,7 +112,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		return this.registerCommandDecoration(undefined, undefined, mark);
 	}
 
-	private _updateDecorationVisibility(): codemavi {
+	private _updateDecorationVisibility(): void {
 		const showDecorations = this._configurationService.getValue(TerminalSettingId.ShellIntegrationDecorationsEnabled);
 		this._showGutterDecorations = (showDecorations === 'both' || showDecorations === 'gutter');
 		this._showOverviewRulerDecorations = (showDecorations === 'both' || showDecorations === 'overviewRuler');
@@ -127,7 +127,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}
 	}
 
-	private _disposeAllDecorations(): codemavi {
+	private _disposeAllDecorations(): void {
 		this._placeholderDecoration?.dispose();
 		for (const value of this._decorations.values()) {
 			value.decoration.dispose();
@@ -135,7 +135,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}
 	}
 
-	private _updateGutterDecorationVisibility(): codemavi {
+	private _updateGutterDecorationVisibility(): void {
 		const commandDecorationElements = this._terminal?.element?.querySelectorAll(DecorationSelector.CommandDecoration);
 		if (commandDecorationElements) {
 			for (const commandDecorationElement of commandDecorationElements) {
@@ -144,7 +144,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}
 	}
 
-	private _updateCommandDecorationVisibility(commandDecorationElement: Element): codemavi {
+	private _updateCommandDecorationVisibility(commandDecorationElement: Element): void {
 		if (this._showGutterDecorations) {
 			commandDecorationElement.classList.remove(DecorationSelector.Hide);
 		} else {
@@ -152,14 +152,14 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}
 	}
 
-	public refreshLayouts(): codemavi {
+	public refreshLayouts(): void {
 		updateLayout(this._configurationService, this._placeholderDecoration?.element);
 		for (const decoration of this._decorations) {
 			updateLayout(this._configurationService, decoration[1].decoration.element);
 		}
 	}
 
-	private _refreshStyles(refreshOverviewRulerColors?: boolean): codemavi {
+	private _refreshStyles(refreshOverviewRulerColors?: boolean): void {
 		if (refreshOverviewRulerColors) {
 			for (const decoration of this._decorations.values()) {
 				const color = this._getDecorationCssColor(decoration)?.toString() ?? '';
@@ -176,26 +176,26 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}
 	}
 
-	private _dispose(): codemavi {
+	private _dispose(): void {
 		for (const disposable of this._capabilityDisposables.values()) {
 			dispose(disposable);
 		}
 		this.clearDecorations();
 	}
 
-	private _clearPlaceholder(): codemavi {
+	private _clearPlaceholder(): void {
 		this._placeholderDecoration?.dispose();
 		this._placeholderDecoration = undefined;
 	}
 
-	public clearDecorations(): codemavi {
+	public clearDecorations(): void {
 		this._placeholderDecoration?.marker.dispose();
 		this._clearPlaceholder();
 		this._disposeAllDecorations();
 		this._decorations.clear();
 	}
 
-	private _attachToCommandCapability(): codemavi {
+	private _attachToCommandCapability(): void {
 		if (this._capabilities.has(TerminalCapability.CommandDetection)) {
 			const capability = this._capabilities.get(TerminalCapability.CommandDetection)!;
 			const disposables = this._getCommandDetectionListeners(capability);
@@ -253,7 +253,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		return commandDetectionListeners;
 	}
 
-	activate(terminal: Terminal): codemavi {
+	activate(terminal: Terminal): void {
 		this._terminal = terminal;
 		this._attachToCommandCapability();
 	}
@@ -338,7 +338,7 @@ export class DecorationAddon extends Disposable implements ITerminalAddon, IDeco
 		}));
 	}
 
-	private _updateClasses(element?: HTMLElement, exitCode?: number, markProperties?: IMarkProperties): codemavi {
+	private _updateClasses(element?: HTMLElement, exitCode?: number, markProperties?: IMarkProperties): void {
 		if (!element) {
 			return;
 		}

@@ -10,8 +10,8 @@ type MessageEvent = {
 };
 
 declare const globalThis: {
-	postMessage: (message: any) => codemavi;
-	onmessage: (event: MessageEvent) => codemavi;
+	postMessage: (message: any) => void;
+	onmessage: (event: MessageEvent) => void;
 };
 
 let initialized = false;

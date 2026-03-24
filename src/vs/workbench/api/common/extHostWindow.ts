@@ -61,7 +61,7 @@ export class ExtHostWindow implements ExtHostWindowShape {
 		return this._nativeHandle;
 	}
 
-	$onDidChangeActiveNativeWindowHandle(handle: string | undefined): codemavi {
+	$onDidChangeActiveNativeWindowHandle(handle: string | undefined): void {
 		this._nativeHandle = handle ? decodeBase64(handle).buffer : undefined;
 	}
 
@@ -73,7 +73,7 @@ export class ExtHostWindow implements ExtHostWindowShape {
 		this.onDidChangeWindowProperty('active', value);
 	}
 
-	onDidChangeWindowProperty(property: keyof WindowState, value: boolean): codemavi {
+	onDidChangeWindowProperty(property: keyof WindowState, value: boolean): void {
 		if (value === this._state[property]) {
 			return;
 		}

@@ -29,13 +29,13 @@ export class SuggestWidgetAdaptor extends Disposable {
 	public get selectedItem(): SuggestItemInfo | undefined {
 		return this._currentSuggestItemInfo;
 	}
-	private _onDidSelectedItemChange = this._register(new Emitter<codemavi>());
-	public readonly onDidSelectedItemChange: Event<codemavi> = this._onDidSelectedItemChange.event;
+	private _onDidSelectedItemChange = this._register(new Emitter<void>());
+	public readonly onDidSelectedItemChange: Event<void> = this._onDidSelectedItemChange.event;
 
 	constructor(
 		private readonly editor: ICodeEditor,
 		private readonly suggestControllerPreselector: () => SingleTextEdit | undefined,
-		private readonly onWillAccept: (item: SuggestItemInfo) => codemavi,
+		private readonly onWillAccept: (item: SuggestItemInfo) => void,
 	) {
 		super();
 
@@ -132,7 +132,7 @@ export class SuggestWidgetAdaptor extends Disposable {
 		this.update(this._isActive);
 	}
 
-	private update(newActive: boolean): codemavi {
+	private update(newActive: boolean): void {
 		const newInlineCompletion = this.getSuggestItemInfo();
 
 		if (this._isActive !== newActive || !suggestItemInfoEquals(this._currentSuggestItemInfo, newInlineCompletion)) {
@@ -166,12 +166,12 @@ export class SuggestWidgetAdaptor extends Disposable {
 		);
 	}
 
-	public stopForceRenderingAbove(): codemavi {
+	public stopForceRenderingAbove(): void {
 		const suggestController = SuggestController.get(this.editor);
 		suggestController?.stopForceRenderingAbove();
 	}
 
-	public forceRenderingAbove(): codemavi {
+	public forceRenderingAbove(): void {
 		const suggestController = SuggestController.get(this.editor);
 		suggestController?.forceRenderingAbove();
 	}
@@ -259,17 +259,17 @@ export class ObservableSuggestWidgetAdapter extends Disposable {
 	constructor(
 		private readonly _editorObs: ObservableCodeEditor,
 
-		private readonly _handleSuggestAccepted: (item: SuggestItemInfo) => codemavi,
+		private readonly _handleSuggestAccepted: (item: SuggestItemInfo) => void,
 		private readonly _suggestControllerPreselector: () => SingleTextEdit | undefined,
 	) {
 		super();
 	}
 
-	public stopForceRenderingAbove(): codemavi {
+	public stopForceRenderingAbove(): void {
 		this._suggestWidgetAdaptor.stopForceRenderingAbove();
 	}
 
-	public forceRenderingAbove(): codemavi {
+	public forceRenderingAbove(): void {
 		this._suggestWidgetAdaptor.forceRenderingAbove();
 	}
 }

@@ -27,7 +27,7 @@ export class MainProcessService implements IMainProcessService {
 		return this.server.getChannel(channelName, this.router);
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<string>): codemavi {
+	registerChannel(channelName: string, channel: IServerChannel<string>): void {
 		this.server.registerChannel(channelName, channel);
 	}
 }

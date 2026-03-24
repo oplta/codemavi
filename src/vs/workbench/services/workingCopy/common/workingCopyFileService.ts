@@ -81,7 +81,7 @@ export interface IWorkingCopyFileOperationParticipant {
 		undoInfo: IFileOperationUndoRedoInfo | undefined,
 		timeout: number,
 		token: CancellationToken
-	): Promise<codemavi>;
+	): Promise<void>;
 }
 
 export interface IStoredFileWorkingCopySaveParticipantContext {
@@ -116,7 +116,7 @@ export interface IStoredFileWorkingCopySaveParticipant {
 		context: IStoredFileWorkingCopySaveParticipantContext,
 		progress: IProgress<IProgressStep>,
 		token: CancellationToken
-	): Promise<codemavi>;
+	): Promise<void>;
 }
 
 export interface ICreateOperation {
@@ -212,7 +212,7 @@ export interface IWorkingCopyFileService {
 	/**
 	 * Runs all available save participants for stored file working copies.
 	 */
-	runSaveParticipants(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi>;
+	runSaveParticipants(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void>;
 
 	//#endregion
 
@@ -263,7 +263,7 @@ export interface IWorkingCopyFileService {
 	 * Working copy owners can listen to the `onWillRunWorkingCopyFileOperation` and
 	 * `onDidRunWorkingCopyFileOperation` events to participate.
 	 */
-	delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<codemavi>;
+	delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<void>;
 
 	//#endregion
 
@@ -446,7 +446,7 @@ export class WorkingCopyFileService extends Disposable implements IWorkingCopyFi
 		return stats;
 	}
 
-	async delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<codemavi> {
+	async delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<void> {
 
 		// validate delete operation before starting
 		for (const operation of operations) {
@@ -500,7 +500,7 @@ export class WorkingCopyFileService extends Disposable implements IWorkingCopyFi
 		return this.fileOperationParticipants.addFileOperationParticipant(participant);
 	}
 
-	private runFileOperationParticipants(files: SourceTargetPair[], operation: FileOperation, undoInfo: IFileOperationUndoRedoInfo | undefined, token: CancellationToken): Promise<codemavi> {
+	private runFileOperationParticipants(files: SourceTargetPair[], operation: FileOperation, undoInfo: IFileOperationUndoRedoInfo | undefined, token: CancellationToken): Promise<void> {
 		return this.fileOperationParticipants.participate(files, operation, undoInfo, token);
 	}
 
@@ -516,7 +516,7 @@ export class WorkingCopyFileService extends Disposable implements IWorkingCopyFi
 		return this.saveParticipants.addSaveParticipant(participant);
 	}
 
-	runSaveParticipants(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	runSaveParticipants(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 		return this.saveParticipants.participate(workingCopy, context, progress, token);
 	}
 

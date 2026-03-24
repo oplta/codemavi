@@ -25,7 +25,7 @@ export class WorkspaceRecommendations extends ExtensionRecommendations {
 	private _recommendations: ExtensionRecommendation[] = [];
 	get recommendations(): ReadonlyArray<ExtensionRecommendation> { return this._recommendations; }
 
-	private _onDidChangeRecommendations = this._register(new Emitter<codemavi>());
+	private _onDidChangeRecommendations = this._register(new Emitter<void>());
 	readonly onDidChangeRecommendations = this._onDidChangeRecommendations.event;
 
 	private _ignoredRecommendations: string[] = [];
@@ -46,7 +46,7 @@ export class WorkspaceRecommendations extends ExtensionRecommendations {
 		this.onDidChangeWorkspaceExtensionsScheduler = this._register(new RunOnceScheduler(() => this.onDidChangeWorkspaceExtensionsFolders(), 1000));
 	}
 
-	protected async doActivate(): Promise<codemavi> {
+	protected async doActivate(): Promise<void> {
 		this.workspaceExtensions = await this.fetchWorkspaceExtensions();
 		await this.fetch();
 
@@ -66,7 +66,7 @@ export class WorkspaceRecommendations extends ExtensionRecommendations {
 		}));
 	}
 
-	private async onDidChangeWorkspaceExtensionsFolders(): Promise<codemavi> {
+	private async onDidChangeWorkspaceExtensionsFolders(): Promise<void> {
 		const existing = this.workspaceExtensions;
 		this.workspaceExtensions = await this.fetchWorkspaceExtensions();
 		if (!equals(existing, this.workspaceExtensions, (a, b) => this.uriIdentityService.extUri.isEqual(a, b))) {
@@ -100,7 +100,7 @@ export class WorkspaceRecommendations extends ExtensionRecommendations {
 	/**
 	 * Parse all extensions.json files, fetch workspace recommendations, filter out invalid and unwanted ones
 	 */
-	private async fetch(): Promise<codemavi> {
+	private async fetch(): Promise<void> {
 
 		const extensionsConfigs = await this.workspaceExtensionsConfigService.getExtensionsConfigs();
 
@@ -166,7 +166,7 @@ export class WorkspaceRecommendations extends ExtensionRecommendations {
 		return { validRecommendations: validExtensions, invalidRecommendations: invalidExtensions, message };
 	}
 
-	private async onDidChangeExtensionsConfigs(): Promise<codemavi> {
+	private async onDidChangeExtensionsConfigs(): Promise<void> {
 		await this.fetch();
 		this._onDidChangeRecommendations.fire();
 	}

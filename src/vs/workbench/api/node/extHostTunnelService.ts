@@ -195,7 +195,7 @@ export class NodeExtHostTunnelService extends ExtHostTunnelService {
 		}
 	}
 
-	override async $registerCandidateFinder(enable: boolean): Promise<codemavi> {
+	override async $registerCandidateFinder(enable: boolean): Promise<void> {
 		if (enable && this._candidateFindingEnabled) {
 			// already enabled
 			return;
@@ -229,7 +229,7 @@ export class NodeExtHostTunnelService extends ExtHostTunnelService {
 			}
 			const delay = this.calculateDelay(movingAverage.value);
 			this.logService.trace(`ForwardedPorts: (ExtHostTunnelService) next candidate port scan in ${delay} ms.`);
-			await (new Promise<codemavi>(resolve => setTimeout(() => resolve(), delay)));
+			await (new Promise<void>(resolve => setTimeout(() => resolve(), delay)));
 		}
 	}
 
@@ -238,7 +238,7 @@ export class NodeExtHostTunnelService extends ExtHostTunnelService {
 		return Math.max(movingAverage * 20, 2000);
 	}
 
-	private async setInitialCandidates(): Promise<codemavi> {
+	private async setInitialCandidates(): Promise<void> {
 		this._initialCandidates = await this.findCandidatePorts();
 		this.logService.trace(`ForwardedPorts: (ExtHostTunnelService) Initial candidates found: ${this._initialCandidates.map(c => c.port).join(', ')}`);
 	}
@@ -350,7 +350,7 @@ export class NodeExtHostTunnelService extends ExtHostTunnelService {
 
 			await t.waitForReady();
 
-			const disposeEmitter = new Emitter<codemavi>();
+			const disposeEmitter = new Emitter<void>();
 
 			return {
 				localAddress: parseAddress(t.localAddress) ?? t.localAddress,
@@ -399,14 +399,14 @@ class ExtHostManagedSocket extends ManagedSocket {
 		super(debugLabel, half);
 	}
 
-	public override write(buffer: VSBuffer): codemavi {
+	public override write(buffer: VSBuffer): void {
 		this.passing.send(buffer.buffer);
 	}
-	protected override closeRemote(): codemavi {
+	protected override closeRemote(): void {
 		this.passing.end();
 	}
 
-	public override async drain(): Promise<codemavi> {
+	public override async drain(): Promise<void> {
 		await this.passing.drain?.();
 	}
 }

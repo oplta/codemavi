@@ -34,17 +34,17 @@ export interface IUntitledTextEditorModel extends ITextEditorModel, ILanguageSup
 	/**
 	 * Emits an event when the encoding of this untitled model changes.
 	 */
-	readonly onDidChangeEncoding: Event<codemavi>;
+	readonly onDidChangeEncoding: Event<void>;
 
 	/**
 	 * Emits an event when the name of this untitled model changes.
 	 */
-	readonly onDidChangeName: Event<codemavi>;
+	readonly onDidChangeName: Event<void>;
 
 	/**
 	 * Emits an event when this untitled model is reverted.
 	 */
-	readonly onDidRevert: Event<codemavi>;
+	readonly onDidRevert: Event<void>;
 
 	/**
 	 * Whether this untitled text model has an associated file path.
@@ -59,12 +59,12 @@ export interface IUntitledTextEditorModel extends ITextEditorModel, ILanguageSup
 	/**
 	 * Sets the encoding to use for this untitled model.
 	 */
-	setEncoding(encoding: string): Promise<codemavi>;
+	setEncoding(encoding: string): Promise<void>;
 
 	/**
 	 * Resolves the untitled model.
 	 */
-	resolve(): Promise<codemavi>;
+	resolve(): Promise<void>;
 }
 
 export class UntitledTextEditorModel extends BaseTextEditorModel implements IUntitledTextEditorModel {
@@ -81,22 +81,22 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 
 	//#region Events
 
-	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeContent = this._register(new Emitter<void>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
-	private readonly _onDidChangeName = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeName = this._register(new Emitter<void>());
 	readonly onDidChangeName = this._onDidChangeName.event;
 
-	private readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeDirty = this._register(new Emitter<void>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
-	private readonly _onDidChangeEncoding = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeEncoding = this._register(new Emitter<void>());
 	readonly onDidChangeEncoding = this._onDidChangeEncoding.event;
 
 	private readonly _onDidSave = this._register(new Emitter<IWorkingCopySaveEvent>());
 	readonly onDidSave = this._onDidSave.event;
 
-	private readonly _onDidRevert = this._register(new Emitter<codemavi>());
+	private readonly _onDidRevert = this._register(new Emitter<void>());
 	readonly onDidRevert = this._onDidRevert.event;
 
 	//#endregion
@@ -161,13 +161,13 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Config Changes
 		this._register(this.textResourceConfigurationService.onDidChangeConfiguration(e => this.onConfigurationChange(e, true)));
 	}
 
-	private onConfigurationChange(e: ITextResourceConfigurationChangeEvent | undefined, fromEvent: boolean): codemavi {
+	private onConfigurationChange(e: ITextResourceConfigurationChangeEvent | undefined, fromEvent: boolean): void {
 
 		// Encoding
 		if (!e || e.affectsConfiguration(this.resource, 'files.encoding')) {
@@ -196,7 +196,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 
 	//#region Language
 
-	override setLanguageId(languageId: string, source?: string): codemavi {
+	override setLanguageId(languageId: string, source?: string): void {
 		const actualLanguage: string | undefined = languageId === UntitledTextEditorModel.ACTIVE_EDITOR_LANGUAGE_ID
 			? this.editorService.activeTextEditorLanguageId
 			: languageId;
@@ -225,7 +225,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		return this.preferredEncoding || this.configuredEncoding;
 	}
 
-	async setEncoding(encoding: string): Promise<codemavi> {
+	async setEncoding(encoding: string): Promise<void> {
 		const oldEncoding = this.getEncoding();
 		this.preferredEncoding = encoding;
 
@@ -249,7 +249,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		return this.isDirty();
 	}
 
-	private setDirty(dirty: boolean): codemavi {
+	private setDirty(dirty: boolean): void {
 		if (this.dirty === dirty) {
 			return;
 		}
@@ -273,7 +273,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		return !!target;
 	}
 
-	async revert(): Promise<codemavi> {
+	async revert(): Promise<void> {
 
 		// Reset contents to be empty
 		this.ignoreDirtyOnModelContentChange = true;
@@ -314,7 +314,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 
 	private ignoreDirtyOnModelContentChange = false;
 
-	override async resolve(): Promise<codemavi> {
+	override async resolve(): Promise<void> {
 
 		// Create text editor model if not yet done
 		let createdUntitledModel = false;
@@ -374,14 +374,14 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		return super.resolve();
 	}
 
-	protected override installModelListeners(model: ITextModel): codemavi {
+	protected override installModelListeners(model: ITextModel): void {
 		this._register(model.onDidChangeContent(e => this.onModelContentChanged(model, e)));
 		this._register(model.onDidChangeLanguage(() => this.onConfigurationChange(undefined, true))); // language change can have impact on config
 
 		super.installModelListeners(model);
 	}
 
-	private onModelContentChanged(textEditorModel: ITextModel, e: IModelContentChangedEvent): codemavi {
+	private onModelContentChanged(textEditorModel: ITextModel, e: IModelContentChangedEvent): void {
 		if (!this.ignoreDirtyOnModelContentChange) {
 
 			// mark the untitled text editor as non-dirty once its content becomes empty and we do
@@ -408,7 +408,7 @@ export class UntitledTextEditorModel extends BaseTextEditorModel implements IUnt
 		this.autoDetectLanguage();
 	}
 
-	private updateNameFromFirstLine(textEditorModel: ITextModel): codemavi {
+	private updateNameFromFirstLine(textEditorModel: ITextModel): void {
 		if (this.hasAssociatedFilePath) {
 			return; // not in case of an associated file path
 		}

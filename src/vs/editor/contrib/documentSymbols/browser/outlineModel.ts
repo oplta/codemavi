@@ -29,7 +29,7 @@ export abstract class TreeElement {
 	abstract children: Map<string, TreeElement>;
 	abstract parent: TreeElement | undefined;
 
-	remove(): codemavi {
+	remove(): void {
 		this.parent?.children.delete(this.id);
 	}
 
@@ -136,13 +136,13 @@ export class OutlineGroup extends TreeElement {
 		return undefined;
 	}
 
-	updateMarker(marker: IOutlineMarker[]): codemavi {
+	updateMarker(marker: IOutlineMarker[]): void {
 		for (const [, child] of this.children) {
 			this._updateMarker(marker, child);
 		}
 	}
 
-	private _updateMarker(markers: IOutlineMarker[], item: OutlineElement): codemavi {
+	private _updateMarker(markers: IOutlineMarker[], item: OutlineElement): void {
 		item.marker = undefined;
 
 		// find the proper start index to check for item/marker overlap.
@@ -240,7 +240,7 @@ export class OutlineModel extends TreeElement {
 		});
 	}
 
-	private static _makeOutlineElement(info: DocumentSymbol, container: OutlineGroup | OutlineElement): codemavi {
+	private static _makeOutlineElement(info: DocumentSymbol, container: OutlineGroup | OutlineElement): void {
 		const id = TreeElement.findId(info, container);
 		const res = new OutlineElement(id, container, info);
 		if (info.children) {
@@ -336,7 +336,7 @@ export class OutlineModel extends TreeElement {
 		return TreeElement.getElementById(id, this);
 	}
 
-	updateMarker(marker: IOutlineMarker[]): codemavi {
+	updateMarker(marker: IOutlineMarker[]): void {
 		// sort markers by start range so that we can use
 		// outline element starts for quicker look up
 		marker.sort(Range.compareRangesUsingStarts);
@@ -367,7 +367,7 @@ export class OutlineModel extends TreeElement {
 		);
 	}
 
-	private static _flattenDocumentSymbols(bucket: DocumentSymbol[], entries: DocumentSymbol[], overrideContainerLabel: string): codemavi {
+	private static _flattenDocumentSymbols(bucket: DocumentSymbol[], entries: DocumentSymbol[], overrideContainerLabel: string): void {
 		for (const entry of entries) {
 			bucket.push({
 				kind: entry.kind,
@@ -429,7 +429,7 @@ export class OutlineModelService implements IOutlineModelService {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 

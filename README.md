@@ -51,8 +51,8 @@ Works on the principle of "trust but verify." Checks for lint errors and test re
 
 ```bash
 # Clone the repository
-git clone https://github.com/codemavi/codemavi.git
-cd codemavi
+git clone https://github.com/mavi/mavi.git
+cd mavi
 
 # Install dependencies
 npm install
@@ -74,9 +74,9 @@ npm run watch
 
 2. **Create Project Rules:**
    ```bash
-   echo "# Project Rules" > .codemavi/rules.md
-   echo "- Use TypeScript strict mode" >> .codemavi/rules.md
-   echo "- No 'any' types allowed" >> .codemavi/rules.md
+   echo "# Project Rules" > .mavi/rules.md
+   echo "- Use TypeScript strict mode" >> .mavi/rules.md
+   echo "- No 'any' types allowed" >> .mavi/rules.md
    ```
 
 3. **Try Auto Dev Mode:**
@@ -195,15 +195,15 @@ See our [Contributing Guide](HOW_TO_CONTRIBUTE.md) for detailed instructions.
 - **Solution:** Check your API keys and network connection. Try switching to Ollama for local testing.
 
 **Issue:** "Agent stuck in loop"
-- **Solution:** Check `.codemavi/rules.md` for conflicting rules. Use checkpoint system to rollback.
+- **Solution:** Check `.mavi/rules.md` for conflicting rules. Use checkpoint system to rollback.
 
 **Issue:** "Build errors"
 - **Solution:** Ensure Node.js version is 18+. Clear node_modules and reinstall.
 
 ### Getting Help
 
-- [GitHub Issues](https://github.com/codemavi/codemavi/issues) - Report bugs and request features
-- [Discussions](https://github.com/codemavi/codemavi/discussions) - Ask questions and share ideas
+- [GitHub Issues](https://github.com/mavi/mavi/issues) - Report bugs and request features
+- [Discussions](https://github.com/mavi/mavi/discussions) - Ask questions and share ideas
 - [Documentation](docs/) - Comprehensive guides and references
 
 ## 📄 License

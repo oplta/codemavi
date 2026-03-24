@@ -254,7 +254,7 @@ class Snapper {
 	}
 
 
-	private _enrichResult(result: IToken[], themesResult: IThemesResult): codemavi {
+	private _enrichResult(result: IToken[], themesResult: IThemesResult): void {
 		const index: { [themeName: string]: number } = {};
 		const themeNames = Object.keys(themesResult);
 		for (const themeName of themeNames) {
@@ -278,7 +278,7 @@ class Snapper {
 		}
 	}
 
-	private _moveInjectionCursorToRange(cursor: Parser.TreeCursor, injectionRange: { startIndex: number; endIndex: number }): codemavi {
+	private _moveInjectionCursorToRange(cursor: Parser.TreeCursor, injectionRange: { startIndex: number; endIndex: number }): void {
 		let continueCursor = cursor.gotoFirstChild();
 		// Get into the first "real" child node, as the root nodes can extend outside the range.
 		while (((cursor.startIndex < injectionRange.startIndex) || (cursor.endIndex > injectionRange.endIndex)) && continueCursor) {

@@ -39,9 +39,9 @@ export type ITerminalContributionDescription = { readonly id: string } & (
  * @param canRunInDetachedTerminals Whether the terminal contribution should be run in detecthed
  * terminals. Defaults to false.
  */
-export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: ITerminalContributionContext, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals?: false): codemavi;
-export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: IDetachedCompatibleTerminalContributionContext, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals: true): codemavi;
-export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: any, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals: boolean = false): codemavi {
+export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: ITerminalContributionContext, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals?: false): void;
+export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: IDetachedCompatibleTerminalContributionContext, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals: true): void;
+export function registerTerminalContribution<Services extends BrandedService[]>(id: string, ctor: { new(ctx: any, ...services: Services): ITerminalContribution }, canRunInDetachedTerminals: boolean = false): void {
 	// eslint-disable-next-line local/code-no-dangerous-type-assertions
 	TerminalContributionRegistry.INSTANCE.registerTerminalContribution({ id, ctor, canRunInDetachedTerminals } as ITerminalContributionDescription);
 }
@@ -67,7 +67,7 @@ class TerminalContributionRegistry {
 	constructor() {
 	}
 
-	public registerTerminalContribution(description: ITerminalContributionDescription): codemavi {
+	public registerTerminalContribution(description: ITerminalContributionDescription): void {
 		this._terminalContributions.push(description);
 	}
 

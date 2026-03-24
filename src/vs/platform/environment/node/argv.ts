@@ -9,7 +9,7 @@ import { localize } from '../../../nls.js';
 import { NativeParsedArgs } from '../common/argv.js';
 
 /**
- * This code is also used by standalone cli's. Acodemavi adding any other dependencies.
+ * This code is also used by standalone cli's. Avoid adding any other dependencies.
  */
 const helpCategories = {
 	o: localize('optionsUpperCase', "Options"),
@@ -221,10 +221,10 @@ export const OPTIONS: OptionDescriptions<Required<NativeParsedArgs>> = {
 };
 
 export interface ErrorReporter {
-	onUnknownOption(id: string): codemavi;
-	onMultipleValues(id: string, usedValue: string): codemavi;
-	onEmptyValue(id: string): codemavi;
-	onDeprecatedOption(deprecatedId: string, message: string): codemavi;
+	onUnknownOption(id: string): void;
+	onMultipleValues(id: string, usedValue: string): void;
+	onEmptyValue(id: string): void;
+	onDeprecatedOption(deprecatedId: string, message: string): void;
 
 	getSubcommandReporter?(command: string): ErrorReporter;
 }
@@ -287,7 +287,7 @@ export function parseArgs<T>(args: string[], options: OptionDescriptions<T>, err
 	}
 
 
-	// remove aliases to acodemavi confusion
+	// remove aliases to avoid confusion
 	const parsedArgs = minimist(args, { string: stringOptions, boolean: booleanOptions, alias });
 
 	const cleanedArgs: any = {};

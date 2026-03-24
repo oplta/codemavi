@@ -39,7 +39,7 @@ export class AutoRepliesPtyServiceContribution implements IPtyServiceContributio
 		}
 	}
 
-	handleProcessReady(persistentProcessId: number, process: ITerminalChildProcess): codemavi {
+	handleProcessReady(persistentProcessId: number, process: ITerminalChildProcess): void {
 		this._terminalProcesses.set(persistentProcessId, process);
 		this._autoResponders.set(persistentProcessId, new Map());
 		for (const [match, reply] of this._autoReplies.entries()) {
@@ -47,7 +47,7 @@ export class AutoRepliesPtyServiceContribution implements IPtyServiceContributio
 		}
 	}
 
-	handleProcessDispose(persistentProcessId: number): codemavi {
+	handleProcessDispose(persistentProcessId: number): void {
 		const processAutoResponders = this._autoResponders.get(persistentProcessId);
 		if (processAutoResponders) {
 			for (const e of processAutoResponders.values()) {

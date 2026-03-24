@@ -28,13 +28,13 @@ export interface IExtensionStorageService {
 
 	getExtensionState(extension: IExtension | IGalleryExtension | string, global: boolean): IStringDictionary<any> | undefined;
 	getExtensionStateRaw(extension: IExtension | IGalleryExtension | string, global: boolean): string | undefined;
-	setExtensionState(extension: IExtension | IGalleryExtension | string, state: IStringDictionary<any> | undefined, global: boolean): codemavi;
+	setExtensionState(extension: IExtension | IGalleryExtension | string, state: IStringDictionary<any> | undefined, global: boolean): void;
 
-	readonly onDidChangeExtensionStorageToSync: Event<codemavi>;
-	setKeysForSync(extensionIdWithVersion: IExtensionIdWithVersion, keys: string[]): codemavi;
+	readonly onDidChangeExtensionStorageToSync: Event<void>;
+	setKeysForSync(extensionIdWithVersion: IExtensionIdWithVersion, keys: string[]): void;
 	getKeysForSync(extensionIdWithVersion: IExtensionIdWithVersion): string[] | undefined;
 
-	addToMigrationList(from: string, to: string): codemavi;
+	addToMigrationList(from: string, to: string): void;
 	getSourceExtensionToMigrate(target: string): string | undefined;
 }
 
@@ -59,7 +59,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 	}
 
 	/* TODO @sandy081: This has to be done across all profiles */
-	static async removeOutdatedExtensionVersions(extensionManagementService: IExtensionManagementService, storageService: IStorageService): Promise<codemavi> {
+	static async removeOutdatedExtensionVersions(extensionManagementService: IExtensionManagementService, storageService: IStorageService): Promise<void> {
 		const extensions = await extensionManagementService.getInstalled();
 		const extensionVersionsToRemove: string[] = [];
 		for (const [id, versions] of ExtensionStorageService.readAllExtensionsWithKeysForSync(storageService)) {
@@ -91,7 +91,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 		return extensionsWithKeysForSync;
 	}
 
-	private readonly _onDidChangeExtensionStorageToSync = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeExtensionStorageToSync = this._register(new Emitter<void>());
 	readonly onDidChangeExtensionStorageToSync = this._onDidChangeExtensionStorageToSync.event;
 
 	private readonly extensionsWithKeysForSync: Map<string, string[]>;
@@ -106,7 +106,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 		this._register(this.storageService.onDidChangeValue(StorageScope.PROFILE, undefined, this._store)(e => this.onDidChangeStorageValue(e)));
 	}
 
-	private onDidChangeStorageValue(e: IProfileStorageValueChangeEvent): codemavi {
+	private onDidChangeStorageValue(e: IProfileStorageValueChangeEvent): void {
 
 		// State of extension with keys for sync has changed
 		if (this.extensionsWithKeysForSync.has(e.key.toLowerCase())) {
@@ -167,7 +167,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 		return rawState;
 	}
 
-	setExtensionState(extension: IExtension | IGalleryExtension | string, state: IStringDictionary<any> | undefined, global: boolean): codemavi {
+	setExtensionState(extension: IExtension | IGalleryExtension | string, state: IStringDictionary<any> | undefined, global: boolean): void {
 		const extensionId = this.getExtensionId(extension);
 		if (state === undefined) {
 			this.storageService.remove(extensionId, global ? StorageScope.PROFILE : StorageScope.WORKSPACE);
@@ -176,7 +176,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 		}
 	}
 
-	setKeysForSync(extensionIdWithVersion: IExtensionIdWithVersion, keys: string[]): codemavi {
+	setKeysForSync(extensionIdWithVersion: IExtensionIdWithVersion, keys: string[]): void {
 		this.storageService.store(ExtensionStorageService.toKey(extensionIdWithVersion), JSON.stringify(keys), StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
@@ -190,7 +190,7 @@ export class ExtensionStorageService extends Disposable implements IExtensionSto
 			: (extensionKeysForSyncFromStorage || extensionKeysForSyncFromProduct);
 	}
 
-	addToMigrationList(from: string, to: string): codemavi {
+	addToMigrationList(from: string, to: string): void {
 		if (from !== to) {
 			// remove the duplicates
 			const migrationList: [string, string][] = this.migrationList.filter(entry => !entry.includes(from) && !entry.includes(to));

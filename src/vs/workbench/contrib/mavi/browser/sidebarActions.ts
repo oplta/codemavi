@@ -17,7 +17,7 @@ import { IRange } from '../../../../editor/common/core/range.js';
 import { MAVI_VIEW_CONTAINER_ID, MAVI_VIEW_ID } from './sidebarPane.js';
 import { IMetricsService } from '../common/metricsService.js';
 import { ICommandService } from '../../../../platform/commands/common/commands.js';
-import { MAVI_TOGGLE_SETTINGS_ACTION_ID } from './codemaviSettingsPane.js';
+import { MAVI_TOGGLE_SETTINGS_ACTION_ID } from './maviSettingsPane.js';
 import { MAVI_CTRL_L_ACTION_ID } from './actionIDs.js';
 import { localize2 } from '../../../../nls.js';
 import { IChatThreadService } from './chatThreadService.js';
@@ -61,12 +61,12 @@ export const roundRangeToLines = (range: IRange | null | undefined, options: { e
 
 
 
-const MAVI_OPEN_SIDEBAR_ACTION_ID = 'codemavi.sidebar.open'
+const MAVI_OPEN_SIDEBAR_ACTION_ID = 'mavi.sidebar.open'
 registerAction2(class extends Action2 {
 	constructor() {
-		super({ id: MAVI_OPEN_SIDEBAR_ACTION_ID, title: localize2('codemaviOpenSidebar', 'Code Mavi: Open Sidebar'), f1: true });
+		super({ id: MAVI_OPEN_SIDEBAR_ACTION_ID, title: localize2('maviOpenSidebar', 'Mavi: Open Sidebar'), f1: true });
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewsService = accessor.get(IViewsService)
 		const chatThreadsService = accessor.get(IChatThreadService)
 		viewsService.openViewContainer(MAVI_VIEW_CONTAINER_ID)
@@ -81,14 +81,14 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_CTRL_L_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviCmdL', 'Code Mavi: Add Selection to Chat'),
+			title: localize2('maviCmdL', 'Mavi: Add Selection to Chat'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyCode.KeyL,
-				weight: KeybindingWeight.Code MaviExtension
+				weight: KeybindingWeight.MaviExtension
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		// Get services
 		const commandService = accessor.get(ICommandService)
 		const viewsService = accessor.get(IViewsService)
@@ -144,7 +144,7 @@ registerAction2(class extends Action2 {
 
 
 // New chat keybind + menu button
-const MAVI_CMD_SHIFT_L_ACTION_ID = 'codemavi.cmdShiftL'
+const MAVI_CMD_SHIFT_L_ACTION_ID = 'mavi.cmdShiftL'
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
@@ -152,13 +152,13 @@ registerAction2(class extends Action2 {
 			title: 'New Chat',
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KeyL,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			},
 			icon: { id: 'add' },
 			menu: [{ id: MenuId.ViewTitle, group: 'navigation', when: ContextKeyExpr.equals('view', MAVI_VIEW_ID), }],
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 
 		const metricsService = accessor.get(IMetricsService)
 		const chatThreadsService = accessor.get(IChatThreadService)
@@ -209,13 +209,13 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: 'codemavi.historyAction',
+			id: 'mavi.historyAction',
 			title: 'View Past Chats',
 			icon: { id: 'history' },
 			menu: [{ id: MenuId.ViewTitle, group: 'navigation', when: ContextKeyExpr.equals('view', MAVI_VIEW_ID), }]
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 
 		// do not do anything if there are no messages (without this it clears all of the user's selections if the button is pressed)
 		// TODO the history button should be disabled in this case so we can remove this logic
@@ -239,13 +239,13 @@ registerAction2(class extends Action2 {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: 'codemavi.settingsAction',
-			title: `Code Mavi's Settings`,
+			id: 'mavi.settingsAction',
+			title: `Mavi's Settings`,
 			icon: { id: 'settings-gear' },
 			menu: [{ id: MenuId.ViewTitle, group: 'navigation', when: ContextKeyExpr.equals('view', MAVI_VIEW_ID), }]
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService)
 		commandService.executeCommand(MAVI_TOGGLE_SETTINGS_ACTION_ID)
 	}
@@ -257,7 +257,7 @@ registerAction2(class extends Action2 {
 // export class TabSwitchListener extends Disposable {
 
 // 	constructor(
-// 		onSwitchTab: () => codemavi,
+// 		onSwitchTab: () => void,
 // 		@ICodeEditorService private readonly _editorService: ICodeEditorService,
 // 	) {
 // 		super()

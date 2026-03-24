@@ -1,16 +1,16 @@
 /**
- * Code Mavi - Prompt Inspector and Layer System
+ * Mavi - Prompt Inspector and Layer System
  *
  * Provides transparency into agent prompts by showing the complete prompt
  * that gets sent to LLMs, including all rule layers and context injections.
  */
 
-import { URI } from "../../../../base/common/uri.js";
-import { IFileService } from "../../../../platform/files/common/files.js";
-import { ILogService } from "../../../../platform/log/common/log.js";
-import { Event, Emitter } from "../../../../base/common/event.js";
-import { Disposable } from "../../../../base/common/lifecycle.js";
-import { createDecorator } from "../../../../platform/instantiation/common/instantiation.js";
+import { URI } from "../../../../../../base/common/uri.js";
+import { IFileService } from "../../../../../../platform/files/common/files.js";
+import { ILogService } from "../../../../../../platform/log/common/log.js";
+import { Event, Emitter } from "../../../../../../base/common/event.js";
+import { Disposable } from "../../../../../../base/common/lifecycle.js";
+import { createDecorator } from "../../../../../../platform/instantiation/common/instantiation.js";
 import { IRuleParserService, ParsedRules } from "./rule-parser.js";
 
 export interface PromptLayer {
@@ -332,7 +332,7 @@ export class PromptInspectorService extends Disposable implements IPromptInspect
 	}
 
 	async mergeLayers(layers: PromptLayer[]): Promise<string> {
-		let prompt = '# Code Mavi Agent Prompt\n\n';
+		let prompt = '# Mavi Agent Prompt\n\n';
 		prompt += '*This prompt is automatically assembled from multiple layers*\n\n';
 
 		// Add layer information
@@ -345,7 +345,7 @@ export class PromptInspectorService extends Disposable implements IPromptInspect
 
 		// Add footer
 		prompt += '---\n';
-		prompt += '*Prompt assembled by Code Mavi Prompt Inspector*\n';
+		prompt += '*Prompt assembled by Mavi Prompt Inspector*\n';
 		prompt += `*Total layers: ${layers.length}*\n`;
 
 		return prompt;
@@ -582,9 +582,9 @@ async getLayerTemplates(agentType: string): Promise<PromptLayer[]> {
 		'orchestrator': {
 			name: 'Orchestrator Base Prompt',
 			description: 'Base system prompt for Orchestrator agent',
-			content: `# Code Mavi Orchestrator Agent
+			content: `# Mavi Orchestrator Agent
 
-You are the Orchestrator agent for Code Mavi. Your role is to:
+You are the Orchestrator agent for Mavi. Your role is to:
 1. Analyze user requests and understand requirements
 2. Create detailed execution plans
 3. Delegate tasks to specialized agents
@@ -597,14 +597,14 @@ You are the Orchestrator agent for Code Mavi. Your role is to:
 - Resource allocation and optimization
 - Quality assurance and validation`,
 			priority: 100,
-			source: { type: 'system', author: 'Code Mavi' }
+			source: { type: 'system', author: 'Mavi' }
 		},
 		'executor': {
 			name: 'Executor Base Prompt',
 			description: 'Base system prompt for Executor agent',
-			content: `# Code Mavi Executor Agent
+			content: `# Mavi Executor Agent
 
-You are the Executor agent for Code Mavi. Your role is to:
+You are the Executor agent for Mavi. Your role is to:
 1. Implement specific code changes based on instructions
 2. Generate semantic diffs for changes
 3. Follow coding standards and best practices
@@ -616,14 +616,14 @@ You are the Executor agent for Code Mavi. Your role is to:
 - Code quality assurance
 - Self-validation and testing`,
 			priority: 100,
-			source: { type: 'system', author: 'Code Mavi' }
+			source: { type: 'system', author: 'Mavi' }
 		},
 		'verifier': {
 			name: 'Verifier Base Prompt',
 			description: 'Base system prompt for Verifier agent',
-			content: `# Code Mavi Verifier Agent
+			content: `# Mavi Verifier Agent
 
-You are the Verifier agent for Code Mavi. Your role is to:
+You are the Verifier agent for Mavi. Your role is to:
 1. Validate code changes made by Executor
 2. Run comprehensive tests and checks
 3. Identify and report issues
@@ -635,7 +635,7 @@ You are the Verifier agent for Code Mavi. Your role is to:
 - Test execution and validation
 - Security and performance analysis`,
 			priority: 100,
-			source: { type: 'system', author: 'Code Mavi' }
+			source: { type: 'system', author: 'Mavi' }
 		}
 	};
 
@@ -678,7 +678,7 @@ You are the Verifier agent for Code Mavi. Your role is to:
 {{RECENT_CHANGES}}`,
 		priority: 80,
 		enabled: true,
-		source: { type: 'context', author: 'Code Mavi' },
+		source: { type: 'context', author: 'Mavi' },
 		metadata: {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
@@ -769,12 +769,12 @@ private async createSystemLayer(agentType: string): Promise<PromptLayer> {
 		id: `system_${agentType}_${Date.now()}`,
 		name: `${agentType.charAt(0).toUpperCase() + agentType.slice(1)} System Prompt`,
 		description: `Base system prompt for ${agentType} agent`,
-		content: `# Code Mavi ${agentType.charAt(0).toUpperCase() + agentType.slice(1)} Agent
+		content: `# Mavi ${agentType.charAt(0).toUpperCase() + agentType.slice(1)} Agent
 
-You are a specialized AI agent working within the Code Mavi system.`,
+You are a specialized AI agent working within the Mavi system.`,
 		priority: 100,
 		enabled: true,
-		source: { type: 'system', author: 'Code Mavi' },
+		source: { type: 'system', author: 'Mavi' },
 		metadata: {
 			createdAt: Date.now(),
 			updatedAt: Date.now(),
@@ -943,7 +943,7 @@ private estimateCodeRatio(text: string): number {
 private async loadHistory(): Promise<void> {
 	try {
 		const homeDir = process.env.HOME || process.env.USERPROFILE || '.';
-		const historyPath = `${homeDir}/.codemavi/${this.HISTORY_FILE}`;
+		const historyPath = `${homeDir}/.mavi/${this.HISTORY_FILE}`;
 		const uri = URI.file(historyPath);
 
 		if (await this.fileExists(uri)) {
@@ -1001,11 +1001,11 @@ private async saveToHistory(inspection: PromptInspection): Promise<void> {
 private async saveHistory(): Promise<void> {
 	try {
 		const homeDir = process.env.HOME || process.env.USERPROFILE || '.';
-		const codemaviDir = `${homeDir}/.codemavi`;
-		const historyPath = `${codemaviDir}/${this.HISTORY_FILE}`;
+		const maviDir = `${homeDir}/.mavi`;
+		const historyPath = `${maviDir}/${this.HISTORY_FILE}`;
 
 		// Ensure directory exists
-		const dirUri = URI.file(codemaviDir);
+		const dirUri = URI.file(maviDir);
 		await this.ensureDirectoryExists(dirUri);
 
 		// Prepare data
@@ -1153,8 +1153,8 @@ private async readFile(uri: URI): Promise<string> {
 		const content = await this.fileService.readFile(uri);
 		return content.value.toString();
 	} catch (error) {
-		this.logService.error(\`[PromptInspector] Failed to read file \${uri.fsPath}:\`, error);
-		throw new Error(\`Failed to read file: \${uri.fsPath}\`);
+		this.logService.error(`[PromptInspector] Failed to read file \${uri.fsPath}:`, error);
+		throw new Error(`Failed to read file: \${uri.fsPath}`);
 	}
 }
 
@@ -1162,8 +1162,8 @@ private async writeFile(uri: URI, content: string): Promise<void> {
 	try {
 		await this.fileService.writeFile(uri, content);
 	} catch (error) {
-		this.logService.error(\`[PromptInspector] Failed to write file \${uri.fsPath}:\`, error);
-		throw new Error(\`Failed to write file: \${uri.fsPath}\`);
+		this.logService.error(`[PromptInspector] Failed to write file \${uri.fsPath}:`, error);
+		throw new Error(`Failed to write file: \${uri.fsPath}`);
 	}
 }
 
@@ -1181,6 +1181,7 @@ private async ensureDirectoryExists(uri: URI): Promise<void> {
 		await this.fileService.createFolder(uri);
 	} catch (error) {
 		// Directory might already exist, ignore error
-		this.logService.debug(\`[PromptInspector] Directory creation skipped: \${uri.fsPath}\`);
+		this.logService.debug(`[PromptInspector] Directory creation skipped: \${uri.fsPath}`);
 	}
+}
 }

@@ -211,7 +211,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	private traceLock(msg: string): codemavi {
+	private traceLock(msg: string): void {
 		if (DiskFileSystemProvider.TRACE_LOG_RESOURCE_LOCKS) {
 			this.logService.trace(msg);
 		}
@@ -228,7 +228,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return stream;
 	}
 
-	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 		if (opts?.atomic !== false && opts?.atomic?.postfix && await this.canWriteFileAtomic(resource)) {
 			return this.doWriteFileAtomic(resource, joinPath(resourcesDirname(resource), `${resourcesBasename(resource)}${opts.atomic.postfix}`), content, opts);
 		} else {
@@ -255,7 +255,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return true; // atomic writing supported
 	}
 
-	private async doWriteFileAtomic(resource: URI, tempResource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	private async doWriteFileAtomic(resource: URI, tempResource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 
 		// Ensure to create locks for all resources involved
 		// since atomic write involves mutiple disk operations
@@ -291,7 +291,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	private async doWriteFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions, disableWriteLock?: boolean): Promise<codemavi> {
+	private async doWriteFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions, disableWriteLock?: boolean): Promise<void> {
 		let handle: number | undefined = undefined;
 		try {
 			const filePath = this.toFilePath(resource);
@@ -331,7 +331,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	private static canFlush: boolean = true;
 
-	static configureFlushOnWrite(enabled: boolean): codemavi {
+	static configureFlushOnWrite(enabled: boolean): void {
 		DiskFileSystemProvider.canFlush = enabled;
 	}
 
@@ -457,7 +457,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return fd;
 	}
 
-	async close(fd: number): Promise<codemavi> {
+	async close(fd: number): Promise<void> {
 
 		// It is very important that we keep any associated lock
 		// for the file handle before attempting to call `fs.close(fd)`
@@ -518,8 +518,8 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	private normalizePos(fd: number, pos: number): number | null {
 
-		// When calling fs.read/write we try to acodemavi passing in the "pos" argument and
-		// rather prefer to pass in "null" because this acodemavis an extra seek(pos)
+		// When calling fs.read/write we try to avoid passing in the "pos" argument and
+		// rather prefer to pass in "null" because this avoids an extra seek(pos)
 		// call that in some cases can even fail (e.g. when opening a file over FTP -
 		// see https://github.com/microsoft/vscode/issues/73884).
 		//
@@ -532,7 +532,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		return pos;
 	}
 
-	private updatePos(fd: number, pos: number | null, bytesLength: number | null): codemavi {
+	private updatePos(fd: number, pos: number | null, bytesLength: number | null): void {
 		const lastKnownPos = this.mapHandleToPos.get(fd);
 		if (typeof lastKnownPos === 'number') {
 
@@ -601,7 +601,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	//#region Move/Copy/Delete/Create Folder
 
-	async mkdir(resource: URI): Promise<codemavi> {
+	async mkdir(resource: URI): Promise<void> {
 		try {
 			await promises.mkdir(this.toFilePath(resource));
 		} catch (error) {
@@ -609,7 +609,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	async delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
+	async delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
 		try {
 			const filePath = this.toFilePath(resource);
 			if (opts.recursive) {
@@ -653,7 +653,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		const fromFilePath = this.toFilePath(from);
 		const toFilePath = this.toFilePath(to);
 
@@ -680,7 +680,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	async copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	async copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		const fromFilePath = this.toFilePath(from);
 		const toFilePath = this.toFilePath(to);
 
@@ -707,7 +707,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 		}
 	}
 
-	private async validateMoveCopy(from: URI, to: URI, mode: 'move' | 'copy', overwrite?: boolean): Promise<codemavi> {
+	private async validateMoveCopy(from: URI, to: URI, mode: 'move' | 'copy', overwrite?: boolean): Promise<void> {
 		const fromFilePath = this.toFilePath(from);
 		const toFilePath = this.toFilePath(to);
 
@@ -762,11 +762,11 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	//#region Clone File
 
-	async cloneFile(from: URI, to: URI): Promise<codemavi> {
+	async cloneFile(from: URI, to: URI): Promise<void> {
 		return this.doCloneFile(from, to, false /* optimistically assume parent folders exist */);
 	}
 
-	private async doCloneFile(from: URI, to: URI, mkdir: boolean): Promise<codemavi> {
+	private async doCloneFile(from: URI, to: URI, mkdir: boolean): Promise<void> {
 		const fromFilePath = this.toFilePath(from);
 		const toFilePath = this.toFilePath(to);
 
@@ -806,16 +806,16 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 	//#region File Watching
 
 	protected createUniversalWatcher(
-		onChange: (changes: IFileChange[]) => codemavi,
-		onLogMessage: (msg: ILogMessage) => codemavi,
+		onChange: (changes: IFileChange[]) => void,
+		onLogMessage: (msg: ILogMessage) => void,
 		verboseLogging: boolean
 	): AbstractUniversalWatcherClient {
 		return new UniversalWatcherClient(changes => onChange(changes), msg => onLogMessage(msg), verboseLogging);
 	}
 
 	protected createNonRecursiveWatcher(
-		onChange: (changes: IFileChange[]) => codemavi,
-		onLogMessage: (msg: ILogMessage) => codemavi,
+		onChange: (changes: IFileChange[]) => void,
+		onLogMessage: (msg: ILogMessage) => void,
 		verboseLogging: boolean
 	): AbstractNonRecursiveWatcherClient {
 		return new NodeJSWatcherClient(changes => onChange(changes), msg => onLogMessage(msg), verboseLogging);
@@ -827,7 +827,7 @@ export class DiskFileSystemProvider extends AbstractDiskFileSystemProvider imple
 
 	private toFileSystemProviderError(error: NodeJS.ErrnoException): FileSystemProviderError {
 		if (error instanceof FileSystemProviderError) {
-			return error; // acodemavi double conversion
+			return error; // avoid double conversion
 		}
 
 		let resultError: Error | string = error;

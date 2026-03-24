@@ -32,7 +32,7 @@ export class QuickInputService extends BaseQuickInputService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.onShow(() => this.inQuickInputContext.set(true)));
 		this._register(this.onHide(() => this.inQuickInputContext.set(false)));
 	}

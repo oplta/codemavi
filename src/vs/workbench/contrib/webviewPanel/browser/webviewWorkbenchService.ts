@@ -76,7 +76,7 @@ export interface IWebviewWorkbenchService {
 		webview: WebviewInput,
 		group: IEditorGroup | GroupIdentifier | ACTIVE_GROUP_TYPE | SIDE_GROUP_TYPE,
 		preserveFocus: boolean
-	): codemavi;
+	): void;
 
 	/**
 	 * Register a new {@link WebviewResolver}.
@@ -93,7 +93,7 @@ export interface IWebviewWorkbenchService {
 	/**
 	 * Try to resolve a webview. This will block until a resolver is registered for the webview.
 	 */
-	resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<codemavi>;
+	resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<void>;
 }
 
 /**
@@ -108,7 +108,7 @@ interface WebviewResolver {
 	/**
 	 * Resolves the webview.
 	 */
-	resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<codemavi>;
+	resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<void>;
 }
 
 function canRevive(reviver: WebviewResolver, webview: WebviewInput): boolean {
@@ -118,7 +118,7 @@ function canRevive(reviver: WebviewResolver, webview: WebviewInput): boolean {
 export class LazilyResolvedWebviewEditorInput extends WebviewInput {
 
 	private _resolved = false;
-	private _resolvePromise?: CancelablePromise<codemavi>;
+	private _resolvePromise?: CancelablePromise<void>;
 
 	constructor(
 		init: WebviewInputInitInfo,
@@ -164,12 +164,12 @@ export class LazilyResolvedWebviewEditorInput extends WebviewInput {
 class RevivalPool {
 	private _awaitingRevival: Array<{
 		readonly input: WebviewInput;
-		readonly promise: DeferredPromise<codemavi>;
+		readonly promise: DeferredPromise<void>;
 		readonly disposable: IDisposable;
 	}> = [];
 
-	public enqueueForRestoration(input: WebviewInput, token: CancellationToken): Promise<codemavi> {
-		const promise = new DeferredPromise<codemavi>();
+	public enqueueForRestoration(input: WebviewInput, token: CancellationToken): Promise<void> {
+		const promise = new DeferredPromise<void>();
 
 		const remove = () => {
 			const index = this._awaitingRevival.findIndex(entry => input === entry.input);
@@ -304,7 +304,7 @@ export class WebviewEditorService extends Disposable implements IWebviewWorkbenc
 		webview: WebviewInput,
 		group: IEditorGroup | GroupIdentifier | ACTIVE_GROUP_TYPE | SIDE_GROUP_TYPE,
 		preserveFocus: boolean
-	): codemavi {
+	): void {
 		const topLevelEditor = this.findTopLevelEditorForWebview(webview);
 
 		this._editorService.openEditor(topLevelEditor, {
@@ -381,7 +381,7 @@ export class WebviewEditorService extends Disposable implements IWebviewWorkbenc
 		return false;
 	}
 
-	public async resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<codemavi> {
+	public async resolveWebview(webview: WebviewInput, token: CancellationToken): Promise<void> {
 		const didRevive = await this.tryRevive(webview, token);
 		if (!didRevive && !token.isCancellationRequested) {
 			// A reviver may not be registered yet. Put into pool and resolve promise when we can revive
@@ -389,7 +389,7 @@ export class WebviewEditorService extends Disposable implements IWebviewWorkbenc
 		}
 	}
 
-	public setIcons(id: string, iconPath: WebviewIcons | undefined): codemavi {
+	public setIcons(id: string, iconPath: WebviewIcons | undefined): void {
 		this._iconManager.setIcons(id, iconPath);
 	}
 }

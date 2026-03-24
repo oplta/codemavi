@@ -68,7 +68,7 @@ suite(`ipynb Clear Outputs`, () => {
 
 		vscode.workspace.onDidChangeNotebookDocument(() => verifyMetadataChanges(), undefined, disposables);
 
-		await new Promise<codemavi>((resolve, reject) => {
+		await new Promise<void>((resolve, reject) => {
 			const interval = setInterval(() => {
 				try {
 					verifyMetadataChanges();

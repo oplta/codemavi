@@ -45,10 +45,10 @@ export interface ITerminalStatusList {
 	 * @param duration An optional duration in milliseconds of the status, when specified the status
 	 * will remove itself when the duration elapses unless the status gets re-added.
 	 */
-	add(status: ITerminalStatus, duration?: number): codemavi;
-	remove(status: ITerminalStatus): codemavi;
-	remove(statusId: string): codemavi;
-	toggle(status: ITerminalStatus, value: boolean): codemavi;
+	add(status: ITerminalStatus, duration?: number): void;
+	remove(status: ITerminalStatus): void;
+	remove(statusId: string): void;
+	toggle(status: ITerminalStatus, value: boolean): void;
 }
 
 export class TerminalStatusList extends Disposable implements ITerminalStatusList {
@@ -109,9 +109,9 @@ export class TerminalStatusList extends Disposable implements ITerminalStatusLis
 		}
 	}
 
-	remove(status: ITerminalStatus): codemavi;
-	remove(statusId: string): codemavi;
-	remove(statusOrId: ITerminalStatus | string): codemavi {
+	remove(status: ITerminalStatus): void;
+	remove(statusId: string): void;
+	remove(statusOrId: ITerminalStatus | string): void {
 		const status = typeof statusOrId === 'string' ? this._statuses.get(statusOrId) : statusOrId;
 		// Verify the status is the same as the one passed in
 		if (status && this._statuses.get(status.id)) {

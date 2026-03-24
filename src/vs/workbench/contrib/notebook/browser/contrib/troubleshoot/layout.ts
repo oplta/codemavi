@@ -33,7 +33,7 @@ export class TroubleshootController extends Disposable implements INotebookEdito
 		this._update();
 	}
 
-	toggle(): codemavi {
+	toggle(): void {
 		this._enabled = !this._enabled;
 		this._update();
 	}
@@ -128,7 +128,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 
@@ -151,7 +151,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 
@@ -176,7 +176,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const notebookService = accessor.get(INotebookService);
 		notebookService.clearEditorCache();
 	}

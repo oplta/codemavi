@@ -23,7 +23,7 @@ class ExtHostNotebookDocumentSaveParticipant implements IStoredFileWorkingCopySa
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostNotebookDocumentSaveParticipant);
 	}
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, _progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, _progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 
 		if (!workingCopy.model || !(workingCopy.model instanceof NotebookFileWorkingCopyModel)) {
 			return undefined;
@@ -60,7 +60,7 @@ export class SaveParticipant {
 		this._saveParticipantDisposable = this.workingCopyFileService.addSaveParticipant(instantiationService.createInstance(ExtHostNotebookDocumentSaveParticipant, extHostContext));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._saveParticipantDisposable.dispose();
 	}
 }

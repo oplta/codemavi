@@ -102,7 +102,7 @@ export abstract class SymbolNavigationAction extends EditorAction2 {
 		SymbolNavigationAction._allSymbolNavigationCommands.set(opts.id, this);
 	}
 
-	override runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, arg?: SymbolNavigationAnchor | unknown, range?: Range): Promise<codemavi> {
+	override runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, arg?: SymbolNavigationAnchor | unknown, range?: Range): Promise<void> {
 		if (!editor.hasModel()) {
 			return Promise.resolve(undefined);
 		}
@@ -174,7 +174,7 @@ export abstract class SymbolNavigationAction extends EditorAction2 {
 
 	protected abstract _getGoToPreference(editor: IActiveCodeEditor): GoToLocationValues;
 
-	private async _onResult(editorService: ICodeEditorService, symbolNavService: ISymbolNavigationService, editor: IActiveCodeEditor, model: ReferencesModel, range?: Range): Promise<codemavi> {
+	private async _onResult(editorService: ICodeEditorService, symbolNavService: ISymbolNavigationService, editor: IActiveCodeEditor, model: ReferencesModel, range?: Range): Promise<void> {
 
 		const gotoLocation = this._getGoToPreference(editor);
 		if (!(editor instanceof EmbeddedCodeEditorWidget) && (this.configuration.openInPeek || (gotoLocation === 'peek' && model.references.length > 1))) {

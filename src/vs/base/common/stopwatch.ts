@@ -25,11 +25,11 @@ export class StopWatch {
 		this._stopTime = -1;
 	}
 
-	public stop(): codemavi {
+	public stop(): void {
 		this._stopTime = this._now();
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._startTime = this._now();
 		this._stopTime = -1;
 	}

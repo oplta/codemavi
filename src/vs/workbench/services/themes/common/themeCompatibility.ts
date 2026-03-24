@@ -18,7 +18,7 @@ function addSettingMapping(settingId: string, colorId: string) {
 	colorIds.push(colorId);
 }
 
-export function convertSettings(oldSettings: ITextMateThemingRule[], result: { textMateRules: ITextMateThemingRule[]; colors: IColorMap }): codemavi {
+export function convertSettings(oldSettings: ITextMateThemingRule[], result: { textMateRules: ITextMateThemingRule[]; colors: IColorMap }): void {
 	for (const rule of oldSettings) {
 		result.textMateRules.push(rule);
 		if (!rule.scope) {
@@ -55,7 +55,7 @@ addSettingMapping('selectionHighlightColor', colorRegistry.editorSelectionHighli
 addSettingMapping('findMatchHighlight', colorRegistry.editorFindMatchHighlight);
 addSettingMapping('currentFindMatchHighlight', colorRegistry.editorFindMatch);
 addSettingMapping('hoverHighlight', colorRegistry.editorHoverHighlight);
-addSettingMapping('wordHighlight', 'editor.wordHighlightBackground'); // inlined to acodemavi editor/contrib dependenies
+addSettingMapping('wordHighlight', 'editor.wordHighlightBackground'); // inlined to avoid editor/contrib dependenies
 addSettingMapping('wordHighlightStrong', 'editor.wordHighlightStrongBackground');
 addSettingMapping('findRangeHighlight', colorRegistry.editorFindRangeHighlight);
 addSettingMapping('findMatchHighlight', 'peekViewResult.matchHighlightBackground');

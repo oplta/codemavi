@@ -62,14 +62,14 @@ export class ResourceMap<T> {
 		}
 	}
 
-	public delete(resource: vscode.Uri): codemavi {
+	public delete(resource: vscode.Uri): void {
 		const file = this.toKey(resource);
 		if (file) {
 			this._map.delete(file);
 		}
 	}
 
-	public clear(): codemavi {
+	public clear(): void {
 		this._map.clear();
 	}
 

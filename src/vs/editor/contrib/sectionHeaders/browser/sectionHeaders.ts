@@ -143,7 +143,7 @@ export class SectionHeaderDetector extends Disposable implements IEditorContribu
 			});
 	}
 
-	private updateDecorations(sectionHeaders: SectionHeader[]): codemavi {
+	private updateDecorations(sectionHeaders: SectionHeader[]): void {
 
 		const model = this.editor.getModel();
 		if (model) {
@@ -175,7 +175,7 @@ export class SectionHeaderDetector extends Disposable implements IEditorContribu
 		});
 	}
 
-	private stop(): codemavi {
+	private stop(): void {
 		this.computeSectionHeaders.cancel();
 		if (this.computePromise) {
 			this.computePromise.cancel();
@@ -183,7 +183,7 @@ export class SectionHeaderDetector extends Disposable implements IEditorContribu
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this.stop();
 		this.decorations.clear();

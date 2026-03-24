@@ -40,7 +40,7 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 	private _initProperties: object = {}
 
 
-	// helper - looks like this is stored in a .vscdb file in ~/Library/Application Support/Code Mavi
+	// helper - looks like this is stored in a .vscdb file in ~/Library/Application Support/Mavi
 	private _memoStorage(key: string, target: StorageTarget, setValIfNotExist?: string) {
 		const currVal = this._appStorage.get(key, StorageScope.APPLICATION)
 		if (currVal !== undefined) return currVal
@@ -54,18 +54,18 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 	// returns 'NULL' or the old key
 	private get oldId() {
 		// check new storage key first
-		const newKey = 'codemavi.app.oldMachineId'
+		const newKey = 'mavi.app.oldMachineId'
 		const newOldId = this._appStorage.get(newKey, StorageScope.APPLICATION)
 		if (newOldId) return newOldId
 
 		// put old key into new key if didn't already
-		const oldValue = this._appStorage.get('codemavi.machineId', StorageScope.APPLICATION) ?? 'NULL' // the old way of getting the key
+		const oldValue = this._appStorage.get('mavi.machineId', StorageScope.APPLICATION) ?? 'NULL' // the old way of getting the key
 		this._appStorage.store(newKey, oldValue, StorageScope.APPLICATION, StorageTarget.MACHINE)
 		return oldValue
 
 		// in a few weeks we can replace above with this
 		// private get oldId() {
-		// 	return this._memoStorage('codemavi.app.oldMachineId', StorageTarget.MACHINE, 'NULL')
+		// 	return this._memoStorage('mavi.app.oldMachineId', StorageTarget.MACHINE, 'NULL')
 		// }
 	}
 
@@ -74,12 +74,12 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 	private get distinctId() {
 		const oldId = this.oldId
 		const setValIfNotExist = oldId === 'NULL' ? undefined : oldId
-		return this._memoStorage('codemavi.app.machineId', StorageTarget.MACHINE, setValIfNotExist)
+		return this._memoStorage('mavi.app.machineId', StorageTarget.MACHINE, setValIfNotExist)
 	}
 
 	// just to see if there are ever multiple machineIDs per userID (instead of this, we should just track by the user's email)
 	private get userId() {
-		return this._memoStorage('codemavi.app.userMachineId', StorageTarget.USER)
+		return this._memoStorage('mavi.app.userMachineId', StorageTarget.USER)
 	}
 
 	constructor(
@@ -99,7 +99,7 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 		// very important to await whenReady!
 		await this._appStorage.whenReady
 
-		const { commit, version, codemaviVersion, release, quality } = this._productService
+		const { commit, version, maviVersion, release, quality } = this._productService
 
 		const isDevMode = !this._envMainService.isBuilt // found in abstractUpdateService.ts
 
@@ -107,7 +107,7 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 		this._initProperties = {
 			commit,
 			vscodeVersion: version,
-			codemaviVersion: codemaviVersion,
+			maviVersion: maviVersion,
 			release,
 			os,
 			quality,
@@ -125,7 +125,7 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 
 		const didOptOut = this._appStorage.getBoolean(OPT_OUT_KEY, StorageScope.APPLICATION, false)
 
-		console.log('User is opted out of basic Code Mavi metrics?', didOptOut)
+		console.log('User is opted out of basic Mavi metrics?', didOptOut)
 		if (didOptOut) {
 			this.client.optOut()
 		}
@@ -135,7 +135,7 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 		}
 
 
-		console.log('Code Mavi posthog metrics info:', JSON.stringify(identifyMessage, null, 2))
+		console.log('Mavi posthog metrics info:', JSON.stringify(identifyMessage, null, 2))
 	}
 
 

@@ -71,7 +71,7 @@ export class NotebookRendererMessagingService extends Disposable implements INot
 		return messaging;
 	}
 
-	private postMessage(editorId: string, rendererId: string, message: unknown): codemavi {
+	private postMessage(editorId: string, rendererId: string, message: unknown): void {
 		if (!this.activations.has(rendererId)) {
 			this.prepare(rendererId);
 		}

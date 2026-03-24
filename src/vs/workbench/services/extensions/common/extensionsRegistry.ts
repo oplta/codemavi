@@ -22,12 +22,12 @@ const schemaRegistry = Registry.as<IJSONContributionRegistry>(Extensions.JSONCon
 
 export class ExtensionMessageCollector {
 
-	private readonly _messageHandler: (msg: IMessage) => codemavi;
+	private readonly _messageHandler: (msg: IMessage) => void;
 	private readonly _extension: IExtensionDescription;
 	private readonly _extensionPointId: string;
 
 	constructor(
-		messageHandler: (msg: IMessage) => codemavi,
+		messageHandler: (msg: IMessage) => void,
 		extension: IExtensionDescription,
 		extensionPointId: string
 	) {
@@ -36,7 +36,7 @@ export class ExtensionMessageCollector {
 		this._extensionPointId = extensionPointId;
 	}
 
-	private _msg(type: Severity, message: string): codemavi {
+	private _msg(type: Severity, message: string): void {
 		this._messageHandler({
 			type: type,
 			message: message,
@@ -45,15 +45,15 @@ export class ExtensionMessageCollector {
 		});
 	}
 
-	public error(message: string): codemavi {
+	public error(message: string): void {
 		this._msg(Severity.Error, message);
 	}
 
-	public warn(message: string): codemavi {
+	public warn(message: string): void {
 		this._msg(Severity.Warning, message);
 	}
 
-	public info(message: string): codemavi {
+	public info(message: string): void {
 		this._msg(Severity.Info, message);
 	}
 }
@@ -64,7 +64,7 @@ export interface IExtensionPointUser<T> {
 	collector: ExtensionMessageCollector;
 }
 
-export type IExtensionPointHandler<T> = (extensions: readonly IExtensionPointUser<T>[], delta: ExtensionPointUserDelta<T>) => codemavi;
+export type IExtensionPointHandler<T> = (extensions: readonly IExtensionPointUser<T>[], delta: ExtensionPointUserDelta<T>) => void;
 
 export interface IExtensionPoint<T> {
 	readonly name: string;
@@ -139,13 +139,13 @@ export class ExtensionPoint<T> implements IExtensionPoint<T> {
 		};
 	}
 
-	acceptUsers(users: IExtensionPointUser<T>[]): codemavi {
+	acceptUsers(users: IExtensionPointUser<T>[]): void {
 		this._delta = ExtensionPointUserDelta.compute(this._users, users);
 		this._users = users;
 		this._handle();
 	}
 
-	private _handle(): codemavi {
+	private _handle(): void {
 		if (this._handler === null || this._users === null || this._delta === null) {
 			return;
 		}

@@ -41,7 +41,7 @@ export class WorkbenchIconSelectBox extends IconSelectBox {
 		}
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		WorkbenchIconSelectBox.focusedWidget = this;
 	}

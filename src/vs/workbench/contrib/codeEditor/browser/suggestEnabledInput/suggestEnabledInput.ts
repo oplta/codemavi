@@ -116,16 +116,16 @@ export interface ISuggestEnabledInputStyleOverrides {
 
 export class SuggestEnabledInput extends Widget {
 
-	private readonly _onShouldFocusResults = new Emitter<codemavi>();
-	readonly onShouldFocusResults: Event<codemavi> = this._onShouldFocusResults.event;
+	private readonly _onShouldFocusResults = new Emitter<void>();
+	readonly onShouldFocusResults: Event<void> = this._onShouldFocusResults.event;
 
 	private readonly _onInputDidChange = new Emitter<string | undefined>();
 	readonly onInputDidChange: Event<string | undefined> = this._onInputDidChange.event;
 
-	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
+	private readonly _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onDidBlur = this._register(new Emitter<codemavi>());
+	private readonly _onDidBlur = this._register(new Emitter<void>());
 	readonly onDidBlur = this._onDidBlur.event;
 
 	readonly inputWidget: CodeEditorWidget;
@@ -287,7 +287,7 @@ export class SuggestEnabledInput extends Widget {
 		return undefined;
 	}
 
-	public updateAriaLabel(label: string): codemavi {
+	public updateAriaLabel(label: string): void {
 		this.inputWidget.updateOptions({ ariaLabel: label });
 	}
 
@@ -303,7 +303,7 @@ export class SuggestEnabledInput extends Widget {
 		return this.inputWidget.getValue();
 	}
 
-	private style(styleOverrides: ISuggestEnabledInputStyleOverrides): codemavi {
+	private style(styleOverrides: ISuggestEnabledInputStyleOverrides): void {
 		this.stylingContainer.style.backgroundColor = asCssVariable(styleOverrides.inputBackground ?? inputBackground);
 		this.stylingContainer.style.color = asCssVariable(styleOverrides.inputForeground ?? inputForeground);
 		this.placeholderText.style.color = asCssVariable(styleOverrides.inputPlaceholderForeground ?? inputPlaceholderForeground);
@@ -317,7 +317,7 @@ export class SuggestEnabledInput extends Widget {
 		}
 	}
 
-	public focus(selectAll?: boolean): codemavi {
+	public focus(selectAll?: boolean): void {
 		this.inputWidget.focus();
 
 		if (selectAll && this.inputWidget.getValue()) {
@@ -325,16 +325,16 @@ export class SuggestEnabledInput extends Widget {
 		}
 	}
 
-	public onHide(): codemavi {
+	public onHide(): void {
 		this.inputWidget.onHide();
 	}
 
-	public layout(dimension: Dimension): codemavi {
+	public layout(dimension: Dimension): void {
 		this.inputWidget.layout(dimension);
 		this.placeholderText.style.width = `${dimension.width - 2}px`;
 	}
 
-	private selectAll(): codemavi {
+	private selectAll(): void {
 		this.inputWidget.setSelection(new Range(1, 1, 1, this.getValue().length + 1));
 	}
 }
@@ -364,7 +364,7 @@ export class SuggestEnabledInputWithHistory extends SuggestEnabledInput implemen
 		this.history = this._register(new HistoryNavigator<string>(new Set(history), 100));
 	}
 
-	public addToHistory(): codemavi {
+	public addToHistory(): void {
 		const value = this.getValue();
 		if (value && value !== this.getCurrentValue()) {
 			this.history.add(value);
@@ -375,7 +375,7 @@ export class SuggestEnabledInputWithHistory extends SuggestEnabledInput implemen
 		return this.history.getHistory();
 	}
 
-	public showNextValue(): codemavi {
+	public showNextValue(): void {
 		if (!this.history.has(this.getValue())) {
 			this.addToHistory();
 		}
@@ -388,7 +388,7 @@ export class SuggestEnabledInputWithHistory extends SuggestEnabledInput implemen
 		this.setValue(next ?? '');
 	}
 
-	public showPreviousValue(): codemavi {
+	public showPreviousValue(): void {
 		if (!this.history.has(this.getValue())) {
 			this.addToHistory();
 		}
@@ -404,7 +404,7 @@ export class SuggestEnabledInputWithHistory extends SuggestEnabledInput implemen
 		}
 	}
 
-	public clearHistory(): codemavi {
+	public clearHistory(): void {
 		this.history.clear();
 	}
 

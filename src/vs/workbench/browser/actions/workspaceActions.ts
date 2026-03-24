@@ -44,7 +44,7 @@ export class OpenFileAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<void> {
 		const fileDialogService = accessor.get(IFileDialogService);
 
 		return fileDialogService.pickFileAndOpen({ forceNewWindow: false, telemetryExtraData: data });
@@ -75,7 +75,7 @@ export class OpenFolderAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<void> {
 		const fileDialogService = accessor.get(IFileDialogService);
 
 		return fileDialogService.pickFolderAndOpen({ forceNewWindow: false, telemetryExtraData: data });
@@ -105,7 +105,7 @@ export class OpenFolderViaWorkspaceAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<codemavi> {
+	override run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 
 		return commandService.executeCommand(SET_ROOT_FOLDER_COMMAND_ID);
@@ -131,7 +131,7 @@ export class OpenFileFolderAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<void> {
 		const fileDialogService = accessor.get(IFileDialogService);
 
 		return fileDialogService.pickFileFolderAndOpen({ forceNewWindow: false, telemetryExtraData: data });
@@ -152,7 +152,7 @@ class OpenWorkspaceAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, data?: ITelemetryData): Promise<void> {
 		const fileDialogService = accessor.get(IFileDialogService);
 
 		return fileDialogService.pickWorkspaceAndOpen({ telemetryExtraData: data });
@@ -177,7 +177,7 @@ class CloseWorkspaceAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const hostService = accessor.get(IHostService);
 		const environmentService = accessor.get(IWorkbenchEnvironmentService);
 
@@ -199,7 +199,7 @@ class OpenWorkspaceConfigFileAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const contextService = accessor.get(IWorkspaceContextService);
 		const editorService = accessor.get(IEditorService);
 
@@ -224,7 +224,7 @@ export class AddRootFolderAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<codemavi> {
+	override run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 
 		return commandService.executeCommand(ADD_ROOT_FOLDER_COMMAND_ID);
@@ -245,7 +245,7 @@ export class RemoveRootFolderAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		const workspaceEditingService = accessor.get(IWorkspaceEditingService);
 
@@ -270,7 +270,7 @@ class SaveWorkspaceAsAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const workspaceEditingService = accessor.get(IWorkspaceEditingService);
 		const contextService = accessor.get(IWorkspaceContextService);
 
@@ -303,7 +303,7 @@ class DuplicateWorkspaceInNewWindowAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const workspaceContextService = accessor.get(IWorkspaceContextService);
 		const workspaceEditingService = accessor.get(IWorkspaceEditingService);
 		const hostService = accessor.get(IHostService);

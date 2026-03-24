@@ -24,7 +24,7 @@ class WalkThroughContentProviderRegistry {
 
 	private readonly providers = new Map<string, IWalkThroughContentProvider>();
 
-	registerProvider(moduleId: string, provider: IWalkThroughContentProvider): codemavi {
+	registerProvider(moduleId: string, provider: IWalkThroughContentProvider): void {
 		this.providers.set(moduleId, provider);
 	}
 

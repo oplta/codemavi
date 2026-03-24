@@ -1,5 +1,5 @@
 /**
- * Code Mavi - Agent State Manager
+ * Mavi - Agent State Manager
  * 
  * Agent'ın düşünce zincirini (Chain of Thought), mevcut görev durumunu
  * ve zihin geçmişini (memory) yöneten servis.
@@ -40,7 +40,7 @@ export class AgentStateManager {
 	/**
 	 * Düşünce zincirine yeni bir halka ekler.
 	 */
-	addStep(taskId: string, thought: string, action: string): codemavi {
+	addStep(taskId: string, thought: string, action: string): void {
 		const state = this._states.get(taskId)
 		if (!state) return
 
@@ -56,7 +56,7 @@ export class AgentStateManager {
 	/**
 	 * Son yapılan eylemin sonucunu (observation) kaydeder.
 	 */
-	updateLastStep(taskId: string, observation: string): codemavi {
+	updateLastStep(taskId: string, observation: string): void {
 		const state = this._states.get(taskId)
 		if (!state || state.steps.length === 0) return
 
@@ -66,7 +66,7 @@ export class AgentStateManager {
 	/**
 	 * Görev durumunu günceller.
 	 */
-	setStatus(taskId: string, status: IAgentState['status']): codemavi {
+	setStatus(taskId: string, status: IAgentState['status']): void {
 		const state = this._states.get(taskId)
 		if (state) state.status = status
 	}

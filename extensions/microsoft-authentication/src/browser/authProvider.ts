@@ -9,7 +9,7 @@ export class MsalAuthProvider implements AuthenticationProvider {
 	private _onDidChangeSessions = new EventEmitter<AuthenticationProviderAuthenticationSessionsChangeEvent>();
 	onDidChangeSessions = this._onDidChangeSessions.event;
 
-	initialize(): Thenable<codemavi> {
+	initialize(): Thenable<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -19,7 +19,7 @@ export class MsalAuthProvider implements AuthenticationProvider {
 	createSession(): Thenable<AuthenticationSession> {
 		throw new Error('Method not implemented.');
 	}
-	removeSession(): Thenable<codemavi> {
+	removeSession(): Thenable<void> {
 		throw new Error('Method not implemented.');
 	}
 

@@ -20,7 +20,7 @@ export interface IUserDataSyncAccountService {
 	readonly onTokenFailed: Event<boolean/*bail out*/>;
 	readonly account: IUserDataSyncAccount | undefined;
 	readonly onDidChangeAccount: Event<IUserDataSyncAccount | undefined>;
-	updateAccount(account: IUserDataSyncAccount | undefined): Promise<codemavi>;
+	updateAccount(account: IUserDataSyncAccount | undefined): Promise<void>;
 
 }
 
@@ -56,7 +56,7 @@ export class UserDataSyncAccountService extends Disposable implements IUserDataS
 		this._register(userDataSyncStoreService.onTokenSucceed(() => this.wasTokenFailed = false));
 	}
 
-	async updateAccount(account: IUserDataSyncAccount | undefined): Promise<codemavi> {
+	async updateAccount(account: IUserDataSyncAccount | undefined): Promise<void> {
 		if (account && this._account ? account.token !== this._account.token || account.authenticationProviderId !== this._account.authenticationProviderId : account !== this._account) {
 			this._account = account;
 			if (this._account) {

@@ -128,7 +128,7 @@ export class DebugHoverWidget implements IContentWidget {
 		this.expressionRenderer = this.instantiationService.createInstance(DebugExpressionRenderer);
 	}
 
-	private create(): codemavi {
+	private create(): void {
 		this.domNode = $('.debug-hover-widget');
 		this.complexValueContainer = dom.append(this.domNode, $('.complex-value'));
 		this.complexValueTitle = dom.append(this.complexValueContainer, $('.title'));
@@ -185,7 +185,7 @@ export class DebugHoverWidget implements IContentWidget {
 		this.editor.addContentWidget(this);
 	}
 
-	private async onContextMenu(e: ITreeContextMenuEvent<IExpression>): Promise<codemavi> {
+	private async onContextMenu(e: ITreeContextMenuEvent<IExpression>): Promise<void> {
 		const variable = e.element;
 		if (!(variable instanceof Variable) || !variable.value) {
 			return;
@@ -194,7 +194,7 @@ export class DebugHoverWidget implements IContentWidget {
 		return openContextMenuForVariableTreeElement(this.contextKeyService, this.menuService, this.contextMenuService, MenuId.DebugHoverContext, e);
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this.toDispose.push(dom.addStandardDisposableListener(this.domNode, 'keydown', (e: IKeyboardEvent) => {
 			if (e.equals(KeyCode.Escape)) {
 				this.hide();
@@ -242,7 +242,7 @@ export class DebugHoverWidget implements IContentWidget {
 		return this._isVisible && !!this.safeTriangle?.contains(x, y);
 	}
 
-	async showAt(position: Position, focus: boolean, mouseEvent?: IMouseEvent): Promise<codemavi | ShowDebugHoverResult> {
+	async showAt(position: Position, focus: boolean, mouseEvent?: IMouseEvent): Promise<void | ShowDebugHoverResult> {
 		this.showCancellationSource?.dispose(true);
 		const cancellationSource = this.showCancellationSource = new CancellationTokenSource();
 		const session = this.debugService.getViewModel().focusedSession;
@@ -291,7 +291,7 @@ export class DebugHoverWidget implements IContentWidget {
 		className: 'hoverHighlight'
 	});
 
-	private async doShow(session: IDebugSession | undefined, position: Position, expression: IExpression, focus: boolean, mouseEvent: IMouseEvent | undefined): Promise<codemavi> {
+	private async doShow(session: IDebugSession | undefined, position: Position, expression: IExpression, focus: boolean, mouseEvent: IMouseEvent | undefined): Promise<void> {
 		if (!this.domNode) {
 			this.create();
 		}
@@ -337,23 +337,23 @@ export class DebugHoverWidget implements IContentWidget {
 		}
 	}
 
-	private layoutTreeAndContainer(): codemavi {
+	private layoutTreeAndContainer(): void {
 		this.layoutTree();
 		this.editor.layoutContentWidget(this);
 	}
 
-	private layoutTree(): codemavi {
+	private layoutTree(): void {
 		const scrollBarHeight = 10;
-		let maxHeightToAcodemaviCursorOverlay = Infinity;
+		let maxHeightToAvoidCursorOverlay = Infinity;
 		if (this.showAtPosition) {
 			const editorTop = this.editor.getDomNode()?.offsetTop || 0;
 			const containerTop = this.treeContainer.offsetTop + editorTop;
 			const hoveredCharTop = this.editor.getTopForLineNumber(this.showAtPosition.lineNumber, true) - this.editor.getScrollTop();
 			if (containerTop < hoveredCharTop) {
-				maxHeightToAcodemaviCursorOverlay = hoveredCharTop + editorTop - 22; // 22 is monaco top padding https://github.com/microsoft/vscode/blob/a1df2d7319382d42f66ad7f411af01e4cc49c80a/src/vs/editor/browser/viewParts/contentWidgets/contentWidgets.ts#L364
+				maxHeightToAvoidCursorOverlay = hoveredCharTop + editorTop - 22; // 22 is monaco top padding https://github.com/microsoft/vscode/blob/a1df2d7319382d42f66ad7f411af01e4cc49c80a/src/vs/editor/browser/viewParts/contentWidgets/contentWidgets.ts#L364
 			}
 		}
-		const treeHeight = Math.min(Math.max(266, this.editor.getLayoutInfo().height * 0.55), this.tree.contentHeight + scrollBarHeight, maxHeightToAcodemaviCursorOverlay);
+		const treeHeight = Math.min(Math.max(266, this.editor.getLayoutInfo().height * 0.55), this.tree.contentHeight + scrollBarHeight, maxHeightToAvoidCursorOverlay);
 
 		const realTreeWidth = this.tree.contentWidth;
 		const treeWidth = clamp(realTreeWidth, 400, 550);
@@ -386,7 +386,7 @@ export class DebugHoverWidget implements IContentWidget {
 	}
 
 
-	hide(): codemavi {
+	hide(): void {
 		if (this.showCancellationSource) {
 			this.showCancellationSource.dispose(true);
 			this.showCancellationSource = undefined;
@@ -414,7 +414,7 @@ export class DebugHoverWidget implements IContentWidget {
 		} : null;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.toDispose = lifecycle.dispose(this.toDispose);
 	}
 }

@@ -125,7 +125,7 @@ class MirrorNotebookDocument {
 		});
 	}
 
-	private _assertIndex(index: number): codemavi {
+	private _assertIndex(index: number): void {
 		if (index < 0 || index >= this.cells.length) {
 			throw new Error(`Illegal index ${index}. Cells length: ${this.cells.length}`);
 		}
@@ -185,10 +185,10 @@ export class NotebookWorker implements IWebWorkerServerRequestHandler, IDisposab
 	constructor() {
 		this._models = Object.create(null);
 	}
-	dispose(): codemavi {
+	dispose(): void {
 	}
 
-	public $acceptNewModel(uri: string, metadata: NotebookDocumentMetadata, transientDocumentMetadata: TransientDocumentMetadata, cells: IMainCellDto[]): codemavi {
+	public $acceptNewModel(uri: string, metadata: NotebookDocumentMetadata, transientDocumentMetadata: TransientDocumentMetadata, cells: IMainCellDto[]): void {
 		this._models[uri] = new MirrorNotebookDocument(URI.parse(uri), cells.map(dto => new MirrorCell(
 			dto.handle,
 			URI.parse(dto.url),
@@ -213,7 +213,7 @@ export class NotebookWorker implements IWebWorkerServerRequestHandler, IDisposab
 		model.cells.find(cell => cell.handle === handle)?.onEvents(event);
 	}
 
-	public $acceptRemovedModel(strURL: string): codemavi {
+	public $acceptRemovedModel(strURL: string): void {
 		if (!this._models[strURL]) {
 			return;
 		}
@@ -231,7 +231,7 @@ export class NotebookWorker implements IWebWorkerServerRequestHandler, IDisposab
 		const modifiedMetadata = filter(modified.metadata, key => !modified.transientDocumentMetadata[key]);
 		const metadataChanged = JSON.stringify(originalMetadata) !== JSON.stringify(modifiedMetadata);
 		// TODO@DonJayamanne
-		// In the future we might want to acodemavi computing LCS of outputs
+		// In the future we might want to avoid computing LCS of outputs
 		// That will make this faster.
 		const originalDiff = new LcsDiff(CellSequence.create(original), CellSequence.create(modified)).ComputeDiff(false);
 		if (originalDiff.changes.length === 0) {
@@ -283,7 +283,7 @@ export class NotebookWorker implements IWebWorkerServerRequestHandler, IDisposab
 			 * We can use a similarity algorithm to find that.
 			 *
 			 * The purpose of using LCS first is to find the cells that have not changed.
-			 * This acodemavis the need to use similarity algorithms on all cells.
+			 * This avoids the need to use similarity algorithms on all cells.
 			 *
 			 * At the end of the day what we need is as follows
 			 * A <=> A

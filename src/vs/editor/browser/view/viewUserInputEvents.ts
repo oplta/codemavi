@@ -10,7 +10,7 @@ import { IMouseWheelEvent } from '../../../base/browser/mouseEvent.js';
 import { Position } from '../../common/core/position.js';
 
 export interface EventCallback<T> {
-	(event: T): codemavi;
+	(event: T): void;
 }
 
 export class ViewUserInputEvents {
@@ -24,7 +24,7 @@ export class ViewUserInputEvents {
 	public onMouseUp: EventCallback<IEditorMouseEvent> | null = null;
 	public onMouseDrag: EventCallback<IEditorMouseEvent> | null = null;
 	public onMouseDrop: EventCallback<IPartialEditorMouseEvent> | null = null;
-	public onMouseDropCanceled: EventCallback<codemavi> | null = null;
+	public onMouseDropCanceled: EventCallback<void> | null = null;
 	public onMouseWheel: EventCallback<IMouseWheelEvent> | null = null;
 
 	private readonly _coordinatesConverter: ICoordinatesConverter;
@@ -33,47 +33,47 @@ export class ViewUserInputEvents {
 		this._coordinatesConverter = coordinatesConverter;
 	}
 
-	public emitKeyDown(e: IKeyboardEvent): codemavi {
+	public emitKeyDown(e: IKeyboardEvent): void {
 		this.onKeyDown?.(e);
 	}
 
-	public emitKeyUp(e: IKeyboardEvent): codemavi {
+	public emitKeyUp(e: IKeyboardEvent): void {
 		this.onKeyUp?.(e);
 	}
 
-	public emitContextMenu(e: IEditorMouseEvent): codemavi {
+	public emitContextMenu(e: IEditorMouseEvent): void {
 		this.onContextMenu?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseMove(e: IEditorMouseEvent): codemavi {
+	public emitMouseMove(e: IEditorMouseEvent): void {
 		this.onMouseMove?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseLeave(e: IPartialEditorMouseEvent): codemavi {
+	public emitMouseLeave(e: IPartialEditorMouseEvent): void {
 		this.onMouseLeave?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseDown(e: IEditorMouseEvent): codemavi {
+	public emitMouseDown(e: IEditorMouseEvent): void {
 		this.onMouseDown?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseUp(e: IEditorMouseEvent): codemavi {
+	public emitMouseUp(e: IEditorMouseEvent): void {
 		this.onMouseUp?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseDrag(e: IEditorMouseEvent): codemavi {
+	public emitMouseDrag(e: IEditorMouseEvent): void {
 		this.onMouseDrag?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseDrop(e: IPartialEditorMouseEvent): codemavi {
+	public emitMouseDrop(e: IPartialEditorMouseEvent): void {
 		this.onMouseDrop?.(this._convertViewToModelMouseEvent(e));
 	}
 
-	public emitMouseDropCanceled(): codemavi {
+	public emitMouseDropCanceled(): void {
 		this.onMouseDropCanceled?.();
 	}
 
-	public emitMouseWheel(e: IMouseWheelEvent): codemavi {
+	public emitMouseWheel(e: IMouseWheelEvent): void {
 		this.onMouseWheel?.(e);
 	}
 

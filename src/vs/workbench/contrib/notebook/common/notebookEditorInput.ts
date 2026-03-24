@@ -274,7 +274,7 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
 		return undefined;
 	}
 
-	override async revert(_group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
+	override async revert(_group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
 		if (this.editorModelReference && this.editorModelReference.object.isDirty()) {
 			await this.editorModelReference.object.revert(options);
 		}

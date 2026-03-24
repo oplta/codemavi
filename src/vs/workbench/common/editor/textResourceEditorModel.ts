@@ -26,7 +26,7 @@ export class TextResourceEditorModel extends BaseTextEditorModel {
 		super(modelService, languageService, languageDetectionService, accessibilityService, resource);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 
 		// force this class to dispose the underlying model
 		if (this.textEditorModelHandle) {

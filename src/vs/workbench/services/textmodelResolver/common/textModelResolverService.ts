@@ -101,7 +101,7 @@ class ResourceModelCollection extends ReferenceCollection<Promise<IResolvedTextE
 		throw new Error(`Unable to resolve resource ${key}`);
 	}
 
-	protected destroyReferencedObject(key: string, modelPromise: Promise<ITextEditorModel>): codemavi {
+	protected destroyReferencedObject(key: string, modelPromise: Promise<ITextEditorModel>): void {
 
 		// inMemory is bound to a different lifecycle
 		const resource = URI.parse(key);

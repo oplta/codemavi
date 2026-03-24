@@ -133,7 +133,7 @@ export class McpServerOptionsCommand extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, id: string): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, id: string): Promise<void> {
 		const mcpService = accessor.get(IMcpService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const mcpRegistry = accessor.get(IMcpRegistry);
@@ -283,7 +283,7 @@ export class MCPServerActionRendering extends Disposable implements IWorkbenchCo
 
 			return instaService.createInstance(class extends MenuEntryActionViewItem {
 
-				override render(container: HTMLElement): codemavi {
+				override render(container: HTMLElement): void {
 
 					super.render(container);
 					container.classList.add('chat-mcp');
@@ -318,7 +318,7 @@ export class MCPServerActionRendering extends Disposable implements IWorkbenchCo
 					}));
 				}
 
-				override async onClick(e: MouseEvent): Promise<codemavi> {
+				override async onClick(e: MouseEvent): Promise<void> {
 					e.preventDefault();
 					e.stopPropagation();
 
@@ -374,7 +374,7 @@ export class ResetMcpTrustCommand extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const mcpService = accessor.get(IMcpRegistry);
 		mcpService.resetTrust();
 	}
@@ -394,7 +394,7 @@ export class ResetMcpCachedTools extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const mcpService = accessor.get(IMcpService);
 		mcpService.resetCaches();
 	}
@@ -422,7 +422,7 @@ export class AddConfigurationAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, configUri?: string): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, configUri?: string): Promise<void> {
 		return accessor.get(IInstantiationService).createInstance(McpAddConfigurationCommand, configUri).run();
 	}
 }
@@ -440,7 +440,7 @@ export class RemoveStoredInput extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, scope: StorageScope, id?: string): codemavi {
+	run(accessor: ServicesAccessor, scope: StorageScope, id?: string): void {
 		accessor.get(IMcpRegistry).clearSavedInputs(scope, id);
 	}
 }
@@ -457,7 +457,7 @@ export class EditStoredInput extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, inputId: string, uri: URI | undefined, configSection: string, target: ConfigurationTarget): codemavi {
+	run(accessor: ServicesAccessor, inputId: string, uri: URI | undefined, configSection: string, target: ConfigurationTarget): void {
 		const workspaceFolder = uri && accessor.get(IWorkspaceContextService).getWorkspaceFolder(uri);
 		accessor.get(IMcpRegistry).editSavedInput(inputId, workspaceFolder || undefined, configSection, target);
 	}
@@ -475,7 +475,7 @@ export class ShowOutput extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, serverId: string): codemavi {
+	run(accessor: ServicesAccessor, serverId: string): void {
 		accessor.get(IMcpService).servers.get().find(s => s.definition.id === serverId)?.showOutput();
 	}
 }

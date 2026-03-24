@@ -79,7 +79,7 @@ export class MainThreadEditorTabs implements MainThreadEditorTabsShape {
 		this._editorGroupsService.whenReady.then(() => this._createTabsModel());
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._groupLookup.clear();
 		this._tabInfoLookup.clear();
 		this._dispoables.dispose();
@@ -496,7 +496,7 @@ export class MainThreadEditorTabs implements MainThreadEditorTabsShape {
 	/**
 	 * Builds the model from scratch based on the current state of the editor service.
 	 */
-	private _createTabsModel(): codemavi {
+	private _createTabsModel(): void {
 		if (this._editorGroupsService.groups.length === 0) {
 			return; // skip this invalid state, it may happen when the entire editor area is transitioning to other state ("editor working sets")
 		}
@@ -555,7 +555,7 @@ export class MainThreadEditorTabs implements MainThreadEditorTabsShape {
 	 * The main handler for the tab events
 	 * @param events The list of events to process
 	 */
-	private _updateTabsModel(changeEvent: IEditorsChangeEvent): codemavi {
+	private _updateTabsModel(changeEvent: IEditorsChangeEvent): void {
 		const event = changeEvent.event;
 		const groupId = changeEvent.groupId;
 		switch (event.kind) {
@@ -615,7 +615,7 @@ export class MainThreadEditorTabs implements MainThreadEditorTabsShape {
 		}
 	}
 	//#region Messages received from Ext Host
-	$moveTab(tabId: string, index: number, viewColumn: EditorGroupColumn, preserveFocus?: boolean): codemavi {
+	$moveTab(tabId: string, index: number, viewColumn: EditorGroupColumn, preserveFocus?: boolean): void {
 		const groupId = columnToEditorGroup(this._editorGroupsService, this._configurationService, viewColumn);
 		const tabInfo = this._tabInfoLookup.get(tabId);
 		const tab = tabInfo?.tab;

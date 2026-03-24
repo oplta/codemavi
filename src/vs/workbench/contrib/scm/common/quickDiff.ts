@@ -89,7 +89,7 @@ export interface QuickDiffResult {
 export interface IQuickDiffService {
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeQuickDiffProviders: Event<codemavi>;
+	readonly onDidChangeQuickDiffProviders: Event<void>;
 	addQuickDiffProvider(quickDiff: QuickDiffProvider): IDisposable;
 	getQuickDiffs(uri: URI, language?: string, isSynchronized?: boolean): Promise<QuickDiff[]>;
 }

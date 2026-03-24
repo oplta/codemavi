@@ -197,7 +197,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return this._getTextModel(resource);
 	}
 
-	private _resetContextKeys(): codemavi {
+	private _resetContextKeys(): void {
 		this._accessiblityHelpIsShown.reset();
 		this._accessibleViewIsShown.reset();
 		this._accessibleViewSupportsNavigation.reset();
@@ -215,7 +215,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return this._editorWidget.getPosition() || undefined;
 	}
 
-	setPosition(position: Position, reveal?: boolean, select?: boolean): codemavi {
+	setPosition(position: Position, reveal?: boolean, select?: boolean): void {
 		this._editorWidget.setPosition(position);
 		if (reveal) {
 			this._editorWidget.revealPosition(position);
@@ -241,7 +241,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return { code: codeBlock.code, languageId: codeBlock.languageId, codeBlockIndex, element: undefined };
 	}
 
-	navigateToCodeBlock(type: 'next' | 'previous'): codemavi {
+	navigateToCodeBlock(type: 'next' | 'previous'): void {
 		const position = this._editorWidget.getPosition();
 		if (!this._codeBlocks?.length || !position) {
 			return;
@@ -259,14 +259,14 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		this.setPosition(new Position(codeBlock.startLine, 1), true);
 	}
 
-	showLastProvider(id: AccessibleViewProviderId): codemavi {
+	showLastProvider(id: AccessibleViewProviderId): void {
 		if (!this._lastProvider || this._lastProvider.options.id !== id) {
 			return;
 		}
 		this.show(this._lastProvider);
 	}
 
-	show(provider?: AccesibleViewContentProvider, symbol?: IAccessibleViewSymbol, showAccessibleViewHelp?: boolean, position?: IPosition): codemavi {
+	show(provider?: AccesibleViewContentProvider, symbol?: IAccessibleViewSymbol, showAccessibleViewHelp?: boolean, position?: IPosition): void {
 		provider = provider ?? this._currentProvider;
 		if (!provider) {
 			return;
@@ -325,7 +325,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		}
 	}
 
-	previous(): codemavi {
+	previous(): void {
 		const newContent = this._currentProvider?.providePreviousContent?.();
 		if (!this._currentProvider || !this._viewContainer || !newContent) {
 			return;
@@ -333,7 +333,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		this._render(this._currentProvider, this._viewContainer, undefined, newContent);
 	}
 
-	next(): codemavi {
+	next(): void {
 		const newContent = this._currentProvider?.provideNextContent?.();
 		if (!this._currentProvider || !this._viewContainer || !newContent) {
 			return;
@@ -348,7 +348,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return isIAccessibleViewContentProvider(this._currentProvider) ? this._configurationService.getValue(this._currentProvider.verbositySettingKey) === true : this._storageService.getBoolean(`${ACCESSIBLE_VIEW_SHOWN_STORAGE_PREFIX}${this._currentProvider.id}`, StorageScope.APPLICATION, false);
 	}
 
-	goToSymbol(): codemavi {
+	goToSymbol(): void {
 		if (!this._currentProvider) {
 			return;
 		}
@@ -356,7 +356,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		this._instantiationService.createInstance(AccessibleViewSymbolQuickPick, this).show(this._currentProvider);
 	}
 
-	calculateCodeBlocks(markdown?: string): codemavi {
+	calculateCodeBlocks(markdown?: string): void {
 		if (!markdown) {
 			return;
 		}
@@ -409,14 +409,14 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return symbols.length ? symbols : undefined;
 	}
 
-	openHelpLink(): codemavi {
+	openHelpLink(): void {
 		if (!this._currentProvider?.options.readMoreUrl) {
 			return;
 		}
 		this._openerService.open(URI.parse(this._currentProvider.options.readMoreUrl));
 	}
 
-	configureKeybindings(unassigned: boolean): codemavi {
+	configureKeybindings(unassigned: boolean): void {
 		this._isInQuickPick = true;
 		const provider = this._updateLastProvider();
 		const items = unassigned ? provider?.options?.configureKeybindingItems : provider?.options?.configuredKeybindingItems;
@@ -445,7 +445,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		}));
 	}
 
-	private _convertTokensToSymbols(tokens: marked.TokensList, symbols: IAccessibleViewSymbol[]): codemavi {
+	private _convertTokensToSymbols(tokens: marked.TokensList, symbols: IAccessibleViewSymbol[]): void {
 		let firstListItem: string | undefined;
 		for (const token of tokens) {
 			let label: string | undefined = undefined;
@@ -474,7 +474,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		}
 	}
 
-	showSymbol(provider: AccesibleViewContentProvider, symbol: IAccessibleViewSymbol): codemavi {
+	showSymbol(provider: AccesibleViewContentProvider, symbol: IAccessibleViewSymbol): void {
 		if (!this._currentContent) {
 			return;
 		}
@@ -501,7 +501,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		this._updateContextKeys(provider, true);
 	}
 
-	disableHint(): codemavi {
+	disableHint(): void {
 		if (!isIAccessibleViewContentProvider(this._currentProvider)) {
 			return;
 		}
@@ -509,7 +509,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		alert(localize('disableAccessibilityHelp', '{0} accessibility verbosity is now disabled', this._currentProvider.verbositySettingKey));
 	}
 
-	private _updateContextKeys(provider: AccesibleViewContentProvider, shown: boolean): codemavi {
+	private _updateContextKeys(provider: AccesibleViewContentProvider, shown: boolean): void {
 		if (provider.options.type === AccessibleViewType.Help) {
 			this._accessiblityHelpIsShown.set(shown);
 			this._accessibleViewIsShown.reset();
@@ -522,7 +522,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		this._accessibleViewGoToSymbolSupported.set(this._goToSymbolsSupported() ? this.getSymbols()?.length! > 0 : false);
 	}
 
-	private _updateContent(provider: AccesibleViewContentProvider, updatedContent?: string): codemavi {
+	private _updateContent(provider: AccesibleViewContentProvider, updatedContent?: string): void {
 		let content = updatedContent ?? provider.provideContent();
 		if (provider.options.type === AccessibleViewType.View) {
 			this._currentContent = content;
@@ -610,7 +610,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		});
 		this._updateToolbar(this._currentProvider.actions, provider.options.type);
 
-		const hide = (e?: KeyboardEvent | IKeyboardEvent): codemavi => {
+		const hide = (e?: KeyboardEvent | IKeyboardEvent): void => {
 			if (!this._isInQuickPick) {
 				provider.onClose();
 			}
@@ -658,7 +658,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return disposableStore;
 	}
 
-	private _updateToolbar(providedActions?: IAction[], type?: AccessibleViewType): codemavi {
+	private _updateToolbar(providedActions?: IAction[], type?: AccessibleViewType): void {
 		this._toolbar.setAriaLabel(type === AccessibleViewType.Help ? localize('accessibleHelpToolbar', 'Accessibility Help') : localize('accessibleViewToolbar', "Accessible View"));
 		const toolbarMenu = this._register(this._menuService.createMenu(MenuId.AccessibleView, this._contextKeyService));
 		const menuActions = getFlatActionBarActions(toolbarMenu.getActions({}));
@@ -673,7 +673,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		}
 	}
 
-	private _layout(): codemavi {
+	private _layout(): void {
 		const dimension = this._layoutService.activeContainerDimension;
 		const maxHeight = dimension.height && dimension.height * .4;
 		const height = Math.min(maxHeight, this._editorWidget.getContentHeight());
@@ -728,7 +728,7 @@ export class AccessibleView extends Disposable implements ITextModelContentProvi
 		return lastProvider;
 	}
 
-	public showAccessibleViewHelp(): codemavi {
+	public showAccessibleViewHelp(): void {
 		const lastProvider = this._updateLastProvider();
 		if (!lastProvider) {
 			return;
@@ -865,28 +865,28 @@ export class AccessibleViewService extends Disposable implements IAccessibleView
 		super();
 	}
 
-	show(provider: AccesibleViewContentProvider, position?: Position): codemavi {
+	show(provider: AccesibleViewContentProvider, position?: Position): void {
 		if (!this._accessibleView) {
 			this._accessibleView = this._register(this._instantiationService.createInstance(AccessibleView));
 		}
 		this._accessibleView.show(provider, undefined, undefined, position);
 	}
-	configureKeybindings(unassigned: boolean): codemavi {
+	configureKeybindings(unassigned: boolean): void {
 		this._accessibleView?.configureKeybindings(unassigned);
 	}
-	openHelpLink(): codemavi {
+	openHelpLink(): void {
 		this._accessibleView?.openHelpLink();
 	}
-	showLastProvider(id: AccessibleViewProviderId): codemavi {
+	showLastProvider(id: AccessibleViewProviderId): void {
 		this._accessibleView?.showLastProvider(id);
 	}
-	next(): codemavi {
+	next(): void {
 		this._accessibleView?.next();
 	}
-	previous(): codemavi {
+	previous(): void {
 		this._accessibleView?.previous();
 	}
-	goToSymbol(): codemavi {
+	goToSymbol(): void {
 		this._accessibleView?.goToSymbol();
 	}
 	getOpenAriaHint(verbositySettingKey: AccessibilityVerbositySettingId): string | null {
@@ -902,10 +902,10 @@ export class AccessibleViewService extends Disposable implements IAccessibleView
 		}
 		return hint;
 	}
-	disableHint(): codemavi {
+	disableHint(): void {
 		this._accessibleView?.disableHint();
 	}
-	showAccessibleViewHelp(): codemavi {
+	showAccessibleViewHelp(): void {
 		this._accessibleView?.showAccessibleViewHelp();
 	}
 	getPosition(id: AccessibleViewProviderId): Position | undefined {
@@ -915,13 +915,13 @@ export class AccessibleViewService extends Disposable implements IAccessibleView
 		const lastLine = this._accessibleView?.editorWidget.getModel()?.getLineCount();
 		return lastLine !== undefined && lastLine > 0 ? new Position(lastLine, 1) : undefined;
 	}
-	setPosition(position: Position, reveal?: boolean, select?: boolean): codemavi {
+	setPosition(position: Position, reveal?: boolean, select?: boolean): void {
 		this._accessibleView?.setPosition(position, reveal, select);
 	}
 	getCodeBlockContext(): ICodeBlockActionContext | undefined {
 		return this._accessibleView?.getCodeBlockContext();
 	}
-	navigateToCodeBlock(type: 'next' | 'previous'): codemavi {
+	navigateToCodeBlock(type: 'next' | 'previous'): void {
 		this._accessibleView?.navigateToCodeBlock(type);
 	}
 }
@@ -930,7 +930,7 @@ class AccessibleViewSymbolQuickPick {
 	constructor(private _accessibleView: AccessibleView, @IQuickInputService private readonly _quickInputService: IQuickInputService) {
 
 	}
-	show(provider: AccesibleViewContentProvider): codemavi {
+	show(provider: AccesibleViewContentProvider): void {
 		const disposables = new DisposableStore();
 		const quickPick = disposables.add(this._quickInputService.createQuickPick<IAccessibleViewSymbol>());
 		quickPick.placeholder = localize('accessibleViewSymbolQuickPickPlaceholder', "Type to search symbols");

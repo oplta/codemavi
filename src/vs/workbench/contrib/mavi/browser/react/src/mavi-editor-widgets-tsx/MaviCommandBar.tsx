@@ -10,7 +10,7 @@ import '../styles.css'
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { ScrollType } from '../../../../../../../editor/common/editorCommon.js';
 import { acceptAllBg, acceptBorder, buttonFontSize, buttonTextColor, rejectAllBg, rejectBg, rejectBorder } from '../../../../common/helpers/colors.js';
-import { Code MaviCommandBarProps } from '../../../codemaviCommandBarService.js';
+import { MaviCommandBarProps } from '../../../maviCommandBarService.js';
 import { Check, EllipsisVertical, Menu, MoveDown, MoveLeft, MoveRight, MoveUp, X } from 'lucide-react';
 import {
 	MAVI_GOTO_NEXT_DIFF_ACTION_ID,
@@ -23,19 +23,19 @@ import {
 	MAVI_REJECT_ALL_DIFFS_ACTION_ID
 } from '../../../actionIDs.js';
 
-export const Code MaviCommandBarMain = ({ uri, editor }: Code MaviCommandBarProps) => {
+export const MaviCommandBarMain = ({ uri, editor }: MaviCommandBarProps) => {
 	const isDark = useIsDark()
 
 	return <div
-		className={`@@codemavi-scope ${isDark ? 'dark' : ''}`}
+		className={`@@mavi-scope ${isDark ? 'dark' : ''}`}
 	>
-		<Code MaviCommandBar uri={uri} editor={editor} />
+		<MaviCommandBar uri={uri} editor={editor} />
 	</div>
 }
 
 
 
-export const AcceptAllButtonWrapper = ({ text, onClick, className, ...props }: { text: string, onClick: () => codemavi, className?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+export const AcceptAllButtonWrapper = ({ text, onClick, className, ...props }: { text: string, onClick: () => void, className?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
 	<button
 		className={`
 			px-2 py-0.5
@@ -58,7 +58,7 @@ export const AcceptAllButtonWrapper = ({ text, onClick, className, ...props }: {
 	</button>
 )
 
-export const RejectAllButtonWrapper = ({ text, onClick, className, ...props }: { text: string, onClick: () => codemavi, className?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+export const RejectAllButtonWrapper = ({ text, onClick, className, ...props }: { text: string, onClick: () => void, className?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
 	<button
 		className={`
 			px-2 py-0.5
@@ -83,14 +83,14 @@ export const RejectAllButtonWrapper = ({ text, onClick, className, ...props }: {
 
 
 
-export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) => {
+export const MaviCommandBar = ({ uri, editor }: MaviCommandBarProps) => {
 	const accessor = useAccessor()
 	const editCodeService = accessor.get('IEditCodeService')
 	const editorService = accessor.get('ICodeEditorService')
 	const metricsService = accessor.get('IMetricsService')
 	const commandService = accessor.get('ICommandService')
 	const commandBarService = accessor.get('IMaviCommandBarService')
-	const codemaviModelService = accessor.get('IMaviModelService')
+	const maviModelService = accessor.get('IMaviModelService')
 	const keybindingService = accessor.get('IKeybindingService')
 	const { stateOfURI: commandBarState, sortedURIs: sortedCommandBarURIs } = useCommandBarState()
 	const [showAcceptRejectAllButtons, setShowAcceptRejectAllButtons] = useState(false)
@@ -196,7 +196,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 	if (currFileIdx === null) {
 		return (
 			<div className="pointer-events-auto">
-				<div className="flex bg-codemavi-bg-2 shadow-md border border-codemavi-border-2 [&>*:first-child]:pl-3 [&>*:last-child]:pr-3 [&>*]:border-r [&>*]:border-codemavi-border-2 [&>*:last-child]:border-r-0">
+				<div className="flex bg-mavi-bg-2 shadow-md border border-mavi-border-2 [&>*:first-child]:pl-3 [&>*:last-child]:pr-3 [&>*]:border-r [&>*]:border-mavi-border-2 [&>*:last-child]:border-r-0">
 					<div className="flex items-center px-3">
 						<span className="text-xs whitespace-nowrap">
 							{`${sortedCommandBarURIs.length} file${sortedCommandBarURIs.length === 1 ? '' : 's'} changed`}
@@ -226,12 +226,12 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 			{/* Accept All / Reject All buttons that appear when the vertical ellipsis is clicked */}
 			{showAcceptRejectAllButtons && showAcceptRejectAll && (
 				<div className="flex justify-end mb-1">
-					<div className="inline-flex bg-codemavi-bg-2 rounded shadow-md border border-codemavi-border-2 overflow-hidden">
-						<div className="flex items-center [&>*]:border-r [&>*]:border-codemavi-border-2 [&>*:last-child]:border-r-0">
+					<div className="inline-flex bg-mavi-bg-2 rounded shadow-md border border-mavi-border-2 overflow-hidden">
+						<div className="flex items-center [&>*]:border-r [&>*]:border-mavi-border-2 [&>*:last-child]:border-r-0">
 							<AcceptAllButtonWrapper
 								// text={`Accept All${acceptAllKeybindLabel ? ` ${acceptAllKeybindLabel}` : ''}`}
 								text={`Accept All`}
-								data-tooltip-id='codemavi-tooltip'
+								data-tooltip-id='mavi-tooltip'
 								data-tooltip-content={acceptAllKeybindLabel}
 								data-tooltip-delay-show={500}
 								onClick={onAcceptAll}
@@ -239,7 +239,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 							<RejectAllButtonWrapper
 								// text={`Reject All${rejectAllKeybindLabel ? ` ${rejectAllKeybindLabel}` : ''}`}
 								text={`Reject All`}
-								data-tooltip-id='codemavi-tooltip'
+								data-tooltip-id='mavi-tooltip'
 								data-tooltip-content={rejectAllKeybindLabel}
 								data-tooltip-delay-show={500}
 								onClick={onRejectAll}
@@ -249,7 +249,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 				</div>
 			)}
 
-			<div className="flex items-center bg-codemavi-bg-2 rounded shadow-md border border-codemavi-border-2 [&>*:first-child]:pl-3 [&>*:last-child]:pr-3 [&>*]:px-3 [&>*]:border-r [&>*]:border-codemavi-border-2 [&>*:last-child]:border-r-0">
+			<div className="flex items-center bg-mavi-bg-2 rounded shadow-md border border-mavi-border-2 [&>*:first-child]:pl-3 [&>*:last-child]:pr-3 [&>*]:px-3 [&>*]:border-r [&>*]:border-mavi-border-2 [&>*:last-child]:border-r-0">
 
 				{/* Diff Navigation Group */}
 				<div className="flex items-center py-0.5">
@@ -263,7 +263,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 								commandBarService.goToDiffIdx(prevDiffIdx);
 							}
 						}}
-						data-tooltip-id="codemavi-tooltip"
+						data-tooltip-id="mavi-tooltip"
 						data-tooltip-content={`${upKeybindLabel ? `${upKeybindLabel}` : ''}`}
 						data-tooltip-delay-show={500}
 					>
@@ -288,7 +288,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 								commandBarService.goToDiffIdx(nextDiffIdx);
 							}
 						}}
-						data-tooltip-id="codemavi-tooltip"
+						data-tooltip-id="mavi-tooltip"
 						data-tooltip-content={`${downKeybindLabel ? `${downKeybindLabel}` : ''}`}
 						data-tooltip-delay-show={500}
 					>
@@ -310,7 +310,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 								commandBarService.goToURIIdx(prevURIIdx);
 							}
 						}}
-						data-tooltip-id="codemavi-tooltip"
+						data-tooltip-id="mavi-tooltip"
 						data-tooltip-content={`${leftKeybindLabel ? `${leftKeybindLabel}` : ''}`}
 						data-tooltip-delay-show={500}
 					>
@@ -332,7 +332,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 								commandBarService.goToURIIdx(nextURIIdx);
 							}
 						}}
-						data-tooltip-id="codemavi-tooltip"
+						data-tooltip-id="mavi-tooltip"
 						data-tooltip-content={`${rightKeybindLabel ? `${rightKeybindLabel}` : ''}`}
 						data-tooltip-delay-show={500}
 					>
@@ -347,7 +347,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 						<AcceptAllButtonWrapper
 							// text={`Accept File${acceptFileKeybindLabel ? ` ${acceptFileKeybindLabel}` : ''}`}
 							text={`Accept File`}
-							data-tooltip-id='codemavi-tooltip'
+							data-tooltip-id='mavi-tooltip'
 							data-tooltip-content={acceptFileKeybindLabel}
 							data-tooltip-delay-show={500}
 							onClick={onAcceptFile}
@@ -355,7 +355,7 @@ export const Code MaviCommandBar = ({ uri, editor }: Code MaviCommandBarProps) =
 						<RejectAllButtonWrapper
 							// text={`Reject File${rejectFileKeybindLabel ? ` ${rejectFileKeybindLabel}` : ''}`}
 							text={`Reject File`}
-							data-tooltip-id='codemavi-tooltip'
+							data-tooltip-id='mavi-tooltip'
 							data-tooltip-content={rejectFileKeybindLabel}
 							data-tooltip-delay-show={500}
 							onClick={onRejectFile}

@@ -302,7 +302,7 @@ export class Menu extends ActionBar {
 		});
 	}
 
-	private initializeOrUpdateStyleSheet(container: HTMLElement, style: IMenuStyles): codemavi {
+	private initializeOrUpdateStyleSheet(container: HTMLElement, style: IMenuStyles): void {
 		if (!this.styleSheet) {
 			if (isInShadowDOM(container)) {
 				this.styleSheet = createStyleSheet(container);
@@ -316,7 +316,7 @@ export class Menu extends ActionBar {
 		this.styleSheet.textContent = getMenuWidgetCSS(style, isInShadowDOM(container));
 	}
 
-	private styleScrollElement(scrollElement: HTMLElement, style: IMenuStyles): codemavi {
+	private styleScrollElement(scrollElement: HTMLElement, style: IMenuStyles): void {
 
 		const fgColor = style.foregroundColor ?? '';
 		const bgColor = style.backgroundColor ?? '';
@@ -343,7 +343,7 @@ export class Menu extends ActionBar {
 		return this.menuElement.scrollTop;
 	}
 
-	trigger(index: number): codemavi {
+	trigger(index: number): void {
 		if (index <= this.viewItems.length && index >= 0) {
 			const item = this.viewItems[index];
 			if (item instanceof SubmenuMenuActionViewItem) {
@@ -366,7 +366,7 @@ export class Menu extends ActionBar {
 		}
 	}
 
-	private setFocusedItem(element: HTMLElement): codemavi {
+	private setFocusedItem(element: HTMLElement): void {
 		for (let i = 0; i < this.actionsList.children.length; i++) {
 			const elem = this.actionsList.children[i];
 			if (element === elem) {
@@ -376,7 +376,7 @@ export class Menu extends ActionBar {
 		}
 	}
 
-	protected override updateFocus(fromRight?: boolean): codemavi {
+	protected override updateFocus(fromRight?: boolean): void {
 		super.updateFocus(fromRight, true, true);
 
 		if (typeof this.focusedItem !== 'undefined') {
@@ -481,7 +481,7 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 			}
 		}
 
-		// Add mouse up listener later to acodemavi accidental clicks
+		// Add mouse up listener later to avoid accidental clicks
 		this.runOnceToEnableMouseUp = new RunOnceScheduler(() => {
 			if (!this.element) {
 				return;
@@ -531,7 +531,7 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		this._register(this.runOnceToEnableMouseUp);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 
 		if (!this.element) {
@@ -572,12 +572,12 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		this.applyStyle();
 	}
 
-	override blur(): codemavi {
+	override blur(): void {
 		super.blur();
 		this.applyStyle();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		this.item?.focus();
@@ -585,14 +585,14 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		this.applyStyle();
 	}
 
-	updatePositionInSet(pos: number, setSize: number): codemavi {
+	updatePositionInSet(pos: number, setSize: number): void {
 		if (this.item) {
 			this.item.setAttribute('aria-posinset', `${pos}`);
 			this.item.setAttribute('aria-setsize', `${setSize}`);
 		}
 	}
 
-	protected override updateLabel(): codemavi {
+	protected override updateLabel(): void {
 		if (!this.label) {
 			return;
 		}
@@ -643,11 +643,11 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateTooltip(): codemavi {
+	protected override updateTooltip(): void {
 		// menus should function like native menus and they do not have tooltips
 	}
 
-	protected override updateClass(): codemavi {
+	protected override updateClass(): void {
 		if (this.cssClass && this.item) {
 			this.item.classList.remove(...this.cssClass.split(' '));
 		}
@@ -663,7 +663,7 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateEnabled(): codemavi {
+	protected override updateEnabled(): void {
 		if (this.action.enabled) {
 			if (this.element) {
 				this.element.classList.remove('disabled');
@@ -688,7 +688,7 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	protected override updateChecked(): codemavi {
+	protected override updateChecked(): void {
 		if (!this.item) {
 			return;
 		}
@@ -708,7 +708,7 @@ class BaseMenuActionViewItem extends BaseActionViewItem {
 		return this.mnemonic;
 	}
 
-	protected applyStyle(): codemavi {
+	protected applyStyle(): void {
 		const isSelected = this.element && this.element.classList.contains('focused');
 		const fgColor = isSelected && this.menuStyle.selectionForegroundColor ? this.menuStyle.selectionForegroundColor : this.menuStyle.foregroundColor;
 		const bgColor = isSelected && this.menuStyle.selectionBackgroundColor ? this.menuStyle.selectionBackgroundColor : undefined;
@@ -764,7 +764,7 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		}, 750);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 
 		if (!this.element) {
@@ -825,18 +825,18 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		}));
 	}
 
-	protected override updateEnabled(): codemavi {
+	protected override updateEnabled(): void {
 		// override on submenu entry
 		// native menus do not observe enablement on sumbenus
 		// we mimic that behavior
 	}
 
-	open(selectFirst?: boolean): codemavi {
+	open(selectFirst?: boolean): void {
 		this.cleanupExistingSubmenu(false);
 		this.createSubmenu(selectFirst);
 	}
 
-	override onClick(e: EventLike): codemavi {
+	override onClick(e: EventLike): void {
 		// stop clicking from trying to run an action
 		EventHelper.stop(e, true);
 
@@ -844,7 +844,7 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		this.createSubmenu(true);
 	}
 
-	private cleanupExistingSubmenu(force: boolean): codemavi {
+	private cleanupExistingSubmenu(force: boolean): void {
 		if (this.parentData.submenu && (force || (this.parentData.submenu !== this.mysubmenu))) {
 
 			// disposal may throw if the submenu has already been removed
@@ -888,7 +888,7 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		return ret;
 	}
 
-	private createSubmenu(selectFirstItem = true): codemavi {
+	private createSubmenu(selectFirstItem = true): void {
 		if (!this.element) {
 			return;
 		}
@@ -958,13 +958,13 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		}
 	}
 
-	private updateAriaExpanded(value: string): codemavi {
+	private updateAriaExpanded(value: string): void {
 		if (this.item) {
 			this.item?.setAttribute('aria-expanded', value);
 		}
 	}
 
-	protected override applyStyle(): codemavi {
+	protected override applyStyle(): void {
 		super.applyStyle();
 
 		const isSelected = this.element && this.element.classList.contains('focused');
@@ -975,7 +975,7 @@ class SubmenuMenuActionViewItem extends BaseMenuActionViewItem {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.hideScheduler.dispose();
@@ -996,7 +996,7 @@ class MenuSeparatorActionViewItem extends ActionViewItem {
 		super(context, action, options);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		if (this.label) {
 			this.label.style.borderBottomColor = this.menuStyles.separatorColor ? `${this.menuStyles.separatorColor}` : '';

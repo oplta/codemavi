@@ -46,7 +46,7 @@ export class MenuService implements IMenuService {
 		return new Set<string>([...menuInfo.structureContextKeys, ...menuInfo.preconditionContextKeys, ...menuInfo.toggledContextKeys]);
 	}
 
-	resetHiddenStates(ids?: MenuId[]): codemavi {
+	resetHiddenStates(ids?: MenuId[]): void {
 		this._hiddenStates.reset(ids);
 	}
 }
@@ -56,8 +56,8 @@ class PersistedMenuHideState {
 	private static readonly _key = 'menu.hiddenCommands';
 
 	private readonly _disposables = new DisposableStore();
-	private readonly _onDidChange = new Emitter<codemavi>();
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private _ignoreChangeEvent: boolean = false;
 	private _data: Record<string, string[] | undefined>;
@@ -94,7 +94,7 @@ class PersistedMenuHideState {
 		return this._hiddenByDefaultCache.get(`${menu.id}/${commandId}`) ?? false;
 	}
 
-	setDefaultState(menu: MenuId, commandId: string, hidden: boolean): codemavi {
+	setDefaultState(menu: MenuId, commandId: string, hidden: boolean): void {
 		this._hiddenByDefaultCache.set(`${menu.id}/${commandId}`, hidden);
 	}
 
@@ -104,7 +104,7 @@ class PersistedMenuHideState {
 		return hiddenByDefault ? !state : state;
 	}
 
-	updateHidden(menu: MenuId, commandId: string, hidden: boolean): codemavi {
+	updateHidden(menu: MenuId, commandId: string, hidden: boolean): void {
 		const hiddenByDefault = this._isHiddenByDefault(menu, commandId);
 		if (hiddenByDefault) {
 			hidden = !hidden;
@@ -135,7 +135,7 @@ class PersistedMenuHideState {
 		this._persist();
 	}
 
-	reset(menus?: MenuId[]): codemavi {
+	reset(menus?: MenuId[]): void {
 		if (menus === undefined) {
 			// reset all
 			this._data = Object.create(null);
@@ -151,7 +151,7 @@ class PersistedMenuHideState {
 		}
 	}
 
-	private _persist(): codemavi {
+	private _persist(): void {
 		try {
 			this._ignoreChangeEvent = true;
 			const raw = JSON.stringify(this._data);
@@ -194,7 +194,7 @@ class MenuInfoSnapshot {
 		return this._toggledContextKeys;
 	}
 
-	refresh(): codemavi {
+	refresh(): void {
 
 		// reset
 		this._menuGroups.length = 0;
@@ -226,7 +226,7 @@ class MenuInfoSnapshot {
 		return menuItems;
 	}
 
-	private _collectContextKeysAndSubmenuIds(item: IMenuItem | ISubmenuItem): codemavi {
+	private _collectContextKeysAndSubmenuIds(item: IMenuItem | ISubmenuItem): void {
 
 		MenuInfoSnapshot._fillInKbExprKeys(item.when, this._structureContextKeys);
 
@@ -250,7 +250,7 @@ class MenuInfoSnapshot {
 		}
 	}
 
-	private static _fillInKbExprKeys(exp: ContextKeyExpression | undefined, set: Set<string>): codemavi {
+	private static _fillInKbExprKeys(exp: ContextKeyExpression | undefined, set: Set<string>): void {
 		if (exp) {
 			for (const key of exp.keys()) {
 				set.add(key);
@@ -453,7 +453,7 @@ class MenuImpl implements IMenu {
 		return this._menuInfo.createActionGroups(options);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._onDidChange.dispose();
 	}

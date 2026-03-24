@@ -46,7 +46,7 @@ export class MultiDiffEditorWidget extends Disposable {
 		this._register(recomputeInitiallyAndOnChange(this._widgetImpl));
 	}
 
-	public reveal(resource: IMultiDiffResourceId, options?: RevealOptions): codemavi {
+	public reveal(resource: IMultiDiffResourceId, options?: RevealOptions): void {
 		this._widgetImpl.get().reveal(resource, options);
 	}
 
@@ -54,11 +54,11 @@ export class MultiDiffEditorWidget extends Disposable {
 		return new MultiDiffEditorViewModel(model, this._instantiationService);
 	}
 
-	public setViewModel(viewModel: MultiDiffEditorViewModel | undefined): codemavi {
+	public setViewModel(viewModel: MultiDiffEditorViewModel | undefined): void {
 		this._viewModel.set(viewModel, undefined);
 	}
 
-	public layout(dimension: Dimension): codemavi {
+	public layout(dimension: Dimension): void {
 		this._dimension.set(dimension, undefined);
 	}
 
@@ -74,7 +74,7 @@ export class MultiDiffEditorWidget extends Disposable {
 		return this._widgetImpl.get().getViewState();
 	}
 
-	public setViewState(viewState: IMultiDiffEditorViewState): codemavi {
+	public setViewState(viewState: IMultiDiffEditorViewState): void {
 		this._widgetImpl.get().setViewState(viewState);
 	}
 

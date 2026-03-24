@@ -19,7 +19,7 @@ export interface ScheduledTask {
 	readonly time: TimeOffset;
 	readonly source: ScheduledTaskSource;
 
-	run(): codemavi;
+	run(): void;
 }
 
 export interface ScheduledTaskSource {
@@ -89,7 +89,7 @@ export class AsyncSchedulerProcessor extends Disposable {
 	private readonly maxTaskCount: number;
 	private readonly useSetImmediate: boolean;
 
-	private readonly queueEmptyEmitter = new Emitter<codemavi>();
+	private readonly queueEmptyEmitter = new Emitter<void>();
 	public readonly onTaskQueueEmpty = this.queueEmptyEmitter.event;
 
 	private lastError: Error | undefined;
@@ -145,7 +145,7 @@ export class AsyncSchedulerProcessor extends Disposable {
 		}
 	}
 
-	waitForEmptyQueue(): Promise<codemavi> {
+	waitForEmptyQueue(): Promise<void> {
 		if (this.lastError) {
 			const error = this.lastError;
 			this.lastError = undefined;
@@ -233,7 +233,7 @@ function setInterval(scheduler: Scheduler, handler: TimerHandler, interval: numb
 	let disposed = false;
 	let lastDisposable: IDisposable;
 
-	function schedule(): codemavi {
+	function schedule(): void {
 		iterCount++;
 		const curIter = iterCount;
 		lastDisposable = scheduler.schedule({
@@ -331,8 +331,8 @@ function createDateClass(scheduler: Scheduler): DateConstructor {
 
 interface PriorityQueue<T> {
 	length: number;
-	add(value: T): codemavi;
-	remove(value: T): codemavi;
+	add(value: T): void;
+	remove(value: T): void;
 
 	removeMin(): T | undefined;
 	toSortedArray(): T[];
@@ -350,12 +350,12 @@ class SimplePriorityQueue<T> implements PriorityQueue<T> {
 		return this.items.length;
 	}
 
-	add(value: T): codemavi {
+	add(value: T): void {
 		this.items.push(value);
 		this.isSorted = false;
 	}
 
-	remove(value: T): codemavi {
+	remove(value: T): void {
 		this.items.splice(this.items.indexOf(value), 1);
 		this.isSorted = false;
 	}

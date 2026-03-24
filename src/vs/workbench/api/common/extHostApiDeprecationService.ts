@@ -12,7 +12,7 @@ import { IExtHostRpcService } from './extHostRpcService.js';
 export interface IExtHostApiDeprecationService {
 	readonly _serviceBrand: undefined;
 
-	report(apiId: string, extension: IExtensionDescription, migrationSuggestion: string): codemavi;
+	report(apiId: string, extension: IExtensionDescription, migrationSuggestion: string): void;
 }
 
 export const IExtHostApiDeprecationService = createDecorator<IExtHostApiDeprecationService>('IExtHostApiDeprecationService');
@@ -31,7 +31,7 @@ export class ExtHostApiDeprecationService implements IExtHostApiDeprecationServi
 		this._telemetryShape = rpc.getProxy(extHostProtocol.MainContext.MainThreadTelemetry);
 	}
 
-	public report(apiId: string, extension: IExtensionDescription, migrationSuggestion: string): codemavi {
+	public report(apiId: string, extension: IExtensionDescription, migrationSuggestion: string): void {
 		const key = this.getUsageKey(apiId, extension);
 		if (this._reportedUsages.has(key)) {
 			return;
@@ -67,7 +67,7 @@ export class ExtHostApiDeprecationService implements IExtHostApiDeprecationServi
 export const NullApiDeprecationService = Object.freeze(new class implements IExtHostApiDeprecationService {
 	declare readonly _serviceBrand: undefined;
 
-	public report(_apiId: string, _extension: IExtensionDescription, _warningMessage: string): codemavi {
+	public report(_apiId: string, _extension: IExtensionDescription, _warningMessage: string): void {
 		// noop
 	}
 }());

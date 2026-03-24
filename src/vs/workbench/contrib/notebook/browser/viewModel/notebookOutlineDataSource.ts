@@ -61,7 +61,7 @@ export class NotebookCellOutlineDataSource implements INotebookCellOutlineDataSo
 			const notebookCells = notebookEditorWidget?.getViewModel()?.viewCells.filter((cell) => cell.cellKind === CellKind.Code);
 
 			if (notebookCells) {
-				const promises: Promise<codemavi>[] = [];
+				const promises: Promise<void>[] = [];
 				// limit the number of cells so that we don't resolve an excessive amount of text models
 				for (const cell of notebookCells.slice(0, 50)) {
 					// gather all symbols asynchronously
@@ -77,7 +77,7 @@ export class NotebookCellOutlineDataSource implements INotebookCellOutlineDataSo
 		}
 	}
 
-	public recomputeState(): codemavi {
+	public recomputeState(): void {
 		this._disposables.clear();
 		this._activeEntry = undefined;
 		this._uri = undefined;
@@ -214,7 +214,7 @@ export class NotebookCellOutlineDataSource implements INotebookCellOutlineDataSo
 		return { changeEventTriggered: false };
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._entries.length = 0;
 		this._activeEntry = undefined;
 		this._disposables.dispose();

@@ -50,7 +50,7 @@ export class Margin extends ViewPart {
 		this._domNode.appendChild(this._glyphMarginBackgroundDomNode);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 
@@ -77,11 +77,11 @@ export class Margin extends ViewPart {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		this._domNode.setLayerHinting(this._canUseLayerHinting);
 		this._domNode.setContain('strict');
 		const adjustedScrollTop = ctx.scrollTop - ctx.bigNumbersDelta;

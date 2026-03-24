@@ -12,7 +12,7 @@ export class GithubRemoteSourcePublisher implements RemoteSourcePublisher {
 
 	constructor(private gitAPI: GitAPI) { }
 
-	publishRepository(repository: Repository): Promise<codemavi> {
+	publishRepository(repository: Repository): Promise<void> {
 		return publishRepository(this.gitAPI, repository);
 	}
 }

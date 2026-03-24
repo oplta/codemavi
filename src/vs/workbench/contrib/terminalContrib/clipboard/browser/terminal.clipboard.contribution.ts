@@ -56,7 +56,7 @@ export class TerminalClipboardContribution extends Disposable implements ITermin
 		super();
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
 		this._xterm = xterm;
 		// TODO: This should be a different event on xterm, copying html should not share the requesting run command event
 		this._register(xterm.onDidRequestCopyAsHtml(e => this.copySelection(true, e.command)));
@@ -72,7 +72,7 @@ export class TerminalClipboardContribution extends Disposable implements ITermin
 		}));
 	}
 
-	async copySelection(asHtml?: boolean, command?: ITerminalCommand): Promise<codemavi> {
+	async copySelection(asHtml?: boolean, command?: ITerminalCommand): Promise<void> {
 		// TODO: Confirm this is fine that it's no longer awaiting xterm promise
 		this._xterm?.copySelection(asHtml, command);
 	}
@@ -80,18 +80,18 @@ export class TerminalClipboardContribution extends Disposable implements ITermin
 	/**
 	 * Focuses and pastes the contents of the clipboard into the terminal instance.
 	 */
-	async paste(): Promise<codemavi> {
+	async paste(): Promise<void> {
 		await this._paste(await this._clipboardService.readText());
 	}
 
 	/**
 	 * Focuses and pastes the contents of the selection clipboard into the terminal instance.
 	 */
-	async pasteSelection(): Promise<codemavi> {
+	async pasteSelection(): Promise<void> {
 		await this._paste(await this._clipboardService.readText('selection'));
 	}
 
-	private async _paste(value: string): Promise<codemavi> {
+	private async _paste(value: string): Promise<void> {
 		if (!this._xterm) {
 			return;
 		}
@@ -113,7 +113,7 @@ export class TerminalClipboardContribution extends Disposable implements ITermin
 		this._onDidPaste.fire(currentText);
 	}
 
-	async handleMouseEvent(event: MouseEvent): Promise<{ handled: boolean } | codemavi> {
+	async handleMouseEvent(event: MouseEvent): Promise<{ handled: boolean } | void> {
 		switch (event.button) {
 			case 1: { // Middle click
 				if (this._terminalConfigurationService.config.middleClickBehavior === 'paste') {

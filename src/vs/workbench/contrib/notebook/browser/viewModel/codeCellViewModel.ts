@@ -30,7 +30,7 @@ export const outputDisplayLimit = 500;
 export class CodeCellViewModel extends BaseCellViewModel implements ICellViewModel {
 	readonly cellKind = CellKind.Code;
 
-	protected readonly _onLayoutInfoRead = this._register(new Emitter<codemavi>());
+	protected readonly _onLayoutInfoRead = this._register(new Emitter<void>());
 	readonly onLayoutInfoRead = this._onLayoutInfoRead.event;
 
 	protected readonly _onDidStartExecution = this._register(new Emitter<ICellExecutionStateChangedEvent>());
@@ -419,7 +419,7 @@ export class CodeCellViewModel extends BaseCellViewModel implements ICellViewMod
 			+ layoutConfiguration.cellBottomMargin;
 	}
 
-	protected onDidChangeTextModelContent(): codemavi {
+	protected onDidChangeTextModelContent(): void {
 		if (this.getEditState() !== CellEditState.Editing) {
 			this.updateEditState(CellEditState.Editing, 'onDidChangeTextModelContent');
 			this._onDidChangeState.fire({ contentChanged: true });
@@ -502,7 +502,7 @@ export class CodeCellViewModel extends BaseCellViewModel implements ICellViewMod
 		this.layoutChange({ outputHeight: true }, 'CodeCellViewModel#spliceOutputs');
 	}
 
-	private _ensureOutputsTop(): codemavi {
+	private _ensureOutputsTop(): void {
 		if (!this._outputsTop) {
 			const values = new Uint32Array(this._outputCollection.length);
 			for (let i = 0; i < this._outputCollection.length; i++) {

@@ -66,12 +66,12 @@ export interface IWorkingCopyBackupService {
 	/**
 	 * Stores a new working copy backup for the given identifier.
 	 */
-	backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<codemavi>;
+	backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadable | VSBufferReadableStream, versionId?: number, meta?: IWorkingCopyBackupMeta, token?: CancellationToken): Promise<void>;
 
 	/**
 	 * Discards the working copy backup associated with the identifier if it exists.
 	 */
-	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<codemavi>;
+	discardBackup(identifier: IWorkingCopyIdentifier, token?: CancellationToken): Promise<void>;
 
 	/**
 	 * Discards all working copy backups.
@@ -79,5 +79,5 @@ export interface IWorkingCopyBackupService {
 	 * The optional set of identifiers in the filter can be
 	 * provided to discard all but the provided ones.
 	 */
-	discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<codemavi>;
+	discardBackups(filter?: { except: IWorkingCopyIdentifier[] }): Promise<void>;
 }

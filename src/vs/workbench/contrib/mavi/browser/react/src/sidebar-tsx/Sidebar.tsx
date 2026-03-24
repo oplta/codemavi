@@ -15,15 +15,15 @@ export const Sidebar = ({ className }: { className: string }) => {
 
 	const isDark = useIsDark()
 	return <div
-		className={`@@codemavi-scope ${isDark ? 'dark' : ''}`}
+		className={`@@mavi-scope ${isDark ? 'dark' : ''}`}
 		style={{ width: '100%', height: '100%' }}
 	>
 		<div
 			// default background + text styles for sidebar
 			className={`
 				w-full h-full
-				bg-codemavi-bg-2
-				text-codemavi-fg-1
+				bg-mavi-bg-2
+				text-mavi-fg-1
 			`}
 		>
 

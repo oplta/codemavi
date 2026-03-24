@@ -41,7 +41,7 @@ export class ChatSelectedTools extends Disposable {
 
 	readonly tools: IObservable<IToolData[]>;
 
-	readonly toolsActionItemViewItemProvider: IActionViewItemProvider & { onDidRender: Event<codemavi> };
+	readonly toolsActionItemViewItemProvider: IActionViewItemProvider & { onDidRender: Event<void> };
 
 	constructor(
 		@ILanguageModelToolsService toolsService: ILanguageModelToolsService,
@@ -82,7 +82,7 @@ export class ChatSelectedTools extends Disposable {
 			return { count, enabled };
 		});
 
-		const onDidRender = this._store.add(new Emitter<codemavi>());
+		const onDidRender = this._store.add(new Emitter<void>());
 
 		this.toolsActionItemViewItemProvider = Object.assign(
 			(action: IAction, options: IActionViewItemOptions) => {
@@ -92,14 +92,14 @@ export class ChatSelectedTools extends Disposable {
 
 				return instaService.createInstance(class extends MenuEntryActionViewItem {
 
-					override render(container: HTMLElement): codemavi {
+					override render(container: HTMLElement): void {
 						this.options.icon = false;
 						this.options.label = true;
 						container.classList.add('chat-mcp');
 						super.render(container);
 					}
 
-					protected override updateLabel(): codemavi {
+					protected override updateLabel(): void {
 						this._store.add(autorun(r => {
 							assertType(this.label);
 
@@ -124,7 +124,7 @@ export class ChatSelectedTools extends Disposable {
 		);
 	}
 
-	update(disableBuckets: readonly ToolDataSource[], disableTools: readonly IToolData[]): codemavi {
+	update(disableBuckets: readonly ToolDataSource[], disableTools: readonly IToolData[]): void {
 		this._selectedTools.set({
 			disabledBuckets: disableBuckets.map(ToolDataSource.toKey),
 			disabledTools: disableTools.map(t => t.id)

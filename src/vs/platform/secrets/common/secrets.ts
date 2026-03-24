@@ -17,8 +17,8 @@ export const ISecretStorageService = createDecorator<ISecretStorageService>('sec
 export interface ISecretStorageProvider {
 	type: 'in-memory' | 'persisted' | 'unknown';
 	get(key: string): Promise<string | undefined>;
-	set(key: string, value: string): Promise<codemavi>;
-	delete(key: string): Promise<codemavi>;
+	set(key: string, value: string): Promise<void>;
+	delete(key: string): Promise<void>;
 }
 
 export interface ISecretStorageService extends ISecretStorageProvider {
@@ -90,7 +90,7 @@ export class BaseSecretStorageService extends Disposable implements ISecretStora
 		});
 	}
 
-	set(key: string, value: string): Promise<codemavi> {
+	set(key: string, value: string): Promise<void> {
 		return this._sequencer.queue(key, async () => {
 			const storageService = await this.resolvedStorageService;
 
@@ -112,7 +112,7 @@ export class BaseSecretStorageService extends Disposable implements ISecretStora
 		});
 	}
 
-	delete(key: string): Promise<codemavi> {
+	delete(key: string): Promise<void> {
 		return this._sequencer.queue(key, async () => {
 			const storageService = await this.resolvedStorageService;
 
@@ -146,11 +146,11 @@ export class BaseSecretStorageService extends Disposable implements ISecretStora
 		return storageService;
 	}
 
-	protected reinitialize(): codemavi {
+	protected reinitialize(): void {
 		this._lazyStorageService = new Lazy(() => this.initialize());
 	}
 
-	private onDidChangeValue(key: string): codemavi {
+	private onDidChangeValue(key: string): void {
 		if (!key.startsWith(this._storagePrefix)) {
 			return;
 		}

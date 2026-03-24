@@ -96,7 +96,7 @@ class AuthenticationContribution extends Disposable implements IWorkbenchContrib
 		this._registerActions();
 	}
 
-	private _registerHandlers(): codemavi {
+	private _registerHandlers(): void {
 		this._register(this._authenticationService.onDidRegisterAuthenticationProvider(_e => {
 			this._clearPlaceholderMenuItem();
 		}));
@@ -113,13 +113,13 @@ class AuthenticationContribution extends Disposable implements IWorkbenchContrib
 		}));
 	}
 
-	private _registerActions(): codemavi {
+	private _registerActions(): void {
 		this._register(registerAction2(SignOutOfAccountAction));
 		this._register(registerAction2(ManageTrustedExtensionsForAccountAction));
 		this._register(registerAction2(ManageAccountPreferencesForExtensionAction));
 	}
 
-	private _clearPlaceholderMenuItem(): codemavi {
+	private _clearPlaceholderMenuItem(): void {
 		this._placeholderMenuItem?.dispose();
 		this._placeholderMenuItem = undefined;
 	}

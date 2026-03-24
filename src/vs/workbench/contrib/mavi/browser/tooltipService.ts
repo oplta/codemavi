@@ -7,12 +7,12 @@ import { Disposable, toDisposable } from '../../../../base/common/lifecycle.js';
 import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
 import { IWorkbenchContribution, registerWorkbenchContribution2, WorkbenchPhase } from '../../../common/contributions.js';
 import { ServicesAccessor } from '../../../../editor/browser/editorExtensions.js';
-import { mountCode MaviTooltip } from './react/out/codemavi-tooltip/index.js';
+import { mountMaviTooltip } from './react/out/mavi-tooltip/index.js';
 import { h, getActiveWindow } from '../../../../base/browser/dom.js';
 
 // Tooltip contribution that mounts the component at startup
 export class TooltipContribution extends Disposable implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.codemaviTooltip';
+	static readonly ID = 'workbench.contrib.maviTooltip';
 
 	constructor(
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
@@ -21,7 +21,7 @@ export class TooltipContribution extends Disposable implements IWorkbenchContrib
 		this.initializeTooltip();
 	}
 
-	private initializeTooltip(): codemavi {
+	private initializeTooltip(): void {
 		// Get the active window reference for multi-window support
 		const targetWindow = getActiveWindow();
 
@@ -30,12 +30,12 @@ export class TooltipContribution extends Disposable implements IWorkbenchContrib
 
 		if (workbench) {
 			// Create a container element for the tooltip using h function
-			const tooltipContainer = h('div.codemavi-tooltip-container').root;
+			const tooltipContainer = h('div.mavi-tooltip-container').root;
 			workbench.appendChild(tooltipContainer);
 
 			// Mount the React component
 			this.instantiationService.invokeFunction((accessor: ServicesAccessor) => {
-				const result = mountCode MaviTooltip(tooltipContainer, accessor);
+				const result = mountMaviTooltip(tooltipContainer, accessor);
 				if (result && typeof result.dispose === 'function') {
 					this._register(toDisposable(result.dispose));
 				}

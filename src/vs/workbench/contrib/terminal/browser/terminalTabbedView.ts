@@ -188,7 +188,7 @@ export class TerminalTabbedView extends Disposable {
 		return parseInt(storedValue);
 	}
 
-	private _handleOnDidSashReset(): codemavi {
+	private _handleOnDidSashReset(): void {
 		// Calculate ideal size of list to display all text based on its contents
 		let idealWidth = TerminalTabsListSizes.WideViewMinimumWidth;
 		const offscreenCanvas = document.createElement('canvas');
@@ -220,7 +220,7 @@ export class TerminalTabbedView extends Disposable {
 		return additionalWidth + splitAnnotationWidth + statusIconWidth;
 	}
 
-	private _handleOnDidSashChange(): codemavi {
+	private _handleOnDidSashChange(): void {
 		const listWidth = this._splitView.getViewSize(this._tabTreeIndex);
 		if (!this._width || listWidth <= 0) {
 			return;
@@ -228,7 +228,7 @@ export class TerminalTabbedView extends Disposable {
 		this._updateListWidth(listWidth);
 	}
 
-	private _updateListWidth(width: number): codemavi {
+	private _updateListWidth(width: number): void {
 		if (width < TerminalTabsListSizes.MidpointViewWidth && width >= TerminalTabsListSizes.NarrowViewWidth) {
 			width = TerminalTabsListSizes.NarrowViewWidth;
 			this._splitView.resizeView(this._tabTreeIndex, width);
@@ -241,7 +241,7 @@ export class TerminalTabbedView extends Disposable {
 		this._storageService.store(widthKey, width, StorageScope.PROFILE, StorageTarget.USER);
 	}
 
-	private _setupSplitView(terminalOuterContainer: HTMLElement): codemavi {
+	private _setupSplitView(terminalOuterContainer: HTMLElement): void {
 		this._register(this._splitView.onDidSashReset(() => this._handleOnDidSashReset()));
 		this._register(this._splitView.onDidSashChange(() => this._handleOnDidSashChange()));
 
@@ -306,7 +306,7 @@ export class TerminalTabbedView extends Disposable {
 		this._terminalIsTabsNarrowContextKey.set(!hasText);
 	}
 
-	layout(width: number, height: number): codemavi {
+	layout(width: number, height: number): void {
 		this._height = height;
 		this._width = width;
 		this._splitView.layout(width);
@@ -316,7 +316,7 @@ export class TerminalTabbedView extends Disposable {
 		this._updateHasText();
 	}
 
-	private _attachEventListeners(parentDomElement: HTMLElement, terminalContainer: HTMLElement): codemavi {
+	private _attachEventListeners(parentDomElement: HTMLElement, terminalContainer: HTMLElement): void {
 		this._register(dom.addDisposableListener(this._tabContainer, 'mouseleave', async (event: MouseEvent) => {
 			this._terminalTabsMouseContextKey.set(false);
 			this._refreshShowTabs();
@@ -409,14 +409,14 @@ export class TerminalTabbedView extends Disposable {
 		];
 	}
 
-	setEditable(isEditing: boolean): codemavi {
+	setEditable(isEditing: boolean): void {
 		if (!isEditing) {
 			this._tabList.domFocus();
 		}
 		this._tabList.refresh(false);
 	}
 
-	focusTabs(): codemavi {
+	focusTabs(): void {
 		if (!this._shouldShowTabs()) {
 			return;
 		}

@@ -24,10 +24,10 @@ suite('MainThreadManagedSockets', () => {
 		let half: RemoteSocketHalf;
 
 		class ExtHostMock extends mock<ExtHostManagedSocketsShape>() {
-			private onDidFire = new Emitter<codemavi>();
+			private onDidFire = new Emitter<void>();
 			public readonly events: any[] = [];
 
-			override $remoteSocketWrite(socketId: number, buffer: VSBuffer): codemavi {
+			override $remoteSocketWrite(socketId: number, buffer: VSBuffer): void {
 				this.events.push({ socketId, data: buffer.toString() });
 				this.onDidFire.fire();
 			}
@@ -43,13 +43,13 @@ suite('MainThreadManagedSockets', () => {
 				this.onDidFire.fire();
 			}
 
-			expectEvent(test: (evt: any) => codemavi, message: string) {
+			expectEvent(test: (evt: any) => void, message: string) {
 				if (this.events.some(test)) {
 					return;
 				}
 
 				const d = new DisposableStore();
-				return new Promise<codemavi>(resolve => {
+				return new Promise<void>(resolve => {
 					d.add(this.onDidFire.event(() => {
 						if (this.events.some(test)) {
 							return;
@@ -67,7 +67,7 @@ suite('MainThreadManagedSockets', () => {
 			half = {
 				onClose: new Emitter<SocketCloseEvent>(),
 				onData: new Emitter<VSBuffer>(),
-				onEnd: new Emitter<codemavi>(),
+				onEnd: new Emitter<void>(),
 			};
 		});
 

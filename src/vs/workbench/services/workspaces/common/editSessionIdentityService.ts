@@ -51,7 +51,7 @@ export class EditSessionIdentityService implements IEditSessionIdentityService {
 		return provider?.provideEditSessionIdentityMatch?.(workspaceFolder, identity1, identity2, cancellationToken);
 	}
 
-	async onWillCreateEditSessionIdentity(workspaceFolder: IWorkspaceFolder, cancellationToken: CancellationToken): Promise<codemavi> {
+	async onWillCreateEditSessionIdentity(workspaceFolder: IWorkspaceFolder, cancellationToken: CancellationToken): Promise<void> {
 		this._logService.debug('Running onWillCreateEditSessionIdentity participants...');
 
 		// TODO@joyceerhl show progress notification?

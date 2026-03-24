@@ -22,7 +22,7 @@ export async function activate(context: ExtensionContext) {
 		};
 
 		const timer = {
-			setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): Disposable {
+			setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): Disposable {
 				const handle = setTimeout(callback, ms, ...args);
 				return { dispose: () => clearTimeout(handle) };
 			}
@@ -35,7 +35,7 @@ export async function activate(context: ExtensionContext) {
 	}
 }
 
-export async function deactivate(): Promise<codemavi> {
+export async function deactivate(): Promise<void> {
 	if (client) {
 		await client.dispose();
 		client = undefined;

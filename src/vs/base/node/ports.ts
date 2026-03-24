@@ -30,7 +30,7 @@ export function findFreePort(startPort: number, giveUpAfter: number, timeout: nu
 	});
 }
 
-function doFindFreePort(startPort: number, giveUpAfter: number, stride: number, clb: (port: number) => codemavi): codemavi {
+function doFindFreePort(startPort: number, giveUpAfter: number, stride: number, clb: (port: number) => void): void {
 	if (giveUpAfter === 0) {
 		return clb(0);
 	}
@@ -155,7 +155,7 @@ export function findFreePortFaster(startPort: number, giveUpAfter: number, timeo
 	let timeoutHandle: NodeJS.Timeout | undefined = undefined;
 	let countTried: number = 1;
 	const server = net.createServer({ pauseOnConnect: true });
-	function doResolve(port: number, resolve: (port: number) => codemavi) {
+	function doResolve(port: number, resolve: (port: number) => void) {
 		if (!resolved) {
 			resolved = true;
 			server.removeAllListeners();
@@ -190,7 +190,7 @@ export function findFreePortFaster(startPort: number, giveUpAfter: number, timeo
 	});
 }
 
-function dispose(socket: net.Socket): codemavi {
+function dispose(socket: net.Socket): void {
 	try {
 		socket.removeAllListeners('connect');
 		socket.removeAllListeners('error');

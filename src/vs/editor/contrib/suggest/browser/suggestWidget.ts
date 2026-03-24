@@ -94,7 +94,7 @@ class PersistedWidgetSize {
 		this._service.store(this._key, JSON.stringify(size), StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		this._service.remove(this._key, StorageScope.PROFILE);
 	}
 }
@@ -109,7 +109,7 @@ export class SuggestWidget implements IDisposable {
 	private _loadingTimeout?: IDisposable;
 	private readonly _pendingLayout = new MutableDisposable();
 	private readonly _pendingShowDetails = new MutableDisposable();
-	private _currentSuggestionDetails?: CancelablePromise<codemavi>;
+	private _currentSuggestionDetails?: CancelablePromise<void>;
 	private _focusedItem?: CompletionItem;
 	private _ignoreFocusEvents: boolean = false;
 	private _completionModel?: CompletionModel;
@@ -303,7 +303,7 @@ export class SuggestWidget implements IDisposable {
 		this._disposables.add(this.editor.onMouseDown((e: IEditorMouseEvent) => this._onEditorMouseDown(e)));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._details.widget.dispose();
 		this._details.dispose();
 		this._list.dispose();
@@ -317,7 +317,7 @@ export class SuggestWidget implements IDisposable {
 		this.element.dispose();
 	}
 
-	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): codemavi {
+	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): void {
 		if (this._details.widget.domNode.contains(mouseEvent.target.element)) {
 			// Clicking inside details
 			this._details.widget.domNode.focus();
@@ -329,13 +329,13 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	private _onCursorSelectionChanged(): codemavi {
+	private _onCursorSelectionChanged(): void {
 		if (this._state !== State.Hidden) {
 			this._contentWidget.layout();
 		}
 	}
 
-	private _onListMouseDownOrTap(e: IListMouseEvent<CompletionItem> | IListGestureEvent<CompletionItem>): codemavi {
+	private _onListMouseDownOrTap(e: IListMouseEvent<CompletionItem> | IListGestureEvent<CompletionItem>): void {
 		if (typeof e.element === 'undefined' || typeof e.index === 'undefined') {
 			return;
 		}
@@ -347,13 +347,13 @@ export class SuggestWidget implements IDisposable {
 		this._select(e.element, e.index);
 	}
 
-	private _onListSelection(e: IListEvent<CompletionItem>): codemavi {
+	private _onListSelection(e: IListEvent<CompletionItem>): void {
 		if (e.elements.length) {
 			this._select(e.elements[0], e.indexes[0]);
 		}
 	}
 
-	private _select(item: CompletionItem, index: number): codemavi {
+	private _select(item: CompletionItem, index: number): void {
 		const completionModel = this._completionModel;
 		if (completionModel) {
 			this._onDidSelect.fire({ item, index, model: completionModel });
@@ -365,7 +365,7 @@ export class SuggestWidget implements IDisposable {
 		this._details.widget.borderWidth = isHighContrast(theme.type) ? 2 : 1;
 	}
 
-	private _onListFocus(e: IListEvent<CompletionItem>): codemavi {
+	private _onListFocus(e: IListEvent<CompletionItem>): void {
 		if (this._ignoreFocusEvents) {
 			return;
 		}
@@ -445,7 +445,7 @@ export class SuggestWidget implements IDisposable {
 		this._onDidFocus.fire({ item, index, model: this._completionModel });
 	}
 
-	private _setState(state: State): codemavi {
+	private _setState(state: State): void {
 
 		if (this._state === state) {
 			return;
@@ -511,7 +511,7 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	private _show(): codemavi {
+	private _show(): void {
 		this._status.show();
 		this._contentWidget.show();
 		this._layout(this._persistedSize.restore());
@@ -535,7 +535,7 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	showSuggestions(completionModel: CompletionModel, selectionIndex: number, isFrozen: boolean, isAuto: boolean, noFocus: boolean): codemavi {
+	showSuggestions(completionModel: CompletionModel, selectionIndex: number, isFrozen: boolean, isAuto: boolean, noFocus: boolean): void {
 
 		this._contentWidget.setPosition(this.editor.getPosition());
 		this._loadingTimeout?.dispose();
@@ -588,7 +588,7 @@ export class SuggestWidget implements IDisposable {
 		});
 	}
 
-	focusSelected(): codemavi {
+	focusSelected(): void {
 		if (this._list.length > 0) {
 			this._list.setFocus([0]);
 		}
@@ -695,7 +695,7 @@ export class SuggestWidget implements IDisposable {
 		return undefined;
 	}
 
-	toggleDetailsFocus(): codemavi {
+	toggleDetailsFocus(): void {
 		if (this._state === State.Details) {
 			// Should return the focus to the list item.
 			this._list.setFocus(this._list.getFocus());
@@ -710,7 +710,7 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	toggleDetails(focused: boolean = false): codemavi {
+	toggleDetails(focused: boolean = false): void {
 		if (this._isDetailsVisible()) {
 			// hide details widget
 			this._pendingShowDetails.clear();
@@ -727,7 +727,7 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	private _showDetails(loading: boolean, focused: boolean): codemavi {
+	private _showDetails(loading: boolean, focused: boolean): void {
 		this._pendingShowDetails.value = dom.runAtThisOrScheduleAtNextAnimationFrame(dom.getWindow(this.element.domNode), () => {
 			this._pendingShowDetails.clear();
 			this._details.show();
@@ -753,7 +753,7 @@ export class SuggestWidget implements IDisposable {
 		});
 	}
 
-	toggleExplainMode(): codemavi {
+	toggleExplainMode(): void {
 		if (this._list.getFocusedElements()[0]) {
 			this._explainMode = !this._explainMode;
 			if (!this._isDetailsVisible()) {
@@ -764,11 +764,11 @@ export class SuggestWidget implements IDisposable {
 		}
 	}
 
-	resetPersistedSize(): codemavi {
+	resetPersistedSize(): void {
 		this._persistedSize.reset();
 	}
 
-	hideWidget(): codemavi {
+	hideWidget(): void {
 		this._pendingLayout.clear();
 		this._pendingShowDetails.clear();
 		this._loadingTimeout?.dispose();
@@ -807,7 +807,7 @@ export class SuggestWidget implements IDisposable {
 		this._positionDetails();
 	}
 
-	private _layout(size: dom.Dimension | undefined): codemavi {
+	private _layout(size: dom.Dimension | undefined): void {
 		if (!this.editor.hasModel()) {
 			return;
 		}
@@ -895,7 +895,7 @@ export class SuggestWidget implements IDisposable {
 		this._resize(width, height);
 	}
 
-	private _resize(width: number, height: number): codemavi {
+	private _resize(width: number, height: number): void {
 
 		const { width: maxWidth, height: maxHeight } = this.element.maxSize;
 		width = Math.min(maxWidth, width);
@@ -910,7 +910,7 @@ export class SuggestWidget implements IDisposable {
 		this._positionDetails();
 	}
 
-	private _positionDetails(): codemavi {
+	private _positionDetails(): void {
 		if (this._isDetailsVisible()) {
 			this._details.placeAtAnchor(this.element.domNode, this._contentWidget.getPosition()?.preference[0] === ContentWidgetPositionPreference.BELOW);
 		}
@@ -972,7 +972,7 @@ export class SuggestContentWidget implements IContentWidget {
 		private readonly _editor: ICodeEditor
 	) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this._added) {
 			this._added = false;
 			this._editor.removeContentWidget(this);
@@ -987,7 +987,7 @@ export class SuggestContentWidget implements IContentWidget {
 		return this._widget.element.domNode;
 	}
 
-	show(): codemavi {
+	show(): void {
 		this._hidden = false;
 		if (!this._added) {
 			this._added = true;
@@ -995,14 +995,14 @@ export class SuggestContentWidget implements IContentWidget {
 		}
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		if (!this._hidden) {
 			this._hidden = true;
 			this.layout();
 		}
 	}
 
-	layout(): codemavi {
+	layout(): void {
 		this._editor.layoutContentWidget(this);
 	}
 
@@ -1040,7 +1040,7 @@ export class SuggestContentWidget implements IContentWidget {
 		this._preferenceLocked = false;
 	}
 
-	setPosition(position: IPosition | null): codemavi {
+	setPosition(position: IPosition | null): void {
 		this._position = position;
 	}
 }

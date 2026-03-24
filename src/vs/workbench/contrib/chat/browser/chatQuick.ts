@@ -29,7 +29,7 @@ import { ChatAgentLocation } from '../common/constants.js';
 export class QuickChatService extends Disposable implements IQuickChatService {
 	readonly _serviceBrand: undefined;
 
-	private readonly _onDidClose = this._register(new Emitter<codemavi>());
+	private readonly _onDidClose = this._register(new Emitter<void>());
 	readonly onDidClose = this._onDidClose.event;
 
 	private _input: IQuickWidget | undefined;
@@ -57,7 +57,7 @@ export class QuickChatService extends Disposable implements IQuickChatService {
 		return dom.isAncestorOfActiveElement(widget);
 	}
 
-	toggle(options?: IQuickChatOpenOptions): codemavi {
+	toggle(options?: IQuickChatOpenOptions): void {
 		// If the input is already shown, hide it. This provides a toggle behavior of the quick
 		// pick. This should not happen when there is a query.
 		if (this.focused && !options?.query) {
@@ -75,7 +75,7 @@ export class QuickChatService extends Disposable implements IQuickChatService {
 		}
 	}
 
-	open(options?: IQuickChatOpenOptions): codemavi {
+	open(options?: IQuickChatOpenOptions): void {
 		if (this._input) {
 			if (this._currentChat && options?.query) {
 				this._currentChat.focus();
@@ -124,14 +124,14 @@ export class QuickChatService extends Disposable implements IQuickChatService {
 			}
 		}
 	}
-	focus(): codemavi {
+	focus(): void {
 		this._currentChat?.focus();
 	}
-	close(): codemavi {
+	close(): void {
 		this._input?.dispose();
 		this._input = undefined;
 	}
-	async openInChatView(): Promise<codemavi> {
+	async openInChatView(): Promise<void> {
 		await this._currentChat?.openChatView();
 		this.close();
 	}
@@ -166,7 +166,7 @@ class QuickChat extends Disposable {
 		this.widget.inputEditor.setValue('');
 	}
 
-	focus(selection?: Selection): codemavi {
+	focus(selection?: Selection): void {
 		if (this.widget) {
 			this.widget.focusInput();
 			const value = this.widget.inputEditor.getValue();
@@ -181,7 +181,7 @@ class QuickChat extends Disposable {
 		}
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		this.widget.setVisible(false);
 		// Maintain scroll position for a short time so that if the user re-shows the chat
 		// the same scroll position will be used.
@@ -192,7 +192,7 @@ class QuickChat extends Disposable {
 		}, 30 * 1000); // 30 seconds
 	}
 
-	show(): codemavi {
+	show(): void {
 		this.widget.setVisible(true);
 		// If the mutable disposable is set, then we are keeping the existing scroll position
 		// so we should not update the layout.
@@ -205,7 +205,7 @@ class QuickChat extends Disposable {
 		}
 	}
 
-	render(parent: HTMLElement): codemavi {
+	render(parent: HTMLElement): void {
 		if (this.widget) {
 			// NOTE: if this changes, we need to make sure disposables in this function are tracked differently.
 			throw new Error('Cannot render quick chat twice');
@@ -241,7 +241,7 @@ class QuickChat extends Disposable {
 		return this.layoutService.mainContainerDimension.height - QuickChat.DEFAULT_HEIGHT_OFFSET;
 	}
 
-	private registerListeners(parent: HTMLElement): codemavi {
+	private registerListeners(parent: HTMLElement): void {
 		this._register(this.layoutService.onDidLayoutMainContainer(() => {
 			if (this.widget.visible) {
 				this.widget.updateDynamicChatTreeItemLayout(2, this.maxHeight);
@@ -278,7 +278,7 @@ class QuickChat extends Disposable {
 		return this.widget.acceptInput();
 	}
 
-	async openChatView(): Promise<codemavi> {
+	async openChatView(): Promise<void> {
 		const widget = await showChatView(this.viewsService);
 		if (!widget?.viewModel || !this.model) {
 			return;
@@ -340,16 +340,16 @@ class QuickChat extends Disposable {
 		widget.focusInput();
 	}
 
-	setValue(value: string, selection?: Selection): codemavi {
+	setValue(value: string, selection?: Selection): void {
 		this.widget.inputEditor.setValue(value);
 		this.focus(selection);
 	}
 
-	clearValue(): codemavi {
+	clearValue(): void {
 		this.widget.inputEditor.setValue('');
 	}
 
-	private updateModel(): codemavi {
+	private updateModel(): void {
 		this.model ??= this.chatService.startSession(ChatAgentLocation.Panel, CancellationToken.None);
 		if (!this.model) {
 			throw new Error('Could not start chat session');

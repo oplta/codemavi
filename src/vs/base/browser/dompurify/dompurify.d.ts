@@ -43,21 +43,21 @@ declare namespace DOMPurify {
 
 		addHook(
 			hook: 'uponSanitizeElement',
-			cb: (currentNode: Element, data: SanitizeElementHookEvent, config: Config) => codemavi,
-		): codemavi;
+			cb: (currentNode: Element, data: SanitizeElementHookEvent, config: Config) => void,
+		): void;
 		addHook(
 			hook: 'uponSanitizeAttribute',
-			cb: (currentNode: Element, data: SanitizeAttributeHookEvent, config: Config) => codemavi,
-		): codemavi;
-		addHook(hook: HookName, cb: (currentNode: Element, data: HookEvent, config: Config) => codemavi): codemavi;
+			cb: (currentNode: Element, data: SanitizeAttributeHookEvent, config: Config) => void,
+		): void;
+		addHook(hook: HookName, cb: (currentNode: Element, data: HookEvent, config: Config) => void): void;
 
-		setConfig(cfg: Config): codemavi;
-		clearConfig(): codemavi;
+		setConfig(cfg: Config): void;
+		clearConfig(): void;
 		isValidAttribute(tag: string, attr: string, value: string): boolean;
 
-		removeHook(entryPoint: HookName): codemavi;
-		removeHooks(entryPoint: HookName): codemavi;
-		removeAllHooks(): codemavi;
+		removeHook(entryPoint: HookName): void;
+		removeHooks(entryPoint: HookName): void;
+		removeAllHooks(): void;
 
 		version: string;
 		removed: any[];

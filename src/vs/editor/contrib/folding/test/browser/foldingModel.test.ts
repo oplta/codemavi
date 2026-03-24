@@ -66,7 +66,7 @@ export class TestDecorationProvider {
 		return this.model.changeDecorations(callback);
 	}
 
-	removeDecorations(decorationIds: string[]): codemavi {
+	removeDecorations(decorationIds: string[]): void {
 		this.model.changeDecorations((changeAccessor) => {
 			changeAccessor.deltaDecorations(decorationIds, []);
 		});
@@ -142,7 +142,7 @@ suite('Folding Model', () => {
 		/* 2*/	' * Comment',
 		/* 3*/	' */',
 		/* 4*/	'class A {',
-		/* 5*/	'  codemavi foo() {',
+		/* 5*/	'  mavi foo() {',
 		/* 6*/	'    // comment {',
 		/* 7*/	'  }',
 		/* 8*/	'}'];
@@ -181,7 +181,7 @@ suite('Folding Model', () => {
 		/* 2*/	' * Comment',
 		/* 3*/	' */',
 		/* 4*/	'class A {',
-		/* 5*/	'  codemavi foo() {',
+		/* 5*/	'  mavi foo() {',
 		/* 6*/	'    // comment {',
 		/* 7*/	'  }',
 		/* 8*/	'}'];
@@ -227,7 +227,7 @@ suite('Folding Model', () => {
 		/* 2*/	' * Comment',
 		/* 3*/	' */',
 		/* 4*/	'class A {',
-		/* 5*/	'  codemavi foo() {',
+		/* 5*/	'  mavi foo() {',
 		/* 6*/	'    // comment {',
 		/* 7*/	'  }',
 		/* 8*/	'}'];
@@ -304,7 +304,7 @@ suite('Folding Model', () => {
 		/* 2*/	' * Comment',
 		/* 3*/	' */',
 		/* 4*/	'class A {',
-		/* 5*/	'  codemavi foo() {',
+		/* 5*/	'  mavi foo() {',
 		/* 6*/	'    // comment {',
 		/* 7*/	'  }',
 		/* 8*/	'}'];
@@ -340,7 +340,7 @@ suite('Folding Model', () => {
 			/* 1*/	'//#region',
 			/* 2*/	'//#endregion',
 			/* 3*/	'class A {',
-			/* 4*/	'  codemavi foo() {',
+			/* 4*/	'  mavi foo() {',
 			/* 5*/	'    if (true) {',
 			/* 6*/	'        return;',
 			/* 7*/	'    }',
@@ -391,7 +391,7 @@ suite('Folding Model', () => {
 		const lines = [
 		/* 1*/	'//#region',
 		/* 2*/	'class A {',
-		/* 3*/	'  codemavi foo() {',
+		/* 3*/	'  mavi foo() {',
 		/* 4*/	'    if (true) {',
 		/* 5*/	'      //hello',
 		/* 6*/	'    }',
@@ -436,7 +436,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -489,7 +489,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -548,7 +548,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -600,7 +600,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -647,7 +647,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -696,7 +696,7 @@ suite('Folding Model', () => {
 		/* 5*/	'  /**',
 		/* 6*/	'   * the foo',
 		/* 7*/	'   */',
-		/* 8*/	'  codemavi foo() {',
+		/* 8*/	'  mavi foo() {',
 		/* 9*/	'    /*',
 		/* 10*/	'     * the comment',
 		/* 11*/	'     */',
@@ -732,7 +732,7 @@ suite('Folding Model', () => {
 		/* 1*/	'//#region',
 		/* 2*/	'//#endregion',
 		/* 3*/	'class A {',
-		/* 4*/	'  codemavi foo() {',
+		/* 4*/	'  mavi foo() {',
 		/* 5*/	'    if (true) {',
 		/* 6*/	'        return;',
 		/* 7*/	'    }',
@@ -779,7 +779,7 @@ suite('Folding Model', () => {
 	test('folding decoration', () => {
 		const lines = [
 		/* 1*/	'class A {',
-		/* 2*/	'  codemavi foo() {',
+		/* 2*/	'  mavi foo() {',
 		/* 3*/	'    if (true) {',
 		/* 4*/	'      hoo();',
 		/* 5*/	'    }',
@@ -840,7 +840,7 @@ suite('Folding Model', () => {
 	test('fold jumping', () => {
 		const lines = [
 			/* 1*/	'class A {',
-			/* 2*/	'  codemavi foo() {',
+			/* 2*/	'  mavi foo() {',
 			/* 3*/	'    if (1) {',
 			/* 4*/	'      a();',
 			/* 5*/	'    } else if (2) {',

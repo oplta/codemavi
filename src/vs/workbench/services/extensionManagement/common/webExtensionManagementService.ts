@@ -119,7 +119,7 @@ export class WebExtensionManagementService extends AbstractExtensionManagementSe
 		return this.install(location, { profileLocation });
 	}
 
-	protected async removeExtension(extension: ILocalExtension): Promise<codemavi> {
+	protected async removeExtension(extension: ILocalExtension): Promise<void> {
 		// do nothing
 	}
 
@@ -170,7 +170,7 @@ export class WebExtensionManagementService extends AbstractExtensionManagementSe
 		return updatedLocalExtension;
 	}
 
-	override async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<codemavi> {
+	override async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<void> {
 		await this.webExtensionsScannerService.copyExtensions(fromProfileLocation, toProfileLocation, e => !e.metadata?.isApplicationScoped);
 	}
 
@@ -206,9 +206,9 @@ export class WebExtensionManagementService extends AbstractExtensionManagementSe
 	getManifest(vsix: URI): Promise<IExtensionManifest> { throw new Error('unsupported'); }
 	download(): Promise<URI> { throw new Error('unsupported'); }
 
-	async cleanUp(): Promise<codemavi> { }
+	async cleanUp(): Promise<void> { }
 
-	private async whenProfileChanged(e: DidChangeUserDataProfileEvent): Promise<codemavi> {
+	private async whenProfileChanged(e: DidChangeUserDataProfileEvent): Promise<void> {
 		const previousProfileLocation = e.previous.extensionsResource;
 		const currentProfileLocation = e.profile.extensionsResource;
 		if (!previousProfileLocation || !currentProfileLocation) {
@@ -307,7 +307,7 @@ class InstallExtensionTask extends AbstractExtensionTask<ILocalExtension> implem
 	}
 }
 
-class UninstallExtensionTask extends AbstractExtensionTask<codemavi> implements IUninstallExtensionTask {
+class UninstallExtensionTask extends AbstractExtensionTask<void> implements IUninstallExtensionTask {
 
 	constructor(
 		readonly extension: ILocalExtension,
@@ -317,7 +317,7 @@ class UninstallExtensionTask extends AbstractExtensionTask<codemavi> implements 
 		super();
 	}
 
-	protected doRun(token: CancellationToken): Promise<codemavi> {
+	protected doRun(token: CancellationToken): Promise<void> {
 		return this.webExtensionsScannerService.removeExtension(this.extension, this.options.profileLocation);
 	}
 }

@@ -30,7 +30,7 @@ export class FileUserDataProvider extends Disposable implements
 	IFileSystemProviderWithFileCloneCapability {
 
 	readonly capabilities: FileSystemProviderCapabilities;
-	readonly onDidChangeCapabilities: Event<codemavi>;
+	readonly onDidChangeCapabilities: Event<void>;
 
 	private readonly _onDidChangeFile: Emitter<readonly IFileChange[]>;
 	readonly onDidChangeFile: Event<readonly IFileChange[]>;
@@ -58,7 +58,7 @@ export class FileUserDataProvider extends Disposable implements
 		this._register(this.fileSystemProvider.onDidChangeFile(e => this.handleFileChanges(e)));
 	}
 
-	private updateAtomicReadWritesResources(): codemavi {
+	private updateAtomicReadWritesResources(): void {
 		this.atomicReadWriteResources.clear();
 		for (const profile of this.userDataProfilesService.profiles) {
 			this.atomicReadWriteResources.add(profile.settingsResource);
@@ -72,7 +72,7 @@ export class FileUserDataProvider extends Disposable implements
 		return this.fileSystemProvider.open(this.toFileSystemResource(resource), opts);
 	}
 
-	close(fd: number): Promise<codemavi> {
+	close(fd: number): Promise<void> {
 		return this.fileSystemProvider.close(fd);
 	}
 
@@ -97,11 +97,11 @@ export class FileUserDataProvider extends Disposable implements
 		return this.fileSystemProvider.stat(this.toFileSystemResource(resource));
 	}
 
-	mkdir(resource: URI): Promise<codemavi> {
+	mkdir(resource: URI): Promise<void> {
 		return this.fileSystemProvider.mkdir(this.toFileSystemResource(resource));
 	}
 
-	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		return this.fileSystemProvider.rename(this.toFileSystemResource(from), this.toFileSystemResource(to), opts);
 	}
 
@@ -121,7 +121,7 @@ export class FileUserDataProvider extends Disposable implements
 		return this.atomicReadWriteResources.has(resource);
 	}
 
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 		return this.fileSystemProvider.writeFile(this.toFileSystemResource(resource), content, opts);
 	}
 
@@ -133,25 +133,25 @@ export class FileUserDataProvider extends Disposable implements
 		return false;
 	}
 
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
 		return this.fileSystemProvider.delete(this.toFileSystemResource(resource), opts);
 	}
 
-	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		if (hasFileFolderCopyCapability(this.fileSystemProvider)) {
 			return this.fileSystemProvider.copy(this.toFileSystemResource(from), this.toFileSystemResource(to), opts);
 		}
 		throw new Error('copy not supported');
 	}
 
-	cloneFile(from: URI, to: URI): Promise<codemavi> {
+	cloneFile(from: URI, to: URI): Promise<void> {
 		if (hasFileCloneCapability(this.fileSystemProvider)) {
 			return this.fileSystemProvider.cloneFile(this.toFileSystemResource(from), this.toFileSystemResource(to));
 		}
 		throw new Error('clone not supported');
 	}
 
-	private handleFileChanges(changes: readonly IFileChange[]): codemavi {
+	private handleFileChanges(changes: readonly IFileChange[]): void {
 		const userDataChanges: IFileChange[] = [];
 		for (const change of changes) {
 			if (change.resource.scheme !== this.fileSystemScheme) {

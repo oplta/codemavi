@@ -6,47 +6,47 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAccessor, useIsDark, useSettingsState } from '../util/services.js';
 import { Brain, Check, ChevronRight, DollarSign, ExternalLink, Lock, X } from 'lucide-react';
-import { displayInfoOfProviderName, ProviderName, providerNames, localProviderNames, featureNames, FeatureName, isFeatureNameDisabled } from '../../../../common/codemaviSettingsTypes.js';
+import { displayInfoOfProviderName, ProviderName, providerNames, localProviderNames, featureNames, FeatureName, isFeatureNameDisabled } from '../../../../common/maviSettingsTypes.js';
 import { ChatMarkdownRender } from '../markdown/ChatMarkdownRender.js';
-import { OllamaSetupInstructions, OneClickSwitchButton, SettingsForProvider, ModelDump } from '../codemavi-settings-tsx/Settings.js';
+import { OllamaSetupInstructions, OneClickSwitchButton, SettingsForProvider, ModelDump } from '../mavi-settings-tsx/Settings.js';
 import { ColorScheme } from '../../../../../../../platform/theme/common/theme.js';
 import ErrorBoundary from '../sidebar-tsx/ErrorBoundary.js';
 import { isLinux } from '../../../../../../../base/common/platform.js';
 
 const OVERRIDE_VALUE = false
 
-export const Code MaviOnboarding = () => {
+export const MaviOnboarding = () => {
 
-	const codemaviSettingsState = useSettingsState()
-	const isOnboardingComplete = codemaviSettingsState.globalSettings.isOnboardingComplete || OVERRIDE_VALUE
+	const maviSettingsState = useSettingsState()
+	const isOnboardingComplete = maviSettingsState.globalSettings.isOnboardingComplete || OVERRIDE_VALUE
 
 	const isDark = useIsDark()
 
 	return (
-		<div className={`@@codemavi-scope ${isDark ? 'dark' : ''}`}>
+		<div className={`@@mavi-scope ${isDark ? 'dark' : ''}`}>
 			<div
 				className={`
-					bg-codemavi-bg-3 fixed top-0 right-0 bottom-0 left-0 width-full z-[99999]
+					bg-mavi-bg-3 fixed top-0 right-0 bottom-0 left-0 width-full z-[99999]
 					transition-all duration-1000 ${isOnboardingComplete ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}
 				`}
 				style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
 			>
 				<ErrorBoundary>
-					<Code MaviOnboardingContent />
+					<MaviOnboardingContent />
 				</ErrorBoundary>
 			</div>
 		</div>
 	)
 }
 
-const Code MaviIcon = () => {
+const MaviIcon = () => {
 	const accessor = useAccessor()
 	const themeService = accessor.get('IThemeService')
 
 	const divRef = useRef<HTMLDivElement | null>(null)
 
 	useEffect(() => {
-		// codemavi icon style
+		// mavi icon style
 		const updateTheme = () => {
 			const theme = themeService.getColorTheme().type
 			const isDark = theme === ColorScheme.DARK || theme === ColorScheme.HIGH_CONTRAST_DARK
@@ -61,7 +61,7 @@ const Code MaviIcon = () => {
 		return () => d.dispose()
 	}, [])
 
-	return <div ref={divRef} className='@@codemavi-codemavi-icon' />
+	return <div ref={divRef} className='@@mavi-mavi-icon' />
 }
 
 const FADE_DURATION_MS = 2000
@@ -126,7 +126,7 @@ const featureNameMap: { display: string, featureName: FeatureName }[] = [
 	{ display: 'Source Control', featureName: 'SCM' },
 ];
 
-const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setPageIndex: (index: number) => codemavi }) => {
+const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setPageIndex: (index: number) => void }) => {
 	const [currentTab, setCurrentTab] = useState<TabName>('Free');
 	const settingsState = useSettingsState();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -151,7 +151,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 
 	return (<div className="flex flex-col md:flex-row w-full h-[80vh] gap-6 max-w-[900px] mx-auto relative">
 		{/* Left Column */}
-		<div className="md:w-1/4 w-full flex flex-col gap-6 p-6 border-none border-codemavi-border-2 h-full overflow-y-auto">
+		<div className="md:w-1/4 w-full flex flex-col gap-6 p-6 border-none border-mavi-border-2 h-full overflow-y-auto">
 			{/* Tab Selector */}
 			<div className="flex md:flex-col gap-2">
 				{[...tabNames, 'Cloud/Other'].map(tab => (
@@ -159,7 +159,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 						key={tab}
 						className={`py-2 px-4 rounded-md text-left ${currentTab === tab
 							? 'bg-[#0e70c0]/80 text-white font-medium shadow-sm'
-							: 'bg-codemavi-bg-2 hover:bg-codemavi-bg-2/80 text-codemavi-fg-1'
+							: 'bg-mavi-bg-2 hover:bg-mavi-bg-2/80 text-mavi-fg-1'
 							} transition-all duration-200`}
 						onClick={() => {
 							setCurrentTab(tab as TabName);
@@ -197,7 +197,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 
 			<div className="w-full max-w-xl mt-4 mb-10">
 				<div className="text-4xl font-light my-4 w-full">{currentTab}</div>
-				<div className="text-sm opacity-80 text-codemavi-fg-3 my-4 w-full">{descriptionOfTab[currentTab]}</div>
+				<div className="text-sm opacity-80 text-mavi-fg-3 my-4 w-full">{descriptionOfTab[currentTab]}</div>
 			</div>
 
 			{providerNamesOfTab[currentTab].map((providerName) => (
@@ -206,7 +206,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 						Add {displayInfoOfProviderName(providerName).title}
 						{providerName === 'gemini' && (
 							<span
-								data-tooltip-id="codemavi-tooltip-provider-info"
+								data-tooltip-id="mavi-tooltip-provider-info"
 								data-tooltip-content="Gemini 2.5 Pro offers 25 free messages a day, and Gemini 2.5 Flash offers 500. We recommend using models down the line as you run out of free credits."
 								data-tooltip-place="right"
 								className="ml-1 text-xs align-top text-blue-400"
@@ -214,7 +214,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 						)}
 						{providerName === 'openRouter' && (
 							<span
-								data-tooltip-id="codemavi-tooltip-provider-info"
+								data-tooltip-id="mavi-tooltip-provider-info"
 								data-tooltip-content="OpenRouter offers 50 free messages a day, and 1000 if you deposit $10. Only applies to models labeled ':free'."
 								data-tooltip-place="right"
 								className="ml-1 text-xs align-top text-blue-400"
@@ -230,13 +230,13 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 			))}
 
 			{(currentTab === 'Local' || currentTab === 'Cloud/Other') && (
-				<div className="w-full max-w-xl mt-8 bg-codemavi-bg-2/50 rounded-lg p-6 border border-codemavi-border-4">
+				<div className="w-full max-w-xl mt-8 bg-mavi-bg-2/50 rounded-lg p-6 border border-mavi-border-4">
 					<div className="flex items-center gap-2 mb-4">
 						<div className="text-xl font-medium">Models</div>
 					</div>
 
 					{currentTab === 'Local' && (
-						<div className="text-sm opacity-80 text-codemavi-fg-3 my-4 w-full">Local models should be detected automatically. You can add custom models below.</div>
+						<div className="text-sm opacity-80 text-mavi-fg-3 my-4 w-full">Local models should be detected automatically. You can add custom models below.</div>
 					)}
 
 					{currentTab === 'Local' && <ModelDump filteredProviders={localProviderNames} />}
@@ -275,7 +275,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 // 	OnboardingPage
 // 		title:
 // 			div
-// 				"Welcome to Code Mavi"
+// 				"Welcome to Mavi"
 // 			image
 // 		content:<></>
 // 		title
@@ -285,7 +285,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 // 	OnboardingPage
 // 		title:
 // 			div
-// 				"How would you like to use Code Mavi?"
+// 				"How would you like to use Mavi?"
 // 		content:
 // 			ModelQuestionContent
 // 				|
@@ -313,7 +313,7 @@ const AddProvidersPage = ({ pageIndex, setPageIndex }: { pageIndex: number, setP
 // 		content
 // 		prev/next
 
-const NextButton = ({ onClick, ...props }: { onClick: () => codemavi } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const NextButton = ({ onClick, ...props }: { onClick: () => void } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
 
 	// Create a new props object without the disabled attribute
 	const { disabled, ...buttonProps } = props;
@@ -328,7 +328,7 @@ const NextButton = ({ onClick, ...props }: { onClick: () => codemavi } & React.B
 				} rounded text-black duration-600 transition-all
 			`}
 			{...disabled && {
-				'data-tooltip-id': 'codemavi-tooltip',
+				'data-tooltip-id': 'mavi-tooltip',
 				"data-tooltip-content": 'Please enter all required fields or choose another provider', // (double-click to proceed anyway, can come back in Settings)
 				"data-tooltip-place": 'top',
 			}}
@@ -339,11 +339,11 @@ const NextButton = ({ onClick, ...props }: { onClick: () => codemavi } & React.B
 	)
 }
 
-const PreviousButton = ({ onClick, ...props }: { onClick: () => codemavi } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const PreviousButton = ({ onClick, ...props }: { onClick: () => void } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return (
 		<button
 			onClick={onClick}
-			className="px-6 py-2 rounded text-codemavi-fg-3 opacity-80 hover:brightness-115 duration-600 transition-all"
+			className="px-6 py-2 rounded text-mavi-fg-3 opacity-80 hover:brightness-115 duration-600 transition-all"
 			{...props}
 		>
 			Back
@@ -375,7 +375,7 @@ const OllamaDownloadOrRemoveModelButton = ({ modelName, isModelInstalled, sizeGb
 		href={`https://ollama.com/library/${modelName}`}
 		target="_blank"
 		rel="noopener noreferrer"
-		className="flex items-center justify-center text-codemavi-fg-2 hover:text-codemavi-fg-1"
+		className="flex items-center justify-center text-mavi-fg-2 hover:text-mavi-fg-1"
 	>
 		<ExternalLink className="w-3.5 h-3.5" />
 	</a>
@@ -467,14 +467,14 @@ const PrimaryActionButton = ({ children, className, ringSize, ...props }: { chil
 
 type WantToUseOption = 'smart' | 'private' | 'cheap' | 'all'
 
-const Code MaviOnboardingContent = () => {
+const MaviOnboardingContent = () => {
 
 
 	const accessor = useAccessor()
-	const codemaviSettingsService = accessor.get('IMaviSettingsService')
-	const codemaviMetricsService = accessor.get('IMetricsService')
+	const maviSettingsService = accessor.get('IMaviSettingsService')
+	const maviMetricsService = accessor.get('IMetricsService')
 
-	const codemaviSettingsState = useSettingsState()
+	const maviSettingsState = useSettingsState()
 
 	const [pageIndex, setPageIndex] = useState(0)
 
@@ -518,9 +518,9 @@ const Code MaviOnboardingContent = () => {
 
 
 	const selectedProviderName = getSelectedProvider();
-	const didFillInProviderSettings = selectedProviderName && codemaviSettingsState.settingsOfProvider[selectedProviderName]._didFillInProviderSettings
-	const isApiKeyLongEnoughIfApiKeyExists = selectedProviderName && codemaviSettingsState.settingsOfProvider[selectedProviderName].apiKey ? codemaviSettingsState.settingsOfProvider[selectedProviderName].apiKey.length > 15 : true
-	const isAtLeastOneModel = selectedProviderName && codemaviSettingsState.settingsOfProvider[selectedProviderName].models.length >= 1
+	const didFillInProviderSettings = selectedProviderName && maviSettingsState.settingsOfProvider[selectedProviderName]._didFillInProviderSettings
+	const isApiKeyLongEnoughIfApiKeyExists = selectedProviderName && maviSettingsState.settingsOfProvider[selectedProviderName].apiKey ? maviSettingsState.settingsOfProvider[selectedProviderName].apiKey.length > 15 : true
+	const isAtLeastOneModel = selectedProviderName && maviSettingsState.settingsOfProvider[selectedProviderName].models.length >= 1
 
 	const didFillInSelectedProviderSettings = !!(didFillInProviderSettings && isApiKeyLongEnoughIfApiKeyExists && isAtLeastOneModel)
 
@@ -543,11 +543,11 @@ const Code MaviOnboardingContent = () => {
 			/>
 			<PrimaryActionButton
 				onClick={() => {
-					codemaviSettingsService.setGlobalSetting('isOnboardingComplete', true);
-					codemaviMetricsService.capture('Completed Onboarding', { selectedProviderName, wantToUseOption })
+					maviSettingsService.setGlobalSetting('isOnboardingComplete', true);
+					maviMetricsService.capture('Completed Onboarding', { selectedProviderName, wantToUseOption })
 				}}
-				ringSize={codemaviSettingsState.globalSettings.isOnboardingComplete ? 'screen' : undefined}
-			>Enter the Code Mavi</PrimaryActionButton>
+				ringSize={maviSettingsState.globalSettings.isOnboardingComplete ? 'screen' : undefined}
+			>Enter the Mavi</PrimaryActionButton>
 		</div>
 	</div>
 
@@ -563,7 +563,7 @@ const Code MaviOnboardingContent = () => {
 	// can be md
 	const detailedDescOfWantToUseOption: { [wantToUseOption in WantToUseOption]: string } = {
 		smart: "Most intelligent and best for agent mode.",
-		private: "Private-hosted so your data never leaves your computer or network. [Email us](mailto:founders@codemavieditor.com) for help setting up at your company.",
+		private: "Private-hosted so your data never leaves your computer or network. [Email us](mailto:founders@mavieditor.com) for help setting up at your company.",
 		cheap: "Use great deals like Gemini 2.5 Pro, or self-host a model with Ollama or vLLM for free.",
 		all: "",
 	}
@@ -586,21 +586,21 @@ const Code MaviOnboardingContent = () => {
 
 	// reset the page to page 0 if the user redos onboarding
 	useEffect(() => {
-		if (!codemaviSettingsState.globalSettings.isOnboardingComplete) {
+		if (!maviSettingsState.globalSettings.isOnboardingComplete) {
 			setPageIndex(0)
 		}
-	}, [setPageIndex, codemaviSettingsState.globalSettings.isOnboardingComplete])
+	}, [setPageIndex, maviSettingsState.globalSettings.isOnboardingComplete])
 
 
 	const contentOfIdx: { [pageIndex: number]: React.ReactNode } = {
 		0: <OnboardingPageShell
 			content={
 				<div className='flex flex-col items-center gap-8'>
-					<div className="text-5xl font-light text-center">Welcome to Code Mavi</div>
+					<div className="text-5xl font-light text-center">Welcome to Mavi</div>
 
-					{/* Slice of Code Mavi image */}
+					{/* Slice of Mavi image */}
 					<div className='max-w-md w-full h-[30vh] mx-auto flex items-center justify-center'>
-						{!isLinux && <Code MaviIcon />}
+						{!isLinux && <MaviIcon />}
 					</div>
 
 
@@ -630,7 +630,7 @@ const Code MaviOnboardingContent = () => {
 					<div className="text-5xl font-light text-center">Settings and Themes</div>
 
 					<div className="mt-8 text-center flex flex-col items-center gap-4 w-full max-w-md mx-auto">
-						<h4 className="text-codemavi-fg-3 mb-4">Transfer your settings from an existing editor?</h4>
+						<h4 className="text-mavi-fg-3 mb-4">Transfer your settings from an existing editor?</h4>
 						<OneClickSwitchButton className='w-full px-4 py-2' fromEditor="VS Code" />
 						<OneClickSwitchButton className='w-full px-4 py-2' fromEditor="Cursor" />
 						<OneClickSwitchButton className='w-full px-4 py-2' fromEditor="Windsurf" />

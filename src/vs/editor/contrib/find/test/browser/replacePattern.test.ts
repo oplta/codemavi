@@ -78,7 +78,7 @@ suite('Replace Pattern test', () => {
 			const expected = new ReplacePattern(expectedPieces);
 			assert.deepStrictEqual(actual, expected, 'Parsing ' + input);
 		};
-		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): codemavi {
+		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): void {
 			const replacePattern = parseReplaceString(replaceString);
 			const m = search.exec(target);
 			const actual = replacePattern.buildReplaceString(m);
@@ -134,7 +134,7 @@ suite('Replace Pattern test', () => {
 	});
 
 	test('get replace string if given text is a complete match', () => {
-		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): codemavi {
+		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): void {
 			const replacePattern = parseReplaceString(replaceString);
 			const m = search.exec(target);
 			const actual = replacePattern.buildReplaceString(m);
@@ -160,7 +160,7 @@ suite('Replace Pattern test', () => {
 	});
 
 	test('get replace string if match is sub-string of the text', () => {
-		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): codemavi {
+		function assertReplace(target: string, search: RegExp, replaceString: string, expected: string): void {
 			const replacePattern = parseReplaceString(replaceString);
 			const m = search.exec(target);
 			const actual = replacePattern.buildReplaceString(m);
@@ -191,7 +191,7 @@ suite('Replace Pattern test', () => {
 	});
 
 	test('buildReplaceStringWithCasePreserved test', () => {
-		function assertReplace(target: string[], replaceString: string, expected: string): codemavi {
+		function assertReplace(target: string[], replaceString: string, expected: string): void {
 			let actual: string = '';
 			actual = buildReplaceStringWithCasePreserved(target, replaceString);
 			assert.strictEqual(actual, expected);
@@ -222,7 +222,7 @@ suite('Replace Pattern test', () => {
 	});
 
 	test('preserve case', () => {
-		function assertReplace(target: string[], replaceString: string, expected: string): codemavi {
+		function assertReplace(target: string[], replaceString: string, expected: string): void {
 			const replacePattern = parseReplaceString(replaceString);
 			const actual = replacePattern.buildReplaceString(target, true);
 			assert.strictEqual(actual, expected);

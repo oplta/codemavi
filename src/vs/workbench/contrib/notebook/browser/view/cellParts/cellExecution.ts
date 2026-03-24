@@ -47,13 +47,13 @@ export class CellExecutionPart extends CellContentPart {
 		}));
 	}
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		this.updateExecutionOrder(element.internalMetadata, true);
 	}
 
-	private updateExecutionOrder(internalMetadata: NotebookCellInternalMetadata, forceClear = false): codemavi {
+	private updateExecutionOrder(internalMetadata: NotebookCellInternalMetadata, forceClear = false): void {
 		if (this._notebookEditor.activeKernel?.implementsExecutionOrder || (!this._notebookEditor.activeKernel && typeof internalMetadata.executionOrder === 'number')) {
-			// If the executionOrder was just cleared, and the cell is executing, wait just a bit before clearing the view to acodemavi flashing
+			// If the executionOrder was just cleared, and the cell is executing, wait just a bit before clearing the view to avoid flashing
 			if (typeof internalMetadata.executionOrder !== 'number' && !forceClear && !!this._notebookExecutionStateService.getCellExecution(this.currentCell!.uri)) {
 				const renderingCell = this.currentCell;
 				disposableTimeout(() => {
@@ -73,13 +73,13 @@ export class CellExecutionPart extends CellContentPart {
 		}
 	}
 
-	override updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): codemavi {
+	override updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): void {
 		if (e.internalMetadataChanged) {
 			this.updateExecutionOrder(element.internalMetadata);
 		}
 	}
 
-	override updateInternalLayoutNow(element: ICellViewModel): codemavi {
+	override updateInternalLayoutNow(element: ICellViewModel): void {
 		this._updatePosition();
 	}
 
@@ -94,7 +94,7 @@ export class CellExecutionPart extends CellContentPart {
 				if (this.currentCell instanceof CodeCellViewModel) {
 					const elementTop = this._notebookEditor.getAbsoluteTopOfElement(this.currentCell);
 					const editorBottom = elementTop + this.currentCell.layoutInfo.outputContainerOffset;
-					// another approach to acodemavi the flicker caused by sticky scroll is manually calculate the scrollBottom:
+					// another approach to avoid the flicker caused by sticky scroll is manually calculate the scrollBottom:
 					// const scrollBottom = this._notebookEditor.scrollTop + this._notebookEditor.getLayoutInfo().height - 26 - this._notebookEditor.getLayoutInfo().stickyHeight;
 					const scrollBottom = this._notebookEditor.scrollBottom;
 

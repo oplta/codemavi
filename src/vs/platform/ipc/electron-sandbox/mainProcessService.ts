@@ -29,7 +29,7 @@ export class ElectronIPCMainProcessService extends Disposable implements IMainPr
 		return this.mainProcessConnection.getChannel(channelName);
 	}
 
-	registerChannel(channelName: string, channel: IServerChannel<string>): codemavi {
+	registerChannel(channelName: string, channel: IServerChannel<string>): void {
 		this.mainProcessConnection.registerChannel(channelName, channel);
 	}
 }

@@ -17,7 +17,7 @@ export async function assertLinkHelper(
 	detector.xterm.reset();
 
 	// Write the text and wait for the parser to finish
-	await new Promise<codemavi>(r => detector.xterm.write(text, r));
+	await new Promise<void>(r => detector.xterm.write(text, r));
 	const textSplit = text.split('\r\n');
 	const lastLineIndex = textSplit.filter((e, i) => i !== textSplit.length - 1).reduce((p, c) => {
 		return p + Math.max(Math.ceil(c.length / 80), 1);

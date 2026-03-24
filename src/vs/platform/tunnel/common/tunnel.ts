@@ -24,7 +24,7 @@ export interface RemoteTunnel {
 	readonly localAddress: string;
 	readonly privacy: string;
 	readonly protocol?: string;
-	dispose(silent?: boolean): Promise<codemavi>;
+	dispose(silent?: boolean): Promise<void>;
 }
 
 export interface TunnelOptions {
@@ -107,9 +107,9 @@ export interface ITunnel {
 	/**
 	 * Implementers of Tunnel should fire onDidDispose when dispose is called.
 	 */
-	onDidDispose: Event<codemavi>;
+	onDidDispose: Event<void>;
 
-	dispose(): Promise<codemavi> | codemavi;
+	dispose(): Promise<void> | void;
 }
 
 export interface ISharedTunnelsService {
@@ -129,15 +129,15 @@ export interface ITunnelService {
 	readonly canElevate: boolean;
 	readonly canChangeProtocol: boolean;
 	readonly hasTunnelProvider: boolean;
-	readonly onAddedTunnelProvider: Event<codemavi>;
+	readonly onAddedTunnelProvider: Event<void>;
 
 	canTunnel(uri: URI): boolean;
 	openTunnel(addressProvider: IAddressProvider | undefined, remoteHost: string | undefined, remotePort: number, localHost?: string, localPort?: number, elevateIfNeeded?: boolean, privacy?: string, protocol?: string): Promise<RemoteTunnel | string | undefined> | undefined;
 	getExistingTunnel(remoteHost: string, remotePort: number): Promise<RemoteTunnel | string | undefined>;
-	setEnvironmentTunnel(remoteHost: string, remotePort: number, localAddress: string, privacy: string, protocol: string): codemavi;
-	closeTunnel(remoteHost: string, remotePort: number): Promise<codemavi>;
+	setEnvironmentTunnel(remoteHost: string, remotePort: number, localAddress: string, privacy: string, protocol: string): void;
+	closeTunnel(remoteHost: string, remotePort: number): Promise<void>;
 	setTunnelProvider(provider: ITunnelProvider | undefined): IDisposable;
-	setTunnelFeatures(features: TunnelProviderFeatures): codemavi;
+	setTunnelFeatures(features: TunnelProviderFeatures): void;
 	isPortPrivileged(port: number): boolean;
 }
 
@@ -201,15 +201,15 @@ export function isPortPrivileged(port: number, host: string, os: OperatingSystem
 }
 
 export class DisposableTunnel {
-	private _onDispose: Emitter<codemavi> = new Emitter();
-	onDidDispose: Event<codemavi> = this._onDispose.event;
+	private _onDispose: Emitter<void> = new Emitter();
+	onDidDispose: Event<void> = this._onDispose.event;
 
 	constructor(
 		public readonly remoteAddress: { port: number; host: string },
 		public readonly localAddress: { port: number; host: string } | string,
-		private readonly _dispose: () => Promise<codemavi>) { }
+		private readonly _dispose: () => Promise<void>) { }
 
-	dispose(): Promise<codemavi> {
+	dispose(): Promise<void> {
 		this._onDispose.fire();
 		return this._dispose();
 	}
@@ -222,8 +222,8 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 	public onTunnelOpened: Event<RemoteTunnel> = this._onTunnelOpened.event;
 	private _onTunnelClosed: Emitter<{ host: string; port: number }> = new Emitter();
 	public onTunnelClosed: Event<{ host: string; port: number }> = this._onTunnelClosed.event;
-	private _onAddedTunnelProvider: Emitter<codemavi> = new Emitter();
-	public onAddedTunnelProvider: Event<codemavi> = this._onAddedTunnelProvider.event;
+	private _onAddedTunnelProvider: Emitter<void> = new Emitter();
+	public onAddedTunnelProvider: Event<void> = this._onAddedTunnelProvider.event;
 	protected readonly _tunnels = new Map</*host*/ string, Map</* port */ number, { refcount: number; readonly value: Promise<RemoteTunnel | string | undefined> }>>();
 	protected _tunnelProvider: ITunnelProvider | undefined;
 	protected _canElevate: boolean = false;
@@ -267,7 +267,7 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 		};
 	}
 
-	setTunnelFeatures(features: TunnelProviderFeatures): codemavi {
+	setTunnelFeatures(features: TunnelProviderFeatures): void {
 		this._canElevate = features.elevation;
 		this._privacyOptions = features.privacyOptions;
 		this._canChangeProtocol = features.protocol;
@@ -308,7 +308,7 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 		return tunnels;
 	}
 
-	override async dispose(): Promise<codemavi> {
+	override async dispose(): Promise<void> {
 		super.dispose();
 		for (const portMap of this._tunnels.values()) {
 			for (const { value } of portMap.values()) {
@@ -319,7 +319,7 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 		this._tunnels.clear();
 	}
 
-	setEnvironmentTunnel(remoteHost: string, remotePort: number, localAddress: string, privacy: string, protocol: string): codemavi {
+	setEnvironmentTunnel(remoteHost: string, remotePort: number, localAddress: string, privacy: string, protocol: string): void {
 		this.addTunnelToMap(remoteHost, remotePort, Promise.resolve({
 			tunnelRemoteHost: remoteHost,
 			tunnelRemotePort: remotePort,
@@ -414,10 +414,10 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 		};
 	}
 
-	private async tryDisposeTunnel(remoteHost: string, remotePort: number, tunnel: { refcount: number; readonly value: Promise<RemoteTunnel | string | undefined> }): Promise<codemavi> {
+	private async tryDisposeTunnel(remoteHost: string, remotePort: number, tunnel: { refcount: number; readonly value: Promise<RemoteTunnel | string | undefined> }): Promise<void> {
 		if (tunnel.refcount <= 0) {
 			this.logService.trace(`ForwardedPorts: (TunnelService) Tunnel is being disposed ${remoteHost}:${remotePort}.`);
-			const disposePromise: Promise<codemavi> = tunnel.value.then(async (tunnel) => {
+			const disposePromise: Promise<void> = tunnel.value.then(async (tunnel) => {
 				if (tunnel && (typeof tunnel !== 'string')) {
 					await tunnel.dispose(true);
 					this._onTunnelClosed.fire({ host: tunnel.tunnelRemoteHost, port: tunnel.tunnelRemotePort });
@@ -430,7 +430,7 @@ export abstract class AbstractTunnelService extends Disposable implements ITunne
 		}
 	}
 
-	async closeTunnel(remoteHost: string, remotePort: number): Promise<codemavi> {
+	async closeTunnel(remoteHost: string, remotePort: number): Promise<void> {
 		this.logService.trace(`ForwardedPorts: (TunnelService) close request for ${remoteHost}:${remotePort} `);
 		const portMap = this._tunnels.get(remoteHost);
 		if (portMap && portMap.has(remotePort)) {

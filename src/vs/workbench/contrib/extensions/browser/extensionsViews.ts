@@ -81,7 +81,7 @@ class ExtensionsViewState extends Disposable implements IExtensionsViewState {
 		featureId?: string;
 	} = {};
 
-	onFocusChange(extensions: IExtension[]): codemavi {
+	onFocusChange(extensions: IExtension[]): void {
 		this.currentlyFocusedItems.forEach(extension => this._onBlur.fire(extension));
 		this.currentlyFocusedItems = extensions;
 		this.currentlyFocusedItems.forEach(extension => this._onFocus.fire(extension));
@@ -178,9 +178,9 @@ export class ExtensionsListView extends ViewPane {
 		this.registerActions();
 	}
 
-	protected registerActions(): codemavi { }
+	protected registerActions(): void { }
 
-	protected override renderHeader(container: HTMLElement): codemavi {
+	protected override renderHeader(container: HTMLElement): void {
 		container.classList.add('extension-view-header');
 		super.renderHeader(container);
 
@@ -189,7 +189,7 @@ export class ExtensionsListView extends ViewPane {
 		}
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		const messageContainer = append(container, $('.message-container'));
@@ -249,7 +249,7 @@ export class ExtensionsListView extends ViewPane {
 		}
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		if (this.bodyTemplate) {
 			this.bodyTemplate.extensionsList.style.height = height + 'px';
@@ -327,7 +327,7 @@ export class ExtensionsListView extends ViewPane {
 		return Promise.resolve(emptyModel);
 	}
 
-	private async onContextMenu(e: IListContextMenuEvent<IExtension>): Promise<codemavi> {
+	private async onContextMenu(e: IListContextMenuEvent<IExtension>): Promise<void> {
 		if (e.element) {
 			const disposables = new DisposableStore();
 			const manageExtensionAction = disposables.add(this.instantiationService.createInstance(ManageExtensionAction));
@@ -1148,7 +1148,7 @@ export class ExtensionsListView extends ViewPane {
 		}
 	}
 
-	private updateBody(message?: Message): codemavi {
+	private updateBody(message?: Message): void {
 		if (this.bodyTemplate) {
 
 			const count = this.count();
@@ -1194,12 +1194,12 @@ export class ExtensionsListView extends ViewPane {
 		}
 	}
 
-	private openExtension(extension: IExtension, options: { sideByside?: boolean; preserveFocus?: boolean; pinned?: boolean }): codemavi {
+	private openExtension(extension: IExtension, options: { sideByside?: boolean; preserveFocus?: boolean; pinned?: boolean }): void {
 		extension = this.extensionsWorkbenchService.local.filter(e => areSameExtensions(e.identifier, extension.identifier))[0] || extension;
 		this.extensionsWorkbenchService.open(extension, options).then(undefined, err => this.onError(err));
 	}
 
-	private onError(err: any): codemavi {
+	private onError(err: any): void {
 		if (isCancellationError(err)) {
 			return;
 		}
@@ -1218,7 +1218,7 @@ export class ExtensionsListView extends ViewPane {
 		this.notificationService.error(err);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		if (this.queryRequest) {
 			this.queryRequest.request.cancel();
@@ -1344,7 +1344,7 @@ export class ExtensionsListView extends ViewPane {
 		return /@feature:/i.test(query);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		if (!this.list) {
 			return;
@@ -1527,7 +1527,7 @@ export class DeprecatedExtensionsView extends ExtensionsListView {
 export class SearchMarketplaceExtensionsView extends ExtensionsListView {
 
 	private readonly reportSearchFinishedDelayer = this._register(new ThrottledDelayer(2000));
-	private searchWaitPromise: Promise<codemavi> = Promise.resolve();
+	private searchWaitPromise: Promise<void> = Promise.resolve();
 
 	override async show(query: string): Promise<IPagedModel<IExtension>> {
 		const queryPromise = super.show(query);
@@ -1536,7 +1536,7 @@ export class SearchMarketplaceExtensionsView extends ExtensionsListView {
 		return queryPromise;
 	}
 
-	private async reportSearchFinished(): Promise<codemavi> {
+	private async reportSearchFinished(): Promise<void> {
 		await this.searchWaitPromise;
 		this.telemetryService.publicLog2('extensionsView:MarketplaceSearchFinished');
 	}
@@ -1545,7 +1545,7 @@ export class SearchMarketplaceExtensionsView extends ExtensionsListView {
 export class DefaultRecommendedExtensionsView extends ExtensionsListView {
 	private readonly recommendedExtensionsQuery = '@recommended:all';
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this._register(this.extensionRecommendationsService.onDidChangeRecommendations(() => {
@@ -1570,7 +1570,7 @@ export class DefaultRecommendedExtensionsView extends ExtensionsListView {
 export class RecommendedExtensionsView extends ExtensionsListView {
 	private readonly recommendedExtensionsQuery = '@recommended';
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this._register(this.extensionRecommendationsService.onDidChangeRecommendations(() => {
@@ -1586,7 +1586,7 @@ export class RecommendedExtensionsView extends ExtensionsListView {
 export class WorkspaceRecommendedExtensionsView extends ExtensionsListView implements IWorkspaceRecommendedExtensionsView {
 	private readonly recommendedExtensionsQuery = '@recommended:workspace';
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this._register(this.extensionRecommendationsService.onDidChangeRecommendations(() => this.show(this.recommendedExtensionsQuery)));
@@ -1608,7 +1608,7 @@ export class WorkspaceRecommendedExtensionsView extends ExtensionsListView imple
 		return this.getInstallableRecommendations(recommendations, { source: 'install-all-workspace-recommendations' }, CancellationToken.None);
 	}
 
-	async installWorkspaceRecommendations(): Promise<codemavi> {
+	async installWorkspaceRecommendations(): Promise<void> {
 		const installableRecommendations = await this.getInstallableWorkspaceRecommendations();
 		if (installableRecommendations.length) {
 			const galleryExtensions: InstallExtensionInfo[] = [];
@@ -1650,7 +1650,7 @@ export class PreferredExtensionsPagedModel implements IPagedModel<IExtension> {
 	private preferredGalleryExtensions = new Set<string>();
 	private resolvedGalleryExtensionsFromQuery: IExtension[] = [];
 	private readonly pages: Array<{
-		promise: Promise<codemavi> | null;
+		promise: Promise<void> | null;
 		cts: CancellationTokenSource | null;
 		promiseIndexes: Set<number>;
 	}>;
@@ -1733,7 +1733,7 @@ export class PreferredExtensionsPagedModel implements IPagedModel<IExtension> {
 		return this.get(index);
 	}
 
-	private populateResolvedExtensions(pageIndex: number, extensions: IExtension[]): codemavi {
+	private populateResolvedExtensions(pageIndex: number, extensions: IExtension[]): void {
 		let adjustIndexOfNextPagesBy = 0;
 		const pageStartIndex = pageIndex * this.pager.pageSize;
 		for (let i = 0; i < extensions.length; i++) {

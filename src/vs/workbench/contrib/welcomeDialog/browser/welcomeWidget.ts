@@ -163,7 +163,7 @@ export class WelcomeWidget extends Disposable implements IOverlayWidget {
 
 	private _isVisible: boolean = false;
 
-	private _show(): codemavi {
+	private _show(): void {
 		if (this._isVisible) {
 			return;
 		}
@@ -171,7 +171,7 @@ export class WelcomeWidget extends Disposable implements IOverlayWidget {
 		this._rootDomNode.style.display = 'block';
 	}
 
-	private _hide(): codemavi {
+	private _hide(): void {
 		if (!this._isVisible) {
 			return;
 		}
@@ -187,7 +187,7 @@ export class WelcomeWidget extends Disposable implements IOverlayWidget {
 }
 
 registerThemingParticipant((theme, collector) => {
-	const addBackgroundColorRule = (selector: string, color: Color | undefined): codemavi => {
+	const addBackgroundColorRule = (selector: string, color: Color | undefined): void => {
 		if (color) {
 			collector.addRule(`.monaco-editor ${selector} { background-color: ${color}; }`);
 		}

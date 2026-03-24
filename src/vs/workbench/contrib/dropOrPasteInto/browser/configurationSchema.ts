@@ -62,7 +62,7 @@ export class DropOrPasteSchemaContribution extends Disposable implements IWorkbe
 
 	public static ID = 'workbench.contrib.dropOrPasteIntoSchema';
 
-	private readonly _onDidChangeSchemaContributions = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeSchemaContributions = this._register(new Emitter<void>());
 
 	private _allProvidedDropKinds: HierarchicalKind[] = [];
 	private _allProvidedPasteKinds: HierarchicalKind[] = [];
@@ -92,7 +92,7 @@ export class DropOrPasteSchemaContribution extends Disposable implements IWorkbe
 		});
 	}
 
-	private updateProvidedKinds(): codemavi {
+	private updateProvidedKinds(): void {
 		// Drop
 		const dropKinds = new Map<string, HierarchicalKind>();
 		for (const provider of this.languageFeatures.documentDropEditProvider.allNoModel()) {
@@ -112,7 +112,7 @@ export class DropOrPasteSchemaContribution extends Disposable implements IWorkbe
 		this._allProvidedPasteKinds = Array.from(pasteKinds.values());
 	}
 
-	private updateConfigurationSchema(): codemavi {
+	private updateConfigurationSchema(): void {
 		pasteEnumValues.length = 0;
 		for (const codeActionKind of this._allProvidedPasteKinds) {
 			pasteEnumValues.push(codeActionKind.value);

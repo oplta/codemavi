@@ -246,7 +246,7 @@ export class ToggleRequestPausedAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	override run(accessor: ServicesAccessor, ...args: any[]): void {
 		const context: IChatExecuteActionContext | undefined = args[0];
 		const widgetService = accessor.get(IChatWidgetService);
 		const widget = context?.widget ?? widgetService.lastFocusedWidget;
@@ -288,7 +288,7 @@ export class SwitchToNextModelAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, ...args: any[]): codemavi {
+	override run(accessor: ServicesAccessor, ...args: any[]): void {
 		const widgetService = accessor.get(IChatWidgetService);
 		const widget = widgetService.lastFocusedWidget;
 		widget?.input.switchToNextModel();

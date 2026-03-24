@@ -80,7 +80,7 @@ export class StatusBarColorProvider implements IWorkbenchContribution {
 		this.update();
 	}
 
-	protected update(): codemavi {
+	protected update(): void {
 		const debugConfig = this.configurationService.getValue<IDebugConfiguration>('debug');
 		const isInDebugMode = isStatusbarInDebugMode(this.debugService.state, this.debugService.getModel().getSessions());
 		if (!debugConfig.enableStatusBarColor) {
@@ -97,7 +97,7 @@ export class StatusBarColorProvider implements IWorkbenchContribution {
 
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposable?.dispose();
 		this.disposables.dispose();
 	}

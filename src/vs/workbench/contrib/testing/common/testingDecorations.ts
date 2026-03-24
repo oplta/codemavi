@@ -19,13 +19,13 @@ export interface ITestingDecorationsService {
 	 * Fires when something happened to change decorations in an editor.
 	 * Interested consumers should call {@link syncDecorations} to update them.
 	 */
-	onDidChange: Event<codemavi>;
+	onDidChange: Event<void>;
 
 	/**
 	 * Signals the code underlying a test message has changed, and it should
 	 * no longer be decorated in the source.
 	 */
-	invalidateResultMessage(message: ITestMessage): codemavi;
+	invalidateResultMessage(message: ITestMessage): void;
 
 	/**
 	 * Ensures decorations in the given document URI are up to date,
@@ -45,7 +45,7 @@ export interface ITestingDecorationsService {
 	/**
 	 * Sets that alternative actions are displayed on the model.
 	 */
-	updateDecorationsAlternateAction(resource: URI, isAlt: boolean): codemavi;
+	updateDecorationsAlternateAction(resource: URI, isAlt: boolean): void;
 }
 
 export interface ITestDecoration {
@@ -65,7 +65,7 @@ export interface ITestDecoration {
 	 */
 	readonly editorDecoration: IModelDeltaDecoration;
 
-	getContextMenuActions(): { object: IAction[]; dispose(): codemavi };
+	getContextMenuActions(): { object: IAction[]; dispose(): void };
 }
 
 export class TestDecorations<T extends { id: string; line: number } = ITestDecoration> {

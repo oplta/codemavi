@@ -62,7 +62,7 @@ export class Workbench extends Layout {
 	private readonly _onWillShutdown = this._register(new Emitter<WillShutdownEvent>());
 	readonly onWillShutdown = this._onWillShutdown.event;
 
-	private readonly _onDidShutdown = this._register(new Emitter<codemavi>());
+	private readonly _onDidShutdown = this._register(new Emitter<void>());
 	readonly onDidShutdown = this._onDidShutdown.event;
 
 	constructor(
@@ -79,7 +79,7 @@ export class Workbench extends Layout {
 		this.registerErrorHandler(logService);
 	}
 
-	private registerErrorHandler(logService: ILogService): codemavi {
+	private registerErrorHandler(logService: ILogService): void {
 
 		// Listen on unhandled rejection events
 		// Note: intentionally not registered as disposable to handle
@@ -98,7 +98,7 @@ export class Workbench extends Layout {
 	}
 
 	private previousUnexpectedError: { message: string | undefined; time: number } = { message: undefined, time: 0 };
-	private handleUnexpectedError(error: unknown, logService: ILogService): codemavi {
+	private handleUnexpectedError(error: unknown, logService: ILogService): void {
 		const message = toErrorMessage(error, true);
 		if (!message) {
 			return;
@@ -212,7 +212,7 @@ export class Workbench extends Layout {
 		return instantiationService;
 	}
 
-	private registerListeners(lifecycleService: ILifecycleService, storageService: IStorageService, configurationService: IConfigurationService, hostService: IHostService, dialogService: IDialogService): codemavi {
+	private registerListeners(lifecycleService: ILifecycleService, storageService: IStorageService, configurationService: IConfigurationService, hostService: IHostService, dialogService: IDialogService): void {
 
 		// Configuration changes
 		this._register(configurationService.onDidChangeConfiguration(e => this.updateFontAliasing(e, configurationService)));
@@ -278,7 +278,7 @@ export class Workbench extends Layout {
 		}
 	}
 
-	private restoreFontInfo(storageService: IStorageService, configurationService: IConfigurationService): codemavi {
+	private restoreFontInfo(storageService: IStorageService, configurationService: IConfigurationService): void {
 		const storedFontInfoRaw = storageService.get('editorFontInfo', StorageScope.APPLICATION);
 		if (storedFontInfoRaw) {
 			try {
@@ -294,14 +294,14 @@ export class Workbench extends Layout {
 		FontMeasurements.readFontInfo(mainWindow, BareFontInfo.createFromRawSettings(configurationService.getValue('editor'), PixelRatio.getInstance(mainWindow).value));
 	}
 
-	private storeFontInfo(storageService: IStorageService): codemavi {
+	private storeFontInfo(storageService: IStorageService): void {
 		const serializedFontInfo = FontMeasurements.serializeFontInfo(mainWindow);
 		if (serializedFontInfo) {
 			storageService.store('editorFontInfo', JSON.stringify(serializedFontInfo), StorageScope.APPLICATION, StorageTarget.MACHINE);
 		}
 	}
 
-	private renderWorkbench(instantiationService: IInstantiationService, notificationService: NotificationService, storageService: IStorageService, configurationService: IConfigurationService): codemavi {
+	private renderWorkbench(instantiationService: IInstantiationService, notificationService: NotificationService, storageService: IStorageService, configurationService: IConfigurationService): void {
 
 		// ARIA & Signals
 		setARIAContainer(this.mainContainer);
@@ -363,7 +363,7 @@ export class Workbench extends Layout {
 		return part;
 	}
 
-	private createNotificationsHandlers(instantiationService: IInstantiationService, notificationService: NotificationService): codemavi {
+	private createNotificationsHandlers(instantiationService: IInstantiationService, notificationService: NotificationService): void {
 
 		// Instantiate Notification components
 		const notificationsCenter = this._register(instantiationService.createInstance(NotificationsCenter, this.mainContainer, notificationService.model));
@@ -393,7 +393,7 @@ export class Workbench extends Layout {
 		});
 	}
 
-	private restore(lifecycleService: ILifecycleService): codemavi {
+	private restore(lifecycleService: ILifecycleService): void {
 
 		// Ask each part to restore
 		try {

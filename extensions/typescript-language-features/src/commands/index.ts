@@ -23,7 +23,7 @@ export function registerBaseCommands(
 	lazyClientHost: Lazy<TypeScriptServiceClientHost>,
 	pluginManager: PluginManager,
 	activeJsTsEditorTracker: ActiveJsTsEditorTracker,
-): codemavi {
+): void {
 	commandManager.register(new ReloadTypeScriptProjectsCommand(lazyClientHost));
 	commandManager.register(new ReloadJavaScriptProjectsCommand(lazyClientHost));
 	commandManager.register(new SelectTypeScriptVersionCommand(lazyClientHost));

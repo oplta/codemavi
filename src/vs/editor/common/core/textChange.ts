@@ -218,7 +218,7 @@ class TextChangeCompressor {
 		return cleaned;
 	}
 
-	private _acceptCurr(currEdit: TextChange): codemavi {
+	private _acceptCurr(currEdit: TextChange): void {
 		this._result[this._resultLen++] = TextChangeCompressor._rebaseCurr(this._prevDeltaOffset, currEdit);
 		this._currDeltaOffset += currEdit.newLength - currEdit.oldLength;
 	}
@@ -227,7 +227,7 @@ class TextChangeCompressor {
 		return (currIndex < this._currLen ? this._currEdits[currIndex] : null);
 	}
 
-	private _acceptPrev(prevEdit: TextChange): codemavi {
+	private _acceptPrev(prevEdit: TextChange): void {
 		this._result[this._resultLen++] = TextChangeCompressor._rebasePrev(this._currDeltaOffset, prevEdit);
 		this._prevDeltaOffset += prevEdit.newLength - prevEdit.oldLength;
 	}

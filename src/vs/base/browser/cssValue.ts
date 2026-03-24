@@ -91,7 +91,7 @@ export function inline(strings: TemplateStringsArray, ...values: InlineCssTempla
 export class Builder {
 	private readonly _parts: CssFragment[] = [];
 
-	push(...parts: CssFragment[]): codemavi {
+	push(...parts: CssFragment[]): void {
 		this._parts.push(...parts);
 	}
 

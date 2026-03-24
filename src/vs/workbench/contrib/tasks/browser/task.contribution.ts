@@ -73,9 +73,9 @@ export class TaskStatusBarContributions extends Disposable implements IWorkbench
 		this._registerListeners();
 	}
 
-	private _registerListeners(): codemavi {
-		let promise: Promise<codemavi> | undefined = undefined;
-		let resolve: (value?: codemavi | Thenable<codemavi>) => codemavi;
+	private _registerListeners(): void {
+		let promise: Promise<void> | undefined = undefined;
+		let resolve: (value?: void | Thenable<void>) => void;
 		this._register(this._taskService.onDidStateChange(event => {
 			if (event.kind === TaskEventKind.Changed) {
 				this._updateRunningTasksStatus();
@@ -87,7 +87,7 @@ export class TaskStatusBarContributions extends Disposable implements IWorkbench
 						this._activeTasksCount++;
 						if (this._activeTasksCount === 1) {
 							if (!promise) {
-								({ promise, resolve } = promiseWithResolvers<codemavi>());
+								({ promise, resolve } = promiseWithResolvers<void>());
 							}
 						}
 						break;
@@ -125,7 +125,7 @@ export class TaskStatusBarContributions extends Disposable implements IWorkbench
 		}));
 	}
 
-	private async _updateRunningTasksStatus(): Promise<codemavi> {
+	private async _updateRunningTasksStatus(): Promise<void> {
 		const tasks = await this._taskService.getActiveTasks();
 		if (tasks.length === 0) {
 			if (this._runningTasksStatusItem) {
@@ -586,7 +586,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, args: any): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, args: any): Promise<void> {
 		const terminalService = accessor.get(ITerminalService);
 		const taskSystem = accessor.get(ITaskService);
 		const instance = args as ITerminalInstance ?? terminalService.activeInstance;

@@ -50,7 +50,7 @@ class TestFileService extends FileService {
 		}
 		throw new Error('ENOENT');
 	}
-	setFiles(files: URI[] | '*'): codemavi {
+	setFiles(files: URI[] | '*'): void {
 		this._files = files;
 	}
 }

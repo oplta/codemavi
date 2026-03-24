@@ -21,6 +21,13 @@ Bu doküman, Code Mavi projesinin gelişim aşamalarını ve hedeflerini takip e
 - [x] **Auto-Verifier:** Created `VerifierService` for tracking lint/test errors and formatting correction prompts.
 - [x] **State Management:** Created `AgentStateManager` for tracking thoughts, actions, and task status (Chain of Thought).
 
+## ✅ v0.4.0: Agent Altyapısı ve Semantic Search (Tamamlandı)
+- [x] Agent base classes (Orchestrator, Executor, Verifier)
+- [x] Semantic search service with multi-provider support
+- [x] Documentation and implementation guides
+- [x] Architecture overview and lessons learned
+- [x] GitHub release v0.4.0
+
 ## 🟡 v1.0.0: IDE Entegrasyonu ve Yayılım (Şu anki hedef)
 - [ ] Mantık katmanının Code Mavi IDE (VS Code Fork) ile tam entegrasyonu.
 - [ ] Kullanıcı dostu agent arayüzü.

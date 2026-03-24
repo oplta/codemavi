@@ -26,10 +26,10 @@ export class QuickInputService extends Themable implements IQuickInputService {
 
 	get backButton(): IQuickInputButton { return this.controller.backButton; }
 
-	private readonly _onShow = this._register(new Emitter<codemavi>());
+	private readonly _onShow = this._register(new Emitter<void>());
 	readonly onShow = this._onShow.event;
 
-	private readonly _onHide = this._register(new Emitter<codemavi>());
+	private readonly _onHide = this._register(new Emitter<void>());
 	readonly onHide = this._onHide.event;
 
 	private _controller: QuickInputController | undefined;
@@ -195,11 +195,11 @@ export class QuickInputService extends Themable implements IQuickInputService {
 		return this.controller.cancel();
 	}
 
-	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): codemavi {
+	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): void {
 		this.controller.setAlignment(alignment);
 	}
 
-	toggleHover(): codemavi {
+	toggleHover(): void {
 		if (this.hasController) {
 			this.controller.toggleHover();
 		}

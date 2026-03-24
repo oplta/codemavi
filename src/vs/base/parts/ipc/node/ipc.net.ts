@@ -30,12 +30,12 @@ export class NodeSocket implements ISocket {
 
 	public readonly debugLabel: string;
 	public readonly socket: Socket;
-	private readonly _errorListener: (err: any) => codemavi;
-	private readonly _closeListener: (hadError: boolean) => codemavi;
-	private readonly _endListener: () => codemavi;
+	private readonly _errorListener: (err: any) => void;
+	private readonly _closeListener: (hadError: boolean) => void;
+	private readonly _endListener: () => void;
 	private _canWrite = true;
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		SocketDiagnostics.traceSocketEvent(this.socket, this.debugLabel, type, data);
 	}
 
@@ -78,14 +78,14 @@ export class NodeSocket implements ISocket {
 		this.socket.on('end', this._endListener);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.socket.off('error', this._errorListener);
 		this.socket.off('close', this._closeListener);
 		this.socket.off('end', this._endListener);
 		this.socket.destroy();
 	}
 
-	public onData(_listener: (e: VSBuffer) => codemavi): IDisposable {
+	public onData(_listener: (e: VSBuffer) => void): IDisposable {
 		const listener = (buff: Buffer) => {
 			this.traceSocketEvent(SocketDiagnosticsEventType.Read, buff);
 			_listener(VSBuffer.wrap(buff));
@@ -96,7 +96,7 @@ export class NodeSocket implements ISocket {
 		};
 	}
 
-	public onClose(listener: (e: SocketCloseEvent) => codemavi): IDisposable {
+	public onClose(listener: (e: SocketCloseEvent) => void): IDisposable {
 		const adapter = (hadError: boolean) => {
 			listener({
 				type: SocketCloseEventType.NodeSocketCloseEvent,
@@ -110,7 +110,7 @@ export class NodeSocket implements ISocket {
 		};
 	}
 
-	public onEnd(listener: () => codemavi): IDisposable {
+	public onEnd(listener: () => void): IDisposable {
 		const adapter = () => {
 			listener();
 		};
@@ -120,7 +120,7 @@ export class NodeSocket implements ISocket {
 		};
 	}
 
-	public write(buffer: VSBuffer): codemavi {
+	public write(buffer: VSBuffer): void {
 		// return early if socket has been destroyed in the meantime
 		if (this.socket.destroyed || !this._canWrite) {
 			return;
@@ -161,14 +161,14 @@ export class NodeSocket implements ISocket {
 		}
 	}
 
-	public end(): codemavi {
+	public end(): void {
 		this.traceSocketEvent(SocketDiagnosticsEventType.NodeEndSent);
 		this.socket.end();
 	}
 
-	public drain(): Promise<codemavi> {
+	public drain(): Promise<void> {
 		this.traceSocketEvent(SocketDiagnosticsEventType.NodeDrainBegin);
-		return new Promise<codemavi>((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			if (this.socket.bufferSize === 0) {
 				this.traceSocketEvent(SocketDiagnosticsEventType.NodeDrainEnd);
 				resolve();
@@ -212,7 +212,7 @@ const enum ReadState {
 }
 
 interface ISocketTracer {
-	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi;
+	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void;
 }
 
 interface FrameOptions {
@@ -250,7 +250,7 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		return this._flowManager.recordedInflateBytes;
 	}
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		this.socket.traceSocketEvent(type, data);
 	}
 
@@ -300,7 +300,7 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._flowManager.isProcessingWriteQueue()) {
 			// Wait for any outstanding writes to finish before disposing
 			this._register(this._flowManager.onDidFinishProcessingWriteQueue(() => {
@@ -312,19 +312,19 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		}
 	}
 
-	public onData(listener: (e: VSBuffer) => codemavi): IDisposable {
+	public onData(listener: (e: VSBuffer) => void): IDisposable {
 		return this._onData.event(listener);
 	}
 
-	public onClose(listener: (e: SocketCloseEvent) => codemavi): IDisposable {
+	public onClose(listener: (e: SocketCloseEvent) => void): IDisposable {
 		return this._onClose.event(listener);
 	}
 
-	public onEnd(listener: () => codemavi): IDisposable {
+	public onEnd(listener: () => void): IDisposable {
 		return this.socket.onEnd(listener);
 	}
 
-	public write(buffer: VSBuffer): codemavi {
+	public write(buffer: VSBuffer): void {
 		// If we write many logical messages (let's say 1000 messages of 100KB) during a single process tick, we do
 		// this thing where we install a process.nextTick timer and group all of them together and we then issue a
 		// single WebSocketNodeSocket.write with a 100MB buffer.
@@ -344,9 +344,9 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		}
 	}
 
-	private _write(buffer: VSBuffer, { compressed, opcode }: FrameOptions): codemavi {
+	private _write(buffer: VSBuffer, { compressed, opcode }: FrameOptions): void {
 		if (this._isEnded) {
-			// Acodemavi ERR_STREAM_WRITE_AFTER_END
+			// Avoid ERR_STREAM_WRITE_AFTER_END
 			return;
 		}
 
@@ -388,12 +388,12 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		this.socket.write(VSBuffer.concat([header, buffer]));
 	}
 
-	public end(): codemavi {
+	public end(): void {
 		this._isEnded = true;
 		this.socket.end();
 	}
 
-	private _acceptChunk(data: VSBuffer): codemavi {
+	private _acceptChunk(data: VSBuffer): void {
 		if (data.byteLength === 0) {
 			return;
 		}
@@ -492,7 +492,7 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		}
 	}
 
-	public async drain(): Promise<codemavi> {
+	public async drain(): Promise<void> {
 		this.traceSocketEvent(SocketDiagnosticsEventType.WebSocketNodeSocketDrainBegin);
 		if (this._flowManager.isProcessingWriteQueue()) {
 			await Event.toPromise(this._flowManager.onDidFinishProcessingWriteQueue);
@@ -512,10 +512,10 @@ class WebSocketFlowManager extends Disposable {
 	private readonly _writeQueue: { data: VSBuffer; options: FrameOptions }[] = [];
 	private readonly _readQueue: { data: VSBuffer; isCompressed: boolean; isLastFrameOfMessage: boolean }[] = [];
 
-	private readonly _onDidFinishProcessingReadQueue = this._register(new Emitter<codemavi>());
+	private readonly _onDidFinishProcessingReadQueue = this._register(new Emitter<void>());
 	public readonly onDidFinishProcessingReadQueue = this._onDidFinishProcessingReadQueue.event;
 
-	private readonly _onDidFinishProcessingWriteQueue = this._register(new Emitter<codemavi>());
+	private readonly _onDidFinishProcessingWriteQueue = this._register(new Emitter<void>());
 	public readonly onDidFinishProcessingWriteQueue = this._onDidFinishProcessingWriteQueue.event;
 
 	public get permessageDeflate(): boolean {
@@ -535,7 +535,7 @@ class WebSocketFlowManager extends Disposable {
 		inflateBytes: VSBuffer | null,
 		recordInflateBytes: boolean,
 		private readonly _onData: Emitter<VSBuffer>,
-		private readonly _writeFn: (data: VSBuffer, options: FrameOptions) => codemavi
+		private readonly _writeFn: (data: VSBuffer, options: FrameOptions) => void
 	) {
 		super();
 		if (permessageDeflate) {
@@ -552,13 +552,13 @@ class WebSocketFlowManager extends Disposable {
 		}
 	}
 
-	public writeMessage(data: VSBuffer, options: FrameOptions): codemavi {
+	public writeMessage(data: VSBuffer, options: FrameOptions): void {
 		this._writeQueue.push({ data, options });
 		this._processWriteQueue();
 	}
 
 	private _isProcessingWriteQueue = false;
-	private async _processWriteQueue(): Promise<codemavi> {
+	private async _processWriteQueue(): Promise<void> {
 		if (this._isProcessingWriteQueue) {
 			return;
 		}
@@ -590,13 +590,13 @@ class WebSocketFlowManager extends Disposable {
 		});
 	}
 
-	public acceptFrame(data: VSBuffer, isCompressed: boolean, isLastFrameOfMessage: boolean): codemavi {
+	public acceptFrame(data: VSBuffer, isCompressed: boolean, isLastFrameOfMessage: boolean): void {
 		this._readQueue.push({ data, isCompressed, isLastFrameOfMessage });
 		this._processReadQueue();
 	}
 
 	private _isProcessingReadQueue = false;
-	private async _processReadQueue(): Promise<codemavi> {
+	private async _processReadQueue(): Promise<void> {
 		if (this._isProcessingReadQueue) {
 			return;
 		}
@@ -679,7 +679,7 @@ class ZlibInflateStream extends Disposable {
 		}
 	}
 
-	public write(buffer: VSBuffer): codemavi {
+	public write(buffer: VSBuffer): void {
 		if (this._recordInflateBytes) {
 			this._recordedInflateBytes.push(buffer.clone());
 		}
@@ -687,7 +687,7 @@ class ZlibInflateStream extends Disposable {
 		this._zlibInflate.write(buffer.buffer);
 	}
 
-	public flush(callback: (data: VSBuffer) => codemavi): codemavi {
+	public flush(callback: (data: VSBuffer) => void): void {
 		this._zlibInflate.flush(() => {
 			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibInflateFlushFired);
 			const data = VSBuffer.concat(this._pendingInflateData);
@@ -724,12 +724,12 @@ class ZlibDeflateStream extends Disposable {
 		});
 	}
 
-	public write(buffer: VSBuffer): codemavi {
+	public write(buffer: VSBuffer): void {
 		this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibDeflateWrite, buffer.buffer);
 		this._zlibDeflate.write(<Buffer>buffer.buffer);
 	}
 
-	public flush(callback: (data: VSBuffer) => codemavi): codemavi {
+	public flush(callback: (data: VSBuffer) => void): void {
 		// See https://zlib.net/manual.html#Constants
 		this._zlibDeflate.flush(/*Z_SYNC_FLUSH*/2, () => {
 			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibDeflateFlushFired);
@@ -745,7 +745,7 @@ class ZlibDeflateStream extends Disposable {
 	}
 }
 
-function unmask(buffer: VSBuffer, mask: number): codemavi {
+function unmask(buffer: VSBuffer, mask: number): void {
 	if (mask === 0) {
 		return;
 	}
@@ -828,7 +828,7 @@ export function createStaticIPCHandle(directoryPath: string, type: string, versi
 	return result;
 }
 
-function validateIPCHandleLength(handle: string): codemavi {
+function validateIPCHandleLength(handle: string): void {
 	const limit = safeIpcPathLengths[platform];
 	if (typeof limit === 'number' && handle.length >= limit) {
 		// https://nodejs.org/api/net.html#net_identifying_paths_for_ipc_connections
@@ -843,7 +843,7 @@ export class Server extends IPCServer {
 
 		return Event.map(onConnection, socket => ({
 			protocol: new Protocol(new NodeSocket(socket, 'ipc-server-connection')),
-			onDidClientDisconnect: Event.once(Event.fromNodeEventEmitter<codemavi>(socket, 'close'))
+			onDidClientDisconnect: Event.once(Event.fromNodeEventEmitter<void>(socket, 'close'))
 		}));
 	}
 
@@ -854,7 +854,7 @@ export class Server extends IPCServer {
 		this.server = server;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		if (this.server) {
 			this.server.close();

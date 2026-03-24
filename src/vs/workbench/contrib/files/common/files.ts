@@ -162,7 +162,7 @@ export class TextFileContentProvider extends Disposable implements ITextModelCon
 		super();
 	}
 
-	static async open(resource: URI, scheme: string, label: string, editorService: IEditorService, options?: ITextEditorOptions): Promise<codemavi> {
+	static async open(resource: URI, scheme: string, label: string, editorService: IEditorService, options?: ITextEditorOptions): Promise<void> {
 		await editorService.openEditor({
 			original: { resource: TextFileContentProvider.resourceToTextFile(scheme, resource) },
 			modified: { resource },

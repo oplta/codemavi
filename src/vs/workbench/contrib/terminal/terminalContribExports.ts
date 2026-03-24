@@ -20,7 +20,7 @@ import { terminalZoomConfiguration } from '../terminalContrib/zoom/common/termin
 
 // HACK: Export some commands from `terminalContrib/` that are depended upon elsewhere. These are
 // soft layer breakers between `terminal/` and `terminalContrib/` but there are difficulties in
-// removing the dependency. These are explicitly defined here to acodemavi an eslint line override.
+// removing the dependency. These are explicitly defined here to avoid an eslint line override.
 export const enum TerminalContribCommandId {
 	A11yFocusAccessibleBuffer = TerminalAccessibilityCommandId.FocusAccessibleBuffer,
 	DeveloperRestartPtyHost = TerminalDeveloperCommandId.RestartPtyHost,
@@ -28,7 +28,7 @@ export const enum TerminalContribCommandId {
 
 // HACK: Export some settings from `terminalContrib/` that are depended upon elsewhere. These are
 // soft layer breakers between `terminal/` and `terminalContrib/` but there are difficulties in
-// removing the dependency. These are explicitly defined here to acodemavi an eslint line override.
+// removing the dependency. These are explicitly defined here to avoid an eslint line override.
 export const enum TerminalContribSettingId {
 	SuggestEnabled = TerminalSuggestSettingId.Enabled,
 	StickyScrollEnabled = TerminalStickyScrollSettingId.Enabled,

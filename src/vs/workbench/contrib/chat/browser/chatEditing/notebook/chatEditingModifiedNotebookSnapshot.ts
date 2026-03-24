@@ -35,7 +35,7 @@ export function createSnapshot(notebook: NotebookTextModel, transientOptions: Tr
 	return serializeSnapshot(notebook.createSnapshot({ context: SnapshotContext.Backup, outputSizeLimit, transientOptions }), transientOptions);
 }
 
-export function restoreSnapshot(notebook: NotebookTextModel, snapshot: string): codemavi {
+export function restoreSnapshot(notebook: NotebookTextModel, snapshot: string): void {
 	try {
 		const { transientOptions, data } = deserializeSnapshot(snapshot);
 		notebook.restoreSnapshot(data, transientOptions);

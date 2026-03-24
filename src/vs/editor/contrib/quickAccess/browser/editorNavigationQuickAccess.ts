@@ -38,7 +38,7 @@ export interface IQuickAccessTextEditorContext {
 	 * If defined, allows to restore the original view state
 	 * the text editor had before quick access opened.
 	 */
-	restoreViewState?: () => codemavi;
+	restoreViewState?: () => void;
 }
 
 /**
@@ -141,7 +141,7 @@ export abstract class AbstractEditorNavigationQuickAccessProvider implements IQu
 	 */
 	protected abstract provideWithoutTextEditor(picker: IQuickPick<IQuickPickItem, { useSeparators: true }>, token: CancellationToken): IDisposable;
 
-	protected gotoLocation({ editor }: IQuickAccessTextEditorContext, options: { range: IRange; keyMods: IKeyMods; forceSideBySide?: boolean; preserveFocus?: boolean }): codemavi {
+	protected gotoLocation({ editor }: IQuickAccessTextEditorContext, options: { range: IRange; keyMods: IKeyMods; forceSideBySide?: boolean; preserveFocus?: boolean }): void {
 		editor.setSelection(options.range, TextEditorSelectionSource.JUMP);
 		editor.revealRangeInCenter(options.range, ScrollType.Smooth);
 		if (!options.preserveFocus) {
@@ -167,7 +167,7 @@ export abstract class AbstractEditorNavigationQuickAccessProvider implements IQu
 	/**
 	 * Subclasses to provide an event when the active editor control changes.
 	 */
-	protected abstract readonly onDidActiveTextEditorControlChange: Event<codemavi>;
+	protected abstract readonly onDidActiveTextEditorControlChange: Event<void>;
 
 	/**
 	 * Subclasses to provide the current active editor control.
@@ -181,7 +181,7 @@ export abstract class AbstractEditorNavigationQuickAccessProvider implements IQu
 
 	private rangeHighlightDecorationId: IEditorLineDecoration | undefined = undefined;
 
-	addDecorations(editor: IEditor, range: IRange): codemavi {
+	addDecorations(editor: IEditor, range: IRange): void {
 		editor.changeDecorations(changeAccessor => {
 
 			// Reset old decorations if any
@@ -225,7 +225,7 @@ export abstract class AbstractEditorNavigationQuickAccessProvider implements IQu
 		});
 	}
 
-	clearDecorations(editor: IEditor): codemavi {
+	clearDecorations(editor: IEditor): void {
 		const rangeHighlightDecorationId = this.rangeHighlightDecorationId;
 		if (rangeHighlightDecorationId) {
 			editor.changeDecorations(changeAccessor => {

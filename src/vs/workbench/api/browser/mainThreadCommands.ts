@@ -35,7 +35,7 @@ export class MainThreadCommands implements MainThreadCommandsShape {
 		this._generateCommandsDocumentationRegistration.dispose();
 	}
 
-	private async _generateCommandsDocumentation(): Promise<codemavi> {
+	private async _generateCommandsDocumentation(): Promise<void> {
 		const result = await this._proxy.$getContributedCommandMetadata();
 
 		// add local commands
@@ -54,7 +54,7 @@ export class MainThreadCommands implements MainThreadCommandsShape {
 		console.log(all.join('\n'));
 	}
 
-	$registerCommand(id: string): codemavi {
+	$registerCommand(id: string): void {
 		this._commandRegistrations.set(
 			id,
 			CommandsRegistry.registerCommand(id, (accessor, ...args) => {
@@ -65,11 +65,11 @@ export class MainThreadCommands implements MainThreadCommandsShape {
 		);
 	}
 
-	$unregisterCommand(id: string): codemavi {
+	$unregisterCommand(id: string): void {
 		this._commandRegistrations.deleteAndDispose(id);
 	}
 
-	$fireCommandActivationEvent(id: string): codemavi {
+	$fireCommandActivationEvent(id: string): void {
 		const activationEvent = `onCommand:${id}`;
 		if (!this._extensionService.activationEventIsDone(activationEvent)) {
 			// this is NOT awaited because we only use it as drive-by-activation

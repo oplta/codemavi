@@ -8,10 +8,10 @@ import { FileAccess } from '../../common/network.js';
 import { URI } from '../../common/uri.js';
 
 declare const __readFileInTests: (path: string) => Promise<string>;
-declare const __writeFileInTests: (path: string, contents: string) => Promise<codemavi>;
+declare const __writeFileInTests: (path: string, contents: string) => Promise<void>;
 declare const __readDirInTests: (path: string) => Promise<string[]>;
-declare const __unlinkInTests: (path: string) => Promise<codemavi>;
-declare const __mkdirPInTests: (path: string) => Promise<codemavi>;
+declare const __unlinkInTests: (path: string) => Promise<void>;
+declare const __mkdirPInTests: (path: string) => Promise<void>;
 
 // setup on import so assertSnapshot has the current context without explicit passing
 let context: Lazy<SnapshotContext> | undefined;
@@ -176,7 +176,7 @@ teardown(async function () {
  * in a `__snapshots__` directory next to the test file, which is expected to
  * be the first `.test.js` file in the callstack.
  */
-export function assertSnapshot(value: any, options?: ISnapshotOptions): Promise<codemavi> {
+export function assertSnapshot(value: any, options?: ISnapshotOptions): Promise<void> {
 	if (!context) {
 		throw new Error('assertSnapshot can only be used in a test');
 	}

@@ -70,7 +70,7 @@ export class BreadcrumbsModel {
 		this._onDidUpdate.fire(this);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._cfgFilePath.dispose();
 		this._cfgSymbolPath.dispose();
@@ -151,7 +151,7 @@ export class BreadcrumbsModel {
 		this._onDidUpdate.fire(this);
 	}
 
-	private _bindToEditor(editor: IEditorPane): codemavi {
+	private _bindToEditor(editor: IEditorPane): void {
 		const newCts = new CancellationTokenSource();
 		this._currentOutline.clear();
 		this._outlineDisposables.clear();

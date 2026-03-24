@@ -146,7 +146,7 @@ export interface IStorageService {
 	 * @param target allows to define the target of the storage operation
 	 * to either the current machine or user.
 	 */
-	store(key: string, value: StorageValue, scope: StorageScope, target: StorageTarget): codemavi;
+	store(key: string, value: StorageValue, scope: StorageScope, target: StorageTarget): void;
 
 	/**
 	 * Allows to store multiple values in a bulk operation. Events will only
@@ -155,7 +155,7 @@ export interface IStorageService {
 	 * @param external a hint to indicate the source of the operation is external,
 	 * such as settings sync or profile changes.
 	 */
-	storeAll(entries: Array<IStorageEntry>, external: boolean): codemavi;
+	storeAll(entries: Array<IStorageEntry>, external: boolean): void;
 
 	/**
 	 * Delete an element stored under the provided key from storage.
@@ -164,7 +164,7 @@ export interface IStorageService {
 	 * operation to either the current workspace only, all workspaces
 	 * or all profiles.
 	 */
-	remove(key: string, scope: StorageScope): codemavi;
+	remove(key: string, scope: StorageScope): void;
 
 	/**
 	 * Returns all the keys used in the storage for the provided `scope`
@@ -185,7 +185,7 @@ export interface IStorageService {
 	/**
 	 * Log the contents of the storage to the console.
 	 */
-	log(): codemavi;
+	log(): void;
 
 	/**
 	 * Returns true if the storage service handles the provided scope.
@@ -196,7 +196,7 @@ export interface IStorageService {
 	 * Switch storage to another workspace or profile. Optionally preserve the
 	 * current data to the new storage.
 	 */
-	switch(to: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<codemavi>;
+	switch(to: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<void>;
 
 	/**
 	 * Whether the storage for the given scope was created during this session or
@@ -207,7 +207,7 @@ export interface IStorageService {
 	/**
 	 * Attempts to reduce the DB size via optimization commands if supported.
 	 */
-	optimize(scope: StorageScope): Promise<codemavi>;
+	optimize(scope: StorageScope): Promise<void>;
 
 	/**
 	 * Allows to flush state, e.g. in cases where a shutdown is
@@ -217,7 +217,7 @@ export interface IStorageService {
 	 * @returns a `Promise` that can be awaited on when all updates
 	 * to the underlying storage have been flushed.
 	 */
-	flush(reason?: WillSaveStateReason): Promise<codemavi>;
+	flush(reason?: WillSaveStateReason): Promise<void>;
 }
 
 export const enum StorageScope {
@@ -326,7 +326,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 	private readonly _onWillSaveState = this._register(new Emitter<IWillSaveStateEvent>());
 	readonly onWillSaveState = this._onWillSaveState.event;
 
-	private initializationPromise: Promise<codemavi> | undefined;
+	private initializationPromise: Promise<void> | undefined;
 
 	private readonly flushWhenIdleScheduler: RunOnceScheduler;
 	private readonly runFlushWhenIdle = this._register(new MutableDisposable());
@@ -344,7 +344,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return Event.filter(this._onDidChangeValue.event, e => e.scope === scope && (key === undefined || e.key === key), disposable);
 	}
 
-	private doFlushWhenIdle(): codemavi {
+	private doFlushWhenIdle(): void {
 		this.runFlushWhenIdle.value = runWhenGlobalIdle(() => {
 			if (this.shouldFlushWhenIdle()) {
 				this.flush();
@@ -359,11 +359,11 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return true;
 	}
 
-	protected stopFlushWhenIdle(): codemavi {
+	protected stopFlushWhenIdle(): void {
 		dispose([this.runFlushWhenIdle, this.flushWhenIdleScheduler]);
 	}
 
-	initialize(): Promise<codemavi> {
+	initialize(): Promise<void> {
 		if (!this.initializationPromise) {
 			this.initializationPromise = (async () => {
 
@@ -390,7 +390,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return this.initializationPromise;
 	}
 
-	protected emitDidChangeValue(scope: StorageScope, event: IStorageChangeEvent): codemavi {
+	protected emitDidChangeValue(scope: StorageScope, event: IStorageChangeEvent): void {
 		const { key, external } = event;
 
 		// Specially handle `TARGET_KEY`
@@ -419,7 +419,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		}
 	}
 
-	protected emitWillSaveState(reason: WillSaveStateReason): codemavi {
+	protected emitWillSaveState(reason: WillSaveStateReason): void {
 		this._onWillSaveState.fire({ reason });
 	}
 
@@ -447,7 +447,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return this.getStorage(scope)?.getObject(key, fallbackValue);
 	}
 
-	storeAll(entries: Array<IStorageEntry>, external: boolean): codemavi {
+	storeAll(entries: Array<IStorageEntry>, external: boolean): void {
 		this.withPausedEmitters(() => {
 			for (const entry of entries) {
 				this.store(entry.key, entry.value, entry.scope, entry.target, external);
@@ -455,7 +455,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		});
 	}
 
-	store(key: string, value: StorageValue, scope: StorageScope, target: StorageTarget, external = false): codemavi {
+	store(key: string, value: StorageValue, scope: StorageScope, target: StorageTarget, external = false): void {
 
 		// We remove the key for undefined/null values
 		if (isUndefinedOrNull(value)) {
@@ -474,7 +474,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		});
 	}
 
-	remove(key: string, scope: StorageScope, external = false): codemavi {
+	remove(key: string, scope: StorageScope, external = false): void {
 
 		// Update our datastructures but send events only after
 		this.withPausedEmitters(() => {
@@ -487,7 +487,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		});
 	}
 
-	private withPausedEmitters(fn: Function): codemavi {
+	private withPausedEmitters(fn: Function): void {
 
 		// Pause emitters
 		this._onDidChangeValue.pause();
@@ -517,7 +517,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return keys;
 	}
 
-	private updateKeyTarget(key: string, scope: StorageScope, target: StorageTarget | undefined, external = false): codemavi {
+	private updateKeyTarget(key: string, scope: StorageScope, target: StorageTarget | undefined, external = false): void {
 
 		// Add
 		const keyTargets = this.getKeyTargets(scope);
@@ -585,7 +585,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return this.getBoolean(IS_NEW_KEY, scope) === true;
 	}
 
-	async flush(reason = WillSaveStateReason.NONE): Promise<codemavi> {
+	async flush(reason = WillSaveStateReason.NONE): Promise<void> {
 
 		// Signal event to collect changes
 		this._onWillSaveState.fire({ reason });
@@ -617,7 +617,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		}
 	}
 
-	async log(): Promise<codemavi> {
+	async log(): Promise<void> {
 		const applicationItems = this.getStorage(StorageScope.APPLICATION)?.items ?? new Map<string, string>();
 		const profileItems = this.getStorage(StorageScope.PROFILE)?.items ?? new Map<string, string>();
 		const workspaceItems = this.getStorage(StorageScope.WORKSPACE)?.items ?? new Map<string, string>();
@@ -632,7 +632,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		);
 	}
 
-	async optimize(scope: StorageScope): Promise<codemavi> {
+	async optimize(scope: StorageScope): Promise<void> {
 
 		// Await pending data to be flushed to the DB
 		// before attempting to optimize the DB
@@ -641,7 +641,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return this.getStorage(scope)?.optimize();
 	}
 
-	async switch(to: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<codemavi> {
+	async switch(to: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<void> {
 
 		// Signal as event so that clients can store data before we switch
 		this.emitWillSaveState(WillSaveStateReason.NONE);
@@ -665,7 +665,7 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 		return true;
 	}
 
-	protected switchData(oldStorage: Map<string, string>, newStorage: IStorage, scope: StorageScope): codemavi {
+	protected switchData(oldStorage: Map<string, string>, newStorage: IStorage, scope: StorageScope): void {
 		this.withPausedEmitters(() => {
 			// Signal storage keys that have changed
 			const handledkeys = new Set<string>();
@@ -690,14 +690,14 @@ export abstract class AbstractStorageService extends Disposable implements IStor
 
 	abstract hasScope(scope: IAnyWorkspaceIdentifier | IUserDataProfile): boolean;
 
-	protected abstract doInitialize(): Promise<codemavi>;
+	protected abstract doInitialize(): Promise<void>;
 
 	protected abstract getStorage(scope: StorageScope): IStorage | undefined;
 
 	protected abstract getLogDetails(scope: StorageScope): string | undefined;
 
-	protected abstract switchToProfile(toProfile: IUserDataProfile, preserveData: boolean): Promise<codemavi>;
-	protected abstract switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<codemavi>;
+	protected abstract switchToProfile(toProfile: IUserDataProfile, preserveData: boolean): Promise<void>;
+	protected abstract switchToWorkspace(toWorkspace: IAnyWorkspaceIdentifier | IUserDataProfile, preserveData: boolean): Promise<void>;
 }
 
 export function isProfileUsingDefaultStorage(profile: IUserDataProfile): boolean {
@@ -740,13 +740,13 @@ export class InMemoryStorageService extends AbstractStorageService {
 		}
 	}
 
-	protected async doInitialize(): Promise<codemavi> { }
+	protected async doInitialize(): Promise<void> { }
 
-	protected async switchToProfile(): Promise<codemavi> {
+	protected async switchToProfile(): Promise<void> {
 		// no-op when in-memory
 	}
 
-	protected async switchToWorkspace(): Promise<codemavi> {
+	protected async switchToWorkspace(): Promise<void> {
 		// no-op when in-memory
 	}
 
@@ -759,7 +759,7 @@ export class InMemoryStorageService extends AbstractStorageService {
 	}
 }
 
-export async function logStorage(application: Map<string, string>, profile: Map<string, string>, workspace: Map<string, string>, applicationPath: string, profilePath: string, workspacePath: string): Promise<codemavi> {
+export async function logStorage(application: Map<string, string>, profile: Map<string, string>, workspace: Map<string, string>, applicationPath: string, profilePath: string, workspacePath: string): Promise<void> {
 	const safeParse = (value: string) => {
 		try {
 			return JSON.parse(value);

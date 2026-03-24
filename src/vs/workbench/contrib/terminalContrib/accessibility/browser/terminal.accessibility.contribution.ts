@@ -49,7 +49,7 @@ class TextAreaSyncContribution extends DisposableStore implements ITerminalContr
 	) {
 		super();
 	}
-	layout(xterm: IXtermTerminal & { raw: Terminal }): codemavi {
+	layout(xterm: IXtermTerminal & { raw: Terminal }): void {
 		if (this._addon) {
 			return;
 		}
@@ -107,7 +107,7 @@ export class TerminalAccessibleViewContribution extends Disposable implements IT
 		}));
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: Terminal }): codemavi {
+	xtermReady(xterm: IXtermTerminal & { raw: Terminal }): void {
 		const addon = this._instantiationService.createInstance(TextAreaSyncAddon, this._ctx.instance.capabilities);
 		xterm.raw.loadAddon(addon);
 		addon.activate(xterm.raw);
@@ -132,7 +132,7 @@ export class TerminalAccessibleViewContribution extends Disposable implements IT
 		}));
 	}
 
-	private _updateCommandExecutedListener(): codemavi {
+	private _updateCommandExecutedListener(): void {
 		if (!this._ctx.instance.capabilities.has(TerminalCapability.CommandDetection)) {
 			return;
 		}
@@ -155,7 +155,7 @@ export class TerminalAccessibleViewContribution extends Disposable implements IT
 		return accessibleViewCurrentProviderId.getValue(this._contextKeyService) === AccessibleViewProviderId.Terminal;
 	}
 
-	show(): codemavi {
+	show(): void {
 		if (!this._xterm) {
 			return;
 		}
@@ -170,7 +170,7 @@ export class TerminalAccessibleViewContribution extends Disposable implements IT
 		const position = this._configurationService.getValue(TerminalAccessibilitySettingId.AccessibleViewPreserveCursorPosition) ? this._accessibleViewService.getPosition(AccessibleViewProviderId.Terminal) : undefined;
 		this._accessibleViewService.show(this._bufferProvider, position);
 	}
-	navigateToCommand(type: NavigationType): codemavi {
+	navigateToCommand(type: NavigationType): void {
 		const currentLine = this._accessibleViewService.getPosition(AccessibleViewProviderId.Terminal)?.lineNumber;
 		const commands = this._getCommandsWithEditorLine();
 		if (!commands?.length || !currentLine) {
@@ -289,7 +289,7 @@ class FocusAccessibleBufferAction extends Action2 {
 			]
 		});
 	}
-	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, ...args: any[]): Promise<void> {
 		const terminalService = accessor.get(ITerminalService);
 		const terminal = await terminalService.getActiveOrCreateInstance();
 		if (!terminal?.xterm) {

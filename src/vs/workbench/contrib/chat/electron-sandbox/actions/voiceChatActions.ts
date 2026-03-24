@@ -90,15 +90,15 @@ interface IVoiceChatSessionController {
 	readonly context: VoiceChatSessionContext;
 	readonly scopedContextKeyService: IContextKeyService;
 
-	updateState(state: VoiceChatSessionState): codemavi;
+	updateState(state: VoiceChatSessionState): void;
 
-	focusInput(): codemavi;
+	focusInput(): void;
 	acceptInput(): Promise<IChatResponseModel | undefined>;
-	updateInput(text: string): codemavi;
+	updateInput(text: string): void;
 	getInput(): string;
 
-	setInputPlaceholder(text: string): codemavi;
-	clearInputPlaceholder(): codemavi;
+	setInputPlaceholder(text: string): void;
+	clearInputPlaceholder(): void;
 }
 
 class VoiceChatSessionControllerFactory {
@@ -170,7 +170,7 @@ class VoiceChatSessionControllerFactory {
 		return undefined;
 	}
 
-	private static createChatContextKeyController(contextKeyService: IContextKeyService, context: VoiceChatSessionContext): (state: VoiceChatSessionState) => codemavi {
+	private static createChatContextKeyController(contextKeyService: IContextKeyService, context: VoiceChatSessionContext): (state: VoiceChatSessionState) => void {
 		const contextVoiceChatGettingReady = ScopedVoiceChatGettingReady.bindTo(contextKeyService);
 		const contextVoiceChatInProgress = ScopedVoiceChatInProgress.bindTo(contextKeyService);
 
@@ -210,10 +210,10 @@ class VoiceChatSessionControllerFactory {
 }
 
 interface IVoiceChatSession {
-	setTimeoutDisabled(disabled: boolean): codemavi;
+	setTimeoutDisabled(disabled: boolean): void;
 
-	accept(): codemavi;
-	stop(): codemavi;
+	accept(): void;
+	stop(): void;
 }
 
 interface IActiveVoiceChatSession extends IVoiceChatSession {
@@ -321,7 +321,7 @@ class VoiceChatSessions {
 		return session;
 	}
 
-	private onDidSpeechToTextSessionStart(controller: IVoiceChatSessionController, disposables: DisposableStore): codemavi {
+	private onDidSpeechToTextSessionStart(controller: IVoiceChatSessionController, disposables: DisposableStore): void {
 		controller.updateState(VoiceChatSessionState.Started);
 
 		let dotCount = 0;
@@ -336,7 +336,7 @@ class VoiceChatSessions {
 		updatePlaceholder();
 	}
 
-	stop(voiceChatSessionId = this.voiceChatSessionIds, context?: VoiceChatSessionContext): codemavi {
+	stop(voiceChatSessionId = this.voiceChatSessionIds, context?: VoiceChatSessionContext): void {
 		if (
 			!this.currentVoiceChatSession ||
 			this.voiceChatSessionIds !== voiceChatSessionId ||
@@ -353,7 +353,7 @@ class VoiceChatSessions {
 		this.currentVoiceChatSession = undefined;
 	}
 
-	async accept(voiceChatSessionId = this.voiceChatSessionIds): Promise<codemavi> {
+	async accept(voiceChatSessionId = this.voiceChatSessionIds): Promise<void> {
 		if (
 			!this.currentVoiceChatSession ||
 			this.voiceChatSessionIds !== voiceChatSessionId
@@ -393,7 +393,7 @@ class VoiceChatSessions {
 
 export const VOICE_KEY_HOLD_THRESHOLD = 500;
 
-async function startVoiceChatWithHoldMode(id: string, accessor: ServicesAccessor, target: 'view' | 'inline' | 'quick' | 'focused', context?: IChatExecuteActionContext): Promise<codemavi> {
+async function startVoiceChatWithHoldMode(id: string, accessor: ServicesAccessor, target: 'view' | 'inline' | 'quick' | 'focused', context?: IChatExecuteActionContext): Promise<void> {
 	const instantiationService = accessor.get(IInstantiationService);
 	const keybindingService = accessor.get(IKeybindingService);
 
@@ -425,7 +425,7 @@ class VoiceChatWithHoldModeAction extends Action2 {
 		super(desc);
 	}
 
-	run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<codemavi> {
+	run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<void> {
 		return startVoiceChatWithHoldMode(this.desc.id, accessor, this.target, context);
 	}
 }
@@ -471,7 +471,7 @@ export class HoldToVoiceChatInChatViewAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<void> {
 
 		// The intent of this action is to provide 2 modes to align with what `Ctrlcmd+I` in inline chat:
 		// - if the user press and holds, we start voice chat in the chat view
@@ -591,7 +591,7 @@ export class StartVoiceChatAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, context?: IChatExecuteActionContext): Promise<void> {
 		const widget = context?.widget;
 		if (widget) {
 			// if we already get a context when the action is executed
@@ -626,7 +626,7 @@ export class StopListeningAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		VoiceChatSessions.getInstance(accessor.get(IInstantiationService)).stop();
 	}
 }
@@ -653,7 +653,7 @@ export class StopListeningAndSubmitAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		VoiceChatSessions.getInstance(accessor.get(IInstantiationService)).accept();
 	}
 }
@@ -727,7 +727,7 @@ class ChatSynthesizerSessions {
 		@IInstantiationService private readonly instantiationService: IInstantiationService
 	) { }
 
-	async start(controller: IChatSynthesizerSessionController): Promise<codemavi> {
+	async start(controller: IChatSynthesizerSessionController): Promise<void> {
 
 		// Stop running text-to-speech or speech-to-text sessions in chats
 		this.stop();
@@ -833,7 +833,7 @@ class ChatSynthesizerSessions {
 			.join('\n');
 	}
 
-	stop(): codemavi {
+	stop(): void {
 		this.activeSession?.dispose(true);
 		this.activeSession = undefined;
 	}
@@ -1053,7 +1053,7 @@ export class KeywordActivationContribution extends Disposable implements IWorkbe
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(Event.runAndSubscribe(this.speechService.onDidChangeHasSpeechProvider, () => {
 			this.updateConfiguration();
 			this.handleKeywordActivation();
@@ -1078,7 +1078,7 @@ export class KeywordActivationContribution extends Disposable implements IWorkbe
 		}));
 	}
 
-	private updateConfiguration(): codemavi {
+	private updateConfiguration(): void {
 		if (!this.speechService.hasSpeechProvider || !this.chatAgentService.getDefaultAgent(ChatAgentLocation.Panel)) {
 			return; // these settings require a speech and chat provider
 		}
@@ -1111,7 +1111,7 @@ export class KeywordActivationContribution extends Disposable implements IWorkbe
 		});
 	}
 
-	private handleKeywordActivation(): codemavi {
+	private handleKeywordActivation(): void {
 		const enabled =
 			supportsKeywordActivation(this.configurationService, this.speechService, this.chatAgentService) &&
 			!this.speechService.hasActiveSpeechToTextSession;
@@ -1133,7 +1133,7 @@ export class KeywordActivationContribution extends Disposable implements IWorkbe
 		}
 	}
 
-	private async enableKeywordActivation(): Promise<codemavi> {
+	private async enableKeywordActivation(): Promise<void> {
 		const session = this.activeSession = new CancellationTokenSource();
 		const result = await this.speechService.recognizeKeyword(session.token);
 		if (session.token.isCancellationRequested || session !== this.activeSession) {
@@ -1173,12 +1173,12 @@ export class KeywordActivationContribution extends Disposable implements IWorkbe
 		}
 	}
 
-	private disableKeywordActivation(): codemavi {
+	private disableKeywordActivation(): void {
 		this.activeSession?.dispose(true);
 		this.activeSession = undefined;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.activeSession?.dispose();
 
 		super.dispose();
@@ -1209,7 +1209,7 @@ class KeywordActivationStatusEntry extends Disposable {
 		this.updateStatusEntry();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.speechService.onDidStartKeywordRecognition(() => this.updateStatusEntry()));
 		this._register(this.speechService.onDidEndKeywordRecognition(() => this.updateStatusEntry()));
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
@@ -1219,7 +1219,7 @@ class KeywordActivationStatusEntry extends Disposable {
 		}));
 	}
 
-	private updateStatusEntry(): codemavi {
+	private updateStatusEntry(): void {
 		const visible = supportsKeywordActivation(this.configurationService, this.speechService, this.chatAgentService);
 		if (visible) {
 			if (!this.entry.value) {
@@ -1248,7 +1248,7 @@ class KeywordActivationStatusEntry extends Disposable {
 		};
 	}
 
-	private updateStatusLabel(): codemavi {
+	private updateStatusLabel(): void {
 		this.entry.value?.update(this.getStatusEntryProperties());
 	}
 }
@@ -1263,7 +1263,7 @@ abstract class BaseInstallSpeechProviderAction extends Action2 {
 
 	private static readonly SPEECH_EXTENSION_ID = 'ms-vscode.vscode-speech';
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const contextKeyService = accessor.get(IContextKeyService);
 		const extensionsWorkbenchService = accessor.get(IExtensionsWorkbenchService);
 		const dialogService = accessor.get(IDialogService);
@@ -1275,7 +1275,7 @@ abstract class BaseInstallSpeechProviderAction extends Action2 {
 		}
 	}
 
-	private async installExtension(extensionsWorkbenchService: IExtensionsWorkbenchService, dialogService: IDialogService): Promise<codemavi> {
+	private async installExtension(extensionsWorkbenchService: IExtensionsWorkbenchService, dialogService: IDialogService): Promise<void> {
 		try {
 			await extensionsWorkbenchService.install(BaseInstallSpeechProviderAction.SPEECH_EXTENSION_ID, {
 				justification: this.getJustification(),

@@ -44,6 +44,6 @@ export interface IExtensionRecommendationNotificationService {
 	hasToIgnoreRecommendationNotifications(): boolean;
 
 	promptImportantExtensionsInstallNotification(recommendations: IExtensionRecommendations): Promise<RecommendationsNotificationResult>;
-	promptWorkspaceRecommendations(recommendations: Array<string | URI>): Promise<codemavi>;
+	promptWorkspaceRecommendations(recommendations: Array<string | URI>): Promise<void>;
 }
 

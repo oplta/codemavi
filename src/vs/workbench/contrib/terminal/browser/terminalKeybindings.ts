@@ -9,7 +9,7 @@ import { TerminalCommandId } from '../common/terminal.js';
 import { TerminalContextKeys } from '../common/terminalContextKey.js';
 import { terminalSendSequenceCommand } from './terminalActions.js';
 
-export function registerSendSequenceKeybinding(text: string, rule: { when?: ContextKeyExpression } & IKeybindings): codemavi {
+export function registerSendSequenceKeybinding(text: string, rule: { when?: ContextKeyExpression } & IKeybindings): void {
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: TerminalCommandId.SendSequence,
 		weight: KeybindingWeight.WorkbenchContrib,

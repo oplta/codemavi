@@ -56,7 +56,7 @@ export class BrowserUpdateService extends Disposable implements IUpdateService {
 		return !!update;
 	}
 
-	async checkForUpdates(explicit: boolean): Promise<codemavi> {
+	async checkForUpdates(explicit: boolean): Promise<void> {
 		await this.doCheckForUpdates(explicit);
 	}
 
@@ -82,19 +82,19 @@ export class BrowserUpdateService extends Disposable implements IUpdateService {
 		return undefined; // no update provider to ask
 	}
 
-	async downloadUpdate(): Promise<codemavi> {
+	async downloadUpdate(): Promise<void> {
 		// no-op
 	}
 
-	async applyUpdate(): Promise<codemavi> {
+	async applyUpdate(): Promise<void> {
 		this.hostService.reload();
 	}
 
-	async quitAndInstall(): Promise<codemavi> {
+	async quitAndInstall(): Promise<void> {
 		this.hostService.reload();
 	}
 
-	async _applySpecificUpdate(packagePath: string): Promise<codemavi> {
+	async _applySpecificUpdate(packagePath: string): Promise<void> {
 		// noop
 	}
 }

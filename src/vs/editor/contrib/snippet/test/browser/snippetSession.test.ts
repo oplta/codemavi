@@ -63,7 +63,7 @@ suite('SnippetSession', function () {
 
 	test('normalize whitespace', function () {
 
-		function assertNormalized(position: IPosition, input: string, expected: string): codemavi {
+		function assertNormalized(position: IPosition, input: string, expected: string): void {
 			const snippet = new SnippetParser().parse(input);
 			SnippetSession.adjustWhitespace(model, position, true, snippet);
 			assert.strictEqual(snippet.toTextmateString(), expected);

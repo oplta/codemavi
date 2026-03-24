@@ -59,7 +59,7 @@ export class ChatEditor extends EditorPane {
 		}
 	}
 
-	protected override createEditor(parent: HTMLElement): codemavi {
+	protected override createEditor(parent: HTMLElement): void {
 		this._scopedContextKeyService = this._register(this.contextKeyService.createScoped(parent));
 		const scopedInstantiationService = this._register(this.instantiationService.createChild(new ServiceCollection([IContextKeyService, this.scopedContextKeyService])));
 
@@ -96,24 +96,24 @@ export class ChatEditor extends EditorPane {
 		this.widget.setVisible(true);
 	}
 
-	protected override setEditorVisible(visible: boolean): codemavi {
+	protected override setEditorVisible(visible: boolean): void {
 		super.setEditorVisible(visible);
 
 		this.widget?.setVisible(visible);
 	}
 
-	public override focus(): codemavi {
+	public override focus(): void {
 		super.focus();
 
 		this.widget?.focusInput();
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		this.saveState();
 		super.clearInput();
 	}
 
-	override async setInput(input: ChatEditorInput, options: IChatEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: ChatEditorInput, options: IChatEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		super.setInput(input, options, context, token);
 
 		const editorModel = await input.resolve();
@@ -128,13 +128,13 @@ export class ChatEditor extends EditorPane {
 		this.updateModel(editorModel.model, options?.viewState ?? input.options.viewState);
 	}
 
-	private updateModel(model: IChatModel, viewState?: IChatViewState): codemavi {
+	private updateModel(model: IChatModel, viewState?: IChatViewState): void {
 		this._memento = new Memento('interactive-session-editor-' + CHAT_PROVIDER_ID, this.storageService);
 		this._viewState = viewState ?? this._memento.getMemento(StorageScope.WORKSPACE, StorageTarget.MACHINE) as IChatViewState;
 		this.widget.setModel(model, { ...this._viewState });
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 		this.widget?.saveState();
 
 		if (this._memento && this._viewState) {
@@ -151,7 +151,7 @@ export class ChatEditor extends EditorPane {
 		return { ...this._viewState };
 	}
 
-	override layout(dimension: dom.Dimension, position?: dom.IDomPosition | undefined): codemavi {
+	override layout(dimension: dom.Dimension, position?: dom.IDomPosition | undefined): void {
 		if (this.widget) {
 			this.widget.layout(dimension.height, dimension.width);
 		}

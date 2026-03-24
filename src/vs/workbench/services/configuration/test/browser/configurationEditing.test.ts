@@ -53,8 +53,8 @@ const ROOT = URI.file('tests').with({ scheme: 'vscode-tests' });
 class ConfigurationCache implements IConfigurationCache {
 	needsCaching(resource: URI): boolean { return false; }
 	async read(): Promise<string> { return ''; }
-	async write(): Promise<codemavi> { }
-	async remove(): Promise<codemavi> { }
+	async write(): Promise<void> { }
+	async remove(): Promise<void> { }
 }
 
 suite('ConfigurationEditing', () => {

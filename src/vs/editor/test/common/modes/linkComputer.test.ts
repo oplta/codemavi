@@ -27,7 +27,7 @@ function myComputeLinks(lines: string[]): ILink[] {
 	return computeLinks(target);
 }
 
-function assertLink(text: string, extractedLink: string): codemavi {
+function assertLink(text: string, extractedLink: string): void {
 	let startColumn = 0,
 		endColumn = 0,
 		chr: string,

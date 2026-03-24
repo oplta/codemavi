@@ -15,7 +15,7 @@ export const ILifecycleService = createDecorator<ILifecycleService>('lifecycleSe
  * resolves to a boolean. Returning a promise is useful in cases of long running operations
  * on shutdown.
  *
- * Note: It is absolutely important to acodemavi long running promises if possible. Please try hard
+ * Note: It is absolutely important to avoid long running promises if possible. Please try hard
  * to return a boolean directly. Returning a promise has quite an impact on the shutdown sequence!
  */
 export interface BeforeShutdownEvent {
@@ -32,7 +32,7 @@ export interface BeforeShutdownEvent {
 	 * @param id to identify the veto operation in case it takes very long or never
 	 * completes.
 	 */
-	veto(value: boolean | Promise<boolean>, id: string): codemavi;
+	veto(value: boolean | Promise<boolean>, id: string): void;
 }
 
 export interface InternalBeforeShutdownEvent extends BeforeShutdownEvent {
@@ -44,7 +44,7 @@ export interface InternalBeforeShutdownEvent extends BeforeShutdownEvent {
 	 * This method is hidden from the API because it is intended
 	 * to be only used once internally.
 	 */
-	finalVeto(vetoFn: () => boolean | Promise<boolean>, id: string): codemavi;
+	finalVeto(vetoFn: () => boolean | Promise<boolean>, id: string): void;
 }
 
 /**
@@ -100,7 +100,7 @@ export interface IWillShutdownEventLastJoiner extends IWillShutdownEventJoiner {
  * by providing a promise from the join method. Returning a promise is useful in cases of long
  * running operations on shutdown.
  *
- * Note: It is absolutely important to acodemavi long running promises if possible. Please try hard
+ * Note: It is absolutely important to avoid long running promises if possible. Please try hard
  * to return a boolean directly. Returning a promise has quite an impact on the shutdown sequence!
  */
 export interface WillShutdownEvent {
@@ -124,7 +124,7 @@ export interface WillShutdownEvent {
 	 * @param joiner to identify the join operation in case it takes very long or never
 	 * completes.
 	 */
-	join(promise: Promise<codemavi>, joiner: IWillShutdownEventDefaultJoiner): codemavi;
+	join(promise: Promise<void>, joiner: IWillShutdownEventDefaultJoiner): void;
 
 	/**
 	 * Allows to join the shutdown at the end. The promise can be a long running operation but it
@@ -134,7 +134,7 @@ export interface WillShutdownEvent {
 	 * @param joiner to identify the join operation in case it takes very long or never
 	 * completes.
 	 */
-	join(promiseFn: (() => Promise<codemavi>), joiner: IWillShutdownEventLastJoiner): codemavi;
+	join(promiseFn: (() => Promise<void>), joiner: IWillShutdownEventLastJoiner): void;
 
 	/**
 	 * Allows to access the joiners that have not finished joining this event.
@@ -145,7 +145,7 @@ export interface WillShutdownEvent {
 	 * Allows to enforce the shutdown, even when there are
 	 * pending `join` operations to complete.
 	 */
-	force(): codemavi;
+	force(): void;
 }
 
 export const enum ShutdownReason {
@@ -254,7 +254,7 @@ export interface ILifecycleService {
 	/**
 	 * Fired when the shutdown was prevented by a component giving veto.
 	 */
-	readonly onShutdownVeto: Event<codemavi>;
+	readonly onShutdownVeto: Event<void>;
 
 	/**
 	 * Fired when an error happened during `onBeforeShutdown` veto handling.
@@ -286,13 +286,13 @@ export interface ILifecycleService {
 	 *
 	 * This event should be used to dispose resources.
 	 */
-	readonly onDidShutdown: Event<codemavi>;
+	readonly onDidShutdown: Event<void>;
 
 	/**
 	 * Returns a promise that resolves when a certain lifecycle phase
 	 * has started.
 	 */
-	when(phase: LifecyclePhase): Promise<codemavi>;
+	when(phase: LifecyclePhase): Promise<void>;
 
 	/**
 	 * Triggers a shutdown of the workbench. Depending on native or web, this can have
@@ -301,5 +301,5 @@ export interface ILifecycleService {
 	 * **Note:** this should normally not be called. See related methods in `IHostService`
 	 * and `INativeHostService` to close a window or quit the application.
 	 */
-	shutdown(): Promise<codemavi>;
+	shutdown(): Promise<void>;
 }

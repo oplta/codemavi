@@ -23,9 +23,9 @@ export interface ISnippetsService {
 
 	isEnabled(snippet: Snippet): boolean;
 
-	updateEnablement(snippet: Snippet, enabled: boolean): codemavi;
+	updateEnablement(snippet: Snippet, enabled: boolean): void;
 
-	updateUsageTimestamp(snippet: Snippet): codemavi;
+	updateUsageTimestamp(snippet: Snippet): void;
 
 	getSnippets(languageId: string | undefined, opt?: ISnippetGetOptions): Promise<Snippet[]>;
 

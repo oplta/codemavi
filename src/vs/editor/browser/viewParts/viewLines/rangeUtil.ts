@@ -23,7 +23,7 @@ export class RangeUtil {
 		return this._handyReadyRange;
 	}
 
-	private static _detachRange(range: Range, endNode: HTMLElement): codemavi {
+	private static _detachRange(range: Range, endNode: HTMLElement): void {
 		// Move range out of the span node, IE doesn't like having many ranges in
 		// the same spot and will act badly for lines containing dashes ('-')
 		range.selectNodeContents(endNode);
@@ -100,7 +100,7 @@ export class RangeUtil {
 
 		if (startChildIndex === endChildIndex && startOffset === endOffset && startOffset === 0 && !domNode.children[startChildIndex].firstChild) {
 			// We must find the position at the beginning of a <span>
-			// To cover cases of empty <span>s, acodemavi using a range and use the <span>'s bounding box
+			// To cover cases of empty <span>s, avoid using a range and use the <span>'s bounding box
 			const clientRects = domNode.children[startChildIndex].getClientRects();
 			context.markDidDomLayout();
 			return this._createHorizontalRangesFromClientRects(clientRects, context.clientRectDeltaLeft, context.clientRectScale);

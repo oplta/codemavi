@@ -28,7 +28,7 @@ export class ApplyFileSnippetAction extends SnippetsAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const snippetService = accessor.get(ISnippetsService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const editorService = accessor.get(IEditorService);

@@ -29,7 +29,7 @@ export class ManageTrustedExtensionsForAccountAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, options?: { providerId: string; accountLabel: string }): Promise<codemavi> {
+	override run(accessor: ServicesAccessor, options?: { providerId: string; accountLabel: string }): Promise<void> {
 		const instantiationService = accessor.get(IInstantiationService);
 		return instantiationService.createInstance(ManageTrustedExtensionsForAccountActionImpl).run(options);
 	}

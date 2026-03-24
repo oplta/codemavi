@@ -21,11 +21,11 @@ class MockKeybindingContextKey<T extends ContextKeyValue = ContextKeyValue> impl
 		this._value = this._defaultValue;
 	}
 
-	public set(value: T | undefined): codemavi {
+	public set(value: T | undefined): void {
 		this._value = value;
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._value = this._defaultValue;
 	}
 
@@ -39,7 +39,7 @@ export class MockContextKeyService implements IContextKeyService {
 	public _serviceBrand: undefined;
 	private _keys = new Map<string, IContextKey<any>>();
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		//
 	}
 	public createKey<T extends ContextKeyValue = ContextKeyValue>(key: string, defaultValue: T | undefined): IContextKey<T> {
@@ -53,7 +53,7 @@ export class MockContextKeyService implements IContextKeyService {
 	public get onDidChangeContext(): Event<IContextKeyChangeEvent> {
 		return Event.None;
 	}
-	public bufferChangeEvents(callback: () => codemavi) { callback(); }
+	public bufferChangeEvents(callback: () => void) { callback(); }
 	public getContextKeyValue(key: string) {
 		const value = this._keys.get(key);
 		if (value) {
@@ -69,7 +69,7 @@ export class MockContextKeyService implements IContextKeyService {
 	public createOverlay(): IContextKeyService {
 		return this;
 	}
-	updateParent(_parentContextKeyService: IContextKeyService): codemavi {
+	updateParent(_parentContextKeyService: IContextKeyService): void {
 		// no-op
 	}
 }
@@ -88,7 +88,7 @@ export class MockKeybindingService implements IKeybindingService {
 
 	public readonly inChordMode: boolean = false;
 
-	public get onDidUpdateKeybindings(): Event<codemavi> {
+	public get onDidUpdateKeybindings(): Event<void> {
 		return Event.None;
 	}
 
@@ -139,7 +139,7 @@ export class MockKeybindingService implements IKeybindingService {
 		return NoMatchingKb;
 	}
 
-	public dispatchByUserSettingsLabel(userSettingsLabel: string, target: IContextKeyServiceTarget): codemavi {
+	public dispatchByUserSettingsLabel(userSettingsLabel: string, target: IContextKeyServiceTarget): void {
 
 	}
 

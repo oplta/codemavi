@@ -34,7 +34,7 @@ export class Rulers extends ViewPart {
 		this._typicalHalfwidthCharacterWidth = options.get(EditorOption.fontInfo).typicalHalfwidthCharacterWidth;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 
@@ -52,11 +52,11 @@ export class Rulers extends ViewPart {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	private _ensureRulersCount(): codemavi {
+	private _ensureRulersCount(): void {
 		const currentCount = this._renderedRulers.length;
 		const desiredCount = this._rulers.length;
 
@@ -88,7 +88,7 @@ export class Rulers extends ViewPart {
 		}
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 
 		this._ensureRulersCount();
 

@@ -11,7 +11,7 @@ import { Widget } from '../../../../base/browser/ui/widget.js';
 import { IOverlayWidget, ICodeEditor, OverlayWidgetPositionPreference } from '../../../../editor/browser/editorBrowser.js';
 import { Emitter, Event } from '../../../../base/common/event.js';
 import { ICodeEditorService } from '../../../../editor/browser/services/codeEditorService.js';
-import { mountCode MaviCommandBar } from './react/out/codemavi-editor-widgets-tsx/index.js'
+import { mountMaviCommandBar } from './react/out/mavi-editor-widgets-tsx/index.js'
 import { deepClone } from '../../../../base/common/objects.js';
 import { InstantiationType, registerSingleton } from '../../../../platform/instantiation/common/extensions.js';
 import { IEditCodeService } from './editCodeServiceInterface.js';
@@ -27,7 +27,7 @@ import { IMetricsService } from '../common/metricsService.js';
 import { KeyMod } from '../../../../editor/common/services/editorBaseApi.js';
 import { KeyCode } from '../../../../base/common/keyCodes.js';
 import { ScrollType } from '../../../../editor/common/editorCommon.js';
-import { IMaviModelService } from '../common/codemaviModelService.js';
+import { IMaviModelService } from '../common/maviModelService.js';
 
 
 
@@ -41,20 +41,20 @@ export interface IMaviCommandBarService {
 	onDidChangeActiveURI: Event<{ uri: URI | null }>;
 
 	getStreamState: (uri: URI) => 'streaming' | 'idle-has-changes' | 'idle-no-changes';
-	setDiffIdx(uri: URI, newIdx: number | null): codemavi;
+	setDiffIdx(uri: URI, newIdx: number | null): void;
 
 	getNextDiffIdx(step: 1 | -1): number | null;
 	getNextUriIdx(step: 1 | -1): number | null;
-	goToDiffIdx(idx: number | null): codemavi;
-	goToURIIdx(idx: number | null): Promise<codemavi>;
+	goToDiffIdx(idx: number | null): void;
+	goToURIIdx(idx: number | null): Promise<void>;
 
-	acceptOrRejectAllFiles(opts: { behavior: 'reject' | 'accept' }): codemavi;
+	acceptOrRejectAllFiles(opts: { behavior: 'reject' | 'accept' }): void;
 	anyFileIsStreaming(): boolean;
 
 }
 
 
-export const IMaviCommandBarService = createDecorator<IMaviCommandBarService>('Code MaviCommandBarService');
+export const IMaviCommandBarService = createDecorator<IMaviCommandBarService>('MaviCommandBarService');
 
 
 export type CommandBarStateType = undefined | {
@@ -75,10 +75,10 @@ const defaultState: NonNullable<CommandBarStateType> = {
 }
 
 
-export class Code MaviCommandBarService extends Disposable implements IMaviCommandBarService {
+export class MaviCommandBarService extends Disposable implements IMaviCommandBarService {
 	_serviceBrand: undefined;
 
-	static readonly ID: 'codemavi.Code MaviCommandBarService'
+	static readonly ID: 'mavi.MaviCommandBarService'
 
 	// depends on uri -> diffZone -> {streaming, diffs}
 	public stateOfURI: { [uri: string]: CommandBarStateType } = {}
@@ -100,7 +100,7 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 		@ICodeEditorService private readonly _codeEditorService: ICodeEditorService,
 		@IModelService private readonly _modelService: IModelService,
 		@IEditCodeService private readonly _editCodeService: IEditCodeService,
-		@IMaviModelService private readonly _codemaviModelService: IMaviModelService,
+		@IMaviModelService private readonly _maviModelService: IMaviModelService,
 	) {
 		super();
 
@@ -246,7 +246,7 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 	}
 
 
-	setDiffIdx(uri: URI, newIdx: number | null): codemavi {
+	setDiffIdx(uri: URI, newIdx: number | null): void {
 		this._setState(uri, { diffIdx: newIdx });
 		this._onDidChangeState.fire({ uri });
 	}
@@ -421,7 +421,7 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 		return nextIdx;
 	}
 
-	goToDiffIdx(idx: number | null): codemavi {
+	goToDiffIdx(idx: number | null): void {
 		// If null or no active URI, return
 		if (idx === null || !this.activeURI) return;
 
@@ -451,7 +451,7 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 		this.setDiffIdx(this.activeURI, idx);
 	}
 
-	async goToURIIdx(idx: number | null): Promise<codemavi> {
+	async goToURIIdx(idx: number | null): Promise<void> {
 		// If null or no URIs, return
 		if (idx === null || this.sortedURIs.length === 0) return;
 
@@ -460,7 +460,7 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 		if (!nextURI) return;
 
 		// Get the model for this URI
-		const { model } = await this._codemaviModelService.getModelSafe(nextURI);
+		const { model } = await this._maviModelService.getModelSafe(nextURI);
 		if (!model) return;
 
 		// Find an editor to use
@@ -488,10 +488,10 @@ export class Code MaviCommandBarService extends Disposable implements IMaviComma
 
 }
 
-registerSingleton(IMaviCommandBarService, Code MaviCommandBarService, InstantiationType.Delayed); // delayed is needed here :(
+registerSingleton(IMaviCommandBarService, MaviCommandBarService, InstantiationType.Delayed); // delayed is needed here :(
 
 
-export type Code MaviCommandBarProps = {
+export type MaviCommandBarProps = {
 	uri: URI | null;
 	editor: ICodeEditor;
 }
@@ -535,12 +535,12 @@ class AcceptRejectAllFloatingWidget extends Widget implements IOverlayWidget {
 
 		this.instantiationService.invokeFunction(accessor => {
 			const uri = editor.getModel()?.uri || null
-			const res = mountCode MaviCommandBar(root, accessor, { uri, editor } satisfies Code MaviCommandBarProps)
+			const res = mountMaviCommandBar(root, accessor, { uri, editor } satisfies MaviCommandBarProps)
 			if (!res) return
 			this._register(toDisposable(() => res.dispose?.()))
 			this._register(editor.onWillChangeModel((model) => {
 				const uri = model.newModelUrl
-				res.rerender({ uri, editor } satisfies Code MaviCommandBarProps)
+				res.rerender({ uri, editor } satisfies MaviCommandBarProps)
 			}))
 		})
 	}
@@ -560,7 +560,7 @@ class AcceptRejectAllFloatingWidget extends Widget implements IOverlayWidget {
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.editor.removeOverlayWidget(this);
 		super.dispose();
 	}
@@ -572,16 +572,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_ACCEPT_DIFF_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviAcceptDiffAction', 'Code Mavi: Accept Diff'),
+			title: localize2('maviAcceptDiffAction', 'Mavi: Accept Diff'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.Enter,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.Enter },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editCodeService = accessor.get(IEditCodeService);
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
@@ -615,16 +615,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_REJECT_DIFF_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviRejectDiffAction', 'Code Mavi: Reject Diff'),
+			title: localize2('maviRejectDiffAction', 'Mavi: Reject Diff'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.Backspace,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.Backspace },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editCodeService = accessor.get(IEditCodeService);
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
@@ -656,16 +656,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_GOTO_NEXT_DIFF_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviGoToNextDiffAction', 'Code Mavi: Go to Next Diff'),
+			title: localize2('maviGoToNextDiffAction', 'Mavi: Go to Next Diff'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.DownArrow,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.DownArrow },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 
@@ -683,16 +683,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_GOTO_PREV_DIFF_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviGoToPrevDiffAction', 'Code Mavi: Go to Previous Diff'),
+			title: localize2('maviGoToPrevDiffAction', 'Mavi: Go to Previous Diff'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.UpArrow,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.UpArrow },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 
@@ -710,16 +710,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_GOTO_NEXT_URI_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviGoToNextUriAction', 'Code Mavi: Go to Next File with Diffs'),
+			title: localize2('maviGoToNextUriAction', 'Mavi: Go to Next File with Diffs'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.RightArrow,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.RightArrow },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 
@@ -737,16 +737,16 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_GOTO_PREV_URI_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviGoToPrevUriAction', 'Code Mavi: Go to Previous File with Diffs'),
+			title: localize2('maviGoToPrevUriAction', 'Mavi: Go to Previous File with Diffs'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyMod.Shift | KeyCode.LeftArrow,
 				mac: { primary: KeyMod.WinCtrl | KeyMod.Alt | KeyCode.LeftArrow },
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 
@@ -764,15 +764,15 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_ACCEPT_FILE_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviAcceptFileAction', 'Code Mavi: Accept All Diffs in Current File'),
+			title: localize2('maviAcceptFileAction', 'Mavi: Accept All Diffs in Current File'),
 			keybinding: {
 				primary: KeyMod.Alt | KeyMod.Shift | KeyCode.Enter,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const editCodeService = accessor.get(IEditCodeService);
 		const metricsService = accessor.get(IMetricsService);
@@ -795,15 +795,15 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_REJECT_FILE_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviRejectFileAction', 'Code Mavi: Reject All Diffs in Current File'),
+			title: localize2('maviRejectFileAction', 'Mavi: Reject All Diffs in Current File'),
 			keybinding: {
 				primary: KeyMod.Alt | KeyMod.Shift | KeyCode.Backspace,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const editCodeService = accessor.get(IEditCodeService);
 		const metricsService = accessor.get(IMetricsService);
@@ -826,15 +826,15 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_ACCEPT_ALL_DIFFS_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviAcceptAllDiffsAction', 'Code Mavi: Accept All Diffs in All Files'),
+			title: localize2('maviAcceptAllDiffsAction', 'Mavi: Accept All Diffs in All Files'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.Enter,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 
@@ -851,15 +851,15 @@ registerAction2(class extends Action2 {
 		super({
 			id: MAVI_REJECT_ALL_DIFFS_ACTION_ID,
 			f1: true,
-			title: localize2('codemaviRejectAllDiffsAction', 'Code Mavi: Reject All Diffs in All Files'),
+			title: localize2('maviRejectAllDiffsAction', 'Mavi: Reject All Diffs in All Files'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.Backspace,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandBarService = accessor.get(IMaviCommandBarService);
 		const metricsService = accessor.get(IMetricsService);
 

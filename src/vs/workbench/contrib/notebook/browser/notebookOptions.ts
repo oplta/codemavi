@@ -347,7 +347,7 @@ export class NotebookOptions extends Disposable {
 		return this._editorTopPadding;
 	}
 
-	private _migrateDeprecatedSetting(deprecatedKey: string, key: string): codemavi {
+	private _migrateDeprecatedSetting(deprecatedKey: string, key: string): void {
 		const deprecatedSetting = this.configurationService.inspect(deprecatedKey);
 
 		if (deprecatedSetting.application !== undefined) {

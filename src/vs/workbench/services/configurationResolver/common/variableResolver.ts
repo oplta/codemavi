@@ -110,7 +110,7 @@ export abstract class AbstractVariableResolverService implements IConfigurationR
 		throw new Error('resolveWithInteraction not implemented.');
 	}
 
-	public contributeVariable(variable: string, resolution: () => Promise<string | undefined>): codemavi {
+	public contributeVariable(variable: string, resolution: () => Promise<string | undefined>): void {
 		if (this._contributedVariables.has(variable)) {
 			throw new Error('Variable ' + variable + ' is contributed twice.');
 		} else {

@@ -208,7 +208,7 @@ suite('vscode API - workspace events', () => {
 		return testOnWillRename(true);
 	}));
 
-	async function testOnWillRename(withDirtyFile: boolean): Promise<codemavi> {
+	async function testOnWillRename(withDirtyFile: boolean): Promise<void> {
 
 		const oldUri = await createRandomFile('BAR');
 

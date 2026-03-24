@@ -881,14 +881,14 @@ suite('SnippetsSync', () => {
 		return JSON.parse(syncData.content);
 	}
 
-	async function updateSnippet(name: string, content: string, client: UserDataSyncClient, profile?: IUserDataProfile): Promise<codemavi> {
+	async function updateSnippet(name: string, content: string, client: UserDataSyncClient, profile?: IUserDataProfile): Promise<void> {
 		const fileService = client.instantiationService.get(IFileService);
 		const userDataProfilesService = client.instantiationService.get(IUserDataProfilesService);
 		const snippetsResource = joinPath((profile ?? userDataProfilesService.defaultProfile).snippetsHome, name);
 		await fileService.writeFile(snippetsResource, VSBuffer.fromString(content));
 	}
 
-	async function removeSnippet(name: string, client: UserDataSyncClient): Promise<codemavi> {
+	async function removeSnippet(name: string, client: UserDataSyncClient): Promise<void> {
 		const fileService = client.instantiationService.get(IFileService);
 		const userDataProfilesService = client.instantiationService.get(IUserDataProfilesService);
 		const snippetsResource = joinPath(userDataProfilesService.defaultProfile.snippetsHome, name);

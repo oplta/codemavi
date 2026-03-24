@@ -18,16 +18,16 @@ suite("CodeEditorWidget", () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
 	function withTestFixture(
-		cb: (args: { editor: ICodeEditor; viewModel: ViewModel; log: Log; derived: IObservable<string> }) => codemavi
+		cb: (args: { editor: ICodeEditor; viewModel: ViewModel; log: Log; derived: IObservable<string> }) => void
 	) {
 		withEditorSetupTestFixture(undefined, cb);
 	}
 
 	function withEditorSetupTestFixture(
 		preSetupCallback:
-			| ((editor: ICodeEditor, disposables: DisposableStore) => codemavi)
+			| ((editor: ICodeEditor, disposables: DisposableStore) => void)
 			| undefined,
-		cb: (args: { editor: ICodeEditor; viewModel: ViewModel; log: Log; derived: IObservable<string> }) => codemavi
+		cb: (args: { editor: ICodeEditor; viewModel: ViewModel; log: Log; derived: IObservable<string> }) => void
 	) {
 		withTestCodeEditor("hello world", {}, (editor, viewModel) => {
 			const disposables = new DisposableStore();
@@ -183,7 +183,7 @@ suite("CodeEditorWidget", () => {
 
 class Log {
 	private readonly entries: string[] = [];
-	public log(message: string): codemavi {
+	public log(message: string): void {
 		this.entries.push(message);
 	}
 

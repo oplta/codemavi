@@ -397,7 +397,7 @@ suite('ExtensionsActions', () => {
 				instantiationService.stubPromise(IExtensionGalleryService, 'getCompatibleExtension', gallery);
 				instantiationService.stubPromise(IExtensionGalleryService, 'getExtensions', [gallery]);
 				assert.ok(!testObject.enabled);
-				return new Promise<codemavi>(c => {
+				return new Promise<void>(c => {
 					disposables.add(testObject.onDidChange(() => {
 						if (testObject.enabled) {
 							c();
@@ -420,7 +420,7 @@ suite('ExtensionsActions', () => {
 		instantiationService.stubPromise(IExtensionGalleryService, 'query', aPage(gallery));
 		instantiationService.stubPromise(IExtensionGalleryService, 'getCompatibleExtension', gallery);
 		instantiationService.stubPromise(IExtensionGalleryService, 'getExtensions', [gallery]);
-		await new Promise<codemavi>(c => {
+		await new Promise<void>(c => {
 			disposables.add(testObject.onDidChange(() => {
 				if (testObject.enabled) {
 					c();
@@ -428,7 +428,7 @@ suite('ExtensionsActions', () => {
 			}));
 			instantiationService.get(IExtensionsWorkbenchService).queryGallery(CancellationToken.None);
 		});
-		await new Promise<codemavi>(c => {
+		await new Promise<void>(c => {
 			disposables.add(testObject.onDidChange(() => {
 				if (!testObject.enabled) {
 					c();
@@ -1156,7 +1156,7 @@ suite('ExtensionRuntimeStateAction', () => {
 		const extensions = await workbenchService.queryLocal();
 		testObject.extension = extensions[0];
 
-		return new Promise<codemavi>(c => {
+		return new Promise<void>(c => {
 			disposables.add(testObject.onDidChange(() => {
 				if (testObject.enabled && testObject.tooltip === `Please restart extensions to enable the updated extension.`) {
 					c();

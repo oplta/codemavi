@@ -13,7 +13,7 @@ import { getActiveWindow } from '../../../../base/browser/dom.js';
 
 // Onboarding contribution that mounts the component at startup
 export class MiscWorkbenchContribs extends Disposable implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.codemaviMiscWorkbenchContribs';
+	static readonly ID = 'workbench.contrib.maviMiscWorkbenchContribs';
 
 	constructor(
 		@IExtensionTransferService private readonly extensionTransferService: IExtensionTransferService,
@@ -23,10 +23,10 @@ export class MiscWorkbenchContribs extends Disposable implements IWorkbenchContr
 		this.initialize();
 	}
 
-	private initialize(): codemavi {
+	private initialize(): void {
 
 		// delete blacklisted extensions once (this is for people who already installed them)
-		const deleteExtensionsStorageId = 'codemavi-deleted-blacklist-2'
+		const deleteExtensionsStorageId = 'mavi-deleted-blacklist-2'
 		const alreadyDeleted = this.storageService.get(deleteExtensionsStorageId, StorageScope.APPLICATION)
 		if (!alreadyDeleted) {
 			this.storageService.store(deleteExtensionsStorageId, 'true', StorageScope.APPLICATION, StorageTarget.MACHINE)

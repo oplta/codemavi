@@ -386,7 +386,7 @@ Code Mavi is positioned to become the first open-source, agent-first IDE that co
    ```typescript
    class RuleParser {
      async parseRules(filePath: string): Promise<RuleSet> {
-       // Parse .codemavi/rules.md
+       // Parse .mavi/rules.md
        // Extract sections and rules
      }
    }
@@ -396,8 +396,8 @@ Code Mavi is positioned to become the first open-source, agent-first IDE that co
    ```
    Priority Order:
    1. Session-specific rules (temporary)
-   2. Project rules (.codemavi/rules.md)
-   3. Global rules (~/.codemavi/global-rules.md)
+   2. Project rules (.mavi/rules.md)
+   3. Global rules (~/.mavi/global-rules.md)
    4. Base agent rules (system)
    ```
 

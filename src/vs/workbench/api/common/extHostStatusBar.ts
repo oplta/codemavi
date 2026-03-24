@@ -60,9 +60,9 @@ export class ExtHostStatusBarEntry implements vscode.StatusBarItem {
 	private _timeoutHandle: any;
 	private _accessibilityInformation?: vscode.AccessibilityInformation;
 
-	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension: IExtensionDescription, id?: string, alignment?: ExtHostStatusBarAlignment, priority?: number, _onDispose?: () => codemavi);
-	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension: IExtensionDescription | undefined, id: string, alignment?: ExtHostStatusBarAlignment, priority?: number, _onDispose?: () => codemavi);
-	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension?: IExtensionDescription, id?: string, alignment: ExtHostStatusBarAlignment = ExtHostStatusBarAlignment.Left, priority?: number, private _onDispose?: () => codemavi) {
+	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension: IExtensionDescription, id?: string, alignment?: ExtHostStatusBarAlignment, priority?: number, _onDispose?: () => void);
+	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension: IExtensionDescription | undefined, id: string, alignment?: ExtHostStatusBarAlignment, priority?: number, _onDispose?: () => void);
+	constructor(proxy: MainThreadStatusBarShape, commands: CommandsConverter, staticItems: ReadonlyMap<string, StatusBarItemDto>, extension?: IExtensionDescription, id?: string, alignment: ExtHostStatusBarAlignment = ExtHostStatusBarAlignment.Left, priority?: number, private _onDispose?: () => void) {
 		this.#proxy = proxy;
 		this.#commands = commands;
 
@@ -232,18 +232,18 @@ export class ExtHostStatusBarEntry implements vscode.StatusBarItem {
 		this.update();
 	}
 
-	public show(): codemavi {
+	public show(): void {
 		this._visible = true;
 		this.update();
 	}
 
-	public hide(): codemavi {
+	public hide(): void {
 		clearTimeout(this._timeoutHandle);
 		this._visible = false;
 		this.#proxy.$disposeEntry(this._entryId);
 	}
 
-	private update(): codemavi {
+	private update(): void {
 		if (this._disposed || !this._visible) {
 			return;
 		}
@@ -302,7 +302,7 @@ export class ExtHostStatusBarEntry implements vscode.StatusBarItem {
 		}, 0);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.hide();
 		this._onDispose?.();
 		this._disposed = true;
@@ -362,7 +362,7 @@ export class ExtHostStatusBar implements ExtHostStatusBarShape {
 		this._statusMessage = new StatusBarMessage(this);
 	}
 
-	$acceptStaticEntries(added: StatusBarItemDto[]): codemavi {
+	$acceptStaticEntries(added: StatusBarItemDto[]): void {
 		for (const item of added) {
 			this._existingItems.set(item.entryId, item);
 		}

@@ -1,12 +1,12 @@
 /**
- * Code Mavi - Verifier Agent
+ * Mavi - Verifier Agent
  *
  * The quality assurance specialist of the triple-agent system
  * Validates changes made by Executor, runs tests, checks for errors,
  * and ensures code quality before changes are finalized
  */
 
-import { URI } from "../../../../base/common/uri.js";
+import { URI } from "../../../../../../base/common/uri.js";
 import {
 	BaseAgent,
 	AgentTask,
@@ -16,8 +16,8 @@ import {
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
-import { Event, Emitter } from "../../../../base/common/event.js";
-import { CancellationToken } from "../../../../base/common/cancellation.js";
+import { Event, Emitter } from "../../../../../../base/common/event.js";
+import { CancellationToken } from "../../../../../../base/common/cancellation.js";
 
 export interface VerificationRequest {
 	taskId: string;

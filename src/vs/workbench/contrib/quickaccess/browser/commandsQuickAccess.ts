@@ -101,7 +101,7 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 		};
 	}
 
-	private updateOptions(e?: IConfigurationChangeEvent): codemavi {
+	private updateOptions(e?: IConfigurationChangeEvent): void {
 		if (e && !e.affectsConfiguration('workbench.commandPalette.experimental')) {
 			return;
 		}
@@ -275,7 +275,7 @@ export class ShowAllCommandsAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		accessor.get(IQuickInputService).quickAccess.show(CommandsQuickAccessProvider.PREFIX);
 	}
 }
@@ -290,7 +290,7 @@ export class ClearCommandHistoryAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		const storageService = accessor.get(IStorageService);
 		const dialogService = accessor.get(IDialogService);

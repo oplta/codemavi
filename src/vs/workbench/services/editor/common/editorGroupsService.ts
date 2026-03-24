@@ -245,7 +245,7 @@ export interface IEditorGroupsContainer {
 	 * Use the `whenRestored` property to await visible editors
 	 * having fully resolved.
 	 */
-	readonly whenReady: Promise<codemavi>;
+	readonly whenReady: Promise<void>;
 
 	/**
 	 * A promise that resolves when groups have been restored in
@@ -257,7 +257,7 @@ export interface IEditorGroupsContainer {
 	 * Use the `whenReady` property to not await editors to
 	 * resolve.
 	 */
-	readonly whenRestored: Promise<codemavi>;
+	readonly whenRestored: Promise<void>;
 
 	/**
 	 * Find out if the editor part has UI state to restore
@@ -318,27 +318,27 @@ export interface IEditorGroupsContainer {
 	/**
 	 * Sets the size of a group.
 	 */
-	setSize(group: IEditorGroup | GroupIdentifier, size: { width: number; height: number }): codemavi;
+	setSize(group: IEditorGroup | GroupIdentifier, size: { width: number; height: number }): void;
 
 	/**
 	 * Arrange all groups in the container according to the provided arrangement.
 	 */
-	arrangeGroups(arrangement: GroupsArrangement, target?: IEditorGroup | GroupIdentifier): codemavi;
+	arrangeGroups(arrangement: GroupsArrangement, target?: IEditorGroup | GroupIdentifier): void;
 
 	/**
 	 * Toggles the target goup size to maximize/unmaximize.
 	 */
-	toggleMaximizeGroup(group?: IEditorGroup | GroupIdentifier): codemavi;
+	toggleMaximizeGroup(group?: IEditorGroup | GroupIdentifier): void;
 
 	/**
 	 * Toggles the target goup size to expand/distribute even.
 	 */
-	toggleExpandGroup(group?: IEditorGroup | GroupIdentifier): codemavi;
+	toggleExpandGroup(group?: IEditorGroup | GroupIdentifier): void;
 
 	/**
 	 * Applies the provided layout by either moving existing groups or creating new groups.
 	 */
-	applyLayout(layout: EditorGroupLayout): codemavi;
+	applyLayout(layout: EditorGroupLayout): void;
 
 	/**
 	 * Returns an editor layout of the container.
@@ -348,7 +348,7 @@ export interface IEditorGroupsContainer {
 	/**
 	 * Sets the orientation of the root group to be either vertical or horizontal.
 	 */
-	setGroupOrientation(orientation: GroupOrientation): codemavi;
+	setGroupOrientation(orientation: GroupOrientation): void;
 
 	/**
 	 * Find a group in a specific scope:
@@ -379,7 +379,7 @@ export interface IEditorGroupsContainer {
 	/**
 	 * Remove a group from the container.
 	 */
-	removeGroup(group: IEditorGroup | GroupIdentifier): codemavi;
+	removeGroup(group: IEditorGroup | GroupIdentifier): void;
 
 	/**
 	 * Move a group to a new group in the container.
@@ -443,12 +443,12 @@ export interface IEditorPart extends IEditorGroupsContainer {
 	/**
 	 * An event for when the editor part is scrolled.
 	 */
-	readonly onDidScroll: Event<codemavi>;
+	readonly onDidScroll: Event<void>;
 
 	/**
 	 * An event for when the editor part is disposed.
 	 */
-	readonly onWillDispose: Event<codemavi>;
+	readonly onWillDispose: Event<void>;
 
 	/**
 	 * The identifier of the window the editor part is contained in.
@@ -468,7 +468,7 @@ export interface IEditorPart extends IEditorGroupsContainer {
 	/**
 	 * Enable or disable centered editor layout.
 	 */
-	centerLayout(active: boolean): codemavi;
+	centerLayout(active: boolean): void;
 
 	/**
 	 * Find out if the editor layout is currently centered.
@@ -516,7 +516,7 @@ export interface IEditorGroupContextKeyProvider<T extends ContextKeyValue> {
 	/**
 	 * An event that is fired when there was a change leading to the context key value to be re-evaluated.
 	 */
-	readonly onDidChange?: Event<codemavi>;
+	readonly onDidChange?: Event<void>;
 }
 
 /**
@@ -596,7 +596,7 @@ export interface IEditorGroupsService extends IEditorGroupsContainer {
 	/**
 	 * Deletes a working set.
 	 */
-	deleteWorkingSet(workingSet: IEditorWorkingSet): codemavi;
+	deleteWorkingSet(workingSet: IEditorWorkingSet): void;
 
 	/**
 	 * Registers a context key provider. This provider sets a context key for each scoped editor group context and the global context.
@@ -615,7 +615,7 @@ export const enum OpenEditorContext {
 
 export interface IActiveEditorActions {
 	readonly actions: IToolbarActions;
-	readonly onDidChange: Event<IMenuChangeEvent | codemavi>;
+	readonly onDidChange: Event<IMenuChangeEvent | void>;
 }
 
 export interface IEditorGroup {
@@ -628,7 +628,7 @@ export interface IEditorGroup {
 	/**
 	 * An event that is fired when the group gets disposed.
 	 */
-	readonly onWillDispose: Event<codemavi>;
+	readonly onWillDispose: Event<void>;
 
 	/**
 	 * An event that is fired when the active editor in the group changed.
@@ -829,7 +829,7 @@ export interface IEditorGroup {
 	 * @param activeSelectedEditor the editor to set as active selected editor
 	 * @param inactiveSelectedEditors the inactive editors to set as selected
 	 */
-	setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): Promise<codemavi>;
+	setSelection(activeSelectedEditor: EditorInput, inactiveSelectedEditors: EditorInput[]): Promise<void>;
 
 	/**
 	 * Find out if a certain editor is included in the group.
@@ -858,14 +858,14 @@ export interface IEditorGroup {
 	 *
 	 * Note: It is currently not supported to show the same editor more than once in the same group.
 	 */
-	copyEditor(editor: EditorInput, target: IEditorGroup, options?: IEditorOptions): codemavi;
+	copyEditor(editor: EditorInput, target: IEditorGroup, options?: IEditorOptions): void;
 
 	/**
 	 * Copy editors from this group to another group.
 	 *
 	 * Note: It is currently not supported to show the same editor more than once in the same group.
 	 */
-	copyEditors(editors: EditorInputWithOptions[], target: IEditorGroup): codemavi;
+	copyEditors(editors: EditorInputWithOptions[], target: IEditorGroup): void;
 
 	/**
 	 * Close an editor from the group. This may trigger a confirmation dialog if
@@ -906,7 +906,7 @@ export interface IEditorGroup {
 	 * @returns a promise that is resolved when the replaced active
 	 * editor (if any) has finished loading.
 	 */
-	replaceEditors(editors: IEditorReplacement[]): Promise<codemavi>;
+	replaceEditors(editors: IEditorReplacement[]): Promise<void>;
 
 	/**
 	 * Set an editor to be pinned. A pinned editor is not replaced
@@ -915,7 +915,7 @@ export interface IEditorGroup {
 	 * @param editor the editor to pin, or the currently active editor
 	 * if unspecified.
 	 */
-	pinEditor(editor?: EditorInput): codemavi;
+	pinEditor(editor?: EditorInput): void;
 
 	/**
 	 * Set an editor to be sticky. A sticky editor is showing in the beginning
@@ -924,7 +924,7 @@ export interface IEditorGroup {
 	 * @param editor the editor to make sticky, or the currently active editor
 	 * if unspecified.
 	 */
-	stickEditor(editor?: EditorInput): codemavi;
+	stickEditor(editor?: EditorInput): void;
 
 	/**
 	 * Set an editor to be non-sticky and thus moves back to a location after
@@ -933,19 +933,19 @@ export interface IEditorGroup {
 	 * @param editor the editor to make unsticky, or the currently active editor
 	 * if unspecified.
 	 */
-	unstickEditor(editor?: EditorInput): codemavi;
+	unstickEditor(editor?: EditorInput): void;
 
 	/**
 	 * Whether this editor group should be locked or not.
 	 *
 	 * See {@linkcode IEditorGroup.isLocked `isLocked`}
 	 */
-	lock(locked: boolean): codemavi;
+	lock(locked: boolean): void;
 
 	/**
 	 * Move keyboard focus into the group.
 	 */
-	focus(): codemavi;
+	focus(): void;
 
 	/**
 	 * Create the editor actions for the current active editor.

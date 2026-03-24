@@ -33,7 +33,7 @@ interface IDirectoryTree {
 	pathToEntries: { [relativePath: string]: IDirectoryEntry[] };
 }
 
-const killCmds = new Set<() => codemavi>();
+const killCmds = new Set<() => void>();
 process.on('exit', () => {
 	killCmds.forEach(cmd => cmd());
 });
@@ -108,12 +108,12 @@ export class FileWalker {
 		});
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this.isCanceled = true;
 		killCmds.forEach(cmd => cmd());
 	}
 
-	walk(folderQueries: IFolderQuery[], extraFiles: URI[], numThreads: number | undefined, onResult: (result: IRawFileMatch) => codemavi, onMessage: (message: IProgressMessage) => codemavi, done: (error: Error | null, isLimitHit: boolean) => codemavi): codemavi {
+	walk(folderQueries: IFolderQuery[], extraFiles: URI[], numThreads: number | undefined, onResult: (result: IRawFileMatch) => void, onMessage: (message: IProgressMessage) => void, done: (error: Error | null, isLimitHit: boolean) => void): void {
 		this.fileWalkSW = StopWatch.create(false);
 
 		// Support that the file pattern is a full path to a file that exists
@@ -135,7 +135,7 @@ export class FileWalker {
 		this.cmdSW = StopWatch.create(false);
 
 		// For each root folder
-		this.parallel<IFolderQuery, codemavi>(folderQueries, (folderQuery: IFolderQuery, rootFolderDone: (err: Error | null, result: codemavi) => codemavi) => {
+		this.parallel<IFolderQuery, void>(folderQueries, (folderQuery: IFolderQuery, rootFolderDone: (err: Error | null, result: void) => void) => {
 			this.call(this.cmdTraversal, this, folderQuery, numThreads, onResult, onMessage, (err?: Error) => {
 				if (err) {
 					const errorMessage = toErrorMessage(err);
@@ -153,7 +153,7 @@ export class FileWalker {
 		});
 	}
 
-	private parallel<T, E>(list: T[], fn: (item: T, callback: (err: Error | null, result: E | null) => codemavi) => codemavi, callback: (err: Array<Error | null> | null, result: E[]) => codemavi): codemavi {
+	private parallel<T, E>(list: T[], fn: (item: T, callback: (err: Error | null, result: E | null) => void) => void, callback: (err: Array<Error | null> | null, result: E[]) => void): void {
 		const results = new Array(list.length);
 		const errors = new Array<Error | null>(list.length);
 		let didErrorOccur = false;
@@ -181,7 +181,7 @@ export class FileWalker {
 		});
 	}
 
-	private call<F extends Function>(fun: F, that: any, ...args: any[]): codemavi {
+	private call<F extends Function>(fun: F, that: any, ...args: any[]): void {
 		try {
 			fun.apply(that, args);
 		} catch (e) {
@@ -189,7 +189,7 @@ export class FileWalker {
 		}
 	}
 
-	private cmdTraversal(folderQuery: IFolderQuery, numThreads: number | undefined, onResult: (result: IRawFileMatch) => codemavi, onMessage: (message: IProgressMessage) => codemavi, cb: (err?: Error) => codemavi): codemavi {
+	private cmdTraversal(folderQuery: IFolderQuery, numThreads: number | undefined, onResult: (result: IRawFileMatch) => void, onMessage: (message: IProgressMessage) => void, cb: (err?: Error) => void): void {
 		const rootFolder = folderQuery.folder.fsPath;
 		const isMac = platform.isMacintosh;
 
@@ -303,7 +303,7 @@ export class FileWalker {
 	/**
 	 * Public for testing.
 	 */
-	readStdout(cmd: childProcess.ChildProcess, encoding: BufferEncoding, cb: (err: Error | null, stdout?: string) => codemavi): codemavi {
+	readStdout(cmd: childProcess.ChildProcess, encoding: BufferEncoding, cb: (err: Error | null, stdout?: string) => void): void {
 		let all = '';
 		this.collectStdout(cmd, encoding, () => { }, (err: Error | null, stdout?: string, last?: boolean) => {
 			if (err) {
@@ -318,7 +318,7 @@ export class FileWalker {
 		});
 	}
 
-	private collectStdout(cmd: childProcess.ChildProcess, encoding: BufferEncoding, onMessage: (message: IProgressMessage) => codemavi, cb: (err: Error | null, stdout?: string, last?: boolean) => codemavi): codemavi {
+	private collectStdout(cmd: childProcess.ChildProcess, encoding: BufferEncoding, onMessage: (message: IProgressMessage) => void, cb: (err: Error | null, stdout?: string, last?: boolean) => void): void {
 		let onData = (err: Error | null, stdout?: string, last?: boolean) => {
 			if (err || last) {
 				onData = () => { };
@@ -363,7 +363,7 @@ export class FileWalker {
 		});
 	}
 
-	private forwardData(stream: Readable, encoding: BufferEncoding, cb: (err: Error | null, stdout?: string) => codemavi): StringDecoder {
+	private forwardData(stream: Readable, encoding: BufferEncoding, cb: (err: Error | null, stdout?: string) => void): StringDecoder {
 		const decoder = new StringDecoder(encoding);
 		stream.on('data', (data: Buffer) => {
 			cb(null, decoder.write(data));
@@ -393,7 +393,7 @@ export class FileWalker {
 		return tree;
 	}
 
-	private addDirectoryEntries(folderQuery: IFolderQuery, { pathToEntries }: IDirectoryTree, base: string, relativeFiles: string[], onResult: (result: IRawFileMatch) => codemavi) {
+	private addDirectoryEntries(folderQuery: IFolderQuery, { pathToEntries }: IDirectoryTree, base: string, relativeFiles: string[], onResult: (result: IRawFileMatch) => void) {
 		// Support relative paths to files from a root resource (ignores excludes)
 		if (relativeFiles.indexOf(this.filePattern) !== -1) {
 			this.matchFile(onResult, {
@@ -421,7 +421,7 @@ export class FileWalker {
 		relativeFiles.forEach(add);
 	}
 
-	private matchDirectoryTree({ rootEntries, pathToEntries }: IDirectoryTree, rootFolder: string, onResult: (result: IRawFileMatch) => codemavi) {
+	private matchDirectoryTree({ rootEntries, pathToEntries }: IDirectoryTree, rootFolder: string, onResult: (result: IRawFileMatch) => void) {
 		const self = this;
 		const excludePattern = this.folderExcludePatterns.get(rootFolder)!;
 		const filePattern = this.filePattern;
@@ -470,12 +470,12 @@ export class FileWalker {
 		};
 	}
 
-	private doWalk(folderQuery: IFolderQuery, relativeParentPath: string, files: string[], onResult: (result: IRawFileMatch) => codemavi, done: (error?: Error) => codemavi): codemavi {
+	private doWalk(folderQuery: IFolderQuery, relativeParentPath: string, files: string[], onResult: (result: IRawFileMatch) => void, done: (error?: Error) => void): void {
 		const rootFolder = folderQuery.folder;
 
 		// Execute tasks on each file in parallel to optimize throughput
 		const hasSibling = hasSiblingFn(() => files);
-		this.parallel(files, (file: string, clb: (error: Error | null, _?: any) => codemavi): codemavi => {
+		this.parallel(files, (file: string, clb: (error: Error | null, _?: any) => void): void => {
 
 			// Check canceled
 			if (this.isCanceled || this.isLimitHit) {
@@ -558,13 +558,13 @@ export class FileWalker {
 					return clb(null, undefined);
 				});
 			});
-		}, (error: Array<Error | null> | null): codemavi => {
+		}, (error: Array<Error | null> | null): void => {
 			const filteredErrors = error ? arrays.coalesce(error) : error; // find any error by removing null values first
 			return done(filteredErrors && filteredErrors.length > 0 ? filteredErrors[0] : undefined);
 		});
 	}
 
-	private matchFile(onResult: (result: IRawFileMatch) => codemavi, candidate: IRawFileMatch): codemavi {
+	private matchFile(onResult: (result: IRawFileMatch) => void, candidate: IRawFileMatch): void {
 		if (this.isFileMatch(candidate) && (!this.includePattern || this.includePattern(candidate.relativePath, path.basename(candidate.relativePath)))) {
 			this.resultCount++;
 
@@ -596,7 +596,7 @@ export class FileWalker {
 		return true;
 	}
 
-	private statLinkIfNeeded(path: string, lstat: fs.Stats, clb: (error: Error | null, stat: fs.Stats) => codemavi): codemavi {
+	private statLinkIfNeeded(path: string, lstat: fs.Stats, clb: (error: Error | null, stat: fs.Stats) => void): void {
 		if (lstat.isSymbolicLink()) {
 			return fs.stat(path, clb); // stat the target the link points to
 		}
@@ -604,7 +604,7 @@ export class FileWalker {
 		return clb(null, lstat); // not a link, so the stat is already ok for us
 	}
 
-	private realPathIfNeeded(path: string, lstat: fs.Stats, clb: (error: Error | null, realpath?: string) => codemavi): codemavi {
+	private realPathIfNeeded(path: string, lstat: fs.Stats, clb: (error: Error | null, realpath?: string) => void): void {
 		if (lstat.isSymbolicLink()) {
 			return fs.realpath(path, (error, realpath) => {
 				if (error) {
@@ -646,7 +646,7 @@ export class Engine implements ISearchEngine<IRawFileMatch> {
 		this.walker = new FileWalker(config);
 	}
 
-	search(onResult: (result: IRawFileMatch) => codemavi, onProgress: (progress: IProgressMessage) => codemavi, done: (error: Error | null, complete: ISearchEngineSuccess) => codemavi): codemavi {
+	search(onResult: (result: IRawFileMatch) => void, onProgress: (progress: IProgressMessage) => void, done: (error: Error | null, complete: ISearchEngineSuccess) => void): void {
 		this.walker.walk(this.folderQueries, this.extraFiles, this.numThreads, onResult, onProgress, (err: Error | null, isLimitHit: boolean) => {
 			done(err, {
 				limitHit: isLimitHit,
@@ -656,7 +656,7 @@ export class Engine implements ISearchEngine<IRawFileMatch> {
 		});
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this.walker.cancel();
 	}
 }
@@ -677,7 +677,7 @@ class AbsoluteAndRelativeParsedExpression {
 	/**
 	 * Split the IExpression into its absolute and relative components, and glob.parse them separately.
 	 */
-	private init(expr: glob.IExpression): codemavi {
+	private init(expr: glob.IExpression): void {
 		let absoluteGlobExpr: glob.IExpression | undefined;
 		let relativeGlobExpr: glob.IExpression | undefined;
 		Object.keys(expr)

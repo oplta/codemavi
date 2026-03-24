@@ -244,7 +244,7 @@ export class InlineChatHintsController extends Disposable implements IEditorCont
 
 			// DEBT - I cannot use `model.onDidChangeContent` directly here
 			// https://github.com/microsoft/vscode/issues/242059
-			const emitter = store.add(new Emitter<codemavi>());
+			const emitter = store.add(new Emitter<void>());
 			store.add(model.onDidChangeContent(() => emitter.fire()));
 			observableFromEvent(emitter.event, () => model.getVersionId()).read(r);
 
@@ -316,7 +316,7 @@ export class InlineChatHintsController extends Disposable implements IEditorCont
 		}));
 	}
 
-	private _showContextMenu(event: IMouseEvent, setting: string): codemavi {
+	private _showContextMenu(event: IMouseEvent, setting: string): void {
 		this._contextMenuService.showContextMenu({
 			getAnchor: () => ({ x: event.posx, y: event.posy }),
 			getActions: () => [
@@ -331,11 +331,11 @@ export class InlineChatHintsController extends Disposable implements IEditorCont
 		});
 	}
 
-	show(): codemavi {
+	show(): void {
 		this._visibilityObs.set(true, undefined);
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		this._visibilityObs.set(false, undefined);
 	}
 }
@@ -354,7 +354,7 @@ export class HideInlineChatHintAction extends EditorAction2 {
 		});
 	}
 
-	override async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	override async runEditorCommand(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		InlineChatHintsController.get(editor)?.hide();
 	}
 }

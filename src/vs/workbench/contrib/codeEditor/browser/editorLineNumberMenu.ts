@@ -17,7 +17,7 @@ import { IInstantiationService, ServicesAccessor } from '../../../../platform/in
 import { Registry } from '../../../../platform/registry/common/platform.js';
 
 export interface IGutterActionsGenerator {
-	(context: { lineNumber: number; editor: ICodeEditor; accessor: ServicesAccessor }, result: { push(action: IAction, group?: string): codemavi }): codemavi;
+	(context: { lineNumber: number; editor: ICodeEditor; accessor: ServicesAccessor }, result: { push(action: IAction, group?: string): void }): void;
 }
 
 export class GutterActionsRegistryImpl {

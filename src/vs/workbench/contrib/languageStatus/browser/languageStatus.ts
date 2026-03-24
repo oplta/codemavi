@@ -77,7 +77,7 @@ export class LanguageStatusContribution extends Disposable implements IWorkbench
 		this._register(editorGroupService.onDidCreateAuxiliaryEditorPart(part => this.createLanguageStatus(part)));
 	}
 
-	private createLanguageStatus(part: IEditorPart): codemavi {
+	private createLanguageStatus(part: IEditorPart): void {
 		const disposables = new DisposableStore();
 		Event.once(part.onWillDispose)(() => disposables.dispose());
 
@@ -130,7 +130,7 @@ class LanguageStatus {
 
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._combinedEntry?.dispose();
 		dispose(this._dedicatedEntries.values());
@@ -144,7 +144,7 @@ class LanguageStatus {
 		this._update();
 	}
 
-	private _restoreState(): codemavi {
+	private _restoreState(): void {
 		const raw = this._storageService.get(LanguageStatus._keyDedicatedItems, StorageScope.PROFILE, '[]');
 		try {
 			const ids = <string[]>JSON.parse(raw);
@@ -154,7 +154,7 @@ class LanguageStatus {
 		}
 	}
 
-	private _storeState(): codemavi {
+	private _storeState(): void {
 		if (this._dedicated.size === 0) {
 			this._storageService.remove(LanguageStatus._keyDedicatedItems, StorageScope.PROFILE);
 		} else {
@@ -181,7 +181,7 @@ class LanguageStatus {
 		return new LanguageStatusViewModel(combined, dedicated);
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		const editor = getCodeEditor(this._editorService.activeTextEditorControl);
 		const model = this._createViewModel(editor);
 
@@ -378,7 +378,7 @@ class LanguageStatus {
 		}
 	}
 
-	private _renderTextPlus(target: HTMLElement, text: string, store: DisposableStore): codemavi {
+	private _renderTextPlus(target: HTMLElement, text: string, store: DisposableStore): void {
 		for (const node of parseLinkedText(text).nodes) {
 			if (typeof node === 'string') {
 				const parts = renderLabelWithIcons(node);
@@ -437,7 +437,7 @@ export class ResetAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IStorageService).remove('languageStatus.interactCount', StorageScope.PROFILE);
 	}
 }

@@ -90,7 +90,7 @@ declare module 'vscode' {
 		 *
 		 * @return Thenable indicating that the opening has completed.
 		 */
-		openExternalUri(resolvedUri: Uri, ctx: OpenExternalUriContext, token: CancellationToken): Thenable<codemavi> | codemavi;
+		openExternalUri(resolvedUri: Uri, ctx: OpenExternalUriContext, token: CancellationToken): Thenable<void> | void;
 	}
 
 	/**

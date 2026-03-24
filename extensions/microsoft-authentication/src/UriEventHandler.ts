@@ -12,7 +12,7 @@ export class UriEventHandler extends vscode.EventEmitter<vscode.Uri> implements 
 		this.fire(uri);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._disposable.dispose();
 	}

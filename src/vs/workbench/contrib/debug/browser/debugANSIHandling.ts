@@ -123,7 +123,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * @param color Color to change to. If `undefined` or not provided,
 	 * will clear current color without adding a new one.
 	 */
-	function changeColor(colorType: 'foreground' | 'background' | 'underline', color?: RGBA | string): codemavi {
+	function changeColor(colorType: 'foreground' | 'background' | 'underline', color?: RGBA | string): void {
 		if (colorType === 'foreground') {
 			customFgColor = color;
 		} else if (colorType === 'background') {
@@ -141,7 +141,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * Swap foreground and background colors.  Used for color inversion.  Caller should check
 	 * [] flag to make sure it is appropriate to turn ON or OFF (if it is already inverted don't call
 	 */
-	function reverseForegroundAndBackgroundColors(): codemavi {
+	function reverseForegroundAndBackgroundColors(): void {
 		const oldFgColor = customFgColor;
 		changeColor('foreground', customBgColor);
 		changeColor('background', oldFgColor);
@@ -160,7 +160,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * does not.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#SGR }
 	 */
-	function setBasicFormatters(styleCodes: number[]): codemavi {
+	function setBasicFormatters(styleCodes: number[]): void {
 		for (const code of styleCodes) {
 			switch (code) {
 				case 0: {  // reset (everything)
@@ -313,7 +313,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * will set the underline color.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit }
 	 */
-	function set24BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): codemavi {
+	function set24BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): void {
 		if (styleCodes.length >= 5 &&
 			styleCodes[2] >= 0 && styleCodes[2] <= 255 &&
 			styleCodes[3] >= 0 && styleCodes[3] <= 255 &&
@@ -332,7 +332,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * will set the underline color.
 	 * @see {@link https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit }
 	 */
-	function set8BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): codemavi {
+	function set8BitColor(styleCodes: number[], colorType: 'foreground' | 'background' | 'underline'): void {
 		let colorNumber = styleCodes[2];
 		const color = calcANSI8bitColor(colorNumber);
 
@@ -366,7 +366,7 @@ export function handleANSIOutput(text: string, linkDetector: ILinkDetector, work
 	 * [30-37, 90-97, 40-47, 100-107]. If not on one of these ranges, will do
 	 * nothing.
 	 */
-	function setBasicColor(styleCode: number): codemavi {
+	function setBasicColor(styleCode: number): void {
 		let colorType: 'foreground' | 'background' | undefined;
 		let colorIndex: number | undefined;
 
@@ -413,7 +413,7 @@ export function appendStylizedStringToContainer(
 	customUnderlineColor: RGBA | string | undefined,
 	highlights: IHighlight[] | undefined,
 	offset: number,
-): codemavi {
+): void {
 	if (!root || !stringContent) {
 		return;
 	}

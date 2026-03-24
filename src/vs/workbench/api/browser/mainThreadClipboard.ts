@@ -15,7 +15,7 @@ export class MainThreadClipboard implements MainThreadClipboardShape {
 		@IClipboardService private readonly _clipboardService: IClipboardService,
 	) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		// nothing
 	}
 
@@ -23,7 +23,7 @@ export class MainThreadClipboard implements MainThreadClipboardShape {
 		return this._clipboardService.readText();
 	}
 
-	$writeText(value: string): Promise<codemavi> {
+	$writeText(value: string): Promise<void> {
 		return this._clipboardService.writeText(value);
 	}
 }

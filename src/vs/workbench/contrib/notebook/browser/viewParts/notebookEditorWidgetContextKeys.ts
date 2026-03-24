@@ -69,7 +69,7 @@ export class NotebookEditorContextKeys {
 		this._disposables.add(_notebookExecutionStateService.onDidChangeLastRunFailState(this._updateForLastRunFailState, this));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._viewModelDisposables.dispose();
 		this._selectedKernelDisposables.dispose();
@@ -84,7 +84,7 @@ export class NotebookEditorContextKeys {
 		this._cellOutputsListeners.length = 0;
 	}
 
-	private _handleDidChangeModel(): codemavi {
+	private _handleDidChangeModel(): void {
 
 		this._updateKernelContext();
 		this._updateForNotebookOptions();
@@ -140,7 +140,7 @@ export class NotebookEditorContextKeys {
 		}));
 		this._viewType.set(this._editor.textModel.viewType);
 	}
-	private _updateForExecution(e: ICellExecutionStateChangedEvent | IExecutionStateChangedEvent): codemavi {
+	private _updateForExecution(e: ICellExecutionStateChangedEvent | IExecutionStateChangedEvent): void {
 		if (this._editor.textModel) {
 			const notebookExe = this._notebookExecutionStateService.getExecution(this._editor.textModel.uri);
 			const notebookCellExe = this._notebookExecutionStateService.getCellExecutionsForNotebook(this._editor.textModel.uri);
@@ -156,13 +156,13 @@ export class NotebookEditorContextKeys {
 		}
 	}
 
-	private _updateForLastRunFailState(e: INotebookFailStateChangedEvent): codemavi {
+	private _updateForLastRunFailState(e: INotebookFailStateChangedEvent): void {
 		if (e.notebook === this._editor.textModel?.uri) {
 			this._lastCellFailed.set(e.visible);
 		}
 	}
 
-	private async _updateForInstalledExtension(): Promise<codemavi> {
+	private async _updateForInstalledExtension(): Promise<void> {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -173,7 +173,7 @@ export class NotebookEditorContextKeys {
 			!!kernelExtensionId && !(await this._extensionService.getExtension(kernelExtensionId)));
 	}
 
-	private _updateKernelContext(): codemavi {
+	private _updateKernelContext(): void {
 		if (!this._editor.hasModel()) {
 			this._notebookKernelCount.reset();
 			this._notebookKernelSourceCount.reset();
@@ -199,7 +199,7 @@ export class NotebookEditorContextKeys {
 		}
 	}
 
-	private _updateForNotebookOptions(): codemavi {
+	private _updateForNotebookOptions(): void {
 		const layout = this._editor.notebookOptions.getDisplayOptions();
 		this._useConsolidatedOutputButton.set(layout.consolidatedOutputButton);
 		this._cellToolbarLocation.set(this._editor.notebookOptions.computeCellToolbarLocation(this._editor.textModel?.viewType));

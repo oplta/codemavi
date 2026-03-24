@@ -79,7 +79,7 @@ export interface ITextModelTreeSitter {
 	textModel: ITextModel;
 	parseResult: ITreeSitterParseResult | undefined;
 	getInjection(offset: number, parentLanguage: string): ITreeSitterParseResult | undefined;
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export const ITreeSitterImporter = createDecorator<ITreeSitterImporter>('treeSitterImporter');

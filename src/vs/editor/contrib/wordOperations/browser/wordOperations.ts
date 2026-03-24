@@ -41,7 +41,7 @@ export abstract class MoveWordCommand extends EditorCommand {
 		this._wordNavigationType = opts.wordNavigationType;
 	}
 
-	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -330,7 +330,7 @@ export abstract class DeleteWordCommand extends EditorCommand {
 		this._wordNavigationType = opts.wordNavigationType;
 	}
 
-	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		if (!editor.hasModel()) {
@@ -477,7 +477,7 @@ export class DeleteInsideWord extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		if (!editor.hasModel()) {
 			return;
 		}

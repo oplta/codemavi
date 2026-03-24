@@ -4,7 +4,7 @@ The Mavi IDE codebase is not as intimidating as it seems!
 
 Most of Mavi IDE's code lives in the folder `src/vs/workbench/contrib/mavi/`.
 
-The purpose of this document is to explain how Mavi IDE's codebase works. If you want build instructions instead, see [Contributing](https://github.com/codemavi/codemavi/blob/main/HOW_TO_CONTRIBUTE.md).
+The purpose of this document is to explain how Mavi IDE's codebase works. If you want build instructions instead, see [Contributing](https://github.com/mavi/mavi/blob/main/HOW_TO_CONTRIBUTE.md).
 
 
 
@@ -55,7 +55,7 @@ Here's some terminology you might want to know about when working inside VSCode:
 ### Internal LLM Message Pipeline
 
 Here's a picture of all the dependencies that are relevent between the time you first send a message through Mavi IDE's sidebar, and the time a request is sent to your provider.
-Sending LLM messages from the main process acodemavis CSP issues with local providers and lets us use node_modules more easily.
+Sending LLM messages from the main process avoids CSP issues with local providers and lets us use node_modules more easily.
 
 
 <div align="center">
@@ -97,10 +97,10 @@ How Apply works:
 
 
 ### Writing Files Inner Workings
-When Mavi IDE wants to change your code, it just writes to a text model. This means all you need to know to write to a file is its URI - you don't have to load it, save it, etc. There are some annoying background URI/model things to think about to get this to work, but we handled them all in `codemaviModelService`.
+When Mavi IDE wants to change your code, it just writes to a text model. This means all you need to know to write to a file is its URI - you don't have to load it, save it, etc. There are some annoying background URI/model things to think about to get this to work, but we handled them all in `maviModelService`.
 
 ### Mavi IDE Settings Inner Workings
-We have a service `codemaviSettingsService` that stores all your Mavi IDE settings (providers, models, global Mavi IDE settings, etc). Imagine this as an implicit dependency for any of the core Mavi IDE services:
+We have a service `maviSettingsService` that stores all your Mavi IDE settings (providers, models, global Mavi IDE settings, etc). Imagine this as an implicit dependency for any of the core Mavi IDE services:
 
 <div align="center">
 	<img width="800" src="https://github.com/user-attachments/assets/9f3cb68c-a61b-4810-8429-bb90b992b3fa">
@@ -126,7 +126,7 @@ Here's a guide to some of the terminology we're using:
 
 
 ### Build process
-If you want to know how our build pipeline works, see our build repo [here](https://github.com/codemavi/codemavi-builder).
+If you want to know how our build pipeline works, see our build repo [here](https://github.com/mavi/mavi-builder).
 
 
 

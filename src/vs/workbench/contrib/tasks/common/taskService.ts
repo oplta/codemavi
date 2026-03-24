@@ -65,9 +65,9 @@ export interface ITaskService {
 	readonly _serviceBrand: undefined;
 	onDidStateChange: Event<ITaskEvent>;
 	/** Fired when task providers are registered or unregistered */
-	onDidChangeTaskProviders: Event<codemavi>;
+	onDidChangeTaskProviders: Event<void>;
 	isReconnected: boolean;
-	onDidReconnectToTasks: Event<codemavi>;
+	onDidReconnectToTasks: Event<void>;
 	supportsMultipleTaskExecutions: boolean;
 
 	configureAction(): Action;
@@ -77,7 +77,7 @@ export interface ITaskService {
 	getBusyTasks(): Promise<Task[]>;
 	terminate(task: Task): Promise<ITaskTerminateResponse>;
 	tasks(filter?: ITaskFilter): Promise<Task[]>;
-	rerun(terminalInstanceId: number): codemavi;
+	rerun(terminalInstanceId: number): void;
 	/**
 	 * Gets tasks currently known to the task system. Unlike {@link tasks},
 	 * this does not activate extensions or prompt for workspace trust.
@@ -86,7 +86,7 @@ export interface ITaskService {
 	taskTypes(): string[];
 	getWorkspaceTasks(runSource?: TaskRunSource): Promise<Map<string, IWorkspaceFolderTaskResult>>;
 	getSavedTasks(type: 'persistent' | 'historical'): Promise<(Task | ConfiguringTask)[]>;
-	removeRecentlyUsedTask(taskRecentlyUsedKey: string): codemavi;
+	removeRecentlyUsedTask(taskRecentlyUsedKey: string): void;
 	/**
 	 * @param alias The task's name, label or defined identifier.
 	 */
@@ -95,18 +95,18 @@ export interface ITaskService {
 	createSorter(): TaskSorter;
 
 	getTaskDescription(task: Task | ConfiguringTask): string | undefined;
-	customize(task: ContributedTask | CustomTask | ConfiguringTask, properties?: {}, openConfig?: boolean): Promise<codemavi>;
+	customize(task: ContributedTask | CustomTask | ConfiguringTask, properties?: {}, openConfig?: boolean): Promise<void>;
 	openConfig(task: CustomTask | ConfiguringTask | undefined): Promise<boolean>;
 
 	registerTaskProvider(taskProvider: ITaskProvider, type: string): IDisposable;
 
-	registerTaskSystem(scheme: string, taskSystemInfo: ITaskSystemInfo): codemavi;
-	onDidChangeTaskSystemInfo: Event<codemavi>;
-	onDidChangeTaskConfig: Event<codemavi>;
+	registerTaskSystem(scheme: string, taskSystemInfo: ITaskSystemInfo): void;
+	onDidChangeTaskSystemInfo: Event<void>;
+	onDidChangeTaskConfig: Event<void>;
 	readonly hasTaskSystemInfo: boolean;
-	registerSupportedExecutions(custom?: boolean, shell?: boolean, process?: boolean): codemavi;
+	registerSupportedExecutions(custom?: boolean, shell?: boolean, process?: boolean): void;
 
-	extensionCallbackTaskComplete(task: Task, result: number | undefined): Promise<codemavi>;
+	extensionCallbackTaskComplete(task: Task, result: number | undefined): Promise<void>;
 }
 
 export interface ITaskTerminalStatus {

@@ -30,7 +30,7 @@ export class SimpleIconLabel implements IDisposable {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.hover?.dispose();
 	}
 }

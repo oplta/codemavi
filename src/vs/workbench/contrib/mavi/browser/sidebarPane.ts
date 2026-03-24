@@ -72,7 +72,7 @@ class SidebarViewPane extends ViewPane {
 
 
 
-	protected override renderBody(parent: HTMLElement): codemavi {
+	protected override renderBody(parent: HTMLElement): void {
 		super.renderBody(parent);
 		// parent.style.overflow = 'auto'
 		parent.style.userSelect = 'text'
@@ -80,12 +80,12 @@ class SidebarViewPane extends ViewPane {
 		// gets set immediately
 		this.instantiationService.invokeFunction(accessor => {
 			// mount react
-			const disposeFn: (() => codemavi) | undefined = mountSidebar(parent, accessor)?.dispose;
+			const disposeFn: (() => void) | undefined = mountSidebar(parent, accessor)?.dispose;
 			this._register(toDisposable(() => disposeFn?.()))
 		});
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width)
 		this.element.style.height = `${height}px`
 		this.element.style.width = `${width}px`
@@ -95,20 +95,20 @@ class SidebarViewPane extends ViewPane {
 
 
 
-// ---------- Register viewpane inside the codemavi container ----------
+// ---------- Register viewpane inside the mavi container ----------
 
-// const codemaviThemeIcon = Codicon.symbolObject;
-// const codemaviViewIcon = registerIcon('codemavi-view-icon', codemaviThemeIcon, localize('codemaviViewIcon', 'View icon of the Code Mavi chat view.'));
+// const maviThemeIcon = Codicon.symbolObject;
+// const maviViewIcon = registerIcon('mavi-view-icon', maviThemeIcon, localize('maviViewIcon', 'View icon of the Mavi chat view.'));
 
 // called VIEWLET_ID in other places for some reason
-export const MAVI_VIEW_CONTAINER_ID = 'workbench.view.codemavi'
+export const MAVI_VIEW_CONTAINER_ID = 'workbench.view.mavi'
 export const MAVI_VIEW_ID = MAVI_VIEW_CONTAINER_ID
 
 // Register view container
 const viewContainerRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
 const container = viewContainerRegistry.registerViewContainer({
 	id: MAVI_VIEW_CONTAINER_ID,
-	title: nls.localize2('codemaviContainer', 'Chat'), // this is used to say "Code Mavi" (Ctrl + L)
+	title: nls.localize2('maviContainer', 'Chat'), // this is used to say "Mavi" (Ctrl + L)
 	ctorDescriptor: new SyncDescriptor(ViewPaneContainer, [MAVI_VIEW_CONTAINER_ID, {
 		mergeViewWithContainerWhenSingleView: true,
 		orientation: Orientation.HORIZONTAL,
@@ -129,8 +129,8 @@ const viewsRegistry = Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry);
 viewsRegistry.registerViews([{
 	id: MAVI_VIEW_ID,
 	hideByDefault: false, // start open
-	// containerIcon: codemaviViewIcon,
-	name: nls.localize2('codemaviChat', ''), // this says ... : CHAT
+	// containerIcon: maviViewIcon,
+	name: nls.localize2('maviChat', ''), // this says ... : CHAT
 	ctorDescriptor: new SyncDescriptor(SidebarViewPane),
 	canToggleVisibility: false,
 	canMoveView: false, // can't move this out of its container
@@ -149,22 +149,22 @@ viewsRegistry.registerViews([{
 
 
 // open sidebar
-export const MAVI_OPEN_SIDEBAR_ACTION_ID = 'codemavi.openSidebar'
+export const MAVI_OPEN_SIDEBAR_ACTION_ID = 'mavi.openSidebar'
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: MAVI_OPEN_SIDEBAR_ACTION_ID,
-			title: 'Open Code Mavi Sidebar',
+			title: 'Open Mavi Sidebar',
 		})
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const viewsService = accessor.get(IViewsService)
 		viewsService.openViewContainer(MAVI_VIEW_CONTAINER_ID);
 	}
 });
 
 export class SidebarStartContribution implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.startupCode MaviSidebar';
+	static readonly ID = 'workbench.contrib.startupMaviSidebar';
 	constructor(
 		@ICommandService private readonly commandService: ICommandService,
 	) {

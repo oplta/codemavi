@@ -44,14 +44,14 @@ export class ExtensionsWatcher extends Disposable {
 		this.initialize().then(null, error => logService.error('Error while initializing Extensions Watcher', getErrorMessage(error)));
 	}
 
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		await this.extensionsScannerService.initializeDefaultProfileExtensions();
 		await this.onDidChangeProfiles(this.userDataProfilesService.profiles);
 		this.registerListeners();
 		await this.deleteExtensionsNotInProfiles();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.userDataProfilesService.onDidChangeProfiles(e => this.onDidChangeProfiles(e.added)));
 		this._register(this.extensionsProfileScannerService.onAddExtensions(e => this.onAddExtensions(e)));
 		this._register(this.extensionsProfileScannerService.onDidAddExtensions(e => this.onDidAddExtensions(e)));
@@ -60,7 +60,7 @@ export class ExtensionsWatcher extends Disposable {
 		this._register(this.fileService.onDidFilesChange(e => this.onDidFilesChange(e)));
 	}
 
-	private async onDidChangeProfiles(added: readonly IUserDataProfile[]): Promise<codemavi> {
+	private async onDidChangeProfiles(added: readonly IUserDataProfile[]): Promise<void> {
 		try {
 			if (added.length) {
 				await Promise.all(added.map(profile => {
@@ -78,13 +78,13 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private async onAddExtensions(e: ProfileExtensionsEvent): Promise<codemavi> {
+	private async onAddExtensions(e: ProfileExtensionsEvent): Promise<void> {
 		for (const extension of e.extensions) {
 			this.addExtensionWithKey(this.getKey(extension.identifier, extension.version), e.profileLocation);
 		}
 	}
 
-	private async onDidAddExtensions(e: DidAddProfileExtensionsEvent): Promise<codemavi> {
+	private async onDidAddExtensions(e: DidAddProfileExtensionsEvent): Promise<void> {
 		for (const extension of e.extensions) {
 			const key = this.getKey(extension.identifier, extension.version);
 			if (e.error) {
@@ -95,15 +95,15 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private async onRemoveExtensions(e: ProfileExtensionsEvent): Promise<codemavi> {
+	private async onRemoveExtensions(e: ProfileExtensionsEvent): Promise<void> {
 		for (const extension of e.extensions) {
 			this.removeExtensionWithKey(this.getKey(extension.identifier, extension.version), e.profileLocation);
 		}
 	}
 
-	private async onDidRemoveExtensions(e: DidRemoveProfileExtensionsEvent): Promise<codemavi> {
+	private async onDidRemoveExtensions(e: DidRemoveProfileExtensionsEvent): Promise<void> {
 		const extensionsToDelete: IExtension[] = [];
-		const promises: Promise<codemavi>[] = [];
+		const promises: Promise<void>[] = [];
 		for (const extension of e.extensions) {
 			const key = this.getKey(extension.identifier, extension.version);
 			if (e.error) {
@@ -133,7 +133,7 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private onDidFilesChange(e: FileChangesEvent): codemavi {
+	private onDidFilesChange(e: FileChangesEvent): void {
 		for (const profile of this.userDataProfilesService.profiles) {
 			if (e.contains(profile.extensionsResource, FileChangeType.UPDATED, FileChangeType.ADDED)) {
 				this.onDidExtensionsProfileChange(profile.extensionsResource);
@@ -141,7 +141,7 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private async onDidExtensionsProfileChange(profileLocation: URI): Promise<codemavi> {
+	private async onDidExtensionsProfileChange(profileLocation: URI): Promise<void> {
 		const added: IExtensionIdentifier[] = [], removed: IExtensionIdentifier[] = [];
 		const extensions = await this.extensionsProfileScannerService.scanProfileExtensions(profileLocation);
 		const extensionKeys = new Set<string>();
@@ -173,14 +173,14 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private async populateExtensionsFromProfile(extensionsProfileLocation: URI): Promise<codemavi> {
+	private async populateExtensionsFromProfile(extensionsProfileLocation: URI): Promise<void> {
 		const extensions = await this.extensionsProfileScannerService.scanProfileExtensions(extensionsProfileLocation);
 		for (const extension of extensions) {
 			this.addExtensionWithKey(this.getKey(extension.identifier, extension.version), extensionsProfileLocation);
 		}
 	}
 
-	private async deleteExtensionsNotInProfiles(toDelete?: IExtension[]): Promise<codemavi> {
+	private async deleteExtensionsNotInProfiles(toDelete?: IExtension[]): Promise<void> {
 		if (!toDelete) {
 			const installed = await this.extensionManagementService.scanAllUserInstalledExtensions();
 			toDelete = installed.filter(installedExtension => !this.allExtensions.has(this.getKey(installedExtension.identifier, installedExtension.manifest.version)));
@@ -190,7 +190,7 @@ export class ExtensionsWatcher extends Disposable {
 		}
 	}
 
-	private addExtensionWithKey(key: string, extensionsProfileLocation: URI): codemavi {
+	private addExtensionWithKey(key: string, extensionsProfileLocation: URI): void {
 		let profiles = this.allExtensions.get(key);
 		if (!profiles) {
 			this.allExtensions.set(key, profiles = new ResourceSet((uri) => this.uriIdentityService.extUri.getComparisonKey(uri)));
@@ -198,7 +198,7 @@ export class ExtensionsWatcher extends Disposable {
 		profiles.add(extensionsProfileLocation);
 	}
 
-	private removeExtensionWithKey(key: string, profileLocation: URI): codemavi {
+	private removeExtensionWithKey(key: string, profileLocation: URI): void {
 		const profiles = this.allExtensions.get(key);
 		if (profiles) {
 			profiles.delete(profileLocation);

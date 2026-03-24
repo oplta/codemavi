@@ -91,7 +91,7 @@ declare module 'vscode' {
 		 *
 		 * The results of the PortAttributesProvider are merged with the user setting `remote.portsAttributes`. If the values conflict, the user setting takes precedence.
 		 *
-		 * @param portSelector It is best practice to specify a port selector to acodemavi unnecessary calls to your provider.
+		 * @param portSelector It is best practice to specify a port selector to avoid unnecessary calls to your provider.
 		 * If you don't specify a port selector your provider will be called for every port, which will result in slower port forwarding for the user.
 		 * @param provider The {@link PortAttributesProvider PortAttributesProvider}.
 		 */

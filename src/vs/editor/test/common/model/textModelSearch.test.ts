@@ -21,11 +21,11 @@ suite('TextModelSearch', () => {
 
 	const usualWordSeparators = getMapForWordSeparators(USUAL_WORD_SEPARATORS, []);
 
-	function assertFindMatch(actual: FindMatch | null, expectedRange: Range, expectedMatches: string[] | null = null): codemavi {
+	function assertFindMatch(actual: FindMatch | null, expectedRange: Range, expectedMatches: string[] | null = null): void {
 		assert.deepStrictEqual(actual, new FindMatch(expectedRange, expectedMatches));
 	}
 
-	function _assertFindMatches(model: TextModel, searchParams: SearchParams, expectedMatches: FindMatch[]): codemavi {
+	function _assertFindMatches(model: TextModel, searchParams: SearchParams, expectedMatches: FindMatch[]): void {
 		const actual = TextModelSearch.findMatches(model, searchParams, model.getFullModelRange(), false, 1000);
 		assert.deepStrictEqual(actual, expectedMatches, 'findMatches OK');
 
@@ -50,7 +50,7 @@ suite('TextModelSearch', () => {
 		}
 	}
 
-	function assertFindMatches(text: string, searchString: string, isRegex: boolean, matchCase: boolean, wordSeparators: string | null, _expected: [number, number, number, number][]): codemavi {
+	function assertFindMatches(text: string, searchString: string, isRegex: boolean, matchCase: boolean, wordSeparators: string | null, _expected: [number, number, number, number][]): void {
 		const expectedRanges = _expected.map(entry => new Range(entry[0], entry[1], entry[2], entry[3]));
 		const expectedMatches = expectedRanges.map(entry => new FindMatch(entry, null));
 		const searchParams = new SearchParams(searchString, isRegex, matchCase, wordSeparators);
@@ -592,7 +592,7 @@ suite('TextModelSearch', () => {
 		model.dispose();
 	});
 
-	function assertParseSearchResult(searchString: string, isRegex: boolean, matchCase: boolean, wordSeparators: string | null, expected: SearchData | null): codemavi {
+	function assertParseSearchResult(searchString: string, isRegex: boolean, matchCase: boolean, wordSeparators: string | null, expected: SearchData | null): void {
 		const searchParams = new SearchParams(searchString, isRegex, matchCase, wordSeparators);
 		const actual = searchParams.parseSearchRequest();
 

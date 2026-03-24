@@ -78,8 +78,8 @@ abstract class BaseHoverAccessibleViewProvider extends Disposable implements IAc
 	public readonly id = AccessibleViewProviderId.Hover;
 	public readonly verbositySettingKey = 'accessibility.verbosity.hover';
 
-	private readonly _onDidChangeContent: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
+	private readonly _onDidChangeContent: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
 
 	protected _focusedHoverPartIndex: number = -1;
 
@@ -87,7 +87,7 @@ abstract class BaseHoverAccessibleViewProvider extends Disposable implements IAc
 		super();
 	}
 
-	public onOpen(): codemavi {
+	public onOpen(): void {
 		if (!this._hoverController) {
 			return;
 		}
@@ -98,7 +98,7 @@ abstract class BaseHoverAccessibleViewProvider extends Disposable implements IAc
 		}));
 	}
 
-	public onClose(): codemavi {
+	public onClose(): void {
 		if (!this._hoverController) {
 			return;
 		}
@@ -221,7 +221,7 @@ export class HoverAccessibleViewProvider extends BaseHoverAccessibleViewProvider
 		});
 	}
 
-	private _initializeOptions(editor: ICodeEditor, hoverController: ContentHoverController): codemavi {
+	private _initializeOptions(editor: ICodeEditor, hoverController: ContentHoverController): void {
 		const helpProvider = this._register(new HoverAccessibilityHelpProvider(hoverController));
 		this.options.language = editor.getModel()?.getLanguageId();
 		this.options.customHelp = () => { return helpProvider.provideContentAtIndex(this._focusedHoverPartIndex, true); };

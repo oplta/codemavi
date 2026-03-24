@@ -52,13 +52,13 @@ export class InlayHintsAccessibility implements IEditorContribution {
 		this._ctxIsReading = InlayHintsAccessibility.IsReading.bindTo(contextKeyService);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._sessionDispoosables.dispose();
 		this._ctxIsReading.reset();
 		this._ariaElement.remove();
 	}
 
-	private _reset(): codemavi {
+	private _reset(): void {
 		dom.clearNode(this._ariaElement);
 		this._sessionDispoosables.clear();
 		this._ctxIsReading.reset();
@@ -149,7 +149,7 @@ export class InlayHintsAccessibility implements IEditorContribution {
 
 
 
-	startInlayHintsReading(): codemavi {
+	startInlayHintsReading(): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -162,7 +162,7 @@ export class InlayHintsAccessibility implements IEditorContribution {
 		}
 	}
 
-	stopInlayHintsReading(): codemavi {
+	stopInlayHintsReading(): void {
 		this._reset();
 		this._editor.focus();
 	}

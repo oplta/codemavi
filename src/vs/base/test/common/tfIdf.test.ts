@@ -31,7 +31,7 @@ function permutate<T>(arr: T[]): T[][] {
 	return result;
 }
 
-function assertScoreOrdersEqual(actualScores: TfIdfScore[], expectedScoreKeys: string[]): codemavi {
+function assertScoreOrdersEqual(actualScores: TfIdfScore[], expectedScoreKeys: string[]): void {
 	actualScores.sort((a, b) => (b.score - a.score) || a.key.localeCompare(b.key));
 	assert.strictEqual(actualScores.length, expectedScoreKeys.length);
 	for (let i = 0; i < expectedScoreKeys.length; i++) {

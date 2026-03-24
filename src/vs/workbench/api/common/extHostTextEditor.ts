@@ -84,7 +84,7 @@ class TextEditorEdit {
 		}
 	}
 
-	replace(location: Position | Range | Selection, value: string): codemavi {
+	replace(location: Position | Range | Selection, value: string): void {
 		this._throwIfFinalized();
 		let range: Range | null = null;
 
@@ -99,12 +99,12 @@ class TextEditorEdit {
 		this._pushEdit(range, value, false);
 	}
 
-	insert(location: Position, value: string): codemavi {
+	insert(location: Position, value: string): void {
 		this._throwIfFinalized();
 		this._pushEdit(new Range(location, location), value, true);
 	}
 
-	delete(location: Range | Selection): codemavi {
+	delete(location: Range | Selection): void {
 		this._throwIfFinalized();
 		let range: Range | null = null;
 
@@ -117,7 +117,7 @@ class TextEditorEdit {
 		this._pushEdit(range, null, true);
 	}
 
-	private _pushEdit(range: Range, text: string | null, forceMoveMarkers: boolean): codemavi {
+	private _pushEdit(range: Range, text: string | null, forceMoveMarkers: boolean): void {
 		const validRange = this._document.validateRange(range);
 		this._collectedEdits.push({
 			range: validRange,
@@ -126,7 +126,7 @@ class TextEditorEdit {
 		});
 	}
 
-	setEndOfLine(endOfLine: EndOfLine): codemavi {
+	setEndOfLine(endOfLine: EndOfLine): void {
 		this._throwIfFinalized();
 		if (endOfLine !== EndOfLine.LF && endOfLine !== EndOfLine.CRLF) {
 			throw illegalArgument('endOfLine');
@@ -193,7 +193,7 @@ export class ExtHostTextEditorOptions {
 		};
 	}
 
-	public _accept(source: IResolvedTextEditorConfiguration): codemavi {
+	public _accept(source: IResolvedTextEditorConfiguration): void {
 		this._tabSize = source.tabSize;
 		this._indentSize = source.indentSize;
 		this._originalIndentSize = source.originalIndentSize;
@@ -396,7 +396,7 @@ export class ExtHostTextEditorOptions {
 		}
 	}
 
-	private _warnOnError(action: string, promise: Promise<any>): codemavi {
+	private _warnOnError(action: string, promise: Promise<any>): void {
 		promise.catch(err => {
 			this._logService.warn(`ExtHostTextEditorOptions '${action}' failed:'`);
 			this._logService.warn(err);
@@ -486,7 +486,7 @@ export class ExtHostTextEditor {
 				throw new ReadonlyError('viewColumn');
 			},
 			// --- edit
-			edit(callback: (edit: TextEditorEdit) => codemavi, options: { undoStopBefore: boolean; undoStopAfter: boolean } = { undoStopBefore: true, undoStopAfter: true }): Promise<boolean> {
+			edit(callback: (edit: TextEditorEdit) => void, options: { undoStopBefore: boolean; undoStopAfter: boolean } = { undoStopBefore: true, undoStopAfter: true }): Promise<boolean> {
 				if (that._disposed) {
 					return Promise.reject(new Error('TextEditor#edit not possible on closed editors'));
 				}
@@ -526,10 +526,10 @@ export class ExtHostTextEditor {
 				}
 				return _proxy.$tryInsertSnippet(id, document.value.version, snippet.value, ranges, options);
 			},
-			setDecorations(decorationType: vscode.TextEditorDecorationType, ranges: Range[] | vscode.DecorationOptions[]): codemavi {
+			setDecorations(decorationType: vscode.TextEditorDecorationType, ranges: Range[] | vscode.DecorationOptions[]): void {
 				const willBeEmpty = (ranges.length === 0);
 				if (willBeEmpty && !that._hasDecorationsForKey.has(decorationType.key)) {
-					// acodemavi no-op call to the renderer
+					// avoid no-op call to the renderer
 					return;
 				}
 				if (willBeEmpty) {
@@ -561,7 +561,7 @@ export class ExtHostTextEditor {
 					}
 				});
 			},
-			revealRange(range: Range, revealType: vscode.TextEditorRevealType): codemavi {
+			revealRange(range: Range, revealType: vscode.TextEditorRevealType): void {
 				that._runOnProxy(() => _proxy.$tryRevealRange(
 					id,
 					TypeConverters.Range.from(range),
@@ -587,12 +587,12 @@ export class ExtHostTextEditor {
 
 	// --- incoming: extension host MUST accept what the renderer says
 
-	_acceptOptions(options: IResolvedTextEditorConfiguration): codemavi {
+	_acceptOptions(options: IResolvedTextEditorConfiguration): void {
 		ok(!this._disposed);
 		this._options._accept(options);
 	}
 
-	_acceptVisibleRanges(value: Range[]): codemavi {
+	_acceptVisibleRanges(value: Range[]): void {
 		ok(!this._disposed);
 		this._visibleRanges = value;
 	}
@@ -602,12 +602,12 @@ export class ExtHostTextEditor {
 		this._viewColumn = value;
 	}
 
-	_acceptSelections(selections: Selection[]): codemavi {
+	_acceptSelections(selections: Selection[]): void {
 		ok(!this._disposed);
 		this._selections = selections;
 	}
 
-	_acceptDiffInformation(diffInformation: vscode.TextEditorDiffInformation[] | undefined): codemavi {
+	_acceptDiffInformation(diffInformation: vscode.TextEditorDiffInformation[] | undefined): void {
 		ok(!this._disposed);
 		this._diffInformation = diffInformation;
 	}

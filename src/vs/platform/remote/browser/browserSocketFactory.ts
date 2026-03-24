@@ -38,13 +38,13 @@ export interface IWebSocketCloseEvent {
 
 export interface IWebSocket {
 	readonly onData: Event<ArrayBuffer>;
-	readonly onOpen: Event<codemavi>;
-	readonly onClose: Event<IWebSocketCloseEvent | codemavi>;
+	readonly onOpen: Event<void>;
+	readonly onClose: Event<IWebSocketCloseEvent | void>;
 	readonly onError: Event<any>;
 
-	traceSocketEvent?(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi;
-	send(data: ArrayBuffer | ArrayBufferView): codemavi;
-	close(): codemavi;
+	traceSocketEvent?(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void;
+	send(data: ArrayBuffer | ArrayBufferView): void;
+	close(): void;
 }
 
 class BrowserWebSocket extends Disposable implements IWebSocket {
@@ -52,7 +52,7 @@ class BrowserWebSocket extends Disposable implements IWebSocket {
 	private readonly _onData = new Emitter<ArrayBuffer>();
 	public readonly onData = this._onData.event;
 
-	private readonly _onOpen = this._register(new Emitter<codemavi>());
+	private readonly _onOpen = this._register(new Emitter<void>());
 	public readonly onOpen = this._onOpen.event;
 
 	private readonly _onClose = this._register(new Emitter<IWebSocketCloseEvent>());
@@ -68,9 +68,9 @@ class BrowserWebSocket extends Disposable implements IWebSocket {
 	private _isReading: boolean;
 	private _isClosed: boolean;
 
-	private readonly _socketMessageListener: (ev: MessageEvent) => codemavi;
+	private readonly _socketMessageListener: (ev: MessageEvent) => void;
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		SocketDiagnostics.traceSocketEvent(this._socket, this._debugLabel, type, data);
 	}
 
@@ -181,7 +181,7 @@ class BrowserWebSocket extends Disposable implements IWebSocket {
 		}));
 	}
 
-	send(data: ArrayBuffer | ArrayBufferView): codemavi {
+	send(data: ArrayBuffer | ArrayBufferView): void {
 		if (this._isClosed) {
 			// Refuse to write data to closed WebSocket...
 			return;
@@ -190,7 +190,7 @@ class BrowserWebSocket extends Disposable implements IWebSocket {
 		this._socket.send(data);
 	}
 
-	close(): codemavi {
+	close(): void {
 		this._isClosed = true;
 		this.traceSocketEvent(SocketDiagnosticsEventType.Close);
 		this._socket.close();
@@ -210,7 +210,7 @@ class BrowserSocket implements ISocket {
 	public readonly socket: IWebSocket;
 	public readonly debugLabel: string;
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		if (typeof this.socket.traceSocketEvent === 'function') {
 			this.socket.traceSocketEvent(type, data);
 		} else {
@@ -223,16 +223,16 @@ class BrowserSocket implements ISocket {
 		this.debugLabel = debugLabel;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.socket.close();
 	}
 
-	public onData(listener: (e: VSBuffer) => codemavi): IDisposable {
+	public onData(listener: (e: VSBuffer) => void): IDisposable {
 		return this.socket.onData((data) => listener(VSBuffer.wrap(new Uint8Array(data))));
 	}
 
-	public onClose(listener: (e: SocketCloseEvent) => codemavi): IDisposable {
-		const adapter = (e: IWebSocketCloseEvent | codemavi) => {
+	public onClose(listener: (e: SocketCloseEvent) => void): IDisposable {
+		const adapter = (e: IWebSocketCloseEvent | void) => {
 			if (typeof e === 'undefined') {
 				listener(e);
 			} else {
@@ -248,19 +248,19 @@ class BrowserSocket implements ISocket {
 		return this.socket.onClose(adapter);
 	}
 
-	public onEnd(listener: () => codemavi): IDisposable {
+	public onEnd(listener: () => void): IDisposable {
 		return Disposable.None;
 	}
 
-	public write(buffer: VSBuffer): codemavi {
+	public write(buffer: VSBuffer): void {
 		this.socket.send(buffer.buffer);
 	}
 
-	public end(): codemavi {
+	public end(): void {
 		this.socket.close();
 	}
 
-	public drain(): Promise<codemavi> {
+	public drain(): Promise<void> {
 		return Promise.resolve();
 	}
 }

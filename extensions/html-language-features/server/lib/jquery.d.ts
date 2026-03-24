@@ -176,11 +176,11 @@ interface JQueryXHR extends XMLHttpRequest, JQueryPromise<any> {
      *
      * @param statusText A string passed as the textStatus parameter for the done callback. Default value: "canceled"
      */
-    abort(statusText?: string): codemavi;
+    abort(statusText?: string): void;
     /**
      * Incorporates the functionality of the .done() and .fail() methods, allowing (as of jQuery 1.8) the underlying Promise to be manipulated. Refer to deferred.then() for implementation details.
      */
-    then<R>(doneCallback: (data: any, textStatus: string, jqXHR: JQueryXHR) => R, failCallback?: (jqXHR: JQueryXHR, textStatus: string, errorThrown: any) => codemavi): JQueryPromise<R>;
+    then<R>(doneCallback: (data: any, textStatus: string, jqXHR: JQueryXHR) => R, failCallback?: (jqXHR: JQueryXHR, textStatus: string, errorThrown: any) => void): JQueryPromise<R>;
     /**
      * Property containing the parsed response if the response Content-Type is json
      */
@@ -188,7 +188,7 @@ interface JQueryXHR extends XMLHttpRequest, JQueryPromise<any> {
     /**
      * A function to be called if the request fails.
      */
-    error(xhr: JQueryXHR, textStatus: string, errorThrown: string): codemavi;
+    error(xhr: JQueryXHR, textStatus: string, errorThrown: string): void;
 }
 
 /**
@@ -292,14 +292,14 @@ interface JQueryGenericPromise<T> {
      * @param doneFilter A function that is called when the Deferred is resolved.
      * @param failFilter An optional function that is called when the Deferred is rejected.
      */
-    then(doneFilter: (value?: T, ...values: any[]) => codemavi, failFilter?: (...reasons: any[]) => any, progressFilter?: (...progression: any[]) => any): JQueryPromise<codemavi>;
+    then(doneFilter: (value?: T, ...values: any[]) => void, failFilter?: (...reasons: any[]) => any, progressFilter?: (...progression: any[]) => any): JQueryPromise<void>;
 }
 
 /**
  * Interface for the JQuery promise/deferred callbacks
  */
 interface JQueryPromiseCallback<T> {
-    (value?: T, ...args: any[]): codemavi;
+    (value?: T, ...args: any[]): void;
 }
 
 interface JQueryPromiseOperator<T, U> {
@@ -460,8 +460,8 @@ interface BaseJQueryEventObject extends Event {
     preventDefault(): any;
     relatedTarget: Element;
     result: any;
-    stopImmediatePropagation(): codemavi;
-    stopPropagation(): codemavi;
+    stopImmediatePropagation(): void;
+    stopPropagation(): void;
     target: Element;
     pageX: number;
     pageY: number;
@@ -650,13 +650,13 @@ interface JQueryStatic {
      * @param dataTypes An optional string containing one or more space-separated dataTypes
      * @param handler A handler to set default values for future Ajax requests.
      */
-    ajaxPrefilter(dataTypes: string, handler: (opts: any, originalOpts: JQueryAjaxSettings, jqXHR: JQueryXHR) => any): codemavi;
+    ajaxPrefilter(dataTypes: string, handler: (opts: any, originalOpts: JQueryAjaxSettings, jqXHR: JQueryXHR) => any): void;
     /**
      * Handle custom Ajax options or modify existing options before each request is sent and before they are processed by $.ajax().
      *
      * @param handler A handler to set default values for future Ajax requests.
      */
-    ajaxPrefilter(handler: (opts: any, originalOpts: JQueryAjaxSettings, jqXHR: JQueryXHR) => any): codemavi;
+    ajaxPrefilter(handler: (opts: any, originalOpts: JQueryAjaxSettings, jqXHR: JQueryXHR) => any): void;
 
     ajaxSettings: JQueryAjaxSettings;
 
@@ -665,7 +665,7 @@ interface JQueryStatic {
      *
      * @param options A set of key/value pairs that configure the default Ajax request. All options are optional.
      */
-    ajaxSetup(options: JQueryAjaxSettings): codemavi;
+    ajaxSetup(options: JQueryAjaxSettings): void;
 
     /**
      * Load data from the server using a HTTP GET request.
@@ -753,7 +753,7 @@ interface JQueryStatic {
      *
      * @param hold Indicates whether the ready hold is being requested or released
      */
-    holdReady(hold: boolean): codemavi;
+    holdReady(hold: boolean): void;
 
     /**
      * Accepts a string containing a CSS selector which is then used to match a set of elements.
@@ -867,7 +867,7 @@ interface JQueryStatic {
      * @param element A DOM element from which to remove and execute a queued function.
      * @param queueName A string containing the name of the queue. Defaults to fx, the standard effects queue.
      */
-    dequeue(element: Element, queueName?: string): codemavi;
+    dequeue(element: Element, queueName?: string): void;
 
     /**
      * Determine whether an element has any jQuery data associated with it.
@@ -922,12 +922,12 @@ interface JQueryStatic {
     easing: JQueryEasingFunctions;
 
     fx: {
-        tick: () => codemavi;
+        tick: () => void;
         /**
          * The rate (in milliseconds) at which animations fire.
          */
         interval: number;
-        stop: () => codemavi;
+        stop: () => void;
         speeds: { slow: number; fast: number; };
         /**
          * Globally disable all animations.

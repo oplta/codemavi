@@ -51,12 +51,12 @@ import { Dto } from '../../services/extensions/common/proxyIdentifier.js';
 
 interface ITestRunner {
 	/** Old test runner API, as exported from `vscode/lib/testrunner` */
-	run(testsRoot: string, clb: (error: Error, failures?: number) => codemavi): codemavi;
+	run(testsRoot: string, clb: (error: Error, failures?: number) => void): void;
 }
 
 interface INewTestRunner {
 	/** New test runner API, as explained in the extension test doc */
-	run(): Promise<codemavi>;
+	run(): Promise<void>;
 }
 
 export const IHostUtils = createDecorator<IHostUtils>('IHostUtils');
@@ -64,7 +64,7 @@ export const IHostUtils = createDecorator<IHostUtils>('IHostUtils');
 export interface IHostUtils {
 	readonly _serviceBrand: undefined;
 	readonly pid: number | undefined;
-	exit(code: number): codemavi;
+	exit(code: number): void;
 	fsExists?(path: string): Promise<boolean>;
 	fsRealpath?(path: string): Promise<string>;
 }
@@ -86,7 +86,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 
 	abstract readonly extensionRuntime: ExtensionRuntime;
 
-	private readonly _onDidChangeRemoteConnectionData = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeRemoteConnectionData = this._register(new Emitter<void>());
 	public readonly onDidChangeRemoteConnectionData = this._onDidChangeRemoteConnectionData.event;
 
 	protected readonly _hostUtils: IHostUtils;
@@ -186,7 +186,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 			this._myRegistry,
 			this._globalRegistry,
 			{
-				onExtensionActivationError: (extensionId: ExtensionIdentifier, error: Error, missingExtensionDependency: MissingExtensionDependency | null): codemavi => {
+				onExtensionActivationError: (extensionId: ExtensionIdentifier, error: Error, missingExtensionDependency: MissingExtensionDependency | null): void => {
 					this._mainThreadExtensionsProxy.$onExtensionActivationError(extensionId, errors.transformErrorForSerialization(error), missingExtensionDependency);
 				},
 
@@ -211,7 +211,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return this._remoteConnectionData;
 	}
 
-	public async initialize(): Promise<codemavi> {
+	public async initialize(): Promise<void> {
 		try {
 
 			await this._beforeAlmostReadyToRunExtensions();
@@ -229,10 +229,10 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		}
 	}
 
-	private async _deactivateAll(): Promise<codemavi> {
+	private async _deactivateAll(): Promise<void> {
 		this._storagePath.onWillDeactivateAll();
 
-		let allPromises: Promise<codemavi>[] = [];
+		let allPromises: Promise<void>[] = [];
 		try {
 			const allExtensions = this._myRegistry.getAllExtensionDescriptions();
 			const allExtensionsIds = allExtensions.map(ext => ext.identifier);
@@ -247,7 +247,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		await Promise.all(allPromises);
 	}
 
-	public terminate(reason: string, code: number = 0): codemavi {
+	public terminate(reason: string, code: number = 0): void {
 		if (this._isTerminating) {
 			// we are already shutting down...
 			return;
@@ -297,15 +297,15 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		};
 	}
 
-	private _activateByEvent(activationEvent: string, startup: boolean): Promise<codemavi> {
+	private _activateByEvent(activationEvent: string, startup: boolean): Promise<void> {
 		return this._activator.activateByEvent(activationEvent, startup);
 	}
 
-	private _activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
+	private _activateById(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
 		return this._activator.activateById(extensionId, reason);
 	}
 
-	public activateByIdWithErrors(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi> {
+	public activateByIdWithErrors(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void> {
 		return this._activateById(extensionId, reason).then(() => {
 			const extension = this._activator.getActivatedExtension(extensionId);
 			if (extension.activationFailed) {
@@ -378,7 +378,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return tst;
 	}
 
-	private _deactivate(extensionId: ExtensionIdentifier): Promise<codemavi> {
+	private _deactivate(extensionId: ExtensionIdentifier): Promise<void> {
 		let result = Promise.resolve(undefined);
 
 		if (!this._readyToRunExtensions.isOpen()) {
@@ -609,7 +609,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 
 	// -- eager activation
 
-	private _activateOneStartupFinished(desc: IExtensionDescription, activationEvent: string): codemavi {
+	private _activateOneStartupFinished(desc: IExtensionDescription, activationEvent: string): void {
 		this._activateById(desc.identifier, {
 			startup: false,
 			extensionId: desc.identifier,
@@ -619,7 +619,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		});
 	}
 
-	private _activateAllStartupFinishedDeferred(extensions: IExtensionDescription[], start: number = 0): codemavi {
+	private _activateAllStartupFinishedDeferred(extensions: IExtensionDescription[], start: number = 0): void {
 		const timeBudget = 50; // 50 milliseconds
 		const startTime = Date.now();
 
@@ -642,7 +642,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		});
 	}
 
-	private _activateAllStartupFinished(): codemavi {
+	private _activateAllStartupFinished(): void {
 		// startup is considered finished
 		this._mainThreadExtensionsProxy.$setPerformanceMarks(performance.getMarks());
 
@@ -666,7 +666,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 	}
 
 	// Handle "eager" activation extensions
-	private _handleEagerExtensions(): Promise<codemavi> {
+	private _handleEagerExtensions(): Promise<void> {
 		const starActivation = this._activateByEvent('*', true).then(undefined, (err) => {
 			this._logService.error(err);
 		});
@@ -684,7 +684,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return eagerExtensionsActivation;
 	}
 
-	private _handleWorkspaceContainsEagerExtensions(folders: ReadonlyArray<vscode.WorkspaceFolder>): Promise<codemavi> {
+	private _handleWorkspaceContainsEagerExtensions(folders: ReadonlyArray<vscode.WorkspaceFolder>): Promise<void> {
 		if (folders.length === 0) {
 			return Promise.resolve(undefined);
 		}
@@ -696,7 +696,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		).then(() => { });
 	}
 
-	private async _handleWorkspaceContainsEagerExtension(folders: ReadonlyArray<vscode.WorkspaceFolder>, desc: IExtensionDescription): Promise<codemavi> {
+	private async _handleWorkspaceContainsEagerExtension(folders: ReadonlyArray<vscode.WorkspaceFolder>, desc: IExtensionDescription): Promise<void> {
 		if (this.isActivated(desc.identifier)) {
 			return;
 		}
@@ -721,7 +721,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		);
 	}
 
-	private async _handleRemoteResolverEagerExtensions(): Promise<codemavi> {
+	private async _handleRemoteResolverEagerExtensions(): Promise<void> {
 		if (this._initData.remote.authority) {
 			return this._activateByEvent(`onResolveRemoteAuthority:${this._initData.remote.authority}`, false);
 		}
@@ -774,7 +774,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 
 			const runResult = testRunner.run(extensionTestsPath, oldTestRunnerCallback);
 
-			// Using the new API `run(): Promise<codemavi>`
+			// Using the new API `run(): Promise<void>`
 			if (runResult && runResult.then) {
 				runResult
 					.then(() => {
@@ -793,7 +793,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		});
 	}
 
-	private _startExtensionHost(): Promise<codemavi> {
+	private _startExtensionHost(): Promise<void> {
 		if (this._started) {
 			throw new Error(`Extension host is already started!`);
 		}
@@ -996,7 +996,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return result;
 	}
 
-	public async $startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
+	public async $startExtensionHost(extensionsDelta: IExtensionDescriptionDelta): Promise<void> {
 		extensionsDelta.toAdd.forEach((extension) => (<any>extension).extensionLocation = URI.revive(extension.extensionLocation));
 
 		const { globalRegistry, myExtensions } = applyExtensionsDelta(this._activationEventsReader, this._globalRegistry, this._myRegistry, extensionsDelta);
@@ -1014,7 +1014,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return this._startExtensionHost();
 	}
 
-	public $activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<codemavi> {
+	public $activateByEvent(activationEvent: string, activationKind: ActivationKind): Promise<void> {
 		if (activationKind === ActivationKind.Immediate) {
 			return this._almostReadyToRunExtensions.wait()
 				.then(_ => this._activateByEvent(activationEvent, false));
@@ -1036,7 +1036,7 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return true;
 	}
 
-	public async $deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<codemavi> {
+	public async $deltaExtensions(extensionsDelta: IExtensionDescriptionDelta): Promise<void> {
 		extensionsDelta.toAdd.forEach((extension) => (<any>extension).extensionLocation = URI.revive(extension.extensionLocation));
 
 		// First build up and update the trie and only afterwards apply the delta
@@ -1072,15 +1072,15 @@ export abstract class AbstractExtHostExtensionService extends Disposable impleme
 		return buff;
 	}
 
-	public async $updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<codemavi> {
+	public async $updateRemoteConnectionData(connectionData: IRemoteConnectionData): Promise<void> {
 		this._remoteConnectionData = connectionData;
 		this._onDidChangeRemoteConnectionData.fire();
 	}
 
-	protected abstract _beforeAlmostReadyToRunExtensions(): Promise<codemavi>;
+	protected abstract _beforeAlmostReadyToRunExtensions(): Promise<void>;
 	protected abstract _getEntryPoint(extensionDescription: IExtensionDescription): string | undefined;
 	protected abstract _loadCommonJSModule<T extends object | undefined>(extensionId: IExtensionDescription | null, module: URI, activationTimesBuilder: ExtensionActivationTimesBuilder): Promise<T>;
-	public abstract $setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi>;
+	public abstract $setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void>;
 }
 
 function applyExtensionsDelta(activationEventsReader: SyncedActivationEventsReader, oldGlobalRegistry: ExtensionDescriptionRegistry, oldMyRegistry: ExtensionDescriptionRegistry, extensionsDelta: IExtensionDescriptionDelta) {
@@ -1134,18 +1134,18 @@ export const IExtHostExtensionService = createDecorator<IExtHostExtensionService
 
 export interface IExtHostExtensionService extends AbstractExtHostExtensionService {
 	readonly _serviceBrand: undefined;
-	initialize(): Promise<codemavi>;
-	terminate(reason: string): codemavi;
+	initialize(): Promise<void>;
+	terminate(reason: string): void;
 	getExtension(extensionId: string): Promise<IExtensionDescription | undefined>;
 	isActivated(extensionId: ExtensionIdentifier): boolean;
-	activateByIdWithErrors(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<codemavi>;
+	activateByIdWithErrors(extensionId: ExtensionIdentifier, reason: ExtensionActivationReason): Promise<void>;
 	getExtensionExports(extensionId: ExtensionIdentifier): IExtensionAPI | null | undefined;
 	getExtensionRegistry(): Promise<ExtensionDescriptionRegistry>;
 	getExtensionPathIndex(): Promise<ExtensionPaths>;
 	registerRemoteAuthorityResolver(authorityPrefix: string, resolver: vscode.RemoteAuthorityResolver): vscode.Disposable;
 	getRemoteExecServer(authority: string): Promise<vscode.ExecServer | undefined>;
 
-	onDidChangeRemoteConnectionData: Event<codemavi>;
+	onDidChangeRemoteConnectionData: Event<void>;
 	getRemoteConnectionData(): IRemoteConnectionData | null;
 }
 
@@ -1207,7 +1207,7 @@ export class ExtensionPaths {
 		private _searchTree: TernarySearchTree<URI, IExtensionDescription>
 	) { }
 
-	setSearchTree(searchTree: TernarySearchTree<URI, IExtensionDescription>): codemavi {
+	setSearchTree(searchTree: TernarySearchTree<URI, IExtensionDescription>): void {
 		this._searchTree = searchTree;
 	}
 
@@ -1215,7 +1215,7 @@ export class ExtensionPaths {
 		return this._searchTree.findSubstr(key);
 	}
 
-	forEach(callback: (value: IExtensionDescription, index: URI) => any): codemavi {
+	forEach(callback: (value: IExtensionDescription, index: URI) => any): void {
 		return this._searchTree.forEach(callback);
 	}
 }
@@ -1238,7 +1238,7 @@ class SyncedActivationEventsReader implements IActivationEventsReader {
 		return this._map.get(extensionDescription.identifier) ?? [];
 	}
 
-	public addActivationEvents(activationEvents: { [extensionId: string]: string[] }): codemavi {
+	public addActivationEvents(activationEvents: { [extensionId: string]: string[] }): void {
 		for (const extensionId of Object.keys(activationEvents)) {
 			this._map.set(extensionId, activationEvents[extensionId]);
 		}

@@ -61,7 +61,7 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 		});
 	}
 
-	private registerViews(): codemavi {
+	private registerViews(): void {
 		mark('code/willRegisterExplorerViews');
 
 		const viewDescriptors = viewsRegistry.getViews(VIEW_CONTAINER);
@@ -178,7 +178,7 @@ export class ExplorerViewPaneContainer extends ViewPaneContainer {
 		this._register(this.contextService.onDidChangeWorkspaceName(e => this.updateTitleArea()));
 	}
 
-	override create(parent: HTMLElement): codemavi {
+	override create(parent: HTMLElement): void {
 		super.create(parent);
 		parent.classList.add('explorer-viewlet');
 	}
@@ -232,12 +232,12 @@ export class ExplorerViewPaneContainer extends ViewPaneContainer {
 		return <OpenEditorsView>this.getView(OpenEditorsView.ID);
 	}
 
-	override setVisible(visible: boolean): codemavi {
+	override setVisible(visible: boolean): void {
 		this.viewletVisibleContextKey.set(visible);
 		super.setVisible(visible);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		const explorerView = this.getView(VIEW_ID);
 		if (explorerView && this.panes.every(p => !p.isExpanded())) {
 			explorerView.setExpanded(true);

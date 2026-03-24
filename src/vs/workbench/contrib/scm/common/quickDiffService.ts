@@ -40,7 +40,7 @@ export class QuickDiffService extends Disposable implements IQuickDiffService {
 	declare readonly _serviceBrand: undefined;
 
 	private quickDiffProviders: Set<QuickDiffProvider> = new Set();
-	private readonly _onDidChangeQuickDiffProviders = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeQuickDiffProviders = this._register(new Emitter<void>());
 	readonly onDidChangeQuickDiffProviders = this._onDidChangeQuickDiffProviders.event;
 
 	constructor(@IUriIdentityService private readonly uriIdentityService: IUriIdentityService) {

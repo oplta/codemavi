@@ -27,7 +27,7 @@ export class FileWatcherManager {
 		refCount: number;
 	}>();
 
-	create(id: number, uri: vscode.Uri, watchParentDirs: boolean, listeners: { create?: () => codemavi; change?: () => codemavi; delete?: () => codemavi }): codemavi {
+	create(id: number, uri: vscode.Uri, watchParentDirs: boolean, listeners: { create?: () => void; change?: () => void; delete?: () => void }): void {
 		// Non-writable file systems do not support file watching
 		if (!vscode.workspace.fs.isWritableFileSystem(uri.scheme)) {
 			return;
@@ -80,7 +80,7 @@ export class FileWatcherManager {
 		}
 	}
 
-	delete(id: number): codemavi {
+	delete(id: number): void {
 		const entry = this._fileWatchers.get(id);
 		if (entry) {
 			for (const dirWatcher of entry.dirWatchers) {

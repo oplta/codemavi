@@ -5,7 +5,7 @@
 
 import { SendLLMMessageParams, OnText, OnFinalMessage, OnError } from '../../common/sendLLMMessageTypes.js';
 import { IMetricsService } from '../../common/metricsService.js';
-import { displayInfoOfProviderName } from '../../common/codemaviSettingsTypes.js';
+import { displayInfoOfProviderName } from '../../common/maviSettingsTypes.js';
 import { sendLLMMessageToProviderImplementation } from './sendLLMMessage.impl.js';
 
 
@@ -54,8 +54,8 @@ export const sendLLMMessage = async ({
 	const submit_time = new Date()
 
 	let _fullTextSoFar = ''
-	let _aborter: (() => codemavi) | null = null
-	let _setAborter = (fn: () => codemavi) => { _aborter = fn }
+	let _aborter: (() => void) | null = null
+	let _setAborter = (fn: () => void) => { _aborter = fn }
 	let _didAbort = false
 
 	const onText: OnText = (params) => {
@@ -78,7 +78,7 @@ export const sendLLMMessage = async ({
 
 		// handle failed to fetch errors, which give 0 information by design
 		if (errorMessage === 'TypeError: fetch failed')
-			errorMessage = `Failed to fetch from ${displayInfoOfProviderName(providerName).title}. This likely means you specified the wrong endpoint in Code Mavi's Settings, or your local model provider like Ollama is powered off.`
+			errorMessage = `Failed to fetch from ${displayInfoOfProviderName(providerName).title}. This likely means you specified the wrong endpoint in Mavi's Settings, or your local model provider like Ollama is powered off.`
 
 		captureLLMEvent(`${loggingName} - Error`, { error: errorMessage })
 		onError_({ message: errorMessage, fullError })

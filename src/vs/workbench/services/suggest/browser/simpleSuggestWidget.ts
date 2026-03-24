@@ -45,8 +45,8 @@ export interface ISimpleSelectedSuggestion<T extends SimpleCompletionItem> {
 
 interface IPersistedWidgetSizeDelegate {
 	restore(): dom.Dimension | undefined;
-	store(size: dom.Dimension): codemavi;
-	reset(): codemavi;
+	store(size: dom.Dimension): void;
+	reset(): void;
 }
 
 const enum WidgetPositionPreference {
@@ -86,7 +86,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 	private _preference?: WidgetPositionPreference;
 	private readonly _pendingShowDetails = this._register(new MutableDisposable());
 	private readonly _pendingLayout = this._register(new MutableDisposable());
-	private _currentSuggestionDetails?: CancelablePromise<codemavi>;
+	private _currentSuggestionDetails?: CancelablePromise<void>;
 	private _focusedItem?: TItem;
 	private _ignoreFocusEvents: boolean = false;
 	readonly element: ResizableHTMLElement;
@@ -119,7 +119,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		private readonly _persistedSize: IPersistedWidgetSizeDelegate,
 		private readonly _options: IWorkbenchSuggestWidgetOptions,
 		private readonly _getFontInfo: () => ISimpleSuggestWidgetFontInfo,
-		private readonly _onDidFontConfigurationChange: Event<codemavi>,
+		private readonly _onDidFontConfigurationChange: Event<void>,
 		private readonly _getAdvancedExplainModeDetails: () => string | undefined,
 		@IInstantiationService private readonly _instantiationService: IInstantiationService,
 		@IConfigurationService private readonly _configurationService: IConfigurationService,
@@ -272,7 +272,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}));
 	}
 
-	private _onListFocus(e: IListEvent<TItem>): codemavi {
+	private _onListFocus(e: IListEvent<TItem>): void {
 		if (this._ignoreFocusEvents) {
 			return;
 		}
@@ -359,7 +359,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		this._onDidFocus.fire({ item, index, model: this._completionModel });
 	}
 
-	private _clearAriaActiveDescendant(): codemavi {
+	private _clearAriaActiveDescendant(): void {
 		const node = dom.getActiveWindow().document.activeElement;
 		if (!node) {
 			return;
@@ -379,11 +379,11 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		return this._completionModel?.items.length !== 0;
 	}
 
-	resetWidgetSize(): codemavi {
+	resetWidgetSize(): void {
 		this._persistedSize.reset();
 	}
 
-	showSuggestions(selectionIndex: number, isFrozen: boolean, isAuto: boolean, cursorPosition: { top: number; left: number; height: number }): codemavi {
+	showSuggestions(selectionIndex: number, isFrozen: boolean, isAuto: boolean, cursorPosition: { top: number; left: number; height: number }): void {
 		this._cursorPosition = cursorPosition;
 
 		// this._contentWidget.setPosition(this.editor.getPosition());
@@ -435,13 +435,13 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		this._afterRender();
 	}
 
-	setLineContext(lineContext: LineContext): codemavi {
+	setLineContext(lineContext: LineContext): void {
 		if (this._completionModel) {
 			this._completionModel.lineContext = lineContext;
 		}
 	}
 
-	private _setState(state: State): codemavi {
+	private _setState(state: State): void {
 		if (this._state === state) {
 			return;
 		}
@@ -515,7 +515,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	private _showListAndStatus(): codemavi {
+	private _showListAndStatus(): void {
 		if (this._status) {
 			dom.show(this._listElement, this._status.element);
 		} else {
@@ -523,7 +523,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	private _show(): codemavi {
+	private _show(): void {
 		// this._layout(this._persistedSize.restore());
 		// dom.show(this.element.domNode);
 		// this._onDidShow.fire();
@@ -542,7 +542,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 	}
 
 
-	toggleDetailsFocus(): codemavi {
+	toggleDetailsFocus(): void {
 		if (this._state === State.Details) {
 			// Should return the focus to the list item.
 			this._list.setFocus(this._list.getFocus());
@@ -557,7 +557,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	toggleDetails(focused: boolean = false): codemavi {
+	toggleDetails(focused: boolean = false): void {
 		if (this._isDetailsVisible()) {
 			// hide details widget
 			this._pendingShowDetails.clear();
@@ -576,7 +576,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	private _showDetails(loading: boolean, focused: boolean): codemavi {
+	private _showDetails(loading: boolean, focused: boolean): void {
 		this._pendingShowDetails.value = dom.runAtThisOrScheduleAtNextAnimationFrame(dom.getWindow(this.element.domNode), () => {
 			this._pendingShowDetails.clear();
 			this._details.show();
@@ -602,7 +602,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		});
 	}
 
-	toggleExplainMode(): codemavi {
+	toggleExplainMode(): void {
 		if (this._list.getFocusedElements()[0]) {
 			this._explainMode = !this._explainMode;
 			if (!this._isDetailsVisible()) {
@@ -613,7 +613,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		this._pendingLayout.clear();
 		this._pendingShowDetails.clear();
 		// this._loadingTimeout?.dispose();
@@ -631,7 +631,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		}
 	}
 
-	private _layout(size: dom.Dimension | undefined): codemavi {
+	private _layout(size: dom.Dimension | undefined): void {
 		if (!this._cursorPosition) {
 			return;
 		}
@@ -749,7 +749,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		this._positionDetails();
 	}
 
-	private _resize(width: number, height: number): codemavi {
+	private _resize(width: number, height: number): void {
 		const { width: maxWidth, height: maxHeight } = this.element.maxSize;
 		width = Math.min(maxWidth, width);
 		if (maxHeight) {
@@ -768,7 +768,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		this._positionDetails();
 	}
 
-	private _positionDetails(): codemavi {
+	private _positionDetails(): void {
 		if (this._isDetailsVisible()) {
 			this._details.placeAtAnchor(this.element.domNode);
 		}
@@ -793,7 +793,7 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		};
 	}
 
-	private _onListMouseDownOrTap(e: IListMouseEvent<TItem> | IListGestureEvent<TItem>): codemavi {
+	private _onListMouseDownOrTap(e: IListMouseEvent<TItem> | IListGestureEvent<TItem>): void {
 		if (typeof e.element === 'undefined' || typeof e.index === 'undefined') {
 			return;
 		}
@@ -805,13 +805,13 @@ export class SimpleSuggestWidget<TModel extends SimpleCompletionModel<TItem>, TI
 		this._select(e.element, e.index);
 	}
 
-	private _onListSelection(e: IListEvent<TItem>): codemavi {
+	private _onListSelection(e: IListEvent<TItem>): void {
 		if (e.elements.length) {
 			this._select(e.elements[0], e.indexes[0]);
 		}
 	}
 
-	private _select(item: TItem, index: number): codemavi {
+	private _select(item: TItem, index: number): void {
 		const completionModel = this._completionModel;
 		if (completionModel) {
 			this._onDidSelect.fire({ item, index, model: completionModel });

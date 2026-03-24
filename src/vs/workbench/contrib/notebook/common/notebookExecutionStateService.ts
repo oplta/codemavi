@@ -86,7 +86,7 @@ export interface INotebookExecutionStateService {
 	onDidChangeExecution: Event<ICellExecutionStateChangedEvent | IExecutionStateChangedEvent>;
 	onDidChangeLastRunFailState: Event<INotebookFailStateChangedEvent>;
 
-	forceCancelNotebookExecutions(notebookUri: URI): codemavi;
+	forceCancelNotebookExecutions(notebookUri: URI): void;
 	getCellExecutionsForNotebook(notebook: URI): INotebookCellExecution[];
 	getCellExecutionsByHandleForNotebook(notebook: URI): Map<number, INotebookCellExecution> | undefined;
 	getCellExecution(cellUri: URI): INotebookCellExecution | undefined;
@@ -104,15 +104,15 @@ export interface INotebookCellExecution {
 	readonly didPause: boolean;
 	readonly isPaused: boolean;
 
-	confirm(): codemavi;
-	update(updates: ICellExecuteUpdate[]): codemavi;
-	complete(complete: ICellExecutionComplete): codemavi;
+	confirm(): void;
+	update(updates: ICellExecuteUpdate[]): void;
+	complete(complete: ICellExecutionComplete): void;
 }
 export interface INotebookExecution {
 	readonly notebook: URI;
 	readonly state: NotebookExecutionState;
 
-	confirm(): codemavi;
-	begin(): codemavi;
-	complete(): codemavi;
+	confirm(): void;
+	begin(): void;
+	complete(): void;
 }

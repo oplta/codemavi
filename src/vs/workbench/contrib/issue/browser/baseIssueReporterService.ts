@@ -62,7 +62,7 @@ export class BaseIssueReporterService extends Disposable {
 	public openReporter = false;
 	public loadingExtensionData = false;
 	public selectedExtension = '';
-	public delayedSubmit = new Delayer<codemavi>(300);
+	public delayedSubmit = new Delayer<void>(300);
 	public previewButton!: Button;
 	public nonGitHubIssueUrl = false;
 	public needsUpdate = false;
@@ -156,7 +156,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	render(): codemavi {
+	render(): void {
 		this.renderBlocks();
 	}
 
@@ -250,7 +250,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.window.document.body.style.color = styles.color || '';
 	}
 
-	private async updateIssueReporterUri(extension: IssueReporterExtensionData): Promise<codemavi> {
+	private async updateIssueReporterUri(extension: IssueReporterExtensionData): Promise<void> {
 		try {
 			if (extension.uri) {
 				const uri = URI.revive(extension.uri);
@@ -277,7 +277,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.updateExtensionSelector(installedExtensions);
 	}
 
-	private updateExtensionSelector(extensions: IssueReporterExtensionData[]): codemavi {
+	private updateExtensionSelector(extensions: IssueReporterExtensionData[]): void {
 		interface IOption {
 			name: string;
 			id: string;
@@ -397,7 +397,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	public setEventHandlers(): codemavi {
+	public setEventHandlers(): void {
 		(['includeSystemInfo', 'includeProcessInfo', 'includeWorkspaceInfo', 'includeExtensions', 'includeExperiments', 'includeExtensionData'] as const).forEach(elementId => {
 			this.addEventListener(elementId, 'click', (event: Event) => {
 				event.stopPropagation();
@@ -659,7 +659,7 @@ export class BaseIssueReporterService extends Disposable {
 		return selectedExtension && selectedExtension.bugsUrl;
 	}
 
-	public searchVSCodeIssues(title: string, issueDescription?: string): codemavi {
+	public searchVSCodeIssues(title: string, issueDescription?: string): void {
 		if (title) {
 			this.searchDuplicates(title, issueDescription);
 		} else {
@@ -667,7 +667,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	public searchIssues(title: string, fileOnExtension: boolean | undefined, fileOnMarketplace: boolean | undefined): codemavi {
+	public searchIssues(title: string, fileOnExtension: boolean | undefined, fileOnMarketplace: boolean | undefined): void {
 		if (fileOnExtension) {
 			return this.searchExtensionIssues(title);
 		}
@@ -680,7 +680,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.searchVSCodeIssues(title, description);
 	}
 
-	private searchExtensionIssues(title: string): codemavi {
+	private searchExtensionIssues(title: string): void {
 		const url = this.getExtensionGitHubUrl();
 		if (title) {
 			const matches = /^https?:\/\/github\.com\/(.*)/.exec(url);
@@ -700,7 +700,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.clearSearchResults();
 	}
 
-	private searchMarketplaceIssues(title: string): codemavi {
+	private searchMarketplaceIssues(title: string): void {
 		if (title) {
 			const gitHubInfo = this.parseGitHubUrl(this.product.reportMarketplaceIssueUrl!);
 			if (gitHubInfo) {
@@ -709,18 +709,18 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	public async close(): Promise<codemavi> {
+	public async close(): Promise<void> {
 		await this.issueFormService.closeReporter();
 	}
 
-	public clearSearchResults(): codemavi {
+	public clearSearchResults(): void {
 		const similarIssues = this.getElementById('similar-issues')!;
 		similarIssues.innerText = '';
 		this.numberOfSearchResultsDisplayed = 0;
 	}
 
 	@debounce(300)
-	private searchGitHub(repo: string, title: string): codemavi {
+	private searchGitHub(repo: string, title: string): void {
 		const query = `is:issue+repo:${repo}+${title}`;
 		const similarIssues = this.getElementById('similar-issues')!;
 
@@ -754,7 +754,7 @@ export class BaseIssueReporterService extends Disposable {
 	}
 
 	@debounce(300)
-	private searchDuplicates(title: string, body?: string): codemavi {
+	private searchDuplicates(title: string, body?: string): void {
 		const url = 'https://vscode-probot.westus.cloudapp.azure.com:7890/duplicate_candidates';
 		const init = {
 			method: 'POST',
@@ -832,7 +832,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	private setUpTypes(): codemavi {
+	private setUpTypes(): void {
 		const makeOption = (issueType: IssueType, description: string) => $('option', { 'value': issueType.valueOf() }, escape(description));
 
 		const typeSelect = this.getElementById('issue-type')! as HTMLSelectElement;
@@ -857,7 +857,7 @@ export class BaseIssueReporterService extends Disposable {
 		return option;
 	}
 
-	public setSourceOptions(): codemavi {
+	public setSourceOptions(): void {
 		const sourceSelect = this.getElementById('issue-source')! as HTMLSelectElement;
 		const { issueType, fileOnExtension, selectedExtension, fileOnMarketplace, fileOnProduct } = this.issueReporterModel.getData();
 		let selected = sourceSelect.selectedIndex;
@@ -893,7 +893,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	public async renderBlocks(): Promise<codemavi> {
+	public async renderBlocks(): Promise<void> {
 		// Depending on Issue Type, we render different blocks and text
 		const { issueType, fileOnExtension, fileOnMarketplace, selectedExtension } = this.issueReporterModel.getData();
 		const blockContainer = this.getElementById('block-container');
@@ -1228,7 +1228,7 @@ export class BaseIssueReporterService extends Disposable {
 		return `${repositoryUrl}${queryStringPrefix}title=${encodeURIComponent(issueTitle)}`;
 	}
 
-	public clearExtensionData(): codemavi {
+	public clearExtensionData(): void {
 		this.nonGitHubIssueUrl = false;
 		this.issueReporterModel.update({ extensionData: undefined });
 		this.data.issueBody = this.data.issueBody || '';
@@ -1274,7 +1274,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.renderBlocks();
 	}
 
-	public validateSelectedExtension(): codemavi {
+	public validateSelectedExtension(): void {
 		const extensionValidationMessage = this.getElementById('extension-selection-validation-error')!;
 		const extensionValidationNoUrlsMessage = this.getElementById('extension-selection-validation-error-no-url')!;
 		hide(extensionValidationMessage);
@@ -1340,7 +1340,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.renderBlocks();
 	}
 
-	private setExtensionValidationMessage(): codemavi {
+	private setExtensionValidationMessage(): void {
 		const extensionValidationMessage = this.getElementById('extension-selection-validation-error')!;
 		const extensionValidationNoUrlsMessage = this.getElementById('extension-selection-validation-error-no-url')!;
 		const bugsUrl = this.getExtensionBugsUrl();
@@ -1373,7 +1373,7 @@ export class BaseIssueReporterService extends Disposable {
 		this.window.document.querySelector('.block-workspace .block-info code')!.textContent = '\n' + state.workspaceInfo;
 	}
 
-	public updateExtensionTable(extensions: IssueReporterExtensionData[], numThemeExtensions: number): codemavi {
+	public updateExtensionTable(extensions: IssueReporterExtensionData[], numThemeExtensions: number): void {
 		const target = this.window.document.querySelector<HTMLElement>('.block-extensions .block-info');
 		if (target) {
 			if (this.disableExtensions) {
@@ -1408,7 +1408,7 @@ export class BaseIssueReporterService extends Disposable {
 		);
 	}
 
-	private openLink(event: MouseEvent): codemavi {
+	private openLink(event: MouseEvent): void {
 		event.preventDefault();
 		event.stopPropagation();
 		// Exclude right click
@@ -1426,7 +1426,7 @@ export class BaseIssueReporterService extends Disposable {
 		}
 	}
 
-	public addEventListener(elementId: string, eventType: string, handler: (event: Event) => codemavi): codemavi {
+	public addEventListener(elementId: string, eventType: string, handler: (event: Event) => void): void {
 		const element = this.getElementById(elementId);
 		element?.addEventListener(eventType, handler);
 	}

@@ -76,7 +76,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return this._register(this._instantiationService.createInstance(TreeSitterTokens, this._languageService.languageIdCodec, this._textModel, () => this._languageId));
 	}
 
-	private createTokens(useTreeSitter: boolean): codemavi {
+	private createTokens(useTreeSitter: boolean): void {
 		const needsReset = this._tokens !== undefined;
 		this._tokens?.dispose();
 		this._tokens = useTreeSitter ? this.createTreeSitterTokens() : this.createGrammarTokens();
@@ -112,13 +112,13 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 			|| this._onDidChangeTokens.hasListeners());
 	}
 
-	public handleLanguageConfigurationServiceChange(e: LanguageConfigurationServiceChangeEvent): codemavi {
+	public handleLanguageConfigurationServiceChange(e: LanguageConfigurationServiceChangeEvent): void {
 		if (e.affects(this._languageId)) {
 			this._onDidChangeLanguageConfiguration.fire({});
 		}
 	}
 
-	public handleDidChangeContent(e: IModelContentChangedEvent): codemavi {
+	public handleDidChangeContent(e: IModelContentChangedEvent): void {
 		if (e.isFlush) {
 			this._semanticTokens.flush();
 		} else if (!e.isEolChange) { // We don't have to do anything on an EOL change
@@ -138,7 +138,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		this._tokens.handleDidChangeContent(e);
 	}
 
-	public handleDidChangeAttached(): codemavi {
+	public handleDidChangeAttached(): void {
 		this._tokens.handleDidChangeAttached();
 	}
 
@@ -151,7 +151,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return this._semanticTokens.addSparseTokens(lineNumber, syntacticTokens);
 	}
 
-	private _emitModelTokensChangedEvent(e: IModelTokensChangedEvent): codemavi {
+	private _emitModelTokensChangedEvent(e: IModelTokensChangedEvent): void {
 		if (!this._textModel._isDisposing()) {
 			this._bracketPairsTextModelPart.handleDidChangeTokens(e);
 			this._onDidChangeTokens.fire(e);
@@ -160,7 +160,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 
 	// #region Grammar Tokens
 
-	private validateLineNumber(lineNumber: number): codemavi {
+	private validateLineNumber(lineNumber: number): void {
 		if (lineNumber < 1 || lineNumber > this._textModel.getLineCount()) {
 			throw new BugIndicatingError('Illegal value for lineNumber');
 		}
@@ -178,7 +178,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return this._tokens.backgroundTokenizationState;
 	}
 
-	public forceTokenization(lineNumber: number): codemavi {
+	public forceTokenization(lineNumber: number): void {
 		this.validateLineNumber(lineNumber);
 		this._tokens.forceTokenization(lineNumber);
 	}
@@ -193,7 +193,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return this._tokens.isCheapToTokenize(lineNumber);
 	}
 
-	public tokenizeIfCheap(lineNumber: number): codemavi {
+	public tokenizeIfCheap(lineNumber: number): void {
 		this.validateLineNumber(lineNumber);
 		this._tokens.tokenizeIfCheap(lineNumber);
 	}
@@ -210,7 +210,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 
 	// #region Semantic Tokens
 
-	public setSemanticTokens(tokens: SparseMultilineTokens[] | null, isComplete: boolean): codemavi {
+	public setSemanticTokens(tokens: SparseMultilineTokens[] | null, isComplete: boolean): void {
 		this._semanticTokens.set(tokens, isComplete);
 
 		this._emitModelTokensChangedEvent({
@@ -227,7 +227,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return !this._semanticTokens.isEmpty();
 	}
 
-	public setPartialSemanticTokens(range: Range, tokens: SparseMultilineTokens[]): codemavi {
+	public setPartialSemanticTokens(range: Range, tokens: SparseMultilineTokens[]): void {
 		if (this.hasCompleteSemanticTokens()) {
 			return;
 		}
@@ -353,7 +353,7 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 		return lineTokens.getLanguageId(lineTokens.findTokenIndexAtOffset(position.column - 1));
 	}
 
-	public setLanguageId(languageId: string, source: string = 'api'): codemavi {
+	public setLanguageId(languageId: string, source: string = 'api'): void {
 		if (this._languageId === languageId) {
 			// There's nothing to do
 			return;
@@ -380,8 +380,8 @@ export class TokenizationTextModelPart extends TextModelPart implements ITokeniz
 class GrammarTokens extends AbstractTokens {
 	private _tokenizer: TokenizerWithStateStoreAndTextModel | null = null;
 	protected _backgroundTokenizationState: BackgroundTokenizationState = BackgroundTokenizationState.InProgress;
-	protected readonly _onDidChangeBackgroundTokenizationState: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onDidChangeBackgroundTokenizationState: Event<codemavi> = this._onDidChangeBackgroundTokenizationState.event;
+	protected readonly _onDidChangeBackgroundTokenizationState: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onDidChangeBackgroundTokenizationState: Event<void> = this._onDidChangeBackgroundTokenizationState.event;
 
 	private _defaultBackgroundTokenizer: DefaultBackgroundTokenizer | null = null;
 	private readonly _backgroundTokenizer = this._register(new MutableDisposable<IBackgroundTokenizer>());
@@ -426,7 +426,7 @@ class GrammarTokens extends AbstractTokens {
 		}));
 	}
 
-	public resetTokenization(fireTokenChangeEvent: boolean = true): codemavi {
+	public resetTokenization(fireTokenChangeEvent: boolean = true): void {
 		this._tokens.flush();
 		this._debugBackgroundTokens?.flush();
 		if (this._debugBackgroundStates) {
@@ -534,7 +534,7 @@ class GrammarTokens extends AbstractTokens {
 		this._defaultBackgroundTokenizer?.handleChanges();
 	}
 
-	public handleDidChangeContent(e: IModelContentChangedEvent): codemavi {
+	public handleDidChangeContent(e: IModelContentChangedEvent): void {
 		if (e.isFlush) {
 			// Don't fire the event, as the view might not have got the text change event yet
 			this.resetTokenization(false);
@@ -564,18 +564,18 @@ class GrammarTokens extends AbstractTokens {
 		return { changes: changes };
 	}
 
-	private refreshAllVisibleLineTokens(): codemavi {
+	private refreshAllVisibleLineTokens(): void {
 		const ranges = LineRange.joinMany([...this._attachedViewStates].map(([_, s]) => s.lineRanges));
 		this.refreshRanges(ranges);
 	}
 
-	private refreshRanges(ranges: readonly LineRange[]): codemavi {
+	private refreshRanges(ranges: readonly LineRange[]): void {
 		for (const range of ranges) {
 			this.refreshRange(range.startLineNumber, range.endLineNumberExclusive - 1);
 		}
 	}
 
-	private refreshRange(startLineNumber: number, endLineNumber: number): codemavi {
+	private refreshRange(startLineNumber: number, endLineNumber: number): void {
 		if (!this._tokenizer) {
 			return;
 		}
@@ -599,7 +599,7 @@ class GrammarTokens extends AbstractTokens {
 		this._defaultBackgroundTokenizer?.checkFinished();
 	}
 
-	public forceTokenization(lineNumber: number): codemavi {
+	public forceTokenization(lineNumber: number): void {
 		const builder = new ContiguousMultilineTokensBuilder();
 		this._tokenizer?.updateTokensUntilLine(builder, lineNumber);
 		this.setTokens(builder.finalize());

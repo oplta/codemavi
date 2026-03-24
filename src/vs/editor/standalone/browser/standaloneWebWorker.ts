@@ -22,7 +22,7 @@ export interface MonacoWebWorker<T> {
 	/**
 	 * Terminate the web worker, thus invalidating the returned proxy.
 	 */
-	dispose(): codemavi;
+	dispose(): void;
 	/**
 	 * Get a proxy to the arbitrary loaded code.
 	 */

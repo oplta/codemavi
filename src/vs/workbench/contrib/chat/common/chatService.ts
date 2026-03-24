@@ -131,13 +131,13 @@ export interface IChatProgressMessage {
 }
 
 export interface IChatTask extends IChatTaskDto {
-	deferred: DeferredPromise<string | codemavi>;
+	deferred: DeferredPromise<string | void>;
 	progress: (IChatWarningMessage | IChatContentReference)[];
 	onDidAddProgress: Event<IChatWarningMessage | IChatContentReference>;
-	add(progress: IChatWarningMessage | IChatContentReference): codemavi;
+	add(progress: IChatWarningMessage | IChatContentReference): void;
 
-	complete: (result: string | codemavi) => codemavi;
-	task: () => Promise<string | codemavi>;
+	complete: (result: string | void) => void;
+	task: () => Promise<string | void>;
 	isSettled: () => boolean;
 }
 
@@ -152,7 +152,7 @@ export interface IChatTaskDto {
 }
 
 export interface IChatTaskResult {
-	content: IMarkdownString | codemavi;
+	content: IMarkdownString | void;
 	kind: 'progressTaskResult';
 }
 
@@ -237,9 +237,9 @@ export interface IChatToolInvocation {
 	readonly toolId: string;
 	readonly toolCallId: string;
 
-	isCompletePromise: Promise<codemavi>;
+	isCompletePromise: Promise<void>;
 	isComplete: boolean;
-	complete(result: IToolResult): codemavi;
+	complete(result: IToolResult): void;
 	kind: 'toolInvocation';
 }
 
@@ -426,7 +426,7 @@ export interface IChatTransferredSessionData {
 
 export interface IChatSendRequestResponseState {
 	responseCreatedPromise: Promise<IChatResponseModel>;
-	responseCompletePromise: Promise<codemavi>;
+	responseCompletePromise: Promise<void>;
 }
 
 export interface IChatSendRequestData extends IChatSendRequestResponseState {
@@ -502,24 +502,24 @@ export interface IChatService {
 	 */
 	sendRequest(sessionId: string, message: string, options?: IChatSendRequestOptions): Promise<IChatSendRequestData | undefined>;
 
-	resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions): Promise<codemavi>;
-	adoptRequest(sessionId: string, request: IChatRequestModel): Promise<codemavi>;
-	removeRequest(sessionid: string, requestId: string): Promise<codemavi>;
-	cancelCurrentRequestForSession(sessionId: string): codemavi;
-	clearSession(sessionId: string): Promise<codemavi>;
-	addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): codemavi;
+	resendRequest(request: IChatRequestModel, options?: IChatSendRequestOptions): Promise<void>;
+	adoptRequest(sessionId: string, request: IChatRequestModel): Promise<void>;
+	removeRequest(sessionid: string, requestId: string): Promise<void>;
+	cancelCurrentRequestForSession(sessionId: string): void;
+	clearSession(sessionId: string): Promise<void>;
+	addCompleteRequest(sessionId: string, message: IParsedChatRequest | string, variableData: IChatRequestVariableData | undefined, attempt: number | undefined, response: IChatCompleteResponse): void;
 	getHistory(): Promise<IChatDetail[]>;
-	setChatSessionTitle(sessionId: string, title: string): codemavi;
-	clearAllHistoryEntries(): Promise<codemavi>;
-	removeHistoryEntry(sessionId: string): Promise<codemavi>;
+	setChatSessionTitle(sessionId: string, title: string): void;
+	clearAllHistoryEntries(): Promise<void>;
+	removeHistoryEntry(sessionId: string): Promise<void>;
 	getChatStorageFolder(): URI;
-	logChatIndex(): codemavi;
+	logChatIndex(): void;
 
 	onDidPerformUserAction: Event<IChatUserActionEvent>;
-	notifyUserAction(event: IChatUserActionEvent): codemavi;
+	notifyUserAction(event: IChatUserActionEvent): void;
 	onDidDisposeSession: Event<{ sessionId: string; reason: 'initializationFailed' | 'cleared' }>;
 
-	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): codemavi;
+	transferChatSession(transferredSessionData: IChatTransferredSessionData, toWorkspace: URI): void;
 
 	readonly unifiedViewEnabled: boolean;
 	isEditingLocation(location: ChatAgentLocation): boolean;

@@ -8,7 +8,7 @@ const enum Constants {
 }
 
 export class ColorZone {
-	_colorZoneBrand: codemavi = undefined;
+	_colorZoneBrand: void = undefined;
 
 	public readonly from: number;
 	public readonly to: number;
@@ -35,7 +35,7 @@ export class ColorZone {
  * A zone in the overview ruler
  */
 export class OverviewRulerZone {
-	_overviewRulerZoneBrand: codemavi = undefined;
+	_overviewRulerZoneBrand: void = undefined;
 
 	public readonly startLineNumber: number;
 	public readonly endLineNumber: number;
@@ -73,7 +73,7 @@ export class OverviewRulerZone {
 		return a.color < b.color ? -1 : 1;
 	}
 
-	public setColorZone(colorZone: ColorZone): codemavi {
+	public setColorZone(colorZone: ColorZone): void {
 		this._colorZone = colorZone;
 	}
 
@@ -116,7 +116,7 @@ export class OverviewZoneManager {
 		return this._id2Color;
 	}
 
-	public setZones(newZones: OverviewRulerZone[]): codemavi {
+	public setZones(newZones: OverviewRulerZone[]): void {
 		this._zones = newZones;
 		this._zones.sort(OverviewRulerZone.compare);
 	}
@@ -130,7 +130,7 @@ export class OverviewZoneManager {
 		return true;
 	}
 
-	public setPixelRatio(pixelRatio: number): codemavi {
+	public setPixelRatio(pixelRatio: number): void {
 		this._pixelRatio = pixelRatio;
 		this._colorZonesInvalid = true;
 	}

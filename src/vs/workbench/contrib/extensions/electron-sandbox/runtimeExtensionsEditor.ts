@@ -52,18 +52,18 @@ export enum ProfileSessionState {
 export interface IExtensionHostProfileService {
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeState: Event<codemavi>;
-	readonly onDidChangeLastProfile: Event<codemavi>;
+	readonly onDidChangeState: Event<void>;
+	readonly onDidChangeLastProfile: Event<void>;
 
 	readonly state: ProfileSessionState;
 	readonly lastProfile: IExtensionHostProfile | null;
 	lastProfileSavedTo: URI | undefined;
 
-	startProfiling(): codemavi;
-	stopProfiling(): codemavi;
+	startProfiling(): void;
+	stopProfiling(): void;
 
 	getUnresponsiveProfile(extensionId: ExtensionIdentifier): IExtensionHostProfile | undefined;
-	setUnresponsiveProfile(extensionId: ExtensionIdentifier, profile: IExtensionHostProfile): codemavi;
+	setUnresponsiveProfile(extensionId: ExtensionIdentifier, profile: IExtensionHostProfile): void;
 }
 
 export class RuntimeExtensionsEditor extends AbstractRuntimeExtensionsEditor {
@@ -209,7 +209,7 @@ export class OpenExtensionHostProfileACtion extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const extensionHostProfileService = accessor.get(IExtensionHostProfileService);
 		const commandService = accessor.get(ICommandService);
 		const editorService = accessor.get(IEditorService);

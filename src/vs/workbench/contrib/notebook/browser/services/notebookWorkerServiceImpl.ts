@@ -83,7 +83,7 @@ class NotebookEditorModelManager extends Disposable {
 		super();
 	}
 
-	public ensureSyncedResources(resources: URI[]): codemavi {
+	public ensureSyncedResources(resources: URI[]): void {
 		for (const resource of resources) {
 			const resourceStr = resource.toString();
 
@@ -96,7 +96,7 @@ class NotebookEditorModelManager extends Disposable {
 		}
 	}
 
-	private _beginModelSync(resource: URI): codemavi {
+	private _beginModelSync(resource: URI): void {
 		const model = this._notebookService.listNotebookDocuments().find(document => document.uri.toString() === resource.toString());
 		if (!model) {
 			return;
@@ -227,7 +227,7 @@ class NotebookEditorModelManager extends Disposable {
 		this._syncedModels[modelUrl] = toDispose;
 	}
 
-	private _stopModelSync(modelUrl: string): codemavi {
+	private _stopModelSync(modelUrl: string): void {
 		const toDispose = this._syncedModels[modelUrl];
 		delete this._syncedModels[modelUrl];
 		delete this._syncedModelsLastUsedTime[modelUrl];

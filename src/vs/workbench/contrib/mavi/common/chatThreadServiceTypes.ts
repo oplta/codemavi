@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------*/
 
 import { URI } from '../../../../base/common/uri.js';
-import { Code MaviFileSnapshot } from './editCodeServiceTypes.js';
+import { MaviFileSnapshot } from './editCodeServiceTypes.js';
 import { AnthropicReasoning, RawToolParamsObj } from './sendLLMMessageTypes.js';
 import { ToolCallParams, ToolName, ToolResult } from './toolsServiceTypes.js';
 
@@ -38,10 +38,10 @@ export type DecorativeCanceledTool = {
 export type CheckpointEntry = {
 	role: 'checkpoint';
 	type: 'user_edit' | 'tool_edit';
-	codemaviFileSnapshotOfURI: { [fsPath: string]: Code MaviFileSnapshot | undefined };
+	maviFileSnapshotOfURI: { [fsPath: string]: MaviFileSnapshot | undefined };
 
 	userModifications: {
-		codemaviFileSnapshotOfURI: { [fsPath: string]: Code MaviFileSnapshot | undefined };
+		maviFileSnapshotOfURI: { [fsPath: string]: MaviFileSnapshot | undefined };
 	};
 }
 

@@ -64,7 +64,7 @@ export class PartsSplash {
 		}, this, this._disposables);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 
@@ -107,7 +107,7 @@ export class PartsSplash {
 		return !isFullscreen(mainWindow) && !this._environmentService.isExtensionDevelopment && !this._didChangeTitleBarStyle;
 	}
 
-	private _removePartsSplash(): codemavi {
+	private _removePartsSplash(): void {
 		const element = mainWindow.document.getElementById(PartsSplash._splashElementId);
 		if (element) {
 			element.style.display = 'none';

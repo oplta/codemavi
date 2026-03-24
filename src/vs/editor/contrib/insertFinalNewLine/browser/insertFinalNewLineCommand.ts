@@ -21,7 +21,7 @@ export class InsertFinalNewLineCommand implements ICommand {
 		this._selectionId = null;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const op = insertFinalNewLine(model);
 		if (op) {
 			builder.addEditOperation(op.range, op.text);

@@ -43,7 +43,7 @@ export class MainThreadWebviews extends Disposable implements extHostProtocol.Ma
 		this._proxy = context.getProxy(extHostProtocol.ExtHostContext.ExtHostWebviews);
 	}
 
-	public addWebview(handle: extHostProtocol.WebviewHandle, webview: IOverlayWebview, options: { serializeBuffersForPostMessage: boolean }): codemavi {
+	public addWebview(handle: extHostProtocol.WebviewHandle, webview: IOverlayWebview, options: { serializeBuffersForPostMessage: boolean }): void {
 		if (this._webviews.has(handle)) {
 			throw new Error('Webview already registered');
 		}
@@ -52,11 +52,11 @@ export class MainThreadWebviews extends Disposable implements extHostProtocol.Ma
 		this.hookupWebviewEventDelegate(handle, webview, options);
 	}
 
-	public $setHtml(handle: extHostProtocol.WebviewHandle, value: string): codemavi {
+	public $setHtml(handle: extHostProtocol.WebviewHandle, value: string): void {
 		this.tryGetWebview(handle)?.setHtml(value);
 	}
 
-	public $setOptions(handle: extHostProtocol.WebviewHandle, options: extHostProtocol.IWebviewContentOptions): codemavi {
+	public $setOptions(handle: extHostProtocol.WebviewHandle, options: extHostProtocol.IWebviewContentOptions): void {
 		const webview = this.tryGetWebview(handle);
 		if (webview) {
 			webview.contentOptions = reviveWebviewContentOptions(options);
@@ -90,7 +90,7 @@ export class MainThreadWebviews extends Disposable implements extHostProtocol.Ma
 		}));
 	}
 
-	private onDidClickLink(handle: extHostProtocol.WebviewHandle, link: string): codemavi {
+	private onDidClickLink(handle: extHostProtocol.WebviewHandle, link: string): void {
 		const webview = this.getWebview(handle);
 		if (this.isSupportedLink(webview, URI.parse(link))) {
 			this._openerService.open(link, { fromUserGesture: true, allowContributedOpeners: true, allowCommands: Array.isArray(webview.contentOptions.enableCommandUris) || webview.contentOptions.enableCommandUris === true, fromWorkspace: true });

@@ -93,11 +93,11 @@ export interface IProductIconTheme {
 
 
 export interface ICssStyleCollector {
-	addRule(rule: string): codemavi;
+	addRule(rule: string): void;
 }
 
 export interface IThemingParticipant {
-	(theme: IColorTheme, collector: ICssStyleCollector, environment: IEnvironmentService): codemavi;
+	(theme: IColorTheme, collector: ICssStyleCollector, environment: IEnvironmentService): void;
 }
 
 export interface IThemeService {
@@ -185,13 +185,13 @@ export class Themable extends Disposable {
 		this._register(this.themeService.onDidColorThemeChange(theme => this.onThemeChange(theme)));
 	}
 
-	protected onThemeChange(theme: IColorTheme): codemavi {
+	protected onThemeChange(theme: IColorTheme): void {
 		this.theme = theme;
 
 		this.updateStyles();
 	}
 
-	updateStyles(): codemavi {
+	updateStyles(): void {
 		// Subclasses to override
 	}
 

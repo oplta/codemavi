@@ -51,7 +51,7 @@ export function combineTextEditInfos(textEditInfoFirst: TextEditInfo[], textEdit
 
 	const result: TextEditInfo[] = [];
 
-	function pushEdit(startOffset: Length, endOffset: Length, newLength: Length): codemavi {
+	function pushEdit(startOffset: Length, endOffset: Length, newLength: Length): void {
 		if (result.length > 0 && lengthEquals(result[result.length - 1].endOffset, startOffset)) {
 			const lastResult = result[result.length - 1];
 			result[result.length - 1] = new TextEditInfo(lastResult.startOffset, endOffset, lengthAdd(lastResult.newLength, newLength));

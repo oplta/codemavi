@@ -35,7 +35,7 @@ export class MergeEditorCopyContentsToJSON extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const { activeEditorPane } = accessor.get(IEditorService);
 		const clipboardService = accessor.get(IClipboardService);
 		const notificationService = accessor.get(INotificationService);

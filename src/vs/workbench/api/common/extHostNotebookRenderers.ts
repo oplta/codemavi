@@ -19,7 +19,7 @@ export class ExtHostNotebookRenderers implements ExtHostNotebookRenderersShape {
 		this.proxy = mainContext.getProxy(MainContext.MainThreadNotebookRenderers);
 	}
 
-	public $postRendererMessage(editorId: string, rendererId: string, message: unknown): codemavi {
+	public $postRendererMessage(editorId: string, rendererId: string, message: unknown): void {
 		const editor = this._extHostNotebook.getEditorById(editorId);
 		this._rendererMessageEmitters.get(rendererId)?.fire({ editor: editor.apiEditor, message });
 	}

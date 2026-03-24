@@ -81,7 +81,7 @@ export interface IPaneCompositeBarOptions {
 	readonly overflowActionSize: number;
 	readonly preventLoopNavigation?: boolean;
 	readonly activityHoverOptions: IActivityHoverOptions;
-	readonly fillExtraContextMenuActions: (actions: IAction[], e?: MouseEvent | GestureEvent) => codemavi;
+	readonly fillExtraContextMenuActions: (actions: IAction[], e?: MouseEvent | GestureEvent) => void;
 	readonly colors: (theme: IColorTheme) => ICompositeBarColors;
 }
 
@@ -204,7 +204,7 @@ export class PaneCompositeBar extends Disposable {
 	private createMoveAction(viewContainer: ViewContainer, newLocation: ViewContainerLocation, defaultLocation: ViewContainerLocation): IAction {
 		return toAction({
 			id: `moveViewContainerTo${newLocation}`,
-			label: newLocation === ViewContainerLocation.Panel ? localize('panel', "Panel") : newLocation === ViewContainerLocation.Sidebar ? localize('sidebar', "Primary Side Bar") : localize('auxiliarybar', "Code Mavi Side Bar"),
+			label: newLocation === ViewContainerLocation.Panel ? localize('panel', "Panel") : newLocation === ViewContainerLocation.Sidebar ? localize('sidebar', "Primary Side Bar") : localize('auxiliarybar', "Mavi Side Bar"),
 			run: () => {
 				let index: number | undefined;
 				if (newLocation !== defaultLocation) {
@@ -218,7 +218,7 @@ export class PaneCompositeBar extends Disposable {
 		});
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		// View Container Changes
 		this._register(this.viewDescriptorService.onDidChangeViewContainers(({ added, removed }) => this.onDidChangeViewContainers(added, removed)));
 		this._register(this.viewDescriptorService.onDidChangeContainerLocation(({ viewContainer, from, to }) => this.onDidChangeViewContainerLocation(viewContainer, from, to)));
@@ -266,7 +266,7 @@ export class PaneCompositeBar extends Disposable {
 		}
 	}
 
-	private onDidRegisterExtensions(): codemavi {
+	private onDidRegisterExtensions(): void {
 		this.hasExtensionsRegistered = true;
 
 		// show/hide/remove composites
@@ -286,7 +286,7 @@ export class PaneCompositeBar extends Disposable {
 		this.saveCachedViewContainers();
 	}
 
-	private onDidViewContainerVisible(id: string): codemavi {
+	private onDidViewContainerVisible(id: string): void {
 		const viewContainer = this.getViewContainer(id);
 		if (viewContainer) {
 
@@ -334,7 +334,7 @@ export class PaneCompositeBar extends Disposable {
 		return compositeActions;
 	}
 
-	private onDidRegisterViewContainers(viewContainers: readonly ViewContainer[]): codemavi {
+	private onDidRegisterViewContainers(viewContainers: readonly ViewContainer[]): void {
 		for (const viewContainer of viewContainers) {
 			this.addComposite(viewContainer);
 
@@ -362,12 +362,12 @@ export class PaneCompositeBar extends Disposable {
 		}
 	}
 
-	private onDidDeregisterViewContainer(viewContainer: ViewContainer): codemavi {
+	private onDidDeregisterViewContainer(viewContainer: ViewContainer): void {
 		this.viewContainerDisposables.deleteAndDispose(viewContainer.id);
 		this.removeComposite(viewContainer.id);
 	}
 
-	private updateCompositeBarActionItem(viewContainer: ViewContainer, viewContainerModel: IViewContainerModel): codemavi {
+	private updateCompositeBarActionItem(viewContainer: ViewContainer, viewContainerModel: IViewContainerModel): void {
 		const compositeBarActionItem = this.toCompositeBarActionItemFrom(viewContainerModel);
 		const { activityAction, pinnedAction } = this.getCompositeActions(viewContainer.id);
 		activityAction.updateCompositeBarActionItem(compositeBarActionItem);
@@ -415,7 +415,7 @@ export class PaneCompositeBar extends Disposable {
 		return { id, name, classNames, iconUrl, keybindingId };
 	}
 
-	private showOrHideViewContainer(viewContainer: ViewContainer): codemavi {
+	private showOrHideViewContainer(viewContainer: ViewContainer): void {
 		if (this.shouldBeHidden(viewContainer)) {
 			this.hideComposite(viewContainer.id);
 		} else {
@@ -460,11 +460,11 @@ export class PaneCompositeBar extends Disposable {
 		return true;
 	}
 
-	private addComposite(viewContainer: ViewContainer): codemavi {
+	private addComposite(viewContainer: ViewContainer): void {
 		this.compositeBar.addComposite({ id: viewContainer.id, name: typeof viewContainer.title === 'string' ? viewContainer.title : viewContainer.title.value, order: viewContainer.order, requestedIndex: viewContainer.requestedIndex });
 	}
 
-	private hideComposite(compositeId: string): codemavi {
+	private hideComposite(compositeId: string): void {
 		this.compositeBar.hideComposite(compositeId);
 
 		const compositeActions = this.compositeActions.get(compositeId);
@@ -475,7 +475,7 @@ export class PaneCompositeBar extends Disposable {
 		}
 	}
 
-	private removeComposite(compositeId: string): codemavi {
+	private removeComposite(compositeId: string): void {
 		this.compositeBar.removeComposite(compositeId);
 
 		const compositeActions = this.compositeActions.get(compositeId);
@@ -509,11 +509,11 @@ export class PaneCompositeBar extends Disposable {
 		return this.compositeBar.getContextMenuActions();
 	}
 
-	focus(index?: number): codemavi {
+	focus(index?: number): void {
 		this.compositeBar.focus(index);
 	}
 
-	layout(width: number, height: number): codemavi {
+	layout(width: number, height: number): void {
 		this.compositeBar.layout(new Dimension(width, height));
 	}
 
@@ -526,7 +526,7 @@ export class PaneCompositeBar extends Disposable {
 		return this.viewDescriptorService.getViewContainersByLocation(this.location);
 	}
 
-	private updateCompositeBarItemsFromStorage(retainExisting: boolean): codemavi {
+	private updateCompositeBarItemsFromStorage(retainExisting: boolean): void {
 		if (this.pinnedViewContainersValue === this.getStoredPinnedViewContainersValue()) {
 			return;
 		}
@@ -585,7 +585,7 @@ export class PaneCompositeBar extends Disposable {
 		this.compositeBar.setCompositeBarItems(newCompositeItems);
 	}
 
-	private saveCachedViewContainers(): codemavi {
+	private saveCachedViewContainers(): void {
 		const state: ICachedViewContainer[] = [];
 
 		const compositeItems = this.compositeBar.getCompositeBarItems();
@@ -644,7 +644,7 @@ export class PaneCompositeBar extends Disposable {
 		return this._cachedViewContainers;
 	}
 
-	private storeCachedViewContainersState(cachedViewContainers: ICachedViewContainer[]): codemavi {
+	private storeCachedViewContainersState(cachedViewContainers: ICachedViewContainer[]): void {
 		const pinnedViewContainers = this.getPinnedViewContainers();
 		this.setPinnedViewContainers(cachedViewContainers.map(({ id, pinned, order }) => ({
 			id,
@@ -672,7 +672,7 @@ export class PaneCompositeBar extends Disposable {
 		return JSON.parse(this.pinnedViewContainersValue);
 	}
 
-	private setPinnedViewContainers(pinnedViewContainers: IPinnedViewContainer[]): codemavi {
+	private setPinnedViewContainers(pinnedViewContainers: IPinnedViewContainer[]): void {
 		this.pinnedViewContainersValue = JSON.stringify(pinnedViewContainers);
 	}
 
@@ -696,7 +696,7 @@ export class PaneCompositeBar extends Disposable {
 		return this.storageService.get(this.options.pinnedViewContainersKey, StorageScope.PROFILE, '[]');
 	}
 
-	private setStoredPinnedViewContainersValue(value: string): codemavi {
+	private setStoredPinnedViewContainersValue(value: string): void {
 		this.storageService.store(this.options.pinnedViewContainersKey, value, StorageScope.PROFILE, StorageTarget.USER);
 	}
 
@@ -704,7 +704,7 @@ export class PaneCompositeBar extends Disposable {
 		return JSON.parse(this.placeholderViewContainersValue);
 	}
 
-	private setPlaceholderViewContainers(placeholderViewContainers: IPlaceholderViewContainer[]): codemavi {
+	private setPlaceholderViewContainers(placeholderViewContainers: IPlaceholderViewContainer[]): void {
 		this.placeholderViewContainersValue = JSON.stringify(placeholderViewContainers);
 	}
 
@@ -728,7 +728,7 @@ export class PaneCompositeBar extends Disposable {
 		return this.storageService.get(this.options.placeholderViewContainersKey, StorageScope.PROFILE, '[]');
 	}
 
-	private setStoredPlaceholderViewContainersValue(value: string): codemavi {
+	private setStoredPlaceholderViewContainersValue(value: string): void {
 		this.storageService.store(this.options.placeholderViewContainersKey, value, StorageScope.PROFILE, StorageTarget.MACHINE);
 	}
 
@@ -736,7 +736,7 @@ export class PaneCompositeBar extends Disposable {
 		return JSON.parse(this.viewContainersWorkspaceStateValue);
 	}
 
-	private setViewContainersWorkspaceState(viewContainersWorkspaceState: IViewContainerWorkspaceState[]): codemavi {
+	private setViewContainersWorkspaceState(viewContainersWorkspaceState: IViewContainerWorkspaceState[]): void {
 		this.viewContainersWorkspaceStateValue = JSON.stringify(viewContainersWorkspaceState);
 	}
 
@@ -760,7 +760,7 @@ export class PaneCompositeBar extends Disposable {
 		return this.storageService.get(this.options.viewContainersWorkspaceStateKey, StorageScope.WORKSPACE, '[]');
 	}
 
-	private setStoredViewContainersWorkspaceStateValue(value: string): codemavi {
+	private setStoredViewContainersWorkspaceStateValue(value: string): void {
 		this.storageService.store(this.options.viewContainersWorkspaceStateKey, value, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 }
@@ -788,15 +788,15 @@ class ViewContainerActivityAction extends CompositeBarAction {
 		}));
 	}
 
-	updateCompositeBarActionItem(compositeBarActionItem: ICompositeBarActionItem): codemavi {
+	updateCompositeBarActionItem(compositeBarActionItem: ICompositeBarActionItem): void {
 		this.compositeBarActionItem = compositeBarActionItem;
 	}
 
-	private updateActivity(): codemavi {
+	private updateActivity(): void {
 		this.activities = this.activityService.getViewContainerActivities(this.compositeBarActionItem.id);
 	}
 
-	override async run(event: { preserveFocus: boolean }): Promise<codemavi> {
+	override async run(event: { preserveFocus: boolean }): Promise<void> {
 		if (isMouseEvent(event) && event.button === 2) {
 			return; // do not run on right click
 		}
@@ -844,7 +844,7 @@ class PlaceHolderToggleCompositePinnedAction extends ToggleCompositePinnedAction
 		super({ id, name: id, classNames: undefined }, compositeBar);
 	}
 
-	setActivity(activity: ICompositeBarActionItem): codemavi {
+	setActivity(activity: ICompositeBarActionItem): void {
 		this.label = activity.name;
 	}
 }
@@ -855,7 +855,7 @@ class PlaceHolderToggleCompositeBadgeAction extends ToggleCompositeBadgeAction {
 		super({ id, name: id, classNames: undefined }, compositeBar);
 	}
 
-	setCompositeBarActionItem(actionItem: ICompositeBarActionItem): codemavi {
+	setCompositeBarActionItem(actionItem: ICompositeBarActionItem): void {
 		this.label = actionItem.name;
 	}
 }

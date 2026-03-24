@@ -41,7 +41,7 @@ type TWithOptionalCancellationToken<TFunction extends Function> = TFunction exte
  * // let's say we have a class that implements the `Disposable` interface that we want
  * // to use the decorator on
  * class Example extends Disposable {
- * 		async doSomethingAsync(arg1: number, arg2: string): Promise<codemavi> {
+ * 		async doSomethingAsync(arg1: number, arg2: string): Promise<void> {
  * 			// do something async..
  * 			await new Promise(resolve => setTimeout(resolve, 1000));
  * 		}
@@ -52,7 +52,7 @@ type TWithOptionalCancellationToken<TFunction extends Function> = TFunction exte
  * // to do that we need to add the `CancellationToken` argument to the end of args list
  * class Example extends Disposable {
  * 		@cancelPreviousCalls
- * 		async doSomethingAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<codemavi> {
+ * 		async doSomethingAsync(arg1: number, arg2: string, cancellationToken?: CancellationToken): Promise<void> {
  * 			console.log(`call with args ${arg1} and ${arg2} initiated`);
  *
  * 			// the decorator will create the cancellation token automatically

@@ -30,19 +30,19 @@ suite('WordPartOperations', () => {
 		new TestLanguageConfigurationService()
 	);
 
-	function runEditorCommand(editor: ICodeEditor, command: EditorCommand): codemavi {
+	function runEditorCommand(editor: ICodeEditor, command: EditorCommand): void {
 		command.runEditorCommand(serviceAccessor, editor, null);
 	}
-	function cursorWordPartLeft(editor: ICodeEditor, inSelectionmode: boolean = false): codemavi {
+	function cursorWordPartLeft(editor: ICodeEditor, inSelectionmode: boolean = false): void {
 		runEditorCommand(editor, inSelectionmode ? _cursorWordPartLeftSelect : _cursorWordPartLeft);
 	}
-	function cursorWordPartRight(editor: ICodeEditor, inSelectionmode: boolean = false): codemavi {
+	function cursorWordPartRight(editor: ICodeEditor, inSelectionmode: boolean = false): void {
 		runEditorCommand(editor, inSelectionmode ? _cursorWordPartRightSelect : _cursorWordPartRight);
 	}
-	function deleteWordPartLeft(editor: ICodeEditor): codemavi {
+	function deleteWordPartLeft(editor: ICodeEditor): void {
 		runEditorCommand(editor, _deleteWordPartLeft);
 	}
-	function deleteWordPartRight(editor: ICodeEditor): codemavi {
+	function deleteWordPartRight(editor: ICodeEditor): void {
 		runEditorCommand(editor, _deleteWordPartRight);
 	}
 

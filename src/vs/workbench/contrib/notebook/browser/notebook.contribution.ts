@@ -307,7 +307,7 @@ export class NotebookContribution extends Disposable implements IWorkbenchContri
 		return data.notebook.toString();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._uriComparisonKeyComputer?.dispose();
 	}
@@ -328,7 +328,7 @@ class CellContentProvider implements ITextModelContentProvider {
 		this._registration = textModelService.registerTextModelContentProvider(CellUri.scheme, this);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._registration.dispose();
 	}
 
@@ -425,7 +425,7 @@ class CellInfoContentProvider {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._disposables);
 	}
 
@@ -634,7 +634,7 @@ class NotebookMetadataContentProvider {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._disposables);
 	}
 
@@ -694,7 +694,7 @@ class RegisterSchemasContribution extends Disposable implements IWorkbenchContri
 		this.registerMetadataSchemas();
 	}
 
-	private registerMetadataSchemas(): codemavi {
+	private registerMetadataSchemas(): void {
 		const jsonRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
 		const metadataSchema: IJSONSchema = {
 			properties: {
@@ -742,11 +742,11 @@ class NotebookEditorManager implements IWorkbenchContribution {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 
-	private _openMissingDirtyNotebookEditors(models: IResolvedNotebookEditorModel[]): codemavi {
+	private _openMissingDirtyNotebookEditors(models: IResolvedNotebookEditorModel[]): void {
 		const result: IResourceEditorInput[] = [];
 		for (const model of models) {
 			if (model.isDirty() && !this._editorService.isOpened({ resource: model.resource, typeId: NotebookEditorInput.ID, editorId: model.viewType }) && extname(model.resource) !== '.interactive') {
@@ -807,7 +807,7 @@ class SimpleNotebookWorkingCopyEditorHandler extends Disposable implements IWork
 		return NotebookEditorInput.getOrCreate(this._instantiationService, workingCopy.resource, undefined, this._getViewType(workingCopy)!);
 	}
 
-	private async _installHandler(): Promise<codemavi> {
+	private async _installHandler(): Promise<void> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 
 		this._register(this._workingCopyEditorService.registerHandler(this));

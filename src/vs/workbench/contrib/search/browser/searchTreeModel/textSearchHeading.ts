@@ -27,7 +27,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 
 	protected _query: QueryType | null = null;
 	private _rangeHighlightDecorations: RangeHighlightDecorations;
-	private disposePastResults: () => Promise<codemavi> = () => Promise.resolve();
+	private disposePastResults: () => Promise<void> = () => Promise.resolve();
 
 	protected _folderMatches: ISearchTreeFolderMatchWorkspaceRoot[] = [];
 	protected _otherFilesMatch: ISearchTreeFolderMatch | null = null;
@@ -82,7 +82,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 		return folderMatch;
 	}
 
-	add(allRaw: IFileMatch[], searchInstanceID: string, silent: boolean = false): codemavi {
+	add(allRaw: IFileMatch[], searchInstanceID: string, silent: boolean = false): void {
 		// Split up raw into a list per folder so we can do a batch add per folder.
 
 		const { byFolder, other } = this.groupFilesByFolder(allRaw);
@@ -102,7 +102,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 		this.disposePastResults();
 	}
 
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai = false): codemavi {
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatch | (ISearchTreeFileMatch | ISearchTreeFolderMatch)[], ai = false): void {
 		if (!Array.isArray(matches)) {
 			matches = [matches];
 		}
@@ -164,7 +164,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 
 	abstract query: QueryType | null;
 
-	protected clearQuery(): codemavi {
+	protected clearQuery(): void {
 		// When updating the query we could change the roots, so keep a reference to them to clean up when we trigger `disposePastResults`
 		const oldFolderMatches = this.folderMatches();
 		this.disposePastResults = async () => {
@@ -188,7 +188,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 			this._folderMatches;
 	}
 
-	private disposeMatches(): codemavi {
+	private disposeMatches(): void {
 		this.folderMatches().forEach(folderMatch => folderMatch.dispose());
 
 		this._folderMatches = [];
@@ -211,7 +211,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 		return this._showHighlights;
 	}
 
-	toggleHighlights(value: boolean): codemavi {
+	toggleHighlights(value: boolean): void {
 		if (this._showHighlights === value) {
 			return;
 		}
@@ -249,7 +249,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 		return this.matches().reduce<number>((prev, match) => prev + match.count(), 0);
 	}
 
-	clear(clearAll: boolean = true): codemavi {
+	clear(clearAll: boolean = true): void {
 		this.cachedSearchComplete = undefined;
 		this.folderMatches().forEach((folderMatch) => folderMatch.clear(clearAll));
 		this.disposeMatches();
@@ -257,7 +257,7 @@ export abstract class TextSearchHeadingImpl<QueryType extends ITextSearchQuery> 
 		this._otherFilesMatch = null;
 	}
 
-	override async dispose(): Promise<codemavi> {
+	override async dispose(): Promise<void> {
 		this._rangeHighlightDecorations.dispose();
 		this.disposeMatches();
 		super.dispose();

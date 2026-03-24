@@ -44,10 +44,10 @@ suite('TokenizationSupport2Adapter', () => {
 		public setTheme(themeName: string): string {
 			throw new Error('Not implemented');
 		}
-		public setAutoDetectHighContrast(autoDetectHighContrast: boolean): codemavi {
+		public setAutoDetectHighContrast(autoDetectHighContrast: boolean): void {
 			throw new Error('Not implemented');
 		}
-		public defineTheme(themeName: string, themeData: IStandaloneThemeData): codemavi {
+		public defineTheme(themeName: string, themeData: IStandaloneThemeData): void {
 			throw new Error('Not implemented');
 		}
 		public getColorTheme(): IStandaloneTheme {
@@ -77,7 +77,7 @@ suite('TokenizationSupport2Adapter', () => {
 				tokenColorMap: []
 			};
 		}
-		setColorMapOverride(colorMapOverride: Color[] | null): codemavi {
+		setColorMapOverride(colorMapOverride: Color[] | null): void {
 		}
 		public getFileIconTheme(): IFileIconTheme {
 			return {
@@ -108,7 +108,7 @@ suite('TokenizationSupport2Adapter', () => {
 		}
 	}
 
-	function testBadTokensProvider(providerTokens: IToken[], expectedClassicTokens: Token[], expectedModernTokens: number[]): codemavi {
+	function testBadTokensProvider(providerTokens: IToken[], expectedClassicTokens: Token[], expectedModernTokens: number[]): void {
 
 		class BadTokensProvider implements TokensProvider {
 			public getInitialState(): IState {

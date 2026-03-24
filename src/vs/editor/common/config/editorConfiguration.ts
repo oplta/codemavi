@@ -39,29 +39,29 @@ export interface IEditorConfiguration extends IDisposable {
 	 * Update the options with new partial options. All previous
 	 * options will be kept and only present keys will be overwritten.
 	 */
-	updateOptions(newOptions: Readonly<IEditorOptions>): codemavi;
+	updateOptions(newOptions: Readonly<IEditorOptions>): void;
 	/**
 	 * Recompute options with new reference element dimensions.
 	 */
-	observeContainer(dimension?: IDimension): codemavi;
+	observeContainer(dimension?: IDimension): void;
 	/**
 	 * Set if the current model is dominated by long lines.
 	 */
-	setIsDominatedByLongLines(isDominatedByLongLines: boolean): codemavi;
+	setIsDominatedByLongLines(isDominatedByLongLines: boolean): void;
 	/**
 	 * Set the current model line count.
 	 */
-	setModelLineCount(modelLineCount: number): codemavi;
+	setModelLineCount(modelLineCount: number): void;
 	/**
 	 * Set the current view model line count.
 	 */
-	setViewLineCount(viewLineCount: number): codemavi;
+	setViewLineCount(viewLineCount: number): void;
 	/**
 	 * Set reserved height above.
 	 */
-	setReservedHeight(reservedHeight: number): codemavi;
+	setReservedHeight(reservedHeight: number): void;
 	/**
 	 * Set the number of decoration lanes to be rendered in the glyph margin.
 	 */
-	setGlyphMarginDecorationLaneCount(decorationLaneCount: number): codemavi;
+	setGlyphMarginDecorationLaneCount(decorationLaneCount: number): void;
 }

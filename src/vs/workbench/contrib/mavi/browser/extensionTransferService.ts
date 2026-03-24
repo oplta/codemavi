@@ -16,7 +16,7 @@ import { TransferEditorType, TransferFilesInfo } from './extensionTransferTypes.
 export interface IExtensionTransferService {
 	readonly _serviceBrand: undefined; // services need this, just leave it undefined
 	transferExtensions(os: 'mac' | 'windows' | 'linux' | null, fromEditor: TransferEditorType): Promise<string | undefined>
-	deleteBlacklistExtensions(os: 'mac' | 'windows' | 'linux' | null): Promise<codemavi>
+	deleteBlacklistExtensions(os: 'mac' | 'windows' | 'linux' | null): Promise<void>
 
 }
 
@@ -31,7 +31,7 @@ const extensionBlacklist = [
 	// ignore extensions
 	'ms-vscode-remote.remote', // ms-vscode-remote.remote-ssh, ms-vscode-remote.remote-wsl
 	'ms-vscode.remote', // ms-vscode.remote-explorer
-	// ignore other AI copilots that could conflict with Code Mavi keybindings
+	// ignore other AI copilots that could conflict with Mavi keybindings
 	'sourcegraph.cody-ai',
 	'continue.continue',
 	'codeium.codeium',
@@ -195,37 +195,37 @@ const transferTheseFilesOfOS = (os: 'mac' | 'windows' | 'linux' | null, fromEdit
 		if (fromEditor === 'VS Code') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.vscode', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Cursor') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Cursor', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Cursor', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.cursor', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Windsurf') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Windsurf', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Windsurf', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, 'Library', 'Application Support', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.windsurf', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		}
@@ -238,37 +238,37 @@ const transferTheseFilesOfOS = (os: 'mac' | 'windows' | 'linux' | null, fromEdit
 		if (fromEditor === 'VS Code') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.vscode', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Cursor') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Cursor', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Cursor', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.cursor', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Windsurf') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Windsurf', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Windsurf', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.config', 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.windsurf', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), homeDir, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		}
@@ -283,37 +283,37 @@ const transferTheseFilesOfOS = (os: 'mac' | 'windows' | 'linux' | null, fromEdit
 		if (fromEditor === 'VS Code') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.vscode', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Cursor') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Cursor', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Cursor', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.cursor', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		} else if (fromEditor === 'Windsurf') {
 			return [{
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Windsurf', 'User', 'settings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'settings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'settings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Windsurf', 'User', 'keybindings.json'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Code Mavi', 'User', 'keybindings.json'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), appdata, 'Mavi', 'User', 'keybindings.json'),
 			}, {
 				from: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.windsurf', 'extensions'),
-				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.codemavi-editor', 'extensions'),
+				to: URI.joinPath(URI.from({ scheme: 'file' }), userprofile, '.mavi-editor', 'extensions'),
 				isExtensions: true,
 			}]
 		}

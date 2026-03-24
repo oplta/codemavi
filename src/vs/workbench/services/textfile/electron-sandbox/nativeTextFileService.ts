@@ -58,13 +58,13 @@ export class NativeTextFileService extends AbstractTextFileService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Lifecycle
 		this._register(this.lifecycleService.onWillShutdown(event => event.join(this.onWillShutdown(), { id: 'join.textFiles', label: localize('join.textFiles', "Saving text files") })));
 	}
 
-	private async onWillShutdown(): Promise<codemavi> {
+	private async onWillShutdown(): Promise<void> {
 		let modelsPendingToSave: ITextFileEditorModel[];
 
 		// As long as models are pending to be saved, we prolong the shutdown

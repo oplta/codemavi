@@ -22,16 +22,16 @@ export interface ISelectBoxDelegate extends IDisposable {
 
 	// Public SelectBox Interface
 	readonly onDidSelect: Event<ISelectData>;
-	setOptions(options: ISelectOptionItem[], selected?: number): codemavi;
-	select(index: number): codemavi;
-	setAriaLabel(label: string): codemavi;
-	focus(): codemavi;
-	blur(): codemavi;
-	setFocusable(focus: boolean): codemavi;
-	setEnabled(enabled: boolean): codemavi;
+	setOptions(options: ISelectOptionItem[], selected?: number): void;
+	select(index: number): void;
+	setAriaLabel(label: string): void;
+	focus(): void;
+	blur(): void;
+	setFocusable(focus: boolean): void;
+	setEnabled(enabled: boolean): void;
 
 	// Delegated Widget interface
-	render(container: HTMLElement): codemavi;
+	render(container: HTMLElement): void;
 }
 
 export interface ISelectBoxOptions {
@@ -101,35 +101,35 @@ export class SelectBox extends Widget implements ISelectBoxDelegate {
 		return this.selectBoxDelegate.onDidSelect;
 	}
 
-	setOptions(options: ISelectOptionItem[], selected?: number): codemavi {
+	setOptions(options: ISelectOptionItem[], selected?: number): void {
 		this.selectBoxDelegate.setOptions(options, selected);
 	}
 
-	select(index: number): codemavi {
+	select(index: number): void {
 		this.selectBoxDelegate.select(index);
 	}
 
-	setAriaLabel(label: string): codemavi {
+	setAriaLabel(label: string): void {
 		this.selectBoxDelegate.setAriaLabel(label);
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this.selectBoxDelegate.focus();
 	}
 
-	blur(): codemavi {
+	blur(): void {
 		this.selectBoxDelegate.blur();
 	}
 
-	setFocusable(focusable: boolean): codemavi {
+	setFocusable(focusable: boolean): void {
 		this.selectBoxDelegate.setFocusable(focusable);
 	}
 
-	setEnabled(enabled: boolean): codemavi {
+	setEnabled(enabled: boolean): void {
 		this.selectBoxDelegate.setEnabled(enabled);
 	}
 
-	render(container: HTMLElement): codemavi {
+	render(container: HTMLElement): void {
 		this.selectBoxDelegate.render(container);
 	}
 }

@@ -20,9 +20,9 @@ const REDIRECT_URL_INSIDERS = 'https://insiders.vscode.dev/redirect';
 
 export interface IGitHubServer {
 	login(scopes: string, existingLogin?: string): Promise<string>;
-	logout(session: vscode.AuthenticationSession): Promise<codemavi>;
+	logout(session: vscode.AuthenticationSession): Promise<void>;
 	getUserInfo(token: string): Promise<{ id: string; accountName: string }>;
-	sendAdditionalTelemetryInfo(session: vscode.AuthenticationSession): Promise<codemavi>;
+	sendAdditionalTelemetryInfo(session: vscode.AuthenticationSession): Promise<void>;
 	friendlyName: string;
 }
 
@@ -149,7 +149,7 @@ export class GitHubServer implements IGitHubServer {
 		throw new Error(userCancelled ? CANCELLATION_ERROR : 'No auth flow succeeded.');
 	}
 
-	public async logout(session: vscode.AuthenticationSession): Promise<codemavi> {
+	public async logout(session: vscode.AuthenticationSession): Promise<void> {
 		this._logger.trace(`Deleting session (${session.id}) from server...`);
 
 		if (!Config.gitHubClientSecret) {
@@ -251,7 +251,7 @@ export class GitHubServer implements IGitHubServer {
 		}
 	}
 
-	public async sendAdditionalTelemetryInfo(session: vscode.AuthenticationSession): Promise<codemavi> {
+	public async sendAdditionalTelemetryInfo(session: vscode.AuthenticationSession): Promise<void> {
 		if (!vscode.env.isTelemetryEnabled) {
 			return;
 		}
@@ -269,7 +269,7 @@ export class GitHubServer implements IGitHubServer {
 		await this.checkEnterpriseVersion(session.accessToken);
 	}
 
-	private async checkUserDetails(session: vscode.AuthenticationSession): Promise<codemavi> {
+	private async checkUserDetails(session: vscode.AuthenticationSession): Promise<void> {
 		let edu: string | undefined;
 
 		try {
@@ -309,7 +309,7 @@ export class GitHubServer implements IGitHubServer {
 		});
 	}
 
-	private async checkEnterpriseVersion(token: string): Promise<codemavi> {
+	private async checkEnterpriseVersion(token: string): Promise<void> {
 		try {
 			let version: string;
 			if (!isSupportedTarget(this._type, this._ghesUri)) {

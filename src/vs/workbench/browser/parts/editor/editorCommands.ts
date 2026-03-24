@@ -135,7 +135,7 @@ const isSelectedEditorsMoveCopyArg = function (arg: SelectedEditorsMoveCopyArgum
 	return true;
 };
 
-function registerActiveEditorMoveCopyCommand(): codemavi {
+function registerActiveEditorMoveCopyCommand(): void {
 
 	const moveCopyJSONSchema: IJSONSchema = {
 		'type': 'object',
@@ -193,7 +193,7 @@ function registerActiveEditorMoveCopyCommand(): codemavi {
 		}
 	});
 
-	function moveCopySelectedEditors(isMove: boolean, args: SelectedEditorsMoveCopyArguments = Object.create(null), accessor: ServicesAccessor): codemavi {
+	function moveCopySelectedEditors(isMove: boolean, args: SelectedEditorsMoveCopyArguments = Object.create(null), accessor: ServicesAccessor): void {
 		args.to = args.to || 'right';
 		args.by = args.by || 'tab';
 		args.value = typeof args.value === 'number' ? args.value : 1;
@@ -213,7 +213,7 @@ function registerActiveEditorMoveCopyCommand(): codemavi {
 		}
 	}
 
-	function moveTabs(args: SelectedEditorsMoveCopyArguments, group: IEditorGroup, editors: EditorInput[]): codemavi {
+	function moveTabs(args: SelectedEditorsMoveCopyArguments, group: IEditorGroup, editors: EditorInput[]): void {
 		const to = args.to;
 		if (to === 'first' || to === 'right') {
 			editors = [...editors].reverse();
@@ -226,7 +226,7 @@ function registerActiveEditorMoveCopyCommand(): codemavi {
 		}
 	}
 
-	function moveTab(args: SelectedEditorsMoveCopyArguments, group: IEditorGroup, editor: EditorInput): codemavi {
+	function moveTab(args: SelectedEditorsMoveCopyArguments, group: IEditorGroup, editor: EditorInput): void {
 		let index = group.getIndexOfEditor(editor);
 		switch (args.to) {
 			case 'first':
@@ -253,7 +253,7 @@ function registerActiveEditorMoveCopyCommand(): codemavi {
 		group.moveEditor(editor, group, { index });
 	}
 
-	function moveCopyActiveEditorToGroup(isMove: boolean, args: SelectedEditorsMoveCopyArguments, sourceGroup: IEditorGroup, editors: EditorInput[], accessor: ServicesAccessor): codemavi {
+	function moveCopyActiveEditorToGroup(isMove: boolean, args: SelectedEditorsMoveCopyArguments, sourceGroup: IEditorGroup, editors: EditorInput[], accessor: ServicesAccessor): void {
 		const editorGroupsService = accessor.get(IEditorGroupsService);
 		const configurationService = accessor.get(IConfigurationService);
 
@@ -320,9 +320,9 @@ function registerActiveEditorMoveCopyCommand(): codemavi {
 	}
 }
 
-function registerEditorGroupsLayoutCommands(): codemavi {
+function registerEditorGroupsLayoutCommands(): void {
 
-	function applyEditorLayout(accessor: ServicesAccessor, layout: EditorGroupLayout): codemavi {
+	function applyEditorLayout(accessor: ServicesAccessor, layout: EditorGroupLayout): void {
 		if (!layout || typeof layout !== 'object') {
 			return;
 		}
@@ -388,7 +388,7 @@ function registerEditorGroupsLayoutCommands(): codemavi {
 	});
 }
 
-function registerOpenEditorAPICommands(): codemavi {
+function registerOpenEditorAPICommands(): void {
 
 	function mixinContext(context: IOpenEvent<unknown> | undefined, options: ITextEditorOptions | undefined, column: EditorGroupColumn | undefined): [ITextEditorOptions | undefined, EditorGroupColumn | undefined] {
 		if (!context) {
@@ -559,8 +559,8 @@ interface OpenMultiFileDiffEditorOptions {
 	resources?: { originalUri: UriComponents; modifiedUri: UriComponents }[];
 }
 
-function registerOpenEditorAtIndexCommands(): codemavi {
-	const openEditorAtIndex: ICommandHandler = (accessor: ServicesAccessor, editorIndex: number): codemavi => {
+function registerOpenEditorAtIndexCommands(): void {
+	const openEditorAtIndex: ICommandHandler = (accessor: ServicesAccessor, editorIndex: number): void => {
 		const editorService = accessor.get(IEditorService);
 		const activeEditorPane = editorService.activeEditorPane;
 		if (activeEditorPane) {
@@ -610,7 +610,7 @@ function registerOpenEditorAtIndexCommands(): codemavi {
 	}
 }
 
-function registerFocusEditorGroupAtIndexCommands(): codemavi {
+function registerFocusEditorGroupAtIndexCommands(): void {
 
 	// Keybindings to focus a specific group (2-8) in the editor area
 	for (let groupIndex = 1; groupIndex < 8; groupIndex++) {
@@ -680,7 +680,7 @@ function registerFocusEditorGroupAtIndexCommands(): codemavi {
 	}
 }
 
-export function splitEditor(editorGroupsService: IEditorGroupsService, direction: GroupDirection, resolvedContext: IResolvedEditorCommandsContext): codemavi {
+export function splitEditor(editorGroupsService: IEditorGroupsService, direction: GroupDirection, resolvedContext: IResolvedEditorCommandsContext): void {
 	if (!resolvedContext.groupedEditors.length) {
 		return;
 	}
@@ -950,7 +950,7 @@ function registerCloseEditorCommands() {
 	});
 }
 
-function registerFocusEditorGroupWihoutWrapCommands(): codemavi {
+function registerFocusEditorGroupWihoutWrapCommands(): void {
 
 	const commands = [
 		{
@@ -981,9 +981,9 @@ function registerFocusEditorGroupWihoutWrapCommands(): codemavi {
 	}
 }
 
-function registerSplitEditorInGroupCommands(): codemavi {
+function registerSplitEditorInGroupCommands(): void {
 
-	async function splitEditorInGroup(accessor: ServicesAccessor, resolvedContext: IResolvedEditorCommandsContext): Promise<codemavi> {
+	async function splitEditorInGroup(accessor: ServicesAccessor, resolvedContext: IResolvedEditorCommandsContext): Promise<void> {
 		const instantiationService = accessor.get(IInstantiationService);
 
 		if (!resolvedContext.groupedEditors.length) {
@@ -1018,12 +1018,12 @@ function registerSplitEditorInGroupCommands(): codemavi {
 				}
 			});
 		}
-		run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			return splitEditorInGroup(accessor, resolveCommandsContext(args, accessor.get(IEditorService), accessor.get(IEditorGroupsService), accessor.get(IListService)));
 		}
 	});
 
-	async function joinEditorInGroup(resolvedContext: IResolvedEditorCommandsContext): Promise<codemavi> {
+	async function joinEditorInGroup(resolvedContext: IResolvedEditorCommandsContext): Promise<void> {
 		if (!resolvedContext.groupedEditors.length) {
 			return;
 		}
@@ -1071,7 +1071,7 @@ function registerSplitEditorInGroupCommands(): codemavi {
 				}
 			});
 		}
-		run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			return joinEditorInGroup(resolveCommandsContext(args, accessor.get(IEditorService), accessor.get(IEditorGroupsService), accessor.get(IListService)));
 		}
 	});
@@ -1086,7 +1086,7 @@ function registerSplitEditorInGroupCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			const resolvedContext = resolveCommandsContext(args, accessor.get(IEditorService), accessor.get(IEditorGroupsService), accessor.get(IListService));
 			if (!resolvedContext.groupedEditors.length) {
 				return;
@@ -1112,7 +1112,7 @@ function registerSplitEditorInGroupCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor): Promise<codemavi> {
+		async run(accessor: ServicesAccessor): Promise<void> {
 			const configurationService = accessor.get(IConfigurationService);
 			const currentSetting = configurationService.getValue<unknown>(SideBySideEditor.SIDE_BY_SIDE_LAYOUT_SETTING);
 
@@ -1128,7 +1128,7 @@ function registerSplitEditorInGroupCommands(): codemavi {
 	});
 }
 
-function registerFocusSideEditorsCommands(): codemavi {
+function registerFocusSideEditorsCommands(): void {
 
 	registerAction2(class extends Action2 {
 		constructor() {
@@ -1140,7 +1140,7 @@ function registerFocusSideEditorsCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor): Promise<codemavi> {
+		async run(accessor: ServicesAccessor): Promise<void> {
 			const editorService = accessor.get(IEditorService);
 			const commandService = accessor.get(ICommandService);
 
@@ -1163,7 +1163,7 @@ function registerFocusSideEditorsCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor): Promise<codemavi> {
+		async run(accessor: ServicesAccessor): Promise<void> {
 			const editorService = accessor.get(IEditorService);
 			const commandService = accessor.get(ICommandService);
 
@@ -1186,7 +1186,7 @@ function registerFocusSideEditorsCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor): Promise<codemavi> {
+		async run(accessor: ServicesAccessor): Promise<void> {
 			const editorService = accessor.get(IEditorService);
 			const commandService = accessor.get(ICommandService);
 
@@ -1204,7 +1204,7 @@ function registerFocusSideEditorsCommands(): codemavi {
 	});
 }
 
-function registerOtherEditorCommands(): codemavi {
+function registerOtherEditorCommands(): void {
 
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: KEEP_EDITOR_COMMAND_ID,
@@ -1232,7 +1232,7 @@ function registerOtherEditorCommands(): codemavi {
 		}
 	});
 
-	function setEditorGroupLock(accessor: ServicesAccessor, locked: boolean | undefined, ...args: unknown[]): codemavi {
+	function setEditorGroupLock(accessor: ServicesAccessor, locked: boolean | undefined, ...args: unknown[]): void {
 		const resolvedContext = resolveCommandsContext(args, accessor.get(IEditorService), accessor.get(IEditorGroupsService), accessor.get(IListService));
 		const group = resolvedContext.groupedEditors[0]?.group;
 		group?.lock(locked ?? !group.isLocked);
@@ -1247,7 +1247,7 @@ function registerOtherEditorCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			setEditorGroupLock(accessor, undefined, ...args);
 		}
 	});
@@ -1262,7 +1262,7 @@ function registerOtherEditorCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			setEditorGroupLock(accessor, true, ...args);
 		}
 	});
@@ -1277,7 +1277,7 @@ function registerOtherEditorCommands(): codemavi {
 				f1: true
 			});
 		}
-		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<codemavi> {
+		async run(accessor: ServicesAccessor, ...args: unknown[]): Promise<void> {
 			setEditorGroupLock(accessor, false, ...args);
 		}
 	});
@@ -1359,7 +1359,7 @@ function registerOtherEditorCommands(): codemavi {
 	});
 }
 
-export function setup(): codemavi {
+export function setup(): void {
 	registerActiveEditorMoveCopyCommand();
 	registerEditorGroupsLayoutCommands();
 	registerDiffEditorCommands();

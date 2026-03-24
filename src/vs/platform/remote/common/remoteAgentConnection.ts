@@ -105,8 +105,8 @@ class PromiseWithTimeout<T> {
 	private _state: 'pending' | 'resolved' | 'rejected' | 'timedout';
 	private readonly _disposables: DisposableStore;
 	public readonly promise: Promise<T>;
-	private readonly _resolvePromise: (value: T) => codemavi;
-	private readonly _rejectPromise: (err: any) => codemavi;
+	private readonly _resolvePromise: (value: T) => void;
+	private readonly _rejectPromise: (err: any) => void;
 
 	public get didTimeout(): boolean {
 		return (this._state === 'timedout');
@@ -125,7 +125,7 @@ class PromiseWithTimeout<T> {
 		}
 	}
 
-	public registerDisposable(disposable: IDisposable): codemavi {
+	public registerDisposable(disposable: IDisposable): void {
 		if (this._state === 'pending') {
 			this._disposables.add(disposable);
 		} else {
@@ -133,7 +133,7 @@ class PromiseWithTimeout<T> {
 		}
 	}
 
-	private _timeout(): codemavi {
+	private _timeout(): void {
 		if (this._state !== 'pending') {
 			return;
 		}
@@ -149,7 +149,7 @@ class PromiseWithTimeout<T> {
 		return err;
 	}
 
-	public resolve(value: T): codemavi {
+	public resolve(value: T): void {
 		if (this._state !== 'pending') {
 			return;
 		}
@@ -158,7 +158,7 @@ class PromiseWithTimeout<T> {
 		this._resolvePromise(value);
 	}
 
-	public reject(err: any): codemavi {
+	public reject(err: any): void {
 		if (this._state !== 'pending') {
 			return;
 		}
@@ -463,7 +463,7 @@ export async function connectRemoteAgentTunnel(options: IConnectionOptions, tunn
 	return protocol;
 }
 
-function sleep(seconds: number): CancelablePromise<codemavi> {
+function sleep(seconds: number): CancelablePromise<void> {
 	return createCancelablePromise(token => {
 		return new Promise((resolve, reject) => {
 			const timeout = setTimeout(resolve, seconds * 1000);
@@ -495,10 +495,10 @@ export class ReconnectionWaitEvent {
 		public readonly reconnectionToken: string,
 		public readonly millisSinceLastIncomingData: number,
 		public readonly durationSeconds: number,
-		private readonly cancellableTimer: CancelablePromise<codemavi>
+		private readonly cancellableTimer: CancelablePromise<void>
 	) { }
 
-	public skipWait(): codemavi {
+	public skipWait(): void {
 		this.cancellableTimer.cancel();
 	}
 }
@@ -531,7 +531,7 @@ export type PersistentConnectionEvent = ConnectionGainEvent | ConnectionLostEven
 
 export abstract class PersistentConnection extends Disposable {
 
-	public static triggerPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): codemavi {
+	public static triggerPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): void {
 		this._permanentFailure = true;
 		this._permanentFailureMillisSinceLastIncomingData = millisSinceLastIncomingData;
 		this._permanentFailureAttempt = attempt;
@@ -611,12 +611,12 @@ export abstract class PersistentConnection extends Disposable {
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._isDisposed = true;
 	}
 
-	private async _beginReconnecting(): Promise<codemavi> {
+	private async _beginReconnecting(): Promise<void> {
 		// Only have one reconnection loop active at a time.
 		if (this._isReconnecting) {
 			return;
@@ -629,7 +629,7 @@ export abstract class PersistentConnection extends Disposable {
 		}
 	}
 
-	private async _runReconnectingLoop(): Promise<codemavi> {
+	private async _runReconnectingLoop(): Promise<void> {
 		if (this._isPermanentFailure || this._isDisposed) {
 			// no more attempts!
 			return;
@@ -714,7 +714,7 @@ export abstract class PersistentConnection extends Disposable {
 		} while (!this._isPermanentFailure && !this._isDisposed);
 	}
 
-	private _onReconnectionPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): codemavi {
+	private _onReconnectionPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): void {
 		if (this._reconnectionFailureIsFatal) {
 			PersistentConnection.triggerPermanentFailure(millisSinceLastIncomingData, attempt, handled);
 		} else {
@@ -722,16 +722,16 @@ export abstract class PersistentConnection extends Disposable {
 		}
 	}
 
-	private _gotoPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): codemavi {
+	private _gotoPermanentFailure(millisSinceLastIncomingData: number, attempt: number, handled: boolean): void {
 		this._onDidStateChange.fire(new ReconnectionPermanentFailureEvent(this.reconnectionToken, millisSinceLastIncomingData, attempt, handled));
 		safeDisposeProtocolAndSocket(this.protocol);
 	}
 
-	private _pauseSocketWriting(): codemavi {
+	private _pauseSocketWriting(): void {
 		this.protocol.pauseSocketWriting();
 	}
 
-	protected abstract _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<codemavi>;
+	protected abstract _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<void>;
 }
 
 export class ManagementPersistentConnection extends PersistentConnection {
@@ -746,7 +746,7 @@ export class ManagementPersistentConnection extends PersistentConnection {
 		}, options.ipcLogger));
 	}
 
-	protected async _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<codemavi> {
+	protected async _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<void> {
 		await doConnectRemoteAgentManagement(options, timeoutCancellationToken);
 	}
 }
@@ -762,12 +762,12 @@ export class ExtensionHostPersistentConnection extends PersistentConnection {
 		this.debugPort = debugPort;
 	}
 
-	protected async _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<codemavi> {
+	protected async _reconnect(options: ISimpleConnectionOptions, timeoutCancellationToken: CancellationToken): Promise<void> {
 		await doConnectRemoteAgentExtensionHost(options, this._startArguments, timeoutCancellationToken);
 	}
 }
 
-function safeDisposeProtocolAndSocket(protocol: PersistentProtocol): codemavi {
+function safeDisposeProtocolAndSocket(protocol: PersistentProtocol): void {
 	try {
 		protocol.acceptDisconnect();
 		const socket = protocol.getSocket();

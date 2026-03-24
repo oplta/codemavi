@@ -90,15 +90,15 @@ export class NotebookEditorTestModel extends EditorModel implements INotebookEdi
 	protected readonly _onDidSave = this._register(new Emitter<IWorkingCopySaveEvent>());
 	readonly onDidSave = this._onDidSave.event;
 
-	protected readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
+	protected readonly _onDidChangeDirty = this._register(new Emitter<void>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
 	readonly onDidChangeOrphaned = Event.None;
 	readonly onDidChangeReadonly = Event.None;
 	readonly onDidRevertUntitled = Event.None;
 
-	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
-	readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
+	private readonly _onDidChangeContent = this._register(new Emitter<void>());
+	readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
 
 
 	get viewType() {
@@ -175,7 +175,7 @@ export class NotebookEditorTestModel extends EditorModel implements INotebookEdi
 		throw new NotImplementedError();
 	}
 
-	revert(): Promise<codemavi> {
+	revert(): Promise<void> {
 		throw new NotImplementedError();
 	}
 }
@@ -332,7 +332,7 @@ function _createTestNotebookEditor(instantiationService: TestInstantiationServic
 		}
 
 		override getId(): string { return id; }
-		override setScrollTop(scrollTop: number): codemavi {
+		override setScrollTop(scrollTop: number): void {
 			cellList.scrollTop = scrollTop;
 		}
 		override get scrollTop(): number {
@@ -512,7 +512,7 @@ class TestCellExecution implements INotebookCellExecution {
 	constructor(
 		readonly notebook: URI,
 		readonly cellHandle: number,
-		private onComplete: () => codemavi,
+		private onComplete: () => void,
 	) { }
 
 	readonly state: NotebookCellExecutionState = NotebookCellExecutionState.Unconfirmed;
@@ -520,13 +520,13 @@ class TestCellExecution implements INotebookCellExecution {
 	readonly didPause: boolean = false;
 	readonly isPaused: boolean = false;
 
-	confirm(): codemavi {
+	confirm(): void {
 	}
 
-	update(updates: ICellExecuteUpdate[]): codemavi {
+	update(updates: ICellExecuteUpdate[]): void {
 	}
 
-	complete(complete: ICellExecutionComplete): codemavi {
+	complete(complete: ICellExecutionComplete): void {
 		this.onComplete();
 	}
 }
@@ -539,7 +539,7 @@ export class TestNotebookExecutionStateService implements INotebookExecutionStat
 	onDidChangeExecution = new Emitter<ICellExecutionStateChangedEvent | IExecutionStateChangedEvent>().event;
 	onDidChangeLastRunFailState = new Emitter<INotebookFailStateChangedEvent>().event;
 
-	forceCancelNotebookExecutions(notebookUri: URI): codemavi {
+	forceCancelNotebookExecutions(notebookUri: URI): void {
 	}
 
 	getCellExecutionsForNotebook(notebook: URI): INotebookCellExecution[] {

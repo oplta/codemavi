@@ -144,7 +144,7 @@ export class OpenScmGroupAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, options: OpenScmGroupActionOptions): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, options: OpenScmGroupActionOptions): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		await OpenScmGroupAction.openMultiFileDiffEditor(editorService, options.title, URI.revive(options.repositoryUri), options.resourceGroupId);
 	}

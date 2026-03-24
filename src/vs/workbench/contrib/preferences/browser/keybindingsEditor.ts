@@ -80,15 +80,15 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 	private _onAcceptWhenExpression = this._register(new Emitter<IKeybindingItemEntry>());
 	readonly onAcceptWhenExpression = this._onAcceptWhenExpression.event;
 
-	private _onLayout: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onLayout: Event<codemavi> = this._onLayout.event;
+	private _onLayout: Emitter<void> = this._register(new Emitter<void>());
+	readonly onLayout: Event<void> = this._onLayout.event;
 
 	private keybindingsEditorModel: KeybindingsEditorModel | null = null;
 
 	private headerContainer!: HTMLElement;
 	private actionsContainer!: HTMLElement;
 	private searchWidget!: KeybindingsSearchWidget;
-	private searchHistoryDelayer: Delayer<codemavi>;
+	private searchHistoryDelayer: Delayer<void>;
 
 	private overlayContainer!: HTMLElement;
 	private defineKeybindingWidget!: DefineKeybindingWidget;
@@ -99,7 +99,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 	private keybindingsTable!: WorkbenchTable<IKeybindingItemEntry>;
 
 	private dimension: DOM.Dimension | null = null;
-	private delayedFiltering: Delayer<codemavi>;
+	private delayedFiltering: Delayer<void>;
 	private latestEmptyFilters: string[] = [];
 	private keybindingsEditorContextKey: IContextKey<boolean>;
 	private keybindingFocusContextKey: IContextKey<boolean>;
@@ -128,13 +128,13 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		@IAccessibilityService private readonly accessibilityService: IAccessibilityService
 	) {
 		super(KeybindingsEditor.ID, group, telemetryService, themeService, storageService);
-		this.delayedFiltering = new Delayer<codemavi>(300);
+		this.delayedFiltering = new Delayer<void>(300);
 		this._register(keybindingsService.onDidUpdateKeybindings(() => this.render(!!this.keybindingFocusContextKey.get())));
 
 		this.keybindingsEditorContextKey = CONTEXT_KEYBINDINGS_EDITOR.bindTo(this.contextKeyService);
 		this.searchFocusContextKey = CONTEXT_KEYBINDINGS_SEARCH_FOCUS.bindTo(this.contextKeyService);
 		this.keybindingFocusContextKey = CONTEXT_KEYBINDING_FOCUS.bindTo(this.contextKeyService);
-		this.searchHistoryDelayer = new Delayer<codemavi>(500);
+		this.searchHistoryDelayer = new Delayer<void>(500);
 
 		this.recordKeysAction = new Action(KEYBINDINGS_EDITOR_COMMAND_RECORD_SEARCH_KEYS, localize('recordKeysLabel', "Record Keys"), ThemeIcon.asClassName(keybindingsRecordKeysIcon));
 		this.recordKeysAction.checked = false;
@@ -144,7 +144,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		this.overflowWidgetsDomNode = $('.keybindings-overflow-widgets-container.monaco-editor');
 	}
 
-	override create(parent: HTMLElement): codemavi {
+	override create(parent: HTMLElement): void {
 		super.create(parent);
 		this._register(registerNavigableContainer({
 			name: 'keybindingsEditor',
@@ -162,7 +162,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}));
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		const keybindingsEditorElement = DOM.append(parent, $('div', { class: 'keybindings-editor' }));
 
 		this.createAriaLabelElement(keybindingsEditorElement);
@@ -171,19 +171,19 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		this.createBody(keybindingsEditorElement);
 	}
 
-	override setInput(input: KeybindingsEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override setInput(input: KeybindingsEditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		this.keybindingsEditorContextKey.set(true);
 		return super.setInput(input, options, context, token)
 			.then(() => this.render(!!(options && options.preserveFocus)));
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		super.clearInput();
 		this.keybindingsEditorContextKey.reset();
 		this.keybindingFocusContextKey.reset();
 	}
 
-	layout(dimension: DOM.Dimension): codemavi {
+	layout(dimension: DOM.Dimension): void {
 		this.dimension = dimension;
 		this.layoutSearchWidget(dimension);
 
@@ -195,7 +195,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		this._onLayout.fire();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		const activeKeybindingEntry = this.activeKeybindingEntry;
@@ -211,7 +211,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		return focusedElement && focusedElement.templateId === KEYBINDING_ENTRY_TEMPLATE_ID ? <IKeybindingItemEntry>focusedElement : null;
 	}
 
-	async defineKeybinding(keybindingEntry: IKeybindingItemEntry, add: boolean): Promise<codemavi> {
+	async defineKeybinding(keybindingEntry: IKeybindingItemEntry, add: boolean): Promise<void> {
 		this.selectEntry(keybindingEntry);
 		this.showOverlayContainer();
 		try {
@@ -227,22 +227,22 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	defineWhenExpression(keybindingEntry: IKeybindingItemEntry): codemavi {
+	defineWhenExpression(keybindingEntry: IKeybindingItemEntry): void {
 		if (keybindingEntry.keybindingItem.keybinding) {
 			this.selectEntry(keybindingEntry);
 			this._onDefineWhenExpression.fire(keybindingEntry);
 		}
 	}
 
-	rejectWhenExpression(keybindingEntry: IKeybindingItemEntry): codemavi {
+	rejectWhenExpression(keybindingEntry: IKeybindingItemEntry): void {
 		this._onRejectWhenExpression.fire(keybindingEntry);
 	}
 
-	acceptWhenExpression(keybindingEntry: IKeybindingItemEntry): codemavi {
+	acceptWhenExpression(keybindingEntry: IKeybindingItemEntry): void {
 		this._onAcceptWhenExpression.fire(keybindingEntry);
 	}
 
-	async updateKeybinding(keybindingEntry: IKeybindingItemEntry, key: string, when: string | undefined, add?: boolean): Promise<codemavi> {
+	async updateKeybinding(keybindingEntry: IKeybindingItemEntry, key: string, when: string | undefined, add?: boolean): Promise<void> {
 		const currentKey = keybindingEntry.keybindingItem.keybinding ? keybindingEntry.keybindingItem.keybinding.getUserSettingsLabel() : '';
 		if (currentKey !== key || keybindingEntry.keybindingItem.when !== when) {
 			if (add) {
@@ -256,7 +256,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	async removeKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<codemavi> {
+	async removeKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<void> {
 		this.selectEntry(keybindingEntry);
 		if (keybindingEntry.keybindingItem.keybinding) { // This should be a pre-condition
 			try {
@@ -269,7 +269,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	async resetKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<codemavi> {
+	async resetKeybinding(keybindingEntry: IKeybindingItemEntry): Promise<void> {
 		this.selectEntry(keybindingEntry);
 		try {
 			await this.keybindingEditingService.resetKeybinding(keybindingEntry.keybindingItem.keybindingItem);
@@ -283,7 +283,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	async copyKeybinding(keybinding: IKeybindingItemEntry): Promise<codemavi> {
+	async copyKeybinding(keybinding: IKeybindingItemEntry): Promise<void> {
 		this.selectEntry(keybinding);
 		const userFriendlyKeybinding: IUserFriendlyKeybinding = {
 			key: keybinding.keybindingItem.keybinding ? keybinding.keybindingItem.keybinding.getUserSettingsLabel() || '' : '',
@@ -295,44 +295,44 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		await this.clipboardService.writeText(JSON.stringify(userFriendlyKeybinding, null, '  '));
 	}
 
-	async copyKeybindingCommand(keybinding: IKeybindingItemEntry): Promise<codemavi> {
+	async copyKeybindingCommand(keybinding: IKeybindingItemEntry): Promise<void> {
 		this.selectEntry(keybinding);
 		await this.clipboardService.writeText(keybinding.keybindingItem.command);
 	}
 
-	async copyKeybindingCommandTitle(keybinding: IKeybindingItemEntry): Promise<codemavi> {
+	async copyKeybindingCommandTitle(keybinding: IKeybindingItemEntry): Promise<void> {
 		this.selectEntry(keybinding);
 		await this.clipboardService.writeText(keybinding.keybindingItem.commandLabel);
 	}
 
-	focusSearch(): codemavi {
+	focusSearch(): void {
 		this.searchWidget.focus();
 	}
 
-	search(filter: string): codemavi {
+	search(filter: string): void {
 		this.focusSearch();
 		this.searchWidget.setValue(filter);
 		this.selectEntry(0);
 	}
 
-	clearSearchResults(): codemavi {
+	clearSearchResults(): void {
 		this.searchWidget.clear();
 	}
 
-	showSimilarKeybindings(keybindingEntry: IKeybindingItemEntry): codemavi {
+	showSimilarKeybindings(keybindingEntry: IKeybindingItemEntry): void {
 		const value = `"${keybindingEntry.keybindingItem.keybinding.getAriaLabel()}"`;
 		if (value !== this.searchWidget.getValue()) {
 			this.searchWidget.setValue(value);
 		}
 	}
 
-	private createAriaLabelElement(parent: HTMLElement): codemavi {
+	private createAriaLabelElement(parent: HTMLElement): void {
 		this.ariaLabelElement = DOM.append(parent, DOM.$(''));
 		this.ariaLabelElement.setAttribute('id', 'keybindings-editor-aria-label-element');
 		this.ariaLabelElement.setAttribute('aria-live', 'assertive');
 	}
 
-	private createOverlayContainer(parent: HTMLElement): codemavi {
+	private createOverlayContainer(parent: HTMLElement): void {
 		this.overlayContainer = DOM.append(parent, $('.overlay-container'));
 		this.overlayContainer.style.position = 'absolute';
 		this.overlayContainer.style.zIndex = '40'; // has to greater than sash z-index which is 35
@@ -350,7 +350,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		this.overlayContainer.style.display = 'none';
 	}
 
-	private createHeader(parent: HTMLElement): codemavi {
+	private createHeader(parent: HTMLElement): void {
 		this.headerContainer = DOM.append(parent, $('.keybindings-header'));
 		const fullTextSearchPlaceholder = localize('SearchKeybindings.FullTextSearchPlaceholder', "Type to search in keybindings");
 		const keybindingsSearchPlaceholder = localize('SearchKeybindings.KeybindingsSearchPlaceholder', "Recording Keys. Press Escape to exit");
@@ -419,7 +419,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		this._register(this.keybindingsService.onDidUpdateKeybindings(() => toolBar.setActions(actions)));
 	}
 
-	private updateSearchOptions(): codemavi {
+	private updateSearchOptions(): void {
 		const keybindingsEditorInput = this.input as KeybindingsEditorInput;
 		if (keybindingsEditorInput) {
 			keybindingsEditorInput.searchOptions = {
@@ -441,18 +441,18 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		return recordingBadge;
 	}
 
-	private layoutSearchWidget(dimension: DOM.Dimension): codemavi {
+	private layoutSearchWidget(dimension: DOM.Dimension): void {
 		this.searchWidget.layout(dimension);
 		this.headerContainer.classList.toggle('small', dimension.width < 400);
 		this.searchWidget.inputBox.inputElement.style.paddingRight = `${DOM.getTotalWidth(this.actionsContainer) + 12}px`;
 	}
 
-	private createBody(parent: HTMLElement): codemavi {
+	private createBody(parent: HTMLElement): void {
 		const bodyContainer = DOM.append(parent, $('.keybindings-body'));
 		this.createTable(bodyContainer);
 	}
 
-	private createTable(parent: HTMLElement): codemavi {
+	private createTable(parent: HTMLElement): void {
 		this.keybindingsTableContainer = DOM.append(parent, $('.keybindings-table-container'));
 		this.keybindingsTable = this._register(this.instantiationService.createInstance(WorkbenchTable,
 			'KeybindingsEditor',
@@ -543,7 +543,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		DOM.append(this.keybindingsTableContainer, this.overflowWidgetsDomNode);
 	}
 
-	private async render(preserveFocus: boolean): Promise<codemavi> {
+	private async render(preserveFocus: boolean): Promise<void> {
 		if (this.input) {
 			const input: KeybindingsEditorInput = this.input as KeybindingsEditorInput;
 			this.keybindingsEditorModel = await input.resolve();
@@ -574,7 +574,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		return actionsLabels;
 	}
 
-	private filterKeybindings(): codemavi {
+	private filterKeybindings(): void {
 		this.renderKeybindingsEntries(this.searchWidget.hasFocus());
 		this.searchHistoryDelayer.trigger(() => {
 			this.searchWidget.inputBox.addToHistory();
@@ -583,13 +583,13 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		});
 	}
 
-	public clearKeyboardShortcutSearchHistory(): codemavi {
+	public clearKeyboardShortcutSearchHistory(): void {
 		this.searchWidget.inputBox.clearHistory();
 		this.getMemento(StorageScope.PROFILE, StorageTarget.USER)['searchHistory'] = this.searchWidget.inputBox.getHistory();
 		this.saveState();
 	}
 
-	private renderKeybindingsEntries(reset: boolean, preserveFocus?: boolean): codemavi {
+	private renderKeybindingsEntries(reset: boolean, preserveFocus?: boolean): void {
 		if (this.keybindingsEditorModel) {
 			const filter = this.searchWidget.getValue();
 			const keybindingsEntries: IKeybindingItemEntry[] = this.keybindingsEditorModel.fetch(filter, this.sortByPrecedenceAction.checked);
@@ -632,7 +632,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	private layoutKeybindingsTable(): codemavi {
+	private layoutKeybindingsTable(): void {
 		if (!this.dimension) {
 			return;
 		}
@@ -667,7 +667,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		return -1;
 	}
 
-	private selectEntry(keybindingItemEntry: IKeybindingItemEntry | number, focus: boolean = true): codemavi {
+	private selectEntry(keybindingItemEntry: IKeybindingItemEntry | number, focus: boolean = true): void {
 		const index = typeof keybindingItemEntry === 'number' ? keybindingItemEntry : this.getIndexOf(keybindingItemEntry);
 		if (index !== -1 && index < this.keybindingsTable.length) {
 			if (focus) {
@@ -678,25 +678,25 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	focusKeybindings(): codemavi {
+	focusKeybindings(): void {
 		this.keybindingsTable.domFocus();
 		const currentFocusIndices = this.keybindingsTable.getFocus();
 		this.keybindingsTable.setFocus([currentFocusIndices.length ? currentFocusIndices[0] : 0]);
 	}
 
-	selectKeybinding(keybindingItemEntry: IKeybindingItemEntry): codemavi {
+	selectKeybinding(keybindingItemEntry: IKeybindingItemEntry): void {
 		this.selectEntry(keybindingItemEntry);
 	}
 
-	recordSearchKeys(): codemavi {
+	recordSearchKeys(): void {
 		this.recordKeysAction.checked = true;
 	}
 
-	toggleSortByPrecedence(): codemavi {
+	toggleSortByPrecedence(): void {
 		this.sortByPrecedenceAction.checked = !this.sortByPrecedenceAction.checked;
 	}
 
-	private onContextMenu(e: IListContextMenuEvent<IKeybindingItemEntry>): codemavi {
+	private onContextMenu(e: IListContextMenuEvent<IKeybindingItemEntry>): void {
 		if (!e.element) {
 			return;
 		}
@@ -725,7 +725,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		}
 	}
 
-	private onFocusChange(): codemavi {
+	private onFocusChange(): void {
 		this.keybindingFocusContextKey.reset();
 		const element = this.keybindingsTable.getFocusedElements()[0];
 		if (!element) {
@@ -817,7 +817,7 @@ export class KeybindingsEditor extends EditorPane implements IKeybindingsEditorP
 		};
 	}
 
-	private onKeybindingEditingError(error: any): codemavi {
+	private onKeybindingEditingError(error: any): void {
 		this.notificationService.error(typeof error === 'string' ? error : localize('error', "Error '{0}' while editing the keybinding. Please open 'keybindings.json' file and check for errors.", `${error}`));
 	}
 }
@@ -865,7 +865,7 @@ class ActionsColumnRenderer implements ITableRenderer<IKeybindingItemEntry, IAct
 		return { actionBar };
 	}
 
-	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IActionsColumnTemplateData, height: number | undefined): void {
 		templateData.actionBar.clear();
 		const actions: IAction[] = [];
 		if (keybindingItemEntry.keybindingItem.keybinding) {
@@ -898,7 +898,7 @@ class ActionsColumnRenderer implements ITableRenderer<IKeybindingItemEntry, IAct
 		};
 	}
 
-	disposeTemplate(templateData: IActionsColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IActionsColumnTemplateData): void {
 		templateData.actionBar.dispose();
 	}
 
@@ -938,7 +938,7 @@ class CommandColumnRenderer implements ITableRenderer<IKeybindingItemEntry, ICom
 		return { commandColumn, commandColumnHover, commandLabelContainer, commandLabel, commandDefaultLabelContainer, commandDefaultLabel, commandIdLabelContainer, commandIdLabel };
 	}
 
-	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: ICommandColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: ICommandColumnTemplateData, height: number | undefined): void {
 		const keybindingItem = keybindingItemEntry.keybindingItem;
 		const commandIdMatched = !!(keybindingItem.commandLabel && keybindingItemEntry.commandIdMatches);
 		const commandDefaultLabelMatched = !!keybindingItemEntry.commandDefaultLabelMatches;
@@ -973,7 +973,7 @@ class CommandColumnRenderer implements ITableRenderer<IKeybindingItemEntry, ICom
 		}
 	}
 
-	disposeTemplate(templateData: ICommandColumnTemplateData): codemavi {
+	disposeTemplate(templateData: ICommandColumnTemplateData): void {
 		templateData.commandColumnHover.dispose();
 		templateData.commandDefaultLabel.dispose();
 		templateData.commandIdLabel.dispose();
@@ -999,7 +999,7 @@ class KeybindingColumnRenderer implements ITableRenderer<IKeybindingItemEntry, I
 		return { keybindingLabel };
 	}
 
-	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IKeybindingColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IKeybindingColumnTemplateData, height: number | undefined): void {
 		if (keybindingItemEntry.keybindingItem.keybinding) {
 			templateData.keybindingLabel.set(keybindingItemEntry.keybindingItem.keybinding, keybindingItemEntry.keybindingMatches);
 		} else {
@@ -1007,7 +1007,7 @@ class KeybindingColumnRenderer implements ITableRenderer<IKeybindingItemEntry, I
 		}
 	}
 
-	disposeTemplate(templateData: IKeybindingColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IKeybindingColumnTemplateData): void {
 		templateData.keybindingLabel.dispose();
 	}
 }
@@ -1022,7 +1022,7 @@ interface ISourceColumnTemplateData {
 	disposables: DisposableStore;
 }
 
-function onClick(element: HTMLElement, callback: () => codemavi): IDisposable {
+function onClick(element: HTMLElement, callback: () => void): IDisposable {
 	const disposables = new DisposableStore();
 	disposables.add(DOM.addDisposableListener(element, DOM.EventType.CLICK, DOM.finalHandler(callback)));
 	disposables.add(DOM.addDisposableListener(element, DOM.EventType.KEY_UP, e => {
@@ -1057,7 +1057,7 @@ class SourceColumnRenderer implements ITableRenderer<IKeybindingItemEntry, ISour
 		return { sourceColumn, sourceColumnHover, sourceLabel, extensionLabel, extensionContainer, extensionId, disposables: new DisposableStore() };
 	}
 
-	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: ISourceColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: ISourceColumnTemplateData, height: number | undefined): void {
 		templateData.disposables.clear();
 		if (isString(keybindingItemEntry.keybindingItem.source)) {
 			templateData.extensionContainer.classList.add('hide');
@@ -1084,7 +1084,7 @@ class SourceColumnRenderer implements ITableRenderer<IKeybindingItemEntry, ISour
 		}
 	}
 
-	disposeTemplate(templateData: ISourceColumnTemplateData): codemavi {
+	disposeTemplate(templateData: ISourceColumnTemplateData): void {
 		templateData.sourceColumnHover.dispose();
 		templateData.disposables.dispose();
 		templateData.sourceLabel.dispose();
@@ -1099,7 +1099,7 @@ class WhenInputWidget extends Disposable {
 	private readonly _onDidAccept = this._register(new Emitter<string>());
 	readonly onDidAccept = this._onDidAccept.event;
 
-	private readonly _onDidReject = this._register(new Emitter<codemavi>());
+	private readonly _onDidReject = this._register(new Emitter<void>());
 	readonly onDidReject = this._onDidReject.event;
 
 	constructor(
@@ -1130,11 +1130,11 @@ class WhenInputWidget extends Disposable {
 		this._register(Event.any(keybindingsEditor.onRejectWhenExpression, this.input.onDidBlur)(() => this._onDidReject.fire()));
 	}
 
-	layout(dimension: DOM.Dimension): codemavi {
+	layout(dimension: DOM.Dimension): void {
 		this.input.layout(dimension);
 	}
 
-	show(value: string): codemavi {
+	show(value: string): void {
 		this.input.setValue(value);
 		this.input.focus(true);
 	}
@@ -1178,7 +1178,7 @@ class WhenColumnRenderer implements ITableRenderer<IKeybindingItemEntry, IWhenCo
 		};
 	}
 
-	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IWhenColumnTemplateData, height: number | undefined): codemavi {
+	renderElement(keybindingItemEntry: IKeybindingItemEntry, index: number, templateData: IWhenColumnTemplateData, height: number | undefined): void {
 		templateData.disposables.clear();
 		const whenInputDisposables = templateData.disposables.add(new DisposableStore());
 		templateData.disposables.add(this.keybindingsEditor.onDefineWhenExpression(e => {
@@ -1222,7 +1222,7 @@ class WhenColumnRenderer implements ITableRenderer<IKeybindingItemEntry, IWhenCo
 		}
 	}
 
-	disposeTemplate(templateData: IWhenColumnTemplateData): codemavi {
+	disposeTemplate(templateData: IWhenColumnTemplateData): void {
 		templateData.disposables.dispose();
 		templateData.whenLabel.dispose();
 	}

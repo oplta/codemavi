@@ -35,6 +35,6 @@ declare module 'vscode' {
 		canReply: boolean;
 		contextValue?: string;
 		label?: string;
-		dispose(): codemavi;
+		dispose(): void;
 	}
 }

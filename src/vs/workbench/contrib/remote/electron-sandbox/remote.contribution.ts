@@ -36,7 +36,7 @@ class RemoteAgentDiagnosticListener implements IWorkbenchContribution {
 		@IRemoteAgentService remoteAgentService: IRemoteAgentService,
 		@ILabelService labelService: ILabelService
 	) {
-		ipcRenderer.on('vscode:getDiagnosticInfo', (event: unknown, request: { replyChannel: string; args: IDiagnosticInfoOptions }): codemavi => {
+		ipcRenderer.on('vscode:getDiagnosticInfo', (event: unknown, request: { replyChannel: string; args: IDiagnosticInfoOptions }): void => {
 			const connection = remoteAgentService.getConnection();
 			if (connection) {
 				const hostName = labelService.getHostLabel(Schemas.vscodeRemote, connection.remoteAuthority);
@@ -104,7 +104,7 @@ class RemoteTelemetryEnablementUpdater extends Disposable implements IWorkbenchC
 		}));
 	}
 
-	private updateRemoteTelemetryEnablement(): Promise<codemavi> {
+	private updateRemoteTelemetryEnablement(): Promise<void> {
 		return this.remoteAgentService.updateTelemetryLevel(getTelemetryLevel(this.configurationService));
 	}
 }

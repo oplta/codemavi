@@ -9,7 +9,7 @@ import { SettingsDocument } from './settingsDocumentHelper';
 import { provideInstalledExtensionProposals } from './extensionsProposals';
 import './importExportProfiles';
 
-export function activate(context: vscode.ExtensionContext): codemavi {
+export function activate(context: vscode.ExtensionContext): void {
 	//settings.json suggestions
 	context.subscriptions.push(registerSettingsCompletions());
 

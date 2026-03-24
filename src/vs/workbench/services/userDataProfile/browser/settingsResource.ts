@@ -31,7 +31,7 @@ export class SettingsResourceInitializer implements IProfileResourceInitializer 
 	) {
 	}
 
-	async initialize(content: string): Promise<codemavi> {
+	async initialize(content: string): Promise<void> {
 		const settingsContent: ISettingsContent = JSON.parse(content);
 		if (settingsContent.settings === null) {
 			this.logService.info(`Initializing Profile: No settings to apply...`);
@@ -67,7 +67,7 @@ export class SettingsResource implements IProfileResource {
 		}
 	}
 
-	async apply(content: string, profile: IUserDataProfile): Promise<codemavi> {
+	async apply(content: string, profile: IUserDataProfile): Promise<void> {
 		const settingsContent: ISettingsContent = JSON.parse(content);
 		if (settingsContent.settings === null) {
 			this.logService.info(`Importing Profile (${profile.name}): No settings to apply...`);

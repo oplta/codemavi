@@ -41,7 +41,7 @@ export class FilePolicyService extends AbstractPolicyService implements IPolicyS
 		this._register(onDidChangePolicyFile(() => this.throttledDelayer.trigger(() => this.refresh())));
 	}
 
-	protected async _updatePolicyDefinitions(): Promise<codemavi> {
+	protected async _updatePolicyDefinitions(): Promise<void> {
 		await this.refresh();
 	}
 
@@ -70,7 +70,7 @@ export class FilePolicyService extends AbstractPolicyService implements IPolicyS
 		return policies;
 	}
 
-	private async refresh(): Promise<codemavi> {
+	private async refresh(): Promise<void> {
 		const policies = await this.read();
 		const diff = keysDiff(this.policies, policies);
 		this.policies = policies;

@@ -175,7 +175,7 @@ class WebWorker extends Disposable implements IWebWorker {
 		return this.id;
 	}
 
-	public postMessage(message: any, transfer: Transferable[]): codemavi {
+	public postMessage(message: any, transfer: Transferable[]): void {
 		this.worker?.then(w => {
 			try {
 				w.postMessage(message, transfer);

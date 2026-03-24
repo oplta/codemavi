@@ -115,7 +115,7 @@ export class OutlinePane extends ViewPane implements IOutlinePane {
 		this._disposables.add(this._outlineViewState.onDidChange(updateContext));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._disposables.dispose();
 		this._editorPaneDisposables.dispose();
 		this._editorControlDisposables.dispose();
@@ -123,14 +123,14 @@ export class OutlinePane extends ViewPane implements IOutlinePane {
 		super.dispose();
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		this._editorControlChangePromise.then(() => {
 			super.focus();
 			this._tree?.domFocus();
 		});
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this._domNode = container;
@@ -159,17 +159,17 @@ export class OutlinePane extends ViewPane implements IOutlinePane {
 		}));
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this._tree?.layout(height, width);
 		this._treeDimensions = new dom.Dimension(width, height);
 	}
 
-	collapseAll(): codemavi {
+	collapseAll(): void {
 		this._tree?.collapseAll();
 	}
 
-	expandAll(): codemavi {
+	expandAll(): void {
 		this._tree?.expandAll();
 	}
 
@@ -197,8 +197,8 @@ export class OutlinePane extends ViewPane implements IOutlinePane {
 		return false;
 	}
 
-	private _editorControlChangePromise: Promise<codemavi> = Promise.resolve();
-	private _handleEditorChanged(pane: IEditorPane | undefined): codemavi {
+	private _editorControlChangePromise: Promise<void> = Promise.resolve();
+	private _handleEditorChanged(pane: IEditorPane | undefined): void {
 		this._editorPaneDisposables.clear();
 
 		if (pane) {
@@ -211,7 +211,7 @@ export class OutlinePane extends ViewPane implements IOutlinePane {
 		this._editorControlChangePromise = this._handleEditorControlChanged(pane);
 	}
 
-	private async _handleEditorControlChanged(pane: IEditorPane | undefined): Promise<codemavi> {
+	private async _handleEditorControlChanged(pane: IEditorPane | undefined): Promise<void> {
 
 		// persist state
 		const resource = EditorResourceAccessor.getOriginalUri(pane?.input);

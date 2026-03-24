@@ -36,7 +36,7 @@ export class RangeHighlightDecorations implements IDisposable {
 		this._decorationId = null;
 	}
 
-	highlightRange(resource: URI | ITextModel, range: Range, ownerId: number = 0): codemavi {
+	highlightRange(resource: URI | ITextModel, range: Range, ownerId: number = 0): void {
 		let model: ITextModel | null;
 		if (URI.isUri(resource)) {
 			model = this._modelService.getModel(resource);

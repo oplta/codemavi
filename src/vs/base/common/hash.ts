@@ -152,7 +152,7 @@ export class StringSHA1 {
 		this._finished = false;
 	}
 
-	public update(str: string): codemavi {
+	public update(str: string): void {
 		const strLen = str.length;
 		if (strLen === 0) {
 			return;
@@ -253,7 +253,7 @@ export class StringSHA1 {
 		return toHexString(this._h0) + toHexString(this._h1) + toHexString(this._h2) + toHexString(this._h3) + toHexString(this._h4);
 	}
 
-	private _wrapUp(): codemavi {
+	private _wrapUp(): void {
 		this._buff[this._buffLen++] = 0x80;
 		this._buff.subarray(this._buffLen).fill(0);
 
@@ -271,7 +271,7 @@ export class StringSHA1 {
 		this._step();
 	}
 
-	private _step(): codemavi {
+	private _step(): void {
 		const bigBlock32 = StringSHA1._bigBlock32;
 		const data = this._buffDV;
 

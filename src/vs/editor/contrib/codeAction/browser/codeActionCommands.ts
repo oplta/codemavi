@@ -57,7 +57,7 @@ function triggerCodeActionsForEditorSelection(
 	filter: CodeActionFilter | undefined,
 	autoApply: CodeActionAutoApply | undefined,
 	triggerAction: CodeActionTriggerSource = CodeActionTriggerSource.Default
-): codemavi {
+): void {
 	if (editor.hasModel()) {
 		const controller = CodeActionController.get(editor);
 		controller?.manualTriggerAtCurrentPosition(notAvailableMessage, triggerAction, filter, autoApply);
@@ -79,7 +79,7 @@ export class QuickFixAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		return triggerCodeActionsForEditorSelection(editor, nls.localize('editor.action.quickFix.noneMessage', "No code actions available"), undefined, undefined, CodeActionTriggerSource.QuickFix);
 	}
 }
@@ -149,7 +149,7 @@ export class RefactorAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor, userArgs: any): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor, userArgs: any): void {
 		const args = CodeActionCommandArgs.fromUser(userArgs, {
 			kind: CodeActionKind.Refactor,
 			apply: CodeActionAutoApply.Never
@@ -191,7 +191,7 @@ export class SourceAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor, userArgs: any): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor, userArgs: any): void {
 		const args = CodeActionCommandArgs.fromUser(userArgs, {
 			kind: CodeActionKind.Source,
 			apply: CodeActionAutoApply.Never
@@ -233,7 +233,7 @@ export class OrganizeImportsAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		return triggerCodeActionsForEditorSelection(editor,
 			nls.localize('editor.action.organize.noneMessage', "No organize imports action available"),
 			{ include: CodeActionKind.SourceOrganizeImports, includeSourceActions: true },
@@ -253,7 +253,7 @@ export class FixAllAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		return triggerCodeActionsForEditorSelection(editor,
 			nls.localize('fixAll.noneMessage', "No fix all action available"),
 			{ include: CodeActionKind.SourceFixAll, includeSourceActions: true },
@@ -281,7 +281,7 @@ export class AutoFixAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor): void {
 		return triggerCodeActionsForEditorSelection(editor,
 			nls.localize('editor.action.autoFix.noneMessage', "No auto fixes available"),
 			{

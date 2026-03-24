@@ -132,7 +132,7 @@ export class CellEditorStatusBar extends CellContentPart {
 	}
 
 
-	override didRenderCell(element: ICellViewModel): codemavi {
+	override didRenderCell(element: ICellViewModel): void {
 		if (this._notebookEditor.hasModel()) {
 			const context: (INotebookCellActionContext & { $mid: number }) = {
 				ui: true,
@@ -187,7 +187,7 @@ export class CellEditorStatusBar extends CellContentPart {
 		}
 	}
 
-	override updateInternalLayoutNow(element: ICellViewModel): codemavi {
+	override updateInternalLayoutNow(element: ICellViewModel): void {
 		// todo@rebornix layer breaker
 		this._cellContainer.classList.toggle('cell-statusbar-hidden', this._notebookEditor.notebookOptions.computeEditorStatusbarHeight(element.internalMetadata, element.uri) === 0);
 
@@ -229,12 +229,12 @@ export class CellEditorStatusBar extends CellContentPart {
 		this.updateRenderedItems();
 	}
 
-	private updateActiveCell(): codemavi {
+	private updateActiveCell(): void {
 		const isActiveCell = this.currentContext!.notebookEditor.getActiveCell() === this.currentContext?.cell;
 		this.statusBarContainer.classList.toggle('is-active-cell', isActiveCell);
 	}
 
-	private updateRenderedItems(): codemavi {
+	private updateRenderedItems(): void {
 		const items = this.currentContext!.cell.getCellStatusBarItems();
 		items.sort((itemA, itemB) => {
 			return (itemB.priority ?? 0) - (itemA.priority ?? 0);
@@ -364,7 +364,7 @@ class CellStatusBarItem extends Disposable {
 		this._currentItem = item;
 	}
 
-	private async executeCommand(): Promise<codemavi> {
+	private async executeCommand(): Promise<void> {
 		const command = this._currentItem.command;
 		if (!command) {
 			return;

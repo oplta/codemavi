@@ -24,7 +24,7 @@ class ToggleHighContrast extends EditorAction {
 		this._originalThemeName = null;
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const standaloneThemeService = accessor.get(IStandaloneThemeService);
 		const currentTheme = standaloneThemeService.getColorTheme();
 		if (isHighContrast(currentTheme.type)) {

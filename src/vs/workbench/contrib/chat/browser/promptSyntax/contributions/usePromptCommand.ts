@@ -52,7 +52,7 @@ const COMMAND_KEY_BINDING = KeyMod.CtrlCmd | KeyCode.Slash | KeyMod.Alt;
  */
 const command = async (
 	accessor: ServicesAccessor,
-): Promise<codemavi> => {
+): Promise<void> => {
 	const commandService = accessor.get(ICommandService);
 
 	const options: IChatAttachPromptActionOptions = {

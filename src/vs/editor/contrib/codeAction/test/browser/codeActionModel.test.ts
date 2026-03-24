@@ -56,7 +56,7 @@ suite('CodeActionModel', () => {
 	});
 
 	test('Oracle -> marker added', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		await runWithFakedTimers({ useFakeTimers: true }, () => {
 			const reg = registry.register(languageId, testProvider);
@@ -125,7 +125,7 @@ suite('CodeActionModel', () => {
 	});
 
 	test('Oracle -> should only auto trigger once for cursor and marker update right after each other', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 		await runWithFakedTimers({ useFakeTimers: true }, () => {
 			const reg = registry.register(languageId, testProvider);
 			store.add(reg);

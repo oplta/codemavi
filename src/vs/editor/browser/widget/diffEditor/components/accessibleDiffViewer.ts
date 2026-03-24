@@ -46,16 +46,16 @@ export interface IAccessibleDiffViewerModel {
 	/**
 	 * Should do: `setSelection`, `revealLine` and `focus`
 	 */
-	originalReveal(range: Range): codemavi;
+	originalReveal(range: Range): void;
 
 	getModifiedModel(): ITextModel;
 	getModifiedOptions(): IComputedEditorOptions;
 	/**
 	 * Should do: `setSelection`, `revealLine` and `focus`
 	 */
-	modifiedReveal(range?: Range): codemavi;
-	modifiedSetSelection(range: Range): codemavi;
-	modifiedFocus(): codemavi;
+	modifiedReveal(range?: Range): void;
+	modifiedSetSelection(range: Range): void;
+	modifiedFocus(): void;
 
 	getModifiedPosition(): Position | undefined;
 }
@@ -66,7 +66,7 @@ export class AccessibleDiffViewer extends Disposable {
 	constructor(
 		private readonly _parentNode: HTMLElement,
 		private readonly _visible: IObservable<boolean>,
-		private readonly _setVisible: (visible: boolean, tx: ITransaction | undefined) => codemavi,
+		private readonly _setVisible: (visible: boolean, tx: ITransaction | undefined) => void,
 		private readonly _canClose: IObservable<boolean>,
 		private readonly _width: IObservable<number>,
 		private readonly _height: IObservable<number>,
@@ -88,7 +88,7 @@ export class AccessibleDiffViewer extends Disposable {
 		return { model, view, };
 	}).recomputeInitiallyAndOnChange(this._store);
 
-	next(): codemavi {
+	next(): void {
 		transaction(tx => {
 			const isVisible = this._visible.get();
 			this._setVisible(true, tx);
@@ -98,14 +98,14 @@ export class AccessibleDiffViewer extends Disposable {
 		});
 	}
 
-	prev(): codemavi {
+	prev(): void {
 		transaction(tx => {
 			this._setVisible(true, tx);
 			this._state.get()!.model.previousGroup(tx);
 		});
 	}
 
-	close(): codemavi {
+	close(): void {
 		transaction(tx => {
 			this._setVisible(false, tx);
 		});
@@ -128,7 +128,7 @@ class ViewModel extends Disposable {
 	constructor(
 		private readonly _diffs: IObservable<DetailedLineRangeMapping[] | undefined>,
 		private readonly _models: IAccessibleDiffViewerModel,
-		private readonly _setVisible: (visible: boolean, tx: ITransaction | undefined) => codemavi,
+		private readonly _setVisible: (visible: boolean, tx: ITransaction | undefined) => void,
 		public readonly canClose: IObservable<boolean>,
 		@IAccessibilitySignalService private readonly _accessibilitySignalService: IAccessibilitySignalService,
 	) {
@@ -181,7 +181,7 @@ class ViewModel extends Disposable {
 		}));
 	}
 
-	private _goToGroupDelta(delta: number, tx?: ITransaction): codemavi {
+	private _goToGroupDelta(delta: number, tx?: ITransaction): void {
 		const groups = this.groups.get();
 		if (!groups || groups.length <= 1) { return; }
 		subtransaction(tx, tx => {
@@ -190,10 +190,10 @@ class ViewModel extends Disposable {
 		});
 	}
 
-	nextGroup(tx?: ITransaction): codemavi { this._goToGroupDelta(1, tx); }
-	previousGroup(tx?: ITransaction): codemavi { this._goToGroupDelta(-1, tx); }
+	nextGroup(tx?: ITransaction): void { this._goToGroupDelta(1, tx); }
+	previousGroup(tx?: ITransaction): void { this._goToGroupDelta(-1, tx); }
 
-	private _goToLineDelta(delta: number): codemavi {
+	private _goToLineDelta(delta: number): void {
 		const group = this.currentGroup.get();
 		if (!group || group.lines.length <= 1) { return; }
 		transaction(tx => {
@@ -201,10 +201,10 @@ class ViewModel extends Disposable {
 		});
 	}
 
-	goToNextLine(): codemavi { this._goToLineDelta(1); }
-	goToPreviousLine(): codemavi { this._goToLineDelta(-1); }
+	goToNextLine(): void { this._goToLineDelta(1); }
+	goToPreviousLine(): void { this._goToLineDelta(-1); }
 
-	goToLine(line: ViewElement): codemavi {
+	goToLine(line: ViewElement): void {
 		const group = this.currentGroup.get();
 		if (!group) { return; }
 		const idx = group.lines.indexOf(line);
@@ -214,7 +214,7 @@ class ViewModel extends Disposable {
 		});
 	}
 
-	revealCurrentElementInEditor(): codemavi {
+	revealCurrentElementInEditor(): void {
 		if (!this.canClose.get()) { return; }
 		this._setVisible(false, undefined);
 
@@ -232,7 +232,7 @@ class ViewModel extends Disposable {
 		}
 	}
 
-	close(): codemavi {
+	close(): void {
 		if (!this.canClose.get()) { return; }
 		this._setVisible(false, undefined);
 		this._models.modifiedFocus();
@@ -438,7 +438,7 @@ class View extends Disposable {
 		}));
 	}
 
-	private _render(store: DisposableStore): codemavi {
+	private _render(store: DisposableStore): void {
 		const originalOptions = this._models.getOriginalOptions();
 		const modifiedOptions = this._models.getModifiedOptions();
 
@@ -698,7 +698,7 @@ export class AccessibleDiffViewerModelFromEditors implements IAccessibleDiffView
 		return this.editors.original.getOptions();
 	}
 
-	originalReveal(range: Range): codemavi {
+	originalReveal(range: Range): void {
 		this.editors.original.revealRange(range);
 		this.editors.original.setSelection(range);
 		this.editors.original.focus();
@@ -712,7 +712,7 @@ export class AccessibleDiffViewerModelFromEditors implements IAccessibleDiffView
 		return this.editors.modified.getOptions();
 	}
 
-	modifiedReveal(range?: Range | undefined): codemavi {
+	modifiedReveal(range?: Range | undefined): void {
 		if (range) {
 			this.editors.modified.revealRange(range);
 			this.editors.modified.setSelection(range);
@@ -720,11 +720,11 @@ export class AccessibleDiffViewerModelFromEditors implements IAccessibleDiffView
 		this.editors.modified.focus();
 	}
 
-	modifiedSetSelection(range: Range): codemavi {
+	modifiedSetSelection(range: Range): void {
 		this.editors.modified.setSelection(range);
 	}
 
-	modifiedFocus(): codemavi {
+	modifiedFocus(): void {
 		this.editors.modified.focus();
 	}
 

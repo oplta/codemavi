@@ -35,11 +35,11 @@ export class ContextMenuHandler {
 		private keybindingService: IKeybindingService,
 	) { }
 
-	configure(options: IContextMenuHandlerOptions): codemavi {
+	configure(options: IContextMenuHandlerOptions): void {
 		this.options = options;
 	}
 
-	showContextMenu(delegate: IContextMenuDelegate): codemavi {
+	showContextMenu(delegate: IContextMenuDelegate): void {
 		const actions = delegate.getActions();
 		if (!actions.length) {
 			return; // Don't render an empty context menu
@@ -148,7 +148,7 @@ export class ContextMenuHandler {
 		}, shadowRootElement, !!shadowRootElement);
 	}
 
-	private onActionRun(e: IRunEvent, logTelemetry: boolean): codemavi {
+	private onActionRun(e: IRunEvent, logTelemetry: boolean): void {
 		if (logTelemetry) {
 			this.telemetryService.publicLog2<WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification>('workbenchActionExecuted', { id: e.action.id, from: 'contextMenu' });
 		}
@@ -156,7 +156,7 @@ export class ContextMenuHandler {
 		this.contextViewService.hideContextView(false);
 	}
 
-	private onDidActionRun(e: IRunEvent): codemavi {
+	private onDidActionRun(e: IRunEvent): void {
 		if (e.error && !isCancellationError(e.error)) {
 			this.notificationService.error(e.error);
 		}

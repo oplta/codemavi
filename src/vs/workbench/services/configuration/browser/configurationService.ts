@@ -78,7 +78,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 	private readonly remoteUserConfiguration: RemoteUserConfiguration | null = null;
 	private readonly workspaceConfiguration: WorkspaceConfiguration;
 	private cachedFolderConfigs: ResourceMap<FolderConfiguration>;
-	private readonly workspaceEditingQueue: Queue<codemavi>;
+	private readonly workspaceEditingQueue: Queue<void>;
 
 	private readonly _onDidChangeConfiguration: Emitter<IConfigurationChangeEvent> = this._register(new Emitter<IConfigurationChangeEvent>());
 	public readonly onDidChangeConfiguration: Event<IConfigurationChangeEvent> = this._onDidChangeConfiguration.event;
@@ -89,8 +89,8 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 	private readonly _onDidChangeWorkspaceFolders: Emitter<IWorkspaceFoldersChangeEvent> = this._register(new Emitter<IWorkspaceFoldersChangeEvent>());
 	public readonly onDidChangeWorkspaceFolders: Event<IWorkspaceFoldersChangeEvent> = this._onDidChangeWorkspaceFolders.event;
 
-	private readonly _onDidChangeWorkspaceName: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onDidChangeWorkspaceName: Event<codemavi> = this._onDidChangeWorkspaceName.event;
+	private readonly _onDidChangeWorkspaceName: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onDidChangeWorkspaceName: Event<void> = this._onDidChangeWorkspaceName.event;
 
 	private readonly _onDidChangeWorkbenchState: Emitter<WorkbenchState> = this._register(new Emitter<WorkbenchState>());
 	public readonly onDidChangeWorkbenchState: Event<WorkbenchState> = this._onDidChangeWorkbenchState.event;
@@ -156,10 +156,10 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		this._register(this.policyConfiguration.onDidChangeConfiguration(configurationModel => this.onPolicyConfigurationChanged(configurationModel)));
 		this._register(userDataProfileService.onDidChangeCurrentProfile(e => this.onUserDataProfileChanged(e)));
 
-		this.workspaceEditingQueue = new Queue<codemavi>();
+		this.workspaceEditingQueue = new Queue<void>();
 	}
 
-	private createApplicationConfiguration(): codemavi {
+	private createApplicationConfiguration(): void {
 		this.applicationConfigurationDisposables.clear();
 		if (this.userDataProfileService.currentProfile.isDefault || this.userDataProfileService.currentProfile.useDefaultFlags?.settings) {
 			this.applicationConfiguration = null;
@@ -199,15 +199,15 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return this.workspace.getFolder(resource);
 	}
 
-	public addFolders(foldersToAdd: IWorkspaceFolderCreationData[], index?: number): Promise<codemavi> {
+	public addFolders(foldersToAdd: IWorkspaceFolderCreationData[], index?: number): Promise<void> {
 		return this.updateFolders(foldersToAdd, [], index);
 	}
 
-	public removeFolders(foldersToRemove: URI[]): Promise<codemavi> {
+	public removeFolders(foldersToRemove: URI[]): Promise<void> {
 		return this.updateFolders([], foldersToRemove);
 	}
 
-	public async updateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToRemove: URI[], index?: number): Promise<codemavi> {
+	public async updateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToRemove: URI[], index?: number): Promise<void> {
 		return this.workspaceEditingQueue.queue(() => this.doUpdateFolders(foldersToAdd, foldersToRemove, index));
 	}
 
@@ -233,7 +233,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return false;
 	}
 
-	private async doUpdateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToRemove: URI[], index?: number): Promise<codemavi> {
+	private async doUpdateFolders(foldersToAdd: IWorkspaceFolderCreationData[], foldersToRemove: URI[], index?: number): Promise<void> {
 		if (this.getWorkbenchState() !== WorkbenchState.WORKSPACE) {
 			return Promise.resolve(undefined); // we need a workspace to begin with
 		}
@@ -302,7 +302,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return Promise.resolve(undefined);
 	}
 
-	private async setFolders(folders: IStoredWorkspaceFolder[]): Promise<codemavi> {
+	private async setFolders(folders: IStoredWorkspaceFolder[]): Promise<void> {
 		if (!this.instantiationService) {
 			throw new Error('Cannot update workspace folders because workspace service is not yet ready to accept writes.');
 		}
@@ -331,11 +331,11 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return this._configuration.getValue(section, overrides);
 	}
 
-	updateValue(key: string, value: any): Promise<codemavi>;
-	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides): Promise<codemavi>;
-	updateValue(key: string, value: any, target: ConfigurationTarget): Promise<codemavi>;
-	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides, target: ConfigurationTarget, options?: IConfigurationUpdateOptions): Promise<codemavi>;
-	async updateValue(key: string, value: any, arg3?: any, arg4?: any, options?: any): Promise<codemavi> {
+	updateValue(key: string, value: any): Promise<void>;
+	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides): Promise<void>;
+	updateValue(key: string, value: any, target: ConfigurationTarget): Promise<void>;
+	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides, target: ConfigurationTarget, options?: IConfigurationUpdateOptions): Promise<void>;
+	async updateValue(key: string, value: any, arg3?: any, arg4?: any, options?: any): Promise<void> {
 		const overrides: IConfigurationUpdateOverrides | undefined = isConfigurationUpdateOverrides(arg3) ? arg3
 			: isConfigurationOverrides(arg3) ? { resource: arg3.resource, overrideIdentifiers: arg3.overrideIdentifier ? [arg3.overrideIdentifier] : undefined } : undefined;
 		const target: ConfigurationTarget | undefined = overrides ? arg4 : arg3;
@@ -362,7 +362,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		await Promises.settled(targets.map(target => this.writeConfigurationValue(key, value, target, overrides, options)));
 	}
 
-	async reloadConfiguration(target?: ConfigurationTarget | IWorkspaceFolder): Promise<codemavi> {
+	async reloadConfiguration(target?: ConfigurationTarget | IWorkspaceFolder): Promise<void> {
 		if (target === undefined) {
 			this.reloadDefaultConfiguration();
 			const application = await this.reloadApplicationConfiguration(true);
@@ -419,7 +419,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return this._configuration.keys();
 	}
 
-	public async whenRemoteConfigurationLoaded(): Promise<codemavi> {
+	public async whenRemoteConfigurationLoaded(): Promise<void> {
 		await this.initRemoteUserConfigurationBarrier.wait();
 	}
 
@@ -436,7 +436,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 	 *
 	 * Related root path issue discussion is being tracked here - https://github.com/microsoft/vscode/issues/69335
 	 */
-	async initialize(arg: IAnyWorkspaceIdentifier): Promise<codemavi> {
+	async initialize(arg: IAnyWorkspaceIdentifier): Promise<void> {
 		mark('code/willInitWorkspaceService');
 
 		const trigger = this.initialized;
@@ -448,7 +448,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		mark('code/didInitWorkspaceService');
 	}
 
-	updateWorkspaceTrust(trusted: boolean): codemavi {
+	updateWorkspaceTrust(trusted: boolean): void {
 		if (this.isWorkspaceTrusted !== trusted) {
 			this.isWorkspaceTrusted = trusted;
 			const data = this._configuration.toData();
@@ -489,7 +489,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	acquireInstantiationService(instantiationService: IInstantiationService): codemavi {
+	acquireInstantiationService(instantiationService: IInstantiationService): void {
 		this.instantiationService = instantiationService;
 	}
 
@@ -536,14 +536,14 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return Promise.resolve(workspace);
 	}
 
-	private checkAndMarkWorkspaceComplete(fromCache: boolean): codemavi {
+	private checkAndMarkWorkspaceComplete(fromCache: boolean): void {
 		if (!this.completeWorkspaceBarrier.isOpen() && this.workspace.initialized) {
 			this.completeWorkspaceBarrier.open();
 			this.validateWorkspaceFoldersAndReload(fromCache);
 		}
 	}
 
-	private async updateWorkspaceAndInitializeConfiguration(workspace: Workspace, trigger: boolean): Promise<codemavi> {
+	private async updateWorkspaceAndInitializeConfiguration(workspace: Workspace, trigger: boolean): Promise<void> {
 		const hasWorkspaceBefore = !!this.workspace;
 		let previousState: WorkbenchState | undefined;
 		let previousWorkspacePath: string | undefined;
@@ -603,7 +603,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return result;
 	}
 
-	private async initializeConfiguration(trigger: boolean): Promise<codemavi> {
+	private async initializeConfiguration(trigger: boolean): Promise<void> {
 		await this.defaultConfiguration.initialize();
 
 		const initPolicyConfigurationPromise = this.policyConfiguration.initialize();
@@ -630,7 +630,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		mark('code/didInitWorkspaceConfiguration');
 	}
 
-	private reloadDefaultConfiguration(): codemavi {
+	private reloadDefaultConfiguration(): void {
 		this.onDefaultConfigurationChanged(this.defaultConfiguration.reload());
 	}
 
@@ -669,7 +669,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return ConfigurationModel.createEmptyModel(this.logService);
 	}
 
-	private async reloadWorkspaceConfiguration(): Promise<codemavi> {
+	private async reloadWorkspaceConfiguration(): Promise<void> {
 		const workbenchState = this.getWorkbenchState();
 		if (workbenchState === WorkbenchState.FOLDER) {
 			return this.onWorkspaceFolderConfigurationChanged(this.workspace.folders[0]);
@@ -679,11 +679,11 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	private reloadWorkspaceFolderConfiguration(folder: IWorkspaceFolder): Promise<codemavi> {
+	private reloadWorkspaceFolderConfiguration(folder: IWorkspaceFolder): Promise<void> {
 		return this.onWorkspaceFolderConfigurationChanged(folder);
 	}
 
-	private async loadConfiguration(applicationConfigurationModel: ConfigurationModel, userConfigurationModel: ConfigurationModel, remoteUserConfigurationModel: ConfigurationModel, trigger: boolean): Promise<codemavi> {
+	private async loadConfiguration(applicationConfigurationModel: ConfigurationModel, userConfigurationModel: ConfigurationModel, remoteUserConfigurationModel: ConfigurationModel, trigger: boolean): Promise<void> {
 		// reset caches
 		this.cachedFolderConfigs = new ResourceMap<FolderConfiguration>();
 
@@ -718,7 +718,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	private onUserDataProfileChanged(e: DidChangeUserDataProfileEvent): codemavi {
+	private onUserDataProfileChanged(e: DidChangeUserDataProfileEvent): void {
 		e.join((async () => {
 			const promises: Promise<ConfigurationModel>[] = [];
 			promises.push(this.localUserConfiguration.reset(e.profile.settingsResource, e.profile.tasksResource, { scopes: getLocalUserConfigurationScopes(e.profile, !!this.remoteUserConfiguration) }));
@@ -738,7 +738,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		})());
 	}
 
-	private onDefaultConfigurationChanged(configurationModel: ConfigurationModel, properties?: string[]): codemavi {
+	private onDefaultConfigurationChanged(configurationModel: ConfigurationModel, properties?: string[]): void {
 		if (this.workspace) {
 			const previousData = this._configuration.toData();
 			const change = this._configuration.compareAndUpdateDefaultConfiguration(configurationModel, properties);
@@ -769,13 +769,13 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	private onPolicyConfigurationChanged(policyConfiguration: ConfigurationModel): codemavi {
+	private onPolicyConfigurationChanged(policyConfiguration: ConfigurationModel): void {
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const change = this._configuration.compareAndUpdatePolicyConfiguration(policyConfiguration);
 		this.triggerConfigurationChange(change, previous, ConfigurationTarget.DEFAULT);
 	}
 
-	private onApplicationConfigurationChanged(applicationConfiguration: ConfigurationModel): codemavi {
+	private onApplicationConfigurationChanged(applicationConfiguration: ConfigurationModel): void {
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const previousAllProfilesSettings = this._configuration.applicationConfiguration.getValue<string[]>(APPLY_ALL_PROFILES_SETTING) ?? [];
 		const change = this._configuration.compareAndUpdateApplicationConfiguration(applicationConfiguration);
@@ -810,19 +810,19 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		this.triggerConfigurationChange(change, previous, ConfigurationTarget.USER);
 	}
 
-	private onLocalUserConfigurationChanged(userConfiguration: ConfigurationModel): codemavi {
+	private onLocalUserConfigurationChanged(userConfiguration: ConfigurationModel): void {
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const change = this._configuration.compareAndUpdateLocalUserConfiguration(userConfiguration);
 		this.triggerConfigurationChange(change, previous, ConfigurationTarget.USER);
 	}
 
-	private onRemoteUserConfigurationChanged(userConfiguration: ConfigurationModel): codemavi {
+	private onRemoteUserConfigurationChanged(userConfiguration: ConfigurationModel): void {
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const change = this._configuration.compareAndUpdateRemoteUserConfiguration(userConfiguration);
 		this.triggerConfigurationChange(change, previous, ConfigurationTarget.USER);
 	}
 
-	private async onWorkspaceConfigurationChanged(fromCache: boolean): Promise<codemavi> {
+	private async onWorkspaceConfigurationChanged(fromCache: boolean): Promise<void> {
 		if (this.workspace && this.workspace.configuration) {
 			let newFolders = toWorkspaceFolders(this.workspaceConfiguration.getFolders(), this.workspace.configuration, this.uriIdentityService.extUri);
 
@@ -844,7 +844,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	private updateRestrictedSettings(): codemavi {
+	private updateRestrictedSettings(): void {
 		const changed: string[] = [];
 
 		const allProperties = this.configurationRegistry.getConfigurationProperties();
@@ -894,7 +894,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		}
 	}
 
-	private async updateWorkspaceConfiguration(workspaceFolders: WorkspaceFolder[], configuration: ConfigurationModel, fromCache: boolean): Promise<codemavi> {
+	private async updateWorkspaceConfiguration(workspaceFolders: WorkspaceFolder[], configuration: ConfigurationModel, fromCache: boolean): Promise<void> {
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const change = this._configuration.compareAndUpdateWorkspaceConfiguration(configuration);
 		const changes = this.compareFolders(this.workspace.folders, workspaceFolders);
@@ -910,8 +910,8 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		this.updateRestrictedSettings();
 	}
 
-	private async handleWillChangeWorkspaceFolders(changes: IWorkspaceFoldersChangeEvent, fromCache: boolean): Promise<codemavi> {
-		const joiners: Promise<codemavi>[] = [];
+	private async handleWillChangeWorkspaceFolders(changes: IWorkspaceFoldersChangeEvent, fromCache: boolean): Promise<void> {
+		const joiners: Promise<void>[] = [];
 		this._onWillChangeWorkspaceFolders.fire({
 			join(updateWorkspaceTrustStatePromise) {
 				joiners.push(updateWorkspaceTrustStatePromise);
@@ -922,7 +922,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		try { await Promises.settled(joiners); } catch (error) { /* Ignore */ }
 	}
 
-	private async onWorkspaceFolderConfigurationChanged(folder: IWorkspaceFolder): Promise<codemavi> {
+	private async onWorkspaceFolderConfigurationChanged(folder: IWorkspaceFolder): Promise<void> {
 		const [folderConfiguration] = await this.loadFolderConfigurations([folder]);
 		const previous = { data: this._configuration.toData(), workspace: this.workspace };
 		const folderConfigurationChange = this._configuration.compareAndUpdateFolderConfiguration(folder.uri, folderConfiguration);
@@ -970,7 +970,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		})]);
 	}
 
-	private async validateWorkspaceFoldersAndReload(fromCache: boolean): Promise<codemavi> {
+	private async validateWorkspaceFoldersAndReload(fromCache: boolean): Promise<void> {
 		const validWorkspaceFolders = await this.toValidWorkspaceFolders(this.workspace.folders);
 		const { removed } = this.compareFolders(this.workspace.folders, validWorkspaceFolders);
 		if (removed.length) {
@@ -996,7 +996,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return validWorkspaceFolders;
 	}
 
-	private async writeConfigurationValue(key: string, value: any, target: ConfigurationTarget, overrides: IConfigurationUpdateOverrides | undefined, options?: IConfigurationUpdateOverrides): Promise<codemavi> {
+	private async writeConfigurationValue(key: string, value: any, target: ConfigurationTarget, overrides: IConfigurationUpdateOverrides | undefined, options?: IConfigurationUpdateOverrides): Promise<void> {
 		if (!this.instantiationService) {
 			throw new Error('Cannot write configuration because the configuration service is not yet ready to accept writes.');
 		}
@@ -1110,7 +1110,7 @@ export class WorkspaceService extends Disposable implements IWorkbenchConfigurat
 		return [definedTargets[0] || ConfigurationTarget.USER];
 	}
 
-	private triggerConfigurationChange(change: IConfigurationChange, previous: { data: IConfigurationData; workspace?: Workspace } | undefined, target: ConfigurationTarget): codemavi {
+	private triggerConfigurationChange(change: IConfigurationChange, previous: { data: IConfigurationData; workspace?: Workspace } | undefined, target: ConfigurationTarget): void {
 		if (change.keys.length) {
 			if (target !== ConfigurationTarget.DEFAULT) {
 				this.logService.debug(`Configuration keys changed in ${ConfigurationTargetToString(target)} target`, ...change.keys);
@@ -1167,13 +1167,13 @@ class RegisterConfigurationSchemasContribution extends Disposable implements IWo
 			this.registerConfigurationSchemas();
 
 			const configurationRegistry = Registry.as<IConfigurationRegistry>(Extensions.Configuration);
-			const delayer = this._register(new Delayer<codemavi>(50));
+			const delayer = this._register(new Delayer<void>(50));
 			this._register(Event.any(configurationRegistry.onDidUpdateConfiguration, configurationRegistry.onDidSchemaChange, workspaceTrustManagementService.onDidChangeTrust)(() =>
 				delayer.trigger(() => this.registerConfigurationSchemas(), lifecycleService.phase === LifecyclePhase.Eventually ? undefined : 2500 /* delay longer in early phases */)));
 		});
 	}
 
-	private registerConfigurationSchemas(): codemavi {
+	private registerConfigurationSchemas(): void {
 		const allSettingsSchema: IJSONSchema = {
 			properties: allSettings.properties,
 			patternProperties: allSettings.patternProperties,
@@ -1297,7 +1297,7 @@ class RegisterConfigurationSchemasContribution extends Disposable implements IWo
 		workspaceSettingsSchema: IJSONSchema;
 		folderSettingsSchema: IJSONSchema;
 		configDefaultsSchema: IJSONSchema;
-	}): codemavi {
+	}): void {
 		const jsonRegistry = Registry.as<IJSONContributionRegistry>(JSONExtensions.JSONContribution);
 		jsonRegistry.registerSchema(defaultSettingsSchemaId, schemas.defaultSettingsSchema);
 		jsonRegistry.registerSchema(userSettingsSchemaId, schemas.userSettingsSchema);
@@ -1360,7 +1360,7 @@ class UpdateExperimentalSettingsDefaults extends Disposable implements IWorkbenc
 		this._register(this.configurationRegistry.onDidUpdateConfiguration(({ properties }) => this.processExperimentalSettings(properties)));
 	}
 
-	private async processExperimentalSettings(properties: Iterable<string>): Promise<codemavi> {
+	private async processExperimentalSettings(properties: Iterable<string>): Promise<void> {
 		const overrides: IStringDictionary<any> = {};
 		const allProperties = this.configurationRegistry.getConfigurationProperties();
 		for (const property of properties) {

@@ -20,11 +20,11 @@ suite('PromptInputModel', () => {
 	let promptInputModel: PromptInputModel;
 	let xterm: Terminal;
 	let onCommandStart: Emitter<ITerminalCommand>;
-	let onCommandStartChanged: Emitter<codemavi>;
+	let onCommandStartChanged: Emitter<void>;
 	let onCommandExecuted: Emitter<ITerminalCommand>;
 
 	async function writePromise(data: string) {
-		await new Promise<codemavi>(r => xterm.write(data, r));
+		await new Promise<void>(r => xterm.write(data, r));
 	}
 
 	function fireCommandStart() {
@@ -124,7 +124,7 @@ suite('PromptInputModel', () => {
 		await writePromise('foo');
 		await assertPromptInput('foo|');
 
-		await new Promise<codemavi>(r => {
+		await new Promise<void>(r => {
 			store.add(promptInputModel.onDidInterrupt(() => {
 				// Fire onDidFinishInput immediately after onDidInterrupt
 				store.add(promptInputModel.onDidFinishInput(() => {

@@ -17,7 +17,7 @@ import { IChatContentPart, IChatContentPartRenderContext } from './chatContentPa
 export class ChatConfirmationContentPart extends Disposable implements IChatContentPart {
 	public readonly domNode: HTMLElement;
 
-	private readonly _onDidChangeHeight = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeHeight = this._register(new Emitter<void>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	constructor(
@@ -72,7 +72,7 @@ export class ChatConfirmationContentPart extends Disposable implements IChatCont
 		return other.kind === 'confirmation';
 	}
 
-	addDisposable(disposable: IDisposable): codemavi {
+	addDisposable(disposable: IDisposable): void {
 		this._register(disposable);
 	}
 }

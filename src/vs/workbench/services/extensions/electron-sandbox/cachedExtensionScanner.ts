@@ -22,8 +22,8 @@ import { IWorkbenchEnvironmentService } from '../../environment/common/environme
 export class CachedExtensionScanner {
 
 	public readonly scannedExtensions: Promise<IExtensionDescription[]>;
-	private _scannedExtensionsResolve!: (result: IExtensionDescription[]) => codemavi;
-	private _scannedExtensionsReject!: (err: any) => codemavi;
+	private _scannedExtensionsResolve!: (result: IExtensionDescription[]) => void;
+	private _scannedExtensionsReject!: (err: any) => void;
 
 	constructor(
 		@INotificationService private readonly _notificationService: INotificationService,
@@ -40,7 +40,7 @@ export class CachedExtensionScanner {
 		});
 	}
 
-	public async startScanningExtensions(): Promise<codemavi> {
+	public async startScanningExtensions(): Promise<void> {
 		try {
 			const extensions = await this._scanInstalledExtensions();
 			this._scannedExtensionsResolve(extensions);

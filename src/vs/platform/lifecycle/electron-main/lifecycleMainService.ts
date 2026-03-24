@@ -67,7 +67,7 @@ export interface ShutdownEvent {
 	 * Allows to join the shutdown. The promise can be a long running operation but it
 	 * will block the application from closing.
 	 */
-	join(id: string, promise: Promise<codemavi>): codemavi;
+	join(id: string, promise: Promise<void>): void;
 }
 
 export interface IRelaunchHandler {
@@ -107,7 +107,7 @@ export interface ILifecycleMainService {
 	 * An event that fires when the application is about to shutdown before any window is closed.
 	 * The shutdown can still be prevented by any window that vetos this event.
 	 */
-	readonly onBeforeShutdown: Event<codemavi>;
+	readonly onBeforeShutdown: Event<void>;
 
 	/**
 	 * An event that fires after the onBeforeShutdown event has been fired and after no window has
@@ -131,17 +131,17 @@ export interface ILifecycleMainService {
 	/**
 	 * Make a `ICodeWindow` known to the lifecycle main service.
 	 */
-	registerWindow(window: ICodeWindow): codemavi;
+	registerWindow(window: ICodeWindow): void;
 
 	/**
 	 * Make a `IAuxiliaryWindow` known to the lifecycle main service.
 	 */
-	registerAuxWindow(auxWindow: IAuxiliaryWindow): codemavi;
+	registerAuxWindow(auxWindow: IAuxiliaryWindow): void;
 
 	/**
 	 * Reload a window. All lifecycle event handlers are triggered.
 	 */
-	reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<codemavi>;
+	reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<void>;
 
 	/**
 	 * Unload a window for the provided reason. All lifecycle event handlers are triggered.
@@ -151,12 +151,12 @@ export interface ILifecycleMainService {
 	/**
 	 * Restart the application with optional arguments (CLI). All lifecycle event handlers are triggered.
 	 */
-	relaunch(options?: IRelaunchOptions): Promise<codemavi>;
+	relaunch(options?: IRelaunchOptions): Promise<void>;
 
 	/**
 	 * Sets a custom handler for relaunching the application.
 	 */
-	setRelaunchHandler(handler: IRelaunchHandler): codemavi;
+	setRelaunchHandler(handler: IRelaunchHandler): void;
 
 	/**
 	 * Shutdown the application normally. All lifecycle event handlers are triggered.
@@ -175,13 +175,13 @@ export interface ILifecycleMainService {
 	 * of components to participate. The only lifecycle event handler that
 	 * is triggered is `onWillShutdown` in the main process.
 	 */
-	kill(code?: number): Promise<codemavi>;
+	kill(code?: number): Promise<void>;
 
 	/**
 	 * Returns a promise that resolves when a certain lifecycle phase
 	 * has started.
 	 */
-	when(phase: LifecycleMainPhase): Promise<codemavi>;
+	when(phase: LifecycleMainPhase): Promise<void>;
 }
 
 export const enum LifecycleMainPhase {
@@ -216,7 +216,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 
 	private static readonly QUIT_AND_RESTART_KEY = 'lifecycle.quitAndRestart';
 
-	private readonly _onBeforeShutdown = this._register(new Emitter<codemavi>());
+	private readonly _onBeforeShutdown = this._register(new Emitter<void>());
 	readonly onBeforeShutdown = this._onBeforeShutdown.event;
 
 	private readonly _onWillShutdown = this._register(new Emitter<ShutdownEvent>());
@@ -242,9 +242,9 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 	private windowCounter = 0;
 
 	private pendingQuitPromise: Promise<boolean> | undefined = undefined;
-	private pendingQuitPromiseResolve: { (veto: boolean): codemavi } | undefined = undefined;
+	private pendingQuitPromiseResolve: { (veto: boolean): void } | undefined = undefined;
 
-	private pendingWillShutdownPromise: Promise<codemavi> | undefined = undefined;
+	private pendingWillShutdownPromise: Promise<void> | undefined = undefined;
 
 	private readonly mapWindowIdToPendingUnload = new Map<number, Promise<boolean>>();
 
@@ -263,7 +263,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		this.when(LifecycleMainPhase.Ready).then(() => this.registerListeners());
 	}
 
-	private resolveRestarted(): codemavi {
+	private resolveRestarted(): void {
 		this._wasRestarted = !!this.stateService.getItem(LifecycleMainService.QUIT_AND_RESTART_KEY);
 
 		if (this._wasRestarted) {
@@ -272,7 +272,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// before-quit: an event that is fired if application quit was
 		// requested but before any window was closed.
@@ -343,7 +343,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		});
 	}
 
-	private fireOnWillShutdown(reason: ShutdownReason): Promise<codemavi> {
+	private fireOnWillShutdown(reason: ShutdownReason): Promise<void> {
 		if (this.pendingWillShutdownPromise) {
 			return this.pendingWillShutdownPromise; // shutdown is already running
 		}
@@ -351,7 +351,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		const logService = this.logService;
 		this.trace('Lifecycle#onWillShutdown.fire()');
 
-		const joiners: Promise<codemavi>[] = [];
+		const joiners: Promise<void>[] = [];
 
 		this._onWillShutdown.fire({
 			reason,
@@ -404,7 +404,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}
 	}
 
-	async when(phase: LifecycleMainPhase): Promise<codemavi> {
+	async when(phase: LifecycleMainPhase): Promise<void> {
 		if (phase <= this._phase) {
 			return;
 		}
@@ -418,7 +418,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		await barrier.wait();
 	}
 
-	registerWindow(window: ICodeWindow): codemavi {
+	registerWindow(window: ICodeWindow): void {
 		const windowListeners = new DisposableStore();
 
 		// track window count
@@ -477,7 +477,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}));
 	}
 
-	registerAuxWindow(auxWindow: IAuxiliaryWindow): codemavi {
+	registerAuxWindow(auxWindow: IAuxiliaryWindow): void {
 		const win = assertIsDefined(auxWindow.win);
 
 		const windowListeners = new DisposableStore();
@@ -507,7 +507,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}));
 	}
 
-	async reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<codemavi> {
+	async reload(window: ICodeWindow, cli?: NativeParsedArgs): Promise<void> {
 
 		// Only reload when the window has not vetoed this
 		const veto = await this.unload(window, UnloadReason.RELOAD);
@@ -571,7 +571,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		return true; // veto
 	}
 
-	private resolvePendingQuitPromise(veto: boolean): codemavi {
+	private resolvePendingQuitPromise(veto: boolean): void {
 		if (this.pendingQuitPromiseResolve) {
 			this.pendingQuitPromiseResolve(veto);
 			this.pendingQuitPromiseResolve = undefined;
@@ -597,8 +597,8 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		});
 	}
 
-	private onWillUnloadWindowInRenderer(window: ICodeWindow, reason: UnloadReason): Promise<codemavi> {
-		return new Promise<codemavi>(resolve => {
+	private onWillUnloadWindowInRenderer(window: ICodeWindow, reason: UnloadReason): Promise<void> {
+		return new Promise<void>(resolve => {
 			const oneTimeEventToken = this.oneTimeListenerTokenGenerator++;
 			const replyChannel = `vscode:reply${oneTimeEventToken}`;
 
@@ -659,7 +659,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		return this.pendingQuitPromise;
 	}
 
-	private trace(msg: string): codemavi {
+	private trace(msg: string): void {
 		if (this.environmentMainService.args['enable-smoke-test-driver']) {
 			this.logService.info(msg); // helps diagnose issues with exiting from smoke tests
 		} else {
@@ -667,11 +667,11 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}
 	}
 
-	setRelaunchHandler(handler: IRelaunchHandler): codemavi {
+	setRelaunchHandler(handler: IRelaunchHandler): void {
 		this.relaunchHandler = handler;
 	}
 
-	async relaunch(options?: IRelaunchOptions): Promise<codemavi> {
+	async relaunch(options?: IRelaunchOptions): Promise<void> {
 		this.trace('Lifecycle#relaunch()');
 
 		const args = process.argv.slice(1);
@@ -704,7 +704,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 		}
 	}
 
-	async kill(code?: number): Promise<codemavi> {
+	async kill(code?: number): Promise<void> {
 		this.trace('Lifecycle#kill()');
 
 		// Give main process participants a chance to orderly shutdown
@@ -730,7 +730,7 @@ export class LifecycleMainService extends Disposable implements ILifecycleMainSe
 			(async () => {
 				for (const window of getAllWindowsExcludingOffscreen()) {
 					if (window && !window.isDestroyed()) {
-						let whenWindowClosed: Promise<codemavi>;
+						let whenWindowClosed: Promise<void>;
 						if (window.webContents && !window.webContents.isDestroyed()) {
 							whenWindowClosed = new Promise(resolve => window.once('closed', resolve));
 						} else {

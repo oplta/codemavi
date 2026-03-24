@@ -38,7 +38,7 @@ class ReplAccessibilityHelpProvider extends Disposable implements IAccessibleVie
 		this._treeHadFocus = !!_replView.getFocusedElement();
 	}
 
-	public onClose(): codemavi {
+	public onClose(): void {
 		if (this._treeHadFocus) {
 			return this._replView.focusTree();
 		}

@@ -43,7 +43,7 @@ export class EditorsObserver extends Disposable {
 	private readonly mostRecentEditorsMap = new LinkedMap<IEditorIdentifier, IEditorIdentifier>();
 	private readonly editorsPerResourceCounter = new ResourceMap<Map<string /* typeId/editorId */, number /* counter */>>();
 
-	private readonly _onDidMostRecentlyActiveEditorsChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidMostRecentlyActiveEditorsChange = this._register(new Emitter<void>());
 	readonly onDidMostRecentlyActiveEditorsChange = this._onDidMostRecentlyActiveEditorsChange.event;
 
 	get count(): number {
@@ -95,13 +95,13 @@ export class EditorsObserver extends Disposable {
 		this.loadState();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.editorGroupsContainer.onDidAddGroup(group => this.onGroupAdded(group)));
 		this._register(this.editorGroupService.onDidChangeEditorPartOptions(e => this.onDidChangeEditorPartOptions(e)));
 		this._register(this.storageService.onWillSaveState(() => this.saveState()));
 	}
 
-	private onGroupAdded(group: IEditorGroup): codemavi {
+	private onGroupAdded(group: IEditorGroup): void {
 
 		// Make sure to add any already existing editor
 		// of the new group into our list in LRU order
@@ -119,7 +119,7 @@ export class EditorsObserver extends Disposable {
 		this.registerGroupListeners(group);
 	}
 
-	private registerGroupListeners(group: IEditorGroup): codemavi {
+	private registerGroupListeners(group: IEditorGroup): void {
 		const groupDisposables = new DisposableStore();
 		groupDisposables.add(group.onDidModelChange(e => {
 			switch (e.kind) {
@@ -165,7 +165,7 @@ export class EditorsObserver extends Disposable {
 		Event.once(group.onWillDispose)(() => dispose(groupDisposables));
 	}
 
-	private onDidChangeEditorPartOptions(event: IEditorPartOptionsChangeEvent): codemavi {
+	private onDidChangeEditorPartOptions(event: IEditorPartOptionsChangeEvent): void {
 		if (!equals(event.newPartOptions.limit, event.oldPartOptions.limit)) {
 			const activeGroup = this.editorGroupsContainer.activeGroup;
 			let exclude: IEditorIdentifier | undefined = undefined;
@@ -177,7 +177,7 @@ export class EditorsObserver extends Disposable {
 		}
 	}
 
-	private addMostRecentEditor(group: IEditorGroup, editor: EditorInput, isActive: boolean, isNew: boolean): codemavi {
+	private addMostRecentEditor(group: IEditorGroup, editor: EditorInput, isActive: boolean, isNew: boolean): void {
 		const key = this.ensureKey(group, editor);
 		const mostRecentEditor = this.mostRecentEditorsMap.first;
 
@@ -207,7 +207,7 @@ export class EditorsObserver extends Disposable {
 		this._onDidMostRecentlyActiveEditorsChange.fire();
 	}
 
-	private updateEditorResourcesMap(editor: EditorInput, add: boolean): codemavi {
+	private updateEditorResourcesMap(editor: EditorInput, add: boolean): void {
 
 		// Distill the editor resource and type id with support
 		// for side by side editor's primary side too.
@@ -259,7 +259,7 @@ export class EditorsObserver extends Disposable {
 		}
 	}
 
-	private removeMostRecentEditor(group: IEditorGroup, editor: EditorInput): codemavi {
+	private removeMostRecentEditor(group: IEditorGroup, editor: EditorInput): void {
 
 		// Update in resource map
 		this.updateEditorResourcesMap(editor, false);
@@ -308,7 +308,7 @@ export class EditorsObserver extends Disposable {
 		return key;
 	}
 
-	private async ensureOpenedEditorsLimit(exclude: IEditorIdentifier | undefined, groupId?: GroupIdentifier): Promise<codemavi> {
+	private async ensureOpenedEditorsLimit(exclude: IEditorIdentifier | undefined, groupId?: GroupIdentifier): Promise<void> {
 		if (
 			!this.editorGroupService.partOptions.limit?.enabled ||
 			typeof this.editorGroupService.partOptions.limit.value !== 'number' ||
@@ -344,7 +344,7 @@ export class EditorsObserver extends Disposable {
 		}
 	}
 
-	private async doEnsureOpenedEditorsLimit(limit: number, mostRecentEditors: IEditorIdentifier[], exclude?: IEditorIdentifier): Promise<codemavi> {
+	private async doEnsureOpenedEditorsLimit(limit: number, mostRecentEditors: IEditorIdentifier[], exclude?: IEditorIdentifier): Promise<void> {
 
 		// Check for `excludeDirty` setting and apply it by excluding
 		// any recent editor that is dirty from the opened editors limit
@@ -408,7 +408,7 @@ export class EditorsObserver extends Disposable {
 		}
 	}
 
-	private saveState(): codemavi {
+	private saveState(): void {
 		if (this.isScoped) {
 			return; // do not persist state when scoped
 		}
@@ -458,7 +458,7 @@ export class EditorsObserver extends Disposable {
 		};
 	}
 
-	private async loadState(): Promise<codemavi> {
+	private async loadState(): Promise<void> {
 		if (this.editorGroupsContainer === this.editorGroupService.mainPart || this.editorGroupsContainer === this.editorGroupService) {
 			await this.editorGroupService.whenReady;
 		}
@@ -493,7 +493,7 @@ export class EditorsObserver extends Disposable {
 		}
 	}
 
-	private deserialize(serialized: ISerializedEditorsList): codemavi {
+	private deserialize(serialized: ISerializedEditorsList): void {
 		const mapValues: [IEditorIdentifier, IEditorIdentifier][] = [];
 
 		for (const { groupId, index } of serialized.entries) {

@@ -356,8 +356,8 @@ suite('SearchResult', () => {
 	});
 
 	test('replace should remove the file match', function () {
-		const codemaviPromise = Promise.resolve(null);
-		instantiationService.stub(IReplaceService, 'replace', codemaviPromise);
+		const maviPromise = Promise.resolve(null);
+		instantiationService.stub(IReplaceService, 'replace', maviPromise);
 		const testObject = aSearchResult();
 		addToSearchResult(testObject, [
 			aRawMatch('/1',
@@ -365,13 +365,13 @@ suite('SearchResult', () => {
 
 		testObject.replace(testObject.matches()[0]);
 
-		return codemaviPromise.then(() => assert.ok(testObject.isEmpty()));
+		return maviPromise.then(() => assert.ok(testObject.isEmpty()));
 	});
 
 	test('replace should trigger the change event', function () {
 		const target = sinon.spy();
-		const codemaviPromise = Promise.resolve(null);
-		instantiationService.stub(IReplaceService, 'replace', codemaviPromise);
+		const maviPromise = Promise.resolve(null);
+		instantiationService.stub(IReplaceService, 'replace', maviPromise);
 		const testObject = aSearchResult();
 		addToSearchResult(testObject, [
 			aRawMatch('/1',
@@ -382,15 +382,15 @@ suite('SearchResult', () => {
 
 		testObject.replace(objectToRemove);
 
-		return codemaviPromise.then(() => {
+		return maviPromise.then(() => {
 			assert.ok(target.calledOnce);
 			assert.deepStrictEqual([{ elements: [objectToRemove], removed: true }], target.args[0]);
 		});
 	});
 
 	test('replaceAll should remove all file matches', function () {
-		const codemaviPromise = Promise.resolve(null);
-		instantiationService.stubPromise(IReplaceService, 'replace', codemaviPromise);
+		const maviPromise = Promise.resolve(null);
+		instantiationService.stubPromise(IReplaceService, 'replace', maviPromise);
 		const testObject = aSearchResult();
 		addToSearchResult(testObject, [
 			aRawMatch('/1',
@@ -400,7 +400,7 @@ suite('SearchResult', () => {
 
 		testObject.replaceAll(null!);
 
-		return codemaviPromise.then(() => assert.ok(testObject.isEmpty()));
+		return maviPromise.then(() => assert.ok(testObject.isEmpty()));
 	});
 
 	test('batchRemove should trigger the onChange event correctly', function () {

@@ -21,7 +21,7 @@ class AudioPreviewProvider implements vscode.CustomReadonlyEditorProvider {
 		return { uri, dispose: () => { } };
 	}
 
-	public async resolveCustomEditor(document: vscode.CustomDocument, webviewEditor: vscode.WebviewPanel): Promise<codemavi> {
+	public async resolveCustomEditor(document: vscode.CustomDocument, webviewEditor: vscode.WebviewPanel): Promise<void> {
 		new AudioPreview(this.extensionRoot, document.uri, webviewEditor, this.binarySizeStatusBarEntry);
 	}
 }
@@ -96,7 +96,7 @@ class AudioPreview extends MediaPreview {
 			}
 		}
 
-		// Acodemavi adding cache busting if there is already a query string
+		// Avoid adding cache busting if there is already a query string
 		if (resource.query) {
 			return webviewEditor.webview.asWebviewUri(resource).toString();
 		}

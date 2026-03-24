@@ -25,7 +25,7 @@ export class ExtHostSpeech implements ExtHostSpeechShape {
 		this.proxy = mainContext.getProxy(MainContext.MainThreadSpeech);
 	}
 
-	async $createSpeechToTextSession(handle: number, session: number, language?: string): Promise<codemavi> {
+	async $createSpeechToTextSession(handle: number, session: number, language?: string): Promise<void> {
 		const provider = this.providers.get(handle);
 		if (!provider) {
 			return;
@@ -52,12 +52,12 @@ export class ExtHostSpeech implements ExtHostSpeechShape {
 		disposables.add(cts.token.onCancellationRequested(() => disposables.dispose()));
 	}
 
-	async $cancelSpeechToTextSession(session: number): Promise<codemavi> {
+	async $cancelSpeechToTextSession(session: number): Promise<void> {
 		this.sessions.get(session)?.dispose(true);
 		this.sessions.delete(session);
 	}
 
-	async $createTextToSpeechSession(handle: number, session: number, language?: string): Promise<codemavi> {
+	async $createTextToSpeechSession(handle: number, session: number, language?: string): Promise<void> {
 		const provider = this.providers.get(handle);
 		if (!provider) {
 			return;
@@ -86,17 +86,17 @@ export class ExtHostSpeech implements ExtHostSpeechShape {
 		disposables.add(cts.token.onCancellationRequested(() => disposables.dispose()));
 	}
 
-	async $synthesizeSpeech(session: number, text: string): Promise<codemavi> {
+	async $synthesizeSpeech(session: number, text: string): Promise<void> {
 		this.synthesizers.get(session)?.synthesize(text);
 	}
 
-	async $cancelTextToSpeechSession(session: number): Promise<codemavi> {
+	async $cancelTextToSpeechSession(session: number): Promise<void> {
 		this.sessions.get(session)?.dispose(true);
 		this.sessions.delete(session);
 		this.synthesizers.delete(session);
 	}
 
-	async $createKeywordRecognitionSession(handle: number, session: number): Promise<codemavi> {
+	async $createKeywordRecognitionSession(handle: number, session: number): Promise<void> {
 		const provider = this.providers.get(handle);
 		if (!provider) {
 			return;
@@ -123,7 +123,7 @@ export class ExtHostSpeech implements ExtHostSpeechShape {
 		disposables.add(cts.token.onCancellationRequested(() => disposables.dispose()));
 	}
 
-	async $cancelKeywordRecognitionSession(session: number): Promise<codemavi> {
+	async $cancelKeywordRecognitionSession(session: number): Promise<void> {
 		this.sessions.get(session)?.dispose(true);
 		this.sessions.delete(session);
 	}

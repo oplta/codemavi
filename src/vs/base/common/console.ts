@@ -99,7 +99,7 @@ function findFirstFrame(stack: string | undefined): string | undefined {
 	return stack.substring(0, newlineIndex);
 }
 
-export function log(entry: IRemoteConsoleLog, label: string): codemavi {
+export function log(entry: IRemoteConsoleLog, label: string): void {
 	const { args, stack } = parse(entry);
 
 	const isOneStringArg = typeof args[0] === 'string' && args.length === 1;

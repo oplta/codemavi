@@ -20,7 +20,7 @@ class MoveCaretAction extends EditorAction {
 		this.left = left;
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		if (!editor.hasModel()) {
 			return;
 		}

@@ -48,7 +48,7 @@ suite('NotebookEditorStickyScroll', () => {
 			override getControl() {
 				return editor;
 			}
-			override onDidChangeModel: Event<codemavi> = Event.None;
+			override onDidChangeModel: Event<void> = Event.None;
 			override onDidChangeSelection: Event<IEditorPaneSelectionChangeEvent> = Event.None;
 		}, OutlineTarget.QuickPick));
 		return outline;

@@ -135,7 +135,7 @@ export class BreakpointsView extends ViewPane {
 		this.hintDelayer = this._register(new RunOnceScheduler(() => this.updateBreakpointsHint(true), 4000));
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this.element.classList.add('debug-pane');
@@ -218,7 +218,7 @@ export class BreakpointsView extends ViewPane {
 		}));
 	}
 
-	protected override renderHeaderTitle(container: HTMLElement, title: string): codemavi {
+	protected override renderHeaderTitle(container: HTMLElement, title: string): void {
 		super.renderHeaderTitle(container, title);
 
 		const iconLabelContainer = dom.append(container, $('span.breakpoint-warning'));
@@ -231,12 +231,12 @@ export class BreakpointsView extends ViewPane {
 		dom.hide(this.hintContainer.element);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 		this.list?.domFocus();
 	}
 
-	renderInputBox(data: InputBoxData | undefined): codemavi {
+	renderInputBox(data: InputBoxData | undefined): void {
 		this._inputBoxData = data;
 		this.onBreakpointsChange();
 		this._inputBoxData = undefined;
@@ -246,7 +246,7 @@ export class BreakpointsView extends ViewPane {
 		return this._inputBoxData;
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		if (this.ignoreLayout) {
 			return;
 		}
@@ -261,7 +261,7 @@ export class BreakpointsView extends ViewPane {
 		}
 	}
 
-	private onListContextMenu(e: IListContextMenuEvent<IEnablement>): codemavi {
+	private onListContextMenu(e: IListContextMenuEvent<IEnablement>): void {
 		const element = e.element;
 		const type = element instanceof Breakpoint ? 'breakpoint' : element instanceof ExceptionBreakpoint ? 'exceptionBreakpoint' :
 			element instanceof FunctionBreakpoint ? 'functionBreakpoint' : element instanceof DataBreakpoint ? 'dataBreakpoint' :
@@ -282,7 +282,7 @@ export class BreakpointsView extends ViewPane {
 		});
 	}
 
-	private updateSize(): codemavi {
+	private updateSize(): void {
 		const containerModel = this.viewDescriptorService.getViewContainerModel(this.viewDescriptorService.getViewContainerByViewId(this.id)!)!;
 
 		// Adjust expanded body size
@@ -291,7 +291,7 @@ export class BreakpointsView extends ViewPane {
 		this.maximumBodySize = this.orientation === Orientation.VERTICAL && containerModel.visibleViewDescriptors.length > 1 ? getExpandedBodySize(this.debugService.getModel(), sessionId, Number.POSITIVE_INFINITY) : Number.POSITIVE_INFINITY;
 	}
 
-	private updateBreakpointsHint(delayed = false): codemavi {
+	private updateBreakpointsHint(delayed = false): void {
 		if (!this.hintContainer) {
 			return;
 		}
@@ -321,7 +321,7 @@ export class BreakpointsView extends ViewPane {
 		}
 	}
 
-	private onBreakpointsChange(): codemavi {
+	private onBreakpointsChange(): void {
 		if (this.isBodyVisible()) {
 			this.updateSize();
 			if (this.list) {
@@ -340,7 +340,7 @@ export class BreakpointsView extends ViewPane {
 		}
 	}
 
-	private onStateChange(): codemavi {
+	private onStateChange(): void {
 		if (this.isBodyVisible()) {
 			this.needsStateChange = false;
 			const thread = this.debugService.getViewModel().focusedThread;
@@ -545,7 +545,7 @@ class BreakpointsRenderer implements IListRenderer<IBreakpoint, IBreakpointTempl
 		return data;
 	}
 
-	renderElement(breakpoint: IBreakpoint, index: number, data: IBreakpointTemplateData): codemavi {
+	renderElement(breakpoint: IBreakpoint, index: number, data: IBreakpointTemplateData): void {
 		data.context = breakpoint;
 		data.breakpoint.classList.toggle('disabled', !this.debugService.getModel().areBreakpointsActivated());
 
@@ -582,11 +582,11 @@ class BreakpointsRenderer implements IListRenderer<IBreakpoint, IBreakpointTempl
 
 
 
-	disposeElement(a: any, index: number, template: IBreakpointTemplateData): codemavi {
+	disposeElement(a: any, index: number, template: IBreakpointTemplateData): void {
 		template.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IBreakpointTemplateData): codemavi {
+	disposeTemplate(templateData: IBreakpointTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -636,7 +636,7 @@ class ExceptionBreakpointsRenderer implements IListRenderer<IExceptionBreakpoint
 		return data;
 	}
 
-	renderElement(exceptionBreakpoint: IExceptionBreakpoint, index: number, data: IExceptionBreakpointTemplateData): codemavi {
+	renderElement(exceptionBreakpoint: IExceptionBreakpoint, index: number, data: IExceptionBreakpointTemplateData): void {
 		data.context = exceptionBreakpoint;
 		data.name.textContent = exceptionBreakpoint.label || `${exceptionBreakpoint.filter} exceptions`;
 		const exceptionBreakpointtitle = exceptionBreakpoint.verified ? (exceptionBreakpoint.description || data.name.textContent) : exceptionBreakpoint.message || localize('unverifiedExceptionBreakpoint', "Unverified Exception Breakpoint");
@@ -662,11 +662,11 @@ class ExceptionBreakpointsRenderer implements IListRenderer<IExceptionBreakpoint
 		breakpointIdToActionBarDomeNode.set(exceptionBreakpoint.getId(), data.actionBar.domNode);
 	}
 
-	disposeElement(element: IExceptionBreakpoint, index: number, templateData: IExceptionBreakpointTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: IExceptionBreakpoint, index: number, templateData: IExceptionBreakpointTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IExceptionBreakpointTemplateData): codemavi {
+	disposeTemplate(templateData: IExceptionBreakpointTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -717,7 +717,7 @@ class FunctionBreakpointsRenderer implements IListRenderer<FunctionBreakpoint, I
 		return data;
 	}
 
-	renderElement(functionBreakpoint: FunctionBreakpoint, _index: number, data: IFunctionBreakpointTemplateData): codemavi {
+	renderElement(functionBreakpoint: FunctionBreakpoint, _index: number, data: IFunctionBreakpointTemplateData): void {
 		data.context = functionBreakpoint;
 		data.name.textContent = functionBreakpoint.name;
 		const { icon, message } = getBreakpointMessageAndIcon(this.debugService.state, this.debugService.getModel().areBreakpointsActivated(), functionBreakpoint, this.labelService, this.debugService.getModel());
@@ -753,11 +753,11 @@ class FunctionBreakpointsRenderer implements IListRenderer<FunctionBreakpoint, I
 		breakpointIdToActionBarDomeNode.set(functionBreakpoint.getId(), data.actionBar.domNode);
 	}
 
-	disposeElement(element: FunctionBreakpoint, index: number, templateData: IFunctionBreakpointTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: FunctionBreakpoint, index: number, templateData: IFunctionBreakpointTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IFunctionBreakpointTemplateData): codemavi {
+	disposeTemplate(templateData: IFunctionBreakpointTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -811,7 +811,7 @@ class DataBreakpointsRenderer implements IListRenderer<DataBreakpoint, IDataBrea
 		return data;
 	}
 
-	renderElement(dataBreakpoint: DataBreakpoint, _index: number, data: IDataBreakpointTemplateData): codemavi {
+	renderElement(dataBreakpoint: DataBreakpoint, _index: number, data: IDataBreakpointTemplateData): void {
 		data.context = dataBreakpoint;
 		data.name.textContent = dataBreakpoint.description;
 		const { icon, message } = getBreakpointMessageAndIcon(this.debugService.state, this.debugService.getModel().areBreakpointsActivated(), dataBreakpoint, this.labelService, this.debugService.getModel());
@@ -856,11 +856,11 @@ class DataBreakpointsRenderer implements IListRenderer<DataBreakpoint, IDataBrea
 		this.breakpointIsDataBytes.reset();
 	}
 
-	disposeElement(element: DataBreakpoint, index: number, templateData: IDataBreakpointTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: DataBreakpoint, index: number, templateData: IDataBreakpointTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IBaseBreakpointWithIconTemplateData): codemavi {
+	disposeTemplate(templateData: IBaseBreakpointWithIconTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -908,7 +908,7 @@ class InstructionBreakpointsRenderer implements IListRenderer<IInstructionBreakp
 		return data;
 	}
 
-	renderElement(breakpoint: IInstructionBreakpoint, index: number, data: IInstructionBreakpointTemplateData): codemavi {
+	renderElement(breakpoint: IInstructionBreakpoint, index: number, data: IInstructionBreakpointTemplateData): void {
 		data.context = breakpoint;
 		data.breakpoint.classList.toggle('disabled', !this.debugService.getModel().areBreakpointsActivated());
 
@@ -934,11 +934,11 @@ class InstructionBreakpointsRenderer implements IListRenderer<IInstructionBreakp
 	}
 
 
-	disposeElement(element: IInstructionBreakpoint, index: number, templateData: IInstructionBreakpointTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: IInstructionBreakpoint, index: number, templateData: IInstructionBreakpointTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IInstructionBreakpointTemplateData): codemavi {
+	disposeTemplate(templateData: IInstructionBreakpointTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -1027,7 +1027,7 @@ class FunctionBreakpointInputRenderer implements IListRenderer<IFunctionBreakpoi
 		return template;
 	}
 
-	renderElement(functionBreakpoint: FunctionBreakpoint, _index: number, data: IFunctionBreakpointInputTemplateData): codemavi {
+	renderElement(functionBreakpoint: FunctionBreakpoint, _index: number, data: IFunctionBreakpointInputTemplateData): void {
 		data.breakpoint = functionBreakpoint;
 		data.type = this.view.inputBoxData?.type || 'name'; // If there is no type set take the 'name' as the default
 		const { icon, message } = getBreakpointMessageAndIcon(this.debugService.state, this.debugService.getModel().areBreakpointsActivated(), functionBreakpoint, this.labelService, this.debugService.getModel());
@@ -1058,11 +1058,11 @@ class FunctionBreakpointInputRenderer implements IListRenderer<IFunctionBreakpoi
 		}, 0);
 	}
 
-	disposeElement(element: IFunctionBreakpoint, index: number, templateData: IFunctionBreakpointInputTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: IFunctionBreakpoint, index: number, templateData: IFunctionBreakpointInputTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IFunctionBreakpointInputTemplateData): codemavi {
+	disposeTemplate(templateData: IFunctionBreakpointInputTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -1143,7 +1143,7 @@ class DataBreakpointInputRenderer implements IListRenderer<IDataBreakpoint, IDat
 		return template;
 	}
 
-	renderElement(dataBreakpoint: DataBreakpoint, _index: number, data: IDataBreakpointInputTemplateData): codemavi {
+	renderElement(dataBreakpoint: DataBreakpoint, _index: number, data: IDataBreakpointInputTemplateData): void {
 		data.breakpoint = dataBreakpoint;
 		data.type = this.view.inputBoxData?.type || 'condition'; // If there is no type set take the 'condition' as the default
 		const { icon, message } = getBreakpointMessageAndIcon(this.debugService.state, this.debugService.getModel().areBreakpointsActivated(), dataBreakpoint, this.labelService, this.debugService.getModel());
@@ -1173,11 +1173,11 @@ class DataBreakpointInputRenderer implements IListRenderer<IDataBreakpoint, IDat
 		}, 0);
 	}
 
-	disposeElement(element: IDataBreakpoint, index: number, templateData: IDataBreakpointInputTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: IDataBreakpoint, index: number, templateData: IDataBreakpointInputTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IDataBreakpointInputTemplateData): codemavi {
+	disposeTemplate(templateData: IDataBreakpointInputTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -1257,7 +1257,7 @@ class ExceptionBreakpointInputRenderer implements IListRenderer<IExceptionBreakp
 		return templateData;
 	}
 
-	renderElement(exceptionBreakpoint: ExceptionBreakpoint, _index: number, data: IExceptionBreakpointInputTemplateData): codemavi {
+	renderElement(exceptionBreakpoint: ExceptionBreakpoint, _index: number, data: IExceptionBreakpointInputTemplateData): void {
 		const placeHolder = exceptionBreakpoint.conditionDescription || localize('exceptionBreakpointPlaceholder', "Break when expression evaluates to true");
 		data.inputBox.setPlaceHolder(placeHolder);
 		data.currentBreakpoint = exceptionBreakpoint;
@@ -1270,11 +1270,11 @@ class ExceptionBreakpointInputRenderer implements IListRenderer<IExceptionBreakp
 		}, 0);
 	}
 
-	disposeElement(element: IExceptionBreakpoint, index: number, templateData: IExceptionBreakpointInputTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: IExceptionBreakpoint, index: number, templateData: IExceptionBreakpointInputTemplateData, height: number | undefined): void {
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IExceptionBreakpointInputTemplateData): codemavi {
+	disposeTemplate(templateData: IExceptionBreakpointInputTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -1495,7 +1495,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		const viewService = accessor.get(IViewsService);
 		await viewService.openView(BREAKPOINTS_VIEW_ID);
@@ -1504,7 +1504,7 @@ registerAction2(class extends Action2 {
 });
 
 abstract class MemoryBreakpointAction extends Action2 {
-	async run(accessor: ServicesAccessor, existingBreakpoint?: IDataBreakpoint): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, existingBreakpoint?: IDataBreakpoint): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		const session = debugService.getViewModel().focusedSession;
 		if (!session) {
@@ -1680,7 +1680,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const debugService = accessor.get(IDebugService);
 		debugService.setBreakpointsActivated(!debugService.getModel().areBreakpointsActivated());
 	}
@@ -1706,7 +1706,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, breakpoint: IBaseBreakpoint): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, breakpoint: IBaseBreakpoint): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		if (breakpoint instanceof Breakpoint) {
 			await debugService.removeBreakpoints(breakpoint.getId());
@@ -1749,7 +1749,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const debugService = accessor.get(IDebugService);
 		debugService.removeBreakpoints();
 		debugService.removeFunctionBreakpoints();
@@ -1782,7 +1782,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		await debugService.enableOrDisableBreakpoints(true);
 	}
@@ -1812,7 +1812,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		await debugService.enableOrDisableBreakpoints(false);
 	}
@@ -1834,7 +1834,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		await debugService.setBreakpointsActivated(true);
 	}
@@ -1861,7 +1861,7 @@ registerAction2(class extends ViewAction<BreakpointsView> {
 		});
 	}
 
-	async runInView(accessor: ServicesAccessor, view: BreakpointsView, breakpoint: ExceptionBreakpoint | Breakpoint | FunctionBreakpoint | DataBreakpoint): Promise<codemavi> {
+	async runInView(accessor: ServicesAccessor, view: BreakpointsView, breakpoint: ExceptionBreakpoint | Breakpoint | FunctionBreakpoint | DataBreakpoint): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		const editorService = accessor.get(IEditorService);
 		if (breakpoint instanceof Breakpoint) {

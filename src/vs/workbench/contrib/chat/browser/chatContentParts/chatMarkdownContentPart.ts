@@ -58,7 +58,7 @@ export class ChatMarkdownContentPart extends Disposable implements IChatContentP
 	public readonly domNode: HTMLElement;
 	private readonly allRefs: IDisposableReference<CodeBlockPart | CollapsedCodeBlock>[] = [];
 
-	private readonly _onDidChangeHeight = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeHeight = this._register(new Emitter<void>());
 	public readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
 	public readonly codeblocks: IChatCodeBlockInfo[] = [];
@@ -240,7 +240,7 @@ export class ChatMarkdownContentPart extends Disposable implements IChatContentP
 			|| this.codeblocks.at(-1)?.isStreaming && this.codeblocks.at(-1)?.codemapperUri !== undefined && other.content.value.lastIndexOf('```') === this.markdown.content.value.lastIndexOf('```'));
 	}
 
-	layout(width: number): codemavi {
+	layout(width: number): void {
 		this.allRefs.forEach((ref, index) => {
 			if (ref.object instanceof CodeBlockPart) {
 				ref.object.layout(width);
@@ -253,7 +253,7 @@ export class ChatMarkdownContentPart extends Disposable implements IChatContentP
 		});
 	}
 
-	addDisposable(disposable: IDisposable): codemavi {
+	addDisposable(disposable: IDisposable): void {
 		this._register(disposable);
 	}
 }
@@ -357,7 +357,7 @@ class CollapsedCodeBlock extends Disposable {
 		}));
 	}
 
-	render(uri: URI, isStreaming?: boolean): codemavi {
+	render(uri: URI, isStreaming?: boolean): void {
 		this._progressStore.clear();
 
 		this._uri = uri;
@@ -443,7 +443,7 @@ class CollapsedCodeBlock extends Disposable {
 		}));
 	}
 
-	private updateTooltip(tooltip: string): codemavi {
+	private updateTooltip(tooltip: string): void {
 		this.tooltip = tooltip;
 		if (!this.hover.value) {
 			this.hover.value = this.hoverService.setupDelayedHover(this.element, () => (

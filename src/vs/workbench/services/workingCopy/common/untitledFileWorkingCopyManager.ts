@@ -81,7 +81,7 @@ export interface IUntitledFileWorkingCopyManager<M extends IUntitledFileWorkingC
 	/**
 	 * Internal method: triggers the onDidSave event.
 	 */
-	notifyDidSave(source: URI, target: URI): codemavi;
+	notifyDidSave(source: URI, target: URI): void;
 }
 
 export interface INewUntitledFileWorkingCopyOptions {
@@ -251,7 +251,7 @@ export class UntitledFileWorkingCopyManager<M extends IUntitledFileWorkingCopyMo
 		return workingCopy;
 	}
 
-	private registerWorkingCopy(workingCopy: IUntitledFileWorkingCopy<M>): codemavi {
+	private registerWorkingCopy(workingCopy: IUntitledFileWorkingCopy<M>): void {
 
 		// Install working copy listeners
 		const workingCopyListeners = new DisposableStore();
@@ -288,7 +288,7 @@ export class UntitledFileWorkingCopyManager<M extends IUntitledFileWorkingCopyMo
 
 	//#region Lifecycle
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		// Dispose the working copy change listeners
@@ -298,7 +298,7 @@ export class UntitledFileWorkingCopyManager<M extends IUntitledFileWorkingCopyMo
 
 	//#endregion
 
-	notifyDidSave(source: URI, target: URI): codemavi {
+	notifyDidSave(source: URI, target: URI): void {
 		this._onDidSave.fire({ source, target });
 	}
 }

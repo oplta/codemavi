@@ -32,7 +32,7 @@ const MULTIROOT_QUERIES: IFolderQuery[] = [
 
 flakySuite('FileSearchEngine', () => {
 
-	test('Files: *.js', function (done: () => codemavi) {
+	test('Files: *.js', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -51,7 +51,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: maxResults', function (done: () => codemavi) {
+	test('Files: maxResults', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -70,7 +70,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: maxResults without Ripgrep', function (done: () => codemavi) {
+	test('Files: maxResults without Ripgrep', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -89,7 +89,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: exists', function (done: () => codemavi) {
+	test('Files: exists', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -110,7 +110,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: not exists', function (done: () => codemavi) {
+	test('Files: not exists', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -131,7 +131,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: exists without Ripgrep', function (done: () => codemavi) {
+	test('Files: exists without Ripgrep', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -152,7 +152,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: not exists without Ripgrep', function (done: () => codemavi) {
+	test('Files: not exists without Ripgrep', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -173,7 +173,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: examples/com*', function (done: () => codemavi) {
+	test('Files: examples/com*', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -192,7 +192,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: examples (fuzzy)', function (done: () => codemavi) {
+	test('Files: examples (fuzzy)', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -211,7 +211,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: multiroot', function (done: () => codemavi) {
+	test('Files: multiroot', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: MULTIROOT_QUERIES,
@@ -230,7 +230,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: multiroot with includePattern and maxResults', function (done: () => codemavi) {
+	test('Files: multiroot with includePattern and maxResults', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: MULTIROOT_QUERIES,
@@ -253,7 +253,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: multiroot with includePattern and exists', function (done: () => codemavi) {
+	test('Files: multiroot with includePattern and exists', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: MULTIROOT_QUERIES,
@@ -277,7 +277,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: NPE (CamelCase)', function (done: () => codemavi) {
+	test('Files: NPE (CamelCase)', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -296,7 +296,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.*', function (done: () => codemavi) {
+	test('Files: *.*', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -315,7 +315,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.as', function (done: () => codemavi) {
+	test('Files: *.as', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -334,7 +334,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* without derived', function (done: () => codemavi) {
+	test('Files: *.* without derived', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -357,7 +357,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* exclude folder without wildcard', function (done: () => codemavi) {
+	test('Files: *.* exclude folder without wildcard', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -377,7 +377,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: exclude folder without wildcard #36438', function (done: () => codemavi) {
+	test('Files: exclude folder without wildcard #36438', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY_36438,
@@ -396,7 +396,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: include folder without wildcard #36438', function (done: () => codemavi) {
+	test('Files: include folder without wildcard #36438', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY_36438,
@@ -415,7 +415,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* exclude folder with leading wildcard', function (done: () => codemavi) {
+	test('Files: *.* exclude folder with leading wildcard', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -435,7 +435,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* exclude folder with trailing wildcard', function (done: () => codemavi) {
+	test('Files: *.* exclude folder with trailing wildcard', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -455,7 +455,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* exclude with unicode', function (done: () => codemavi) {
+	test('Files: *.* exclude with unicode', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -475,7 +475,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: *.* include with unicode', function (done: () => codemavi) {
+	test('Files: *.* include with unicode', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -495,7 +495,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: multiroot with exclude', function (done: () => codemavi) {
+	test('Files: multiroot with exclude', function (done: () => void) {
 		const folderQueries: IFolderQuery[] = [
 			{
 				folder: EXAMPLES_FIXTURES,
@@ -531,7 +531,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: Unicode and Spaces', function (done: () => codemavi) {
+	test('Files: Unicode and Spaces', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -553,7 +553,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: no results', function (done: () => codemavi) {
+	test('Files: no results', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -572,7 +572,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: relative path matched once', function (done: () => codemavi) {
+	test('Files: relative path matched once', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -594,7 +594,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: Include pattern, single files', function (done: () => codemavi) {
+	test('Files: Include pattern, single files', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: ROOT_FOLDER_QUERY,
@@ -618,7 +618,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: extraFiles only', function (done: () => codemavi) {
+	test('Files: extraFiles only', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: [],
@@ -645,7 +645,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: extraFiles only (with include)', function (done: () => codemavi) {
+	test('Files: extraFiles only (with include)', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: [],
@@ -673,7 +673,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: extraFiles only (with exclude)', function (done: () => codemavi) {
+	test('Files: extraFiles only (with exclude)', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: [],
@@ -698,7 +698,7 @@ flakySuite('FileSearchEngine', () => {
 		});
 	});
 
-	test('Files: no dupes in nested folders', function (done: () => codemavi) {
+	test('Files: no dupes in nested folders', function (done: () => void) {
 		const engine = new FileSearchEngine({
 			type: QueryType.File,
 			folderQueries: [
@@ -723,7 +723,7 @@ flakySuite('FileSearchEngine', () => {
 
 flakySuite('FileWalker', () => {
 
-	(platform.isWindows ? test.skip : test)('Find: exclude subfolder', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude subfolder', function (done: () => void) {
 		const file0 = './more/file.txt';
 		const file1 = './examples/subfolder/subfile.txt';
 
@@ -753,7 +753,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: folder excludes', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: folder excludes', function (done: () => void) {
 		const folderQueries: IFolderQuery[] = [
 			{
 				folder: URI.file(TEST_FIXTURES),
@@ -776,7 +776,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: exclude multiple folders', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude multiple folders', function (done: () => void) {
 		const file0 = './index.html';
 		const file1 = './examples/small.js';
 		const file2 = './more/file.txt';
@@ -801,7 +801,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: exclude folder path suffix', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude folder path suffix', function (done: () => void) {
 		const file0 = './examples/company.js';
 		const file1 = './examples/subfolder/subfile.txt';
 
@@ -823,7 +823,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: exclude subfolder path suffix', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude subfolder path suffix', function (done: () => void) {
 		const file0 = './examples/subfolder/subfile.txt';
 		const file1 = './examples/subfolder/anotherfolder/anotherfile.txt';
 
@@ -845,7 +845,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: exclude folder path', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude folder path', function (done: () => void) {
 		const file0 = './examples/company.js';
 		const file1 = './examples/subfolder/subfile.txt';
 
@@ -867,7 +867,7 @@ flakySuite('FileWalker', () => {
 		});
 	});
 
-	(platform.isWindows ? test.skip : test)('Find: exclude combination of paths', function (done: () => codemavi) {
+	(platform.isWindows ? test.skip : test)('Find: exclude combination of paths', function (done: () => void) {
 		const filesIn = [
 			'./examples/subfolder/subfile.txt',
 			'./examples/company.js',

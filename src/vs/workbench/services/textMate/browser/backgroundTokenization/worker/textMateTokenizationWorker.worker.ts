@@ -53,7 +53,7 @@ export class TextMateTokenizationWorker implements IWebWorkerServerRequestHandle
 		this._host = TextMateWorkerHost.getChannel(workerServer);
 	}
 
-	public async $init(_createData: ICreateData): Promise<codemavi> {
+	public async $init(_createData: ICreateData): Promise<void> {
 		const grammarDefinitions = _createData.grammarDefinitions.map<IValidGrammarDefinition>((def) => {
 			return {
 				location: URI.revive(def.location),
@@ -95,7 +95,7 @@ export class TextMateTokenizationWorker implements IWebWorkerServerRequestHandle
 
 	// These methods are called by the renderer
 
-	public $acceptNewModel(data: IRawModelData): codemavi {
+	public $acceptNewModel(data: IRawModelData): void {
 		const uri = URI.revive(data.uri);
 		const that = this;
 		this._models.set(data.controllerId, new TextMateWorkerTokenizer(uri, data.lines, data.EOL, data.versionId, {
@@ -109,28 +109,28 @@ export class TextMateTokenizationWorker implements IWebWorkerServerRequestHandle
 				}
 				return that._grammarCache[encodedLanguageId];
 			},
-			setTokensAndStates(versionId: number, tokens: Uint8Array, stateDeltas: StateDeltas[]): codemavi {
+			setTokensAndStates(versionId: number, tokens: Uint8Array, stateDeltas: StateDeltas[]): void {
 				that._host.$setTokensAndStates(data.controllerId, versionId, tokens, stateDeltas);
 			},
-			reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): codemavi {
+			reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): void {
 				that._host.$reportTokenizationTime(timeMs, languageId, sourceExtensionId, lineLength, isRandomSample);
 			},
 		}, data.languageId, data.encodedLanguageId, data.maxTokenizationLineLength));
 	}
 
-	public $acceptModelChanged(controllerId: number, e: IModelChangedEvent): codemavi {
+	public $acceptModelChanged(controllerId: number, e: IModelChangedEvent): void {
 		this._models.get(controllerId)!.onEvents(e);
 	}
 
-	public $retokenize(controllerId: number, startLineNumber: number, endLineNumberExclusive: number): codemavi {
+	public $retokenize(controllerId: number, startLineNumber: number, endLineNumberExclusive: number): void {
 		this._models.get(controllerId)!.retokenize(startLineNumber, endLineNumberExclusive);
 	}
 
-	public $acceptModelLanguageChanged(controllerId: number, newLanguageId: string, newEncodedLanguageId: LanguageId): codemavi {
+	public $acceptModelLanguageChanged(controllerId: number, newLanguageId: string, newEncodedLanguageId: LanguageId): void {
 		this._models.get(controllerId)!.onLanguageId(newLanguageId, newEncodedLanguageId);
 	}
 
-	public $acceptRemovedModel(controllerId: number): codemavi {
+	public $acceptRemovedModel(controllerId: number): void {
 		const model = this._models.get(controllerId);
 		if (model) {
 			model.dispose();
@@ -138,12 +138,12 @@ export class TextMateTokenizationWorker implements IWebWorkerServerRequestHandle
 		}
 	}
 
-	public async $acceptTheme(theme: IRawTheme, colorMap: string[]): Promise<codemavi> {
+	public async $acceptTheme(theme: IRawTheme, colorMap: string[]): Promise<void> {
 		const grammarFactory = await this._grammarFactory;
 		grammarFactory?.setTheme(theme, colorMap);
 	}
 
-	public $acceptMaxTokenizationLineLength(controllerId: number, value: number): codemavi {
+	public $acceptMaxTokenizationLineLength(controllerId: number, value: number): void {
 		this._models.get(controllerId)!.acceptMaxTokenizationLineLength(value);
 	}
 }

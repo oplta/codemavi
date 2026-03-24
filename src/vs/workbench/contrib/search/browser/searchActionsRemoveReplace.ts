@@ -84,7 +84,7 @@ registerAction2(class RemoveAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context: ISearchActionContext | undefined): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, context: ISearchActionContext | undefined): Promise<void> {
 		const viewsService = accessor.get(IViewsService);
 		const configurationService = accessor.get(IConfigurationService);
 		const searchView = getSearchView(viewsService);

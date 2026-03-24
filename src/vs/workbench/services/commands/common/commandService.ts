@@ -17,7 +17,7 @@ export class CommandService extends Disposable implements ICommandService {
 	declare readonly _serviceBrand: undefined;
 
 	private _extensionHostIsReady: boolean = false;
-	private _starActivation: Promise<codemavi> | null;
+	private _starActivation: Promise<void> | null;
 
 	private readonly _onWillExecuteCommand: Emitter<ICommandEvent> = this._register(new Emitter<ICommandEvent>());
 	public readonly onWillExecuteCommand: Event<ICommandEvent> = this._onWillExecuteCommand.event;
@@ -35,7 +35,7 @@ export class CommandService extends Disposable implements ICommandService {
 		this._starActivation = null;
 	}
 
-	private _activateStar(): Promise<codemavi> {
+	private _activateStar(): Promise<void> {
 		if (!this._starActivation) {
 			// wait for * activation, limited to at most 30s
 			this._starActivation = Promise.race<any>([

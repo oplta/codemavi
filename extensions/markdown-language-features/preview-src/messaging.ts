@@ -13,7 +13,7 @@ export interface MessagePoster {
 	postMessage<T extends FromWebviewMessage.Type>(
 		type: T['type'],
 		body: Omit<T, 'source' | 'type'>
-	): codemavi;
+	): void;
 }
 
 export const createPosterForVsCode = (vscode: any, settingsManager: SettingsManager): MessagePoster => {
@@ -21,7 +21,7 @@ export const createPosterForVsCode = (vscode: any, settingsManager: SettingsMana
 		postMessage<T extends FromWebviewMessage.Type>(
 			type: T['type'],
 			body: Omit<T, 'source' | 'type'>
-		): codemavi {
+		): void {
 			vscode.postMessage({
 				type,
 				source: settingsManager.settings!.source,

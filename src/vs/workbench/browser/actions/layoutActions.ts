@@ -83,7 +83,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const editorGroupService = accessor.get(IEditorGroupsService);
 
@@ -104,7 +104,7 @@ class MoveSidebarPositionAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const configurationService = accessor.get(IConfigurationService);
 
@@ -154,7 +154,7 @@ export class ToggleSidebarPositionAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const configurationService = accessor.get(IConfigurationService);
 
@@ -205,7 +205,7 @@ MenuRegistry.appendMenuItems([{
 		group: '3_workbench_layout_move',
 		command: {
 			id: ToggleSidebarPositionAction.ID,
-			title: localize('move second sidebar left', "Move Code Mavi Side Bar Left")
+			title: localize('move second sidebar left', "Move Mavi Side Bar Left")
 		},
 		when: ContextKeyExpr.and(ContextKeyExpr.notEquals('config.workbench.sideBar.location', 'right'), ContextKeyExpr.equals('viewContainerLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
 		order: 1
@@ -216,7 +216,7 @@ MenuRegistry.appendMenuItems([{
 		group: '3_workbench_layout_move',
 		command: {
 			id: ToggleSidebarPositionAction.ID,
-			title: localize('move second sidebar right', "Move Code Mavi Side Bar Right")
+			title: localize('move second sidebar right', "Move Mavi Side Bar Right")
 		},
 		when: ContextKeyExpr.and(ContextKeyExpr.equals('config.workbench.sideBar.location', 'right'), ContextKeyExpr.equals('viewContainerLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
 		order: 1
@@ -262,7 +262,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IWorkbenchLayoutService).toggleMaximizedPanel();
 	}
 });
@@ -314,7 +314,7 @@ export class ToggleSidebarVisibilityAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 
 		layoutService.setPartHidden(layoutService.isVisible(Parts.SIDEBAR_PART), Parts.SIDEBAR_PART);
@@ -390,7 +390,7 @@ export class ToggleStatusbarVisibilityAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
 		const configurationService = accessor.get(IConfigurationService);
 
@@ -418,7 +418,7 @@ abstract class AbstractSetShowTabsAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		return configurationService.updateValue(this.settingName, this.value);
 	}
@@ -542,7 +542,7 @@ export class EditorActionsTitleBarAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		return configurationService.updateValue(LayoutSettings.EDITOR_ACTIONS_LOCATION, EditorActionsLocation.TITLEBAR);
 	}
@@ -569,7 +569,7 @@ export class EditorActionsDefaultAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		return configurationService.updateValue(LayoutSettings.EDITOR_ACTIONS_LOCATION, EditorActionsLocation.DEFAULT);
 	}
@@ -593,7 +593,7 @@ export class HideEditorActionsAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		return configurationService.updateValue(LayoutSettings.EDITOR_ACTIONS_LOCATION, EditorActionsLocation.HIDDEN);
 	}
@@ -617,7 +617,7 @@ export class ShowEditorActionsAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		return configurationService.updateValue(LayoutSettings.EDITOR_ACTIONS_LOCATION, EditorActionsLocation.DEFAULT);
 	}
@@ -690,7 +690,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): Promise<codemavi> {
+	run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		const oldettingValue = configurationService.getValue<string>('workbench.editor.pinnedTabsOnSeparateRow');
@@ -727,7 +727,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		return accessor.get(IWorkbenchLayoutService).toggleZenMode();
 	}
 });
@@ -769,7 +769,7 @@ if (isWindows || isLinux || isWeb) {
 			});
 		}
 
-		run(accessor: ServicesAccessor): codemavi {
+		run(accessor: ServicesAccessor): void {
 			return accessor.get(IWorkbenchLayoutService).toggleMenuBar();
 		}
 	});
@@ -802,7 +802,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		return accessor.get(IViewDescriptorService).reset();
 	}
 });
@@ -820,7 +820,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewDescriptorService = accessor.get(IViewDescriptorService);
 		const instantiationService = accessor.get(IInstantiationService);
 		const quickInputService = accessor.get(IQuickInputService);
@@ -908,7 +908,7 @@ registerAction2(class extends Action2 {
 					if (!hasAddedView) {
 						results.push({
 							type: 'separator',
-							label: localize('secondarySideBarContainer', "Code Mavi Side Bar / {0}", containerModel.title)
+							label: localize('secondarySideBarContainer', "Mavi Side Bar / {0}", containerModel.title)
 						});
 						hasAddedView = true;
 					}
@@ -967,7 +967,7 @@ class MoveFocusedViewAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor, viewId?: string): codemavi {
+	run(accessor: ServicesAccessor, viewId?: string): void {
 		const viewDescriptorService = accessor.get(IViewDescriptorService);
 		const viewsService = accessor.get(IViewsService);
 		const quickInputService = accessor.get(IQuickInputService);
@@ -1015,7 +1015,7 @@ class MoveFocusedViewAction extends Action2 {
 		if (!(isViewSolo && currentLocation === ViewContainerLocation.AuxiliaryBar)) {
 			items.push({
 				id: '_.auxiliarybar.newcontainer',
-				label: localize('moveFocusedView.newContainerInSidePanel', "New Code Mavi Side Bar Entry")
+				label: localize('moveFocusedView.newContainerInSidePanel', "New Mavi Side Bar Entry")
 			});
 		}
 
@@ -1063,7 +1063,7 @@ class MoveFocusedViewAction extends Action2 {
 
 		items.push({
 			type: 'separator',
-			label: localize('secondarySideBar', "Code Mavi Side Bar")
+			label: localize('secondarySideBar', "Mavi Side Bar")
 		});
 
 		const pinnedAuxPanels = paneCompositePartService.getPinnedPaneCompositeIds(ViewContainerLocation.AuxiliaryBar);
@@ -1126,7 +1126,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const viewDescriptorService = accessor.get(IViewDescriptorService);
 		const contextKeyService = accessor.get(IContextKeyService);
 		const dialogService = accessor.get(IDialogService);
@@ -1160,7 +1160,7 @@ abstract class BaseResizeViewAction extends Action2 {
 
 	protected static readonly RESIZE_INCREMENT = 60; // This is a css pixel size
 
-	protected resizePart(widthChange: number, heightChange: number, layoutService: IWorkbenchLayoutService, partToResize?: Parts): codemavi {
+	protected resizePart(widthChange: number, heightChange: number, layoutService: IWorkbenchLayoutService, partToResize?: Parts): void {
 
 		let part: Parts | undefined;
 		if (partToResize === undefined) {
@@ -1199,7 +1199,7 @@ class IncreaseViewSizeAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(BaseResizeViewAction.RESIZE_INCREMENT, BaseResizeViewAction.RESIZE_INCREMENT, accessor.get(IWorkbenchLayoutService));
 	}
 }
@@ -1215,7 +1215,7 @@ class IncreaseViewWidthAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(BaseResizeViewAction.RESIZE_INCREMENT, 0, accessor.get(IWorkbenchLayoutService), Parts.EDITOR_PART);
 	}
 }
@@ -1231,7 +1231,7 @@ class IncreaseViewHeightAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(0, BaseResizeViewAction.RESIZE_INCREMENT, accessor.get(IWorkbenchLayoutService), Parts.EDITOR_PART);
 	}
 }
@@ -1247,7 +1247,7 @@ class DecreaseViewSizeAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(-BaseResizeViewAction.RESIZE_INCREMENT, -BaseResizeViewAction.RESIZE_INCREMENT, accessor.get(IWorkbenchLayoutService));
 	}
 }
@@ -1262,7 +1262,7 @@ class DecreaseViewWidthAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(-BaseResizeViewAction.RESIZE_INCREMENT, 0, accessor.get(IWorkbenchLayoutService), Parts.EDITOR_PART);
 	}
 }
@@ -1278,7 +1278,7 @@ class DecreaseViewHeightAction extends BaseResizeViewAction {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		this.resizePart(0, -BaseResizeViewAction.RESIZE_INCREMENT, accessor.get(IWorkbenchLayoutService), Parts.EDITOR_PART);
 	}
 }
@@ -1303,7 +1303,7 @@ registerAction2(class AlignQuickInputTopAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const quickInputService = accessor.get(IQuickInputService);
 		quickInputService.setAlignment('top');
 	}
@@ -1319,7 +1319,7 @@ registerAction2(class AlignQuickInputCenterAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const quickInputService = accessor.get(IQuickInputService);
 		quickInputService.setAlignment('center');
 	}
@@ -1381,7 +1381,7 @@ if (!isMacintosh || !isNative) {
 ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleActivityBarVisibilityActionId, ContextKeyExpr.notEquals('config.workbench.activityBar.location', 'hidden'), localize('activityBar', "Activity Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: activityBarLeftIcon, iconB: activityBarRightIcon }),
 	CreateToggleLayoutItem(ToggleSidebarVisibilityAction.ID, SideBarVisibleContext, localize('sideBar', "Primary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelLeftIcon, iconB: panelRightIcon }),
-	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Code Mavi Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
+	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Mavi Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
 ]);
@@ -1505,7 +1505,7 @@ registerAction2(class CustomizeLayoutAction extends Action2 {
 		];
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		if (this._currentQuickPick) {
 			this._currentQuickPick.hide();
 			return;

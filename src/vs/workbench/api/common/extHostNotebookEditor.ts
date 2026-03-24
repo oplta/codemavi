@@ -88,15 +88,15 @@ export class ExtHostNotebookEditor {
 		this._visible = value;
 	}
 
-	_acceptVisibleRanges(value: vscode.NotebookRange[]): codemavi {
+	_acceptVisibleRanges(value: vscode.NotebookRange[]): void {
 		this._visibleRanges = value;
 	}
 
-	_acceptSelections(selections: vscode.NotebookRange[]): codemavi {
+	_acceptSelections(selections: vscode.NotebookRange[]): void {
 		this._selections = selections;
 	}
 
-	private _trySetSelections(value: vscode.NotebookRange[]): codemavi {
+	private _trySetSelections(value: vscode.NotebookRange[]): void {
 		this._proxy.$trySetSelections(this.id, value.map(extHostConverter.NotebookRange.from));
 	}
 

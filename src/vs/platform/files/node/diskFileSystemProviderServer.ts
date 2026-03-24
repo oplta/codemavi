@@ -128,7 +128,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 		return emitter.event;
 	}
 
-	private writeFile(uriTransformer: IURITransformer, _resource: UriComponents, content: VSBuffer, opts: IFileWriteOptions): Promise<codemavi> {
+	private writeFile(uriTransformer: IURITransformer, _resource: UriComponents, content: VSBuffer, opts: IFileWriteOptions): Promise<void> {
 		const resource = this.transformIncoming(uriTransformer, _resource);
 
 		return this.provider.writeFile(resource, content.buffer, opts);
@@ -140,7 +140,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 		return this.provider.open(resource, opts);
 	}
 
-	private close(fd: number): Promise<codemavi> {
+	private close(fd: number): Promise<void> {
 		return this.provider.close(fd);
 	}
 
@@ -160,26 +160,26 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 
 	//#region Move/Copy/Delete/Create Folder
 
-	private mkdir(uriTransformer: IURITransformer, _resource: UriComponents): Promise<codemavi> {
+	private mkdir(uriTransformer: IURITransformer, _resource: UriComponents): Promise<void> {
 		const resource = this.transformIncoming(uriTransformer, _resource);
 
 		return this.provider.mkdir(resource);
 	}
 
-	protected delete(uriTransformer: IURITransformer, _resource: UriComponents, opts: IFileDeleteOptions): Promise<codemavi> {
+	protected delete(uriTransformer: IURITransformer, _resource: UriComponents, opts: IFileDeleteOptions): Promise<void> {
 		const resource = this.transformIncoming(uriTransformer, _resource);
 
 		return this.provider.delete(resource, opts);
 	}
 
-	private rename(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents, opts: IFileOverwriteOptions): Promise<codemavi> {
+	private rename(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents, opts: IFileOverwriteOptions): Promise<void> {
 		const source = this.transformIncoming(uriTransformer, _source);
 		const target = this.transformIncoming(uriTransformer, _target);
 
 		return this.provider.rename(source, target, opts);
 	}
 
-	private copy(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents, opts: IFileOverwriteOptions): Promise<codemavi> {
+	private copy(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents, opts: IFileOverwriteOptions): Promise<void> {
 		const source = this.transformIncoming(uriTransformer, _source);
 		const target = this.transformIncoming(uriTransformer, _target);
 
@@ -190,7 +190,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 
 	//#region Clone File
 
-	private cloneFile(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents): Promise<codemavi> {
+	private cloneFile(uriTransformer: IURITransformer, _source: UriComponents, _target: UriComponents): Promise<void> {
 		const source = this.transformIncoming(uriTransformer, _source);
 		const target = this.transformIncoming(uriTransformer, _target);
 
@@ -223,7 +223,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 		return emitter.event;
 	}
 
-	private async watch(uriTransformer: IURITransformer, sessionId: string, req: number, _resource: UriComponents, opts: IWatchOptions): Promise<codemavi> {
+	private async watch(uriTransformer: IURITransformer, sessionId: string, req: number, _resource: UriComponents, opts: IWatchOptions): Promise<void> {
 		const watcher = this.sessionToWatcher.get(sessionId);
 		if (watcher) {
 			const resource = this.transformIncoming(uriTransformer, _resource);
@@ -232,7 +232,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 		}
 	}
 
-	private async unwatch(sessionId: string, req: number): Promise<codemavi> {
+	private async unwatch(sessionId: string, req: number): Promise<void> {
 		const id = sessionId + req;
 		const disposable = this.watchRequests.get(id);
 		if (disposable) {
@@ -245,7 +245,7 @@ export abstract class AbstractDiskFileSystemProviderChannel<T> extends Disposabl
 
 	//#endregion
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		for (const [, disposable] of this.watchRequests) {
@@ -287,7 +287,7 @@ export abstract class AbstractSessionFileWatcher extends Disposable implements I
 		this.registerListeners(sessionEmitter);
 	}
 
-	private registerListeners(sessionEmitter: Emitter<IFileChange[] | string>): codemavi {
+	private registerListeners(sessionEmitter: Emitter<IFileChange[] | string>): void {
 		const localChangeEmitter = this._register(new Emitter<readonly IFileChange[]>());
 
 		this._register(localChangeEmitter.event((events) => {
@@ -326,7 +326,7 @@ export abstract class AbstractSessionFileWatcher extends Disposable implements I
 		});
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		for (const [, disposable] of this.watcherRequests) {
 			disposable.dispose();
 		}

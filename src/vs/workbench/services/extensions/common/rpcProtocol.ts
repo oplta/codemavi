@@ -105,8 +105,8 @@ export const enum ResponsiveState {
 }
 
 export interface IRPCProtocolLogger {
-	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): codemavi;
-	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): codemavi;
+	logIncoming(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): void;
+	logOutgoing(msgLength: number, req: number, initiator: RequestInitiator, str: string, data?: any): void;
 }
 
 const noop = () => { };
@@ -131,7 +131,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 	private readonly _locals: any[];
 	private readonly _proxies: any[];
 	private _lastMessageId: number;
-	private readonly _cancelInvokedHandlers: { [req: string]: () => codemavi };
+	private readonly _cancelInvokedHandlers: { [req: string]: () => void };
 	private readonly _pendingRPCReplies: { [msgId: string]: PendingRPCReply };
 	private _responsiveState: ResponsiveState;
 	private _unacknowledgedCount: number;
@@ -161,7 +161,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		this._register(this._protocol.onMessage((msg) => this._receiveOneMessage(msg)));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._isDisposed = true;
 
 		// Release all outstanding promises with a canceled error
@@ -174,14 +174,14 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		super.dispose();
 	}
 
-	public drain(): Promise<codemavi> {
+	public drain(): Promise<void> {
 		if (typeof this._protocol.drain === 'function') {
 			return this._protocol.drain();
 		}
 		return Promise.resolve();
 	}
 
-	private _onWillSendRequest(req: number): codemavi {
+	private _onWillSendRequest(req: number): void {
 		if (this._unacknowledgedCount === 0) {
 			// Since this is the first request we are sending in a while,
 			// mark this moment as the start for the countdown to unresponsive time
@@ -193,7 +193,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		}
 	}
 
-	private _onDidReceiveAcknowledge(req: number): codemavi {
+	private _onDidReceiveAcknowledge(req: number): void {
 		// The next possible unresponsive time is now + delta.
 		this._unresponsiveTime = Date.now() + RPCProtocol.UNRESPONSIVE_TIME;
 		this._unacknowledgedCount--;
@@ -205,7 +205,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		this._setResponsiveState(ResponsiveState.Responsive);
 	}
 
-	private _checkUnresponsive(): codemavi {
+	private _checkUnresponsive(): void {
 		if (this._unacknowledgedCount === 0) {
 			// Not waiting for anything => cannot say if it is responsive or not
 			return;
@@ -220,7 +220,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		}
 	}
 
-	private _setResponsiveState(newResponsiveState: ResponsiveState): codemavi {
+	private _setResponsiveState(newResponsiveState: ResponsiveState): void {
 		if (this._responsiveState === newResponsiveState) {
 			// no change
 			return;
@@ -270,7 +270,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		return value;
 	}
 
-	public assertRegistered(identifiers: ProxyIdentifier<any>[]): codemavi {
+	public assertRegistered(identifiers: ProxyIdentifier<any>[]): void {
 		for (let i = 0, len = identifiers.length; i < len; i++) {
 			const identifier = identifiers[i];
 			if (!this._locals[identifier.nid]) {
@@ -279,7 +279,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		}
 	}
 
-	private _receiveOneMessage(rawmsg: VSBuffer): codemavi {
+	private _receiveOneMessage(rawmsg: VSBuffer): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -357,12 +357,12 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		}
 	}
 
-	private _receiveRequest(msgLength: number, req: number, rpcId: number, method: string, args: any[], usesCancellationToken: boolean): codemavi {
+	private _receiveRequest(msgLength: number, req: number, rpcId: number, method: string, args: any[], usesCancellationToken: boolean): void {
 		this._logger?.logIncoming(msgLength, req, RequestInitiator.OtherSide, `receiveRequest ${getStringIdentifierForProxy(rpcId)}.${method}(`, args);
 		const callId = String(req);
 
 		let promise: Promise<any>;
-		let cancel: () => codemavi;
+		let cancel: () => void;
 		if (usesCancellationToken) {
 			const cancellationTokenSource = new CancellationTokenSource();
 			args.push(cancellationTokenSource.token);
@@ -394,13 +394,13 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		});
 	}
 
-	private _receiveCancel(msgLength: number, req: number): codemavi {
+	private _receiveCancel(msgLength: number, req: number): void {
 		this._logger?.logIncoming(msgLength, req, RequestInitiator.OtherSide, `receiveCancel`);
 		const callId = String(req);
 		this._cancelInvokedHandlers[callId]?.();
 	}
 
-	private _receiveReply(msgLength: number, req: number, value: any): codemavi {
+	private _receiveReply(msgLength: number, req: number, value: any): void {
 		this._logger?.logIncoming(msgLength, req, RequestInitiator.LocalSide, `receiveReply:`, value);
 		const callId = String(req);
 		if (!this._pendingRPCReplies.hasOwnProperty(callId)) {
@@ -413,7 +413,7 @@ export class RPCProtocol extends Disposable implements IRPCProtocol {
 		pendingReply.resolveOk(value);
 	}
 
-	private _receiveReplyErr(msgLength: number, req: number, value: any): codemavi {
+	private _receiveReplyErr(msgLength: number, req: number, value: any): void {
 		this._logger?.logIncoming(msgLength, req, RequestInitiator.LocalSide, `receiveReplyErr:`, value);
 
 		const callId = String(req);
@@ -502,12 +502,12 @@ class PendingRPCReply {
 		private readonly _disposable: IDisposable
 	) { }
 
-	public resolveOk(value: any): codemavi {
+	public resolveOk(value: any): void {
 		this._promise.resolveOk(value);
 		this._disposable.dispose();
 	}
 
-	public resolveErr(err: any): codemavi {
+	public resolveErr(err: any): void {
 		this._promise.resolveErr(err);
 		this._disposable.dispose();
 	}
@@ -544,7 +544,7 @@ class MessageBuffer {
 
 	public static readonly sizeUInt32 = 4;
 
-	public writeUInt8(n: number): codemavi {
+	public writeUInt8(n: number): void {
 		this._buff.writeUInt8(n, this._offset); this._offset += 1;
 	}
 
@@ -553,7 +553,7 @@ class MessageBuffer {
 		return n;
 	}
 
-	public writeUInt32(n: number): codemavi {
+	public writeUInt32(n: number): void {
 		this._buff.writeUInt32BE(n, this._offset); this._offset += 4;
 	}
 
@@ -566,7 +566,7 @@ class MessageBuffer {
 		return 1 /* string length */ + str.byteLength /* actual string */;
 	}
 
-	public writeShortString(str: VSBuffer): codemavi {
+	public writeShortString(str: VSBuffer): void {
 		this._buff.writeUInt8(str.byteLength, this._offset); this._offset += 1;
 		this._buff.set(str, this._offset); this._offset += str.byteLength;
 	}
@@ -582,7 +582,7 @@ class MessageBuffer {
 		return 4 /* string length */ + str.byteLength /* actual string */;
 	}
 
-	public writeLongString(str: VSBuffer): codemavi {
+	public writeLongString(str: VSBuffer): void {
 		this._buff.writeUInt32BE(str.byteLength, this._offset); this._offset += 4;
 		this._buff.set(str, this._offset); this._offset += str.byteLength;
 	}
@@ -594,7 +594,7 @@ class MessageBuffer {
 		return str;
 	}
 
-	public writeBuffer(buff: VSBuffer): codemavi {
+	public writeBuffer(buff: VSBuffer): void {
 		this._buff.writeUInt32BE(buff.byteLength, this._offset); this._offset += 4;
 		this._buff.set(buff, this._offset); this._offset += buff.byteLength;
 	}
@@ -603,7 +603,7 @@ class MessageBuffer {
 		return 4 /* buffer length */ + buff.byteLength /* actual buffer */;
 	}
 
-	public writeVSBuffer(buff: VSBuffer): codemavi {
+	public writeVSBuffer(buff: VSBuffer): void {
 		this._buff.writeUInt32BE(buff.byteLength, this._offset); this._offset += 4;
 		this._buff.set(buff, this._offset); this._offset += buff.byteLength;
 	}
@@ -642,7 +642,7 @@ class MessageBuffer {
 		return size;
 	}
 
-	public writeMixedArray(arr: readonly MixedArg[]): codemavi {
+	public writeMixedArray(arr: readonly MixedArg[]): void {
 		this._buff.writeUInt8(arr.length, this._offset); this._offset += 1;
 		for (let i = 0, len = arr.length; i < len; i++) {
 			const el = arr[i];

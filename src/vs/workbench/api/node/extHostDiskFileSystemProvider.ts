@@ -49,7 +49,7 @@ class DiskFileSystemProviderAdapter implements vscode.FileSystemProvider {
 		return this.impl.readdir(uri);
 	}
 
-	createDirectory(uri: vscode.Uri): Promise<codemavi> {
+	createDirectory(uri: vscode.Uri): Promise<void> {
 		return this.impl.mkdir(uri);
 	}
 
@@ -57,19 +57,19 @@ class DiskFileSystemProviderAdapter implements vscode.FileSystemProvider {
 		return this.impl.readFile(uri);
 	}
 
-	writeFile(uri: vscode.Uri, content: Uint8Array, options: { readonly create: boolean; readonly overwrite: boolean }): Promise<codemavi> {
+	writeFile(uri: vscode.Uri, content: Uint8Array, options: { readonly create: boolean; readonly overwrite: boolean }): Promise<void> {
 		return this.impl.writeFile(uri, content, { ...options, unlock: false, atomic: false });
 	}
 
-	delete(uri: vscode.Uri, options: { readonly recursive: boolean }): Promise<codemavi> {
+	delete(uri: vscode.Uri, options: { readonly recursive: boolean }): Promise<void> {
 		return this.impl.delete(uri, { ...options, useTrash: false, atomic: false });
 	}
 
-	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { readonly overwrite: boolean }): Promise<codemavi> {
+	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { readonly overwrite: boolean }): Promise<void> {
 		return this.impl.rename(oldUri, newUri, options);
 	}
 
-	copy(source: vscode.Uri, destination: vscode.Uri, options: { readonly overwrite: boolean }): Promise<codemavi> {
+	copy(source: vscode.Uri, destination: vscode.Uri, options: { readonly overwrite: boolean }): Promise<void> {
 		return this.impl.copy(source, destination, options);
 	}
 

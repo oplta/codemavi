@@ -10,12 +10,12 @@ export interface IComposite {
 	/**
 	 * An event when the composite gained focus.
 	 */
-	readonly onDidFocus: Event<codemavi>;
+	readonly onDidFocus: Event<void>;
 
 	/**
 	 * An event when the composite lost focus.
 	 */
-	readonly onDidBlur: Event<codemavi>;
+	readonly onDidBlur: Event<void>;
 
 	/**
 	 * Returns true if the composite has focus.
@@ -40,7 +40,7 @@ export interface IComposite {
 	/**
 	 * Asks the underlying control to focus.
 	 */
-	focus(): codemavi;
+	focus(): void;
 }
 
 /**

@@ -22,36 +22,36 @@ import type * as rendererApi from 'vscode-notebook-renderer';
 declare module globalThis {
 	const acquireVsCodeApi: () => ({
 		getState(): { [key: string]: unknown };
-		setState(data: { [key: string]: unknown }): codemavi;
-		postMessage: (msg: unknown) => codemavi;
+		setState(data: { [key: string]: unknown }): void;
+		postMessage: (msg: unknown) => void;
 	});
 }
 
 declare class ResizeObserver {
-	constructor(onChange: (entries: { target: HTMLElement; contentRect?: ClientRect }[]) => codemavi);
-	observe(element: Element): codemavi;
-	disconnect(): codemavi;
+	constructor(onChange: (entries: { target: HTMLElement; contentRect?: ClientRect }[]) => void);
+	observe(element: Element): void;
+	disconnect(): void;
 }
 
 declare class Highlight {
 	constructor();
-	add(range: AbstractRange): codemavi;
-	clear(): codemavi;
+	add(range: AbstractRange): void;
+	clear(): void;
 	priority: number;
 }
 
 interface CSSHighlights {
-	set(rule: string, highlight: Highlight): codemavi;
+	set(rule: string, highlight: Highlight): void;
 }
 declare namespace CSS {
 	let highlights: CSSHighlights | undefined;
 }
 
 
-type Listener<T> = { fn: (evt: T) => codemavi; thisArg: unknown };
+type Listener<T> = { fn: (evt: T) => void; thisArg: unknown };
 
 interface EmitterLike<T> {
-	fire(data: T): codemavi;
+	fire(data: T): void;
 	event: Event<T>;
 }
 
@@ -83,8 +83,8 @@ interface PreloadContext {
 	readonly isWorkspaceTrusted: boolean;
 }
 
-declare function requestIdleCallback(callback: (args: IdleDeadline) => codemavi, options?: { timeout: number }): number;
-declare function cancelIdleCallback(handle: number): codemavi;
+declare function requestIdleCallback(callback: (args: IdleDeadline) => void, options?: { timeout: number }): number;
+declare function cancelIdleCallback(handle: number): void;
 
 declare function __import(path: string): Promise<any>;
 
@@ -101,9 +101,9 @@ async function webviewPreloads(ctx: PreloadContext) {
 	const textEncoder = new TextEncoder();
 	const textDecoder = new TextDecoder();
 
-	function promiseWithResolvers<T>(): { promise: Promise<T>; resolve: (value: T | PromiseLike<T>) => codemavi; reject: (err?: any) => codemavi } {
-		let resolve: (value: T | PromiseLike<T>) => codemavi;
-		let reject: (reason?: any) => codemavi;
+	function promiseWithResolvers<T>(): { promise: Promise<T>; resolve: (value: T | PromiseLike<T>) => void; reject: (err?: any) => void } {
+		let resolve: (value: T | PromiseLike<T>) => void;
+		let reject: (reason?: any) => void;
 		const promise = new Promise<T>((res, rej) => {
 			resolve = res;
 			reject = rej;
@@ -123,7 +123,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 	const tokenizationStyle = new CSSStyleSheet();
 	tokenizationStyle.replaceSync(ctx.style.tokenizationCss);
 
-	const runWhenIdle: (callback: (idle: IdleDeadline) => codemavi, timeout?: number) => IDisposable = (typeof requestIdleCallback !== 'function' || typeof cancelIdleCallback !== 'function')
+	const runWhenIdle: (callback: (idle: IdleDeadline) => void, timeout?: number) => IDisposable = (typeof requestIdleCallback !== 'function' || typeof cancelIdleCallback !== 'function')
 		? (runner) => {
 			setTimeout(() => {
 				if (disposed) {
@@ -411,11 +411,11 @@ async function webviewPreloads(ctx: PreloadContext) {
 
 	interface KernelPreloadContext {
 		readonly onDidReceiveKernelMessage: Event<unknown>;
-		postKernelMessage(data: unknown): codemavi;
+		postKernelMessage(data: unknown): void;
 	}
 
 	interface KernelPreloadModule {
-		activate(ctx: KernelPreloadContext): Promise<codemavi> | codemavi;
+		activate(ctx: KernelPreloadContext): Promise<void> | void;
 	}
 
 	interface IObservedElement {
@@ -433,7 +433,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 		});
 	}
 
-	async function runKernelPreload(url: string): Promise<codemavi> {
+	async function runKernelPreload(url: string): Promise<void> {
 		try {
 			return await activateModuleKernelPreload(url);
 		} catch (e) {
@@ -871,8 +871,8 @@ async function webviewPreloads(ctx: PreloadContext) {
 
 	interface IHighlightResult {
 		range: ICommonRange;
-		dispose: () => codemavi;
-		update: (color: string | undefined, className: string | undefined) => codemavi;
+		dispose: () => void;
+		update: (color: string | undefined, className: string | undefined) => void;
 	}
 
 	function selectRange(_range: ICommonRange) {
@@ -948,7 +948,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 		}
 	}
 
-	function createEmitter<T>(listenerChange: (listeners: Set<Listener<T>>) => codemavi = () => undefined): EmitterLike<T> {
+	function createEmitter<T>(listenerChange: (listeners: Set<Listener<T>>) => void = () => undefined): EmitterLike<T> {
 		const listeners = new Set<Listener<T>>();
 		return {
 			fire(data) {
@@ -993,7 +993,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 
 	const outputItemRequests = new class {
 		private _requestPool = 0;
-		private readonly _requests = new Map</*requestId*/number, { resolve: (x: webviewMessages.OutputItemEntry | undefined) => codemavi }>();
+		private readonly _requests = new Map</*requestId*/number, { resolve: (x: webviewMessages.OutputItemEntry | undefined) => void }>();
 
 		getOutputItem(outputId: string, mime: string) {
 			const requestId = this._requestPool++;
@@ -1137,11 +1137,11 @@ async function webviewPreloads(ctx: PreloadContext) {
 	}
 
 	interface IHighlighter {
-		addHighlights(matches: IFindMatch[], ownerID: string): codemavi;
-		removeHighlights(ownerID: string): codemavi;
-		highlightCurrentMatch(index: number, ownerID: string): codemavi;
-		unHighlightCurrentMatch(index: number, ownerID: string): codemavi;
-		dispose(): codemavi;
+		addHighlights(matches: IFindMatch[], ownerID: string): void;
+		removeHighlights(ownerID: string): void;
+		highlightCurrentMatch(index: number, ownerID: string): void;
+		unHighlightCurrentMatch(index: number, ownerID: string): void;
+		dispose(): void;
 	}
 
 	interface IHighlightInfo {
@@ -1160,7 +1160,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._activeHighlightInfo = new Map();
 		}
 
-		addHighlights(matches: IFindMatch[], ownerID: string): codemavi {
+		addHighlights(matches: IFindMatch[], ownerID: string): void {
 			for (let i = matches.length - 1; i >= 0; i--) {
 				const match = matches[i];
 				const ret = highlightRange(match.originalRange, true, 'mark', match.isShadow ? {
@@ -1178,7 +1178,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._activeHighlightInfo.set(ownerID, highlightInfo);
 		}
 
-		removeHighlights(ownerID: string): codemavi {
+		removeHighlights(ownerID: string): void {
 			this._activeHighlightInfo.get(ownerID)?.matches.forEach(match => {
 				match.highlightResult?.dispose();
 			});
@@ -1297,7 +1297,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._activeHighlightInfo.set(ownerID, newEntry);
 		}
 
-		highlightCurrentMatch(index: number, ownerID: string): codemavi {
+		highlightCurrentMatch(index: number, ownerID: string): void {
 			const highlightInfo = this._activeHighlightInfo.get(ownerID);
 			if (!highlightInfo) {
 				console.error('Modified current highlight match before adding highlight list.');
@@ -1324,7 +1324,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._refreshRegistry(false);
 		}
 
-		unHighlightCurrentMatch(index: number, ownerID: string): codemavi {
+		unHighlightCurrentMatch(index: number, ownerID: string): void {
 			const highlightInfo = this._activeHighlightInfo.get(ownerID);
 			if (!highlightInfo) {
 				return;
@@ -1338,7 +1338,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._refreshRegistry();
 		}
 
-		dispose(): codemavi {
+		dispose(): void {
 			window.document.getSelection()?.removeAllRanges();
 			this._currentMatchesHighlight.clear();
 			this._matchesHighlight.clear();
@@ -1512,7 +1512,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 					if (anchorNode) {
 						const lastEl: any = matches.length ? matches[matches.length - 1] : null;
 
-						// Optimization: acodemavi searching for the output container
+						// Optimization: avoid searching for the output container
 						if (lastEl && lastEl.container.contains(anchorNode) && options.includeOutput) {
 							matches.push({
 								type: lastEl.type,
@@ -1868,7 +1868,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._onMessageEvent.fire(message);
 		}
 
-		public async renderOutputItem(item: rendererApi.OutputItem, element: HTMLElement, signal: AbortSignal): Promise<codemavi> {
+		public async renderOutputItem(item: rendererApi.OutputItem, element: HTMLElement, signal: AbortSignal): Promise<void> {
 			try {
 				await this.load();
 			} catch (e) {
@@ -1904,7 +1904,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			}
 		}
 
-		public disposeOutputItem(id?: string): codemavi {
+		public disposeOutputItem(id?: string): void {
 			this._api?.disposeOutputItem?.(id);
 		}
 
@@ -2176,7 +2176,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this._renderers.get(rendererId)?.disposeOutputItem(outputId);
 		}
 
-		public async render(item: ExtendedOutputItem, preferredRendererId: string | undefined, element: HTMLElement, signal: AbortSignal): Promise<codemavi> {
+		public async render(item: ExtendedOutputItem, preferredRendererId: string | undefined, element: HTMLElement, signal: AbortSignal): Promise<void> {
 			const primaryRenderer = this.findRenderer(preferredRendererId, item);
 			if (!primaryRenderer) {
 				const errorMessage = (window.document.documentElement.style.getPropertyValue('--notebook-cell-renderer-not-found-error') || '').replace('$0', () => item.mime);
@@ -2303,7 +2303,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			return cell;
 		}
 
-		public async ensureMarkupCell(info: webviewMessages.IMarkupCellInitialization): Promise<codemavi> {
+		public async ensureMarkupCell(info: webviewMessages.IMarkupCellInitialization): Promise<void> {
 			let cell = this._markupCells.get(info.cellId);
 			if (cell) {
 				cell.element.style.visibility = info.visible ? '' : 'hidden';
@@ -2322,22 +2322,22 @@ async function webviewPreloads(ctx: PreloadContext) {
 			}
 		}
 
-		public async updateMarkupContent(id: string, newContent: string, metadata: NotebookCellMetadata): Promise<codemavi> {
+		public async updateMarkupContent(id: string, newContent: string, metadata: NotebookCellMetadata): Promise<void> {
 			const cell = this.getExpectedMarkupCell(id);
 			await cell?.updateContentAndRender(newContent, metadata);
 		}
 
-		public showMarkupCell(id: string, top: number, newContent: string | undefined, metadata: NotebookCellMetadata | undefined): codemavi {
+		public showMarkupCell(id: string, top: number, newContent: string | undefined, metadata: NotebookCellMetadata | undefined): void {
 			const cell = this.getExpectedMarkupCell(id);
 			cell?.show(top, newContent, metadata);
 		}
 
-		public hideMarkupCell(id: string): codemavi {
+		public hideMarkupCell(id: string): void {
 			const cell = this.getExpectedMarkupCell(id);
 			cell?.hide();
 		}
 
-		public unhideMarkupCell(id: string): codemavi {
+		public unhideMarkupCell(id: string): void {
 			const cell = this.getExpectedMarkupCell(id);
 			cell?.unhide();
 		}
@@ -2373,7 +2373,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			}
 		}
 
-		public async renderOutputCell(data: webviewMessages.ICreationRequestMessage, signal: AbortSignal): Promise<codemavi> {
+		public async renderOutputCell(data: webviewMessages.ICreationRequestMessage, signal: AbortSignal): Promise<void> {
 			const preloadErrors = await Promise.all<undefined | Error>(
 				data.requiredPreloads.map(p => kernelPreloads.waitFor(p.uri).then(() => undefined, err => err))
 			);
@@ -2470,7 +2470,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 
 	class MarkupCell {
 
-		public readonly ready: Promise<codemavi>;
+		public readonly ready: Promise<void>;
 
 		public readonly id: string;
 		public readonly element: HTMLElement;
@@ -2488,7 +2488,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			this.id = id;
 			this._content = { value: content, version: 0, metadata: metadata };
 
-			const { promise, resolve, reject } = promiseWithResolvers<codemavi>();
+			const { promise, resolve, reject } = promiseWithResolvers<void>();
 			this.ready = promise;
 
 			let cachedData: { readonly version: number; readonly value: Uint8Array } | undefined;
@@ -2603,7 +2603,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			});
 		}
 
-		public async updateContentAndRender(newContent: string, metadata: NotebookCellMetadata): Promise<codemavi> {
+		public async updateContentAndRender(newContent: string, metadata: NotebookCellMetadata): Promise<void> {
 			this._content = { value: newContent, version: this._content.version + 1, metadata };
 
 			this.renderTaskAbort?.abort();
@@ -2647,7 +2647,7 @@ async function webviewPreloads(ctx: PreloadContext) {
 			});
 		}
 
-		public show(top: number, newContent: string | undefined, metadata: NotebookCellMetadata | undefined): codemavi {
+		public show(top: number, newContent: string | undefined, metadata: NotebookCellMetadata | undefined): void {
 			this.element.style.visibility = '';
 			this.element.style.top = `${top}px`;
 			if (typeof newContent === 'string' || metadata) {

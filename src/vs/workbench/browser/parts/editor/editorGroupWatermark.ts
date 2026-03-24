@@ -24,8 +24,8 @@ import { IWindowOpenable } from '../../../../platform/window/common/window.js';
 import { splitRecentLabel } from '../../../../base/common/labels.js';
 import { IViewsService } from '../../../services/views/common/viewsService.js';
 
-/* eslint-disable */ // Code Mavi
-import { VOID_CTRL_K_ACTION_ID, VOID_CTRL_L_ACTION_ID } from '../../../contrib/codemavi/browser/actionIDs.js';
+/* eslint-disable */ // Mavi
+import { MAVI_CTRL_K_ACTION_ID, MAVI_CTRL_L_ACTION_ID } from '../../../contrib/mavi/browser/actionIDs.js';
 import { VIEWLET_ID as REMOTE_EXPLORER_VIEWLET_ID } from '../../../contrib/remote/browser/remoteExplorer.js';
 /* eslint-enable */
 
@@ -111,7 +111,7 @@ export class EditorGroupWatermark extends Disposable {
 		append(container, elements.root);
 		this.shortcuts = elements.shortcuts; // shortcuts div is modified on render()
 
-		// codemavi icon style
+		// mavi icon style
 		const updateTheme = () => {
 			const theme = this.themeService.getColorTheme().type
 			const isDark = theme === ColorScheme.DARK || theme === ColorScheme.HIGH_CONTRAST_DARK
@@ -130,7 +130,7 @@ export class EditorGroupWatermark extends Disposable {
 		this.render();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 			if (e.affectsConfiguration('workbench.tips.enabled')) {
 				this.render();
@@ -158,10 +158,10 @@ export class EditorGroupWatermark extends Disposable {
 
 
 
-	private render(): codemavi {
+	private render(): void {
 
 		this.clear();
-		const codemaviIconBox = append(this.shortcuts, $('.watermark-box'));
+		const maviIconBox = append(this.shortcuts, $('.watermark-box'));
 		const recentsBox = append(this.shortcuts, $('div'));
 		recentsBox.style.display = 'flex'
 		recentsBox.style.flex = 'row'
@@ -174,14 +174,14 @@ export class EditorGroupWatermark extends Disposable {
 			const recentlyOpened = await this.workspacesService.getRecentlyOpened()
 				.catch(() => ({ files: [], workspaces: [] })).then(w => w.workspaces);
 
-			clearNode(codemaviIconBox);
+			clearNode(maviIconBox);
 			clearNode(recentsBox);
 
 			this.currentDisposables.forEach(label => label.dispose());
 			this.currentDisposables.clear();
 
 
-			// Code Mavi - if the workbench is empty, show open
+			// Mavi - if the workbench is empty, show open
 			if (this.contextService.getWorkbenchState() === WorkbenchState.EMPTY) {
 
 				// Create a flex container for buttons with vertical direction
@@ -191,11 +191,11 @@ export class EditorGroupWatermark extends Disposable {
 				buttonContainer.style.alignItems = 'center'; // Center the buttons horizontally
 				buttonContainer.style.gap = '8px'; // Reduce gap between buttons from 16px to 8px
 				buttonContainer.style.marginBottom = '16px';
-				codemaviIconBox.appendChild(buttonContainer);
+				maviIconBox.appendChild(buttonContainer);
 
 				// Open a folder
 				const openFolderButton = h('button')
-				openFolderButton.root.classList.add('codemavi-openfolder-button')
+				openFolderButton.root.classList.add('mavi-openfolder-button')
 				openFolderButton.root.style.display = 'block'
 				openFolderButton.root.style.width = '124px' // Set width to 124px as requested
 				openFolderButton.root.textContent = 'Open Folder'
@@ -211,7 +211,7 @@ export class EditorGroupWatermark extends Disposable {
 
 				// Open SSH button
 				const openSSHButton = h('button')
-				openSSHButton.root.classList.add('codemavi-openssh-button')
+				openSSHButton.root.classList.add('mavi-openssh-button')
 				openSSHButton.root.style.display = 'block'
 				openSSHButton.root.style.backgroundColor = '#5a5a5a' // Made darker than the default gray
 				openSSHButton.root.style.width = '124px' // Set width to 124px as requested
@@ -225,7 +225,7 @@ export class EditorGroupWatermark extends Disposable {
 				// Recents
 				if (recentlyOpened.length !== 0) {
 
-					codemaviIconBox.append(
+					maviIconBox.append(
 						...recentlyOpened.map((w, i) => {
 
 							let fullPath: string;
@@ -244,7 +244,7 @@ export class EditorGroupWatermark extends Disposable {
 							const { name, parentPath } = splitRecentLabel(fullPath);
 
 							const linkSpan = $('span');
-							linkSpan.classList.add('codemavi-link')
+							linkSpan.classList.add('mavi-link')
 							linkSpan.style.display = 'flex'
 							linkSpan.style.gap = '4px'
 							linkSpan.style.padding = '8px'
@@ -283,9 +283,9 @@ export class EditorGroupWatermark extends Disposable {
 			}
 			else {
 
-				// show them Code Mavi keybindings
-				const keys = this.keybindingService.lookupKeybinding(VOID_CTRL_L_ACTION_ID);
-				const dl = append(codemaviIconBox, $('dl'));
+				// show them Mavi keybindings
+				const keys = this.keybindingService.lookupKeybinding(MAVI_CTRL_L_ACTION_ID);
+				const dl = append(maviIconBox, $('dl'));
 				const dt = append(dl, $('dt'));
 				dt.textContent = 'Chat'
 				const dd = append(dl, $('dd'));
@@ -295,8 +295,8 @@ export class EditorGroupWatermark extends Disposable {
 				this.currentDisposables.add(label);
 
 
-				const keys2 = this.keybindingService.lookupKeybinding(VOID_CTRL_K_ACTION_ID);
-				const dl2 = append(codemaviIconBox, $('dl'));
+				const keys2 = this.keybindingService.lookupKeybinding(MAVI_CTRL_K_ACTION_ID);
+				const dl2 = append(maviIconBox, $('dl'));
 				const dt2 = append(dl2, $('dt'));
 				dt2.textContent = 'Quick Edit'
 				const dd2 = append(dl2, $('dd'));
@@ -307,17 +307,17 @@ export class EditorGroupWatermark extends Disposable {
 
 				// const keys3 = this.keybindingService.lookupKeybinding('workbench.action.openGlobalKeybindings');
 				// const button3 = append(recentsBox, $('button'));
-				// button3.textContent = `Code Mavi Settings`
+				// button3.textContent = `Mavi Settings`
 				// button3.style.display = 'block'
 				// button3.style.marginLeft = 'auto'
 				// button3.style.marginRight = 'auto'
-				// button3.classList.add('codemavi-settings-watermark-button')
+				// button3.classList.add('mavi-settings-watermark-button')
 
 				// const label3 = new KeybindingLabel(button3, OS, { renderUnboundKeybindings: true, ...defaultKeybindingLabelStyles });
 				// if (keys3)
 				// 	label3.set(keys3);
 				// button3.onclick = () => {
-				// 	this.commandService.executeCommand(VOID_OPEN_SETTINGS_ACTION_ID)
+				// 	this.commandService.executeCommand(MAVI_OPEN_SETTINGS_ACTION_ID)
 				// }
 				// this.currentDisposables.add(label3);
 
@@ -329,12 +329,12 @@ export class EditorGroupWatermark extends Disposable {
 		this.transientDisposables.add(this.keybindingService.onDidUpdateKeybindings(update));
 	}
 
-	private clear(): codemavi {
+	private clear(): void {
 		clearNode(this.shortcuts);
 		this.transientDisposables.clear();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this.clear();
 		this.currentDisposables.forEach(label => label.dispose());
@@ -453,7 +453,7 @@ registerColor('editorWatermark.foreground', { dark: transparent(editorForeground
 // 		this.render();
 // 	}
 
-// 	private registerListeners(): codemavi {
+// 	private registerListeners(): void {
 // 		this._register(this.configurationService.onDidChangeConfiguration(e => {
 // 			if (e.affectsConfiguration('workbench.tips.enabled') && this.enabled !== this.configurationService.getValue<boolean>('workbench.tips.enabled')) {
 // 				this.render();
@@ -482,7 +482,7 @@ registerColor('editorWatermark.foreground', { dark: transparent(editorForeground
 // 		}));
 // 	}
 
-// 	private render(): codemavi {
+// 	private render(): void {
 // 		this.enabled = this.configurationService.getValue<boolean>('workbench.tips.enabled');
 
 // 		clearNode(this.shortcuts);

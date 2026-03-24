@@ -41,7 +41,7 @@ export class TSServerRequestCommand implements Command {
 		}
 
 		// The list can be found in the TypeScript compiler as `const enum CommandTypes`,
-		// to acodemavi extensions making calls which could affect the internal tsserver state
+		// to avoid extensions making calls which could affect the internal tsserver state
 		// these are only read-y sorts of commands
 		const allowList = [
 			// Seeing the JS/DTS output for a file

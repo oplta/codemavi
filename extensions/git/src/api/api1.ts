@@ -37,7 +37,7 @@ export class ApiChange implements Change {
 
 export class ApiRepositoryState implements RepositoryState {
 	#repository: BaseRepository;
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 
 	constructor(repository: BaseRepository) {
 		this.#repository = repository;
@@ -61,11 +61,11 @@ export class ApiRepositoryState implements RepositoryState {
 
 export class ApiRepositoryUIState implements RepositoryUIState {
 	#sourceControl: SourceControl;
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 
 	constructor(sourceControl: SourceControl) {
 		this.#sourceControl = sourceControl;
-		this.onDidChange = mapEvent<boolean, codemavi>(this.#sourceControl.onDidChangeSelection, () => null);
+		this.onDidChange = mapEvent<boolean, void>(this.#sourceControl.onDidChangeSelection, () => null);
 	}
 
 	get selected(): boolean { return this.#sourceControl.selected; }
@@ -79,8 +79,8 @@ export class ApiRepository implements Repository {
 	readonly state: RepositoryState;
 	readonly ui: RepositoryUIState;
 
-	readonly onDidCommit: Event<codemavi>;
-	readonly onDidCheckout: Event<codemavi>;
+	readonly onDidCommit: Event<void>;
+	readonly onDidCheckout: Event<void>;
 
 	constructor(repository: BaseRepository) {
 		this.#repository = repository;
@@ -90,13 +90,13 @@ export class ApiRepository implements Repository {
 		this.state = new ApiRepositoryState(this.#repository);
 		this.ui = new ApiRepositoryUIState(this.#repository.sourceControl);
 
-		this.onDidCommit = mapEvent<OperationResult, codemavi>(
+		this.onDidCommit = mapEvent<OperationResult, void>(
 			filterEvent(this.#repository.onDidRunOperation, e => e.operation.kind === OperationKind.Commit), () => null);
-		this.onDidCheckout = mapEvent<OperationResult, codemavi>(
+		this.onDidCheckout = mapEvent<OperationResult, void>(
 			filterEvent(this.#repository.onDidRunOperation, e => e.operation.kind === OperationKind.Checkout || e.operation.kind === OperationKind.CheckoutTracking), () => null);
 	}
 
-	apply(patch: string, reverse?: boolean): Promise<codemavi> {
+	apply(patch: string, reverse?: boolean): Promise<void> {
 		return this.#repository.apply(patch, reverse);
 	}
 
@@ -194,11 +194,11 @@ export class ApiRepository implements Repository {
 		return this.#repository.hashObject(data);
 	}
 
-	createBranch(name: string, checkout: boolean, ref?: string | undefined): Promise<codemavi> {
+	createBranch(name: string, checkout: boolean, ref?: string | undefined): Promise<void> {
 		return this.#repository.branch(name, checkout, ref);
 	}
 
-	deleteBranch(name: string, force?: boolean): Promise<codemavi> {
+	deleteBranch(name: string, force?: boolean): Promise<void> {
 		return this.#repository.deleteBranch(name, force);
 	}
 
@@ -214,7 +214,7 @@ export class ApiRepository implements Repository {
 		return this.#repository.getBranchBase(name);
 	}
 
-	setBranchUpstream(name: string, upstream: string): Promise<codemavi> {
+	setBranchUpstream(name: string, upstream: string): Promise<void> {
 		return this.#repository.setBranchUpstream(name, upstream);
 	}
 
@@ -230,31 +230,31 @@ export class ApiRepository implements Repository {
 		return this.#repository.getMergeBase(ref1, ref2);
 	}
 
-	tag(name: string, message: string, ref?: string | undefined): Promise<codemavi> {
+	tag(name: string, message: string, ref?: string | undefined): Promise<void> {
 		return this.#repository.tag({ name, message, ref });
 	}
 
-	deleteTag(name: string): Promise<codemavi> {
+	deleteTag(name: string): Promise<void> {
 		return this.#repository.deleteTag(name);
 	}
 
-	status(): Promise<codemavi> {
+	status(): Promise<void> {
 		return this.#repository.status();
 	}
 
-	checkout(treeish: string): Promise<codemavi> {
+	checkout(treeish: string): Promise<void> {
 		return this.#repository.checkout(treeish);
 	}
 
-	addRemote(name: string, url: string): Promise<codemavi> {
+	addRemote(name: string, url: string): Promise<void> {
 		return this.#repository.addRemote(name, url);
 	}
 
-	removeRemote(name: string): Promise<codemavi> {
+	removeRemote(name: string): Promise<void> {
 		return this.#repository.removeRemote(name);
 	}
 
-	renameRemote(name: string, newName: string): Promise<codemavi> {
+	renameRemote(name: string, newName: string): Promise<void> {
 		return this.#repository.renameRemote(name, newName);
 	}
 
@@ -262,7 +262,7 @@ export class ApiRepository implements Repository {
 		ref?: string | undefined,
 		depth?: number | undefined,
 		prune?: boolean | undefined
-	): Promise<codemavi> {
+	): Promise<void> {
 		if (arg0 !== undefined && typeof arg0 !== 'string') {
 			return this.#repository.fetch(arg0);
 		}
@@ -270,11 +270,11 @@ export class ApiRepository implements Repository {
 		return this.#repository.fetch({ remote: arg0, ref, depth, prune });
 	}
 
-	pull(unshallow?: boolean): Promise<codemavi> {
+	pull(unshallow?: boolean): Promise<void> {
 		return this.#repository.pull(undefined, unshallow);
 	}
 
-	push(remoteName?: string, branchName?: string, setUpstream: boolean = false, force?: ForcePushMode): Promise<codemavi> {
+	push(remoteName?: string, branchName?: string, setUpstream: boolean = false, force?: ForcePushMode): Promise<void> {
 		return this.#repository.pushTo(remoteName, branchName, setUpstream, force);
 	}
 
@@ -286,27 +286,27 @@ export class ApiRepository implements Repository {
 		return this.#repository.log(options);
 	}
 
-	commit(message: string, opts?: CommitOptions): Promise<codemavi> {
+	commit(message: string, opts?: CommitOptions): Promise<void> {
 		return this.#repository.commit(message, { ...opts, postCommitCommand: null });
 	}
 
-	merge(ref: string): Promise<codemavi> {
+	merge(ref: string): Promise<void> {
 		return this.#repository.merge(ref);
 	}
 
-	mergeAbort(): Promise<codemavi> {
+	mergeAbort(): Promise<void> {
 		return this.#repository.mergeAbort();
 	}
 
-	applyStash(index?: number): Promise<codemavi> {
+	applyStash(index?: number): Promise<void> {
 		return this.#repository.applyStash(index);
 	}
 
-	popStash(index?: number): Promise<codemavi> {
+	popStash(index?: number): Promise<void> {
 		return this.#repository.popStash(index);
 	}
 
-	dropStash(index?: number): Promise<codemavi> {
+	dropStash(index?: number): Promise<void> {
 		return this.#repository.dropStash(index);
 	}
 }

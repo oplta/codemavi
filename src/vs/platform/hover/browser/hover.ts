@@ -100,14 +100,14 @@ export class WorkbenchHoverDelegate extends Disposable implements IHoverDelegate
 		return !!this.hoverOptions?.instantHover && Date.now() - this.lastHoverHideTime < this.timeLimit;
 	}
 
-	setInstantHoverTimeLimit(timeLimit: number): codemavi {
+	setInstantHoverTimeLimit(timeLimit: number): void {
 		if (!this.hoverOptions?.instantHover) {
 			throw new Error('Instant hover is not enabled');
 		}
 		this.timeLimit = timeLimit;
 	}
 
-	onDidHideHover(): codemavi {
+	onDidHideHover(): void {
 		this.hoverDisposables.clear();
 		if (this.hoverOptions?.instantHover) {
 			this.lastHoverHideTime = Date.now();

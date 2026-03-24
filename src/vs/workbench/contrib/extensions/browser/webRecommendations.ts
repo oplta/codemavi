@@ -21,7 +21,7 @@ export class WebRecommendations extends ExtensionRecommendations {
 		super();
 	}
 
-	protected async doActivate(): Promise<codemavi> {
+	protected async doActivate(): Promise<void> {
 		const isOnlyWeb = this.extensionManagementServerService.webExtensionManagementServer && !this.extensionManagementServerService.localExtensionManagementServer && !this.extensionManagementServerService.remoteExtensionManagementServer;
 		if (isOnlyWeb && Array.isArray(this.productService.webExtensionTips)) {
 			this._recommendations = this.productService.webExtensionTips.map((extensionId): ExtensionRecommendation => ({

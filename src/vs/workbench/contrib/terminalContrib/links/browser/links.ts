@@ -112,7 +112,7 @@ export interface ITerminalSimpleLink {
 	 * An optional method to call when the link is activated. This should be used when there is are
 	 * no registered opener for this link type.
 	 */
-	activate?(text: string): codemavi;
+	activate?(text: string): void;
 }
 
 export type TerminalLinkType = TerminalBuiltinLinkType | ITerminalExternalLinkType;
@@ -152,7 +152,7 @@ export interface ITerminalExternalLinkType {
 }
 
 export interface ITerminalLinkOpener {
-	open(link: ITerminalSimpleLink): Promise<codemavi>;
+	open(link: ITerminalSimpleLink): Promise<void>;
 }
 
 export type ResolvedLink = IResolvedValidLink | null;

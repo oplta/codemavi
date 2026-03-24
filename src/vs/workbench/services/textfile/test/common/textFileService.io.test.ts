@@ -20,7 +20,7 @@ export interface Params {
 		service: ITextFileService;
 		testDir: string;
 	}>;
-	teardown(): Promise<codemavi>;
+	teardown(): Promise<void>;
 
 	exists(fsPath: string): Promise<boolean>;
 	stat(fsPath: string): Promise<{ size: number }>;
@@ -410,7 +410,7 @@ export default function createSuite(params: Params) {
 		await testReadStream(resource);
 	});
 
-	async function testReadStream(resource: URI): Promise<codemavi> {
+	async function testReadStream(resource: URI): Promise<void> {
 		const result = await service.readStream(resource);
 
 		assert.strictEqual(result.name, basename(resource.fsPath));
@@ -435,7 +435,7 @@ export default function createSuite(params: Params) {
 		await testRead(resource);
 	});
 
-	async function testRead(resource: URI): Promise<codemavi> {
+	async function testRead(resource: URI): Promise<void> {
 		const result = await service.read(resource);
 
 		assert.strictEqual(result.name, basename(resource.fsPath));
@@ -540,7 +540,7 @@ export default function createSuite(params: Params) {
 		await testLargeEncoding('utf16be', 'öäüß');
 	});
 
-	async function testLargeEncoding(encoding: string, needle: string): Promise<codemavi> {
+	async function testLargeEncoding(encoding: string, needle: string): Promise<void> {
 		const resource = URI.file(join(testDir, `lorem_${encoding}.txt`));
 
 		// Verify via `ITextFileService.readStream`

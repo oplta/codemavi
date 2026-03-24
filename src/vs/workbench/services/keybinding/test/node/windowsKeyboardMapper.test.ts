@@ -18,7 +18,7 @@ async function createKeyboardMapper(isUSStandard: boolean, file: string, mapAltG
 	return new WindowsKeyboardMapper(isUSStandard, rawMappings, mapAltGrToCtrlAlt);
 }
 
-function _assertResolveKeybinding(mapper: WindowsKeyboardMapper, k: number, expected: IResolvedKeybinding[]): codemavi {
+function _assertResolveKeybinding(mapper: WindowsKeyboardMapper, k: number, expected: IResolvedKeybinding[]): void {
 	const keyBinding = decodeKeybinding(k, OperatingSystem.Windows);
 	assertResolveKeybinding(mapper, keyBinding!, expected);
 }

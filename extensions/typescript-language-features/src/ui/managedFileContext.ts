@@ -25,7 +25,7 @@ export default class ManagedFileContextManager extends Disposable {
 		this.onDidChangeActiveTextEditor(activeJsTsEditorTracker.activeJsTsEditor);
 	}
 
-	private onDidChangeActiveTextEditor(editor?: vscode.TextEditor): codemavi {
+	private onDidChangeActiveTextEditor(editor?: vscode.TextEditor): void {
 		if (editor) {
 			this.updateContext(this.isManagedFile(editor));
 		} else {

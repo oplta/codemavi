@@ -129,7 +129,7 @@ export class Gesture extends Disposable {
 		return 'ontouchstart' in mainWindow || navigator.maxTouchPoints > 0;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this.handle) {
 			this.handle.dispose();
 			this.handle = null;
@@ -138,7 +138,7 @@ export class Gesture extends Disposable {
 		super.dispose();
 	}
 
-	private onTouchStart(e: TouchEvent): codemavi {
+	private onTouchStart(e: TouchEvent): void {
 		const timestamp = Date.now(); // use Date.now() because on FF e.timeStamp is not epoch based.
 
 		if (this.handle) {
@@ -173,7 +173,7 @@ export class Gesture extends Disposable {
 		}
 	}
 
-	private onTouchEnd(targetWindow: Window, e: TouchEvent): codemavi {
+	private onTouchEnd(targetWindow: Window, e: TouchEvent): void {
 		const timestamp = Date.now(); // use Date.now() because on FF e.timeStamp is not epoch based.
 
 		const activeTouchCount = Object.keys(this.activeTouches).length;
@@ -249,7 +249,7 @@ export class Gesture extends Disposable {
 		return event;
 	}
 
-	private dispatchEvent(event: GestureEvent): codemavi {
+	private dispatchEvent(event: GestureEvent): void {
 		if (event.type === EventType.Tap) {
 			const currentTime = (new Date()).getTime();
 			let setTapCount = 0;
@@ -295,7 +295,7 @@ export class Gesture extends Disposable {
 		}
 	}
 
-	private inertia(targetWindow: Window, dispatchTo: readonly EventTarget[], t1: number, vX: number, dirX: number, x: number, vY: number, dirY: number, y: number): codemavi {
+	private inertia(targetWindow: Window, dispatchTo: readonly EventTarget[], t1: number, vX: number, dirX: number, x: number, vY: number, dirY: number, y: number): void {
 		this.handle = DomUtils.scheduleAtNextAnimationFrame(targetWindow, () => {
 			const now = Date.now();
 
@@ -329,7 +329,7 @@ export class Gesture extends Disposable {
 		});
 	}
 
-	private onTouchMove(e: TouchEvent): codemavi {
+	private onTouchMove(e: TouchEvent): void {
 		const timestamp = Date.now(); // use Date.now() because on FF e.timeStamp is not epoch based.
 
 		for (let i = 0, len = e.changedTouches.length; i < len; i++) {

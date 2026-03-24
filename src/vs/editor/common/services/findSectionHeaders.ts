@@ -154,7 +154,7 @@ export function collectMarkHeaders(model: ISectionHeaderFinderTarget, options: F
 				}
 			}
 
-			// Move lastIndex past the current match to acodemavi infinite loop
+			// Move lastIndex past the current match to avoid infinite loop
 			regex.lastIndex = match.index + match[0].length;
 		}
 	}

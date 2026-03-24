@@ -76,7 +76,7 @@ export class SlowExtensionAction extends Action {
 		this.enabled = Boolean(RepoInfo.fromExtension(extension));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 		const action = await this._instantiationService.invokeFunction(createSlowExtensionAction, this.extension, this.profile);
 		if (action) {
 			await action.run();
@@ -135,7 +135,7 @@ class ReportExtensionSlowAction extends Action {
 		super('report.slow', localize('cmd.report', "Report Issue"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 
 		// rewrite pii (paths) and store on disk
 		const data = Utils.rewriteAbsolutePaths(this.profile.data, 'pii_removed');
@@ -178,7 +178,7 @@ class ShowExtensionSlowAction extends Action {
 		super('show.slow', localize('cmd.show', "Show Issues"));
 	}
 
-	override async run(): Promise<codemavi> {
+	override async run(): Promise<void> {
 
 		// rewrite pii (paths) and store on disk
 		const data = Utils.rewriteAbsolutePaths(this.profile.data, 'pii_removed');

@@ -20,8 +20,8 @@
 }
 
 /*
-	Ensure spinning icons are pixel-perfectly centered and acodemavi wobble.
-	This is only applied to icons that spin to acodemavi unnecessary
+	Ensure spinning icons are pixel-perfectly centered and avoid wobble.
+	This is only applied to icons that spin to avoid unnecessary
 	GPU layers and blurry subpixel AA.
 */
 .monaco-editor .glyph-margin-widgets .cgmr.codicon-modifier-spin::before  {

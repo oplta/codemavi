@@ -102,7 +102,7 @@ export class StorageMainService extends Disposable implements IStorageMainServic
 		};
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Application Storage: Warmup when any window opens
 		(async () => {
@@ -308,7 +308,7 @@ export interface IApplicationStorageMainService extends IStorageService {
 	 * a chance that the service operates on an in-memory store that
 	 * is not backed by any persistent DB.
 	 */
-	readonly whenReady: Promise<codemavi>;
+	readonly whenReady: Promise<void>;
 
 	get(key: string, scope: StorageScope.APPLICATION, fallbackValue: string): string;
 	get(key: string, scope: StorageScope.APPLICATION, fallbackValue?: string): string | undefined;
@@ -319,9 +319,9 @@ export interface IApplicationStorageMainService extends IStorageService {
 	getNumber(key: string, scope: StorageScope.APPLICATION, fallbackValue: number): number;
 	getNumber(key: string, scope: StorageScope.APPLICATION, fallbackValue?: number): number | undefined;
 
-	store(key: string, value: string | boolean | number | undefined | null, scope: StorageScope.APPLICATION, target: StorageTarget): codemavi;
+	store(key: string, value: string | boolean | number | undefined | null, scope: StorageScope.APPLICATION, target: StorageTarget): void;
 
-	remove(key: string, scope: StorageScope.APPLICATION): codemavi;
+	remove(key: string, scope: StorageScope.APPLICATION): void;
 
 	keys(scope: StorageScope.APPLICATION, target: StorageTarget): string[];
 
@@ -334,7 +334,7 @@ export class ApplicationStorageMainService extends AbstractStorageService implem
 
 	declare readonly _serviceBrand: undefined;
 
-	readonly whenReady: Promise<codemavi>;
+	readonly whenReady: Promise<void>;
 
 	constructor(
 		@IUserDataProfilesService private readonly userDataProfilesService: IUserDataProfilesService,
@@ -345,7 +345,7 @@ export class ApplicationStorageMainService extends AbstractStorageService implem
 		this.whenReady = this.storageMainService.applicationStorage.whenInit;
 	}
 
-	protected doInitialize(): Promise<codemavi> {
+	protected doInitialize(): Promise<void> {
 
 		// application storage is being initialized as part
 		// of the first window opening, so we do not trigger

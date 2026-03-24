@@ -76,7 +76,7 @@ export class NotebookCellDiffDecorator extends DisposableStore {
 		}));
 	}
 
-	public update(editor: ICodeEditor): codemavi {
+	public update(editor: ICodeEditor): void {
 		this.throttledDecorator.trigger(() => this._updateImpl(editor));
 	}
 
@@ -132,7 +132,7 @@ export class NotebookCellDiffDecorator extends DisposableStore {
 		return this._originalModel;
 	}
 
-	private _updateWithDiff(editor: ICodeEditor, originalModel: ITextModel, diff: IDocumentDiff, currentModel: ITextModel): codemavi {
+	private _updateWithDiff(editor: ICodeEditor, originalModel: ITextModel, diff: IDocumentDiff, currentModel: ITextModel): void {
 		if (areDiffsEqual(diff, this.diffForPreviouslyAppliedDecorators)) {
 			return;
 		}

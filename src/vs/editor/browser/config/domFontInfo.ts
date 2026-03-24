@@ -6,7 +6,7 @@
 import { FastDomNode } from '../../../base/browser/fastDomNode.js';
 import { BareFontInfo } from '../../common/config/fontInfo.js';
 
-export function applyFontInfo(domNode: FastDomNode<HTMLElement> | HTMLElement, fontInfo: BareFontInfo): codemavi {
+export function applyFontInfo(domNode: FastDomNode<HTMLElement> | HTMLElement, fontInfo: BareFontInfo): void {
 	if (domNode instanceof FastDomNode) {
 		domNode.setFontFamily(fontInfo.getMassagedFontFamily());
 		domNode.setFontWeight(fontInfo.fontWeight);

@@ -1,13 +1,13 @@
 /**
- * Code Mavi - Vector Database Service
+ * Mavi - Vector Database Service
  *
  * SQLite + vec0 extension for vector similarity search
  * Stores code embeddings and enables semantic search
  */
 
-import { URI } from '../../../../base/common/uri.js';
+import { URI } from '../../../../../../base/common/uri.js';
 import Database from 'better-sqlite3';
-import { Disposable } from '../../../../base/common/lifecycle.js';
+import { Disposable } from '../../../../../../base/common/lifecycle.js';
 import { join } from 'path';
 import { mkdirSync, existsSync } from 'fs';
 
@@ -66,7 +66,7 @@ export class VectorDBService extends Disposable {
       // Default to user data directory
       const userDataDir = this.getUserDataDir();
       mkdirSync(userDataDir, { recursive: true });
-      this.dbPath = join(userDataDir, 'codemavi-vectors.db');
+      this.dbPath = join(userDataDir, 'mavi-vectors.db');
     }
 
     this._register({
@@ -82,9 +82,9 @@ export class VectorDBService extends Disposable {
 
     switch (process.platform) {
       case 'darwin':
-        return join(homeDir, 'Library', 'Application Support', 'Code Mavi');
+        return join(homeDir, 'Library', 'Application Support', 'Mavi');
       case 'win32':
-        return join(process.env.APPDATA || homeDir, 'Code Mavi');
+        return join(process.env.APPDATA || homeDir, 'Mavi');
       default:
         return join(homeDir, '.config', 'code-mavi');
     }
@@ -647,3 +647,4 @@ export class VectorDBService extends Disposable {
     // Fallback: return beginning of content
     return content.substring(0, maxLength) + '...';
   }
+}

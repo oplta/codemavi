@@ -96,7 +96,7 @@ export const customEditorsExtensionPoint = ExtensionsRegistry.registerExtensionP
 	extensionPoint: 'customEditors',
 	deps: [languagesExtPoint],
 	jsonSchema: CustomEditorsContribution,
-	activationEventsGenerator: (contribs: ICustomEditorsExtensionPoint[], result: { push(item: string): codemavi }) => {
+	activationEventsGenerator: (contribs: ICustomEditorsExtensionPoint[], result: { push(item: string): void }) => {
 		for (const contrib of contribs) {
 			const viewType = contrib[Fields.viewType];
 			if (viewType) {

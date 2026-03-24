@@ -53,7 +53,7 @@ export const OUTPUT_FILTER_FOCUS_CONTEXT = new RawContextKey<boolean>('outputFil
 export const HIDE_CATEGORY_FILTER_CONTEXT = new RawContextKey<string>('output.filter.categories', '');
 
 export interface IOutputViewFilters {
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 	text: string;
 	trace: boolean;
 	debug: boolean;
@@ -61,7 +61,7 @@ export interface IOutputViewFilters {
 	warning: boolean;
 	error: boolean;
 	categories: string;
-	toggleCategory(category: string): codemavi;
+	toggleCategory(category: string): void;
 	hasCategory(category: string): boolean;
 }
 
@@ -103,7 +103,7 @@ export interface IOutputService {
 	/**
 	 * Show the channel with the passed id.
 	 */
-	showChannel(id: string, preserveFocus?: boolean): Promise<codemavi>;
+	showChannel(id: string, preserveFocus?: boolean): Promise<void>;
 
 	/**
 	 * Allows to register on active output channel change.
@@ -118,7 +118,7 @@ export interface IOutputService {
 	/**
 	 * Save the logs to a file.
 	 */
-	saveOutputAs(...channels: IOutputChannelDescriptor[]): Promise<codemavi>;
+	saveOutputAs(...channels: IOutputChannelDescriptor[]): Promise<void>;
 
 	/**
 	 * Checks if the log level can be set for the given channel.
@@ -137,7 +137,7 @@ export interface IOutputService {
 	 * @param channel
 	 * @param logLevel
 	 */
-	setLogLevel(channel: IOutputChannelDescriptor, logLevel: LogLevel): codemavi;
+	setLogLevel(channel: IOutputChannelDescriptor, logLevel: LogLevel): void;
 }
 
 export enum OutputChannelUpdateMode {
@@ -180,28 +180,28 @@ export interface IOutputChannel {
 	/**
 	 * Appends output to the channel.
 	 */
-	append(output: string): codemavi;
+	append(output: string): void;
 
 	/**
 	 * Clears all received output for this channel.
 	 */
-	clear(): codemavi;
+	clear(): void;
 
 	/**
 	 * Replaces the content of the channel with given output
 	 */
-	replace(output: string): codemavi;
+	replace(output: string): void;
 
 	/**
 	 * Update the channel.
 	 */
-	update(mode: OutputChannelUpdateMode.Append): codemavi;
-	update(mode: OutputChannelUpdateMode, till: number): codemavi;
+	update(mode: OutputChannelUpdateMode.Append): void;
+	update(mode: OutputChannelUpdateMode, till: number): void;
 
 	/**
 	 * Disposes the output channel.
 	 */
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export const Extensions = {
@@ -248,12 +248,12 @@ export interface IOutputChannelRegistry {
 	/**
 	 * Make an output channel known to the output world.
 	 */
-	registerChannel(descriptor: IOutputChannelDescriptor): codemavi;
+	registerChannel(descriptor: IOutputChannelDescriptor): void;
 
 	/**
 	 * Update the files for the given output channel.
 	 */
-	updateChannelSources(id: string, sources: IOutputContentSource[]): codemavi;
+	updateChannelSources(id: string, sources: IOutputContentSource[]): void;
 
 	/**
 	 * Returns the list of channels known to the output world.
@@ -268,7 +268,7 @@ export interface IOutputChannelRegistry {
 	/**
 	 * Remove the output channel with the passed id.
 	 */
-	removeChannel(id: string): codemavi;
+	removeChannel(id: string): void;
 }
 
 class OutputChannelRegistry implements IOutputChannelRegistry {
@@ -283,7 +283,7 @@ class OutputChannelRegistry implements IOutputChannelRegistry {
 	private readonly _onDidUpdateChannelFiles = new Emitter<IMultiSourceOutputChannelDescriptor>();
 	readonly onDidUpdateChannelSources = this._onDidUpdateChannelFiles.event;
 
-	public registerChannel(descriptor: IOutputChannelDescriptor): codemavi {
+	public registerChannel(descriptor: IOutputChannelDescriptor): void {
 		if (!this.channels.has(descriptor.id)) {
 			this.channels.set(descriptor.id, descriptor);
 			this._onDidRegisterChannel.fire(descriptor.id);
@@ -300,7 +300,7 @@ class OutputChannelRegistry implements IOutputChannelRegistry {
 		return this.channels.get(id);
 	}
 
-	public updateChannelSources(id: string, sources: IOutputContentSource[]): codemavi {
+	public updateChannelSources(id: string, sources: IOutputContentSource[]): void {
 		const channel = this.channels.get(id);
 		if (channel && isMultiSourceOutputChannelDescriptor(channel)) {
 			channel.source = sources;
@@ -308,7 +308,7 @@ class OutputChannelRegistry implements IOutputChannelRegistry {
 		}
 	}
 
-	public removeChannel(id: string): codemavi {
+	public removeChannel(id: string): void {
 		const channel = this.channels.get(id);
 		if (channel) {
 			this.channels.delete(id);

@@ -91,15 +91,15 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 
 	private readonly storageKey = WORKSPACE_TRUST_STORAGE_KEY;
 
-	private readonly _workspaceResolvedPromise: Promise<codemavi>;
-	private readonly _workspaceResolvedPromiseResolve: () => codemavi;
-	private readonly _workspaceTrustInitializedPromise: Promise<codemavi>;
-	private readonly _workspaceTrustInitializedPromiseResolve: () => codemavi;
+	private readonly _workspaceResolvedPromise: Promise<void>;
+	private readonly _workspaceResolvedPromiseResolve: () => void;
+	private readonly _workspaceTrustInitializedPromise: Promise<void>;
+	private readonly _workspaceTrustInitializedPromiseResolve: () => void;
 
 	private readonly _onDidChangeTrust = this._register(new Emitter<boolean>());
 	readonly onDidChangeTrust = this._onDidChangeTrust.event;
 
-	private readonly _onDidChangeTrustedFolders = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeTrustedFolders = this._register(new Emitter<void>());
 	readonly onDidChangeTrustedFolders = this._onDidChangeTrustedFolders.event;
 
 	private _canonicalStartupFiles: URI[] = [];
@@ -143,7 +143,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 
 	//#region initialize
 
-	private initializeWorkspaceTrust(): codemavi {
+	private initializeWorkspaceTrust(): void {
 		// Resolve canonical Uris
 		this.resolveCanonicalUris()
 			.then(async () => {
@@ -185,7 +185,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 
 	//#region private interface
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.workspaceService.onDidChangeWorkspaceFolders(async () => await this.updateWorkspaceTrust()));
 		this._register(this.storageService.onDidChangeValue(StorageScope.APPLICATION, this.storageKey, this._store)(async () => {
 			/* This will only execute if storage was changed by a user action in a separate window */
@@ -213,7 +213,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return canonicalUri.with({ query: null, fragment: null });
 	}
 
-	private async resolveCanonicalUris(): Promise<codemavi> {
+	private async resolveCanonicalUris(): Promise<void> {
 		// Open editors
 		const filesToOpen: IPath[] = [];
 		if (this.environmentService.filesToOpenOrCreate) {
@@ -273,7 +273,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return result;
 	}
 
-	private async saveTrustInfo(): Promise<codemavi> {
+	private async saveTrustInfo(): Promise<void> {
 		this.storageService.store(this.storageKey, JSON.stringify(this._trustStateInfo), StorageScope.APPLICATION, StorageTarget.MACHINE);
 		this._onDidChangeTrustedFolders.fire();
 
@@ -325,7 +325,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return this.getUrisTrust(this.getWorkspaceUris());
 	}
 
-	private async updateWorkspaceTrust(trusted?: boolean): Promise<codemavi> {
+	private async updateWorkspaceTrust(trusted?: boolean): Promise<void> {
 		if (!this.workspaceTrustEnablementService.isWorkspaceTrustEnabled()) {
 			return;
 		}
@@ -394,7 +394,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return { trusted: resultState, uri: resultUri };
 	}
 
-	private async doSetUrisTrust(uris: URI[], trusted: boolean): Promise<codemavi> {
+	private async doSetUrisTrust(uris: URI[], trusted: boolean): Promise<void> {
 		let changed = false;
 
 		for (const uri of uris) {
@@ -473,11 +473,11 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 
 	//#region public interface
 
-	get workspaceResolved(): Promise<codemavi> {
+	get workspaceResolved(): Promise<void> {
 		return this._workspaceResolvedPromise;
 	}
 
-	get workspaceTrustInitialized(): Promise<codemavi> {
+	get workspaceTrustInitialized(): Promise<void> {
 		return this._workspaceTrustInitializedPromise;
 	}
 
@@ -527,7 +527,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return true;
 	}
 
-	async setParentFolderTrust(trusted: boolean): Promise<codemavi> {
+	async setParentFolderTrust(trusted: boolean): Promise<void> {
 		if (this.canSetParentFolderTrust()) {
 			const workspaceUri = (toWorkspaceIdentifier(this._canonicalWorkspace) as ISingleFolderWorkspaceIdentifier).uri;
 			const parentFolder = this.uriIdentityService.extUri.dirname(workspaceUri);
@@ -588,7 +588,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return true;
 	}
 
-	async setWorkspaceTrust(trusted: boolean): Promise<codemavi> {
+	async setWorkspaceTrust(trusted: boolean): Promise<void> {
 		// Empty workspace
 		if (this.isEmptyWorkspace()) {
 			await this.updateWorkspaceTrust(trusted);
@@ -613,7 +613,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return this.doGetUriTrustInfo(await this.getCanonicalUri(uri));
 	}
 
-	async setUrisTrust(uris: URI[], trusted: boolean): Promise<codemavi> {
+	async setUrisTrust(uris: URI[], trusted: boolean): Promise<void> {
 		this.doSetUrisTrust(await Promise.all(uris.map(uri => this.getCanonicalUri(uri))), trusted);
 	}
 
@@ -621,7 +621,7 @@ export class WorkspaceTrustManagementService extends Disposable implements IWork
 		return this._trustStateInfo.uriTrustInfo.map(info => info.uri);
 	}
 
-	async setTrustedUris(uris: URI[]): Promise<codemavi> {
+	async setTrustedUris(uris: URI[]): Promise<void> {
 		this._trustStateInfo.uriTrustInfo = [];
 		for (const uri of uris) {
 			const canonicalUri = await this.getCanonicalUri(uri);
@@ -658,18 +658,18 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 	_serviceBrand: undefined;
 
 	private _openFilesTrustRequestPromise?: Promise<WorkspaceTrustUriResponse>;
-	private _openFilesTrustRequestResolver?: (response: WorkspaceTrustUriResponse) => codemavi;
+	private _openFilesTrustRequestResolver?: (response: WorkspaceTrustUriResponse) => void;
 
 	private _workspaceTrustRequestPromise?: Promise<boolean | undefined>;
-	private _workspaceTrustRequestResolver?: (trusted: boolean | undefined) => codemavi;
+	private _workspaceTrustRequestResolver?: (trusted: boolean | undefined) => void;
 
-	private readonly _onDidInitiateOpenFilesTrustRequest = this._register(new Emitter<codemavi>());
+	private readonly _onDidInitiateOpenFilesTrustRequest = this._register(new Emitter<void>());
 	readonly onDidInitiateOpenFilesTrustRequest = this._onDidInitiateOpenFilesTrustRequest.event;
 
 	private readonly _onDidInitiateWorkspaceTrustRequest = this._register(new Emitter<WorkspaceTrustRequestOptions | undefined>());
 	readonly onDidInitiateWorkspaceTrustRequest = this._onDidInitiateWorkspaceTrustRequest.event;
 
-	private readonly _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<codemavi>());
+	private readonly _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<void>());
 	readonly onDidInitiateWorkspaceTrustRequestOnStartup = this._onDidInitiateWorkspaceTrustRequestOnStartup.event;
 
 	constructor(
@@ -689,7 +689,7 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 		this.configurationService.updateValue(WORKSPACE_TRUST_UNTRUSTED_FILES, value);
 	}
 
-	async completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse?: boolean): Promise<codemavi> {
+	async completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse?: boolean): Promise<void> {
 		if (!this._openFilesTrustRequestResolver) {
 			return;
 		}
@@ -763,7 +763,7 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 
 	//#region Workspace trust request
 
-	private resolveWorkspaceTrustRequest(trusted?: boolean): codemavi {
+	private resolveWorkspaceTrustRequest(trusted?: boolean): void {
 		if (this._workspaceTrustRequestResolver) {
 			this._workspaceTrustRequestResolver(trusted ?? this.workspaceTrustManagementService.isWorkspaceTrusted());
 
@@ -772,7 +772,7 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 		}
 	}
 
-	cancelWorkspaceTrustRequest(): codemavi {
+	cancelWorkspaceTrustRequest(): void {
 		if (this._workspaceTrustRequestResolver) {
 			this._workspaceTrustRequestResolver(undefined);
 
@@ -781,7 +781,7 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 		}
 	}
 
-	async completeWorkspaceTrustRequest(trusted?: boolean): Promise<codemavi> {
+	async completeWorkspaceTrustRequest(trusted?: boolean): Promise<void> {
 		if (trusted === undefined || trusted === this.workspaceTrustManagementService.isWorkspaceTrusted()) {
 			this.resolveWorkspaceTrustRequest(trusted);
 			return;
@@ -815,7 +815,7 @@ export class WorkspaceTrustRequestService extends Disposable implements IWorkspa
 		return this._workspaceTrustRequestPromise;
 	}
 
-	requestWorkspaceTrustOnStartup(): codemavi {
+	requestWorkspaceTrustOnStartup(): void {
 		if (!this._workspaceTrustRequestPromise) {
 			// Create promise
 			this._workspaceTrustRequestPromise = new Promise(resolve => {
@@ -838,13 +838,13 @@ class WorkspaceTrustTransitionManager extends Disposable {
 		return toDisposable(() => remove());
 	}
 
-	async participate(trusted: boolean): Promise<codemavi> {
+	async participate(trusted: boolean): Promise<void> {
 		for (const participant of this.participants) {
 			await participant.participate(trusted);
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.participants.clear();
 		super.dispose();
 	}

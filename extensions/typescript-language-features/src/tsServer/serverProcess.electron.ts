@@ -30,7 +30,7 @@ class ProtocolBuffer {
 	private index: number = 0;
 	private buffer: Buffer = Buffer.allocUnsafe(defaultSize);
 
-	public append(data: string | Buffer): codemavi {
+	public append(data: string | Buffer): void {
 		let toAppend: Buffer | null = null;
 		if (Buffer.isBuffer(data)) {
 			toAppend = data;
@@ -107,7 +107,7 @@ class Reader<T> extends Disposable {
 	private readonly _onData = this._register(new vscode.EventEmitter<T>());
 	public readonly onData = this._onData.event;
 
-	private onLengthData(data: Buffer | string): codemavi {
+	private onLengthData(data: Buffer | string): void {
 		if (this.isDisposed) {
 			return;
 		}
@@ -195,23 +195,23 @@ class IpcChildServerProcess extends Disposable implements TsServerProcess {
 		super();
 	}
 
-	write(serverRequest: Proto.Request): codemavi {
+	write(serverRequest: Proto.Request): void {
 		this._process.send(serverRequest);
 	}
 
-	onData(handler: (data: Proto.Response) => codemavi): codemavi {
+	onData(handler: (data: Proto.Response) => void): void {
 		this._process.on('message', handler);
 	}
 
-	onExit(handler: (code: number | null, signal: string | null) => codemavi): codemavi {
+	onExit(handler: (code: number | null, signal: string | null) => void): void {
 		this._process.on('exit', handler);
 	}
 
-	onError(handler: (err: Error) => codemavi): codemavi {
+	onError(handler: (err: Error) => void): void {
 		this._process.on('error', handler);
 	}
 
-	kill(): codemavi {
+	kill(): void {
 		this._process.kill();
 	}
 }
@@ -226,24 +226,24 @@ class StdioChildServerProcess extends Disposable implements TsServerProcess {
 		this._reader = this._register(new Reader<Proto.Response>(this._process.stdout!));
 	}
 
-	write(serverRequest: Proto.Request): codemavi {
+	write(serverRequest: Proto.Request): void {
 		this._process.stdin!.write(JSON.stringify(serverRequest) + '\r\n', 'utf8');
 	}
 
-	onData(handler: (data: Proto.Response) => codemavi): codemavi {
+	onData(handler: (data: Proto.Response) => void): void {
 		this._reader.onData(handler);
 	}
 
-	onExit(handler: (code: number | null, signal: string | null) => codemavi): codemavi {
+	onExit(handler: (code: number | null, signal: string | null) => void): void {
 		this._process.on('exit', handler);
 	}
 
-	onError(handler: (err: Error) => codemavi): codemavi {
+	onError(handler: (err: Error) => void): void {
 		this._process.on('error', handler);
 		this._reader.onError(handler);
 	}
 
-	kill(): codemavi {
+	kill(): void {
 		this._process.kill();
 		this._reader.dispose();
 	}

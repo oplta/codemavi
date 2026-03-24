@@ -32,7 +32,7 @@ export class Client extends IPCClient implements IDisposable {
 		this.protocol = protocol;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.protocol.disconnect();
 		super.dispose();
 	}

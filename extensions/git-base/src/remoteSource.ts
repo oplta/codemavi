@@ -55,12 +55,12 @@ class RemoteSourceProviderQuickPick implements Disposable {
 	}
 
 	@debounce(300)
-	private onDidChangeValue(): codemavi {
+	private onDidChangeValue(): void {
 		this.query();
 	}
 
 	@throttle
-	private async query(): Promise<codemavi> {
+	private async query(): Promise<void> {
 		try {
 			if (this.isDisposed) {
 				return;

@@ -52,7 +52,7 @@ export class DialogHandlerContribution extends Disposable implements IWorkbenchC
 		this.processDialogs();
 	}
 
-	private async processDialogs(): Promise<codemavi> {
+	private async processDialogs(): Promise<void> {
 		while (this.model.dialogs.length) {
 			this.currentDialog = this.model.dialogs[0];
 

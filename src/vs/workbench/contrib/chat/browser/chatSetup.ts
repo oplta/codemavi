@@ -176,7 +176,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 
 	private static readonly SETUP_NEEDED_MESSAGE = new MarkdownString(localize('settingUpCopilotNeeded', "You need to set up Copilot to use Chat."));
 
-	private readonly _onUnresolvableError = this._register(new Emitter<codemavi>());
+	private readonly _onUnresolvableError = this._register(new Emitter<void>());
 	readonly onUnresolvableError = this._onUnresolvableError.event;
 
 	constructor(
@@ -191,7 +191,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		super();
 	}
 
-	async invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi): Promise<IChatAgentResult> {
+	async invoke(request: IChatAgentRequest, progress: (part: IChatProgress) => void): Promise<IChatAgentResult> {
 		return this.instantiationService.invokeFunction(async accessor => {
 			const chatService = accessor.get(IChatService);						// use accessor for lazy loading
 			const languageModelsService = accessor.get(ILanguageModelsService);	// of chat related services
@@ -202,7 +202,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		});
 	}
 
-	private async doInvoke(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
+	private async doInvoke(request: IChatAgentRequest, progress: (part: IChatProgress) => void, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
 		if (!this.context.state.installed || this.context.state.entitlement === ChatEntitlement.Available || this.context.state.entitlement === ChatEntitlement.Unknown) {
 			return this.doInvokeWithSetup(request, progress, chatService, languageModelsService, chatWidgetService, chatAgentService);
 		}
@@ -210,7 +210,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		return this.doInvokeWithoutSetup(request, progress, chatService, languageModelsService, chatWidgetService, chatAgentService);
 	}
 
-	private async doInvokeWithoutSetup(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
+	private async doInvokeWithoutSetup(request: IChatAgentRequest, progress: (part: IChatProgress) => void, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
 		const requestModel = chatWidgetService.getWidgetBySessionId(request.sessionId)?.viewModel?.model.getRequests().at(-1);
 		if (!requestModel) {
 			this.logService.error('[chat setup] Request model not found, cannot redispatch request.');
@@ -228,7 +228,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 	}
 
 	private _handlingForwardedRequest: string | undefined;
-	private async forwardRequestToCopilot(requestModel: IChatRequestModel, progress: (part: IChatProgress) => codemavi, chatService: IChatService, languageModelsService: ILanguageModelsService, chatAgentService: IChatAgentService, chatWidgetService: IChatWidgetService): Promise<codemavi> {
+	private async forwardRequestToCopilot(requestModel: IChatRequestModel, progress: (part: IChatProgress) => void, chatService: IChatService, languageModelsService: ILanguageModelsService, chatAgentService: IChatAgentService, chatWidgetService: IChatWidgetService): Promise<void> {
 
 		if (this._handlingForwardedRequest === requestModel.message.text) {
 			throw new Error('Already handling this request');
@@ -280,7 +280,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		});
 	}
 
-	private whenLanguageModelReady(languageModelsService: ILanguageModelsService): Promise<unknown> | codemavi {
+	private whenLanguageModelReady(languageModelsService: ILanguageModelsService): Promise<unknown> | void {
 		for (const id of languageModelsService.getLanguageModelIds()) {
 			const model = languageModelsService.lookupLanguageModel(id);
 			if (model && model.isDefault) {
@@ -291,7 +291,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		return Event.toPromise(Event.filter(languageModelsService.onDidChangeLanguageModels, e => e.added?.some(added => added.metadata.isDefault) ?? false));
 	}
 
-	private whenAgentReady(chatAgentService: IChatAgentService): Promise<unknown> | codemavi {
+	private whenAgentReady(chatAgentService: IChatAgentService): Promise<unknown> | void {
 		const defaultAgent = chatAgentService.getDefaultAgent(this.location);
 		if (defaultAgent && !defaultAgent.isCore) {
 			return; // we have a default agent from an extension!
@@ -303,7 +303,7 @@ class SetupChatAgentImplementation extends Disposable implements IChatAgentImple
 		}));
 	}
 
-	private async doInvokeWithSetup(request: IChatAgentRequest, progress: (part: IChatProgress) => codemavi, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
+	private async doInvokeWithSetup(request: IChatAgentRequest, progress: (part: IChatProgress) => void, chatService: IChatService, languageModelsService: ILanguageModelsService, chatWidgetService: IChatWidgetService, chatAgentService: IChatAgentService): Promise<IChatAgentResult> {
 		this.telemetryService.publicLog2<WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification>('workbenchActionExecuted', { id: CHAT_SETUP_ACTION_ID, from: 'chat' });
 
 		const requestModel = chatWidgetService.getWidgetBySessionId(request.sessionId)?.viewModel?.model.getRequests().at(-1);
@@ -543,7 +543,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 		this.registerUrlLinkHandler();
 	}
 
-	private registerSetupAgents(context: ChatEntitlementContext, controller: Lazy<ChatSetupController>): codemavi {
+	private registerSetupAgents(context: ChatEntitlementContext, controller: Lazy<ChatSetupController>): void {
 		const registration = markAsSingleton(new MutableDisposable()); // prevents flicker on window reload
 
 		const updateRegistration = () => {
@@ -578,7 +578,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 		), () => updateRegistration()));
 	}
 
-	private registerChatWelcome(context: ChatEntitlementContext, controller: Lazy<ChatSetupController>): codemavi {
+	private registerChatWelcome(context: ChatEntitlementContext, controller: Lazy<ChatSetupController>): void {
 		Registry.as<IChatViewsWelcomeContributionRegistry>(ChatViewsWelcomeExtensions.ChatViewsWelcomeRegistry).register({
 			title: localize('welcomeChat', "Welcome to Copilot"),
 			when: ChatContextKeys.SetupViewCondition,
@@ -587,7 +587,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 		});
 	}
 
-	private registerActions(context: ChatEntitlementContext, requests: ChatEntitlementRequests, controller: Lazy<ChatSetupController>): codemavi {
+	private registerActions(context: ChatEntitlementContext, requests: ChatEntitlementRequests, controller: Lazy<ChatSetupController>): void {
 		const chatSetupTriggerContext = ContextKeyExpr.or(
 			ChatContextKeys.Setup.installed.negate(),
 			ChatContextKeys.Entitlement.canSignUp
@@ -619,7 +619,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 				});
 			}
 
-			override async run(accessor: ServicesAccessor, mode: ChatMode): Promise<codemavi> {
+			override async run(accessor: ServicesAccessor, mode: ChatMode): Promise<void> {
 				const viewsService = accessor.get(IViewsService);
 				const viewDescriptorService = accessor.get(IViewDescriptorService);
 				const configurationService = accessor.get(IConfigurationService);
@@ -685,7 +685,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 				});
 			}
 
-			override async run(accessor: ServicesAccessor): Promise<codemavi> {
+			override async run(accessor: ServicesAccessor): Promise<void> {
 				const viewsDescriptorService = accessor.get(IViewDescriptorService);
 				const layoutService = accessor.get(IWorkbenchLayoutService);
 				const configurationService = accessor.get(IConfigurationService);
@@ -742,7 +742,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 				});
 			}
 
-			override async run(accessor: ServicesAccessor, from?: string): Promise<codemavi> {
+			override async run(accessor: ServicesAccessor, from?: string): Promise<void> {
 				const openerService = accessor.get(IOpenerService);
 				const hostService = accessor.get(IHostService);
 				const commandService = accessor.get(ICommandService);
@@ -757,7 +757,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 				}
 			}
 
-			private async onWindowFocus(focus: boolean, commandService: ICommandService): Promise<codemavi> {
+			private async onWindowFocus(focus: boolean, commandService: ICommandService): Promise<void> {
 				if (focus) {
 					windowFocusListener.clear();
 
@@ -774,7 +774,7 @@ export class ChatSetupContribution extends Disposable implements IWorkbenchContr
 		registerAction2(UpgradePlanAction);
 	}
 
-	private registerUrlLinkHandler(): codemavi {
+	private registerUrlLinkHandler(): void {
 		this._register(ExtensionUrlHandlerOverrideRegistry.registerHandler({
 			canHandleURL: url => {
 				return url.scheme === this.productService.urlProtocol && equalsIgnoreCase(url.authority, defaultChat.chatExtensionId);
@@ -818,7 +818,7 @@ enum ChatSetupStep {
 
 class ChatSetupController extends Disposable {
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private _step = ChatSetupStep.Initial;
@@ -849,11 +849,11 @@ class ChatSetupController extends Disposable {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.context.onDidChange(() => this._onDidChange.fire()));
 	}
 
-	private setStep(step: ChatSetupStep): codemavi {
+	private setStep(step: ChatSetupStep): void {
 		if (this._step === step) {
 			return;
 		}
@@ -1017,7 +1017,7 @@ class ChatSetupController extends Disposable {
 		return true;
 	}
 
-	private async doInstall(): Promise<codemavi> {
+	private async doInstall(): Promise<void> {
 		let error: Error | undefined;
 		try {
 			await this.extensionsWorkbenchService.install(defaultChat.extensionId, {
@@ -1188,7 +1188,7 @@ class ChatSetupWelcomeContent extends Disposable {
 		this.create();
 	}
 
-	private create(): codemavi {
+	private create(): void {
 		const markdown = this.instantiationService.createInstance(MarkdownRenderer, {});
 
 		// Header
@@ -1247,7 +1247,7 @@ class ChatSetupWelcomeContent extends Disposable {
 		this._register(Event.runAndSubscribe(this.controller.onDidChange, () => this.update(freeContainer, settingsContainer, button)));
 	}
 
-	private update(freeContainer: HTMLElement, settingsContainer: HTMLElement, button: ButtonWithDropdown): codemavi {
+	private update(freeContainer: HTMLElement, settingsContainer: HTMLElement, button: ButtonWithDropdown): void {
 		const showSettings = this.telemetryService.telemetryLevel !== TelemetryLevel.NONE;
 		let showFree: boolean;
 		let buttonLabel: string;
@@ -1292,7 +1292,7 @@ class ChatSetupWelcomeContent extends Disposable {
 
 //#endregion
 
-function refreshTokens(commandService: ICommandService): codemavi {
+function refreshTokens(commandService: ICommandService): void {
 	// ugly, but we need to signal to the extension that entitlements changed
 	commandService.executeCommand(defaultChat.completionsRefreshTokenCommand);
 	commandService.executeCommand(defaultChat.chatRefreshTokenCommand);

@@ -395,7 +395,7 @@ export class AutoClosingPairs {
 	}
 }
 
-function appendEntry<K, V>(target: Map<K, V[]>, key: K, value: V): codemavi {
+function appendEntry<K, V>(target: Map<K, V[]>, key: K, value: V): void {
 	if (target.has(key)) {
 		target.get(key)!.push(value);
 	} else {

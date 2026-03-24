@@ -49,11 +49,11 @@ class DocumentSymbolBreadcrumbsSource implements IBreadcrumbsDataSource<Document
 		return this._breadcrumbs;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._breadcrumbs = [];
 	}
 
-	update(model: OutlineModel, position: IPosition): codemavi {
+	update(model: OutlineModel, position: IPosition): void {
 		const newElements = this._computeBreadcrumbs(model, position);
 		this._breadcrumbs = newElements;
 	}
@@ -207,7 +207,7 @@ class DocumentSymbolsOutline implements IOutline<DocumentSymbolItem> {
 		this._createOutline().finally(() => firstLoadBarrier.open());
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._outlineDisposables.dispose();
 	}
@@ -220,7 +220,7 @@ class DocumentSymbolsOutline implements IOutline<DocumentSymbolItem> {
 		return this._outlineModel?.uri;
 	}
 
-	async reveal(entry: DocumentSymbolItem, options: IEditorOptions, sideBySide: boolean, select: boolean): Promise<codemavi> {
+	async reveal(entry: DocumentSymbolItem, options: IEditorOptions, sideBySide: boolean, select: boolean): Promise<void> {
 		const model = OutlineModel.get(entry);
 		if (!model || !(entry instanceof OutlineElement)) {
 			return;
@@ -262,7 +262,7 @@ class DocumentSymbolsOutline implements IOutline<DocumentSymbolItem> {
 		});
 	}
 
-	private async _createOutline(contentChangeEvent?: IModelContentChangedEvent): Promise<codemavi> {
+	private async _createOutline(contentChangeEvent?: IModelContentChangedEvent): Promise<void> {
 
 		this._outlineDisposables.clear();
 		if (!contentChangeEvent) {
@@ -376,7 +376,7 @@ class DocumentSymbolsOutline implements IOutline<DocumentSymbolItem> {
 		}
 	}
 
-	private _applyMarkersToOutline(model: OutlineModel | undefined): codemavi {
+	private _applyMarkersToOutline(model: OutlineModel | undefined): void {
 		const problem = this._configurationService.getValue('problems.visibility');
 		const config = this._configurationService.getValue(OutlineConfigKeys.problemsEnabled);
 		if (!model || !problem || !config) {
@@ -408,7 +408,7 @@ class DocumentSymbolsOutline implements IOutline<DocumentSymbolItem> {
 
 class DocumentSymbolsOutlineCreator implements IOutlineCreator<IEditorPane, DocumentSymbolItem> {
 
-	readonly dispose: () => codemavi;
+	readonly dispose: () => void;
 
 	constructor(
 		@IOutlineService outlineService: IOutlineService

@@ -28,9 +28,9 @@ class CodeLensViewZone implements IViewZone {
 	heightInPx: number;
 
 	private _lastHeight?: number;
-	private readonly _onHeight: () => codemavi;
+	private readonly _onHeight: () => void;
 
-	constructor(afterLineNumber: number, heightInPx: number, onHeight: () => codemavi) {
+	constructor(afterLineNumber: number, heightInPx: number, onHeight: () => void) {
 		this.afterLineNumber = afterLineNumber;
 		this.heightInPx = heightInPx;
 
@@ -39,7 +39,7 @@ class CodeLensViewZone implements IViewZone {
 		this.domNode = document.createElement('div');
 	}
 
-	onComputedHeight(height: number): codemavi {
+	onComputedHeight(height: number): void {
 		if (this._lastHeight === undefined) {
 			this._lastHeight = height;
 		} else if (this._lastHeight !== height) {
@@ -83,7 +83,7 @@ class CodeLensContentWidget implements IContentWidget {
 		this._domNode.className = `codelens-decoration`;
 	}
 
-	withCommands(lenses: Array<CodeLens | undefined | null>, animate: boolean): codemavi {
+	withCommands(lenses: Array<CodeLens | undefined | null>, animate: boolean): void {
 		this._commands.clear();
 
 		const children: HTMLElement[] = [];
@@ -137,7 +137,7 @@ class CodeLensContentWidget implements IContentWidget {
 		return this._domNode;
 	}
 
-	updatePosition(line: number): codemavi {
+	updatePosition(line: number): void {
 		const column = this._editor.getModel().getLineFirstNonWhitespaceColumn(line);
 		this._widgetPosition = {
 			position: { lineNumber: line, column: column },
@@ -151,7 +151,7 @@ class CodeLensContentWidget implements IContentWidget {
 }
 
 export interface IDecorationIdCallback {
-	(decorationId: string): codemavi;
+	(decorationId: string): void;
 }
 
 export class CodeLensHelper {
@@ -166,16 +166,16 @@ export class CodeLensHelper {
 		this._addDecorationsCallbacks = [];
 	}
 
-	addDecoration(decoration: IModelDeltaDecoration, callback: IDecorationIdCallback): codemavi {
+	addDecoration(decoration: IModelDeltaDecoration, callback: IDecorationIdCallback): void {
 		this._addDecorations.push(decoration);
 		this._addDecorationsCallbacks.push(callback);
 	}
 
-	removeDecoration(decorationId: string): codemavi {
+	removeDecoration(decorationId: string): void {
 		this._removeDecorations.push(decorationId);
 	}
 
-	commit(changeAccessor: IModelDecorationsChangeAccessor): codemavi {
+	commit(changeAccessor: IModelDecorationsChangeAccessor): void {
 		const resultingDecorations = changeAccessor.deltaDecorations(this._removeDecorations, this._addDecorations);
 		for (let i = 0, len = resultingDecorations.length; i < len; i++) {
 			this._addDecorationsCallbacks[i](resultingDecorations[i]);
@@ -205,7 +205,7 @@ export class CodeLensWidget {
 		helper: CodeLensHelper,
 		viewZoneChangeAccessor: IViewZoneChangeAccessor,
 		heightInPx: number,
-		updateCallback: () => codemavi
+		updateCallback: () => void
 	) {
 		this._editor = editor;
 		this._data = data;
@@ -244,7 +244,7 @@ export class CodeLensWidget {
 		}
 	}
 
-	private _createContentWidgetIfNecessary(): codemavi {
+	private _createContentWidgetIfNecessary(): void {
 		if (!this._contentWidget) {
 			this._contentWidget = new CodeLensContentWidget(this._editor, this._viewZone.afterLineNumber + 1);
 			this._editor.addContentWidget(this._contentWidget);
@@ -253,7 +253,7 @@ export class CodeLensWidget {
 		}
 	}
 
-	dispose(helper: CodeLensHelper, viewZoneChangeAccessor?: IViewZoneChangeAccessor): codemavi {
+	dispose(helper: CodeLensHelper, viewZoneChangeAccessor?: IViewZoneChangeAccessor): void {
 		this._decorationIds.forEach(helper.removeDecoration, helper);
 		this._decorationIds = [];
 		viewZoneChangeAccessor?.removeZone(this._viewZoneId);
@@ -276,7 +276,7 @@ export class CodeLensWidget {
 		});
 	}
 
-	updateCodeLensSymbols(data: CodeLensItem[], helper: CodeLensHelper): codemavi {
+	updateCodeLensSymbols(data: CodeLensItem[], helper: CodeLensHelper): void {
 		this._decorationIds.forEach(helper.removeDecoration, helper);
 		this._decorationIds = [];
 		this._data = data;
@@ -288,7 +288,7 @@ export class CodeLensWidget {
 		});
 	}
 
-	updateHeight(height: number, viewZoneChangeAccessor: IViewZoneChangeAccessor): codemavi {
+	updateHeight(height: number, viewZoneChangeAccessor: IViewZoneChangeAccessor): void {
 		this._viewZone.heightInPx = height;
 		viewZoneChangeAccessor.layoutZone(this._viewZoneId);
 		if (this._contentWidget) {
@@ -311,7 +311,7 @@ export class CodeLensWidget {
 		return this._data;
 	}
 
-	updateCommands(symbols: Array<CodeLens | undefined | null>): codemavi {
+	updateCommands(symbols: Array<CodeLens | undefined | null>): void {
 
 		this._createContentWidgetIfNecessary();
 		this._contentWidget!.withCommands(symbols, true);
@@ -337,7 +337,7 @@ export class CodeLensWidget {
 		return -1;
 	}
 
-	update(viewZoneChangeAccessor: IViewZoneChangeAccessor): codemavi {
+	update(viewZoneChangeAccessor: IViewZoneChangeAccessor): void {
 		if (this.isValid()) {
 			const range = this._editor.getModel().getDecorationRange(this._decorationIds[0]);
 			if (range) {

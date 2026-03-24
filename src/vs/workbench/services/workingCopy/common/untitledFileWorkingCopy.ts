@@ -99,19 +99,19 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 
 	//#region Events
 
-	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeContent = this._register(new Emitter<void>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
-	private readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeDirty = this._register(new Emitter<void>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
 	private readonly _onDidSave = this._register(new Emitter<IWorkingCopySaveEvent>());
 	readonly onDidSave = this._onDidSave.event;
 
-	private readonly _onDidRevert = this._register(new Emitter<codemavi>());
+	private readonly _onDidRevert = this._register(new Emitter<void>());
 	readonly onDidRevert = this._onDidRevert.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	//#endregion
@@ -150,7 +150,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 		return this.modified;
 	}
 
-	private setModified(modified: boolean): codemavi {
+	private setModified(modified: boolean): void {
 		if (this.modified === modified) {
 			return;
 		}
@@ -166,7 +166,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 
 	//#region Resolve
 
-	async resolve(): Promise<codemavi> {
+	async resolve(): Promise<void> {
 		this.trace('resolve()');
 
 		if (this.isResolved()) {
@@ -209,7 +209,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 		}
 	}
 
-	private async doCreateModel(contents: VSBufferReadableStream): Promise<codemavi> {
+	private async doCreateModel(contents: VSBufferReadableStream): Promise<void> {
 		this.trace('doCreateModel()');
 
 		// Create model and dispose it when we get disposed
@@ -219,7 +219,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 		this.installModelListeners(this._model);
 	}
 
-	private installModelListeners(model: M): codemavi {
+	private installModelListeners(model: M): void {
 
 		// Content Change
 		this._register(model.onDidChangeContent(e => this.onModelContentChanged(e)));
@@ -228,7 +228,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 		this._register(model.onWillDispose(() => this.dispose()));
 	}
 
-	private onModelContentChanged(e: IUntitledFileWorkingCopyModelContentChangedEvent): codemavi {
+	private onModelContentChanged(e: IUntitledFileWorkingCopyModelContentChangedEvent): void {
 
 		// Mark the untitled file working copy as non-modified once its
 		// in case provided by the change event and in case we do not
@@ -298,7 +298,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 
 	//#region Revert
 
-	async revert(): Promise<codemavi> {
+	async revert(): Promise<void> {
 		this.trace('revert()');
 
 		// No longer modified
@@ -315,7 +315,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 
 	//#endregion
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.trace('dispose()');
 
 		this._onWillDispose.fire();
@@ -323,7 +323,7 @@ export class UntitledFileWorkingCopy<M extends IUntitledFileWorkingCopyModel> ex
 		super.dispose();
 	}
 
-	private trace(msg: string): codemavi {
+	private trace(msg: string): void {
 		this.logService.trace(`[untitled file working copy] ${msg}`, this.resource.toString(), this.typeId);
 	}
 }

@@ -27,11 +27,11 @@ export class StickyLineCandidate {
 
 export interface IStickyLineCandidateProvider {
 
-	dispose(): codemavi;
+	dispose(): void;
 	getVersionId(): number | undefined;
-	update(): Promise<codemavi>;
+	update(): Promise<void>;
 	getCandidateStickyLinesIntersecting(range: StickyRange): StickyLineCandidate[];
-	onDidChangeStickyScroll: Event<codemavi>;
+	onDidChangeStickyScroll: Event<void>;
 
 }
 
@@ -39,7 +39,7 @@ export class StickyLineCandidateProvider extends Disposable implements IStickyLi
 
 	static readonly ID = 'store.contrib.stickyScrollController';
 
-	private readonly _onDidChangeStickyScroll = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeStickyScroll = this._register(new Emitter<void>());
 	public readonly onDidChangeStickyScroll = this._onDidChangeStickyScroll.event;
 
 	private readonly _editor: ICodeEditor;
@@ -112,14 +112,14 @@ export class StickyLineCandidateProvider extends Disposable implements IStickyLi
 		}
 	}
 
-	public async update(): Promise<codemavi> {
+	public async update(): Promise<void> {
 		this._cts?.dispose(true);
 		this._cts = new CancellationTokenSource();
 		await this.updateStickyModel(this._cts.token);
 		this._onDidChangeStickyScroll.fire();
 	}
 
-	private async updateStickyModel(token: CancellationToken): Promise<codemavi> {
+	private async updateStickyModel(token: CancellationToken): Promise<void> {
 		if (!this._editor.hasModel() || !this._stickyModelProvider || this._editor.getModel().isTooLargeForTokenization()) {
 			this._model = null;
 			return;
@@ -148,7 +148,7 @@ export class StickyLineCandidateProvider extends Disposable implements IStickyLi
 		depth: number,
 		top: number,
 		lastStartLineNumber: number
-	): codemavi {
+	): void {
 		if (outlineModel.children.length === 0) {
 			return;
 		}

@@ -65,7 +65,7 @@ abstract class BaseStorageDatabaseClient extends Disposable implements IStorageD
 		return new Map(items);
 	}
 
-	updateItems(request: IUpdateRequest): Promise<codemavi> {
+	updateItems(request: IUpdateRequest): Promise<void> {
 		const serializableRequest: ISerializableUpdateRequest = { profile: this.profile, workspace: this.workspace };
 
 		if (request.insert) {
@@ -79,13 +79,13 @@ abstract class BaseStorageDatabaseClient extends Disposable implements IStorageD
 		return this.channel.call('updateItems', serializableRequest);
 	}
 
-	optimize(): Promise<codemavi> {
+	optimize(): Promise<void> {
 		const serializableRequest: IBaseSerializableStorageRequest = { profile: this.profile, workspace: this.workspace };
 
 		return this.channel.call('optimize', serializableRequest);
 	}
 
-	abstract close(): Promise<codemavi>;
+	abstract close(): Promise<void>;
 }
 
 abstract class BaseProfileAwareStorageDatabaseClient extends BaseStorageDatabaseClient {
@@ -99,11 +99,11 @@ abstract class BaseProfileAwareStorageDatabaseClient extends BaseStorageDatabase
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.channel.listen<ISerializableItemsChangeEvent>('onDidChangeStorage', { profile: this.profile })((e: ISerializableItemsChangeEvent) => this.onDidChangeStorage(e)));
 	}
 
-	private onDidChangeStorage(e: ISerializableItemsChangeEvent): codemavi {
+	private onDidChangeStorage(e: ISerializableItemsChangeEvent): void {
 		if (Array.isArray(e.changed) || Array.isArray(e.deleted)) {
 			this._onDidChangeItemsExternal.fire({
 				changed: e.changed ? new Map(e.changed) : undefined,
@@ -119,7 +119,7 @@ export class ApplicationStorageDatabaseClient extends BaseProfileAwareStorageDat
 		super(channel, undefined);
 	}
 
-	async close(): Promise<codemavi> {
+	async close(): Promise<void> {
 
 		// The application storage database is shared across all instances so
 		// we do not close it from the window. However we dispose the
@@ -135,7 +135,7 @@ export class ProfileStorageDatabaseClient extends BaseProfileAwareStorageDatabas
 		super(channel, profile);
 	}
 
-	async close(): Promise<codemavi> {
+	async close(): Promise<void> {
 
 		// The profile storage database is shared across all instances of
 		// the same profile so we do not close it from the window.
@@ -154,7 +154,7 @@ export class WorkspaceStorageDatabaseClient extends BaseStorageDatabaseClient im
 		super(channel, undefined, workspace);
 	}
 
-	async close(): Promise<codemavi> {
+	async close(): Promise<void> {
 
 		// The workspace storage database is only used in this instance
 		// but we do not need to close it from here, the main process

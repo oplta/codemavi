@@ -69,7 +69,7 @@ export interface IButton extends IDisposable {
 	set enabled(value: boolean);
 	set checked(value: boolean);
 
-	focus(): codemavi;
+	focus(): void;
 	hasFocus(): boolean;
 }
 
@@ -178,7 +178,7 @@ export class Button extends Disposable implements IButton {
 		this._register(this.focusTracker.onDidBlur(() => { if (this.enabled) { this.updateBackground(false); } }));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._element.remove();
 	}
@@ -206,7 +206,7 @@ export class Button extends Disposable implements IButton {
 		return elements;
 	}
 
-	private updateBackground(hover: boolean): codemavi {
+	private updateBackground(hover: boolean): void {
 		let background;
 		if (this.options.secondary) {
 			background = hover ? this.options.buttonSecondaryHoverBackground : this.options.buttonSecondaryBackground;
@@ -285,7 +285,7 @@ export class Button extends Disposable implements IButton {
 		}
 	}
 
-	protected _setAriaLabel(): codemavi {
+	protected _setAriaLabel(): void {
 		if (typeof this.options.ariaLabel === 'string') {
 			this._element.setAttribute('aria-label', this.options.ariaLabel);
 		} else if (typeof this.options.title === 'string') {
@@ -338,7 +338,7 @@ export class Button extends Disposable implements IButton {
 		}
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this._element.focus();
 	}
 
@@ -454,7 +454,7 @@ export class ButtonWithDropdown extends Disposable implements IButton {
 		return this.primaryButton.checked;
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this.primaryButton.focus();
 	}
 
@@ -512,13 +512,13 @@ export class ButtonWithDescription implements IButtonWithDescription {
 		return this._button.checked;
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this._button.focus();
 	}
 	hasFocus(): boolean {
 		return this._button.hasFocus();
 	}
-	dispose(): codemavi {
+	dispose(): void {
 		this._button.dispose();
 	}
 
@@ -540,7 +540,7 @@ export class ButtonBar {
 
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._buttonStore.dispose();
 	}
 
@@ -548,7 +548,7 @@ export class ButtonBar {
 		return this._buttons;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._buttonStore.clear();
 		this._buttons.length = 0;
 	}
@@ -571,7 +571,7 @@ export class ButtonBar {
 		return button;
 	}
 
-	private pushButton(button: IButton): codemavi {
+	private pushButton(button: IButton): void {
 		this._buttons.push(button);
 
 		const index = this._buttons.length - 1;

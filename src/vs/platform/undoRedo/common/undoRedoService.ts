@@ -54,7 +54,7 @@ class ResourceStackElement {
 		this.isValid = true;
 	}
 
-	public setValid(isValid: boolean): codemavi {
+	public setValid(isValid: boolean): void {
 		this.isValid = isValid;
 	}
 
@@ -117,7 +117,7 @@ class RemovedResources {
 		return this.elements.has(strResource);
 	}
 
-	public set(strResource: string, value: ResourceReasonPair): codemavi {
+	public set(strResource: string, value: ResourceReasonPair): void {
 		this.elements.set(strResource, value);
 	}
 
@@ -160,7 +160,7 @@ class WorkspaceStackElement {
 		return (typeof this.actual.split === 'function');
 	}
 
-	public removeResource(resourceLabel: string, strResource: string, reason: RemovedResourceReason): codemavi {
+	public removeResource(resourceLabel: string, strResource: string, reason: RemovedResourceReason): void {
 		if (!this.removedResources) {
 			this.removedResources = new RemovedResources();
 		}
@@ -169,7 +169,7 @@ class WorkspaceStackElement {
 		}
 	}
 
-	public setValid(resourceLabel: string, strResource: string, isValid: boolean): codemavi {
+	public setValid(resourceLabel: string, strResource: string, isValid: boolean): void {
 		if (isValid) {
 			if (this.invalidatedResources) {
 				this.invalidatedResources.delete(strResource);
@@ -211,7 +211,7 @@ class ResourceEditStack {
 		this.versionId = 1;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		for (const element of this._past) {
 			if (element.type === UndoRedoElementType.Workspace) {
 				element.removeResource(this.resourceLabel, this.strResource, RemovedResourceReason.ExternalRemoval);
@@ -237,13 +237,13 @@ class ResourceEditStack {
 		return result.join('\n');
 	}
 
-	public flushAllElements(): codemavi {
+	public flushAllElements(): void {
 		this._past = [];
 		this._future = [];
 		this.versionId++;
 	}
 
-	public setElementsIsValid(isValid: boolean): codemavi {
+	public setElementsIsValid(isValid: boolean): void {
 		for (const element of this._past) {
 			if (element.type === UndoRedoElementType.Workspace) {
 				element.setValid(this.resourceLabel, this.strResource, isValid);
@@ -260,7 +260,7 @@ class ResourceEditStack {
 		}
 	}
 
-	private _setElementValidFlag(element: StackElement, isValid: boolean): codemavi {
+	private _setElementValidFlag(element: StackElement, isValid: boolean): void {
 		if (element.type === UndoRedoElementType.Workspace) {
 			element.setValid(this.resourceLabel, this.strResource, isValid);
 		} else {
@@ -268,7 +268,7 @@ class ResourceEditStack {
 		}
 	}
 
-	public setElementsValidFlag(isValid: boolean, filter: (element: IUndoRedoElement) => boolean): codemavi {
+	public setElementsValidFlag(isValid: boolean, filter: (element: IUndoRedoElement) => boolean): void {
 		for (const element of this._past) {
 			if (filter(element.actual)) {
 				this._setElementValidFlag(element, isValid);
@@ -281,7 +281,7 @@ class ResourceEditStack {
 		}
 	}
 
-	public pushElement(element: StackElement): codemavi {
+	public pushElement(element: StackElement): void {
 		// remove the future
 		for (const futureElement of this._future) {
 			if (futureElement.type === UndoRedoElementType.Workspace) {
@@ -306,7 +306,7 @@ class ResourceEditStack {
 		return new ResourceEditStackSnapshot(resource, elements);
 	}
 
-	public restoreSnapshot(snapshot: ResourceEditStackSnapshot): codemavi {
+	public restoreSnapshot(snapshot: ResourceEditStackSnapshot): void {
 		const snapshotLength = snapshot.elements.length;
 		let isOK = true;
 		let snapshotIndex = 0;
@@ -384,7 +384,7 @@ class ResourceEditStack {
 		return (this._future.length > 0);
 	}
 
-	public splitPastWorkspaceElement(toRemove: WorkspaceStackElement, individualMap: Map<string, ResourceStackElement>): codemavi {
+	public splitPastWorkspaceElement(toRemove: WorkspaceStackElement, individualMap: Map<string, ResourceStackElement>): void {
 		for (let j = this._past.length - 1; j >= 0; j--) {
 			if (this._past[j] === toRemove) {
 				if (individualMap.has(this.strResource)) {
@@ -400,7 +400,7 @@ class ResourceEditStack {
 		this.versionId++;
 	}
 
-	public splitFutureWorkspaceElement(toRemove: WorkspaceStackElement, individualMap: Map<string, ResourceStackElement>): codemavi {
+	public splitFutureWorkspaceElement(toRemove: WorkspaceStackElement, individualMap: Map<string, ResourceStackElement>): void {
 		for (let j = this._future.length - 1; j >= 0; j--) {
 			if (this._future[j] === toRemove) {
 				if (individualMap.has(this.strResource)) {
@@ -416,13 +416,13 @@ class ResourceEditStack {
 		this.versionId++;
 	}
 
-	public moveBackward(element: StackElement): codemavi {
+	public moveBackward(element: StackElement): void {
 		this._past.pop();
 		this._future.push(element);
 		this.versionId++;
 	}
 
-	public moveForward(element: StackElement): codemavi {
+	public moveForward(element: StackElement): void {
 		this._future.pop();
 		this._past.push(element);
 		this.versionId++;
@@ -492,7 +492,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return resource.toString();
 	}
 
-	private _print(label: string): codemavi {
+	private _print(label: string): void {
 		console.log(`------------------------------------`);
 		console.log(`AFTER ${label}: `);
 		const str: string[] = [];
@@ -502,7 +502,7 @@ export class UndoRedoService implements IUndoRedoService {
 		console.log(str.join('\n'));
 	}
 
-	public pushElement(element: IUndoRedoElement, group: UndoRedoGroup = UndoRedoGroup.None, source: UndoRedoSource = UndoRedoSource.None): codemavi {
+	public pushElement(element: IUndoRedoElement, group: UndoRedoGroup = UndoRedoGroup.None, source: UndoRedoSource = UndoRedoSource.None): void {
 		if (element.type === UndoRedoElementType.Resource) {
 			const resourceLabel = getResourceLabel(element.resource);
 			const strResource = this.getUriComparisonKey(element.resource);
@@ -534,7 +534,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	private _pushElement(element: StackElement): codemavi {
+	private _pushElement(element: StackElement): void {
 		for (let i = 0, len = element.strResources.length; i < len; i++) {
 			const resourceLabel = element.resourceLabels[i];
 			const strResource = element.strResources[i];
@@ -564,7 +564,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return null;
 	}
 
-	private _splitPastWorkspaceElement(toRemove: WorkspaceStackElement & { actual: { split(): IResourceUndoRedoElement[] } }, ignoreResources: RemovedResources | null): codemavi {
+	private _splitPastWorkspaceElement(toRemove: WorkspaceStackElement & { actual: { split(): IResourceUndoRedoElement[] } }, ignoreResources: RemovedResources | null): void {
 		const individualArr = toRemove.actual.split();
 		const individualMap = new Map<string, ResourceStackElement>();
 		for (const _element of individualArr) {
@@ -583,7 +583,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	private _splitFutureWorkspaceElement(toRemove: WorkspaceStackElement & { actual: { split(): IResourceUndoRedoElement[] } }, ignoreResources: RemovedResources | null): codemavi {
+	private _splitFutureWorkspaceElement(toRemove: WorkspaceStackElement & { actual: { split(): IResourceUndoRedoElement[] } }, ignoreResources: RemovedResources | null): void {
 		const individualArr = toRemove.actual.split();
 		const individualMap = new Map<string, ResourceStackElement>();
 		for (const _element of individualArr) {
@@ -602,7 +602,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	public removeElements(resource: URI | string): codemavi {
+	public removeElements(resource: URI | string): void {
 		const strResource = typeof resource === 'string' ? resource : this.getUriComparisonKey(resource);
 		if (this._editStacks.has(strResource)) {
 			const editStack = this._editStacks.get(strResource)!;
@@ -614,7 +614,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	public setElementsValidFlag(resource: URI, isValid: boolean, filter: (element: IUndoRedoElement) => boolean): codemavi {
+	public setElementsValidFlag(resource: URI, isValid: boolean, filter: (element: IUndoRedoElement) => boolean): void {
 		const strResource = this.getUriComparisonKey(resource);
 		if (this._editStacks.has(strResource)) {
 			const editStack = this._editStacks.get(strResource)!;
@@ -643,7 +643,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return new ResourceEditStackSnapshot(resource, []);
 	}
 
-	public restoreSnapshot(snapshot: ResourceEditStackSnapshot): codemavi {
+	public restoreSnapshot(snapshot: ResourceEditStackSnapshot): void {
 		const strResource = this.getUriComparisonKey(snapshot.resource);
 		if (this._editStacks.has(strResource)) {
 			const editStack = this._editStacks.get(strResource)!;
@@ -707,7 +707,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return false;
 	}
 
-	private _onError(err: Error, element: StackElement): codemavi {
+	private _onError(err: Error, element: StackElement): void {
 		onUnexpectedError(err);
 		// An error occurred while undoing or redoing => drop the undo/redo stack for all affected resources
 		for (const strResource of element.strResources) {
@@ -716,7 +716,7 @@ export class UndoRedoService implements IUndoRedoService {
 		this._notificationService.error(err);
 	}
 
-	private _acquireLocks(editStackSnapshot: EditStackSnapshot): () => codemavi {
+	private _acquireLocks(editStackSnapshot: EditStackSnapshot): () => void {
 		// first, check if all locks can be acquired
 		for (const editStack of editStackSnapshot.editStacks) {
 			if (editStack.locked) {
@@ -737,10 +737,10 @@ export class UndoRedoService implements IUndoRedoService {
 		};
 	}
 
-	private _safeInvokeWithLocks(element: StackElement, invoke: () => Promise<codemavi> | codemavi, editStackSnapshot: EditStackSnapshot, cleanup: IDisposable, continuation: () => Promise<codemavi> | codemavi): Promise<codemavi> | codemavi {
+	private _safeInvokeWithLocks(element: StackElement, invoke: () => Promise<void> | void, editStackSnapshot: EditStackSnapshot, cleanup: IDisposable, continuation: () => Promise<void> | void): Promise<void> | void {
 		const releaseLocks = this._acquireLocks(editStackSnapshot);
 
-		let result: Promise<codemavi> | codemavi;
+		let result: Promise<void> | void;
 		try {
 			result = invoke();
 		} catch (err) {
@@ -750,7 +750,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 
 		if (result) {
-			// result is Promise<codemavi>
+			// result is Promise<void>
 			return result.then(
 				() => {
 					releaseLocks();
@@ -764,7 +764,7 @@ export class UndoRedoService implements IUndoRedoService {
 				}
 			);
 		} else {
-			// result is codemavi
+			// result is mavi
 			releaseLocks();
 			cleanup.dispose();
 			return continuation();
@@ -782,7 +782,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return result;
 	}
 
-	private _invokeResourcePrepare(element: ResourceStackElement, callback: (disposable: IDisposable) => Promise<codemavi> | codemavi): codemavi | Promise<codemavi> {
+	private _invokeResourcePrepare(element: ResourceStackElement, callback: (disposable: IDisposable) => Promise<void> | void): void | Promise<void> {
 		if (element.actual.type !== UndoRedoElementType.Workspace || typeof element.actual.prepareUndoRedo === 'undefined') {
 			// no preparation needed
 			return callback(Disposable.None);
@@ -903,7 +903,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return null;
 	}
 
-	private _workspaceUndo(strResource: string, element: WorkspaceStackElement, undoConfirmed: boolean): Promise<codemavi> | codemavi {
+	private _workspaceUndo(strResource: string, element: WorkspaceStackElement, undoConfirmed: boolean): Promise<void> | void {
 		const affectedEditStacks = this._getAffectedEditStacks(element);
 		const verificationError = this._checkWorkspaceUndo(strResource, element, affectedEditStacks, /*invalidated resources will be checked after the prepare call*/false);
 		if (verificationError) {
@@ -937,7 +937,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return false;
 	}
 
-	private async _confirmAndExecuteWorkspaceUndo(strResource: string, element: WorkspaceStackElement, editStackSnapshot: EditStackSnapshot, undoConfirmed: boolean): Promise<codemavi> {
+	private async _confirmAndExecuteWorkspaceUndo(strResource: string, element: WorkspaceStackElement, editStackSnapshot: EditStackSnapshot, undoConfirmed: boolean): Promise<void> {
 
 		if (element.canSplit() && !this._isPartOfUndoGroup(element)) {
 			// this element can be split
@@ -1009,7 +1009,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return this._safeInvokeWithLocks(element, () => element.actual.undo(), editStackSnapshot, cleanup, () => this._continueUndoInGroup(element.groupId, undoConfirmed));
 	}
 
-	private _resourceUndo(editStack: ResourceEditStack, element: ResourceStackElement, undoConfirmed: boolean): Promise<codemavi> | codemavi {
+	private _resourceUndo(editStack: ResourceEditStack, element: ResourceStackElement, undoConfirmed: boolean): Promise<void> | void {
 		if (!element.isValid) {
 			// invalid element => immediately flush edit stack!
 			editStack.flushAllElements();
@@ -1054,7 +1054,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return [matchedElement, matchedStrResource];
 	}
 
-	private _continueUndoInGroup(groupId: number, undoConfirmed: boolean): Promise<codemavi> | codemavi {
+	private _continueUndoInGroup(groupId: number, undoConfirmed: boolean): Promise<void> | void {
 		if (!groupId) {
 			return;
 		}
@@ -1065,7 +1065,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	public undo(resourceOrSource: URI | UndoRedoSource): Promise<codemavi> | codemavi {
+	public undo(resourceOrSource: URI | UndoRedoSource): Promise<void> | void {
 		if (resourceOrSource instanceof UndoRedoSource) {
 			const [, matchedStrResource] = this._findClosestUndoElementWithSource(resourceOrSource.id);
 			return matchedStrResource ? this._undo(matchedStrResource, resourceOrSource.id, false) : undefined;
@@ -1076,7 +1076,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return this._undo(this.getUriComparisonKey(resourceOrSource), 0, false);
 	}
 
-	private _undo(strResource: string, sourceId: number = 0, undoConfirmed: boolean): Promise<codemavi> | codemavi {
+	private _undo(strResource: string, sourceId: number = 0, undoConfirmed: boolean): Promise<void> | void {
 		if (!this._editStacks.has(strResource)) {
 			return;
 		}
@@ -1115,7 +1115,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	private async _confirmAndContinueUndo(strResource: string, sourceId: number, element: StackElement): Promise<codemavi> {
+	private async _confirmAndContinueUndo(strResource: string, sourceId: number, element: StackElement): Promise<void> {
 		const result = await this._dialogService.confirm({
 			message: nls.localize('confirmDifferentSource', "Would you like to undo '{0}'?", element.label),
 			primaryButton: nls.localize({ key: 'confirmDifferentSource.yes', comment: ['&& denotes a mnemonic'] }, "&&Yes"),
@@ -1259,7 +1259,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return null;
 	}
 
-	private _workspaceRedo(strResource: string, element: WorkspaceStackElement): Promise<codemavi> | codemavi {
+	private _workspaceRedo(strResource: string, element: WorkspaceStackElement): Promise<void> | void {
 		const affectedEditStacks = this._getAffectedEditStacks(element);
 		const verificationError = this._checkWorkspaceRedo(strResource, element, affectedEditStacks, /*invalidated resources will be checked after the prepare call*/false);
 		if (verificationError) {
@@ -1268,7 +1268,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return this._executeWorkspaceRedo(strResource, element, affectedEditStacks);
 	}
 
-	private async _executeWorkspaceRedo(strResource: string, element: WorkspaceStackElement, editStackSnapshot: EditStackSnapshot): Promise<codemavi> {
+	private async _executeWorkspaceRedo(strResource: string, element: WorkspaceStackElement, editStackSnapshot: EditStackSnapshot): Promise<void> {
 		// prepare
 		let cleanup: IDisposable;
 		try {
@@ -1290,7 +1290,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return this._safeInvokeWithLocks(element, () => element.actual.redo(), editStackSnapshot, cleanup, () => this._continueRedoInGroup(element.groupId));
 	}
 
-	private _resourceRedo(editStack: ResourceEditStack, element: ResourceStackElement): Promise<codemavi> | codemavi {
+	private _resourceRedo(editStack: ResourceEditStack, element: ResourceStackElement): Promise<void> | void {
 		if (!element.isValid) {
 			// invalid element => immediately flush edit stack!
 			editStack.flushAllElements();
@@ -1336,7 +1336,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return [matchedElement, matchedStrResource];
 	}
 
-	private _continueRedoInGroup(groupId: number): Promise<codemavi> | codemavi {
+	private _continueRedoInGroup(groupId: number): Promise<void> | void {
 		if (!groupId) {
 			return;
 		}
@@ -1347,7 +1347,7 @@ export class UndoRedoService implements IUndoRedoService {
 		}
 	}
 
-	public redo(resourceOrSource: URI | UndoRedoSource | string): Promise<codemavi> | codemavi {
+	public redo(resourceOrSource: URI | UndoRedoSource | string): Promise<void> | void {
 		if (resourceOrSource instanceof UndoRedoSource) {
 			const [, matchedStrResource] = this._findClosestRedoElementWithSource(resourceOrSource.id);
 			return matchedStrResource ? this._redo(matchedStrResource) : undefined;
@@ -1358,7 +1358,7 @@ export class UndoRedoService implements IUndoRedoService {
 		return this._redo(this.getUriComparisonKey(resourceOrSource));
 	}
 
-	private _redo(strResource: string): Promise<codemavi> | codemavi {
+	private _redo(strResource: string): Promise<void> | void {
 		if (!this._editStacks.has(strResource)) {
 			return;
 		}
@@ -1393,7 +1393,7 @@ export class UndoRedoService implements IUndoRedoService {
 }
 
 class WorkspaceVerificationError {
-	constructor(public readonly returnValue: Promise<codemavi> | codemavi) { }
+	constructor(public readonly returnValue: Promise<void> | void) { }
 }
 
 registerSingleton(IUndoRedoService, UndoRedoService, InstantiationType.Delayed);

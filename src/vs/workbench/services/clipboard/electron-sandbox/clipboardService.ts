@@ -24,7 +24,7 @@ export class NativeClipboardService implements IClipboardService {
 		return this.nativeHostService.readImage();
 	}
 
-	async writeText(text: string, type?: 'selection' | 'clipboard'): Promise<codemavi> {
+	async writeText(text: string, type?: 'selection' | 'clipboard'): Promise<void> {
 		return this.nativeHostService.writeClipboardText(text, type);
 	}
 
@@ -40,13 +40,13 @@ export class NativeClipboardService implements IClipboardService {
 		return '';
 	}
 
-	async writeFindText(text: string): Promise<codemavi> {
+	async writeFindText(text: string): Promise<void> {
 		if (isMacintosh) {
 			return this.nativeHostService.writeClipboardFindText(text);
 		}
 	}
 
-	async writeResources(resources: URI[]): Promise<codemavi> {
+	async writeResources(resources: URI[]): Promise<void> {
 		if (resources.length) {
 			return this.nativeHostService.writeClipboardBuffer(NativeClipboardService.FILE_FORMAT, this.resourcesToBuffer(resources));
 		}

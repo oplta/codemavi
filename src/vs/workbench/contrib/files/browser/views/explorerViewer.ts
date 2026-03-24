@@ -242,7 +242,7 @@ class ExplorerFindHighlightTree implements IExplorerFindHighlightTree {
 		return { treeLayer, relPath };
 	}
 
-	add(resource: URI, root: ExplorerItem): codemavi {
+	add(resource: URI, root: ExplorerItem): void {
 		const relPath = relativePath(root.resource, resource);
 		if (relPath === undefined || relPath.startsWith('..')) {
 			throw new Error('Resource is not a child of the root');
@@ -279,7 +279,7 @@ class ExplorerFindHighlightTree implements IExplorerFindHighlightTree {
 		return treeLayer.isMatch;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._tree.clear();
 	}
 
@@ -327,11 +327,11 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		return this.filterSessionStartState.rootsWithProviders.has(element.root) ? element.isMarkedAsFiltered() : true;
 	}
 
-	startSession(): codemavi {
+	startSession(): void {
 		this.sessionId++;
 	}
 
-	async endSession(): Promise<codemavi> {
+	async endSession(): Promise<void> {
 		// Restore view state
 		if (this.filterSessionStartState) {
 			await this.endFilterSession();
@@ -377,7 +377,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 
 	// Filter
 
-	private startFilterSession(): codemavi {
+	private startFilterSession(): void {
 		const tree = this.treeProvider();
 		const input = tree.getInput();
 		if (!input) {
@@ -418,7 +418,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		};
 	}
 
-	private addWorkspaceFilterResults(root: ExplorerItem, files: URI[], directories: URI[]): codemavi {
+	private addWorkspaceFilterResults(root: ExplorerItem, files: URI[], directories: URI[]): void {
 		const results = [
 			...files.map(file => ({ resource: file, isDirectory: false })),
 			...directories.map(directory => ({ resource: directory, isDirectory: true }))
@@ -477,7 +477,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		return phantomElements;
 	}
 
-	async endFilterSession(): Promise<codemavi> {
+	async endFilterSession(): Promise<void> {
 		this.clearPhantomElements();
 
 		this.explorerFindActiveContextKey.set(false);
@@ -494,7 +494,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		this.explorerService.refresh();
 	}
 
-	private clearPhantomElements(): codemavi {
+	private clearPhantomElements(): void {
 		for (const phantomParent of this.phantomParents) {
 			// Clear phantom nodes from model
 			phantomParent.forgetChildren();
@@ -505,7 +505,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 
 	// Highlight
 
-	private startHighlightSession(): codemavi {
+	private startHighlightSession(): void {
 		const roots = this.explorerService.roots.filter(root => this.searchSupportsScheme(root.resource.scheme));
 		this.highlightSessionStartState = { rootsWithProviders: new Set(roots) };
 	}
@@ -535,7 +535,7 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		};
 	}
 
-	private addWorkspaceHighlightResults(root: ExplorerItem, resources: URI[]): codemavi {
+	private addWorkspaceHighlightResults(root: ExplorerItem, resources: URI[]): void {
 		const highlightedDirectories = new Set<ExplorerItem>();
 		const storeDirectories = (item: ExplorerItem | undefined) => {
 			while (item) {
@@ -568,12 +568,12 @@ export class ExplorerFindProvider implements IAsyncFindProvider<ExplorerItem> {
 		}
 	}
 
-	private endHighlightSession(): codemavi {
+	private endHighlightSession(): void {
 		this.highlightSessionStartState = undefined;
 		this.clearHighlights();
 	}
 
-	private clearHighlights(): codemavi {
+	private clearHighlights(): void {
 		const tree = this.treeProvider();
 		for (const item of this.findHighlightTree.highlightedItems) {
 			if (tree.hasNode(item)) {
@@ -727,13 +727,13 @@ export interface ICompressedNavigationController {
 	readonly labels: HTMLElement[];
 	readonly index: number;
 	readonly count: number;
-	readonly onDidChange: Event<codemavi>;
-	previous(): codemavi;
-	next(): codemavi;
-	first(): codemavi;
-	last(): codemavi;
-	setIndex(index: number): codemavi;
-	updateCollapsed(collapsed: boolean): codemavi;
+	readonly onDidChange: Event<void>;
+	previous(): void;
+	next(): void;
+	first(): void;
+	last(): void;
+	setIndex(index: number): void;
+	updateCollapsed(collapsed: boolean): void;
 }
 
 export class CompressedNavigationController implements ICompressedNavigationController, IDisposable {
@@ -750,7 +750,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 	get currentId(): string { return `${this.id}_${this.index}`; }
 	get labels(): HTMLElement[] { return this._labels; }
 
-	private _onDidChange = new Emitter<codemavi>();
+	private _onDidChange = new Emitter<void>();
 	readonly onDidChange = this._onDidChange.event;
 
 	constructor(private id: string, readonly items: ExplorerItem[], templateData: IFileTemplateData, private depth: number, private collapsed: boolean) {
@@ -760,7 +760,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this._updateLabelDisposable = templateData.label.onDidRender(() => this.updateLabels(templateData));
 	}
 
-	private updateLabels(templateData: IFileTemplateData): codemavi {
+	private updateLabels(templateData: IFileTemplateData): void {
 		this._labels = Array.from(templateData.container.querySelectorAll('.label-name')) as HTMLElement[];
 		let parents = '';
 		for (let i = 0; i < this.labels.length; i++) {
@@ -776,7 +776,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		}
 	}
 
-	previous(): codemavi {
+	previous(): void {
 		if (this._index <= 0) {
 			return;
 		}
@@ -784,7 +784,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this.setIndex(this._index - 1);
 	}
 
-	next(): codemavi {
+	next(): void {
 		if (this._index >= this.items.length - 1) {
 			return;
 		}
@@ -792,7 +792,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this.setIndex(this._index + 1);
 	}
 
-	first(): codemavi {
+	first(): void {
 		if (this._index === 0) {
 			return;
 		}
@@ -800,7 +800,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this.setIndex(0);
 	}
 
-	last(): codemavi {
+	last(): void {
 		if (this._index === this.items.length - 1) {
 			return;
 		}
@@ -808,7 +808,7 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this.setIndex(this.items.length - 1);
 	}
 
-	setIndex(index: number): codemavi {
+	setIndex(index: number): void {
 		if (index < 0 || index >= this.items.length) {
 			return;
 		}
@@ -820,14 +820,14 @@ export class CompressedNavigationController implements ICompressedNavigationCont
 		this._onDidChange.fire();
 	}
 
-	updateCollapsed(collapsed: boolean): codemavi {
+	updateCollapsed(collapsed: boolean): void {
 		this.collapsed = collapsed;
 		for (let i = 0; i < this.labels.length; i++) {
 			this.labels[i].setAttribute('aria-expanded', collapsed ? 'false' : 'true');
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this._updateLabelDisposable.dispose();
 	}
@@ -849,14 +849,14 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 	private configListener: IDisposable;
 	private compressedNavigationControllers = new Map<ExplorerItem, CompressedNavigationController[]>();
 
-	private _onDidChangeActiveDescendant = new EventMultiplexer<codemavi>();
+	private _onDidChangeActiveDescendant = new EventMultiplexer<void>();
 	readonly onDidChangeActiveDescendant = this._onDidChangeActiveDescendant.event;
 
 	constructor(
 		container: HTMLElement,
 		private labels: ResourceLabels,
 		private highlightTree: IExplorerFindHighlightTree,
-		private updateWidth: (stat: ExplorerItem) => codemavi,
+		private updateWidth: (stat: ExplorerItem) => void,
 		@IContextViewService private readonly contextViewService: IContextViewService,
 		@IThemeService private readonly themeService: IThemeService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
@@ -894,19 +894,19 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		return FilesRenderer.ID;
 	}
 
-	// Code Mavi added this
-	// // Create codemavi buttons container
-	// const codemaviButtonsContainer = DOM.append(container, DOM.$('div'));
-	// codemaviButtonsContainer.style.position = 'absolute'
-	// codemaviButtonsContainer.style.top = '0'
-	// codemaviButtonsContainer.style.right = '0'
-	// // const codemaviButtons = DOM.append(codemaviButtonsContainer, DOM.$('span'));
-	// // codemaviButtons.textContent = 'codemavibuttons'
-	// // codemaviButtons.addEventListener('click', () => {
+	// Mavi added this
+	// // Create mavi buttons container
+	// const maviButtonsContainer = DOM.append(container, DOM.$('div'));
+	// maviButtonsContainer.style.position = 'absolute'
+	// maviButtonsContainer.style.top = '0'
+	// maviButtonsContainer.style.right = '0'
+	// // const maviButtons = DOM.append(maviButtonsContainer, DOM.$('span'));
+	// // maviButtons.textContent = 'mavibuttons'
+	// // maviButtons.addEventListener('click', () => {
 	// // 	console.log('ON CLICK', templateData.currentContext?.children)
 	// // })
-	// const codemaviLabels = this.labels.create(codemaviButtonsContainer, { supportHighlights: false, supportIcons: false, });
-	// codemaviLabels.element.textContent = 'hi333'
+	// const maviLabels = this.labels.create(maviButtonsContainer, { supportHighlights: false, supportIcons: false, });
+	// maviLabels.element.textContent = 'hi333'
 	renderTemplate(container: HTMLElement): IFileTemplateData {
 		const templateDisposables = new DisposableStore();
 		const label = templateDisposables.add(this.labels.create(container, { supportHighlights: true }));
@@ -931,8 +931,8 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		return templateData;
 	}
 
-	// Code Mavi cares about this function, this is where elements in the tree are rendered
-	renderElement(node: ITreeNode<ExplorerItem, FuzzyScore>, index: number, templateData: IFileTemplateData): codemavi {
+	// Mavi cares about this function, this is where elements in the tree are rendered
+	renderElement(node: ITreeNode<ExplorerItem, FuzzyScore>, index: number, templateData: IFileTemplateData): void {
 		const stat = node.element;
 		templateData.currentContext = stat;
 
@@ -954,7 +954,7 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		}
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ExplorerItem>, FuzzyScore>, index: number, templateData: IFileTemplateData, height: number | undefined): codemavi {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ExplorerItem>, FuzzyScore>, index: number, templateData: IFileTemplateData, height: number | undefined): void {
 		const stat = node.element.elements[node.element.elements.length - 1];
 		templateData.currentContext = stat;
 
@@ -1021,7 +1021,7 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		}
 	}
 
-	private renderStat(stat: ExplorerItem, label: string | string[], domId: string | undefined, filterData: FuzzyScore | undefined, templateData: IFileTemplateData): codemavi {
+	private renderStat(stat: ExplorerItem, label: string | string[], domId: string | undefined, filterData: FuzzyScore | undefined, templateData: IFileTemplateData): void {
 		templateData.label.element.style.display = 'flex';
 		const extraClasses = ['explorer-item'];
 		if (this.explorerService.isCut(stat)) {
@@ -1197,17 +1197,17 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		});
 	}
 
-	disposeElement(element: ITreeNode<ExplorerItem, FuzzyScore>, index: number, templateData: IFileTemplateData): codemavi {
+	disposeElement(element: ITreeNode<ExplorerItem, FuzzyScore>, index: number, templateData: IFileTemplateData): void {
 		templateData.currentContext = undefined;
 		templateData.elementDisposables.clear();
 	}
 
-	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ExplorerItem>, FuzzyScore>, index: number, templateData: IFileTemplateData): codemavi {
+	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<ExplorerItem>, FuzzyScore>, index: number, templateData: IFileTemplateData): void {
 		templateData.currentContext = undefined;
 		templateData.elementDisposables.clear();
 	}
 
-	disposeTemplate(templateData: IFileTemplateData): codemavi {
+	disposeTemplate(templateData: IFileTemplateData): void {
 		templateData.templateDisposables.dispose();
 	}
 
@@ -1241,7 +1241,7 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		return this.compressedNavigationControllers.get(stat)?.[0]?.currentId ?? undefined;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.configListener.dispose();
 	}
 }
@@ -1258,7 +1258,7 @@ interface CachedParsedExpression {
 export class FilesFilter implements ITreeFilter<ExplorerItem, FuzzyScore> {
 	private hiddenExpressionPerRoot = new Map<string, CachedParsedExpression>();
 	private editorsAffectingFilter = new Set<EditorInput>();
-	private _onDidChange = new Emitter<codemavi>();
+	private _onDidChange = new Emitter<void>();
 	private toDispose: IDisposable[] = [];
 	// List of ignoreFile resources. Used to detect changes to the ignoreFiles.
 	private ignoreFileResourcesPerRoot = new Map<string, ResourceSet>();
@@ -1329,11 +1329,11 @@ export class FilesFilter implements ITreeFilter<ExplorerItem, FuzzyScore> {
 		this.updateConfiguration();
 	}
 
-	get onDidChange(): Event<codemavi> {
+	get onDidChange(): Event<void> {
 		return this._onDidChange.event;
 	}
 
-	private updateConfiguration(): codemavi {
+	private updateConfiguration(): void {
 		let shouldFire = false;
 		let updatedGitIgnoreSetting = false;
 		this.contextService.getWorkspace().folders.forEach(folder => {
@@ -1459,7 +1459,7 @@ export class FilesFilter implements ITreeFilter<ExplorerItem, FuzzyScore> {
 		return isIncludedInTraversal === undefined ? false : !isIncludedInTraversal;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this.toDispose);
 	}
 }
@@ -1793,7 +1793,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		return String(elements.length);
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
 		const items = FileDragAndDrop.getStatsFromDragAndDropData(data as ElementsDragAndDropData<ExplorerItem, ExplorerItem[]>, originalEvent);
 		if (items && items.length && originalEvent.dataTransfer) {
 			// Apply some datatransfer types to allow for dragging the element outside of the application
@@ -1808,7 +1808,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		}
 	}
 
-	async drop(data: IDragAndDropData, target: ExplorerItem | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<codemavi> {
+	async drop(data: IDragAndDropData, target: ExplorerItem | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<void> {
 		this.compressedDropTargetDisposable.dispose();
 
 		// Find compressed target
@@ -1861,7 +1861,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		}
 	}
 
-	private async handleExplorerDrop(data: ElementsDragAndDropData<ExplorerItem, ExplorerItem[]>, target: ExplorerItem, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<codemavi> {
+	private async handleExplorerDrop(data: ElementsDragAndDropData<ExplorerItem, ExplorerItem[]>, target: ExplorerItem, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): Promise<void> {
 		const elementsData = FileDragAndDrop.getStatsFromDragAndDropData(data);
 		const distinctItems = new Map(elementsData.map(element => [element, this.isCollapsed(element)]));
 
@@ -1919,7 +1919,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		return this.doHandleExplorerDropOnMove(sources, target);
 	}
 
-	private async doHandleRootDrop(roots: ExplorerItem[], target: ExplorerItem, targetSector: ListViewTargetSector | undefined): Promise<codemavi> {
+	private async doHandleRootDrop(roots: ExplorerItem[], target: ExplorerItem, targetSector: ListViewTargetSector | undefined): Promise<void> {
 		if (roots.length === 0) {
 			return;
 		}
@@ -1978,7 +1978,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		return this.workspaceEditingService.updateFolders(0, workspaceCreationData.length, workspaceCreationData);
 	}
 
-	private async doHandleExplorerDropOnCopy(sources: ExplorerItem[], target: ExplorerItem): Promise<codemavi> {
+	private async doHandleExplorerDropOnCopy(sources: ExplorerItem[], target: ExplorerItem): Promise<void> {
 
 		// Reuse duplicate action when user copies
 		const explorerConfig = this.configurationService.getValue<IFilesConfiguration>().explorer;
@@ -2013,7 +2013,7 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		await this.editorService.openEditors(editors);
 	}
 
-	private async doHandleExplorerDropOnMove(sources: ExplorerItem[], target: ExplorerItem): Promise<codemavi> {
+	private async doHandleExplorerDropOnMove(sources: ExplorerItem[], target: ExplorerItem): Promise<void> {
 
 		// Do not allow moving readonly items
 		const resourceFileEdits = sources.filter(source => !source.isReadonly).map(source => new ResourceFileEdit(source.resource, joinPath(target.resource, source.name)));
@@ -2086,11 +2086,11 @@ export class FileDragAndDrop implements ITreeDragAndDrop<ExplorerItem> {
 		return stat;
 	}
 
-	onDragEnd(): codemavi {
+	onDragEnd(): void {
 		this.compressedDropTargetDisposable.dispose();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.compressedDropTargetDisposable.dispose();
 	}
 }

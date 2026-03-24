@@ -82,7 +82,7 @@ export class TestCoverageView extends ViewPane {
 		super(options, keybindingService, contextMenuService, configurationService, contextKeyService, viewDescriptorService, instantiationService, openerService, themeService, hoverService);
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		const labels = this._register(this.instantiationService.createInstance(ResourceLabels, { onDidChangeVisibility: this.onDidChangeBodyVisibility }));
@@ -98,7 +98,7 @@ export class TestCoverageView extends ViewPane {
 		}));
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.tree.value?.layout(height, width);
 	}
@@ -216,7 +216,7 @@ const shouldShowDeclDetailsOnExpand = (c: CoverageTreeElement): c is IPrefixTree
 	isFileCoverage(c) && c.value instanceof FileCoverage && !!c.value.declaration?.total;
 
 class TestCoverageTree extends Disposable {
-	private readonly tree: WorkbenchCompressibleObjectTree<CoverageTreeElement, codemavi>;
+	private readonly tree: WorkbenchCompressibleObjectTree<CoverageTreeElement, void>;
 	private readonly inputDisposables = this._register(new DisposableStore());
 
 	constructor(
@@ -232,7 +232,7 @@ class TestCoverageTree extends Disposable {
 		container.classList.add('testing-stdtree');
 
 		this.tree = instantiationService.createInstance(
-			WorkbenchCompressibleObjectTree<CoverageTreeElement, codemavi>,
+			WorkbenchCompressibleObjectTree<CoverageTreeElement, void>,
 			'TestCoverageView',
 			container,
 			new TestCoverageTreeListDelegate(),
@@ -383,7 +383,7 @@ class TestCoverageTree extends Disposable {
 
 	private updateWithDetails(el: IPrefixTreeNode<FileCoverage>, details: readonly CoverageDetails[]) {
 		if (!this.tree.hasElement(el)) {
-			return; // acodemavi any issues if the tree changes in the meanwhile
+			return; // avoid any issues if the tree changes in the meanwhile
 		}
 
 		const decl: DeclarationCoverageNode[] = [];
@@ -488,7 +488,7 @@ class CurrentlyFilteredToRenderer implements ICompressibleTreeRenderer<CoverageT
 		@IContextKeyService private readonly contextKeyService: IContextKeyService,
 	) { }
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, index: number, templateData: IFilteredToTemplate, height: number | undefined): codemavi {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, index: number, templateData: IFilteredToTemplate, height: number | undefined): void {
 		this.renderInner(node.element.elements[node.element.elements.length - 1] as CurrentlyFilteredTo, templateData);
 	}
 
@@ -506,11 +506,11 @@ class CurrentlyFilteredToRenderer implements ICompressibleTreeRenderer<CoverageT
 		return { label, actions };
 	}
 
-	renderElement(element: ITreeNode<CoverageTreeElement, FuzzyScore>, index: number, templateData: IFilteredToTemplate, height: number | undefined): codemavi {
+	renderElement(element: ITreeNode<CoverageTreeElement, FuzzyScore>, index: number, templateData: IFilteredToTemplate, height: number | undefined): void {
 		this.renderInner(element.element as CurrentlyFilteredTo, templateData);
 	}
 
-	disposeTemplate(templateData: IFilteredToTemplate): codemavi {
+	disposeTemplate(templateData: IFilteredToTemplate): void {
 		templateData.actions.dispose();
 	}
 
@@ -554,12 +554,12 @@ class FileCoverageRenderer implements ICompressibleTreeRenderer<CoverageTreeElem
 	}
 
 	/** @inheritdoc */
-	public renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, _index: number, templateData: FileTemplateData): codemavi {
+	public renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, _index: number, templateData: FileTemplateData): void {
 		this.doRender(node.element as TestCoverageFileNode, templateData, node.filterData);
 	}
 
 	/** @inheritdoc */
-	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, templateData: FileTemplateData): codemavi {
+	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, templateData: FileTemplateData): void {
 		this.doRender(node.element.elements, templateData, node.filterData);
 	}
 
@@ -628,12 +628,12 @@ class DeclarationCoverageRenderer implements ICompressibleTreeRenderer<CoverageT
 	}
 
 	/** @inheritdoc */
-	public renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, _index: number, templateData: DeclarationTemplateData): codemavi {
+	public renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, _index: number, templateData: DeclarationTemplateData): void {
 		this.doRender(node.element as DeclarationCoverageNode, templateData, node.filterData);
 	}
 
 	/** @inheritdoc */
-	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, templateData: DeclarationTemplateData): codemavi {
+	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, templateData: DeclarationTemplateData): void {
 		this.doRender(node.element.elements[node.element.elements.length - 1] as DeclarationCoverageNode, templateData, node.filterData);
 	}
 
@@ -656,7 +656,7 @@ class BasicRenderer implements ICompressibleTreeRenderer<CoverageTreeElement, Fu
 	public static readonly ID = 'B';
 	public readonly templateId = BasicRenderer.ID;
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, container: HTMLElement): codemavi {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<CoverageTreeElement>, FuzzyScore>, _index: number, container: HTMLElement): void {
 		this.renderInner(node.element.elements[node.element.elements.length - 1], container);
 	}
 
@@ -664,11 +664,11 @@ class BasicRenderer implements ICompressibleTreeRenderer<CoverageTreeElement, Fu
 		return container;
 	}
 
-	renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, index: number, container: HTMLElement): codemavi {
+	renderElement(node: ITreeNode<CoverageTreeElement, FuzzyScore>, index: number, container: HTMLElement): void {
 		this.renderInner(node.element, container);
 	}
 
-	disposeTemplate(): codemavi {
+	disposeTemplate(): void {
 		// no-op
 	}
 
@@ -708,7 +708,7 @@ registerAction2(class TestCoverageChangePerTestFilterAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): codemavi {
+	override run(accessor: ServicesAccessor): void {
 		const coverageService = accessor.get(ITestCoverageService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const coverage = coverageService.selected.get();

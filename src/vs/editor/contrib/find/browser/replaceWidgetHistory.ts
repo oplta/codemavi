@@ -48,17 +48,17 @@ export class ReplaceWidgetHistory implements IHistory<string> {
 		return this.inMemoryValues.has(t);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.inMemoryValues.clear();
 		this.save();
 	}
 
-	forEach(callbackfn: (value: string, value2: string, set: Set<string>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: string, value2: string, set: Set<string>) => void, thisArg?: any): void {
 		// fetch latest from storage
 		this.load();
 		return this.inMemoryValues.forEach(callbackfn);
 	}
-	replace?(t: string[]): codemavi {
+	replace?(t: string[]): void {
 		this.inMemoryValues = new Set(t);
 		this.save();
 	}
@@ -82,10 +82,10 @@ export class ReplaceWidgetHistory implements IHistory<string> {
 	}
 
 	// Run saves async
-	save(): Promise<codemavi> {
+	save(): Promise<void> {
 		const elements: string[] = [];
 		this.inMemoryValues.forEach(e => elements.push(e));
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			this.storageService.store(
 				ReplaceWidgetHistory.FIND_HISTORY_KEY,
 				JSON.stringify(elements),

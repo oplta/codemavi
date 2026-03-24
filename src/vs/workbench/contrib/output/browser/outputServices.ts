@@ -44,7 +44,7 @@ class OutputChannel extends Disposable implements IOutputChannel {
 	constructor(
 		readonly outputChannelDescriptor: IOutputChannelDescriptor,
 		private readonly outputLocation: URI,
-		private readonly outputDirPromise: Promise<codemavi>,
+		private readonly outputDirPromise: Promise<void>,
 		@ILanguageService private readonly languageService: ILanguageService,
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
 	) {
@@ -70,19 +70,19 @@ class OutputChannel extends Disposable implements IOutputChannel {
 		return this.model.getLogEntries();
 	}
 
-	append(output: string): codemavi {
+	append(output: string): void {
 		this.model.append(output);
 	}
 
-	update(mode: OutputChannelUpdateMode, till?: number): codemavi {
+	update(mode: OutputChannelUpdateMode, till?: number): void {
 		this.model.update(mode, till, true);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.model.clear();
 	}
 
-	replace(value: string): codemavi {
+	replace(value: string): void {
 		this.model.replace(value);
 	}
 }
@@ -99,7 +99,7 @@ interface IOutputFilterOptions {
 
 class OutputViewFilters extends Disposable implements IOutputViewFilters {
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	constructor(
@@ -195,7 +195,7 @@ class OutputViewFilters extends Disposable implements IOutputViewFilters {
 		this._onDidChange.fire();
 	}
 
-	toggleCategory(category: string): codemavi {
+	toggleCategory(category: string): void {
 		const categories = this.categories;
 		if (this.hasCategory(category)) {
 			this.categories = categories.replace(`,${category},`, ',');
@@ -317,7 +317,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		return null;
 	}
 
-	async showChannel(id: string, preserveFocus?: boolean): Promise<codemavi> {
+	async showChannel(id: string, preserveFocus?: boolean): Promise<void> {
 		const channel = this.getChannel(id);
 		if (this.activeChannel?.id !== channel?.id) {
 			this.setActiveChannel(channel);
@@ -362,7 +362,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		return sources.reduce((prev, curr) => Math.min(prev, this.loggerService.getLogLevel(curr.resource) ?? logLevel), LogLevel.Error);
 	}
 
-	setLogLevel(channel: IOutputChannelDescriptor, logLevel: LogLevel): codemavi {
+	setLogLevel(channel: IOutputChannelDescriptor, logLevel: LogLevel): void {
 		if (!channel.log) {
 			return;
 		}
@@ -403,7 +403,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		return id;
 	}
 
-	async saveOutputAs(...channels: IOutputChannelDescriptor[]): Promise<codemavi> {
+	async saveOutputAs(...channels: IOutputChannelDescriptor[]): Promise<void> {
 		let channel: IOutputChannel | undefined;
 		if (channels.length > 1) {
 			const compoundChannelId = this.registerCompoundLogChannel(channels);
@@ -447,7 +447,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		}
 	}
 
-	private async onDidRegisterChannel(channelId: string): Promise<codemavi> {
+	private async onDidRegisterChannel(channelId: string): Promise<void> {
 		const channel = this.createChannel(channelId);
 		this.channels.set(channelId, channel);
 		if (!this.activeChannel || this.activeChannelIdInStorage === channelId) {
@@ -458,14 +458,14 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		}
 	}
 
-	private onDidUpdateChannelSources(channel: IMultiSourceOutputChannelDescriptor): codemavi {
+	private onDidUpdateChannelSources(channel: IMultiSourceOutputChannelDescriptor): void {
 		const outputChannel = this.channels.get(channel.id);
 		if (outputChannel) {
 			outputChannel.model.updateChannelSources(channel.source);
 		}
 	}
 
-	private onDidRemoveChannel(channel: IOutputChannelDescriptor): codemavi {
+	private onDidRemoveChannel(channel: IOutputChannelDescriptor): void {
 		if (this.activeChannel?.id === channel.id) {
 			const channels = this.getChannelDescriptors();
 			if (channels[0]) {
@@ -493,7 +493,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		return channel;
 	}
 
-	private outputFolderCreationPromise: Promise<codemavi> | null = null;
+	private outputFolderCreationPromise: Promise<void> | null = null;
 	private instantiateChannel(id: string): OutputChannel {
 		const channelData = Registry.as<IOutputChannelRegistry>(Extensions.OutputChannels).getChannel(id);
 		if (!channelData) {
@@ -506,7 +506,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		return this.instantiationService.createInstance(OutputChannel, channelData, this.outputLocation, this.outputFolderCreationPromise);
 	}
 
-	private resetLogLevelFilters(): codemavi {
+	private resetLogLevelFilters(): void {
 		const descriptor = this.activeChannel?.outputChannelDescriptor;
 		const channelLogLevel = descriptor ? this.getLogLevel(descriptor) : undefined;
 		if (channelLogLevel !== undefined) {
@@ -518,13 +518,13 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		}
 	}
 
-	private setLevelContext(): codemavi {
+	private setLevelContext(): void {
 		const descriptor = this.activeChannel?.outputChannelDescriptor;
 		const channelLogLevel = descriptor ? this.getLogLevel(descriptor) : undefined;
 		this.activeOutputChannelLevelContext.set(channelLogLevel !== undefined ? LogLevelToString(channelLogLevel) : '');
 	}
 
-	private async setLevelIsDefaultContext(): Promise<codemavi> {
+	private async setLevelIsDefaultContext(): Promise<void> {
 		const descriptor = this.activeChannel?.outputChannelDescriptor;
 		const channelLogLevel = descriptor ? this.getLogLevel(descriptor) : undefined;
 		if (channelLogLevel !== undefined) {
@@ -535,7 +535,7 @@ export class OutputService extends Disposable implements IOutputService, ITextMo
 		}
 	}
 
-	private setActiveChannel(channel: OutputChannel | undefined): codemavi {
+	private setActiveChannel(channel: OutputChannel | undefined): void {
 		this.activeChannel = channel;
 		const descriptor = channel?.outputChannelDescriptor;
 		this.activeFileOutputChannelContext.set(!!descriptor && isSingleSourceOutputChannelDescriptor(descriptor));

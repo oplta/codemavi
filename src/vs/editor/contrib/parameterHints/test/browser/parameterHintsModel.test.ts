@@ -77,7 +77,7 @@ suite('ParameterHintsModel', () => {
 	}
 
 	test('Provider should get trigger character on type', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const triggerChar = '(';
 
@@ -103,7 +103,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Provider should be retriggered if already active', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const triggerChar = '(';
 
@@ -150,7 +150,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Provider should not be retriggered if previous help is canceled first', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const triggerChar = '(';
 
@@ -197,7 +197,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Provider should get last trigger character when triggered multiple times and only be invoked once', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const editor = createMockEditor('');
 		disposables.add(new ParameterHintsModel(editor, registry, 5));
@@ -239,7 +239,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Provider should be retriggered if already active', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const editor = createMockEditor('');
 		disposables.add(new ParameterHintsModel(editor, registry, 5));
@@ -333,7 +333,7 @@ suite('ParameterHintsModel', () => {
 			hintsModel.trigger({ triggerKind: languages.SignatureHelpTriggerKind.Invoke }, 0);
 			assert.strictEqual(-1, didRequestCancellationOf);
 
-			return new Promise<codemavi>((resolve, reject) =>
+			return new Promise<void>((resolve, reject) =>
 				disposables.add(hintsModel.onChangedHints(newParamterHints => {
 					try {
 						assert.strictEqual(0, didRequestCancellationOf);
@@ -347,7 +347,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Provider should be retriggered by retrigger character', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const triggerChar = 'a';
 		const retriggerChar = 'b';
@@ -516,7 +516,7 @@ suite('ParameterHintsModel', () => {
 	});
 
 	test('Retrigger while a pending resolve is still going on should preserve last active signature #96702', async () => {
-		const { promise: donePromise, resolve: done } = promiseWithResolvers<codemavi>();
+		const { promise: donePromise, resolve: done } = promiseWithResolvers<void>();
 
 		const editor = createMockEditor('');
 		const model = disposables.add(new ParameterHintsModel(editor, registry, 50));

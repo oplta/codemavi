@@ -26,7 +26,7 @@ suite('TestingContinuousRunService', () => {
 		public requests = new Set<ResolvedTestRunRequest>();
 		public log: [kind: 'start' | 'stop', profileId: number, testIds: string[]][] = [];
 
-		override startContinuousRun(req: ResolvedTestRunRequest, token: CancellationToken): Promise<codemavi> {
+		override startContinuousRun(req: ResolvedTestRunRequest, token: CancellationToken): Promise<void> {
 			this.requests.add(req);
 			this.log.push(['start', req.targets[0].profileId, req.targets[0].testIds]);
 			ds.add(token.onCancellationRequested(() => {
@@ -38,7 +38,7 @@ suite('TestingContinuousRunService', () => {
 	}
 
 	class MockProfilesService extends mock<ITestProfileService>() {
-		public didChangeEmitter = ds.add(new Emitter<codemavi>());
+		public didChangeEmitter = ds.add(new Emitter<void>());
 		override onDidChange = this.didChangeEmitter.event;
 
 		override getGroupDefaultProfiles(group: TestRunProfileBitset, controllerId?: string): ITestRunProfile[] {

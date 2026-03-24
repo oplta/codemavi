@@ -202,7 +202,7 @@ export class LineCommentCommand implements ICommand {
 	/**
 	 * Given a successful analysis, execute either insert line comments, either remove line comments
 	 */
-	private _executeLineComments(model: ISimpleModel, builder: IEditOperationBuilder, data: IPreflightDataSupported, s: Selection): codemavi {
+	private _executeLineComments(model: ISimpleModel, builder: IEditOperationBuilder, data: IPreflightDataSupported, s: Selection): void {
 
 		let ops: ISingleEditOperation[];
 
@@ -281,7 +281,7 @@ export class LineCommentCommand implements ICommand {
 	/**
 	 * Given an unsuccessful analysis, delegate to the block comment command
 	 */
-	private _executeBlockComment(model: ITextModel, builder: IEditOperationBuilder, s: Selection): codemavi {
+	private _executeBlockComment(model: ITextModel, builder: IEditOperationBuilder, s: Selection): void {
 		model.tokenization.tokenizeIfCheap(s.startLineNumber);
 		const languageId = model.getLanguageIdAtPosition(s.startLineNumber, 1);
 		const config = this.languageConfigurationService.getLanguageConfiguration(languageId).comments;
@@ -328,7 +328,7 @@ export class LineCommentCommand implements ICommand {
 		}
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 
 		let s = this._selection;
 		this._moveEndPositionDown = false;
@@ -430,7 +430,7 @@ export class LineCommentCommand implements ICommand {
 	/**
 	 * Adjust insertion points to have them vertically aligned in the add line comment case
 	 */
-	public static _normalizeInsertionPoint(model: ISimpleModel, lines: IInsertionPoint[], startLineNumber: number, indentSize: number): codemavi {
+	public static _normalizeInsertionPoint(model: ISimpleModel, lines: IInsertionPoint[], startLineNumber: number, indentSize: number): void {
 		let minVisibleColumn = Constants.MAX_SAFE_SMALL_INTEGER;
 		let j: number;
 		let lenJ: number;

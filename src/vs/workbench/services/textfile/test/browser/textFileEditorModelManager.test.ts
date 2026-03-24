@@ -122,7 +122,7 @@ suite('Files - TextFileEditorModelManager', () => {
 		disposables.add(await manager.resolve(resource));
 
 		let didResolve = false;
-		const onDidResolve = new Promise<codemavi>(resolve => {
+		const onDidResolve = new Promise<void>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model.resource.toString() === resource.toString()) {
 					didResolve = true;
@@ -402,7 +402,7 @@ suite('Files - TextFileEditorModelManager', () => {
 		disposables.add(await manager.resolve(resource));
 
 		let didResolve = false;
-		const onDidResolve = new Promise<codemavi>(resolve => {
+		const onDidResolve = new Promise<void>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				if (model.resource.toString() === resource.toString()) {
 					didResolve = true;
@@ -425,7 +425,7 @@ suite('Files - TextFileEditorModelManager', () => {
 
 		let didResolve = false;
 		let resolvedCounter = 0;
-		const onDidResolve = new Promise<codemavi>(resolve => {
+		const onDidResolve = new Promise<void>(resolve => {
 			disposables.add(manager.onDidResolve(({ model }) => {
 				disposables.add(model);
 				if (model.resource.toString() === resource.toString()) {

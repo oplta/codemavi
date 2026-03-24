@@ -32,7 +32,7 @@ export class LinuxUpdateService extends AbstractUpdateService {
 		return createUpdateURL(`linux-${process.arch}`, quality, this.productService);
 	}
 
-	protected doCheckForUpdates(context: any): codemavi {
+	protected doCheckForUpdates(context: any): void {
 		if (!this.url) {
 			return;
 		}
@@ -55,7 +55,7 @@ export class LinuxUpdateService extends AbstractUpdateService {
 			});
 	}
 
-	protected override async doDownloadUpdate(state: AvailableForDownload): Promise<codemavi> {
+	protected override async doDownloadUpdate(state: AvailableForDownload): Promise<void> {
 		// Use the download URL if available as we don't currently detect the package type that was
 		// installed and the website download page is more useful than the tarball generally.
 		if (this.productService.downloadUrl && this.productService.downloadUrl.length > 0) {

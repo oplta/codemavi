@@ -290,7 +290,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		this.toggleExceptionWidget();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this.toDispose.push(this.debugService.getViewModel().onDidFocusStackFrame(e => this.onFocusStackFrame(e.stackFrame)));
 
 		// hover listeners & hover widget
@@ -349,7 +349,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 
 	private _wordToLineNumbersMap: WordsToLineNumbersCache | undefined;
 
-	private updateHoverConfiguration(): codemavi {
+	private updateHoverConfiguration(): void {
 		const model = this.editor.getModel();
 		if (model) {
 			this.editorHoverOptions = this.configurationService.getValue<IEditorHoverOptions>('editor.hover', {
@@ -359,7 +359,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	private addDocumentListeners(): codemavi {
+	private addDocumentListeners(): void {
 		const stackFrame = this.debugService.getViewModel().focusedStackFrame;
 		const model = this.editor.getModel();
 		if (model) {
@@ -367,7 +367,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	private applyDocumentListeners(model: ITextModel, stackFrame: IStackFrame | undefined): codemavi {
+	private applyDocumentListeners(model: ITextModel, stackFrame: IStackFrame | undefined): void {
 		if (!stackFrame || !this.uriIdentityService.extUri.isEqual(model.uri, stackFrame.source.uri)) {
 			this.altListener.clear();
 			return;
@@ -406,7 +406,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		});
 	}
 
-	async showHover(position: Position, focus: boolean, mouseEvent?: IMouseEvent): Promise<codemavi> {
+	async showHover(position: Position, focus: boolean, mouseEvent?: IMouseEvent): Promise<void> {
 		// normally will already be set in `showHoverScheduler`, but public callers may hit this directly:
 		this.preventDefaultEditorHover();
 
@@ -450,7 +450,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		hoverController?.showContentHover(range, HoverStartMode.Immediate, HoverStartSource.Mouse, focus);
 	}
 
-	private async onFocusStackFrame(sf: IStackFrame | undefined): Promise<codemavi> {
+	private async onFocusStackFrame(sf: IStackFrame | undefined): Promise<void> {
 		const model = this.editor.getModel();
 		if (model) {
 			this.applyDocumentListeners(model, sf);
@@ -491,7 +491,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		return scheduler;
 	}
 
-	private hideHoverWidget(): codemavi {
+	private hideHoverWidget(): void {
 		if (this.hoverWidget.willBeVisible()) {
 			this.hoverWidget.hide();
 		}
@@ -501,7 +501,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 
 	// hover business
 
-	private onEditorMouseDown(mouseEvent: IEditorMouseEvent): codemavi {
+	private onEditorMouseDown(mouseEvent: IEditorMouseEvent): void {
 		this.mouseDown = true;
 		if (mouseEvent.target.type === MouseTargetType.CONTENT_WIDGET && mouseEvent.target.detail === DebugHoverWidget.ID) {
 			return;
@@ -510,7 +510,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		this.hideHoverWidget();
 	}
 
-	private onEditorMouseMove(mouseEvent: IEditorMouseEvent): codemavi {
+	private onEditorMouseMove(mouseEvent: IEditorMouseEvent): void {
 		if (this.debugService.state !== State.Stopped) {
 			return;
 		}
@@ -543,7 +543,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		if (target.type === MouseTargetType.CONTENT_TEXT) {
 			if (target.position && !Position.equals(target.position, this.hoverPosition?.position || null) && !this.hoverWidget.isInSafeTriangle(mouseEvent.event.posx, mouseEvent.event.posy)) {
 				this.hoverPosition = { position: target.position, event: mouseEvent.event };
-				// Disable the editor hover during the request to acodemavi flickering
+				// Disable the editor hover during the request to avoid flickering
 				this.preventDefaultEditorHover();
 				this.showHoverScheduler.schedule(this.hoverDelay);
 			}
@@ -553,7 +553,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	private onKeyDown(e: IKeyboardEvent): codemavi {
+	private onKeyDown(e: IKeyboardEvent): void {
 		const stopKey = env.isMacintosh ? KeyCode.Meta : KeyCode.Ctrl;
 		if (e.keyCode !== stopKey && e.keyCode !== KeyCode.Alt) {
 			// do not hide hover when Ctrl/Meta is pressed, and alt is handled separately
@@ -563,7 +563,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 	// end hover business
 
 	// exception widget
-	private async toggleExceptionWidget(): Promise<codemavi> {
+	private async toggleExceptionWidget(): Promise<void> {
 		// Toggles exception widget based on the state of the current editor model and debug stack frame
 		const model = this.editor.getModel();
 		const focusedSf = this.debugService.getViewModel().focusedStackFrame;
@@ -591,7 +591,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	private showExceptionWidget(exceptionInfo: IExceptionInfo, debugSession: IDebugSession | undefined, lineNumber: number, column: number): codemavi {
+	private showExceptionWidget(exceptionInfo: IExceptionInfo, debugSession: IDebugSession | undefined, lineNumber: number, column: number): void {
 		if (this.exceptionWidget) {
 			this.exceptionWidget.dispose();
 		}
@@ -608,7 +608,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		this.exceptionWidgetVisible.set(true);
 	}
 
-	closeExceptionWidget(): codemavi {
+	closeExceptionWidget(): void {
 		if (this.exceptionWidget) {
 			const shouldFocusEditor = this.exceptionWidget.hasFocus();
 			this.exceptionWidget.dispose();
@@ -620,7 +620,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	async addLaunchConfiguration(): Promise<codemavi> {
+	async addLaunchConfiguration(): Promise<void> {
 		const model = this.editor.getModel();
 		if (!model) {
 			return;
@@ -705,7 +705,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		);
 	}
 
-	private async updateInlineValueDecorations(stackFrame: IStackFrame | undefined): Promise<codemavi> {
+	private async updateInlineValueDecorations(stackFrame: IStackFrame | undefined): Promise<void> {
 
 		const var_value_format = '{0} = {1}';
 		const separator = ', ';
@@ -837,7 +837,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 				({ scope, variables: await scope.getChildren() })));
 
 			// Map of inline values per line that's populated in scope order, from
-			// narrowest to widest. This is done to acodemavi duplicating values if
+			// narrowest to widest. This is done to avoid duplicating values if
 			// they appear in multiple scopes or are shadowed (#129770, #217326)
 			const valuesPerLine = new Map</* line */number, Map</* var */string, /* value */ string>>();
 
@@ -901,7 +901,7 @@ export class DebugEditorContribution implements IDebugEditorContribution {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this.hoverWidget) {
 			this.hoverWidget.dispose();
 		}

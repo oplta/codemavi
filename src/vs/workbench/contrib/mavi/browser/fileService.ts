@@ -7,31 +7,31 @@ import { IFileService } from '../../../../platform/files/common/files.js';
 import { IClipboardService } from '../../../../platform/clipboard/common/clipboardService.js';
 import { IDirectoryStrService } from '../common/directoryStrService.js';
 import { messageOfSelection } from '../common/prompt/prompts.js';
-import { IMaviModelService } from '../common/codemaviModelService.js';
+import { IMaviModelService } from '../common/maviModelService.js';
 
 
 
 class FilePromptActionService extends Action2 {
-	private static readonly MAVI_COPY_FILE_PROMPT_ID = 'codemavi.copyfileprompt'
+	private static readonly MAVI_COPY_FILE_PROMPT_ID = 'mavi.copyfileprompt'
 
 	constructor() {
 		super({
 			id: FilePromptActionService.MAVI_COPY_FILE_PROMPT_ID,
-			title: localize2('codemaviCopyPrompt', 'Code Mavi: Copy Prompt'),
+			title: localize2('maviCopyPrompt', 'Mavi: Copy Prompt'),
 			menu: [{
 				id: MenuId.ExplorerContext,
-				group: '8_codemavi',
+				group: '8_mavi',
 				order: 1,
 			}]
 		});
 	}
 
-	async run(accessor: ServicesAccessor, uri: URI): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, uri: URI): Promise<void> {
 		try {
 			const fileService = accessor.get(IFileService);
 			const clipboardService = accessor.get(IClipboardService)
 			const directoryStrService = accessor.get(IDirectoryStrService)
-			const codemaviModelService = accessor.get(IMaviModelService)
+			const maviModelService = accessor.get(IMaviModelService)
 
 			const stat = await fileService.stat(uri)
 
@@ -45,7 +45,7 @@ class FilePromptActionService extends Action2 {
 				m = await messageOfSelection({
 					type: 'File',
 					uri,
-					language: (await codemaviModelService.getModelSafe(uri)).model?.getLanguageId() || '',
+					language: (await maviModelService.getModelSafe(uri)).model?.getLanguageId() || '',
 					state: { wasAddedAsCurrentFile: false, },
 				}, {
 					folderOpts,

@@ -90,12 +90,12 @@ export class GitHubBranchProtectionProviderManager {
 		this.updateEnablement();
 	}
 
-	private updateEnablement(): codemavi {
+	private updateEnablement(): void {
 		const config = workspace.getConfiguration('github', null);
 		this.enabled = config.get<boolean>('branchProtection', true) === true;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.enabled = false;
 		this.disposables.dispose();
 	}
@@ -161,7 +161,7 @@ export class GitHubBranchProtectionProvider implements BranchProtectionProvider 
 		return rulesets;
 	}
 
-	private async updateRepositoryBranchProtection(): Promise<codemavi> {
+	private async updateRepositoryBranchProtection(): Promise<void> {
 		const branchProtection: BranchProtection[] = [];
 
 		try {

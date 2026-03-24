@@ -4,16 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 
 export interface ErrorListenerCallback {
-	(error: any): codemavi;
+	(error: any): void;
 }
 
 export interface ErrorListenerUnbind {
-	(): codemavi;
+	(): void;
 }
 
-// Acodemavi circular dependency on EventEmitter by implementing a subset of the interface.
+// Avoid circular dependency on EventEmitter by implementing a subset of the interface.
 export class ErrorHandler {
-	private unexpectedErrorHandler: (e: any) => codemavi;
+	private unexpectedErrorHandler: (e: any) => void;
 	private listeners: ErrorListenerCallback[];
 
 	constructor() {
@@ -43,31 +43,31 @@ export class ErrorHandler {
 		};
 	}
 
-	private emit(e: any): codemavi {
+	private emit(e: any): void {
 		this.listeners.forEach((listener) => {
 			listener(e);
 		});
 	}
 
-	private _removeListener(listener: ErrorListenerCallback): codemavi {
+	private _removeListener(listener: ErrorListenerCallback): void {
 		this.listeners.splice(this.listeners.indexOf(listener), 1);
 	}
 
-	setUnexpectedErrorHandler(newUnexpectedErrorHandler: (e: any) => codemavi): codemavi {
+	setUnexpectedErrorHandler(newUnexpectedErrorHandler: (e: any) => void): void {
 		this.unexpectedErrorHandler = newUnexpectedErrorHandler;
 	}
 
-	getUnexpectedErrorHandler(): (e: any) => codemavi {
+	getUnexpectedErrorHandler(): (e: any) => void {
 		return this.unexpectedErrorHandler;
 	}
 
-	onUnexpectedError(e: any): codemavi {
+	onUnexpectedError(e: any): void {
 		this.unexpectedErrorHandler(e);
 		this.emit(e);
 	}
 
 	// For external errors, we don't want the listeners to be called
-	onUnexpectedExternalError(e: any): codemavi {
+	onUnexpectedExternalError(e: any): void {
 		this.unexpectedErrorHandler(e);
 	}
 }
@@ -75,13 +75,13 @@ export class ErrorHandler {
 export const errorHandler = new ErrorHandler();
 
 /** @skipMangle */
-export function setUnexpectedErrorHandler(newUnexpectedErrorHandler: (e: any) => codemavi): codemavi {
+export function setUnexpectedErrorHandler(newUnexpectedErrorHandler: (e: any) => void): void {
 	errorHandler.setUnexpectedErrorHandler(newUnexpectedErrorHandler);
 }
 
 /**
  * Returns if the error is a SIGPIPE error. SIGPIPE errors should generally be
- * logged at most once, to acodemavi a loop.
+ * logged at most once, to avoid a loop.
  *
  * @see https://github.com/microsoft/vscode-remote-release/issues/6481
  */

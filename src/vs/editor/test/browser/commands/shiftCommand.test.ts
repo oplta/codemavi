@@ -53,7 +53,7 @@ class DocBlockCommentMode extends Disposable {
 	}
 }
 
-function testShiftCommand(lines: string[], languageId: string | null, useTabStops: boolean, selection: Selection, expectedLines: string[], expectedSelection: Selection, prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => codemavi): codemavi {
+function testShiftCommand(lines: string[], languageId: string | null, useTabStops: boolean, selection: Selection, expectedLines: string[], expectedSelection: Selection, prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => void): void {
 	testCommand(lines, languageId, selection, (accessor, sel) => new ShiftCommand(sel, {
 		isUnshift: false,
 		tabSize: 4,
@@ -64,7 +64,7 @@ function testShiftCommand(lines: string[], languageId: string | null, useTabStop
 	}, accessor.get(ILanguageConfigurationService)), expectedLines, expectedSelection, undefined, prepare);
 }
 
-function testUnshiftCommand(lines: string[], languageId: string | null, useTabStops: boolean, selection: Selection, expectedLines: string[], expectedSelection: Selection, prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => codemavi): codemavi {
+function testUnshiftCommand(lines: string[], languageId: string | null, useTabStops: boolean, selection: Selection, expectedLines: string[], expectedSelection: Selection, prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => void): void {
 	testCommand(lines, languageId, selection, (accessor, sel) => new ShiftCommand(sel, {
 		isUnshift: true,
 		tabSize: 4,
@@ -961,7 +961,7 @@ suite('Editor Commands - ShiftCommand', () => {
 		// 3 => 2
 		testIndentation(4, 4, '         ', 2, 3);
 
-		function _assertUnshiftCommand(tabSize: number, indentSize: number, insertSpaces: boolean, text: string[], expected: ISingleEditOperation[]): codemavi {
+		function _assertUnshiftCommand(tabSize: number, indentSize: number, insertSpaces: boolean, text: string[], expected: ISingleEditOperation[]): void {
 			return withEditorModel(text, (model) => {
 				const testLanguageConfigurationService = new TestLanguageConfigurationService();
 				const op = new ShiftCommand(new Selection(1, 1, text.length + 1, 1), {
@@ -978,7 +978,7 @@ suite('Editor Commands - ShiftCommand', () => {
 			});
 		}
 
-		function _assertShiftCommand(tabSize: number, indentSize: number, insertSpaces: boolean, text: string[], expected: ISingleEditOperation[]): codemavi {
+		function _assertShiftCommand(tabSize: number, indentSize: number, insertSpaces: boolean, text: string[], expected: ISingleEditOperation[]): void {
 			return withEditorModel(text, (model) => {
 				const testLanguageConfigurationService = new TestLanguageConfigurationService();
 				const op = new ShiftCommand(new Selection(1, 1, text.length + 1, 1), {

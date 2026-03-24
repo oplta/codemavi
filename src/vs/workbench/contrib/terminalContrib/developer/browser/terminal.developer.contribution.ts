@@ -127,7 +127,7 @@ registerTerminalAction({
 		]);
 
 		// Record session
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			const events: unknown[] = [];
 			const endRecording = () => {
 				const session = JSON.stringify(events, null, 2);
@@ -244,7 +244,7 @@ class DevModeContribution extends Disposable implements ITerminalContribution {
 		}));
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: Terminal }): codemavi {
+	xtermReady(xterm: IXtermTerminal & { raw: Terminal }): void {
 		this._xterm = xterm;
 		this._updateDevMode();
 	}

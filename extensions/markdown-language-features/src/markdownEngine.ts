@@ -17,9 +17,9 @@ import { isOfScheme, Schemes } from './util/schemes';
 /**
  * Adds begin line index to the output via the 'data-line' data attribute.
  */
-const pluginSourceMap: MarkdownIt.PluginSimple = (md): codemavi => {
+const pluginSourceMap: MarkdownIt.PluginSimple = (md): void => {
 	// Set the attribute on every possible token.
-	md.core.ruler.push('source_map_data_attribute', (state): codemavi => {
+	md.core.ruler.push('source_map_data_attribute', (state): void => {
 		for (const token of state.tokens) {
 			if (token.map && token.type !== 'inline') {
 				token.attrSet('data-line', String(token.map[0]));
@@ -73,7 +73,7 @@ class TokenCache {
 		this._tokens = tokens;
 	}
 
-	public clean(): codemavi {
+	public clean(): void {
 		this._cachedDocument = undefined;
 		this._tokens = undefined;
 	}
@@ -198,7 +198,7 @@ export class MarkdownItEngine implements IMdParser {
 		return engine.parse(text, {});
 	}
 
-	private _resetSlugCount(): codemavi {
+	private _resetSlugCount(): void {
 		this._slugCount = new Map<string, number>();
 	}
 
@@ -233,7 +233,7 @@ export class MarkdownItEngine implements IMdParser {
 		return this._tokenizeDocument(document, config, engine);
 	}
 
-	public cleanCache(): codemavi {
+	public cleanCache(): void {
 		this._tokenCache.clean();
 	}
 
@@ -246,7 +246,7 @@ export class MarkdownItEngine implements IMdParser {
 		};
 	}
 
-	private _addImageRenderer(md: MarkdownIt): codemavi {
+	private _addImageRenderer(md: MarkdownIt): void {
 		const original = md.renderer.rules.image;
 		md.renderer.rules.image = (tokens: Token[], idx: number, options, env: RenderEnv, self) => {
 			const token = tokens[idx];
@@ -268,7 +268,7 @@ export class MarkdownItEngine implements IMdParser {
 		};
 	}
 
-	private _addFencedRenderer(md: MarkdownIt): codemavi {
+	private _addFencedRenderer(md: MarkdownIt): void {
 		const original = md.renderer.rules['fenced'];
 		md.renderer.rules['fenced'] = (tokens: Token[], idx: number, options, env, self) => {
 			const token = tokens[idx];
@@ -284,7 +284,7 @@ export class MarkdownItEngine implements IMdParser {
 		};
 	}
 
-	private _addLinkNormalizer(md: MarkdownIt): codemavi {
+	private _addLinkNormalizer(md: MarkdownIt): void {
 		const normalizeLink = md.normalizeLink;
 		md.normalizeLink = (link: string) => {
 			try {
@@ -300,7 +300,7 @@ export class MarkdownItEngine implements IMdParser {
 		};
 	}
 
-	private _addLinkValidator(md: MarkdownIt): codemavi {
+	private _addLinkValidator(md: MarkdownIt): void {
 		const validateLink = md.validateLink;
 		md.validateLink = (link: string) => {
 			return validateLink(link)
@@ -310,7 +310,7 @@ export class MarkdownItEngine implements IMdParser {
 		};
 	}
 
-	private _addNamedHeaders(md: MarkdownIt): codemavi {
+	private _addNamedHeaders(md: MarkdownIt): void {
 		const original = md.renderer.rules.heading_open;
 		md.renderer.rules.heading_open = (tokens: Token[], idx: number, options, env, self) => {
 			const title = this._tokenToPlainText(tokens[idx + 1]);
@@ -349,7 +349,7 @@ export class MarkdownItEngine implements IMdParser {
 		}
 	}
 
-	private _addLinkRenderer(md: MarkdownIt): codemavi {
+	private _addLinkRenderer(md: MarkdownIt): void {
 		const original = md.renderer.rules.link_open;
 
 		md.renderer.rules.link_open = (tokens: Token[], idx: number, options, env, self) => {

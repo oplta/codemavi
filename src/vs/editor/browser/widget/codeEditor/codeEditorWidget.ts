@@ -73,8 +73,8 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 	private readonly _deliveryQueue = createEventDeliveryQueue();
 	protected readonly _contributions: CodeEditorContributions = this._register(new CodeEditorContributions());
 
-	private readonly _onDidDispose: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onDidDispose: Event<codemavi> = this._onDidDispose.event;
+	private readonly _onDidDispose: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onDidDispose: Event<void> = this._onDidDispose.event;
 
 	private readonly _onDidChangeModelContent: Emitter<IModelContentChangedEvent> = this._register(new Emitter<IModelContentChangedEvent>({ deliveryQueue: this._deliveryQueue }));
 	public readonly onDidChangeModelContent: Event<IModelContentChangedEvent> = this._onDidChangeModelContent.event;
@@ -109,19 +109,19 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 	private readonly _onDidChangeCursorSelection: Emitter<ICursorSelectionChangedEvent> = this._register(new Emitter<ICursorSelectionChangedEvent>({ deliveryQueue: this._deliveryQueue }));
 	public readonly onDidChangeCursorSelection: Event<ICursorSelectionChangedEvent> = this._onDidChangeCursorSelection.event;
 
-	private readonly _onDidAttemptReadOnlyEdit: Emitter<codemavi> = this._register(new InteractionEmitter<codemavi>(this._contributions, this._deliveryQueue));
-	public readonly onDidAttemptReadOnlyEdit: Event<codemavi> = this._onDidAttemptReadOnlyEdit.event;
+	private readonly _onDidAttemptReadOnlyEdit: Emitter<void> = this._register(new InteractionEmitter<void>(this._contributions, this._deliveryQueue));
+	public readonly onDidAttemptReadOnlyEdit: Event<void> = this._onDidAttemptReadOnlyEdit.event;
 
 	private readonly _onDidLayoutChange: Emitter<EditorLayoutInfo> = this._register(new Emitter<EditorLayoutInfo>({ deliveryQueue: this._deliveryQueue }));
 	public readonly onDidLayoutChange: Event<EditorLayoutInfo> = this._onDidLayoutChange.event;
 
 	private readonly _editorTextFocus: BooleanEventEmitter = this._register(new BooleanEventEmitter({ deliveryQueue: this._deliveryQueue }));
-	public readonly onDidFocusEditorText: Event<codemavi> = this._editorTextFocus.onDidChangeToTrue;
-	public readonly onDidBlurEditorText: Event<codemavi> = this._editorTextFocus.onDidChangeToFalse;
+	public readonly onDidFocusEditorText: Event<void> = this._editorTextFocus.onDidChangeToTrue;
+	public readonly onDidBlurEditorText: Event<void> = this._editorTextFocus.onDidChangeToFalse;
 
 	private readonly _editorWidgetFocus: BooleanEventEmitter = this._register(new BooleanEventEmitter({ deliveryQueue: this._deliveryQueue }));
-	public readonly onDidFocusEditorWidget: Event<codemavi> = this._editorWidgetFocus.onDidChangeToTrue;
-	public readonly onDidBlurEditorWidget: Event<codemavi> = this._editorWidgetFocus.onDidChangeToFalse;
+	public readonly onDidFocusEditorWidget: Event<void> = this._editorWidgetFocus.onDidChangeToTrue;
+	public readonly onDidBlurEditorWidget: Event<void> = this._editorWidgetFocus.onDidChangeToFalse;
 
 	private readonly _onWillType: Emitter<string> = this._register(new InteractionEmitter<string>(this._contributions, this._deliveryQueue));
 	public readonly onWillType = this._onWillType.event;
@@ -129,10 +129,10 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 	private readonly _onDidType: Emitter<string> = this._register(new InteractionEmitter<string>(this._contributions, this._deliveryQueue));
 	public readonly onDidType = this._onDidType.event;
 
-	private readonly _onDidCompositionStart: Emitter<codemavi> = this._register(new InteractionEmitter<codemavi>(this._contributions, this._deliveryQueue));
+	private readonly _onDidCompositionStart: Emitter<void> = this._register(new InteractionEmitter<void>(this._contributions, this._deliveryQueue));
 	public readonly onDidCompositionStart = this._onDidCompositionStart.event;
 
-	private readonly _onDidCompositionEnd: Emitter<codemavi> = this._register(new InteractionEmitter<codemavi>(this._contributions, this._deliveryQueue));
+	private readonly _onDidCompositionEnd: Emitter<void> = this._register(new InteractionEmitter<void>(this._contributions, this._deliveryQueue));
 	public readonly onDidCompositionEnd = this._onDidCompositionEnd.event;
 
 	private readonly _onDidPaste: Emitter<editorBrowser.IPasteEvent> = this._register(new InteractionEmitter<editorBrowser.IPasteEvent>(this._contributions, this._deliveryQueue));
@@ -150,8 +150,8 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 	private readonly _onMouseDrop: Emitter<editorBrowser.IPartialEditorMouseEvent> = this._register(new InteractionEmitter<editorBrowser.IPartialEditorMouseEvent>(this._contributions, this._deliveryQueue));
 	public readonly onMouseDrop: Event<editorBrowser.IPartialEditorMouseEvent> = this._onMouseDrop.event;
 
-	private readonly _onMouseDropCanceled: Emitter<codemavi> = this._register(new InteractionEmitter<codemavi>(this._contributions, this._deliveryQueue));
-	public readonly onMouseDropCanceled: Event<codemavi> = this._onMouseDropCanceled.event;
+	private readonly _onMouseDropCanceled: Emitter<void> = this._register(new InteractionEmitter<void>(this._contributions, this._deliveryQueue));
+	public readonly onMouseDropCanceled: Event<void> = this._onMouseDropCanceled.event;
 
 	private readonly _onDropIntoEditor = this._register(new InteractionEmitter<{ readonly position: IPosition; readonly event: DragEvent }>(this._contributions, this._deliveryQueue));
 	public readonly onDropIntoEditor = this._onDropIntoEditor.event;
@@ -180,22 +180,22 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 	private readonly _onDidScrollChange: Emitter<editorCommon.IScrollEvent> = this._register(new Emitter<editorCommon.IScrollEvent>({ deliveryQueue: this._deliveryQueue }));
 	public readonly onDidScrollChange: Event<editorCommon.IScrollEvent> = this._onDidScrollChange.event;
 
-	private readonly _onDidChangeViewZones: Emitter<codemavi> = this._register(new Emitter<codemavi>({ deliveryQueue: this._deliveryQueue }));
-	public readonly onDidChangeViewZones: Event<codemavi> = this._onDidChangeViewZones.event;
+	private readonly _onDidChangeViewZones: Emitter<void> = this._register(new Emitter<void>({ deliveryQueue: this._deliveryQueue }));
+	public readonly onDidChangeViewZones: Event<void> = this._onDidChangeViewZones.event;
 
-	private readonly _onDidChangeHiddenAreas: Emitter<codemavi> = this._register(new Emitter<codemavi>({ deliveryQueue: this._deliveryQueue }));
-	public readonly onDidChangeHiddenAreas: Event<codemavi> = this._onDidChangeHiddenAreas.event;
+	private readonly _onDidChangeHiddenAreas: Emitter<void> = this._register(new Emitter<void>({ deliveryQueue: this._deliveryQueue }));
+	public readonly onDidChangeHiddenAreas: Event<void> = this._onDidChangeHiddenAreas.event;
 
 	private _updateCounter = 0;
 
 	private readonly _onWillTriggerEditorOperationEvent: Emitter<editorCommon.ITriggerEditorOperationEvent> = this._register(new Emitter<editorCommon.ITriggerEditorOperationEvent>());
 	public readonly onWillTriggerEditorOperationEvent: Event<editorCommon.ITriggerEditorOperationEvent> = this._onWillTriggerEditorOperationEvent.event;
 
-	private readonly _onBeginUpdate: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onBeginUpdate: Event<codemavi> = this._onBeginUpdate.event;
+	private readonly _onBeginUpdate: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onBeginUpdate: Event<void> = this._onBeginUpdate.event;
 
-	private readonly _onEndUpdate: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	public readonly onEndUpdate: Event<codemavi> = this._onEndUpdate.event;
+	private readonly _onEndUpdate: Emitter<void> = this._register(new Emitter<void>());
+	public readonly onEndUpdate: Event<void> = this._onEndUpdate.event;
 
 	private readonly _onBeforeExecuteEdit = this._register(new Emitter<{ source: string | undefined }>());
 	public readonly onBeforeExecuteEdit = this._onBeforeExecuteEdit.event;
@@ -327,7 +327,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 				action.alias,
 				action.metadata,
 				action.precondition ?? undefined,
-				(args: unknown): Promise<codemavi> => {
+				(args: unknown): Promise<void> => {
 					return this._instantiationService.invokeFunction((accessor) => {
 						return Promise.resolve(action.runEditorCommand(accessor, this, args));
 					});
@@ -380,7 +380,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._codeEditorService.addCodeEditor(this);
 	}
 
-	public writeScreenReaderContent(reason: string): codemavi {
+	public writeScreenReaderContent(reason: string): void {
 		this._modelData?.view.writeScreenReaderContent(reason);
 	}
 
@@ -396,7 +396,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return editorCommon.EditorType.ICodeEditor;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._codeEditorService.removeCodeEditor(this);
 
 		this._actions.clear();
@@ -415,7 +415,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._instantiationService.invokeFunction(fn);
 	}
 
-	public updateOptions(newOptions: Readonly<IEditorOptions> | undefined): codemavi {
+	public updateOptions(newOptions: Readonly<IEditorOptions> | undefined): void {
 		this._configuration.updateOptions(newOptions || {});
 	}
 
@@ -457,7 +457,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.model.getValue(eolPreference, preserveBOM);
 	}
 
-	public setValue(newValue: string): codemavi {
+	public setValue(newValue: string): void {
 		try {
 			this._beginUpdate();
 			if (!this._modelData) {
@@ -476,7 +476,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.model;
 	}
 
-	public setModel(_model: ITextModel | editorCommon.IDiffEditorModel | editorCommon.IDiffEditorViewModel | null = null): codemavi {
+	public setModel(_model: ITextModel | editorCommon.IDiffEditorModel | editorCommon.IDiffEditorViewModel | null = null): void {
 		try {
 			this._beginUpdate();
 			const model = <ITextModel | null>_model;
@@ -520,7 +520,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	private _removeDecorationTypes(): codemavi {
+	private _removeDecorationTypes(): void {
 		this._decorationTypeKeysToIds = {};
 		if (this._decorationTypeSubtypes) {
 			for (const decorationType in this._decorationTypeSubtypes) {
@@ -594,7 +594,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return CodeEditorWidget._getVerticalOffsetAfterPosition(this._modelData, lineNumber, maxCol, includeViewZones);
 	}
 
-	public setHiddenAreas(ranges: IRange[], source?: unknown, forceUpdate?: boolean): codemavi {
+	public setHiddenAreas(ranges: IRange[], source?: unknown, forceUpdate?: boolean): void {
 		this._modelData?.viewModel.setHiddenAreas(ranges.map(r => Range.lift(r)), source, forceUpdate);
 	}
 
@@ -627,7 +627,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.viewModel.getPosition();
 	}
 
-	public setPosition(position: IPosition, source: string = 'api'): codemavi {
+	public setPosition(position: IPosition, source: string = 'api'): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -642,7 +642,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}]);
 	}
 
-	private _sendRevealRange(modelRange: Range, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): codemavi {
+	private _sendRevealRange(modelRange: Range, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -655,23 +655,23 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._modelData.viewModel.revealRange('api', revealHorizontal, viewRange, verticalType, scrollType);
 	}
 
-	public revealLine(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLine(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLine(lineNumber, VerticalRevealType.Simple, scrollType);
 	}
 
-	public revealLineInCenter(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLineInCenter(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLine(lineNumber, VerticalRevealType.Center, scrollType);
 	}
 
-	public revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLine(lineNumber, VerticalRevealType.CenterIfOutsideViewport, scrollType);
 	}
 
-	public revealLineNearTop(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLineNearTop(lineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLine(lineNumber, VerticalRevealType.NearTop, scrollType);
 	}
 
-	private _revealLine(lineNumber: number, revealType: VerticalRevealType, scrollType: editorCommon.ScrollType): codemavi {
+	private _revealLine(lineNumber: number, revealType: VerticalRevealType, scrollType: editorCommon.ScrollType): void {
 		if (typeof lineNumber !== 'number') {
 			throw new Error('Invalid arguments');
 		}
@@ -684,7 +684,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealPosition(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealPosition(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealPosition(
 			position,
 			VerticalRevealType.Simple,
@@ -693,7 +693,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealPositionInCenter(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealPositionInCenter(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealPosition(
 			position,
 			VerticalRevealType.Center,
@@ -702,7 +702,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealPosition(
 			position,
 			VerticalRevealType.CenterIfOutsideViewport,
@@ -711,7 +711,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealPositionNearTop(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealPositionNearTop(position: IPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealPosition(
 			position,
 			VerticalRevealType.NearTop,
@@ -720,7 +720,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	private _revealPosition(position: IPosition, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): codemavi {
+	private _revealPosition(position: IPosition, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): void {
 		if (!Position.isIPosition(position)) {
 			throw new Error('Invalid arguments');
 		}
@@ -747,11 +747,11 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.viewModel.getSelections();
 	}
 
-	public setSelection(range: IRange, source?: string): codemavi;
-	public setSelection(editorRange: Range, source?: string): codemavi;
-	public setSelection(selection: ISelection, source?: string): codemavi;
-	public setSelection(editorSelection: Selection, source?: string): codemavi;
-	public setSelection(something: any, source: string = 'api'): codemavi {
+	public setSelection(range: IRange, source?: string): void;
+	public setSelection(editorRange: Range, source?: string): void;
+	public setSelection(selection: ISelection, source?: string): void;
+	public setSelection(editorSelection: Selection, source?: string): void;
+	public setSelection(something: any, source: string = 'api'): void {
 		const isSelection = Selection.isISelection(something);
 		const isRange = Range.isIRange(something);
 
@@ -773,7 +773,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	private _setSelectionImpl(sel: ISelection, source: string): codemavi {
+	private _setSelectionImpl(sel: ISelection, source: string): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -781,7 +781,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._modelData.viewModel.setSelections(source, [selection]);
 	}
 
-	public revealLines(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLines(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLines(
 			startLineNumber,
 			endLineNumber,
@@ -790,7 +790,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealLinesInCenter(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLinesInCenter(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLines(
 			startLineNumber,
 			endLineNumber,
@@ -799,7 +799,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealLinesInCenterIfOutsideViewport(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLinesInCenterIfOutsideViewport(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLines(
 			startLineNumber,
 			endLineNumber,
@@ -808,7 +808,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealLinesNearTop(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealLinesNearTop(startLineNumber: number, endLineNumber: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealLines(
 			startLineNumber,
 			endLineNumber,
@@ -817,7 +817,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	private _revealLines(startLineNumber: number, endLineNumber: number, verticalType: VerticalRevealType, scrollType: editorCommon.ScrollType): codemavi {
+	private _revealLines(startLineNumber: number, endLineNumber: number, verticalType: VerticalRevealType, scrollType: editorCommon.ScrollType): void {
 		if (typeof startLineNumber !== 'number' || typeof endLineNumber !== 'number') {
 			throw new Error('Invalid arguments');
 		}
@@ -830,7 +830,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRange(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth, revealVerticalInCenter: boolean = false, revealHorizontal: boolean = true): codemavi {
+	public revealRange(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth, revealVerticalInCenter: boolean = false, revealHorizontal: boolean = true): void {
 		this._revealRange(
 			range,
 			revealVerticalInCenter ? VerticalRevealType.Center : VerticalRevealType.Simple,
@@ -839,7 +839,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRangeInCenter(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealRangeInCenter(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealRange(
 			range,
 			VerticalRevealType.Center,
@@ -848,7 +848,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRangeInCenterIfOutsideViewport(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealRangeInCenterIfOutsideViewport(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealRange(
 			range,
 			VerticalRevealType.CenterIfOutsideViewport,
@@ -857,7 +857,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRangeNearTop(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealRangeNearTop(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealRange(
 			range,
 			VerticalRevealType.NearTop,
@@ -866,7 +866,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRangeNearTopIfOutsideViewport(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealRangeNearTopIfOutsideViewport(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealRange(
 			range,
 			VerticalRevealType.NearTopIfOutsideViewport,
@@ -875,7 +875,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public revealRangeAtTop(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): codemavi {
+	public revealRangeAtTop(range: IRange, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Smooth): void {
 		this._revealRange(
 			range,
 			VerticalRevealType.Top,
@@ -884,7 +884,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	private _revealRange(range: IRange, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): codemavi {
+	private _revealRange(range: IRange, verticalType: VerticalRevealType, revealHorizontal: boolean, scrollType: editorCommon.ScrollType): void {
 		if (!Range.isIRange(range)) {
 			throw new Error('Invalid arguments');
 		}
@@ -897,7 +897,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		);
 	}
 
-	public setSelections(ranges: readonly ISelection[], source: string = 'api', reason = CursorChangeReason.NotSet): codemavi {
+	public setSelections(ranges: readonly ISelection[], source: string = 'api', reason = CursorChangeReason.NotSet): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -952,7 +952,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.viewModel.viewLayout.getCurrentScrollTop();
 	}
 
-	public setScrollLeft(newScrollLeft: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): codemavi {
+	public setScrollLeft(newScrollLeft: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -963,7 +963,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 			scrollLeft: newScrollLeft
 		}, scrollType);
 	}
-	public setScrollTop(newScrollTop: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): codemavi {
+	public setScrollTop(newScrollTop: number, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -974,7 +974,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 			scrollTop: newScrollTop
 		}, scrollType);
 	}
-	public setScrollPosition(position: editorCommon.INewScrollPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): codemavi {
+	public setScrollPosition(position: editorCommon.INewScrollPosition, scrollType: editorCommon.ScrollType = editorCommon.ScrollType.Immediate): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1001,7 +1001,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		};
 	}
 
-	public restoreViewState(s: editorCommon.IEditorViewState | null): codemavi {
+	public restoreViewState(s: editorCommon.IEditorViewState | null): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
@@ -1023,15 +1023,15 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public handleInitialized(): codemavi {
+	public handleInitialized(): void {
 		this._getViewModel()?.visibleLinesStabilized();
 	}
 
-	public onVisible(): codemavi {
+	public onVisible(): void {
 		this._modelData?.view.refreshFocusState();
 	}
 
-	public onHide(): codemavi {
+	public onHide(): void {
 		this._modelData?.view.refreshFocusState();
 	}
 
@@ -1055,7 +1055,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._actions.get(id) || null;
 	}
 
-	public trigger(source: string | null | undefined, handlerId: string, payload: any): codemavi {
+	public trigger(source: string | null | undefined, handlerId: string, payload: any): void {
 		payload = payload || {};
 
 		try {
@@ -1114,11 +1114,11 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	protected _triggerCommand(handlerId: string, payload: any): codemavi {
+	protected _triggerCommand(handlerId: string, payload: any): void {
 		this._commandService.executeCommand(handlerId, payload);
 	}
 
-	private _startComposition(): codemavi {
+	private _startComposition(): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1127,7 +1127,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._onDidCompositionStart.fire();
 	}
 
-	private _endComposition(source: string | null | undefined): codemavi {
+	private _endComposition(source: string | null | undefined): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1136,7 +1136,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._onDidCompositionEnd.fire();
 	}
 
-	private _type(source: string | null | undefined, text: string): codemavi {
+	private _type(source: string | null | undefined, text: string): void {
 		if (!this._modelData || text.length === 0) {
 			return;
 		}
@@ -1149,14 +1149,14 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	private _compositionType(source: string | null | undefined, text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): codemavi {
+	private _compositionType(source: string | null | undefined, text: string, replacePrevCharCnt: number, replaceNextCharCnt: number, positionDelta: number): void {
 		if (!this._modelData) {
 			return;
 		}
 		this._modelData.viewModel.compositionType(text, replacePrevCharCnt, replaceNextCharCnt, positionDelta, source);
 	}
 
-	private _paste(source: string | null | undefined, text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null, clipboardEvent?: ClipboardEvent): codemavi {
+	private _paste(source: string | null | undefined, text: string, pasteOnNewLine: boolean, multicursorText: string[] | null, mode: string | null, clipboardEvent?: ClipboardEvent): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1173,7 +1173,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	private _cut(source: string | null | undefined): codemavi {
+	private _cut(source: string | null | undefined): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1249,14 +1249,14 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return true;
 	}
 
-	public executeCommand(source: string | null | undefined, command: editorCommon.ICommand): codemavi {
+	public executeCommand(source: string | null | undefined, command: editorCommon.ICommand): void {
 		if (!this._modelData) {
 			return;
 		}
 		this._modelData.viewModel.executeCommand(command, source);
 	}
 
-	public executeCommands(source: string | null | undefined, commands: editorCommon.ICommand[]): codemavi {
+	public executeCommands(source: string | null | undefined, commands: editorCommon.ICommand[]): void {
 		if (!this._modelData) {
 			return;
 		}
@@ -1304,7 +1304,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.model.deltaDecorations(oldDecorations, newDecorations, this._id);
 	}
 
-	public removeDecorations(decorationIds: string[]): codemavi {
+	public removeDecorations(decorationIds: string[]): void {
 		if (!this._modelData || decorationIds.length === 0) {
 			return;
 		}
@@ -1314,7 +1314,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		});
 	}
 
-	public setDecorationsByType(description: string, decorationTypeKey: string, decorationOptions: editorCommon.IDecorationOptions[]): codemavi {
+	public setDecorationsByType(description: string, decorationTypeKey: string, decorationOptions: editorCommon.IDecorationOptions[]): void {
 
 		const newDecorationsSubTypes: { [key: string]: boolean } = {};
 		const oldDecorationsSubTypes = this._decorationTypeSubtypes[decorationTypeKey] || {};
@@ -1356,7 +1356,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this.changeDecorations(accessor => this._decorationTypeKeysToIds[decorationTypeKey] = accessor.deltaDecorations(oldDecorationsIds, newModelDecorations));
 	}
 
-	public setDecorationsByTypeFast(decorationTypeKey: string, ranges: IRange[]): codemavi {
+	public setDecorationsByTypeFast(decorationTypeKey: string, ranges: IRange[]): void {
 
 		// remove decoration sub types that are no longer used, deregister decoration type if necessary
 		const oldDecorationsSubTypes = this._decorationTypeSubtypes[decorationTypeKey] || {};
@@ -1376,7 +1376,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this.changeDecorations(accessor => this._decorationTypeKeysToIds[decorationTypeKey] = accessor.deltaDecorations(oldDecorationsIds, newModelDecorations));
 	}
 
-	public removeDecorationsByType(decorationTypeKey: string): codemavi {
+	public removeDecorationsByType(decorationTypeKey: string): void {
 		// remove decorations for type and sub type
 		const oldDecorationsIds = this._decorationTypeKeysToIds[decorationTypeKey];
 		if (oldDecorationsIds) {
@@ -1414,7 +1414,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.view.domNode.domNode;
 	}
 
-	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): codemavi {
+	public delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
@@ -1428,14 +1428,14 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this._modelData.view.delegateScrollFromMouseWheelEvent(browserEvent);
 	}
 
-	public layout(dimension?: IDimension, postponeRendering: boolean = false): codemavi {
+	public layout(dimension?: IDimension, postponeRendering: boolean = false): void {
 		this._configuration.observeContainer(dimension);
 		if (!postponeRendering) {
 			this.render();
 		}
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
@@ -1456,7 +1456,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.view.isWidgetFocused();
 	}
 
-	public addContentWidget(widget: editorBrowser.IContentWidget): codemavi {
+	public addContentWidget(widget: editorBrowser.IContentWidget): void {
 		const widgetData: IContentWidgetData = {
 			widget: widget,
 			position: widget.getPosition()
@@ -1473,7 +1473,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public layoutContentWidget(widget: editorBrowser.IContentWidget): codemavi {
+	public layoutContentWidget(widget: editorBrowser.IContentWidget): void {
 		const widgetId = widget.getId();
 		if (this._contentWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._contentWidgets[widgetId];
@@ -1484,7 +1484,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public removeContentWidget(widget: editorBrowser.IContentWidget): codemavi {
+	public removeContentWidget(widget: editorBrowser.IContentWidget): void {
 		const widgetId = widget.getId();
 		if (this._contentWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._contentWidgets[widgetId];
@@ -1495,7 +1495,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public addOverlayWidget(widget: editorBrowser.IOverlayWidget): codemavi {
+	public addOverlayWidget(widget: editorBrowser.IOverlayWidget): void {
 		const widgetData: IOverlayWidgetData = {
 			widget: widget,
 			position: widget.getPosition()
@@ -1511,7 +1511,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public layoutOverlayWidget(widget: editorBrowser.IOverlayWidget): codemavi {
+	public layoutOverlayWidget(widget: editorBrowser.IOverlayWidget): void {
 		const widgetId = widget.getId();
 		if (this._overlayWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._overlayWidgets[widgetId];
@@ -1522,7 +1522,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public removeOverlayWidget(widget: editorBrowser.IOverlayWidget): codemavi {
+	public removeOverlayWidget(widget: editorBrowser.IOverlayWidget): void {
 		const widgetId = widget.getId();
 		if (this._overlayWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._overlayWidgets[widgetId];
@@ -1533,7 +1533,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public addGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): codemavi {
+	public addGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): void {
 		const widgetData: IGlyphMarginWidgetData = {
 			widget: widget,
 			position: widget.getPosition()
@@ -1550,7 +1550,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public layoutGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): codemavi {
+	public layoutGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): void {
 		const widgetId = widget.getId();
 		if (this._glyphMarginWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._glyphMarginWidgets[widgetId];
@@ -1561,7 +1561,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public removeGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): codemavi {
+	public removeGlyphMarginWidget(widget: editorBrowser.IGlyphMarginWidget): void {
 		const widgetId = widget.getId();
 		if (this._glyphMarginWidgets.hasOwnProperty(widgetId)) {
 			const widgetData = this._glyphMarginWidgets[widgetId];
@@ -1572,7 +1572,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	public changeViewZones(callback: (accessor: editorBrowser.IViewZoneChangeAccessor) => codemavi): codemavi {
+	public changeViewZones(callback: (accessor: editorBrowser.IViewZoneChangeAccessor) => void): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
@@ -1612,7 +1612,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return this._modelData.view.getOffsetForColumn(lineNumber, column);
 	}
 
-	public render(forceRedraw: boolean = false): codemavi {
+	public render(forceRedraw: boolean = false): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
@@ -1621,18 +1621,18 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		});
 	}
 
-	public setAriaOptions(options: editorBrowser.IEditorAriaOptions): codemavi {
+	public setAriaOptions(options: editorBrowser.IEditorAriaOptions): void {
 		if (!this._modelData || !this._modelData.hasRealView) {
 			return;
 		}
 		this._modelData.view.setAriaOptions(options);
 	}
 
-	public applyFontInfo(target: HTMLElement): codemavi {
+	public applyFontInfo(target: HTMLElement): void {
 		applyFontInfo(target, this._configuration.options.get(EditorOption.fontInfo));
 	}
 
-	public setBanner(domNode: HTMLElement | null, domNodeHeight: number): codemavi {
+	public setBanner(domNode: HTMLElement | null, domNodeHeight: number): void {
 		if (this._bannerDomNode && this._domElement.contains(this._bannerDomNode)) {
 			this._bannerDomNode.remove();
 		}
@@ -1645,7 +1645,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		}
 	}
 
-	protected _attachModel(model: ITextModel | null): codemavi {
+	protected _attachModel(model: ITextModel | null): void {
 		if (!model) {
 			this._modelData = null;
 			return;
@@ -1892,7 +1892,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return [view, true];
 	}
 
-	protected _postDetachModelCleanup(detachedModel: ITextModel | null): codemavi {
+	protected _postDetachModelCleanup(detachedModel: ITextModel | null): void {
 		detachedModel?.removeAllDecorationsWithOwnerId(this._id);
 	}
 
@@ -1918,11 +1918,11 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return model;
 	}
 
-	private _registerDecorationType(description: string, key: string, options: editorCommon.IDecorationRenderOptions, parentTypeKey?: string): codemavi {
+	private _registerDecorationType(description: string, key: string, options: editorCommon.IDecorationRenderOptions, parentTypeKey?: string): void {
 		this._codeEditorService.registerDecorationType(description, key, options, parentTypeKey, this);
 	}
 
-	private _removeDecorationType(key: string): codemavi {
+	private _removeDecorationType(key: string): void {
 		this._codeEditorService.removeDecorationType(key);
 	}
 
@@ -1938,7 +1938,7 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		return (this._modelData !== null);
 	}
 
-	private showDropIndicatorAt(position: Position): codemavi {
+	private showDropIndicatorAt(position: Position): void {
 		const newDecorations: IModelDeltaDecoration[] = [{
 			range: new Range(position.lineNumber, position.column, position.lineNumber, position.column),
 			options: CodeEditorWidget.dropIntoEditorDecorationOptions
@@ -1948,22 +1948,22 @@ export class CodeEditorWidget extends Disposable implements editorBrowser.ICodeE
 		this.revealPosition(position, editorCommon.ScrollType.Immediate);
 	}
 
-	private removeDropIndicator(): codemavi {
+	private removeDropIndicator(): void {
 		this._dropIntoEditorDecorations.clear();
 	}
 
-	public setContextValue(key: string, value: ContextKeyValue): codemavi {
+	public setContextValue(key: string, value: ContextKeyValue): void {
 		this._contextKeyService.createKey(key, value);
 	}
 
-	private _beginUpdate(): codemavi {
+	private _beginUpdate(): void {
 		this._updateCounter++;
 		if (this._updateCounter === 1) {
 			this._onBeginUpdate.fire();
 		}
 	}
 
-	private _endUpdate(): codemavi {
+	private _endUpdate(): void {
 		this._updateCounter--;
 		if (this._updateCounter === 0) {
 			this._onEndUpdate.fire();
@@ -2018,7 +2018,7 @@ class ModelData {
 	) {
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		dispose(this.listenersToRemove);
 		this.model.onBeforeDetached(this.attachedView);
 		if (this.hasRealView) {
@@ -2035,11 +2035,11 @@ const enum BooleanEventValue {
 }
 
 export class BooleanEventEmitter extends Disposable {
-	private readonly _onDidChangeToTrue: Emitter<codemavi>;
-	public readonly onDidChangeToTrue: Event<codemavi>;
+	private readonly _onDidChangeToTrue: Emitter<void>;
+	public readonly onDidChangeToTrue: Event<void>;
 
-	private readonly _onDidChangeToFalse: Emitter<codemavi>;
-	public readonly onDidChangeToFalse: Event<codemavi>;
+	private readonly _onDidChangeToFalse: Emitter<void>;
+	public readonly onDidChangeToFalse: Event<void>;
 
 	private _value: BooleanEventValue;
 
@@ -2047,9 +2047,9 @@ export class BooleanEventEmitter extends Disposable {
 		private readonly _emitterOptions: EmitterOptions
 	) {
 		super();
-		this._onDidChangeToTrue = this._register(new Emitter<codemavi>(this._emitterOptions));
+		this._onDidChangeToTrue = this._register(new Emitter<void>(this._emitterOptions));
 		this.onDidChangeToTrue = this._onDidChangeToTrue.event;
-		this._onDidChangeToFalse = this._register(new Emitter<codemavi>(this._emitterOptions));
+		this._onDidChangeToFalse = this._register(new Emitter<void>(this._emitterOptions));
 		this.onDidChangeToFalse = this._onDidChangeToFalse.event;
 		this._value = BooleanEventValue.NotSet;
 	}
@@ -2080,7 +2080,7 @@ class InteractionEmitter<T> extends Emitter<T> {
 		super({ deliveryQueue });
 	}
 
-	override fire(event: T): codemavi {
+	override fire(event: T): void {
 		this._contributions.onBeforeInteractionEvent();
 		super.fire(event);
 	}
@@ -2143,7 +2143,7 @@ class EditorContextKeysManager extends Disposable {
 		this._editorSimpleInput.set(this._editor.isSimpleWidget);
 	}
 
-	private _updateFromConfig(): codemavi {
+	private _updateFromConfig(): void {
 		const options = this._editor.getOptions();
 
 		this._tabMovesFocus.set(TabFocus.getTabFocusMode());
@@ -2152,7 +2152,7 @@ class EditorContextKeysManager extends Disposable {
 		this._editorColumnSelection.set(options.get(EditorOption.columnSelection));
 	}
 
-	private _updateFromSelection(): codemavi {
+	private _updateFromSelection(): void {
 		const selections = this._editor.getSelections();
 		if (!selections) {
 			this._hasMultipleSelections.reset();
@@ -2163,13 +2163,13 @@ class EditorContextKeysManager extends Disposable {
 		}
 	}
 
-	private _updateFromFocus(): codemavi {
+	private _updateFromFocus(): void {
 		this._editorFocus.set(this._editor.hasWidgetFocus() && !this._editor.isSimpleWidget);
 		this._editorTextFocus.set(this._editor.hasTextFocus() && !this._editor.isSimpleWidget);
 		this._textInputFocus.set(this._editor.hasTextFocus());
 	}
 
-	private _updateFromModel(): codemavi {
+	private _updateFromModel(): void {
 		const model = this._editor.getModel();
 		this._canUndo.set(Boolean(model && model.canUndo()));
 		this._canRedo.set(Boolean(model && model.canRedo()));
@@ -2368,7 +2368,7 @@ class EditorDecorationsCollection implements editorCommon.IEditorDecorationsColl
 		return this._decorationIds.includes(decoration.id);
 	}
 
-	public clear(): codemavi {
+	public clear(): void {
 		if (this._decorationIds.length === 0) {
 			// nothing to do
 			return;

@@ -20,7 +20,7 @@ import { localize } from '../../../../../nls.js';
 import { INotificationService } from '../../../../../platform/notification/common/notification.js';
 import { INotebookKernelHistoryService } from '../../common/notebookKernelService.js';
 
-export async function changeCellToKind(kind: CellKind, context: INotebookActionContext, language?: string, mime?: string): Promise<codemavi> {
+export async function changeCellToKind(kind: CellKind, context: INotebookActionContext, language?: string, mime?: string): Promise<void> {
 	const { notebookEditor } = context;
 	if (!notebookEditor.hasModel()) {
 		return;
@@ -185,7 +185,7 @@ export function runDeleteAction(editor: IActiveNotebookEditor, cell: ICellViewMo
 	}
 }
 
-export async function moveCellRange(context: INotebookActionContext, direction: 'up' | 'down'): Promise<codemavi> {
+export async function moveCellRange(context: INotebookActionContext, direction: 'up' | 'down'): Promise<void> {
 	if (!context.notebookEditor.hasModel()) {
 		return;
 	}
@@ -272,7 +272,7 @@ export async function moveCellRange(context: INotebookActionContext, direction: 
 	}
 }
 
-export async function copyCellRange(context: INotebookCellActionContext, direction: 'up' | 'down'): Promise<codemavi> {
+export async function copyCellRange(context: INotebookCellActionContext, direction: 'up' | 'down'): Promise<void> {
 	const editor = context.notebookEditor;
 	if (!editor.hasModel()) {
 		return;
@@ -352,7 +352,7 @@ export async function copyCellRange(context: INotebookCellActionContext, directi
 	}
 }
 
-export async function joinSelectedCells(bulkEditService: IBulkEditService, notificationService: INotificationService, context: INotebookCellActionContext): Promise<codemavi> {
+export async function joinSelectedCells(bulkEditService: IBulkEditService, notificationService: INotificationService, context: INotebookCellActionContext): Promise<void> {
 	const editor = context.notebookEditor;
 	if (editor.isReadOnly) {
 		return;
@@ -504,7 +504,7 @@ export async function joinNotebookCells(editor: IActiveNotebookEditor, range: IC
 	}
 }
 
-export async function joinCellsWithSurrounds(bulkEditService: IBulkEditService, context: INotebookCellActionContext, direction: 'above' | 'below'): Promise<codemavi> {
+export async function joinCellsWithSurrounds(bulkEditService: IBulkEditService, context: INotebookCellActionContext, direction: 'above' | 'below'): Promise<void> {
 	const editor = context.notebookEditor;
 	const textModel = editor.textModel;
 	const viewModel = editor.getViewModel() as NotebookViewModel;

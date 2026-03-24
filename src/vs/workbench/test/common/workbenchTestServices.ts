@@ -64,8 +64,8 @@ export class TestContextService implements IWorkspaceContextService {
 	private workspace: Workspace;
 	private options: object;
 
-	private readonly _onDidChangeWorkspaceName: Emitter<codemavi>;
-	get onDidChangeWorkspaceName(): Event<codemavi> { return this._onDidChangeWorkspaceName.event; }
+	private readonly _onDidChangeWorkspaceName: Emitter<void>;
+	get onDidChangeWorkspaceName(): Event<void> { return this._onDidChangeWorkspaceName.event; }
 
 	private readonly _onWillChangeWorkspaceFolders: Emitter<IWorkspaceFoldersWillChangeEvent>;
 	get onWillChangeWorkspaceFolders(): Event<IWorkspaceFoldersWillChangeEvent> { return this._onWillChangeWorkspaceFolders.event; }
@@ -79,7 +79,7 @@ export class TestContextService implements IWorkspaceContextService {
 	constructor(workspace = TestWorkspace, options = null) {
 		this.workspace = workspace;
 		this.options = options || Object.create(null);
-		this._onDidChangeWorkspaceName = new Emitter<codemavi>();
+		this._onDidChangeWorkspaceName = new Emitter<void>();
 		this._onWillChangeWorkspaceFolders = new Emitter<IWorkspaceFoldersWillChangeEvent>();
 		this._onDidChangeWorkspaceFolders = new Emitter<IWorkspaceFoldersChangeEvent>();
 		this._onDidChangeWorkbenchState = new Emitter<WorkbenchState>();
@@ -113,7 +113,7 @@ export class TestContextService implements IWorkspaceContextService {
 		return this.workspace.getFolder(resource);
 	}
 
-	setWorkspace(workspace: any): codemavi {
+	setWorkspace(workspace: any): void {
 		this.workspace = workspace;
 	}
 
@@ -142,7 +142,7 @@ export class TestContextService implements IWorkspaceContextService {
 
 export class TestStorageService extends InMemoryStorageService {
 
-	testEmitWillSaveState(reason: WillSaveStateReason): codemavi {
+	testEmitWillSaveState(reason: WillSaveStateReason): void {
 		super.emitWillSaveState(reason);
 	}
 }
@@ -153,27 +153,27 @@ export class TestHistoryService implements IHistoryService {
 
 	constructor(private root?: URI) { }
 
-	async reopenLastClosedEditor(): Promise<codemavi> { }
-	async goForward(): Promise<codemavi> { }
-	async goBack(): Promise<codemavi> { }
-	async goPrevious(): Promise<codemavi> { }
-	async goLast(): Promise<codemavi> { }
-	removeFromHistory(_input: EditorInput | IResourceEditorInput): codemavi { }
-	clear(): codemavi { }
-	clearRecentlyOpened(): codemavi { }
+	async reopenLastClosedEditor(): Promise<void> { }
+	async goForward(): Promise<void> { }
+	async goBack(): Promise<void> { }
+	async goPrevious(): Promise<void> { }
+	async goLast(): Promise<void> { }
+	removeFromHistory(_input: EditorInput | IResourceEditorInput): void { }
+	clear(): void { }
+	clearRecentlyOpened(): void { }
 	getHistory(): readonly (EditorInput | IResourceEditorInput)[] { return []; }
-	async openNextRecentlyUsedEditor(group?: GroupIdentifier): Promise<codemavi> { }
-	async openPreviouslyUsedEditor(group?: GroupIdentifier): Promise<codemavi> { }
+	async openNextRecentlyUsedEditor(group?: GroupIdentifier): Promise<void> { }
+	async openPreviouslyUsedEditor(group?: GroupIdentifier): Promise<void> { }
 	getLastActiveWorkspaceRoot(_schemeFilter: string): URI | undefined { return this.root; }
 	getLastActiveFile(_schemeFilter: string): URI | undefined { return undefined; }
 }
 
 export class TestWorkingCopy extends Disposable implements IWorkingCopy {
 
-	private readonly _onDidChangeDirty = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeDirty = this._register(new Emitter<void>());
 	readonly onDidChangeDirty = this._onDidChangeDirty.event;
 
-	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeContent = this._register(new Emitter<void>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
 	private readonly _onDidSave = this._register(new Emitter<IStoredFileWorkingCopySaveEvent>());
@@ -192,14 +192,14 @@ export class TestWorkingCopy extends Disposable implements IWorkingCopy {
 		this.dirty = isDirty;
 	}
 
-	setDirty(dirty: boolean): codemavi {
+	setDirty(dirty: boolean): void {
 		if (this.dirty !== dirty) {
 			this.dirty = dirty;
 			this._onDidChangeDirty.fire();
 		}
 	}
 
-	setContent(content: string): codemavi {
+	setContent(content: string): void {
 		this._onDidChangeContent.fire();
 	}
 
@@ -217,7 +217,7 @@ export class TestWorkingCopy extends Disposable implements IWorkingCopy {
 		return true;
 	}
 
-	async revert(options?: IRevertOptions): Promise<codemavi> {
+	async revert(options?: IRevertOptions): Promise<void> {
 		this.setDirty(false);
 	}
 
@@ -255,9 +255,9 @@ export class TestWorkingCopyFileService implements IWorkingCopyFileService {
 
 	readonly hasSaveParticipants = false;
 	addSaveParticipant(participant: IStoredFileWorkingCopySaveParticipant): IDisposable { return Disposable.None; }
-	async runSaveParticipants(workingCopy: IWorkingCopy, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> { }
+	async runSaveParticipants(workingCopy: IWorkingCopy, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> { }
 
-	async delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<codemavi> { }
+	async delete(operations: IDeleteOperation[], token: CancellationToken, undoInfo?: IFileOperationUndoRedoInfo): Promise<void> { }
 
 	registerWorkingCopyProvider(provider: (resourceOrFolder: URI) => IWorkingCopy[]): IDisposable { return Disposable.None; }
 
@@ -323,11 +323,11 @@ export const NullFilesConfigurationService = new class implements IFilesConfigur
 	getAutoSaveConfiguration(): IAutoSaveConfiguration { throw new Error('Method not implemented.'); }
 	getAutoSaveMode(): IAutoSaveMode { throw new Error('Method not implemented.'); }
 	hasShortAutoSaveDelay(): boolean { throw new Error('Method not implemented.'); }
-	toggleAutoSave(): Promise<codemavi> { throw new Error('Method not implemented.'); }
+	toggleAutoSave(): Promise<void> { throw new Error('Method not implemented.'); }
 	enableAutoSaveAfterShortDelay(resourceOrEditor: URI | EditorInput): IDisposable { throw new Error('Method not implemented.'); }
 	disableAutoSave(resourceOrEditor: URI | EditorInput): IDisposable { throw new Error('Method not implemented.'); }
 	isReadonly(resource: URI, stat?: IBaseFileStat | undefined): boolean { return false; }
-	async updateReadonly(resource: URI, readonly: boolean | 'toggle' | 'reset'): Promise<codemavi> { }
+	async updateReadonly(resource: URI, readonly: boolean | 'toggle' | 'reset'): Promise<void> { }
 	preventSaveConflicts(resource: URI, language?: string | undefined): boolean { throw new Error('Method not implemented.'); }
 };
 
@@ -347,10 +347,10 @@ export class TestWorkspaceTrustManagementService extends Disposable implements I
 	private _onDidChangeTrust = this._register(new Emitter<boolean>());
 	onDidChangeTrust = this._onDidChangeTrust.event;
 
-	private _onDidChangeTrustedFolders = this._register(new Emitter<codemavi>());
+	private _onDidChangeTrustedFolders = this._register(new Emitter<void>());
 	onDidChangeTrustedFolders = this._onDidChangeTrustedFolders.event;
 
-	private _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<codemavi>());
+	private _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<void>());
 	onDidInitiateWorkspaceTrustRequestOnStartup = this._onDidInitiateWorkspaceTrustRequestOnStartup.event;
 
 
@@ -376,7 +376,7 @@ export class TestWorkspaceTrustManagementService extends Disposable implements I
 		throw new Error('Method not implemented.');
 	}
 
-	setParentFolderTrust(trusted: boolean): Promise<codemavi> {
+	setParentFolderTrust(trusted: boolean): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -384,11 +384,11 @@ export class TestWorkspaceTrustManagementService extends Disposable implements I
 		throw new Error('Method not implemented.');
 	}
 
-	async setTrustedUris(folders: URI[]): Promise<codemavi> {
+	async setTrustedUris(folders: URI[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	async setUrisTrust(uris: URI[], trusted: boolean): Promise<codemavi> {
+	async setUrisTrust(uris: URI[], trusted: boolean): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -408,15 +408,15 @@ export class TestWorkspaceTrustManagementService extends Disposable implements I
 		return false;
 	}
 
-	get workspaceTrustInitialized(): Promise<codemavi> {
+	get workspaceTrustInitialized(): Promise<void> {
 		return Promise.resolve();
 	}
 
-	get workspaceResolved(): Promise<codemavi> {
+	get workspaceResolved(): Promise<void> {
 		return Promise.resolve();
 	}
 
-	async setWorkspaceTrust(trusted: boolean): Promise<codemavi> {
+	async setWorkspaceTrust(trusted: boolean): Promise<void> {
 		if (this.trusted !== trusted) {
 			this.trusted = trusted;
 			this._onDidChangeTrust.fire(this.trusted);
@@ -427,13 +427,13 @@ export class TestWorkspaceTrustManagementService extends Disposable implements I
 export class TestWorkspaceTrustRequestService extends Disposable implements IWorkspaceTrustRequestService {
 	_serviceBrand: any;
 
-	private readonly _onDidInitiateOpenFilesTrustRequest = this._register(new Emitter<codemavi>());
+	private readonly _onDidInitiateOpenFilesTrustRequest = this._register(new Emitter<void>());
 	readonly onDidInitiateOpenFilesTrustRequest = this._onDidInitiateOpenFilesTrustRequest.event;
 
 	private readonly _onDidInitiateWorkspaceTrustRequest = this._register(new Emitter<WorkspaceTrustRequestOptions>());
 	readonly onDidInitiateWorkspaceTrustRequest = this._onDidInitiateWorkspaceTrustRequest.event;
 
-	private readonly _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<codemavi>());
+	private readonly _onDidInitiateWorkspaceTrustRequestOnStartup = this._register(new Emitter<void>());
 	readonly onDidInitiateWorkspaceTrustRequestOnStartup = this._onDidInitiateWorkspaceTrustRequestOnStartup.event;
 
 	constructor(private readonly _trusted: boolean) {
@@ -448,15 +448,15 @@ export class TestWorkspaceTrustRequestService extends Disposable implements IWor
 		return this.requestOpenUrisHandler(uris);
 	}
 
-	async completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse: boolean): Promise<codemavi> {
+	async completeOpenFilesTrustRequest(result: WorkspaceTrustUriResponse, saveResponse: boolean): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
-	cancelWorkspaceTrustRequest(): codemavi {
+	cancelWorkspaceTrustRequest(): void {
 		throw new Error('Method not implemented.');
 	}
 
-	async completeWorkspaceTrustRequest(trusted?: boolean): Promise<codemavi> {
+	async completeWorkspaceTrustRequest(trusted?: boolean): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 
@@ -464,7 +464,7 @@ export class TestWorkspaceTrustRequestService extends Disposable implements IWor
 		return this._trusted;
 	}
 
-	requestWorkspaceTrustOnStartup(): codemavi {
+	requestWorkspaceTrustOnStartup(): void {
 		throw new Error('Method not implemented.');
 	}
 }
@@ -476,9 +476,9 @@ export class TestMarkerService implements IMarkerService {
 	onMarkerChanged = Event.None;
 
 	getStatistics(): MarkerStatistics { throw new Error('Method not implemented.'); }
-	changeOne(owner: string, resource: URI, markers: IMarkerData[]): codemavi { }
-	changeAll(owner: string, data: IResourceMarker[]): codemavi { }
-	remove(owner: string, resources: URI[]): codemavi { }
+	changeOne(owner: string, resource: URI, markers: IMarkerData[]): void { }
+	changeAll(owner: string, data: IResourceMarker[]): void { }
+	remove(owner: string, resources: URI[]): void { }
 	read(filter?: { owner?: string | undefined; resource?: URI | undefined; severities?: number | undefined; take?: number | undefined } | undefined): IMarker[] { return []; }
 	installResourceFilter(resource: URI, reason: string): IDisposable {
 		return { dispose: () => { /* TODO: Implement cleanup logic */ } };

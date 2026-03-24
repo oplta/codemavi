@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 type ReturnType<T> = [
 	{ readonly current: T },
-	(t: T) => codemavi
+	(t: T) => void
 ]
 
 // use this if state might be too slow to catch

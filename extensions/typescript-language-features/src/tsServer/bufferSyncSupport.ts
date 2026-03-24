@@ -103,11 +103,11 @@ class BufferSynchronizer {
 		}));
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this._pending.clear();
 	}
 
-	public beforeCommand(command: string): codemavi {
+	public beforeCommand(command: string): void {
 		if (command === 'updateOpen') {
 			return;
 		}
@@ -167,7 +167,7 @@ class SyncedBuffer {
 		private readonly synchronizer: BufferSynchronizer,
 	) { }
 
-	public open(): codemavi {
+	public open(): void {
 		const args: Proto.OpenRequestArgs = {
 			file: this.filepath,
 			fileContent: this.document.getText(),
@@ -237,7 +237,7 @@ class SyncedBuffer {
 		return this.synchronizer.close(this.resource, this.filepath, mode2ScriptKind(this.document.languageId));
 	}
 
-	public onContentChanged(events: readonly vscode.TextDocumentContentChangeEvent[]): codemavi {
+	public onContentChanged(events: readonly vscode.TextDocumentContentChangeEvent[]): void {
 		if (this.state !== BufferState.Open) {
 			console.error(`Unexpected buffer state: ${this.state}`);
 		}
@@ -258,12 +258,12 @@ class SyncedBufferMap extends ResourceMap<SyncedBuffer> {
 }
 
 class PendingDiagnostics extends ResourceMap<number> {
-	public getOrderedFileSet(): ResourceMap<codemavi | vscode.Range[]> {
+	public getOrderedFileSet(): ResourceMap<void | vscode.Range[]> {
 		const orderedResources = Array.from(this.entries())
 			.sort((a, b) => a.value - b.value)
 			.map(entry => entry.resource);
 
-		const map = new ResourceMap<codemavi | vscode.Range[]>(this._normalizePath, this.config);
+		const map = new ResourceMap<void | vscode.Range[]>(this._normalizePath, this.config);
 		for (const resource of orderedResources) {
 			map.set(resource, undefined);
 		}
@@ -275,8 +275,8 @@ class GetErrRequest {
 
 	public static executeGetErrRequest(
 		client: ITypeScriptServiceClient,
-		files: ResourceMap<codemavi | vscode.Range[]>,
-		onDone: () => codemavi
+		files: ResourceMap<void | vscode.Range[]>,
+		onDone: () => void
 	) {
 		return new GetErrRequest(client, files, onDone);
 	}
@@ -286,8 +286,8 @@ class GetErrRequest {
 
 	private constructor(
 		private readonly client: ITypeScriptServiceClient,
-		public readonly files: ResourceMap<codemavi | vscode.Range[]>,
-		onDone: () => codemavi
+		public readonly files: ResourceMap<void | vscode.Range[]>,
+		onDone: () => void
 	) {
 		if (!this.isErrorReportingEnabled()) {
 			this._done = true;
@@ -523,7 +523,7 @@ export default class BufferSyncSupport extends Disposable {
 	private readonly _onWillChange = this._register(new vscode.EventEmitter<vscode.Uri>());
 	public readonly onWillChange = this._onWillChange.event;
 
-	public listen(): codemavi {
+	public listen(): void {
 		if (this.listening) {
 			return;
 		}
@@ -577,13 +577,13 @@ export default class BufferSyncSupport extends Disposable {
 		return vscode.Uri.file(filePath);
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		this.pendingGetErr?.cancel();
 		this.pendingDiagnostics.clear();
 		this.synchronizer.reset();
 	}
 
-	public reinitialize(): codemavi {
+	public reinitialize(): void {
 		this.reset();
 		for (const buffer of this.syncedBuffers.allBuffers) {
 			buffer.open();
@@ -611,7 +611,7 @@ export default class BufferSyncSupport extends Disposable {
 		return true;
 	}
 
-	public closeResource(resource: vscode.Uri): codemavi {
+	public closeResource(resource: vscode.Uri): void {
 		const syncedBuffer = this.syncedBuffers.get(resource);
 		if (!syncedBuffer) {
 			return;
@@ -641,7 +641,7 @@ export default class BufferSyncSupport extends Disposable {
 		return result;
 	}
 
-	public beforeCommand(command: string): codemavi {
+	public beforeCommand(command: string): void {
 		this.synchronizer.beforeCommand(command);
 	}
 
@@ -649,11 +649,11 @@ export default class BufferSyncSupport extends Disposable {
 		return this.syncedBuffers.get(resource)?.lineCount;
 	}
 
-	private onDidCloseTextDocument(document: vscode.TextDocument): codemavi {
+	private onDidCloseTextDocument(document: vscode.TextDocument): void {
 		this.closeResource(document.uri);
 	}
 
-	private onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): codemavi {
+	private onDidChangeTextDocument(e: vscode.TextDocumentChangeEvent): void {
 		const syncedBuffer = this.syncedBuffers.get(e.document.uri);
 		if (!syncedBuffer) {
 			return;
@@ -716,7 +716,7 @@ export default class BufferSyncSupport extends Disposable {
 		return this.pendingDiagnostics.has(resource);
 	}
 
-	private sendPendingDiagnostics(): codemavi {
+	private sendPendingDiagnostics(): void {
 		const orderedFileSet = this.pendingDiagnostics.getOrderedFileSet();
 
 		if (this.pendingGetErr) {

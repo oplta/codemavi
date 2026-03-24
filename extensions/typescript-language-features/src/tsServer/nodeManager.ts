@@ -56,7 +56,7 @@ export class NodeVersionManager extends Disposable {
 		}
 	}
 
-	private readonly _onDidPickNewVersion = this._register(new vscode.EventEmitter<codemavi>());
+	private readonly _onDidPickNewVersion = this._register(new vscode.EventEmitter<void>());
 	public readonly onDidPickNewVersion = this._onDidPickNewVersion.event;
 
 	public get currentVersion(): string | undefined {
@@ -119,14 +119,14 @@ export class NodeVersionManager extends Disposable {
 		return version;
 	}
 
-	private async promptAndSetWorkspaceNode(): Promise<codemavi> {
+	private async promptAndSetWorkspaceNode(): Promise<void> {
 		const version = await this.promptUseWorkspaceNode();
 		if (version !== undefined) {
 			this.updateActiveVersion(version);
 		}
 	}
 
-	private updateActiveVersion(pickedVersion: string | undefined): codemavi {
+	private updateActiveVersion(pickedVersion: string | undefined): void {
 		const oldVersion = this.currentVersion;
 		this._currentVersion = pickedVersion;
 		if (oldVersion !== pickedVersion) {

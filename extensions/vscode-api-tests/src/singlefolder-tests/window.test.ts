@@ -817,9 +817,9 @@ suite('vscode API - window', () => {
 	test('showQuickPick, select first two', async function () {
 		// const label = 'showQuickPick, select first two';
 		// let i = 0;
-		const resolves: ((value: string) => codemavi)[] = [];
-		let done: () => codemavi;
-		const unexpected = new Promise<codemavi>((resolve, reject) => {
+		const resolves: ((value: string) => void)[] = [];
+		let done: () => void;
+		const unexpected = new Promise<void>((resolve, reject) => {
 			done = () => resolve();
 			resolves.push(reject);
 		});
@@ -860,7 +860,7 @@ suite('vscode API - window', () => {
 		], {
 			canPickMany: true
 		});
-		await new Promise<codemavi>(resolve => setTimeout(() => resolve(), 100));
+		await new Promise<void>(resolve => setTimeout(() => resolve(), 100));
 		await commands.executeCommand('workbench.action.acceptSelectedQuickOpenItem');
 		if (await Promise.race([picks, new Promise<boolean>(resolve => setTimeout(() => resolve(false), 100))]) === false) {
 			await commands.executeCommand('workbench.action.acceptSelectedQuickOpenItem');
@@ -978,9 +978,9 @@ suite('vscode API - window', () => {
 	});
 
 	function createQuickPickTracker<T extends string | QuickPickItem>() {
-		const resolves: ((value: T) => codemavi)[] = [];
-		let done: () => codemavi;
-		const unexpected = new Promise<codemavi>((resolve, reject) => {
+		const resolves: ((value: T) => void)[] = [];
+		let done: () => void;
+		const unexpected = new Promise<void>((resolve, reject) => {
 			done = () => resolve();
 			resolves.push(reject);
 		});
@@ -999,7 +999,7 @@ suite('vscode API - window', () => {
 		return workspace.openTextDocument(join(workspace.rootPath || '', './far.js')).then(doc => window.showTextDocument(doc)).then(editor => {
 
 
-			return new Promise<codemavi>((resolve, _reject) => {
+			return new Promise<void>((resolve, _reject) => {
 
 				const subscription = window.onDidChangeTextEditorSelection(e => {
 					assert.ok(e.textEditor === editor);

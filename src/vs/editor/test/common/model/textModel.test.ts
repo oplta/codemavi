@@ -15,7 +15,7 @@ import { TextModel, createTextBuffer } from '../../../common/model/textModel.js'
 import { createModelServices, createTextModel } from '../testTextModel.js';
 import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
 
-function testGuessIndentation(defaultInsertSpaces: boolean, defaultTabSize: number, expectedInsertSpaces: boolean, expectedTabSize: number, text: string[], msg?: string): codemavi {
+function testGuessIndentation(defaultInsertSpaces: boolean, defaultTabSize: number, expectedInsertSpaces: boolean, expectedTabSize: number, text: string[], msg?: string): void {
 	const m = createTextModel(
 		text.join('\n'),
 		undefined,
@@ -32,7 +32,7 @@ function testGuessIndentation(defaultInsertSpaces: boolean, defaultTabSize: numb
 	assert.strictEqual(r.tabSize, expectedTabSize, msg);
 }
 
-function assertGuess(expectedInsertSpaces: boolean | undefined, expectedTabSize: number | undefined | [number], text: string[], msg?: string): codemavi {
+function assertGuess(expectedInsertSpaces: boolean | undefined, expectedTabSize: number | undefined | [number], text: string[], msg?: string): void {
 	if (typeof expectedInsertSpaces === 'undefined') {
 		// cannot guess insertSpaces
 		if (typeof expectedTabSize === 'undefined') {
@@ -82,7 +82,7 @@ suite('TextModelData.fromString', () => {
 		isBasicASCII: boolean;
 	}
 
-	function testTextModelDataFromString(text: string, expected: ITextBufferData): codemavi {
+	function testTextModelDataFromString(text: string, expected: ITextBufferData): void {
 		const { textBuffer, disposable } = createTextBuffer(text, TextModel.DEFAULT_CREATION_OPTIONS.defaultEOL);
 		const actual: ITextBufferData = {
 			EOL: textBuffer.getEOL(),
@@ -174,7 +174,7 @@ suite('Editor Model - TextModel', () => {
 
 	test('TextModel does not use events internally', () => {
 		// Make sure that all model parts receive text model events explicitly
-		// to acodemavi that by any chance an outside listener receives events before
+		// to avoid that by any chance an outside listener receives events before
 		// the parts and thus are able to access the text model in an inconsistent state.
 		//
 		// We simply check that there are no listeners attached to text model

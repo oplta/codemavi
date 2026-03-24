@@ -92,7 +92,7 @@ export interface IExtensionFeaturesManagementService {
 
 	readonly onDidChangeEnablement: Event<{ readonly extension: ExtensionIdentifier; readonly featureId: string; readonly enabled: boolean }>;
 	isEnabled(extension: ExtensionIdentifier, featureId: string): boolean;
-	setEnablement(extension: ExtensionIdentifier, featureId: string, enabled: boolean): codemavi;
+	setEnablement(extension: ExtensionIdentifier, featureId: string, enabled: boolean): void;
 	getEnablementData(featureId: string): { readonly extension: ExtensionIdentifier; readonly enabled: boolean }[];
 
 	getAccess(extension: ExtensionIdentifier, featureId: string, justification?: string): Promise<boolean>;
@@ -100,7 +100,7 @@ export interface IExtensionFeaturesManagementService {
 	readonly onDidChangeAccessData: Event<{ readonly extension: ExtensionIdentifier; readonly featureId: string; readonly accessData: IExtensionFeatureAccessData }>;
 	getAllAccessDataForExtension(extension: ExtensionIdentifier): Map<string, IExtensionFeatureAccessData>;
 	getAccessData(extension: ExtensionIdentifier, featureId: string): IExtensionFeatureAccessData | undefined;
-	setStatus(extension: ExtensionIdentifier, featureId: string, status: { readonly severity: Severity; readonly message: string } | undefined): codemavi;
+	setStatus(extension: ExtensionIdentifier, featureId: string, status: { readonly severity: Severity; readonly message: string } | undefined): void;
 }
 
 class ExtensionFeaturesRegistry implements IExtensionFeaturesRegistry {

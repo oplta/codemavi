@@ -23,7 +23,7 @@ const require = createRequire(import.meta.url);
 
 class NodeModuleRequireInterceptor extends RequireInterceptor {
 
-	protected _installInterceptor(): codemavi {
+	protected _installInterceptor(): void {
 		const that = this;
 		const node_module = require('module');
 		const originalLoad = node_module._load;
@@ -73,7 +73,7 @@ export class ExtHostExtensionService extends AbstractExtHostExtensionService {
 
 	readonly extensionRuntime = ExtensionRuntime.Node;
 
-	protected async _beforeAlmostReadyToRunExtensions(): Promise<codemavi> {
+	protected async _beforeAlmostReadyToRunExtensions(): Promise<void> {
 		// make sure console.log calls make it to the render
 		this._instaService.createInstance(ExtHostConsoleForwarder);
 
@@ -133,7 +133,7 @@ export class ExtHostExtensionService extends AbstractExtHostExtensionService {
 		return r;
 	}
 
-	public async $setRemoteEnvironment(env: { [key: string]: string | null }): Promise<codemavi> {
+	public async $setRemoteEnvironment(env: { [key: string]: string | null }): Promise<void> {
 		if (!this._initData.remote.isRemote) {
 			return;
 		}

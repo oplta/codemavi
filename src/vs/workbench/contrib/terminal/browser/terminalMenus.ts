@@ -34,7 +34,7 @@ export const enum TerminalMenuBarGroup {
 	Configure = '7_configure'
 }
 
-export function setupTerminalMenus(): codemavi {
+export function setupTerminalMenus(): void {
 	MenuRegistry.appendMenuItems(
 		[
 			{

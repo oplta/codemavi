@@ -28,7 +28,7 @@ export class NativeWorkingCopyBackupService extends WorkingCopyBackupService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Lifecycle: ensure to prolong the shutdown for as long
 		// as pending backup operations have not finished yet.

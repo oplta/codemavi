@@ -129,7 +129,7 @@ const sanitizerOptions: DOMPurify.Config = {
 	],
 };
 
-export const activate: ActivationFunction<codemavi> = (ctx) => {
+export const activate: ActivationFunction<void> = (ctx) => {
 	const markdownIt: MarkdownIt = new MarkdownIt({
 		html: true,
 		linkify: true,
@@ -341,7 +341,7 @@ export const activate: ActivationFunction<codemavi> = (ctx) => {
 					: DOMPurify.sanitize(unsanitizedRenderedMarkdown, sanitizerOptions)) as string;
 			}
 		},
-		extendMarkdownIt: (f: (md: typeof markdownIt) => codemavi) => {
+		extendMarkdownIt: (f: (md: typeof markdownIt) => void) => {
 			try {
 				f(markdownIt);
 			} catch (err) {
@@ -352,7 +352,7 @@ export const activate: ActivationFunction<codemavi> = (ctx) => {
 };
 
 
-function addNamedHeaderRendering(md: InstanceType<typeof MarkdownIt>): codemavi {
+function addNamedHeaderRendering(md: InstanceType<typeof MarkdownIt>): void {
 	const slugCounter = new Map<string, number>();
 
 	const originalHeaderOpen = md.renderer.rules.heading_open;
@@ -384,7 +384,7 @@ function addNamedHeaderRendering(md: InstanceType<typeof MarkdownIt>): codemavi 
 	};
 }
 
-function addLinkRenderer(md: MarkdownIt): codemavi {
+function addLinkRenderer(md: MarkdownIt): void {
 	const original = md.renderer.rules.link_open;
 
 	md.renderer.rules.link_open = (tokens: MarkdownItToken[], idx: number, options, env, self) => {

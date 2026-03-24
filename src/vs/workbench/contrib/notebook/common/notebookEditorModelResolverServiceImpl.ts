@@ -49,7 +49,7 @@ class NotebookModelReferenceCollection extends ReferenceCollection<Promise<IReso
 		super();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._onDidSaveNotebook.dispose();
 		this._onDidChangeDirty.dispose();
@@ -121,7 +121,7 @@ class NotebookModelReferenceCollection extends ReferenceCollection<Promise<IReso
 		return result;
 	}
 
-	protected destroyReferencedObject(key: string, object: Promise<IResolvedNotebookEditorModel>): codemavi {
+	protected destroyReferencedObject(key: string, object: Promise<IResolvedNotebookEditorModel>): void {
 		this.modelsToDispose.add(key);
 
 		(async () => {

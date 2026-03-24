@@ -18,11 +18,11 @@ suite('Viewlets', () => {
 			super('id', null!, null!, null!, null!, null!, null!, null!);
 		}
 
-		override layout(dimension: any): codemavi {
+		override layout(dimension: any): void {
 			throw new Error('Method not implemented.');
 		}
 
-		override setBoundarySashes(sashes: IBoundarySashes): codemavi {
+		override setBoundarySashes(sashes: IBoundarySashes): void {
 			throw new Error('Method not implemented.');
 		}
 

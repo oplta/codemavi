@@ -857,14 +857,14 @@ suite('PromptsSync', () => {
 		content: string,
 		client: UserDataSyncClient,
 		profile?: IUserDataProfile,
-	): Promise<codemavi> {
+	): Promise<void> {
 		const fileService = client.instantiationService.get(IFileService);
 		const userDataProfilesService = client.instantiationService.get(IUserDataProfilesService);
 		const promptsResource = joinPath((profile ?? userDataProfilesService.defaultProfile).promptsHome, name);
 		await fileService.writeFile(promptsResource, VSBuffer.fromString(content));
 	}
 
-	async function removePrompt(name: string, client: UserDataSyncClient): Promise<codemavi> {
+	async function removePrompt(name: string, client: UserDataSyncClient): Promise<void> {
 		const fileService = client.instantiationService.get(IFileService);
 		const userDataProfilesService = client.instantiationService.get(IUserDataProfilesService);
 		const promptsResource = joinPath(userDataProfilesService.defaultProfile.promptsHome, name);

@@ -643,7 +643,7 @@ function getExecuteShellCommandFunction(
 // 	// 	return undefined;
 // 	// }
 // 	if (typeof cacheKey === 'string') {
-// 		// Prepend the spec name to the cacheKey to acodemavi collisions between specs.
+// 		// Prepend the spec name to the cacheKey to avoid collisions between specs.
 // 		return `${tokenArray[0]}:${cacheKey}`;
 // 	}
 // 	return undefined;

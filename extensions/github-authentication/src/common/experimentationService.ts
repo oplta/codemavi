@@ -78,11 +78,11 @@ export class ExperimentationTelemetry implements IExperimentationTelemetry {
 		});
 	}
 
-	setSharedProperty(name: string, value: string): codemavi {
+	setSharedProperty(name: string, value: string): void {
 		this.sharedProperties[name] = value;
 	}
 
-	postEvent(eventName: string, props: Map<string, string>): codemavi {
+	postEvent(eventName: string, props: Map<string, string>): void {
 		const event: Record<string, string> = {};
 		for (const [key, value] of props) {
 			event[key] = value;

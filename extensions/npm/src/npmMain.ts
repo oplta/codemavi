@@ -23,7 +23,7 @@ function invalidateScriptCaches() {
 	}
 }
 
-export async function activate(context: vscode.ExtensionContext): Promise<codemavi> {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
 	configureHttpRequest();
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 		if (e.affectsConfiguration('http.proxy') || e.affectsConfiguration('http.proxyStrictSSL')) {
@@ -169,5 +169,5 @@ function configureHttpRequest() {
 	httpRequest.configure(httpSettings.get<string>('proxy', ''), httpSettings.get<boolean>('proxyStrictSSL', true));
 }
 
-export function deactivate(): codemavi {
+export function deactivate(): void {
 }

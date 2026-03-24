@@ -54,7 +54,7 @@ class InlineProgressWidget extends Disposable implements IContentWidget {
 		this.editor.layoutContentWidget(this);
 	}
 
-	private create(title: string): codemavi {
+	private create(title: string): void {
 		this.domNode = dom.$('.inline-progress-widget');
 		this.domNode.role = 'button';
 		this.domNode.title = title;
@@ -97,14 +97,14 @@ class InlineProgressWidget extends Disposable implements IContentWidget {
 		};
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this.editor.removeContentWidget(this);
 	}
 }
 
 interface InlineProgressDelegate {
-	cancel(): codemavi;
+	cancel(): void;
 }
 
 export class InlineProgressManager extends Disposable {
@@ -129,7 +129,7 @@ export class InlineProgressManager extends Disposable {
 		this._currentDecorations = _editor.createDecorationsCollection();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._currentDecorations.clear();
 	}

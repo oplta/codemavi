@@ -31,7 +31,7 @@ export class ResourcePool<T extends IDisposable> extends Disposable {
 		return item;
 	}
 
-	release(item: T): codemavi {
+	release(item: T): void {
 		this._inUse.delete(item);
 		this.pool.push(item);
 	}

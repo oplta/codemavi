@@ -41,7 +41,7 @@ export interface IGotoSymbolQuickAccessProviderOptions extends IEditorNavigation
 	 * this particular showing of the quick access.
 	 * @param item The item that was accepted.
 	 */
-	readonly handleAccept?: (item: IQuickPickItem) => codemavi;
+	readonly handleAccept?: (item: IQuickPickItem) => void;
 }
 
 export abstract class AbstractGotoSymbolQuickAccessProvider extends AbstractEditorNavigationQuickAccessProvider {
@@ -110,7 +110,7 @@ export abstract class AbstractGotoSymbolQuickAccessProvider extends AbstractEdit
 		return disposables;
 	}
 
-	private provideLabelPick(picker: IQuickPick<IGotoSymbolQuickPickItem, { useSeparators: true }>, label: string): codemavi {
+	private provideLabelPick(picker: IQuickPick<IGotoSymbolQuickPickItem, { useSeparators: true }>, label: string): void {
 		picker.items = [{ label, index: 0, kind: SymbolKind.String }];
 		picker.ariaLabel = label;
 	}
@@ -360,7 +360,7 @@ export abstract class AbstractGotoSymbolQuickAccessProvider extends AbstractEdit
 			let lastSeparator: IQuickPickSeparator | undefined = undefined;
 			let lastSymbolKindCounter = 0;
 
-			function updateLastSeparatorLabel(): codemavi {
+			function updateLastSeparatorLabel(): void {
 				if (lastSeparator && typeof lastSymbolKind === 'number' && lastSymbolKindCounter > 0) {
 					lastSeparator.label = format(NLS_SYMBOL_KIND_CACHE[lastSymbolKind] || FALLBACK_NLS_SYMBOL_KIND, lastSymbolKindCounter);
 				}

@@ -33,5 +33,5 @@ export interface IReplaceService {
 	 * Update the replace preview for the given file.
 	 * If `override` is `true`, then replace preview is constructed from source model
 	 */
-	updateReplacePreview(file: ISearchTreeFileMatch, override?: boolean): Promise<codemavi>;
+	updateReplacePreview(file: ISearchTreeFileMatch, override?: boolean): Promise<void>;
 }

@@ -28,7 +28,7 @@ export interface SymbolTree {
 	 *
 	 * @param input A symbol tree input object
 	 */
-	setInput(input: SymbolTreeInput<unknown>): codemavi;
+	setInput(input: SymbolTreeInput<unknown>): void;
 
 	/**
 	 * Get the contents of the references viewlet.
@@ -117,7 +117,7 @@ export interface SymbolTreeModel<T> {
 	 * Optional dispose function which is invoked when this model is
 	 * needed anymore
 	 */
-	dispose?(): codemavi;
+	dispose?(): void;
 }
 
 /**

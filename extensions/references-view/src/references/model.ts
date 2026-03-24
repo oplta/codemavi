@@ -41,7 +41,7 @@ export class ReferencesTreeInput implements SymbolTreeInput<FileItem | Reference
 			navigation: model,
 			highlights: model,
 			dnd: model,
-			dispose(): codemavi {
+			dispose(): void {
 				provider.dispose();
 			}
 		};
@@ -190,7 +190,7 @@ export class ReferencesModel implements SymbolItemNavigation<FileItem | Referenc
 		return this._move(item, false) ?? item;
 	}
 
-	private _move(item: FileItem | ReferenceItem, fwd: boolean): ReferenceItem | codemavi {
+	private _move(item: FileItem | ReferenceItem, fwd: boolean): ReferenceItem | void {
 
 		const delta = fwd ? +1 : -1;
 
@@ -267,7 +267,7 @@ class ReferencesTreeDataProvider implements vscode.TreeDataProvider<FileItem | R
 		this._listener = _model.onDidChangeTreeData(() => this._onDidChange.fire(undefined));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 		this._listener.dispose();
 	}
@@ -333,7 +333,7 @@ export class FileItem {
 
 	// --- adapter
 
-	remove(): codemavi {
+	remove(): void {
 		this.model.remove(this);
 	}
 
@@ -373,7 +373,7 @@ export class ReferenceItem {
 
 	// --- adapter
 
-	remove(): codemavi {
+	remove(): void {
 		this.file.model.remove(this);
 	}
 

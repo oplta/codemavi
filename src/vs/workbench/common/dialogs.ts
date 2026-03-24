@@ -11,7 +11,7 @@ import { IDialogArgs, IDialogResult } from '../../platform/dialogs/common/dialog
 export interface IDialogViewItem {
 	readonly args: IDialogArgs;
 
-	close(result?: IDialogResult | Error): codemavi;
+	close(result?: IDialogResult | Error): void;
 }
 
 export interface IDialogHandle {
@@ -21,8 +21,8 @@ export interface IDialogHandle {
 
 export interface IDialogsModel {
 
-	readonly onWillShowDialog: Event<codemavi>;
-	readonly onDidShowDialog: Event<codemavi>;
+	readonly onWillShowDialog: Event<void>;
+	readonly onDidShowDialog: Event<void>;
 
 	readonly dialogs: IDialogViewItem[];
 
@@ -33,10 +33,10 @@ export class DialogsModel extends Disposable implements IDialogsModel {
 
 	readonly dialogs: IDialogViewItem[] = [];
 
-	private readonly _onWillShowDialog = this._register(new Emitter<codemavi>());
+	private readonly _onWillShowDialog = this._register(new Emitter<void>());
 	readonly onWillShowDialog = this._onWillShowDialog.event;
 
-	private readonly _onDidShowDialog = this._register(new Emitter<codemavi>());
+	private readonly _onDidShowDialog = this._register(new Emitter<void>());
 	readonly onDidShowDialog = this._onDidShowDialog.event;
 
 	show(dialog: IDialogArgs): IDialogHandle {

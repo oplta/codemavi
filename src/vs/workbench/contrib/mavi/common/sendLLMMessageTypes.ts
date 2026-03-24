@@ -5,7 +5,7 @@
 
 import { InternalToolInfo } from './prompt/prompts.js'
 import { ToolName, ToolParamName } from './toolsServiceTypes.js'
-import { ChatMode, ModelSelection, ModelSelectionOptions, OverridesOfModel, ProviderName, RefreshableProviderName, SettingsOfProvider } from './codemaviSettingsTypes.js'
+import { ChatMode, ModelSelection, ModelSelectionOptions, OverridesOfModel, ProviderName, RefreshableProviderName, SettingsOfProvider } from './maviSettingsTypes.js'
 
 
 export const errorDetails = (fullError: Error | null): string | null => {
@@ -91,11 +91,11 @@ export type RawToolCallObj = {
 
 export type AnthropicReasoning = ({ type: 'thinking'; thinking: any; signature: string; } | { type: 'redacted_thinking', data: any })
 
-export type OnText = (p: { fullText: string; fullReasoning: string; toolCall?: RawToolCallObj }) => codemavi
-export type OnFinalMessage = (p: { fullText: string; fullReasoning: string; toolCall?: RawToolCallObj; anthropicReasoning: AnthropicReasoning[] | null }) => codemavi // id is tool_use_id
-export type OnError = (p: { message: string; fullError: Error | null }) => codemavi
-export type OnAbort = () => codemavi
-export type AbortRef = { current: (() => codemavi) | null }
+export type OnText = (p: { fullText: string; fullReasoning: string; toolCall?: RawToolCallObj }) => void
+export type OnFinalMessage = (p: { fullText: string; fullReasoning: string; toolCall?: RawToolCallObj; anthropicReasoning: AnthropicReasoning[] | null }) => void // id is tool_use_id
+export type OnError = (p: { message: string; fullError: Error | null }) => void
+export type OnAbort = () => void
+export type AbortRef = { current: (() => void) | null }
 
 
 // service types
@@ -193,15 +193,15 @@ export type OpenaiCompatibleModelResponse = {
 export type ModelListParams<ModelResponse> = {
 	providerName: ProviderName;
 	settingsOfProvider: SettingsOfProvider;
-	onSuccess: (param: { models: ModelResponse[] }) => codemavi;
-	onError: (param: { error: string }) => codemavi;
+	onSuccess: (param: { models: ModelResponse[] }) => void;
+	onError: (param: { error: string }) => void;
 }
 
 // params to the service
 export type ServiceModelListParams<modelResponse> = {
 	providerName: RefreshableProviderName;
-	onSuccess: (param: { models: modelResponse[] }) => codemavi;
-	onError: (param: { error: any }) => codemavi;
+	onSuccess: (param: { models: modelResponse[] }) => void;
+	onError: (param: { error: any }) => void;
 }
 
 type BlockedMainModelListParams = 'onSuccess' | 'onError'

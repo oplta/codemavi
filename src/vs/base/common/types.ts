@@ -205,7 +205,7 @@ export function assertOneOf<TType, TSubtype extends TType>(
 /**
  * Compile-time type check of a variable.
  */
-export function typeCheck<T = never>(_thing: NoInfer<T>): codemavi { }
+export function typeCheck<T = never>(_thing: NoInfer<T>): void { }
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -242,14 +242,14 @@ export function areFunctions(...objects: unknown[]): boolean {
 
 export type TypeConstraint = string | Function;
 
-export function validateConstraints(args: unknown[], constraints: Array<TypeConstraint | undefined>): codemavi {
+export function validateConstraints(args: unknown[], constraints: Array<TypeConstraint | undefined>): void {
 	const len = Math.min(args.length, constraints.length);
 	for (let i = 0; i < len; i++) {
 		validateConstraint(args[i], constraints[i]);
 	}
 }
 
-export function validateConstraint(arg: unknown, constraint: TypeConstraint | undefined): codemavi {
+export function validateConstraint(arg: unknown, constraint: TypeConstraint | undefined): void {
 
 	if (isString(constraint)) {
 		if (typeof arg !== constraint) {

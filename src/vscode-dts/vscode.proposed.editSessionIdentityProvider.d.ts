@@ -66,6 +66,6 @@ declare module 'vscode' {
 		 *
 		 * @param thenable A thenable that delays saving.
 		 */
-		waitUntil(thenable: Thenable<any>): codemavi;
+		waitUntil(thenable: Thenable<any>): void;
 	}
 }

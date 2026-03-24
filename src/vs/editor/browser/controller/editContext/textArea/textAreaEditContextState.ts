@@ -12,11 +12,11 @@ export const _debugComposition = false;
 
 export interface ITextAreaWrapper {
 	getValue(): string;
-	setValue(reason: string, value: string): codemavi;
+	setValue(reason: string, value: string): void;
 
 	getSelectionStart(): number;
 	getSelectionEnd(): number;
-	setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): codemavi;
+	setSelectionRange(reason: string, selectionStart: number, selectionEnd: number): void;
 }
 
 export interface ITypeData {
@@ -77,7 +77,7 @@ export class TextAreaState {
 		return selectionsEqual && valuesEqual;
 	}
 
-	public writeToTextArea(reason: string, textArea: ITextAreaWrapper, select: boolean): codemavi {
+	public writeToTextArea(reason: string, textArea: ITextAreaWrapper, select: boolean): void {
 		if (_debugComposition) {
 			console.log(`writeToTextArea ${reason}: ${this.toString()}`);
 		}

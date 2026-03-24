@@ -63,7 +63,7 @@ class QuickDiffModelReferenceCollection extends ReferenceCollection<QuickDiffMod
 		return this._instantiationService.createInstance(QuickDiffModel, textFileModel, options);
 	}
 
-	protected override destroyReferencedObject(_key: string, object: QuickDiffModel): codemavi {
+	protected override destroyReferencedObject(_key: string, object: QuickDiffModel): void {
 		object.dispose();
 	}
 }
@@ -105,7 +105,7 @@ export class QuickDiffModel extends Disposable {
 	private _disposed = false;
 	private _quickDiffs: QuickDiff[] = [];
 	private _quickDiffsPromise?: Promise<QuickDiff[]>;
-	private _diffDelayer = new ThrottledDelayer<codemavi>(200);
+	private _diffDelayer = new ThrottledDelayer<void>(200);
 
 	private readonly _onDidChange = new Emitter<{ changes: QuickDiffChange[]; diff: ISplice<QuickDiffChange>[] }>();
 	readonly onDidChange: Event<{ changes: QuickDiffChange[]; diff: ISplice<QuickDiffChange>[] }> = this._onDidChange.event;
@@ -199,7 +199,7 @@ export class QuickDiffModel extends Disposable {
 			} : undefined;
 	}
 
-	private onDidAddRepository(repository: ISCMRepository): codemavi {
+	private onDidAddRepository(repository: ISCMRepository): void {
 		const disposables = new DisposableStore();
 
 		disposables.add(repository.provider.onDidChangeResources(this.triggerDiff, this));
@@ -212,7 +212,7 @@ export class QuickDiffModel extends Disposable {
 		this.triggerDiff();
 	}
 
-	private triggerDiff(): codemavi {
+	private triggerDiff(): void {
 		if (!this._diffDelayer) {
 			return;
 		}
@@ -231,7 +231,7 @@ export class QuickDiffModel extends Disposable {
 			.catch(err => onUnexpectedError(err));
 	}
 
-	private setChanges(changes: QuickDiffChange[], mapChanges: Map<string, number[]>): codemavi {
+	private setChanges(changes: QuickDiffChange[], mapChanges: Map<string, number[]>): void {
 		const diff = sortedDiff(this.changes, changes, (a, b) => compareChanges(a.change, b.change));
 		this._changes = changes;
 		this._quickDiffChanges = mapChanges;
@@ -435,7 +435,7 @@ export class QuickDiffModel extends Disposable {
 		return this.changes.length - 1;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._disposed = true;
 
 		this._quickDiffs = [];

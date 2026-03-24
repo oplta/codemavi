@@ -40,35 +40,35 @@ export interface IConfigurationRegistry {
 	/**
 	 * Register multiple configurations to the registry.
 	 */
-	registerConfigurations(configurations: IConfigurationNode[], validate?: boolean): codemavi;
+	registerConfigurations(configurations: IConfigurationNode[], validate?: boolean): void;
 
 	/**
 	 * Deregister multiple configurations from the registry.
 	 */
-	deregisterConfigurations(configurations: IConfigurationNode[]): codemavi;
+	deregisterConfigurations(configurations: IConfigurationNode[]): void;
 
 	/**
 	 * update the configuration registry by
 	 * 	- registering the configurations to add
 	 * 	- dereigstering the configurations to remove
 	 */
-	updateConfigurations(configurations: { add: IConfigurationNode[]; remove: IConfigurationNode[] }): codemavi;
+	updateConfigurations(configurations: { add: IConfigurationNode[]; remove: IConfigurationNode[] }): void;
 
 	/**
 	 * Register multiple default configurations to the registry.
 	 */
-	registerDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): codemavi;
+	registerDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): void;
 
 	/**
 	 * Deregister multiple default configurations from the registry.
 	 */
-	deregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): codemavi;
+	deregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): void;
 
 	/**
 	 * Bulk update of the configuration registry (default and configurations, remove and add)
 	 * @param delta
 	 */
-	deltaConfiguration(delta: IConfigurationDelta): codemavi;
+	deltaConfiguration(delta: IConfigurationDelta): void;
 
 	/**
 	 * Return the registered default configurations
@@ -84,13 +84,13 @@ export interface IConfigurationRegistry {
 	 * Signal that the schema of a configuration setting has changes. It is currently only supported to change enumeration values.
 	 * Property or default value changes are not allowed.
 	 */
-	notifyConfigurationSchemaUpdated(...configurations: IConfigurationNode[]): codemavi;
+	notifyConfigurationSchemaUpdated(...configurations: IConfigurationNode[]): void;
 
 	/**
 	 * Event that fires whenever a configuration has been
 	 * registered.
 	 */
-	readonly onDidSchemaChange: Event<codemavi>;
+	readonly onDidSchemaChange: Event<void>;
 
 	/**
 	 * Event that fires whenever a configuration has been
@@ -121,7 +121,7 @@ export interface IConfigurationRegistry {
 	/**
 	 * Register the identifiers for editor configurations
 	 */
-	registerOverrideIdentifiers(identifiers: string[]): codemavi;
+	registerOverrideIdentifiers(identifiers: string[]): void;
 }
 
 export const enum ConfigurationScope {
@@ -284,8 +284,8 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 	private readonly resourceLanguageSettingsSchema: IJSONSchema;
 	private readonly overrideIdentifiers = new Set<string>();
 
-	private readonly _onDidSchemaChange = new Emitter<codemavi>();
-	readonly onDidSchemaChange: Event<codemavi> = this._onDidSchemaChange.event;
+	private readonly _onDidSchemaChange = new Emitter<void>();
+	readonly onDidSchemaChange: Event<void> = this._onDidSchemaChange.event;
 
 	private readonly _onDidUpdateConfiguration = new Emitter<{ properties: ReadonlySet<string>; defaultsOverrides?: boolean }>();
 	readonly onDidUpdateConfiguration = this._onDidUpdateConfiguration.event;
@@ -318,7 +318,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		return configuration;
 	}
 
-	public registerConfigurations(configurations: IConfigurationNode[], validate: boolean = true): codemavi {
+	public registerConfigurations(configurations: IConfigurationNode[], validate: boolean = true): void {
 		const properties = new Set<string>();
 		this.doRegisterConfigurations(configurations, validate, properties);
 
@@ -327,7 +327,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this._onDidUpdateConfiguration.fire({ properties });
 	}
 
-	public deregisterConfigurations(configurations: IConfigurationNode[]): codemavi {
+	public deregisterConfigurations(configurations: IConfigurationNode[]): void {
 		const properties = new Set<string>();
 		this.doDeregisterConfigurations(configurations, properties);
 
@@ -336,7 +336,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this._onDidUpdateConfiguration.fire({ properties });
 	}
 
-	public updateConfigurations({ add, remove }: { add: IConfigurationNode[]; remove: IConfigurationNode[] }): codemavi {
+	public updateConfigurations({ add, remove }: { add: IConfigurationNode[]; remove: IConfigurationNode[] }): void {
 		const properties = new Set<string>();
 		this.doDeregisterConfigurations(remove, properties);
 		this.doRegisterConfigurations(add, false, properties);
@@ -346,7 +346,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this._onDidUpdateConfiguration.fire({ properties });
 	}
 
-	public registerDefaultConfigurations(configurationDefaults: IConfigurationDefaults[]): codemavi {
+	public registerDefaultConfigurations(configurationDefaults: IConfigurationDefaults[]): void {
 		const properties = new Set<string>();
 		this.doRegisterDefaultConfigurations(configurationDefaults, properties);
 		this._onDidSchemaChange.fire();
@@ -402,14 +402,14 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this.doRegisterOverrideIdentifiers(overrideIdentifiers);
 	}
 
-	public deregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): codemavi {
+	public deregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[]): void {
 		const properties = new Set<string>();
 		this.doDeregisterDefaultConfigurations(defaultConfigurations, properties);
 		this._onDidSchemaChange.fire();
 		this._onDidUpdateConfiguration.fire({ properties, defaultsOverrides: true });
 	}
 
-	private doDeregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[], bucket: Set<string>): codemavi {
+	private doDeregisterDefaultConfigurations(defaultConfigurations: IConfigurationDefaults[], bucket: Set<string>): void {
 		for (const defaultConfiguration of defaultConfigurations) {
 			const index = this.registeredConfigurationDefaults.indexOf(defaultConfiguration);
 			if (index !== -1) {
@@ -466,7 +466,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this.updateOverridePropertyPatternKey();
 	}
 
-	private updateDefaultOverrideProperty(key: string, newDefaultOverride: IConfigurationDefaultOverrideValue, source: IExtensionInfo | undefined): codemavi {
+	private updateDefaultOverrideProperty(key: string, newDefaultOverride: IConfigurationDefaultOverrideValue, source: IExtensionInfo | undefined): void {
 		const property: IRegisteredConfigurationPropertySchema = {
 			type: 'object',
 			default: newDefaultOverride.value,
@@ -553,7 +553,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		return { value, source };
 	}
 
-	public deltaConfiguration(delta: IConfigurationDelta): codemavi {
+	public deltaConfiguration(delta: IConfigurationDelta): void {
 		// defaults: remove
 		let defaultsOverrides = false;
 		const properties = new Set<string>();
@@ -582,7 +582,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this._onDidSchemaChange.fire();
 	}
 
-	public registerOverrideIdentifiers(overrideIdentifiers: string[]): codemavi {
+	public registerOverrideIdentifiers(overrideIdentifiers: string[]): void {
 		this.doRegisterOverrideIdentifiers(overrideIdentifiers);
 		this._onDidSchemaChange.fire();
 	}
@@ -594,7 +594,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this.updateOverridePropertyPatternKey();
 	}
 
-	private doRegisterConfigurations(configurations: IConfigurationNode[], validate: boolean, bucket: Set<string>): codemavi {
+	private doRegisterConfigurations(configurations: IConfigurationNode[], validate: boolean, bucket: Set<string>): void {
 
 		configurations.forEach(configuration => {
 
@@ -605,7 +605,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		});
 	}
 
-	private doDeregisterConfigurations(configurations: IConfigurationNode[], bucket: Set<string>): codemavi {
+	private doDeregisterConfigurations(configurations: IConfigurationNode[], bucket: Set<string>): void {
 
 		const deregisterConfiguration = (configuration: IConfigurationNode) => {
 			if (configuration.properties) {
@@ -630,7 +630,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		}
 	}
 
-	private validateAndRegisterProperties(configuration: IConfigurationNode, validate: boolean = true, extensionInfo: IExtensionInfo | undefined, restrictedProperties: string[] | undefined, scope: ConfigurationScope = ConfigurationScope.WINDOW, bucket: Set<string>): codemavi {
+	private validateAndRegisterProperties(configuration: IConfigurationNode, validate: boolean = true, extensionInfo: IExtensionInfo | undefined, restrictedProperties: string[] | undefined, scope: ConfigurationScope = ConfigurationScope.WINDOW, bucket: Set<string>): void {
 		scope = types.isUndefinedOrNull(configuration.scope) ? scope : configuration.scope;
 		const properties = configuration.properties;
 		if (properties) {
@@ -732,7 +732,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		register(configuration);
 	}
 
-	private updateSchema(key: string, property: IConfigurationPropertySchema): codemavi {
+	private updateSchema(key: string, property: IConfigurationPropertySchema): void {
 		allSettings.properties[key] = property;
 		switch (property.scope) {
 			case ConfigurationScope.APPLICATION:
@@ -760,7 +760,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		}
 	}
 
-	private removeFromSchema(key: string, property: IConfigurationPropertySchema): codemavi {
+	private removeFromSchema(key: string, property: IConfigurationPropertySchema): void {
 		delete allSettings.properties[key];
 		switch (property.scope) {
 			case ConfigurationScope.APPLICATION:
@@ -786,7 +786,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		}
 	}
 
-	private updateOverridePropertyPatternKey(): codemavi {
+	private updateOverridePropertyPatternKey(): void {
 		for (const overrideIdentifier of this.overrideIdentifiers.values()) {
 			const overrideIdentifierProperty = `[${overrideIdentifier}]`;
 			const resourceLanguagePropertiesSchema: IJSONSchema = {
@@ -806,7 +806,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		}
 	}
 
-	private registerOverridePropertyPatternKey(): codemavi {
+	private registerOverridePropertyPatternKey(): void {
 		const resourceLanguagePropertiesSchema: IJSONSchema = {
 			type: 'object',
 			description: nls.localize('overrideSettings.defaultDescription', "Configure editor settings to be overridden for a language."),
@@ -823,7 +823,7 @@ class ConfigurationRegistry implements IConfigurationRegistry {
 		this._onDidSchemaChange.fire();
 	}
 
-	private updatePropertyDefaultValue(key: string, property: IRegisteredConfigurationPropertySchema): codemavi {
+	private updatePropertyDefaultValue(key: string, property: IRegisteredConfigurationPropertySchema): void {
 		const configurationdefaultOverride = this.configurationDefaultsOverrides.get(key)?.configurationDefaultOverrideValue;
 		let defaultValue = undefined;
 		let defaultSource = undefined;

@@ -129,7 +129,7 @@ class FastInt32Array {
 		}
 	}
 
-	set(idx: number, value: number): codemavi {
+	set(idx: number, value: number): void {
 		if (idx < 0) {
 			idx = -idx - 1;
 			if (idx >= this.negativeArr.length) {
@@ -165,7 +165,7 @@ class FastArrayNegativeIndices<T> {
 		}
 	}
 
-	set(idx: number, value: T): codemavi {
+	set(idx: number, value: T): void {
 		if (idx < 0) {
 			idx = -idx - 1;
 			this.negativeArr[idx] = value;

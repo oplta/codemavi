@@ -20,7 +20,7 @@ export class MenuHiddenStatesReset extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IMenuService).resetHiddenStates();
 		accessor.get(ILogService).info('did RESET all menu hidden states');
 	}

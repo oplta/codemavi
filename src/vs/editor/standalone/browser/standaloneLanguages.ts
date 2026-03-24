@@ -29,8 +29,8 @@ import { IMarkerData, IMarkerService } from '../../../platform/markers/common/ma
 /**
  * Register information about a new language.
  */
-export function register(language: ILanguageExtensionPoint): codemavi {
-	// Intentionally using the `ModesRegistry` here to acodemavi
+export function register(language: ILanguageExtensionPoint): void {
+	// Intentionally using the `ModesRegistry` here to avoid
 	// instantiating services too quickly in the standalone editor.
 	ModesRegistry.registerLanguage(language);
 }
@@ -53,7 +53,7 @@ export function getEncodedLanguageId(languageId: string): number {
  * An event emitted when a language is associated for the first time with a text model.
  * @event
  */
-export function onLanguage(languageId: string, callback: () => codemavi): IDisposable {
+export function onLanguage(languageId: string, callback: () => void): IDisposable {
 	return StandaloneServices.withServices(() => {
 		const languageService = StandaloneServices.get(ILanguageService);
 		const disposable = languageService.onDidRequestRichLanguageFeatures((encounteredLanguageId) => {
@@ -73,7 +73,7 @@ export function onLanguage(languageId: string, callback: () => codemavi): IDispo
  * when a language is encountered during the tokenization of another language.
  * @event
  */
-export function onLanguageEncountered(languageId: string, callback: () => codemavi): IDisposable {
+export function onLanguageEncountered(languageId: string, callback: () => void): IDisposable {
 	return StandaloneServices.withServices(() => {
 		const languageService = StandaloneServices.get(ILanguageService);
 		const disposable = languageService.onDidRequestBasicLanguageFeatures((encounteredLanguageId) => {
@@ -113,7 +113,7 @@ export class EncodedTokenizationSupportAdapter implements languages.ITokenizatio
 		this._actual = actual;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		// NOOP
 	}
 
@@ -147,7 +147,7 @@ export class TokenizationSupportAdapter implements languages.ITokenizationSuppor
 	) {
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		// NOOP
 	}
 
@@ -362,7 +362,7 @@ function isThenable<T>(obj: any): obj is Thenable<T> {
  * Change the color map that is used for token colors.
  * Supported formats (hex): #RRGGBB, $RRGGBBAA, #RGB, #RGBA
  */
-export function setColorMap(colorMap: string[] | null): codemavi {
+export function setColorMap(colorMap: string[] | null): void {
 	const standaloneThemeService = StandaloneServices.get(IStandaloneThemeService);
 	if (colorMap) {
 		const result: Color[] = [null!];
@@ -740,7 +740,7 @@ export interface CodeActionProviderMetadata {
 	 * List of code action kinds that a {@link CodeActionProvider} may return.
 	 *
 	 * This list is used to determine if a given `CodeActionProvider` should be invoked or not.
-	 * To acodemavi unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
+	 * To avoid unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
 	 * list of kinds may either be generic, such as `["quickfix", "refactor", "source"]`, or list out every kind provided,
 	 * such as `["quickfix.removeLine", "source.fixAll" ...]`.
 	 */

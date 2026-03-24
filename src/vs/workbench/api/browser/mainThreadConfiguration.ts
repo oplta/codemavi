@@ -41,21 +41,21 @@ export class MainThreadConfiguration implements MainThreadConfigurationShape {
 		return configurationData;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._configurationListener.dispose();
 	}
 
-	$updateConfigurationOption(target: ConfigurationTarget | null, key: string, value: any, overrides: IConfigurationOverrides | undefined, scopeToLanguage: boolean | undefined): Promise<codemavi> {
+	$updateConfigurationOption(target: ConfigurationTarget | null, key: string, value: any, overrides: IConfigurationOverrides | undefined, scopeToLanguage: boolean | undefined): Promise<void> {
 		overrides = { resource: overrides?.resource ? URI.revive(overrides.resource) : undefined, overrideIdentifier: overrides?.overrideIdentifier };
 		return this.writeConfiguration(target, key, value, overrides, scopeToLanguage);
 	}
 
-	$removeConfigurationOption(target: ConfigurationTarget | null, key: string, overrides: IConfigurationOverrides | undefined, scopeToLanguage: boolean | undefined): Promise<codemavi> {
+	$removeConfigurationOption(target: ConfigurationTarget | null, key: string, overrides: IConfigurationOverrides | undefined, scopeToLanguage: boolean | undefined): Promise<void> {
 		overrides = { resource: overrides?.resource ? URI.revive(overrides.resource) : undefined, overrideIdentifier: overrides?.overrideIdentifier };
 		return this.writeConfiguration(target, key, undefined, overrides, scopeToLanguage);
 	}
 
-	private writeConfiguration(target: ConfigurationTarget | null, key: string, value: any, overrides: IConfigurationOverrides, scopeToLanguage: boolean | undefined): Promise<codemavi> {
+	private writeConfiguration(target: ConfigurationTarget | null, key: string, value: any, overrides: IConfigurationOverrides, scopeToLanguage: boolean | undefined): Promise<void> {
 		target = target !== null && target !== undefined ? target : this.deriveConfigurationTarget(key, overrides);
 		const configurationValue = this.configurationService.inspect(key, overrides);
 		switch (target) {
@@ -72,7 +72,7 @@ export class MainThreadConfiguration implements MainThreadConfigurationShape {
 		}
 	}
 
-	private _updateValue(key: string, value: any, configurationTarget: ConfigurationTarget, overriddenValue: any | undefined, overrides: IConfigurationOverrides, scopeToLanguage: boolean | undefined): Promise<codemavi> {
+	private _updateValue(key: string, value: any, configurationTarget: ConfigurationTarget, overriddenValue: any | undefined, overrides: IConfigurationOverrides, scopeToLanguage: boolean | undefined): Promise<void> {
 		overrides = scopeToLanguage === true ? overrides
 			: scopeToLanguage === false ? { resource: overrides.resource }
 				: overrides.overrideIdentifier && overriddenValue !== undefined ? overrides

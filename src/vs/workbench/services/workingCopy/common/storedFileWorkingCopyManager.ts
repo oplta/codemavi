@@ -168,7 +168,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 	//#endregion
 
 	private readonly mapResourceToWorkingCopyListeners = new ResourceMap<IDisposable>();
-	private readonly mapResourceToPendingWorkingCopyResolve = new ResourceMap<Promise<codemavi>>();
+	private readonly mapResourceToPendingWorkingCopyResolve = new ResourceMap<Promise<void>>();
 
 	private readonly workingCopyResolveQueue = this._register(new ResourceQueue());
 
@@ -195,7 +195,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Update working copies from file change events
 		this._register(this.fileService.onDidFilesChange(e => this.onDidFilesChange(e)));
@@ -227,7 +227,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		return false;
 	}
 
-	private async onWillShutdownDesktop(): Promise<codemavi> {
+	private async onWillShutdownDesktop(): Promise<void> {
 		let pendingSavedWorkingCopies: IStoredFileWorkingCopy<M>[];
 
 		// As long as stored file working copies are pending to be saved, we prolong the shutdown
@@ -240,7 +240,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 
 	//#region Resolve from file or file provider changes
 
-	private onDidChangeFileSystemProviderCapabilities(e: IFileSystemProviderCapabilitiesChangeEvent): codemavi {
+	private onDidChangeFileSystemProviderCapabilities(e: IFileSystemProviderCapabilitiesChangeEvent): void {
 
 		// Resolve working copies again for file systems that changed
 		// capabilities to fetch latest metadata (e.g. readonly)
@@ -248,7 +248,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		this.queueWorkingCopyReloads(e.scheme);
 	}
 
-	private onDidChangeFileSystemProviderRegistrations(e: IFileSystemProviderRegistrationEvent): codemavi {
+	private onDidChangeFileSystemProviderRegistrations(e: IFileSystemProviderRegistrationEvent): void {
 		if (!e.added) {
 			return; // only if added
 		}
@@ -261,7 +261,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		this.queueWorkingCopyReloads(e.scheme);
 	}
 
-	private onDidFilesChange(e: FileChangesEvent): codemavi {
+	private onDidFilesChange(e: FileChangesEvent): void {
 
 		// Trigger a resolve for any update or add event that impacts
 		// the working copy. We also consider the added event
@@ -270,9 +270,9 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		this.queueWorkingCopyReloads(e);
 	}
 
-	private queueWorkingCopyReloads(scheme: string): codemavi;
-	private queueWorkingCopyReloads(e: FileChangesEvent): codemavi;
-	private queueWorkingCopyReloads(schemeOrEvent: string | FileChangesEvent): codemavi {
+	private queueWorkingCopyReloads(scheme: string): void;
+	private queueWorkingCopyReloads(e: FileChangesEvent): void;
+	private queueWorkingCopyReloads(schemeOrEvent: string | FileChangesEvent): void {
 		for (const workingCopy of this.workingCopies) {
 			if (workingCopy.isDirty()) {
 				continue; // never reload dirty working copies
@@ -291,7 +291,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		}
 	}
 
-	private queueWorkingCopyReload(workingCopy: IStoredFileWorkingCopy<M>): codemavi {
+	private queueWorkingCopyReload(workingCopy: IStoredFileWorkingCopy<M>): void {
 
 		// Resolves a working copy to update (use a queue to prevent accumulation of
 		// resolve when the resolving actually takes long. At most we only want the
@@ -314,7 +314,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 
 	private readonly mapCorrelationIdToWorkingCopiesToRestore = new Map<number, { source: URI; target: URI; snapshot?: VSBufferReadableStream }[]>();
 
-	private onWillRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
+	private onWillRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
 
 		// Move / Copy: remember working copies to restore after the operation
 		if (e.operation === FileOperation.MOVE || e.operation === FileOperation.COPY) {
@@ -366,7 +366,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		}
 	}
 
-	private onDidFailWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
+	private onDidFailWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
 
 		// Move / Copy: restore dirty flag on working copies to restore that were dirty
 		if ((e.operation === FileOperation.MOVE || e.operation === FileOperation.COPY)) {
@@ -388,7 +388,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		}
 	}
 
-	private onDidRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): codemavi {
+	private onDidRunWorkingCopyFileOperation(e: WorkingCopyFileEvent): void {
 		switch (e.operation) {
 
 			// Create: Revert existing working copies
@@ -438,7 +438,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 
 	//#region Reload & Resolve
 
-	private async reload(workingCopy: IStoredFileWorkingCopy<M>): Promise<codemavi> {
+	private async reload(workingCopy: IStoredFileWorkingCopy<M>): Promise<void> {
 
 		// Await a pending working copy resolve first before proceeding
 		// to ensure that we never resolve a working copy more than once
@@ -478,7 +478,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 			workingCopy = resourceOrWorkingCopy;
 		}
 
-		let workingCopyResolve: Promise<codemavi>;
+		let workingCopyResolve: Promise<void>;
 		let didCreateWorkingCopy = false;
 
 		const resolveOptions: IStoredFileWorkingCopyResolveOptions = {
@@ -544,7 +544,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 			this.registerWorkingCopy(workingCopy);
 		}
 
-		// Store pending resolve to acodemavi race conditions
+		// Store pending resolve to avoid race conditions
 		this.mapResourceToPendingWorkingCopyResolve.set(resource, workingCopyResolve);
 
 		// Make known to manager (if not already known)
@@ -587,7 +587,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		return workingCopy;
 	}
 
-	private joinPendingResolves(resource: URI): Promise<codemavi> | undefined {
+	private joinPendingResolves(resource: URI): Promise<void> | undefined {
 		const pendingWorkingCopyResolve = this.mapResourceToPendingWorkingCopyResolve.get(resource);
 		if (!pendingWorkingCopyResolve) {
 			return;
@@ -596,14 +596,14 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		return this.doJoinPendingResolves(resource);
 	}
 
-	private async doJoinPendingResolves(resource: URI): Promise<codemavi> {
+	private async doJoinPendingResolves(resource: URI): Promise<void> {
 
 		// While we have pending working copy resolves, ensure
 		// to await the last one finishing before returning.
 		// This prevents a race when multiple clients await
 		// the pending resolve and then all trigger the resolve
 		// at the same time.
-		let currentWorkingCopyResolve: Promise<codemavi> | undefined;
+		let currentWorkingCopyResolve: Promise<void> | undefined;
 		while (this.mapResourceToPendingWorkingCopyResolve.has(resource)) {
 			const nextPendingWorkingCopyResolve = this.mapResourceToPendingWorkingCopyResolve.get(resource);
 			if (nextPendingWorkingCopyResolve === currentWorkingCopyResolve) {
@@ -619,7 +619,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		}
 	}
 
-	private registerWorkingCopy(workingCopy: IStoredFileWorkingCopy<M>): codemavi {
+	private registerWorkingCopy(workingCopy: IStoredFileWorkingCopy<M>): void {
 
 		// Install working copy listeners
 		const workingCopyListeners = new DisposableStore();
@@ -692,7 +692,7 @@ export class StoredFileWorkingCopyManager<M extends IStoredFileWorkingCopyModel>
 		return true;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		// Clear pending working copy resolves

@@ -48,12 +48,12 @@ export class EditSessionsWorkbenchService extends Disposable implements IEditSes
 		return this.existingSessionId !== undefined;
 	}
 
-	private _didSignIn = new Emitter<codemavi>();
+	private _didSignIn = new Emitter<void>();
 	get onDidSignIn() {
 		return this._didSignIn.event;
 	}
 
-	private _didSignOut = new Emitter<codemavi>();
+	private _didSignOut = new Emitter<void>();
 	get onDidSignOut() {
 		return this._didSignOut.event;
 	}
@@ -275,7 +275,7 @@ export class EditSessionsWorkbenchService extends Disposable implements IEditSes
 			}
 		}
 
-		// If settings sync is already enabled, acodemavi asking again to authenticate
+		// If settings sync is already enabled, avoid asking again to authenticate
 		if (this.shouldAttemptEditSessionInit()) {
 			this.logService.info(`Reusing user data sync enablement`);
 			const authenticationSessionInfo = await getCurrentAuthenticationSessionInfo(this.secretStorageService, this.productService);
@@ -430,7 +430,7 @@ export class EditSessionsWorkbenchService extends Disposable implements IEditSes
 		return accounts.find((account) => account.session.id === this.existingSessionId);
 	}
 
-	private async onDidChangeStorage(): Promise<codemavi> {
+	private async onDidChangeStorage(): Promise<void> {
 		const newSessionId = this.existingSessionId;
 		const previousSessionId = this.authenticationInfo?.sessionId;
 
@@ -441,14 +441,14 @@ export class EditSessionsWorkbenchService extends Disposable implements IEditSes
 		}
 	}
 
-	private clearAuthenticationPreference(): codemavi {
+	private clearAuthenticationPreference(): void {
 		this.authenticationInfo = undefined;
 		this.initialized = false;
 		this.existingSessionId = undefined;
 		this.signedInContext.set(false);
 	}
 
-	private onDidChangeSessions(e: AuthenticationSessionsChangeEvent): codemavi {
+	private onDidChangeSessions(e: AuthenticationSessionsChangeEvent): void {
 		if (this.authenticationInfo?.sessionId && e.removed?.find(session => session.id === this.authenticationInfo?.sessionId)) {
 			this.clearAuthenticationPreference();
 		}

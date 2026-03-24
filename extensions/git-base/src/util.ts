@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 export interface IDisposable {
-	dispose(): codemavi;
+	dispose(): void;
 }
 
-export function toDisposable(dispose: () => codemavi): IDisposable {
+export function toDisposable(dispose: () => void): IDisposable {
 	return { dispose };
 }
 
-export function done<T>(promise: Promise<T>): Promise<codemavi> {
-	return promise.then<codemavi>(() => undefined);
+export function done<T>(promise: Promise<T>): Promise<void> {
+	return promise.then<void>(() => undefined);
 }
 
 export namespace Versions {

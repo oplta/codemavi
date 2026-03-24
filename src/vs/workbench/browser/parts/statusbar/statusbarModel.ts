@@ -44,7 +44,7 @@ export class StatusbarViewModel extends Disposable {
 		this.registerListeners();
 	}
 
-	private restoreState(): codemavi {
+	private restoreState(): void {
 		const hiddenRaw = this.storageService.get(StatusbarViewModel.HIDDEN_ENTRIES_KEY, StorageScope.PROFILE);
 		if (hiddenRaw) {
 			try {
@@ -55,11 +55,11 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.storageService.onDidChangeValue(StorageScope.PROFILE, StatusbarViewModel.HIDDEN_ENTRIES_KEY, this._store)(() => this.onDidStorageValueChange()));
 	}
 
-	private onDidStorageValueChange(): codemavi {
+	private onDidStorageValueChange(): void {
 
 		// Keep current hidden entries
 		const currentlyHidden = new Set(this.hidden);
@@ -96,7 +96,7 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	add(entry: IStatusbarViewModelEntry): codemavi {
+	add(entry: IStatusbarViewModelEntry): void {
 
 		// Add to set of entries
 		this._entries.push(entry);
@@ -111,7 +111,7 @@ export class StatusbarViewModel extends Disposable {
 		this.markFirstLastVisibleEntry();
 	}
 
-	remove(entry: IStatusbarViewModelEntry): codemavi {
+	remove(entry: IStatusbarViewModelEntry): void {
 		const index = this._entries.indexOf(entry);
 		if (index >= 0) {
 
@@ -133,7 +133,7 @@ export class StatusbarViewModel extends Disposable {
 		return this.hidden.has(id);
 	}
 
-	hide(id: string): codemavi {
+	hide(id: string): void {
 		if (!this.hidden.has(id)) {
 			this.hidden.add(id);
 
@@ -143,7 +143,7 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	show(id: string): codemavi {
+	show(id: string): void {
 		if (this.hidden.has(id)) {
 			this.hidden.delete(id);
 
@@ -161,11 +161,11 @@ export class StatusbarViewModel extends Disposable {
 		return this._entries.filter(entry => entry.alignment === alignment);
 	}
 
-	focusNextEntry(): codemavi {
+	focusNextEntry(): void {
 		this.focusEntry(+1, 0);
 	}
 
-	focusPreviousEntry(): codemavi {
+	focusPreviousEntry(): void {
 		this.focusEntry(-1, this.entries.length - 1);
 	}
 
@@ -177,7 +177,7 @@ export class StatusbarViewModel extends Disposable {
 		return this._entries.find(entry => isAncestorOfActiveElement(entry.container));
 	}
 
-	private focusEntry(delta: number, restartPosition: number): codemavi {
+	private focusEntry(delta: number, restartPosition: number): void {
 
 		const getVisibleEntry = (start: number) => {
 			let indexToFocus = start;
@@ -209,9 +209,9 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	private updateVisibility(id: string, trigger: boolean): codemavi;
-	private updateVisibility(entry: IStatusbarViewModelEntry, trigger: boolean): codemavi;
-	private updateVisibility(arg1: string | IStatusbarViewModelEntry, trigger: boolean): codemavi {
+	private updateVisibility(id: string, trigger: boolean): void;
+	private updateVisibility(entry: IStatusbarViewModelEntry, trigger: boolean): void;
+	private updateVisibility(arg1: string | IStatusbarViewModelEntry, trigger: boolean): void {
 
 		// By identifier
 		if (typeof arg1 === 'string') {
@@ -245,7 +245,7 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	private saveState(): codemavi {
+	private saveState(): void {
 		if (this.hidden.size > 0) {
 			this.storageService.store(StatusbarViewModel.HIDDEN_ENTRIES_KEY, JSON.stringify(Array.from(this.hidden.values())), StorageScope.PROFILE, StorageTarget.USER);
 		} else {
@@ -253,7 +253,7 @@ export class StatusbarViewModel extends Disposable {
 		}
 	}
 
-	private sort(): codemavi {
+	private sort(): void {
 		const allEntryIds = new Set(this._entries.map(entry => entry.id));
 
 		// Split up entries into 2 buckets:
@@ -375,12 +375,12 @@ export class StatusbarViewModel extends Disposable {
 		this._entries = sortedEntries;
 	}
 
-	private markFirstLastVisibleEntry(): codemavi {
+	private markFirstLastVisibleEntry(): void {
 		this.doMarkFirstLastVisibleStatusbarItem(this.getEntries(StatusbarAlignment.LEFT));
 		this.doMarkFirstLastVisibleStatusbarItem(this.getEntries(StatusbarAlignment.RIGHT));
 	}
 
-	private doMarkFirstLastVisibleStatusbarItem(entries: IStatusbarViewModelEntry[]): codemavi {
+	private doMarkFirstLastVisibleStatusbarItem(entries: IStatusbarViewModelEntry[]): void {
 		let firstVisibleItem: IStatusbarViewModelEntry | undefined;
 		let lastVisibleItem: IStatusbarViewModelEntry | undefined;
 

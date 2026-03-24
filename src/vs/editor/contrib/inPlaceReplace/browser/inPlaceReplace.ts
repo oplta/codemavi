@@ -38,7 +38,7 @@ class InPlaceReplaceController implements IEditorContribution {
 	private readonly editorWorkerService: IEditorWorkerService;
 	private readonly decorations: IEditorDecorationsCollection;
 	private currentRequest?: CancelablePromise<IInplaceReplaceSupportResult | null>;
-	private decorationRemover?: CancelablePromise<codemavi>;
+	private decorationRemover?: CancelablePromise<void>;
 
 	constructor(
 		editor: ICodeEditor,
@@ -49,10 +49,10 @@ class InPlaceReplaceController implements IEditorContribution {
 		this.decorations = this.editor.createDecorationsCollection();
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 	}
 
-	public run(source: string, up: boolean): Promise<codemavi> | undefined {
+	public run(source: string, up: boolean): Promise<void> | undefined {
 
 		// cancel any pending request
 		this.currentRequest?.cancel();
@@ -141,7 +141,7 @@ class InPlaceReplaceUp extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> | undefined {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> | undefined {
 		const controller = InPlaceReplaceController.get(editor);
 		if (!controller) {
 			return Promise.resolve(undefined);
@@ -165,7 +165,7 @@ class InPlaceReplaceDown extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> | undefined {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> | undefined {
 		const controller = InPlaceReplaceController.get(editor);
 		if (!controller) {
 			return Promise.resolve(undefined);

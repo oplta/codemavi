@@ -104,7 +104,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		super.dispose();
 	}
 
-	private async showCodeActionsFromLightbulb(actions: CodeActionSet, at: IAnchor | IPosition): Promise<codemavi> {
+	private async showCodeActionsFromLightbulb(actions: CodeActionSet, at: IAnchor | IPosition): Promise<void> {
 		if (actions.allAIFixes && actions.validActions.length === 1) {
 			const actionItem = actions.validActions[0];
 			const command = actionItem.action.command;
@@ -123,7 +123,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		return this.showCodeActionList(actions, at, { includeDisabledActions: false, fromLightbulb: false });
 	}
 
-	public hideCodeActions(): codemavi {
+	public hideCodeActions(): void {
 		this._actionWidgetService.hide();
 	}
 
@@ -132,7 +132,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		triggerAction: CodeActionTriggerSource,
 		filter?: CodeActionFilter,
 		autoApply?: CodeActionAutoApply,
-	): codemavi {
+	): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -146,7 +146,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		return this._model.trigger(trigger);
 	}
 
-	async applyCodeAction(action: CodeActionItem, retrigger: boolean, preview: boolean, actionReason: ApplyCodeActionReason): Promise<codemavi> {
+	async applyCodeAction(action: CodeActionItem, retrigger: boolean, preview: boolean, actionReason: ApplyCodeActionReason): Promise<void> {
 		const progress = this._progressService.show(true, 500);
 		try {
 			await this._instantiationService.invokeFunction(applyCodeAction, action, actionReason, { preview, editor: this._editor });
@@ -158,12 +158,12 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		}
 	}
 
-	public hideLightBulbWidget(): codemavi {
+	public hideLightBulbWidget(): void {
 		this._lightBulbWidget.rawValue?.hide();
 		this._lightBulbWidget.rawValue?.gutterHide();
 	}
 
-	private async update(newState: CodeActionsState.State): Promise<codemavi> {
+	private async update(newState: CodeActionsState.State): Promise<void> {
 		if (newState.type !== CodeActionsState.Type.Triggered) {
 			this.hideLightBulbWidget();
 			return;
@@ -271,7 +271,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 		className: DECORATION_CLASS_NAME
 	});
 
-	public async showCodeActionList(actions: CodeActionSet, at: IAnchor | IPosition, options: IActionShowOptions): Promise<codemavi> {
+	public async showCodeActionList(actions: CodeActionSet, at: IAnchor | IPosition, options: IActionShowOptions): Promise<void> {
 
 		const currentDecorations = this._editor.createDecorationsCollection();
 
@@ -421,7 +421,7 @@ export class CodeActionController extends Disposable implements IEditorContribut
 }
 
 registerThemingParticipant((theme, collector) => {
-	const addBackgroundColorRule = (selector: string, color: Color | undefined): codemavi => {
+	const addBackgroundColorRule = (selector: string, color: Color | undefined): void => {
 		if (color) {
 			collector.addRule(`.monaco-editor ${selector} { background-color: ${color}; }`);
 		}

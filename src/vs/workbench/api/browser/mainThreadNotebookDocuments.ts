@@ -43,13 +43,13 @@ export class MainThreadNotebookDocuments implements MainThreadNotebookDocumentsS
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._modelReferenceCollection.dispose();
 		dispose(this._documentEventListenersMapping.values());
 	}
 
-	handleNotebooksAdded(notebooks: readonly NotebookTextModel[]): codemavi {
+	handleNotebooksAdded(notebooks: readonly NotebookTextModel[]): void {
 
 		for (const textModel of notebooks) {
 			const disposableStore = new DisposableStore();
@@ -119,7 +119,7 @@ export class MainThreadNotebookDocuments implements MainThreadNotebookDocumentsS
 		}
 	}
 
-	handleNotebooksRemoved(uris: URI[]): codemavi {
+	handleNotebooksRemoved(uris: URI[]): void {
 		for (const uri of uris) {
 			this._documentEventListenersMapping.get(uri)?.dispose();
 			this._documentEventListenersMapping.delete(uri);

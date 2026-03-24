@@ -221,7 +221,7 @@ export class RemoteTunnelWorkbenchContribution extends Disposable implements IWo
 		}
 	}
 
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		const [mode, status] = await Promise.all([
 			this.remoteTunnelService.getMode(),
 			this.remoteTunnelService.getTunnelStatus(),
@@ -749,7 +749,7 @@ export class RemoteTunnelWorkbenchContribution extends Disposable implements IWo
 	private async showManageOptions() {
 		const account = await this.remoteTunnelService.getMode();
 
-		return new Promise<codemavi>((c, e) => {
+		return new Promise<void>((c, e) => {
 			const disposables = new DisposableStore();
 			const quickPick = this.quickInputService.createQuickPick({ useSeparators: true });
 			quickPick.placeholder = localize('manage.placeholder', 'Select a command to invoke');

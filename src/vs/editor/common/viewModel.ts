@@ -31,18 +31,18 @@ export interface IViewModel extends ICursorSimpleModel {
 
 	readonly glyphLanes: IGlyphMarginLanesModel;
 
-	addViewEventHandler(eventHandler: ViewEventHandler): codemavi;
-	removeViewEventHandler(eventHandler: ViewEventHandler): codemavi;
+	addViewEventHandler(eventHandler: ViewEventHandler): void;
+	removeViewEventHandler(eventHandler: ViewEventHandler): void;
 
 	/**
 	 * Gives a hint that a lot of requests are about to come in for these line numbers.
 	 */
-	setViewport(startLineNumber: number, endLineNumber: number, centeredLineNumber: number): codemavi;
-	visibleLinesStabilized(): codemavi;
-	setHasFocus(hasFocus: boolean): codemavi;
-	setHasWidgetFocus(hasWidgetFocus: boolean): codemavi;
-	onCompositionStart(): codemavi;
-	onCompositionEnd(): codemavi;
+	setViewport(startLineNumber: number, endLineNumber: number, centeredLineNumber: number): void;
+	visibleLinesStabilized(): void;
+	setHasFocus(hasFocus: boolean): void;
+	setHasWidgetFocus(hasWidgetFocus: boolean): void;
+	onCompositionStart(): void;
+	onCompositionEnd(): void;
 
 	getMinimapDecorationsInRange(range: Range): ViewModelDecoration[];
 	getDecorationsInViewport(visibleRange: Range): ViewModelDecoration[];
@@ -85,21 +85,21 @@ export interface IViewModel extends ICursorSimpleModel {
 	setCursorStates(source: string | null | undefined, reason: CursorChangeReason, states: PartialCursorState[] | null): boolean;
 	getCursorColumnSelectData(): IColumnSelectData;
 	getCursorAutoClosedCharacters(): Range[];
-	setCursorColumnSelectData(columnSelectData: IColumnSelectData): codemavi;
+	setCursorColumnSelectData(columnSelectData: IColumnSelectData): void;
 	getPrevEditOperationType(): EditOperationType;
-	setPrevEditOperationType(type: EditOperationType): codemavi;
-	revealAllCursors(source: string | null | undefined, revealHorizontal: boolean, minimalReveal?: boolean): codemavi;
-	revealPrimaryCursor(source: string | null | undefined, revealHorizontal: boolean, minimalReveal?: boolean): codemavi;
-	revealTopMostCursor(source: string | null | undefined): codemavi;
-	revealBottomMostCursor(source: string | null | undefined): codemavi;
-	revealRange(source: string | null | undefined, revealHorizontal: boolean, viewRange: Range, verticalType: VerticalRevealType, scrollType: ScrollType): codemavi;
+	setPrevEditOperationType(type: EditOperationType): void;
+	revealAllCursors(source: string | null | undefined, revealHorizontal: boolean, minimalReveal?: boolean): void;
+	revealPrimaryCursor(source: string | null | undefined, revealHorizontal: boolean, minimalReveal?: boolean): void;
+	revealTopMostCursor(source: string | null | undefined): void;
+	revealBottomMostCursor(source: string | null | undefined): void;
+	revealRange(source: string | null | undefined, revealHorizontal: boolean, viewRange: Range, verticalType: VerticalRevealType, scrollType: ScrollType): void;
 	//#endregion
 
 	//#region viewLayout
-	changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => codemavi): codemavi;
+	changeWhitespace(callback: (accessor: IWhitespaceChangeAccessor) => void): void;
 	//#endregion
 
-	batchEvents(callback: () => codemavi): codemavi;
+	batchEvents(callback: () => void): void;
 }
 
 export interface IViewLayout {
@@ -115,13 +115,13 @@ export interface IViewLayout {
 
 	getFutureViewport(): Viewport;
 
-	setScrollPosition(position: INewScrollPosition, type: ScrollType): codemavi;
-	deltaScrollNow(deltaScrollLeft: number, deltaScrollTop: number): codemavi;
+	setScrollPosition(position: INewScrollPosition, type: ScrollType): void;
+	deltaScrollNow(deltaScrollLeft: number, deltaScrollTop: number): void;
 
 	validateScrollPosition(scrollPosition: INewScrollPosition): IScrollPosition;
 
-	setMaxLineWidth(maxLineWidth: number): codemavi;
-	setOverlayWidgetsMinWidth(overlayWidgetsMinWidth: number): codemavi;
+	setMaxLineWidth(maxLineWidth: number): void;
+	setOverlayWidgetsMinWidth(overlayWidgetsMinWidth: number): void;
 
 	getLinesViewportData(): IPartialViewLinesViewportData;
 	getLinesViewportDataAtScrollTop(scrollTop: number): IPartialViewLinesViewportData;
@@ -152,8 +152,8 @@ export interface IEditorWhitespace {
  */
 export interface IWhitespaceChangeAccessor {
 	insertWhitespace(afterLineNumber: number, ordinal: number, heightInPx: number, minWidth: number): string;
-	changeOneWhitespace(id: string, newAfterLineNumber: number, newHeight: number): codemavi;
-	removeWhitespace(id: string): codemavi;
+	changeOneWhitespace(id: string, newAfterLineNumber: number, newHeight: number): void;
+	removeWhitespace(id: string): void;
 }
 
 export interface IPartialViewLinesViewportData {
@@ -200,7 +200,7 @@ export interface IViewWhitespaceViewportData {
 }
 
 export class Viewport {
-	readonly _viewportBrand: codemavi = undefined;
+	readonly _viewportBrand: void = undefined;
 
 	readonly top: number;
 	readonly left: number;
@@ -251,7 +251,7 @@ export class MinimapLinesRenderingData {
 }
 
 export class ViewLineData {
-	_viewLineDataBrand: codemavi = undefined;
+	_viewLineDataBrand: void = undefined;
 
 	/**
 	 * The content at this view line.
@@ -420,7 +420,7 @@ export class SingleLineInlineDecoration {
 }
 
 export class ViewModelDecoration {
-	_viewModelDecorationBrand: codemavi = undefined;
+	_viewModelDecorationBrand: void = undefined;
 
 	public readonly range: Range;
 	public readonly options: IModelDecorationOptions;

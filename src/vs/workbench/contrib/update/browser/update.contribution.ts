@@ -53,7 +53,7 @@ export class ShowCurrentReleaseNotesAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const instantiationService = accessor.get(IInstantiationService);
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
@@ -84,7 +84,7 @@ export class ShowCurrentReleaseNotesFromCurrentFileAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const instantiationService = accessor.get(IInstantiationService);
 		const productService = accessor.get(IProductService);
 
@@ -113,7 +113,7 @@ export class CheckForUpdateAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const updateService = accessor.get(IUpdateService);
 		return updateService.checkForUpdates(true);
 	}
@@ -130,7 +130,7 @@ class DownloadUpdateAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IUpdateService).downloadUpdate();
 	}
 }
@@ -146,7 +146,7 @@ class InstallUpdateAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IUpdateService).applyUpdate();
 	}
 }
@@ -162,7 +162,7 @@ class RestartToUpdateAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IUpdateService).quitAndInstall();
 	}
 }
@@ -184,7 +184,7 @@ class DownloadAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const productService = accessor.get(IProductService);
 		const openerService = accessor.get(IOpenerService);
 
@@ -212,7 +212,7 @@ if (isWindows) {
 			});
 		}
 
-		async run(accessor: ServicesAccessor): Promise<codemavi> {
+		async run(accessor: ServicesAccessor): Promise<void> {
 			const updateService = accessor.get(IUpdateService);
 			const fileDialogService = accessor.get(IFileDialogService);
 

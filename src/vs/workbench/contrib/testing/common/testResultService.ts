@@ -44,7 +44,7 @@ export interface ITestResultService {
 	/**
 	 * Discards all completed test results.
 	 */
-	clear(): codemavi;
+	clear(): void;
 
 	/**
 	 * Creates a new, live test result.
@@ -270,7 +270,7 @@ export class TestResultService extends Disposable implements ITestResultService 
 	}
 
 	protected async persistImmediately() {
-		// ensure results are loaded before persisting to acodemavi deleting once
+		// ensure results are loaded before persisting to avoid deleting once
 		// that we don't have yet.
 		await this.loadResults();
 		this.storage.persist(this.results);

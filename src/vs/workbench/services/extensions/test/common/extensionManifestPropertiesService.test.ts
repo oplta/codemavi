@@ -124,7 +124,7 @@ if (!isWeb) {
 			instantiationService.dispose();
 		});
 
-		function assertUntrustedWorkspaceSupport(extensionManifest: IExtensionManifest, expected: ExtensionUntrustedWorkspaceSupportType): codemavi {
+		function assertUntrustedWorkspaceSupport(extensionManifest: IExtensionManifest, expected: ExtensionUntrustedWorkspaceSupportType): void {
 			testObject = instantiationService.createInstance(ExtensionManifestPropertiesService);
 			const untrustedWorkspaceSupport = testObject.getExtensionUntrustedWorkspaceSupportType(extensionManifest);
 

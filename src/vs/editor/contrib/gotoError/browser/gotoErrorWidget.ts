@@ -47,7 +47,7 @@ class MessageWidget {
 	constructor(
 		parent: HTMLElement,
 		editor: ICodeEditor,
-		onRelatedInformation: (related: IRelatedInformation) => codemavi,
+		onRelatedInformation: (related: IRelatedInformation) => void,
 		private readonly _openerService: IOpenerService,
 		private readonly _labelService: ILabelService
 	) {
@@ -87,11 +87,11 @@ class MessageWidget {
 		this._disposables.add(this._scrollable);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._disposables);
 	}
 
-	update(marker: IMarker): codemavi {
+	update(marker: IMarker): void {
 		const { source, message, relatedInformation, code } = marker;
 		let sourceAndCodeLength = (source?.length || 0) + '()'.length;
 		if (code) {
@@ -188,7 +188,7 @@ class MessageWidget {
 		this._scrollable.setScrollDimensions({ scrollWidth, scrollHeight });
 	}
 
-	layout(height: number, width: number): codemavi {
+	layout(height: number, width: number): void {
 		this._scrollable.getDomNode().style.height = `${height}px`;
 		this._scrollable.getDomNode().style.width = `${width}px`;
 		this._scrollable.setScrollDimensions({ width, height });
@@ -285,23 +285,23 @@ export class MarkerNavigationWidget extends PeekViewWidget {
 		}); // style() will trigger _applyStyles
 	}
 
-	protected override _applyStyles(): codemavi {
+	protected override _applyStyles(): void {
 		if (this._parentContainer) {
 			this._parentContainer.style.backgroundColor = this._backgroundColor ? this._backgroundColor.toString() : '';
 		}
 		super._applyStyles();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._callOnDispose.dispose();
 		super.dispose();
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this._parentContainer.focus();
 	}
 
-	protected override _fillHead(container: HTMLElement): codemavi {
+	protected override _fillHead(container: HTMLElement): void {
 		super._fillHead(container);
 
 		this._disposables.add(this._actionbarWidget!.actionRunner.onWillRun(e => this.editor.focus()));
@@ -311,11 +311,11 @@ export class MarkerNavigationWidget extends PeekViewWidget {
 		this._actionbarWidget!.push(actions, { label: false, icon: true, index: 0 });
 	}
 
-	protected override _fillTitleIcon(container: HTMLElement): codemavi {
+	protected override _fillTitleIcon(container: HTMLElement): void {
 		this._icon = dom.append(container, dom.$(''));
 	}
 
-	protected _fillBody(container: HTMLElement): codemavi {
+	protected _fillBody(container: HTMLElement): void {
 		this._parentContainer = container;
 		container.classList.add('marker-widget');
 		this._parentContainer.tabIndex = 0;
@@ -328,11 +328,11 @@ export class MarkerNavigationWidget extends PeekViewWidget {
 		this._disposables.add(this._message);
 	}
 
-	override show(): codemavi {
+	override show(): void {
 		throw new Error('call showAtMarker');
 	}
 
-	showAtMarker(marker: IMarker, markerIdx: number, markerCount: number): codemavi {
+	showAtMarker(marker: IMarker, markerIdx: number, markerCount: number): void {
 		// update:
 		// * title
 		// * message
@@ -362,7 +362,7 @@ export class MarkerNavigationWidget extends PeekViewWidget {
 		this.editor.focus();
 	}
 
-	updateMarker(marker: IMarker): codemavi {
+	updateMarker(marker: IMarker): void {
 		this._container.classList.remove('stale');
 		this._message.update(marker);
 	}
@@ -372,18 +372,18 @@ export class MarkerNavigationWidget extends PeekViewWidget {
 		this._relayout();
 	}
 
-	protected override _doLayoutBody(heightInPixel: number, widthInPixel: number): codemavi {
+	protected override _doLayoutBody(heightInPixel: number, widthInPixel: number): void {
 		super._doLayoutBody(heightInPixel, widthInPixel);
 		this._heightInPixel = heightInPixel;
 		this._message.layout(heightInPixel, widthInPixel);
 		this._container.style.height = `${heightInPixel}px`;
 	}
 
-	protected override _onWidth(widthInPixel: number): codemavi {
+	protected override _onWidth(widthInPixel: number): void {
 		this._message.layout(this._heightInPixel, widthInPixel);
 	}
 
-	protected override _relayout(): codemavi {
+	protected override _relayout(): void {
 		super._relayout(this.computeRequiredHeight());
 	}
 

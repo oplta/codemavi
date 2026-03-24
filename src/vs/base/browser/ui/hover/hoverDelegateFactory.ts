@@ -17,7 +17,7 @@ const defaultHoverDelegateMouse = new Lazy<IHoverDelegate>(() => hoverDelegateFa
 const defaultHoverDelegateElement = new Lazy<IHoverDelegate>(() => hoverDelegateFactory('element', false));
 
 // TODO: Remove when getDefaultHoverDelegate is no longer used
-export function setHoverDelegateFactory(hoverDelegateProvider: ((placement: 'mouse' | 'element', enableInstantHover: boolean) => IScopedHoverDelegate)): codemavi {
+export function setHoverDelegateFactory(hoverDelegateProvider: ((placement: 'mouse' | 'element', enableInstantHover: boolean) => IScopedHoverDelegate)): void {
 	hoverDelegateFactory = hoverDelegateProvider;
 }
 

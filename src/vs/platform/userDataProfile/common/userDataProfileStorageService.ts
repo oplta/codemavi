@@ -49,7 +49,7 @@ export interface IUserDataProfileStorageService {
 	 * @param data Data that has to be updated
 	 * @param target Storage target of the data
 	 */
-	updateStorageData(profile: IUserDataProfile, data: Map<string, string | undefined | null>, target: StorageTarget): Promise<codemavi>;
+	updateStorageData(profile: IUserDataProfile, data: Map<string, string | undefined | null>, target: StorageTarget): Promise<void>;
 
 	/**
 	 * Calls a function with a storage service scoped to given profile.
@@ -79,7 +79,7 @@ export abstract class AbstractUserDataProfileStorageService extends Disposable i
 		return this.withProfileScopedStorageService(profile, async storageService => this.getItems(storageService));
 	}
 
-	async updateStorageData(profile: IUserDataProfile, data: Map<string, string | undefined | null>, target: StorageTarget): Promise<codemavi> {
+	async updateStorageData(profile: IUserDataProfile, data: Map<string, string | undefined | null>, target: StorageTarget): Promise<void> {
 		return this.withProfileScopedStorageService(profile, async storageService => this.writeItems(storageService, data, target));
 	}
 
@@ -127,7 +127,7 @@ export abstract class AbstractUserDataProfileStorageService extends Disposable i
 		return result;
 	}
 
-	private writeItems(storageService: IStorageService, items: Map<string, string | undefined | null>, target: StorageTarget): codemavi {
+	private writeItems(storageService: IStorageService, items: Map<string, string | undefined | null>, target: StorageTarget): void {
 		storageService.storeAll(Array.from(items.entries()).map(([key, value]) => ({ key, value, scope: StorageScope.PROFILE, target })), true);
 	}
 
@@ -181,7 +181,7 @@ class StorageService extends AbstractStorageService {
 		super({ flushInterval: 100 });
 	}
 
-	protected async doInitialize(): Promise<codemavi> {
+	protected async doInitialize(): Promise<void> {
 		const profileStorageDatabase = await this.profileStorageDatabase;
 		const profileStorage = new Storage(profileStorageDatabase);
 		this._register(profileStorage.onDidChangeStorage(e => {
@@ -203,7 +203,7 @@ class StorageService extends AbstractStorageService {
 	}
 
 	protected getLogDetails(): string | undefined { return undefined; }
-	protected async switchToProfile(): Promise<codemavi> { }
-	protected async switchToWorkspace(): Promise<codemavi> { }
+	protected async switchToProfile(): Promise<void> { }
+	protected async switchToWorkspace(): Promise<void> { }
 	hasScope() { return false; }
 }

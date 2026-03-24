@@ -112,7 +112,7 @@ export class SimpleCommentEditor extends CodeEditorWidget {
 		return EditorExtensionsRegistry.getEditorActions();
 	}
 
-	public override updateOptions(newOptions: Readonly<IEditorOptions> | undefined): codemavi {
+	public override updateOptions(newOptions: Readonly<IEditorOptions> | undefined): void {
 		const withLineNumberRemoved: Readonly<IEditorOptions> = { ...newOptions, lineNumbers: 'off' };
 		super.updateOptions(withLineNumberRemoved);
 	}

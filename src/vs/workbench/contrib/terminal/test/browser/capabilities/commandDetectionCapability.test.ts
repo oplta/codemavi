@@ -37,7 +37,7 @@ suite('CommandDetectionCapability', () => {
 			ok(Math.abs(Date.now() - command.timestamp) < 2000);
 		}
 		deepStrictEqual(addEvents, capability.commands);
-		// Clear the commands to acodemavi re-asserting past commands
+		// Clear the commands to avoid re-asserting past commands
 		addEvents.length = 0;
 		capability.clearCommands();
 	}

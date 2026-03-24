@@ -38,7 +38,7 @@ export class ContributedCustomEditors extends Disposable {
 		});
 	}
 
-	private readonly _onChange = this._register(new Emitter<codemavi>());
+	private readonly _onChange = this._register(new Emitter<void>());
 	public readonly onChange = this._onChange.event;
 
 	private update(extensions: readonly IExtensionPointUser<ICustomEditorsExtensionPoint[]>[]) {
@@ -76,7 +76,7 @@ export class ContributedCustomEditors extends Disposable {
 			.filter(customEditor => customEditor.matches(resource));
 	}
 
-	private add(info: CustomEditorInfo): codemavi {
+	private add(info: CustomEditorInfo): void {
 		if (this._editors.has(info.id)) {
 			console.error(`Custom editor with id '${info.id}' already registered`);
 			return;

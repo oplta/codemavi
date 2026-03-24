@@ -58,7 +58,7 @@ suite('RipgrepTextSearchEngine', () => {
 	});
 
 	test('fixRegexNewline - re', () => {
-		function testFixRegexNewline([inputReg, testStr, shouldMatch]: readonly [string, string, boolean]): codemavi {
+		function testFixRegexNewline([inputReg, testStr, shouldMatch]: readonly [string, string, boolean]): void {
 			const fixed = fixRegexNewline(inputReg);
 			const reg = new RegExp(fixed);
 			assert.strictEqual(reg.test(testStr), shouldMatch, `${inputReg} => ${reg}, ${testStr}, ${shouldMatch}`);
@@ -83,7 +83,7 @@ suite('RipgrepTextSearchEngine', () => {
 	});
 
 	test('fixNewline - matching', () => {
-		function testFixNewline([inputReg, testStr, shouldMatch = true]: readonly [string, string, boolean?]): codemavi {
+		function testFixNewline([inputReg, testStr, shouldMatch = true]: readonly [string, string, boolean?]): void {
 			const fixed = fixNewline(inputReg);
 			const reg = new RegExp(fixed);
 			assert.strictEqual(reg.test(testStr), shouldMatch, `${inputReg} => ${reg}, ${testStr}, ${shouldMatch}`);
@@ -106,7 +106,7 @@ suite('RipgrepTextSearchEngine', () => {
 	suite('RipgrepParser', () => {
 		const TEST_FOLDER = URI.file('/foo/bar');
 
-		function testParser(inputData: string[], expectedResults: TextSearchResult2[]): codemavi {
+		function testParser(inputData: string[], expectedResults: TextSearchResult2[]): void {
 			const testParser = new RipgrepParser(1000, TEST_FOLDER, DEFAULT_TEXT_SEARCH_PREVIEW_OPTIONS);
 
 			const actualResults: TextSearchResult2[] = [];
@@ -320,7 +320,7 @@ suite('RipgrepTextSearchEngine', () => {
 	suite('getRgArgs', () => {
 		test('simple includes', () => {
 			// Only testing the args that come from includes.
-			function testGetRgArgs(includes: string[], expectedFromIncludes: string[]): codemavi {
+			function testGetRgArgs(includes: string[], expectedFromIncludes: string[]): void {
 				const query: TextSearchQuery2 = {
 					pattern: 'test'
 				};
@@ -368,7 +368,7 @@ suite('RipgrepTextSearchEngine', () => {
 	});
 
 	test('brace expansion for ripgrep', () => {
-		function testBraceExpansion(argGlob: string, expectedGlob: string[]): codemavi {
+		function testBraceExpansion(argGlob: string, expectedGlob: string[]): void {
 			const result = performBraceExpansionForRipgrep(argGlob);
 			assert.deepStrictEqual(result, expectedGlob);
 		}

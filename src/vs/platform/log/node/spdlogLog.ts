@@ -40,7 +40,7 @@ interface ILog {
 	message: string;
 }
 
-function log(logger: spdlog.Logger, level: LogLevel, message: string): codemavi {
+function log(logger: spdlog.Logger, level: LogLevel, message: string): void {
 	switch (level) {
 		case LogLevel.Trace: logger.trace(message); break;
 		case LogLevel.Debug: logger.debug(message); break;
@@ -52,7 +52,7 @@ function log(logger: spdlog.Logger, level: LogLevel, message: string): codemavi 
 	}
 }
 
-function setLogLevel(logger: spdlog.Logger, level: LogLevel): codemavi {
+function setLogLevel(logger: spdlog.Logger, level: LogLevel): void {
 	switch (level) {
 		case LogLevel.Trace: logger.setLevel(SpdLogLevel.Trace); break;
 		case LogLevel.Debug: logger.setLevel(SpdLogLevel.Debug); break;
@@ -67,7 +67,7 @@ function setLogLevel(logger: spdlog.Logger, level: LogLevel): codemavi {
 export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 
 	private buffer: ILog[] = [];
-	private readonly _loggerCreationPromise: Promise<codemavi>;
+	private readonly _loggerCreationPromise: Promise<void>;
 	private _logger: spdlog.Logger | undefined;
 
 	constructor(
@@ -87,7 +87,7 @@ export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 		}));
 	}
 
-	private async _createSpdLogLogger(name: string, filepath: string, rotating: boolean, donotUseFormatters: boolean): Promise<codemavi> {
+	private async _createSpdLogLogger(name: string, filepath: string, rotating: boolean, donotUseFormatters: boolean): Promise<void> {
 		const filecount = rotating ? 6 : 1;
 		const filesize = (30 / filecount) * ByteSize.MB;
 		const logger = await createSpdLogLogger(name, filepath, filesize, filecount, donotUseFormatters);
@@ -101,7 +101,7 @@ export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 		}
 	}
 
-	protected log(level: LogLevel, message: string): codemavi {
+	protected log(level: LogLevel, message: string): void {
 		if (this._logger) {
 			log(this._logger, level, message);
 		} else if (this.getLevel() <= level) {
@@ -109,7 +109,7 @@ export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 		}
 	}
 
-	override flush(): codemavi {
+	override flush(): void {
 		if (this._logger) {
 			this.flushLogger();
 		} else {
@@ -117,7 +117,7 @@ export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		if (this._logger) {
 			this.disposeLogger();
 		} else {
@@ -126,13 +126,13 @@ export class SpdLogLogger extends AbstractMessageLogger implements ILogger {
 		super.dispose();
 	}
 
-	private flushLogger(): codemavi {
+	private flushLogger(): void {
 		if (this._logger) {
 			this._logger.flush();
 		}
 	}
 
-	private disposeLogger(): codemavi {
+	private disposeLogger(): void {
 		if (this._logger) {
 			this._logger.drop();
 			this._logger = undefined;

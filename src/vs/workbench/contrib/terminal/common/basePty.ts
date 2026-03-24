@@ -32,7 +32,7 @@ export abstract class BasePty extends Disposable implements Partial<ITerminalChi
 
 	protected readonly _onProcessData = this._register(new Emitter<IProcessDataEvent | string>());
 	readonly onProcessData = this._onProcessData.event;
-	protected readonly _onProcessReplayComplete = this._register(new Emitter<codemavi>());
+	protected readonly _onProcessReplayComplete = this._register(new Emitter<void>());
 	readonly onProcessReplayComplete = this._onProcessReplayComplete.event;
 	protected readonly _onProcessReady = this._register(new Emitter<IProcessReadyEvent>());
 	readonly onProcessReady = this._onProcessReady.event;

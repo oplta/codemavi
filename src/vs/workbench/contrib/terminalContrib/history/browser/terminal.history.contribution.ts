@@ -74,7 +74,7 @@ class TerminalHistoryContribution extends Disposable implements ITerminalContrib
 	 * Triggers a quick pick that displays recent commands or cwds. Selecting one will
 	 * rerun it in the active terminal.
 	 */
-	async runRecent(type: 'command' | 'cwd', filterMode?: 'fuzzy' | 'contiguous', value?: string): Promise<codemavi> {
+	async runRecent(type: 'command' | 'cwd', filterMode?: 'fuzzy' | 'contiguous', value?: string): Promise<void> {
 		return this._instantiationService.invokeFunction(showRunRecentQuickPick,
 			this._ctx.instance,
 			this._terminalInRunCommandPicker,

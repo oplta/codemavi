@@ -221,7 +221,7 @@ export class TokenStore implements IDisposable {
 	 *
 	 * @param update all the tokens for the document in sequence
 	 */
-	buildStore(tokens: TokenUpdate[], tokenQuality: TokenQuality): codemavi {
+	buildStore(tokens: TokenUpdate[], tokenQuality: TokenQuality): void {
 		this._root = this.createFromUpdates(tokens, tokenQuality);
 	}
 
@@ -331,7 +331,7 @@ export class TokenStore implements IDisposable {
 	 * @param visitor Return true from visitor to exit early
 	 * @returns
 	 */
-	private traverseInOrderInRange(startOffsetInclusive: number, endOffsetExclusive: number, visitor: (node: Node, offset: number) => boolean): codemavi {
+	private traverseInOrderInRange(startOffsetInclusive: number, endOffsetExclusive: number, visitor: (node: Node, offset: number) => boolean): void {
 		const stack: { node: Node; offset: number }[] = [{ node: this._root, offset: 0 }];
 
 		while (stack.length > 0) {
@@ -392,7 +392,7 @@ export class TokenStore implements IDisposable {
 		return result;
 	}
 
-	markForRefresh(startOffsetInclusive: number, endOffsetExclusive: number): codemavi {
+	markForRefresh(startOffsetInclusive: number, endOffsetExclusive: number): void {
 		this.traverseInOrderInRange(startOffsetInclusive, endOffsetExclusive, (node) => {
 			if (isLeaf(node)) {
 				node.tokenQuality = TokenQuality.None;
@@ -494,7 +494,7 @@ export class TokenStore implements IDisposable {
 		return result.join('');
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		const stack: Array<[Node, boolean]> = [[this._root, false]];
 		while (stack.length > 0) {
 			const [node, visited] = stack.pop()!;

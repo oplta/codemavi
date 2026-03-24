@@ -57,7 +57,7 @@ export class InlineCompletionsModel extends Disposable {
 	private _isAcceptingPartially = false;
 	public get isAcceptingPartially() { return this._isAcceptingPartially; }
 
-	private readonly _onDidAccept = new Emitter<codemavi>();
+	private readonly _onDidAccept = new Emitter<void>();
 	public readonly onDidAccept = this._onDidAccept.event;
 
 	private readonly _editorObs = observableCodeEditor(this._editor);
@@ -303,7 +303,7 @@ export class InlineCompletionsModel extends Disposable {
 		return this._source.fetch(cursorPosition, context, itemToPreserve, changeSummary.shouldDebounce, userJumpedToActiveCompletion);
 	});
 
-	public async trigger(tx?: ITransaction, options?: { onlyFetchInlineEdits?: boolean; noDelay?: boolean }): Promise<codemavi> {
+	public async trigger(tx?: ITransaction, options?: { onlyFetchInlineEdits?: boolean; noDelay?: boolean }): Promise<void> {
 		subtransaction(tx, tx => {
 			if (options?.onlyFetchInlineEdits) {
 				this._onlyRequestInlineEditsSignal.trigger(tx);
@@ -316,7 +316,7 @@ export class InlineCompletionsModel extends Disposable {
 		await this._fetchInlineCompletionsPromise.get();
 	}
 
-	public async triggerExplicitly(tx?: ITransaction, onlyFetchInlineEdits: boolean = false): Promise<codemavi> {
+	public async triggerExplicitly(tx?: ITransaction, onlyFetchInlineEdits: boolean = false): Promise<void> {
 		subtransaction(tx, tx => {
 			if (onlyFetchInlineEdits) {
 				this._onlyRequestInlineEditsSignal.trigger(tx);
@@ -328,7 +328,7 @@ export class InlineCompletionsModel extends Disposable {
 		await this._fetchInlineCompletionsPromise.get();
 	}
 
-	public stop(stopReason: 'explicitCancel' | 'automatic' = 'automatic', tx?: ITransaction): codemavi {
+	public stop(stopReason: 'explicitCancel' | 'automatic' = 'automatic', tx?: ITransaction): void {
 		subtransaction(tx, tx => {
 			if (stopReason === 'explicitCancel') {
 				const inlineCompletion = this.state.get()?.inlineCompletion;
@@ -653,7 +653,7 @@ export class InlineCompletionsModel extends Disposable {
 		return s.cursorAtInlineEdit;
 	});
 
-	private async _deltaSelectedInlineCompletionIndex(delta: 1 | -1): Promise<codemavi> {
+	private async _deltaSelectedInlineCompletionIndex(delta: 1 | -1): Promise<void> {
 		await this.triggerExplicitly();
 
 		const completions = this._filteredInlineCompletionItems.get() || [];
@@ -665,11 +665,11 @@ export class InlineCompletionsModel extends Disposable {
 		}
 	}
 
-	public async next(): Promise<codemavi> { await this._deltaSelectedInlineCompletionIndex(1); }
+	public async next(): Promise<void> { await this._deltaSelectedInlineCompletionIndex(1); }
 
-	public async previous(): Promise<codemavi> { await this._deltaSelectedInlineCompletionIndex(-1); }
+	public async previous(): Promise<void> { await this._deltaSelectedInlineCompletionIndex(-1); }
 
-	public async accept(editor: ICodeEditor = this._editor): Promise<codemavi> {
+	public async accept(editor: ICodeEditor = this._editor): Promise<void> {
 		if (editor.getModel() !== this.textModel) {
 			throw new BugIndicatingError();
 		}
@@ -746,7 +746,7 @@ export class InlineCompletionsModel extends Disposable {
 		this._lastAcceptedInlineCompletionInfo = { textModelVersionIdAfter: this.textModel.getVersionId(), inlineCompletion: completion };
 	}
 
-	public async acceptNextWord(editor: ICodeEditor): Promise<codemavi> {
+	public async acceptNextWord(editor: ICodeEditor): Promise<void> {
 		await this._acceptNext(editor, (pos, text) => {
 			const langId = this.textModel.getLanguageIdAtPosition(pos.lineNumber, pos.column);
 			const config = this._languageConfigurationService.getLanguageConfiguration(langId);
@@ -775,7 +775,7 @@ export class InlineCompletionsModel extends Disposable {
 		}, PartialAcceptTriggerKind.Word);
 	}
 
-	public async acceptNextLine(editor: ICodeEditor): Promise<codemavi> {
+	public async acceptNextLine(editor: ICodeEditor): Promise<void> {
 		await this._acceptNext(editor, (pos, text) => {
 			const m = text.match(/\n/);
 			if (m && m.index !== undefined) {
@@ -785,7 +785,7 @@ export class InlineCompletionsModel extends Disposable {
 		}, PartialAcceptTriggerKind.Line);
 	}
 
-	private async _acceptNext(editor: ICodeEditor, getAcceptUntilIndex: (position: Position, text: string) => number, kind: PartialAcceptTriggerKind): Promise<codemavi> {
+	private async _acceptNext(editor: ICodeEditor, getAcceptUntilIndex: (position: Position, text: string) => number, kind: PartialAcceptTriggerKind): Promise<void> {
 		if (editor.getModel() !== this.textModel) {
 			throw new BugIndicatingError();
 		}
@@ -854,7 +854,7 @@ export class InlineCompletionsModel extends Disposable {
 	// TODO: clean this up if we keep it
 	private readonly _inAcceptPartialFlow = observableValue(this, false);
 	public readonly inPartialAcceptFlow: IObservable<boolean> = this._inAcceptPartialFlow;
-	public async acceptNextInlineEditPart(editor: ICodeEditor): Promise<codemavi> {
+	public async acceptNextInlineEditPart(editor: ICodeEditor): Promise<void> {
 		if (editor.getModel() !== this.textModel) {
 			throw new BugIndicatingError();
 		}
@@ -950,7 +950,7 @@ export class InlineCompletionsModel extends Disposable {
 	private readonly _inAcceptFlow = observableValue(this, false);
 	public readonly inAcceptFlow: IObservable<boolean> = this._inAcceptFlow;
 
-	public jump(): codemavi {
+	public jump(): void {
 		const s = this.inlineEditState.get();
 		if (!s) { return; }
 
@@ -973,7 +973,7 @@ export class InlineCompletionsModel extends Disposable {
 		});
 	}
 
-	public async handleInlineEditShown(inlineCompletion: InlineCompletionItem): Promise<codemavi> {
+	public async handleInlineEditShown(inlineCompletion: InlineCompletionItem): Promise<void> {
 		if (inlineCompletion.didShow) {
 			return;
 		}
@@ -1035,7 +1035,7 @@ class FadeoutDecoration extends Disposable {
 	constructor(
 		editor: ICodeEditor,
 		ranges: Range[],
-		onDispose?: () => codemavi,
+		onDispose?: () => void,
 	) {
 		super();
 

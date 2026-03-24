@@ -8,7 +8,7 @@ import { SymbolsTree } from '../tree';
 import { ContextKey } from '../utils';
 import { CallItem, CallsDirection, CallsTreeInput } from './model';
 
-export function register(tree: SymbolsTree, context: vscode.ExtensionContext): codemavi {
+export function register(tree: SymbolsTree, context: vscode.ExtensionContext): void {
 
 	const direction = new RichCallsDirection(context.workspaceState, CallsDirection.Incoming);
 
@@ -42,7 +42,7 @@ export function register(tree: SymbolsTree, context: vscode.ExtensionContext): c
 	);
 }
 
-function removeCallItem(item: CallItem | unknown): codemavi {
+function removeCallItem(item: CallItem | unknown): void {
 	if (item instanceof CallItem) {
 		item.remove();
 	}

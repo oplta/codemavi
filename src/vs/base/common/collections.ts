@@ -124,11 +124,11 @@ export class SetWithKey<T> implements Set<T> {
 		}
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._map.clear();
 	}
 
-	forEach(callbackfn: (value: T, value2: T, set: Set<T>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void {
 		this._map.forEach(entry => callbackfn.call(thisArg, entry, entry, this));
 	}
 

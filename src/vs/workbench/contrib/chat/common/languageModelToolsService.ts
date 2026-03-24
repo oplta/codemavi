@@ -137,16 +137,16 @@ export type CountTokensCallback = (input: string, token: CancellationToken) => P
 
 export interface ILanguageModelToolsService {
 	_serviceBrand: undefined;
-	onDidChangeTools: Event<codemavi>;
+	onDidChangeTools: Event<void>;
 	registerToolData(toolData: IToolData): IDisposable;
 	registerToolImplementation(id: string, tool: IToolImpl): IDisposable;
 	getTools(): Iterable<Readonly<IToolData>>;
 	getTool(id: string): IToolData | undefined;
 	getToolByName(name: string): IToolData | undefined;
 	invokeTool(invocation: IToolInvocation, countTokens: CountTokensCallback, token: CancellationToken): Promise<IToolResult>;
-	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile' | 'memory', autoConfirm?: boolean): codemavi;
-	resetToolAutoConfirmation(): codemavi;
-	cancelToolCallsForRequest(requestId: string): codemavi;
+	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile' | 'memory', autoConfirm?: boolean): void;
+	resetToolAutoConfirmation(): void;
+	cancelToolCallsForRequest(requestId: string): void;
 }
 
 export function createToolInputUri(toolOrId: IToolData | string): URI {

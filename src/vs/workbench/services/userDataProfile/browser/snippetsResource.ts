@@ -29,7 +29,7 @@ export class SnippetsResourceInitializer implements IProfileResourceInitializer 
 	) {
 	}
 
-	async initialize(content: string): Promise<codemavi> {
+	async initialize(content: string): Promise<void> {
 		const snippetsContent: ISnippetsContent = JSON.parse(content);
 		for (const key in snippetsContent.snippets) {
 			const resource = this.uriIdentityService.extUri.joinPath(this.userDataProfileService.currentProfile.snippetsHome, key);
@@ -51,7 +51,7 @@ export class SnippetsResource implements IProfileResource {
 		return JSON.stringify({ snippets });
 	}
 
-	async apply(content: string, profile: IUserDataProfile): Promise<codemavi> {
+	async apply(content: string, profile: IUserDataProfile): Promise<void> {
 		const snippetsContent: ISnippetsContent = JSON.parse(content);
 		for (const key in snippetsContent.snippets) {
 			const resource = this.uriIdentityService.extUri.joinPath(profile.snippetsHome, key);

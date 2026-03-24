@@ -40,11 +40,11 @@ export class RulersGpu extends ViewPart {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		// Rendering is handled by RectangleRenderer
 	}
 

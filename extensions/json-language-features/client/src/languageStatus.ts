@@ -17,7 +17,7 @@ type ShowSchemasInput = {
 
 interface ShowSchemasItem extends QuickPickItem {
 	uri?: Uri;
-	buttonCommands?: (() => codemavi)[];
+	buttonCommands?: (() => void)[];
 }
 
 function getExtensionSchemaAssociations() {

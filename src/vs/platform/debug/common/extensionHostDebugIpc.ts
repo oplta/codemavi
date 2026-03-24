@@ -54,7 +54,7 @@ export class ExtensionHostDebugChannelClient extends Disposable implements IExte
 		super();
 	}
 
-	reload(sessionId: string): codemavi {
+	reload(sessionId: string): void {
 		this.channel.call('reload', [sessionId]);
 	}
 
@@ -62,7 +62,7 @@ export class ExtensionHostDebugChannelClient extends Disposable implements IExte
 		return this.channel.listen('reload');
 	}
 
-	close(sessionId: string): codemavi {
+	close(sessionId: string): void {
 		this.channel.call('close', [sessionId]);
 	}
 
@@ -70,7 +70,7 @@ export class ExtensionHostDebugChannelClient extends Disposable implements IExte
 		return this.channel.listen('close');
 	}
 
-	attachSession(sessionId: string, port: number, subId?: string): codemavi {
+	attachSession(sessionId: string, port: number, subId?: string): void {
 		this.channel.call('attach', [sessionId, port, subId]);
 	}
 
@@ -78,7 +78,7 @@ export class ExtensionHostDebugChannelClient extends Disposable implements IExte
 		return this.channel.listen('attach');
 	}
 
-	terminateSession(sessionId: string, subId?: string): codemavi {
+	terminateSession(sessionId: string, subId?: string): void {
 		this.channel.call('terminate', [sessionId, subId]);
 	}
 

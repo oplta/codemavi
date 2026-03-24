@@ -12,13 +12,13 @@ import { IProductIconTheme, IThemeService } from '../common/themeService.js';
 
 export interface IIconsStyleSheet extends IDisposable {
 	getCSS(): css.CssFragment;
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 }
 
 export function getIconsStyleSheet(themeService: IThemeService | undefined): IIconsStyleSheet {
 	const disposable = new DisposableStore();
 
-	const onDidChangeEmmiter = disposable.add(new Emitter<codemavi>());
+	const onDidChangeEmmiter = disposable.add(new Emitter<void>());
 	const iconRegistry = getIconRegistry();
 	disposable.add(iconRegistry.onDidChange(() => onDidChangeEmmiter.fire()));
 	if (themeService) {

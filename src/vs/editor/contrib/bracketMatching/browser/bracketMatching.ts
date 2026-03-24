@@ -39,7 +39,7 @@ class JumpToBracketAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		BracketMatchingController.get(editor)?.jumpToBracket();
 	}
 }
@@ -68,7 +68,7 @@ class SelectToBracketAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		let selectBrackets = true;
 		if (args && args.selectBrackets === false) {
 			selectBrackets = false;
@@ -90,7 +90,7 @@ class RemoveBracketsAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		BracketMatchingController.get(editor)?.removeBrackets(this.id);
 	}
 }
@@ -176,7 +176,7 @@ export class BracketMatchingController extends Disposable implements IEditorCont
 		}));
 	}
 
-	public jumpToBracket(): codemavi {
+	public jumpToBracket(): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -218,7 +218,7 @@ export class BracketMatchingController extends Disposable implements IEditorCont
 		this._editor.revealRange(newSelections[0]);
 	}
 
-	public selectToBracket(selectBrackets: boolean): codemavi {
+	public selectToBracket(selectBrackets: boolean): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -267,7 +267,7 @@ export class BracketMatchingController extends Disposable implements IEditorCont
 			this._editor.revealRange(newSelections[0]);
 		}
 	}
-	public removeBrackets(editSource?: string): codemavi {
+	public removeBrackets(editSource?: string): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -310,7 +310,7 @@ export class BracketMatchingController extends Disposable implements IEditorCont
 		className: 'bracket-match'
 	});
 
-	private _updateBrackets(): codemavi {
+	private _updateBrackets(): void {
 		if (this._matchBrackets === 'never') {
 			return;
 		}
@@ -329,7 +329,7 @@ export class BracketMatchingController extends Disposable implements IEditorCont
 		this._decorations.set(newDecorations);
 	}
 
-	private _recomputeBrackets(): codemavi {
+	private _recomputeBrackets(): void {
 		if (!this._editor.hasModel() || !this._editor.hasWidgetFocus()) {
 			// no model or no focus => no brackets!
 			this._lastBracketsData = [];

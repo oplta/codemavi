@@ -53,7 +53,7 @@ import { assertNoRpc, poll } from '../utils';
 			});
 			equal(result, terminal);
 			doesNotThrow(terminal.sendText.bind(terminal, 'echo "foo"'));
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -70,7 +70,7 @@ import { assertNoRpc, poll } from '../utils';
 						r(terminal);
 					}
 				}));
-				// Use a single character to acodemavi winpty/conpty issues with injected sequences
+				// Use a single character to avoid winpty/conpty issues with injected sequences
 				const terminal = window.createTerminal({
 					env: { TEST: '`' }
 				});
@@ -78,7 +78,7 @@ import { assertNoRpc, poll } from '../utils';
 			});
 
 			let data = '';
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidWriteTerminalData(e => {
 					if (e.terminal === terminal) {
 						data += e.data;
@@ -95,7 +95,7 @@ import { assertNoRpc, poll } from '../utils';
 				}
 			});
 
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				terminal.dispose();
 				disposables.push(window.onDidCloseTerminal(t => {
 					strictEqual(terminal, t);
@@ -114,7 +114,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 			});
 			equal(result, terminal);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -136,7 +136,7 @@ import { assertNoRpc, poll } from '../utils';
 			equal(result, terminal);
 			const pid = await result.processId;
 			equal(true, pid && pid > 0);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -156,7 +156,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 			});
 			equal(result, terminal);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -181,7 +181,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 			});
 			equal(result, terminal);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -202,7 +202,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 			});
 			equal(result, terminal);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -222,7 +222,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 			});
 			equal(result, terminal);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						deepStrictEqual(t.exitStatus, { code: undefined, reason: TerminalExitReason.Extension });
@@ -245,7 +245,7 @@ import { assertNoRpc, poll } from '../utils';
 				terminal.sendText('test');
 			});
 			strictEqual(eventState.isInteractedWith, true);
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -260,14 +260,14 @@ import { assertNoRpc, poll } from '../utils';
 			if (terminal.state.shell) {
 				return;
 			}
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidChangeTerminalState(e => {
 					if (e === terminal && e.state.shell) {
 						r();
 					}
 				}));
 			});
-			await new Promise<codemavi>(r => {
+			await new Promise<void>(r => {
 				disposables.push(window.onDidCloseTerminal(t => {
 					if (t === terminal) {
 						r();
@@ -359,7 +359,7 @@ import { assertNoRpc, poll } from '../utils';
 				});
 				equal(result, terminal);
 				equal(true, window.terminals.indexOf(terminal) !== -1);
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(t => {
 						if (t === terminal) {
 							r();
@@ -381,30 +381,30 @@ import { assertNoRpc, poll } from '../utils';
 				const terminal = window.createTerminal({ name: 'selection test' });
 				terminal.show();
 				// Wait for some terminal data
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					const disposable = window.onDidWriteTerminalData(() => {
 						disposable.dispose();
 						r();
 					});
 				});
 				await commands.executeCommand('workbench.action.terminal.selectAll');
-				await poll<codemavi>(() => Promise.resolve(), () => terminal.selection !== undefined, 'selection should be defined');
+				await poll<void>(() => Promise.resolve(), () => terminal.selection !== undefined, 'selection should be defined');
 				terminal.dispose();
 			});
 			test('should be undefined after clearing a selection', async () => {
 				const terminal = window.createTerminal({ name: 'selection test' });
 				terminal.show();
 				// Wait for some terminal data
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					const disposable = window.onDidWriteTerminalData(() => {
 						disposable.dispose();
 						r();
 					});
 				});
 				await commands.executeCommand('workbench.action.terminal.selectAll');
-				await poll<codemavi>(() => Promise.resolve(), () => terminal.selection !== undefined, 'selection should be defined');
+				await poll<void>(() => Promise.resolve(), () => terminal.selection !== undefined, 'selection should be defined');
 				await commands.executeCommand('workbench.action.terminal.clearSelection');
-				await poll<codemavi>(() => Promise.resolve(), () => terminal.selection === undefined, 'selection should not be defined');
+				await poll<void>(() => Promise.resolve(), () => terminal.selection === undefined, 'selection should not be defined');
 				terminal.dispose();
 			});
 		});
@@ -422,8 +422,8 @@ import { assertNoRpc, poll } from '../utils';
 				const closeEvents: string[] = [];
 				disposables.push(window.onDidOpenTerminal(e => openEvents.push(e.name)));
 
-				let resolveOnceDataWritten: (() => codemavi) | undefined;
-				let resolveOnceClosed: (() => codemavi) | undefined;
+				let resolveOnceDataWritten: (() => void) | undefined;
+				let resolveOnceClosed: (() => void) | undefined;
 
 				disposables.push(window.onDidWriteTerminalData(e => {
 					dataEvents.push({ name: e.terminal.name, data: e.data });
@@ -451,7 +451,7 @@ import { assertNoRpc, poll } from '../utils';
 				}));
 
 				const term1Write = new EventEmitter<string>();
-				const term1Close = new EventEmitter<codemavi>();
+				const term1Close = new EventEmitter<void>();
 				window.createTerminal({
 					name: 'test1', pty: {
 						onDidWrite: term1Write.event,
@@ -460,15 +460,15 @@ import { assertNoRpc, poll } from '../utils';
 							term1Write.fire('write1');
 
 							// Wait until the data is written
-							await new Promise<codemavi>(resolve => { resolveOnceDataWritten = resolve; });
+							await new Promise<void>(resolve => { resolveOnceDataWritten = resolve; });
 
 							term1Close.fire();
 
 							// Wait until the terminal is closed
-							await new Promise<codemavi>(resolve => { resolveOnceClosed = resolve; });
+							await new Promise<void>(resolve => { resolveOnceClosed = resolve; });
 
 							const term2Write = new EventEmitter<string>();
-							const term2Close = new EventEmitter<codemavi>();
+							const term2Close = new EventEmitter<void>();
 							window.createTerminal({
 								name: 'test2', pty: {
 									onDidWrite: term2Write.event,
@@ -477,12 +477,12 @@ import { assertNoRpc, poll } from '../utils';
 										term2Write.fire('write2');
 
 										// Wait until the data is written
-										await new Promise<codemavi>(resolve => { resolveOnceDataWritten = resolve; });
+										await new Promise<void>(resolve => { resolveOnceDataWritten = resolve; });
 
 										term2Close.fire();
 
 										// Wait until the terminal is closed
-										await new Promise<codemavi>(resolve => { resolveOnceClosed = resolve; });
+										await new Promise<void>(resolve => { resolveOnceClosed = resolve; });
 
 										done();
 									},
@@ -511,7 +511,7 @@ import { assertNoRpc, poll } from '../utils';
 					}));
 					window.createTerminal({ name: 'c', pty });
 				});
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});
@@ -588,7 +588,7 @@ import { assertNoRpc, poll } from '../utils';
 					return;
 				}
 				// TODO: Remove logs when the test is verified as non-flaky
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					// Does this never fire because it's already set to 10x5?
 					disposables.push(window.onDidChangeTerminalDimensions(e => {
 						console.log(`window.onDidChangeTerminalDimensions event, dimensions = ${e.dimensions?.columns}x${e.dimensions?.rows}`);
@@ -618,7 +618,7 @@ import { assertNoRpc, poll } from '../utils';
 					},
 					close: () => { }
 				};
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidOpenTerminal(t1 => {
 						if (t1 === created) {
 							disposables.push(window.onDidCloseTerminal(t2 => {
@@ -642,7 +642,7 @@ import { assertNoRpc, poll } from '../utils';
 					open: () => closeEmitter.fire(undefined),
 					close: () => { }
 				};
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidOpenTerminal(t1 => {
 						if (t1 === created) {
 							strictEqual(created.exitStatus, undefined);
@@ -667,7 +667,7 @@ import { assertNoRpc, poll } from '../utils';
 					open: () => closeEmitter.fire(0),
 					close: () => { }
 				};
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidOpenTerminal(t1 => {
 						if (t1 === created) {
 							strictEqual(created.exitStatus, undefined);
@@ -697,7 +697,7 @@ import { assertNoRpc, poll } from '../utils';
 					},
 					close: () => { }
 				};
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidOpenTerminal(t1 => {
 						if (t1 === created) {
 							strictEqual(created.exitStatus, undefined);
@@ -721,7 +721,7 @@ import { assertNoRpc, poll } from '../utils';
 					close: () => { }
 				};
 				const options = { name: 'foo', pty };
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidOpenTerminal(term => {
 						if (term === terminal) {
 							terminal.dispose();
@@ -769,16 +769,16 @@ import { assertNoRpc, poll } from '../utils';
 
 				// Poll for the echo results to show up
 				try {
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~a2~'), '~a2~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('b1~b2~'), 'b1~b2~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~c2~c1'), '~c2~c1 should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~a2~'), '~a2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('b1~b2~'), 'b1~b2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~c2~c1'), '~c2~c1 should be printed');
 				} catch (err) {
 					console.error('DATA UP UNTIL NOW:', data);
 					throw err;
 				}
 
 				// Wait for terminal to be disposed
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});
@@ -814,16 +814,16 @@ import { assertNoRpc, poll } from '../utils';
 
 				// Poll for the echo results to show up
 				try {
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~a2~'), '~a2~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~b2~'), '~b2~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~c2~'), '~c2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~a2~'), '~a2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~b2~'), '~b2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~c2~'), '~c2~ should be printed');
 				} catch (err) {
 					console.error('DATA UP UNTIL NOW:', data);
 					throw err;
 				}
 
 				// Wait for terminal to be disposed
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});
@@ -858,15 +858,15 @@ import { assertNoRpc, poll } from '../utils';
 
 				// Poll for the echo results to show up
 				try {
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~a1~'), '~a1~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~b1~'), '~b1~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~a1~'), '~a1~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~b1~'), '~b1~ should be printed');
 				} catch (err) {
 					console.error('DATA UP UNTIL NOW:', data);
 					throw err;
 				}
 
 				// Wait for terminal to be disposed
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});
@@ -901,15 +901,15 @@ import { assertNoRpc, poll } from '../utils';
 
 				// Poll for the echo results to show up
 				try {
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~a1~'), '~a1~ should be printed');
-					await poll<codemavi>(() => Promise.resolve(), () => data.includes('~b2~'), '~b2~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~a1~'), '~a1~ should be printed');
+					await poll<void>(() => Promise.resolve(), () => data.includes('~b2~'), '~b2~ should be printed');
 				} catch (err) {
 					console.error('DATA UP UNTIL NOW:', data);
 					throw err;
 				}
 
 				// Wait for terminal to be disposed
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					disposables.push(window.onDidCloseTerminal(() => r()));
 					terminal.dispose();
 				});

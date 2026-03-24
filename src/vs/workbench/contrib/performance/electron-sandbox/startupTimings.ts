@@ -140,7 +140,7 @@ export class NativeStartupTimings extends StartupTimings implements IWorkbenchCo
 		return super._isStandardStartup();
 	}
 
-	private async _appendContent(file: URI, content: string): Promise<codemavi> {
+	private async _appendContent(file: URI, content: string): Promise<void> {
 		const chunks: VSBuffer[] = [];
 		if (await this._fileService.exists(file)) {
 			chunks.push((await this._fileService.readFile(file)).value);
@@ -207,7 +207,7 @@ export class NativeStartupTimings extends StartupTimings implements IWorkbenchCo
 		return undefined;
 	}
 
-	private _telemetryLogHeapStatistics({ used, garbage, majorGCs, minorGCs, duration }: IHeapStatistics): codemavi {
+	private _telemetryLogHeapStatistics({ used, garbage, majorGCs, minorGCs, duration }: IHeapStatistics): void {
 		type StartupHeapStatisticsClassification = {
 			owner: 'bpasero';
 			comment: 'An event that reports startup heap statistics for performance analysis.';

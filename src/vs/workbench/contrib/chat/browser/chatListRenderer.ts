@@ -109,7 +109,7 @@ export interface IChatRendererDelegate {
 	getListLength(): number;
 	currentChatMode(): ChatMode;
 
-	readonly onDidScroll?: Event<codemavi>;
+	readonly onDidScroll?: Event<void>;
 }
 
 const mostRecentResponseClassName = 'chat-most-recent-response';
@@ -241,12 +241,12 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		return undefined;
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		this._isVisible = visible;
 		this._onDidChangeVisibility.fire(visible);
 	}
 
-	layout(width: number): codemavi {
+	layout(width: number): void {
 		const newWidth = width - 40; // padding
 		if (newWidth !== this._currentLayoutWidth) {
 			this._currentLayoutWidth = newWidth;
@@ -358,11 +358,11 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		return template;
 	}
 
-	renderElement(node: ITreeNode<ChatTreeItem, FuzzyScore>, index: number, templateData: IChatListItemTemplate): codemavi {
+	renderElement(node: ITreeNode<ChatTreeItem, FuzzyScore>, index: number, templateData: IChatListItemTemplate): void {
 		this.renderChatTreeItem(node.element, index, templateData);
 	}
 
-	private clearRenderedParts(templateData: IChatListItemTemplate): codemavi {
+	private clearRenderedParts(templateData: IChatListItemTemplate): void {
 		if (templateData.renderedParts) {
 			dispose(coalesce(templateData.renderedParts));
 			templateData.renderedParts = undefined;
@@ -370,7 +370,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		}
 	}
 
-	renderChatTreeItem(element: ChatTreeItem, index: number, templateData: IChatListItemTemplate): codemavi {
+	renderChatTreeItem(element: ChatTreeItem, index: number, templateData: IChatListItemTemplate): void {
 		if (templateData.currentElement && templateData.currentElement.id !== element.id) {
 			this.traceLayout('renderChatTreeItem', `Rendering a different element into the template, index=${index}`);
 			this.clearRenderedParts(templateData);
@@ -439,7 +439,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 						timer.cancel();
 					}
 				} catch (err) {
-					// Kill the timer if anything went wrong, acodemavi getting stuck in a nasty rendering loop.
+					// Kill the timer if anything went wrong, avoid getting stuck in a nasty rendering loop.
 					timer.cancel();
 					this.logService.error(err);
 				}
@@ -455,13 +455,13 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		}
 	}
 
-	private renderDetail(element: IChatResponseViewModel, templateData: IChatListItemTemplate): codemavi {
+	private renderDetail(element: IChatResponseViewModel, templateData: IChatListItemTemplate): void {
 		templateData.elementDisposables.add(autorun(reader => {
 			this._renderDetail(element, templateData);
 		}));
 	}
 
-	private _renderDetail(element: IChatResponseViewModel, templateData: IChatListItemTemplate): codemavi {
+	private _renderDetail(element: IChatResponseViewModel, templateData: IChatListItemTemplate): void {
 
 		dom.clearNode(templateData.detail);
 
@@ -494,7 +494,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		}
 	}
 
-	private renderAvatar(element: ChatTreeItem, templateData: IChatListItemTemplate): codemavi {
+	private renderAvatar(element: ChatTreeItem, templateData: IChatListItemTemplate): void {
 		const icon = isResponseVM(element) ?
 			this.getAgentIcon(element.agent?.metadata) :
 			(element.avatarIcon ?? Codicon.account);
@@ -639,7 +639,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		}
 	}
 
-	private updateItemHeight(templateData: IChatListItemTemplate): codemavi {
+	private updateItemHeight(templateData: IChatListItemTemplate): void {
 		if (!templateData.currentElement) {
 			return;
 		}
@@ -708,7 +708,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		return false;
 	}
 
-	private renderChatContentDiff(partsToRender: ReadonlyArray<IChatRendererContent | null>, contentForThisTurn: ReadonlyArray<IChatRendererContent>, element: IChatResponseViewModel, templateData: IChatListItemTemplate): codemavi {
+	private renderChatContentDiff(partsToRender: ReadonlyArray<IChatRendererContent | null>, contentForThisTurn: ReadonlyArray<IChatRendererContent>, element: IChatResponseViewModel, templateData: IChatListItemTemplate): void {
 		const renderedParts = templateData.renderedParts ?? [];
 		templateData.renderedParts = renderedParts;
 		partsToRender.forEach((partToRender, index) => {
@@ -765,7 +765,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		let numNeededWords = data.numWordsToRender;
 		const partsToRender: IChatRendererContent[] = [];
 
-		// Always add the references to acodemavi shifting the content parts when a reference is added, and having to re-diff all the content.
+		// Always add the references to avoid shifting the content parts when a reference is added, and having to re-diff all the content.
 		// The part will hide itself if the list is empty.
 		partsToRender.push({ kind: 'references', references: element.contentReferences });
 
@@ -973,7 +973,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		return context.preceedingContentParts.reduce((acc, part) => acc + (part.codeblocks?.length ?? 0), 0);
 	}
 
-	private handleRenderedCodeblocks(element: ChatTreeItem, part: IChatContentPart, codeBlockStartIndex: number): codemavi {
+	private handleRenderedCodeblocks(element: ChatTreeItem, part: IChatContentPart, codeBlockStartIndex: number): void {
 		if (!part.addDisposable || part.codeblocksPartId === undefined) {
 			return;
 		}
@@ -1073,7 +1073,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		return markdownPart;
 	}
 
-	disposeElement(node: ITreeNode<ChatTreeItem, FuzzyScore>, index: number, templateData: IChatListItemTemplate): codemavi {
+	disposeElement(node: ITreeNode<ChatTreeItem, FuzzyScore>, index: number, templateData: IChatListItemTemplate): void {
 		this.traceLayout('disposeElement', `Disposing element, index=${index}`);
 		templateData.elementDisposables.clear();
 
@@ -1084,7 +1084,7 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 		templateData.footerToolbar.context = undefined;
 	}
 
-	disposeTemplate(templateData: IChatListItemTemplate): codemavi {
+	disposeTemplate(templateData: IChatListItemTemplate): void {
 		templateData.templateDisposables.dispose();
 	}
 }
@@ -1178,7 +1178,7 @@ export class ChatVoteDownButton extends DropdownMenuActionViewItem {
 		];
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 
 		this.element?.classList.toggle('checked', this.action.checked);

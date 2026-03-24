@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------*/
 
 import { mountFnGenerator } from '../util/mountFnGenerator.js'
-import { Code MaviCommandBarMain } from './Code MaviCommandBar.js'
-import { Code MaviSelectionHelperMain } from './Code MaviSelectionHelper.js'
+import { MaviCommandBarMain } from './MaviCommandBar.js'
+import { MaviSelectionHelperMain } from './MaviSelectionHelper.js'
 
-export const mountCode MaviCommandBar = mountFnGenerator(Code MaviCommandBarMain)
+export const mountMaviCommandBar = mountFnGenerator(MaviCommandBarMain)
 
-export const mountCode MaviSelectionHelper = mountFnGenerator(Code MaviSelectionHelperMain)
+export const mountMaviSelectionHelper = mountFnGenerator(MaviSelectionHelperMain)
 

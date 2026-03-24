@@ -71,8 +71,8 @@ export interface IKeyboardEvent {
 	toKeyCodeChord(): KeyCodeChord;
 	equals(keybinding: number): boolean;
 
-	preventDefault(): codemavi;
-	stopPropagation(): codemavi;
+	preventDefault(): void;
+	stopPropagation(): void;
 }
 
 const ctrlKeyMod = (platform.isMacintosh ? KeyMod.WinCtrl : KeyMod.CtrlCmd);
@@ -159,13 +159,13 @@ export class StandardKeyboardEvent implements IKeyboardEvent {
 		// console.log(`code: ${e.code}, keyCode: ${e.keyCode}, key: ${e.key}`);
 	}
 
-	public preventDefault(): codemavi {
+	public preventDefault(): void {
 		if (this.browserEvent && this.browserEvent.preventDefault) {
 			this.browserEvent.preventDefault();
 		}
 	}
 
-	public stopPropagation(): codemavi {
+	public stopPropagation(): void {
 		if (this.browserEvent && this.browserEvent.stopPropagation) {
 			this.browserEvent.stopPropagation();
 		}

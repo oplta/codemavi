@@ -279,7 +279,7 @@ export class ExtensionsSynchroniser extends AbstractSynchroniser implements IUse
 		}
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IExtensionResourcePreview, IExtensionResourceMergeResult][], force: boolean): Promise<codemavi> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [IExtensionResourcePreview, IExtensionResourceMergeResult][], force: boolean): Promise<void> {
 		let { skippedExtensions, builtinExtensions, localExtensions } = resourcePreviews[0][0];
 		const { local, remote, localChange, remoteChange } = resourcePreviews[0][1];
 
@@ -557,7 +557,7 @@ export class LocalExtensionsProvider {
 		return newSkippedExtensions;
 	}
 
-	private updateExtensionState(state: IStringDictionary<any>, extension: ILocalExtension | IGalleryExtension, version: string | undefined, extensionStorageService: IExtensionStorageService): codemavi {
+	private updateExtensionState(state: IStringDictionary<any>, extension: ILocalExtension | IGalleryExtension, version: string | undefined, extensionStorageService: IExtensionStorageService): void {
 		const extensionState = extensionStorageService.getExtensionState(extension, true) || {};
 		const keys = version ? extensionStorageService.getKeysForSync({ id: extension.identifier.id, version }) : undefined;
 		if (keys) {

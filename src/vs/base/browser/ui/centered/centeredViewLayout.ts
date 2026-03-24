@@ -97,7 +97,7 @@ export class CenteredViewLayout implements IDisposable {
 		this.splitView.orthogonalEndSash = boundarySashes.bottom;
 	}
 
-	layout(width: number, height: number, top: number, left: number): codemavi {
+	layout(width: number, height: number, top: number, left: number): void {
 		this.lastLayoutPosition = { width, height, top, left };
 		if (this.splitView) {
 			this.splitView.layout(width, this.lastLayoutPosition);
@@ -111,7 +111,7 @@ export class CenteredViewLayout implements IDisposable {
 		this.didLayout = true;
 	}
 
-	private resizeSplitViews(): codemavi {
+	private resizeSplitViews(): void {
 		if (!this.splitView) {
 			return;
 		}
@@ -151,7 +151,7 @@ export class CenteredViewLayout implements IDisposable {
 		return !!this.splitView;
 	}
 
-	styles(style: ICenteredViewStyles): codemavi {
+	styles(style: ICenteredViewStyles): void {
 		this.style = style;
 		if (this.splitView && this.emptyViews) {
 			this.splitView.style(this.style);
@@ -160,7 +160,7 @@ export class CenteredViewLayout implements IDisposable {
 		}
 	}
 
-	activate(active: boolean): codemavi {
+	activate(active: boolean): void {
 		if (active === this.isActive()) {
 			return;
 		}
@@ -214,7 +214,7 @@ export class CenteredViewLayout implements IDisposable {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.splitViewDisposables.dispose();
 
 		if (this.splitView) {

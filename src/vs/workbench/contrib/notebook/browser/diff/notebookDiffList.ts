@@ -102,16 +102,16 @@ export class CellDiffPlaceholderRenderer implements IListRenderer<DiffElementPla
 		};
 	}
 
-	renderElement(element: DiffElementPlaceholderViewModel, index: number, templateData: CellDiffPlaceholderRenderTemplate, height: number | undefined): codemavi {
+	renderElement(element: DiffElementPlaceholderViewModel, index: number, templateData: CellDiffPlaceholderRenderTemplate, height: number | undefined): void {
 		templateData.body.classList.remove('left', 'right', 'full');
 		templateData.elementDisposables.add(this.instantiationService.createInstance(CellDiffPlaceholderElement, element, templateData));
 	}
 
-	disposeTemplate(templateData: CellDiffPlaceholderRenderTemplate): codemavi {
+	disposeTemplate(templateData: CellDiffPlaceholderRenderTemplate): void {
 		templateData.container.innerText = '';
 	}
 
-	disposeElement(element: DiffElementPlaceholderViewModel, index: number, templateData: CellDiffPlaceholderRenderTemplate): codemavi {
+	disposeElement(element: DiffElementPlaceholderViewModel, index: number, templateData: CellDiffPlaceholderRenderTemplate): void {
 		templateData.elementDisposables.clear();
 	}
 }
@@ -189,19 +189,19 @@ export class NotebookDocumentMetadataDiffRenderer implements IListRenderer<Noteb
 		return buildDiffEditorWidget(this.instantiationService, this.notebookEditor, sourceContainer, { readOnly: true });
 	}
 
-	renderElement(element: NotebookDocumentMetadataViewModel, index: number, templateData: NotebookDocumentDiffElementRenderTemplate, height: number | undefined): codemavi {
+	renderElement(element: NotebookDocumentMetadataViewModel, index: number, templateData: NotebookDocumentDiffElementRenderTemplate, height: number | undefined): void {
 		templateData.body.classList.remove('full');
 		templateData.elementDisposables.add(this.instantiationService.createInstance(NotebookDocumentMetadataElement, this.notebookEditor, element, templateData));
 	}
 
-	disposeTemplate(templateData: NotebookDocumentDiffElementRenderTemplate): codemavi {
+	disposeTemplate(templateData: NotebookDocumentDiffElementRenderTemplate): void {
 		templateData.container.innerText = '';
 		templateData.sourceEditor.dispose();
 		templateData.toolbar?.dispose();
 		templateData.elementDisposables.dispose();
 	}
 
-	disposeElement(element: NotebookDocumentMetadataViewModel, index: number, templateData: NotebookDocumentDiffElementRenderTemplate): codemavi {
+	disposeElement(element: NotebookDocumentMetadataViewModel, index: number, templateData: NotebookDocumentDiffElementRenderTemplate): void {
 		if (templateData.toolbar) {
 			templateData.toolbar.context = undefined;
 		}
@@ -270,7 +270,7 @@ export class CellDiffSingleSideRenderer implements IListRenderer<SingleSideDiffE
 		return buildSourceEditor(this.instantiationService, this.notebookEditor, sourceContainer);
 	}
 
-	renderElement(element: SingleSideDiffElementViewModel, index: number, templateData: CellDiffSingleSideRenderTemplate, height: number | undefined): codemavi {
+	renderElement(element: SingleSideDiffElementViewModel, index: number, templateData: CellDiffSingleSideRenderTemplate, height: number | undefined): void {
 		templateData.body.classList.remove('left', 'right', 'full');
 
 		switch (element.type) {
@@ -285,13 +285,13 @@ export class CellDiffSingleSideRenderer implements IListRenderer<SingleSideDiffE
 		}
 	}
 
-	disposeTemplate(templateData: CellDiffSingleSideRenderTemplate): codemavi {
+	disposeTemplate(templateData: CellDiffSingleSideRenderTemplate): void {
 		templateData.container.innerText = '';
 		templateData.sourceEditor.dispose();
 		templateData.elementDisposables.dispose();
 	}
 
-	disposeElement(element: SingleSideDiffElementViewModel, index: number, templateData: CellDiffSingleSideRenderTemplate): codemavi {
+	disposeElement(element: SingleSideDiffElementViewModel, index: number, templateData: CellDiffSingleSideRenderTemplate): void {
 		templateData.elementDisposables.clear();
 	}
 }
@@ -380,7 +380,7 @@ export class CellDiffSideBySideRenderer implements IListRenderer<SideBySideDiffE
 		return buildDiffEditorWidget(this.instantiationService, this.notebookEditor, sourceContainer);
 	}
 
-	renderElement(element: SideBySideDiffElementViewModel, index: number, templateData: CellDiffSideBySideRenderTemplate, height: number | undefined): codemavi {
+	renderElement(element: SideBySideDiffElementViewModel, index: number, templateData: CellDiffSideBySideRenderTemplate, height: number | undefined): void {
 		templateData.body.classList.remove('left', 'right', 'full');
 
 		switch (element.type) {
@@ -395,14 +395,14 @@ export class CellDiffSideBySideRenderer implements IListRenderer<SideBySideDiffE
 		}
 	}
 
-	disposeTemplate(templateData: CellDiffSideBySideRenderTemplate): codemavi {
+	disposeTemplate(templateData: CellDiffSideBySideRenderTemplate): void {
 		templateData.container.innerText = '';
 		templateData.sourceEditor.dispose();
 		templateData.toolbar?.dispose();
 		templateData.elementDisposables.dispose();
 	}
 
-	disposeElement(element: SideBySideDiffElementViewModel, index: number, templateData: CellDiffSideBySideRenderTemplate): codemavi {
+	disposeElement(element: SideBySideDiffElementViewModel, index: number, templateData: CellDiffSideBySideRenderTemplate): void {
 		if (templateData.toolbar) {
 			templateData.toolbar.context = undefined;
 		}
@@ -411,7 +411,7 @@ export class CellDiffSideBySideRenderer implements IListRenderer<SideBySideDiffE
 }
 
 export class NotebookMouseController<T> extends MouseController<T> {
-	protected override onViewPointer(e: IListMouseEvent<T>): codemavi {
+	protected override onViewPointer(e: IListMouseEvent<T>): void {
 		if (isMonacoEditor(e.browserEvent.target as HTMLElement)) {
 			const focus = typeof e.index === 'undefined' ? [] : [e.index];
 			this.list.setFocus(focus, e.browserEvent);

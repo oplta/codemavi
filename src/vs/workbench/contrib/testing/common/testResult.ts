@@ -96,13 +96,13 @@ export interface ITestResult {
  */
 export interface ITaskRawOutput {
 	readonly onDidWriteData: Event<VSBuffer>;
-	readonly endPromise: Promise<codemavi>;
+	readonly endPromise: Promise<void>;
 	readonly buffers: VSBuffer[];
 	readonly length: number;
 
 	/** Gets a continuous buffer for the desired range */
 	getRange(start: number, length: number): VSBuffer;
-	/** Gets an iterator of buffers for the range; may acodemavi allocation of getRange() */
+	/** Gets an iterator of buffers for the range; may avoid allocation of getRange() */
 	getRangeIter(start: number, length: number): Iterable<VSBuffer>;
 }
 
@@ -117,7 +117,7 @@ const emptyRawOutput: ITaskRawOutput = {
 
 export class TaskRawOutput implements ITaskRawOutput {
 	private readonly writeDataEmitter = new Emitter<VSBuffer>();
-	private readonly endDeferred = new DeferredPromise<codemavi>();
+	private readonly endDeferred = new DeferredPromise<void>();
 	private offset = 0;
 
 	/** @inheritdoc */
@@ -277,7 +277,7 @@ export type TestResultItemChange = { item: TestResultItem; result: ITestResult }
  * and marked as "complete" when the run finishes.
  */
 export class LiveTestResult extends Disposable implements ITestResult {
-	private readonly completeEmitter = this._register(new Emitter<codemavi>());
+	private readonly completeEmitter = this._register(new Emitter<void>());
 	private readonly newTaskEmitter = this._register(new Emitter<number>());
 	private readonly endTaskEmitter = this._register(new Emitter<number>());
 	private readonly changeEmitter = this._register(new Emitter<TestResultItemChange>());
@@ -356,7 +356,7 @@ export class LiveTestResult extends Disposable implements ITestResult {
 	/**
 	 * Appends output that occurred during the test run.
 	 */
-	public appendOutput(output: VSBuffer, taskId: string, location?: IRichLocation, testId?: string): codemavi {
+	public appendOutput(output: VSBuffer, taskId: string, location?: IRichLocation, testId?: string): void {
 		const preview = output.byteLength > 100 ? output.slice(0, 100).toString() + '…' : output.toString();
 		let marker: number | undefined;
 

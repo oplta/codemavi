@@ -2622,7 +2622,7 @@
 					"name": "punctuation.separator.delimiter.php"
 				},
 				{
-					"match": "(?i)\\b(null|int|float|bool|string|array|object|callable|iterable|true|false|mixed|codemavi)\\b",
+					"match": "(?i)\\b(null|int|float|bool|string|array|object|callable|iterable|true|false|mixed| void)\\b",
 					"name": "keyword.other.type.php"
 				},
 				{
@@ -2812,7 +2812,7 @@
 							"name": "keyword.operator.nullable-type.php"
 						},
 						{
-							"match": "(?x)\\b\n(string|integer|int|boolean|bool|float|double|object|mixed\n|array|resource|codemavi|null|callback|false|true|self|static)\\b",
+							"match": "(?x)\\b\n(string|integer|int|boolean|bool|float|double|object|mixed\n|array|resource|void |null|callback|false|true|self|static)\\b",
 							"name": "keyword.other.type.php"
 						},
 						{

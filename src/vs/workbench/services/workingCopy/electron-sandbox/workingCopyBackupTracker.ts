@@ -180,7 +180,7 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 
 				if (isMacintosh || await this.nativeHostService.getWindowCount() > 1) {
 					if (this.contextService.getWorkbenchState() !== WorkbenchState.EMPTY) {
-						return modifiedWorkingCopies.filter(modifiedWorkingCopy => modifiedWorkingCopy.capabilities & WorkingCopyCapabilities.Scratchpad); // backup scratchpads automatically to acodemavi user confirmation
+						return modifiedWorkingCopies.filter(modifiedWorkingCopy => modifiedWorkingCopy.capabilities & WorkingCopyCapabilities.Scratchpad); // backup scratchpads automatically to avoid user confirmation
 					}
 
 					return []; // do not backup if a window is closed that does not cause quitting of the application
@@ -203,7 +203,7 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 						return modifiedWorkingCopies; // backup if a workspace/folder is open and onExitAndWindowClose is configured
 					}
 
-					return modifiedWorkingCopies.filter(modifiedWorkingCopy => modifiedWorkingCopy.capabilities & WorkingCopyCapabilities.Scratchpad); // backup scratchpads automatically to acodemavi user confirmation
+					return modifiedWorkingCopies.filter(modifiedWorkingCopy => modifiedWorkingCopy.capabilities & WorkingCopyCapabilities.Scratchpad); // backup scratchpads automatically to avoid user confirmation
 				}
 
 				return []; // do not backup because we are switching contexts with no workspace/folder open
@@ -329,7 +329,7 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 		return true; // veto (user canceled)
 	}
 
-	private doSaveAllBeforeShutdown(workingCopies: IWorkingCopy[], reason: SaveReason): Promise<codemavi> {
+	private doSaveAllBeforeShutdown(workingCopies: IWorkingCopy[], reason: SaveReason): Promise<void> {
 		return this.withProgressAndCancellation(async () => {
 
 			// Skip save participants on shutdown for performance reasons
@@ -360,7 +360,7 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 			workingCopies.some(workingCopy => workingCopy.capabilities & WorkingCopyCapabilities.Untitled || workingCopy.capabilities & WorkingCopyCapabilities.Scratchpad) ? ProgressLocation.Window : ProgressLocation.Dialog);
 	}
 
-	private doRevertAllBeforeShutdown(modifiedWorkingCopies: IWorkingCopy[]): Promise<codemavi> {
+	private doRevertAllBeforeShutdown(modifiedWorkingCopies: IWorkingCopy[]): Promise<void> {
 		return this.withProgressAndCancellation(async () => {
 
 			// Soft revert is good enough on shutdown
@@ -410,10 +410,10 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 		return false; // no veto (no modified)
 	}
 
-	private discardBackupsBeforeShutdown(backupsToDiscard: IWorkingCopyIdentifier[]): Promise<codemavi>;
-	private discardBackupsBeforeShutdown(backupsToKeep: { except: IWorkingCopyIdentifier[] }): Promise<codemavi>;
-	private discardBackupsBeforeShutdown(backupsToDiscardOrKeep: IWorkingCopyIdentifier[] | { except: IWorkingCopyIdentifier[] }): Promise<codemavi>;
-	private async discardBackupsBeforeShutdown(arg1: IWorkingCopyIdentifier[] | { except: IWorkingCopyIdentifier[] }): Promise<codemavi> {
+	private discardBackupsBeforeShutdown(backupsToDiscard: IWorkingCopyIdentifier[]): Promise<void>;
+	private discardBackupsBeforeShutdown(backupsToKeep: { except: IWorkingCopyIdentifier[] }): Promise<void>;
+	private discardBackupsBeforeShutdown(backupsToDiscardOrKeep: IWorkingCopyIdentifier[] | { except: IWorkingCopyIdentifier[] }): Promise<void>;
+	private async discardBackupsBeforeShutdown(arg1: IWorkingCopyIdentifier[] | { except: IWorkingCopyIdentifier[] }): Promise<void> {
 
 		// We never discard any backups before we are ready
 		// and have resolved all backups that exist. This
@@ -446,7 +446,7 @@ export class NativeWorkingCopyBackupTracker extends WorkingCopyBackupTracker imp
 		}, localize('discardBackupsBeforeShutdown', "Discarding backups is taking a bit longer..."));
 	}
 
-	private withProgressAndCancellation(promiseFactory: (token: CancellationToken) => Promise<codemavi>, title: string, detail?: string, location = ProgressLocation.Dialog): Promise<codemavi> {
+	private withProgressAndCancellation(promiseFactory: (token: CancellationToken) => Promise<void>, title: string, detail?: string, location = ProgressLocation.Dialog): Promise<void> {
 		const cts = new CancellationTokenSource();
 
 		return this.progressService.withProgress({

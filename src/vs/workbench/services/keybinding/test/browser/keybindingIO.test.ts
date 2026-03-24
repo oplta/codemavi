@@ -16,29 +16,29 @@ suite('keybindingIO', () => {
 
 	test('serialize/deserialize', () => {
 
-		function testOneSerialization(keybinding: number, expected: string, msg: string, OS: OperatingSystem): codemavi {
+		function testOneSerialization(keybinding: number, expected: string, msg: string, OS: OperatingSystem): void {
 			const usLayoutResolvedKeybinding = createUSLayoutResolvedKeybinding(keybinding, OS)!;
 			const actualSerialized = usLayoutResolvedKeybinding.getUserSettingsLabel();
 			assert.strictEqual(actualSerialized, expected, expected + ' - ' + msg);
 		}
-		function testSerialization(keybinding: number, expectedWin: string, expectedMac: string, expectedLinux: string): codemavi {
+		function testSerialization(keybinding: number, expectedWin: string, expectedMac: string, expectedLinux: string): void {
 			testOneSerialization(keybinding, expectedWin, 'win', OperatingSystem.Windows);
 			testOneSerialization(keybinding, expectedMac, 'mac', OperatingSystem.Macintosh);
 			testOneSerialization(keybinding, expectedLinux, 'linux', OperatingSystem.Linux);
 		}
 
-		function testOneDeserialization(keybinding: string, _expected: number, msg: string, OS: OperatingSystem): codemavi {
+		function testOneDeserialization(keybinding: string, _expected: number, msg: string, OS: OperatingSystem): void {
 			const actualDeserialized = KeybindingParser.parseKeybinding(keybinding);
 			const expected = decodeKeybinding(_expected, OS);
 			assert.deepStrictEqual(actualDeserialized, expected, keybinding + ' - ' + msg);
 		}
-		function testDeserialization(inWin: string, inMac: string, inLinux: string, expected: number): codemavi {
+		function testDeserialization(inWin: string, inMac: string, inLinux: string, expected: number): void {
 			testOneDeserialization(inWin, expected, 'win', OperatingSystem.Windows);
 			testOneDeserialization(inMac, expected, 'mac', OperatingSystem.Macintosh);
 			testOneDeserialization(inLinux, expected, 'linux', OperatingSystem.Linux);
 		}
 
-		function testRoundtrip(keybinding: number, expectedWin: string, expectedMac: string, expectedLinux: string): codemavi {
+		function testRoundtrip(keybinding: number, expectedWin: string, expectedMac: string, expectedLinux: string): void {
 			testSerialization(keybinding, expectedWin, expectedMac, expectedLinux);
 			testDeserialization(expectedWin, expectedMac, expectedLinux, keybinding);
 		}

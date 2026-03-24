@@ -12,7 +12,7 @@ import { TextModel } from '../../../common/model/textModel.js';
 import { IModelContentChangedEvent } from '../../../common/textModelEvents.js';
 import { createTextModel } from '../testTextModel.js';
 
-export function testApplyEditsWithSyncedModels(original: string[], edits: ISingleEditOperation[], expected: string[], inputEditsAreInvalid: boolean = false): codemavi {
+export function testApplyEditsWithSyncedModels(original: string[], edits: ISingleEditOperation[], expected: string[], inputEditsAreInvalid: boolean = false): void {
 	const originalStr = original.join('\n');
 	const expectedStr = expected.join('\n');
 
@@ -52,7 +52,7 @@ const enum AssertDocumentLineMappingDirection {
 	PositionToOffset
 }
 
-function assertOneDirectionLineMapping(model: TextModel, direction: AssertDocumentLineMappingDirection, msg: string): codemavi {
+function assertOneDirectionLineMapping(model: TextModel, direction: AssertDocumentLineMappingDirection, msg: string): void {
 	const allText = model.getValue();
 
 	let line = 1, column = 1, previousIsCarriageReturn = false;
@@ -81,13 +81,13 @@ function assertOneDirectionLineMapping(model: TextModel, direction: AssertDocume
 	}
 }
 
-function assertLineMapping(model: TextModel, msg: string): codemavi {
+function assertLineMapping(model: TextModel, msg: string): void {
 	assertOneDirectionLineMapping(model, AssertDocumentLineMappingDirection.PositionToOffset, msg);
 	assertOneDirectionLineMapping(model, AssertDocumentLineMappingDirection.OffsetToPosition, msg);
 }
 
 
-export function assertSyncedModels(text: string, callback: (model: TextModel, assertMirrorModels: () => codemavi) => codemavi, setup: ((model: TextModel) => codemavi) | null = null): codemavi {
+export function assertSyncedModels(text: string, callback: (model: TextModel, assertMirrorModels: () => void) => void, setup: ((model: TextModel) => void) | null = null): void {
 	const model = createTextModel(text);
 	model.setEOL(EndOfLineSequence.LF);
 	assertLineMapping(model, 'model');

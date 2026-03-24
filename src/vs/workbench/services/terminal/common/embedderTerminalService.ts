@@ -19,7 +19,7 @@ export interface IEmbedderTerminalService {
 
 	readonly onDidCreateTerminal: Event<IShellLaunchConfig>;
 
-	createTerminal(options: IEmbedderTerminalOptions): codemavi;
+	createTerminal(options: IEmbedderTerminalOptions): void;
 }
 
 export type EmbedderTerminal = IShellLaunchConfig & Required<Pick<IShellLaunchConfig, 'customPtyImplementation'>>;
@@ -40,16 +40,16 @@ export interface IEmbedderTerminalOptions {
  */
 export interface IEmbedderTerminalPty {
 	onDidWrite: Event<string>;
-	onDidClose?: Event<codemavi | number>;
+	onDidClose?: Event<void | number>;
 	onDidChangeName?: Event<string>;
 
-	open(): codemavi;
-	close(): codemavi;
+	open(): void;
+	close(): void;
 
 	// Extension APIs that have not been implemented for embedders:
 	//   onDidOverrideDimensions?: Event<TerminalDimensions | undefined>;
-	//   handleInput?(data: string): codemavi;
-	//   setDimensions?(dimensions: TerminalDimensions): codemavi;
+	//   handleInput?(data: string): void;
+	//   setDimensions?(dimensions: TerminalDimensions): void;
 }
 
 class EmbedderTerminalService implements IEmbedderTerminalService {
@@ -58,7 +58,7 @@ class EmbedderTerminalService implements IEmbedderTerminalService {
 	private readonly _onDidCreateTerminal = new Emitter<IShellLaunchConfig>();
 	readonly onDidCreateTerminal = Event.buffer(this._onDidCreateTerminal.event);
 
-	createTerminal(options: IEmbedderTerminalOptions): codemavi {
+	createTerminal(options: IEmbedderTerminalOptions): void {
 		const slc: EmbedderTerminal = {
 			name: options.name,
 			isFeatureTerminal: true,
@@ -108,29 +108,29 @@ class EmbedderTerminalProcess extends Disposable implements ITerminalChildProces
 		this._pty.open();
 		return undefined;
 	}
-	shutdown(): codemavi {
+	shutdown(): void {
 		this._pty.close();
 	}
 
 	// TODO: A lot of these aren't useful for some implementations of ITerminalChildProcess, should
 	// they be optional? Should there be a base class for "external" consumers to implement?
 
-	input(): codemavi {
+	input(): void {
 		// not supported
 	}
-	async processBinary(): Promise<codemavi> {
+	async processBinary(): Promise<void> {
 		// not supported
 	}
-	resize(): codemavi {
+	resize(): void {
 		// no-op
 	}
-	clearBuffer(): codemavi | Promise<codemavi> {
+	clearBuffer(): void | Promise<void> {
 		// no-op
 	}
-	acknowledgeDataEvent(): codemavi {
+	acknowledgeDataEvent(): void {
 		// no-op, flow control not currently implemented
 	}
-	async setUnicodeVersion(): Promise<codemavi> {
+	async setUnicodeVersion(): Promise<void> {
 		// no-op
 	}
 	async getInitialCwd(): Promise<string> {
@@ -143,7 +143,7 @@ class EmbedderTerminalProcess extends Disposable implements ITerminalChildProces
 		throw new Error(`refreshProperty is not suppported in EmbedderTerminalProcess. property: ${property}`);
 	}
 
-	updateProperty(property: ProcessPropertyType, value: any): Promise<codemavi> {
+	updateProperty(property: ProcessPropertyType, value: any): Promise<void> {
 		throw new Error(`updateProperty is not suppported in EmbedderTerminalProcess. property: ${property}, value: ${value}`);
 	}
 }

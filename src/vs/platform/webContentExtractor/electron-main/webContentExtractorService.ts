@@ -19,7 +19,7 @@ export class NativeWebContentExtractorService implements IWebContentExtractorSer
 	_serviceBrand: undefined;
 
 	// Only allow 3 windows to be opened at a time
-	// to acodemavi overwhelming the system with too many processes.
+	// to avoid overwhelming the system with too many processes.
 	private _limiter = new Limiter<string>(3);
 	private _webContentsCache = new ResourceMap<CacheEntry>();
 	private readonly _cacheDuration = 24 * 60 * 60 * 1000; // 1 day in milliseconds

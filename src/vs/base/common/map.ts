@@ -108,7 +108,7 @@ export class ResourceMap<T> implements Map<URI, T> {
 		return this.map.size;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.map.clear();
 	}
 
@@ -116,7 +116,7 @@ export class ResourceMap<T> implements Map<URI, T> {
 		return this.map.delete(this.toKey(resource));
 	}
 
-	forEach(clb: (value: T, key: URI, map: Map<URI, T>) => codemavi, thisArg?: any): codemavi {
+	forEach(clb: (value: T, key: URI, map: Map<URI, T>) => void, thisArg?: any): void {
 		if (typeof thisArg !== 'undefined') {
 			clb = clb.bind(thisArg);
 		}
@@ -177,7 +177,7 @@ export class ResourceSet implements Set<URI> {
 		return this;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._map.clear();
 	}
 
@@ -185,7 +185,7 @@ export class ResourceSet implements Set<URI> {
 		return this._map.delete(value);
 	}
 
-	forEach(callbackfn: (value: URI, value2: URI, set: Set<URI>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: URI, value2: URI, set: Set<URI>) => void, thisArg?: any): void {
 		this._map.forEach((_value, key) => callbackfn.call(thisArg, key, key, this));
 	}
 
@@ -243,7 +243,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		this._state = 0;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._map.clear();
 		this._head = undefined;
 		this._tail = undefined;
@@ -340,7 +340,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		return item.value;
 	}
 
-	forEach(callbackfn: (value: V, key: K, map: LinkedMap<K, V>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: V, key: K, map: LinkedMap<K, V>) => void, thisArg?: any): void {
 		const state = this._state;
 		let current = this._head;
 		while (current) {
@@ -478,7 +478,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private addItemFirst(item: Item<K, V>): codemavi {
+	private addItemFirst(item: Item<K, V>): void {
 		// First time Insert
 		if (!this._head && !this._tail) {
 			this._tail = item;
@@ -492,7 +492,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private addItemLast(item: Item<K, V>): codemavi {
+	private addItemLast(item: Item<K, V>): void {
 		// First time Insert
 		if (!this._head && !this._tail) {
 			this._head = item;
@@ -506,7 +506,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private removeItem(item: Item<K, V>): codemavi {
+	private removeItem(item: Item<K, V>): void {
 		if (item === this._head && item === this._tail) {
 			this._head = undefined;
 			this._tail = undefined;
@@ -543,7 +543,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		this._state++;
 	}
 
-	private touch(item: Item<K, V>, touch: Touch): codemavi {
+	private touch(item: Item<K, V>, touch: Touch): void {
 		if (!this._head || !this._tail) {
 			throw new Error('Invalid list');
 		}
@@ -615,7 +615,7 @@ export class LinkedMap<K, V> implements Map<K, V> {
 		return data;
 	}
 
-	fromJSON(data: [K, V][]): codemavi {
+	fromJSON(data: [K, V][]): void {
 		this.clear();
 
 		for (const [key, value] of data) {
@@ -672,7 +672,7 @@ abstract class Cache<K, V> extends LinkedMap<K, V> {
 		}
 	}
 
-	protected abstract trim(newSize: number): codemavi;
+	protected abstract trim(newSize: number): void;
 }
 
 export class LRUCache<K, V> extends Cache<K, V> {
@@ -761,12 +761,12 @@ export class BidirectionalMap<K, V> {
 		}
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this._m1.clear();
 		this._m2.clear();
 	}
 
-	set(key: K, value: V): codemavi {
+	set(key: K, value: V): void {
 		this._m1.set(key, value);
 		this._m2.set(value, key);
 	}
@@ -789,7 +789,7 @@ export class BidirectionalMap<K, V> {
 		return true;
 	}
 
-	forEach(callbackfn: (value: V, key: K, map: BidirectionalMap<K, V>) => codemavi, thisArg?: any): codemavi {
+	forEach(callbackfn: (value: V, key: K, map: BidirectionalMap<K, V>) => void, thisArg?: any): void {
 		this._m1.forEach((value, key) => {
 			callbackfn.call(thisArg, value, key, this);
 		});
@@ -808,7 +808,7 @@ export class SetMap<K, V> {
 
 	private map = new Map<K, Set<V>>();
 
-	add(key: K, value: V): codemavi {
+	add(key: K, value: V): void {
 		let values = this.map.get(key);
 
 		if (!values) {
@@ -819,7 +819,7 @@ export class SetMap<K, V> {
 		values.add(value);
 	}
 
-	delete(key: K, value: V): codemavi {
+	delete(key: K, value: V): void {
 		const values = this.map.get(key);
 
 		if (!values) {
@@ -833,7 +833,7 @@ export class SetMap<K, V> {
 		}
 	}
 
-	forEach(key: K, fn: (value: V) => codemavi): codemavi {
+	forEach(key: K, fn: (value: V) => void): void {
 		const values = this.map.get(key);
 
 		if (!values) {
@@ -891,7 +891,7 @@ export class NKeyMap<TValue, TKeys extends (string | boolean | number)[]> {
 	 * @param value The value to set.
 	 * @param keys The keys for the value.
 	 */
-	public set(value: TValue, ...keys: [...TKeys]): codemavi {
+	public set(value: TValue, ...keys: [...TKeys]): void {
 		let currentMap = this._data;
 		for (let i = 0; i < keys.length - 1; i++) {
 			if (!currentMap.has(keys[i])) {
@@ -913,7 +913,7 @@ export class NKeyMap<TValue, TKeys extends (string | boolean | number)[]> {
 		return currentMap.get(keys[keys.length - 1]);
 	}
 
-	public clear(): codemavi {
+	public clear(): void {
 		this._data.clear();
 	}
 

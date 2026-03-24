@@ -27,8 +27,8 @@ export const ISymbolNavigationService = createDecorator<ISymbolNavigationService
 
 export interface ISymbolNavigationService {
 	readonly _serviceBrand: undefined;
-	reset(): codemavi;
-	put(anchor: OneReference): codemavi;
+	reset(): void;
+	put(anchor: OneReference): void;
 	revealNext(source: ICodeEditor): Promise<any>;
 }
 
@@ -53,7 +53,7 @@ class SymbolNavigationService implements ISymbolNavigationService {
 		this._ctxHasSymbols = ctxHasSymbols.bindTo(contextKeyService);
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		this._ctxHasSymbols.reset();
 		this._currentState?.dispose();
 		this._currentMessage?.dispose();
@@ -61,7 +61,7 @@ class SymbolNavigationService implements ISymbolNavigationService {
 		this._currentIdx = -1;
 	}
 
-	put(anchor: OneReference): codemavi {
+	put(anchor: OneReference): void {
 		const refModel = anchor.parent.parent;
 
 		if (refModel.references.length <= 1) {
@@ -136,7 +136,7 @@ class SymbolNavigationService implements ISymbolNavigationService {
 
 	}
 
-	private _showMessage(): codemavi {
+	private _showMessage(): void {
 
 		this._currentMessage?.dispose();
 
@@ -164,7 +164,7 @@ registerEditorCommand(new class extends EditorCommand {
 		});
 	}
 
-	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): codemavi | Promise<codemavi> {
+	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): void | Promise<void> {
 		return accessor.get(ISymbolNavigationService).revealNext(editor);
 	}
 });
@@ -195,20 +195,20 @@ class EditorState {
 		editorService.listCodeEditors().forEach(this._onDidAddEditor, this);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._onDidChange.dispose();
 		dispose(this._listener.values());
 	}
 
-	private _onDidAddEditor(editor: ICodeEditor): codemavi {
+	private _onDidAddEditor(editor: ICodeEditor): void {
 		this._listener.set(editor, combinedDisposable(
 			editor.onDidChangeCursorPosition(_ => this._onDidChange.fire({ editor })),
 			editor.onDidChangeModelContent(_ => this._onDidChange.fire({ editor })),
 		));
 	}
 
-	private _onDidRemoveEditor(editor: ICodeEditor): codemavi {
+	private _onDidRemoveEditor(editor: ICodeEditor): void {
 		this._listener.get(editor)?.dispose();
 		this._listener.delete(editor);
 	}

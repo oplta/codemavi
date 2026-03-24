@@ -40,11 +40,11 @@ export abstract class Memory {
 		return 0;
 	}
 
-	abstract memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi;
+	abstract memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void;
 
 	abstract toJSON(): object | undefined;
 
-	abstract fromJSON(data: object): codemavi;
+	abstract fromJSON(data: object): void;
 }
 
 export class NoMemory extends Memory {
@@ -53,7 +53,7 @@ export class NoMemory extends Memory {
 		super('first');
 	}
 
-	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi {
+	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void {
 		// no-op
 	}
 
@@ -81,7 +81,7 @@ export class LRUMemory extends Memory {
 	private _cache = new LRUCache<string, MemItem>(300, 0.66);
 	private _seq = 0;
 
-	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi {
+	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void {
 		const key = `${model.getLanguageId()}/${item.textLabel}`;
 		this._cache.set(key, {
 			touch: this._seq++,
@@ -134,7 +134,7 @@ export class LRUMemory extends Memory {
 		return this._cache.toJSON();
 	}
 
-	fromJSON(data: [string, MemItem][]): codemavi {
+	fromJSON(data: [string, MemItem][]): void {
 		this._cache.clear();
 		const seq = 0;
 		for (const [key, value] of data) {
@@ -156,7 +156,7 @@ export class PrefixMemory extends Memory {
 	private _trie = TernarySearchTree.forStrings<MemItem>();
 	private _seq = 0;
 
-	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi {
+	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void {
 		const { word } = model.getWordUntilPosition(pos);
 		const key = `${model.getLanguageId()}/${word}`;
 		this._trie.set(key, {
@@ -202,7 +202,7 @@ export class PrefixMemory extends Memory {
 		return entries.slice(0, 200);
 	}
 
-	fromJSON(data: [string, MemItem][]): codemavi {
+	fromJSON(data: [string, MemItem][]): void {
 		this._trie.clear();
 		if (data.length > 0) {
 			this._seq = data[0][1].touch + 1;
@@ -246,12 +246,12 @@ export class SuggestMemoryService implements ISuggestMemoryService {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._persistSoon.dispose();
 	}
 
-	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi {
+	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void {
 		this._withStrategy(model, pos).memorize(model, pos, item);
 		this._persistSoon.schedule();
 	}
@@ -303,7 +303,7 @@ export const ISuggestMemoryService = createDecorator<ISuggestMemoryService>('ISu
 
 export interface ISuggestMemoryService {
 	readonly _serviceBrand: undefined;
-	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): codemavi;
+	memorize(model: ITextModel, pos: IPosition, item: CompletionItem): void;
 	select(model: ITextModel, pos: IPosition, items: CompletionItem[]): number;
 }
 

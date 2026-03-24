@@ -40,7 +40,7 @@
 					"name": "invalid.deprecated.package_name_not_lowercase.java"
 				},
 				{
-					"match": "(?x)\\b(?<!\\$)\n(abstract|assert|boolean|break|byte|case|catch|char|class|\nconst|continue|default|do|double|else|enum|extends|final|\nfinally|float|for|goto|if|implements|import|instanceof|int|\ninterface|long|native|new|non-sealed|package|permits|private|protected|public|\nreturn|sealed|short|static|strictfp|super|switch|syncronized|this|\nthrow|throws|transient|try|codemavi|volatile|while|yield|\ntrue|false|null)\\b",
+					"match": "(?x)\\b(?<!\\$)\n(abstract|assert|boolean|break|byte|case|catch|char|class|\nconst|continue|default|do|double|else|enum|extends|final|\nfinally|float|for|goto|if|implements|import|instanceof|int|\ninterface|long|native|new|non-sealed|package|permits|private|protected|public|\nreturn|sealed|short|static|strictfp|super|switch|syncronized|this|\nthrow|throws|transient|try|void |volatile|while|yield|\ntrue|false|null)\\b",
 					"name": "invalid.illegal.character_not_allowed_here.java"
 				},
 				{
@@ -84,7 +84,7 @@
 					"name": "invalid.illegal.character_not_allowed_here.java"
 				},
 				{
-					"match": "(?x)\\b(?<!\\$)\n(abstract|assert|boolean|break|byte|case|catch|char|class|\nconst|continue|default|do|double|else|enum|extends|final|\nfinally|float|for|goto|if|implements|import|instanceof|int|\ninterface|long|native|new|non-sealed|package|permits|private|protected|public|\nreturn|sealed|short|static|strictfp|super|switch|syncronized|this|\nthrow|throws|transient|try|codemavi|volatile|while|yield|\ntrue|false|null)\\b",
+					"match": "(?x)\\b(?<!\\$)\n(abstract|assert|boolean|break|byte|case|catch|char|class|\nconst|continue|default|do|double|else|enum|extends|final|\nfinally|float|for|goto|if|implements|import|instanceof|int|\ninterface|long|native|new|non-sealed|package|permits|private|protected|public|\nreturn|sealed|short|static|strictfp|super|switch|syncronized|this|\nthrow|throws|transient|try|void |volatile|while|yield|\ntrue|false|null)\\b",
 					"name": "invalid.illegal.character_not_allowed_here.java"
 				},
 				{
@@ -1354,7 +1354,7 @@
 		"primitive-arrays": {
 			"patterns": [
 				{
-					"begin": "\\b(codemavi|boolean|byte|char|short|int|float|long|double)\\b\\s*(?=\\[)",
+					"begin": "\\b(void |boolean|byte|char|short|int|float|long|double)\\b\\s*(?=\\[)",
 					"beginCaptures": {
 						"1": {
 							"name": "storage.type.primitive.array.java"
@@ -1373,7 +1373,7 @@
 			]
 		},
 		"primitive-types": {
-			"match": "\\b(codemavi|boolean|byte|char|short|int|float|long|double)\\b",
+			"match": "\\b(void |boolean|byte|char|short|int|float|long|double)\\b",
 			"name": "storage.type.primitive.java"
 		},
 		"properties": {
@@ -1844,7 +1844,7 @@
 			]
 		},
 		"variables": {
-			"begin": "(?x)\n(?=\n  \\b\n  (\n    (codemavi|boolean|byte|char|short|int|float|long|double)\n    |\n    (?>(\\w+\\.)*[A-Z_]+\\w*) # e.g. `javax.ws.rs.Response`, or `String`\n  )\n  \\b\n  \\s*\n  (\n    <[\\w<>,\\.?\\s\\[\\]]*> # e.g. `HashMap<Integer, String>`, or `List<java.lang.String>`\n  )?\n  \\s*\n  (\n    (\\[\\])* # int[][]\n  )?\n  \\s+\n  [A-Za-z_$][\\w$]* # At least one identifier after space\n  ([\\w\\[\\],$][\\w\\[\\],\\s]*)? # possibly primitive array or additional identifiers\n  \\s*(=|:|;)\n)",
+			"begin": "(?x)\n(?=\n  \\b\n  (\n    (void |boolean|byte|char|short|int|float|long|double)\n    |\n    (?>(\\w+\\.)*[A-Z_]+\\w*) # e.g. `javax.ws.rs.Response`, or `String`\n  )\n  \\b\n  \\s*\n  (\n    <[\\w<>,\\.?\\s\\[\\]]*> # e.g. `HashMap<Integer, String>`, or `List<java.lang.String>`\n  )?\n  \\s*\n  (\n    (\\[\\])* # int[][]\n  )?\n  \\s+\n  [A-Za-z_$][\\w$]* # At least one identifier after space\n  ([\\w\\[\\],$][\\w\\[\\],\\s]*)? # possibly primitive array or additional identifiers\n  \\s*(=|:|;)\n)",
 			"end": "(?=\\=|:|;)",
 			"name": "meta.definition.variable.java",
 			"patterns": [

@@ -36,7 +36,7 @@ export class TokenArray {
 		return LineTokens.createFromTextAndMetadata(this.map((r, t) => ({ text: r.substring(lineContent), metadata: t.metadata })), decoder);
 	}
 
-	public forEach(cb: (range: OffsetRange, tokenInfo: TokenInfo) => codemavi): codemavi {
+	public forEach(cb: (range: OffsetRange, tokenInfo: TokenInfo) => void): void {
 		let lengthSum = 0;
 		for (const tokenInfo of this._tokenInfo) {
 			const range = new OffsetRange(lengthSum, lengthSum + tokenInfo.length);
@@ -94,7 +94,7 @@ export class TokenInfo {
 export class TokenArrayBuilder {
 	private readonly _tokens: TokenInfo[] = [];
 
-	public add(length: number, metadata: TokenMetadata): codemavi {
+	public add(length: number, metadata: TokenMetadata): void {
 		this._tokens.push(new TokenInfo(length, metadata));
 	}
 

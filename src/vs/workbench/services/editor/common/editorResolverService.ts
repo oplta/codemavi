@@ -136,17 +136,17 @@ export interface IEditorResolverService {
 	 * @param globPattern The glob pattern (must be a string as settings don't support relative glob)
 	 * @param editorID The ID of the editor to make a user default
 	 */
-	updateUserAssociations(globPattern: string, editorID: string): codemavi;
+	updateUserAssociations(globPattern: string, editorID: string): void;
 
 	/**
 	 * Emitted when an editor is registered or unregistered.
 	 */
-	readonly onDidChangeEditorRegistrations: Event<codemavi>;
+	readonly onDidChangeEditorRegistrations: Event<void>;
 
 	/**
 	 * Given a callback, run the callback pausing the registration emitter
 	 */
-	bufferChangeEvents(callback: Function): codemavi;
+	bufferChangeEvents(callback: Function): void;
 
 	/**
 	 * Registers a specific editor. Editors with the same glob pattern and ID will be grouped together by the resolver.

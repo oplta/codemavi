@@ -91,11 +91,11 @@ export class TelemetryService implements ITelemetryService {
 		}));
 	}
 
-	setExperimentProperty(name: string, value: string): codemavi {
+	setExperimentProperty(name: string, value: string): void {
 		this._experimentProperties[name] = value;
 	}
 
-	private _updateTelemetryLevel(): codemavi {
+	private _updateTelemetryLevel(): void {
 		let level = getTelemetryLevel(this._configurationService);
 		const collectableTelemetry = this._productService.enabledTelemetryLevels;
 		// Also ensure that error telemetry is respecting the product configuration for collectable telemetry
@@ -117,7 +117,7 @@ export class TelemetryService implements ITelemetryService {
 		return this._telemetryLevel;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 
@@ -170,7 +170,7 @@ function getTelemetryLevelSettingDescription(): string {
 	const restartString = !isWeb ? localize('telemetry.restart', 'Microsoft says \"Some third party extensions might not respect this setting. Consult the specific extension\'s documentation to be sure. A full restart of the application is necessary for crash reporting changes to take effect.\"') : '';
 
 
-	// Code Mavi removed these
+	// Mavi removed these
 	// const crashReportsHeader = localize('telemetry.crashReports', "Crash Reports");
 	// const errorsHeader = localize('telemetry.errors', "Error Telemetry");
 	// const usageHeader = localize('telemetry.usage', "Usage Data");
@@ -191,7 +191,7 @@ ${telemetryText}
 
 ${restartString}
 
-Code Mavi separately records basic usage like the number of messages people are sending. If you'd like to disable Code Mavi metrics, you may do so in Code Mavi's Settings.
+Mavi separately records basic usage like the number of messages people are sending. If you'd like to disable Mavi metrics, you may do so in Mavi's Settings.
 `;
 
 	return telemetryDescription;

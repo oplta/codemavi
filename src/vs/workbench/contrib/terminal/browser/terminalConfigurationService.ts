@@ -22,8 +22,8 @@ export class TerminalConfigurationService extends Disposable implements ITermina
 	protected _config!: Readonly<ITerminalConfiguration>;
 	get config() { return this._config; }
 
-	private readonly _onConfigChanged = new Emitter<codemavi>();
-	get onConfigChanged(): Event<codemavi> { return this._onConfigChanged.event; }
+	private readonly _onConfigChanged = new Emitter<void>();
+	get onConfigChanged(): Event<void> { return this._onConfigChanged.event; }
 
 	constructor(
 		@IConfigurationService private readonly _configurationService: IConfigurationService,
@@ -39,11 +39,11 @@ export class TerminalConfigurationService extends Disposable implements ITermina
 		}));
 	}
 
-	setPanelContainer(panelContainer: HTMLElement): codemavi { return this._fontMetrics.setPanelContainer(panelContainer); }
+	setPanelContainer(panelContainer: HTMLElement): void { return this._fontMetrics.setPanelContainer(panelContainer); }
 	configFontIsMonospace(): boolean { return this._fontMetrics.configFontIsMonospace(); }
 	getFont(w: Window, xtermCore?: IXtermCore, excludeDimensions?: boolean): ITerminalFont { return this._fontMetrics.getFont(w, xtermCore, excludeDimensions); }
 
-	private _updateConfig(): codemavi {
+	private _updateConfig(): void {
 		const configValues = { ...this._configurationService.getValue<ITerminalConfiguration>(TERMINAL_CONFIG_SECTION) };
 		configValues.fontWeight = this._normalizeFontWeight(configValues.fontWeight, DEFAULT_FONT_WEIGHT);
 		configValues.fontWeightBold = this._normalizeFontWeight(configValues.fontWeightBold, DEFAULT_BOLD_FONT_WEIGHT);
@@ -83,7 +83,7 @@ export class TerminalFontMetrics extends Disposable {
 		this._register(toDisposable(() => this._charMeasureElement?.remove()));
 	}
 
-	setPanelContainer(panelContainer: HTMLElement): codemavi {
+	setPanelContainer(panelContainer: HTMLElement): void {
 		this._panelContainer = panelContainer;
 	}
 

@@ -58,7 +58,7 @@ export function serializePipePositions(text: string, positions: Position[]): str
 	return resultText;
 }
 
-export function testRepeatedActionAndExtractPositions(text: string, initialPosition: Position, action: (editor: ITestCodeEditor) => codemavi, record: (editor: ITestCodeEditor) => Position, stopCondition: (editor: ITestCodeEditor) => boolean, options: TestCodeEditorInstantiationOptions = {}): Position[] {
+export function testRepeatedActionAndExtractPositions(text: string, initialPosition: Position, action: (editor: ITestCodeEditor) => void, record: (editor: ITestCodeEditor) => Position, stopCondition: (editor: ITestCodeEditor) => boolean, options: TestCodeEditorInstantiationOptions = {}): Position[] {
 	const actualStops: Position[] = [];
 	withTestCodeEditor(text, options, (editor) => {
 		editor.setPosition(initialPosition);

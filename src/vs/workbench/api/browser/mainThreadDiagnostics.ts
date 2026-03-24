@@ -28,13 +28,13 @@ export class MainThreadDiagnostics implements MainThreadDiagnosticsShape {
 		this._markerListener = this._markerService.onMarkerChanged(this._forwardMarkers, this);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._markerListener.dispose();
 		this._activeOwners.forEach(owner => this._markerService.changeAll(owner, []));
 		this._activeOwners.clear();
 	}
 
-	private _forwardMarkers(resources: readonly URI[]): codemavi {
+	private _forwardMarkers(resources: readonly URI[]): void {
 		const data: [UriComponents, IMarkerData[]][] = [];
 		for (const resource of resources) {
 			const allMarkerData = this._markerService.read({ resource });
@@ -52,7 +52,7 @@ export class MainThreadDiagnostics implements MainThreadDiagnosticsShape {
 		}
 	}
 
-	$changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): codemavi {
+	$changeMany(owner: string, entries: [UriComponents, IMarkerData[]][]): void {
 		for (const entry of entries) {
 			const [uri, markers] = entry;
 			if (markers) {
@@ -72,7 +72,7 @@ export class MainThreadDiagnostics implements MainThreadDiagnosticsShape {
 		this._activeOwners.add(owner);
 	}
 
-	$clear(owner: string): codemavi {
+	$clear(owner: string): void {
 		this._markerService.changeAll(owner, []);
 		this._activeOwners.delete(owner);
 	}

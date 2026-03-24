@@ -74,12 +74,12 @@ export class SimpleCompletionModel<T extends SimpleCompletionItem> {
 		this._refilterKind = Refilter.All;
 	}
 
-	private _ensureCachedState(): codemavi {
+	private _ensureCachedState(): void {
 		if (this._refilterKind !== Refilter.Nothing) {
 			this._createCachedState();
 		}
 	}
-	private _createCachedState(): codemavi {
+	private _createCachedState(): void {
 
 		// this._providerInfo = new Map();
 

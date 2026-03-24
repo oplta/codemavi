@@ -62,7 +62,7 @@ export class LocalFileSearchWorker implements ILocalFileSearchWorker, IWebWorker
 		this.host = LocalFileSearchWorkerHost.getChannel(workerServer);
 	}
 
-	$cancelQuery(queryId: number): codemavi {
+	$cancelQuery(queryId: number): void {
 		this.cancellationTokens.get(queryId)?.cancel();
 	}
 
@@ -118,7 +118,7 @@ export class LocalFileSearchWorker implements ILocalFileSearchWorker, IWebWorker
 
 			const pattern = createSearchRegExp(query.contentPattern);
 
-			const onGoingProcesses: Promise<codemavi>[] = [];
+			const onGoingProcesses: Promise<void>[] = [];
 
 			let fileCount = 0;
 			let resultCount = 0;
@@ -173,7 +173,7 @@ export class LocalFileSearchWorker implements ILocalFileSearchWorker, IWebWorker
 
 	}
 
-	private async walkFolderQuery(handle: IWorkerFileSystemDirectoryHandle, queryProps: ICommonQueryProps<URI>, folderQuery: IFolderQuery<URI>, extUri: ExtUri, onFile: (file: FileNode) => any, token: CancellationToken): Promise<codemavi> {
+	private async walkFolderQuery(handle: IWorkerFileSystemDirectoryHandle, queryProps: ICommonQueryProps<URI>, folderQuery: IFolderQuery<URI>, extUri: ExtUri, onFile: (file: FileNode) => any, token: CancellationToken): Promise<void> {
 
 		const folderExcludes = folderQuery.excludePattern?.map(excludePattern => glob.parse(excludePattern.pattern ?? {}, { trimForExclusions: true }) as glob.ParsedExpression);
 

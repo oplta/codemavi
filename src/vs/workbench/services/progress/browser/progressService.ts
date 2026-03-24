@@ -43,7 +43,7 @@ export class ProgressService extends Disposable implements IProgressService {
 		super();
 	}
 
-	async withProgress<R = unknown>(options: IProgressOptions, originalTask: (progress: IProgress<IProgressStep>) => Promise<R>, onDidCancel?: (choice?: number) => codemavi): Promise<R> {
+	async withProgress<R = unknown>(options: IProgressOptions, originalTask: (progress: IProgress<IProgressStep>) => Promise<R>, onDidCancel?: (choice?: number) => void): Promise<R> {
 		const { location } = options;
 
 		const task = async (progress: IProgress<IProgressStep>) => {
@@ -197,14 +197,14 @@ export class ProgressService extends Disposable implements IProgressService {
 		}
 	}
 
-	private withNotificationProgress<P extends Promise<R>, R = unknown>(options: IProgressNotificationOptions, callback: (progress: IProgress<IProgressStep>) => P, onDidCancel?: (choice?: number) => codemavi): P {
+	private withNotificationProgress<P extends Promise<R>, R = unknown>(options: IProgressNotificationOptions, callback: (progress: IProgress<IProgressStep>) => P, onDidCancel?: (choice?: number) => void): P {
 
 		const progressStateModel = new class extends Disposable {
 
 			private readonly _onDidReport = this._register(new Emitter<IProgressStep>());
 			readonly onDidReport = this._onDidReport.event;
 
-			private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+			private readonly _onWillDispose = this._register(new Emitter<void>());
 			readonly onWillDispose = this._onWillDispose.event;
 
 			private _step: IProgressStep | undefined = undefined;
@@ -225,19 +225,19 @@ export class ProgressService extends Disposable implements IProgressService {
 				});
 			}
 
-			report(step: IProgressStep): codemavi {
+			report(step: IProgressStep): void {
 				this._step = step;
 
 				this._onDidReport.fire(step);
 			}
 
-			cancel(choice?: number): codemavi {
+			cancel(choice?: number): void {
 				onDidCancel?.(choice);
 
 				this.dispose();
 			}
 
-			override dispose(): codemavi {
+			override dispose(): void {
 				this._done = true;
 				this._onWillDispose.fire();
 
@@ -249,7 +249,7 @@ export class ProgressService extends Disposable implements IProgressService {
 
 			// Create a promise that we can resolve as needed
 			// when the outside calls dispose on us
-			const promise = new DeferredPromise<codemavi>();
+			const promise = new DeferredPromise<void>();
 
 			this.withWindowProgress({
 				location: ProgressLocation.Window,
@@ -298,7 +298,7 @@ export class ProgressService extends Disposable implements IProgressService {
 							super(`progress.button.${button}`, button, undefined, true);
 						}
 
-						override async run(): Promise<codemavi> {
+						override async run(): Promise<void> {
 							progressStateModel.cancel(index);
 						}
 					};
@@ -314,7 +314,7 @@ export class ProgressService extends Disposable implements IProgressService {
 						super('progress.cancel', typeof options.cancellable === 'string' ? options.cancellable : localize('cancel', "Cancel"), undefined, true);
 					}
 
-					override async run(): Promise<codemavi> {
+					override async run(): Promise<void> {
 						progressStateModel.cancel();
 					}
 				};
@@ -360,7 +360,7 @@ export class ProgressService extends Disposable implements IProgressService {
 			return notification;
 		};
 
-		const updateProgress = (notification: INotificationHandle, increment?: number): codemavi => {
+		const updateProgress = (notification: INotificationHandle, increment?: number): void => {
 			if (typeof increment === 'number' && increment >= 0) {
 				notification.progress.total(100); // always percentage based
 				notification.progress.worked(increment);
@@ -373,7 +373,7 @@ export class ProgressService extends Disposable implements IProgressService {
 		let notificationTimeout: any | undefined;
 		let titleAndMessage: string | undefined; // hoisted to make sure a delayed notification shows the most recent message
 
-		const updateNotification = (step?: IProgressStep): codemavi => {
+		const updateNotification = (step?: IProgressStep): void => {
 
 			// full message (inital or update)
 			if (step?.message && options.title) {
@@ -464,7 +464,7 @@ export class ProgressService extends Disposable implements IProgressService {
 		return promise;
 	}
 
-	private showOnActivityBar<P extends Promise<R>, R = unknown>(viewletId: string, options: IProgressCompositeOptions, promise: P): codemavi {
+	private showOnActivityBar<P extends Promise<R>, R = unknown>(viewletId: string, options: IProgressCompositeOptions, promise: P): void {
 		let activityProgress: IDisposable;
 		let delayHandle: any = setTimeout(() => {
 			delayHandle = undefined;
@@ -541,7 +541,7 @@ export class ProgressService extends Disposable implements IProgressService {
 		return promise;
 	}
 
-	private withDialogProgress<P extends Promise<R>, R = unknown>(options: IProgressDialogOptions, task: (progress: IProgress<IProgressStep>) => P, onDidCancel?: (choice?: number) => codemavi): P {
+	private withDialogProgress<P extends Promise<R>, R = unknown>(options: IProgressDialogOptions, task: (progress: IProgress<IProgressStep>) => P, onDidCancel?: (choice?: number) => void): P {
 		const disposables = new DisposableStore();
 
 		let dialog: Dialog;
@@ -597,7 +597,7 @@ export class ProgressService extends Disposable implements IProgressService {
 			}
 		}, 0));
 
-		const updateDialog = function (message?: string): codemavi {
+		const updateDialog = function (message?: string): void {
 			latestMessage = message;
 
 			// Make sure to only run one dialog update and not multiple

@@ -12,7 +12,7 @@ import { IMainProcessService } from '../../../../platform/ipc/common/mainProcess
 import { generateUuid } from '../../../../base/common/uuid.js';
 import { Event } from '../../../../base/common/event.js';
 import { Disposable } from '../../../../base/common/lifecycle.js';
-import { IMaviSettingsService } from './codemaviSettingsService.js';
+import { IMaviSettingsService } from './maviSettingsService.js';
 import { IMCPService } from './mcpService.js';
 
 // calls channel to implement features
@@ -21,9 +21,9 @@ export const ILLMMessageService = createDecorator<ILLMMessageService>('llmMessag
 export interface ILLMMessageService {
 	readonly _serviceBrand: undefined;
 	sendLLMMessage: (params: ServiceSendLLMMessageParams) => string | null;
-	abort: (requestId: string) => codemavi;
-	ollamaList: (params: ServiceModelListParams<OllamaModelResponse>) => codemavi;
-	openAICompatibleList: (params: ServiceModelListParams<OpenaiCompatibleModelResponse>) => codemavi;
+	abort: (requestId: string) => void;
+	ollamaList: (params: ServiceModelListParams<OllamaModelResponse>) => void;
+	openAICompatibleList: (params: ServiceModelListParams<OpenaiCompatibleModelResponse>) => void;
 }
 
 
@@ -35,32 +35,32 @@ export class LLMMessageService extends Disposable implements ILLMMessageService 
 
 	// sendLLMMessage
 	private readonly llmMessageHooks = {
-		onText: {} as { [eventId: string]: ((params: EventLLMMessageOnTextParams) => codemavi) },
-		onFinalMessage: {} as { [eventId: string]: ((params: EventLLMMessageOnFinalMessageParams) => codemavi) },
-		onError: {} as { [eventId: string]: ((params: EventLLMMessageOnErrorParams) => codemavi) },
-		onAbort: {} as { [eventId: string]: (() => codemavi) }, // NOT sent over the channel, result is instant when we call .abort()
+		onText: {} as { [eventId: string]: ((params: EventLLMMessageOnTextParams) => void) },
+		onFinalMessage: {} as { [eventId: string]: ((params: EventLLMMessageOnFinalMessageParams) => void) },
+		onError: {} as { [eventId: string]: ((params: EventLLMMessageOnErrorParams) => void) },
+		onAbort: {} as { [eventId: string]: (() => void) }, // NOT sent over the channel, result is instant when we call .abort()
 	}
 
 	// list hooks
 	private readonly listHooks = {
 		ollama: {
-			success: {} as { [eventId: string]: ((params: EventModelListOnSuccessParams<OllamaModelResponse>) => codemavi) },
-			error: {} as { [eventId: string]: ((params: EventModelListOnErrorParams<OllamaModelResponse>) => codemavi) },
+			success: {} as { [eventId: string]: ((params: EventModelListOnSuccessParams<OllamaModelResponse>) => void) },
+			error: {} as { [eventId: string]: ((params: EventModelListOnErrorParams<OllamaModelResponse>) => void) },
 		},
 		openAICompat: {
-			success: {} as { [eventId: string]: ((params: EventModelListOnSuccessParams<OpenaiCompatibleModelResponse>) => codemavi) },
-			error: {} as { [eventId: string]: ((params: EventModelListOnErrorParams<OpenaiCompatibleModelResponse>) => codemavi) },
+			success: {} as { [eventId: string]: ((params: EventModelListOnSuccessParams<OpenaiCompatibleModelResponse>) => void) },
+			error: {} as { [eventId: string]: ((params: EventModelListOnErrorParams<OpenaiCompatibleModelResponse>) => void) },
 		}
 	} satisfies {
 		[providerName in 'ollama' | 'openAICompat']: {
-			success: { [eventId: string]: ((params: EventModelListOnSuccessParams<any>) => codemavi) },
-			error: { [eventId: string]: ((params: EventModelListOnErrorParams<any>) => codemavi) },
+			success: { [eventId: string]: ((params: EventModelListOnSuccessParams<any>) => void) },
+			error: { [eventId: string]: ((params: EventModelListOnErrorParams<any>) => void) },
 		}
 	}
 
 	constructor(
 		@IMainProcessService private readonly mainProcessService: IMainProcessService, // used as a renderer (only usable on client side)
-		@IMaviSettingsService private readonly codemaviSettingsService: IMaviSettingsService,
+		@IMaviSettingsService private readonly maviSettingsService: IMaviSettingsService,
 		// @INotificationService private readonly notificationService: INotificationService,
 		@IMCPService private readonly mcpService: IMCPService,
 	) {
@@ -105,7 +105,7 @@ export class LLMMessageService extends Disposable implements ILLMMessageService 
 
 		// throw an error if no model/provider selected (this should usually never be reached, the UI should check this first, but might happen in cases like Apply where we haven't built much UI/checks yet, good practice to have check logic on backend)
 		if (modelSelection === null) {
-			const message = `Please add a provider in Code Mavi's Settings.`
+			const message = `Please add a provider in Mavi's Settings.`
 			onError({ message, fullError: null })
 			return null
 		}
@@ -116,7 +116,7 @@ export class LLMMessageService extends Disposable implements ILLMMessageService 
 			return null
 		}
 
-		const { settingsOfProvider, } = this.codemaviSettingsService.state
+		const { settingsOfProvider, } = this.maviSettingsService.state
 
 		const mcpTools = this.mcpService.getMCPTools()
 
@@ -149,7 +149,7 @@ export class LLMMessageService extends Disposable implements ILLMMessageService 
 	ollamaList = (params: ServiceModelListParams<OllamaModelResponse>) => {
 		const { onSuccess, onError, ...proxyParams } = params
 
-		const { settingsOfProvider } = this.codemaviSettingsService.state
+		const { settingsOfProvider } = this.maviSettingsService.state
 
 		// add state for request id
 		const requestId_ = generateUuid();
@@ -168,7 +168,7 @@ export class LLMMessageService extends Disposable implements ILLMMessageService 
 	openAICompatibleList = (params: ServiceModelListParams<OpenaiCompatibleModelResponse>) => {
 		const { onSuccess, onError, ...proxyParams } = params
 
-		const { settingsOfProvider } = this.codemaviSettingsService.state
+		const { settingsOfProvider } = this.maviSettingsService.state
 
 		// add state for request id
 		const requestId_ = generateUuid();

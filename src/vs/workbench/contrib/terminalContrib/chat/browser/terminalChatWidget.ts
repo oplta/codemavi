@@ -56,7 +56,7 @@ export class TerminalChatWidget extends Disposable {
 
 	private readonly _container: HTMLElement;
 
-	private readonly _onDidHide = this._register(new Emitter<codemavi>());
+	private readonly _onDidHide = this._register(new Emitter<void>());
 	readonly onDidHide = this._onDidHide.event;
 
 	private readonly _inlineChatWidget: InlineChatWidget;
@@ -84,7 +84,7 @@ export class TerminalChatWidget extends Disposable {
 
 	private readonly _model: MutableDisposable<ChatModel> = this._register(new MutableDisposable());
 
-	private _sessionCtor: CancelablePromise<codemavi> | undefined;
+	private _sessionCtor: CancelablePromise<void> | undefined;
 
 	private _currentRequestId: string | undefined;
 	private _activeRequestCts?: CancellationTokenSource;
@@ -150,7 +150,7 @@ export class TerminalChatWidget extends Disposable {
 			this._inlineChatWidget.onDidChangeHeight,
 			this._instance.onDimensionsChanged,
 			this._inlineChatWidget.chatWidget.onDidChangeContentHeight,
-			Event.debounce(this._xterm.raw.onCursorMove, () => codemavi 0, MicrotaskDelay),
+			Event.debounce(this._xterm.raw.onCursorMove, () => void 0, MicrotaskDelay),
 		)(() => this._relayout()));
 
 		const observer = new ResizeObserver(() => this._relayout());
@@ -231,7 +231,7 @@ export class TerminalChatWidget extends Disposable {
 		this.inlineChatWidget.placeholder = defaultAgent?.description ?? localize('askAI', 'Ask AI');
 	}
 
-	async reveal(viewState?: IChatViewState): Promise<codemavi> {
+	async reveal(viewState?: IChatViewState): Promise<void> {
 		await this._createSession(viewState);
 		this._doLayout();
 		this._container.classList.remove('hide');
@@ -253,7 +253,7 @@ export class TerminalChatWidget extends Disposable {
 		return topPadding + cursorY * cellHeight;
 	}
 
-	private _updateXtermViewportPosition(): codemavi {
+	private _updateXtermViewportPosition(): void {
 		const top = this._getTerminalCursorTop();
 		if (!top) {
 			return;
@@ -277,7 +277,7 @@ export class TerminalChatWidget extends Disposable {
 		return this._terminalElement.clientHeight;
 	}
 
-	hide(): codemavi {
+	hide(): void {
 		this._container.classList.add('hide');
 		this._inlineChatWidget.reset();
 		this._resetPlaceholder();
@@ -299,7 +299,7 @@ export class TerminalChatWidget extends Disposable {
 			TerminalStickyScrollContribution.get(this._instance)?.hideLock();
 		}
 	}
-	focus(): codemavi {
+	focus(): void {
 		this.inlineChatWidget.focus();
 	}
 	hasFocus(): boolean {
@@ -310,7 +310,7 @@ export class TerminalChatWidget extends Disposable {
 		this._inlineChatWidget.value = value ?? '';
 	}
 
-	async acceptCommand(shouldExecute: boolean): Promise<codemavi> {
+	async acceptCommand(shouldExecute: boolean): Promise<void> {
 		const code = await this.inlineChatWidget.getCodeBlockInfo(0);
 		if (!code) {
 			return;
@@ -324,8 +324,8 @@ export class TerminalChatWidget extends Disposable {
 		return this._focusTracker;
 	}
 
-	private async _createSession(viewState?: IChatViewState): Promise<codemavi> {
-		this._sessionCtor = createCancelablePromise<codemavi>(async token => {
+	private async _createSession(viewState?: IChatViewState): Promise<void> {
+		this._sessionCtor = createCancelablePromise<void>(async token => {
 			if (!this._model.value) {
 				this._model.value = this._chatService.startSession(ChatAgentLocation.Terminal, token);
 				const model = this._model.value;
@@ -363,7 +363,7 @@ export class TerminalChatWidget extends Disposable {
 		this._storageService.store(this._viewStateStorageKey, JSON.stringify(this._inlineChatWidget.chatWidget.getViewState()), StorageScope.PROFILE, StorageTarget.USER);
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		this.cancel();
 		this._model.clear();
 		this._responseContainsCodeBlockContextKey.reset();
@@ -420,7 +420,7 @@ export class TerminalChatWidget extends Disposable {
 		}
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this._sessionCtor?.cancel();
 		this._sessionCtor = undefined;
 		this._activeRequestCts?.cancel();
@@ -432,7 +432,7 @@ export class TerminalChatWidget extends Disposable {
 		this._chatService.cancelCurrentRequestForSession(model?.sessionId);
 	}
 
-	async viewInChat(): Promise<codemavi> {
+	async viewInChat(): Promise<void> {
 		const widget = await showChatView(this._viewsService);
 		const currentRequest = this._inlineChatWidget.chatWidget.viewModel?.model.getRequests().find(r => r.id === this._currentRequestId);
 		if (!widget || !currentRequest?.response) {

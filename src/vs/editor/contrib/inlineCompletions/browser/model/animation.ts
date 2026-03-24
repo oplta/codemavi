@@ -67,11 +67,11 @@ export class ObservableAnimatedValue {
 		this._value = observableValue(this, initialValue);
 	}
 
-	setAnimation(value: AnimatedValue, tx: ITransaction | undefined): codemavi {
+	setAnimation(value: AnimatedValue, tx: ITransaction | undefined): void {
 		this._value.set(value, tx);
 	}
 
-	changeAnimation(fn: (prev: AnimatedValue) => AnimatedValue, tx: ITransaction | undefined): codemavi {
+	changeAnimation(fn: (prev: AnimatedValue) => AnimatedValue, tx: ITransaction | undefined): void {
 		const value = fn(this._value.get());
 		this._value.set(value, tx);
 	}
@@ -92,7 +92,7 @@ class Scheduler {
 
 	private _isScheduled = false;
 
-	public invalidateOnNextAnimationFrame(reader: IReader | undefined): codemavi {
+	public invalidateOnNextAnimationFrame(reader: IReader | undefined): void {
 		this._counter.read(reader);
 		if (!this._isScheduled) {
 			this._isScheduled = true;
@@ -103,7 +103,7 @@ class Scheduler {
 		}
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		this._counter.trigger(undefined);
 	}
 }

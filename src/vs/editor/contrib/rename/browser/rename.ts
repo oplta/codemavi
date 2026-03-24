@@ -156,12 +156,12 @@ class RenameController implements IEditorContribution {
 		this._renameWidget = this._disposableStore.add(this._instaService.createInstance(RenameWidget, this.editor, ['acceptRenameInput', 'acceptRenameInputWithPreview']));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposableStore.dispose();
 		this._cts.dispose(true);
 	}
 
-	async run(): Promise<codemavi> {
+	async run(): Promise<void> {
 
 		const trace = this._logService.trace.bind(this._logService, '[rename]');
 
@@ -328,19 +328,19 @@ class RenameController implements IEditorContribution {
 
 	}
 
-	acceptRenameInput(wantsPreview: boolean): codemavi {
+	acceptRenameInput(wantsPreview: boolean): void {
 		this._renameWidget.acceptInput(wantsPreview);
 	}
 
-	cancelRenameInput(): codemavi {
+	cancelRenameInput(): void {
 		this._renameWidget.cancelInput(true, 'cancelRenameInput command');
 	}
 
-	focusNextRenameSuggestion(): codemavi {
+	focusNextRenameSuggestion(): void {
 		this._renameWidget.focusNextRenameSuggestion();
 	}
 
-	focusPreviousRenameSuggestion(): codemavi {
+	focusPreviousRenameSuggestion(): void {
 		this._renameWidget.focusPreviousRenameSuggestion();
 	}
 
@@ -426,7 +426,7 @@ export class RenameAction extends EditorAction {
 		});
 	}
 
-	override runCommand(accessor: ServicesAccessor, args: [URI, IPosition]): codemavi | Promise<codemavi> {
+	override runCommand(accessor: ServicesAccessor, args: [URI, IPosition]): void | Promise<void> {
 		const editorService = accessor.get(ICodeEditorService);
 		const [uri, pos] = Array.isArray(args) && args || [undefined, undefined];
 
@@ -446,7 +446,7 @@ export class RenameAction extends EditorAction {
 		return super.runCommand(accessor, args);
 	}
 
-	run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		const logService = accessor.get(ILogService);
 
 		const controller = RenameController.get(editor);
@@ -516,7 +516,7 @@ registerAction2(class FocusNextRenameSuggestion extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): codemavi {
+	override run(accessor: ServicesAccessor): void {
 		const currentEditor = accessor.get(ICodeEditorService).getFocusedCodeEditor();
 		if (!currentEditor) { return; }
 
@@ -544,7 +544,7 @@ registerAction2(class FocusPreviousRenameSuggestion extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): codemavi {
+	override run(accessor: ServicesAccessor): void {
 		const currentEditor = accessor.get(ICodeEditorService).getFocusedCodeEditor();
 		if (!currentEditor) { return; }
 

@@ -41,7 +41,7 @@ function createFolderItemsModel(...labels: string[]): TerminalCompletionModel {
 	);
 }
 
-function assertItems(model: TerminalCompletionModel, labels: string[]): codemavi {
+function assertItems(model: TerminalCompletionModel, labels: string[]): void {
 	assert.deepStrictEqual(model.items.map(i => i.completion.label), labels);
 	assert.strictEqual(model.items.length, labels.length); // sanity check
 }

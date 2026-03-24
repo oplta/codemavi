@@ -12,7 +12,7 @@ import { ICellExecutionStateChangedEvent } from '../../common/notebookExecutionS
 
 /**
  * A content part is a non-floating element that is rendered inside a cell.
- * The rendering of the content part is synchronous to acodemavi flickering.
+ * The rendering of the content part is synchronous to avoid flickering.
  */
 export abstract class CellContentPart extends Disposable {
 	protected currentCell: ICellViewModel | undefined;
@@ -26,22 +26,22 @@ export abstract class CellContentPart extends Disposable {
 	 * Prepare model for cell part rendering
 	 * No DOM operations recommended within this operation
 	 */
-	prepareRenderCell(element: ICellViewModel): codemavi { }
+	prepareRenderCell(element: ICellViewModel): void { }
 
 	/**
 	 * Update the DOM for the cell `element`
 	 */
-	renderCell(element: ICellViewModel): codemavi {
+	renderCell(element: ICellViewModel): void {
 		this.currentCell = element;
 		safeInvokeNoArg(() => this.didRenderCell(element));
 	}
 
-	didRenderCell(element: ICellViewModel): codemavi { }
+	didRenderCell(element: ICellViewModel): void { }
 
 	/**
 	 * Dispose any disposables generated from `didRenderCell`
 	 */
-	unrenderCell(element: ICellViewModel): codemavi {
+	unrenderCell(element: ICellViewModel): void {
 		this.currentCell = undefined;
 		this.cellDisposables.clear();
 	}
@@ -49,29 +49,29 @@ export abstract class CellContentPart extends Disposable {
 	/**
 	 * Perform DOM read operations to prepare for the list/cell layout update.
 	 */
-	prepareLayout(): codemavi { }
+	prepareLayout(): void { }
 
 	/**
 	 * Update internal DOM (top positions) per cell layout info change
 	 * Note that a cell part doesn't need to call `DOM.scheduleNextFrame`,
 	 * the list view will ensure that layout call is invoked in the right frame
 	 */
-	updateInternalLayoutNow(element: ICellViewModel): codemavi { }
+	updateInternalLayoutNow(element: ICellViewModel): void { }
 
 	/**
 	 * Update per cell state change
 	 */
-	updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): codemavi { }
+	updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): void { }
 
 	/**
 	 * Update per execution state change.
 	 */
-	updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): codemavi { }
+	updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): void { }
 }
 
 /**
  * An overlay part renders on top of other components.
- * The rendering of the overlay part might be postponed to the next animation frame to acodemavi forced reflow.
+ * The rendering of the overlay part might be postponed to the next animation frame to avoid forced reflow.
  */
 export abstract class CellOverlayPart extends Disposable {
 	protected currentCell: ICellViewModel | undefined;
@@ -85,22 +85,22 @@ export abstract class CellOverlayPart extends Disposable {
 	 * Prepare model for cell part rendering
 	 * No DOM operations recommended within this operation
 	 */
-	prepareRenderCell(element: ICellViewModel): codemavi { }
+	prepareRenderCell(element: ICellViewModel): void { }
 
 	/**
 	 * Update the DOM for the cell `element`
 	 */
-	renderCell(element: ICellViewModel): codemavi {
+	renderCell(element: ICellViewModel): void {
 		this.currentCell = element;
 		this.didRenderCell(element);
 	}
 
-	didRenderCell(element: ICellViewModel): codemavi { }
+	didRenderCell(element: ICellViewModel): void { }
 
 	/**
 	 * Dispose any disposables generated from `didRenderCell`
 	 */
-	unrenderCell(element: ICellViewModel): codemavi {
+	unrenderCell(element: ICellViewModel): void {
 		this.currentCell = undefined;
 		this.cellDisposables.clear();
 	}
@@ -110,17 +110,17 @@ export abstract class CellOverlayPart extends Disposable {
 	 * Note that a cell part doesn't need to call `DOM.scheduleNextFrame`,
 	 * the list view will ensure that layout call is invoked in the right frame
 	 */
-	updateInternalLayoutNow(element: ICellViewModel): codemavi { }
+	updateInternalLayoutNow(element: ICellViewModel): void { }
 
 	/**
 	 * Update per cell state change
 	 */
-	updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): codemavi { }
+	updateState(element: ICellViewModel, e: CellViewModelStateChangeEvent): void { }
 
 	/**
 	 * Update per execution state change.
 	 */
-	updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): codemavi { }
+	updateForExecutionState(element: ICellViewModel, e: ICellExecutionStateChangedEvent): void { }
 }
 
 function safeInvokeNoArg<T>(func: () => T): T | null {
@@ -153,7 +153,7 @@ export class CellPartsCollection extends Disposable {
 		return new CellPartsCollection(targetWindow, this.contentParts, this.overlayParts.concat(other));
 	}
 
-	scheduleRenderCell(element: ICellViewModel): codemavi {
+	scheduleRenderCell(element: ICellViewModel): void {
 		// prepare model
 		for (const part of this.contentParts) {
 			safeInvokeNoArg(() => part.prepareRenderCell(element));
@@ -175,7 +175,7 @@ export class CellPartsCollection extends Disposable {
 		});
 	}
 
-	unrenderCell(element: ICellViewModel): codemavi {
+	unrenderCell(element: ICellViewModel): void {
 		for (const part of this.contentParts) {
 			safeInvokeNoArg(() => part.unrenderCell(element));
 		}

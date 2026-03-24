@@ -24,7 +24,7 @@ export function disposeAll(disposables: Iterable<vscode.Disposable>) {
 }
 
 export interface IDisposable {
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export abstract class Disposable {

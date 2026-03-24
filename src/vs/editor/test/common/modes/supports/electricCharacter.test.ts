@@ -20,12 +20,12 @@ suite('Editor Modes - Auto Indentation', () => {
 		return electricCharacterSupport.onElectricCharacter(character, createFakeScopedLineTokens(line), offset);
 	}
 
-	function testDoesNothing(electricCharacterSupport: BracketElectricCharacterSupport, line: TokenText[], character: string, offset: number): codemavi {
+	function testDoesNothing(electricCharacterSupport: BracketElectricCharacterSupport, line: TokenText[], character: string, offset: number): void {
 		const actual = _testOnElectricCharacter(electricCharacterSupport, line, character, offset);
 		assert.deepStrictEqual(actual, null);
 	}
 
-	function testMatchBracket(electricCharacterSupport: BracketElectricCharacterSupport, line: TokenText[], character: string, offset: number, matchOpenBracket: string): codemavi {
+	function testMatchBracket(electricCharacterSupport: BracketElectricCharacterSupport, line: TokenText[], character: string, offset: number, matchOpenBracket: string): void {
 		const actual = _testOnElectricCharacter(electricCharacterSupport, line, character, offset);
 		assert.deepStrictEqual(actual, { matchOpenBracket: matchOpenBracket });
 	}

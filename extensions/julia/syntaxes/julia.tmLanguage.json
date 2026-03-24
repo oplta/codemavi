@@ -726,7 +726,7 @@
 						}
 					},
 					"name": "string.docstring.julia",
-					"comment": "This only matches docstrings that start and end with triple quotes on\ntheir own line in the codemavi",
+					"comment": "This only matches docstrings that start and end with triple quotes on\ntheir own line in the mavi",
 					"patterns": [
 						{
 							"include": "#string_escaped_char"

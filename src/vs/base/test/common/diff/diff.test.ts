@@ -25,7 +25,7 @@ function maskBasedSubstring(str: string, mask: boolean[]): string {
 	return r;
 }
 
-function assertAnswer(originalStr: string, modifiedStr: string, changes: IDiffChange[], answerStr: string, onlyLength: boolean = false): codemavi {
+function assertAnswer(originalStr: string, modifiedStr: string, changes: IDiffChange[], answerStr: string, onlyLength: boolean = false): void {
 	const originalMask = createArray(originalStr.length, true);
 	const modifiedMask = createArray(modifiedStr.length, true);
 
@@ -58,7 +58,7 @@ function assertAnswer(originalStr: string, modifiedStr: string, changes: IDiffCh
 	}
 }
 
-function lcsInnerTest(originalStr: string, modifiedStr: string, answerStr: string, onlyLength: boolean = false): codemavi {
+function lcsInnerTest(originalStr: string, modifiedStr: string, answerStr: string, onlyLength: boolean = false): void {
 	const diff = new LcsDiff(new StringDiffSequence(originalStr), new StringDiffSequence(modifiedStr));
 	const changes = diff.ComputeDiff(false).changes;
 	assertAnswer(originalStr, modifiedStr, changes, answerStr, onlyLength);

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 /**
- * This file is mostly a mirror of the editor's suggest but scoped to .monaco-workbench to acodemavi
+ * This file is mostly a mirror of the editor's suggest but scoped to .monaco-workbench to avoid
  * layer breakers and shipping with the standalone monaco editor.
  */
 

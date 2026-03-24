@@ -63,12 +63,12 @@ export class McpService extends Disposable implements IMcpService {
 		}));
 	}
 
-	public resetCaches(): codemavi {
+	public resetCaches(): void {
 		this.userCache.reset();
 		this.workspaceCache.reset();
 	}
 
-	public async activateCollections(): Promise<codemavi> {
+	public async activateCollections(): Promise<void> {
 		const collections = await this._mcpRegistry.discoverCollections();
 		const collectionIds = new Set(collections.map(c => c.id));
 
@@ -199,7 +199,7 @@ export class McpService extends Disposable implements IMcpService {
 		});
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._servers.get().forEach(s => s.dispose());
 		super.dispose();
 	}

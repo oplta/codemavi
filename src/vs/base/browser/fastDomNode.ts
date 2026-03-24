@@ -39,11 +39,11 @@ export class FastDomNode<T extends HTMLElement> {
 		public readonly domNode: T
 	) { }
 
-	public focus(): codemavi {
+	public focus(): void {
 		this.domNode.focus();
 	}
 
-	public setMaxWidth(_maxWidth: number | string): codemavi {
+	public setMaxWidth(_maxWidth: number | string): void {
 		const maxWidth = numberAsPixels(_maxWidth);
 		if (this._maxWidth === maxWidth) {
 			return;
@@ -52,7 +52,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.maxWidth = this._maxWidth;
 	}
 
-	public setWidth(_width: number | string): codemavi {
+	public setWidth(_width: number | string): void {
 		const width = numberAsPixels(_width);
 		if (this._width === width) {
 			return;
@@ -61,7 +61,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.width = this._width;
 	}
 
-	public setHeight(_height: number | string): codemavi {
+	public setHeight(_height: number | string): void {
 		const height = numberAsPixels(_height);
 		if (this._height === height) {
 			return;
@@ -70,7 +70,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.height = this._height;
 	}
 
-	public setTop(_top: number | string): codemavi {
+	public setTop(_top: number | string): void {
 		const top = numberAsPixels(_top);
 		if (this._top === top) {
 			return;
@@ -79,7 +79,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.top = this._top;
 	}
 
-	public setLeft(_left: number | string): codemavi {
+	public setLeft(_left: number | string): void {
 		const left = numberAsPixels(_left);
 		if (this._left === left) {
 			return;
@@ -88,7 +88,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.left = this._left;
 	}
 
-	public setBottom(_bottom: number | string): codemavi {
+	public setBottom(_bottom: number | string): void {
 		const bottom = numberAsPixels(_bottom);
 		if (this._bottom === bottom) {
 			return;
@@ -97,7 +97,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.bottom = this._bottom;
 	}
 
-	public setRight(_right: number | string): codemavi {
+	public setRight(_right: number | string): void {
 		const right = numberAsPixels(_right);
 		if (this._right === right) {
 			return;
@@ -106,7 +106,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.right = this._right;
 	}
 
-	public setPaddingTop(_paddingTop: number | string): codemavi {
+	public setPaddingTop(_paddingTop: number | string): void {
 		const paddingTop = numberAsPixels(_paddingTop);
 		if (this._paddingTop === paddingTop) {
 			return;
@@ -115,7 +115,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.paddingTop = this._paddingTop;
 	}
 
-	public setPaddingLeft(_paddingLeft: number | string): codemavi {
+	public setPaddingLeft(_paddingLeft: number | string): void {
 		const paddingLeft = numberAsPixels(_paddingLeft);
 		if (this._paddingLeft === paddingLeft) {
 			return;
@@ -124,7 +124,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.paddingLeft = this._paddingLeft;
 	}
 
-	public setPaddingBottom(_paddingBottom: number | string): codemavi {
+	public setPaddingBottom(_paddingBottom: number | string): void {
 		const paddingBottom = numberAsPixels(_paddingBottom);
 		if (this._paddingBottom === paddingBottom) {
 			return;
@@ -133,7 +133,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.paddingBottom = this._paddingBottom;
 	}
 
-	public setPaddingRight(_paddingRight: number | string): codemavi {
+	public setPaddingRight(_paddingRight: number | string): void {
 		const paddingRight = numberAsPixels(_paddingRight);
 		if (this._paddingRight === paddingRight) {
 			return;
@@ -142,7 +142,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.paddingRight = this._paddingRight;
 	}
 
-	public setFontFamily(fontFamily: string): codemavi {
+	public setFontFamily(fontFamily: string): void {
 		if (this._fontFamily === fontFamily) {
 			return;
 		}
@@ -150,7 +150,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontFamily = this._fontFamily;
 	}
 
-	public setFontWeight(fontWeight: string): codemavi {
+	public setFontWeight(fontWeight: string): void {
 		if (this._fontWeight === fontWeight) {
 			return;
 		}
@@ -158,7 +158,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontWeight = this._fontWeight;
 	}
 
-	public setFontSize(_fontSize: number | string): codemavi {
+	public setFontSize(_fontSize: number | string): void {
 		const fontSize = numberAsPixels(_fontSize);
 		if (this._fontSize === fontSize) {
 			return;
@@ -167,7 +167,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontSize = this._fontSize;
 	}
 
-	public setFontStyle(fontStyle: string): codemavi {
+	public setFontStyle(fontStyle: string): void {
 		if (this._fontStyle === fontStyle) {
 			return;
 		}
@@ -175,7 +175,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontStyle = this._fontStyle;
 	}
 
-	public setFontFeatureSettings(fontFeatureSettings: string): codemavi {
+	public setFontFeatureSettings(fontFeatureSettings: string): void {
 		if (this._fontFeatureSettings === fontFeatureSettings) {
 			return;
 		}
@@ -183,7 +183,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontFeatureSettings = this._fontFeatureSettings;
 	}
 
-	public setFontVariationSettings(fontVariationSettings: string): codemavi {
+	public setFontVariationSettings(fontVariationSettings: string): void {
 		if (this._fontVariationSettings === fontVariationSettings) {
 			return;
 		}
@@ -191,7 +191,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.fontVariationSettings = this._fontVariationSettings;
 	}
 
-	public setTextDecoration(textDecoration: string): codemavi {
+	public setTextDecoration(textDecoration: string): void {
 		if (this._textDecoration === textDecoration) {
 			return;
 		}
@@ -199,7 +199,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.textDecoration = this._textDecoration;
 	}
 
-	public setLineHeight(_lineHeight: number | string): codemavi {
+	public setLineHeight(_lineHeight: number | string): void {
 		const lineHeight = numberAsPixels(_lineHeight);
 		if (this._lineHeight === lineHeight) {
 			return;
@@ -208,7 +208,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.lineHeight = this._lineHeight;
 	}
 
-	public setLetterSpacing(_letterSpacing: number | string): codemavi {
+	public setLetterSpacing(_letterSpacing: number | string): void {
 		const letterSpacing = numberAsPixels(_letterSpacing);
 		if (this._letterSpacing === letterSpacing) {
 			return;
@@ -217,7 +217,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.letterSpacing = this._letterSpacing;
 	}
 
-	public setClassName(className: string): codemavi {
+	public setClassName(className: string): void {
 		if (this._className === className) {
 			return;
 		}
@@ -225,12 +225,12 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.className = this._className;
 	}
 
-	public toggleClassName(className: string, shouldHaveIt?: boolean): codemavi {
+	public toggleClassName(className: string, shouldHaveIt?: boolean): void {
 		this.domNode.classList.toggle(className, shouldHaveIt);
 		this._className = this.domNode.className;
 	}
 
-	public setDisplay(display: string): codemavi {
+	public setDisplay(display: string): void {
 		if (this._display === display) {
 			return;
 		}
@@ -238,7 +238,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.display = this._display;
 	}
 
-	public setPosition(position: string): codemavi {
+	public setPosition(position: string): void {
 		if (this._position === position) {
 			return;
 		}
@@ -246,7 +246,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.position = this._position;
 	}
 
-	public setVisibility(visibility: string): codemavi {
+	public setVisibility(visibility: string): void {
 		if (this._visibility === visibility) {
 			return;
 		}
@@ -254,7 +254,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.visibility = this._visibility;
 	}
 
-	public setColor(color: string): codemavi {
+	public setColor(color: string): void {
 		if (this._color === color) {
 			return;
 		}
@@ -262,7 +262,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.color = this._color;
 	}
 
-	public setBackgroundColor(backgroundColor: string): codemavi {
+	public setBackgroundColor(backgroundColor: string): void {
 		if (this._backgroundColor === backgroundColor) {
 			return;
 		}
@@ -270,7 +270,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.backgroundColor = this._backgroundColor;
 	}
 
-	public setLayerHinting(layerHint: boolean): codemavi {
+	public setLayerHinting(layerHint: boolean): void {
 		if (this._layerHint === layerHint) {
 			return;
 		}
@@ -278,7 +278,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.transform = this._layerHint ? 'translate3d(0px, 0px, 0px)' : '';
 	}
 
-	public setBoxShadow(boxShadow: string): codemavi {
+	public setBoxShadow(boxShadow: string): void {
 		if (this._boxShadow === boxShadow) {
 			return;
 		}
@@ -286,7 +286,7 @@ export class FastDomNode<T extends HTMLElement> {
 		this.domNode.style.boxShadow = boxShadow;
 	}
 
-	public setContain(contain: 'none' | 'strict' | 'content' | 'size' | 'layout' | 'style' | 'paint'): codemavi {
+	public setContain(contain: 'none' | 'strict' | 'content' | 'size' | 'layout' | 'style' | 'paint'): void {
 		if (this._contain === contain) {
 			return;
 		}
@@ -294,19 +294,19 @@ export class FastDomNode<T extends HTMLElement> {
 		(<any>this.domNode.style).contain = this._contain;
 	}
 
-	public setAttribute(name: string, value: string): codemavi {
+	public setAttribute(name: string, value: string): void {
 		this.domNode.setAttribute(name, value);
 	}
 
-	public removeAttribute(name: string): codemavi {
+	public removeAttribute(name: string): void {
 		this.domNode.removeAttribute(name);
 	}
 
-	public appendChild(child: FastDomNode<T>): codemavi {
+	public appendChild(child: FastDomNode<T>): void {
 		this.domNode.appendChild(child.domNode);
 	}
 
-	public removeChild(child: FastDomNode<T>): codemavi {
+	public removeChild(child: FastDomNode<T>): void {
 		this.domNode.removeChild(child.domNode);
 	}
 }

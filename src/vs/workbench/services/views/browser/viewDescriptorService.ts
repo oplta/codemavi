@@ -119,7 +119,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 
 	}
 
-	private migrateToViewsCustomizationsStorage(): codemavi {
+	private migrateToViewsCustomizationsStorage(): void {
 		if (this.storageService.get(ViewDescriptorService.VIEWS_CUSTOMIZATIONS, StorageScope.PROFILE)) {
 			return;
 		}
@@ -142,7 +142,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		this.storageService.remove('views.cachedViewPositions', StorageScope.PROFILE);
 	}
 
-	private registerGroupedViews(groupedViews: Map<string, IViewDescriptor[]>): codemavi {
+	private registerGroupedViews(groupedViews: Map<string, IViewDescriptor[]>): void {
 		for (const [containerId, views] of groupedViews.entries()) {
 			const viewContainer = this.viewContainersRegistry.get(containerId);
 
@@ -167,7 +167,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	private deregisterGroupedViews(groupedViews: Map<string, IViewDescriptor[]>): codemavi {
+	private deregisterGroupedViews(groupedViews: Map<string, IViewDescriptor[]>): void {
 		for (const [viewContainerId, views] of groupedViews.entries()) {
 			const viewContainer = this.viewContainersRegistry.get(viewContainerId);
 
@@ -180,7 +180,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	private moveOrphanViewsToDefaultLocation(): codemavi {
+	private moveOrphanViewsToDefaultLocation(): void {
 		for (const [viewId, containerId] of this.viewDescriptorsCustomLocations.entries()) {
 			// check if the view container exists
 			if (this.viewContainersRegistry.get(containerId)) {
@@ -196,7 +196,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	whenExtensionsRegistered(): codemavi {
+	whenExtensionsRegistered(): void {
 
 		// Handle those views whose custom parent view container does not exist anymore
 		// May be the extension contributing this view container is no longer installed
@@ -218,7 +218,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		this.canRegisterViewsVisibilityActions = true;
 	}
 
-	private onDidRegisterViews(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): codemavi {
+	private onDidRegisterViews(views: { views: IViewDescriptor[]; viewContainer: ViewContainer }[]): void {
 		this.contextKeyService.bufferChangeEvents(() => {
 			views.forEach(({ views, viewContainer }) => {
 				// When views are registered, we need to regroup them based on the customizations
@@ -238,7 +238,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return id.startsWith(ViewDescriptorService.COMMON_CONTAINER_ID_PREFIX);
 	}
 
-	private onDidDeregisterViews(views: IViewDescriptor[], viewContainer: ViewContainer): codemavi {
+	private onDidDeregisterViews(views: IViewDescriptor[], viewContainer: ViewContainer): void {
 		// When views are registered, we need to regroup them based on the customizations
 		const regroupedViews = this.regroupViews(viewContainer.id, views);
 		this.deregisterGroupedViews(regroupedViews);
@@ -311,7 +311,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return this.viewContainersRegistry.getDefaultViewContainer(location);
 	}
 
-	moveViewContainerToLocation(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number, reason?: string): codemavi {
+	moveViewContainerToLocation(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number, reason?: string): void {
 		this.logger.value.info(`moveViewContainerToLocation: viewContainer:${viewContainer.id} location:${location} reason:${reason}`);
 		this.moveViewContainerToLocationWithoutSaving(viewContainer, location, requestedIndex);
 		this.saveViewCustomizations();
@@ -321,18 +321,18 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return this.viewContainerBadgeEnablementStates.get(id) ?? true;
 	}
 
-	setViewContainerBadgeEnablementState(id: string, badgesEnabled: boolean): codemavi {
+	setViewContainerBadgeEnablementState(id: string, badgesEnabled: boolean): void {
 		this.viewContainerBadgeEnablementStates.set(id, badgesEnabled);
 		this.saveViewCustomizations();
 	}
 
-	moveViewToLocation(view: IViewDescriptor, location: ViewContainerLocation, reason?: string): codemavi {
+	moveViewToLocation(view: IViewDescriptor, location: ViewContainerLocation, reason?: string): void {
 		this.logger.value.info(`moveViewToLocation: view:${view.id} location:${location} reason:${reason}`);
 		const container = this.registerGeneratedViewContainer(location);
 		this.moveViewsToContainer([view], container);
 	}
 
-	moveViewsToContainer(views: IViewDescriptor[], viewContainer: ViewContainer, visibilityState?: ViewVisibilityState, reason?: string): codemavi {
+	moveViewsToContainer(views: IViewDescriptor[], viewContainer: ViewContainer, visibilityState?: ViewVisibilityState, reason?: string): void {
 		if (!views.length) {
 			return;
 		}
@@ -355,7 +355,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		for (const viewContainer of this.viewContainers) {
 			const viewContainerModel = this.getViewContainerModel(viewContainer);
 
@@ -385,7 +385,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return this.isGeneratedContainerId(viewContainerId) && !this.viewContainersCustomLocations.has(viewContainerId);
 	}
 
-	private onDidChangeDefaultContainer(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer): codemavi {
+	private onDidChangeDefaultContainer(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer): void {
 		const viewsToMove = views.filter(view =>
 			!this.viewDescriptorsCustomLocations.has(view.id) // Move views which are not already moved
 			|| (!this.viewContainers.includes(from) && this.viewDescriptorsCustomLocations.get(view.id) === from.id) // Move views which are moved from a removed container
@@ -395,7 +395,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	private reportMovedViews(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer): codemavi {
+	private reportMovedViews(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer): void {
 		const containerToString = (container: ViewContainer): string => {
 			if (container.id.startsWith(ViewDescriptorService.COMMON_CONTAINER_ID_PREFIX)) {
 				return 'custom';
@@ -437,7 +437,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		this.telemetryService.publicLog2<ViewDescriptorServiceMoveViewsEvent, ViewDescriptorServiceMoveViewsClassification>('viewDescriptorService.moveViews', { viewCount, fromContainer, toContainer, fromLocation, toLocation });
 	}
 
-	private moveViewsWithoutSaving(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer, visibilityState: ViewVisibilityState = ViewVisibilityState.Expand): codemavi {
+	private moveViewsWithoutSaving(views: IViewDescriptor[], from: ViewContainer, to: ViewContainer, visibilityState: ViewVisibilityState = ViewVisibilityState.Expand): void {
 		this.removeViews(from, views);
 		this.addViews(to, views, visibilityState);
 
@@ -451,7 +451,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		this._onDidChangeContainer.fire({ views, from, to });
 	}
 
-	private moveViewContainerToLocationWithoutSaving(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number): codemavi {
+	private moveViewContainerToLocationWithoutSaving(viewContainer: ViewContainer, location: ViewContainerLocation, requestedIndex?: number): void {
 		const from = this.getViewContainerLocation(viewContainer);
 		const to = location;
 		if (from !== to) {
@@ -472,7 +472,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}
 	}
 
-	private cleanUpGeneratedViewContainer(viewContainerId: string): codemavi {
+	private cleanUpGeneratedViewContainer(viewContainerId: string): void {
 		// Skip if container is not generated
 		if (!this.isGeneratedContainerId(viewContainerId)) {
 			return;
@@ -522,13 +522,13 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return container;
 	}
 
-	private onDidStorageChange(): codemavi {
+	private onDidStorageChange(): void {
 		if (JSON.stringify(this.viewCustomizations) !== this.getStoredViewCustomizationsValue() /* This checks if current window changed the value or not */) {
 			this.onDidViewCustomizationsStorageChange();
 		}
 	}
 
-	private onDidViewCustomizationsStorageChange(): codemavi {
+	private onDidViewCustomizationsStorageChange(): void {
 		this._viewCustomizations = undefined;
 
 		const newViewContainerCustomizations = new Map<string, ViewContainerLocation>(Object.entries(this.viewCustomizations.viewContainerLocations));
@@ -605,7 +605,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return `${ViewDescriptorService.COMMON_CONTAINER_ID_PREFIX}.${ViewContainerLocationToString(location)}.${generateUuid()}`;
 	}
 
-	private saveViewCustomizations(): codemavi {
+	private saveViewCustomizations(): void {
 		const viewCustomizations: IViewsCustomizations = { viewContainerLocations: {}, viewLocations: {}, viewContainerBadgeEnablementStates: {} };
 
 		for (const [containerId, location] of this.viewContainersCustomLocations) {
@@ -662,7 +662,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return this.storageService.get(ViewDescriptorService.VIEWS_CUSTOMIZATIONS, StorageScope.PROFILE, '{}');
 	}
 
-	private setStoredViewCustomizationsValue(value: string): codemavi {
+	private setStoredViewCustomizationsValue(value: string): void {
 		this.storageService.store(ViewDescriptorService.VIEWS_CUSTOMIZATIONS, value, StorageScope.PROFILE, StorageTarget.USER);
 	}
 
@@ -690,7 +690,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return result;
 	}
 
-	private onDidRegisterViewContainer(viewContainer: ViewContainer): codemavi {
+	private onDidRegisterViewContainer(viewContainer: ViewContainer): void {
 		const defaultLocation = this.isGeneratedContainerId(viewContainer.id) ? true : this.getViewContainerLocation(viewContainer) === this.getDefaultViewContainerLocation(viewContainer);
 		this.getOrCreateDefaultViewContainerLocationContextKey(viewContainer).set(defaultLocation);
 		this.getOrRegisterViewContainerModel(viewContainer);
@@ -739,26 +739,26 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		return viewContainerModel;
 	}
 
-	private onDidDeregisterViewContainer(viewContainer: ViewContainer): codemavi {
+	private onDidDeregisterViewContainer(viewContainer: ViewContainer): void {
 		this.viewContainerModels.deleteAndDispose(viewContainer);
 		this.viewsVisibilityActionDisposables.deleteAndDispose(viewContainer);
 	}
 
-	private onDidChangeActiveViews({ added, removed }: { added: ReadonlyArray<IViewDescriptor>; removed: ReadonlyArray<IViewDescriptor> }): codemavi {
+	private onDidChangeActiveViews({ added, removed }: { added: ReadonlyArray<IViewDescriptor>; removed: ReadonlyArray<IViewDescriptor> }): void {
 		this.contextKeyService.bufferChangeEvents(() => {
 			added.forEach(viewDescriptor => this.getOrCreateActiveViewContextKey(viewDescriptor).set(true));
 			removed.forEach(viewDescriptor => this.getOrCreateActiveViewContextKey(viewDescriptor).set(false));
 		});
 	}
 
-	private onDidChangeVisibleViews({ added, removed }: { added: IViewDescriptor[]; removed: IViewDescriptor[] }): codemavi {
+	private onDidChangeVisibleViews({ added, removed }: { added: IViewDescriptor[]; removed: IViewDescriptor[] }): void {
 		this.contextKeyService.bufferChangeEvents(() => {
 			added.forEach(viewDescriptor => this.getOrCreateVisibleViewContextKey(viewDescriptor).set(true));
 			removed.forEach(viewDescriptor => this.getOrCreateVisibleViewContextKey(viewDescriptor).set(false));
 		});
 	}
 
-	private registerViewsVisibilityActions(viewContainer: ViewContainer, { viewContainerModel, disposables }: { viewContainerModel: ViewContainerModel; disposables: DisposableStore }): codemavi {
+	private registerViewsVisibilityActions(viewContainer: ViewContainer, { viewContainerModel, disposables }: { viewContainerModel: ViewContainerModel; disposables: DisposableStore }): void {
 		this.viewsVisibilityActionDisposables.deleteAndDispose(viewContainer);
 		this.viewsVisibilityActionDisposables.set(viewContainer, this.registerViewsVisibilityActionsForContainer(viewContainerModel));
 		disposables.add(Event.any(
@@ -804,7 +804,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 							}]
 						});
 					}
-					async runInViewPaneContainer(serviceAccessor: ServicesAccessor, viewPaneContainer: ViewPaneContainer): Promise<codemavi> {
+					async runInViewPaneContainer(serviceAccessor: ServicesAccessor, viewPaneContainer: ViewPaneContainer): Promise<void> {
 						viewPaneContainer.toggleViewVisibility(viewDescriptor.id);
 					}
 				}));
@@ -829,7 +829,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 							}]
 						});
 					}
-					async runInViewPaneContainer(serviceAccessor: ServicesAccessor, viewPaneContainer: ViewPaneContainer): Promise<codemavi> {
+					async runInViewPaneContainer(serviceAccessor: ServicesAccessor, viewPaneContainer: ViewPaneContainer): Promise<void> {
 						if (viewPaneContainer.getView(viewDescriptor.id)?.isVisible()) {
 							viewPaneContainer.toggleViewVisibility(viewDescriptor.id);
 						}
@@ -866,7 +866,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		});
 	}
 
-	private addViews(container: ViewContainer, views: IViewDescriptor[], visibilityState: ViewVisibilityState = ViewVisibilityState.Default): codemavi {
+	private addViews(container: ViewContainer, views: IViewDescriptor[], visibilityState: ViewVisibilityState = ViewVisibilityState.Default): void {
 		this.contextKeyService.bufferChangeEvents(() => {
 			views.forEach(view => {
 				const isDefaultContainer = this.getDefaultContainerById(view.id) === container;
@@ -888,7 +888,7 @@ export class ViewDescriptorService extends Disposable implements IViewDescriptor
 		}));
 	}
 
-	private removeViews(container: ViewContainer, views: IViewDescriptor[]): codemavi {
+	private removeViews(container: ViewContainer, views: IViewDescriptor[]): void {
 		// Set view default location keys to false
 		this.contextKeyService.bufferChangeEvents(() => {
 			views.forEach(view => {

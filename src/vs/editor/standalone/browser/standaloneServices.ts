@@ -103,18 +103,18 @@ import { IWebWorkerDescriptor } from '../../../base/browser/webWorkerFactory.js'
 class SimpleModel implements IResolvedTextEditorModel {
 
 	private readonly model: ITextModel;
-	private readonly _onWillDispose: Emitter<codemavi>;
+	private readonly _onWillDispose: Emitter<void>;
 
 	constructor(model: ITextModel) {
 		this.model = model;
-		this._onWillDispose = new Emitter<codemavi>();
+		this._onWillDispose = new Emitter<void>();
 	}
 
-	public get onWillDispose(): Event<codemavi> {
+	public get onWillDispose(): Event<void> {
 		return this._onWillDispose.event;
 	}
 
-	public resolve(): Promise<codemavi> {
+	public resolve(): Promise<void> {
 		return Promise.resolve();
 	}
 
@@ -131,7 +131,7 @@ class SimpleModel implements IResolvedTextEditorModel {
 	}
 
 	private disposed = false;
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.disposed = true;
 
 		this._onWillDispose.fire();
@@ -193,7 +193,7 @@ class StandaloneEditorProgressService implements IEditorProgressService {
 		return StandaloneEditorProgressService.NULL_PROGRESS_RUNNER;
 	}
 
-	async showWhile(promise: Promise<any>, delay?: number): Promise<codemavi> {
+	async showWhile(promise: Promise<any>, delay?: number): Promise<void> {
 		await promise;
 	}
 }
@@ -202,7 +202,7 @@ class StandaloneProgressService implements IProgressService {
 
 	declare readonly _serviceBrand: undefined;
 
-	withProgress<R>(_options: IProgressOptions | IProgressDialogOptions | IProgressNotificationOptions | IProgressWindowOptions | IProgressCompositeOptions, task: (progress: IProgress<IProgressStep>) => Promise<R>, onDidCancel?: ((choice?: number | undefined) => codemavi) | undefined): Promise<R> {
+	withProgress<R>(_options: IProgressOptions | IProgressDialogOptions | IProgressNotificationOptions | IProgressWindowOptions | IProgressCompositeOptions, task: (progress: IProgress<IProgressStep>) => Promise<R>, onDidCancel?: ((choice?: number | undefined) => void) | undefined): Promise<R> {
 		return task({
 			report: () => { },
 		});
@@ -285,15 +285,15 @@ class StandaloneDialogService implements IDialogService {
 		return { result };
 	}
 
-	async info(message: string, detail?: string): Promise<codemavi> {
+	async info(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Info, message, detail });
 	}
 
-	async warn(message: string, detail?: string): Promise<codemavi> {
+	async warn(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Warning, message, detail });
 	}
 
-	async error(message: string, detail?: string): Promise<codemavi> {
+	async error(message: string, detail?: string): Promise<void> {
 		await this.prompt({ type: Severity.Error, message, detail });
 	}
 
@@ -301,7 +301,7 @@ class StandaloneDialogService implements IDialogService {
 		return Promise.resolve({ confirmed: false }); // unsupported
 	}
 
-	about(): Promise<codemavi> {
+	about(): Promise<void> {
 		return Promise.resolve(undefined);
 	}
 }
@@ -312,7 +312,7 @@ export class StandaloneNotificationService implements INotificationService {
 
 	readonly onDidRemoveNotification: Event<INotification> = Event.None;
 
-	readonly onDidChangeFilter: Event<codemavi> = Event.None;
+	readonly onDidChangeFilter: Event<void> = Event.None;
 
 	public _serviceBrand: undefined;
 
@@ -355,7 +355,7 @@ export class StandaloneNotificationService implements INotificationService {
 	}
 
 
-	public setFilter(filter: NotificationsFilter | INotificationSourceFilter): codemavi { }
+	public setFilter(filter: NotificationsFilter | INotificationSourceFilter): void { }
 
 	public getFilter(source?: INotificationSource): NotificationsFilter {
 		return NotificationsFilter.OFF;
@@ -365,7 +365,7 @@ export class StandaloneNotificationService implements INotificationService {
 		return [];
 	}
 
-	public removeFilter(sourceId: string): codemavi { }
+	public removeFilter(sourceId: string): void { }
 }
 
 export class StandaloneCommandService implements ICommandService {
@@ -530,7 +530,7 @@ export class StandaloneKeybindingService extends AbstractKeybindingService {
 		});
 	}
 
-	private updateResolver(): codemavi {
+	private updateResolver(): void {
 		this._cachedResolver = null;
 		this._onDidUpdateKeybindings.fire();
 	}
@@ -596,14 +596,14 @@ export class StandaloneKeybindingService extends AbstractKeybindingService {
 		return '';
 	}
 
-	public registerSchemaContribution(contribution: KeybindingsSchemaContribution): codemavi {
+	public registerSchemaContribution(contribution: KeybindingsSchemaContribution): void {
 		// noop
 	}
 
 	/**
 	 * not yet supported
 	 */
-	public override enableKeybindingHoldMode(commandId: string): Promise<codemavi> | undefined {
+	public override enableKeybindingHoldMode(commandId: string): Promise<void> | undefined {
 		return undefined;
 	}
 }
@@ -663,7 +663,7 @@ export class StandaloneConfigurationService implements IConfigurationService {
 		return this._configuration.getValue(section, overrides, undefined);
 	}
 
-	public updateValues(values: [string, any][]): Promise<codemavi> {
+	public updateValues(values: [string, any][]): Promise<void> {
 		const previous = { data: this._configuration.toData() };
 
 		const changedKeys: string[] = [];
@@ -686,7 +686,7 @@ export class StandaloneConfigurationService implements IConfigurationService {
 		return Promise.resolve();
 	}
 
-	public updateValue(key: string, value: any, arg3?: any, arg4?: any): Promise<codemavi> {
+	public updateValue(key: string, value: any, arg3?: any, arg4?: any): Promise<void> {
 		return this.updateValues([[key, value]]);
 	}
 
@@ -698,7 +698,7 @@ export class StandaloneConfigurationService implements IConfigurationService {
 		return this._configuration.keys(undefined);
 	}
 
-	public reloadConfiguration(): Promise<codemavi> {
+	public reloadConfiguration(): Promise<void> {
 		return Promise.resolve(undefined);
 	}
 
@@ -768,7 +768,7 @@ class StandaloneResourceConfigurationService implements ITextResourceConfigurati
 		return this.languageService.guessLanguageIdByFilepathOrFirstLine(resource);
 	}
 
-	updateValue(resource: URI, key: string, value: any, configurationTarget?: ConfigurationTarget): Promise<codemavi> {
+	updateValue(resource: URI, key: string, value: any, configurationTarget?: ConfigurationTarget): Promise<void> {
 		return this.configurationService.updateValue(key, value, { resource }, configurationTarget);
 	}
 }
@@ -800,8 +800,8 @@ class StandaloneTelemetryService implements ITelemetryService {
 	readonly devDeviceId = 'someValue.devDeviceId';
 	readonly firstSessionDate = 'someValue.firstSessionDate';
 	readonly sendErrorTelemetry = false;
-	setEnabled(): codemavi { }
-	setExperimentProperty(): codemavi { }
+	setEnabled(): void { }
+	setExperimentProperty(): void { }
 	publicLog() { }
 	publicLog2() { }
 	publicLogError() { }
@@ -814,8 +814,8 @@ class StandaloneWorkspaceContextService implements IWorkspaceContextService {
 
 	private static readonly SCHEME = 'inmemory';
 
-	private readonly _onDidChangeWorkspaceName = new Emitter<codemavi>();
-	public readonly onDidChangeWorkspaceName: Event<codemavi> = this._onDidChangeWorkspaceName.event;
+	private readonly _onDidChangeWorkspaceName = new Emitter<void>();
+	public readonly onDidChangeWorkspaceName: Event<void> = this._onDidChangeWorkspaceName.event;
 
 	private readonly _onWillChangeWorkspaceFolders = new Emitter<IWorkspaceFoldersWillChangeEvent>();
 	public readonly onWillChangeWorkspaceFolders: Event<IWorkspaceFoldersWillChangeEvent> = this._onWillChangeWorkspaceFolders.event;
@@ -864,7 +864,7 @@ class StandaloneWorkspaceContextService implements IWorkspaceContextService {
 	}
 }
 
-export function updateConfigurationService(configurationService: IConfigurationService, source: any, isDiffEditor: boolean): codemavi {
+export function updateConfigurationService(configurationService: IConfigurationService, source: any, isDiffEditor: boolean): void {
 	if (!source) {
 		return;
 	}
@@ -1011,7 +1011,7 @@ class StandaloneWorkspaceTrustManagementService implements IWorkspaceTrustManage
 
 	private _neverEmitter = new Emitter<never>();
 	public readonly onDidChangeTrust: Event<boolean> = this._neverEmitter.event;
-	onDidChangeTrustedFolders: Event<codemavi> = this._neverEmitter.event;
+	onDidChangeTrustedFolders: Event<void> = this._neverEmitter.event;
 	public readonly workspaceResolved = Promise.resolve();
 	public readonly workspaceTrustInitialized = Promise.resolve();
 	public readonly acceptsOutOfWorkspaceFiles = true;
@@ -1025,25 +1025,25 @@ class StandaloneWorkspaceTrustManagementService implements IWorkspaceTrustManage
 	canSetParentFolderTrust(): boolean {
 		return false;
 	}
-	async setParentFolderTrust(trusted: boolean): Promise<codemavi> {
+	async setParentFolderTrust(trusted: boolean): Promise<void> {
 		// noop
 	}
 	canSetWorkspaceTrust(): boolean {
 		return false;
 	}
-	async setWorkspaceTrust(trusted: boolean): Promise<codemavi> {
+	async setWorkspaceTrust(trusted: boolean): Promise<void> {
 		// noop
 	}
 	getUriTrustInfo(uri: URI): Promise<IWorkspaceTrustUriInfo> {
 		throw new Error('Method not supported.');
 	}
-	async setUrisTrust(uri: URI[], trusted: boolean): Promise<codemavi> {
+	async setUrisTrust(uri: URI[], trusted: boolean): Promise<void> {
 		// noop
 	}
 	getTrustedUris(): URI[] {
 		return [];
 	}
-	async setTrustedUris(uris: URI[]): Promise<codemavi> {
+	async setTrustedUris(uris: URI[]): Promise<void> {
 		// noop
 	}
 	addWorkspaceTrustTransitionParticipant(participant: IWorkspaceTrustTransitionParticipant): IDisposable {
@@ -1096,10 +1096,10 @@ class StandaloneEditorWorkerService extends EditorWorkerService {
 
 class StandaloneAccessbilitySignalService implements IAccessibilitySignalService {
 	_serviceBrand: undefined;
-	async playSignal(cue: AccessibilitySignal, options: {}): Promise<codemavi> {
+	async playSignal(cue: AccessibilitySignal, options: {}): Promise<void> {
 	}
 
-	async playSignals(cues: AccessibilitySignal[]): Promise<codemavi> {
+	async playSignals(cues: AccessibilitySignal[]): Promise<void> {
 	}
 
 	getEnabledState(signal: AccessibilitySignal, userGesture: boolean, modality?: AccessibilityModality | undefined): IValueWithChangeEvent<boolean> {
@@ -1118,11 +1118,11 @@ class StandaloneAccessbilitySignalService implements IAccessibilitySignalService
 		return false;
 	}
 
-	onSoundEnabledChanged(cue: AccessibilitySignal): Event<codemavi> {
+	onSoundEnabledChanged(cue: AccessibilitySignal): Event<void> {
 		return Event.None;
 	}
 
-	async playSound(cue: Sound, allowManyInParallel?: boolean | undefined): Promise<codemavi> {
+	async playSound(cue: Sound, allowManyInParallel?: boolean | undefined): Promise<void> {
 	}
 	playSignalLoop(cue: AccessibilitySignal): IDisposable {
 		return toDisposable(() => { });
@@ -1199,7 +1199,7 @@ export module StandaloneServices {
 	}
 
 	let initialized = false;
-	const onDidInitialize = new Emitter<codemavi>();
+	const onDidInitialize = new Emitter<void>();
 	export function initialize(overrides: IEditorOverrideServices): IInstantiationService {
 		if (initialized) {
 			return instantiationService;

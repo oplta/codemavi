@@ -15,11 +15,11 @@ export class NotebookCellStatusBarService extends Disposable implements INoteboo
 
 	readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeProviders = this._register(new Emitter<codemavi>());
-	readonly onDidChangeProviders: Event<codemavi> = this._onDidChangeProviders.event;
+	private readonly _onDidChangeProviders = this._register(new Emitter<void>());
+	readonly onDidChangeProviders: Event<void> = this._onDidChangeProviders.event;
 
-	private readonly _onDidChangeItems = this._register(new Emitter<codemavi>());
-	readonly onDidChangeItems: Event<codemavi> = this._onDidChangeItems.event;
+	private readonly _onDidChangeItems = this._register(new Emitter<void>());
+	readonly onDidChangeItems: Event<void> = this._onDidChangeItems.event;
 
 	private readonly _providers: INotebookCellStatusBarItemProvider[] = [];
 

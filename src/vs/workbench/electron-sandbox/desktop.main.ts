@@ -75,7 +75,7 @@ export class DesktopMain extends Disposable {
 		this.init();
 	}
 
-	private init(): codemavi {
+	private init(): void {
 
 		// Massage configuration file URIs
 		this.reviveUris();
@@ -110,7 +110,7 @@ export class DesktopMain extends Disposable {
 		}
 	}
 
-	async open(): Promise<codemavi> {
+	async open(): Promise<void> {
 
 		// Init services and wait for DOM to be ready in parallel
 		const [services] = await Promise.all([this.initServices(), domContentLoaded(mainWindow)]);
@@ -157,7 +157,7 @@ export class DesktopMain extends Disposable {
 		return [];
 	}
 
-	private registerListeners(workbench: Workbench, storageService: NativeWorkbenchStorageService): codemavi {
+	private registerListeners(workbench: Workbench, storageService: NativeWorkbenchStorageService): void {
 
 		// Workbench Lifecycle
 		this._register(workbench.onWillShutdown(event => event.join(storageService.close(), { id: 'join.closeStorage', label: localize('join.closeStorage', "Saving UI state") })));
@@ -409,10 +409,10 @@ export class DesktopMain extends Disposable {
 }
 
 export interface IDesktopMain {
-	main(configuration: INativeWindowConfiguration): Promise<codemavi>;
+	main(configuration: INativeWindowConfiguration): Promise<void>;
 }
 
-export function main(configuration: INativeWindowConfiguration): Promise<codemavi> {
+export function main(configuration: INativeWindowConfiguration): Promise<void> {
 	const workbench = new DesktopMain(configuration);
 
 	return workbench.open();

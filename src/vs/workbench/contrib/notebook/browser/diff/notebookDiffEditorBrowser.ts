@@ -35,32 +35,32 @@ export interface INotebookTextDiffEditor {
 	inlineNotebookEditor: INotebookEditor | undefined;
 	readonly currentChangedIndex: IObservable<number>;
 	onMouseUp: Event<{ readonly event: MouseEvent; readonly target: IDiffElementViewModelBase }>;
-	onDidScroll: Event<codemavi>;
+	onDidScroll: Event<void>;
 	onDidDynamicOutputRendered: Event<{ cell: IGenericCellViewModel; output: ICellOutputViewModel }>;
 	getOverflowContainerDomNode(): HTMLElement;
 	getLayoutInfo(): NotebookLayoutInfo;
 	getScrollTop(): number;
 	getScrollHeight(): number;
-	layoutNotebookCell(cell: IDiffElementViewModelBase, height: number): codemavi;
-	createOutput(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: IInsetRenderOutput, getOffset: () => number, diffSide: DiffSide): codemavi;
-	showInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, displayOutput: ICellOutputViewModel, diffSide: DiffSide): codemavi;
-	removeInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: ICellOutputViewModel, diffSide: DiffSide): codemavi;
-	hideInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: ICellOutputViewModel): codemavi;
+	layoutNotebookCell(cell: IDiffElementViewModelBase, height: number): void;
+	createOutput(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: IInsetRenderOutput, getOffset: () => number, diffSide: DiffSide): void;
+	showInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, displayOutput: ICellOutputViewModel, diffSide: DiffSide): void;
+	removeInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: ICellOutputViewModel, diffSide: DiffSide): void;
+	hideInset(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: IDiffNestedCellViewModel, output: ICellOutputViewModel): void;
 	/**
 	 * Trigger the editor to scroll from scroll event programmatically
 	 */
-	triggerScroll(event: IMouseWheelEvent): codemavi;
-	delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): codemavi;
+	triggerScroll(event: IMouseWheelEvent): void;
+	delegateVerticalScrollbarPointerDown(browserEvent: PointerEvent): void;
 	getCellByInfo(cellInfo: ICommonCellInfo): IGenericCellViewModel;
-	focusNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<codemavi>;
-	focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<codemavi>;
-	updateOutputHeight(cellInfo: ICommonCellInfo, output: ICellOutputViewModel, height: number, isInit: boolean): codemavi;
-	deltaCellOutputContainerClassNames(diffSide: DiffSide, cellId: string, added: string[], removed: string[]): codemavi;
-	firstChange(): codemavi;
-	lastChange(): codemavi;
-	previousChange(): codemavi;
-	nextChange(): codemavi;
-	toggleInlineView(): codemavi;
+	focusNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<void>;
+	focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<void>;
+	updateOutputHeight(cellInfo: ICommonCellInfo, output: ICellOutputViewModel, height: number, isInit: boolean): void;
+	deltaCellOutputContainerClassNames(diffSide: DiffSide, cellId: string, added: string[], removed: string[]): void;
+	firstChange(): void;
+	lastChange(): void;
+	previousChange(): void;
+	nextChange(): void;
+	toggleInlineView(): void;
 }
 
 export interface IDiffNestedCellViewModel {
@@ -112,9 +112,9 @@ export interface NotebookDocumentDiffElementRenderTemplate extends CellDiffCommo
 }
 
 export interface IDiffCellMarginOverlay extends IDisposable {
-	onAction: Event<codemavi>;
-	show(): codemavi;
-	hide(): codemavi;
+	onAction: Event<void>;
+	show(): void;
+	hide(): void;
 }
 
 export interface CellDiffSideBySideRenderTemplate extends CellDiffCommonRenderTemplate {
@@ -191,5 +191,5 @@ export interface INotebookDiffViewModel extends IDisposable {
 	 * If view models are generated, then the onDidChangeItems is triggered.
 	 * @param token
 	 */
-	computeDiff(token: CancellationToken): Promise<codemavi>;
+	computeDiff(token: CancellationToken): Promise<void>;
 }

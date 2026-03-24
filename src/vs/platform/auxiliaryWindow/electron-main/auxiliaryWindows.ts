@@ -20,7 +20,7 @@ export interface IAuxiliaryWindowsMainService {
 	readonly onDidTriggerSystemContextMenu: Event<{ readonly window: IAuxiliaryWindow; readonly x: number; readonly y: number }>;
 
 	createWindow(details: HandlerDetails): BrowserWindowConstructorOptions;
-	registerWindow(webContents: WebContents): codemavi;
+	registerWindow(webContents: WebContents): void;
 
 	getWindowByWebContents(webContents: WebContents): IAuxiliaryWindow | undefined;
 

@@ -37,7 +37,7 @@ export class ElectronWebviewElement extends WebviewElement {
 	private _cachedHtmlContent: string | undefined;
 
 	private readonly _webviewMainService: IWebviewManagerService;
-	private readonly _iframeDelayer = this._register(new Delayer<codemavi>(200));
+	private readonly _iframeDelayer = this._register(new Delayer<void>(200));
 
 	protected override get platform() { return 'electron'; }
 
@@ -79,7 +79,7 @@ export class ElectronWebviewElement extends WebviewElement {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		// Make sure keyboard handler knows it closed (#71800)
 		this._webviewKeyboardHandler.didBlur();
 
@@ -113,7 +113,7 @@ export class ElectronWebviewElement extends WebviewElement {
 	 *
 	 * @param value The string to search for. Empty strings are ignored.
 	 */
-	public override find(value: string, previous: boolean): codemavi {
+	public override find(value: string, previous: boolean): void {
 		if (!this.element) {
 			return;
 		}
@@ -145,7 +145,7 @@ export class ElectronWebviewElement extends WebviewElement {
 		});
 	}
 
-	public override stopFind(keepSelection?: boolean): codemavi {
+	public override stopFind(keepSelection?: boolean): void {
 		if (!this.element) {
 			return;
 		}
@@ -157,7 +157,7 @@ export class ElectronWebviewElement extends WebviewElement {
 		this._onDidStopFind.fire();
 	}
 
-	protected override handleFocusChange(isFocused: boolean): codemavi {
+	protected override handleFocusChange(isFocused: boolean): void {
 		super.handleFocusChange(isFocused);
 		if (isFocused) {
 			this._webviewKeyboardHandler.didFocus();

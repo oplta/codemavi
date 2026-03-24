@@ -81,27 +81,27 @@ export class DetachedTerminal extends Disposable implements IDetachedTerminalIns
 		return this._xterm.hasSelection();
 	}
 
-	clearSelection(): codemavi {
+	clearSelection(): void {
 		this._xterm.clearSelection();
 	}
 
-	focus(force?: boolean): codemavi {
+	focus(force?: boolean): void {
 		if (force || !dom.getActiveWindow().getSelection()?.toString()) {
 			this.xterm.focus();
 		}
 	}
 
-	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions> | undefined): codemavi {
+	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions> | undefined): void {
 		this.domElement = container;
 		const screenElement = this._xterm.attachToElement(container, options);
 		this._widgets.attachToElement(screenElement);
 	}
 
-	forceScrollbarVisibility(): codemavi {
+	forceScrollbarVisibility(): void {
 		this.domElement?.classList.add('force-scrollbar');
 	}
 
-	resetScrollbarVisibility(): codemavi {
+	resetScrollbarVisibility(): void {
 		this.domElement?.classList.remove('force-scrollbar');
 	}
 

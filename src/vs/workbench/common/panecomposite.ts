@@ -9,7 +9,7 @@ import { IComposite } from './composite.js';
 export interface IPaneComposite extends IComposite {
 
 	/**
-	 * Returns the minimal width needed to acodemavi any content horizontal truncation
+	 * Returns the minimal width needed to avoid any content horizontal truncation
 	 */
 	getOptimalWidth(): number | undefined;
 

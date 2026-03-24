@@ -56,13 +56,13 @@ export class ColorPickerModel {
 		this._colorPresentations = availableColorPresentations;
 	}
 
-	selectNextColorPresentation(): codemavi {
+	selectNextColorPresentation(): void {
 		this.presentationIndex = (this.presentationIndex + 1) % this.colorPresentations.length;
 		this.flushColor();
 		this._onDidChangePresentation.fire(this.presentation);
 	}
 
-	guessColorPresentation(color: Color, originalText: string): codemavi {
+	guessColorPresentation(color: Color, originalText: string): void {
 		let presentationIndex = -1;
 		for (let i = 0; i < this.colorPresentations.length; i++) {
 			if (originalText.toLowerCase() === this.colorPresentations[i].label) {
@@ -88,7 +88,7 @@ export class ColorPickerModel {
 		}
 	}
 
-	flushColor(): codemavi {
+	flushColor(): void {
 		this._onColorFlushed.fire(this._color);
 	}
 }

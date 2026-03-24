@@ -51,7 +51,7 @@ export default class FileConfigurationManager extends Disposable {
 	public async ensureConfigurationForDocument(
 		document: vscode.TextDocument,
 		token: vscode.CancellationToken
-	): Promise<codemavi> {
+	): Promise<void> {
 		const formattingOptions = this.getFormattingOptions(document);
 		if (formattingOptions) {
 			return this.ensureConfigurationOptions(document, formattingOptions, token);
@@ -74,7 +74,7 @@ export default class FileConfigurationManager extends Disposable {
 		document: vscode.TextDocument,
 		options: FormattingOptions,
 		token: vscode.CancellationToken
-	): Promise<codemavi> {
+	): Promise<void> {
 		const file = this.client.toOpenTsFilePath(document);
 		if (!file) {
 			return;
@@ -110,7 +110,7 @@ export default class FileConfigurationManager extends Disposable {
 	public async setGlobalConfigurationFromDocument(
 		document: vscode.TextDocument,
 		token: vscode.CancellationToken,
-	): Promise<codemavi> {
+	): Promise<void> {
 		const formattingOptions = this.getFormattingOptions(document);
 		if (!formattingOptions) {
 			return;

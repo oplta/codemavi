@@ -24,7 +24,7 @@ export class NativeWorkbenchStorageService extends RemoteStorageService {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.userDataProfileService.onDidChangeCurrentProfile(e => e.join(this.switchToProfile(e.profile))));
 	}
 }

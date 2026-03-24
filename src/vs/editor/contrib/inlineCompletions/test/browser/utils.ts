@@ -21,12 +21,12 @@ export class MockInlineCompletionsProvider implements InlineCompletionsProvider 
 	private callHistory = new Array<unknown>();
 	private calledTwiceIn50Ms = false;
 
-	public setReturnValue(value: InlineCompletion | undefined, delayMs: number = 0): codemavi {
+	public setReturnValue(value: InlineCompletion | undefined, delayMs: number = 0): void {
 		this.returnValue = value ? [value] : [];
 		this.delayMs = delayMs;
 	}
 
-	public setReturnValues(values: InlineCompletion[], delayMs: number = 0): codemavi {
+	public setReturnValues(values: InlineCompletion[], delayMs: number = 0): void {
 		this.returnValue = values;
 		this.delayMs = delayMs;
 	}
@@ -103,31 +103,31 @@ export class GhostTextContext extends Disposable {
 		return arr;
 	}
 
-	public keyboardType(text: string): codemavi {
+	public keyboardType(text: string): void {
 		this.editor.trigger('keyboard', 'type', { text });
 	}
 
-	public cursorUp(): codemavi {
+	public cursorUp(): void {
 		CoreNavigationCommands.CursorUp.runEditorCommand(null, this.editor, null);
 	}
 
-	public cursorRight(): codemavi {
+	public cursorRight(): void {
 		CoreNavigationCommands.CursorRight.runEditorCommand(null, this.editor, null);
 	}
 
-	public cursorLeft(): codemavi {
+	public cursorLeft(): void {
 		CoreNavigationCommands.CursorLeft.runEditorCommand(null, this.editor, null);
 	}
 
-	public cursorDown(): codemavi {
+	public cursorDown(): void {
 		CoreNavigationCommands.CursorDown.runEditorCommand(null, this.editor, null);
 	}
 
-	public cursorLineEnd(): codemavi {
+	public cursorLineEnd(): void {
 		CoreNavigationCommands.CursorLineEnd.runEditorCommand(null, this.editor, null);
 	}
 
-	public leftDelete(): codemavi {
+	public leftDelete(): void {
 		CoreEditingCommands.DeleteLeft.runEditorCommand(null, this.editor, null);
 	}
 }

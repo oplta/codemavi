@@ -74,7 +74,7 @@ class ViewDescriptorsState extends Disposable {
 
 	}
 
-	set(id: string, state: IViewDescriptorState): codemavi {
+	set(id: string, state: IViewDescriptorState): void {
 		this.state.set(id, state);
 	}
 
@@ -82,12 +82,12 @@ class ViewDescriptorsState extends Disposable {
 		return this.state.get(id);
 	}
 
-	updateState(viewDescriptors: ReadonlyArray<IViewDescriptor>): codemavi {
+	updateState(viewDescriptors: ReadonlyArray<IViewDescriptor>): void {
 		this.updateWorkspaceState(viewDescriptors);
 		this.updateGlobalState(viewDescriptors);
 	}
 
-	private updateWorkspaceState(viewDescriptors: ReadonlyArray<IViewDescriptor>): codemavi {
+	private updateWorkspaceState(viewDescriptors: ReadonlyArray<IViewDescriptor>): void {
 		const storedViewsStates = this.getStoredWorkspaceState();
 		for (const viewDescriptor of viewDescriptors) {
 			const viewState = this.get(viewDescriptor.id);
@@ -108,7 +108,7 @@ class ViewDescriptorsState extends Disposable {
 		}
 	}
 
-	private updateGlobalState(viewDescriptors: ReadonlyArray<IViewDescriptor>): codemavi {
+	private updateGlobalState(viewDescriptors: ReadonlyArray<IViewDescriptor>): void {
 		const storedGlobalState = this.getStoredGlobalState();
 		for (const viewDescriptor of viewDescriptors) {
 			const state = this.get(viewDescriptor.id);
@@ -121,7 +121,7 @@ class ViewDescriptorsState extends Disposable {
 		this.setStoredGlobalState(storedGlobalState);
 	}
 
-	private onDidStorageChange(): codemavi {
+	private onDidStorageChange(): void {
 		if (this.globalViewsStatesValue !== this.getStoredGlobalViewsStatesValue() /* This checks if current window changed the value or not */) {
 			this._globalViewsStatesValue = undefined;
 			const storedViewsVisibilityStates = this.getStoredGlobalState();
@@ -232,7 +232,7 @@ class ViewDescriptorsState extends Disposable {
 		return this.parseStoredGlobalState(this.globalViewsStatesValue).state;
 	}
 
-	private setStoredGlobalState(storedGlobalState: Map<string, IStoredGlobalViewState>): codemavi {
+	private setStoredGlobalState(storedGlobalState: Map<string, IStoredGlobalViewState>): void {
 		this.globalViewsStatesValue = JSON.stringify([...storedGlobalState.values()]);
 	}
 
@@ -272,7 +272,7 @@ class ViewDescriptorsState extends Disposable {
 		return this.storageService.get(this.globalViewsStateStorageId, StorageScope.PROFILE, '[]');
 	}
 
-	private setStoredGlobalViewsStatesValue(value: string): codemavi {
+	private setStoredGlobalViewsStatesValue(value: string): void {
 		this.storageService.store(this.globalViewsStateStorageId, value, StorageScope.PROFILE, StorageTarget.USER);
 	}
 
@@ -343,7 +343,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		this.updateContainerInfo();
 	}
 
-	private updateContainerInfo(): codemavi {
+	private updateContainerInfo(): void {
 		/* Use default container info if one of the visible view descriptors belongs to the current container by default */
 		const useDefaultContainerInfo = this.viewContainer.alwaysUseContainerInfo || this.visibleViewDescriptors.length === 0 || this.visibleViewDescriptors.some(v => Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).getViewContainer(v.id) === this.viewContainer);
 		const title = useDefaultContainerInfo ? (typeof this.viewContainer.title === 'string' ? this.viewContainer.title : this.viewContainer.title.value) : this.visibleViewDescriptors[0]?.containerTitle || this.visibleViewDescriptors[0]?.name?.value || '';
@@ -389,11 +389,11 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		return this.isViewDescriptorVisible(viewDescriptorItem);
 	}
 
-	setVisible(id: string, visible: boolean): codemavi {
+	setVisible(id: string, visible: boolean): void {
 		this.updateVisibility([{ id, visible }]);
 	}
 
-	private updateVisibility(viewDescriptors: { id: string; visible: boolean }[]): codemavi {
+	private updateVisibility(viewDescriptors: { id: string; visible: boolean }[]): void {
 		// First: Update and remove the view descriptors which are asked to be hidden
 		const viewDescriptorItemsToHide = coalesce(viewDescriptors.filter(({ visible }) => !visible)
 			.map(({ id }) => this.findAndIgnoreIfNotFound(id)));
@@ -453,7 +453,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		return !!this.find(id).viewDescriptorItem.state.collapsed;
 	}
 
-	setCollapsed(id: string, collapsed: boolean): codemavi {
+	setCollapsed(id: string, collapsed: boolean): void {
 		const { viewDescriptorItem } = this.find(id);
 		if (viewDescriptorItem.state.collapsed !== collapsed) {
 			viewDescriptorItem.state.collapsed = collapsed;
@@ -465,7 +465,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		return this.find(id).viewDescriptorItem.state.size;
 	}
 
-	setSizes(newSizes: readonly { id: string; size: number }[]): codemavi {
+	setSizes(newSizes: readonly { id: string; size: number }[]): void {
 		for (const { id, size } of newSizes) {
 			const { viewDescriptorItem } = this.find(id);
 			if (viewDescriptorItem.state.size !== size) {
@@ -475,7 +475,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		this.viewDescriptorsState.updateState(this.allViewDescriptors);
 	}
 
-	move(from: string, to: string): codemavi {
+	move(from: string, to: string): void {
 		const fromIndex = this.viewDescriptorItems.findIndex(v => v.viewDescriptor.id === from);
 		const toIndex = this.viewDescriptorItems.findIndex(v => v.viewDescriptor.id === to);
 
@@ -491,7 +491,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		this.broadCastMovedViewDescriptors({ index: fromIndex, viewDescriptor: fromViewDescriptor.viewDescriptor }, { index: toIndex, viewDescriptor: toViewDescriptor.viewDescriptor });
 	}
 
-	add(addedViewDescriptorStates: IAddedViewDescriptorState[]): codemavi {
+	add(addedViewDescriptorStates: IAddedViewDescriptorState[]): void {
 		const addedItems: IViewDescriptorItem[] = [];
 		for (const addedViewDescriptorState of addedViewDescriptorStates) {
 			const viewDescriptor = addedViewDescriptorState.viewDescriptor;
@@ -551,7 +551,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		this.broadCastAddedVisibleViewDescriptors(addedVisibleDescriptors);
 	}
 
-	remove(viewDescriptors: IViewDescriptor[]): codemavi {
+	remove(viewDescriptors: IViewDescriptor[]): void {
 		const removed: IViewDescriptor[] = [];
 		const removedItems: IViewDescriptorItem[] = [];
 		const removedActiveDescriptors: IViewDescriptor[] = [];
@@ -590,7 +590,7 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		}
 	}
 
-	private onDidChangeContext(): codemavi {
+	private onDidChangeContext(): void {
 		const addedActiveItems: { item: IViewDescriptorItem; visibleWhenActive: boolean }[] = [];
 		const removedActiveItems: IViewDescriptorItem[] = [];
 
@@ -634,26 +634,26 @@ export class ViewContainerModel extends Disposable implements IViewContainerMode
 		this.broadCastAddedVisibleViewDescriptors(addedVisibleDescriptors);
 	}
 
-	private broadCastAddedVisibleViewDescriptors(added: IAddedViewDescriptorRef[]): codemavi {
+	private broadCastAddedVisibleViewDescriptors(added: IAddedViewDescriptorRef[]): void {
 		if (added.length) {
 			this._onDidAddVisibleViewDescriptors.fire(added.sort((a, b) => a.index - b.index));
 			this.updateState(`Added views:${added.map(v => v.viewDescriptor.id).join(',')} in ${this.viewContainer.id}`);
 		}
 	}
 
-	private broadCastRemovedVisibleViewDescriptors(removed: IViewDescriptorRef[]): codemavi {
+	private broadCastRemovedVisibleViewDescriptors(removed: IViewDescriptorRef[]): void {
 		if (removed.length) {
 			this._onDidRemoveVisibleViewDescriptors.fire(removed.sort((a, b) => b.index - a.index));
 			this.updateState(`Removed views:${removed.map(v => v.viewDescriptor.id).join(',')} from ${this.viewContainer.id}`);
 		}
 	}
 
-	private broadCastMovedViewDescriptors(from: IViewDescriptorRef, to: IViewDescriptorRef): codemavi {
+	private broadCastMovedViewDescriptors(from: IViewDescriptorRef, to: IViewDescriptorRef): void {
 		this._onDidMoveVisibleViewDescriptors.fire({ from, to });
 		this.updateState(`Moved view ${from.viewDescriptor.id} to ${to.viewDescriptor.id} in ${this.viewContainer.id}`);
 	}
 
-	private updateState(reason: string): codemavi {
+	private updateState(reason: string): void {
 		this.logger.value.info(reason);
 		this.viewDescriptorsState.updateState(this.allViewDescriptors);
 		this.updateContainerInfo();

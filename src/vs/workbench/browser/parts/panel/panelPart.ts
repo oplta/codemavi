@@ -113,7 +113,7 @@ export class PanelPart extends AbstractPaneCompositePart {
 		}));
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		super.updateStyles();
 
 		const container = assertIsDefined(this.getContainer());
@@ -159,7 +159,7 @@ export class PanelPart extends AbstractPaneCompositePart {
 		};
 	}
 
-	private fillExtraContextMenuActions(actions: IAction[]): codemavi {
+	private fillExtraContextMenuActions(actions: IAction[]): void {
 		if (this.getCompositeBarPosition() === CompositeBarPosition.TITLE) {
 			const viewsSubmenuAction = this.getViewsSubmenuAction();
 			if (viewsSubmenuAction) {
@@ -189,7 +189,7 @@ export class PanelPart extends AbstractPaneCompositePart {
 		]);
 	}
 
-	override layout(width: number, height: number, top: number, left: number): codemavi {
+	override layout(width: number, height: number, top: number, left: number): void {
 		let dimensions: Dimension;
 		switch (this.layoutService.getPanelPosition()) {
 			case Position.RIGHT:

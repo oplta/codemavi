@@ -41,7 +41,7 @@ export class TerminalEditorService extends Disposable implements ITerminalEditor
 	readonly onDidChangeInstanceCapability = this._onDidChangeInstanceCapability.event;
 	private readonly _onDidChangeActiveInstance = this._register(new Emitter<ITerminalInstance | undefined>());
 	readonly onDidChangeActiveInstance = this._onDidChangeActiveInstance.event;
-	private readonly _onDidChangeInstances = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeInstances = this._register(new Emitter<void>());
 	readonly onDidChangeInstances = this._onDidChangeInstances.event;
 
 	constructor(
@@ -119,20 +119,20 @@ export class TerminalEditorService extends Disposable implements ITerminalEditor
 		return this.instances[this._activeInstanceIndex];
 	}
 
-	setActiveInstance(instance: ITerminalInstance | undefined): codemavi {
+	setActiveInstance(instance: ITerminalInstance | undefined): void {
 		this._activeInstanceIndex = instance ? this.instances.findIndex(e => e === instance) : -1;
 		this._onDidChangeActiveInstance.fire(this.activeInstance);
 	}
 
-	async focusInstance(instance: ITerminalInstance): Promise<codemavi> {
+	async focusInstance(instance: ITerminalInstance): Promise<void> {
 		return instance.focusWhenReady(true);
 	}
 
-	async focusActiveInstance(): Promise<codemavi> {
+	async focusActiveInstance(): Promise<void> {
 		return this.activeInstance?.focusWhenReady(true);
 	}
 
-	async openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<codemavi> {
+	async openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<void> {
 		const resource = this.resolveResource(instance);
 		if (resource) {
 			await this._activeOpenEditorRequest?.promise;
@@ -176,7 +176,7 @@ export class TerminalEditorService extends Disposable implements ITerminalEditor
 		return input;
 	}
 
-	private _registerInstance(inputKey: string, input: TerminalEditorInput, instance: ITerminalInstance): codemavi {
+	private _registerInstance(inputKey: string, input: TerminalEditorInput, instance: ITerminalInstance): void {
 		this._editorInputs.set(inputKey, input);
 		this._instanceDisposables.set(inputKey, [
 			instance.onDidFocus(this._onDidFocusInstance.fire, this._onDidFocusInstance),
@@ -247,13 +247,13 @@ export class TerminalEditorService extends Disposable implements ITerminalEditor
 		const editorInput = this._editorInputs.get(inputKey);
 		editorInput?.detachInstance();
 		this._removeInstance(instance);
-		// Don't dispose the input when shutting down to acodemavi layouts in the editor area
+		// Don't dispose the input when shutting down to avoid layouts in the editor area
 		if (!this._isShuttingDown) {
 			editorInput?.dispose();
 		}
 	}
 
-	async revealActiveEditor(preserveFocus?: boolean): Promise<codemavi> {
+	async revealActiveEditor(preserveFocus?: boolean): Promise<void> {
 		const instance = this.activeInstance;
 		if (!instance) {
 			return;

@@ -9,8 +9,8 @@ import { IValidEmbeddedLanguagesMap, IValidGrammarDefinition, TMScopeRegistry } 
 import type { IGrammar, IOnigLib, IRawTheme, Registry, StateStack } from 'vscode-textmate';
 
 interface ITMGrammarFactoryHost {
-	logTrace(msg: string): codemavi;
-	logError(msg: string, err: any): codemavi;
+	logTrace(msg: string): void;
+	logError(msg: string, err: any): void;
 	readFile(resource: URI): Promise<string>;
 }
 
@@ -103,7 +103,7 @@ export class TMGrammarFactory extends Disposable {
 		return this._languageToScope.has(languageId);
 	}
 
-	public setTheme(theme: IRawTheme, colorMap: string[]): codemavi {
+	public setTheme(theme: IRawTheme, colorMap: string[]): void {
 		this._grammarRegistry.setTheme(theme, colorMap);
 	}
 

@@ -42,7 +42,7 @@ export class IndentationToSpacesAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const model = editor.getModel();
 		if (!model) {
 			return;
@@ -78,7 +78,7 @@ export class IndentationToTabsAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const model = editor.getModel();
 		if (!model) {
 			return;
@@ -106,7 +106,7 @@ export class ChangeIndentationSizeAction extends EditorAction {
 		super(opts);
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const quickInputService = accessor.get(IQuickInputService);
 		const modelService = accessor.get(IModelService);
 
@@ -221,7 +221,7 @@ export class DetectIndentation extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const modelService = accessor.get(IModelService);
 
 		const model = editor.getModel();
@@ -246,7 +246,7 @@ export class ReindentLinesAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		const model = editor.getModel();
@@ -274,7 +274,7 @@ export class ReindentSelectedLinesAction extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const languageConfigurationService = accessor.get(ILanguageConfigurationService);
 
 		const model = editor.getModel();
@@ -336,7 +336,7 @@ export class AutoIndentOnPasteCommand implements ICommand {
 		}
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		for (const edit of this._edits) {
 			builder.addEditOperation(Range.lift(edit.range), edit.text);
 		}
@@ -380,7 +380,7 @@ export class AutoIndentOnPaste implements IEditorContribution {
 		this.callOnDispose.add(editor.onDidChangeModelLanguage(() => this.update()));
 	}
 
-	private update(): codemavi {
+	private update(): void {
 
 		// clean up
 		this.callOnModel.clear();
@@ -400,7 +400,7 @@ export class AutoIndentOnPaste implements IEditorContribution {
 		}));
 	}
 
-	public trigger(range: Range): codemavi {
+	public trigger(range: Range): void {
 		const selections = this.editor.getSelections();
 		if (selections === null || selections.length > 1) {
 			return;
@@ -588,7 +588,7 @@ export class AutoIndentOnPaste implements IEditorContribution {
 		return false;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.callOnDispose.dispose();
 		this.callOnModel.dispose();
 	}
@@ -602,7 +602,7 @@ function isStartOrEndInString(model: ITextModel, range: Range): boolean {
 	return isPositionInString(range.getStartPosition()) || isPositionInString(range.getEndPosition());
 }
 
-function getIndentationEditOperations(model: ITextModel, builder: IEditOperationBuilder, tabSize: number, tabsToSpaces: boolean): codemavi {
+function getIndentationEditOperations(model: ITextModel, builder: IEditOperationBuilder, tabSize: number, tabsToSpaces: boolean): void {
 	if (model.getLineCount() === 1 && model.getLineMaxColumn(1) === 1) {
 		// Model is empty
 		return;
@@ -643,7 +643,7 @@ export class IndentationToSpacesCommand implements ICommand {
 
 	constructor(private readonly selection: Selection, private tabSize: number) { }
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		this.selectionId = builder.trackSelection(this.selection);
 		getIndentationEditOperations(model, builder, this.tabSize, true);
 	}
@@ -659,7 +659,7 @@ export class IndentationToTabsCommand implements ICommand {
 
 	constructor(private readonly selection: Selection, private tabSize: number) { }
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		this.selectionId = builder.trackSelection(this.selection);
 		getIndentationEditOperations(model, builder, this.tabSize, false);
 	}

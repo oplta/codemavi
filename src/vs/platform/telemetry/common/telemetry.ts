@@ -35,22 +35,22 @@ export interface ITelemetryService {
 	/**
 	 * @deprecated Use publicLog2 and the typescript GDPR annotation where possible
 	 */
-	publicLog(eventName: string, data?: ITelemetryData): codemavi;
+	publicLog(eventName: string, data?: ITelemetryData): void;
 
 	/**
 	 * Sends a telemetry event that has been privacy approved.
 	 * Do not call this unless you have been given approval.
 	 */
-	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi;
+	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void;
 
 	/**
 	 * @deprecated Use publicLogError2 and the typescript GDPR annotation where possible
 	 */
-	publicLogError(errorEventName: string, data?: ITelemetryData): codemavi;
+	publicLogError(errorEventName: string, data?: ITelemetryData): void;
 
-	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi;
+	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void;
 
-	setExperimentProperty(name: string, value: string): codemavi;
+	setExperimentProperty(name: string, value: string): void;
 }
 
 export interface ITelemetryEndpoint {
@@ -64,8 +64,8 @@ export const ICustomEndpointTelemetryService = createDecorator<ICustomEndpointTe
 export interface ICustomEndpointTelemetryService {
 	readonly _serviceBrand: undefined;
 
-	publicLog(endpoint: ITelemetryEndpoint, eventName: string, data?: ITelemetryData): codemavi;
-	publicLogError(endpoint: ITelemetryEndpoint, errorEventName: string, data?: ITelemetryData): codemavi;
+	publicLog(endpoint: ITelemetryEndpoint, eventName: string, data?: ITelemetryData): void;
+	publicLogError(endpoint: ITelemetryEndpoint, errorEventName: string, data?: ITelemetryData): void;
 }
 
 // Keys

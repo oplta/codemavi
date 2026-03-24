@@ -35,7 +35,7 @@ class TerminalCommandGuideContribution extends Disposable implements ITerminalCo
 		super();
 	}
 
-	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
+	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
 		this._xterm = xterm;
 		this._refreshActivatedState();
 		this._register(this._configurationService.onDidChangeConfiguration(e => {

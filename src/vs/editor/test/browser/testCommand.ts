@@ -22,8 +22,8 @@ export function testCommand(
 	expectedLines: string[],
 	expectedSelection: Selection,
 	forceTokenization?: boolean,
-	prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => codemavi
-): codemavi {
+	prepare?: (accessor: ServicesAccessor, disposables: DisposableStore) => void
+): void {
 	const disposables = new DisposableStore();
 	const instantiationService = createCodeEditorServices(disposables);
 	if (prepare) {

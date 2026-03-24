@@ -13,8 +13,8 @@ import { INotificationService } from '../../../../platform/notification/common/n
 
 export interface IMetricsService {
 	readonly _serviceBrand: undefined;
-	capture(event: string, params: Record<string, any>): codemavi;
-	setOptOut(val: boolean): codemavi;
+	capture(event: string, params: Record<string, any>): void;
+	setOptOut(val: boolean): void;
 	getDebuggingProperties(): Promise<object>;
 }
 
@@ -57,17 +57,17 @@ registerSingleton(IMetricsService, MetricsService, InstantiationType.Eager);
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: 'codemaviDebugInfo',
+			id: 'maviDebugInfo',
 			f1: true,
-			title: localize2('codemaviMetricsDebug', 'Code Mavi: Log Debug Info'),
+			title: localize2('maviMetricsDebug', 'Mavi: Log Debug Info'),
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const metricsService = accessor.get(IMetricsService)
 		const notifService = accessor.get(INotificationService)
 
 		const debugProperties = await metricsService.getDebuggingProperties()
 		console.log('Metrics:', debugProperties)
-		notifService.info(`Code Mavi Debug info:\n${JSON.stringify(debugProperties, null, 2)}`)
+		notifService.info(`Mavi Debug info:\n${JSON.stringify(debugProperties, null, 2)}`)
 	}
 })

@@ -60,10 +60,10 @@ class MarketplaceThemesPicker {
 
 	private _searchOngoing: boolean = false;
 	private _searchError: string | undefined = undefined;
-	private readonly _onDidChange = new Emitter<codemavi>();
+	private readonly _onDidChange = new Emitter<void>();
 
 	private _tokenSource: CancellationTokenSource | undefined;
-	private readonly _queryDelayer = new ThrottledDelayer<codemavi>(200);
+	private readonly _queryDelayer = new ThrottledDelayer<void>(200);
 
 	constructor(
 		private readonly getMarketplaceColorThemes: (publisher: string, name: string, version: string) => Promise<IWorkbenchTheme[]>,
@@ -105,7 +105,7 @@ class MarketplaceThemesPicker {
 		});
 	}
 
-	private async doSearch(value: string, token: CancellationToken): Promise<codemavi> {
+	private async doSearch(value: string, token: CancellationToken): Promise<void> {
 		this._searchOngoing = true;
 		this._onDidChange.fire();
 		try {
@@ -113,7 +113,7 @@ class MarketplaceThemesPicker {
 
 			const options = { text: `${this.marketplaceQuery} ${value}`, pageSize: 20 };
 			const pager = await this.extensionGalleryService.query(options, token);
-			for (let i = 0; i < pager.total && i < 1; i++) { // loading multiple pages is turned of for now to acodemavi flickering
+			for (let i = 0; i < pager.total && i < 1; i++) { // loading multiple pages is turned of for now to avoid flickering
 				if (token.isCancellationRequested) {
 					break;
 				}
@@ -159,7 +159,7 @@ class MarketplaceThemesPicker {
 
 	}
 
-	public openQuickPick(value: string, currentTheme: IWorkbenchTheme | undefined, selectTheme: (theme: IWorkbenchTheme | undefined, applyTheme: boolean) => codemavi): Promise<PickerResult> {
+	public openQuickPick(value: string, currentTheme: IWorkbenchTheme | undefined, selectTheme: (theme: IWorkbenchTheme | undefined, applyTheme: boolean) => void): Promise<PickerResult> {
 		let result: PickerResult | undefined = undefined;
 		const disposables = new DisposableStore();
 		return new Promise<PickerResult>((s, _) => {
@@ -286,7 +286,7 @@ interface InstalledThemesPickerOptions {
 	readonly title?: string;
 	readonly description?: string;
 	readonly toggles?: IQuickInputToggle[];
-	readonly onToggle?: (toggle: IQuickInputToggle, quickInput: IQuickPick<ThemeItem, { useSeparators: boolean }>) => Promise<codemavi>;
+	readonly onToggle?: (toggle: IQuickInputToggle, quickInput: IQuickPick<ThemeItem, { useSeparators: boolean }>) => Promise<void>;
 }
 
 class InstalledThemesPicker {
@@ -334,7 +334,7 @@ class InstalledThemesPicker {
 
 		const pickInstalledThemes = (activeItemId: string | undefined) => {
 			const disposables = new DisposableStore();
-			return new Promise<codemavi>((s, _) => {
+			return new Promise<void>((s, _) => {
 				let isCompleted = false;
 				const autoFocusIndex = picks.findIndex(p => isItem(p) && p.id === activeItemId);
 				const quickpick = disposables.add(this.quickInputService.createQuickPick<ThemeItem>({ useSeparators: true }));

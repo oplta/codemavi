@@ -11,41 +11,41 @@ import { useIsDark } from '../util/services.js';
 /**
  * Creates a configured global tooltip component with consistent styling
  * To use:
- * 1. Mount a Tooltip with some id eg id='codemavi-tooltip'
- * 2. Add data-tooltip-id="codemavi-tooltip" and data-tooltip-content="Your tooltip text" to any element
+ * 1. Mount a Tooltip with some id eg id='mavi-tooltip'
+ * 2. Add data-tooltip-id="mavi-tooltip" and data-tooltip-content="Your tooltip text" to any element
  */
-export const Code MaviTooltip = () => {
+export const MaviTooltip = () => {
 
 
 	const isDark = useIsDark()
 
 	return (
 
-		// use native colors so we don't have to worry about @@codemavi-scope styles
-		// --codemavi-bg-1: var(--vscode-input-background);
-		// --codemavi-bg-1-alt: var(--vscode-badge-background);
-		// --codemavi-bg-2: var(--vscode-sideBar-background);
-		// --codemavi-bg-2-alt: color-mix(in srgb, var(--vscode-sideBar-background) 30%, var(--vscode-editor-background) 70%);
-		// --codemavi-bg-3: var(--vscode-editor-background);
+		// use native colors so we don't have to worry about @@mavi-scope styles
+		// --mavi-bg-1: var(--vscode-input-background);
+		// --mavi-bg-1-alt: var(--vscode-badge-background);
+		// --mavi-bg-2: var(--vscode-sideBar-background);
+		// --mavi-bg-2-alt: color-mix(in srgb, var(--vscode-sideBar-background) 30%, var(--vscode-editor-background) 70%);
+		// --mavi-bg-3: var(--vscode-editor-background);
 
-		// --codemavi-fg-0: color-mix(in srgb, var(--vscode-tab-activeForeground) 90%, black 10%);
-		// --codemavi-fg-1: var(--vscode-editor-foreground);
-		// --codemavi-fg-2: var(--vscode-input-foreground);
-		// --codemavi-fg-3: var(--vscode-input-placeholderForeground);
-		// /* --codemavi-fg-4: var(--vscode-tab-inactiveForeground); */
-		// --codemavi-fg-4: var(--vscode-list-deemphasizedForeground);
+		// --mavi-fg-0: color-mix(in srgb, var(--vscode-tab-activeForeground) 90%, black 10%);
+		// --mavi-fg-1: var(--vscode-editor-foreground);
+		// --mavi-fg-2: var(--vscode-input-foreground);
+		// --mavi-fg-3: var(--vscode-input-placeholderForeground);
+		// /* --mavi-fg-4: var(--vscode-tab-inactiveForeground); */
+		// --mavi-fg-4: var(--vscode-list-deemphasizedForeground);
 
-		// --codemavi-warning: var(--vscode-charts-yellow);
+		// --mavi-warning: var(--vscode-charts-yellow);
 
-		// --codemavi-border-1: var(--vscode-commandCenter-activeBorder);
-		// --codemavi-border-2: var(--vscode-commandCenter-border);
-		// --codemavi-border-3: var(--vscode-commandCenter-inactiveBorder);
-		// --codemavi-border-4: var(--vscode-editorGroup-border);
+		// --mavi-border-1: var(--vscode-commandCenter-activeBorder);
+		// --mavi-border-2: var(--vscode-commandCenter-border);
+		// --mavi-border-3: var(--vscode-commandCenter-inactiveBorder);
+		// --mavi-border-4: var(--vscode-editorGroup-border);
 
 		<>
 			<style>
 				{`
-				#codemavi-tooltip, #codemavi-tooltip-orange, #codemavi-tooltip-green, #codemavi-tooltip-ollama-settings, #codemavi-tooltip-provider-info {
+				#mavi-tooltip, #mavi-tooltip-orange, #mavi-tooltip-green, #mavi-tooltip-ollama-settings, #mavi-tooltip-provider-info {
 					font-size: 12px;
 					padding: 0px 8px;
 					border-radius: 6px;
@@ -54,22 +54,22 @@ export const Code MaviTooltip = () => {
 					word-wrap: break-word;
 				}
 
-				#codemavi-tooltip {
+				#mavi-tooltip {
 					background-color: var(--vscode-editor-background);
 					color: var(--vscode-input-foreground);
 				}
 
-				#codemavi-tooltip-orange {
+				#mavi-tooltip-orange {
 					background-color: #F6762A;
 					color: white;
 				}
 
-				#codemavi-tooltip-green {
+				#mavi-tooltip-green {
 					background-color: #228B22;
 					color: white;
 				}
 
-				#codemavi-tooltip-ollama-settings, #codemavi-tooltip-provider-info {
+				#mavi-tooltip-ollama-settings, #mavi-tooltip-provider-info {
 					background-color: var(--vscode-editor-background);
 					color: var(--vscode-input-foreground);
 				}
@@ -82,26 +82,26 @@ export const Code MaviTooltip = () => {
 
 
 			<Tooltip
-				id="codemavi-tooltip"
+				id="mavi-tooltip"
 				// border='1px solid var(--vscode-editorGroup-border)'
 				border='1px solid rgba(100,100,100,.2)'
 				opacity={1}
 				delayShow={50}
 			/>
 			<Tooltip
-				id="codemavi-tooltip-orange"
+				id="mavi-tooltip-orange"
 				border='1px solid rgba(200,200,200,.3)'
 				opacity={1}
 				delayShow={50}
 			/>
 			<Tooltip
-				id="codemavi-tooltip-green"
+				id="mavi-tooltip-green"
 				border='1px solid rgba(200,200,200,.3)'
 				opacity={1}
 				delayShow={50}
 			/>
 			<Tooltip
-				id="codemavi-tooltip-ollama-settings"
+				id="mavi-tooltip-ollama-settings"
 				border='1px solid rgba(100,100,100,.2)'
 				opacity={1}
 				openEvents={{ mouseover: true, click: true, focus: true }}
@@ -127,7 +127,7 @@ export const Code MaviTooltip = () => {
 			</Tooltip>
 
 			<Tooltip
-				id="codemavi-tooltip-provider-info"
+				id="mavi-tooltip-provider-info"
 				border='1px solid rgba(100,100,100,.2)'
 				opacity={1}
 				delayShow={50}

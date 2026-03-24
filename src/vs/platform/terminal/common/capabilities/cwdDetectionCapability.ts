@@ -26,7 +26,7 @@ export class CwdDetectionCapability extends Disposable implements ICwdDetectionC
 		return this._cwd;
 	}
 
-	updateCwd(cwd: string): codemavi {
+	updateCwd(cwd: string): void {
 		const didChange = this._cwd !== cwd;
 		this._cwd = cwd;
 		const count = this._cwds.get(this._cwd) || 0;

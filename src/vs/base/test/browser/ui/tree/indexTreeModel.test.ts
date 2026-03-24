@@ -31,7 +31,7 @@ const diffIdentityProvider = { getId: (n: number) => String(n) };
  * Calls that test function twice, once with an empty options and
  * once with `diffIdentityProvider`.
  */
-function withSmartSplice(fn: (options: IIndexTreeModelSpliceOptions<number, any>) => codemavi) {
+function withSmartSplice(fn: (options: IIndexTreeModelSpliceOptions<number, any>) => void) {
 	fn({});
 	fn({ diffIdentityProvider });
 }

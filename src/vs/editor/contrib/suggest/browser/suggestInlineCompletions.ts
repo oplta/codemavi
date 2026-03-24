@@ -218,11 +218,11 @@ export class SuggestInlineCompletions extends Disposable implements InlineComple
 		return result;
 	}
 
-	handleItemDidShow(_completions: InlineCompletionResults, item: SuggestInlineCompletion): codemavi {
+	handleItemDidShow(_completions: InlineCompletionResults, item: SuggestInlineCompletion): void {
 		item.completion.resolve(CancellationToken.None);
 	}
 
-	freeInlineCompletions(result: InlineCompletionResults): codemavi {
+	freeInlineCompletions(result: InlineCompletionResults): void {
 		result.release();
 	}
 

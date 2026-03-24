@@ -42,7 +42,7 @@ const epsilon = 10e-8;
 export const displayPercent = (value: number, precision = 2) => {
 	const display = (value * 100).toFixed(precision);
 
-	// acodemavi showing 100% coverage if it just rounds up:
+	// avoid showing 100% coverage if it just rounds up:
 	if (value < 1 - epsilon && display === '100') {
 		return `${100 - (10 ** -precision)}%`;
 	}

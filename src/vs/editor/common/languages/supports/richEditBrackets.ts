@@ -29,7 +29,7 @@ interface InternalBracket {
  *   open: ['if', 'for'], close: ['end', 'end']
  */
 export class RichEditBracket {
-	_richEditBracketBrand: codemavi = undefined;
+	_richEditBracketBrand: void = undefined;
 
 	readonly languageId: string;
 	/**
@@ -183,7 +183,7 @@ function groupFuzzyBrackets(brackets: readonly CharacterPair[]): InternalBracket
 }
 
 export class RichEditBrackets {
-	_richEditBracketsBrand: codemavi = undefined;
+	_richEditBracketsBrand: void = undefined;
 
 	/**
 	 * All groups of brackets defined for this language.
@@ -250,7 +250,7 @@ export class RichEditBrackets {
 	}
 }
 
-function collectSuperstrings(str: string, brackets: InternalBracket[], currentIndex: number, dest: string[]): codemavi {
+function collectSuperstrings(str: string, brackets: InternalBracket[], currentIndex: number, dest: string[]): void {
 	for (let i = 0, len = brackets.length; i < len; i++) {
 		if (i === currentIndex) {
 			continue;

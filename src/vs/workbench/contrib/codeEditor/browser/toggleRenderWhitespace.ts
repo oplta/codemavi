@@ -32,7 +32,7 @@ class ToggleRenderWhitespaceAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<codemavi> {
+	override run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		const renderWhitespace = configurationService.getValue<string>('editor.renderWhitespace');

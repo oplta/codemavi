@@ -29,7 +29,7 @@ export class DebugTitleContribution implements IWorkbenchContribution {
 		this.toDispose.push(hostService.onDidChangeFocus(updateTitle));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this.toDispose);
 	}
 }

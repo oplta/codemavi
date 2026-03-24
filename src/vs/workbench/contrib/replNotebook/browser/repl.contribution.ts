@@ -210,7 +210,7 @@ class ReplWindowWorkingCopyEditorHandler extends Disposable implements IWorkbenc
 		return this.instantiationService.createInstance(ReplEditorInput, workingCopy.resource, undefined);
 	}
 
-	private async _installHandler(): Promise<codemavi> {
+	private async _installHandler(): Promise<void> {
 		await this.extensionService.whenInstalledExtensionsRegistered();
 
 		this._register(this.workingCopyEditorService.registerHandler(this));
@@ -246,7 +246,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 		const contextKeyService = accessor.get(IContextKeyService);
@@ -307,7 +307,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editorControl = editorService.activeEditorPane?.getControl();
 		const contextKeyService = accessor.get(IContextKeyService);
@@ -384,7 +384,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, context?: UriComponents): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const bulkEditService = accessor.get(IBulkEditService);
 		const historyService = accessor.get(IInteractiveHistoryService);

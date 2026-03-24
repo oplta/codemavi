@@ -34,7 +34,7 @@ export interface IConsolePatchFn {
 
 export abstract class ErrorHandler {
 
-	static async installEarlyHandler(accessor: ServicesAccessor): Promise<codemavi> {
+	static async installEarlyHandler(accessor: ServicesAccessor): Promise<void> {
 
 		// increase number of stack frames (from 10, https://github.com/v8/v8/wiki/Stack-Trace-API)
 		Error.stackTraceLimit = 100;
@@ -52,7 +52,7 @@ export abstract class ErrorHandler {
 		});
 	}
 
-	static async installFullHandler(accessor: ServicesAccessor): Promise<codemavi> {
+	static async installFullHandler(accessor: ServicesAccessor): Promise<void> {
 		// uses extension knowledges to correlate errors with extensions
 
 		const logService = accessor.get(ILogService);
@@ -198,7 +198,7 @@ export class ExtensionHostMain {
 		return URI.revive(await mainThreadExtensionsProxy.$asBrowserUri(uri));
 	}
 
-	terminate(reason: string): codemavi {
+	terminate(reason: string): void {
 		this._extensionService.terminate(reason);
 	}
 

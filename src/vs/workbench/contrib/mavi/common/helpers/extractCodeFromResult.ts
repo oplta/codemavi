@@ -172,7 +172,7 @@ export type ExtractedSearchReplaceBlock = {
 
 
 // JS substring swaps indices, so "ab".substr(1,0) will NOT be '', it will be 'a'!
-const codemaviSubstr = (str: string, start: number, end: number) => end < start ? '' : str.substring(start, end)
+const maviSubstr = (str: string, start: number, end: number) => end < start ? '' : str.substring(start, end)
 
 export const endsWithAnyPrefixOf = (str: string, anyPrefix: string) => {
 	// for each prefix
@@ -204,13 +204,13 @@ export const extractSearchReplaceBlocks = (str: string) => {
 		if (dividerStart === -1) { // if didnt find DIVIDER_, either writing originalStr or DIVIDER_ right now
 			const writingDIVIDERlen = endsWithAnyPrefixOf(str, DIVIDER_)?.length ?? 0
 			blocks.push({
-				orig: codemaviSubstr(str, origStart, str.length - writingDIVIDERlen),
+				orig: maviSubstr(str, origStart, str.length - writingDIVIDERlen),
 				final: '',
 				state: 'writingOriginal'
 			})
 			return blocks
 		}
-		const origStrDone = codemaviSubstr(str, origStart, dividerStart)
+		const origStrDone = maviSubstr(str, origStart, dividerStart)
 		dividerStart += DIVIDER_.length
 		i = dividerStart
 		// wrote \n=====\n
@@ -226,13 +226,13 @@ export const extractSearchReplaceBlocks = (str: string) => {
 			const usingWritingFINALlen = Math.max(writingFINALlen, writingFINALlen_)
 			blocks.push({
 				orig: origStrDone,
-				final: codemaviSubstr(str, dividerStart, str.length - usingWritingFINALlen),
+				final: maviSubstr(str, dividerStart, str.length - usingWritingFINALlen),
 				state: 'writingFinal'
 			})
 			return blocks
 		}
 		const usingFINAL = matchedFullFINAL_ ? '\n' + FINAL : FINAL
-		const finalStrDone = codemaviSubstr(str, dividerStart, finalStart)
+		const finalStrDone = maviSubstr(str, dividerStart, finalStart)
 		finalStart += usingFINAL.length
 		i = finalStart
 		// wrote >>>>> FINAL

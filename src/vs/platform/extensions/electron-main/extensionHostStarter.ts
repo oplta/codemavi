@@ -38,7 +38,7 @@ export class ExtensionHostStarter extends Disposable implements IDisposable, IEx
 		}));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		// Intentionally not killing the extension host processes
 		super.dispose();
 	}
@@ -130,7 +130,7 @@ export class ExtensionHostStarter extends Disposable implements IDisposable, IEx
 		return extHostProcess.enableInspectPort();
 	}
 
-	async kill(id: string): Promise<codemavi> {
+	async kill(id: string): Promise<void> {
 		if (this._shutdown) {
 			throw canceled();
 		}
@@ -142,14 +142,14 @@ export class ExtensionHostStarter extends Disposable implements IDisposable, IEx
 		extHostProcess.kill();
 	}
 
-	async _killAllNow(): Promise<codemavi> {
+	async _killAllNow(): Promise<void> {
 		for (const [, extHost] of this._extHosts) {
 			extHost.kill();
 		}
 	}
 
-	async _waitForAllExit(maxWaitTimeMs: number): Promise<codemavi> {
-		const exitPromises: Promise<codemavi>[] = [];
+	async _waitForAllExit(maxWaitTimeMs: number): Promise<void> {
+		const exitPromises: Promise<void>[] = [];
 		for (const [, extHost] of this._extHosts) {
 			exitPromises.push(extHost.waitForExit(maxWaitTimeMs));
 		}

@@ -37,7 +37,7 @@ export function createTestSession(model: DebugModel, name = 'mockSession', optio
 	return new DebugSession(generateUuid(), { resolved: { name, type: 'node', request: 'launch' }, unresolved: undefined }, undefined, model, options, {
 		getViewModel(): any {
 			return {
-				updateViews(): codemavi {
+				updateViews(): void {
 					// noop
 				}
 			};

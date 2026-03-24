@@ -32,7 +32,7 @@ export class LinkedList<E> {
 		return this._first === Node.Undefined;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		let node = this._first;
 		while (node !== Node.Undefined) {
 			const next = node.next;
@@ -46,15 +46,15 @@ export class LinkedList<E> {
 		this._size = 0;
 	}
 
-	unshift(element: E): () => codemavi {
+	unshift(element: E): () => void {
 		return this._insert(element, false);
 	}
 
-	push(element: E): () => codemavi {
+	push(element: E): () => void {
 		return this._insert(element, true);
 	}
 
-	private _insert(element: E, atTheEnd: boolean): () => codemavi {
+	private _insert(element: E, atTheEnd: boolean): () => void {
 		const newNode = new Node(element);
 		if (this._first === Node.Undefined) {
 			this._first = newNode;
@@ -105,7 +105,7 @@ export class LinkedList<E> {
 		}
 	}
 
-	private _remove(node: Node<E>): codemavi {
+	private _remove(node: Node<E>): void {
 		if (node.prev !== Node.Undefined && node.next !== Node.Undefined) {
 			// middle
 			const anchor = node.prev;

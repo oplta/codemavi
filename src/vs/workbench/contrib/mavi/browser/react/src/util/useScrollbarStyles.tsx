@@ -23,7 +23,7 @@
 
 // 			// Apply basic styling to all elements
 // 			scrollElements.forEach(element => {
-// 				element.classList.add('codemavi-scrollable-element');
+// 				element.classList.add('mavi-scrollable-element');
 // 			});
 
 // 			// Only initialize fade effects for elements that haven't been initialized yet
@@ -84,7 +84,7 @@
 // 						element.removeEventListener('mouseleave', onMouseLeave);
 // 						if (fadeTimeout) clearTimeout(fadeTimeout);
 // 						if (fadeInterval) clearInterval(fadeInterval);
-// 						element.classList.remove('codemavi-scrollable-element');
+// 						element.classList.remove('mavi-scrollable-element');
 // 						// Remove any remaining show-scrollbar classes
 // 						for (let i = 0; i <= 10; i++) {
 // 							element.classList.remove(`show-scrollbar-${i}`);

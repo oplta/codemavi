@@ -115,7 +115,7 @@ export class LanguageConfigurationFileHandler extends Disposable {
 		}));
 	}
 
-	private async _loadConfigurationsForMode(languageId: string): Promise<codemavi> {
+	private async _loadConfigurationsForMode(languageId: string): Promise<void> {
 		const configurationFiles = this._languageService.getConfigurationFiles(languageId);
 		const configurationHash = hash(configurationFiles.map(uri => uri.toString()));
 
@@ -424,7 +424,7 @@ export class LanguageConfigurationFileHandler extends Disposable {
 		return richEditConfig;
 	}
 
-	private _handleConfig(languageId: string, configuration: ILanguageConfiguration): codemavi {
+	private _handleConfig(languageId: string, configuration: ILanguageConfiguration): void {
 		const richEditConfig = LanguageConfigurationFileHandler.extractValidConfig(languageId, configuration);
 		this._languageConfigurationService.register(languageId, richEditConfig, 50);
 	}

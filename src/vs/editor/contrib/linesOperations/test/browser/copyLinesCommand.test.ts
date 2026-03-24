@@ -11,11 +11,11 @@ import { DuplicateSelectionAction } from '../../browser/linesOperations.js';
 import { withTestCodeEditor } from '../../../../test/browser/testCodeEditor.js';
 import { testCommand } from '../../../../test/browser/testCommand.js';
 
-function testCopyLinesDownCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
+function testCopyLinesDownCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
 	testCommand(lines, null, selection, (accessor, sel) => new CopyLinesCommand(sel, true), expectedLines, expectedSelection);
 }
 
-function testCopyLinesUpCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): codemavi {
+function testCopyLinesUpCommand(lines: string[], selection: Selection, expectedLines: string[], expectedSelection: Selection): void {
 	testCommand(lines, null, selection, (accessor, sel) => new CopyLinesCommand(sel, false), expectedLines, expectedSelection);
 }
 
@@ -208,7 +208,7 @@ suite('Editor Contrib - Duplicate Selection', () => {
 
 	const duplicateSelectionAction = new DuplicateSelectionAction();
 
-	function testDuplicateSelectionAction(lines: string[], selections: Selection[], expectedLines: string[], expectedSelections: Selection[]): codemavi {
+	function testDuplicateSelectionAction(lines: string[], selections: Selection[], expectedLines: string[], expectedSelections: Selection[]): void {
 		withTestCodeEditor(lines.join('\n'), {}, (editor) => {
 			editor.setSelections(selections);
 			duplicateSelectionAction.run(null!, editor, {});

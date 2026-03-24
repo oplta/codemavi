@@ -33,8 +33,8 @@ export interface IDialogOptions {
 	readonly checkboxChecked?: boolean;
 	readonly type?: 'none' | 'info' | 'error' | 'question' | 'warning' | 'pending';
 	readonly inputs?: IDialogInputOptions[];
-	readonly keyEventProcessor?: (event: StandardKeyboardEvent) => codemavi;
-	readonly renderBody?: (container: HTMLElement) => codemavi;
+	readonly keyEventProcessor?: (event: StandardKeyboardEvent) => void;
+	readonly renderBody?: (container: HTMLElement) => void;
 	readonly icon?: ThemeIcon;
 	readonly buttonDetails?: string[];
 	readonly primaryButtonDropdown?: IButtonWithDropdownOptions;
@@ -197,7 +197,7 @@ export class Dialog extends Disposable {
 		return typeLabel;
 	}
 
-	updateMessage(message: string): codemavi {
+	updateMessage(message: string): void {
 		this.messageDetailElement.innerText = message;
 	}
 
@@ -317,7 +317,7 @@ export class Dialog extends Disposable {
 				if (evt.equals(KeyCode.Tab) || evt.equals(KeyCode.RightArrow) || evt.equals(KeyMod.Shift | KeyCode.Tab) || evt.equals(KeyCode.LeftArrow)) {
 
 					// Build a list of focusable elements in their visual order
-					const focusableElements: { focus: () => codemavi }[] = [];
+					const focusableElements: { focus: () => void }[] = [];
 					let focusedIndex = -1;
 
 					if (this.messageContainer) {
@@ -526,7 +526,7 @@ export class Dialog extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		if (this.modalElement) {

@@ -56,7 +56,7 @@ suite('chat', () => {
 		const onRequest = setupParticipant();
 		commands.executeCommand('workbench.action.chat.open', { query: '@participant /hello friend' });
 
-		const deferred = new DeferredPromise<codemavi>();
+		const deferred = new DeferredPromise<void>();
 		let i = 0;
 		disposables.push(onRequest(request => {
 			try {
@@ -122,7 +122,7 @@ suite('chat', () => {
 
 	test.skip('title provider is called for first request', async () => {
 		let calls = 0;
-		const deferred = new DeferredPromise<codemavi>();
+		const deferred = new DeferredPromise<void>();
 		const participant = chat.createChatParticipant('api-test.participant', (_request, _context, _progress, _token) => {
 			return { metadata: { key: 'value' } };
 		});

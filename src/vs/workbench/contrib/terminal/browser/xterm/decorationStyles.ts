@@ -67,7 +67,7 @@ export function getTerminalDecorationHoverContent(command: ITerminalCommand | un
 	return hoverContent;
 }
 
-export function updateLayout(configurationService: IConfigurationService, element?: HTMLElement): codemavi {
+export function updateLayout(configurationService: IConfigurationService, element?: HTMLElement): void {
 	if (!element) {
 		return;
 	}

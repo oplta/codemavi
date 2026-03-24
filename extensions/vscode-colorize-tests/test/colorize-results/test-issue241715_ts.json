@@ -4732,8 +4732,8 @@
 		}
 	},
 	{
-		"c": "codemavi",
-		"t": "source.ts keyword.operator.expression.codemavi.ts",
+		"c": "mavi",
+		"t": "source.ts keyword.operator.expression.mavi.ts",
 		"r": {
 			"dark_plus": "keyword.operator.expression: #569CD6",
 			"light_plus": "keyword.operator.expression: #0000FF",

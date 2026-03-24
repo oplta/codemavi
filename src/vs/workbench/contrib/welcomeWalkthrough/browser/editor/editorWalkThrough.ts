@@ -46,13 +46,13 @@ export class EditorWalkThroughAction extends Action2 {
 		});
 	}
 
-	public override run(serviceAccessor: ServicesAccessor): Promise<codemavi> {
+	public override run(serviceAccessor: ServicesAccessor): Promise<void> {
 		const editorService = serviceAccessor.get(IEditorService);
 		const instantiationService = serviceAccessor.get(IInstantiationService);
 		const input = instantiationService.createInstance(WalkThroughInput, inputOptions);
 		// TODO @lramos15 adopt the resolver here
 		return editorService.openEditor(input, { pinned: true })
-			.then(() => codemavi (0));
+			.then(() => void (0));
 	}
 }
 

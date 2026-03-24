@@ -38,7 +38,7 @@ export class NativeSecretStorageService extends BaseSecretStorageService {
 		);
 	}
 
-	override set(key: string, value: string): Promise<codemavi> {
+	override set(key: string, value: string): Promise<void> {
 		this._sequencer.queue(key, async () => {
 			await this.resolvedStorageService;
 
@@ -53,7 +53,7 @@ export class NativeSecretStorageService extends BaseSecretStorageService {
 	}
 
 	private notifyOfNoEncryptionOnce = createSingleCallFunction(() => this.notifyOfNoEncryption());
-	private async notifyOfNoEncryption(): Promise<codemavi> {
+	private async notifyOfNoEncryption(): Promise<void> {
 		const buttons: IPromptChoice[] = [];
 		const troubleshootingButton: IPromptChoice = {
 			label: localize('troubleshootingButton', "Open troubleshooting guide"),

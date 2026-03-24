@@ -95,7 +95,7 @@ export class LineRangeMapping {
 	/**
 	 * This method assumes that the LineRangeMapping describes a valid diff!
 	 * I.e. if one range is empty, the other range cannot be the entire document.
-	 * It acodemavis various problems when the line range points to non-existing line-numbers.
+	 * It avoids various problems when the line range points to non-existing line-numbers.
 	*/
 	public toRangeMapping(): RangeMapping {
 		const origInclusiveRange = this.original.toInclusiveRange();
@@ -126,7 +126,7 @@ export class LineRangeMapping {
 	/**
 	 * This method assumes that the LineRangeMapping describes a valid diff!
 	 * I.e. if one range is empty, the other range cannot be the entire document.
-	 * It acodemavis various problems when the line range points to non-existing line-numbers.
+	 * It avoids various problems when the line range points to non-existing line-numbers.
 	*/
 	public toRangeMapping2(original: string[], modified: string[]): RangeMapping {
 		if (isValidLineNumber(this.original.endLineNumberExclusive, original)
@@ -252,7 +252,7 @@ export class RangeMapping {
 		return result;
 	}
 
-	public static assertSorted(rangeMappings: RangeMapping[]): codemavi {
+	public static assertSorted(rangeMappings: RangeMapping[]): void {
 		for (let i = 1; i < rangeMappings.length; i++) {
 			const previous = rangeMappings[i - 1];
 			const current = rangeMappings[i];

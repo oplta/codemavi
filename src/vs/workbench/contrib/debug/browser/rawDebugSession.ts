@@ -265,7 +265,7 @@ export class RawDebugSession implements IDisposable {
 	/**
 	 * Starts the underlying debug adapter and tracks the session time for telemetry.
 	 */
-	async start(): Promise<codemavi> {
+	async start(): Promise<void> {
 		if (!this.debugAdapter) {
 			return Promise.reject(new Error(nls.localize('noDebugAdapterStart', "No debug adapter, can not start debug session.")));
 		}
@@ -589,7 +589,7 @@ export class RawDebugSession implements IDisposable {
 
 	//---- private
 
-	private async shutdown(error?: Error, restart = false, terminateDebuggee: boolean | undefined = undefined, suspendDebuggee: boolean | undefined = undefined): Promise<codemavi> {
+	private async shutdown(error?: Error, restart = false, terminateDebuggee: boolean | undefined = undefined, suspendDebuggee: boolean | undefined = undefined): Promise<void> {
 		if (!this.inShutdown) {
 			this.inShutdown = true;
 			if (this.debugAdapter) {
@@ -616,7 +616,7 @@ export class RawDebugSession implements IDisposable {
 		}
 	}
 
-	private async stopAdapter(error?: Error): Promise<codemavi> {
+	private async stopAdapter(error?: Error): Promise<void> {
 		try {
 			if (this.debugAdapter) {
 				const da = this.debugAdapter;
@@ -629,7 +629,7 @@ export class RawDebugSession implements IDisposable {
 		}
 	}
 
-	private fireAdapterExitEvent(error?: Error): codemavi {
+	private fireAdapterExitEvent(error?: Error): void {
 		if (!this.firedAdapterExitEvent) {
 			this.firedAdapterExitEvent = true;
 
@@ -644,7 +644,7 @@ export class RawDebugSession implements IDisposable {
 		}
 	}
 
-	private async dispatchRequest(request: DebugProtocol.Request): Promise<codemavi> {
+	private async dispatchRequest(request: DebugProtocol.Request): Promise<void> {
 
 		const response: DebugProtocol.Response = {
 			type: 'response',
@@ -815,13 +815,13 @@ export class RawDebugSession implements IDisposable {
 		return result;
 	}
 
-	private mergeCapabilities(capabilities: DebugProtocol.Capabilities | undefined): codemavi {
+	private mergeCapabilities(capabilities: DebugProtocol.Capabilities | undefined): void {
 		if (capabilities) {
 			this._capabilities = objects.mixin(this._capabilities, capabilities);
 		}
 	}
 
-	private fireSimulatedContinuedEvent(threadId: number, allThreadsContinued = false): codemavi {
+	private fireSimulatedContinuedEvent(threadId: number, allThreadsContinued = false): void {
 		this._onDidContinued.fire({
 			type: 'event',
 			event: 'continued',
@@ -833,7 +833,7 @@ export class RawDebugSession implements IDisposable {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this.toDispose);
 	}
 }

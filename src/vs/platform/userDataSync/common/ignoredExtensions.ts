@@ -16,8 +16,8 @@ export interface IIgnoredExtensionsManagementService {
 
 	hasToNeverSyncExtension(extensionId: string): boolean;
 	hasToAlwaysSyncExtension(extensionId: string): boolean;
-	updateIgnoredExtensions(ignoredExtensionId: string, ignore: boolean): Promise<codemavi>;
-	updateSynchronizedExtensions(ignoredExtensionId: string, sync: boolean): Promise<codemavi>;
+	updateIgnoredExtensions(ignoredExtensionId: string, ignore: boolean): Promise<void>;
+	updateSynchronizedExtensions(ignoredExtensionId: string, sync: boolean): Promise<void>;
 }
 
 export class IgnoredExtensionsManagementService implements IIgnoredExtensionsManagementService {
@@ -39,7 +39,7 @@ export class IgnoredExtensionsManagementService implements IIgnoredExtensionsMan
 		return configuredIgnoredExtensions.includes(`-${extensionId.toLowerCase()}`);
 	}
 
-	updateIgnoredExtensions(ignoredExtensionId: string, ignore: boolean): Promise<codemavi> {
+	updateIgnoredExtensions(ignoredExtensionId: string, ignore: boolean): Promise<void> {
 		// first remove the extension completely from ignored extensions
 		let currentValue = [...this.configurationService.getValue<string[]>('settingsSync.ignoredExtensions')].map(id => id.toLowerCase());
 		currentValue = currentValue.filter(v => v !== ignoredExtensionId && v !== `-${ignoredExtensionId}`);
@@ -52,7 +52,7 @@ export class IgnoredExtensionsManagementService implements IIgnoredExtensionsMan
 		return this.configurationService.updateValue('settingsSync.ignoredExtensions', currentValue.length ? currentValue : undefined, ConfigurationTarget.USER);
 	}
 
-	updateSynchronizedExtensions(extensionId: string, sync: boolean): Promise<codemavi> {
+	updateSynchronizedExtensions(extensionId: string, sync: boolean): Promise<void> {
 		// first remove the extension completely from ignored extensions
 		let currentValue = [...this.configurationService.getValue<string[]>('settingsSync.ignoredExtensions')].map(id => id.toLowerCase());
 		currentValue = currentValue.filter(v => v !== extensionId && v !== `-${extensionId}`);

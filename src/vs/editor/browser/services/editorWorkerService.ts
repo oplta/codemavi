@@ -85,7 +85,7 @@ export abstract class EditorWorkerService extends Disposable implements IEditorW
 		this._register(languageFeaturesService.completionProvider.register('*', new WordBasedCompletionItemProvider(this._workerManager, configurationService, this._modelService, this._languageConfigurationService)));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 
@@ -327,7 +327,7 @@ class WorkerManager extends Disposable {
 		this._register(this._modelService.onModelRemoved(_ => this._checkStopEmptyWorker()));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._editorWorkerClient) {
 			this._editorWorkerClient.dispose();
 			this._editorWorkerClient = null;
@@ -338,7 +338,7 @@ class WorkerManager extends Disposable {
 	/**
 	 * Check if the model service has no more models and stop the worker if that is the case.
 	 */
-	private _checkStopEmptyWorker(): codemavi {
+	private _checkStopEmptyWorker(): void {
 		if (!this._editorWorkerClient) {
 			return;
 		}
@@ -354,7 +354,7 @@ class WorkerManager extends Disposable {
 	/**
 	 * Check if the worker has been idle for a while and then stop it.
 	 */
-	private _checkStopIdleWorker(): codemavi {
+	private _checkStopIdleWorker(): void {
 		if (!this._editorWorkerClient) {
 			return;
 		}
@@ -384,11 +384,11 @@ class SynchronousWorkerClient<T extends IDisposable> implements IWebWorkerClient
 		this.proxy = this._instance as Proxied<T>;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._instance.dispose();
 	}
 
-	public setChannel<T extends object>(channel: string, handler: T): codemavi {
+	public setChannel<T extends object>(channel: string, handler: T): void {
 		throw new Error(`Not supported`);
 	}
 
@@ -484,7 +484,7 @@ export class EditorWorkerClient extends Disposable implements IEditorWorkerClien
 		return proxy.$textualSuggest(resources.map(r => r.toString()), leadingWord, wordDef, wordDefFlags);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._disposed = true;
 	}

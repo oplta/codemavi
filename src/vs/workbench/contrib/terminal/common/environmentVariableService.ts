@@ -49,7 +49,7 @@ export class EnvironmentVariableService extends Disposable implements IEnvironme
 			}));
 
 			// Asynchronously invalidate collections where extensions have been uninstalled, this is
-			// async to acodemavi making all functions on the service synchronous and because extensions
+			// async to avoid making all functions on the service synchronous and because extensions
 			// being uninstalled is rare.
 			this._invalidateExtensionCollections();
 		}
@@ -59,28 +59,28 @@ export class EnvironmentVariableService extends Disposable implements IEnvironme
 		this._register(this._extensionService.onDidChangeExtensions(() => this._invalidateExtensionCollections()));
 	}
 
-	set(extensionIdentifier: string, collection: IEnvironmentVariableCollectionWithPersistence): codemavi {
+	set(extensionIdentifier: string, collection: IEnvironmentVariableCollectionWithPersistence): void {
 		this.collections.set(extensionIdentifier, collection);
 		this._updateCollections();
 	}
 
-	delete(extensionIdentifier: string): codemavi {
+	delete(extensionIdentifier: string): void {
 		this.collections.delete(extensionIdentifier);
 		this._updateCollections();
 	}
 
-	private _updateCollections(): codemavi {
+	private _updateCollections(): void {
 		this._persistCollectionsEventually();
 		this.mergedCollection = this._resolveMergedCollection();
 		this._notifyCollectionUpdatesEventually();
 	}
 
 	@throttle(1000)
-	private _persistCollectionsEventually(): codemavi {
+	private _persistCollectionsEventually(): void {
 		this._persistCollections();
 	}
 
-	protected _persistCollections(): codemavi {
+	protected _persistCollections(): void {
 		const collectionsJson: ISerializableExtensionEnvironmentVariableCollection[] = [];
 		this.collections.forEach((collection, extensionIdentifier) => {
 			if (collection.persistent) {
@@ -96,11 +96,11 @@ export class EnvironmentVariableService extends Disposable implements IEnvironme
 	}
 
 	@debounce(1000)
-	private _notifyCollectionUpdatesEventually(): codemavi {
+	private _notifyCollectionUpdatesEventually(): void {
 		this._notifyCollectionUpdates();
 	}
 
-	protected _notifyCollectionUpdates(): codemavi {
+	protected _notifyCollectionUpdates(): void {
 		this._onDidChangeCollections.fire(this.mergedCollection);
 	}
 
@@ -108,7 +108,7 @@ export class EnvironmentVariableService extends Disposable implements IEnvironme
 		return new MergedEnvironmentVariableCollection(this.collections);
 	}
 
-	private async _invalidateExtensionCollections(): Promise<codemavi> {
+	private async _invalidateExtensionCollections(): Promise<void> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 		const registeredExtensions = this._extensionService.extensions;
 		let changes = false;

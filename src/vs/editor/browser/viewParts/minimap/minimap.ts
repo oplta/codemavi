@@ -381,7 +381,7 @@ class MinimapLayout {
 				startLineNumber = Math.max(1, startLineNumber - extraLinesAtTheTop);
 			}
 
-			// Acodemavi flickering caused by a partial viewport start line
+			// Avoid flickering caused by a partial viewport start line
 			// by being consistent w.r.t. the previous layout decision
 			if (previousLayout && previousLayout.scrollHeight === scrollHeight) {
 				if (previousLayout.scrollTop > scrollTop) {
@@ -421,11 +421,11 @@ class MinimapLine implements ILine {
 		this.dy = dy;
 	}
 
-	public onContentChanged(): codemavi {
+	public onContentChanged(): void {
 		this.dy = -1;
 	}
 
-	public onTokensChanged(): codemavi {
+	public onTokensChanged(): void {
 		this.dy = -1;
 	}
 }
@@ -491,10 +491,10 @@ class RenderData {
 	public onLinesChanged(changeFromLineNumber: number, changeCount: number): boolean {
 		return this._renderedLines.onLinesChanged(changeFromLineNumber, changeCount);
 	}
-	public onLinesDeleted(deleteFromLineNumber: number, deleteToLineNumber: number): codemavi {
+	public onLinesDeleted(deleteFromLineNumber: number, deleteToLineNumber: number): void {
 		this._renderedLines.onLinesDeleted(deleteFromLineNumber, deleteToLineNumber);
 	}
-	public onLinesInserted(insertFromLineNumber: number, insertToLineNumber: number): codemavi {
+	public onLinesInserted(insertFromLineNumber: number, insertToLineNumber: number): void {
 		this._renderedLines.onLinesInserted(insertFromLineNumber, insertToLineNumber);
 	}
 	public onTokensChanged(ranges: { fromLineNumber: number; toLineNumber: number }[]): boolean {
@@ -570,8 +570,8 @@ export interface IMinimapModel {
 	getSectionHeaderDecorationsInViewport(startLineNumber: number, endLineNumber: number): ViewModelDecoration[];
 	getSectionHeaderText(decoration: ViewModelDecoration, fitWidth: (s: string) => string): string | null;
 	getOptions(): TextModelResolvedOptions;
-	revealLineNumber(lineNumber: number): codemavi;
-	setScrollTop(scrollTop: number): codemavi;
+	revealLineNumber(lineNumber: number): void;
+	setScrollTop(scrollTop: number): void;
 }
 
 interface IMinimapRenderingContext {
@@ -618,7 +618,7 @@ class MinimapSamplingState {
 			return [null, []];
 		}
 
-		// ratio is intentionally not part of the layout to acodemavi the layout changing all the time
+		// ratio is intentionally not part of the layout to avoid the layout changing all the time
 		// so we need to recompute it again...
 		const { minimapLineCount } = EditorLayoutInfoComputer.computeContainedMinimapLineCount({
 			viewLineCount: viewLineCount,
@@ -791,7 +791,7 @@ class MinimapSamplingState {
 		return [changeStartIndex, changeEndIndex];
 	}
 
-	public onLinesInserted(e: viewEvents.ViewLinesInsertedEvent): codemavi {
+	public onLinesInserted(e: viewEvents.ViewLinesInsertedEvent): void {
 		// have the mapping be sticky
 		const insertedLineCount = e.toLineNumber - e.fromLineNumber + 1;
 		for (let i = this.minimapLines.length - 1; i >= 0; i--) {
@@ -839,7 +839,7 @@ export class Minimap extends ViewPart implements IMinimapModel {
 		this._actual = new InnerMinimap(context.theme, this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._actual.dispose();
 		super.dispose();
 	}
@@ -950,14 +950,14 @@ export class Minimap extends ViewPart implements IMinimapModel {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		if (this._shouldCheckSampling) {
 			this._shouldCheckSampling = false;
 			this._recreateLineSampling();
 		}
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		let viewportStartLineNumber = ctx.visibleRange.startLineNumber;
 		let viewportEndLineNumber = ctx.visibleRange.endLineNumber;
 
@@ -987,7 +987,7 @@ export class Minimap extends ViewPart implements IMinimapModel {
 
 	//#region IMinimapModel
 
-	private _recreateLineSampling(): codemavi {
+	private _recreateLineSampling(): void {
 		this._minimapSelections = null;
 
 		const wasSampling = Boolean(this._samplingState);
@@ -1125,7 +1125,7 @@ export class Minimap extends ViewPart implements IMinimapModel {
 		return this._context.viewModel.model.getOptions();
 	}
 
-	public revealLineNumber(lineNumber: number): codemavi {
+	public revealLineNumber(lineNumber: number): void {
 		if (this._samplingState) {
 			lineNumber = this._samplingState.minimapLines[lineNumber - 1];
 		}
@@ -1138,7 +1138,7 @@ export class Minimap extends ViewPart implements IMinimapModel {
 		);
 	}
 
-	public setScrollTop(scrollTop: number): codemavi {
+	public setScrollTop(scrollTop: number): void {
 		this._context.viewModel.viewLayout.setScrollPosition({
 			scrollTop: scrollTop
 		}, ScrollType.Immediate);
@@ -1287,7 +1287,7 @@ class InnerMinimap extends Disposable {
 		});
 	}
 
-	private _startSliderDragging(e: PointerEvent, initialPosY: number, initialSliderState: MinimapLayout): codemavi {
+	private _startSliderDragging(e: PointerEvent, initialPosY: number, initialSliderState: MinimapLayout): void {
 		if (!e.target || !(e.target instanceof Element)) {
 			return;
 		}
@@ -1334,7 +1334,7 @@ class InnerMinimap extends Disposable {
 		this._model.setScrollTop(scrollTop);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._pointerDownListener.dispose();
 		this._sliderPointerMoveMonitor.dispose();
 		this._sliderPointerDownListener.dispose();
@@ -1363,7 +1363,7 @@ class InnerMinimap extends Disposable {
 		return this._domNode;
 	}
 
-	private _applyLayout(): codemavi {
+	private _applyLayout(): void {
 		this._domNode.setLeft(this._model.options.minimapLeft);
 		this._domNode.setWidth(this._model.options.minimapWidth);
 		this._domNode.setHeight(this._model.options.minimapHeight);
@@ -1398,7 +1398,7 @@ class InnerMinimap extends Disposable {
 
 	// ---- begin view event handlers
 
-	public onDidChangeOptions(): codemavi {
+	public onDidChangeOptions(): void {
 		this._lastRenderData = null;
 		this._buffers = null;
 		this._applyLayout();
@@ -1457,7 +1457,7 @@ class InnerMinimap extends Disposable {
 
 	// --- end event handlers
 
-	public render(renderingCtx: IMinimapRenderingContext): codemavi {
+	public render(renderingCtx: IMinimapRenderingContext): void {
 		const renderMinimap = this._model.options.renderMinimap;
 		if (renderMinimap === RenderMinimap.None) {
 			this._shadow.setClassName('minimap-shadow-hidden');
@@ -1537,7 +1537,7 @@ class InnerMinimap extends Disposable {
 		highlightedLines: ContiguousLineMap<boolean>,
 		layout: MinimapLayout,
 		minimapLineHeight: number
-	): codemavi {
+	): void {
 		if (!this._selectionColor || this._selectionColor.isTransparent()) {
 			return;
 		}
@@ -1587,7 +1587,7 @@ class InnerMinimap extends Disposable {
 		highlightedLines: ContiguousLineMap<boolean>,
 		layout: MinimapLayout,
 		minimapLineHeight: number
-	): codemavi {
+	): void {
 
 		const highlightColors = new Map<string, string>();
 
@@ -1639,7 +1639,7 @@ class InnerMinimap extends Disposable {
 		tabSize: number,
 		characterWidth: number,
 		canvasInnerWidth: number
-	): codemavi {
+	): void {
 		if (!this._selectionColor || this._selectionColor.isTransparent()) {
 			return;
 		}
@@ -1666,7 +1666,7 @@ class InnerMinimap extends Disposable {
 		tabSize: number,
 		characterWidth: number,
 		canvasInnerWidth: number
-	): codemavi {
+	): void {
 		// Loop forwards to hit first decorations with lower `zIndex`
 		for (const decoration of decorations) {
 
@@ -1717,7 +1717,7 @@ class InnerMinimap extends Disposable {
 		tabSize: number,
 		charWidth: number,
 		canvasInnerWidth: number
-	): codemavi {
+	): void {
 		const y = layout.getYForLineNumber(lineNumber, minimapLineHeight);
 
 		// Skip rendering the line if it's vertically outside our viewport
@@ -1882,7 +1882,7 @@ class InnerMinimap extends Disposable {
 		backgroundFillHeight: number,
 		textY: number,
 		separatorY: number
-	): codemavi {
+	): void {
 		if (headerText) {
 			target.fillStyle = backgroundFill;
 			target.fillRect(0, backgroundFillY, minimapWidth, backgroundFillHeight);
@@ -2106,7 +2106,7 @@ class InnerMinimap extends Disposable {
 		lineData: ViewLineData,
 		fontScale: number,
 		minimapLineHeight: number
-	): codemavi {
+	): void {
 		const content = lineData.content;
 		const tokens = lineData.tokens;
 		const maxDx = target.width - charWidth;
@@ -2181,7 +2181,7 @@ class ContiguousLineMap<T> {
 		return (this.get(lineNumber) !== this._defaultValue);
 	}
 
-	public set(lineNumber: number, value: T): codemavi {
+	public set(lineNumber: number, value: T): void {
 		if (lineNumber < this._startLineNumber || lineNumber > this._endLineNumber) {
 			return;
 		}

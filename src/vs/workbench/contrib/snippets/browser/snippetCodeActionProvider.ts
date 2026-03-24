@@ -147,7 +147,7 @@ export class SnippetCodeActions implements IWorkbenchContribution {
 		this._store.add(sessionStore);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 }

@@ -97,7 +97,7 @@ export class NotebookProviderInfoStore extends Disposable {
 		notebooksExtensionPoint.setHandler(extensions => this._setupHandler(extensions));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._clear();
 		super.dispose();
 	}
@@ -355,7 +355,7 @@ export class NotebookProviderInfoStore extends Disposable {
 	}
 
 
-	private _clear(): codemavi {
+	private _clear(): void {
 		this._contributedEditors.clear();
 		this._contributedEditorDisposables.clear();
 	}
@@ -435,7 +435,7 @@ export class NotebookOutputRendererInfoStore {
 		return Array.from(this.contributedRenderers.values());
 	}
 
-	add(info: NotebookOutputRendererInfo): codemavi {
+	add(info: NotebookOutputRendererInfo): void {
 		if (this.contributedRenderers.has(info.id)) {
 			return;
 		}
@@ -503,7 +503,7 @@ class ModelData implements IDisposable, INotebookDocument {
 
 	constructor(
 		readonly model: NotebookTextModel,
-		onWillDispose: (model: INotebookTextModel) => codemavi
+		onWillDispose: (model: INotebookTextModel) => void
 	) {
 		this._modelEventListeners.add(model.onWillDispose(() => onWillDispose(model)));
 	}
@@ -512,7 +512,7 @@ class ModelData implements IDisposable, INotebookDocument {
 		return this.model.cells.findIndex(cell => isEqual(cell.uri, cellUri));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._modelEventListeners.dispose();
 	}
 }
@@ -534,7 +534,7 @@ export class NotebookService extends Disposable implements INotebookService {
 		return this._notebookProviderInfoStore;
 	}
 	private readonly _notebookRenderersInfoStore = this._instantiationService.createInstance(NotebookOutputRendererInfoStore);
-	private readonly _onDidChangeOutputRenderers = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeOutputRenderers = this._register(new Emitter<void>());
 	readonly onDidChangeOutputRenderers = this._onDidChangeOutputRenderers.event;
 
 	private readonly _notebookStaticPreloadInfoStore = new Set<NotebookStaticPreloadInfo>();
@@ -557,8 +557,8 @@ export class NotebookService extends Disposable implements INotebookService {
 	private readonly _onWillRemoveViewType = this._register(new Emitter<string>());
 	readonly onWillRemoveViewType = this._onWillRemoveViewType.event;
 
-	private readonly _onDidChangeEditorTypes = this._register(new Emitter<codemavi>());
-	onDidChangeEditorTypes: Event<codemavi> = this._onDidChangeEditorTypes.event;
+	private readonly _onDidChangeEditorTypes = this._register(new Emitter<void>());
+	onDidChangeEditorTypes: Event<void> = this._onDidChangeEditorTypes.event;
 
 	private _cutItems: NotebookCellTextModel[] | undefined;
 	private _lastClipboardIsCopy: boolean = true;
@@ -580,7 +580,7 @@ export class NotebookService extends Disposable implements INotebookService {
 
 			for (const extension of renderers) {
 				for (const notebookContribution of extension.value) {
-					if (!notebookContribution.entrypoint) { // acodemavi crashing
+					if (!notebookContribution.entrypoint) { // avoid crashing
 						extension.collector.error(`Notebook renderer does not specify entry point`);
 						continue;
 					}
@@ -616,7 +616,7 @@ export class NotebookService extends Disposable implements INotebookService {
 				}
 
 				for (const notebookContribution of extension.value) {
-					if (!notebookContribution.entrypoint) { // acodemavi crashing
+					if (!notebookContribution.entrypoint) { // avoid crashing
 						extension.collector.error(`Notebook preload does not specify entry point`);
 						continue;
 					}
@@ -671,7 +671,7 @@ export class NotebookService extends Disposable implements INotebookService {
 		}));
 	}
 
-	clearEditorCache(): codemavi {
+	clearEditorCache(): void {
 		this.notebookProviderInfoStore.clearEditorCache();
 	}
 
@@ -765,7 +765,7 @@ export class NotebookService extends Disposable implements INotebookService {
 	}
 
 
-	private _persistMementos(): codemavi {
+	private _persistMementos(): void {
 		this._memento.saveMemento();
 	}
 
@@ -777,7 +777,7 @@ export class NotebookService extends Disposable implements INotebookService {
 		return this._notebookRenderersInfoStore.get(rendererId);
 	}
 
-	updateMimePreferredRenderer(viewType: string, mimeType: string, rendererId: string, otherMimetypes: readonly string[]): codemavi {
+	updateMimePreferredRenderer(viewType: string, mimeType: string, rendererId: string, otherMimetypes: readonly string[]): void {
 		const info = this.notebookProviderInfoStore.get(viewType);
 		if (info) {
 			this._notebookRenderersInfoStore.setPreferred(info, mimeType, rendererId);
@@ -892,7 +892,7 @@ export class NotebookService extends Disposable implements INotebookService {
 		return [...this._models].map(e => e[1].model);
 	}
 
-	private _onWillDisposeDocument(model: INotebookTextModel): codemavi {
+	private _onWillDisposeDocument(model: INotebookTextModel): void {
 		const modelData = this._models.get(model.uri);
 		if (modelData) {
 			this._onWillRemoveNotebookDocument.fire(modelData.model);

@@ -48,7 +48,7 @@ export interface IWorkbench {
 		 * @param level The log level of the message to be printed.
 		 * @param message Message to be printed.
 		 */
-		log(level: LogLevel, message: string): codemavi;
+		log(level: LogLevel, message: string): void;
 	};
 
 	env: {
@@ -102,7 +102,7 @@ export interface IWorkbench {
 		 * @param options The definition of the terminal, this is similar to
 		 * `ExtensionTerminalOptions` in the extension API.
 		 */
-		createTerminal(options: IEmbedderTerminalOptions): Promise<codemavi>;
+		createTerminal(options: IEmbedderTerminalOptions): Promise<void>;
 
 		/**
 		 * Show an information message to users. Optionally provide an array of items which will be presented as
@@ -119,7 +119,7 @@ export interface IWorkbench {
 		/**
 		 * Resolves once the remote authority has been resolved.
 		 */
-		didResolveRemoteAuthority(): Promise<codemavi>;
+		didResolveRemoteAuthority(): Promise<void>;
 
 		/**
 		 * Forwards a port. If the current embedder implements a tunnelFactory then that will be used to make the tunnel.
@@ -143,7 +143,7 @@ export interface IWorkbench {
 	 * The returned promise should be awaited on to ensure any data to persist
 	 * has been persisted.
 	 */
-	shutdown: () => Promise<codemavi>;
+	shutdown: () => Promise<void>;
 }
 
 export interface IWorkbenchConstructionOptions {
@@ -526,9 +526,9 @@ export interface ITunnel {
 	/**
 	 * Implementers of Tunnel should fire onDidDispose when dispose is called.
 	 */
-	onDidDispose: Event<codemavi>;
+	onDidDispose: Event<void>;
 
-	dispose(): Promise<codemavi> | codemavi;
+	dispose(): Promise<void> | void;
 }
 
 export interface IShowPortCandidate {
@@ -616,7 +616,7 @@ export interface IWindowIndicator {
 	/**
 	 * Triggering this event will cause the window indicator to update.
 	 */
-	readonly onDidChange?: Event<codemavi>;
+	readonly onDidChange?: Event<void>;
 
 	/**
 	 * Label of the window indicator may include octicons
@@ -766,7 +766,7 @@ export interface IProductQualityChangeHandler {
 	 * Handler is being called when the user wants to switch between
 	 * `insider` or `stable` product qualities.
 	 */
-	(newQuality: 'insider' | 'stable'): codemavi;
+	(newQuality: 'insider' | 'stable'): void;
 }
 
 /**
@@ -788,7 +788,7 @@ export interface ISettingsSyncOptions {
 	/**
 	 * Handler is being called when the user changes Settings Sync enablement.
 	 */
-	enablementHandler?(enablement: boolean, authenticationProvider: string): codemavi;
+	enablementHandler?(enablement: boolean, authenticationProvider: string): void;
 
 	/**
 	 * Authentication provider
@@ -867,5 +867,5 @@ export interface IRemoteResourceRequest {
 	/**
 	 * A method called by the editor to issue a response to the request.
 	 */
-	respondWith(statusCode: number, body: Uint8Array, headers: Record<string, string>): codemavi;
+	respondWith(statusCode: number, body: Uint8Array, headers: Record<string, string>): void;
 }

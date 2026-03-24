@@ -13,15 +13,15 @@ import { IModelContentChangedEvent } from '../textModelEvents.js';
 
 export interface ITreeSitterTokenizationStoreService {
 	readonly _serviceBrand: undefined;
-	setTokens(model: ITextModel, tokens: TokenUpdate[], tokenQuality: TokenQuality): codemavi;
-	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): codemavi;
+	setTokens(model: ITextModel, tokens: TokenUpdate[], tokenQuality: TokenQuality): void;
+	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): void;
 	getTokens(model: ITextModel, line: number): Uint32Array | undefined;
-	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength?: number; newTokens: TokenUpdate[] }[], tokenQuality: TokenQuality): codemavi;
-	markForRefresh(model: ITextModel, range: Range): codemavi;
+	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength?: number; newTokens: TokenUpdate[] }[], tokenQuality: TokenQuality): void;
+	markForRefresh(model: ITextModel, range: Range): void;
 	getNeedsRefresh(model: ITextModel): { range: Range; startOffset: number; endOffset: number }[];
 	hasTokens(model: ITextModel, accurateForRange?: Range): boolean;
 	rangeHasTokens(model: ITextModel, range: Range, minimumTokenQuality: TokenQuality): boolean;
-	delete(model: ITextModel): codemavi;
+	delete(model: ITextModel): void;
 }
 
 export const ITreeSitterTokenizationStoreService = createDecorator<ITreeSitterTokenizationStoreService>('treeSitterTokenizationStoreService');
@@ -38,7 +38,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 
 	constructor() { }
 
-	setTokens(model: ITextModel, tokens: TokenUpdate[], tokenQuality: TokenQuality): codemavi {
+	setTokens(model: ITextModel, tokens: TokenUpdate[], tokenQuality: TokenQuality): void {
 		const disposables = new DisposableStore();
 		const store = disposables.add(new TokenStore(model));
 		this.tokens.set(model, { store: store, accurateVersion: model.getVersionId(), disposables, guessVersion: model.getVersionId() });
@@ -53,7 +53,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 		}));
 	}
 
-	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): codemavi {
+	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): void {
 		const storeInfo = this.tokens.get(model);
 		if (!storeInfo) {
 			return;
@@ -120,7 +120,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 		return result;
 	}
 
-	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength?: number; newTokens: TokenUpdate[] }[], tokenQuality: TokenQuality): codemavi {
+	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength?: number; newTokens: TokenUpdate[] }[], tokenQuality: TokenQuality): void {
 		const existingTokens = this.tokens.get(model);
 		if (!existingTokens) {
 			return;
@@ -141,7 +141,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 		}
 	}
 
-	markForRefresh(model: ITextModel, range: Range): codemavi {
+	markForRefresh(model: ITextModel, range: Range): void {
 		const tree = this.tokens.get(model)?.store;
 		if (!tree) {
 			return;
@@ -162,7 +162,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 		}));
 	}
 
-	delete(model: ITextModel): codemavi {
+	delete(model: ITextModel): void {
 		const storeInfo = this.tokens.get(model);
 		if (storeInfo) {
 			storeInfo.disposables.dispose();
@@ -170,7 +170,7 @@ class TreeSitterTokenizationStoreService implements ITreeSitterTokenizationStore
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		for (const [, value] of this.tokens) {
 			value.disposables.dispose();
 		}

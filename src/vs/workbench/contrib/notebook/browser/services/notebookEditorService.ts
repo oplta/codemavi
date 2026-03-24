@@ -26,9 +26,9 @@ export interface INotebookEditorService {
 	retrieveAllExistingWidgets(): IBorrowValue<NotebookEditorWidget>[];
 	onDidAddNotebookEditor: Event<INotebookEditor>;
 	onDidRemoveNotebookEditor: Event<INotebookEditor>;
-	addNotebookEditor(editor: INotebookEditor): codemavi;
-	removeNotebookEditor(editor: INotebookEditor): codemavi;
+	addNotebookEditor(editor: INotebookEditor): void;
+	removeNotebookEditor(editor: INotebookEditor): void;
 	getNotebookEditor(editorId: string): INotebookEditor | undefined;
 	listNotebookEditors(): readonly INotebookEditor[];
-	updateReplContextKey(uri: string): codemavi;
+	updateReplContextKey(uri: string): void;
 }

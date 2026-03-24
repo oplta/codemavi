@@ -36,7 +36,7 @@ export class BetterTokenStorage<T> {
 		this.initialize();
 	}
 
-	private initialize(): codemavi {
+	private initialize(): void {
 		this._operationInProgress = true;
 		this._tokensPromise = new Promise((resolve, _) => {
 			this._secretStorage.get(this.keylistKey).then(
@@ -92,7 +92,7 @@ export class BetterTokenStorage<T> {
 		return values;
 	}
 
-	async store(key: string, value: T): Promise<codemavi> {
+	async store(key: string, value: T): Promise<void> {
 		const tokens = await this.getTokens();
 
 		const isAddition = !tokens.has(key);
@@ -119,7 +119,7 @@ export class BetterTokenStorage<T> {
 		this._operationInProgress = false;
 	}
 
-	async delete(key: string): Promise<codemavi> {
+	async delete(key: string): Promise<void> {
 		const tokens = await this.getTokens();
 		if (!tokens.has(key)) {
 			return;
@@ -143,7 +143,7 @@ export class BetterTokenStorage<T> {
 		this._operationInProgress = false;
 	}
 
-	async deleteAll(predicate?: (item: T) => boolean): Promise<codemavi> {
+	async deleteAll(predicate?: (item: T) => boolean): Promise<void> {
 		const tokens = await this.getTokens();
 		const promises = [];
 		for (const [key, value] of tokens) {

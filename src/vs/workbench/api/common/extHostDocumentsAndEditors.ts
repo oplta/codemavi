@@ -55,11 +55,11 @@ export class ExtHostDocumentsAndEditors implements ExtHostDocumentsAndEditorsSha
 		@ILogService private readonly _logService: ILogService
 	) { }
 
-	$acceptDocumentsAndEditorsDelta(delta: IDocumentsAndEditorsDelta): codemavi {
+	$acceptDocumentsAndEditorsDelta(delta: IDocumentsAndEditorsDelta): void {
 		this.acceptDocumentsAndEditorsDelta(delta);
 	}
 
-	acceptDocumentsAndEditorsDelta(delta: IDocumentsAndEditorsDelta): codemavi {
+	acceptDocumentsAndEditorsDelta(delta: IDocumentsAndEditorsDelta): void {
 
 		const removedDocuments: ExtHostDocumentData[] = [];
 		const addedDocuments: ExtHostDocumentData[] = [];

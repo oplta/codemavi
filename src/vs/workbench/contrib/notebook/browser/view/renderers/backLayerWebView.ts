@@ -81,23 +81,23 @@ export interface IResolvedBackLayerWebview {
 export interface INotebookDelegateForWebview {
 	readonly creationOptions: INotebookEditorCreationOptions;
 	getCellById(cellId: string): IGenericCellViewModel | undefined;
-	focusNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output', options?: IFocusNotebookCellOptions): Promise<codemavi>;
-	toggleNotebookCellSelection(cell: IGenericCellViewModel, selectFromPrevious: boolean): codemavi;
+	focusNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output', options?: IFocusNotebookCellOptions): Promise<void>;
+	toggleNotebookCellSelection(cell: IGenericCellViewModel, selectFromPrevious: boolean): void;
 	getCellByInfo(cellInfo: ICommonCellInfo): IGenericCellViewModel;
-	focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<codemavi>;
-	updateOutputHeight(cellInfo: ICommonCellInfo, output: IDisplayOutputViewModel, height: number, isInit: boolean, source?: string): codemavi;
-	scheduleOutputHeightAck(cellInfo: ICommonCellInfo, outputId: string, height: number): codemavi;
-	updateMarkupCellHeight(cellId: string, height: number, isInit: boolean): codemavi;
-	setMarkupCellEditState(cellId: string, editState: CellEditState): codemavi;
-	didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi;
-	didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi;
-	didDropMarkupCell(cellId: string, event: { dragOffsetY: number; ctrlKey: boolean; altKey: boolean }): codemavi;
-	didEndDragMarkupCell(cellId: string): codemavi;
-	didResizeOutput(cellId: string): codemavi;
-	setScrollTop(scrollTop: number): codemavi;
-	triggerScroll(event: IMouseWheelEvent): codemavi;
-	updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): codemavi;
-	didFocusOutputInputChange(inputFocused: boolean): codemavi;
+	focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'editor' | 'container' | 'output'): Promise<void>;
+	updateOutputHeight(cellInfo: ICommonCellInfo, output: IDisplayOutputViewModel, height: number, isInit: boolean, source?: string): void;
+	scheduleOutputHeightAck(cellInfo: ICommonCellInfo, outputId: string, height: number): void;
+	updateMarkupCellHeight(cellId: string, height: number, isInit: boolean): void;
+	setMarkupCellEditState(cellId: string, editState: CellEditState): void;
+	didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void;
+	didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void;
+	didDropMarkupCell(cellId: string, event: { dragOffsetY: number; ctrlKey: boolean; altKey: boolean }): void;
+	didEndDragMarkupCell(cellId: string): void;
+	didResizeOutput(cellId: string): void;
+	setScrollTop(scrollTop: number): void;
+	triggerScroll(event: IMouseWheelEvent): void;
+	updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): void;
+	didFocusOutputInputChange(inputFocused: boolean): void;
 }
 
 interface BacklayerWebviewOptions {
@@ -152,7 +152,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 	private _currentKernel?: INotebookKernel;
 
 	private firstInit = true;
-	private initializeMarkupPromise?: { readonly requestId: string; readonly p: DeferredPromise<codemavi>; readonly isFirstInit: boolean };
+	private initializeMarkupPromise?: { readonly requestId: string; readonly p: DeferredPromise<void>; readonly isFirstInit: boolean };
 
 	private readonly nonce = UUID.generateUuid();
 
@@ -546,7 +546,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		return !!this.webview;
 	}
 
-	createWebview(targetWindow: CodeWindow): Promise<codemavi> {
+	createWebview(targetWindow: CodeWindow): Promise<void> {
 		const baseUrl = this.asWebviewUri(this.getNotebookBaseUri(), undefined);
 		const htmlContent = this.generateContent(baseUrl.toString());
 		return this._initialize(htmlContent, targetWindow);
@@ -584,7 +584,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		];
 	}
 
-	private _initialize(content: string, targetWindow: CodeWindow): Promise<codemavi> {
+	private _initialize(content: string, targetWindow: CodeWindow): Promise<void> {
 		if (!getWindow(this.element).document.body.contains(this.element)) {
 			throw new Error('Element is already detached from the DOM tree');
 		}
@@ -595,7 +595,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 
 		this._register(new WebviewWindowDragMonitor(targetWindow, () => this.webview));
 
-		const initializePromise = new DeferredPromise<codemavi>();
+		const initializePromise = new DeferredPromise<void>();
 
 		this._register(this.webview.onFatalError(e => {
 			initializePromise.error(new Error(`Could not initialize webview: ${e.message}}`));
@@ -1156,7 +1156,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 			});
 		}
 	}
-	private async _onDidClickDataLink(event: IClickedDataUrlMessage): Promise<codemavi> {
+	private async _onDidClickDataLink(event: IClickedDataUrlMessage): Promise<void> {
 		if (typeof event.data !== 'string') {
 			return;
 		}
@@ -1279,7 +1279,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		return true;
 	}
 
-	ackHeight(updates: readonly IAckOutputHeight[]): codemavi {
+	ackHeight(updates: readonly IAckOutputHeight[]): void {
 		this._sendMessageToWebview({
 			type: 'ack-dimension',
 			updates
@@ -1452,7 +1452,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		});
 	}
 
-	async initializeMarkup(cells: readonly IMarkupCellInitialization[]): Promise<codemavi> {
+	async initializeMarkup(cells: readonly IMarkupCellInitialization[]): Promise<void> {
 		if (this._disposed) {
 			return;
 		}
@@ -1517,7 +1517,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		}));
 	}
 
-	createOutput(cellInfo: T, content: IInsetRenderOutput, cellTop: number, offset: number): codemavi {
+	createOutput(cellInfo: T, content: IInsetRenderOutput, cellTop: number, offset: number): void {
 		if (this._disposed) {
 			return;
 		}
@@ -1623,7 +1623,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		};
 	}
 
-	updateOutput(cellInfo: T, content: IInsetRenderOutput, cellTop: number, offset: number): codemavi {
+	updateOutput(cellInfo: T, content: IInsetRenderOutput, cellTop: number, offset: number): void {
 		if (this._disposed) {
 			return;
 		}
@@ -1677,7 +1677,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		return;
 	}
 
-	async copyImage(output: ICellOutputViewModel): Promise<codemavi> {
+	async copyImage(output: ICellOutputViewModel): Promise<void> {
 		this._sendMessageToWebview({
 			type: 'copyImage',
 			outputId: output.model.outputId,
@@ -1685,7 +1685,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		});
 	}
 
-	removeInsets(outputs: readonly ICellOutputViewModel[]): codemavi {
+	removeInsets(outputs: readonly ICellOutputViewModel[]): void {
 		if (this._disposed) {
 			return;
 		}
@@ -1714,7 +1714,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		}
 	}
 
-	hideInset(output: ICellOutputViewModel): codemavi {
+	hideInset(output: ICellOutputViewModel): void {
 		if (this._disposed) {
 			return;
 		}
@@ -1846,7 +1846,7 @@ export class BackLayerWebView<T extends ICommonCellInfo> extends Themable {
 		return ret;
 	}
 
-	async findUnHighlightCurrent(index: number, ownerID: string): Promise<codemavi> {
+	async findUnHighlightCurrent(index: number, ownerID: string): Promise<void> {
 		this._sendMessageToWebview({
 			type: 'findUnHighlightCurrent',
 			index,
@@ -1971,7 +1971,7 @@ function copyBufferIfNeeded(buffer: Uint8Array, transfer: ArrayBuffer[]): Uint8A
 		return buffer;
 	} else {
 		// The buffer is smaller than its backing array buffer.
-		// Create a copy to acodemavi sending the entire array buffer.
+		// Create a copy to avoid sending the entire array buffer.
 		const valueBytes = new Uint8Array(buffer);
 		transfer.push(valueBytes.buffer);
 		return valueBytes;

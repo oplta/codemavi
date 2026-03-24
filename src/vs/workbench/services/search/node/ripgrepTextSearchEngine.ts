@@ -214,23 +214,23 @@ export class RipgrepParser extends EventEmitter {
 		this.stringDecoder = new StringDecoder();
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		this.isDone = true;
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		this.handleDecodedData(this.stringDecoder.end());
 	}
 
 
-	override on(event: 'result', listener: (result: TextSearchResult2) => codemavi): this;
-	override on(event: 'hitLimit', listener: () => codemavi): this;
-	override on(event: string, listener: (...args: any[]) => codemavi): this {
+	override on(event: 'result', listener: (result: TextSearchResult2) => void): this;
+	override on(event: 'hitLimit', listener: () => void): this;
+	override on(event: string, listener: (...args: any[]) => void): this {
 		super.on(event, listener);
 		return this;
 	}
 
-	handleData(data: Buffer | string): codemavi {
+	handleData(data: Buffer | string): void {
 		if (this.isDone) {
 			return;
 		}
@@ -239,7 +239,7 @@ export class RipgrepParser extends EventEmitter {
 		this.handleDecodedData(dataStr);
 	}
 
-	private handleDecodedData(decodedData: string): codemavi {
+	private handleDecodedData(decodedData: string): void {
 		// check for newline before appending to remainder
 		let newlineIdx = decodedData.indexOf('\n');
 
@@ -265,7 +265,7 @@ export class RipgrepParser extends EventEmitter {
 	}
 
 
-	private handleLine(outputLine: string): codemavi {
+	private handleLine(outputLine: string): void {
 		if (this.isDone || !outputLine) {
 			return;
 		}
@@ -371,7 +371,7 @@ export class RipgrepParser extends EventEmitter {
 			.map((line, i) => new TextSearchContext2(uri, line, startLine + i));
 	}
 
-	private onResult(match: TextSearchResult2): codemavi {
+	private onResult(match: TextSearchResult2): void {
 		this.emit('result', match);
 	}
 }

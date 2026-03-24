@@ -26,7 +26,7 @@ suite('Workbench parts', () => {
 		minimumHeight: number = 50;
 		maximumHeight: number = 50;
 
-		override layout(width: number, height: number): codemavi {
+		override layout(width: number, height: number): void {
 			throw new Error('Method not implemented.');
 		}
 
@@ -55,7 +55,7 @@ suite('Workbench parts', () => {
 			return super.getMemento(scope, target);
 		}
 
-		testSaveState(): codemavi {
+		testSaveState(): void {
 			return super.saveState();
 		}
 	}

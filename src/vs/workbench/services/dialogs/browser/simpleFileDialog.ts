@@ -445,7 +445,7 @@ export class SimpleFileDialog extends Disposable implements ISimpleFileDialog {
 		});
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 

@@ -61,7 +61,7 @@ class ClosedRepositoriesManager {
 		this.onDidChangeRepositories();
 	}
 
-	addRepository(repository: string): codemavi {
+	addRepository(repository: string): void {
 		this._repositories.add(repository);
 		this.onDidChangeRepositories();
 	}
@@ -79,7 +79,7 @@ class ClosedRepositoriesManager {
 		return this._repositories.has(repository);
 	}
 
-	private onDidChangeRepositories(): codemavi {
+	private onDidChangeRepositories(): void {
 		this.workspaceState.update('closedRepositories', [...this._repositories.values()]);
 		commands.executeCommand('setContext', 'git.closedRepositoryCount', this._repositories.size);
 	}
@@ -100,7 +100,7 @@ class ParentRepositoriesManager {
 		this.onDidChangeRepositories();
 	}
 
-	addRepository(repository: string): codemavi {
+	addRepository(repository: string): void {
 		this._repositories.add(repository);
 		this.onDidChangeRepositories();
 	}
@@ -118,12 +118,12 @@ class ParentRepositoriesManager {
 		return this._repositories.has(repository);
 	}
 
-	openRepository(repository: string): codemavi {
+	openRepository(repository: string): void {
 		this.globalState.update(`parentRepository:${repository}`, true);
 		this.deleteRepository(repository);
 	}
 
-	private onDidChangeRepositories(): codemavi {
+	private onDidChangeRepositories(): void {
 		commands.executeCommand('setContext', 'git.parentRepositoryCount', this._repositories.size);
 	}
 }
@@ -144,7 +144,7 @@ class UnsafeRepositoriesManager {
 		this.onDidChangeRepositories();
 	}
 
-	addRepository(repository: string, path: string): codemavi {
+	addRepository(repository: string, path: string): void {
 		this._repositories.set(repository, path);
 		this.onDidChangeRepositories();
 	}
@@ -166,7 +166,7 @@ class UnsafeRepositoriesManager {
 		return this._repositories.has(repository);
 	}
 
-	private onDidChangeRepositories(): codemavi {
+	private onDidChangeRepositories(): void {
 		commands.executeCommand('setContext', 'git.unsafeRepositoryCount', this._repositories.size);
 	}
 }
@@ -203,14 +203,14 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 	private _state: State = 'uninitialized';
 	get state(): State { return this._state; }
 
-	setState(state: State): codemavi {
+	setState(state: State): void {
 		this._state = state;
 		this._onDidChangeState.fire(state);
 		commands.executeCommand('setContext', 'git.state', state);
 	}
 
 	@memoize
-	get isInitialized(): Promise<codemavi> {
+	get isInitialized(): Promise<void> {
 		if (this._state === 'initialized') {
 			return Promise.resolve();
 		}
@@ -228,7 +228,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 
 	private postCommitCommandsProviders = new Set<PostCommitCommandsProvider>();
 
-	private _onDidChangePostCommitCommandsProviders = new EventEmitter<codemavi>();
+	private _onDidChangePostCommitCommandsProviders = new EventEmitter<void>();
 	readonly onDidChangePostCommitCommandsProviders = this._onDidChangePostCommitCommandsProviders.event;
 
 	private branchProtectionProviders = new Map<string, Set<BranchProtectionProvider>>();
@@ -289,7 +289,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		this.doInitialScan().finally(() => this.setState('initialized'));
 	}
 
-	private async doInitialScan(): Promise<codemavi> {
+	private async doInitialScan(): Promise<void> {
 		this.logger.info('[Model][doInitialScan] Initial repository scan started');
 
 		const config = workspace.getConfiguration('git');
@@ -336,7 +336,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 	 * default it scans one level deep but that can be changed using
 	 * the git.repositoryScanMaxDepth setting.
 	 */
-	private async scanWorkspaceFolders(): Promise<codemavi> {
+	private async scanWorkspaceFolders(): Promise<void> {
 		try {
 			const config = workspace.getConfiguration('git');
 			const autoRepositoryDetection = config.get<boolean | 'subFolders' | 'openEditors'>('autoRepositoryDetection');
@@ -420,7 +420,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		return result;
 	}
 
-	private onPossibleGitRepositoryChange(uri: Uri): codemavi {
+	private onPossibleGitRepositoryChange(uri: Uri): void {
 		const config = workspace.getConfiguration('git');
 		const autoRepositoryDetection = config.get<boolean | 'subFolders' | 'openEditors'>('autoRepositoryDetection');
 
@@ -437,7 +437,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 	}
 
 	@debounce(500)
-	private eventuallyScanPossibleGitRepositories(): codemavi {
+	private eventuallyScanPossibleGitRepositories(): void {
 		for (const path of this.possibleGitRepositoryPaths) {
 			this.openRepository(path);
 		}
@@ -445,7 +445,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		this.possibleGitRepositoryPaths.clear();
 	}
 
-	private async onDidChangeWorkspaceFolders({ added, removed }: WorkspaceFoldersChangeEvent): Promise<codemavi> {
+	private async onDidChangeWorkspaceFolders({ added, removed }: WorkspaceFoldersChangeEvent): Promise<void> {
 		try {
 			const possibleRepositoryFolders = added
 				.filter(folder => !this.getOpenRepository(folder.uri));
@@ -470,7 +470,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		}
 	}
 
-	private onDidChangeConfiguration(): codemavi {
+	private onDidChangeConfiguration(): void {
 		const possibleRepositoryFolders = (workspace.workspaceFolders || [])
 			.filter(folder => workspace.getConfiguration('git', folder.uri).get<boolean>('enabled') === true)
 			.filter(folder => !this.getOpenRepository(folder.uri));
@@ -485,7 +485,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		openRepositoriesToDispose.forEach(r => r.dispose());
 	}
 
-	private async onDidChangeVisibleTextEditors(editors: readonly TextEditor[]): Promise<codemavi> {
+	private async onDidChangeVisibleTextEditors(editors: readonly TextEditor[]): Promise<void> {
 		try {
 			if (!workspace.isTrusted) {
 				this.logger.trace('[Model][onDidChangeVisibleTextEditors] Workspace is not trusted.');
@@ -522,7 +522,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		}
 	}
 
-	private onDidChangeActiveTextEditor(): codemavi {
+	private onDidChangeActiveTextEditor(): void {
 		const textEditor = window.activeTextEditor;
 
 		if (textEditor === undefined) {
@@ -548,7 +548,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 	}
 
 	@sequentialize
-	async openRepository(repoPath: string, openIfClosed = false): Promise<codemavi> {
+	async openRepository(repoPath: string, openIfClosed = false): Promise<void> {
 		this.logger.trace(`[Model][openRepository] Repository: ${repoPath}`);
 		const existingRepository = await this.getRepositoryExact(repoPath);
 		if (existingRepository) {
@@ -651,7 +651,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		}
 	}
 
-	async openParentRepository(repoPath: string): Promise<codemavi> {
+	async openParentRepository(repoPath: string): Promise<void> {
 		this._parentRepositoriesManager.openRepository(repoPath);
 		await this.openRepository(repoPath);
 	}
@@ -705,7 +705,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		return false;
 	}
 
-	private open(repository: Repository): codemavi {
+	private open(repository: Repository): void {
 		this.logger.trace(`[Model][open] Repository: ${repository.root}`);
 
 		const onDidDisappearRepository = filterEvent(repository.onDidChangeState, state => state === RepositoryState.Disposed);
@@ -793,7 +793,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		this._onDidOpenRepository.fire(repository);
 	}
 
-	close(repository: Repository): codemavi {
+	close(repository: Repository): void {
 		const openRepository = this.getOpenRepository(repository);
 
 		if (!openRepository) {
@@ -1055,7 +1055,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		return result;
 	}
 
-	private async showParentRepositoryNotification(): Promise<codemavi> {
+	private async showParentRepositoryNotification(): Promise<void> {
 		const message = this.parentRepositories.length === 1 ?
 			l10n.t('A git repository was found in the parent folders of the workspace or the open file(s). Would you like to open the repository?') :
 			l10n.t('Git repositories were found in the parent folders of the workspace or the open file(s). Would you like to open the repositories?');
@@ -1081,7 +1081,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		}
 	}
 
-	private async showUnsafeRepositoryNotification(): Promise<codemavi> {
+	private async showUnsafeRepositoryNotification(): Promise<void> {
 		// If no repositories are open, we will use a welcome view to inform the user
 		// that a potentially unsafe repository was found so we do not have to show
 		// the notification
@@ -1106,7 +1106,7 @@ export class Model implements IRepositoryResolver, IBranchProtectionProviderRegi
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		const openRepositories = [...this.openRepositories];
 		openRepositories.forEach(r => r.dispose());
 		this.openRepositories = [];

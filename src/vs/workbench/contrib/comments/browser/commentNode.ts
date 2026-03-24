@@ -52,7 +52,7 @@ import { IResolvedTextEditorModel, ITextModelService } from '../../../../editor/
 import { Position } from '../../../../editor/common/core/position.js';
 
 class CommentsActionRunner extends ActionRunner {
-	protected override async runAction(action: IAction, context: any[]): Promise<codemavi> {
+	protected override async runAction(action: IAction, context: any[]): Promise<void> {
 		await action.run(...context);
 	}
 }
@@ -256,7 +256,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		}
 	}
 
-	private createHeader(commentDetailsContainer: HTMLElement): codemavi {
+	private createHeader(commentDetailsContainer: HTMLElement): void {
 		const header = dom.append(commentDetailsContainer, dom.$(`div.comment-title.${MOUSE_CURSOR_TEXT_CSS_CLASS_NAME}`));
 		const infoContainer = dom.append(header, dom.$('comment-header-info'));
 		const author = dom.append(infoContainer, dom.$('strong.author'));
@@ -383,7 +383,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		}
 	}
 
-	async submitComment(): Promise<codemavi> {
+	async submitComment(): Promise<void> {
 		if (this._commentEditor && this._commentFormActions) {
 			await this._commentFormActions.triggerDefaultAction();
 			this.pendingEdit = undefined;
@@ -432,7 +432,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		return toggleReactionAction;
 	}
 
-	private createReactionsContainer(commentDetailsContainer: HTMLElement): codemavi {
+	private createReactionsContainer(commentDetailsContainer: HTMLElement): void {
 		this._reactionActionsContainer?.remove();
 		this._reactionsActionBar.clear();
 		this._reactionActions.clear();
@@ -490,7 +490,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		return (typeof this.comment.body === 'string') ? this.comment.body : this.comment.body.value;
 	}
 
-	private async createCommentEditor(editContainer: HTMLElement): Promise<codemavi> {
+	private async createCommentEditor(editContainer: HTMLElement): Promise<void> {
 		const container = dom.append(editContainer, dom.$('.edit-textarea'));
 		this._commentEditor = this.instantiationService.createInstance(SimpleCommentEditor, container, SimpleCommentEditor.getEditorOptions(this.configurationService), this._contextKeyService, this.parentThread);
 
@@ -634,7 +634,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 			this._commentFormActions?.setActions(menu);
 		}));
 
-		this._commentFormActions = new CommentFormActions(this.keybindingService, this._contextKeyService, this.contextMenuService, container, (action: IAction): codemavi => {
+		this._commentFormActions = new CommentFormActions(this.keybindingService, this._contextKeyService, this.contextMenuService, container, (action: IAction): void => {
 			const text = this._commentEditor!.getValue();
 
 			action.run({
@@ -660,7 +660,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 			this._commentEditorActions?.setActions(menu, true);
 		}));
 
-		this._commentEditorActions = new CommentFormActions(this.keybindingService, this._contextKeyService, this.contextMenuService, container, (action: IAction): codemavi => {
+		this._commentEditorActions = new CommentFormActions(this.keybindingService, this._contextKeyService, this.contextMenuService, container, (action: IAction): void => {
 			const text = this._commentEditor!.getValue();
 
 			action.run({
@@ -695,7 +695,7 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		}
 	}
 
-	private registerActionBarListeners(actionsContainer: HTMLElement): codemavi {
+	private registerActionBarListeners(actionsContainer: HTMLElement): void {
 		this._register(dom.addDisposableListener(this._domNode, 'mouseenter', () => {
 			this.toggleToolbarHidden(false);
 			actionsContainer.classList.add('mouseover');
@@ -774,13 +774,13 @@ export class CommentNode<T extends IRange | ICellRange> extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		dispose(this._commentEditorDisposables);
 	}
 }
 
-function fillInActions(groups: [string, Array<MenuItemAction | SubmenuItemAction>][], target: IAction[] | { primary: IAction[]; secondary: IAction[] }, useAlternativeActions: boolean, isPrimaryGroup: (group: string) => boolean = group => group === 'navigation'): codemavi {
+function fillInActions(groups: [string, Array<MenuItemAction | SubmenuItemAction>][], target: IAction[] | { primary: IAction[]; secondary: IAction[] }, useAlternativeActions: boolean, isPrimaryGroup: (group: string) => boolean = group => group === 'navigation'): void {
 	for (const tuple of groups) {
 		let [group, actions] = tuple;
 		if (useAlternativeActions) {

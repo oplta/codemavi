@@ -44,7 +44,7 @@ export class HoverService extends Disposable implements IHoverService {
 
 	private _lastFocusedElementBeforeOpen: HTMLElement | undefined;
 
-	private readonly _delayedHovers = new Map<HTMLElement, { show: (focus: boolean) => codemavi }>();
+	private readonly _delayedHovers = new Map<HTMLElement, { show: (focus: boolean) => void }>();
 	private readonly _managedHovers = new Map<HTMLElement, IManagedHover>();
 
 	constructor(
@@ -296,35 +296,35 @@ export class HoverService extends Disposable implements IHoverService {
 		);
 	}
 
-	hideHover(force?: boolean): codemavi {
+	hideHover(force?: boolean): void {
 		if ((!force && this._currentHover?.isLocked) || !this._currentHoverOptions) {
 			return;
 		}
 		this.doHideHover();
 	}
 
-	private doHideHover(): codemavi {
+	private doHideHover(): void {
 		this._currentHover = undefined;
 		this._currentHoverOptions = undefined;
 		this._contextViewHandler.hideContextView();
 	}
 
-	private _intersectionChange(entries: IntersectionObserverEntry[], hover: IDisposable): codemavi {
+	private _intersectionChange(entries: IntersectionObserverEntry[], hover: IDisposable): void {
 		const entry = entries[entries.length - 1];
 		if (!entry.isIntersecting) {
 			hover.dispose();
 		}
 	}
 
-	showAndFocusLastHover(): codemavi {
+	showAndFocusLastHover(): void {
 		if (!this._lastHoverOptions) {
 			return;
 		}
 		this.showInstantHover(this._lastHoverOptions, true, true);
 	}
 
-	private _showAndFocusHoverForActiveElement(): codemavi {
-		// TODO: if hover is visible, focus it to acodemavi flickering
+	private _showAndFocusHoverForActiveElement(): void {
+		// TODO: if hover is visible, focus it to avoid flickering
 
 		let activeElement = getActiveElement() as HTMLElement | null;
 		while (activeElement) {
@@ -490,14 +490,14 @@ export class HoverService extends Disposable implements IHoverService {
 		return hover;
 	}
 
-	showManagedHover(target: HTMLElement): codemavi {
+	showManagedHover(target: HTMLElement): void {
 		const hover = this._managedHovers.get(target);
 		if (hover) {
 			hover.show(true);
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._managedHovers.forEach(hover => hover.dispose());
 		super.dispose();
 	}

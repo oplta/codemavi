@@ -11,9 +11,9 @@ import { IEditorContribution } from '../../../../editor/common/editorCommon.js';
 import { Selection } from '../../../../editor/common/core/selection.js';
 import { RunOnceScheduler } from '../../../../base/common/async.js';
 import * as dom from '../../../../base/browser/dom.js';
-import { mountCode MaviSelectionHelper } from './react/out/codemavi-editor-widgets-tsx/index.js';
+import { mountMaviSelectionHelper } from './react/out/mavi-editor-widgets-tsx/index.js';
 import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
-import { IMaviSettingsService } from '../common/codemaviSettingsService.js';
+import { IMaviSettingsService } from '../common/maviSettingsService.js';
 import { EditorOption } from '../../../../editor/common/config/editorOptions.js';
 import { getLengthOfTextPx } from './editCodeService.js';
 
@@ -22,16 +22,16 @@ const minDistanceFromRightPx = 400;
 const minLeftPx = 60;
 
 
-export type Code MaviSelectionHelperProps = {
+export type MaviSelectionHelperProps = {
 	rerenderKey: number // alternates between 0 and 1
 }
 
 
 export class SelectionHelperContribution extends Disposable implements IEditorContribution, IOverlayWidget {
-	public static readonly ID = 'editor.contrib.codemaviSelectionHelper';
+	public static readonly ID = 'editor.contrib.maviSelectionHelper';
 	// react
 	private _rootHTML: HTMLElement;
-	private _rerender: (props?: any) => codemavi = () => { };
+	private _rerender: (props?: any) => void = () => { };
 	private _rerenderKey: number = 0;
 	private _reactComponentDisposable: IDisposable | null = null;
 
@@ -43,7 +43,7 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 	constructor(
 		private readonly _editor: ICodeEditor,
 		@IInstantiationService private readonly _instantiationService: IInstantiationService,
-		@IMaviSettingsService private readonly _codemaviSettingsService: IMaviSettingsService
+		@IMaviSettingsService private readonly _maviSettingsService: IMaviSettingsService
 	) {
 		super();
 
@@ -63,7 +63,7 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 			if (this._reactComponentDisposable) {
 				this._reactComponentDisposable.dispose();
 			}
-			const res = mountCode MaviSelectionHelper(content, accessor);
+			const res = mountMaviSelectionHelper(content, accessor);
 			if (!res) return;
 
 			this._reactComponentDisposable = res;
@@ -122,7 +122,7 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 		return null; // We position manually
 	}
 
-	private _onSelectionChange(e: ICursorSelectionChangedEvent): codemavi {
+	private _onSelectionChange(e: ICursorSelectionChangedEvent): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -157,7 +157,7 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 	}
 
 	// Update the _showHelperForSelection method to work with the React component
-	private _showHelperForSelection(selection: Selection): codemavi {
+	private _showHelperForSelection(selection: Selection): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -242,24 +242,24 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 		this._isVisible = true;
 
 		// rerender
-		const enabled = this._codemaviSettingsService.state.globalSettings.showInlineSuggestions
+		const enabled = this._maviSettingsService.state.globalSettings.showInlineSuggestions
 			&& this._editor.hasTextFocus() // needed since VS Code counts unfocused selections as selections, which causes this to rerender when it shouldnt (bad ux)
 
 		if (enabled) {
-			this._rerender({ rerenderKey: this._rerenderKey } satisfies Code MaviSelectionHelperProps)
+			this._rerender({ rerenderKey: this._rerenderKey } satisfies MaviSelectionHelperProps)
 			this._rerenderKey = (this._rerenderKey + 1) % 2;
 			// this._reactComponentRerender();
 		}
 
 	}
 
-	private _hideHelper(): codemavi {
+	private _hideHelper(): void {
 		this._rootHTML.style.display = 'none';
 		this._isVisible = false;
 		this._lastSelection = null;
 	}
 
-	private _updatePositionIfVisible(): codemavi {
+	private _updatePositionIfVisible(): void {
 		if (!this._isVisible || !this._lastSelection || !this._editor.hasModel()) {
 			return;
 		}
@@ -267,7 +267,7 @@ export class SelectionHelperContribution extends Disposable implements IEditorCo
 		this._showHelperForSelection(this._lastSelection);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._hideHelper();
 		if (this._reactComponentDisposable) {
 			this._reactComponentDisposable.dispose();

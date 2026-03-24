@@ -2586,7 +2586,7 @@ export class EditorLayoutInfoComputer extends ComputedEditorOption<EditorOption.
 				lineHeight: lineHeight,
 				pixelRatio: pixelRatio
 			});
-			// ratio is intentionally not part of the layout to acodemavi the layout changing all the time
+			// ratio is intentionally not part of the layout to avoid the layout changing all the time
 			// when doing sampling
 			const ratio = viewLineCount / minimapLineCount;
 
@@ -3570,7 +3570,7 @@ class EditorQuickSuggestions extends BaseEditorOption<EditorOption.quickSuggesti
 		const defaults: InternalQuickSuggestionsOptions = {
 			other: 'on',
 			comments: 'off',
-			strings: 'on' // Code Mavi changed this setting
+			strings: 'on' // Mavi changed this setting
 		};
 		const types: IJSONSchema[] = [
 			{ type: 'boolean' },
@@ -5621,7 +5621,7 @@ export const EditorOptions = {
 				nls.localize('acceptSuggestionOnEnterSmart', "Only accept a suggestion with `Enter` when it makes a textual change."),
 				''
 			],
-			markdownDescription: nls.localize('acceptSuggestionOnEnter', "Controls whether suggestions should be accepted on `Enter`, in addition to `Tab`. Helps to acodemavi ambiguity between inserting new lines or accepting suggestions.")
+			markdownDescription: nls.localize('acceptSuggestionOnEnter', "Controls whether suggestions should be accepted on `Enter`, in addition to `Tab`. Helps to avoid ambiguity between inserting new lines or accepting suggestions.")
 		}
 	)),
 	accessibilitySupport: register(new EditorAccessibilitySupport()),

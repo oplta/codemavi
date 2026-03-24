@@ -82,7 +82,7 @@ export class ExtensionHostProcess {
 		return this._extensionHostStarter.enableInspectPort(this._id);
 	}
 
-	public kill(): Promise<codemavi> {
+	public kill(): Promise<void> {
 		return this._extensionHostStarter.kill(this._id);
 	}
 }
@@ -96,7 +96,7 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 	private readonly _onExit: Emitter<[number, string]> = new Emitter<[number, string]>();
 	public readonly onExit: Event<[number, string]> = this._onExit.event;
 
-	private readonly _onDidSetInspectPort = new Emitter<codemavi>();
+	private readonly _onDidSetInspectPort = new Emitter<void>();
 
 	private readonly _toDispose = new DisposableStore();
 
@@ -159,7 +159,7 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 		}));
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		if (this._terminating) {
 			return;
 		}
@@ -404,10 +404,10 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 		});
 	}
 
-	private _performHandshake(protocol: IMessagePassingProtocol): Promise<codemavi> {
+	private _performHandshake(protocol: IMessagePassingProtocol): Promise<void> {
 		// 1) wait for the incoming `ready` event and send the initialization data.
 		// 2) wait for the incoming `initialized` event.
-		return new Promise<codemavi>((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 
 			let timeoutHandle: any;
 			const installTimeoutCheck = () => {
@@ -515,7 +515,7 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 		};
 	}
 
-	private _onExtHostProcessExit(code: number, signal: string): codemavi {
+	private _onExtHostProcessExit(code: number, signal: string): void {
 		if (this._terminating) {
 			// Expected termination path (we asked the process to terminate)
 			return;
@@ -579,7 +579,7 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 		return this._inspectListener ?? undefined;
 	}
 
-	private _onWillShutdown(event: WillShutdownEvent): codemavi {
+	private _onWillShutdown(event: WillShutdownEvent): void {
 		// If the extension development host was started without debugger attached we need
 		// to communicate this back to the main side to terminate the debug session
 		if (this._isExtensionDevHost && !this._isExtensionDevTestFromCli && !this._isExtensionDevDebug && this._environmentService.debugExtensionHost.debugId) {

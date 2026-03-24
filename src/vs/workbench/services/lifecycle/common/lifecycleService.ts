@@ -23,13 +23,13 @@ export abstract class AbstractLifecycleService extends Disposable implements ILi
 	protected readonly _onWillShutdown = this._register(new Emitter<WillShutdownEvent>());
 	readonly onWillShutdown = this._onWillShutdown.event;
 
-	protected readonly _onDidShutdown = this._register(new Emitter<codemavi>());
+	protected readonly _onDidShutdown = this._register(new Emitter<void>());
 	readonly onDidShutdown = this._onDidShutdown.event;
 
 	protected readonly _onBeforeShutdownError = this._register(new Emitter<BeforeShutdownErrorEvent>());
 	readonly onBeforeShutdownError = this._onBeforeShutdownError.event;
 
-	protected readonly _onShutdownVeto = this._register(new Emitter<codemavi>());
+	protected readonly _onShutdownVeto = this._register(new Emitter<void>());
 	readonly onShutdownVeto = this._onShutdownVeto.event;
 
 	private _startupKind: StartupKind;
@@ -110,7 +110,7 @@ export abstract class AbstractLifecycleService extends Disposable implements ILi
 		}
 	}
 
-	async when(phase: LifecyclePhase): Promise<codemavi> {
+	async when(phase: LifecyclePhase): Promise<void> {
 		if (phase <= this._phase) {
 			return;
 		}
@@ -127,5 +127,5 @@ export abstract class AbstractLifecycleService extends Disposable implements ILi
 	/**
 	 * Subclasses to implement the explicit shutdown method.
 	 */
-	abstract shutdown(): Promise<codemavi>;
+	abstract shutdown(): Promise<void>;
 }

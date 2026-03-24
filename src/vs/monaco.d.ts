@@ -56,7 +56,7 @@ declare namespace monaco {
 	}
 
 	export interface IDisposable {
-		dispose(): codemavi;
+		dispose(): void;
 	}
 
 	export interface IEvent<T> {
@@ -69,8 +69,8 @@ declare namespace monaco {
 	export class Emitter<T> {
 		constructor();
 		readonly event: IEvent<T>;
-		fire(event: T): codemavi;
-		dispose(): codemavi;
+		fire(event: T): void;
+		dispose(): void;
 	}
 
 
@@ -89,8 +89,8 @@ declare namespace monaco {
 	export class CancellationTokenSource {
 		constructor(parent?: CancellationToken);
 		get token(): CancellationToken;
-		cancel(): codemavi;
-		dispose(cancel?: boolean): codemavi;
+		cancel(): void;
+		dispose(cancel?: boolean): void;
 	}
 
 	export interface CancellationToken {
@@ -500,8 +500,8 @@ declare namespace monaco {
 		readonly keyCode: KeyCode;
 		readonly code: string;
 		equals(keybinding: number): boolean;
-		preventDefault(): codemavi;
-		stopPropagation(): codemavi;
+		preventDefault(): void;
+		stopPropagation(): void;
 	}
 	export interface IMouseEvent {
 		readonly browserEvent: MouseEvent;
@@ -518,8 +518,8 @@ declare namespace monaco {
 		readonly altKey: boolean;
 		readonly metaKey: boolean;
 		readonly timestamp: number;
-		preventDefault(): codemavi;
-		stopPropagation(): codemavi;
+		preventDefault(): void;
+		stopPropagation(): void;
 	}
 
 	export interface IScrollEvent {
@@ -935,7 +935,7 @@ declare namespace monaco {
 		readonly offset: number;
 		readonly type: string;
 		readonly language: string;
-		_tokenBrand: codemavi;
+		_tokenBrand: void;
 		constructor(offset: number, type: string, language: string);
 		toString(): string;
 	}
@@ -955,13 +955,13 @@ declare namespace monaco.editor {
 	 * Creating a diff editor might cause this listener to be invoked with the two editors.
 	 * @event
 	 */
-	export function onDidCreateEditor(listener: (codeEditor: ICodeEditor) => codemavi): IDisposable;
+	export function onDidCreateEditor(listener: (codeEditor: ICodeEditor) => void): IDisposable;
 
 	/**
 	 * Emitted when an diff editor is created.
 	 * @event
 	 */
-	export function onDidCreateDiffEditor(listener: (diffEditor: IDiffEditor) => codemavi): IDisposable;
+	export function onDidCreateDiffEditor(listener: (diffEditor: IDiffEditor) => void): IDisposable;
 
 	/**
 	 * Get all the created editors.
@@ -1035,17 +1035,17 @@ declare namespace monaco.editor {
 	/**
 	 * Change the language for a model.
 	 */
-	export function setModelLanguage(model: ITextModel, mimeTypeOrLanguageId: string): codemavi;
+	export function setModelLanguage(model: ITextModel, mimeTypeOrLanguageId: string): void;
 
 	/**
 	 * Set the markers for a model.
 	 */
-	export function setModelMarkers(model: ITextModel, owner: string, markers: IMarkerData[]): codemavi;
+	export function setModelMarkers(model: ITextModel, owner: string, markers: IMarkerData[]): void;
 
 	/**
 	 * Remove all markers of an owner.
 	 */
-	export function removeAllMarkers(owner: string): codemavi;
+	export function removeAllMarkers(owner: string): void;
 
 	/**
 	 * Get markers for owner and/or resource
@@ -1062,7 +1062,7 @@ declare namespace monaco.editor {
 	 * Emitted when markers change for a model.
 	 * @event
 	 */
-	export function onDidChangeMarkers(listener: (e: readonly Uri[]) => codemavi): IDisposable;
+	export function onDidChangeMarkers(listener: (e: readonly Uri[]) => void): IDisposable;
 
 	/**
 	 * Get the model that has `uri` if it exists.
@@ -1078,13 +1078,13 @@ declare namespace monaco.editor {
 	 * Emitted when a model is created.
 	 * @event
 	 */
-	export function onDidCreateModel(listener: (model: ITextModel) => codemavi): IDisposable;
+	export function onDidCreateModel(listener: (model: ITextModel) => void): IDisposable;
 
 	/**
 	 * Emitted right before a model is disposed.
 	 * @event
 	 */
-	export function onWillDisposeModel(listener: (model: ITextModel) => codemavi): IDisposable;
+	export function onWillDisposeModel(listener: (model: ITextModel) => void): IDisposable;
 
 	/**
 	 * Emitted when a different language is set to a model.
@@ -1093,7 +1093,7 @@ declare namespace monaco.editor {
 	export function onDidChangeModelLanguage(listener: (e: {
 		readonly model: ITextModel;
 		readonly oldLanguage: string;
-	}) => codemavi): IDisposable;
+	}) => void): IDisposable;
 
 	/**
 	 * Create a new web worker that has model syncing capabilities built in.
@@ -1104,7 +1104,7 @@ declare namespace monaco.editor {
 	/**
 	 * Colorize the contents of `domNode` using attribute `data-lang`.
 	 */
-	export function colorizeElement(domNode: HTMLElement, options: IColorizerElementOptions): Promise<codemavi>;
+	export function colorizeElement(domNode: HTMLElement, options: IColorizerElementOptions): Promise<void>;
 
 	/**
 	 * Colorize `text` using language `languageId`.
@@ -1124,22 +1124,22 @@ declare namespace monaco.editor {
 	/**
 	 * Define a new theme or update an existing theme.
 	 */
-	export function defineTheme(themeName: string, themeData: IStandaloneThemeData): codemavi;
+	export function defineTheme(themeName: string, themeData: IStandaloneThemeData): void;
 
 	/**
 	 * Switches to a theme.
 	 */
-	export function setTheme(themeName: string): codemavi;
+	export function setTheme(themeName: string): void;
 
 	/**
 	 * Clears all cached font measurements and triggers re-measurement.
 	 */
-	export function remeasureFonts(): codemavi;
+	export function remeasureFonts(): void;
 
 	/**
 	 * Register a command.
 	 */
-	export function registerCommand(id: string, handler: (accessor: any, ...args: any[]) => codemavi): IDisposable;
+	export function registerCommand(id: string, handler: (accessor: any, ...args: any[]) => void): IDisposable;
 
 	export interface ILinkOpener {
 		open(resource: Uri): boolean | Promise<boolean>;
@@ -1206,7 +1206,7 @@ declare namespace monaco.editor {
 		/**
 		 * Terminate the web worker, thus invalidating the returned proxy.
 		 */
-		dispose(): codemavi;
+		dispose(): void;
 		/**
 		 * Get a proxy to the arbitrary loaded code.
 		 */
@@ -1276,7 +1276,7 @@ declare namespace monaco.editor {
 		 * Method that will be executed when the action is triggered.
 		 * @param editor The editor instance is passed in as a convenience
 		 */
-		run(editor: ICodeEditor, ...args: any[]): codemavi | Promise<codemavi>;
+		run(editor: ICodeEditor, ...args: any[]): void | Promise<void>;
 	}
 
 	/**
@@ -1417,7 +1417,7 @@ declare namespace monaco.editor {
 	}
 
 	export interface IStandaloneCodeEditor extends ICodeEditor {
-		updateOptions(newOptions: IEditorOptions & IGlobalEditorOptions): codemavi;
+		updateOptions(newOptions: IEditorOptions & IGlobalEditorOptions): void;
 		addCommand(keybinding: number, handler: ICommandHandler, context?: string): string | null;
 		createContextKey<T extends ContextKeyValue = ContextKeyValue>(key: string, defaultValue: T): IContextKey<T>;
 		addAction(descriptor: IActionDescriptor): IDisposable;
@@ -1431,7 +1431,7 @@ declare namespace monaco.editor {
 		getModifiedEditor(): IStandaloneCodeEditor;
 	}
 	export interface ICommandHandler {
-		(...args: any[]): codemavi;
+		(...args: any[]): void;
 	}
 	export interface ILocalizedString {
 		original: string;
@@ -1442,8 +1442,8 @@ declare namespace monaco.editor {
 	}
 
 	export interface IContextKey<T extends ContextKeyValue = ContextKeyValue> {
-		set(value: T): codemavi;
-		reset(): codemavi;
+		set(value: T): void;
+		reset(): void;
 		get(): T | undefined;
 	}
 
@@ -1597,13 +1597,13 @@ declare namespace monaco.editor {
 		/**
 		 * Resets the model and ensures it can contain at least `maxLine` lines.
 		 */
-		reset(maxLine: number): codemavi;
+		reset(maxLine: number): void;
 		/**
 		 * Registers that a lane should be visible at the Range in the model.
 		 * @param persist - if true, notes that the lane should always be visible,
 		 * even on lines where there's no specific request for that lane.
 		 */
-		push(lane: GlyphMarginLane, range: Range, persist?: boolean): codemavi;
+		push(lane: GlyphMarginLane, range: Range, persist?: boolean): void;
 	}
 
 	/**
@@ -1936,7 +1936,7 @@ declare namespace monaco.editor {
 	}
 
 	export class TextModelResolvedOptions {
-		_textModelResolvedOptionsBrand: codemavi;
+		_textModelResolvedOptionsBrand: void;
 		readonly tabSize: number;
 		readonly indentSize: number;
 		readonly insertSpaces: boolean;
@@ -1960,7 +1960,7 @@ declare namespace monaco.editor {
 	}
 
 	export class FindMatch {
-		_findMatchBrand: codemavi;
+		_findMatchBrand: void;
 		readonly range: Range;
 		readonly matches: string[] | null;
 	}
@@ -2016,7 +2016,7 @@ declare namespace monaco.editor {
 		/**
 		 * Replace the entire text buffer value contained in this model.
 		 */
-		setValue(newValue: string | ITextSnapshot): codemavi;
+		setValue(newValue: string | ITextSnapshot): void;
 		/**
 		 * Get the text stored in this model.
 		 * @param eol The end of line character preference. Defaults to `EndOfLinePreference.TextDefined`.
@@ -2284,21 +2284,21 @@ declare namespace monaco.editor {
 		/**
 		 * Change the options of this model.
 		 */
-		updateOptions(newOpts: ITextModelUpdateOptions): codemavi;
+		updateOptions(newOpts: ITextModelUpdateOptions): void;
 		/**
 		 * Detect the indentation options for this model from its content.
 		 */
-		detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): codemavi;
+		detectIndentation(defaultInsertSpaces: boolean, defaultTabSize: number): void;
 		/**
 		 * Close the current undo-redo element.
 		 * This offers a way to create an undo/redo stop point.
 		 */
-		pushStackElement(): codemavi;
+		pushStackElement(): void;
 		/**
 		 * Open the current undo-redo element.
 		 * This offers a way to remove the current undo/redo stop point.
 		 */
-		popStackElement(): codemavi;
+		popStackElement(): void;
 		/**
 		 * Push edit operations, basically editing the model. This is the preferred way
 		 * of editing the model. The edit operations will land on the undo stack.
@@ -2312,26 +2312,26 @@ declare namespace monaco.editor {
 		 * Change the end of line sequence. This is the preferred way of
 		 * changing the eol sequence. This will land on the undo stack.
 		 */
-		pushEOL(eol: EndOfLineSequence): codemavi;
+		pushEOL(eol: EndOfLineSequence): void;
 		/**
 		 * Edit the model without adding the edits to the undo stack.
 		 * This can have dire consequences on the undo stack! See @pushEditOperations for the preferred way.
 		 * @param operations The edit operations.
 		 * @return If desired, the inverse edit operations, that, when applied, will bring the model back to the previous state.
 		 */
-		applyEdits(operations: IIdentifiedSingleEditOperation[]): codemavi;
-		applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: false): codemavi;
+		applyEdits(operations: IIdentifiedSingleEditOperation[]): void;
+		applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: false): void;
 		applyEdits(operations: IIdentifiedSingleEditOperation[], computeUndoEdits: true): IValidEditOperation[];
 		/**
 		 * Change the end of line sequence without recording in the undo stack.
 		 * This can have dire consequences on the undo stack! See @pushEOL for the preferred way.
 		 */
-		setEOL(eol: EndOfLineSequence): codemavi;
+		setEOL(eol: EndOfLineSequence): void;
 		/**
 		 * An event emitted when the contents of the model have changed.
 		 * @event
 		 */
-		onDidChangeContent(listener: (e: IModelContentChangedEvent) => codemavi): IDisposable;
+		onDidChangeContent(listener: (e: IModelContentChangedEvent) => void): IDisposable;
 		/**
 		 * An event emitted when decorations of the model have changed.
 		 * @event
@@ -2356,16 +2356,16 @@ declare namespace monaco.editor {
 		 * An event emitted when the model has been attached to the first editor or detached from the last editor.
 		 * @event
 		 */
-		readonly onDidChangeAttached: IEvent<codemavi>;
+		readonly onDidChangeAttached: IEvent<void>;
 		/**
 		 * An event emitted right before disposing the model.
 		 * @event
 		 */
-		readonly onWillDispose: IEvent<codemavi>;
+		readonly onWillDispose: IEvent<void>;
 		/**
 		 * Destroy this model.
 		 */
-		dispose(): codemavi;
+		dispose(): void;
 		/**
 		 * Returns if this model is attached to an editor or not.
 		 */
@@ -2435,14 +2435,14 @@ declare namespace monaco.editor {
 		 * @param range The range to replace (delete). May be empty to represent a simple insert.
 		 * @param text The text to replace with. May be null to represent a simple delete.
 		 */
-		addEditOperation(range: IRange, text: string | null, forceMoveMarkers?: boolean): codemavi;
+		addEditOperation(range: IRange, text: string | null, forceMoveMarkers?: boolean): void;
 		/**
 		 * Add a new edit operation (a replace operation).
 		 * The inverse edits will be accessible in `ICursorStateComputerData.getInverseEditOperations()`
 		 * @param range The range to replace (delete). May be empty to represent a simple insert.
 		 * @param text The text to replace with. May be null to represent a simple delete.
 		 */
-		addTrackedEditOperation(range: IRange, text: string | null, forceMoveMarkers?: boolean): codemavi;
+		addTrackedEditOperation(range: IRange, text: string | null, forceMoveMarkers?: boolean): void;
 		/**
 		 * Track `selection` when applying edit operations.
 		 * A best effort will be made to not grow/expand the selection.
@@ -2480,7 +2480,7 @@ declare namespace monaco.editor {
 		 * @param model The model the command will execute on.
 		 * @param builder A helper to collect the needed edit operations and to track selections.
 		 */
-		getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi;
+		getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void;
 		/**
 		 * Compute the cursor state after the edit operations were applied.
 		 * @param model The model the command has executed on.
@@ -2506,7 +2506,7 @@ declare namespace monaco.editor {
 
 	export interface IDiffEditorViewModel extends IDisposable {
 		readonly model: IDiffEditorModel;
-		waitForDiff(): Promise<codemavi>;
+		waitForDiff(): Promise<void>;
 	}
 
 	/**
@@ -2541,7 +2541,7 @@ declare namespace monaco.editor {
 		readonly alias: string;
 		readonly metadata: ICommandMetadata | undefined;
 		isSupported(): boolean;
-		run(args?: unknown): Promise<codemavi>;
+		run(args?: unknown): Promise<void>;
 	}
 
 	export type IEditorModel = ITextModel | IDiffEditorModel | IDiffEditorViewModel;
@@ -2606,24 +2606,24 @@ declare namespace monaco.editor {
 		 * An event emitted when the editor has been disposed.
 		 * @event
 		 */
-		onDidDispose(listener: () => codemavi): IDisposable;
+		onDidDispose(listener: () => void): IDisposable;
 		/**
 		 * Dispose the editor.
 		 */
-		dispose(): codemavi;
+		dispose(): void;
 		/**
 		 * Get a unique id for this editor instance.
 		 */
 		getId(): string;
 		/**
 		 * Get the editor type. Please see `EditorType`.
-		 * This is to acodemavi an instanceof check
+		 * This is to avoid an instanceof check
 		 */
 		getEditorType(): string;
 		/**
 		 * Update the editor's options after the editor has been created.
 		 */
-		updateOptions(newOptions: IEditorOptions): codemavi;
+		updateOptions(newOptions: IEditorOptions): void;
 		/**
 		 * Instructs the editor to remeasure its container. This method should
 		 * be called when the container of the editor gets resized.
@@ -2633,11 +2633,11 @@ declare namespace monaco.editor {
 		 * By default, this will also render the editor immediately.
 		 * If you prefer to delay rendering to the next animation frame, use postponeRendering == true.
 		 */
-		layout(dimension?: IDimension, postponeRendering?: boolean): codemavi;
+		layout(dimension?: IDimension, postponeRendering?: boolean): void;
 		/**
 		 * Brings browser focus to the editor text
 		 */
-		focus(): codemavi;
+		focus(): void;
 		/**
 		 * Returns true if the text inside this editor is focused (i.e. cursor is blinking).
 		 */
@@ -2653,7 +2653,7 @@ declare namespace monaco.editor {
 		/**
 		 * Restores the view state of the editor from a serializable object generated by `saveViewState`.
 		 */
-		restoreViewState(state: IEditorViewState | null): codemavi;
+		restoreViewState(state: IEditorViewState | null): void;
 		/**
 		 * Given a position, returns a column number that takes tab-widths into account.
 		 */
@@ -2667,41 +2667,41 @@ declare namespace monaco.editor {
 		 * @param position New primary cursor's position
 		 * @param source Source of the call that caused the position
 		 */
-		setPosition(position: IPosition, source?: string): codemavi;
+		setPosition(position: IPosition, source?: string): void;
 		/**
 		 * Scroll vertically as necessary and reveal a line.
 		 */
-		revealLine(lineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLine(lineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal a line centered vertically.
 		 */
-		revealLineInCenter(lineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLineInCenter(lineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal a line centered vertically only if it lies outside the viewport.
 		 */
-		revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLineInCenterIfOutsideViewport(lineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal a line close to the top of the viewport,
 		 * optimized for viewing a code definition.
 		 */
-		revealLineNearTop(lineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLineNearTop(lineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a position.
 		 */
-		revealPosition(position: IPosition, scrollType?: ScrollType): codemavi;
+		revealPosition(position: IPosition, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a position centered vertically.
 		 */
-		revealPositionInCenter(position: IPosition, scrollType?: ScrollType): codemavi;
+		revealPositionInCenter(position: IPosition, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a position centered vertically only if it lies outside the viewport.
 		 */
-		revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType?: ScrollType): codemavi;
+		revealPositionInCenterIfOutsideViewport(position: IPosition, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a position close to the top of the viewport,
 		 * optimized for viewing a code definition.
 		 */
-		revealPositionNearTop(position: IPosition, scrollType?: ScrollType): codemavi;
+		revealPositionNearTop(position: IPosition, scrollType?: ScrollType): void;
 		/**
 		 * Returns the primary selection of the editor.
 		 */
@@ -2715,82 +2715,82 @@ declare namespace monaco.editor {
 		 * @param selection The new selection
 		 * @param source Source of the call that caused the selection
 		 */
-		setSelection(selection: IRange, source?: string): codemavi;
+		setSelection(selection: IRange, source?: string): void;
 		/**
 		 * Set the primary selection of the editor. This will remove any secondary cursors.
 		 * @param selection The new selection
 		 * @param source Source of the call that caused the selection
 		 */
-		setSelection(selection: Range, source?: string): codemavi;
+		setSelection(selection: Range, source?: string): void;
 		/**
 		 * Set the primary selection of the editor. This will remove any secondary cursors.
 		 * @param selection The new selection
 		 * @param source Source of the call that caused the selection
 		 */
-		setSelection(selection: ISelection, source?: string): codemavi;
+		setSelection(selection: ISelection, source?: string): void;
 		/**
 		 * Set the primary selection of the editor. This will remove any secondary cursors.
 		 * @param selection The new selection
 		 * @param source Source of the call that caused the selection
 		 */
-		setSelection(selection: Selection, source?: string): codemavi;
+		setSelection(selection: Selection, source?: string): void;
 		/**
 		 * Set the selections for all the cursors of the editor.
 		 * Cursors will be removed or added, as necessary.
 		 * @param selections The new selection
 		 * @param source Source of the call that caused the selection
 		 */
-		setSelections(selections: readonly ISelection[], source?: string): codemavi;
+		setSelections(selections: readonly ISelection[], source?: string): void;
 		/**
 		 * Scroll vertically as necessary and reveal lines.
 		 */
-		revealLines(startLineNumber: number, endLineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLines(startLineNumber: number, endLineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal lines centered vertically.
 		 */
-		revealLinesInCenter(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLinesInCenter(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal lines centered vertically only if it lies outside the viewport.
 		 */
-		revealLinesInCenterIfOutsideViewport(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLinesInCenterIfOutsideViewport(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically as necessary and reveal lines close to the top of the viewport,
 		 * optimized for viewing a code definition.
 		 */
-		revealLinesNearTop(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): codemavi;
+		revealLinesNearTop(lineNumber: number, endLineNumber: number, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range.
 		 */
-		revealRange(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRange(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range centered vertically.
 		 */
-		revealRangeInCenter(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRangeInCenter(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range at the top of the viewport.
 		 */
-		revealRangeAtTop(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRangeAtTop(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range centered vertically only if it lies outside the viewport.
 		 */
-		revealRangeInCenterIfOutsideViewport(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRangeInCenterIfOutsideViewport(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range close to the top of the viewport,
 		 * optimized for viewing a code definition.
 		 */
-		revealRangeNearTop(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRangeNearTop(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Scroll vertically or horizontally as necessary and reveal a range close to the top of the viewport,
 		 * optimized for viewing a code definition. Only if it lies outside the viewport.
 		 */
-		revealRangeNearTopIfOutsideViewport(range: IRange, scrollType?: ScrollType): codemavi;
+		revealRangeNearTopIfOutsideViewport(range: IRange, scrollType?: ScrollType): void;
 		/**
 		 * Directly trigger a handler or an editor action.
 		 * @param source The source of the call.
 		 * @param handlerId The id of the handler or the id of a contribution.
 		 * @param payload Extra data to be sent to the handler.
 		 */
-		trigger(source: string | null | undefined, handlerId: string, payload: any): codemavi;
+		trigger(source: string | null | undefined, handlerId: string, payload: any): void;
 		/**
 		 * Gets the current model attached to this editor.
 		 */
@@ -2803,7 +2803,7 @@ declare namespace monaco.editor {
 		 * will not be destroyed.
 		 * It is safe to call setModel(null) to simply detach the current model from the editor.
 		 */
-		setModel(model: IEditorModel | null): codemavi;
+		setModel(model: IEditorModel | null): void;
 		/**
 		 * Create a collection of decorations. All decorations added through this collection
 		 * will get the ownerId of the editor (meaning they will not show up in other editors).
@@ -2848,7 +2848,7 @@ declare namespace monaco.editor {
 		/**
 		 * Remove all previous decorations.
 		 */
-		clear(): codemavi;
+		clear(): void;
 	}
 
 	/**
@@ -2858,7 +2858,7 @@ declare namespace monaco.editor {
 		/**
 		 * Dispose this contribution.
 		 */
-		dispose(): codemavi;
+		dispose(): void;
 		/**
 		 * Store view state.
 		 */
@@ -2866,7 +2866,7 @@ declare namespace monaco.editor {
 		/**
 		 * Restore view state.
 		 */
-		restoreViewState?(state: any): codemavi;
+		restoreViewState?(state: any): void;
 	}
 
 	/**
@@ -5224,7 +5224,7 @@ declare namespace monaco.editor {
 
 	export interface IEditorConstructionOptions extends IEditorOptions {
 		/**
-		 * The initial editor dimension (to acodemavi measuring the container).
+		 * The initial editor dimension (to avoid measuring the container).
 		 */
 		dimension?: IDimension;
 		/**
@@ -5297,11 +5297,11 @@ declare namespace monaco.editor {
 		/**
 		 * Callback which gives the relative top of the view zone as it appears (taking scrolling into account).
 		 */
-		onDomNodeTop?: (top: number) => codemavi;
+		onDomNodeTop?: (top: number) => void;
 		/**
 		 * Callback which gives the height in pixels of the view zone.
 		 */
-		onComputedHeight?: (height: number) => codemavi;
+		onComputedHeight?: (height: number) => void;
 	}
 
 	/**
@@ -5318,12 +5318,12 @@ declare namespace monaco.editor {
 		 * Remove a zone
 		 * @param id A unique identifier to the view zone, as returned by the `addZone` call.
 		 */
-		removeZone(id: string): codemavi;
+		removeZone(id: string): void;
 		/**
 		 * Change a zone's position.
 		 * The editor will rescan the `afterLineNumber` and `afterColumn` properties of a view zone.
 		 */
-		layoutZone(id: string): codemavi;
+		layoutZone(id: string): void;
 	}
 
 	/**
@@ -5414,7 +5414,7 @@ declare namespace monaco.editor {
 		 * widget. Is being invoked with the selected position preference
 		 * or `null` if not rendered.
 		 */
-		afterRender?(position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): codemavi;
+		afterRender?(position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): void;
 	}
 
 	/**
@@ -5485,7 +5485,7 @@ declare namespace monaco.editor {
 		/**
 		 * Event fired when the widget layout changes.
 		 */
-		onDidLayout?: IEvent<codemavi>;
+		onDidLayout?: IEvent<void>;
 		/**
 		 * Render this overlay widget in a location where it could overflow the editor's view dom node.
 		 */
@@ -5822,22 +5822,22 @@ declare namespace monaco.editor {
 		 * An event emitted when the text inside this editor gained focus (i.e. cursor starts blinking).
 		 * @event
 		 */
-		readonly onDidFocusEditorText: IEvent<codemavi>;
+		readonly onDidFocusEditorText: IEvent<void>;
 		/**
 		 * An event emitted when the text inside this editor lost focus (i.e. cursor stops blinking).
 		 * @event
 		 */
-		readonly onDidBlurEditorText: IEvent<codemavi>;
+		readonly onDidBlurEditorText: IEvent<void>;
 		/**
 		 * An event emitted when the text inside this editor or an editor widget gained focus.
 		 * @event
 		 */
-		readonly onDidFocusEditorWidget: IEvent<codemavi>;
+		readonly onDidFocusEditorWidget: IEvent<void>;
 		/**
 		 * An event emitted when the text inside this editor or an editor widget lost focus.
 		 * @event
 		 */
-		readonly onDidBlurEditorWidget: IEvent<codemavi>;
+		readonly onDidBlurEditorWidget: IEvent<void>;
 		/**
 		 * Boolean indicating whether input is in composition
 		 */
@@ -5845,16 +5845,16 @@ declare namespace monaco.editor {
 		/**
 		 * An event emitted after composition has started.
 		 */
-		readonly onDidCompositionStart: IEvent<codemavi>;
+		readonly onDidCompositionStart: IEvent<void>;
 		/**
 		 * An event emitted after composition has ended.
 		 */
-		readonly onDidCompositionEnd: IEvent<codemavi>;
+		readonly onDidCompositionEnd: IEvent<void>;
 		/**
 		 * An event emitted when editing failed because the editor is read-only.
 		 * @event
 		 */
-		readonly onDidAttemptReadOnlyEdit: IEvent<codemavi>;
+		readonly onDidAttemptReadOnlyEdit: IEvent<void>;
 		/**
 		 * An event emitted when users paste text in the editor.
 		 * @event
@@ -5914,7 +5914,7 @@ declare namespace monaco.editor {
 		 * An event emitted when hidden areas change in the editor (e.g. due to folding).
 		 * @event
 		 */
-		readonly onDidChangeHiddenAreas: IEvent<codemavi>;
+		readonly onDidChangeHiddenAreas: IEvent<void>;
 		/**
 		 * Some editor operations fire multiple events at once.
 		 * To allow users to react to multiple events fired by a single operation,
@@ -5922,11 +5922,11 @@ declare namespace monaco.editor {
 		 * Whenever the editor fires `onBeginUpdate`, it will also fire `onEndUpdate` once the operation finishes.
 		 * Note that not all operations are bracketed by `onBeginUpdate` and `onEndUpdate`.
 		*/
-		readonly onBeginUpdate: IEvent<codemavi>;
+		readonly onBeginUpdate: IEvent<void>;
 		/**
 		 * Fires after the editor completes the operation it fired `onBeginUpdate` for.
 		*/
-		readonly onEndUpdate: IEvent<codemavi>;
+		readonly onEndUpdate: IEvent<void>;
 		/**
 		 * Saves current view state of the editor in a serializable object.
 		 */
@@ -5934,7 +5934,7 @@ declare namespace monaco.editor {
 		/**
 		 * Restores the view state of the editor from a serializable object generated by `saveViewState`.
 		 */
-		restoreViewState(state: ICodeEditorViewState | null): codemavi;
+		restoreViewState(state: ICodeEditorViewState | null): void;
 		/**
 		 * Returns true if the text inside this editor or an editor widget has focus.
 		 */
@@ -5957,7 +5957,7 @@ declare namespace monaco.editor {
 		 * will not be destroyed.
 		 * It is safe to call setModel(null) to simply detach the current model from the editor.
 		 */
-		setModel(model: ITextModel | null): codemavi;
+		setModel(model: ITextModel | null): void;
 		/**
 		 * Gets all the editor computed options.
 		 */
@@ -5982,7 +5982,7 @@ declare namespace monaco.editor {
 		 * Set the value of the current model attached to this editor.
 		 * @see {@link ITextModel.setValue}
 		 */
-		setValue(newValue: string): codemavi;
+		setValue(newValue: string): void;
 		/**
 		 * Get the width of the editor's content.
 		 * This is information that is "erased" when computing `scrollWidth = Math.max(contentWidth, width)`
@@ -6012,15 +6012,15 @@ declare namespace monaco.editor {
 		/**
 		 * Change the scrollLeft of the editor's viewport.
 		 */
-		setScrollLeft(newScrollLeft: number, scrollType?: ScrollType): codemavi;
+		setScrollLeft(newScrollLeft: number, scrollType?: ScrollType): void;
 		/**
 		 * Change the scrollTop of the editor's viewport.
 		 */
-		setScrollTop(newScrollTop: number, scrollType?: ScrollType): codemavi;
+		setScrollTop(newScrollTop: number, scrollType?: ScrollType): void;
 		/**
 		 * Change the scroll position of the editor's viewport.
 		 */
-		setScrollPosition(position: INewScrollPosition, scrollType?: ScrollType): codemavi;
+		setScrollPosition(position: INewScrollPosition, scrollType?: ScrollType): void;
 		/**
 		 * Check if the editor is currently scrolling towards a different scroll position.
 		 */
@@ -6037,7 +6037,7 @@ declare namespace monaco.editor {
 		 * @param source The source of the call.
 		 * @param command The command to execute
 		 */
-		executeCommand(source: string | null | undefined, command: ICommand): codemavi;
+		executeCommand(source: string | null | undefined, command: ICommand): void;
 		/**
 		 * Create an "undo stop" in the undo-redo stack.
 		 */
@@ -6059,7 +6059,7 @@ declare namespace monaco.editor {
 		 * @param source The source of the call.
 		 * @param command The commands to execute
 		 */
-		executeCommands(source: string | null | undefined, commands: (ICommand | null)[]): codemavi;
+		executeCommands(source: string | null | undefined, commands: (ICommand | null)[]): void;
 		/**
 		 * Get all the decorations on a line (filtering out decorations from other editors).
 		 */
@@ -6077,7 +6077,7 @@ declare namespace monaco.editor {
 		/**
 		 * Remove previously added decorations.
 		 */
-		removeDecorations(decorationIds: string[]): codemavi;
+		removeDecorations(decorationIds: string[]): void;
 		/**
 		 * Get the layout info for the editor.
 		 */
@@ -6102,7 +6102,7 @@ declare namespace monaco.editor {
 		/**
 		 * Write the screen reader content to be the current selection
 		 */
-		writeScreenReaderContent(reason: string): codemavi;
+		writeScreenReaderContent(reason: string): void;
 		/**
 		 * Returns the editor's container dom node
 		 */
@@ -6114,46 +6114,46 @@ declare namespace monaco.editor {
 		/**
 		 * Add a content widget. Widgets must have unique ids, otherwise they will be overwritten.
 		 */
-		addContentWidget(widget: IContentWidget): codemavi;
+		addContentWidget(widget: IContentWidget): void;
 		/**
 		 * Layout/Reposition a content widget. This is a ping to the editor to call widget.getPosition()
 		 * and update appropriately.
 		 */
-		layoutContentWidget(widget: IContentWidget): codemavi;
+		layoutContentWidget(widget: IContentWidget): void;
 		/**
 		 * Remove a content widget.
 		 */
-		removeContentWidget(widget: IContentWidget): codemavi;
+		removeContentWidget(widget: IContentWidget): void;
 		/**
 		 * Add an overlay widget. Widgets must have unique ids, otherwise they will be overwritten.
 		 */
-		addOverlayWidget(widget: IOverlayWidget): codemavi;
+		addOverlayWidget(widget: IOverlayWidget): void;
 		/**
 		 * Layout/Reposition an overlay widget. This is a ping to the editor to call widget.getPosition()
 		 * and update appropriately.
 		 */
-		layoutOverlayWidget(widget: IOverlayWidget): codemavi;
+		layoutOverlayWidget(widget: IOverlayWidget): void;
 		/**
 		 * Remove an overlay widget.
 		 */
-		removeOverlayWidget(widget: IOverlayWidget): codemavi;
+		removeOverlayWidget(widget: IOverlayWidget): void;
 		/**
 		 * Add a glyph margin widget. Widgets must have unique ids, otherwise they will be overwritten.
 		 */
-		addGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
+		addGlyphMarginWidget(widget: IGlyphMarginWidget): void;
 		/**
 		 * Layout/Reposition a glyph margin widget. This is a ping to the editor to call widget.getPosition()
 		 * and update appropriately.
 		 */
-		layoutGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
+		layoutGlyphMarginWidget(widget: IGlyphMarginWidget): void;
 		/**
 		 * Remove a glyph margin widget.
 		 */
-		removeGlyphMarginWidget(widget: IGlyphMarginWidget): codemavi;
+		removeGlyphMarginWidget(widget: IGlyphMarginWidget): void;
 		/**
 		 * Change the view zones. View zones are lost when a new model is attached to the editor.
 		 */
-		changeViewZones(callback: (accessor: IViewZoneChangeAccessor) => codemavi): codemavi;
+		changeViewZones(callback: (accessor: IViewZoneChangeAccessor) => void): void;
 		/**
 		 * Get the horizontal position (left offset) for the column w.r.t to the beginning of the line.
 		 * This method works only if the line `lineNumber` is currently rendered (in the editor's viewport).
@@ -6163,7 +6163,7 @@ declare namespace monaco.editor {
 		/**
 		 * Force an editor render now.
 		 */
-		render(forceRedraw?: boolean): codemavi;
+		render(forceRedraw?: boolean): void;
 		/**
 		 * Get the hit test target at coordinates `clientX` and `clientY`.
 		 * The coordinates are relative to the top-left of the viewport.
@@ -6186,13 +6186,13 @@ declare namespace monaco.editor {
 		/**
 		 * Apply the same font settings as the editor to `target`.
 		 */
-		applyFontInfo(target: HTMLElement): codemavi;
-		setBanner(bannerDomNode: HTMLElement | null, height: number): codemavi;
+		applyFontInfo(target: HTMLElement): void;
+		setBanner(bannerDomNode: HTMLElement | null, height: number): void;
 		/**
 		 * Is called when the model has been set, view state was restored and options are updated.
 		 * This is the best place to compute data for the viewport (such as tokens).
 		 */
-		handleInitialized?(): codemavi;
+		handleInitialized?(): void;
 	}
 
 	/**
@@ -6207,12 +6207,12 @@ declare namespace monaco.editor {
 		 * An event emitted when the diff information computed by this diff editor has been updated.
 		 * @event
 		 */
-		readonly onDidUpdateDiff: IEvent<codemavi>;
+		readonly onDidUpdateDiff: IEvent<void>;
 		/**
 		 * An event emitted when the diff model is changed (i.e. the diff editor shows new content).
 		 * @event
 		 */
-		readonly onDidChangeModel: IEvent<codemavi>;
+		readonly onDidChangeModel: IEvent<void>;
 		/**
 		 * Saves current view state of the editor in a serializable object.
 		 */
@@ -6220,7 +6220,7 @@ declare namespace monaco.editor {
 		/**
 		 * Restores the view state of the editor from a serializable object generated by `saveViewState`.
 		 */
-		restoreViewState(state: IDiffEditorViewState | null): codemavi;
+		restoreViewState(state: IDiffEditorViewState | null): void;
 		/**
 		 * Type the getModel() of IEditor.
 		 */
@@ -6234,7 +6234,7 @@ declare namespace monaco.editor {
 		 * will not be destroyed.
 		 * It is safe to call setModel(null) to simply detach the current model from the editor.
 		 */
-		setModel(model: IDiffEditorModel | IDiffEditorViewModel | null): codemavi;
+		setModel(model: IDiffEditorModel | IDiffEditorViewModel | null): void;
 		/**
 		 * Get the `original` editor.
 		 */
@@ -6250,23 +6250,23 @@ declare namespace monaco.editor {
 		/**
 		 * Update the editor's options after the editor has been created.
 		 */
-		updateOptions(newOptions: IDiffEditorOptions): codemavi;
+		updateOptions(newOptions: IDiffEditorOptions): void;
 		/**
 		 * Jumps to the next or previous diff.
 		 */
-		goToDiff(target: 'next' | 'previous'): codemavi;
+		goToDiff(target: 'next' | 'previous'): void;
 		/**
 		 * Scrolls to the first diff.
 		 * (Waits until the diff computation finished.)
 		 */
 		revealFirstDiff(): unknown;
-		accessibleDiffViewerNext(): codemavi;
-		accessibleDiffViewerPrev(): codemavi;
-		handleInitialized(): codemavi;
+		accessibleDiffViewerNext(): void;
+		accessibleDiffViewerPrev(): void;
+		handleInitialized(): void;
 	}
 
 	export class FontInfo extends BareFontInfo {
-		readonly _editorStylingBrand: codemavi;
+		readonly _editorStylingBrand: void;
 		readonly version: number;
 		readonly isTrusted: boolean;
 		readonly isMonospace: boolean;
@@ -6280,7 +6280,7 @@ declare namespace monaco.editor {
 	}
 
 	export class BareFontInfo {
-		readonly _bareFontInfoBrand: codemavi;
+		readonly _bareFontInfoBrand: void;
 		readonly pixelRatio: number;
 		readonly fontFamily: string;
 		readonly fontWeight: string;
@@ -6296,7 +6296,7 @@ declare namespace monaco.editor {
 	export interface IEditorZoom {
 		onDidChangeZoomLevel: IEvent<number>;
 		getZoomLevel(): number;
-		setZoomLevel(zoomLevel: number): codemavi;
+		setZoomLevel(zoomLevel: number): void;
 	}
 
 	//compatibility:
@@ -6342,7 +6342,7 @@ declare namespace monaco.languages {
 	/**
 	 * Register information about a new language.
 	 */
-	export function register(language: ILanguageExtensionPoint): codemavi;
+	export function register(language: ILanguageExtensionPoint): void;
 
 	/**
 	 * Get the information of all the registered languages.
@@ -6355,14 +6355,14 @@ declare namespace monaco.languages {
 	 * An event emitted when a language is associated for the first time with a text model.
 	 * @event
 	 */
-	export function onLanguage(languageId: string, callback: () => codemavi): IDisposable;
+	export function onLanguage(languageId: string, callback: () => void): IDisposable;
 
 	/**
 	 * An event emitted when a language is associated for the first time with a text model or
 	 * when a language is encountered during the tokenization of another language.
 	 * @event
 	 */
-	export function onLanguageEncountered(languageId: string, callback: () => codemavi): IDisposable;
+	export function onLanguageEncountered(languageId: string, callback: () => void): IDisposable;
 
 	/**
 	 * Set the editing configuration for a language.
@@ -6467,7 +6467,7 @@ declare namespace monaco.languages {
 	 * Change the color map that is used for token colors.
 	 * Supported formats (hex): #RRGGBB, $RRGGBBAA, #RGB, #RGBA
 	 */
-	export function setColorMap(colorMap: string[] | null): codemavi;
+	export function setColorMap(colorMap: string[] | null): void;
 
 	/**
 	 * Register a tokens provider factory for a language. This tokenizer will be exclusive with a tokenizer
@@ -6674,7 +6674,7 @@ declare namespace monaco.languages {
 		 * List of code action kinds that a {@link CodeActionProvider} may return.
 		 *
 		 * This list is used to determine if a given `CodeActionProvider` should be invoked or not.
-		 * To acodemavi unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
+		 * To avoid unnecessary computation, every `CodeActionProvider` should list use `providedCodeActionKinds`. The
 		 * list of kinds may either be generic, such as `["quickfix", "refactor", "source"]`, or list out every kind provided,
 		 * such as `["quickfix.removeLine", "source.fixAll" ...]`.
 		 */
@@ -7156,7 +7156,7 @@ declare namespace monaco.languages {
 	export interface CompletionList {
 		suggestions: CompletionItem[];
 		incomplete?: boolean;
-		dispose?(): codemavi;
+		dispose?(): void;
 	}
 
 	/**
@@ -7340,17 +7340,17 @@ declare namespace monaco.languages {
 		 * Will be called when an item is shown.
 		 * @param updatedInsertText Is useful to understand bracket completion.
 		*/
-		handleItemDidShow?(completions: T, item: T['items'][number], updatedInsertText: string): codemavi;
+		handleItemDidShow?(completions: T, item: T['items'][number], updatedInsertText: string): void;
 		/**
 		 * Will be called when an item is partially accepted. TODO: also handle full acceptance here!
 		 * @param acceptedCharacters Deprecated. Use `info.acceptedCharacters` instead.
 		 */
-		handlePartialAccept?(completions: T, item: T['items'][number], acceptedCharacters: number, info: PartialAcceptInfo): codemavi;
-		handleRejection?(completions: T, item: T['items'][number]): codemavi;
+		handlePartialAccept?(completions: T, item: T['items'][number], acceptedCharacters: number, info: PartialAcceptInfo): void;
+		handleRejection?(completions: T, item: T['items'][number]): void;
 		/**
 		 * Will be called when a completions list is no longer in use and can be garbage-collected.
 		*/
-		freeInlineCompletions(completions: T): codemavi;
+		freeInlineCompletions(completions: T): void;
 		/**
 		 * Only used for {@link yieldsToGroupIds}.
 		 * Multiple providers can have the same group id.
@@ -7830,7 +7830,7 @@ declare namespace monaco.languages {
 
 	export interface ILinksList {
 		links: ILink[];
-		dispose?(): codemavi;
+		dispose?(): void;
 	}
 
 	/**
@@ -8029,8 +8029,8 @@ declare namespace monaco.languages {
 	export interface ICustomEdit {
 		readonly resource: Uri;
 		readonly metadata?: WorkspaceEditMetadata;
-		undo(): Promise<codemavi> | codemavi;
-		redo(): Promise<codemavi> | codemavi;
+		undo(): Promise<void> | void;
+		redo(): Promise<void> | void;
 	}
 
 	export interface Rejection {
@@ -8104,7 +8104,7 @@ declare namespace monaco.languages {
 
 	export interface CodeLensList {
 		lenses: CodeLens[];
-		dispose?(): codemavi;
+		dispose?(): void;
 	}
 
 	export interface CodeLensProvider {
@@ -8137,12 +8137,12 @@ declare namespace monaco.languages {
 
 	export interface InlayHintList {
 		hints: InlayHint[];
-		dispose(): codemavi;
+		dispose(): void;
 	}
 
 	export interface InlayHintsProvider {
 		displayName?: string;
-		onDidChangeInlayHints?: IEvent<codemavi>;
+		onDidChangeInlayHints?: IEvent<void>;
 		provideInlayHints(model: editor.ITextModel, range: Range, token: CancellationToken): ProviderResult<InlayHintList>;
 		resolveInlayHint?(hint: InlayHint, token: CancellationToken): ProviderResult<InlayHint>;
 	}
@@ -8169,10 +8169,10 @@ declare namespace monaco.languages {
 	}
 
 	export interface DocumentSemanticTokensProvider {
-		onDidChange?: IEvent<codemavi>;
+		onDidChange?: IEvent<void>;
 		getLegend(): SemanticTokensLegend;
 		provideDocumentSemanticTokens(model: editor.ITextModel, lastResultId: string | null, token: CancellationToken): ProviderResult<SemanticTokens | SemanticTokensEdits>;
-		releaseDocumentSemanticTokens(resultId: string | undefined): codemavi;
+		releaseDocumentSemanticTokens(resultId: string | undefined): void;
 	}
 
 	export interface DocumentRangeSemanticTokensProvider {
@@ -8203,7 +8203,7 @@ declare namespace monaco.languages {
 	export interface InlineEditProvider<T extends IInlineEdit = IInlineEdit> {
 		displayName?: string;
 		provideInlineEdit(model: editor.ITextModel, context: IInlineEditContext, token: CancellationToken): ProviderResult<T>;
-		freeInlineEdit(edit: T): codemavi;
+		freeInlineEdit(edit: T): void;
 	}
 
 	export interface ILanguageExtensionPoint {

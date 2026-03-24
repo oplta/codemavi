@@ -84,7 +84,7 @@ export class DocumentSemanticTokensFeature extends Disposable {
 		this._register(themeService.onDidColorThemeChange(handleSettingOrThemeChange));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		dispose(this._watchers.values());
 		this._watchers.clear();
 
@@ -181,7 +181,7 @@ class ModelSemanticColoring extends Disposable {
 		this._fetchDocumentSemanticTokens.schedule(0);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._currentDocumentResponse) {
 			this._currentDocumentResponse.dispose();
 			this._currentDocumentResponse = null;
@@ -198,7 +198,7 @@ class ModelSemanticColoring extends Disposable {
 		super.dispose();
 	}
 
-	private _fetchDocumentSemanticTokensNow(): codemavi {
+	private _fetchDocumentSemanticTokensNow(): void {
 		if (this._currentDocumentRequestCancellationTokenSource) {
 			// there is already a request running, let it finish...
 			return;
@@ -263,7 +263,7 @@ class ModelSemanticColoring extends Disposable {
 		});
 	}
 
-	private static _copy(src: Uint32Array, srcOffset: number, dest: Uint32Array, destOffset: number, length: number): codemavi {
+	private static _copy(src: Uint32Array, srcOffset: number, dest: Uint32Array, destOffset: number, length: number): void {
 		// protect against overflows
 		length = Math.min(length, dest.length - destOffset, src.length - srcOffset);
 		for (let i = 0; i < length; i++) {
@@ -271,7 +271,7 @@ class ModelSemanticColoring extends Disposable {
 		}
 	}
 
-	private _setDocumentSemanticTokens(provider: DocumentSemanticTokensProvider | null, tokens: SemanticTokens | SemanticTokensEdits | null, styling: SemanticTokensProviderStyling | null, pendingChanges: IModelContentChangedEvent[]): codemavi {
+	private _setDocumentSemanticTokens(provider: DocumentSemanticTokensProvider | null, tokens: SemanticTokens | SemanticTokensEdits | null, styling: SemanticTokensProviderStyling | null, pendingChanges: IModelContentChangedEvent[]): void {
 		const currentResponse = this._currentDocumentResponse;
 		const rescheduleIfNeeded = () => {
 			if ((pendingChanges.length > 0 || this._providersChangedDuringRequest) && !this._fetchDocumentSemanticTokens.isScheduled()) {
@@ -395,7 +395,7 @@ class SemanticTokensResponse {
 		public readonly data: Uint32Array
 	) { }
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.provider.releaseDocumentSemanticTokens(this.resultId);
 	}
 }

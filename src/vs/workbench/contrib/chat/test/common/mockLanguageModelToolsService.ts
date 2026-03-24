@@ -13,20 +13,20 @@ export class MockLanguageModelToolsService implements ILanguageModelToolsService
 
 	constructor() { }
 
-	cancelToolCallsForRequest(requestId: string): codemavi {
+	cancelToolCallsForRequest(requestId: string): void {
 	}
 
-	onDidChangeTools: Event<codemavi> = Event.None;
+	onDidChangeTools: Event<void> = Event.None;
 
 	registerToolData(toolData: IToolData): IDisposable {
 		return Disposable.None;
 	}
 
-	resetToolAutoConfirmation(): codemavi {
+	resetToolAutoConfirmation(): void {
 
 	}
 
-	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile', autoConfirm?: boolean): codemavi {
+	setToolAutoConfirmation(toolId: string, scope: 'workspace' | 'profile', autoConfirm?: boolean): void {
 
 	}
 

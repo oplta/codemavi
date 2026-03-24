@@ -68,7 +68,7 @@ export class DefaultFormatter extends Disposable implements IWorkbenchContributi
 		this._updateConfigValues();
 	}
 
-	private async _updateConfigValues(): Promise<codemavi> {
+	private async _updateConfigValues(): Promise<void> {
 		await this._extensionService.whenInstalledExtensionsRegistered();
 		let extensions = [...this._extensionService.extensions];
 
@@ -334,7 +334,7 @@ registerEditorAction(class FormatDocumentMultipleAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor, args: any): Promise<void> {
 		if (!editor.hasModel()) {
 			return;
 		}
@@ -365,7 +365,7 @@ registerEditorAction(class FormatSelectionMultipleAction extends EditorAction {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		if (!editor.hasModel()) {
 			return;
 		}

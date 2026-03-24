@@ -86,10 +86,10 @@ export const State = {
 };
 
 export interface IAutoUpdater extends Event.NodeEventEmitter {
-	setFeedURL(url: string): codemavi;
-	checkForUpdates(): codemavi;
-	applyUpdate?(): Promise<codemavi>;
-	quitAndInstall(): codemavi;
+	setFeedURL(url: string): void;
+	checkForUpdates(): void;
+	applyUpdate?(): Promise<void>;
+	quitAndInstall(): void;
 }
 
 export const IUpdateService = createDecorator<IUpdateService>('updateService');
@@ -100,11 +100,11 @@ export interface IUpdateService {
 	readonly onStateChange: Event<State>;
 	readonly state: State;
 
-	checkForUpdates(explicit: boolean): Promise<codemavi>;
-	downloadUpdate(): Promise<codemavi>;
-	applyUpdate(): Promise<codemavi>;
-	quitAndInstall(): Promise<codemavi>;
+	checkForUpdates(explicit: boolean): Promise<void>;
+	downloadUpdate(): Promise<void>;
+	applyUpdate(): Promise<void>;
+	quitAndInstall(): Promise<void>;
 
 	isLatestVersion(): Promise<boolean | undefined>;
-	_applySpecificUpdate(packagePath: string): Promise<codemavi>;
+	_applySpecificUpdate(packagePath: string): Promise<void>;
 }

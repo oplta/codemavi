@@ -42,12 +42,12 @@ export interface ICompositeTitleLabel {
 	/**
 	 * Asks to update the title for the composite with the given ID.
 	 */
-	updateTitle(id: string, title: string, keybinding?: string): codemavi;
+	updateTitle(id: string, title: string, keybinding?: string): void;
 
 	/**
 	 * Called when theming information changes.
 	 */
-	updateStyles(): codemavi;
+	updateStyles(): void;
 }
 
 interface CompositeItem {
@@ -66,7 +66,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 	protected readonly toolbarHoverDelegate: IHoverDelegate;
 
 	private readonly mapCompositeToCompositeContainer = new Map<string, HTMLElement>();
-	private readonly mapActionsBindingToComposite = new Map<string, () => codemavi>();
+	private readonly mapActionsBindingToComposite = new Map<string, () => void>();
 	private activeComposite: Composite | undefined;
 	private lastActiveCompositeId: string;
 	private readonly instantiatedCompositeItems = new Map<string, CompositeItem>();
@@ -125,7 +125,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 
 	private doOpenComposite(id: string, focus: boolean = false): Composite | undefined {
 
-		// Use a generated token to acodemavi race conditions from long running promises
+		// Use a generated token to avoid race conditions from long running promises
 		const currentCompositeOpenToken = defaultGenerator.nextId();
 		this.currentCompositeOpenToken = currentCompositeOpenToken;
 
@@ -208,7 +208,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		throw new Error(`Unable to find composite with id ${id}`);
 	}
 
-	protected showComposite(composite: Composite): codemavi {
+	protected showComposite(composite: Composite): void {
 
 		// Remember Composite
 		this.activeComposite = composite;
@@ -297,7 +297,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		}
 	}
 
-	protected onTitleAreaUpdate(compositeId: string): codemavi {
+	protected onTitleAreaUpdate(compositeId: string): void {
 
 		// Title
 		const composite = this.instantiatedCompositeItems.get(compositeId);
@@ -319,7 +319,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		}
 	}
 
-	private updateTitle(compositeId: string, compositeTitle?: string): codemavi {
+	private updateTitle(compositeId: string, compositeTitle?: string): void {
 		const compositeDescriptor = this.registry.getComposite(compositeId);
 		if (!compositeDescriptor || !this.titleLabel) {
 			return;
@@ -337,7 +337,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		toolBar.setAriaLabel(localize('ariaCompositeToolbarLabel', "{0} actions", compositeTitle));
 	}
 
-	private collectCompositeActions(composite?: Composite): () => codemavi {
+	private collectCompositeActions(composite?: Composite): () => void {
 
 		// From Composite
 		const menuIds = composite?.getMenuIds();
@@ -451,7 +451,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		return $('.composite');
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		super.updateStyles();
 
 		// Forward to title label
@@ -498,7 +498,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		return AnchorAlignment.RIGHT;
 	}
 
-	override layout(width: number, height: number, top: number, left: number): codemavi {
+	override layout(width: number, height: number, top: number, left: number): void {
 		super.layout(width, height, top, left);
 
 		// Layout contents
@@ -508,7 +508,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		this.activeComposite?.layout(this.contentAreaSize);
 	}
 
-	setBoundarySashes?(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes?(sashes: IBoundarySashes): void {
 		this.boundarySashes = sashes;
 		this.activeComposite?.setBoundarySashes(sashes);
 	}
@@ -530,7 +530,7 @@ export abstract class CompositePart<T extends Composite> extends Part {
 		return true;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.mapCompositeToCompositeContainer.clear();
 		this.mapActionsBindingToComposite.clear();
 

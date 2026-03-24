@@ -115,7 +115,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		this.sendBreakpointsAndListen();
 	}
 
-	$registerDebugVisualizerTree(treeId: string, canEdit: boolean): codemavi {
+	$registerDebugVisualizerTree(treeId: string, canEdit: boolean): void {
 		this._visualizerTreeHandles.set(treeId, this.visualizerService.registerTree(treeId, {
 			disposeItem: id => this._proxy.$disposeVisualizedTree(id),
 			getChildren: e => this._proxy.$getVisualizerTreeItemChildren(treeId, e),
@@ -124,12 +124,12 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		}));
 	}
 
-	$unregisterDebugVisualizerTree(treeId: string): codemavi {
+	$unregisterDebugVisualizerTree(treeId: string): void {
 		this._visualizerTreeHandles.get(treeId)?.dispose();
 		this._visualizerTreeHandles.delete(treeId);
 	}
 
-	$registerDebugVisualizer(extensionId: string, id: string): codemavi {
+	$registerDebugVisualizer(extensionId: string, id: string): void {
 		const handle = this.visualizerService.register({
 			extensionId: new ExtensionIdentifier(extensionId),
 			id,
@@ -141,13 +141,13 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		this._visualizerHandles.set(`${extensionId}/${id}`, handle);
 	}
 
-	$unregisterDebugVisualizer(extensionId: string, id: string): codemavi {
+	$unregisterDebugVisualizer(extensionId: string, id: string): void {
 		const key = `${extensionId}/${id}`;
 		this._visualizerHandles.get(key)?.dispose();
 		this._visualizerHandles.delete(key);
 	}
 
-	private sendBreakpointsAndListen(): codemavi {
+	private sendBreakpointsAndListen(): void {
 		// set up a handler to send more
 		this._toDispose.add(this.debugService.getModel().onDidChangeBreakpoints(e => {
 			// Ignore session only breakpoint events since they should only reflect in the UI
@@ -180,7 +180,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		}
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._toDispose.dispose();
 	}
 
@@ -207,7 +207,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		this._toDispose.add(this.debugService.getAdapterManager().registerDebugAdapterFactory(debugTypes, this));
 	}
 
-	public $registerBreakpoints(DTOs: Array<ISourceMultiBreakpointDto | IFunctionBreakpointDto | IDataBreakpointDto>): Promise<codemavi> {
+	public $registerBreakpoints(DTOs: Array<ISourceMultiBreakpointDto | IFunctionBreakpointDto | IDataBreakpointDto>): Promise<void> {
 
 		for (const dto of DTOs) {
 			if (dto.type === 'sourceMulti') {
@@ -245,14 +245,14 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		return Promise.resolve();
 	}
 
-	public $unregisterBreakpoints(breakpointIds: string[], functionBreakpointIds: string[], dataBreakpointIds: string[]): Promise<codemavi> {
+	public $unregisterBreakpoints(breakpointIds: string[], functionBreakpointIds: string[], dataBreakpointIds: string[]): Promise<void> {
 		breakpointIds.forEach(id => this.debugService.removeBreakpoints(id));
 		functionBreakpointIds.forEach(id => this.debugService.removeFunctionBreakpoints(id));
 		dataBreakpointIds.forEach(id => this.debugService.removeDataBreakpoints(id));
 		return Promise.resolve();
 	}
 
-	public $registerDebugConfigurationProvider(debugType: string, providerTriggerKind: DebugConfigurationProviderTriggerKind, hasProvide: boolean, hasResolve: boolean, hasResolve2: boolean, handle: number): Promise<codemavi> {
+	public $registerDebugConfigurationProvider(debugType: string, providerTriggerKind: DebugConfigurationProviderTriggerKind, hasProvide: boolean, hasResolve: boolean, hasResolve2: boolean, handle: number): Promise<void> {
 
 		const provider: IDebugConfigurationProvider = {
 			type: debugType,
@@ -279,7 +279,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		return Promise.resolve(undefined);
 	}
 
-	public $unregisterDebugConfigurationProvider(handle: number): codemavi {
+	public $unregisterDebugConfigurationProvider(handle: number): void {
 		const provider = this._debugConfigurationProviders.get(handle);
 		if (provider) {
 			this._debugConfigurationProviders.delete(handle);
@@ -287,7 +287,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		}
 	}
 
-	public $registerDebugAdapterDescriptorFactory(debugType: string, handle: number): Promise<codemavi> {
+	public $registerDebugAdapterDescriptorFactory(debugType: string, handle: number): Promise<void> {
 
 		const provider: IDebugAdapterDescriptorFactory = {
 			type: debugType,
@@ -301,7 +301,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		return Promise.resolve(undefined);
 	}
 
-	public $unregisterDebugAdapterDescriptorFactory(handle: number): codemavi {
+	public $unregisterDebugAdapterDescriptorFactory(handle: number): void {
 		const provider = this._debugAdapterDescriptorFactories.get(handle);
 		if (provider) {
 			this._debugAdapterDescriptorFactories.delete(handle);
@@ -342,7 +342,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		}
 	}
 
-	public $setDebugSessionName(sessionId: DebugSessionUUID, name: string): codemavi {
+	public $setDebugSessionName(sessionId: DebugSessionUUID, name: string): void {
 		const session = this.debugService.getModel().getSession(sessionId);
 		session?.setName(name);
 	}
@@ -369,7 +369,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		return Promise.reject(new ErrorNoTelemetry('debug session not found'));
 	}
 
-	public $stopDebugging(sessionId: DebugSessionUUID | undefined): Promise<codemavi> {
+	public $stopDebugging(sessionId: DebugSessionUUID | undefined): Promise<void> {
 		if (sessionId) {
 			const session = this.debugService.getModel().getSession(sessionId, true);
 			if (session) {
@@ -381,7 +381,7 @@ export class MainThreadDebugService implements MainThreadDebugServiceShape, IDeb
 		return Promise.reject(new ErrorNoTelemetry('debug session not found'));
 	}
 
-	public $appendDebugConsole(value: string): codemavi {
+	public $appendDebugConsole(value: string): void {
 		// Use warning as severity to get the orange color for messages coming from the debug extension
 		const session = this.debugService.getViewModel().focusedSession;
 		session?.appendToRepl({ output: value, sev: severity.Warning });
@@ -504,15 +504,15 @@ class ExtensionHostDebugAdapter extends AbstractDebugAdapter {
 		this._onExit.fire(code);
 	}
 
-	startSession(): Promise<codemavi> {
+	startSession(): Promise<void> {
 		return Promise.resolve(this._proxy.$startDASession(this._handle, this._ds.getSessionDto(this.session)));
 	}
 
-	sendMessage(message: DebugProtocol.ProtocolMessage): codemavi {
+	sendMessage(message: DebugProtocol.ProtocolMessage): void {
 		this._proxy.$sendDAMessage(this._handle, convertToDAPaths(message, true));
 	}
 
-	async stopSession(): Promise<codemavi> {
+	async stopSession(): Promise<void> {
 		await this.cancelPendingRequests();
 		return Promise.resolve(this._proxy.$stopDASession(this._handle));
 	}

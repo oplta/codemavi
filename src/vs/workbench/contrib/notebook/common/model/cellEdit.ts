@@ -12,11 +12,11 @@ import { ISelectionState, NotebookCellMetadata } from '../notebookCommon.js';
  * It should not modify Undo/Redo stack
  */
 export interface ITextCellEditingDelegate {
-	insertCell?(index: number, cell: NotebookCellTextModel, endSelections?: ISelectionState): codemavi;
-	deleteCell?(index: number, endSelections?: ISelectionState): codemavi;
-	replaceCell?(index: number, count: number, cells: NotebookCellTextModel[], endSelections?: ISelectionState): codemavi;
-	moveCell?(fromIndex: number, length: number, toIndex: number, beforeSelections: ISelectionState | undefined, endSelections?: ISelectionState): codemavi;
-	updateCellMetadata?(index: number, newMetadata: NotebookCellMetadata): codemavi;
+	insertCell?(index: number, cell: NotebookCellTextModel, endSelections?: ISelectionState): void;
+	deleteCell?(index: number, endSelections?: ISelectionState): void;
+	replaceCell?(index: number, count: number, cells: NotebookCellTextModel[], endSelections?: ISelectionState): void;
+	moveCell?(fromIndex: number, length: number, toIndex: number, beforeSelections: ISelectionState | undefined, endSelections?: ISelectionState): void;
+	updateCellMetadata?(index: number, newMetadata: NotebookCellMetadata): void;
 }
 
 export class MoveCellEdit implements IResourceUndoRedoElement {
@@ -37,7 +37,7 @@ export class MoveCellEdit implements IResourceUndoRedoElement {
 	) {
 	}
 
-	undo(): codemavi {
+	undo(): void {
 		if (!this.editingDelegate.moveCell) {
 			throw new Error('Notebook Move Cell not implemented for Undo/Redo');
 		}
@@ -45,7 +45,7 @@ export class MoveCellEdit implements IResourceUndoRedoElement {
 		this.editingDelegate.moveCell(this.toIndex, this.length, this.fromIndex, this.endSelections, this.beforedSelections);
 	}
 
-	redo(): codemavi {
+	redo(): void {
 		if (!this.editingDelegate.moveCell) {
 			throw new Error('Notebook Move Cell not implemented for Undo/Redo');
 		}
@@ -77,7 +77,7 @@ export class SpliceCellsEdit implements IResourceUndoRedoElement {
 	) {
 	}
 
-	undo(): codemavi {
+	undo(): void {
 		if (!this.editingDelegate.replaceCell) {
 			throw new Error('Notebook Replace Cell not implemented for Undo/Redo');
 		}
@@ -87,7 +87,7 @@ export class SpliceCellsEdit implements IResourceUndoRedoElement {
 		});
 	}
 
-	redo(): codemavi {
+	redo(): void {
 		if (!this.editingDelegate.replaceCell) {
 			throw new Error('Notebook Replace Cell not implemented for Undo/Redo');
 		}
@@ -112,7 +112,7 @@ export class CellMetadataEdit implements IResourceUndoRedoElement {
 
 	}
 
-	undo(): codemavi {
+	undo(): void {
 		if (!this.editingDelegate.updateCellMetadata) {
 			return;
 		}
@@ -120,7 +120,7 @@ export class CellMetadataEdit implements IResourceUndoRedoElement {
 		this.editingDelegate.updateCellMetadata(this.index, this.oldMetadata);
 	}
 
-	redo(): codemavi | Promise<codemavi> {
+	redo(): void | Promise<void> {
 		if (!this.editingDelegate.updateCellMetadata) {
 			return;
 		}

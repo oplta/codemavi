@@ -31,6 +31,6 @@ export interface IExtensionHostStarter {
 	createExtensionHost(): Promise<{ id: string }>;
 	start(id: string, opts: IExtensionHostProcessOptions): Promise<{ pid: number | undefined }>;
 	enableInspectPort(id: string): Promise<boolean>;
-	kill(id: string): Promise<codemavi>;
+	kill(id: string): Promise<void>;
 
 }

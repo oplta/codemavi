@@ -1,11 +1,11 @@
 /**
- * Code Mavi - Agent Tool Tanımları
+ * Mavi - Agent Tool Tanımları
  * 
- * Code Mavi'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
+ * Mavi'un toolsServiceTypes.ts dosyasına eklenecek yeni tool'lar
  * Agent-first mimari için gerekli tool'lar
  */
 
-import { URI } from '../../../../base/common/uri.js'
+import { URI } from '../../../../../../base/common/uri.js'
 
 // ============================================
 // YENİ AGENT TOOL'LARI

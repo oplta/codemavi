@@ -38,7 +38,7 @@ export class DiskFileSystemProviderChannel extends AbstractDiskFileSystemProvide
 
 	//#region Delete: override to support Electron's trash support
 
-	protected override async delete(uriTransformer: IURITransformer, _resource: UriComponents, opts: IFileDeleteOptions): Promise<codemavi> {
+	protected override async delete(uriTransformer: IURITransformer, _resource: UriComponents, opts: IFileDeleteOptions): Promise<void> {
 		if (!opts.useTrash) {
 			return super.delete(uriTransformer, _resource, opts);
 		}

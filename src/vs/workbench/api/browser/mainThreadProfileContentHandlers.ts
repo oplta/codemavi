@@ -26,7 +26,7 @@ export class MainThreadProfileContentHandlers extends Disposable implements Main
 		this.proxy = context.getProxy(ExtHostContext.ExtHostProfileContentHandlers);
 	}
 
-	async $registerProfileContentHandler(id: string, name: string, description: string | undefined, extensionId: string): Promise<codemavi> {
+	async $registerProfileContentHandler(id: string, name: string, description: string | undefined, extensionId: string): Promise<void> {
 		this.registeredHandlers.set(id, this.userDataProfileImportExportService.registerProfileContentHandler(id, {
 			name,
 			description,
@@ -41,7 +41,7 @@ export class MainThreadProfileContentHandlers extends Disposable implements Main
 		}));
 	}
 
-	async $unregisterProfileContentHandler(id: string): Promise<codemavi> {
+	async $unregisterProfileContentHandler(id: string): Promise<void> {
 		this.registeredHandlers.deleteAndDispose(id);
 	}
 

@@ -5320,7 +5320,7 @@
 		}
 	},
 	{
-		"c": "codemavi",
+		"c": "mavi",
 		"t": "source.groovy meta.definition.class.groovy meta.class.body.groovy meta.definition.method.groovy meta.method.return-type.java storage.type.primitive.groovy",
 		"r": {
 			"dark_plus": "storage.type.primitive.groovy: #4EC9B0",

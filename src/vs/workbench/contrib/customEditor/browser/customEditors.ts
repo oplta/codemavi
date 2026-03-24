@@ -39,8 +39,8 @@ export class CustomEditorService extends Disposable implements ICustomEditorServ
 
 	private readonly _models: ICustomEditorModelManager;
 
-	private readonly _onDidChangeEditorTypes = this._register(new Emitter<codemavi>());
-	public readonly onDidChangeEditorTypes: Event<codemavi> = this._onDidChangeEditorTypes.event;
+	private readonly _onDidChangeEditorTypes = this._register(new Emitter<void>());
+	public readonly onDidChangeEditorTypes: Event<void> = this._onDidChangeEditorTypes.event;
 
 	private readonly _fileEditorFactory = Registry.as<IEditorFactoryRegistry>(EditorExtensions.EditorFactory).getFileEditorFactory();
 
@@ -103,7 +103,7 @@ export class CustomEditorService extends Disposable implements ICustomEditorServ
 		return [...this._contributedEditors];
 	}
 
-	private withActiveCustomEditor(f: (editor: CustomEditorInput) => codemavi | Promise<codemavi>): boolean | Promise<codemavi> {
+	private withActiveCustomEditor(f: (editor: CustomEditorInput) => void | Promise<void>): boolean | Promise<void> {
 		const activeEditor = this.editorService.activeEditor;
 		if (activeEditor instanceof CustomEditorInput) {
 			const result = f(activeEditor);
@@ -115,7 +115,7 @@ export class CustomEditorService extends Disposable implements ICustomEditorServ
 		return false;
 	}
 
-	private registerContributionPoints(): codemavi {
+	private registerContributionPoints(): void {
 		// Clear all previous contributions we know
 		this._editorResolverDisposables.clear();
 
@@ -220,7 +220,7 @@ export class CustomEditorService extends Disposable implements ICustomEditorServ
 		return activeEditorPane?.input instanceof CustomEditorInput;
 	}
 
-	private async handleMovedFileInOpenedFileEditors(oldResource: URI, newResource: URI): Promise<codemavi> {
+	private async handleMovedFileInOpenedFileEditors(oldResource: URI, newResource: URI): Promise<void> {
 		if (extname(oldResource).toLowerCase() === extname(newResource).toLowerCase()) {
 			return;
 		}

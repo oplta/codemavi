@@ -46,7 +46,7 @@ export interface IConfigurationResolverService {
 	 * Contributes a variable that can be resolved later. Consumers that use resolveAny, resolveWithInteraction,
 	 * and resolveWithInteractionReplace will have contributed variables resolved.
 	 */
-	contributeVariable(variable: string, resolution: () => Promise<string | undefined>): codemavi;
+	contributeVariable(variable: string, resolution: () => Promise<string | undefined>): void;
 }
 
 interface PromptStringInputInfo {

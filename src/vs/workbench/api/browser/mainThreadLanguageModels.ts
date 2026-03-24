@@ -49,13 +49,13 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		this._store.add(_chatProviderService.onDidChangeLanguageModels(this._proxy.$acceptChatModelMetadata, this._proxy));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._providerRegistrations.dispose();
 		this._ignoredFileProviderRegistrations.dispose();
 		this._store.dispose();
 	}
 
-	$registerLanguageModelProvider(handle: number, identifier: string, metadata: ILanguageModelChatMetadata): codemavi {
+	$registerLanguageModelProvider(handle: number, identifier: string, metadata: ILanguageModelChatMetadata): void {
 		const dipsosables = new DisposableStore();
 		dipsosables.add(this._chatProviderService.registerLanguageModelChat(identifier, {
 			metadata,
@@ -94,7 +94,7 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		this._providerRegistrations.set(handle, dipsosables);
 	}
 
-	async $reportResponsePart(requestId: number, chunk: IChatResponseFragment): Promise<codemavi> {
+	async $reportResponsePart(requestId: number, chunk: IChatResponseFragment): Promise<void> {
 		const data = this._pendingProgress.get(requestId);
 		this._logService.trace('[LM] report response PART', Boolean(data), requestId, chunk);
 		if (data) {
@@ -102,7 +102,7 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		}
 	}
 
-	async $reportResponseDone(requestId: number, err: SerializedError | undefined): Promise<codemavi> {
+	async $reportResponseDone(requestId: number, err: SerializedError | undefined): Promise<void> {
 		const data = this._pendingProgress.get(requestId);
 		this._logService.trace('[LM] report response DONE', Boolean(data), requestId, err);
 		if (data) {
@@ -118,7 +118,7 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		}
 	}
 
-	$unregisterProvider(handle: number): codemavi {
+	$unregisterProvider(handle: number): void {
 		this._providerRegistrations.deleteAndDispose(handle);
 	}
 
@@ -126,7 +126,7 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		return this._chatProviderService.selectLanguageModels(selector);
 	}
 
-	$whenLanguageModelChatRequestMade(identifier: string, extensionId: ExtensionIdentifier, participant?: string | undefined, tokenCount?: number | undefined): codemavi {
+	$whenLanguageModelChatRequestMade(identifier: string, extensionId: ExtensionIdentifier, participant?: string | undefined, tokenCount?: number | undefined): void {
 		this._languageModelStatsService.update(identifier, extensionId, participant, tokenCount);
 	}
 
@@ -210,13 +210,13 @@ export class MainThreadLanguageModels implements MainThreadLanguageModelsShape {
 		return this._ignoredFilesService.fileIsIgnored(URI.revive(uri), token);
 	}
 
-	$registerFileIgnoreProvider(handle: number): codemavi {
+	$registerFileIgnoreProvider(handle: number): void {
 		this._ignoredFileProviderRegistrations.set(handle, this._ignoredFilesService.registerIgnoredFileProvider({
 			isFileIgnored: async (uri: URI, token: CancellationToken) => this._proxy.$isFileIgnored(handle, uri, token)
 		}));
 	}
 
-	$unregisterFileIgnoreProvider(handle: number): codemavi {
+	$unregisterFileIgnoreProvider(handle: number): void {
 		this._ignoredFileProviderRegistrations.deleteAndDispose(handle);
 	}
 }
@@ -249,7 +249,7 @@ class LanguageModelAccessAuthProvider implements IAuthenticationProvider {
 		this._onDidChangeSessions.fire({ added: [this._session], changed: [], removed: [] });
 		return this._session;
 	}
-	removeSession(sessionId: string): Promise<codemavi> {
+	removeSession(sessionId: string): Promise<void> {
 		if (this._session) {
 			this._onDidChangeSessions.fire({ added: [], changed: [], removed: [this._session!] });
 			this._session = undefined;

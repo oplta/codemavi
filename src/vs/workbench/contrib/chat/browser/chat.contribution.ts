@@ -460,7 +460,7 @@ class ChatAgentSettingContribution extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private registerMaxRequestsSetting(): codemavi {
+	private registerMaxRequestsSetting(): void {
 		let lastNode: IConfigurationNode | undefined;
 		const registerMaxRequestsSetting = () => {
 			const treatmentId = this.entitlementService.entitlement === ChatEntitlement.Limited ?

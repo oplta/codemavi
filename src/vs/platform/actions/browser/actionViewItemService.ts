@@ -49,7 +49,7 @@ class ActionViewItemService implements IActionViewItemService {
 	private readonly _onDidChange = new Emitter<MenuId>();
 	readonly onDidChange: Event<MenuId> = this._onDidChange.event;
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 	}
 

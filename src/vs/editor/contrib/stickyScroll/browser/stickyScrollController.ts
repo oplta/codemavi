@@ -37,13 +37,13 @@ export interface IStickyScrollController {
 	get stickyScrollWidgetState(): StickyScrollWidgetState;
 	readonly stickyScrollWidgetHeight: number;
 	isFocused(): boolean;
-	focus(): codemavi;
-	focusNext(): codemavi;
-	focusPrevious(): codemavi;
-	goToFocused(): codemavi;
+	focus(): void;
+	focusNext(): void;
+	focusPrevious(): void;
+	goToFocused(): void;
 	findScrollWidgetState(): StickyScrollWidgetState;
-	dispose(): codemavi;
-	selectEditor(): codemavi;
+	dispose(): void;
+	selectEditor(): void;
 	onDidChangeStickyScrollHeight: Event<{ height: number }>;
 }
 
@@ -161,7 +161,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		return this._focused;
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		// If the mouse is down, do not focus on the sticky scroll
 		if (this._onMouseDown) {
 			this._onMouseDown = false;
@@ -179,43 +179,43 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		this._stickyScrollWidget.focusLineWithIndex(this._focusedStickyElementIndex);
 	}
 
-	public focusNext(): codemavi {
+	public focusNext(): void {
 		if (this._focusedStickyElementIndex < this._stickyScrollWidget.lineNumberCount - 1) {
 			this._focusNav(true);
 		}
 	}
 
-	public focusPrevious(): codemavi {
+	public focusPrevious(): void {
 		if (this._focusedStickyElementIndex > 0) {
 			this._focusNav(false);
 		}
 	}
 
-	public selectEditor(): codemavi {
+	public selectEditor(): void {
 		this._editor.focus();
 	}
 
 	// True is next, false is previous
-	private _focusNav(direction: boolean): codemavi {
+	private _focusNav(direction: boolean): void {
 		this._focusedStickyElementIndex = direction ? this._focusedStickyElementIndex + 1 : this._focusedStickyElementIndex - 1;
 		this._stickyScrollWidget.focusLineWithIndex(this._focusedStickyElementIndex);
 	}
 
-	public goToFocused(): codemavi {
+	public goToFocused(): void {
 		const lineNumbers = this._stickyScrollWidget.lineNumbers;
 		this._disposeFocusStickyScrollStore();
 		this._revealPosition({ lineNumber: lineNumbers[this._focusedStickyElementIndex], column: 1 });
 	}
 
-	private _revealPosition(position: IPosition): codemavi {
+	private _revealPosition(position: IPosition): void {
 		this._reveaInEditor(position, () => this._editor.revealPosition(position));
 	}
 
-	private _revealLineInCenterIfOutsideViewport(position: IPosition): codemavi {
+	private _revealLineInCenterIfOutsideViewport(position: IPosition): void {
 		this._reveaInEditor(position, () => this._editor.revealLineInCenterIfOutsideViewport(position.lineNumber, ScrollType.Smooth));
 	}
 
-	private _reveaInEditor(position: IPosition, revealFunction: () => codemavi): codemavi {
+	private _reveaInEditor(position: IPosition, revealFunction: () => void): void {
 		if (this._focused) {
 			this._disposeFocusStickyScrollStore();
 		}
@@ -225,7 +225,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		this._editor.focus();
 	}
 
-	private _registerMouseListeners(): codemavi {
+	private _registerMouseListeners(): void {
 
 		const sessionStore = this._register(new DisposableStore());
 		const gesture = this._register(new ClickLinkGesture(this._editor, {
@@ -405,7 +405,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		});
 	}
 
-	private _onMouseMoveOrKeyDown(mouseEvent: KeyboardEvent | MouseEvent): codemavi {
+	private _onMouseMoveOrKeyDown(mouseEvent: KeyboardEvent | MouseEvent): void {
 		if (!mouseEvent.shiftKey) {
 			return;
 		}
@@ -517,7 +517,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		this._renderStickyScroll(0);
 	}
 
-	private async _renderStickyScroll(rebuildFromLine?: number): Promise<codemavi> {
+	private async _renderStickyScroll(rebuildFromLine?: number): Promise<void> {
 		const model = this._editor.getModel();
 		if (!model || model.isTooLargeForTokenization()) {
 			this._resetState();
@@ -566,7 +566,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		return this._minRebuildFromLine;
 	}
 
-	private async _updateState(rebuildFromLine?: number): Promise<codemavi> {
+	private async _updateState(rebuildFromLine?: number): Promise<void> {
 		this._minRebuildFromLine = undefined;
 		this._foldingModel = await FoldingController.get(this._editor)?.getFoldingModel() ?? undefined;
 		this._widgetState = this.findScrollWidgetState();
@@ -575,7 +575,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		this._stickyScrollWidget.setState(this._widgetState, this._foldingModel, rebuildFromLine);
 	}
 
-	private async _resetState(): Promise<codemavi> {
+	private async _resetState(): Promise<void> {
 		this._minRebuildFromLine = undefined;
 		this._foldingModel = undefined;
 		this._widgetState = StickyScrollWidgetState.Empty;
@@ -623,7 +623,7 @@ export class StickyScrollController extends Disposable implements IEditorContrib
 		return new StickyScrollWidgetState(startLineNumbers, endLineNumbers, lastLineRelativePosition, this._showEndForLine);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._sessionStore.dispose();
 	}

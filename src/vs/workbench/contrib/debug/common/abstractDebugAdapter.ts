@@ -14,10 +14,10 @@ import { localize } from '../../../../nls.js';
  */
 export abstract class AbstractDebugAdapter implements IDebugAdapter {
 	private sequence: number;
-	private pendingRequests = new Map<number, (e: DebugProtocol.Response) => codemavi>();
-	private requestCallback: ((request: DebugProtocol.Request) => codemavi) | undefined;
-	private eventCallback: ((request: DebugProtocol.Event) => codemavi) | undefined;
-	private messageCallback: ((message: DebugProtocol.ProtocolMessage) => codemavi) | undefined;
+	private pendingRequests = new Map<number, (e: DebugProtocol.Response) => void>();
+	private requestCallback: ((request: DebugProtocol.Request) => void) | undefined;
+	private eventCallback: ((request: DebugProtocol.Event) => void) | undefined;
+	private messageCallback: ((message: DebugProtocol.ProtocolMessage) => void) | undefined;
 	private queue: DebugProtocol.ProtocolMessage[] = [];
 	protected readonly _onError = new Emitter<Error>();
 	protected readonly _onExit = new Emitter<number | null>();
@@ -26,11 +26,11 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		this.sequence = 1;
 	}
 
-	abstract startSession(): Promise<codemavi>;
+	abstract startSession(): Promise<void>;
 
-	abstract stopSession(): Promise<codemavi>;
+	abstract stopSession(): Promise<void>;
 
-	abstract sendMessage(message: DebugProtocol.ProtocolMessage): codemavi;
+	abstract sendMessage(message: DebugProtocol.ProtocolMessage): void;
 
 	get onError(): Event<Error> {
 		return this._onError.event;
@@ -40,28 +40,28 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		return this._onExit.event;
 	}
 
-	onMessage(callback: (message: DebugProtocol.ProtocolMessage) => codemavi): codemavi {
+	onMessage(callback: (message: DebugProtocol.ProtocolMessage) => void): void {
 		if (this.messageCallback) {
 			this._onError.fire(new Error(`attempt to set more than one 'Message' callback`));
 		}
 		this.messageCallback = callback;
 	}
 
-	onEvent(callback: (event: DebugProtocol.Event) => codemavi): codemavi {
+	onEvent(callback: (event: DebugProtocol.Event) => void): void {
 		if (this.eventCallback) {
 			this._onError.fire(new Error(`attempt to set more than one 'Event' callback`));
 		}
 		this.eventCallback = callback;
 	}
 
-	onRequest(callback: (request: DebugProtocol.Request) => codemavi): codemavi {
+	onRequest(callback: (request: DebugProtocol.Request) => void): void {
 		if (this.requestCallback) {
 			this._onError.fire(new Error(`attempt to set more than one 'Request' callback`));
 		}
 		this.requestCallback = callback;
 	}
 
-	sendResponse(response: DebugProtocol.Response): codemavi {
+	sendResponse(response: DebugProtocol.Response): void {
 		if (response.seq > 0) {
 			this._onError.fire(new Error(`attempt to send more than one response for command ${response.command}`));
 		} else {
@@ -69,7 +69,7 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		}
 	}
 
-	sendRequest(command: string, args: any, clb: (result: DebugProtocol.Response) => codemavi, timeout?: number): number {
+	sendRequest(command: string, args: any, clb: (result: DebugProtocol.Response) => void, timeout?: number): number {
 		const request: any = {
 			command: command
 		};
@@ -103,7 +103,7 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		return request.seq;
 	}
 
-	acceptMessage(message: DebugProtocol.ProtocolMessage): codemavi {
+	acceptMessage(message: DebugProtocol.ProtocolMessage): void {
 		if (this.messageCallback) {
 			this.messageCallback(message);
 		} else {
@@ -132,7 +132,7 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 	 *
 	 * Because the event is dispatched synchronously, it may fire before person
 	 * is assigned if they're processed in the same task. Inserting a task
-	 * boundary acodemavis this issue.
+	 * boundary avoids this issue.
 	 */
 	protected needsTaskBoundaryBetween(messageA: DebugProtocol.ProtocolMessage, messageB: DebugProtocol.ProtocolMessage) {
 		return messageA.type !== 'event' || messageB.type !== 'event';
@@ -173,18 +173,18 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		}
 	}
 
-	private internalSend(typ: 'request' | 'response' | 'event', message: DebugProtocol.ProtocolMessage): codemavi {
+	private internalSend(typ: 'request' | 'response' | 'event', message: DebugProtocol.ProtocolMessage): void {
 		message.type = typ;
 		message.seq = this.sequence++;
 		this.sendMessage(message);
 	}
 
-	protected async cancelPendingRequests(): Promise<codemavi> {
+	protected async cancelPendingRequests(): Promise<void> {
 		if (this.pendingRequests.size === 0) {
 			return Promise.resolve();
 		}
 
-		const pending = new Map<number, (e: DebugProtocol.Response) => codemavi>();
+		const pending = new Map<number, (e: DebugProtocol.Response) => void>();
 		this.pendingRequests.forEach((value, key) => pending.set(key, value));
 		await timeout(500);
 		pending.forEach((callback, request_seq) => {
@@ -205,7 +205,7 @@ export abstract class AbstractDebugAdapter implements IDebugAdapter {
 		return Array.from(this.pendingRequests.keys());
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.queue = [];
 	}
 }

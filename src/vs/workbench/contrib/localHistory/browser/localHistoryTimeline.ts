@@ -57,7 +57,7 @@ export class LocalHistoryTimeline extends Disposable implements IWorkbenchContri
 		this.registerListeners();
 	}
 
-	private registerComponents(): codemavi {
+	private registerComponents(): void {
 
 		// Timeline (if enabled)
 		this.updateTimelineRegistration();
@@ -66,7 +66,7 @@ export class LocalHistoryTimeline extends Disposable implements IWorkbenchContri
 		this._register(this.fileService.registerProvider(LocalHistoryFileSystemProvider.SCHEMA, new LocalHistoryFileSystemProvider(this.fileService)));
 	}
 
-	private updateTimelineRegistration(): codemavi {
+	private updateTimelineRegistration(): void {
 		if (this.configurationService.getValue<boolean>(LocalHistoryTimeline.LOCAL_HISTORY_ENABLED_SETTINGS_KEY)) {
 			this.timelineProviderDisposable.value = this.timelineService.registerTimelineProvider(this);
 		} else {
@@ -74,7 +74,7 @@ export class LocalHistoryTimeline extends Disposable implements IWorkbenchContri
 		}
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// History changes
 		this._register(this.workingCopyHistoryService.onDidAddEntry(e => this.onDidChangeWorkingCopyHistoryEntry(e.entry)));
@@ -92,7 +92,7 @@ export class LocalHistoryTimeline extends Disposable implements IWorkbenchContri
 		}));
 	}
 
-	private onDidChangeWorkingCopyHistoryEntry(entry: IWorkingCopyHistoryEntry | undefined): codemavi {
+	private onDidChangeWorkingCopyHistoryEntry(entry: IWorkingCopyHistoryEntry | undefined): void {
 
 		// Re-emit as timeline change event
 		this._onDidChange.fire({

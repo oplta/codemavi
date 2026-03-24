@@ -63,7 +63,7 @@ export class TerminalEditorInput extends EditorInput implements IEditorCloseHand
 		return EditorInputCapabilities.Readonly | EditorInputCapabilities.Singleton | EditorInputCapabilities.CanDropIntoEditor | EditorInputCapabilities.ForceDescription;
 	}
 
-	setTerminalInstance(instance: ITerminalInstance): codemavi {
+	setTerminalInstance(instance: ITerminalInstance): void {
 		if (this._terminalInstance) {
 			throw new Error('cannot set instance that has already been set');
 		}
@@ -117,7 +117,7 @@ export class TerminalEditorInput extends EditorInput implements IEditorCloseHand
 		return confirmed ? ConfirmResult.DONT_SAVE : ConfirmResult.CANCEL;
 	}
 
-	override async revert(): Promise<codemavi> {
+	override async revert(): Promise<void> {
 		// On revert just treat the terminal as permanently non-dirty
 		this._isReverted = true;
 	}
@@ -142,7 +142,7 @@ export class TerminalEditorInput extends EditorInput implements IEditorCloseHand
 		}
 	}
 
-	private _setupInstanceListeners(): codemavi {
+	private _setupInstanceListeners(): void {
 		const instance = this._terminalInstance;
 		if (!instance) {
 			return;
@@ -174,7 +174,7 @@ export class TerminalEditorInput extends EditorInput implements IEditorCloseHand
 			instance.statusList.onDidChangePrimaryStatus(() => this._onDidChangeLabel.fire())
 		];
 
-		// Don't dispose editor when instance is torn down on shutdown to acodemavi extra work and so
+		// Don't dispose editor when instance is torn down on shutdown to avoid extra work and so
 		// the editor/tabs don't disappear
 		this._lifecycleService.onWillShutdown((e: WillShutdownEvent) => {
 			this._isShuttingDown = true;

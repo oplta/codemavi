@@ -72,7 +72,7 @@ class TableListRenderer<TRow> implements IListRenderer<TRow, RowTemplateData> {
 		return result;
 	}
 
-	renderElement(element: TRow, index: number, templateData: RowTemplateData, height: number | undefined): codemavi {
+	renderElement(element: TRow, index: number, templateData: RowTemplateData, height: number | undefined): void {
 		for (let i = 0; i < this.columns.length; i++) {
 			const column = this.columns[i];
 			const cell = column.project(element);
@@ -81,7 +81,7 @@ class TableListRenderer<TRow> implements IListRenderer<TRow, RowTemplateData> {
 		}
 	}
 
-	disposeElement(element: TRow, index: number, templateData: RowTemplateData, height: number | undefined): codemavi {
+	disposeElement(element: TRow, index: number, templateData: RowTemplateData, height: number | undefined): void {
 		for (let i = 0; i < this.columns.length; i++) {
 			const renderer = this.renderers[i];
 
@@ -94,7 +94,7 @@ class TableListRenderer<TRow> implements IListRenderer<TRow, RowTemplateData> {
 		}
 	}
 
-	disposeTemplate(templateData: RowTemplateData): codemavi {
+	disposeTemplate(templateData: RowTemplateData): void {
 		for (let i = 0; i < this.columns.length; i++) {
 			const renderer = this.renderers[i];
 			renderer.disposeTemplate(templateData.cellTemplateData[i]);
@@ -104,7 +104,7 @@ class TableListRenderer<TRow> implements IListRenderer<TRow, RowTemplateData> {
 		this.renderedTemplates.delete(templateData);
 	}
 
-	layoutColumn(index: number, size: number): codemavi {
+	layoutColumn(index: number, size: number): void {
 		for (const { cellContainers } of this.renderedTemplates) {
 			cellContainers[index].style.width = `${size}px`;
 		}
@@ -139,7 +139,7 @@ class ColumnHeader<TRow, TCell> extends Disposable implements IView {
 		}
 	}
 
-	layout(size: number): codemavi {
+	layout(size: number): void {
 		this._onDidLayout.fire([this.index, size]);
 	}
 }
@@ -179,8 +179,8 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 	get onTap(): Event<ITableGestureEvent<TRow>> { return this.list.onTap; }
 	get onContextMenu(): Event<ITableContextMenuEvent<TRow>> { return this.list.onContextMenu; }
 
-	get onDidFocus(): Event<codemavi> { return this.list.onDidFocus; }
-	get onDidBlur(): Event<codemavi> { return this.list.onDidBlur; }
+	get onDidFocus(): Event<void> { return this.list.onDidFocus; }
+	get onDidBlur(): Event<void> { return this.list.onDidBlur; }
 
 	get scrollTop(): number { return this.list.scrollTop; }
 	set scrollTop(scrollTop: number) { this.list.scrollTop = scrollTop; }
@@ -188,7 +188,7 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 	set scrollLeft(scrollLeft: number) { this.list.scrollLeft = scrollLeft; }
 	get scrollHeight(): number { return this.list.scrollHeight; }
 	get renderHeight(): number { return this.list.renderHeight; }
-	get onDidDispose(): Event<codemavi> { return this.list.onDidDispose; }
+	get onDidDispose(): Event<void> { return this.list.onDidDispose; }
 
 	constructor(
 		user: string,
@@ -236,20 +236,20 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		return this.columns.map(c => c.label);
 	}
 
-	resizeColumn(index: number, percentage: number): codemavi {
+	resizeColumn(index: number, percentage: number): void {
 		const size = Math.round((percentage / 100.00) * this.cachedWidth);
 		this.splitview.resizeView(index, size);
 	}
 
-	updateOptions(options: ITableOptionsUpdate): codemavi {
+	updateOptions(options: ITableOptionsUpdate): void {
 		this.list.updateOptions(options);
 	}
 
-	splice(start: number, deleteCount: number, elements: readonly TRow[] = []): codemavi {
+	splice(start: number, deleteCount: number, elements: readonly TRow[] = []): void {
 		this.list.splice(start, deleteCount, elements);
 	}
 
-	rerender(): codemavi {
+	rerender(): void {
 		this.list.rerender();
 	}
 
@@ -269,7 +269,7 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		return this.domNode;
 	}
 
-	layout(height?: number, width?: number): codemavi {
+	layout(height?: number, width?: number): void {
 		height = height ?? getContentHeight(this.domNode);
 		width = width ?? getContentWidth(this.domNode);
 
@@ -282,11 +282,11 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		this.list.layout(listHeight, width);
 	}
 
-	triggerTypeNavigation(): codemavi {
+	triggerTypeNavigation(): void {
 		this.list.triggerTypeNavigation();
 	}
 
-	style(styles: ITableStyles): codemavi {
+	style(styles: ITableStyles): void {
 		const content: string[] = [];
 
 		content.push(`.monaco-table.${this.domId} > .monaco-split-view2 .monaco-sash.vertical::before {
@@ -298,11 +298,11 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		this.list.style(styles);
 	}
 
-	domFocus(): codemavi {
+	domFocus(): void {
 		this.list.domFocus();
 	}
 
-	setAnchor(index: number | undefined): codemavi {
+	setAnchor(index: number | undefined): void {
 		this.list.setAnchor(index);
 	}
 
@@ -314,7 +314,7 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		return this.list.getSelectedElements();
 	}
 
-	setSelection(indexes: number[], browserEvent?: UIEvent): codemavi {
+	setSelection(indexes: number[], browserEvent?: UIEvent): void {
 		this.list.setSelection(indexes, browserEvent);
 	}
 
@@ -322,31 +322,31 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		return this.list.getSelection();
 	}
 
-	setFocus(indexes: number[], browserEvent?: UIEvent): codemavi {
+	setFocus(indexes: number[], browserEvent?: UIEvent): void {
 		this.list.setFocus(indexes, browserEvent);
 	}
 
-	focusNext(n = 1, loop = false, browserEvent?: UIEvent): codemavi {
+	focusNext(n = 1, loop = false, browserEvent?: UIEvent): void {
 		this.list.focusNext(n, loop, browserEvent);
 	}
 
-	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent): codemavi {
+	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent): void {
 		this.list.focusPrevious(n, loop, browserEvent);
 	}
 
-	focusNextPage(browserEvent?: UIEvent): Promise<codemavi> {
+	focusNextPage(browserEvent?: UIEvent): Promise<void> {
 		return this.list.focusNextPage(browserEvent);
 	}
 
-	focusPreviousPage(browserEvent?: UIEvent): Promise<codemavi> {
+	focusPreviousPage(browserEvent?: UIEvent): Promise<void> {
 		return this.list.focusPreviousPage(browserEvent);
 	}
 
-	focusFirst(browserEvent?: UIEvent): codemavi {
+	focusFirst(browserEvent?: UIEvent): void {
 		this.list.focusFirst(browserEvent);
 	}
 
-	focusLast(browserEvent?: UIEvent): codemavi {
+	focusLast(browserEvent?: UIEvent): void {
 		this.list.focusLast(browserEvent);
 	}
 
@@ -362,11 +362,11 @@ export class Table<TRow> implements ISpliceable<TRow>, IDisposable {
 		return this.list.getRelativeTop(index);
 	}
 
-	reveal(index: number, relativeTop?: number): codemavi {
+	reveal(index: number, relativeTop?: number): void {
 		this.list.reveal(index, relativeTop);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }

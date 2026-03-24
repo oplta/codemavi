@@ -56,7 +56,7 @@ interface ITreeElement {
 	context: unknown;
 	id: string;
 	label: string;
-	onDidChange: Event<codemavi>;
+	onDidChange: Event<void>;
 	labelWithIcons?: readonly (HTMLSpanElement | string)[];
 	icon?: ThemeIcon;
 	description?: string;
@@ -68,7 +68,7 @@ interface ITreeElement {
 	context: unknown;
 	id: string;
 	label: string;
-	onDidChange: Event<codemavi>;
+	onDidChange: Event<void>;
 	labelWithIcons?: readonly (HTMLSpanElement | string)[];
 	icon?: ThemeIcon;
 	description?: string;
@@ -76,7 +76,7 @@ interface ITreeElement {
 }
 
 class TestResultElement implements ITreeElement {
-	public readonly changeEmitter = new Emitter<codemavi>();
+	public readonly changeEmitter = new Emitter<void>();
 	public readonly onDidChange = this.changeEmitter.event;
 	public readonly type = 'result';
 	public readonly context = this.value.id;
@@ -101,7 +101,7 @@ class CoverageElement implements ITreeElement {
 	public readonly type = 'coverage';
 	public readonly context: undefined;
 	public readonly id = `coverage-${this.results.id}/${this.task.id}`;
-	public readonly onDidChange: Event<codemavi>;
+	public readonly onDidChange: Event<void>;
 
 	public get label() {
 		return this.isOpen ? closeCoverageLabel : openCoverageLabel;
@@ -183,7 +183,7 @@ class TestCaseElement implements ITreeElement {
 }
 
 class TaskElement implements ITreeElement {
-	public readonly changeEmitter = new Emitter<codemavi>();
+	public readonly changeEmitter = new Emitter<void>();
 	public readonly onDidChange = this.changeEmitter.event;
 	public readonly type = 'task';
 	public readonly context: { resultId: string; taskId: string };
@@ -656,7 +656,7 @@ class TestRunElementRenderer implements ICompressibleTreeRenderer<ITreeElement, 
 	) { }
 
 	/** @inheritdoc */
-	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ITreeElement>, FuzzyScore>, _index: number, templateData: TemplateData): codemavi {
+	public renderCompressedElements(node: ITreeNode<ICompressedTreeNode<ITreeElement>, FuzzyScore>, _index: number, templateData: TemplateData): void {
 		const chain = node.element.elements;
 		const lastElement = chain[chain.length - 1];
 		if ((lastElement instanceof TaskElement || lastElement instanceof TestMessageElement) && chain.length >= 2) {
@@ -694,12 +694,12 @@ class TestRunElementRenderer implements ICompressibleTreeRenderer<ITreeElement, 
 	}
 
 	/** @inheritdoc */
-	public renderElement(element: ITreeNode<ITreeElement, FuzzyScore>, _index: number, templateData: TemplateData): codemavi {
+	public renderElement(element: ITreeNode<ITreeElement, FuzzyScore>, _index: number, templateData: TemplateData): void {
 		this.doRender(element.element, templateData);
 	}
 
 	/** @inheritdoc */
-	public disposeTemplate(templateData: TemplateData): codemavi {
+	public disposeTemplate(templateData: TemplateData): void {
 		templateData.templateDisposable.dispose();
 	}
 

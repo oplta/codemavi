@@ -504,7 +504,7 @@ export class Searcher {
 		this._prevMatchLength = 0;
 	}
 
-	public reset(lastIndex: number): codemavi {
+	public reset(lastIndex: number): void {
 		this._searchRegex.lastIndex = lastIndex;
 		this._prevMatchStartIndex = -1;
 		this._prevMatchLength = 0;

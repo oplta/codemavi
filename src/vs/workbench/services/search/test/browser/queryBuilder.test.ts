@@ -563,7 +563,7 @@ suite('QueryBuilder', () => {
 
 	suite('parseSearchPaths 1', () => {
 		test('simple includes', () => {
-			function testSimpleIncludes(includePattern: string, expectedPatterns: string[]): codemavi {
+			function testSimpleIncludes(includePattern: string, expectedPatterns: string[]): void {
 				const result = queryBuilder.parseSearchPaths(includePattern);
 				assert.deepStrictEqual(
 					{ ...result.pattern },
@@ -582,7 +582,7 @@ suite('QueryBuilder', () => {
 			].forEach(([includePattern, expectedPatterns]) => testSimpleIncludes(<string>includePattern, <string[]>expectedPatterns));
 		});
 
-		function testIncludes(includePattern: string, expectedResult: ISearchPathsInfo): codemavi {
+		function testIncludes(includePattern: string, expectedResult: ISearchPathsInfo): void {
 			let actual: ISearchPathsInfo;
 			try {
 				actual = queryBuilder.parseSearchPaths(includePattern);
@@ -596,7 +596,7 @@ suite('QueryBuilder', () => {
 				includePattern);
 		}
 
-		function testIncludesDataItem([includePattern, expectedResult]: [string, ISearchPathsInfo]): codemavi {
+		function testIncludesDataItem([includePattern, expectedResult]: [string, ISearchPathsInfo]): void {
 			testIncludes(includePattern, expectedResult);
 		}
 
@@ -937,14 +937,14 @@ suite('QueryBuilder', () => {
 
 	suite('parseSearchPaths 2', () => {
 
-		function testIncludes(includePattern: string, expectedResult: ISearchPathsInfo): codemavi {
+		function testIncludes(includePattern: string, expectedResult: ISearchPathsInfo): void {
 			assertEqualSearchPathResults(
 				queryBuilder.parseSearchPaths(includePattern),
 				expectedResult,
 				includePattern);
 		}
 
-		function testIncludesDataItem([includePattern, expectedResult]: [string, ISearchPathsInfo]): codemavi {
+		function testIncludesDataItem([includePattern, expectedResult]: [string, ISearchPathsInfo]): void {
 			testIncludes(includePattern, expectedResult);
 		}
 
@@ -1210,7 +1210,7 @@ function makeExcludePatternFromPatterns(...patterns: string[]): {
 	return pattern ? [{ pattern }] : undefined;
 }
 
-function assertEqualTextQueries(actual: ITextQuery, expected: ITextQuery): codemavi {
+function assertEqualTextQueries(actual: ITextQuery, expected: ITextQuery): void {
 	expected = {
 		...DEFAULT_TEXT_QUERY_PROPS,
 		...expected
@@ -1219,7 +1219,7 @@ function assertEqualTextQueries(actual: ITextQuery, expected: ITextQuery): codem
 	return assertEqualQueries(actual, expected);
 }
 
-export function assertEqualQueries(actual: ITextQuery | IFileQuery, expected: ITextQuery | IFileQuery): codemavi {
+export function assertEqualQueries(actual: ITextQuery | IFileQuery, expected: ITextQuery | IFileQuery): void {
 	expected = {
 		...DEFAULT_QUERY_PROPS,
 		...expected
@@ -1235,7 +1235,7 @@ export function assertEqualQueries(actual: ITextQuery | IFileQuery, expected: IT
 		};
 	};
 
-	// Acodemavi comparing URI objects, not a good idea
+	// Avoid comparing URI objects, not a good idea
 	if (expected.folderQueries) {
 		assert.deepStrictEqual(actual.folderQueries.map(folderQueryToCompareObject), expected.folderQueries.map(folderQueryToCompareObject));
 		actual.folderQueries = [];
@@ -1256,7 +1256,7 @@ export function assertEqualQueries(actual: ITextQuery | IFileQuery, expected: IT
 	assert.deepStrictEqual(actual, expected);
 }
 
-export function assertEqualSearchPathResults(actual: ISearchPathsInfo, expected: ISearchPathsInfo, message?: string): codemavi {
+export function assertEqualSearchPathResults(actual: ISearchPathsInfo, expected: ISearchPathsInfo, message?: string): void {
 	cleanUndefinedQueryValues(actual);
 	assert.deepStrictEqual({ ...actual.pattern }, { ...expected.pattern }, message);
 
@@ -1274,7 +1274,7 @@ export function assertEqualSearchPathResults(actual: ISearchPathsInfo, expected:
  * Recursively delete all undefined property values from the search query, to make it easier to
  * assert.deepStrictEqual with some expected object.
  */
-export function cleanUndefinedQueryValues(q: any): codemavi {
+export function cleanUndefinedQueryValues(q: any): void {
 	for (const key in q) {
 		if (q[key] === undefined) {
 			delete q[key];

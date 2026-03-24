@@ -20,7 +20,7 @@ export class InPlaceReplaceCommand implements ICommand {
 		this._text = text;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._editRange, this._text);
 	}
 

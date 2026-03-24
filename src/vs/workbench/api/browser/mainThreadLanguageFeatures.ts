@@ -81,7 +81,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}
 	}
 
-	$unregister(handle: number): codemavi {
+	$unregister(handle: number): void {
 		this._registrations.deleteAndDispose(handle);
 	}
 
@@ -160,7 +160,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- outline
 
-	$registerDocumentSymbolProvider(handle: number, selector: IDocumentFilterDto[], displayName: string): codemavi {
+	$registerDocumentSymbolProvider(handle: number, selector: IDocumentFilterDto[], displayName: string): void {
 		this._registrations.set(handle, this._languageFeaturesService.documentSymbolProvider.register(selector, {
 			displayName,
 			provideDocumentSymbols: (model: ITextModel, token: CancellationToken): Promise<languages.DocumentSymbol[] | undefined> => {
@@ -171,7 +171,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- code lens
 
-	$registerCodeLensSupport(handle: number, selector: IDocumentFilterDto[], eventHandle: number | undefined): codemavi {
+	$registerCodeLensSupport(handle: number, selector: IDocumentFilterDto[], eventHandle: number | undefined): void {
 
 		const provider: languages.CodeLensProvider = {
 			provideCodeLenses: async (model: ITextModel, token: CancellationToken): Promise<languages.CodeLensList | undefined> => {
@@ -205,7 +205,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.codeLensProvider.register(selector, provider));
 	}
 
-	$emitCodeLensEvent(eventHandle: number, event?: any): codemavi {
+	$emitCodeLensEvent(eventHandle: number, event?: any): void {
 		const obj = this._registrations.get(eventHandle);
 		if (obj instanceof Emitter) {
 			obj.fire(event);
@@ -214,7 +214,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- declaration
 
-	$registerDefinitionSupport(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerDefinitionSupport(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.definitionProvider.register(selector, {
 			provideDefinition: (model, position, token): Promise<languages.LocationLink[]> => {
 				return this._proxy.$provideDefinition(handle, model.uri, position, token).then(MainThreadLanguageFeatures._reviveLocationLinkDto);
@@ -222,7 +222,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerDeclarationSupport(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerDeclarationSupport(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.declarationProvider.register(selector, {
 			provideDeclaration: (model, position, token) => {
 				return this._proxy.$provideDeclaration(handle, model.uri, position, token).then(MainThreadLanguageFeatures._reviveLocationLinkDto);
@@ -230,7 +230,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerImplementationSupport(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerImplementationSupport(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.implementationProvider.register(selector, {
 			provideImplementation: (model, position, token): Promise<languages.LocationLink[]> => {
 				return this._proxy.$provideImplementation(handle, model.uri, position, token).then(MainThreadLanguageFeatures._reviveLocationLinkDto);
@@ -238,7 +238,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerTypeDefinitionSupport(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerTypeDefinitionSupport(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.typeDefinitionProvider.register(selector, {
 			provideTypeDefinition: (model, position, token): Promise<languages.LocationLink[]> => {
 				return this._proxy.$provideTypeDefinition(handle, model.uri, position, token).then(MainThreadLanguageFeatures._reviveLocationLinkDto);
@@ -248,7 +248,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- extra info
 
-	$registerHoverProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerHoverProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		/*
 		const hoverFinalizationRegistry = new FinalizationRegistry((hoverId: number) => {
 			this._proxy.$releaseHover(handle, hoverId);
@@ -271,7 +271,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- debug hover
 
-	$registerEvaluatableExpressionProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerEvaluatableExpressionProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.evaluatableExpressionProvider.register(selector, {
 			provideEvaluatableExpression: (model: ITextModel, position: EditorPosition, token: CancellationToken): Promise<languages.EvaluatableExpression | undefined> => {
 				return this._proxy.$provideEvaluatableExpression(handle, model.uri, position, token);
@@ -281,7 +281,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- inline values
 
-	$registerInlineValuesProvider(handle: number, selector: IDocumentFilterDto[], eventHandle: number | undefined): codemavi {
+	$registerInlineValuesProvider(handle: number, selector: IDocumentFilterDto[], eventHandle: number | undefined): void {
 		const provider: languages.InlineValuesProvider = {
 			provideInlineValues: (model: ITextModel, viewPort: EditorRange, context: languages.InlineValueContext, token: CancellationToken): Promise<languages.InlineValue[] | undefined> => {
 				return this._proxy.$provideInlineValues(handle, model.uri, viewPort, context, token);
@@ -289,7 +289,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		};
 
 		if (typeof eventHandle === 'number') {
-			const emitter = new Emitter<codemavi>();
+			const emitter = new Emitter<void>();
 			this._registrations.set(eventHandle, emitter);
 			provider.onDidChangeInlineValues = emitter.event;
 		}
@@ -297,7 +297,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.inlineValuesProvider.register(selector, provider));
 	}
 
-	$emitInlineValuesEvent(eventHandle: number, event?: any): codemavi {
+	$emitInlineValuesEvent(eventHandle: number, event?: any): void {
 		const obj = this._registrations.get(eventHandle);
 		if (obj instanceof Emitter) {
 			obj.fire(event);
@@ -306,7 +306,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- occurrences
 
-	$registerDocumentHighlightProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerDocumentHighlightProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.documentHighlightProvider.register(selector, {
 			provideDocumentHighlights: (model: ITextModel, position: EditorPosition, token: CancellationToken): Promise<languages.DocumentHighlight[] | undefined> => {
 				return this._proxy.$provideDocumentHighlights(handle, model.uri, position, token);
@@ -314,7 +314,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerMultiDocumentHighlightProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerMultiDocumentHighlightProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.multiDocumentHighlightProvider.register(selector, {
 			selector: selector,
 			provideMultiDocumentHighlights: (model: ITextModel, position: EditorPosition, otherModels: ITextModel[], token: CancellationToken): Promise<Map<URI, languages.DocumentHighlight[]> | undefined> => {
@@ -342,7 +342,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- linked editing
 
-	$registerLinkedEditingRangeProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerLinkedEditingRangeProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.linkedEditingRangeProvider.register(selector, {
 			provideLinkedEditingRanges: async (model: ITextModel, position: EditorPosition, token: CancellationToken): Promise<languages.LinkedEditingRanges | undefined> => {
 				const res = await this._proxy.$provideLinkedEditingRanges(handle, model.uri, position, token);
@@ -359,7 +359,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- references
 
-	$registerReferenceSupport(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerReferenceSupport(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.referenceProvider.register(selector, {
 			provideReferences: (model: ITextModel, position: EditorPosition, context: languages.ReferenceContext, token: CancellationToken): Promise<languages.Location[]> => {
 				return this._proxy.$provideReferences(handle, model.uri, position, context, token).then(MainThreadLanguageFeatures._reviveLocationDto);
@@ -369,7 +369,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- code actions
 
-	$registerCodeActionSupport(handle: number, selector: IDocumentFilterDto[], metadata: ICodeActionProviderMetadataDto, displayName: string, extensionId: string, supportsResolve: boolean): codemavi {
+	$registerCodeActionSupport(handle: number, selector: IDocumentFilterDto[], metadata: ICodeActionProviderMetadataDto, displayName: string, extensionId: string, supportsResolve: boolean): void {
 		const provider: languages.CodeActionProvider = {
 			provideCodeActions: async (model: ITextModel, rangeOrSelection: EditorRange | Selection, context: languages.CodeActionContext, token: CancellationToken): Promise<languages.CodeActionList | undefined> => {
 				const listDto = await this._proxy.$provideCodeActions(handle, model.uri, rangeOrSelection, context, token);
@@ -413,7 +413,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	private readonly _pasteEditProviders = new Map<number, MainThreadPasteEditProvider>();
 
-	$registerPasteEditProvider(handle: number, selector: IDocumentFilterDto[], metadata: IPasteEditProviderMetadataDto): codemavi {
+	$registerPasteEditProvider(handle: number, selector: IDocumentFilterDto[], metadata: IPasteEditProviderMetadataDto): void {
 		const provider = new MainThreadPasteEditProvider(handle, this._proxy, metadata, this._uriIdentService);
 		this._pasteEditProviders.set(handle, provider);
 		this._registrations.set(handle, combinedDisposable(
@@ -432,7 +432,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- formatting
 
-	$registerDocumentFormattingSupport(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string): codemavi {
+	$registerDocumentFormattingSupport(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string): void {
 		this._registrations.set(handle, this._languageFeaturesService.documentFormattingEditProvider.register(selector, {
 			extensionId,
 			displayName,
@@ -442,7 +442,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerRangeFormattingSupport(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string, supportsRanges: boolean): codemavi {
+	$registerRangeFormattingSupport(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string, supportsRanges: boolean): void {
 		this._registrations.set(handle, this._languageFeaturesService.documentRangeFormattingEditProvider.register(selector, {
 			extensionId,
 			displayName,
@@ -457,7 +457,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerOnTypeFormattingSupport(handle: number, selector: IDocumentFilterDto[], autoFormatTriggerCharacters: string[], extensionId: ExtensionIdentifier): codemavi {
+	$registerOnTypeFormattingSupport(handle: number, selector: IDocumentFilterDto[], autoFormatTriggerCharacters: string[], extensionId: ExtensionIdentifier): void {
 		this._registrations.set(handle, this._languageFeaturesService.onTypeFormattingEditProvider.register(selector, {
 			extensionId,
 			autoFormatTriggerCharacters,
@@ -469,7 +469,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- navigate type
 
-	$registerNavigateTypeSupport(handle: number, supportsResolve: boolean): codemavi {
+	$registerNavigateTypeSupport(handle: number, supportsResolve: boolean): void {
 		let lastResultId: number | undefined;
 
 		const provider: search.IWorkspaceSymbolProvider = {
@@ -493,7 +493,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- rename
 
-	$registerRenameSupport(handle: number, selector: IDocumentFilterDto[], supportResolveLocation: boolean): codemavi {
+	$registerRenameSupport(handle: number, selector: IDocumentFilterDto[], supportResolveLocation: boolean): void {
 		this._registrations.set(handle, this._languageFeaturesService.renameProvider.register(selector, {
 			provideRenameEdits: (model: ITextModel, position: EditorPosition, newName: string, token: CancellationToken) => {
 				return this._proxy.$provideRenameEdits(handle, model.uri, position, newName, token).then(data => reviveWorkspaceEditDto(data, this._uriIdentService));
@@ -504,7 +504,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		}));
 	}
 
-	$registerNewSymbolNamesProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerNewSymbolNamesProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.newSymbolNamesProvider.register(selector, {
 			supportsAutomaticNewSymbolNamesTriggerKind: this._proxy.$supportsAutomaticNewSymbolNamesTriggerKind(handle),
 			provideNewSymbolNames: (model: ITextModel, range: IRange, triggerKind: languages.NewSymbolNameTriggerKind, token: CancellationToken): Promise<languages.NewSymbolName[] | undefined> => {
@@ -515,24 +515,24 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- semantic tokens
 
-	$registerDocumentSemanticTokensProvider(handle: number, selector: IDocumentFilterDto[], legend: languages.SemanticTokensLegend, eventHandle: number | undefined): codemavi {
-		let event: Event<codemavi> | undefined = undefined;
+	$registerDocumentSemanticTokensProvider(handle: number, selector: IDocumentFilterDto[], legend: languages.SemanticTokensLegend, eventHandle: number | undefined): void {
+		let event: Event<void> | undefined = undefined;
 		if (typeof eventHandle === 'number') {
-			const emitter = new Emitter<codemavi>();
+			const emitter = new Emitter<void>();
 			this._registrations.set(eventHandle, emitter);
 			event = emitter.event;
 		}
 		this._registrations.set(handle, this._languageFeaturesService.documentSemanticTokensProvider.register(selector, new MainThreadDocumentSemanticTokensProvider(this._proxy, handle, legend, event)));
 	}
 
-	$emitDocumentSemanticTokensEvent(eventHandle: number): codemavi {
+	$emitDocumentSemanticTokensEvent(eventHandle: number): void {
 		const obj = this._registrations.get(eventHandle);
 		if (obj instanceof Emitter) {
 			obj.fire(undefined);
 		}
 	}
 
-	$registerDocumentRangeSemanticTokensProvider(handle: number, selector: IDocumentFilterDto[], legend: languages.SemanticTokensLegend): codemavi {
+	$registerDocumentRangeSemanticTokensProvider(handle: number, selector: IDocumentFilterDto[], legend: languages.SemanticTokensLegend): void {
 		this._registrations.set(handle, this._languageFeaturesService.documentRangeSemanticTokensProvider.register(selector, new MainThreadDocumentRangeSemanticTokensProvider(this._proxy, handle, legend)));
 	}
 
@@ -578,7 +578,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		};
 	}
 
-	$registerCompletionsProvider(handle: number, selector: IDocumentFilterDto[], triggerCharacters: string[], supportsResolveDetails: boolean, extensionId: ExtensionIdentifier): codemavi {
+	$registerCompletionsProvider(handle: number, selector: IDocumentFilterDto[], triggerCharacters: string[], supportsResolveDetails: boolean, extensionId: ExtensionIdentifier): void {
 		const provider: languages.CompletionItemProvider = {
 			triggerCharacters,
 			_debugDisplayName: `${extensionId.value}(${triggerCharacters.join('')})`,
@@ -614,7 +614,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.completionProvider.register(selector, provider));
 	}
 
-	$registerInlineCompletionsSupport(handle: number, selector: IDocumentFilterDto[], supportsHandleEvents: boolean, extensionId: string, yieldsToExtensionIds: string[], displayName: string | undefined, debounceDelayMs: number | undefined): codemavi {
+	$registerInlineCompletionsSupport(handle: number, selector: IDocumentFilterDto[], supportsHandleEvents: boolean, extensionId: string, yieldsToExtensionIds: string[], displayName: string | undefined, debounceDelayMs: number | undefined): void {
 		const provider: languages.InlineCompletionsProvider<IdentifiableInlineCompletions> = {
 			provideInlineCompletions: async (model: ITextModel, position: EditorPosition, context: languages.InlineCompletionContext, token: CancellationToken): Promise<IdentifiableInlineCompletions | undefined> => {
 				return this._proxy.$provideInlineCompletions(handle, model.uri, position, context, token);
@@ -622,20 +622,20 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 			provideInlineEditsForRange: async (model: ITextModel, range: EditorRange, context: languages.InlineCompletionContext, token: CancellationToken): Promise<IdentifiableInlineCompletions | undefined> => {
 				return this._proxy.$provideInlineEditsForRange(handle, model.uri, range, context, token);
 			},
-			handleItemDidShow: async (completions: IdentifiableInlineCompletions, item: IdentifiableInlineCompletion, updatedInsertText: string): Promise<codemavi> => {
+			handleItemDidShow: async (completions: IdentifiableInlineCompletions, item: IdentifiableInlineCompletion, updatedInsertText: string): Promise<void> => {
 				if (supportsHandleEvents) {
 					await this._proxy.$handleInlineCompletionDidShow(handle, completions.pid, item.idx, updatedInsertText);
 				}
 			},
-			handlePartialAccept: async (completions, item, acceptedCharacters, info: languages.PartialAcceptInfo): Promise<codemavi> => {
+			handlePartialAccept: async (completions, item, acceptedCharacters, info: languages.PartialAcceptInfo): Promise<void> => {
 				if (supportsHandleEvents) {
 					await this._proxy.$handleInlineCompletionPartialAccept(handle, completions.pid, item.idx, acceptedCharacters, info);
 				}
 			},
-			freeInlineCompletions: (completions: IdentifiableInlineCompletions): codemavi => {
+			freeInlineCompletions: (completions: IdentifiableInlineCompletions): void => {
 				this._proxy.$freeInlineCompletionsList(handle, completions.pid);
 			},
-			handleRejection: async (completions, item): Promise<codemavi> => {
+			handleRejection: async (completions, item): Promise<void> => {
 				if (supportsHandleEvents) {
 					await this._proxy.$handleInlineCompletionRejection(handle, completions.pid, item.idx);
 				}
@@ -651,13 +651,13 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.inlineCompletionsProvider.register(selector, provider));
 	}
 
-	$registerInlineEditProvider(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string): codemavi {
+	$registerInlineEditProvider(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, displayName: string): void {
 		const provider: languages.InlineEditProvider<IdentifiableInlineEdit> = {
 			displayName,
 			provideInlineEdit: async (model: ITextModel, context: languages.IInlineEditContext, token: CancellationToken): Promise<IdentifiableInlineEdit | undefined> => {
 				return this._proxy.$provideInlineEdit(handle, model.uri, context, token);
 			},
-			freeInlineEdit: (edit: IdentifiableInlineEdit): codemavi => {
+			freeInlineEdit: (edit: IdentifiableInlineEdit): void => {
 				this._proxy.$freeInlineEdit(handle, edit.pid);
 			}
 
@@ -667,7 +667,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- parameter hints
 
-	$registerSignatureHelpProvider(handle: number, selector: IDocumentFilterDto[], metadata: ISignatureHelpProviderMetadataDto): codemavi {
+	$registerSignatureHelpProvider(handle: number, selector: IDocumentFilterDto[], metadata: ISignatureHelpProviderMetadataDto): void {
 		this._registrations.set(handle, this._languageFeaturesService.signatureHelpProvider.register(selector, {
 
 			signatureHelpTriggerCharacters: metadata.triggerCharacters,
@@ -690,7 +690,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- inline hints
 
-	$registerInlayHintsProvider(handle: number, selector: IDocumentFilterDto[], supportsResolve: boolean, eventHandle: number | undefined, displayName: string | undefined): codemavi {
+	$registerInlayHintsProvider(handle: number, selector: IDocumentFilterDto[], supportsResolve: boolean, eventHandle: number | undefined, displayName: string | undefined): void {
 		const provider: languages.InlayHintsProvider = {
 			displayName,
 			provideInlayHints: async (model: ITextModel, range: EditorRange, token: CancellationToken): Promise<languages.InlayHintList | undefined> => {
@@ -730,7 +730,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 			};
 		}
 		if (typeof eventHandle === 'number') {
-			const emitter = new Emitter<codemavi>();
+			const emitter = new Emitter<void>();
 			this._registrations.set(eventHandle, emitter);
 			provider.onDidChangeInlayHints = emitter.event;
 		}
@@ -738,7 +738,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.inlayHintsProvider.register(selector, provider));
 	}
 
-	$emitInlayHintsEvent(eventHandle: number): codemavi {
+	$emitInlayHintsEvent(eventHandle: number): void {
 		const obj = this._registrations.get(eventHandle);
 		if (obj instanceof Emitter) {
 			obj.fire(undefined);
@@ -747,7 +747,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- links
 
-	$registerDocumentLinkProvider(handle: number, selector: IDocumentFilterDto[], supportsResolve: boolean): codemavi {
+	$registerDocumentLinkProvider(handle: number, selector: IDocumentFilterDto[], supportsResolve: boolean): void {
 		const provider: languages.LinkProvider = {
 			provideLinks: (model, token) => {
 				return this._proxy.$provideDocumentLinks(handle, model.uri, token).then(dto => {
@@ -781,7 +781,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- colors
 
-	$registerDocumentColorProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerDocumentColorProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		const proxy = this._proxy;
 		this._registrations.set(handle, this._languageFeaturesService.colorProvider.register(selector, {
 			provideDocumentColors: (model, token) => {
@@ -815,7 +815,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- folding
 
-	$registerFoldingRangeProvider(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, eventHandle: number | undefined): codemavi {
+	$registerFoldingRangeProvider(handle: number, selector: IDocumentFilterDto[], extensionId: ExtensionIdentifier, eventHandle: number | undefined): void {
 		const provider: languages.FoldingRangeProvider = {
 			id: extensionId.value,
 			provideFoldingRanges: (model, context, token) => {
@@ -832,7 +832,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		this._registrations.set(handle, this._languageFeaturesService.foldingRangeProvider.register(selector, provider));
 	}
 
-	$emitFoldingRangeEvent(eventHandle: number, event?: any): codemavi {
+	$emitFoldingRangeEvent(eventHandle: number, event?: any): void {
 		const obj = this._registrations.get(eventHandle);
 		if (obj instanceof Emitter) {
 			obj.fire(event);
@@ -841,7 +841,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// -- smart select
 
-	$registerSelectionRangeProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerSelectionRangeProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, this._languageFeaturesService.selectionRangeProvider.register(selector, {
 			provideSelectionRanges: (model, positions, token) => {
 				return this._proxy.$provideSelectionRanges(handle, model.uri, positions, token);
@@ -851,7 +851,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- call hierarchy
 
-	$registerCallHierarchyProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerCallHierarchyProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, callh.CallHierarchyProviderRegistry.register(selector, {
 
 			prepareCallHierarchy: async (document, position, token) => {
@@ -920,7 +920,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 		return onEnterRules.map(MainThreadLanguageFeatures._reviveOnEnterRule);
 	}
 
-	$setLanguageConfiguration(handle: number, languageId: string, _configuration: ILanguageConfigurationDto): codemavi {
+	$setLanguageConfiguration(handle: number, languageId: string, _configuration: ILanguageConfigurationDto): void {
 
 		const configuration: LanguageConfiguration = {
 			comments: _configuration.comments,
@@ -957,7 +957,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	// --- type hierarchy
 
-	$registerTypeHierarchyProvider(handle: number, selector: IDocumentFilterDto[]): codemavi {
+	$registerTypeHierarchyProvider(handle: number, selector: IDocumentFilterDto[]): void {
 		this._registrations.set(handle, typeh.TypeHierarchyProviderRegistry.register(selector, {
 
 			prepareTypeHierarchy: async (document, position, token) => {
@@ -997,7 +997,7 @@ export class MainThreadLanguageFeatures extends Disposable implements MainThread
 
 	private readonly _documentOnDropEditProviders = new Map<number, MainThreadDocumentOnDropEditProvider>();
 
-	$registerDocumentOnDropEditProvider(handle: number, selector: IDocumentFilterDto[], metadata: IDocumentDropEditProviderMetadata): codemavi {
+	$registerDocumentOnDropEditProvider(handle: number, selector: IDocumentFilterDto[], metadata: IDocumentDropEditProviderMetadata): void {
 		const provider = new MainThreadDocumentOnDropEditProvider(handle, this._proxy, metadata, this._uriIdentService);
 		this._documentOnDropEditProviders.set(handle, provider);
 		this._registrations.set(handle, combinedDisposable(
@@ -1184,11 +1184,11 @@ export class MainThreadDocumentSemanticTokensProvider implements languages.Docum
 		private readonly _proxy: ExtHostLanguageFeaturesShape,
 		private readonly _handle: number,
 		private readonly _legend: languages.SemanticTokensLegend,
-		public readonly onDidChange: Event<codemavi> | undefined,
+		public readonly onDidChange: Event<void> | undefined,
 	) {
 	}
 
-	public releaseDocumentSemanticTokens(resultId: string | undefined): codemavi {
+	public releaseDocumentSemanticTokens(resultId: string | undefined): void {
 		if (resultId) {
 			this._proxy.$releaseDocumentSemanticTokens(this._handle, parseInt(resultId, 10));
 		}

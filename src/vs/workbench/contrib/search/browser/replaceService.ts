@@ -87,7 +87,7 @@ class ReplacePreviewModel extends Disposable {
 		return replacePreviewModel;
 	}
 
-	private update(sourceModel: ITextModel, replacePreviewModel: ITextModel, fileMatch: ISearchTreeFileMatch, override: boolean = false): codemavi {
+	private update(sourceModel: ITextModel, replacePreviewModel: ITextModel, fileMatch: ISearchTreeFileMatch, override: boolean = false): void {
 		if (!sourceModel.isDisposed() && !replacePreviewModel.isDisposed()) {
 			this.replaceService.updateReplacePreview(fileMatch, override);
 		}
@@ -165,7 +165,7 @@ export class ReplaceService implements IReplaceService {
 		}
 	}
 
-	async updateReplacePreview(fileMatch: ISearchTreeFileMatch, override: boolean = false): Promise<codemavi> {
+	async updateReplacePreview(fileMatch: ISearchTreeFileMatch, override: boolean = false): Promise<void> {
 		const replacePreviewUri = toReplaceResource(fileMatch.resource);
 		const [sourceModelRef, replaceModelRef] = await Promise.all([this.textModelResolverService.createModelReference(fileMatch.resource), this.textModelResolverService.createModelReference(replacePreviewUri)]);
 		const sourceModel = sourceModelRef.object.textEditorModel;
@@ -186,7 +186,7 @@ export class ReplaceService implements IReplaceService {
 		}
 	}
 
-	private applyEditsToPreview(fileMatch: ISearchTreeFileMatch, replaceModel: ITextModel): codemavi {
+	private applyEditsToPreview(fileMatch: ISearchTreeFileMatch, replaceModel: ITextModel): void {
 		const resourceEdits = this.createEdits(fileMatch, replaceModel.uri);
 		const modelEdits: ISingleEditOperation[] = [];
 		for (const resourceEdit of resourceEdits) {

@@ -44,7 +44,7 @@ export class BroadcastDataChannel<T> extends Disposable {
 		}
 	}
 
-	private createBroadcastChannel(): codemavi {
+	private createBroadcastChannel(): void {
 		const listener = (event: StorageEvent) => {
 			if (event.key === this.channelName && event.newValue) {
 				this._onDidReceiveData.fire(JSON.parse(event.newValue));
@@ -58,7 +58,7 @@ export class BroadcastDataChannel<T> extends Disposable {
 	 * Sends the data to other BroadcastChannel objects set up for this channel. Data can be structured objects, e.g. nested objects and arrays.
 	 * @param data data to broadcast
 	 */
-	postData(data: T): codemavi {
+	postData(data: T): void {
 		if (this.broadcastChannel) {
 			this.broadcastChannel.postMessage(data);
 		} else {

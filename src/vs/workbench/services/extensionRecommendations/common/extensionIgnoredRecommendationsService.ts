@@ -17,7 +17,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 
 	declare readonly _serviceBrand: undefined;
 
-	private _onDidChangeIgnoredRecommendations = this._register(new Emitter<codemavi>());
+	private _onDidChangeIgnoredRecommendations = this._register(new Emitter<void>());
 	readonly onDidChangeIgnoredRecommendations = this._onDidChangeIgnoredRecommendations.event;
 
 	// Global Ignored Recommendations
@@ -42,7 +42,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 		this.initIgnoredWorkspaceRecommendations();
 	}
 
-	private async initIgnoredWorkspaceRecommendations(): Promise<codemavi> {
+	private async initIgnoredWorkspaceRecommendations(): Promise<void> {
 		this.ignoredWorkspaceRecommendations = await this.workspaceExtensionsConfigService.getUnwantedRecommendations();
 		this._onDidChangeIgnoredRecommendations.fire();
 		this._register(this.workspaceExtensionsConfigService.onDidChangeExtensionsConfigs(async () => {
@@ -51,7 +51,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 		}));
 	}
 
-	toggleGlobalIgnoredRecommendation(extensionId: string, shouldIgnore: boolean): codemavi {
+	toggleGlobalIgnoredRecommendation(extensionId: string, shouldIgnore: boolean): void {
 		extensionId = extensionId.toLowerCase();
 		const ignored = this._globalIgnoredRecommendations.indexOf(extensionId) !== -1;
 		if (ignored === shouldIgnore) {
@@ -69,7 +69,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 		return ignoredRecommendations.map(e => e.toLowerCase());
 	}
 
-	private onDidStorageChange(): codemavi {
+	private onDidStorageChange(): void {
 		if (this.ignoredRecommendationsValue !== this.getStoredIgnoredRecommendationsValue() /* This checks if current window changed the value or not */) {
 			this._ignoredRecommendationsValue = undefined;
 			this._globalIgnoredRecommendations = this.getCachedIgnoredRecommendations();
@@ -77,7 +77,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 		}
 	}
 
-	private storeCachedIgnoredRecommendations(ignoredRecommendations: string[]): codemavi {
+	private storeCachedIgnoredRecommendations(ignoredRecommendations: string[]): void {
 		this.ignoredRecommendationsValue = JSON.stringify(ignoredRecommendations);
 	}
 
@@ -101,7 +101,7 @@ export class ExtensionIgnoredRecommendationsService extends Disposable implement
 		return this.storageService.get(ignoredRecommendationsStorageKey, StorageScope.PROFILE, '[]');
 	}
 
-	private setStoredIgnoredRecommendationsValue(value: string): codemavi {
+	private setStoredIgnoredRecommendationsValue(value: string): void {
 		this.storageService.store(ignoredRecommendationsStorageKey, value, StorageScope.PROFILE, StorageTarget.USER);
 	}
 

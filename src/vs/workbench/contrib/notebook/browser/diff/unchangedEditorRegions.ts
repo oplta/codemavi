@@ -21,7 +21,7 @@ export function getUnchangedRegionSettings(configurationService: IConfigurationS
 	return createHideUnchangedRegionOptions(configurationService);
 }
 
-function createHideUnchangedRegionOptions(configurationService: IConfigurationService): UnchangedEditorRegionOptions & { dispose: () => codemavi } {
+function createHideUnchangedRegionOptions(configurationService: IConfigurationService): UnchangedEditorRegionOptions & { dispose: () => void } {
 	const disposables = new DisposableStore();
 	const unchangedRegionsEnablementEmitter = disposables.add(new Emitter<boolean>());
 

@@ -20,7 +20,7 @@ class WindowManager {
 	getZoomLevel(targetWindow: Window): number {
 		return this.mapWindowIdToZoomLevel.get(this.getWindowId(targetWindow)) ?? 0;
 	}
-	setZoomLevel(zoomLevel: number, targetWindow: Window): codemavi {
+	setZoomLevel(zoomLevel: number, targetWindow: Window): void {
 		if (this.getZoomLevel(targetWindow) === zoomLevel) {
 			return;
 		}
@@ -37,7 +37,7 @@ class WindowManager {
 	getZoomFactor(targetWindow: Window): number {
 		return this.mapWindowIdToZoomFactor.get(this.getWindowId(targetWindow)) ?? 1;
 	}
-	setZoomFactor(zoomFactor: number, targetWindow: Window): codemavi {
+	setZoomFactor(zoomFactor: number, targetWindow: Window): void {
 		this.mapWindowIdToZoomFactor.set(this.getWindowId(targetWindow), zoomFactor);
 	}
 
@@ -48,7 +48,7 @@ class WindowManager {
 
 	private readonly mapWindowIdToFullScreen = new Map<number, boolean>();
 
-	setFullscreen(fullscreen: boolean, targetWindow: Window): codemavi {
+	setFullscreen(fullscreen: boolean, targetWindow: Window): void {
 		if (this.isFullscreen(targetWindow) === fullscreen) {
 			return;
 		}
@@ -66,7 +66,7 @@ class WindowManager {
 	}
 }
 
-export function addMatchMediaChangeListener(targetWindow: Window, query: string | MediaQueryList, callback: (this: MediaQueryList, ev: MediaQueryListEvent) => unknown): codemavi {
+export function addMatchMediaChangeListener(targetWindow: Window, query: string | MediaQueryList, callback: (this: MediaQueryList, ev: MediaQueryListEvent) => unknown): void {
 	if (typeof query === 'string') {
 		query = targetWindow.matchMedia(query);
 	}
@@ -74,7 +74,7 @@ export function addMatchMediaChangeListener(targetWindow: Window, query: string 
 }
 
 /** A zoom index, e.g. 1, 2, 3 */
-export function setZoomLevel(zoomLevel: number, targetWindow: Window): codemavi {
+export function setZoomLevel(zoomLevel: number, targetWindow: Window): void {
 	WindowManager.INSTANCE.setZoomLevel(zoomLevel, targetWindow);
 }
 export function getZoomLevel(targetWindow: Window): number {
@@ -86,11 +86,11 @@ export const onDidChangeZoomLevel = WindowManager.INSTANCE.onDidChangeZoomLevel;
 export function getZoomFactor(targetWindow: Window): number {
 	return WindowManager.INSTANCE.getZoomFactor(targetWindow);
 }
-export function setZoomFactor(zoomFactor: number, targetWindow: Window): codemavi {
+export function setZoomFactor(zoomFactor: number, targetWindow: Window): void {
 	WindowManager.INSTANCE.setZoomFactor(zoomFactor, targetWindow);
 }
 
-export function setFullscreen(fullscreen: boolean, targetWindow: Window): codemavi {
+export function setFullscreen(fullscreen: boolean, targetWindow: Window): void {
 	WindowManager.INSTANCE.setFullscreen(fullscreen, targetWindow);
 }
 export function isFullscreen(targetWindow: Window): boolean {

@@ -16,7 +16,7 @@ import { ChatCollapsibleListContentPart, CollapsibleListPool } from './chatRefer
 
 export class ChatTaskContentPart extends Disposable implements IChatContentPart {
 	public readonly domNode: HTMLElement;
-	public readonly onDidChangeHeight: Event<codemavi>;
+	public readonly onDidChangeHeight: Event<void>;
 
 	constructor(
 		private readonly task: IChatTask,
@@ -48,7 +48,7 @@ export class ChatTaskContentPart extends Disposable implements IChatContentPart 
 			&& other.isSettled() === this.task.isSettled();
 	}
 
-	addDisposable(disposable: IDisposable): codemavi {
+	addDisposable(disposable: IDisposable): void {
 		this._register(disposable);
 	}
 }

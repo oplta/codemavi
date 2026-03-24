@@ -109,7 +109,7 @@ export class AnythingQuickAccessProvider extends PickerQuickAccessProvider<IAnyt
 			super();
 		}
 
-		set(picker: IQuickPick<IAnythingQuickPickItem, { useSeparators: true }>): codemavi {
+		set(picker: IQuickPick<IAnythingQuickPickItem, { useSeparators: true }>): void {
 
 			// Picker for this run
 			this.picker = picker;
@@ -942,11 +942,11 @@ export class AnythingQuickAccessProvider extends PickerQuickAccessProvider<IAnyt
 		});
 	}
 
-	addDecorations(editor: IEditor, range: IRange): codemavi {
+	addDecorations(editor: IEditor, range: IRange): void {
 		this.editorSymbolsQuickAccess.addDecorations(editor, range);
 	}
 
-	clearDecorations(editor: IEditor): codemavi {
+	clearDecorations(editor: IEditor): void {
 		this.editorSymbolsQuickAccess.clearDecorations(editor);
 	}
 
@@ -1040,7 +1040,7 @@ export class AnythingQuickAccessProvider extends PickerQuickAccessProvider<IAnyt
 		};
 	}
 
-	private async openAnything(resourceOrEditor: URI | EditorInput | IResourceEditorInput, options: { keyMods?: IKeyMods; preserveFocus?: boolean; range?: IRange; forceOpenSideBySide?: boolean; forcePinned?: boolean }): Promise<codemavi> {
+	private async openAnything(resourceOrEditor: URI | EditorInput | IResourceEditorInput, options: { keyMods?: IKeyMods; preserveFocus?: boolean; range?: IRange; forceOpenSideBySide?: boolean; forcePinned?: boolean }): Promise<void> {
 
 		// Craft some editor options based on quick access usage
 		const editorOptions: ITextEditorOptions = {

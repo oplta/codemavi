@@ -63,8 +63,8 @@ export class CellEditorOptions extends CellContentPart implements ITextModelUpda
 		return this._insertSpaces;
 	}
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = this._register(new Emitter<void>());
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 	private _value: IEditorOptions;
 
 	constructor(
@@ -86,7 +86,7 @@ export class CellEditorOptions extends CellContentPart implements ITextModelUpda
 		}
 	}
 
-	private _recomputeOptions(): codemavi {
+	private _recomputeOptions(): void {
 		this._value = this._computeEditorOptions();
 		this._onDidChange.fire();
 	}
@@ -173,7 +173,7 @@ export class CellEditorOptions extends CellContentPart implements ITextModelUpda
 		};
 	}
 
-	setLineNumbers(lineNumbers: 'on' | 'off' | 'inherit'): codemavi {
+	setLineNumbers(lineNumbers: 'on' | 'off' | 'inherit'): void {
 		this._lineNumbers = lineNumbers;
 		this._recomputeOptions();
 	}
@@ -215,7 +215,7 @@ registerAction2(class ToggleLineNumberAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		const renderLiNumbers = configurationService.getValue<'on' | 'off'>('notebook.lineNumbers') === 'on';
 
@@ -245,7 +245,7 @@ registerAction2(class ToggleActiveLineNumberAction extends NotebookMultiCellActi
 		});
 	}
 
-	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<codemavi> {
+	async runWithContext(accessor: ServicesAccessor, context: INotebookCommandContext | INotebookCellToolbarActionContext): Promise<void> {
 		if (context.ui) {
 			this.updateCell(accessor.get(IConfigurationService), context.cell);
 		} else {

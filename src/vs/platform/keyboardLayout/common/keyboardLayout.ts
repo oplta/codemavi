@@ -74,13 +74,13 @@ export type IKeyboardLayoutInfo = (IWindowsKeyboardLayoutInfo | ILinuxKeyboardLa
 export interface IKeyboardLayoutService {
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeKeyboardLayout: Event<codemavi>;
+	readonly onDidChangeKeyboardLayout: Event<void>;
 
 	getRawKeyboardMapping(): IKeyboardMapping | null;
 	getCurrentKeyboardLayout(): IKeyboardLayoutInfo | null;
 	getAllKeyboardLayouts(): IKeyboardLayoutInfo[];
 	getKeyboardMapper(): IKeyboardMapper;
-	validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): codemavi;
+	validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): void;
 }
 
 export function areKeyboardLayoutsEqual(a: IKeyboardLayoutInfo | null, b: IKeyboardLayoutInfo | null): boolean {

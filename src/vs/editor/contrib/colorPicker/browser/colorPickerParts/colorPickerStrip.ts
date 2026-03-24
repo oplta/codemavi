@@ -23,8 +23,8 @@ export abstract class Strip extends Disposable {
 	private readonly _onDidChange = new Emitter<number>();
 	readonly onDidChange: Event<number> = this._onDidChange.event;
 
-	private readonly _onColorFlushed = new Emitter<codemavi>();
-	readonly onColorFlushed: Event<codemavi> = this._onColorFlushed.event;
+	private readonly _onColorFlushed = new Emitter<void>();
+	readonly onColorFlushed: Event<void> = this._onColorFlushed.event;
 
 	constructor(container: HTMLElement, protected model: ColorPickerModel, type: ColorPickerWidgetType) {
 		super();
@@ -43,7 +43,7 @@ export abstract class Strip extends Disposable {
 		this.layout();
 	}
 
-	layout(): codemavi {
+	layout(): void {
 		this.height = this.domNode.offsetHeight - this.slider.offsetHeight;
 
 		const value = this.getValue(this.model.color);
@@ -55,7 +55,7 @@ export abstract class Strip extends Disposable {
 		this.updateSliderPosition(value);
 	}
 
-	private onPointerDown(e: PointerEvent): codemavi {
+	private onPointerDown(e: PointerEvent): void {
 		if (!e.target || !(e.target instanceof Element)) {
 			return;
 		}
@@ -77,14 +77,14 @@ export abstract class Strip extends Disposable {
 		}, true);
 	}
 
-	private onDidChangeTop(top: number): codemavi {
+	private onDidChangeTop(top: number): void {
 		const value = Math.max(0, Math.min(1, 1 - (top / this.height)));
 
 		this.updateSliderPosition(value);
 		this._onDidChange.fire(value);
 	}
 
-	private updateSliderPosition(value: number): codemavi {
+	private updateSliderPosition(value: number): void {
 		this.slider.style.top = `${(1 - value) * this.height}px`;
 	}
 
@@ -100,7 +100,7 @@ export class OpacityStrip extends Strip {
 		this.onDidChangeColor(this.model.color);
 	}
 
-	protected override onDidChangeColor(color: Color): codemavi {
+	protected override onDidChangeColor(color: Color): void {
 		super.onDidChangeColor(color);
 		const { r, g, b } = color.rgba;
 		const opaque = new Color(new RGBA(r, g, b, 1));

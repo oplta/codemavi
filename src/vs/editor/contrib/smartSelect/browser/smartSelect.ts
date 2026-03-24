@@ -68,11 +68,11 @@ export class SmartSelectController implements IEditorContribution {
 		@ILanguageFeaturesService private readonly _languageFeaturesService: ILanguageFeaturesService,
 	) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._selectionListener?.dispose();
 	}
 
-	async run(forward: boolean): Promise<codemavi> {
+	async run(forward: boolean): Promise<void> {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -122,14 +122,14 @@ export class SmartSelectController implements IEditorContribution {
 		this._state = this._state.map(state => state.mov(forward));
 		const newSelections = this._state.map(state => Selection.fromPositions(state.ranges[state.index].getStartPosition(), state.ranges[state.index].getEndPosition()));
 
-		// Code Mavi changed this to skip over added whitespace when using smartSelect
+		// Mavi changed this to skip over added whitespace when using smartSelect
 		// // Store the original selections for comparison
 		// const originalSelections = selections;
 
 		// // Keep skipping while we're only adding/removing whitespace
 		// let keepSkipping = true;
 		// let skipCount = 0;
-		// const MAX_SKIPS = 5; // Acodemavi infinite loops by setting a reasonable limit
+		// const MAX_SKIPS = 5; // Avoid infinite loops by setting a reasonable limit
 
 		// while (keepSkipping && skipCount < MAX_SKIPS) {
 		// 	keepSkipping = false; // Reset for each iteration
@@ -226,7 +226,7 @@ abstract class AbstractSmartSelect extends EditorAction {
 		this._forward = forward;
 	}
 
-	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<codemavi> {
+	async run(_accessor: ServicesAccessor, editor: ICodeEditor): Promise<void> {
 		const controller = SmartSelectController.get(editor);
 		if (controller) {
 			await controller.run(this._forward);

@@ -28,11 +28,11 @@ export interface IViewModelLines extends IDisposable {
 	setHiddenAreas(_ranges: readonly Range[]): boolean;
 
 	createLineBreaksComputer(): ILineBreaksComputer;
-	onModelFlushed(): codemavi;
+	onModelFlushed(): void;
 	onModelLinesDeleted(versionId: number | null, fromLineNumber: number, toLineNumber: number): viewEvents.ViewLinesDeletedEvent | null;
 	onModelLinesInserted(versionId: number | null, fromLineNumber: number, toLineNumber: number, lineBreaks: (ModelLineProjectionData | null)[]): viewEvents.ViewLinesInsertedEvent | null;
 	onModelLineChanged(versionId: number | null, lineNumber: number, lineBreakData: ModelLineProjectionData | null): [boolean, viewEvents.ViewLinesChangedEvent | null, viewEvents.ViewLinesInsertedEvent | null, viewEvents.ViewLinesDeletedEvent | null];
-	acceptVersionId(versionId: number): codemavi;
+	acceptVersionId(versionId: number): void;
 
 	getViewLineCount(): number;
 	getActiveIndentGuide(viewLineNumber: number, minLineNumber: number, maxLineNumber: number): IActiveIndentGuideInfo;
@@ -108,7 +108,7 @@ export class ViewModelLinesFromProjectedModel implements IViewModelLines {
 		this._constructLines(/*resetHiddenAreas*/true, null);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this.hiddenAreasDecorationIds = this.model.deltaDecorations(this.hiddenAreasDecorationIds, []);
 	}
 
@@ -116,7 +116,7 @@ export class ViewModelLinesFromProjectedModel implements IViewModelLines {
 		return new CoordinatesConverter(this);
 	}
 
-	private _constructLines(resetHiddenAreas: boolean, previousLineBreaks: ((ModelLineProjectionData | null)[]) | null): codemavi {
+	private _constructLines(resetHiddenAreas: boolean, previousLineBreaks: ((ModelLineProjectionData | null)[]) | null): void {
 		this.modelLineProjections = [];
 
 		if (resetHiddenAreas) {
@@ -312,7 +312,7 @@ export class ViewModelLinesFromProjectedModel implements IViewModelLines {
 		return lineBreaksComputerFactory.createLineBreaksComputer(this.fontInfo, this.tabSize, this.wrappingColumn, this.wrappingIndent, this.wordBreak);
 	}
 
-	public onModelFlushed(): codemavi {
+	public onModelFlushed(): void {
 		this._constructLines(/*resetHiddenAreas*/true, null);
 	}
 
@@ -417,7 +417,7 @@ export class ViewModelLinesFromProjectedModel implements IViewModelLines {
 		return [lineMappingChanged, viewLinesChangedEvent, viewLinesInsertedEvent, viewLinesDeletedEvent];
 	}
 
-	public acceptVersionId(versionId: number): codemavi {
+	public acceptVersionId(versionId: number): void {
 		this._validModelVersionId = versionId;
 		if (this.modelLineProjections.length === 1 && !this.modelLineProjections[0].isVisible()) {
 			// At least one line must be visible => reset hidden areas
@@ -991,7 +991,7 @@ export class ViewModelLinesFromProjectedModel implements IViewModelLines {
 
 		// wrapped lines have no indentation.
 		// We deliberately don't handle the case that indentation is wrapped
-		// to acodemavi two view lines reporting indentation for the very same model line.
+		// to avoid two view lines reporting indentation for the very same model line.
 		return 0;
 	}
 }
@@ -1116,7 +1116,7 @@ export class ViewModelLinesFromModelAsIs implements IViewModelLines {
 		this.model = model;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 	}
 
 	public createCoordinatesConverter(): ICoordinatesConverter {
@@ -1151,7 +1151,7 @@ export class ViewModelLinesFromModelAsIs implements IViewModelLines {
 		};
 	}
 
-	public onModelFlushed(): codemavi {
+	public onModelFlushed(): void {
 	}
 
 	public onModelLinesDeleted(_versionId: number | null, fromLineNumber: number, toLineNumber: number): viewEvents.ViewLinesDeletedEvent | null {
@@ -1166,7 +1166,7 @@ export class ViewModelLinesFromModelAsIs implements IViewModelLines {
 		return [false, new viewEvents.ViewLinesChangedEvent(lineNumber, 1), null, null];
 	}
 
-	public acceptVersionId(_versionId: number): codemavi {
+	public acceptVersionId(_versionId: number): void {
 	}
 
 	public getViewLineCount(): number {

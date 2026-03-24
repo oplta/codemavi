@@ -53,7 +53,7 @@ export class NotebookRunSingleCellInSection extends Action2 {
 		});
 	}
 
-	override async run(_accessor: ServicesAccessor, context: any): Promise<codemavi> {
+	override async run(_accessor: ServicesAccessor, context: any): Promise<void> {
 		if (!checkOutlineEntryContext(context)) {
 			return;
 		}
@@ -99,7 +99,7 @@ export class NotebookRunCellsInSection extends Action2 {
 		});
 	}
 
-	override async run(_accessor: ServicesAccessor, context: any): Promise<codemavi> {
+	override async run(_accessor: ServicesAccessor, context: any): Promise<void> {
 		let cell: ICellViewModel;
 		if (checkOutlineEntryContext(context)) {
 			cell = context.outlineEntry.cell;
@@ -158,7 +158,7 @@ export class NotebookFoldSection extends Action2 {
 		});
 	}
 
-	override async run(_accessor: ServicesAccessor, context: any): Promise<codemavi> {
+	override async run(_accessor: ServicesAccessor, context: any): Promise<void> {
 		if (!checkOutlineEntryContext(context)) {
 			return;
 		}
@@ -202,7 +202,7 @@ export class NotebookExpandSection extends Action2 {
 		});
 	}
 
-	override async run(_accessor: ServicesAccessor, context: any): Promise<codemavi> {
+	override async run(_accessor: ServicesAccessor, context: any): Promise<void> {
 		if (!checkOutlineEntryContext(context)) {
 			return;
 		}

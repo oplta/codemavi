@@ -68,7 +68,7 @@ export class ViewLine implements IVisibleLine {
 		}
 		return null;
 	}
-	public setDomNode(domNode: HTMLElement): codemavi {
+	public setDomNode(domNode: HTMLElement): void {
 		if (this._renderedViewLine) {
 			this._renderedViewLine.domNode = createFastDomNode(domNode);
 		} else {
@@ -76,16 +76,16 @@ export class ViewLine implements IVisibleLine {
 		}
 	}
 
-	public onContentChanged(): codemavi {
+	public onContentChanged(): void {
 		this._isMaybeInvalid = true;
 	}
-	public onTokensChanged(): codemavi {
+	public onTokensChanged(): void {
 		this._isMaybeInvalid = true;
 	}
-	public onDecorationsChanged(): codemavi {
+	public onDecorationsChanged(): void {
 		this._isMaybeInvalid = true;
 	}
-	public onOptionsChanged(newOptions: ViewLineOptions): codemavi {
+	public onOptionsChanged(newOptions: ViewLineOptions): void {
 		this._isMaybeInvalid = true;
 		this._options = newOptions;
 	}
@@ -207,7 +207,7 @@ export class ViewLine implements IVisibleLine {
 		return true;
 	}
 
-	public layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): codemavi {
+	public layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): void {
 		if (this._renderedViewLine && this._renderedViewLine.domNode) {
 			this._renderedViewLine.domNode.setTop(deltaTop);
 			this._renderedViewLine.domNode.setHeight(lineHeight);
@@ -247,7 +247,7 @@ export class ViewLine implements IVisibleLine {
 		return monospaceAssumptionsAreValid;
 	}
 
-	public onMonospaceAssumptionsInvalidated(): codemavi {
+	public onMonospaceAssumptionsInvalidated(): void {
 		if (this._renderedViewLine && this._renderedViewLine instanceof FastRenderedViewLine) {
 			this._renderedViewLine = this._renderedViewLine.toSlowRenderedLine();
 		}

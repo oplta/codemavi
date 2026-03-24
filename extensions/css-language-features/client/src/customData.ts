@@ -10,7 +10,7 @@ export function getCustomDataSource(toDispose: Disposable[]) {
 	let pathsInWorkspace = getCustomDataPathsInAllWorkspaces();
 	let pathsInExtensions = getCustomDataPathsFromAllExtensions();
 
-	const onChange = new EventEmitter<codemavi>();
+	const onChange = new EventEmitter<void>();
 
 	toDispose.push(extensions.onDidChange(_ => {
 		const newPathsInExtensions = getCustomDataPathsFromAllExtensions();

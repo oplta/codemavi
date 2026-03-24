@@ -32,7 +32,7 @@ export class GitCommitInputBoxDiagnosticsManager {
 		return this.diagnostics.get(uri) ?? [];
 	}
 
-	private async migrateInputValidationSettings(): Promise<codemavi> {
+	private async migrateInputValidationSettings(): Promise<void> {
 		try {
 			const config = workspace.getConfiguration('git');
 			const inputValidation = config.inspect<'always' | 'warn' | 'off' | boolean>('inputValidation');
@@ -53,13 +53,13 @@ export class GitCommitInputBoxDiagnosticsManager {
 		} catch { }
 	}
 
-	private onDidChangeConfiguration(): codemavi {
+	private onDidChangeConfiguration(): void {
 		for (const repository of this.model.repositories) {
 			this.onDidChangeTextDocument(repository.inputBox.document);
 		}
 	}
 
-	private onDidChangeTextDocument(document: TextDocument): codemavi {
+	private onDidChangeTextDocument(document: TextDocument): void {
 		const config = workspace.getConfiguration('git');
 		const inputValidation = config.get<boolean>('inputValidation', false);
 		if (!inputValidation) {

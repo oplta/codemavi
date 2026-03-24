@@ -40,7 +40,7 @@ import { ILogService } from '../../../../platform/log/common/log.js';
 export class DebugViewPaneContainer extends ViewPaneContainer {
 
 	private startDebugActionViewItem: StartDebugActionViewItem | undefined;
-	private progressResolve: (() => codemavi) | undefined;
+	private progressResolve: (() => void) | undefined;
 	private breakpointView: ViewPane | undefined;
 	private paneListeners = new Map<string, IDisposable>();
 
@@ -82,12 +82,12 @@ export class DebugViewPaneContainer extends ViewPaneContainer {
 		}));
 	}
 
-	override create(parent: HTMLElement): codemavi {
+	override create(parent: HTMLElement): void {
 		super.create(parent);
 		parent.classList.add('debug-viewlet');
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		if (this.startDebugActionViewItem) {
@@ -117,14 +117,14 @@ export class DebugViewPaneContainer extends ViewPaneContainer {
 		return createActionViewItem(this.instantiationService, action, options);
 	}
 
-	focusView(id: string): codemavi {
+	focusView(id: string): void {
 		const view = this.getView(id);
 		if (view) {
 			view.focus();
 		}
 	}
 
-	private onDebugServiceStateChange(state: State): codemavi {
+	private onDebugServiceStateChange(state: State): void {
 		if (this.progressResolve) {
 			this.progressResolve();
 			this.progressResolve = undefined;
@@ -132,12 +132,12 @@ export class DebugViewPaneContainer extends ViewPaneContainer {
 
 		if (state === State.Initializing) {
 			this.progressService.withProgress({ location: VIEWLET_ID, }, _progress => {
-				return new Promise<codemavi>(resolve => this.progressResolve = resolve);
+				return new Promise<void>(resolve => this.progressResolve = resolve);
 			});
 		}
 	}
 
-	override addPanes(panes: { pane: ViewPane; size: number; index?: number; disposable: IDisposable }[]): codemavi {
+	override addPanes(panes: { pane: ViewPane; size: number; index?: number; disposable: IDisposable }[]): void {
 		super.addPanes(panes);
 
 		for (const { pane: pane } of panes) {
@@ -151,7 +151,7 @@ export class DebugViewPaneContainer extends ViewPaneContainer {
 		}
 	}
 
-	override removePanes(panes: ViewPane[]): codemavi {
+	override removePanes(panes: ViewPane[]): void {
 		super.removePanes(panes);
 		for (const pane of panes) {
 			dispose(this.paneListeners.get(pane.id));
@@ -159,7 +159,7 @@ export class DebugViewPaneContainer extends ViewPaneContainer {
 		}
 	}
 
-	private updateBreakpointsMaxSize(): codemavi {
+	private updateBreakpointsMaxSize(): void {
 		if (this.breakpointView) {
 			// We need to update the breakpoints view since all other views are collapsed #25384
 			const allOtherCollapsed = this.panes.every(view => !view.isExpanded() || view === this.breakpointView);
@@ -226,7 +226,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, opts?: { addNew?: boolean }): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, opts?: { addNew?: boolean }): Promise<void> {
 		const debugService = accessor.get(IDebugService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const configurationManager = debugService.getConfigurationManager();
@@ -277,7 +277,7 @@ registerAction2(class extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewsService = accessor.get(IViewsService);
 		if (viewsService.isViewVisible(REPL_VIEW_ID)) {
 			viewsService.closeView(REPL_VIEW_ID);

@@ -45,13 +45,13 @@ export class ContributedExternalUriOpenersStore extends Disposable {
 		this._register(this._extensionService.onDidChangeExtensionsStatus(() => this.invalidateOpenersOnExtensionsChanged()));
 	}
 
-	public didRegisterOpener(id: string, extensionId: string): codemavi {
+	public didRegisterOpener(id: string, extensionId: string): void {
 		this.add(id, extensionId, {
 			isCurrentlyRegistered: true
 		});
 	}
 
-	private add(id: string, extensionId: string, options: { isCurrentlyRegistered: boolean }): codemavi {
+	private add(id: string, extensionId: string, options: { isCurrentlyRegistered: boolean }): void {
 		const existing = this._openers.get(id);
 		if (existing) {
 			existing.isCurrentlyRegistered = existing.isCurrentlyRegistered || options.isCurrentlyRegistered;
@@ -70,7 +70,7 @@ export class ContributedExternalUriOpenersStore extends Disposable {
 		this.updateSchema();
 	}
 
-	public delete(id: string): codemavi {
+	public delete(id: string): void {
 		this._openers.delete(id);
 
 		delete this._mementoObject[id];

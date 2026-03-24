@@ -123,7 +123,7 @@ export class AzureActiveDirectoryService {
 		_context.subscriptions.push(timer);
 	}
 
-	public async initialize(): Promise<codemavi> {
+	public async initialize(): Promise<void> {
 		this._logger.trace('Reading sessions from secret storage...');
 		const sessions = await this._tokenStorage.getAll(item => this.sessionMatchesEndpoint(item));
 		this._logger.trace(`Got ${sessions.length} stored sessions`);
@@ -385,7 +385,7 @@ export class AzureActiveDirectoryService {
 			codeToExchange = code;
 		} finally {
 			setTimeout(() => {
-				codemavi server.stop();
+				void server.stop();
 			}, 5000);
 		}
 
@@ -524,7 +524,7 @@ export class AzureActiveDirectoryService {
 		}, timeout));
 	}
 
-	private removeSessionTimeout(sessionId: string): codemavi {
+	private removeSessionTimeout(sessionId: string): void {
 		const timeout = this._refreshTimeouts.get(sessionId);
 		if (timeout) {
 			clearTimeout(timeout);
@@ -685,7 +685,7 @@ export class AzureActiveDirectoryService {
 
 	private async handleCodeResponse(scopeData: IScopeData): Promise<vscode.AuthenticationSession> {
 		let uriEventListener: vscode.Disposable;
-		return new Promise((resolve: (value: vscode.AuthenticationSession) => codemavi, reject) => {
+		return new Promise((resolve: (value: vscode.AuthenticationSession) => void, reject) => {
 			uriEventListener = this._uriHandler.event(async (uri: vscode.Uri) => {
 				try {
 					const query = new URLSearchParams(uri.query);
@@ -738,7 +738,7 @@ export class AzureActiveDirectoryService {
 		inputBox.title = vscode.l10n.t('Microsoft Authentication');
 		inputBox.prompt = vscode.l10n.t('Provide the authorization code to complete the sign in flow.');
 		inputBox.placeholder = vscode.l10n.t('Paste authorization code here...');
-		return new Promise((resolve: (value: vscode.AuthenticationSession) => codemavi, reject) => {
+		return new Promise((resolve: (value: vscode.AuthenticationSession) => void, reject) => {
 			inputBox.show();
 			inputBox.onDidAccept(async () => {
 				const code = inputBox.value;
@@ -842,7 +842,7 @@ export class AzureActiveDirectoryService {
 
 	//#region storage operations
 
-	private setToken(token: IToken, scopeData: IScopeData): codemavi {
+	private setToken(token: IToken, scopeData: IScopeData): void {
 		this._logger.trace(`[${scopeData.scopeStr}] '${token.sessionId}' Setting token`);
 
 		const existingTokenIndex = this._tokens.findIndex(t => t.sessionId === token.sessionId);
@@ -853,10 +853,10 @@ export class AzureActiveDirectoryService {
 		}
 
 		// Don't await because setting the token is only useful for any new windows that open.
-		codemavi this.storeToken(token, scopeData);
+		void this.storeToken(token, scopeData);
 	}
 
-	private async storeToken(token: IToken, scopeData: IScopeData): Promise<codemavi> {
+	private async storeToken(token: IToken, scopeData: IScopeData): Promise<void> {
 		if (!vscode.window.state.focused) {
 			if (this._pendingTokensToStore.has(token.sessionId)) {
 				this._logger.trace(`[${scopeData.scopeStr}] '${token.sessionId}' Window is not focused, replacing token to be stored`);
@@ -877,7 +877,7 @@ export class AzureActiveDirectoryService {
 		this._logger.trace(`[${scopeData.scopeStr}] '${token.sessionId}' Stored token`);
 	}
 
-	private async storePendingTokens(): Promise<codemavi> {
+	private async storePendingTokens(): Promise<void> {
 		if (this._pendingTokensToStore.size === 0) {
 			this._logger.trace('No pending tokens to store');
 			return;
@@ -901,7 +901,7 @@ export class AzureActiveDirectoryService {
 		this._logger.trace('Done storing pending tokens');
 	}
 
-	private async checkForUpdates(e: IDidChangeInOtherWindowEvent<IStoredSession>): Promise<codemavi> {
+	private async checkForUpdates(e: IDidChangeInOtherWindowEvent<IStoredSession>): Promise<void> {
 		for (const key of e.added) {
 			const session = await this._tokenStorage.get(key);
 			if (!session) {

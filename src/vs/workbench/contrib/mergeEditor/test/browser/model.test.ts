@@ -246,8 +246,8 @@ suite('merge editor model', () => {
 
 async function testMergeModel(
 	options: MergeModelOptions,
-	fn: (model: MergeModelInterface) => codemavi
-): Promise<codemavi> {
+	fn: (model: MergeModelInterface) => void
+): Promise<void> {
 	const disposables = new DisposableStore();
 	const modelInterface = disposables.add(
 		new MergeModelInterface(options, createModelServices(disposables))
@@ -331,7 +331,7 @@ class MergeModelInterface extends Disposable {
 			range: Range;
 			label: string;
 		}
-		function applyRanges(textModel: ITextModel, ranges: LabeledRange[]): codemavi {
+		function applyRanges(textModel: ITextModel, ranges: LabeledRange[]): void {
 			textModel.applyEdits(ranges.map(({ range, label }) => ({
 				range: range,
 				text: `⟦${textModel.getValueInRange(range)}⟧${label}`,
@@ -388,7 +388,7 @@ class MergeModelInterface extends Disposable {
 		return result;
 	}
 
-	toggleConflict(conflictIdx: number, inputNumber: 1 | 2): codemavi {
+	toggleConflict(conflictIdx: number, inputNumber: 1 | 2): void {
 		const baseRange = this.mergeModel.modifiedBaseRanges.get()[conflictIdx];
 		if (!baseRange) {
 			throw new Error();

@@ -84,35 +84,35 @@ export class HoverForeignElementAnchor {
 export type HoverAnchor = HoverRangeAnchor | HoverForeignElementAnchor;
 
 export interface IEditorHoverStatusBar {
-	addAction(actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => codemavi; commandId: string }): IEditorHoverAction;
+	addAction(actionOptions: { label: string; iconClass?: string; run: (target: HTMLElement) => void; commandId: string }): IEditorHoverAction;
 	append(element: HTMLElement): HTMLElement;
 }
 
 export interface IEditorHoverAction {
-	setEnabled(enabled: boolean): codemavi;
+	setEnabled(enabled: boolean): void;
 }
 
 export interface IEditorHoverColorPickerWidget {
-	layout(): codemavi;
+	layout(): void;
 }
 
 export interface IEditorHoverContext {
 	/**
 	 * The contents rendered inside the fragment have been changed, which means that the hover should relayout.
 	 */
-	onContentsChanged(): codemavi;
+	onContentsChanged(): void;
 	/**
 	 * Set the minimum dimensions of the resizable hover
 	 */
-	setMinimumDimensions(dimensions: Dimension): codemavi;
+	setMinimumDimensions(dimensions: Dimension): void;
 	/**
 	 * Hide the hover.
 	 */
-	hide(): codemavi;
+	hide(): void;
 	/**
 	 * Focus the hover.
 	 */
-	focus(): codemavi;
+	focus(): void;
 }
 
 export interface IEditorHoverRenderContext extends IEditorHoverContext {
@@ -167,9 +167,9 @@ export interface IEditorHoverParticipant<T extends IHoverPart = IHoverPart> {
 	createLoadingMessage?(anchor: HoverAnchor): T | null;
 	renderHoverParts(context: IEditorHoverRenderContext, hoverParts: T[]): IRenderedHoverParts<T>;
 	getAccessibleContent(hoverPart: T): string;
-	handleResize?(): codemavi;
-	handleHide?(): codemavi;
-	handleScroll?(e: ScrollEvent): codemavi;
+	handleResize?(): void;
+	handleHide?(): void;
+	handleScroll?(e: ScrollEvent): void;
 }
 
 export type IEditorHoverParticipantCtor = IConstructorSignature<IEditorHoverParticipant, [ICodeEditor]>;
@@ -178,7 +178,7 @@ export const HoverParticipantRegistry = (new class HoverParticipantRegistry {
 
 	_participants: IEditorHoverParticipantCtor[] = [];
 
-	public register<Services extends BrandedService[]>(ctor: { new(editor: ICodeEditor, ...services: Services): IEditorHoverParticipant }): codemavi {
+	public register<Services extends BrandedService[]>(ctor: { new(editor: ICodeEditor, ...services: Services): IEditorHoverParticipant }): void {
 		this._participants.push(ctor as IEditorHoverParticipantCtor);
 	}
 
@@ -199,5 +199,5 @@ export interface IHoverWidget {
 	/**
 	 * Hides the hover.
 	 */
-	hide(): codemavi;
+	hide(): void;
 }

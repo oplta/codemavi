@@ -132,8 +132,8 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 	}
 
 	private remoteMetadataInitialized: boolean = false;
-	private readonly _onDidChangeEntries = this._register(new Emitter<codemavi>());
-	private readonly onDidChangeEntries: Event<codemavi> = this._onDidChangeEntries.event;
+	private readonly _onDidChangeEntries = this._register(new Emitter<void>());
+	private readonly onDidChangeEntries: Event<void> = this._onDidChangeEntries.event;
 
 	constructor(
 		@IStatusbarService private readonly statusbarService: IStatusbarService,
@@ -181,7 +181,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		this.updateRemoteStatusIndicator();
 	}
 
-	private registerActions(): codemavi {
+	private registerActions(): void {
 		const category = nls.localize2('remote.category', "Remote");
 
 		// Show Remote Menu
@@ -246,7 +246,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Menu changes
 		const updateRemoteActions = () => {
@@ -318,7 +318,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		}));
 	}
 
-	private async initializeRemoteMetadata(): Promise<codemavi> {
+	private async initializeRemoteMetadata(): Promise<void> {
 
 		if (this.remoteMetadataInitialized) {
 			return;
@@ -351,7 +351,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		this.virtualWorkspaceLocation = getVirtualWorkspaceLocation(this.workspaceContextService.getWorkspace());
 	}
 
-	private async updateWhenInstalledExtensionsRegistered(): Promise<codemavi> {
+	private async updateWhenInstalledExtensionsRegistered(): Promise<void> {
 		await this.extensionService.whenInstalledExtensionsRegistered();
 
 		const remoteAuthority = this.remoteAuthority;
@@ -374,7 +374,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		this.initializeRemoteMetadata();
 	}
 
-	private setConnectionState(newState: 'disconnected' | 'connected' | 'reconnecting'): codemavi {
+	private setConnectionState(newState: 'disconnected' | 'connected' | 'reconnecting'): void {
 		if (this.connectionState !== newState) {
 			this.connectionState = newState;
 
@@ -395,7 +395,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private scheduleMeasureNetworkConnectionLatency(): codemavi {
+	private scheduleMeasureNetworkConnectionLatency(): void {
 		if (
 			!this.remoteAuthority ||						// only when having a remote connection
 			this.measureNetworkConnectionLatencyScheduler	// already scheduled
@@ -407,7 +407,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		this.measureNetworkConnectionLatencyScheduler.schedule(RemoteStatusIndicator.REMOTE_CONNECTION_LATENCY_SCHEDULER_FIRST_RUN_DELAY);
 	}
 
-	private async measureNetworkConnectionLatency(): Promise<codemavi> {
+	private async measureNetworkConnectionLatency(): Promise<void> {
 
 		// Measure latency if we are online
 		// but only when the window has focus to prevent constantly
@@ -427,7 +427,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		this.measureNetworkConnectionLatencyScheduler?.schedule();
 	}
 
-	private setNetworkState(newState: 'online' | 'offline' | 'high-latency'): codemavi {
+	private setNetworkState(newState: 'online' | 'offline' | 'high-latency'): void {
 		if (this.networkState !== newState) {
 			const oldState = this.networkState;
 			this.networkState = newState;
@@ -449,7 +449,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		}
 	}
 
-	private logNetworkConnectionHealthTelemetry(connectionToken: string, connectionHealth: 'good' | 'poor'): codemavi {
+	private logNetworkConnectionHealthTelemetry(connectionToken: string, connectionHealth: 'good' | 'poor'): void {
 		type RemoteConnectionHealthClassification = {
 			owner: 'alexdima';
 			comment: 'The remote connection health has changed (round trip time)';
@@ -487,7 +487,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		return this.remoteMenuActionsGroups;
 	}
 
-	private updateRemoteStatusIndicator(): codemavi {
+	private updateRemoteStatusIndicator(): void {
 
 		// Remote Indicator: show if provided via options, e.g. by the web embedder API
 		const remoteIndicator = this.environmentService.options?.windowIndicator;
@@ -557,7 +557,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		return;
 	}
 
-	private renderRemoteStatusIndicator(initialText: string, initialTooltip?: string | MarkdownString, command?: string, showProgress?: boolean): codemavi {
+	private renderRemoteStatusIndicator(initialText: string, initialTooltip?: string | MarkdownString, command?: string, showProgress?: boolean): void {
 		const { text, tooltip, ariaLabel } = this.withNetworkStatus(initialText, initialTooltip, showProgress);
 
 		const properties: IStatusbarEntry = {
@@ -632,7 +632,7 @@ export class RemoteStatusIndicator extends Disposable implements IWorkbenchContr
 		return markdownTooltip;
 	}
 
-	private async installExtension(extensionId: string, remoteLabel: string): Promise<codemavi> {
+	private async installExtension(extensionId: string, remoteLabel: string): Promise<void> {
 		try {
 			await this.extensionsWorkbenchService.install(extensionId, {
 				isMachineScoped: false,

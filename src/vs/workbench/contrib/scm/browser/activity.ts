@@ -127,7 +127,7 @@ export class SCMActiveRepositoryController extends Disposable implements IWorkbe
 		return observableFromEvent(this, repository.provider.onDidChangeResources, () => /** @description repositoryResourceCount */ getRepositoryResourceCount(repository.provider));
 	}
 
-	private _updateActivityCountBadge(count: number, store: DisposableStore): codemavi {
+	private _updateActivityCountBadge(count: number, store: DisposableStore): void {
 		if (count === 0) {
 			return;
 		}
@@ -136,7 +136,7 @@ export class SCMActiveRepositoryController extends Disposable implements IWorkbe
 		store.add(this.activityService.showViewActivity(VIEW_PANE_ID, { badge }));
 	}
 
-	private _updateStatusBar(repository: ISCMRepository | undefined, commands: readonly Command[], store: DisposableStore): codemavi {
+	private _updateStatusBar(repository: ISCMRepository | undefined, commands: readonly Command[], store: DisposableStore): void {
 		if (!repository) {
 			return;
 		}
@@ -191,7 +191,7 @@ export class SCMActiveRepositoryController extends Disposable implements IWorkbe
 		}
 	}
 
-	private _updateActiveRepositoryContextKeys(repositoryName: string | undefined, branchName: string | undefined): codemavi {
+	private _updateActiveRepositoryContextKeys(repositoryName: string | undefined, branchName: string | undefined): void {
 		this._activeRepositoryNameContextKey.set(repositoryName ?? '');
 		this._activeRepositoryBranchNameContextKey.set(branchName ?? '');
 	}
@@ -200,7 +200,7 @@ export class SCMActiveRepositoryController extends Disposable implements IWorkbe
 export class SCMActiveResourceContextKeyController extends Disposable implements IWorkbenchContribution {
 	private readonly _repositories: IObservable<Iterable<ISCMRepository>>;
 
-	private readonly _onDidRepositoryChange = new Emitter<codemavi>();
+	private readonly _onDidRepositoryChange = new Emitter<void>();
 
 	constructor(
 		@IEditorGroupsService editorGroupsService: IEditorGroupsService,
@@ -269,7 +269,7 @@ export class SCMActiveResourceContextKeyController extends Disposable implements
 		return activeResourceRepository?.id;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._onDidRepositoryChange.dispose();
 		super.dispose();
 	}

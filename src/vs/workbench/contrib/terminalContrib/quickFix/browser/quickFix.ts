@@ -21,7 +21,7 @@ export interface ITerminalQuickFixService {
 	readonly extensionQuickFixes: Promise<Array<ITerminalCommandSelector>>;
 	providers: Map<string, ITerminalQuickFixProvider>;
 	registerQuickFixProvider(id: string, provider: ITerminalQuickFixProvider): IDisposable;
-	registerCommandSelector(selector: ITerminalCommandSelector): codemavi;
+	registerCommandSelector(selector: ITerminalCommandSelector): void;
 }
 
 export interface ITerminalQuickFixProviderSelector {

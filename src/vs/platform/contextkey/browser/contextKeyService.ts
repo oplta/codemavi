@@ -62,7 +62,7 @@ export class Context implements IContext {
 		return ret;
 	}
 
-	public updateParent(parent: Context): codemavi {
+	public updateParent(parent: Context): void {
 		this._parent = parent;
 	}
 
@@ -140,7 +140,7 @@ class ConfigAwareContextValuesContainer extends Context {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._listener.dispose();
 	}
 
@@ -203,11 +203,11 @@ class ContextKey<T extends ContextKeyValue> implements IContextKey<T> {
 		this.reset();
 	}
 
-	public set(value: T): codemavi {
+	public set(value: T): void {
 		this._service.setContext(this._key, value);
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		if (typeof this._defaultValue === 'undefined') {
 			this._service.removeContext(this._key);
 		} else {
@@ -291,7 +291,7 @@ export abstract class AbstractContextKeyService extends Disposable implements IC
 	}
 
 
-	bufferChangeEvents(callback: Function): codemavi {
+	bufferChangeEvents(callback: Function): void {
 		this._onDidChangeContext.pause();
 		try {
 			callback();
@@ -333,7 +333,7 @@ export abstract class AbstractContextKeyService extends Disposable implements IC
 		return this.getContextValuesContainer(this._myContextId).getValue<T>(key);
 	}
 
-	public setContext(key: string, value: any): codemavi {
+	public setContext(key: string, value: any): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -346,7 +346,7 @@ export abstract class AbstractContextKeyService extends Disposable implements IC
 		}
 	}
 
-	public removeContext(key: string): codemavi {
+	public removeContext(key: string): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -364,10 +364,10 @@ export abstract class AbstractContextKeyService extends Disposable implements IC
 
 	public abstract getContextValuesContainer(contextId: number): Context;
 	public abstract createChildContext(parentContextId?: number): number;
-	public abstract disposeContext(contextId: number): codemavi;
-	public abstract updateParent(parentContextKeyService?: IContextKeyService): codemavi;
+	public abstract disposeContext(contextId: number): void;
+	public abstract updateParent(parentContextKeyService?: IContextKeyService): void;
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._isDisposed = true;
 	}
@@ -413,13 +413,13 @@ export class ContextKeyService extends AbstractContextKeyService implements ICon
 		return id;
 	}
 
-	public disposeContext(contextId: number): codemavi {
+	public disposeContext(contextId: number): void {
 		if (!this._isDisposed) {
 			this._contexts.delete(contextId);
 		}
 	}
 
-	public updateParent(_parentContextKeyService: IContextKeyService): codemavi {
+	public updateParent(_parentContextKeyService: IContextKeyService): void {
 		throw new Error('Cannot update parent of root ContextKeyService');
 	}
 }
@@ -448,7 +448,7 @@ class ScopedContextKeyService extends AbstractContextKeyService {
 		this._domNode.setAttribute(KEYBINDING_CONTEXT_ATTR, String(this._myContextId));
 	}
 
-	private _updateParentChangeListener(): codemavi {
+	private _updateParentChangeListener(): void {
 		// Forward parent events to this listener. Parent will change.
 		this._parentChangeListener.value = this._parent.onDidChangeContext(e => {
 			const thisContainer = this._parent.getContextValuesContainer(this._myContextId);
@@ -460,7 +460,7 @@ class ScopedContextKeyService extends AbstractContextKeyService {
 		});
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		if (this._isDisposed) {
 			return;
 		}
@@ -484,14 +484,14 @@ class ScopedContextKeyService extends AbstractContextKeyService {
 		return this._parent.createChildContext(parentContextId);
 	}
 
-	public disposeContext(contextId: number): codemavi {
+	public disposeContext(contextId: number): void {
 		if (this._isDisposed) {
 			return;
 		}
 		this._parent.disposeContext(contextId);
 	}
 
-	public updateParent(parentContextKeyService: AbstractContextKeyService): codemavi {
+	public updateParent(parentContextKeyService: AbstractContextKeyService): void {
 		if (this._parent === parentContextKeyService) {
 			return;
 		}
@@ -540,7 +540,7 @@ class OverlayContextKeyService implements IContextKeyService {
 		this.overlay = new Map(overlay);
 	}
 
-	bufferChangeEvents(callback: Function): codemavi {
+	bufferChangeEvents(callback: Function): void {
 		this.parent.bufferChangeEvents(callback);
 	}
 
@@ -575,7 +575,7 @@ class OverlayContextKeyService implements IContextKeyService {
 		return new OverlayContextKeyService(this, overlay);
 	}
 
-	updateParent(): codemavi {
+	updateParent(): void {
 		throw new Error('Not supported.');
 	}
 }

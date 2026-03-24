@@ -22,17 +22,17 @@ export interface IChatViewsWelcomeDescriptor {
 }
 
 export interface IChatViewsWelcomeContributionRegistry {
-	onDidChange: Event<codemavi>;
+	onDidChange: Event<void>;
 	get(): ReadonlyArray<IChatViewsWelcomeDescriptor>;
-	register(descriptor: IChatViewsWelcomeDescriptor): codemavi;
+	register(descriptor: IChatViewsWelcomeDescriptor): void;
 }
 
 class ChatViewsWelcomeContributionRegistry implements IChatViewsWelcomeContributionRegistry {
 	private readonly descriptors: IChatViewsWelcomeDescriptor[] = [];
-	private readonly _onDidChange = new Emitter<codemavi>();
-	public readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	public readonly onDidChange: Event<void> = this._onDidChange.event;
 
-	public register(descriptor: IChatViewsWelcomeDescriptor): codemavi {
+	public register(descriptor: IChatViewsWelcomeDescriptor): void {
 		this.descriptors.push(descriptor);
 		this._onDidChange.fire();
 	}

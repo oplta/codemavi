@@ -4,20 +4,20 @@
  *--------------------------------------------------------------------------------------*/
 
 // past values:
-// 'codemavi.settingsServiceStorage'
-// 'codemavi.settingsServiceStorageI' // 1.0.2
+// 'mavi.settingsServiceStorage'
+// 'mavi.settingsServiceStorageI' // 1.0.2
 
 // 1.0.3
-export const MAVI_SETTINGS_STORAGE_KEY = 'codemavi.settingsServiceStorageII'
+export const MAVI_SETTINGS_STORAGE_KEY = 'mavi.settingsServiceStorageII'
 
 
 // past values:
-// 'codemavi.chatThreadStorage'
-// 'codemavi.chatThreadStorageI' // 1.0.2
+// 'mavi.chatThreadStorage'
+// 'mavi.chatThreadStorageI' // 1.0.2
 
 // 1.0.3
-export const THREAD_STORAGE_KEY = 'codemavi.chatThreadStorageII'
+export const THREAD_STORAGE_KEY = 'mavi.chatThreadStorageII'
 
 
 
-export const OPT_OUT_KEY = 'codemavi.app.optOutAll'
+export const OPT_OUT_KEY = 'mavi.app.optOutAll'

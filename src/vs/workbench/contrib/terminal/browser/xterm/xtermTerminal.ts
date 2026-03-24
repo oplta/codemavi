@@ -135,15 +135,15 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 	readonly onDidRequestRunCommand = this._onDidRequestRunCommand.event;
 	private readonly _onDidRequestCopyAsHtml = this._register(new Emitter<{ command: ITerminalCommand }>());
 	readonly onDidRequestCopyAsHtml = this._onDidRequestCopyAsHtml.event;
-	private readonly _onDidRequestRefreshDimensions = this._register(new Emitter<codemavi>());
+	private readonly _onDidRequestRefreshDimensions = this._register(new Emitter<void>());
 	readonly onDidRequestRefreshDimensions = this._onDidRequestRefreshDimensions.event;
 	private readonly _onDidChangeFindResults = this._register(new Emitter<{ resultIndex: number; resultCount: number }>());
 	readonly onDidChangeFindResults = this._onDidChangeFindResults.event;
-	private readonly _onDidChangeSelection = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeSelection = this._register(new Emitter<void>());
 	readonly onDidChangeSelection = this._onDidChangeSelection.event;
 	private readonly _onDidChangeFocus = this._register(new Emitter<boolean>());
 	readonly onDidChangeFocus = this._onDidChangeFocus.event;
-	private readonly _onDidDispose = this._register(new Emitter<codemavi>());
+	private readonly _onDidDispose = this._register(new Emitter<void>());
 	readonly onDidDispose = this._onDidDispose.event;
 	private readonly _onDidChangeProgress = this._register(new Emitter<IProgressState>());
 	readonly onDidChangeProgress = this._onDidChangeProgress.event;
@@ -286,7 +286,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 				async readText(type: ClipboardSelectionType): Promise<string> {
 					return _clipboardService.readText(type === 'p' ? 'selection' : 'clipboard');
 				},
-				async writeText(type: ClipboardSelectionType, text: string): Promise<codemavi> {
+				async writeText(type: ClipboardSelectionType, text: string): Promise<void> {
 					return _clipboardService.writeText(text, type === 'p' ? 'selection' : 'clipboard');
 				}
 			});
@@ -413,15 +413,15 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		this._anyFocusedTerminalHasSelection.set(isFocused && this.raw.hasSelection());
 	}
 
-	write(data: string | Uint8Array, callback?: () => codemavi): codemavi {
+	write(data: string | Uint8Array, callback?: () => void): void {
 		this.raw.write(data, callback);
 	}
 
-	resize(columns: number, rows: number): codemavi {
+	resize(columns: number, rows: number): void {
 		this.raw.resize(columns, rows);
 	}
 
-	updateConfig(): codemavi {
+	updateConfig(): void {
 		const config = this._terminalConfigurationService.config;
 		this.raw.options.altClickMovesCursor = config.altClickMovesCursor;
 		this._setCursorBlink(config.cursorBlinking);
@@ -472,7 +472,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		this.raw.clearTextureAtlas();
 	}
 
-	clearDecorations(): codemavi {
+	clearDecorations(): void {
 		this._decorationAddon?.clearDecorations();
 	}
 
@@ -490,7 +490,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		return (await this._getSearchAddon()).findPrevious(term, searchOptions);
 	}
 
-	private _updateFindColors(searchOptions: ISearchOptions): codemavi {
+	private _updateFindColors(searchOptions: ISearchOptions): void {
 		const theme = this._themeService.getColorTheme();
 		// Theme color names align with monaco/vscode whereas xterm.js has some different naming.
 		// The mapping is as follows:
@@ -533,11 +533,11 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		return this._searchAddonPromise;
 	}
 
-	clearSearchDecorations(): codemavi {
+	clearSearchDecorations(): void {
 		this._searchAddon?.clearDecorations();
 	}
 
-	clearActiveSearchDecoration(): codemavi {
+	clearActiveSearchDecoration(): void {
 		this._searchAddon?.clearActiveDecoration();
 	}
 
@@ -577,35 +577,35 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		return { lineCount: index - currentIndex + 1, currentIndex, endSpaces };
 	}
 
-	scrollDownLine(): codemavi {
+	scrollDownLine(): void {
 		this.raw.scrollLines(1);
 	}
 
-	scrollDownPage(): codemavi {
+	scrollDownPage(): void {
 		this.raw.scrollPages(1);
 	}
 
-	scrollToBottom(): codemavi {
+	scrollToBottom(): void {
 		this.raw.scrollToBottom();
 	}
 
-	scrollUpLine(): codemavi {
+	scrollUpLine(): void {
 		this.raw.scrollLines(-1);
 	}
 
-	scrollUpPage(): codemavi {
+	scrollUpPage(): void {
 		this.raw.scrollPages(-1);
 	}
 
-	scrollToTop(): codemavi {
+	scrollToTop(): void {
 		this.raw.scrollToTop();
 	}
 
-	scrollToLine(line: number, position: ScrollPosition = ScrollPosition.Top): codemavi {
+	scrollToLine(line: number, position: ScrollPosition = ScrollPosition.Top): void {
 		this.markTracker.scrollToLine(line, position);
 	}
 
-	clearBuffer(): codemavi {
+	clearBuffer(): void {
 		this.raw.clear();
 		// xterm.js does not clear the first prompt, so trigger these to simulate
 		// the prompt being written
@@ -618,7 +618,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		return this.raw.hasSelection();
 	}
 
-	clearSelection(): codemavi {
+	clearSelection(): void {
 		this.raw.clearSelection();
 	}
 
@@ -640,16 +640,16 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		}
 	}
 
-	selectAll(): codemavi {
+	selectAll(): void {
 		this.raw.focus();
 		this.raw.selectAll();
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		this.raw.focus();
 	}
 
-	async copySelection(asHtml?: boolean, command?: ITerminalCommand): Promise<codemavi> {
+	async copySelection(asHtml?: boolean, command?: ITerminalCommand): Promise<void> {
 		if (this.hasSelection() || (asHtml && command)) {
 			if (asHtml) {
 				const textAsHtml = await this.getSelectionAsHtml(command);
@@ -672,34 +672,34 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		}
 	}
 
-	private _setCursorBlink(blink: boolean): codemavi {
+	private _setCursorBlink(blink: boolean): void {
 		if (this.raw.options.cursorBlink !== blink) {
 			this.raw.options.cursorBlink = blink;
 			this.raw.refresh(0, this.raw.rows - 1);
 		}
 	}
 
-	private _setCursorStyle(style: ITerminalConfiguration['cursorStyle']): codemavi {
+	private _setCursorStyle(style: ITerminalConfiguration['cursorStyle']): void {
 		const mapped = vscodeToXtermCursorStyle<'cursorStyle'>(style);
 		if (this.raw.options.cursorStyle !== mapped) {
 			this.raw.options.cursorStyle = mapped;
 		}
 	}
 
-	private _setCursorStyleInactive(style: ITerminalConfiguration['cursorStyleInactive']): codemavi {
+	private _setCursorStyleInactive(style: ITerminalConfiguration['cursorStyleInactive']): void {
 		const mapped = vscodeToXtermCursorStyle(style);
 		if (this.raw.options.cursorInactiveStyle !== mapped) {
 			this.raw.options.cursorInactiveStyle = mapped;
 		}
 	}
 
-	private _setCursorWidth(width: number): codemavi {
+	private _setCursorWidth(width: number): void {
 		if (this.raw.options.cursorWidth !== width) {
 			this.raw.options.cursorWidth = width;
 		}
 	}
 
-	private async _enableWebglRenderer(): Promise<codemavi> {
+	private async _enableWebglRenderer(): Promise<void> {
 		if (!this.raw.element || this._webglAddon) {
 			return;
 		}
@@ -731,7 +731,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 	}
 
 	@debounce(100)
-	private async _refreshLigaturesAddon(): Promise<codemavi> {
+	private async _refreshLigaturesAddon(): Promise<void> {
 		if (!this.raw.element) {
 			return;
 		}
@@ -770,8 +770,8 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 	}
 
 	@debounce(100)
-	private async _refreshImageAddon(): Promise<codemavi> {
-		// Only allow the image addon when webgl is being used to acodemavi possible GPU issues
+	private async _refreshImageAddon(): Promise<void> {
+		// Only allow the image addon when webgl is being used to avoid possible GPU issues
 		if (this._terminalConfigurationService.config.enableImages && this._webglAddon) {
 			if (!this._imageAddon) {
 				const AddonCtor = await this._xtermAddonLoader.importAddon('image');
@@ -788,7 +788,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		}
 	}
 
-	private _disposeOfWebglRenderer(): codemavi {
+	private _disposeOfWebglRenderer(): void {
 		try {
 			this._webglAddon?.dispose();
 		} catch {
@@ -848,7 +848,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		};
 	}
 
-	private _updateTheme(theme?: IColorTheme): codemavi {
+	private _updateTheme(theme?: IColorTheme): void {
 		this.raw.options.theme = this.getXtermTheme(theme);
 	}
 
@@ -857,7 +857,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		this._decorationAddon.refreshLayouts();
 	}
 
-	private async _updateUnicodeVersion(): Promise<codemavi> {
+	private async _updateUnicodeVersion(): Promise<void> {
 		if (!this._unicode11Addon && this._terminalConfigurationService.config.unicodeVersion === '11') {
 			const Addon = await this._xtermAddonLoader.importAddon('unicode11');
 			this._unicode11Addon = new Addon();
@@ -869,11 +869,11 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 	}
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	_writeText(data: string): codemavi {
+	_writeText(data: string): void {
 		this.raw.write(data);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._anyTerminalFocusContextKey.reset();
 		this._anyFocusedTerminalHasSelection.reset();
 		this._onDidDispose.fire();

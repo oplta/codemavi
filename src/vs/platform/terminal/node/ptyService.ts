@@ -96,7 +96,7 @@ export class PtyService extends Disposable implements IPtyService {
 
 	private _lastPtyId: number = 0;
 
-	private readonly _onHeartbeat = this._register(new Emitter<codemavi>());
+	private readonly _onHeartbeat = this._register(new Emitter<void>());
 	readonly onHeartbeat = this._traceEvent('_onHeartbeat', this._onHeartbeat.event);
 
 	private readonly _onProcessData = this._register(new Emitter<{ id: number; event: IProcessDataEvent | string }>());
@@ -151,7 +151,7 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async refreshIgnoreProcessNames(names: string[]): Promise<codemavi> {
+	async refreshIgnoreProcessNames(names: string[]): Promise<void> {
 		ignoreProcessNames.length = 0;
 		ignoreProcessNames.push(...names);
 	}
@@ -162,7 +162,7 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async acceptDetachInstanceReply(requestId: number, persistentProcessId: number): Promise<codemavi> {
+	async acceptDetachInstanceReply(requestId: number, persistentProcessId: number): Promise<void> {
 		let processDetails: IProcessDetails | undefined = undefined;
 		const pty = this._ptys.get(persistentProcessId);
 		if (pty) {
@@ -225,20 +225,20 @@ export class PtyService extends Disposable implements IPtyService {
 
 	@traceRpc
 	async reviveTerminalProcesses(workspaceId: string, state: ISerializedTerminalState[], dateTimeFormatLocale: string) {
-		const promises: Promise<codemavi>[] = [];
+		const promises: Promise<void>[] = [];
 		for (const terminal of state) {
 			promises.push(this._reviveTerminalProcess(workspaceId, terminal));
 		}
 		await Promise.all(promises);
 	}
 
-	private async _reviveTerminalProcess(workspaceId: string, terminal: ISerializedTerminalState): Promise<codemavi> {
+	private async _reviveTerminalProcess(workspaceId: string, terminal: ISerializedTerminalState): Promise<void> {
 		const restoreMessage = localize('terminal-history-restored', "History restored");
 
 		// Conpty v1.22+ uses passthrough and doesn't reprint the buffer often, this means that when
 		// the terminal is revived, the cursor would be at the bottom of the buffer then when
 		// PSReadLine requests `GetConsoleCursorInfo` it will be handled by conpty itself by design.
-		// This causes the cursor to move to the top into the replayed terminal contents. To acodemavi
+		// This causes the cursor to move to the top into the replayed terminal contents. To avoid
 		// this, the post restore message will print new lines to get a clear viewport and put the
 		// cursor back at to top left.
 		let postRestoreMessage = '';
@@ -281,7 +281,7 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async shutdownAll(): Promise<codemavi> {
+	async shutdownAll(): Promise<void> {
 		this.dispose();
 	}
 
@@ -335,7 +335,7 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async attachToProcess(id: number): Promise<codemavi> {
+	async attachToProcess(id: number): Promise<void> {
 		try {
 			await this._throwIfNoPty(id).attach();
 			this._logService.info(`Persistent process reconnection "${id}"`);
@@ -346,17 +346,17 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<codemavi> {
+	async updateTitle(id: number, title: string, titleSource: TitleEventSource): Promise<void> {
 		this._throwIfNoPty(id).setTitle(title, titleSource);
 	}
 
 	@traceRpc
-	async updateIcon(id: number, userInitiated: boolean, icon: URI | { light: URI; dark: URI } | { id: string; color?: { id: string } }, color?: string): Promise<codemavi> {
+	async updateIcon(id: number, userInitiated: boolean, icon: URI | { light: URI; dark: URI } | { id: string; color?: { id: string } }, color?: string): Promise<void> {
 		this._throwIfNoPty(id).setIcon(userInitiated, icon, color);
 	}
 
 	@traceRpc
-	async clearBuffer(id: number): Promise<codemavi> {
+	async clearBuffer(id: number): Promise<void> {
 		this._throwIfNoPty(id).clearBuffer();
 	}
 
@@ -366,17 +366,17 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async updateProperty<T extends ProcessPropertyType>(id: number, type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(id: number, type: T, value: IProcessPropertyMap[T]): Promise<void> {
 		return this._throwIfNoPty(id).updateProperty(type, value);
 	}
 
 	@traceRpc
-	async detachFromProcess(id: number, forcePersist?: boolean): Promise<codemavi> {
+	async detachFromProcess(id: number, forcePersist?: boolean): Promise<void> {
 		return this._throwIfNoPty(id).detach(forcePersist);
 	}
 
 	@traceRpc
-	async reduceConnectionGraceTime(): Promise<codemavi> {
+	async reduceConnectionGraceTime(): Promise<void> {
 		for (const pty of this._ptys.values()) {
 			pty.reduceGraceTime();
 		}
@@ -404,12 +404,12 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async shutdown(id: number, immediate: boolean): Promise<codemavi> {
+	async shutdown(id: number, immediate: boolean): Promise<void> {
 		// Don't throw if the pty is already shutdown
 		return this._ptys.get(id)?.shutdown(immediate);
 	}
 	@traceRpc
-	async input(id: number, data: string): Promise<codemavi> {
+	async input(id: number, data: string): Promise<void> {
 		const pty = this._throwIfNoPty(id);
 		if (pty) {
 			for (const contrib of this._contributions) {
@@ -419,11 +419,11 @@ export class PtyService extends Disposable implements IPtyService {
 		}
 	}
 	@traceRpc
-	async processBinary(id: number, data: string): Promise<codemavi> {
+	async processBinary(id: number, data: string): Promise<void> {
 		return this._throwIfNoPty(id).writeBinary(data);
 	}
 	@traceRpc
-	async resize(id: number, cols: number, rows: number): Promise<codemavi> {
+	async resize(id: number, cols: number, rows: number): Promise<void> {
 		const pty = this._throwIfNoPty(id);
 		if (pty) {
 			for (const contrib of this._contributions) {
@@ -441,11 +441,11 @@ export class PtyService extends Disposable implements IPtyService {
 		return this._throwIfNoPty(id).getCwd();
 	}
 	@traceRpc
-	async acknowledgeDataEvent(id: number, charCount: number): Promise<codemavi> {
+	async acknowledgeDataEvent(id: number, charCount: number): Promise<void> {
 		return this._throwIfNoPty(id).acknowledgeDataEvent(charCount);
 	}
 	@traceRpc
-	async setUnicodeVersion(id: number, version: '6' | '11'): Promise<codemavi> {
+	async setUnicodeVersion(id: number, version: '6' | '11'): Promise<void> {
 		return this._throwIfNoPty(id).setUnicodeVersion(version);
 	}
 	@traceRpc
@@ -453,7 +453,7 @@ export class PtyService extends Disposable implements IPtyService {
 		return [];
 	}
 	@traceRpc
-	async orphanQuestionReply(id: number): Promise<codemavi> {
+	async orphanQuestionReply(id: number): Promise<void> {
 		return this._throwIfNoPty(id).orphanQuestionReply();
 	}
 
@@ -531,7 +531,7 @@ export class PtyService extends Disposable implements IPtyService {
 	}
 
 	@traceRpc
-	async setTerminalLayoutInfo(args: ISetTerminalLayoutInfoArgs): Promise<codemavi> {
+	async setTerminalLayoutInfo(args: ISetTerminalLayoutInfoArgs): Promise<void> {
 		this._workspaceLayoutInfos.set(args.workspaceId, args);
 	}
 
@@ -647,7 +647,7 @@ class PersistentTerminalProcess extends Disposable {
 
 	private readonly _bufferer: TerminalDataBufferer;
 
-	private readonly _pendingCommands = new Map<number, { resolve: (data: any) => codemavi; reject: (err: any) => codemavi }>();
+	private readonly _pendingCommands = new Map<number, { resolve: (data: any) => void; reject: (err: any) => void }>();
 
 	private _isStarted: boolean = false;
 	private _interactionState: MutationLogger<InteractionState>;
@@ -662,12 +662,12 @@ class PersistentTerminalProcess extends Disposable {
 	readonly onProcessReplay = this._onProcessReplay.event;
 	private readonly _onProcessReady = this._register(new Emitter<IProcessReadyEvent>());
 	readonly onProcessReady = this._onProcessReady.event;
-	private readonly _onPersistentProcessReady = this._register(new Emitter<codemavi>());
+	private readonly _onPersistentProcessReady = this._register(new Emitter<void>());
 	/** Fired when the persistent process has a ready process and has finished its replay. */
 	readonly onPersistentProcessReady = this._onPersistentProcessReady.event;
 	private readonly _onProcessData = this._register(new Emitter<string>());
 	readonly onProcessData = this._onProcessData.event;
-	private readonly _onProcessOrphanQuestion = this._register(new Emitter<codemavi>());
+	private readonly _onProcessOrphanQuestion = this._register(new Emitter<void>());
 	readonly onProcessOrphanQuestion = this._onProcessOrphanQuestion.event;
 	private readonly _onDidChangeProperty = this._register(new Emitter<IProcessProperty<any>>());
 	readonly onDidChangeProperty = this._onDidChangeProperty.event;
@@ -692,7 +692,7 @@ class PersistentTerminalProcess extends Disposable {
 	get fixedDimensions(): IFixedTerminalDimensions | undefined { return this._fixedDimensions; }
 	get hasChildProcesses(): boolean { return this._terminalProcess.hasChildProcesses; }
 
-	setTitle(title: string, titleSource: TitleEventSource): codemavi {
+	setTitle(title: string, titleSource: TitleEventSource): void {
 		if (titleSource === TitleEventSource.Api) {
 			this._interactionState.setValue(InteractionState.Session, 'setTitle');
 			this._serializer.freeRawReviveBuffer();
@@ -701,7 +701,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._titleSource = titleSource;
 	}
 
-	setIcon(userInitiated: boolean, icon: TerminalIcon, color?: string): codemavi {
+	setIcon(userInitiated: boolean, icon: TerminalIcon, color?: string): void {
 		if (!this._icon || 'id' in icon && 'id' in this._icon && icon.id !== this._icon.id ||
 			!this.color || color !== this._color) {
 
@@ -714,7 +714,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._color = color;
 	}
 
-	private _setFixedDimensions(fixedDimensions?: IFixedTerminalDimensions): codemavi {
+	private _setFixedDimensions(fixedDimensions?: IFixedTerminalDimensions): void {
 		this._fixedDimensions = fixedDimensions;
 	}
 
@@ -782,7 +782,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._register(this.onProcessData(e => this._serializer.handleData(e)));
 	}
 
-	async attach(): Promise<codemavi> {
+	async attach(): Promise<void> {
 		if (!this._disconnectRunner1.isScheduled() && !this._disconnectRunner2.isScheduled()) {
 			this._logService.warn(`Persistent process "${this._persistentProcessId}": Process had no disconnect runners but was an orphan`);
 		}
@@ -790,7 +790,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._disconnectRunner2.cancel();
 	}
 
-	async detach(forcePersist?: boolean): Promise<codemavi> {
+	async detach(forcePersist?: boolean): Promise<void> {
 		// Keep the process around if it was indicated to persist and it has had some iteraction or
 		// was replayed
 		if (this.shouldPersistTerminal && (this._interactionState.value !== InteractionState.None || forcePersist)) {
@@ -808,7 +808,7 @@ class PersistentTerminalProcess extends Disposable {
 		return this._terminalProcess.refreshProperty(type);
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
 		if (type === ProcessPropertyType.FixedDimensions) {
 			return this._setFixedDimensions(value as IProcessPropertyMap[ProcessPropertyType.FixedDimensions]);
 		}
@@ -842,10 +842,10 @@ class PersistentTerminalProcess extends Disposable {
 		this.triggerReplay();
 		return undefined;
 	}
-	shutdown(immediate: boolean): codemavi {
+	shutdown(immediate: boolean): void {
 		return this._terminalProcess.shutdown(immediate);
 	}
-	input(data: string): codemavi {
+	input(data: string): void {
 		this._interactionState.setValue(InteractionState.Session, 'input');
 		this._serializer.freeRawReviveBuffer();
 		if (this._inReplay) {
@@ -853,10 +853,10 @@ class PersistentTerminalProcess extends Disposable {
 		}
 		return this._terminalProcess.input(data);
 	}
-	writeBinary(data: string): Promise<codemavi> {
+	writeBinary(data: string): Promise<void> {
 		return this._terminalProcess.processBinary(data);
 	}
-	resize(cols: number, rows: number): codemavi {
+	resize(cols: number, rows: number): void {
 		if (this._inReplay) {
 			return;
 		}
@@ -867,16 +867,16 @@ class PersistentTerminalProcess extends Disposable {
 
 		return this._terminalProcess.resize(cols, rows);
 	}
-	async clearBuffer(): Promise<codemavi> {
+	async clearBuffer(): Promise<void> {
 		this._serializer.clearBuffer();
 		this._terminalProcess.clearBuffer();
 	}
-	setUnicodeVersion(version: '6' | '11'): codemavi {
+	setUnicodeVersion(version: '6' | '11'): void {
 		this.unicodeVersion = version;
 		this._serializer.setUnicodeVersion?.(version);
 		// TODO: Pass in unicode version in ctor
 	}
-	acknowledgeDataEvent(charCount: number): codemavi {
+	acknowledgeDataEvent(charCount: number): void {
 		if (this._inReplay) {
 			return;
 		}
@@ -889,7 +889,7 @@ class PersistentTerminalProcess extends Disposable {
 		return this._terminalProcess.getCwd();
 	}
 
-	async triggerReplay(): Promise<codemavi> {
+	async triggerReplay(): Promise<void> {
 		if (this._interactionState.value === InteractionState.None) {
 			this._interactionState.setValue(InteractionState.ReplayOnly, 'triggerReplay');
 		}
@@ -904,7 +904,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._onPersistentProcessReady.fire();
 	}
 
-	sendCommandResult(reqId: number, isError: boolean, serializedPayload: any): codemavi {
+	sendCommandResult(reqId: number, isError: boolean, serializedPayload: any): void {
 		const data = this._pendingCommands.get(reqId);
 		if (!data) {
 			return;
@@ -912,7 +912,7 @@ class PersistentTerminalProcess extends Disposable {
 		this._pendingCommands.delete(reqId);
 	}
 
-	orphanQuestionReply(): codemavi {
+	orphanQuestionReply(): void {
 		this._orphanQuestionReplyTime = Date.now();
 		if (this._orphanQuestionBarrier) {
 			const barrier = this._orphanQuestionBarrier;
@@ -921,7 +921,7 @@ class PersistentTerminalProcess extends Disposable {
 		}
 	}
 
-	reduceGraceTime(): codemavi {
+	reduceGraceTime(): void {
 		if (this._disconnectRunner2.isScheduled()) {
 			// we are disconnected and already running the short reconnection timer
 			return;
@@ -972,7 +972,7 @@ class MutationLogger<T> {
 		this._log('initialized');
 	}
 
-	private _log(reason: string): codemavi {
+	private _log(reason: string): void {
 		this._logService.debug(`MutationLogger "${this._name}" set to "${this._value}", reason: ${reason}`);
 	}
 }
@@ -1006,20 +1006,20 @@ class XtermSerializer implements ITerminalSerializer {
 		this._xterm.loadAddon(this._shellIntegrationAddon);
 	}
 
-	freeRawReviveBuffer(): codemavi {
+	freeRawReviveBuffer(): void {
 		// Free the memory of the terminal if it will need to be re-serialized
 		this._rawReviveBuffer = undefined;
 	}
 
-	handleData(data: string): codemavi {
+	handleData(data: string): void {
 		this._xterm.write(data);
 	}
 
-	handleResize(cols: number, rows: number): codemavi {
+	handleResize(cols: number, rows: number): void {
 		this._xterm.resize(cols, rows);
 	}
 
-	clearBuffer(): codemavi {
+	clearBuffer(): void {
 		this._xterm.clear();
 	}
 
@@ -1051,7 +1051,7 @@ class XtermSerializer implements ITerminalSerializer {
 		};
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
 		if (this._xterm.unicode.activeVersion === version) {
 			return;
 		}
@@ -1104,10 +1104,10 @@ function printTime(ms: number): string {
 }
 
 interface ITerminalSerializer {
-	handleData(data: string): codemavi;
-	freeRawReviveBuffer(): codemavi;
-	handleResize(cols: number, rows: number): codemavi;
-	clearBuffer(): codemavi;
+	handleData(data: string): void;
+	freeRawReviveBuffer(): void;
+	handleResize(cols: number, rows: number): void;
+	clearBuffer(): void;
 	generateReplayEvent(normalBufferOnly?: boolean, restoreToLastReviveBuffer?: boolean): Promise<IPtyHostProcessReplayEvent>;
-	setUnicodeVersion?(version: '6' | '11'): codemavi;
+	setUnicodeVersion?(version: '6' | '11'): void;
 }

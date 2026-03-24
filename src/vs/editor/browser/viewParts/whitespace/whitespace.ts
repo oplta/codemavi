@@ -38,7 +38,7 @@ export class WhitespaceOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -84,7 +84,7 @@ export class WhitespaceOverlay extends DynamicViewOverlay {
 	}
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		if (this._options.renderWhitespace === 'none') {
 			this._renderResult = null;
 			return;

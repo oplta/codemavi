@@ -34,7 +34,7 @@ export class ChatMarkdownAnchorService extends Disposable implements IChatMarkdo
 		return this._lastFocusedWidget;
 	}
 
-	private setLastFocusedList(widget: InlineAnchorWidget | undefined): codemavi {
+	private setLastFocusedList(widget: InlineAnchorWidget | undefined): void {
 		this._lastFocusedWidget = widget;
 	}
 

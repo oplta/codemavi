@@ -4,6 +4,6 @@
  *--------------------------------------------------------------------------------------*/
 
 import { mountFnGenerator } from '../util/mountFnGenerator.js'
-import { Code MaviTooltip } from './Code MaviTooltip.js'
+import { MaviTooltip } from './MaviTooltip.js'
 
-export const mountCode MaviTooltip = mountFnGenerator(Code MaviTooltip)
+export const mountMaviTooltip = mountFnGenerator(MaviTooltip)

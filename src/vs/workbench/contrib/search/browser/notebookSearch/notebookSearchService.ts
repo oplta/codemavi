@@ -48,7 +48,7 @@ export class NotebookSearchService implements INotebookSearchService {
 		this.queryBuilder = instantiationService.createInstance(QueryBuilder);
 	}
 
-	notebookSearch(query: ITextQuery, token: CancellationToken | undefined, searchInstanceID: string, onProgress?: (result: ISearchProgressItem) => codemavi): {
+	notebookSearch(query: ITextQuery, token: CancellationToken | undefined, searchInstanceID: string, onProgress?: (result: ISearchProgressItem) => void): {
 		openFilesToScan: ResourceSet;
 		completeData: Promise<ISearchComplete>;
 		allScannedFiles: Promise<ResourceSet>;

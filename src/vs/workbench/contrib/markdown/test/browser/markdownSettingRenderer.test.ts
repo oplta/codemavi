@@ -42,7 +42,7 @@ const configuration: IConfigurationNode = {
 };
 
 class MarkdownConfigurationService extends TestConfigurationService {
-	override async updateValue(key: string, value: any): Promise<codemavi> {
+	override async updateValue(key: string, value: any): Promise<void> {
 		const [section, setting] = key.split('.');
 		return this.setUserConfiguration(section, { [setting]: value });
 	}

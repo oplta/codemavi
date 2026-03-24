@@ -34,12 +34,12 @@ export class MainThreadDocumentContentProviders implements MainThreadDocumentCon
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostDocumentContentProviders);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._resourceContentProvider.dispose();
 		dispose(this._pendingUpdate.values());
 	}
 
-	$registerTextContentProvider(handle: number, scheme: string): codemavi {
+	$registerTextContentProvider(handle: number, scheme: string): void {
 		const registration = this._textModelResolverService.registerTextModelContentProvider(scheme, {
 			provideTextContent: (uri: URI): Promise<ITextModel | null> => {
 				return this._proxy.$provideTextDocumentContent(handle, uri).then(value => {
@@ -55,11 +55,11 @@ export class MainThreadDocumentContentProviders implements MainThreadDocumentCon
 		this._resourceContentProvider.set(handle, registration);
 	}
 
-	$unregisterTextContentProvider(handle: number): codemavi {
+	$unregisterTextContentProvider(handle: number): void {
 		this._resourceContentProvider.deleteAndDispose(handle);
 	}
 
-	async $onVirtualDocumentChange(uri: UriComponents, value: string): Promise<codemavi> {
+	async $onVirtualDocumentChange(uri: UriComponents, value: string): Promise<void> {
 		const model = this._modelService.getModel(URI.revive(uri));
 		if (!model) {
 			return;

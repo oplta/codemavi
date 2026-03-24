@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------*/
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { WarningBox } from '../codemavi-settings-tsx/WarningBox.js';
+import { WarningBox } from '../mavi-settings-tsx/WarningBox.js';
 
 interface Props {
 	children: ReactNode;
 	fallback?: ReactNode;
-	onDismiss?: () => codemavi;
+	onDismiss?: () => void;
 }
 
 interface State {
@@ -35,7 +35,7 @@ class ErrorBoundary extends Component<Props, State> {
 		};
 	}
 
-	componentDidCatch(error: Error, errorInfo: ErrorInfo): codemavi {
+	componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
 		this.setState({
 			error,
 			errorInfo

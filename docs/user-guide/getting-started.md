@@ -24,7 +24,7 @@ Code Mavi is an open-source, agent-first IDE that brings powerful AI-assisted de
 ### Method 1: Download Pre-built Binary (Recommended)
 
 1. **Visit the Releases Page:**
-   - Go to [GitHub Releases](https://github.com/codemavi/codemavi/releases)
+   - Go to [GitHub Releases](https://github.com/mavi/mavi/releases)
    - Download the appropriate version for your OS:
      - `CodeMavi-darwin-x64.zip` for macOS
      - `CodeMavi-win32-x64.zip` for Windows
@@ -67,8 +67,8 @@ If you want the latest features or need to customize Code Mavi:
 
 ```bash
 # Clone the repository
-git clone https://github.com/codemavi/codemavi.git
-cd codemavi
+git clone https://github.com/mavi/mavi.git
+cd mavi
 
 # Install dependencies
 npm install
@@ -146,11 +146,11 @@ Project rules help agents understand your coding standards:
 
 ```bash
 # In your project root
-mkdir .codemavi
-echo "# Project Rules" > .codemavi/rules.md
+mkdir .mavi
+echo "# Project Rules" > .mavi/rules.md
 ```
 
-Edit `.codemavi/rules.md`:
+Edit `.mavi/rules.md`:
 ```markdown
 # Project Rules for Code Mavi Agents
 
@@ -197,13 +197,13 @@ Create global rules that apply to all your projects:
 
 ```bash
 # Create config directory
-mkdir -p ~/.codemavi
+mkdir -p ~/.mavi
 
 # Create global rules
-echo "# Global Development Rules" > ~/.codemavi/global-rules.md
+echo "# Global Development Rules" > ~/.mavi/global-rules.md
 ```
 
-Edit `~/.codemavi/global-rules.md`:
+Edit `~/.mavi/global-rules.md`:
 ```markdown
 # Global Development Rules
 
@@ -339,7 +339,7 @@ Safe experimentation with automatic rollback points:
 Extend agent capabilities with custom tools:
 
 ```typescript
-// In .codemavi/tools/my-tool.ts
+// In .mavi/tools/my-tool.ts
 export interface MyToolParams {
   analyzePerformance: { filePath: string };
 }
@@ -360,12 +360,12 @@ export class MyTool {
 
 | Setting | Description | Recommended Value |
 |---------|-------------|-------------------|
-| `codemavi.provider.default` | Default LLM provider | Your preferred provider |
-| `codemavi.agents.enabled` | Enable/disable agent system | true |
-| `codemavi.autoDevMode.enabled` | Enable Auto Dev Mode | true |
-| `codemavi.checkpoints.autoCreate` | Auto-create checkpoints | true |
-| `codemavi.verification.strict` | Strict verification mode | true |
-| `codemavi.privacy.telemetry` | Send usage data | false |
+| `mavi.provider.default` | Default LLM provider | Your preferred provider |
+| `mavi.agents.enabled` | Enable/disable agent system | true |
+| `mavi.autoDevMode.enabled` | Enable Auto Dev Mode | true |
+| `mavi.checkpoints.autoCreate` | Auto-create checkpoints | true |
+| `mavi.verification.strict` | Strict verification mode | true |
+| `mavi.privacy.telemetry` | Send usage data | false |
 
 ### Keyboard Shortcuts
 
@@ -388,7 +388,7 @@ export class MyTool {
 
 ### Issue: "Agent stuck in loop"
 **Solution:**
-1. Check `.codemavi/rules.md` for conflicting rules
+1. Check `.mavi/rules.md` for conflicting rules
 2. Open Agent Log Panel to see what's happening
 3. Use checkpoint to rollback
 4. Simplify your request and try again

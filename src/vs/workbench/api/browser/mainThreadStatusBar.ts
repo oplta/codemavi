@@ -55,11 +55,11 @@ export class MainThreadStatusBar implements MainThreadStatusBarShape {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 
-	$setEntry(entryId: string, id: string, extensionId: string | undefined, name: string, text: string, tooltip: IMarkdownString | string | undefined, hasTooltipProvider: boolean, command: Command | undefined, color: string | ThemeColor | undefined, backgroundColor: ThemeColor | undefined, alignLeft: boolean, priority: number | undefined, accessibilityInformation: IAccessibilityInformation | undefined): codemavi {
+	$setEntry(entryId: string, id: string, extensionId: string | undefined, name: string, text: string, tooltip: IMarkdownString | string | undefined, hasTooltipProvider: boolean, command: Command | undefined, color: string | ThemeColor | undefined, backgroundColor: ThemeColor | undefined, alignLeft: boolean, priority: number | undefined, accessibilityInformation: IAccessibilityInformation | undefined): void {
 		const tooltipOrTooltipProvider = hasTooltipProvider
 			? {
 				markdown: (cancellation: CancellationToken) => {

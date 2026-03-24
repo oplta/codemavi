@@ -136,7 +136,7 @@ class GitBlameInformationCache {
 		return this._cache.get(repository)?.get(key);
 	}
 
-	set(repository: Repository, resource: Uri, commit: string, blameInformation: BlameInformation[]): codemavi {
+	set(repository: Repository, resource: Uri, commit: string, blameInformation: BlameInformation[]): void {
 		if (!this._cache.has(repository)) {
 			this._cache.set(repository, new LRUCache<string, BlameInformation[]>(100));
 		}
@@ -153,7 +153,7 @@ class GitBlameInformationCache {
 export class GitBlameController {
 	private readonly _subjectMaxLength = 50;
 
-	private readonly _onDidChangeBlameInformation = new EventEmitter<codemavi>();
+	private readonly _onDidChangeBlameInformation = new EventEmitter<void>();
 	public readonly onDidChangeBlameInformation = this._onDidChangeBlameInformation.event;
 
 	private _textEditorBlameInformation: ResourceBlameInformation | undefined;
@@ -320,7 +320,7 @@ export class GitBlameController {
 		return markdownString;
 	}
 
-	private _onDidChangeConfiguration(e?: ConfigurationChangeEvent): codemavi {
+	private _onDidChangeConfiguration(e?: ConfigurationChangeEvent): void {
 		if (e &&
 			!e.affectsConfiguration('git.blame.editorDecoration.enabled') &&
 			!e.affectsConfiguration('git.blame.statusBarItem.enabled')) {
@@ -371,14 +371,14 @@ export class GitBlameController {
 		this._updateTextEditorBlameInformation(window.activeTextEditor);
 	}
 
-	private _onDidOpenRepository(repository: Repository): codemavi {
+	private _onDidOpenRepository(repository: Repository): void {
 		const repositoryDisposables: IDisposable[] = [];
 		repository.onDidRunGitStatus(() => this._onDidRunGitStatus(repository), this, repositoryDisposables);
 
 		this._repositoryDisposables.set(repository, repositoryDisposables);
 	}
 
-	private _onDidCloseRepository(repository: Repository): codemavi {
+	private _onDidCloseRepository(repository: Repository): void {
 		const disposables = this._repositoryDisposables.get(repository);
 		if (disposables) {
 			dispose(disposables);
@@ -388,7 +388,7 @@ export class GitBlameController {
 		this._repositoryBlameCache.delete(repository);
 	}
 
-	private _onDidRunGitStatus(repository: Repository): codemavi {
+	private _onDidRunGitStatus(repository: Repository): void {
 		if (!repository.HEAD?.commit || this._HEAD === repository.HEAD.commit) {
 			return;
 		}
@@ -420,7 +420,7 @@ export class GitBlameController {
 	}
 
 	@throttle
-	private async _updateTextEditorBlameInformation(textEditor: TextEditor | undefined, reason?: 'selection'): Promise<codemavi> {
+	private async _updateTextEditorBlameInformation(textEditor: TextEditor | undefined, reason?: 'selection'): Promise<void> {
 		if (textEditor) {
 			if (!textEditor.diffInformation || textEditor !== window.activeTextEditor) {
 				return;
@@ -443,7 +443,7 @@ export class GitBlameController {
 
 		// Do not show blame information when there is a single selection and it is at the beginning
 		// of the file [0, 0, 0, 0] unless the user explicitly navigates the cursor there. We do this
-		// to acodemavi showing blame information when the editor is not focused.
+		// to avoid showing blame information when the editor is not focused.
 		if (reason !== 'selection' && textEditor.selections.length === 1 &&
 			textEditor.selections[0].start.line === 0 && textEditor.selections[0].start.character === 0 &&
 			textEditor.selections[0].end.line === 0 && textEditor.selections[0].end.character === 0) {
@@ -629,7 +629,7 @@ class GitBlameEditorDecoration implements HoverProvider {
 		return { range: getEditorDecorationRange(position.line), contents: [contents] };
 	}
 
-	private _onDidChangeConfiguration(e?: ConfigurationChangeEvent): codemavi {
+	private _onDidChangeConfiguration(e?: ConfigurationChangeEvent): void {
 		if (e &&
 			!e.affectsConfiguration('git.commitShortHashLength') &&
 			!e.affectsConfiguration('git.blame.editorDecoration.template')) {
@@ -640,7 +640,7 @@ class GitBlameEditorDecoration implements HoverProvider {
 		this._onDidChangeBlameInformation();
 	}
 
-	private _onDidChangeActiveTextEditor(): codemavi {
+	private _onDidChangeActiveTextEditor(): void {
 		// Clear decorations
 		for (const editor of window.visibleTextEditors) {
 			if (editor !== window.activeTextEditor) {
@@ -652,7 +652,7 @@ class GitBlameEditorDecoration implements HoverProvider {
 		this._registerHoverProvider();
 	}
 
-	private _onDidChangeBlameInformation(): codemavi {
+	private _onDidChangeBlameInformation(): void {
 		const textEditor = window.activeTextEditor;
 		if (!textEditor) {
 			return;
@@ -692,7 +692,7 @@ class GitBlameEditorDecoration implements HoverProvider {
 		};
 	}
 
-	private _registerHoverProvider(): codemavi {
+	private _registerHoverProvider(): void {
 		this._hoverDisposable?.dispose();
 
 		if (window.activeTextEditor && isResourceSchemeSupported(window.activeTextEditor.document.uri)) {
@@ -723,7 +723,7 @@ class GitBlameStatusBarItem {
 		this._controller.onDidChangeBlameInformation(() => this._onDidChangeBlameInformation(), this, this._disposables);
 	}
 
-	private _onDidChangeConfiguration(e: ConfigurationChangeEvent): codemavi {
+	private _onDidChangeConfiguration(e: ConfigurationChangeEvent): void {
 		if (!e.affectsConfiguration('git.commitShortHashLength') &&
 			!e.affectsConfiguration('git.blame.statusBarItem.template')) {
 			return;
@@ -732,7 +732,7 @@ class GitBlameStatusBarItem {
 		this._onDidChangeBlameInformation();
 	}
 
-	private async _onDidChangeBlameInformation(): Promise<codemavi> {
+	private async _onDidChangeBlameInformation(): Promise<void> {
 		if (!window.activeTextEditor) {
 			this._statusBarItem.hide();
 			return;

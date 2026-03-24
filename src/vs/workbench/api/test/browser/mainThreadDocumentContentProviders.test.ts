@@ -41,7 +41,7 @@ suite('MainThreadDocumentContentProviders', function () {
 		store.add(model);
 		store.add(providers);
 
-		return new Promise<codemavi>((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			let expectedEvents = 1;
 			store.add(model.onDidChangeContent(e => {
 				expectedEvents -= 1;

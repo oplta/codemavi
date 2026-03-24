@@ -31,7 +31,7 @@ export class SashSettingsController implements IWorkbenchContribution, IDisposab
 		this.onDidChangeHoverDelay();
 	}
 
-	private onDidChangeSize(): codemavi {
+	private onDidChangeSize(): void {
 		const configuredSize = this.configurationService.getValue<number>('workbench.sash.size');
 		const size = clamp(configuredSize, 4, 20);
 		const hoverSize = clamp(configuredSize, 1, 8);
@@ -41,11 +41,11 @@ export class SashSettingsController implements IWorkbenchContribution, IDisposab
 		setGlobalSashSize(size);
 	}
 
-	private onDidChangeHoverDelay(): codemavi {
+	private onDidChangeHoverDelay(): void {
 		setGlobalHoverDelay(this.configurationService.getValue<number>('workbench.sash.hoverDelay'));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }

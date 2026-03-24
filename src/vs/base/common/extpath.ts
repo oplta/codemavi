@@ -395,7 +395,7 @@ export function randomPath(parent?: string, prefix?: string, randomLength = 8): 
 		if (i === 0 && isWindows && !prefix && (randomLength === 3 || randomLength === 4)) {
 
 			// Windows has certain reserved file names that cannot be used, such
-			// as AUX, CON, PRN, etc. We want to acodemavi generating a random name
+			// as AUX, CON, PRN, etc. We want to avoid generating a random name
 			// that matches that pattern, so we use a different set of characters
 			// for the first character of the name that does not include any of
 			// the reserved names first characters.

@@ -24,8 +24,8 @@ export namespace IOutlinePane {
 
 export interface IOutlinePane extends IView {
 	outlineViewState: IOutlineViewState;
-	collapseAll(): codemavi;
-	expandAll(): codemavi;
+	collapseAll(): void;
+	expandAll(): void;
 }
 
 // --- context keys

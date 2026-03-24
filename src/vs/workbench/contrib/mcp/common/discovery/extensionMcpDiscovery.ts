@@ -57,7 +57,7 @@ export class ExtensionMcpDiscovery extends Disposable implements IMcpDiscovery {
 		}));
 	}
 
-	public start(): codemavi {
+	public start(): void {
 		const extensionCollections = this._register(new DisposableMap<string>());
 		this._register(_mcpExtensionPoint.setHandler((_extensions, delta) => {
 			const { added, removed } = delta;
@@ -99,7 +99,7 @@ export class ExtensionMcpDiscovery extends Disposable implements IMcpDiscovery {
 		}));
 	}
 
-	private async _activateExtensionServers(collectionId: string): Promise<codemavi> {
+	private async _activateExtensionServers(collectionId: string): Promise<void> {
 		await this._extensionService.activateByEvent(mcpActivationEvent(collectionId));
 		await Promise.all(this._mcpRegistry.delegates
 			.map(r => r.waitForInitialProviderPromises()));

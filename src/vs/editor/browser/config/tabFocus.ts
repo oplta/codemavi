@@ -14,7 +14,7 @@ class TabFocusImpl {
 		return this._tabFocus;
 	}
 
-	public setTabFocusMode(tabFocusMode: boolean): codemavi {
+	public setTabFocusMode(tabFocusMode: boolean): void {
 		this._tabFocus = tabFocusMode;
 		this._onDidChangeTabFocus.fire(this._tabFocus);
 	}

@@ -31,7 +31,7 @@ type DataTreeItem = DistroItem | DistroLocationItem;
 
 export class DistroTreeDataProvider extends Disposable implements vscode.TreeDataProvider<DataTreeItem> {
 
-	private readonly _onDidChangeTreeData = this._register(new vscode.EventEmitter<DataTreeItem | DataTreeItem[] | codemavi>());
+	private readonly _onDidChangeTreeData = this._register(new vscode.EventEmitter<DataTreeItem | DataTreeItem[] | void>());
 	public readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
 	constructor(

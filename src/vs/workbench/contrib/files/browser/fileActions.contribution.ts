@@ -27,7 +27,7 @@ import { ThemeIcon } from '../../../../base/common/themables.js';
 import { IExplorerService } from './files.js';
 import { Codicon } from '../../../../base/common/codicons.js';
 import { Categories } from '../../../../platform/action/common/actionCommonCategories.js';
-import { VOID_OPEN_SETTINGS_ACTION_ID } from '../../codemavi/browser/codemaviSettingsPane.js';
+import { MAVI_OPEN_SETTINGS_ACTION_ID } from '../../mavi/browser/maviSettingsPane.js';
 
 // Contribute Global Actions
 
@@ -165,7 +165,7 @@ appendEditorTitleContextMenuItem(COPY_PATH_COMMAND_ID, copyPathCommand.title, Re
 appendEditorTitleContextMenuItem(COPY_RELATIVE_PATH_COMMAND_ID, copyRelativePathCommand.title, ResourceContextKey.IsFileSystemResource, '1_cutcopypaste', true);
 appendEditorTitleContextMenuItem(revealInSideBarCommand.id, revealInSideBarCommand.title, ResourceContextKey.IsFileSystemResource, '2_files', false, 1);
 
-export function appendEditorTitleContextMenuItem(id: string, title: string, when: ContextKeyExpression | undefined, group: string, supportsMultiSelect: boolean, order?: number): codemavi {
+export function appendEditorTitleContextMenuItem(id: string, title: string, when: ContextKeyExpression | undefined, group: string, supportsMultiSelect: boolean, order?: number): void {
 	const precondition = supportsMultiSelect !== true ? MultipleEditorsSelectedInGroupContext.negate() : undefined;
 
 	// Menu
@@ -181,7 +181,7 @@ export function appendEditorTitleContextMenuItem(id: string, title: string, when
 appendSaveConflictEditorTitleAction('workbench.files.action.acceptLocalChanges', nls.localize('acceptLocalChanges', "Use your changes and overwrite file contents"), Codicon.check, -10, acceptLocalChangesCommand);
 appendSaveConflictEditorTitleAction('workbench.files.action.revertLocalChanges', nls.localize('revertLocalChanges', "Discard your changes and revert to file contents"), Codicon.discard, -9, revertLocalChangesCommand);
 
-function appendSaveConflictEditorTitleAction(id: string, title: string, icon: ThemeIcon, order: number, command: ICommandHandler): codemavi {
+function appendSaveConflictEditorTitleAction(id: string, title: string, icon: ThemeIcon, order: number, command: ICommandHandler): void {
 
 	// Command
 	CommandsRegistry.registerCommand(id, command);
@@ -197,7 +197,7 @@ function appendSaveConflictEditorTitleAction(id: string, title: string, icon: Th
 
 // Menu registration - command palette
 
-export function appendToCommandPalette({ id, title, category, metadata }: ICommandAction, when?: ContextKeyExpression): codemavi {
+export function appendToCommandPalette({ id, title, category, metadata }: ICommandAction, when?: ContextKeyExpression): void {
 	MenuRegistry.appendMenuItem(MenuId.CommandPalette, {
 		command: {
 			id,
@@ -677,12 +677,12 @@ for (const menuId of [MenuId.EmptyEditorGroupContext, MenuId.EditorTabsBarContex
 // File menu
 
 
-// Code Mavi added this:
+// Mavi added this:
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
-	group: '0_codemavi',
+	group: '0_mavi',
 	command: {
-		id: VOID_OPEN_SETTINGS_ACTION_ID,
-		title: nls.localize({ key: 'openCode Mavi', comment: ['&& denotes a mnemonic'] }, "&&Open Code Mavi Settings"),
+		id: MAVI_OPEN_SETTINGS_ACTION_ID,
+		title: nls.localize({ key: 'openMavi', comment: ['&& denotes a mnemonic'] }, "&&Open Mavi Settings"),
 	},
 	order: 1
 });

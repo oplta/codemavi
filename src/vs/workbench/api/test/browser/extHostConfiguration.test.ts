@@ -25,7 +25,7 @@ suite('ExtHostConfiguration', function () {
 
 	class RecordingShape extends mock<MainThreadConfigurationShape>() {
 		lastArgs!: [ConfigurationTarget, string, any];
-		override $updateConfigurationOption(target: ConfigurationTarget, key: string, value: any): Promise<codemavi> {
+		override $updateConfigurationOption(target: ConfigurationTarget, key: string, value: any): Promise<void> {
 			this.lastArgs = [target, key, value];
 			return Promise.resolve(undefined);
 		}

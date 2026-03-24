@@ -104,13 +104,13 @@ export interface IWalkthroughsService {
 	getWalkthroughs(): IResolvedWalkthrough[];
 	getWalkthrough(id: string): IResolvedWalkthrough;
 
-	registerWalkthrough(descriptor: IWalkthroughLoose): codemavi;
+	registerWalkthrough(descriptor: IWalkthroughLoose): void;
 
-	progressByEvent(eventName: string): codemavi;
-	progressStep(id: string): codemavi;
-	deprogressStep(id: string): codemavi;
+	progressByEvent(eventName: string): void;
+	progressStep(id: string): void;
+	deprogressStep(id: string): void;
 
-	markWalkthroughOpened(id: string): codemavi;
+	markWalkthroughOpened(id: string): void;
 }
 
 // Show walkthrough as "new" for 7 days after first install
@@ -564,7 +564,7 @@ export class WalkthroughsService extends Disposable implements IWalkthroughsServ
 		this._onDidProgressStep.fire(this.getStepProgress(step));
 	}
 
-	progressByEvent(event: string): codemavi {
+	progressByEvent(event: string): void {
 		if (this.sessionEvents.has(event)) { return; }
 
 		this.sessionEvents.add(event);
@@ -578,7 +578,7 @@ export class WalkthroughsService extends Disposable implements IWalkthroughsServ
 		});
 	}
 
-	_registerWalkthrough(walkthroughDescriptor: IWalkthrough): codemavi {
+	_registerWalkthrough(walkthroughDescriptor: IWalkthrough): void {
 		const oldCategory = this.gettingStartedContributions.get(walkthroughDescriptor.id);
 		if (oldCategory) {
 			console.error(`Skipping attempt to overwrite walkthrough. (${walkthroughDescriptor.id})`);

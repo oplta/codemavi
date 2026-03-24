@@ -117,7 +117,7 @@ class MarkerCheckService extends Disposable implements IMarkerCheckService {
 
 	}
 
-	// private _onMarkersChanged = (changedResources: readonly URI[]): codemavi => {
+	// private _onMarkersChanged = (changedResources: readonly URI[]): void => {
 	// 	for (const resource of changedResources) {
 	// 		const markers = this._markerService.read({ resource });
 

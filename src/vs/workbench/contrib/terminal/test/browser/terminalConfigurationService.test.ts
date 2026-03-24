@@ -41,7 +41,7 @@ suite('Workbench - TerminalConfigurationService', () => {
 
 		suite('onConfigChanged', () => {
 			test('should fire on any change to terminal.integrated', async () => {
-				await new Promise<codemavi>(r => {
+				await new Promise<void>(r => {
 					store.add(terminalConfigurationService.onConfigChanged(() => r()));
 					configurationService.onDidChangeConfigurationEmitter.fire({
 						affectsConfiguration: configuration => configuration.startsWith('terminal.integrated'),

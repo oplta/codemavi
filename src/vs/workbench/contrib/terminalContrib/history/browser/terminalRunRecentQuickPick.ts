@@ -36,7 +36,7 @@ export async function showRunRecentQuickPick(
 	type: 'command' | 'cwd',
 	filterMode?: 'fuzzy' | 'contiguous',
 	value?: string,
-): Promise<codemavi> {
+): Promise<void> {
 	if (!instance.xterm) {
 		return;
 	}
@@ -347,7 +347,7 @@ export async function showRunRecentQuickPick(
 	if (value) {
 		quickPick.value = value;
 	}
-	return new Promise<codemavi>(r => {
+	return new Promise<void>(r => {
 		terminalInRunCommandPicker.set(true);
 		disposables.add(showWithPinnedItems(storageService, runRecentStorageKey, quickPick, true));
 		disposables.add(quickPick.onDidHide(() => {

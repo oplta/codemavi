@@ -331,7 +331,7 @@ export class RemoteSSHResolver implements vscode.RemoteAuthorityResolver, vscode
 		let passwordRetryCount = PASSWORD_RETRY_COUNT;
 		let keyboardRetryCount = PASSWORD_RETRY_COUNT;
 		identityKeys = identityKeys.slice();
-		return async (methodsLeft: string[] | null, _partialSuccess: boolean | null, callback: (nextAuth: ssh2.AuthHandlerResult) => codemavi) => {
+		return async (methodsLeft: string[] | null, _partialSuccess: boolean | null, callback: (nextAuth: ssh2.AuthHandlerResult) => void) => {
 			if (methodsLeft === null) {
 				this.logger.info(`Trying no-auth authentication`);
 
@@ -351,7 +351,7 @@ export class RemoteSSHResolver implements vscode.RemoteAuthorityResolver, vscode
 						username: sshUser,
 						agent: new class extends ssh2.OpenSSHAgent {
 							// Only return the current key
-							override getIdentities(callback: (err: Error | undefined, publicKeys?: ParsedKey[]) => codemavi): codemavi {
+							override getIdentities(callback: (err: Error | undefined, publicKeys?: ParsedKey[]) => void): void {
 								callback(undefined, [identityKey.parsedKey]);
 							}
 						}(this.sshAgentSock!)

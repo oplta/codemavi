@@ -73,7 +73,7 @@ suite('WorkingCopyBackupTracker (native)', function () {
 			return 10; // Reduce timeout for tests
 		}
 
-		waitForReady(): Promise<codemavi> {
+		waitForReady(): Promise<void> {
 			return this.whenReady;
 		}
 
@@ -88,13 +88,13 @@ suite('WorkingCopyBackupTracker (native)', function () {
 			}
 		}
 
-		private readonly _onDidResume = this._register(new Emitter<codemavi>());
+		private readonly _onDidResume = this._register(new Emitter<void>());
 		readonly onDidResume = this._onDidResume.event;
 
-		private readonly _onDidSuspend = this._register(new Emitter<codemavi>());
+		private readonly _onDidSuspend = this._register(new Emitter<void>());
 		readonly onDidSuspend = this._onDidSuspend.event;
 
-		protected override suspendBackupOperations(): { resume: () => codemavi } {
+		protected override suspendBackupOperations(): { resume: () => void } {
 			const { resume } = super.suspendBackupOperations();
 
 			this._onDidSuspend.fire();
@@ -141,7 +141,7 @@ suite('WorkingCopyBackupTracker (native)', function () {
 		disposables.clear();
 	});
 
-	async function createTracker(autoSaveEnabled = false): Promise<{ accessor: TestServiceAccessor; part: EditorPart; tracker: TestWorkingCopyBackupTracker; instantiationService: IInstantiationService; cleanup: () => Promise<codemavi> }> {
+	async function createTracker(autoSaveEnabled = false): Promise<{ accessor: TestServiceAccessor; part: EditorPart; tracker: TestWorkingCopyBackupTracker; instantiationService: IInstantiationService; cleanup: () => Promise<void> }> {
 		const instantiationService = workbenchInstantiationService(undefined, disposables);
 
 		const configurationService = new TestConfigurationService();
@@ -673,7 +673,7 @@ suite('WorkingCopyBackupTracker (native)', function () {
 		});
 
 
-		async function hotExitTest(this: any, setting: string, shutdownReason: ShutdownReason, multipleWindows: boolean, workspace: boolean, shouldVeto: boolean): Promise<codemavi> {
+		async function hotExitTest(this: any, setting: string, shutdownReason: ShutdownReason, multipleWindows: boolean, workspace: boolean, shouldVeto: boolean): Promise<void> {
 			const { accessor, cleanup } = await createTracker();
 
 			const resource = toResource.call(this, '/path/index.txt');
@@ -713,7 +713,7 @@ suite('WorkingCopyBackupTracker (native)', function () {
 			await cleanup();
 		}
 
-		async function scratchpadHotExitTest(this: any, setting: string, shutdownReason: ShutdownReason, multipleWindows: boolean, workspace: boolean, shouldVeto: boolean): Promise<codemavi> {
+		async function scratchpadHotExitTest(this: any, setting: string, shutdownReason: ShutdownReason, multipleWindows: boolean, workspace: boolean, shouldVeto: boolean): Promise<void> {
 			const { accessor, cleanup } = await createTracker();
 
 			class TestBackupWorkingCopy extends TestWorkingCopy {

@@ -2678,7 +2678,7 @@ export namespace ChatTask {
 }
 
 export namespace ChatTaskResult {
-	export function from(part: string | codemavi): Dto<IChatTaskResult> {
+	export function from(part: string | void): Dto<IChatTaskResult> {
 		return {
 			kind: 'progressTaskResult',
 			content: typeof part === 'string' ? MarkdownString.from(part) : undefined
@@ -3175,7 +3175,7 @@ export namespace DebugTreeItem {
 export namespace LanguageModelToolDescription {
 	export function to(item: IToolData): vscode.LanguageModelToolInformation {
 		return {
-			// Note- the reason this is a unique 'name' is just to acodemavi confusion with the toolCallId
+			// Note- the reason this is a unique 'name' is just to avoid confusion with the toolCallId
 			name: item.id,
 			description: item.modelDescription,
 			inputSchema: item.inputSchema,

@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------*/
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { MCPUserState, RefreshableProviderName, SettingsOfProvider } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsTypes.js'
+import { MCPUserState, RefreshableProviderName, SettingsOfProvider } from '../../../../../../../workbench/contrib/mavi/common/maviSettingsTypes.js'
 import { DisposableStore, IDisposable } from '../../../../../../../base/common/lifecycle.js'
-import { Code MaviSettingsState } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsService.js'
+import { MaviSettingsState } from '../../../../../../../workbench/contrib/mavi/common/maviSettingsService.js'
 import { ColorScheme } from '../../../../../../../platform/theme/common/theme.js'
-import { RefreshModelStateOfProvider } from '../../../../../../../workbench/contrib/codemavi/common/refreshModelService.js'
+import { RefreshModelStateOfProvider } from '../../../../../../../workbench/contrib/mavi/common/refreshModelService.js'
 
 import { ServicesAccessor } from '../../../../../../../editor/browser/editorExtensions.js';
 import { IExplorerService } from '../../../../../../../workbench/contrib/files/browser/files.js'
@@ -19,9 +19,9 @@ import { IFileService } from '../../../../../../../platform/files/common/files.j
 import { IHoverService } from '../../../../../../../platform/hover/browser/hover.js';
 import { IThemeService } from '../../../../../../../platform/theme/common/themeService.js';
 import { ILLMMessageService } from '../../../../common/sendLLMMessageService.js';
-import { IRefreshModelService } from '../../../../../../../workbench/contrib/codemavi/common/refreshModelService.js';
-import { IMaviSettingsService } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsService.js';
-import { IExtensionTransferService } from '../../../../../../../workbench/contrib/codemavi/browser/extensionTransferService.js'
+import { IRefreshModelService } from '../../../../../../../workbench/contrib/mavi/common/refreshModelService.js';
+import { IMaviSettingsService } from '../../../../../../../workbench/contrib/mavi/common/maviSettingsService.js';
+import { IExtensionTransferService } from '../../../../../../../workbench/contrib/mavi/browser/extensionTransferService.js'
 
 import { IInstantiationService } from '../../../../../../../platform/instantiation/common/instantiation.js'
 import { ICodeEditorService } from '../../../../../../../editor/browser/services/codeEditorService.js'
@@ -36,14 +36,14 @@ import { IKeybindingService } from '../../../../../../../platform/keybinding/com
 import { IEnvironmentService } from '../../../../../../../platform/environment/common/environment.js'
 import { IConfigurationService } from '../../../../../../../platform/configuration/common/configuration.js'
 import { IPathService } from '../../../../../../../workbench/services/path/common/pathService.js'
-import { IMetricsService } from '../../../../../../../workbench/contrib/codemavi/common/metricsService.js'
+import { IMetricsService } from '../../../../../../../workbench/contrib/mavi/common/metricsService.js'
 import { URI } from '../../../../../../../base/common/uri.js'
 import { IChatThreadService, ThreadsState, ThreadStreamState } from '../../../chatThreadService.js'
 import { ITerminalToolService } from '../../../terminalToolService.js'
 import { ILanguageService } from '../../../../../../../editor/common/languages/language.js'
-import { IMaviModelService } from '../../../../common/codemaviModelService.js'
+import { IMaviModelService } from '../../../../common/maviModelService.js'
 import { IWorkspaceContextService } from '../../../../../../../platform/workspace/common/workspace.js'
-import { IMaviCommandBarService } from '../../../codemaviCommandBarService.js'
+import { IMaviCommandBarService } from '../../../maviCommandBarService.js'
 import { INativeHostService } from '../../../../../../../platform/native/common/native.js';
 import { IEditCodeService } from '../../../editCodeServiceInterface.js'
 import { IToolsService } from '../../../toolsService.js'
@@ -62,26 +62,26 @@ import { OPT_OUT_KEY } from '../../../../common/storageKeys.js'
 // React listens by adding a setState function to these listeners.
 
 let chatThreadsState: ThreadsState
-const chatThreadsStateListeners: Set<(s: ThreadsState) => codemavi> = new Set()
+const chatThreadsStateListeners: Set<(s: ThreadsState) => void> = new Set()
 
 let chatThreadsStreamState: ThreadStreamState
-const chatThreadsStreamStateListeners: Set<(threadId: string) => codemavi> = new Set()
+const chatThreadsStreamStateListeners: Set<(threadId: string) => void> = new Set()
 
-let settingsState: Code MaviSettingsState
-const settingsStateListeners: Set<(s: Code MaviSettingsState) => codemavi> = new Set()
+let settingsState: MaviSettingsState
+const settingsStateListeners: Set<(s: MaviSettingsState) => void> = new Set()
 
 let refreshModelState: RefreshModelStateOfProvider
-const refreshModelStateListeners: Set<(s: RefreshModelStateOfProvider) => codemavi> = new Set()
-const refreshModelProviderListeners: Set<(p: RefreshableProviderName, s: RefreshModelStateOfProvider) => codemavi> = new Set()
+const refreshModelStateListeners: Set<(s: RefreshModelStateOfProvider) => void> = new Set()
+const refreshModelProviderListeners: Set<(p: RefreshableProviderName, s: RefreshModelStateOfProvider) => void> = new Set()
 
 let colorThemeState: ColorScheme
-const colorThemeStateListeners: Set<(s: ColorScheme) => codemavi> = new Set()
+const colorThemeStateListeners: Set<(s: ColorScheme) => void> = new Set()
 
-const ctrlKZoneStreamingStateListeners: Set<(diffareaid: number, s: boolean) => codemavi> = new Set()
-const commandBarURIStateListeners: Set<(uri: URI) => codemavi> = new Set();
-const activeURIListeners: Set<(uri: URI | null) => codemavi> = new Set();
+const ctrlKZoneStreamingStateListeners: Set<(diffareaid: number, s: boolean) => void> = new Set()
+const commandBarURIStateListeners: Set<(uri: URI) => void> = new Set();
+const activeURIListeners: Set<(uri: URI | null) => void> = new Set();
 
-const mcpListeners: Set<() => codemavi> = new Set()
+const mcpListeners: Set<() => void> = new Set()
 
 
 // must call this before you can use any of the hooks below
@@ -98,12 +98,12 @@ export const _registerServices = (accessor: ServicesAccessor) => {
 		refreshModelService: accessor.get(IRefreshModelService),
 		themeService: accessor.get(IThemeService),
 		editCodeService: accessor.get(IEditCodeService),
-		codemaviCommandBarService: accessor.get(IMaviCommandBarService),
+		maviCommandBarService: accessor.get(IMaviCommandBarService),
 		modelService: accessor.get(IModelService),
 		mcpService: accessor.get(IMCPService),
 	}
 
-	const { settingsStateService, chatThreadsStateService, refreshModelService, themeService, editCodeService, codemaviCommandBarService, modelService, mcpService } = stateServices
+	const { settingsStateService, chatThreadsStateService, refreshModelService, themeService, editCodeService, maviCommandBarService, modelService, mcpService } = stateServices
 
 
 
@@ -159,13 +159,13 @@ export const _registerServices = (accessor: ServicesAccessor) => {
 	)
 
 	disposables.push(
-		codemaviCommandBarService.onDidChangeState(({ uri }) => {
+		maviCommandBarService.onDidChangeState(({ uri }) => {
 			commandBarURIStateListeners.forEach(l => l(uri));
 		})
 	)
 
 	disposables.push(
-		codemaviCommandBarService.onDidChangeActiveURI(({ uri }) => {
+		maviCommandBarService.onDidChangeActiveURI(({ uri }) => {
 			activeURIListeners.forEach(l => l(uri));
 		})
 	)
@@ -246,7 +246,7 @@ const _registerAccessor = (accessor: ServicesAccessor) => {
 // -- services --
 export const useAccessor = () => {
 	if (!reactAccessor_) {
-		throw new Error(`⚠️ Code Mavi useAccessor was called before _registerServices!`)
+		throw new Error(`⚠️ Mavi useAccessor was called before _registerServices!`)
 	}
 
 	return { get: <S extends keyof ReactAccessor,>(service: S): ReactAccessor[S] => reactAccessor_![service] }
@@ -328,14 +328,14 @@ export const useRefreshModelState = () => {
 }
 
 
-export const useRefreshModelListener = (listener: (providerName: RefreshableProviderName, s: RefreshModelStateOfProvider) => codemavi) => {
+export const useRefreshModelListener = (listener: (providerName: RefreshableProviderName, s: RefreshModelStateOfProvider) => void) => {
 	useEffect(() => {
 		refreshModelProviderListeners.add(listener)
 		return () => { refreshModelProviderListeners.delete(listener) }
 	}, [listener, refreshModelProviderListeners])
 }
 
-export const useCtrlKZoneStreamingState = (listener: (diffareaid: number, s: boolean) => codemavi) => {
+export const useCtrlKZoneStreamingState = (listener: (diffareaid: number, s: boolean) => void) => {
 	useEffect(() => {
 		ctrlKZoneStreamingStateListeners.add(listener)
 		return () => { ctrlKZoneStreamingStateListeners.delete(listener) }
@@ -355,7 +355,7 @@ export const useIsDark = () => {
 	return isDark
 }
 
-export const useCommandBarURIListener = (listener: (uri: URI) => codemavi) => {
+export const useCommandBarURIListener = (listener: (uri: URI) => void) => {
 	useEffect(() => {
 		commandBarURIStateListeners.add(listener);
 		return () => { commandBarURIStateListeners.delete(listener) };

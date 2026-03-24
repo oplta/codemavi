@@ -18,8 +18,8 @@ Code Mavi applies rules in this priority order (highest to lowest):
 
 ```
 1. Session Rules (temporary, in-memory)
-2. Project Rules (.codemavi/rules.md)
-3. Global Rules (~/.codemavi/global-rules.md)
+2. Project Rules (.mavi/rules.md)
+3. Global Rules (~/.mavi/global-rules.md)
 4. Base Agent Rules (system defaults)
 ```
 
@@ -29,19 +29,19 @@ Code Mavi applies rules in this priority order (highest to lowest):
 
 ```bash
 # In your project root
-mkdir .codemavi
+mkdir .mavi
 ```
 
 ### Step 2: Create Rules File
 
 ```bash
 # Create the rules file
-touch .codemavi/rules.md
+touch .mavi/rules.md
 ```
 
 ### Step 3: Add Basic Rules
 
-Edit `.codemavi/rules.md`:
+Edit `.mavi/rules.md`:
 
 ```markdown
 # Project Rules for [Your Project Name]
@@ -190,13 +190,13 @@ Create global rules that apply to all your projects:
 
 ```bash
 # Create global config directory
-mkdir -p ~/.codemavi
+mkdir -p ~/.mavi
 
 # Create global rules file
-touch ~/.codemavi/global-rules.md
+touch ~/.mavi/global-rules.md
 ```
 
-Example `~/.codemavi/global-rules.md`:
+Example `~/.mavi/global-rules.md`:
 
 ```markdown
 # Global Development Rules
@@ -362,10 +362,10 @@ Open the Agent Log Panel (View → Output → Code Mavi Agents) to see how rules
 **Issue:** Rules not being applied
 ```bash
 # Check if rules file is in correct location
-ls -la .codemavi/rules.md
+ls -la .mavi/rules.md
 
 # Check rule syntax
-cat .codemavi/rules.md
+cat .mavi/rules.md
 
 # Check agent logs
 # View → Output → Code Mavi Agents
@@ -435,13 +435,13 @@ cat .codemavi/rules.md
 ### Export Rules
 ```bash
 # Copy rules to share with team
-cp .codemavi/rules.md rules-template.md
+cp .mavi/rules.md rules-template.md
 ```
 
 ### Import Rules
 ```bash
 # Use shared rules template
-cp rules-template.md .codemavi/rules.md
+cp rules-template.md .mavi/rules.md
 # Customize for your project
 ```
 
@@ -510,7 +510,7 @@ Effective rules make Code Mavi agents more powerful and aligned with your projec
 Remember: The goal is not to restrict creativity, but to ensure consistency and quality while leveraging AI assistance effectively.
 
 ### Next Steps
-1. Create your `.codemavi/rules.md` file
+1. Create your `.mavi/rules.md` file
 2. Test with simple agent tasks
 3. Refine based on results
 4. Share successful patterns with the community

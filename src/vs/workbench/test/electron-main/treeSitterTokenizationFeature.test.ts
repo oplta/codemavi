@@ -60,23 +60,23 @@ class MockTelemetryService implements ITelemetryService {
 	devDeviceId: string = '';
 	firstSessionDate: string = '';
 	sendErrorTelemetry: boolean = false;
-	publicLog(eventName: string, data?: ITelemetryData): codemavi {
+	publicLog(eventName: string, data?: ITelemetryData): void {
 	}
-	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi {
+	publicLog2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void {
 	}
-	publicLogError(errorEventName: string, data?: ITelemetryData): codemavi {
+	publicLogError(errorEventName: string, data?: ITelemetryData): void {
 	}
-	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): codemavi {
+	publicLogError2<E extends ClassifiedEvent<OmitMetadata<T>> = never, T extends IGDPRProperty = never>(eventName: string, data?: StrictPropertyCheck<T, E>): void {
 	}
-	setExperimentProperty(name: string, value: string): codemavi {
+	setExperimentProperty(name: string, value: string): void {
 	}
 }
 
 class MockTokenStoreService implements ITreeSitterTokenizationStoreService {
-	delete(model: ITextModel): codemavi {
+	delete(model: ITextModel): void {
 		throw new Error('Method not implemented.');
 	}
-	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): codemavi {
+	handleContentChanged(model: ITextModel, e: IModelContentChangedEvent): void {
 	}
 	rangeHasTokens(model: ITextModel, range: Range, minimumTokenQuality: TokenQuality): boolean {
 		return true;
@@ -89,14 +89,14 @@ class MockTokenStoreService implements ITreeSitterTokenizationStoreService {
 	}
 
 	_serviceBrand: undefined;
-	setTokens(model: ITextModel, tokens: TokenUpdate[]): codemavi {
+	setTokens(model: ITextModel, tokens: TokenUpdate[]): void {
 	}
 	getTokens(model: ITextModel, line: number): Uint32Array | undefined {
 		return undefined;
 	}
-	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength: number; newTokens: TokenUpdate[] }[]): codemavi {
+	updateTokens(model: ITextModel, version: number, updates: { oldRangeLength: number; newTokens: TokenUpdate[] }[]): void {
 	}
-	markForRefresh(model: ITextModel, range: Range): codemavi {
+	markForRefresh(model: ITextModel, range: Range): void {
 	}
 	hasTokens(model: ITextModel, accurateForRange?: Range): boolean {
 		return true;
@@ -196,7 +196,7 @@ suite('Tree Sitter TokenizationFeature', function () {
 	async function getModelAndPrepTree(content: string) {
 		const model = disposables.add(modelService.createModel(content, { languageId: 'typescript', onDidChange: Event.None }, URI.file(`file${nameNumber++}.ts`)));
 		const tree = disposables.add(await treeSitterParserService.getTextModelTreeSitter(model));
-		const treeParseResult = new Promise<codemavi>(resolve => {
+		const treeParseResult = new Promise<void>(resolve => {
 			const disposable = treeSitterParserService.onDidUpdateTree(e => {
 				if (e.textModel === model) {
 					disposable.dispose();
@@ -236,7 +236,7 @@ class y {
 		let updateListener: IDisposable | undefined;
 		let change: TreeUpdateEvent | undefined;
 
-		const updatePromise = new Promise<codemavi>(resolve => {
+		const updatePromise = new Promise<void>(resolve => {
 			updateListener = treeSitterParserService.onDidUpdateTree(async e => {
 				if (e.textModel === model) {
 					change = e;
@@ -245,15 +245,15 @@ class y {
 			});
 		});
 
-		const edit1 = new Promise<codemavi>(resolve => {
+		const edit1 = new Promise<void>(resolve => {
 			model.applyEdits([{ range: new Range(7, 1, 8, 1), text: '' }]);
 			resolve();
 		});
-		const edit2 = new Promise<codemavi>(resolve => {
+		const edit2 = new Promise<void>(resolve => {
 			model.applyEdits([{ range: new Range(6, 1, 7, 1), text: '' }]);
 			resolve();
 		});
-		const edit3 = new Promise<codemavi>(resolve => {
+		const edit3 = new Promise<void>(resolve => {
 			model.applyEdits([{ range: new Range(5, 1, 6, 1), text: '' }]);
 			resolve();
 		});

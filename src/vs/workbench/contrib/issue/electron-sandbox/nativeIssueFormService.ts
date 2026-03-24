@@ -36,7 +36,7 @@ export class NativeIssueFormService extends IssueFormService implements IIssueFo
 	}
 
 	// override to grab platform info
-	override async openReporter(data: IssueReporterData): Promise<codemavi> {
+	override async openReporter(data: IssueReporterData): Promise<void> {
 		if (this.hasToReload(data)) {
 			return;
 		}

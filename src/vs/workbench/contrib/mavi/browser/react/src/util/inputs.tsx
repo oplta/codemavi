@@ -38,7 +38,7 @@ export const WidgetComponent = <CtorParams extends any[], Instance>({ ctor, prop
 		ctor: { new(...params: CtorParams): Instance } | ((container: HTMLDivElement) => Instance),
 		propsFn: (container: HTMLDivElement) => CtorParams, // unused if fn
 		onCreateInstance: (instance: Instance) => IDisposable[],
-		dispose: (instance: Instance) => codemavi,
+		dispose: (instance: Instance) => void,
 		children?: React.ReactNode,
 		className?: string
 	}
@@ -340,7 +340,7 @@ const getOptionsAtPath = async (accessor: ReturnType<typeof useAccessor>, path: 
 
 
 
-export type TextAreaFns = { setValue: (v: string) => codemavi, enable: () => codemavi, disable: () => codemavi }
+export type TextAreaFns = { setValue: (v: string) => void, enable: () => void, disable: () => void }
 type InputBox2Props = {
 	initValue?: string | null;
 	placeholder: string;
@@ -348,13 +348,13 @@ type InputBox2Props = {
 	enableAtToMention?: boolean;
 	fnsRef?: { current: null | TextAreaFns };
 	className?: string;
-	onChangeText?: (value: string) => codemavi;
-	onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => codemavi;
-	onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => codemavi;
-	onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => codemavi;
-	onChangeHeight?: (newHeight: number) => codemavi;
+	onChangeText?: (value: string) => void;
+	onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+	onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+	onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+	onChangeHeight?: (newHeight: number) => void;
 }
-export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props>(function X({ initValue, placeholder, multiline, enableAtToMention, fnsRef, className, onKeyDown, onFocus, onBlur, onChangeText }, ref) {
+export const MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props>(function X({ initValue, placeholder, multiline, enableAtToMention, fnsRef, className, onKeyDown, onFocus, onBlur, onChangeText }, ref) {
 
 
 	// mirrors whatever is in ref
@@ -705,7 +705,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 
 		if (r.scrollHeight === 0) return requestAnimationFrame(adjustHeight)
 		const h = r.scrollHeight
-		const newHeight = Math.min(h + 1, 500) // plus one to acodemavi scrollbar appearing when it shouldn't
+		const newHeight = Math.min(h + 1, 500) // plus one to avoid scrollbar appearing when it shouldn't
 		r.style.height = `${newHeight}px`
 	}, []);
 
@@ -753,7 +753,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 
 			disabled={!isEnabled}
 
-			className={`w-full resize-none max-h-[500px] overflow-y-auto text-codemavi-fg-1 placeholder:text-codemavi-fg-3 ${className}`}
+			className={`w-full resize-none max-h-[500px] overflow-y-auto text-mavi-fg-1 placeholder:text-mavi-fg-3 ${className}`}
 			style={{
 				// defaultInputBoxStyles
 				background: asCssVariable(inputBackground),
@@ -809,7 +809,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 		{isMenuOpen && (
 			<div
 				ref={refs.setFloating}
-				className="z-[100] border-codemavi-border-3 bg-codemavi-bg-2-alt border rounded shadow-lg flex flex-col overflow-hidden"
+				className="z-[100] border-mavi-border-3 bg-mavi-bg-2-alt border rounded shadow-lg flex flex-col overflow-hidden"
 				style={{
 					position: strategy,
 					top: y ?? 0,
@@ -819,7 +819,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 				onWheel={(e) => e.stopPropagation()}
 			>
 				{/* Breadcrumbs Header */}
-				{isBreadcrumbsShowing && <div className="px-2 py-1 text-codemavi-fg-1 bg-codemavi-bg-2-alt border-b border-codemavi-border-3 sticky top-0 bg-codemavi-bg-1 z-10 select-none pointer-events-none">
+				{isBreadcrumbsShowing && <div className="px-2 py-1 text-mavi-fg-1 bg-mavi-bg-2-alt border-b border-mavi-border-3 sticky top-0 bg-mavi-bg-1 z-10 select-none pointer-events-none">
 					{optionText ?
 						<div className="flex items-center">
 							{/* {optionPath.map((path, index) => (
@@ -839,7 +839,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 				<div className='max-h-[400px] w-full max-w-full overflow-y-auto overflow-x-auto'>
 					<div className="w-max min-w-full flex flex-col gap-0 text-nowrap flex-nowrap">
 						{options.length === 0 ?
-							<div className="text-codemavi-fg-3 px-3 py-0.5">No results found</div>
+							<div className="text-mavi-fg-3 px-3 py-0.5">No results found</div>
 							: options.map((o, oIdx) => {
 
 								return (
@@ -850,7 +850,7 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 										className={`
 											flex items-center gap-2
 											px-3 py-1 cursor-pointer
-											${oIdx === optionIdx ? 'bg-blue-500 text-white/80' : 'bg-codemavi-bg-2-alt text-codemavi-fg-1'}
+											${oIdx === optionIdx ? 'bg-blue-500 text-white/80' : 'bg-mavi-bg-2-alt text-mavi-fg-1'}
 										`}
 										onClick={() => { onSelectOption(); }}
 										onMouseMove={() => { setOptionIdx(oIdx) }}
@@ -878,9 +878,9 @@ export const Code MaviInputBox2 = forwardRef<HTMLTextAreaElement, InputBox2Props
 })
 
 
-export const Code MaviSimpleInputBox = ({ value, onChangeValue, placeholder, className, disabled, passwordBlur, compact, ...inputProps }: {
+export const MaviSimpleInputBox = ({ value, onChangeValue, placeholder, className, disabled, passwordBlur, compact, ...inputProps }: {
 	value: string;
-	onChangeValue: (value: string) => codemavi;
+	onChangeValue: (value: string) => void;
 	placeholder: string;
 	className?: string;
 	disabled?: boolean;
@@ -921,11 +921,11 @@ export const Code MaviSimpleInputBox = ({ value, onChangeValue, placeholder, cla
 	return (
 		<input
 			ref={inputRef}
-			defaultValue={value} // Use defaultValue instead of value to acodemavi recreation
+			defaultValue={value} // Use defaultValue instead of value to avoid recreation
 			onChange={handleChange}
 			placeholder={placeholder}
 			disabled={disabled}
-			className={`w-full resize-none bg-codemavi-bg-1 text-codemavi-fg-1 placeholder:text-codemavi-fg-3 border border-codemavi-border-2 focus:border-codemavi-border-1
+			className={`w-full resize-none bg-mavi-bg-1 text-mavi-fg-1 placeholder:text-mavi-fg-3 border border-mavi-border-2 focus:border-mavi-border-1
 				${compact ? 'py-1 px-2' : 'py-2 px-4 '}
 				rounded
 				${disabled ? 'opacity-50 cursor-not-allowed' : ''}
@@ -942,10 +942,10 @@ export const Code MaviSimpleInputBox = ({ value, onChangeValue, placeholder, cla
 };
 
 
-export const Code MaviInputBox = ({ onChangeText, onCreateInstance, inputBoxRef, placeholder, isPasswordField, multiline }: {
-	onChangeText: (value: string) => codemavi;
+export const MaviInputBox = ({ onChangeText, onCreateInstance, inputBoxRef, placeholder, isPasswordField, multiline }: {
+	onChangeText: (value: string) => void;
 	styles?: Partial<IInputBoxStyles>,
-	onCreateInstance?: (instance: InputBox) => codemavi | IDisposable[];
+	onCreateInstance?: (instance: InputBox) => void | IDisposable[];
 	inputBoxRef?: { current: InputBox | null };
 	placeholder: string;
 	isPasswordField?: boolean;
@@ -957,8 +957,8 @@ export const Code MaviInputBox = ({ onChangeText, onCreateInstance, inputBoxRef,
 	const contextViewProvider = accessor.get('IContextViewService')
 	return <WidgetComponent
 		className='
-			bg-codemavi-bg-1
-			@@codemavi-force-child-placeholder-codemavi-fg-1
+			bg-mavi-bg-1
+			@@mavi-force-child-placeholder-mavi-fg-1
 		'
 		ctor={InputBox}
 		propsFn={useCallback((container) => [
@@ -1004,7 +1004,7 @@ export const Code MaviInputBox = ({ onChangeText, onCreateInstance, inputBoxRef,
 
 
 
-export const Code MaviSlider = ({
+export const MaviSlider = ({
 	value,
 	onChange,
 	size = 'md',
@@ -1016,7 +1016,7 @@ export const Code MaviSlider = ({
 	width = 200,
 }: {
 	value: number;
-	onChange: (value: number) => codemavi;
+	onChange: (value: number) => void;
 	disabled?: boolean;
 	size?: 'xxs' | 'xs' | 'sm' | 'sm+' | 'md';
 	min?: number;
@@ -1108,7 +1108,7 @@ export const Code MaviSlider = ({
 							size === 'xs' ? 'h-1' :
 								size === 'sm' ? 'h-1.5' :
 									size === 'sm+' ? 'h-2' : 'h-2.5'
-							} bg-codemavi-bg-2 rounded-full cursor-pointer`}
+							} bg-mavi-bg-2 rounded-full cursor-pointer`}
 						onClick={handleTrackClick}
 					>
 						{/* Filled part of track */}
@@ -1117,7 +1117,7 @@ export const Code MaviSlider = ({
 								size === 'xs' ? 'h-1' :
 									size === 'sm' ? 'h-1.5' :
 										size === 'sm+' ? 'h-2' : 'h-2.5'
-								} bg-codemavi-fg-1 rounded-full`}
+								} bg-mavi-fg-1 rounded-full`}
 							style={{ width: `${percentage}%` }}
 						/>
 					</div>
@@ -1130,8 +1130,8 @@ export const Code MaviSlider = ({
 									size === 'sm' ? 'h-3 w-3' :
 										size === 'sm+' ? 'h-3.5 w-3.5' : 'h-4 w-4'
 							}
-							bg-codemavi-fg-1 rounded-full shadow-md ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}
-							border border-codemavi-fg-1`}
+							bg-mavi-fg-1 rounded-full shadow-md ${disabled ? 'cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'}
+							border border-mavi-fg-1`}
 						style={{ left: `${percentage}%`, zIndex: 2 }}  // Ensure thumb is above the invisible clickable area
 						onMouseDown={(e) => {
 							if (disabled) return;
@@ -1165,7 +1165,7 @@ export const Code MaviSlider = ({
 
 
 
-export const Code MaviSwitch = ({
+export const MaviSwitch = ({
 	value,
 	onChange,
 	size = 'md',
@@ -1173,7 +1173,7 @@ export const Code MaviSwitch = ({
 	...props
 }: {
 	value: boolean;
-	onChange: (value: boolean) => codemavi;
+	onChange: (value: boolean) => void;
 	disabled?: boolean;
 	size?: 'xxs' | 'xs' | 'sm' | 'sm+' | 'md';
 }) => {
@@ -1217,7 +1217,7 @@ export const Code MaviSwitch = ({
 
 
 
-export const Code MaviCheckBox = ({ label, value, onClick, className }: { label: string, value: boolean, onClick: (checked: boolean) => codemavi, className?: string }) => {
+export const MaviCheckBox = ({ label, value, onClick, className }: { label: string, value: boolean, onClick: (checked: boolean) => void, className?: string }) => {
 	const divRef = useRef<HTMLDivElement | null>(null)
 	const instanceRef = useRef<Checkbox | null>(null)
 
@@ -1251,7 +1251,7 @@ export const Code MaviCheckBox = ({ label, value, onClick, className }: { label:
 
 
 
-export const Code MaviCustomDropdownBox = <T extends NonNullable<any>>({
+export const MaviCustomDropdownBox = <T extends NonNullable<any>>({
 	options,
 	selectedOption,
 	onChangeOption,
@@ -1267,7 +1267,7 @@ export const Code MaviCustomDropdownBox = <T extends NonNullable<any>>({
 }: {
 	options: T[];
 	selectedOption: T | undefined;
-	onChangeOption: (newValue: T) => codemavi;
+	onChangeOption: (newValue: T) => void;
 	getOptionDropdownName: (option: T) => string;
 	getOptionDropdownDetail?: (option: T) => string;
 	getOptionDisplayName: (option: T) => string;
@@ -1416,7 +1416,7 @@ export const Code MaviCustomDropdownBox = <T extends NonNullable<any>>({
 			{isOpen && (
 				<div
 					ref={refs.setFloating}
-					className="z-[100] bg-codemavi-bg-1 border-codemavi-border-3 border rounded shadow-lg"
+					className="z-[100] bg-mavi-bg-1 border-mavi-border-3 border rounded shadow-lg"
 					style={{
 						position: strategy,
 						top: y ?? 0,
@@ -1478,9 +1478,9 @@ export const Code MaviCustomDropdownBox = <T extends NonNullable<any>>({
 
 
 
-export const _Code MaviSelectBox = <T,>({ onChangeSelection, onCreateInstance, selectBoxRef, options, className }: {
-	onChangeSelection: (value: T) => codemavi;
-	onCreateInstance?: ((instance: SelectBox) => codemavi | IDisposable[]);
+export const _MaviSelectBox = <T,>({ onChangeSelection, onCreateInstance, selectBoxRef, options, className }: {
+	onChangeSelection: (value: T) => void;
+	onCreateInstance?: ((instance: SelectBox) => void | IDisposable[]);
 	selectBoxRef?: React.MutableRefObject<SelectBox | null>;
 	options: readonly { text: string, value: T }[];
 	className?: string;
@@ -1493,9 +1493,9 @@ export const _Code MaviSelectBox = <T,>({ onChangeSelection, onCreateInstance, s
 	return <WidgetComponent
 		className={`
 			@@select-child-restyle
-			@@[&_select]:!codemavi-text-codemavi-fg-3
-			@@[&_select]:!codemavi-text-xs
-			!text-codemavi-fg-3
+			@@[&_select]:!mavi-text-mavi-fg-3
+			@@[&_select]:!mavi-text-xs
+			!text-mavi-fg-3
 			${className ?? ''}
 		`}
 		ctor={SelectBox}
@@ -1615,7 +1615,7 @@ export const BlockCode = ({ initValue, language, maxHeight, showScrollbars }: Bl
 		if (language) modelRef.current?.setLanguage(language)
 	}, [language])
 
-	return <div ref={divRef} className='relative z-0 px-2 py-1 bg-codemavi-bg-3'>
+	return <div ref={divRef} className='relative z-0 px-2 py-1 bg-mavi-bg-3'>
 		<WidgetComponent
 			className='@@bg-editor-style-override' // text-sm
 			ctor={useCallback((container) => {
@@ -1716,14 +1716,14 @@ export const BlockCode = ({ initValue, language, maxHeight, showScrollbars }: Bl
 }
 
 
-export const Code MaviButtonBgDarken = ({ children, disabled, onClick, className }: { children: React.ReactNode; disabled?: boolean; onClick: () => codemavi; className?: string }) => {
+export const MaviButtonBgDarken = ({ children, disabled, onClick, className }: { children: React.ReactNode; disabled?: boolean; onClick: () => void; className?: string }) => {
 	return <button disabled={disabled}
 		className={`px-3 py-1 bg-black/10 dark:bg-white/10 rounded-sm overflow-hidden whitespace-nowrap flex items-center justify-center ${className || ''}`}
 		onClick={onClick}
 	>{children}</button>
 }
 
-// export const Code MaviScrollableElt = ({ options, children }: { options: ScrollableElementCreationOptions, children: React.ReactNode }) => {
+// export const MaviScrollableElt = ({ options, children }: { options: ScrollableElementCreationOptions, children: React.ReactNode }) => {
 // 	const instanceRef = useRef<DomScrollableElement | null>(null);
 // 	const [childrenPortal, setChildrenPortal] = useState<React.ReactNode | null>(null)
 
@@ -1750,11 +1750,11 @@ export const Code MaviButtonBgDarken = ({ children, disabled, onClick, className
 // 	</>
 // }
 
-// export const Code MaviSelectBox = <T,>({ onChangeSelection, initVal, selectBoxRef, options }: {
+// export const MaviSelectBox = <T,>({ onChangeSelection, initVal, selectBoxRef, options }: {
 // 	initVal: T;
 // 	selectBoxRef: React.MutableRefObject<SelectBox | null>;
 // 	options: readonly { text: string, value: T }[];
-// 	onChangeSelection: (value: T) => codemavi;
+// 	onChangeSelection: (value: T) => void;
 // }) => {
 
 
@@ -1793,8 +1793,8 @@ export const Code MaviButtonBgDarken = ({ children, disabled, onClick, className
 
 
 
-// export const Code MaviCheckBox = ({ onChangeChecked, initVal, label, checkboxRef, }: {
-// 	onChangeChecked: (checked: boolean) => codemavi;
+// export const MaviCheckBox = ({ onChangeChecked, initVal, label, checkboxRef, }: {
+// 	onChangeChecked: (checked: boolean) => void;
 // 	initVal: boolean;
 // 	checkboxRef: React.MutableRefObject<ObjectSettingCheckboxWidget | null>;
 // 	label: string;
@@ -1945,7 +1945,7 @@ const SingleDiffEditor = ({ block, lang }: { block: ExtractedSearchReplaceBlock,
 	}, [originalModel, modifiedModel, instantiationService]);
 
 	return (
-		<div className="w-full bg-codemavi-bg-3 @@bg-editor-style-override" ref={divRef} />
+		<div className="w-full bg-mavi-bg-3 @@bg-editor-style-override" ref={divRef} />
 	);
 };
 
@@ -1960,7 +1960,7 @@ const SingleDiffEditor = ({ block, lang }: { block: ExtractedSearchReplaceBlock,
  *   - searchReplaceBlocks: string in search/replace format (from LLM)
  *   - language?: string (optional, fallback to 'plaintext')
  */
-export const Code MaviDiffEditor = ({ uri, searchReplaceBlocks, language }: { uri?: any, searchReplaceBlocks: string, language?: string }) => {
+export const MaviDiffEditor = ({ uri, searchReplaceBlocks, language }: { uri?: any, searchReplaceBlocks: string, language?: string }) => {
 	const accessor = useAccessor();
 	const languageService = accessor.get('ILanguageService');
 
@@ -1975,7 +1975,7 @@ export const Code MaviDiffEditor = ({ uri, searchReplaceBlocks, language }: { ur
 
 	// If no blocks, show empty state
 	if (blocks.length === 0) {
-		return <div className="w-full p-4 text-codemavi-fg-4 text-sm">No changes found</div>;
+		return <div className="w-full p-4 text-mavi-fg-4 text-sm">No changes found</div>;
 	}
 
 	// Display all blocks
@@ -1984,7 +1984,7 @@ export const Code MaviDiffEditor = ({ uri, searchReplaceBlocks, language }: { ur
 			{blocks.map((block, index) => (
 				<div key={index} className="w-full">
 					{blocks.length > 1 && (
-						<div className="text-codemavi-fg-4 text-xs mb-1 px-1">
+						<div className="text-mavi-fg-4 text-xs mb-1 px-1">
 							Change {index + 1} of {blocks.length}
 						</div>
 					)}

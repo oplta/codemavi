@@ -74,10 +74,10 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 	private _onDidChangeLastSyncTime: Emitter<number> = this._register(new Emitter<number>());
 	readonly onDidChangeLastSyncTime: Event<number> = this._onDidChangeLastSyncTime.event;
 
-	private _onDidResetLocal = this._register(new Emitter<codemavi>());
+	private _onDidResetLocal = this._register(new Emitter<void>());
 	readonly onDidResetLocal = this._onDidResetLocal.event;
 
-	private _onDidResetRemote = this._register(new Emitter<codemavi>());
+	private _onDidResetRemote = this._register(new Emitter<void>());
 	readonly onDidResetRemote = this._onDidResetRemote.event;
 
 	private activeProfileSynchronizers = new Map<string, [ProfileSynchronizer, IDisposable]>();
@@ -123,10 +123,10 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 
 		const executed = false;
 		const that = this;
-		let cancellablePromise: CancelablePromise<codemavi> | undefined;
+		let cancellablePromise: CancelablePromise<void> | undefined;
 		return {
 			manifest,
-			async run(): Promise<codemavi> {
+			async run(): Promise<void> {
 				if (executed) {
 					throw new Error('Can run a task only once');
 				}
@@ -135,7 +135,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 				that.logService.info(`Sync done. Took ${new Date().getTime() - startTime}ms`);
 				that.updateLastSyncTime();
 			},
-			stop(): Promise<codemavi> {
+			stop(): Promise<void> {
 				cancellablePromise?.cancel();
 				return that.stop();
 			}
@@ -169,10 +169,10 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		const cancellableToken = new CancellationTokenSource();
 		return {
 			id: executionId,
-			async merge(): Promise<codemavi> {
+			async merge(): Promise<void> {
 				return that.sync(manifest, true, executionId, cancellableToken.token);
 			},
-			async apply(): Promise<codemavi> {
+			async apply(): Promise<void> {
 				try {
 					try {
 						await that.applyManualSync(manifest, executionId, cancellableToken.token);
@@ -193,7 +193,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 				that.logService.info(`Sync done. Took ${new Date().getTime() - startTime}ms`);
 				that.updateLastSyncTime();
 			},
-			async stop(): Promise<codemavi> {
+			async stop(): Promise<void> {
 				cancellableToken.cancel();
 				await that.stop();
 				await that.resetLocal();
@@ -201,7 +201,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		};
 	}
 
-	private async sync(manifest: IUserDataManifest | null, preview: boolean, executionId: string, token: CancellationToken): Promise<codemavi> {
+	private async sync(manifest: IUserDataManifest | null, preview: boolean, executionId: string, token: CancellationToken): Promise<void> {
 		this._syncErrors = [];
 		try {
 			if (this.status !== SyncStatus.HasConflicts) {
@@ -229,7 +229,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	private async syncRemoteProfiles(remoteProfiles: ISyncUserDataProfile[], manifest: IUserDataManifest | null, preview: boolean, executionId: string, token: CancellationToken): Promise<codemavi> {
+	private async syncRemoteProfiles(remoteProfiles: ISyncUserDataProfile[], manifest: IUserDataManifest | null, preview: boolean, executionId: string, token: CancellationToken): Promise<void> {
 		for (const syncProfile of remoteProfiles) {
 			if (token.isCancellationRequested) {
 				return;
@@ -254,7 +254,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	private async applyManualSync(manifest: IUserDataManifest | null, executionId: string, token: CancellationToken): Promise<codemavi> {
+	private async applyManualSync(manifest: IUserDataManifest | null, executionId: string, token: CancellationToken): Promise<void> {
 		try {
 			this.setStatus(SyncStatus.Syncing);
 			const profileSynchronizers = this.getActiveProfileSynchronizers();
@@ -291,7 +291,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return errors.map(([syncResource, error]) => ({ profile: profileSynchronizer.profile, syncResource, error }));
 	}
 
-	private async stop(): Promise<codemavi> {
+	private async stop(): Promise<void> {
 		if (this.status !== SyncStatus.Idle) {
 			await Promise.allSettled(this.getActiveProfileSynchronizers().map(profileSynchronizer => profileSynchronizer.stop()));
 		}
@@ -313,7 +313,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return null;
 	}
 
-	async replace(syncResourceHandle: ISyncResourceHandle): Promise<codemavi> {
+	async replace(syncResourceHandle: ISyncResourceHandle): Promise<void> {
 		this.checkEnablement();
 
 		const profileSyncResource = this.userDataSyncResourceProviderService.resolveUserDataSyncResource(syncResourceHandle);
@@ -337,7 +337,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return;
 	}
 
-	async accept(syncResource: IUserDataSyncResource, resource: URI, content: string | null | undefined, apply: boolean | { force: boolean }): Promise<codemavi> {
+	async accept(syncResource: IUserDataSyncResource, resource: URI, content: string | null | undefined, apply: boolean | { force: boolean }): Promise<void> {
 		this.checkEnablement();
 
 		await this.performAction(syncResource.profile, async synchronizer => {
@@ -373,13 +373,13 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return !!result;
 	}
 
-	async reset(): Promise<codemavi> {
+	async reset(): Promise<void> {
 		this.checkEnablement();
 		await this.resetRemote();
 		await this.resetLocal();
 	}
 
-	async resetRemote(): Promise<codemavi> {
+	async resetRemote(): Promise<void> {
 		this.checkEnablement();
 		try {
 			await this.userDataSyncStoreService.clear();
@@ -390,7 +390,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		this._onDidResetRemote.fire();
 	}
 
-	async resetLocal(): Promise<codemavi> {
+	async resetLocal(): Promise<void> {
 		this.checkEnablement();
 		this._lastSyncTime = undefined;
 		this.storageService.remove(LAST_SYNC_TIME_KEY, StorageScope.APPLICATION);
@@ -406,7 +406,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		this.logService.info('Did reset the local sync state.');
 	}
 
-	private async cleanUpStaleStorageData(): Promise<codemavi> {
+	private async cleanUpStaleStorageData(): Promise<void> {
 		const allKeys = this.storageService.keys(StorageScope.APPLICATION, StorageTarget.MACHINE);
 		const lastSyncProfileKeys: [string, string][] = [];
 		for (const key of allKeys) {
@@ -446,7 +446,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	async cleanUpRemoteData(): Promise<codemavi> {
+	async cleanUpRemoteData(): Promise<void> {
 		const remoteProfiles = await this.userDataSyncResourceProviderService.getRemoteSyncedProfiles();
 		const remoteProfileCollections = remoteProfiles.map(profile => profile.collection);
 		const allCollections = await this.userDataSyncStoreService.getAllCollections();
@@ -472,13 +472,13 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	async saveRemoteActivityData(location: URI): Promise<codemavi> {
+	async saveRemoteActivityData(location: URI): Promise<void> {
 		this.checkEnablement();
 		const data = await this.userDataSyncStoreService.getActivityData();
 		await this.fileService.writeFile(location, data);
 	}
 
-	async extractActivityData(activityDataResource: URI, location: URI): Promise<codemavi> {
+	async extractActivityData(activityDataResource: URI, location: URI): Promise<void> {
 		const content = (await this.fileService.readFile(activityDataResource)).value.toString();
 		const activityData: IUserDataActivityData = JSON.parse(content);
 
@@ -548,7 +548,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return undefined;
 	}
 
-	private setStatus(status: SyncStatus): codemavi {
+	private setStatus(status: SyncStatus): void {
 		const oldStatus = this._status;
 		if (this._status !== status) {
 			this._status = status;
@@ -559,7 +559,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	private updateConflicts(): codemavi {
+	private updateConflicts(): void {
 		const conflicts = this.getActiveProfileSynchronizers().map(synchronizer => synchronizer.conflicts).flat();
 		if (!equals(this._conflicts, conflicts, (a, b) => a.profile.id === b.profile.id && a.syncResource === b.syncResource && equals(a.conflicts, b.conflicts, (a, b) => isEqual(a.previewResource, b.previewResource)))) {
 			this._conflicts = conflicts;
@@ -567,7 +567,7 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		}
 	}
 
-	private updateLastSyncTime(): codemavi {
+	private updateLastSyncTime(): void {
 		if (this.status === SyncStatus.Idle) {
 			this._lastSyncTime = new Date().getTime();
 			this.storageService.store(LAST_SYNC_TIME_KEY, this._lastSyncTime, StorageScope.APPLICATION, StorageTarget.MACHINE);
@@ -602,12 +602,12 @@ export class UserDataSyncService extends Disposable implements IUserDataSyncServ
 		return profileSynchronizers;
 	}
 
-	private clearActiveProfileSynchronizers(): codemavi {
+	private clearActiveProfileSynchronizers(): void {
 		this.activeProfileSynchronizers.forEach(([, disposable]) => disposable.dispose());
 		this.activeProfileSynchronizers.clear();
 	}
 
-	private checkEnablement(): codemavi {
+	private checkEnablement(): void {
 		if (!this.userDataSyncStoreManagementService.userDataSyncStore) {
 			throw new Error('Not enabled');
 		}
@@ -657,7 +657,7 @@ class ProfileSynchronizer extends Disposable {
 		}
 	}
 
-	private onDidChangeResourceEnablement(syncResource: SyncResource, enabled: boolean): codemavi {
+	private onDidChangeResourceEnablement(syncResource: SyncResource, enabled: boolean): void {
 		if (enabled) {
 			this.registerSynchronizer(syncResource);
 		} else {
@@ -665,7 +665,7 @@ class ProfileSynchronizer extends Disposable {
 		}
 	}
 
-	protected registerSynchronizer(syncResource: SyncResource): codemavi {
+	protected registerSynchronizer(syncResource: SyncResource): void {
 		if (this._enabled.some(([synchronizer]) => synchronizer.resource === syncResource)) {
 			return;
 		}
@@ -694,7 +694,7 @@ class ProfileSynchronizer extends Disposable {
 		this._enabled.push([synchronizer, order, disposables]);
 	}
 
-	private deRegisterSynchronizer(syncResource: SyncResource): codemavi {
+	private deRegisterSynchronizer(syncResource: SyncResource): void {
 		const index = this._enabled.findIndex(([synchronizer]) => synchronizer.resource === syncResource);
 		if (index !== -1) {
 			const [[synchronizer, , disposable]] = this._enabled.splice(index, 1);
@@ -767,7 +767,7 @@ class ProfileSynchronizer extends Disposable {
 		}
 	}
 
-	async apply(executionId: string, token: CancellationToken): Promise<codemavi> {
+	async apply(executionId: string, token: CancellationToken): Promise<void> {
 		const syncHeaders = createSyncHeaders(executionId);
 		for (const synchroniser of this.enabled) {
 			if (token.isCancellationRequested) {
@@ -789,7 +789,7 @@ class ProfileSynchronizer extends Disposable {
 		}
 	}
 
-	async stop(): Promise<codemavi> {
+	async stop(): Promise<void> {
 		for (const synchroniser of this.enabled) {
 			try {
 				if (synchroniser.status !== SyncStatus.Idle) {
@@ -801,7 +801,7 @@ class ProfileSynchronizer extends Disposable {
 		}
 	}
 
-	async resetLocal(): Promise<codemavi> {
+	async resetLocal(): Promise<void> {
 		for (const synchroniser of this.enabled) {
 			try {
 				await synchroniser.resetLocal();
@@ -829,14 +829,14 @@ class ProfileSynchronizer extends Disposable {
 		return this.configurationService.getValue(USER_DATA_SYNC_CONFIGURATION_SCOPE);
 	}
 
-	private setStatus(status: SyncStatus): codemavi {
+	private setStatus(status: SyncStatus): void {
 		if (this._status !== status) {
 			this._status = status;
 			this._onDidChangeStatus.fire(status);
 		}
 	}
 
-	private updateStatus(): codemavi {
+	private updateStatus(): void {
 		this.updateConflicts();
 		if (this.enabled.some(s => s.status === SyncStatus.HasConflicts)) {
 			return this.setStatus(SyncStatus.HasConflicts);
@@ -847,7 +847,7 @@ class ProfileSynchronizer extends Disposable {
 		return this.setStatus(SyncStatus.Idle);
 	}
 
-	private updateConflicts(): codemavi {
+	private updateConflicts(): void {
 		const conflicts = this.enabled.filter(s => s.status === SyncStatus.HasConflicts)
 			.filter(s => s.conflicts.conflicts.length > 0)
 			.map(s => s.conflicts);
@@ -891,7 +891,7 @@ function canBailout(e: any): boolean {
 	return false;
 }
 
-function reportUserDataSyncError(userDataSyncError: UserDataSyncError, executionId: string, userDataSyncStoreManagementService: IUserDataSyncStoreManagementService, telemetryService: ITelemetryService): codemavi {
+function reportUserDataSyncError(userDataSyncError: UserDataSyncError, executionId: string, userDataSyncStoreManagementService: IUserDataSyncStoreManagementService, telemetryService: ITelemetryService): void {
 	telemetryService.publicLog2<{ code: string; service: string; serverCode?: string; url?: string; resource?: string; executionId?: string }, SyncErrorClassification>('sync/error',
 		{
 			code: userDataSyncError.code,

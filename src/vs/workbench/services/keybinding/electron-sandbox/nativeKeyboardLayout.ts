@@ -21,7 +21,7 @@ export class KeyboardLayoutService extends Disposable implements IKeyboardLayout
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeKeyboardLayout = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeKeyboardLayout = this._register(new Emitter<void>());
 	readonly onDidChangeKeyboardLayout = this._onDidChangeKeyboardLayout.event;
 
 	private _keyboardMapper: IKeyboardMapper | null;
@@ -70,7 +70,7 @@ export class KeyboardLayoutService extends Disposable implements IKeyboardLayout
 		return this._keyboardMapper;
 	}
 
-	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): codemavi {
+	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): void {
 		return;
 	}
 }

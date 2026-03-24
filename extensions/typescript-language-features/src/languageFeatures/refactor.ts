@@ -52,7 +52,7 @@ class DidApplyRefactoringCommand implements Command {
 		private readonly telemetryReporter: TelemetryReporter
 	) { }
 
-	public async execute(args: DidApplyRefactoringCommand.Args): Promise<codemavi> {
+	public async execute(args: DidApplyRefactoringCommand.Args): Promise<void> {
 		/* __GDPR__
 			"refactor.execute" : {
 				"owner": "mjbvz",
@@ -86,7 +86,7 @@ class SelectRefactorCommand implements Command {
 		private readonly client: ITypeScriptServiceClient,
 	) { }
 
-	public async execute(args: SelectRefactorCommand.Args): Promise<codemavi> {
+	public async execute(args: SelectRefactorCommand.Args): Promise<void> {
 		const file = this.client.toOpenTsFilePath(args.document);
 		if (!file) {
 			return;
@@ -135,7 +135,7 @@ class MoveToFileRefactorCommand implements Command {
 		private readonly didApplyCommand: DidApplyRefactoringCommand
 	) { }
 
-	public async execute(args: MoveToFileRefactorCommand.Args): Promise<codemavi> {
+	public async execute(args: MoveToFileRefactorCommand.Args): Promise<void> {
 		const file = this.client.toOpenTsFilePath(args.document);
 		if (!file) {
 			return;

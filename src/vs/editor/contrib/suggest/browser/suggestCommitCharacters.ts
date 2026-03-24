@@ -45,7 +45,7 @@ export class CommitCharacterController {
 		}));
 	}
 
-	private _onItem(selected: ISelectedSuggestion | undefined): codemavi {
+	private _onItem(selected: ISelectedSuggestion | undefined): void {
 		if (!selected || !isNonEmptyArray(selected.item.completion.commitCharacters)) {
 			// no item or no commit characters
 			this.reset();
@@ -67,7 +67,7 @@ export class CommitCharacterController {
 		this._active = { acceptCharacters, item: selected };
 	}
 
-	reset(): codemavi {
+	reset(): void {
 		this._active = undefined;
 	}
 

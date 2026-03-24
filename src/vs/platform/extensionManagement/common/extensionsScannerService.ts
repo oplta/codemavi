@@ -142,8 +142,8 @@ export interface IExtensionsScannerService {
 	scanMultipleExtensions(extensionLocations: URI[], extensionType: ExtensionType, scanOptions: ScanOptions): Promise<IScannedExtension[]>;
 	scanOneOrMultipleExtensions(extensionLocation: URI, extensionType: ExtensionType, scanOptions: ScanOptions): Promise<IScannedExtension[]>;
 
-	updateManifestMetadata(extensionLocation: URI, metadata: ManifestMetadata): Promise<codemavi>;
-	initializeDefaultProfileExtensions(): Promise<codemavi>;
+	updateManifestMetadata(extensionLocation: URI, metadata: ManifestMetadata): Promise<void>;
+	initializeDefaultProfileExtensions(): Promise<void>;
 }
 
 export abstract class AbstractExtensionsScannerService extends Disposable implements IExtensionsScannerService {
@@ -276,7 +276,7 @@ export abstract class AbstractExtensionsScannerService extends Disposable implem
 		return this.applyScanOptions(extensions, extensionType, { includeInvalid: scanOptions.includeInvalid, pickLatest: true });
 	}
 
-	async updateManifestMetadata(extensionLocation: URI, metaData: ManifestMetadata): Promise<codemavi> {
+	async updateManifestMetadata(extensionLocation: URI, metaData: ManifestMetadata): Promise<void> {
 		const manifestLocation = joinPath(extensionLocation, 'package.json');
 		const content = (await this.fileService.readFile(manifestLocation)).value.toString();
 		const manifest: IScannedExtensionManifest = JSON.parse(content);
@@ -285,7 +285,7 @@ export abstract class AbstractExtensionsScannerService extends Disposable implem
 		await this.fileService.writeFile(joinPath(extensionLocation, 'package.json'), VSBuffer.fromString(JSON.stringify(manifest, null, '\t')));
 	}
 
-	async initializeDefaultProfileExtensions(): Promise<codemavi> {
+	async initializeDefaultProfileExtensions(): Promise<void> {
 		try {
 			await this.extensionsProfileScannerService.scanProfileExtensions(this.userDataProfilesService.defaultProfile.extensionsResource, { bailOutWhenFileNotFound: true });
 		} catch (error) {
@@ -297,8 +297,8 @@ export abstract class AbstractExtensionsScannerService extends Disposable implem
 		}
 	}
 
-	private initializeDefaultProfileExtensionsPromise: Promise<codemavi> | undefined = undefined;
-	private async doInitializeDefaultProfileExtensions(): Promise<codemavi> {
+	private initializeDefaultProfileExtensionsPromise: Promise<void> | undefined = undefined;
+	private async doInitializeDefaultProfileExtensions(): Promise<void> {
 		if (!this.initializeDefaultProfileExtensionsPromise) {
 			this.initializeDefaultProfileExtensionsPromise = (async () => {
 				try {
@@ -784,12 +784,12 @@ class ExtensionsScanner extends Disposable {
 
 	private async getLocalizedMessages(extensionLocation: URI, extensionManifest: IExtensionManifest, nlsConfiguration: NlsConfiguration): Promise<LocalizedMessages | undefined> {
 		const defaultPackageNLS = joinPath(extensionLocation, 'package.nls.json');
-		const reportErrors = (localized: URI | null, errors: ParseError[]): codemavi => {
+		const reportErrors = (localized: URI | null, errors: ParseError[]): void => {
 			errors.forEach((error) => {
 				this.logService.error(this.formatMessage(extensionLocation, localize('jsonsParseReportErrors', "Failed to parse {0}: {1}.", localized?.path, getParseErrorMessage(error.error))));
 			});
 		};
-		const reportInvalidFormat = (localized: URI | null): codemavi => {
+		const reportInvalidFormat = (localized: URI | null): void => {
 			this.logService.error(this.formatMessage(extensionLocation, localize('jsonInvalidFormat', "Invalid format {0}: JSON object expected.", localized?.path)));
 		};
 
@@ -868,7 +868,7 @@ class ExtensionsScanner extends Disposable {
 	 */
 	private findMessageBundles(extensionLocation: URI, nlsConfiguration: NlsConfiguration): Promise<{ localized: URI; original: URI | null }> {
 		return new Promise<{ localized: URI; original: URI | null }>((c, e) => {
-			const loop = (locale: string): codemavi => {
+			const loop = (locale: string): void => {
 				const toCheck = joinPath(extensionLocation, `package.nls.${locale}.json`);
 				this.fileService.exists(toCheck).then(exists => {
 					if (exists) {
@@ -904,9 +904,9 @@ interface IExtensionCacheData {
 class CachedExtensionsScanner extends ExtensionsScanner {
 
 	private input: ExtensionScannerInput | undefined;
-	private readonly cacheValidatorThrottler: ThrottledDelayer<codemavi> = this._register(new ThrottledDelayer(3000));
+	private readonly cacheValidatorThrottler: ThrottledDelayer<void> = this._register(new ThrottledDelayer(3000));
 
-	private readonly _onDidChangeCache = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeCache = this._register(new Emitter<void>());
 	readonly onDidChangeCache = this._onDidChangeCache.event;
 
 	constructor(
@@ -951,7 +951,7 @@ class CachedExtensionsScanner extends ExtensionsScanner {
 		return null;
 	}
 
-	private async writeExtensionCache(cacheFile: URI, cacheContents: IExtensionCacheData): Promise<codemavi> {
+	private async writeExtensionCache(cacheFile: URI, cacheContents: IExtensionCacheData): Promise<void> {
 		try {
 			await this.fileService.writeFile(cacheFile, VSBuffer.fromString(JSON.stringify(cacheContents)));
 		} catch (error) {
@@ -959,7 +959,7 @@ class CachedExtensionsScanner extends ExtensionsScanner {
 		}
 	}
 
-	private async validateCache(): Promise<codemavi> {
+	private async validateCache(): Promise<void> {
 		if (!this.input) {
 			// Input has been unset by the time we get here, so skip validation
 			return;

@@ -259,7 +259,7 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 		this._commentThreadWidget.setPendingComment(pending);
 	}
 
-	protected _fillContainer(container: HTMLElement): codemavi {
+	protected _fillContainer(container: HTMLElement): void {
 		this.setCssClass('review-widget');
 		this._commentThreadWidget = this._scopedInstantiationService.createInstance(
 			CommentThreadWidget,
@@ -315,7 +315,7 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 		return { lineNumber: range.endLineNumber, column: range.endLineNumber === range.startLineNumber ? (range.startColumn + range.endColumn + 1) / 2 : 1 };
 	}
 
-	private deleteCommentThread(): codemavi {
+	private deleteCommentThread(): void {
 		this.dispose();
 		this.commentService.disposeCommentThread(this.uniqueOwner, this._commentThread.threadId);
 	}
@@ -393,11 +393,11 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 		}
 	}
 
-	protected override _onWidth(widthInPixel: number): codemavi {
+	protected override _onWidth(widthInPixel: number): void {
 		this._commentThreadWidget.layout(widthInPixel);
 	}
 
-	protected override _doLayout(heightInPixel: number, widthInPixel: number): codemavi {
+	protected override _doLayout(heightInPixel: number, widthInPixel: number): void {
 		this._commentThreadWidget.layout(widthInPixel);
 	}
 
@@ -472,7 +472,7 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 		}));
 	}
 
-	async submitComment(): Promise<codemavi> {
+	async submitComment(): Promise<void> {
 		return this._commentThreadWidget.submitComment();
 	}
 
@@ -489,7 +489,7 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 			const arrowHeight = Math.round(lineHeight / 3);
 			const frameThickness = Math.round(lineHeight / 9) * 2;
 
-			const computedLinesNumber = Math.ceil((headHeight + dimensions.height + arrowHeight + frameThickness + 8 /** margin bottom to acodemavi margin collapse */) / lineHeight);
+			const computedLinesNumber = Math.ceil((headHeight + dimensions.height + arrowHeight + frameThickness + 8 /** margin bottom to avoid margin collapse */) / lineHeight);
 
 			if (this._viewZone?.heightInLines === computedLinesNumber) {
 				return;
@@ -519,7 +519,7 @@ export class ReviewZoneWidget extends ZoneWidget implements ICommentThreadWidget
 		this._commentThreadWidget.applyTheme(theme, fontInfo);
 	}
 
-	override show(rangeOrPos: IRange | IPosition | undefined, heightInLines: number): codemavi {
+	override show(rangeOrPos: IRange | IPosition | undefined, heightInLines: number): void {
 		const glyphPosition = this._commentGlyph?.getPosition();
 		let range = Range.isIRange(rangeOrPos) ? rangeOrPos : (rangeOrPos ? Range.fromPositions(rangeOrPos) : undefined);
 		if (glyphPosition?.position && range && glyphPosition.position.lineNumber !== range.endLineNumber) {

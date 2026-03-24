@@ -30,7 +30,7 @@ export abstract class BaseEditorQuickAccessProvider extends PickerQuickAccessPro
 		scorerCache: FuzzyScorerCache = Object.create(null);
 		isQuickNavigating: boolean | undefined = undefined;
 
-		reset(isQuickNavigating: boolean): codemavi {
+		reset(isQuickNavigating: boolean): void {
 
 			// Caches
 			if (!isQuickNavigating) {

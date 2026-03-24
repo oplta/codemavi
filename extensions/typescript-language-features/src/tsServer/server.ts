@@ -42,7 +42,7 @@ export interface ITypeScriptServer {
 
 	readonly tsServerLog: TsServerLog | undefined;
 
-	kill(): codemavi;
+	kill(): void;
 
 	/**
 	 * @return A list of all execute requests. If there are multiple entries, the first item is the primary
@@ -50,11 +50,11 @@ export interface ITypeScriptServer {
 	 */
 	executeImpl(command: keyof TypeScriptRequests, args: any, executeInfo: { isAsync: boolean; token?: vscode.CancellationToken; expectsResult: boolean; lowPriority?: boolean; executionTarget?: ExecutionTarget }): Array<Promise<ServerResponse.Response<Proto.Response>> | undefined>;
 
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export interface TsServerDelegate {
-	onFatalError(command: string, error: Error): codemavi;
+	onFatalError(command: string, error: Error): void;
 }
 
 export const enum TsServerProcessKind {
@@ -77,13 +77,13 @@ export interface TsServerProcessFactory {
 }
 
 export interface TsServerProcess {
-	write(serverRequest: Proto.Request): codemavi;
+	write(serverRequest: Proto.Request): void;
 
-	onData(handler: (data: Proto.Response) => codemavi): codemavi;
-	onExit(handler: (code: number | null, signal: string | null) => codemavi): codemavi;
-	onError(handler: (error: Error) => codemavi): codemavi;
+	onData(handler: (data: Proto.Response) => void): void;
+	onExit(handler: (code: number | null, signal: string | null) => void): void;
+	onError(handler: (error: Error) => void): void;
 
-	kill(): codemavi;
+	kill(): void;
 }
 
 export class SingleTsServer extends Disposable implements ITypeScriptServer {
@@ -268,7 +268,7 @@ export class SingleTsServer extends Disposable implements ITypeScriptServer {
 		return [result];
 	}
 
-	private sendNextRequests(): codemavi {
+	private sendNextRequests(): void {
 		while (this._pendingResponses.size === 0 && this._requestQueue.length > 0) {
 			const item = this._requestQueue.dequeue();
 			if (item) {
@@ -277,7 +277,7 @@ export class SingleTsServer extends Disposable implements ITypeScriptServer {
 		}
 	}
 
-	private sendRequest(requestItem: RequestItem): codemavi {
+	private sendRequest(requestItem: RequestItem): void {
 		const serverRequest = requestItem.request;
 		this._tracer.traceRequest(this._serverId, serverRequest, requestItem.expectsResponse, this._requestQueue.length);
 
@@ -476,7 +476,7 @@ export class GetErrRoutingTsServer extends Disposable implements ITypeScriptServ
 
 	public get tsServerLog() { return this.mainServer.tsServerLog; }
 
-	public kill(): codemavi {
+	public kill(): void {
 		this.getErrServer.kill();
 		this.mainServer.kill();
 	}
@@ -617,7 +617,7 @@ export class SyntaxRoutingTsServer extends Disposable implements ITypeScriptServ
 
 	public get tsServerLog() { return this.semanticServer.tsServerLog; }
 
-	public kill(): codemavi {
+	public kill(): void {
 		this.syntaxServer.kill();
 		this.semanticServer.kill();
 	}

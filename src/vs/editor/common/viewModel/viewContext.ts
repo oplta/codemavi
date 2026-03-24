@@ -27,11 +27,11 @@ export class ViewContext {
 		this.viewLayout = model.viewLayout;
 	}
 
-	public addEventHandler(eventHandler: ViewEventHandler): codemavi {
+	public addEventHandler(eventHandler: ViewEventHandler): void {
 		this.viewModel.addViewEventHandler(eventHandler);
 	}
 
-	public removeEventHandler(eventHandler: ViewEventHandler): codemavi {
+	public removeEventHandler(eventHandler: ViewEventHandler): void {
 		this.viewModel.removeViewEventHandler(eventHandler);
 	}
 }

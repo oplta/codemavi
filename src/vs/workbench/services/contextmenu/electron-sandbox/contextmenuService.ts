@@ -34,8 +34,8 @@ export class ContextMenuService implements IContextMenuService {
 
 	private impl: HTMLContextMenuService | NativeContextMenuService;
 
-	get onDidShowContextMenu(): Event<codemavi> { return this.impl.onDidShowContextMenu; }
-	get onDidHideContextMenu(): Event<codemavi> { return this.impl.onDidHideContextMenu; }
+	get onDidShowContextMenu(): Event<void> { return this.impl.onDidShowContextMenu; }
+	get onDidHideContextMenu(): Event<void> { return this.impl.onDidHideContextMenu; }
 
 	constructor(
 		@INotificationService notificationService: INotificationService,
@@ -58,11 +58,11 @@ export class ContextMenuService implements IContextMenuService {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.impl.dispose();
 	}
 
-	showContextMenu(delegate: IContextMenuDelegate | IContextMenuMenuDelegate): codemavi {
+	showContextMenu(delegate: IContextMenuDelegate | IContextMenuMenuDelegate): void {
 		this.impl.showContextMenu(delegate);
 	}
 }
@@ -71,10 +71,10 @@ class NativeContextMenuService extends Disposable implements IContextMenuService
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidShowContextMenu = this._store.add(new Emitter<codemavi>());
+	private readonly _onDidShowContextMenu = this._store.add(new Emitter<void>());
 	readonly onDidShowContextMenu = this._onDidShowContextMenu.event;
 
-	private readonly _onDidHideContextMenu = this._store.add(new Emitter<codemavi>());
+	private readonly _onDidHideContextMenu = this._store.add(new Emitter<void>());
 	readonly onDidHideContextMenu = this._onDidHideContextMenu.event;
 
 	constructor(
@@ -87,7 +87,7 @@ class NativeContextMenuService extends Disposable implements IContextMenuService
 		super();
 	}
 
-	showContextMenu(delegate: IContextMenuDelegate | IContextMenuMenuDelegate): codemavi {
+	showContextMenu(delegate: IContextMenuDelegate | IContextMenuMenuDelegate): void {
 
 		delegate = ContextMenuMenuDelegate.transform(delegate, this.menuService, this.contextKeyService);
 
@@ -178,11 +178,11 @@ class NativeContextMenuService extends Disposable implements IContextMenuService
 		}
 	}
 
-	private createMenu(delegate: IContextMenuDelegate, entries: readonly IAction[], onHide: () => codemavi, submenuIds = new Set<string>()): IContextMenuItem[] {
+	private createMenu(delegate: IContextMenuDelegate, entries: readonly IAction[], onHide: () => void, submenuIds = new Set<string>()): IContextMenuItem[] {
 		return coalesce(entries.map(entry => this.createMenuItem(delegate, entry, onHide, submenuIds)));
 	}
 
-	private createMenuItem(delegate: IContextMenuDelegate, entry: IAction, onHide: () => codemavi, submenuIds: Set<string>): IContextMenuItem | undefined {
+	private createMenuItem(delegate: IContextMenuDelegate, entry: IAction, onHide: () => void, submenuIds: Set<string>): IContextMenuItem | undefined {
 		// Separator
 		if (entry instanceof Separator) {
 			return { type: 'separator' };
@@ -246,7 +246,7 @@ class NativeContextMenuService extends Disposable implements IContextMenuService
 		}
 	}
 
-	private async runAction(actionToRun: IAction, delegate: IContextMenuDelegate, event: IContextMenuEvent): Promise<codemavi> {
+	private async runAction(actionToRun: IAction, delegate: IContextMenuDelegate, event: IContextMenuEvent): Promise<void> {
 		if (!delegate.skipTelemetry) {
 			this.telemetryService.publicLog2<WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification>('workbenchActionExecuted', { id: actionToRun.id, from: 'contextMenu' });
 		}

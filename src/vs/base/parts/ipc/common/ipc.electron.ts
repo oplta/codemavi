@@ -8,7 +8,7 @@ import { Event } from '../../../common/event.js';
 import { IMessagePassingProtocol } from './ipc.js';
 
 export interface Sender {
-	send(channel: string, msg: unknown): codemavi;
+	send(channel: string, msg: unknown): void;
 }
 
 /**
@@ -20,7 +20,7 @@ export class Protocol implements IMessagePassingProtocol {
 
 	constructor(private sender: Sender, readonly onMessage: Event<VSBuffer>) { }
 
-	send(message: VSBuffer): codemavi {
+	send(message: VSBuffer): void {
 		try {
 			this.sender.send('vscode:message', message.buffer);
 		} catch (e) {
@@ -28,7 +28,7 @@ export class Protocol implements IMessagePassingProtocol {
 		}
 	}
 
-	disconnect(): codemavi {
+	disconnect(): void {
 		this.sender.send('vscode:disconnect', null);
 	}
 }

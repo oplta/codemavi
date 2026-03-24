@@ -292,7 +292,7 @@ suite('SnippetParser', () => {
 
 	test('Marker, toTextmateString()', function () {
 
-		function assertTextsnippetString(input: string, expected: string): codemavi {
+		function assertTextsnippetString(input: string, expected: string): void {
 			const snippet = new SnippetParser().parse(input);
 			const actual = snippet.toTextmateString();
 			assert.strictEqual(actual, expected);
@@ -310,7 +310,7 @@ suite('SnippetParser', () => {
 
 	test('Marker, toTextmateString() <-> identity', function () {
 
-		function assertIdent(input: string): codemavi {
+		function assertIdent(input: string): void {
 			// full loop: (1) parse input, (2) generate textmate string, (3) parse, (4) ensure both trees are equal
 			const snippet = new SnippetParser().parse(input);
 			const input2 = snippet.toTextmateString();
@@ -494,7 +494,7 @@ suite('SnippetParser', () => {
 
 	test('marker#len', () => {
 
-		function assertLen(template: string, ...lengths: number[]): codemavi {
+		function assertLen(template: string, ...lengths: number[]): void {
 			const snippet = new SnippetParser().parse(template, true);
 			snippet.walk(m => {
 				const expected = lengths.shift();
@@ -729,7 +729,7 @@ suite('SnippetParser', () => {
 	});
 
 	test('Snippet parser freeze #53144', function () {
-		const snippet = new SnippetParser().parse('${1/(codemavi$)|(.+)/${1:?-\treturn nil;}/}');
+		const snippet = new SnippetParser().parse('${1/(void$)|(.+)/${1:?-\treturn nil;}/}');
 		assertMarker(snippet, Placeholder);
 	});
 

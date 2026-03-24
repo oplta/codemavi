@@ -59,7 +59,7 @@ suite('SmoothScrollingOperation', () => {
 		return result;
 	}
 
-	function assertSmoothScroll(from: number, to: number, expected: [number, number][]): codemavi {
+	function assertSmoothScroll(from: number, to: number, expected: [number, number][]): void {
 		const actual = simulateSmoothScroll(from, to);
 		assert.deepStrictEqual(actual, expected);
 	}

@@ -24,7 +24,7 @@ export class ProcessService implements IWorkbenchProcessService {
 		@IProductService private readonly productService: IProductService,
 	) { }
 
-	openProcessExplorer(): Promise<codemavi> {
+	openProcessExplorer(): Promise<void> {
 		const theme = this.themeService.getColorTheme();
 		const data: ProcessExplorerData = {
 			pid: this.environmentService.mainPid,

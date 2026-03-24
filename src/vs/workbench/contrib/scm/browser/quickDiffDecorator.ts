@@ -118,7 +118,7 @@ class QuickDiffDecorator extends Disposable {
 		this._register(Event.runAndSubscribe(this.quickDiffModelRef.object.onDidChange, () => this.onDidChange()));
 	}
 
-	private onDidChange(): codemavi {
+	private onDidChange(): void {
 		if (!this.codeEditor.hasModel()) {
 			return;
 		}
@@ -169,7 +169,7 @@ class QuickDiffDecorator extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		if (this.decorationsCollection) {
 			this.decorationsCollection.clear();
 		}
@@ -225,7 +225,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		this.onDidChangeDiffVisibilityConfiguration();
 	}
 
-	private onDidChangeConfiguration(): codemavi {
+	private onDidChangeConfiguration(): void {
 		const enabled = this.configurationService.getValue<string>('scm.diffDecorations') !== 'none';
 
 		if (enabled) {
@@ -235,7 +235,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		}
 	}
 
-	private onDidChangeDiffWidthConfiguration(): codemavi {
+	private onDidChangeDiffWidthConfiguration(): void {
 		let width = this.configurationService.getValue<number>('scm.diffDecorationsGutterWidth');
 
 		if (isNaN(width) || width <= 0 || width > 5) {
@@ -245,12 +245,12 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		this.setViewState({ ...this.viewState, width });
 	}
 
-	private onDidChangeDiffVisibilityConfiguration(): codemavi {
+	private onDidChangeDiffVisibilityConfiguration(): void {
 		const visibility = this.configurationService.getValue<'always' | 'hover'>('scm.diffDecorationsGutterVisibility');
 		this.setViewState({ ...this.viewState, visibility });
 	}
 
-	private setViewState(state: QuickDiffWorkbenchControllerViewState): codemavi {
+	private setViewState(state: QuickDiffWorkbenchControllerViewState): void {
 		this.viewState = state;
 		this.stylesheet.textContent = `
 			.monaco-editor .dirty-diff-added,
@@ -273,7 +273,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		`;
 	}
 
-	private enable(): codemavi {
+	private enable(): void {
 		if (this.enabled) {
 			this.disable();
 		}
@@ -286,7 +286,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		this.enabled = true;
 	}
 
-	private disable(): codemavi {
+	private disable(): void {
 		if (!this.enabled) {
 			return;
 		}
@@ -302,7 +302,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		this.enabled = false;
 	}
 
-	private onDidActiveEditorChange(): codemavi {
+	private onDidActiveEditorChange(): void {
 		this.transientDisposables.add(autorunWithStore((reader, store) => {
 			const activeEditor = this.activeEditor.read(reader);
 			const activeTextEditorControl = this.editorService.activeTextEditorControl;
@@ -333,7 +333,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		}));
 	}
 
-	private onEditorsChanged(): codemavi {
+	private onEditorsChanged(): void {
 		for (const editor of this.editorService.visibleTextEditorControls) {
 			if (!isCodeEditor(editor)) {
 				continue;
@@ -380,7 +380,7 @@ export class QuickDiffWorkbenchController extends Disposable implements IWorkben
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disable();
 		super.dispose();
 	}

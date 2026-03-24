@@ -61,7 +61,7 @@ export interface INativeServerExtensionManagementService extends IExtensionManag
 	readonly _serviceBrand: undefined;
 	scanAllUserInstalledExtensions(): Promise<ILocalExtension[]>;
 	scanInstalledExtensionAtLocation(location: URI): Promise<ILocalExtension | null>;
-	deleteExtensions(...extensions: IExtension[]): Promise<codemavi>;
+	deleteExtensions(...extensions: IExtension[]): Promise<void>;
 }
 
 type ExtractExtensionResult = { readonly local: ILocalExtension; readonly verificationStatus?: ExtensionSignatureVerificationCode };
@@ -216,7 +216,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		return local;
 	}
 
-	protected removeExtension(extension: ILocalExtension): Promise<codemavi> {
+	protected removeExtension(extension: ILocalExtension): Promise<void> {
 		return this.extensionsScanner.deleteExtension(extension, 'remove');
 	}
 
@@ -224,15 +224,15 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		return this.extensionsScanner.copyExtension(extension, fromProfileLocation, toProfileLocation, metadata);
 	}
 
-	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<codemavi> {
+	copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<void> {
 		return this.extensionsScanner.copyExtensions(fromProfileLocation, toProfileLocation, { version: this.productService.version, date: this.productService.date });
 	}
 
-	deleteExtensions(...extensions: IExtension[]): Promise<codemavi> {
+	deleteExtensions(...extensions: IExtension[]): Promise<void> {
 		return this.extensionsScanner.setExtensionsForRemoval(...extensions);
 	}
 
-	async cleanUp(): Promise<codemavi> {
+	async cleanUp(): Promise<void> {
 		this.logService.trace('ExtensionManagementService#cleanUp');
 		try {
 			await this.extensionsScanner.cleanUp();
@@ -246,7 +246,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		return location;
 	}
 
-	private async downloadVsix(vsix: URI): Promise<{ location: URI; cleanup: () => Promise<codemavi> }> {
+	private async downloadVsix(vsix: URI): Promise<{ location: URI; cleanup: () => Promise<void> }> {
 		if (vsix.scheme === Schemas.file) {
 			return { location: vsix, async cleanup() { } };
 		}
@@ -409,7 +409,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		return files.map(f => ({ path: `extension/${path.relative(extension.location.fsPath, f)}`, localPath: f }));
 	}
 
-	private async onDidChangeExtensionsFromAnotherSource({ added, removed }: DidChangeProfileExtensionsEvent): Promise<codemavi> {
+	private async onDidChangeExtensionsFromAnotherSource({ added, removed }: DidChangeProfileExtensionsEvent): Promise<void> {
 		if (removed) {
 			const removedExtensions = added && this.uriIdentityService.extUri.isEqual(removed.profileLocation, added.profileLocation)
 				? removed.extensions.filter(e => added.extensions.every(identifier => !areSameExtensions(identifier, e)))
@@ -430,7 +430,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 	}
 
 	private readonly knownDirectories = new ResourceSet();
-	private async watchForExtensionsNotInstalledBySystem(): Promise<codemavi> {
+	private async watchForExtensionsNotInstalledBySystem(): Promise<void> {
 		this._register(this.extensionsScanner.onExtract(resource => this.knownDirectories.add(resource)));
 		const stat = await this.fileService.resolve(this.extensionsScannerService.userExtensionsLocation);
 		for (const childStat of stat.children ?? []) {
@@ -442,7 +442,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		this._register(this.fileService.onDidFilesChange(e => this.onDidFilesChange(e)));
 	}
 
-	private async onDidFilesChange(e: FileChangesEvent): Promise<codemavi> {
+	private async onDidFilesChange(e: FileChangesEvent): Promise<void> {
 		if (!e.affects(this.extensionsScannerService.userExtensionsLocation, FileChangeType.ADDED)) {
 			return;
 		}
@@ -501,7 +501,7 @@ export class ExtensionManagementService extends AbstractExtensionManagementServi
 		}
 	}
 
-	private async addExtensionsToProfile(extensions: [ILocalExtension, Metadata | undefined][], profileLocation: URI): Promise<codemavi> {
+	private async addExtensionsToProfile(extensions: [ILocalExtension, Metadata | undefined][], profileLocation: URI): Promise<void> {
 		const localExtensions = extensions.map(e => e[0]);
 		await this.extensionsScanner.unsetExtensionsForRemoval(...localExtensions.map(extension => ExtensionKey.create(extension)));
 		await this.extensionsProfileScannerService.addExtensionsToProfile(extensions, profileLocation);
@@ -534,7 +534,7 @@ export class ExtensionsScanner extends Disposable {
 	private scanUserExtensionsPromise = new ResourceMap<Promise<IScannedExtension[]>>();
 
 	constructor(
-		private readonly beforeRemovingExtension: (e: ILocalExtension) => Promise<codemavi>,
+		private readonly beforeRemovingExtension: (e: ILocalExtension) => Promise<void>,
 		@IFileService private readonly fileService: IFileService,
 		@IExtensionsScannerService private readonly extensionsScannerService: IExtensionsScannerService,
 		@IExtensionsProfileScannerService private readonly extensionsProfileScannerService: IExtensionsProfileScannerService,
@@ -547,7 +547,7 @@ export class ExtensionsScanner extends Disposable {
 		this.obsoleteFileLimiter = new Queue();
 	}
 
-	async cleanUp(): Promise<codemavi> {
+	async cleanUp(): Promise<void> {
 		await this.removeTemporarilyDeletedFolders();
 		await this.deleteExtensionsMarkedForRemoval();
 		//TODO: Remove this initiialization after coupe of releases
@@ -702,7 +702,7 @@ export class ExtensionsScanner extends Disposable {
 		return this.scanLocalExtension(local.location, local.type, profileLocation);
 	}
 
-	async setExtensionsForRemoval(...extensions: IExtension[]): Promise<codemavi> {
+	async setExtensionsForRemoval(...extensions: IExtension[]): Promise<void> {
 		const extensionsToRemove = [];
 		for (const extension of extensions) {
 			if (await this.fileService.exists(extension.location)) {
@@ -735,7 +735,7 @@ export class ExtensionsScanner extends Disposable {
 		}
 	}
 
-	async deleteExtension(extension: ILocalExtension | IScannedExtension, type: string): Promise<codemavi> {
+	async deleteExtension(extension: ILocalExtension | IScannedExtension, type: string): Promise<void> {
 		if (this.uriIdentityService.extUri.isEqualOrParent(extension.location, this.extensionsScannerService.userExtensionsLocation)) {
 			await this.deleteExtensionFromLocation(extension.identifier.id, extension.location, type);
 			await this.unsetExtensionsForRemoval(ExtensionKey.create(extension));
@@ -762,7 +762,7 @@ export class ExtensionsScanner extends Disposable {
 		return this.scanLocalExtension(extension.location, extension.type, toProfileLocation);
 	}
 
-	async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, productVersion: IProductVersion): Promise<codemavi> {
+	async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI, productVersion: IProductVersion): Promise<void> {
 		const fromExtensions = await this.scanExtensions(ExtensionType.User, fromProfileLocation, productVersion);
 		const extensions: [ILocalExtension, Metadata | undefined][] = await Promise.all(fromExtensions
 			.filter(e => !e.isApplicationScoped) /* remove application scoped extensions */
@@ -770,7 +770,7 @@ export class ExtensionsScanner extends Disposable {
 		await this.extensionsProfileScannerService.addExtensionsToProfile(extensions, toProfileLocation);
 	}
 
-	private async deleteExtensionFromLocation(id: string, location: URI, type: string): Promise<codemavi> {
+	private async deleteExtensionFromLocation(id: string, location: URI, type: string): Promise<void> {
 		this.logService.trace(`Deleting ${type} extension from disk`, id, location.fsPath);
 		const renamedLocation = this.uriIdentityService.extUri.joinPath(this.uriIdentityService.extUri.dirname(location), `${this.uriIdentityService.extUri.basename(location)}.${hash(generateUuid()).toString(16)}${DELETED_FOLDER_POSTFIX}`);
 		await this.rename(location.fsPath, renamedLocation.fsPath);
@@ -778,7 +778,7 @@ export class ExtensionsScanner extends Disposable {
 		this.logService.info(`Deleted ${type} extension from disk`, id, location.fsPath);
 	}
 
-	private withRemovedExtensions(updateFn?: (removed: IStringDictionary<boolean>) => codemavi): Promise<IStringDictionary<boolean>> {
+	private withRemovedExtensions(updateFn?: (removed: IStringDictionary<boolean>) => void): Promise<IStringDictionary<boolean>> {
 		return this.obsoleteFileLimiter.queue(async () => {
 			let raw: string | undefined;
 			try {
@@ -816,7 +816,7 @@ export class ExtensionsScanner extends Disposable {
 		});
 	}
 
-	private async rename(extractPath: string, renamePath: string): Promise<codemavi> {
+	private async rename(extractPath: string, renamePath: string): Promise<void> {
 		try {
 			await pfs.Promises.rename(extractPath, renamePath, 2 * 60 * 1000 /* Retry for 2 minutes */);
 		} catch (error) {
@@ -884,7 +884,7 @@ export class ExtensionsScanner extends Disposable {
 		};
 	}
 
-	private async initializeExtensionSize(): Promise<codemavi> {
+	private async initializeExtensionSize(): Promise<void> {
 		const extensions = await this.extensionsScannerService.scanAllUserExtensions();
 		await Promise.all(extensions.map(async extension => {
 			// set size if not set before
@@ -895,7 +895,7 @@ export class ExtensionsScanner extends Disposable {
 		}));
 	}
 
-	private async deleteExtensionsMarkedForRemoval(): Promise<codemavi> {
+	private async deleteExtensionsMarkedForRemoval(): Promise<void> {
 		let removed: IStringDictionary<boolean>;
 		try {
 			removed = await this.withRemovedExtensions();
@@ -935,7 +935,7 @@ export class ExtensionsScanner extends Disposable {
 		await Promise.allSettled(toRemove.map(e => this.deleteExtension(e, 'marked for removal')));
 	}
 
-	private async removeTemporarilyDeletedFolders(): Promise<codemavi> {
+	private async removeTemporarilyDeletedFolders(): Promise<void> {
 		this.logService.trace('ExtensionManagementService#removeTempDeleteFolders');
 
 		let stat;
@@ -1116,7 +1116,7 @@ class InstallExtensionInProfileTask extends AbstractExtensionTask<ILocalExtensio
 		return undefined;
 	}
 
-	private async updateMetadata(extension: ILocalExtension, token: CancellationToken): Promise<codemavi> {
+	private async updateMetadata(extension: ILocalExtension, token: CancellationToken): Promise<void> {
 		try {
 			let [galleryExtension] = await this.galleryService.getExtensions([{ id: extension.identifier.id, version: extension.manifest.version }], token);
 			if (!galleryExtension) {
@@ -1139,7 +1139,7 @@ class InstallExtensionInProfileTask extends AbstractExtensionTask<ILocalExtensio
 	}
 }
 
-class UninstallExtensionInProfileTask extends AbstractExtensionTask<codemavi> implements IUninstallExtensionTask {
+class UninstallExtensionInProfileTask extends AbstractExtensionTask<void> implements IUninstallExtensionTask {
 
 	constructor(
 		readonly extension: ILocalExtension,
@@ -1149,7 +1149,7 @@ class UninstallExtensionInProfileTask extends AbstractExtensionTask<codemavi> im
 		super();
 	}
 
-	protected doRun(token: CancellationToken): Promise<codemavi> {
+	protected doRun(token: CancellationToken): Promise<void> {
 		return this.extensionsProfileScannerService.removeExtensionsFromProfile([this.extension.identifier], this.options.profileLocation);
 	}
 

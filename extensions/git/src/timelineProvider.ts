@@ -54,7 +54,7 @@ export class GitTimelineItem extends TimelineItem {
 		return this.shortenRef(this.previousRef);
 	}
 
-	setItemDetails(uri: Uri, hash: string | undefined, avatar: string | undefined, author: string, email: string | undefined, date: string, message: string, shortStat?: CommitShortStat, remoteSourceCommands: Command[] = []): codemavi {
+	setItemDetails(uri: Uri, hash: string | undefined, avatar: string | undefined, author: string, email: string | undefined, date: string, message: string, shortStat?: CommitShortStat, remoteSourceCommands: Command[] = []): void {
 		this.tooltip = new MarkdownString('', true);
 		this.tooltip.isTrusted = true;
 

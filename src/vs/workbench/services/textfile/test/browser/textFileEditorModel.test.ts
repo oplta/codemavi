@@ -829,7 +829,7 @@ suite('Files - TextFileEditorModel', () => {
 		await testSaveFromSaveParticipant(model, false, false, true);
 	});
 
-	async function testSaveFromSaveParticipant(model: TextFileEditorModel, async: boolean, modelChange: boolean, force: boolean): Promise<codemavi> {
+	async function testSaveFromSaveParticipant(model: TextFileEditorModel, async: boolean, modelChange: boolean, force: boolean): Promise<void> {
 
 		disposables.add(accessor.textFileService.files.addSaveParticipant({
 			participate: async () => {

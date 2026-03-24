@@ -12,9 +12,9 @@ export const CommentsViewFilterFocusContextKey = new RawContextKey<boolean>('com
 export interface ICommentsView extends IView {
 
 	readonly filters: CommentsFilters;
-	focusFilter(): codemavi;
-	clearFilterText(): codemavi;
+	focusFilter(): void;
+	clearFilterText(): void;
 	getFilterStats(): { total: number; filtered: number };
 
-	collapseAll(): codemavi;
+	collapseAll(): void;
 }

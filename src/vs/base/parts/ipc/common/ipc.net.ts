@@ -74,7 +74,7 @@ export namespace SocketDiagnostics {
 		return socketIds.get(nativeObject)!;
 	}
 
-	export function traceSocketEvent(nativeObject: any, socketDebugLabel: string, type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+	export function traceSocketEvent(nativeObject: any, socketDebugLabel: string, type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		if (!enableDiagnostics) {
 			return;
 		}
@@ -143,14 +143,14 @@ export interface SocketTimeoutEvent {
 }
 
 export interface ISocket extends IDisposable {
-	onData(listener: (e: VSBuffer) => codemavi): IDisposable;
-	onClose(listener: (e: SocketCloseEvent) => codemavi): IDisposable;
-	onEnd(listener: () => codemavi): IDisposable;
-	write(buffer: VSBuffer): codemavi;
-	end(): codemavi;
-	drain(): Promise<codemavi>;
+	onData(listener: (e: VSBuffer) => void): IDisposable;
+	onClose(listener: (e: SocketCloseEvent) => void): IDisposable;
+	onEnd(listener: () => void): IDisposable;
+	write(buffer: VSBuffer): void;
+	end(): void;
+	drain(): Promise<void>;
 
-	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi;
+	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void;
 }
 
 let emptyBuffer: VSBuffer | null = null;
@@ -301,7 +301,7 @@ export const enum ProtocolConstants {
 	 */
 	ReconnectionShortGraceTime = 5 * 60 * 1000, // 5min
 	/**
-	 * Send a message every 5 seconds to acodemavi that the connection is closed by the OS.
+	 * Send a message every 5 seconds to avoid that the connection is closed by the OS.
 	 */
 	KeepAliveSendTime = 5000, // 5 seconds
 }
@@ -351,7 +351,7 @@ class ProtocolReader extends Disposable {
 		this.lastReadTime = Date.now();
 	}
 
-	public acceptChunk(data: VSBuffer | null): codemavi {
+	public acceptChunk(data: VSBuffer | null): void {
 		if (!data || data.byteLength === 0) {
 			return;
 		}
@@ -405,7 +405,7 @@ class ProtocolReader extends Disposable {
 		return this._incomingData.read(this._incomingData.byteLength);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._isDisposed = true;
 		super.dispose();
 	}
@@ -429,7 +429,7 @@ class ProtocolWriter {
 		this.lastWriteTime = 0;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		try {
 			this.flush();
 		} catch (err) {
@@ -438,21 +438,21 @@ class ProtocolWriter {
 		this._isDisposed = true;
 	}
 
-	public drain(): Promise<codemavi> {
+	public drain(): Promise<void> {
 		this.flush();
 		return this._socket.drain();
 	}
 
-	public flush(): codemavi {
+	public flush(): void {
 		// flush
 		this._writeNow();
 	}
 
-	public pause(): codemavi {
+	public pause(): void {
 		this._isPaused = true;
 	}
 
-	public resume(): codemavi {
+	public resume(): void {
 		this._isPaused = false;
 		this._scheduleWriting();
 	}
@@ -491,14 +491,14 @@ class ProtocolWriter {
 		return ret;
 	}
 
-	private _writeSoon(header: VSBuffer, data: VSBuffer): codemavi {
+	private _writeSoon(header: VSBuffer, data: VSBuffer): void {
 		if (this._bufferAdd(header, data)) {
 			this._scheduleWriting();
 		}
 	}
 
 	private _writeNowTimeout: any = null;
-	private _scheduleWriting(): codemavi {
+	private _scheduleWriting(): void {
 		if (this._writeNowTimeout) {
 			return;
 		}
@@ -508,7 +508,7 @@ class ProtocolWriter {
 		});
 	}
 
-	private _writeNow(): codemavi {
+	private _writeNow(): void {
 		if (this._totalLength === 0) {
 			return;
 		}
@@ -547,8 +547,8 @@ export class Protocol extends Disposable implements IMessagePassingProtocol {
 	private readonly _onMessage = new Emitter<VSBuffer>();
 	readonly onMessage: Event<VSBuffer> = this._onMessage.event;
 
-	private readonly _onDidDispose = new Emitter<codemavi>();
-	readonly onDidDispose: Event<codemavi> = this._onDidDispose.event;
+	private readonly _onDidDispose = new Emitter<void>();
+	readonly onDidDispose: Event<void> = this._onDidDispose.event;
 
 	constructor(socket: ISocket) {
 		super();
@@ -565,7 +565,7 @@ export class Protocol extends Disposable implements IMessagePassingProtocol {
 		this._register(this._socket.onClose(() => this._onDidDispose.fire()));
 	}
 
-	drain(): Promise<codemavi> {
+	drain(): Promise<void> {
 		return this._socketWriter.drain();
 	}
 
@@ -573,11 +573,11 @@ export class Protocol extends Disposable implements IMessagePassingProtocol {
 		return this._socket;
 	}
 
-	sendDisconnect(): codemavi {
+	sendDisconnect(): void {
 		// Nothing to do...
 	}
 
-	send(buffer: VSBuffer): codemavi {
+	send(buffer: VSBuffer): void {
 		this._socketWriter.write(new ProtocolMessage(ProtocolMessageType.Regular, 0, 0, buffer));
 	}
 }
@@ -588,13 +588,13 @@ export class Client<TContext = string> extends IPCClient<TContext> {
 		return new Client(new Protocol(socket), id);
 	}
 
-	get onDidDispose(): Event<codemavi> { return this.protocol.onDidDispose; }
+	get onDidDispose(): Event<void> { return this.protocol.onDidDispose; }
 
 	constructor(private protocol: Protocol | PersistentProtocol, id: TContext, ipcLogger: IIPCLogger | null = null) {
 		super(protocol, id, ipcLogger);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		const socket = this.protocol.getSocket();
 		// should be sent gracefully with a .flush(), but try to send it out as a
@@ -633,7 +633,7 @@ export class BufferedEmitter<T> {
 		this.event = this._emitter.event;
 	}
 
-	private _deliverMessages(): codemavi {
+	private _deliverMessages(): void {
 		if (this._isDeliveringMessages) {
 			return;
 		}
@@ -644,7 +644,7 @@ export class BufferedEmitter<T> {
 		this._isDeliveringMessages = false;
 	}
 
-	public fire(event: T): codemavi {
+	public fire(event: T): void {
 		if (this._hasListeners) {
 			if (this._bufferedMessages.length > 0) {
 				this._bufferedMessages.push(event);
@@ -656,7 +656,7 @@ export class BufferedEmitter<T> {
 		}
 	}
 
-	public flushBuffer(): codemavi {
+	public flushBuffer(): void {
 		this._bufferedMessages = [];
 	}
 }
@@ -709,7 +709,7 @@ class Queue<T> {
 		return result;
 	}
 
-	public pop(): codemavi {
+	public pop(): void {
 		if (!this._first) {
 			return;
 		}
@@ -721,7 +721,7 @@ class Queue<T> {
 		this._first = this._first.next;
 	}
 
-	public push(item: T): codemavi {
+	public push(item: T): void {
 		const element = new QueueElement(item);
 		if (!this._first) {
 			this._first = element;
@@ -842,8 +842,8 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 	private readonly _onMessage = new BufferedEmitter<VSBuffer>();
 	readonly onMessage: Event<VSBuffer> = this._onMessage.event;
 
-	private readonly _onDidDispose = new BufferedEmitter<codemavi>();
-	readonly onDidDispose: Event<codemavi> = this._onDidDispose.event;
+	private readonly _onDidDispose = new BufferedEmitter<void>();
+	readonly onDidDispose: Event<void> = this._onDidDispose.event;
 
 	private readonly _onSocketClose = new BufferedEmitter<SocketCloseEvent>();
 	readonly onSocketClose: Event<SocketCloseEvent> = this._onSocketClose.event;
@@ -892,7 +892,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this._outgoingAckTimeout) {
 			clearTimeout(this._outgoingAckTimeout);
 			this._outgoingAckTimeout = null;
@@ -908,11 +908,11 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		this._socketDisposables.dispose();
 	}
 
-	drain(): Promise<codemavi> {
+	drain(): Promise<void> {
 		return this._socketWriter.drain();
 	}
 
-	sendDisconnect(): codemavi {
+	sendDisconnect(): void {
 		if (!this._didSendDisconnect) {
 			this._didSendDisconnect = true;
 			const msg = new ProtocolMessage(ProtocolMessageType.Disconnect, 0, 0, getEmptyBuffer());
@@ -921,12 +921,12 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		}
 	}
 
-	sendPause(): codemavi {
+	sendPause(): void {
 		const msg = new ProtocolMessage(ProtocolMessageType.Pause, 0, 0, getEmptyBuffer());
 		this._socketWriter.write(msg);
 	}
 
-	sendResume(): codemavi {
+	sendResume(): void {
 		const msg = new ProtocolMessage(ProtocolMessageType.Resume, 0, 0, getEmptyBuffer());
 		this._socketWriter.write(msg);
 	}
@@ -943,7 +943,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		return Date.now() - this._socketReader.lastReadTime;
 	}
 
-	public beginAcceptReconnection(socket: ISocket, initialDataChunk: VSBuffer | null): codemavi {
+	public beginAcceptReconnection(socket: ISocket, initialDataChunk: VSBuffer | null): void {
 		this._isReconnecting = true;
 
 		this._socketDisposables.dispose();
@@ -965,7 +965,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		this._socketReader.acceptChunk(initialDataChunk);
 	}
 
-	public endAcceptReconnection(): codemavi {
+	public endAcceptReconnection(): void {
 		this._isReconnecting = false;
 
 		// After a reconnection, let the other party know (again) which messages have been received.
@@ -982,11 +982,11 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		this._recvAckCheck();
 	}
 
-	public acceptDisconnect(): codemavi {
+	public acceptDisconnect(): void {
 		this._onDidDispose.fire();
 	}
 
-	private _receiveMessage(msg: ProtocolMessage): codemavi {
+	private _receiveMessage(msg: ProtocolMessage): void {
 		if (msg.ack > this._outgoingAckId) {
 			this._outgoingAckId = msg.ack;
 			do {
@@ -1064,11 +1064,11 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		return this._socketReader.readEntireBuffer();
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		this._socketWriter.flush();
 	}
 
-	send(buffer: VSBuffer): codemavi {
+	send(buffer: VSBuffer): void {
 		const myId = ++this._outgoingMsgId;
 		this._incomingAckId = this._incomingMsgId;
 		const msg = new ProtocolMessage(ProtocolMessageType.Regular, myId, this._incomingAckId, buffer);
@@ -1083,12 +1083,12 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 	 * Send a message which will not be part of the regular acknowledge flow.
 	 * Use this for early control messages which are repeated in case of reconnection.
 	 */
-	sendControl(buffer: VSBuffer): codemavi {
+	sendControl(buffer: VSBuffer): void {
 		const msg = new ProtocolMessage(ProtocolMessageType.Control, 0, 0, buffer);
 		this._socketWriter.write(msg);
 	}
 
-	private _sendAckCheck(): codemavi {
+	private _sendAckCheck(): void {
 		if (this._incomingMsgId <= this._incomingAckId) {
 			// nothink to acknowledge
 			return;
@@ -1114,7 +1114,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		}, ProtocolConstants.AcknowledgeTime - timeSinceLastIncomingMsg + 5);
 	}
 
-	private _recvAckCheck(): codemavi {
+	private _recvAckCheck(): void {
 		if (this._outgoingMsgId <= this._outgoingAckId) {
 			// everything has been acknowledged
 			return;
@@ -1170,7 +1170,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		}, minimumTimeUntilTimeout);
 	}
 
-	private _sendAck(): codemavi {
+	private _sendAck(): void {
 		if (this._incomingMsgId <= this._incomingAckId) {
 			// nothink to acknowledge
 			return;
@@ -1181,7 +1181,7 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		this._socketWriter.write(msg);
 	}
 
-	private _sendKeepAlive(): codemavi {
+	private _sendKeepAlive(): void {
 		this._incomingAckId = this._incomingMsgId;
 		const msg = new ProtocolMessage(ProtocolMessageType.KeepAlive, 0, this._incomingAckId, getEmptyBuffer());
 		this._socketWriter.write(msg);

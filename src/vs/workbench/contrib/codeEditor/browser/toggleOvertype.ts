@@ -33,7 +33,7 @@ export class ToggleOvertypeInsertMode extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const oldInputMode = InputMode.getInputMode();
 		const newInputMode = oldInputMode === 'insert' ? 'overtype' : 'insert';
 		InputMode.setInputMode(newInputMode);

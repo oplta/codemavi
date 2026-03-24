@@ -41,12 +41,12 @@ export class FileQueryCacheState {
 	private readonly query = this.cacheQuery(this._cacheKey);
 
 	private loadingPhase = LoadingPhase.Created;
-	private loadPromise: Promise<codemavi> | undefined;
+	private loadPromise: Promise<void> | undefined;
 
 	constructor(
 		private cacheQuery: (cacheKey: string) => IFileQuery,
 		private loadFn: (query: IFileQuery) => Promise<any>,
-		private disposeFn: (cacheKey: string) => Promise<codemavi>,
+		private disposeFn: (cacheKey: string) => Promise<void>,
 		private previousCacheState: FileQueryCacheState | undefined
 	) {
 		if (this.previousCacheState) {
@@ -86,7 +86,7 @@ export class FileQueryCacheState {
 		return this;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (this.loadPromise) {
 			(async () => {
 				try {

@@ -59,7 +59,7 @@ export class BlockCommentCommand implements ICommand {
 		return true;
 	}
 
-	private _createOperationsForBlockComment(selection: Range, startToken: string, endToken: string, insertSpace: boolean, model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	private _createOperationsForBlockComment(selection: Range, startToken: string, endToken: string, insertSpace: boolean, model: ITextModel, builder: IEditOperationBuilder): void {
 		const startLineNumber = selection.startLineNumber;
 		const startColumn = selection.startColumn;
 		const endLineNumber = selection.endLineNumber;
@@ -166,7 +166,7 @@ export class BlockCommentCommand implements ICommand {
 		return res;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const startLineNumber = this._selection.startLineNumber;
 		const startColumn = this._selection.startColumn;
 

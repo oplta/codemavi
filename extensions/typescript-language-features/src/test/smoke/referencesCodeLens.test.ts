@@ -17,7 +17,7 @@ async function updateConfig(newConfig: VsCodeConfiguration): Promise<VsCodeConfi
 	const config = vscode.workspace.getConfiguration(undefined);
 	for (const configKey of Object.keys(newConfig)) {
 		oldConfig[configKey] = config.get(configKey);
-		await new Promise<codemavi>((resolve, reject) =>
+		await new Promise<void>((resolve, reject) =>
 			config.update(configKey, newConfig[configKey], vscode.ConfigurationTarget.Global)
 				.then(() => resolve(), reject));
 	}
@@ -69,7 +69,7 @@ suite('TypeScript References', () => {
 		await createTestEditor(testDocumentUri,
 			`class Foo {`,
 			`	prop: number;`,
-			`	meth(): codemavi {}`,
+			`	meth(): void {}`,
 			`}`
 		);
 
@@ -85,7 +85,7 @@ suite('TypeScript References', () => {
 		await createTestEditor(testDocumentUri,
 			`const foo = {`,
 			`	prop: 1;`,
-			`	meth(): codemavi {}`,
+			`	meth(): void {}`,
 			`}`
 		);
 

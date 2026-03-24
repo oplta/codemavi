@@ -86,7 +86,7 @@ export class TreeSitterTokenizationFeature extends Disposable implements ITreeSi
 		return this._configurationService.getValue<boolean>(`${EDITOR_EXPERIMENTAL_PREFER_TREESITTER}.${languageId}`);
 	}
 
-	private _handleGrammarsExtPoint(): codemavi {
+	private _handleGrammarsExtPoint(): void {
 		// Eventually, this should actually use an extension point to add tree sitter grammars, but for now they are hard coded in core
 		for (const languageId of TREESITTER_ALLOWED_SUPPORT) {
 			const setting = this._getSetting(languageId);
@@ -338,7 +338,7 @@ export class TreeSitterTokenizationSupport extends Disposable implements ITreeSi
 		for (let i = 0; i < ranges.length; i++) {
 			const rangeLinesLength = ranges[i].newRange.endLineNumber - ranges[i].newRange.startLineNumber;
 			if (rangeLinesLength > chunkSize) {
-				// Split the range into chunks to acodemavi long operations
+				// Split the range into chunks to avoid long operations
 				const fullRangeEndLineNumber = ranges[i].newRange.endLineNumber;
 				let chunkLineStart = ranges[i].newRange.startLineNumber;
 				let chunkColumnStart = ranges[i].newRange.startColumn;
@@ -422,7 +422,7 @@ export class TreeSitterTokenizationSupport extends Disposable implements ITreeSi
 					ranges: [{ fromLineNumber: range.range.getStartPosition().lineNumber, toLineNumber: range.range.getEndPosition().lineNumber }]
 				}
 			});
-			await new Promise<codemavi>(resolve => setTimeout0(resolve));
+			await new Promise<void>(resolve => setTimeout0(resolve));
 		}
 		this._onDidCompleteBackgroundTokenization.fire({ textModel });
 	}

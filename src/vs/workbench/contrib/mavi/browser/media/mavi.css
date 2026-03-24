@@ -3,29 +3,29 @@
  *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
  *--------------------------------------------------------------------------------------*/
 
-.monaco-editor .codemavi-sweepIdxBG {
-	background-color: var(--vscode-codemavi-sweepIdxBG);
+.monaco-editor .mavi-sweepIdxBG {
+	background-color: var(--vscode-mavi-sweepIdxBG);
 }
 
-.codemavi-sweepBG {
-	background-color: var(--vscode-codemavi-sweepBG);
+.mavi-sweepBG {
+	background-color: var(--vscode-mavi-sweepBG);
 }
 
-.codemavi-highlightBG {
-	background-color: var(--vscode-codemavi-highlightBG);
+.mavi-highlightBG {
+	background-color: var(--vscode-mavi-highlightBG);
 }
 
-.codemavi-greenBG {
-	background-color: var(--vscode-codemavi-greenBG);
+.mavi-greenBG {
+	background-color: var(--vscode-mavi-greenBG);
 }
 
-.codemavi-redBG {
-	background-color: var(--vscode-codemavi-redBG);
+.mavi-redBG {
+	background-color: var(--vscode-mavi-redBG);
 }
 
 
-/* Renamed from codemavi-watermark-button to codemavi-openfolder-button */
-.codemavi-openfolder-button {
+/* Renamed from mavi-watermark-button to mavi-openfolder-button */
+.mavi-openfolder-button {
     padding: 8px 20px;
     background-color: #306dce;
     color: white;
@@ -36,15 +36,15 @@
 	cursor: pointer;
 	transition: background-color 0.2s ease;
 }
-.codemavi-openfolder-button:hover {
+.mavi-openfolder-button:hover {
     background-color: #2563eb;
 }
-.codemavi-openfolder-button:active {
+.mavi-openfolder-button:active {
     background-color: #2563eb;
 }
 
 /* Added for Open SSH button with slightly darker color */
-.codemavi-openssh-button {
+.mavi-openssh-button {
     padding: 8px 20px;
     background-color: #656565; /* Slightly darker than the #5a5a5a in the TS file */
     color: white;
@@ -55,15 +55,15 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
-.codemavi-openssh-button:hover {
+.mavi-openssh-button:hover {
     background-color: #474747; /* Darker on hover */
 }
-.codemavi-openssh-button:active {
+.mavi-openssh-button:active {
     background-color: #474747;
 }
 
 
-.codemavi-settings-watermark-button {
+.mavi-settings-watermark-button {
 	margin: 8px 0;
 	padding: 8px 20px;
 	background-color: var(--vscode-input-background);
@@ -76,79 +76,79 @@
 	transition: all 0.2s ease;
 }
 
-.codemavi-settings-watermark-button:hover {
+.mavi-settings-watermark-button:hover {
 	filter: brightness(1.1);
 }
 
-.codemavi-settings-watermark-button:active {
+.mavi-settings-watermark-button:active {
 	filter: brightness(1.1);
 }
 
-.codemavi-link {
+.mavi-link {
 	color: #3b82f6;
 	cursor: pointer;
 	transition: all 0.2s ease;
 }
 
-.codemavi-link:hover {
+.mavi-link:hover {
 	opacity: 80%;
 }
 
-/* styles for all containers used by codemavi */
-.codemavi-scope {
+/* styles for all containers used by mavi */
+.mavi-scope {
 	--scrollbar-vertical-width: 8px;
 	--scrollbar-horizontal-height: 6px;
 }
 
-/* Target both codemavi-scope and all its descendants with scrollbars */
-.codemavi-scope,
-.codemavi-scope * {
+/* Target both mavi-scope and all its descendants with scrollbars */
+.mavi-scope,
+.mavi-scope * {
 	scrollbar-width: thin !important;
-	scrollbar-color: var(--codemavi-bg-1) var(--codemavi-bg-3) !important;
+	scrollbar-color: var(--mavi-bg-1) var(--mavi-bg-3) !important;
 	/* For Firefox */
 }
 
-.codemavi-scope::-webkit-scrollbar,
-.codemavi-scope *::-webkit-scrollbar {
+.mavi-scope::-webkit-scrollbar,
+.mavi-scope *::-webkit-scrollbar {
 	width: var(--scrollbar-vertical-width) !important;
 	height: var(--scrollbar-horizontal-height) !important;
-	background-color: var(--codemavi-bg-3) !important;
+	background-color: var(--mavi-bg-3) !important;
 }
 
-.codemavi-scope::-webkit-scrollbar-thumb,
-.codemavi-scope *::-webkit-scrollbar-thumb {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scope::-webkit-scrollbar-thumb,
+.mavi-scope *::-webkit-scrollbar-thumb {
+	background-color: var(--mavi-bg-1) !important;
 	border-radius: 4px !important;
 	border: none !important;
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
 }
 
-.codemavi-scope::-webkit-scrollbar-thumb:hover,
-.codemavi-scope *::-webkit-scrollbar-thumb:hover {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scope::-webkit-scrollbar-thumb:hover,
+.mavi-scope *::-webkit-scrollbar-thumb:hover {
+	background-color: var(--mavi-bg-1) !important;
 	filter: brightness(1.1) !important;
 }
 
-.codemavi-scope::-webkit-scrollbar-thumb:active,
-.codemavi-scope *::-webkit-scrollbar-thumb:active {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scope::-webkit-scrollbar-thumb:active,
+.mavi-scope *::-webkit-scrollbar-thumb:active {
+	background-color: var(--mavi-bg-1) !important;
 	filter: brightness(1.2) !important;
 }
 
-.codemavi-scope::-webkit-scrollbar-track,
-.codemavi-scope *::-webkit-scrollbar-track {
-	background-color: var(--codemavi-bg-3) !important;
+.mavi-scope::-webkit-scrollbar-track,
+.mavi-scope *::-webkit-scrollbar-track {
+	background-color: var(--mavi-bg-3) !important;
 	border: none !important;
 }
 
-.codemavi-scope::-webkit-scrollbar-corner,
-.codemavi-scope *::-webkit-scrollbar-corner {
-	background-color: var(--codemavi-bg-3) !important;
+.mavi-scope::-webkit-scrollbar-corner,
+.mavi-scope *::-webkit-scrollbar-corner {
+	background-color: var(--mavi-bg-3) !important;
 }
 
-/* Add codemavi-scrollable-element styles to match */
-.codemavi-scrollable-element {
+/* Add mavi-scrollable-element styles to match */
+.mavi-scrollable-element {
 	background-color: var(--vscode-editor-background);
 	--scrollbar-vertical-width: 14px;
 	--scrollbar-horizontal-height: 6px;
@@ -156,49 +156,49 @@
 	/* Ensure scrollbars are shown when needed */
 }
 
-.codemavi-scrollable-element,
-.codemavi-scrollable-element * {
+.mavi-scrollable-element,
+.mavi-scrollable-element * {
 	scrollbar-width: thin !important;
 	/* For Firefox */
-	scrollbar-color: var(--codemavi-bg-1) var(--codemavi-bg-3) !important;
+	scrollbar-color: var(--mavi-bg-1) var(--mavi-bg-3) !important;
 	/* For Firefox */
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar,
-.codemavi-scrollable-element *::-webkit-scrollbar {
+.mavi-scrollable-element::-webkit-scrollbar,
+.mavi-scrollable-element *::-webkit-scrollbar {
 	width: var(--scrollbar-vertical-width) !important;
 	height: var(--scrollbar-horizontal-height) !important;
-	background-color: var(--codemavi-bg-3) !important;
+	background-color: var(--mavi-bg-3) !important;
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar-thumb,
-.codemavi-scrollable-element *::-webkit-scrollbar-thumb {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scrollable-element::-webkit-scrollbar-thumb,
+.mavi-scrollable-element *::-webkit-scrollbar-thumb {
+	background-color: var(--mavi-bg-1) !important;
 	border-radius: 4px !important;
 	border: none !important;
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar-thumb:hover,
-.codemavi-scrollable-element *::-webkit-scrollbar-thumb:hover {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scrollable-element::-webkit-scrollbar-thumb:hover,
+.mavi-scrollable-element *::-webkit-scrollbar-thumb:hover {
+	background-color: var(--mavi-bg-1) !important;
 	filter: brightness(1.1) !important;
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar-thumb:active,
-.codemavi-scrollable-element *::-webkit-scrollbar-thumb:active {
-	background-color: var(--codemavi-bg-1) !important;
+.mavi-scrollable-element::-webkit-scrollbar-thumb:active,
+.mavi-scrollable-element *::-webkit-scrollbar-thumb:active {
+	background-color: var(--mavi-bg-1) !important;
 	filter: brightness(1.2) !important;
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar-track,
-.codemavi-scrollable-element *::-webkit-scrollbar-track {
-	background-color: var(--codemavi-bg-3) !important;
+.mavi-scrollable-element::-webkit-scrollbar-track,
+.mavi-scrollable-element *::-webkit-scrollbar-track {
+	background-color: var(--mavi-bg-3) !important;
 	border: none !important;
 }
 
-.codemavi-scrollable-element::-webkit-scrollbar-corner,
-.codemavi-scrollable-element *::-webkit-scrollbar-corner {
-	background-color: var(--codemavi-bg-3) !important;
+.mavi-scrollable-element::-webkit-scrollbar-corner,
+.mavi-scrollable-element *::-webkit-scrollbar-corner {
+	background-color: var(--mavi-bg-3) !important;
 }

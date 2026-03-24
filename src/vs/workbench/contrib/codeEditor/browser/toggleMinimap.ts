@@ -32,7 +32,7 @@ export class ToggleMinimapAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		const newValue = !configurationService.getValue('editor.minimap.enabled');

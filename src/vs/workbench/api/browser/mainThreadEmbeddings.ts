@@ -22,7 +22,7 @@ interface IEmbeddingsService {
 
 	_serviceBrand: undefined;
 
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 
 	allProviders: Iterable<string>;
 
@@ -36,8 +36,8 @@ class EmbeddingsService implements IEmbeddingsService {
 
 	private providers: Map<string, IEmbeddingsProvider>;
 
-	private readonly _onDidChange = new Emitter<codemavi>();
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange = new Emitter<void>();
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	constructor() {
 		this.providers = new Map<string, IEmbeddingsProvider>();
@@ -89,11 +89,11 @@ export class MainThreadEmbeddings implements MainThreadEmbeddingsShape {
 		})));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 
-	$registerEmbeddingProvider(handle: number, identifier: string): codemavi {
+	$registerEmbeddingProvider(handle: number, identifier: string): void {
 		const registration = this.embeddingsService.registerProvider(identifier, {
 			provideEmbeddings: (input: string[], token: CancellationToken): Promise<{ values: number[] }[]> => {
 				return this._proxy.$provideEmbeddings(handle, input, token);
@@ -102,7 +102,7 @@ export class MainThreadEmbeddings implements MainThreadEmbeddingsShape {
 		this._providers.set(handle, registration);
 	}
 
-	$unregisterEmbeddingProvider(handle: number): codemavi {
+	$unregisterEmbeddingProvider(handle: number): void {
 		this._providers.deleteAndDispose(handle);
 	}
 

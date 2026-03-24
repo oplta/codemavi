@@ -15,11 +15,11 @@ export interface IInteractiveHistoryService {
 	readonly _serviceBrand: undefined;
 
 	matchesCurrent(uri: URI, value: string): boolean;
-	addToHistory(uri: URI, value: string): codemavi;
+	addToHistory(uri: URI, value: string): void;
 	getPreviousValue(uri: URI): string | null;
 	getNextValue(uri: URI): string | null;
-	replaceLast(uri: URI, value: string): codemavi;
-	clearHistory(uri: URI): codemavi;
+	replaceLast(uri: URI, value: string): void;
+	clearHistory(uri: URI): void;
 	has(uri: URI): boolean;
 }
 
@@ -42,7 +42,7 @@ export class InteractiveHistoryService extends Disposable implements IInteractiv
 		return history.current() === value;
 	}
 
-	addToHistory(uri: URI, value: string): codemavi {
+	addToHistory(uri: URI, value: string): void {
 		const history = this._history.get(uri);
 		if (!history) {
 			this._history.set(uri, new HistoryNavigator2<string>([value], 50));

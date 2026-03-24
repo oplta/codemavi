@@ -57,7 +57,7 @@ export class LimitIndicatorContribution extends Disposable implements IWorkbench
 
 
 export interface LimitInfo {
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 
 	readonly computed: number;
 	readonly limited: number | false;

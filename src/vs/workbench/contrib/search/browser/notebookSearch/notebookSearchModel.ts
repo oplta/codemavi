@@ -105,7 +105,7 @@ export class CellMatch implements ICellMatch {
 		return Array.from(this._webviewMatches.values());
 	}
 
-	remove(matches: MatchInNotebook | MatchInNotebook[]): codemavi {
+	remove(matches: MatchInNotebook | MatchInNotebook[]): void {
 		if (!Array.isArray(matches)) {
 			matches = [matches];
 		}
@@ -278,7 +278,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		this._notebookEditorWidget = null;
 	}
 
-	updateNotebookHighlights(): codemavi {
+	updateNotebookHighlights(): void {
 		if (this.parent().showHighlights) {
 			this._addNotebookHighlights();
 			this.setNotebookFindMatchDecorationsUsingCellMatches(Array.from(this._cellMatches.values()));
@@ -287,7 +287,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		}
 	}
 
-	private _addNotebookHighlights(): codemavi {
+	private _addNotebookHighlights(): void {
 		if (!this._notebookEditorWidget) {
 			return;
 		}
@@ -299,7 +299,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		}
 	}
 
-	private _removeNotebookHighlights(): codemavi {
+	private _removeNotebookHighlights(): void {
 		if (this._findMatchDecorationModel) {
 			this._findMatchDecorationModel?.stopWebviewFind();
 			this._findMatchDecorationModel?.dispose();
@@ -307,7 +307,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		}
 	}
 
-	private updateNotebookMatches(matches: CellFindMatchWithIndex[], modelChange: boolean): codemavi {
+	private updateNotebookMatches(matches: CellFindMatchWithIndex[], modelChange: boolean): void {
 		if (!this._notebookEditorWidget) {
 			return;
 		}
@@ -343,7 +343,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		this._onChange.fire({ forceUpdateModel: modelChange });
 	}
 
-	private setNotebookFindMatchDecorationsUsingCellMatches(cells: ICellMatch[]): codemavi {
+	private setNotebookFindMatchDecorationsUsingCellMatches(cells: ICellMatch[]): void {
 		if (!this._findMatchDecorationModel) {
 			return;
 		}
@@ -370,7 +370,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 			// no op, might happen due to bugs related to cell output regex search
 		}
 	}
-	async updateMatchesForEditorWidget(): Promise<codemavi> {
+	async updateMatchesForEditorWidget(): Promise<void> {
 		if (!this._notebookEditorWidget) {
 			return;
 		}
@@ -443,7 +443,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 	}
 
 
-	override createMatches(): codemavi {
+	override createMatches(): void {
 		const model = this.modelService.getModel(this._resource);
 		if (model) {
 			// todo: handle better when ai contributed results has model, currently, createMatches does not work for this
@@ -477,7 +477,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		return super.hasChildren || this._cellMatches.size > 0;
 	}
 
-	override setSelectedMatch(match: ISearchTreeMatch | null): codemavi {
+	override setSelectedMatch(match: ISearchTreeMatch | null): void {
 		if (match) {
 			if (!this.isMatchSelected(match) && isIMatchInNotebook(match)) {
 				this._selectedMatch = match;
@@ -496,7 +496,7 @@ export class NotebookCompatibleFileMatch extends FileMatchImpl implements INoteb
 		this.updateHighlights();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.unbindNotebookEditorWidget();
 		super.dispose();
 	}

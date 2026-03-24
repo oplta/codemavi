@@ -25,7 +25,7 @@ export default class TypingsStatus extends Disposable {
 			this._client.onDidEndInstallTypings(event => this.onEndInstallTypings(event.eventId)));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 
 		for (const timeout of this._acquiringTypings.values()) {
@@ -37,7 +37,7 @@ export default class TypingsStatus extends Disposable {
 		return Object.keys(this._acquiringTypings).length > 0;
 	}
 
-	private onBeginInstallTypings(eventId: number): codemavi {
+	private onBeginInstallTypings(eventId: number): void {
 		if (this._acquiringTypings.has(eventId)) {
 			return;
 		}
@@ -46,7 +46,7 @@ export default class TypingsStatus extends Disposable {
 		}, typingsInstallTimeout));
 	}
 
-	private onEndInstallTypings(eventId: number): codemavi {
+	private onEndInstallTypings(eventId: number): void {
 		const timer = this._acquiringTypings.get(eventId);
 		if (timer) {
 			clearTimeout(timer);
@@ -66,14 +66,14 @@ export class AtaProgressReporter extends Disposable {
 		this._register(client.onTypesInstallerInitializationFailed(_ => this.onTypesInstallerInitializationFailed()));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this._promises.forEach(value => value());
 	}
 
-	private _onBegin(eventId: number): codemavi {
+	private _onBegin(eventId: number): void {
 		const handle = setTimeout(() => this._onEndOrTimeout(eventId), typingsInstallTimeout);
-		const promise = new Promise<codemavi>(resolve => {
+		const promise = new Promise<void>(resolve => {
 			this._promises.set(eventId, () => {
 				clearTimeout(handle);
 				resolve();
@@ -86,7 +86,7 @@ export class AtaProgressReporter extends Disposable {
 		}, () => promise);
 	}
 
-	private _onEndOrTimeout(eventId: number): codemavi {
+	private _onEndOrTimeout(eventId: number): void {
 		const resolve = this._promises.get(eventId);
 		if (resolve) {
 			this._promises.delete(eventId);

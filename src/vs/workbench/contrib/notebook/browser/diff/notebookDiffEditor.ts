@@ -109,9 +109,9 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 
 	private readonly _onMouseUp = this._register(new Emitter<{ readonly event: MouseEvent; readonly target: IDiffElementViewModelBase }>());
 	public readonly onMouseUp = this._onMouseUp.event;
-	private readonly _onDidScroll = this._register(new Emitter<codemavi>());
-	readonly onDidScroll: Event<codemavi> = this._onDidScroll.event;
-	readonly onDidChangeScroll: Event<codemavi> = this._onDidScroll.event;
+	private readonly _onDidScroll = this._register(new Emitter<void>());
+	readonly onDidScroll: Event<void> = this._onDidScroll.event;
+	readonly onDidChangeScroll: Event<void> = this._onDidScroll.event;
 	private _eventDispatcher: NotebookDiffEditorEventDispatcher | undefined;
 	protected _scopeContextKeyService!: IContextKeyService;
 	private _model: INotebookDiffEditorModel | null = null;
@@ -202,19 +202,19 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		// throw new Error('Method not implemented.');
 	}
 
-	updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): codemavi {
+	updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): void {
 		// throw new Error('Method not implemented.');
 	}
 
-	async focusNotebookCell(cell: IGenericCellViewModel, focus: 'output' | 'editor' | 'container'): Promise<codemavi> {
+	async focusNotebookCell(cell: IGenericCellViewModel, focus: 'output' | 'editor' | 'container'): Promise<void> {
 		// throw new Error('Method not implemented.');
 	}
 
-	async focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'output' | 'editor' | 'container'): Promise<codemavi> {
+	async focusNextNotebookCell(cell: IGenericCellViewModel, focus: 'output' | 'editor' | 'container'): Promise<void> {
 		// throw new Error('Method not implemented.');
 	}
 
-	didFocusOutputInputChange(inputFocused: boolean): codemavi {
+	didFocusOutputInputChange(inputFocused: boolean): void {
 		// noop
 	}
 
@@ -233,7 +233,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		};
 	}
 
-	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): codemavi {
+	setScrollPosition(scrollPosition: IEditorPaneScrollPosition): void {
 		if (!this._list) {
 			return;
 		}
@@ -248,7 +248,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		this._list?.delegateVerticalScrollbarPointerDown(browserEvent);
 	}
 
-	updateOutputHeight(cellInfo: IDiffCellInfo, output: ICellOutputViewModel, outputHeight: number, isInit: boolean): codemavi {
+	updateOutputHeight(cellInfo: IDiffCellInfo, output: ICellOutputViewModel, outputHeight: number, isInit: boolean): void {
 		const diffElement = cellInfo.diffElement;
 		const cell = this.getCellByInfo(cellInfo);
 		const outputIndex = cell.outputsViewModels.indexOf(output);
@@ -269,26 +269,26 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	setMarkupCellEditState(cellId: string, editState: CellEditState): codemavi {
+	setMarkupCellEditState(cellId: string, editState: CellEditState): void {
 		// throw new Error('Method not implemented.');
 	}
-	didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi {
+	didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void {
 		// throw new Error('Method not implemented.');
 	}
-	didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi {
+	didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void {
 		// throw new Error('Method not implemented.');
 	}
-	didEndDragMarkupCell(cellId: string): codemavi {
+	didEndDragMarkupCell(cellId: string): void {
 		// throw new Error('Method not implemented.');
 	}
 	didDropMarkupCell(cellId: string) {
 		// throw new Error('Method not implemented.');
 	}
-	didResizeOutput(cellId: string): codemavi {
+	didResizeOutput(cellId: string): void {
 		// throw new Error('Method not implemented.');
 	}
 
-	async toggleInlineView(): Promise<codemavi> {
+	async toggleInlineView(): Promise<void> {
 		this._layoutCancellationTokenSource?.dispose();
 
 		this._inlineView = !this._inlineView;
@@ -309,7 +309,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		this.updateLayout(this._layoutCancellationTokenSource.token);
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		this._rootElement = DOM.append(parent, DOM.$('.notebook-text-diff-editor'));
 		this._overflowContainer = document.createElement('div');
 		this._overflowContainer.classList.add('notebook-overflow-widget-container', 'monaco-editor');
@@ -367,8 +367,8 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 					}
 				},
 				// focusNextPreviousDelegate: {
-				// 	onFocusNext: (applyFocusNext: () => codemavi) => this._updateForCursorNavigationMode(applyFocusNext),
-				// 	onFocusPrevious: (applyFocusPrevious: () => codemavi) => this._updateForCursorNavigationMode(applyFocusPrevious),
+				// 	onFocusNext: (applyFocusNext: () => void) => this._updateForCursorNavigationMode(applyFocusNext),
+				// 	onFocusPrevious: (applyFocusPrevious: () => void) => this._updateForCursorNavigationMode(applyFocusPrevious),
 				// }
 			}
 		);
@@ -466,7 +466,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	override async setInput(input: NotebookDiffEditorInput, options: INotebookEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: NotebookDiffEditorInput, options: INotebookEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		this.inlineDiffWidget?.hide();
 
 		await super.setInput(input, options, context, token);
@@ -519,7 +519,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		await this.updateLayout(this._layoutCancellationTokenSource.token, options?.cellSelections ? cellRangesToIndexes(options.cellSelections) : undefined);
 	}
 
-	override setVisible(visible: boolean): codemavi {
+	override setVisible(visible: boolean): void {
 		super.setVisible(visible);
 		if (!visible) {
 			this.inlineDiffWidget?.hide();
@@ -603,7 +603,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}));
 	}
 
-	private async _createModifiedWebview(id: string, viewType: string, resource: URI): Promise<codemavi> {
+	private async _createModifiedWebview(id: string, viewType: string, resource: URI): Promise<void> {
 		this._modifiedWebview?.dispose();
 
 		this._modifiedWebview = this.instantiationService.createInstance(BackLayerWebView, this, id, viewType, resource, {
@@ -620,7 +620,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		return this.fontInfo.fontFamily ?? `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`;
 	}
 
-	private async _createOriginalWebview(id: string, viewType: string, resource: URI): Promise<codemavi> {
+	private async _createOriginalWebview(id: string, viewType: string, resource: URI): Promise<void> {
 		this._originalWebview?.dispose();
 
 		this._originalWebview = this.instantiationService.createInstance(BackLayerWebView, this, id, viewType, resource, {
@@ -634,7 +634,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		this._originalWebview.element.style.left = `16px`;
 	}
 
-	override setOptions(options: INotebookEditorOptions | undefined): codemavi {
+	override setOptions(options: INotebookEditorOptions | undefined): void {
 		const selections = options?.cellSelections ? cellRangesToIndexes(options.cellSelections) : undefined;
 		if (selections) {
 			this._list.setFocus(selections);
@@ -693,7 +693,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 			this._localStore.delete(disposable);
 		}
 
-		let r: () => codemavi;
+		let r: () => void;
 		const layoutDisposable = DOM.scheduleAtNextAnimationFrame(this.window, () => {
 			this.pendingLayouts.delete(cell);
 
@@ -708,10 +708,10 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 
 		this.pendingLayouts.set(cell, disposable);
 
-		return new Promise<codemavi>(resolve => { r = resolve; });
+		return new Promise<void>(resolve => { r = resolve; });
 	}
 
-	setScrollTop(scrollTop: number): codemavi {
+	setScrollTop(scrollTop: number): void {
 		this._list.scrollTop = scrollTop;
 	}
 
@@ -719,7 +719,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		this._list.triggerScrollFromMouseWheelEvent(event);
 	}
 
-	firstChange(): codemavi {
+	firstChange(): void {
 		if (!this.notebookDiffViewModel) {
 			return;
 		}
@@ -732,7 +732,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	lastChange(): codemavi {
+	lastChange(): void {
 		if (!this.notebookDiffViewModel) {
 			return;
 		}
@@ -746,7 +746,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	previousChange(): codemavi {
+	previousChange(): void {
 		if (!this.notebookDiffViewModel) {
 			return;
 		}
@@ -781,7 +781,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	nextChange(): codemavi {
+	nextChange(): void {
 		if (!this.notebookDiffViewModel) {
 			return;
 		}
@@ -816,7 +816,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		}
 	}
 
-	createOutput(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: DiffNestedCellViewModel, output: IInsetRenderOutput, getOffset: () => number, diffSide: DiffSide): codemavi {
+	createOutput(cellDiffViewModel: DiffElementCellViewModelBase, cellViewModel: DiffNestedCellViewModel, output: IInsetRenderOutput, getOffset: () => number, diffSide: DiffSide): void {
 		this._insetModifyQueueByOutputId.queue(output.source.model.outputId + (diffSide === DiffSide.Modified ? '-right' : 'left'), async () => {
 			const activeWebview = diffSide === DiffSide.Modified ? this._modifiedWebview : this._originalWebview;
 			if (!activeWebview) {
@@ -915,7 +915,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		return this;
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		this.inlineDiffWidget?.hide();
 
 		super.clearInput();
@@ -949,7 +949,7 @@ export class NotebookTextDiffEditor extends EditorPane implements INotebookTextD
 		};
 	}
 
-	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): codemavi {
+	layout(dimension: DOM.Dimension, position: DOM.IDomPosition): void {
 		this._rootElement.classList.toggle('mid-width', dimension.width < 1000 && dimension.width >= 600);
 		this._rootElement.classList.toggle('narrow-width', dimension.width < 600);
 		const overviewRulerEnabled = this.isOverviewRulerEnabled();

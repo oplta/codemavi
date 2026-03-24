@@ -58,7 +58,7 @@ export class PwshCompletionProviderAddon extends Disposable implements ITerminal
 	isPasting: boolean = false;
 	private _completionsDeferred: DeferredPromise<ITerminalCompletion[] | undefined> | null = null;
 
-	private readonly _onDidReceiveCompletions = this._register(new Emitter<codemavi>());
+	private readonly _onDidReceiveCompletions = this._register(new Emitter<void>());
 	readonly onDidReceiveCompletions = this._onDidReceiveCompletions.event;
 	private readonly _onDidRequestSendText = this._register(new Emitter<RequestCompletionsSequence>());
 	readonly onDidRequestSendText = this._onDidRequestSendText.event;
@@ -83,7 +83,7 @@ export class PwshCompletionProviderAddon extends Disposable implements ITerminal
 		}));
 	}
 
-	activate(xterm: Terminal): codemavi {
+	activate(xterm: Terminal): void {
 		this._terminal = xterm;
 		this._register(xterm.onData(() => {
 			this._lastUserDataTimestamp = Date.now();
@@ -115,7 +115,7 @@ export class PwshCompletionProviderAddon extends Disposable implements ITerminal
 		return false;
 	}
 
-	private _handleCompletionsSequence(terminal: Terminal, data: string, command: string, args: string[]): codemavi {
+	private _handleCompletionsSequence(terminal: Terminal, data: string, command: string, args: string[]): void {
 		this._onDidReceiveCompletions.fire();
 
 		// Nothing to handle if the terminal is not attached

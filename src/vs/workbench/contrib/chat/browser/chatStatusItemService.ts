@@ -14,9 +14,9 @@ export interface IChatStatusItemService {
 
 	readonly onDidChange: Event<IChatStatusItemChangeEvent>;
 
-	setOrUpdateEntry(entry: ChatStatusEntry): codemavi;
+	setOrUpdateEntry(entry: ChatStatusEntry): void;
 
-	deleteEntry(id: string): codemavi;
+	deleteEntry(id: string): void;
 
 	getEntries(): Iterable<ChatStatusEntry>;
 }
@@ -42,7 +42,7 @@ class ChatStatusItemService implements IChatStatusItemService {
 	private readonly _onDidChange = new Emitter<IChatStatusItemChangeEvent>();
 	readonly onDidChange = this._onDidChange.event;
 
-	setOrUpdateEntry(entry: ChatStatusEntry): codemavi {
+	setOrUpdateEntry(entry: ChatStatusEntry): void {
 		const isUpdate = this._entries.has(entry.id);
 		this._entries.set(entry.id, entry);
 		if (isUpdate) {
@@ -50,7 +50,7 @@ class ChatStatusItemService implements IChatStatusItemService {
 		}
 	}
 
-	deleteEntry(id: string): codemavi {
+	deleteEntry(id: string): void {
 		this._entries.delete(id);
 	}
 

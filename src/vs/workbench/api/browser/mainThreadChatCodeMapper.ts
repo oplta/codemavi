@@ -27,7 +27,7 @@ export class MainThreadChatCodemapper extends Disposable implements MainThreadCo
 		this._proxy = extHostContext.getProxy(ExtHostContext.ExtHostCodeMapper);
 	}
 
-	$registerCodeMapperProvider(handle: number, displayName: string): codemavi {
+	$registerCodeMapperProvider(handle: number, displayName: string): void {
 		const impl: ICodeMapperProvider = {
 			displayName,
 			mapCode: async (uiRequest: ICodeMapperRequest, response: ICodeMapperResponse, token: CancellationToken) => {
@@ -51,11 +51,11 @@ export class MainThreadChatCodemapper extends Disposable implements MainThreadCo
 		this.providers.set(handle, disposable);
 	}
 
-	$unregisterCodeMapperProvider(handle: number): codemavi {
+	$unregisterCodeMapperProvider(handle: number): void {
 		this.providers.deleteAndDispose(handle);
 	}
 
-	$handleProgress(requestId: string, data: ICodeMapperProgressDto): Promise<codemavi> {
+	$handleProgress(requestId: string, data: ICodeMapperProgressDto): Promise<void> {
 		const response = this._responseMap.get(requestId);
 		if (response) {
 			const edits = data.edits;

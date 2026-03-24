@@ -126,7 +126,7 @@ export class TestingDecorationService extends Disposable implements ITestingDeco
 	declare public _serviceBrand: undefined;
 
 	private generation = 0;
-	private readonly changeEmitter = new Emitter<codemavi>();
+	private readonly changeEmitter = new Emitter<void>();
 	private readonly decorationCache = new ResourceMap<{
 		/** The document version at which ranges have been updated, requiring rerendering */
 		rangeUpdateVersionId?: number;
@@ -1450,7 +1450,7 @@ class TestErrorContentWidget extends Disposable implements IContentWidget {
 		};
 	}
 
-	afterRender(_position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): codemavi {
+	afterRender(_position: ContentWidgetPositionPreference | null, coordinate: IContentWidgetRenderedCoordinate | null): void {
 		if (coordinate) {
 			const { verticalScrollbarWidth } = this.editor.getLayoutInfo();
 			const scrollWidth = this.editor.getScrollWidth();

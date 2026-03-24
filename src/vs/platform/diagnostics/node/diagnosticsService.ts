@@ -65,7 +65,7 @@ export async function collectWorkspaceStats(folder: string, filter: string[]): P
 
 	const MAX_FILES = 20000;
 
-	function collect(root: string, dir: string, filter: string[], token: { count: number; maxReached: boolean; readdirCount: number }): Promise<codemavi> {
+	function collect(root: string, dir: string, filter: string[], token: { count: number; maxReached: boolean; readdirCount: number }): Promise<void> {
 		const relativePath = dir.substring(root.length + 1);
 
 		return Promises.withAsyncBody(async resolve => {
@@ -429,7 +429,7 @@ export class DiagnosticsService implements IDiagnosticsService {
 
 	private formatWorkspaceMetadata(info: IMainProcessDiagnostics): Promise<string> {
 		const output: string[] = [];
-		const workspaceStatPromises: Promise<codemavi>[] = [];
+		const workspaceStatPromises: Promise<void>[] = [];
 
 		info.windows.forEach(window => {
 			if (window.folderURIs.length === 0 || !!window.remoteAuthority) {
@@ -480,7 +480,7 @@ export class DiagnosticsService implements IDiagnosticsService {
 		return output.join('\n');
 	}
 
-	private formatProcessItem(mainPid: number, mapProcessToName: Map<number, string>, output: string[], item: ProcessItem, indent: number): codemavi {
+	private formatProcessItem(mainPid: number, mapProcessToName: Map<number, string>, output: string[], item: ProcessItem, indent: number): void {
 		const isRoot = (indent === 0);
 
 		// Format name with indent
@@ -520,7 +520,7 @@ export class DiagnosticsService implements IDiagnosticsService {
 		return { extensions: [...items] };
 	}
 
-	public async reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<codemavi> {
+	public async reportWorkspaceStats(workspace: IWorkspaceInformation): Promise<void> {
 		for (const { uri } of workspace.folders) {
 			const folderUri = URI.revive(uri);
 			if (folderUri.scheme !== Schemas.file) {

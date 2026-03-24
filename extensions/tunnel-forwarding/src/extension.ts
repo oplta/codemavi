@@ -30,7 +30,7 @@ const cliPath = process.env.VSCODE_FORWARDING_IS_DEV
 	) + (process.platform === 'win32' ? '.exe' : '');
 
 class Tunnel implements vscode.Tunnel {
-	private readonly disposeEmitter = new vscode.EventEmitter<codemavi>();
+	private readonly disposeEmitter = new vscode.EventEmitter<void>();
 	public readonly onDidDispose = this.disposeEmitter.event;
 	public localAddress!: string;
 
@@ -101,7 +101,7 @@ class Logger {
 
 	constructor(private readonly label: string) { }
 
-	public show(): codemavi {
+	public show(): void {
 		return this.outputChannel?.show();
 	}
 
@@ -268,7 +268,7 @@ class TunnelProvider implements vscode.TunnelProvider {
 		const child = spawn(cliPath, args, { stdio: 'pipe', env: { ...process.env, NO_COLOR: '1', VSCODE_CLI_ACCESS_TOKEN: session.accessToken } });
 		this.state = { state: State.Starting, process: child };
 
-		const progressP = new DeferredPromise<codemavi>();
+		const progressP = new DeferredPromise<void>();
 		vscode.window.withProgress(
 			{
 				location: vscode.ProgressLocation.Notification,

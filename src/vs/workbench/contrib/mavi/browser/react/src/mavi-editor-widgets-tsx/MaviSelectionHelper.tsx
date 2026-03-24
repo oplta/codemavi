@@ -11,24 +11,24 @@ import { MAVI_CTRL_K_ACTION_ID, MAVI_CTRL_L_ACTION_ID } from '../../../actionIDs
 import { Circle, MoreVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Code MaviSelectionHelperProps } from '../../../../../../contrib/codemavi/browser/codemaviSelectionHelperWidget.js';
-import { MAVI_OPEN_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js';
+import { MaviSelectionHelperProps } from '../../../../../../contrib/mavi/browser/maviSelectionHelperWidget.js';
+import { MAVI_OPEN_SETTINGS_ACTION_ID } from '../../../maviSettingsPane.js';
 
 
-export const Code MaviSelectionHelperMain = (props: Code MaviSelectionHelperProps) => {
+export const MaviSelectionHelperMain = (props: MaviSelectionHelperProps) => {
 
 	const isDark = useIsDark()
 
 	return <div
-		className={`@@codemavi-scope ${isDark ? 'dark' : ''}`}
+		className={`@@mavi-scope ${isDark ? 'dark' : ''}`}
 	>
-		<Code MaviSelectionHelper {...props} />
+		<MaviSelectionHelper {...props} />
 	</div>
 }
 
 
 
-const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps) => {
+const MaviSelectionHelper = ({ rerenderKey }: MaviSelectionHelperProps) => {
 
 
 	const accessor = useAccessor()
@@ -38,7 +38,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 	const ctrlLKeybind = keybindingService.lookupKeybinding(MAVI_CTRL_L_ACTION_ID)
 	const ctrlKKeybind = keybindingService.lookupKeybinding(MAVI_CTRL_K_ACTION_ID)
 
-	const dividerHTML = <div className='w-[0.5px] bg-codemavi-border-3'></div>
+	const dividerHTML = <div className='w-[0.5px] bg-mavi-border-3'></div>
 
 	const [reactRerenderCount, setReactRerenderKey] = useState(rerenderKey)
 	const [clickState, setClickState] = useState<'init' | 'clickedOption' | 'clickedMore'>('init')
@@ -159,7 +159,7 @@ const Code MaviSelectionHelper = ({ rerenderKey }: Code MaviSelectionHelperProps
 		pointer-events-auto select-none
 		z-[1000]
 		rounded-sm shadow-md flex flex-nowrap text-nowrap
-		border border-codemavi-border-3 bg-codemavi-bg-2
+		border border-mavi-border-3 bg-mavi-bg-2
 		transition-all duration-200
 	'>
 		{clickState === 'init' ? defaultHTML

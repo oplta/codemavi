@@ -15,7 +15,7 @@ class InputModeImpl {
 		return this._inputMode;
 	}
 
-	public setInputMode(inputMode: 'overtype' | 'insert'): codemavi {
+	public setInputMode(inputMode: 'overtype' | 'insert'): void {
 		this._inputMode = inputMode;
 		this._onDidChangeInputMode.fire(this._inputMode);
 	}

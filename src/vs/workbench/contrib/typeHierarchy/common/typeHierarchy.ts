@@ -37,7 +37,7 @@ export interface TypeHierarchyItem {
 
 export interface TypeHierarchySession {
 	roots: TypeHierarchyItem[];
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export interface TypeHierarchyProvider {
@@ -75,7 +75,7 @@ export class TypeHierarchyModel {
 		this.root = roots[0];
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.ref.release();
 	}
 

@@ -40,7 +40,7 @@ export class Component extends Themable {
 		return this.memento.getMemento(scope, target);
 	}
 
-	protected reloadMemento(scope: StorageScope): codemavi {
+	protected reloadMemento(scope: StorageScope): void {
 		return this.memento.reloadMemento(scope);
 	}
 
@@ -48,7 +48,7 @@ export class Component extends Themable {
 		return this.memento.onDidChangeValue(scope, disposables);
 	}
 
-	protected saveState(): codemavi {
+	protected saveState(): void {
 		// Subclasses to implement for storing state
 	}
 }

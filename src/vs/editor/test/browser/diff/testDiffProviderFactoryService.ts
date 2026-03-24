@@ -29,5 +29,5 @@ class SyncDocumentDiffProvider implements IDocumentDiffProvider {
 		});
 	}
 
-	onDidChange: Event<codemavi> = () => toDisposable(() => { });
+	onDidChange: Event<void> = () => toDisposable(() => { });
 }

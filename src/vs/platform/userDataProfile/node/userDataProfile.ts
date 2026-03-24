@@ -54,7 +54,7 @@ export class UserDataProfilesService extends UserDataProfilesReadonlyService imp
 		super(stateService, uriIdentityService, environmentService, fileService, logService);
 	}
 
-	protected override saveStoredProfiles(storedProfiles: StoredUserDataProfile[]): codemavi {
+	protected override saveStoredProfiles(storedProfiles: StoredUserDataProfile[]): void {
 		if (storedProfiles.length) {
 			this.stateService.setItem(UserDataProfilesService.PROFILES_KEY, storedProfiles.map(profile => ({ ...profile, location: this.uriIdentityService.extUri.basename(profile.location) })));
 		} else {
@@ -62,7 +62,7 @@ export class UserDataProfilesService extends UserDataProfilesReadonlyService imp
 		}
 	}
 
-	protected override saveStoredProfileAssociations(storedProfileAssociations: StoredProfileAssociations): codemavi {
+	protected override saveStoredProfileAssociations(storedProfileAssociations: StoredProfileAssociations): void {
 		if (storedProfileAssociations.emptyWindows || storedProfileAssociations.workspaces) {
 			this.stateService.setItem(UserDataProfilesService.PROFILE_ASSOCIATIONS_KEY, storedProfileAssociations);
 		} else {
@@ -82,7 +82,7 @@ export class ServerUserDataProfilesService extends UserDataProfilesService imple
 		super(new StateService(SaveStrategy.IMMEDIATE, environmentService, logService, fileService), uriIdentityService, environmentService, fileService, logService);
 	}
 
-	override async init(): Promise<codemavi> {
+	override async init(): Promise<void> {
 		await (this.stateService as StateService).init();
 		return super.init();
 	}

@@ -39,7 +39,7 @@ export class MarkdownDecoder extends BaseDecoder<TMarkdownToken, TSimpleToken> {
 		super(new SimpleDecoder(stream));
 	}
 
-	protected override onStreamData(token: TSimpleToken): codemavi {
+	protected override onStreamData(token: TSimpleToken): void {
 		// `markdown links` start with `[` character, so here we can
 		// initiate the process of parsing a markdown link
 		if (token instanceof LeftBracket && !this.current) {
@@ -104,7 +104,7 @@ export class MarkdownDecoder extends BaseDecoder<TMarkdownToken, TSimpleToken> {
 		}
 	}
 
-	protected override onStreamEnd(): codemavi {
+	protected override onStreamEnd(): void {
 		// if the stream has ended and there is a current incomplete parser
 		// object present, handle the remaining parser object
 		if (this.current) {

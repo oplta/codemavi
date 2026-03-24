@@ -216,7 +216,7 @@ class CharSequence implements ISequence {
 		);
 	}
 
-	private _assertIndex(index: number, arr: number[]): codemavi {
+	private _assertIndex(index: number, arr: number[]): void {
 		if (index < 0 || index >= arr.length) {
 			throw new Error(`Illegal index`);
 		}
@@ -600,7 +600,7 @@ export class DiffComputer {
 		result: LineChange[],
 		originalLineNumber: number, originalStartColumn: number, originalEndColumn: number,
 		modifiedLineNumber: number, modifiedStartColumn: number, modifiedEndColumn: number
-	): codemavi {
+	): void {
 		if (this._mergeTrimWhitespaceCharChange(result, originalLineNumber, originalStartColumn, originalEndColumn, modifiedLineNumber, modifiedStartColumn, modifiedEndColumn)) {
 			// Merged into previous
 			return;

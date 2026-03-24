@@ -114,7 +114,7 @@ class QuickChatGlobalAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, query?: string | Omit<IQuickChatOpenOptions, 'selection'>): codemavi {
+	override run(accessor: ServicesAccessor, query?: string | Omit<IQuickChatOpenOptions, 'selection'>): void {
 		const quickChatService = accessor.get(IQuickChatService);
 		let options: IQuickChatOpenOptions | undefined;
 		switch (typeof query) {
@@ -139,7 +139,7 @@ class AskQuickChatAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor, query?: string): codemavi {
+	override run(accessor: ServicesAccessor, query?: string): void {
 		const quickChatService = accessor.get(IQuickChatService);
 		quickChatService.toggle(query ? {
 			query,

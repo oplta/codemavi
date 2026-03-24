@@ -6,11 +6,11 @@
 import { useState, useEffect, useCallback, useRef, Fragment } from 'react'
 import { useAccessor, useChatThreadsState, useChatThreadsStreamState, useCommandBarState, useCommandBarURIListener, useSettingsState } from '../util/services.js'
 import { usePromise, useRefState } from '../util/helpers.js'
-import { isFeatureNameDisabled } from '../../../../common/codemaviSettingsTypes.js'
+import { isFeatureNameDisabled } from '../../../../common/maviSettingsTypes.js'
 import { URI } from '../../../../../../../base/common/uri.js'
 import { FileSymlink, LucideIcon, RotateCw, Terminal } from 'lucide-react'
 import { Check, X, Square, Copy, Play, } from 'lucide-react'
-import { getBasename, ListableToolItem, codemaviOpenFileFn, ToolChildrenWrapper } from '../sidebar-tsx/SidebarChat.js'
+import { getBasename, ListableToolItem, maviOpenFileFn, ToolChildrenWrapper } from '../sidebar-tsx/SidebarChat.js'
 import { PlacesType, VariantType } from 'react-tooltip'
 
 enum CopyButtonText {
@@ -33,12 +33,12 @@ export const IconShell1 = ({ onClick, Icon, disabled, className, ...props }: Ico
 			e.stopPropagation();
 			onClick?.(e);
 		}}
-		// border border-codemavi-border-1 rounded
+		// border border-mavi-border-1 rounded
 		className={`
 		size-[18px]
 		p-[2px]
 		flex items-center justify-center
-		text-sm text-codemavi-fg-3
+		text-sm text-mavi-fg-3
 		hover:brightness-110
 		disabled:opacity-50 disabled:cursor-not-allowed
 		${className}
@@ -109,7 +109,7 @@ export const JumpToFileButton = ({ uri, ...props }: { uri: URI | 'current' } & R
 		<IconShell1
 			Icon={FileSymlink}
 			onClick={() => {
-				codemaviOpenFileFn(uri, accessor)
+				maviOpenFileFn(uri, accessor)
 			}}
 			{...tooltipPropsForApplyBlock({ tooltipName: 'Go to file' })}
 			{...props}
@@ -120,7 +120,7 @@ export const JumpToFileButton = ({ uri, ...props }: { uri: URI | 'current' } & R
 
 
 
-export const JumpToTerminalButton = ({ onClick }: { onClick: () => codemavi }) => {
+export const JumpToTerminalButton = ({ onClick }: { onClick: () => void }) => {
 	return (
 		<IconShell1
 			Icon={Terminal}
@@ -141,13 +141,13 @@ const getUriBeingApplied = (applyBoxId: string) => {
 
 export const useApplyStreamState = ({ applyBoxId }: { applyBoxId: string }) => {
 	const accessor = useAccessor()
-	const codemaviCommandBarService = accessor.get('IMaviCommandBarService')
+	const maviCommandBarService = accessor.get('IMaviCommandBarService')
 
 	const getStreamState = useCallback(() => {
 		const uri = getUriBeingApplied(applyBoxId)
 		if (!uri) return 'idle-no-changes'
-		return codemaviCommandBarService.getStreamState(uri)
-	}, [codemaviCommandBarService, applyBoxId])
+		return maviCommandBarService.getStreamState(uri)
+	}, [maviCommandBarService, applyBoxId])
 
 
 	const [currStreamStateRef, setStreamState] = useRefState(getStreamState())
@@ -173,15 +173,15 @@ export const useApplyStreamState = ({ applyBoxId }: { applyBoxId: string }) => {
 type IndicatorColor = 'green' | 'orange' | 'dark' | 'yellow' | null
 export const StatusIndicator = ({ indicatorColor, title, className, ...props }: { indicatorColor: IndicatorColor, title?: React.ReactNode, className?: string } & React.HTMLAttributes<HTMLDivElement>) => {
 	return (
-		<div className={`flex flex-row text-codemavi-fg-3 text-xs items-center gap-1.5 ${className}`} {...props}>
+		<div className={`flex flex-row text-mavi-fg-3 text-xs items-center gap-1.5 ${className}`} {...props}>
 			{title && <span className='opacity-80'>{title}</span>}
 			<div
 				className={` size-1.5 rounded-full border
-					${indicatorColor === 'dark' ? 'bg-[rgba(0,0,0,0)] border-codemavi-border-1' :
+					${indicatorColor === 'dark' ? 'bg-[rgba(0,0,0,0)] border-mavi-border-1' :
 						indicatorColor === 'orange' ? 'bg-orange-500 border-orange-500 shadow-[0_0_4px_0px_rgba(234,88,12,0.6)]' :
 							indicatorColor === 'green' ? 'bg-green-500 border-green-500 shadow-[0_0_4px_0px_rgba(22,163,74,0.6)]' :
 								indicatorColor === 'yellow' ? 'bg-yellow-500 border-yellow-500 shadow-[0_0_4px_0px_rgba(22,163,74,0.6)]' :
-									'bg-codemavi-border-1 border-codemavi-border-1'
+									'bg-mavi-border-1 border-mavi-border-1'
 					}
 				`}
 			/>
@@ -190,7 +190,7 @@ export const StatusIndicator = ({ indicatorColor, title, className, ...props }: 
 };
 
 const tooltipPropsForApplyBlock = ({ tooltipName, color = undefined, position = 'top', offset = undefined }: { tooltipName: string, color?: IndicatorColor, position?: PlacesType, offset?: number }) => ({
-	'data-tooltip-id': color === 'orange' ? `codemavi-tooltip-orange` : color === 'green' ? 'codemavi-tooltip-green' : 'codemavi-tooltip',
+	'data-tooltip-id': color === 'orange' ? `mavi-tooltip-orange` : color === 'green' ? 'mavi-tooltip-green' : 'mavi-tooltip',
 	'data-tooltip-place': position as PlacesType,
 	'data-tooltip-content': `${tooltipName}`,
 	'data-tooltip-offset': offset,
@@ -198,13 +198,13 @@ const tooltipPropsForApplyBlock = ({ tooltipName, color = undefined, position = 
 
 export const useEditToolStreamState = ({ applyBoxId, uri }: { applyBoxId: string, uri: URI }) => {
 	const accessor = useAccessor()
-	const codemaviCommandBarService = accessor.get('IMaviCommandBarService')
-	const [streamState, setStreamState] = useState(codemaviCommandBarService.getStreamState(uri))
+	const maviCommandBarService = accessor.get('IMaviCommandBarService')
+	const [streamState, setStreamState] = useState(maviCommandBarService.getStreamState(uri))
 	// listen for stream updates on this box
 	useCommandBarURIListener(useCallback((uri_) => {
 		const shouldUpdate = uri.fsPath === uri_.fsPath
-		if (shouldUpdate) { setStreamState(codemaviCommandBarService.getStreamState(uri)) }
-	}, [codemaviCommandBarService, applyBoxId, uri]))
+		if (shouldUpdate) { setStreamState(maviCommandBarService.getStreamState(uri)) }
+	}, [maviCommandBarService, applyBoxId, uri]))
 
 	return { streamState, }
 }
@@ -272,7 +272,7 @@ const ApplyButtonsForTerminal = ({
 	const settingsState = useSettingsState()
 
 	const [isShellRunning, setIsShellRunning] = useState<boolean>(false)
-	const interruptToolRef = useRef<(() => codemavi) | null>(null)
+	const interruptToolRef = useRef<(() => void) | null>(null)
 	const isDisabled = isShellRunning
 
 	const onClickSubmit = useCallback(async () => {
@@ -351,14 +351,14 @@ const ApplyButtonsForEdit = ({
 		setApplying(newApplyingUri)
 
 		if (!applyDonePromise) {
-			notificationService.info(`Code Mavi Error: We couldn't run Apply here. ${uri === 'current' ? 'This Apply block wants to run on the current file, but you might not have a file open.' : `This Apply block wants to run on ${uri.fsPath}, but it might not exist.`}`)
+			notificationService.info(`Mavi Error: We couldn't run Apply here. ${uri === 'current' ? 'This Apply block wants to run on the current file, but you might not have a file open.' : `This Apply block wants to run on ${uri.fsPath}, but it might not exist.`}`)
 		}
 
 		// catch any errors by interrupting the stream
 		applyDonePromise?.catch(e => {
 			const uri = getUriBeingApplied(applyBoxId)
 			if (uri) editCodeService.interruptURIStreaming({ uri: uri })
-			notificationService.info(`Code Mavi Error: There was a problem running Apply: ${e}.`)
+			notificationService.info(`Mavi Error: There was a problem running Apply: ${e}.`)
 
 		})
 		metricsService.capture('Apply Code', { length: codeStr.length }) // capture the length only
@@ -530,17 +530,17 @@ export const BlockCodeApplyWrapper = ({
 			name={<span className='not-italic'>{getBasename(uri.fsPath)}</span>}
 			isSmall={true}
 			showDot={false}
-			onClick={() => { codemaviOpenFileFn(uri, accessor) }}
+			onClick={() => { maviOpenFileFn(uri, accessor) }}
 		/>
 		: <span>{language}</span>
 
 
-	return <div className='border border-codemavi-border-3 rounded overflow-hidden bg-codemavi-bg-3 my-1'>
+	return <div className='border border-mavi-border-3 rounded overflow-hidden bg-mavi-bg-3 my-1'>
 		{/* header */}
-		<div className=" select-none flex justify-between items-center py-1 px-2 border-b border-codemavi-border-3 cursor-default">
+		<div className=" select-none flex justify-between items-center py-1 px-2 border-b border-mavi-border-3 cursor-default">
 			<div className="flex items-center">
 				<StatusIndicatorForApplyButton uri={uri} applyBoxId={applyBoxId} />
-				<span className="text-[13px] font-light text-codemavi-fg-3">
+				<span className="text-[13px] font-light text-mavi-fg-3">
 					{name}
 				</span>
 			</div>

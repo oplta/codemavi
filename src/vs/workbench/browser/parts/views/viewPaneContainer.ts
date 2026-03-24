@@ -103,7 +103,7 @@ class ViewPaneDropOverlay extends Themable {
 		return !!this._disposed;
 	}
 
-	private create(): codemavi {
+	private create(): void {
 
 		// Container
 		this.container = $('div', { id: ViewPaneDropOverlay.OVERLAY_ID });
@@ -128,7 +128,7 @@ class ViewPaneDropOverlay extends Themable {
 		this.updateStyles();
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 
 		// Overlay drop background
 		this.overlay.style.backgroundColor = this.getColor(this.location === ViewContainerLocation.Panel ? PANEL_SECTION_DRAG_AND_DROP_BACKGROUND : SIDE_BAR_DRAG_AND_DROP_BACKGROUND) || '';
@@ -145,7 +145,7 @@ class ViewPaneDropOverlay extends Themable {
 		this.overlay.style.borderWidth = '0px';
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(new DragAndDropObserver(this.container, {
 			onDragOver: e => {
 
@@ -181,7 +181,7 @@ class ViewPaneDropOverlay extends Themable {
 		}));
 	}
 
-	private positionOverlay(mousePosX: number, mousePosY: number): codemavi {
+	private positionOverlay(mousePosX: number, mousePosY: number): void {
 		const paneWidth = this.paneElement.clientWidth;
 		const paneHeight = this.paneElement.clientHeight;
 
@@ -255,14 +255,14 @@ class ViewPaneDropOverlay extends Themable {
 		this._currentDropOperation = dropDirection;
 	}
 
-	private doUpdateOverlayBorder(direction: DropDirection | undefined): codemavi {
+	private doUpdateOverlayBorder(direction: DropDirection | undefined): void {
 		this.overlay.style.borderTopWidth = direction === DropDirection.UP ? '2px' : '0px';
 		this.overlay.style.borderLeftWidth = direction === DropDirection.LEFT ? '2px' : '0px';
 		this.overlay.style.borderBottomWidth = direction === DropDirection.DOWN ? '2px' : '0px';
 		this.overlay.style.borderRightWidth = direction === DropDirection.RIGHT ? '2px' : '0px';
 	}
 
-	private doPositionOverlay(options: { top?: string; bottom?: string; left?: string; right?: string; width: string; height: string }): codemavi {
+	private doPositionOverlay(options: { top?: string; bottom?: string; left?: string; right?: string; width: string; height: string }): void {
 
 		// Container
 		this.container.style.height = '100%';
@@ -281,7 +281,7 @@ class ViewPaneDropOverlay extends Themable {
 		return element === this.container || element === this.overlay;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this._disposed = true;
@@ -325,8 +325,8 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 	private readonly visibleViewsStorageId: string;
 	protected readonly viewContainerModel: IViewContainerModel;
 
-	private readonly _onTitleAreaUpdate: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onTitleAreaUpdate: Event<codemavi> = this._onTitleAreaUpdate.event;
+	private readonly _onTitleAreaUpdate: Emitter<void> = this._register(new Emitter<void>());
+	readonly onTitleAreaUpdate: Event<void> = this._onTitleAreaUpdate.event;
 
 	private readonly _onDidChangeVisibility = this._register(new Emitter<boolean>());
 	readonly onDidChangeVisibility = this._onDidChangeVisibility.event;
@@ -397,7 +397,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		this.viewContainerModel = this.viewDescriptorService.getViewContainerModel(container);
 	}
 
-	create(parent: HTMLElement): codemavi {
+	create(parent: HTMLElement): void {
 		const options = this.options as IPaneViewOptions;
 		options.orientation = this.orientation;
 		this.paneview = this._register(new PaneView(parent, this.options));
@@ -576,7 +576,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return containerTitle;
 	}
 
-	private showContextMenu(event: StandardMouseEvent): codemavi {
+	private showContextMenu(event: StandardMouseEvent): void {
 		for (const paneItem of this.paneItems) {
 			// Do not show context menu if target is coming from inside pane views
 			if (isAncestor(event.target, paneItem.pane.element)) {
@@ -607,7 +607,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return createActionViewItem(this.instantiationService, action, options);
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		let paneToFocus: ViewPane | undefined = undefined;
 		if (this.lastFocusedPane) {
 			paneToFocus = this.lastFocusedPane;
@@ -637,7 +637,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return Orientation.VERTICAL;
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		if (this.paneview) {
 			if (this.paneview.orientation !== this.orientation) {
 				this.paneview.flipOrientation(dimension.height, dimension.width);
@@ -655,7 +655,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		}
 	}
 
-	setBoundarySashes(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes(sashes: IBoundarySashes): void {
 		this._boundarySashes = sashes;
 		this.paneview?.setBoundarySashes(sashes);
 	}
@@ -666,7 +666,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return optimalWidth + additionalMargin;
 	}
 
-	addPanes(panes: { pane: ViewPane; size: number; index?: number; disposable: IDisposable }[]): codemavi {
+	addPanes(panes: { pane: ViewPane; size: number; index?: number; disposable: IDisposable }[]): void {
 		const wasMerged = this.isViewMergedWithContainer();
 
 		for (const { pane, size, index, disposable } of panes) {
@@ -681,7 +681,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		this._onDidAddViews.fire(panes.map(({ pane }) => pane));
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		if (this.visible !== !!visible) {
 			this.visible = visible;
 
@@ -696,7 +696,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return this.visible;
 	}
 
-	protected updateTitleArea(): codemavi {
+	protected updateTitleArea(): void {
 		this._onTitleAreaUpdate.fire();
 	}
 
@@ -708,14 +708,14 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return this.panes.filter(view => view.id === id)[0];
 	}
 
-	private saveViewSizes(): codemavi {
+	private saveViewSizes(): void {
 		// Save size only when the layout has happened
 		if (this.didLayout) {
 			this.viewContainerModel.setSizes(this.panes.map(view => ({ id: view.id, size: this.getPaneSize(view) })));
 		}
 	}
 
-	private restoreViewSizes(): codemavi {
+	private restoreViewSizes(): void {
 		// Restore sizes only when the layout has happened
 		if (this.didLayout) {
 			let initialSizes;
@@ -749,12 +749,12 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return sizes;
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 		this.panes.forEach((view) => view.saveState());
 		this.storageService.store(this.visibleViewsStorageId, this.length, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 	}
 
-	private onContextMenu(event: StandardMouseEvent, viewPane: ViewPane): codemavi {
+	private onContextMenu(event: StandardMouseEvent, viewPane: ViewPane): void {
 		event.stopPropagation();
 		event.preventDefault();
 
@@ -826,7 +826,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return panes;
 	}
 
-	private onDidRemoveViewDescriptors(removed: IViewDescriptorRef[]): codemavi {
+	private onDidRemoveViewDescriptors(removed: IViewDescriptorRef[]): void {
 		removed = removed.sort((a, b) => b.index - a.index);
 		const panesToRemove: ViewPane[] = [];
 		for (const { index } of removed) {
@@ -845,7 +845,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		}
 	}
 
-	toggleViewVisibility(viewId: string): codemavi {
+	toggleViewVisibility(viewId: string): void {
 		// Check if view is active
 		if (this.viewContainerModel.activeViewDescriptors.some(viewDescriptor => viewDescriptor.id === viewId)) {
 			const visible = !this.viewContainerModel.isVisible(viewId);
@@ -853,7 +853,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		}
 	}
 
-	private addPane(pane: ViewPane, size: number, disposable: IDisposable, index = this.paneItems.length - 1): codemavi {
+	private addPane(pane: ViewPane, size: number, disposable: IDisposable, index = this.paneItems.length - 1): void {
 		const onDidFocus = pane.onDidFocus(() => {
 			this._onDidFocusView.fire(pane);
 			this.lastFocusedPane = pane;
@@ -1017,7 +1017,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		}));
 	}
 
-	removePanes(panes: ViewPane[]): codemavi {
+	removePanes(panes: ViewPane[]): void {
 		const wasMerged = this.isViewMergedWithContainer();
 
 		panes.forEach(pane => this.removePane(pane));
@@ -1030,7 +1030,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		this._onDidRemoveViews.fire(panes);
 	}
 
-	private removePane(pane: ViewPane): codemavi {
+	private removePane(pane: ViewPane): void {
 		const index = this.paneItems.findIndex(i => i.pane === pane);
 
 		if (index === -1) {
@@ -1047,7 +1047,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 
 	}
 
-	movePane(from: ViewPane, to: ViewPane): codemavi {
+	movePane(from: ViewPane, to: ViewPane): void {
 		const fromIndex = this.paneItems.findIndex(item => item.pane === from);
 		const toIndex = this.paneItems.findIndex(item => item.pane === to);
 
@@ -1072,7 +1072,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		this.updateTitleArea();
 	}
 
-	resizePane(pane: ViewPane, size: number): codemavi {
+	resizePane(pane: ViewPane, size: number): void {
 		assertIsDefined(this.paneview).resizePane(pane, size);
 	}
 
@@ -1080,7 +1080,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		return assertIsDefined(this.paneview).getPaneSize(pane);
 	}
 
-	private updateViewHeaders(): codemavi {
+	private updateViewHeaders(): void {
 		if (this.isViewMergedWithContainer()) {
 			if (this.paneItems[0].pane.isExpanded()) {
 				this.lastMergedCollapsedPane = undefined;
@@ -1153,7 +1153,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 			const firstPaneSize = this.getPaneSize(firstPane);
 			const secondPaneSize = this.getPaneSize(secondPane);
 
-			// Acodemavi rounding errors and be consistent when resizing
+			// Avoid rounding errors and be consistent when resizing
 			// The first pane always get half rounded up and the second is half rounded down
 			const newFirstPaneSize = Math.ceil((firstPaneSize + secondPaneSize) / 2);
 			const newSecondPaneSize = Math.floor((firstPaneSize + secondPaneSize) / 2);
@@ -1170,7 +1170,7 @@ export class ViewPaneContainer extends Component implements IViewPaneContainer {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this.paneItems.forEach(i => i.disposable.dispose());
 		if (this.paneview) {
@@ -1202,7 +1202,7 @@ class MoveViewPosition extends Action2 {
 		super(desc);
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewDescriptorService = accessor.get(IViewDescriptorService);
 		const contextKeyService = accessor.get(IContextKeyService);
 
@@ -1299,7 +1299,7 @@ registerAction2(class MoveViews extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor, options: { viewIds: string[]; destinationId: string }): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, options: { viewIds: string[]; destinationId: string }): Promise<void> {
 		if (!Array.isArray(options?.viewIds) || typeof options?.destinationId !== 'string') {
 			return Promise.reject('Invalid arguments');
 		}

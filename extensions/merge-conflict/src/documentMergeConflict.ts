@@ -53,7 +53,7 @@ export class DocumentMergeConflict implements interfaces.IDocumentMergeConflict 
 		return editor.edit((edit) => this.applyEdit(type, editor.document, edit));
 	}
 
-	public applyEdit(type: interfaces.CommitType, document: vscode.TextDocument, edit: { replace(range: vscode.Range, newText: string): codemavi }): codemavi {
+	public applyEdit(type: interfaces.CommitType, document: vscode.TextDocument, edit: { replace(range: vscode.Range, newText: string): void }): void {
 		if (this.applied) {
 			return;
 		}
@@ -87,7 +87,7 @@ export class DocumentMergeConflict implements interfaces.IDocumentMergeConflict 
 		}
 	}
 
-	private replaceRangeWithContent(content: string, edit: { replace(range: vscode.Range, newText: string): codemavi }) {
+	private replaceRangeWithContent(content: string, edit: { replace(range: vscode.Range, newText: string): void }) {
 		if (this.isNewlineOnly(content)) {
 			edit.replace(this.range, '');
 			return;

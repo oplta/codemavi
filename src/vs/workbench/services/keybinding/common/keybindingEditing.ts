@@ -30,19 +30,19 @@ export interface IKeybindingEditingService {
 
 	readonly _serviceBrand: undefined;
 
-	addKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<codemavi>;
+	addKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<void>;
 
-	editKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<codemavi>;
+	editKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<void>;
 
-	removeKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi>;
+	removeKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void>;
 
-	resetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi>;
+	resetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void>;
 }
 
 export class KeybindingsEditingService extends Disposable implements IKeybindingEditingService {
 
 	public _serviceBrand: undefined;
-	private queue: Queue<codemavi>;
+	private queue: Queue<void>;
 
 	constructor(
 		@ITextModelService private readonly textModelResolverService: ITextModelService,
@@ -51,26 +51,26 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		@IUserDataProfileService private readonly userDataProfileService: IUserDataProfileService,
 	) {
 		super();
-		this.queue = new Queue<codemavi>();
+		this.queue = new Queue<void>();
 	}
 
-	addKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<codemavi> {
+	addKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<void> {
 		return this.queue.queue(() => this.doEditKeybinding(keybindingItem, key, when, true)); // queue up writes to prevent race conditions
 	}
 
-	editKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<codemavi> {
+	editKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined): Promise<void> {
 		return this.queue.queue(() => this.doEditKeybinding(keybindingItem, key, when, false)); // queue up writes to prevent race conditions
 	}
 
-	resetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi> {
+	resetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void> {
 		return this.queue.queue(() => this.doResetKeybinding(keybindingItem)); // queue up writes to prevent race conditions
 	}
 
-	removeKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi> {
+	removeKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void> {
 		return this.queue.queue(() => this.doRemoveKeybinding(keybindingItem)); // queue up writes to prevent race conditions
 	}
 
-	private async doEditKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined, add: boolean): Promise<codemavi> {
+	private async doEditKeybinding(keybindingItem: ResolvedKeybindingItem, key: string, when: string | undefined, add: boolean): Promise<void> {
 		const reference = await this.resolveAndValidate();
 		const model = reference.object.textEditorModel;
 		if (add) {
@@ -90,7 +90,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		}
 	}
 
-	private async doRemoveKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi> {
+	private async doRemoveKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void> {
 		const reference = await this.resolveAndValidate();
 		const model = reference.object.textEditorModel;
 		if (keybindingItem.isDefault) {
@@ -105,7 +105,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		}
 	}
 
-	private async doResetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<codemavi> {
+	private async doResetKeybinding(keybindingItem: ResolvedKeybindingItem): Promise<void> {
 		const reference = await this.resolveAndValidate();
 		const model = reference.object.textEditorModel;
 		if (!keybindingItem.isDefault) {
@@ -123,7 +123,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		return this.textFileService.save(this.userDataProfileService.currentProfile.keybindingsResource);
 	}
 
-	private updateKeybinding(keybindingItem: ResolvedKeybindingItem, newKey: string, when: string | undefined, model: ITextModel, userKeybindingEntryIndex: number): codemavi {
+	private updateKeybinding(keybindingItem: ResolvedKeybindingItem, newKey: string, when: string | undefined, model: ITextModel, userKeybindingEntryIndex: number): void {
 		const { tabSize, insertSpaces } = model.getOptions();
 		const eol = model.getEOL();
 		if (userKeybindingEntryIndex !== -1) {
@@ -139,7 +139,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		}
 	}
 
-	private removeUserKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): codemavi {
+	private removeUserKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): void {
 		const { tabSize, insertSpaces } = model.getOptions();
 		const eol = model.getEOL();
 		const userKeybindingEntries = <IUserFriendlyKeybinding[]>json.parse(model.getValue());
@@ -149,7 +149,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		}
 	}
 
-	private removeDefaultKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): codemavi {
+	private removeDefaultKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): void {
 		const { tabSize, insertSpaces } = model.getOptions();
 		const eol = model.getEOL();
 		const key = keybindingItem.resolvedKeybinding ? keybindingItem.resolvedKeybinding.getUserSettingsLabel() : null;
@@ -162,7 +162,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		}
 	}
 
-	private removeUnassignedDefaultKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): codemavi {
+	private removeUnassignedDefaultKeybinding(keybindingItem: ResolvedKeybindingItem, model: ITextModel): void {
 		const { tabSize, insertSpaces } = model.getOptions();
 		const eol = model.getEOL();
 		const userKeybindingEntries = <IUserFriendlyKeybinding[]>json.parse(model.getValue());
@@ -232,7 +232,7 @@ export class KeybindingsEditingService extends Disposable implements IKeybinding
 		return true;
 	}
 
-	private applyEditsToBuffer(edit: Edit, model: ITextModel): codemavi {
+	private applyEditsToBuffer(edit: Edit, model: ITextModel): void {
 		const startPosition = model.getPositionAt(edit.offset);
 		const endPosition = model.getPositionAt(edit.offset + edit.length);
 		const range = new Range(startPosition.lineNumber, startPosition.column, endPosition.lineNumber, endPosition.column);

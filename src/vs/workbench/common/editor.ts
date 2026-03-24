@@ -95,7 +95,7 @@ export interface IEditorPane extends IComposite {
 	 * of multiple editor controls to signal that the active
 	 * editor control has changed when the user clicks around.
 	 */
-	readonly onDidChangeControl: Event<codemavi>;
+	readonly onDidChangeControl: Event<void>;
 
 	/**
 	 * An optional event to notify when the selection inside the editor
@@ -109,7 +109,7 @@ export interface IEditorPane extends IComposite {
 	/**
 	 * An optional event to notify when the editor inside the pane scrolled
 	 */
-	readonly onDidChangeScroll?: Event<codemavi>;
+	readonly onDidChangeScroll?: Event<void>;
 
 	/**
 	 * The assigned input of this editor.
@@ -201,7 +201,7 @@ export interface IEditorPane extends IComposite {
 	 * An optional method to set the current scroll position
 	 * of an editor inside the pane.
 	 */
-	setScrollPosition?(scrollPosition: IEditorPaneScrollPosition): codemavi;
+	setScrollPosition?(scrollPosition: IEditorPaneScrollPosition): void;
 
 	/**
 	 * Finds out if this editor is visible or not.
@@ -328,11 +328,11 @@ export function isEditorPaneWithSelection(editorPane: IEditorPane | undefined): 
 
 export interface IEditorPaneWithScrolling extends IEditorPane {
 
-	readonly onDidChangeScroll: Event<codemavi>;
+	readonly onDidChangeScroll: Event<void>;
 
 	getScrollPosition(): IEditorPaneScrollPosition;
 
-	setScrollPosition(position: IEditorPaneScrollPosition): codemavi;
+	setScrollPosition(position: IEditorPaneScrollPosition): void;
 }
 
 export function isEditorPaneWithScrolling(editorPane: IEditorPane | undefined): editorPane is IEditorPaneWithScrolling {
@@ -425,7 +425,7 @@ export interface IEditorFactoryRegistry {
 	/**
 	 * Registers the file editor factory to use for file editors.
 	 */
-	registerFileEditorFactory(factory: IFileEditorFactory): codemavi;
+	registerFileEditorFactory(factory: IFileEditorFactory): void;
 
 	/**
 	 * Returns the file editor factory to use for file editors.
@@ -451,7 +451,7 @@ export interface IEditorFactoryRegistry {
 	/**
 	 * Starts the registry by providing the required services.
 	 */
-	start(accessor: ServicesAccessor): codemavi;
+	start(accessor: ServicesAccessor): void;
 }
 
 export interface IEditorSerializer {
@@ -940,7 +940,7 @@ export interface IFileEditorInput extends EditorInput, IEncodingSupport, ILangua
 	/**
 	 * Sets the preferred resource to use for this file input.
 	 */
-	setPreferredResource(preferredResource: URI): codemavi;
+	setPreferredResource(preferredResource: URI): void;
 
 	/**
 	 * Sets the preferred name to use for this file input.
@@ -949,7 +949,7 @@ export interface IFileEditorInput extends EditorInput, IEncodingSupport, ILangua
 	 * name and use our standard naming. Specifically for schemes we own,
 	 * we do not let others override the name.
 	 */
-	setPreferredName(name: string): codemavi;
+	setPreferredName(name: string): void;
 
 	/**
 	 * Sets the preferred description to use for this file input.
@@ -958,27 +958,27 @@ export interface IFileEditorInput extends EditorInput, IEncodingSupport, ILangua
 	 * description and use our standard naming. Specifically for schemes we own,
 	 * we do not let others override the description.
 	 */
-	setPreferredDescription(description: string): codemavi;
+	setPreferredDescription(description: string): void;
 
 	/**
 	 * Sets the preferred encoding to use for this file input.
 	 */
-	setPreferredEncoding(encoding: string): codemavi;
+	setPreferredEncoding(encoding: string): void;
 
 	/**
 	 * Sets the preferred language id to use for this file input.
 	 */
-	setPreferredLanguageId(languageId: string): codemavi;
+	setPreferredLanguageId(languageId: string): void;
 
 	/**
 	 * Sets the preferred contents to use for this file input.
 	 */
-	setPreferredContents(contents: string): codemavi;
+	setPreferredContents(contents: string): void;
 
 	/**
 	 * Forces this file input to open as binary instead of text.
 	 */
-	setForceOpenAsBinary(): codemavi;
+	setForceOpenAsBinary(): void;
 
 	/**
 	 * Figure out if the file input has been resolved or not.
@@ -1494,18 +1494,18 @@ export const enum CloseDirection {
 
 export interface IEditorMemento<T> {
 
-	saveEditorState(group: IEditorGroup, resource: URI, state: T): codemavi;
-	saveEditorState(group: IEditorGroup, editor: EditorInput, state: T): codemavi;
+	saveEditorState(group: IEditorGroup, resource: URI, state: T): void;
+	saveEditorState(group: IEditorGroup, editor: EditorInput, state: T): void;
 
 	loadEditorState(group: IEditorGroup, resource: URI): T | undefined;
 	loadEditorState(group: IEditorGroup, editor: EditorInput): T | undefined;
 
-	clearEditorState(resource: URI, group?: IEditorGroup): codemavi;
-	clearEditorState(editor: EditorInput, group?: IEditorGroup): codemavi;
+	clearEditorState(resource: URI, group?: IEditorGroup): void;
+	clearEditorState(editor: EditorInput, group?: IEditorGroup): void;
 
-	clearEditorStateOnDispose(resource: URI, editor: EditorInput): codemavi;
+	clearEditorStateOnDispose(resource: URI, editor: EditorInput): void;
 
-	moveEditorState(source: URI, target: URI, comparer: IExtUri): codemavi;
+	moveEditorState(source: URI, target: URI, comparer: IExtUri): void;
 }
 
 class EditorFactoryRegistry implements IEditorFactoryRegistry {
@@ -1516,7 +1516,7 @@ class EditorFactoryRegistry implements IEditorFactoryRegistry {
 	private readonly editorSerializerConstructors = new Map<string /* Type ID */, IConstructorSignature<IEditorSerializer>>();
 	private readonly editorSerializerInstances = new Map<string /* Type ID */, IEditorSerializer>();
 
-	start(accessor: ServicesAccessor): codemavi {
+	start(accessor: ServicesAccessor): void {
 		const instantiationService = this.instantiationService = accessor.get(IInstantiationService);
 
 		for (const [key, ctor] of this.editorSerializerConstructors) {
@@ -1526,12 +1526,12 @@ class EditorFactoryRegistry implements IEditorFactoryRegistry {
 		this.editorSerializerConstructors.clear();
 	}
 
-	private createEditorSerializer(editorTypeId: string, ctor: IConstructorSignature<IEditorSerializer>, instantiationService: IInstantiationService): codemavi {
+	private createEditorSerializer(editorTypeId: string, ctor: IConstructorSignature<IEditorSerializer>, instantiationService: IInstantiationService): void {
 		const instance = instantiationService.createInstance(ctor);
 		this.editorSerializerInstances.set(editorTypeId, instance);
 	}
 
-	registerFileEditorFactory(factory: IFileEditorFactory): codemavi {
+	registerFileEditorFactory(factory: IFileEditorFactory): void {
 		if (this.fileEditorFactory) {
 			throw new Error('Can only register one file editor factory.');
 		}

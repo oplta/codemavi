@@ -29,7 +29,7 @@ class EditorFeaturesInstantiator extends Disposable implements IWorkbenchContrib
 		}
 	}
 
-	private _instantiate(): codemavi {
+	private _instantiate(): void {
 		if (this._instantiated) {
 			return;
 		}

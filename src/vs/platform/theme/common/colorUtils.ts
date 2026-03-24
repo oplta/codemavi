@@ -87,7 +87,7 @@ export const DEFAULT_COLOR_CONFIG_VALUE = 'default';
 
 export interface IColorRegistry {
 
-	readonly onDidChangeSchema: Event<codemavi>;
+	readonly onDidChangeSchema: Event<void>;
 
 	/**
 	 * Register a color to the registry.
@@ -101,7 +101,7 @@ export interface IColorRegistry {
 	/**
 	 * Register a color to the registry.
 	 */
-	deregisterColor(id: string): codemavi;
+	deregisterColor(id: string): void;
 
 	/**
 	 * Get all color contributions
@@ -126,7 +126,7 @@ export interface IColorRegistry {
 	/**
 	 * Notify when the color theme or settings change.
 	 */
-	notifyThemeUpdate(theme: IColorTheme): codemavi;
+	notifyThemeUpdate(theme: IColorTheme): void;
 
 }
 
@@ -135,8 +135,8 @@ type IJSONSchemaWithSnippets = IJSONSchema & { defaultSnippets: IJSONSchemaSnipp
 
 class ColorRegistry implements IColorRegistry {
 
-	private readonly _onDidChangeSchema = new Emitter<codemavi>();
-	readonly onDidChangeSchema: Event<codemavi> = this._onDidChangeSchema.event;
+	private readonly _onDidChangeSchema = new Emitter<void>();
+	readonly onDidChangeSchema: Event<void> = this._onDidChangeSchema.event;
 
 	private colorsById: { [key: string]: ColorContribution };
 	private colorSchema: IJSONSchemaForColors = { type: 'object', properties: {} };
@@ -182,7 +182,7 @@ class ColorRegistry implements IColorRegistry {
 	}
 
 
-	public deregisterColor(id: string): codemavi {
+	public deregisterColor(id: string): void {
 		delete this.colorsById[id];
 		delete this.colorSchema.properties[id];
 		const index = this.colorReferenceSchema.enum.indexOf(id);

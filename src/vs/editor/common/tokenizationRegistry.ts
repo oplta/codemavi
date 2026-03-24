@@ -23,7 +23,7 @@ export class TokenizationRegistry<TSupport> implements ITokenizationRegistry<TSu
 		this._colorMap = null;
 	}
 
-	public handleChange(languageIds: string[]): codemavi {
+	public handleChange(languageIds: string[]): void {
 		this._onDidChange.fire({
 			changedLanguages: languageIds,
 			changedColorMap: false
@@ -92,7 +92,7 @@ export class TokenizationRegistry<TSupport> implements ITokenizationRegistry<TSu
 		return false;
 	}
 
-	public setColorMap(colorMap: Color[]): codemavi {
+	public setColorMap(colorMap: Color[]): void {
 		this._colorMap = colorMap;
 		this._onDidChange.fire({
 			changedLanguages: Array.from(this._tokenizationSupports.keys()),
@@ -115,7 +115,7 @@ export class TokenizationRegistry<TSupport> implements ITokenizationRegistry<TSu
 class TokenizationSupportFactoryData<TSupport> extends Disposable {
 
 	private _isDisposed: boolean = false;
-	private _resolvePromise: Promise<codemavi> | null = null;
+	private _resolvePromise: Promise<void> | null = null;
 	private _isResolved: boolean = false;
 
 	public get isResolved(): boolean {
@@ -130,19 +130,19 @@ class TokenizationSupportFactoryData<TSupport> extends Disposable {
 		super();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._isDisposed = true;
 		super.dispose();
 	}
 
-	public async resolve(): Promise<codemavi> {
+	public async resolve(): Promise<void> {
 		if (!this._resolvePromise) {
 			this._resolvePromise = this._create();
 		}
 		return this._resolvePromise;
 	}
 
-	private async _create(): Promise<codemavi> {
+	private async _create(): Promise<void> {
 		const value = await this._factory.tokenizationSupport;
 		this._isResolved = true;
 		if (value && !this._isDisposed) {

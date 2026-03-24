@@ -6,6 +6,6 @@
 import { mountFnGenerator } from '../util/mountFnGenerator.js'
 import { Settings } from './Settings.js'
 
-export const mountCode MaviSettings = mountFnGenerator(Settings)
+export const mountMaviSettings = mountFnGenerator(Settings)
 
 

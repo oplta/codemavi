@@ -63,7 +63,7 @@ export interface IInputBoxOptions {
 	ariaLabel: string;
 	placeholder?: string;
 	validationOptions?: IInputValidationOptions;
-	onFinish: (value: string, success: boolean) => codemavi;
+	onFinish: (value: string, success: boolean) => void;
 }
 
 export interface IExpressionTemplateData {
@@ -180,9 +180,9 @@ export abstract class AbstractExpressionsRenderer<T = IExpression> implements IT
 		return template;
 	}
 
-	public abstract renderElement(node: ITreeNode<T, FuzzyScore>, index: number, data: IExpressionTemplateData): codemavi;
+	public abstract renderElement(node: ITreeNode<T, FuzzyScore>, index: number, data: IExpressionTemplateData): void;
 
-	protected renderExpressionElement(element: IExpression, node: ITreeNode<T, FuzzyScore>, data: IExpressionTemplateData): codemavi {
+	protected renderExpressionElement(element: IExpression, node: ITreeNode<T, FuzzyScore>, data: IExpressionTemplateData): void {
 		data.currentElement = element;
 		this.renderExpression(node.element, data, createMatches(node.filterData));
 		if (data.actionBar) {
@@ -248,16 +248,16 @@ export abstract class AbstractExpressionsRenderer<T = IExpression> implements IT
 		});
 	}
 
-	protected abstract renderExpression(expression: T, data: IExpressionTemplateData, highlights: IHighlight[]): codemavi;
+	protected abstract renderExpression(expression: T, data: IExpressionTemplateData, highlights: IHighlight[]): void;
 	protected abstract getInputBoxOptions(expression: IExpression, settingValue: boolean): IInputBoxOptions | undefined;
 
-	protected renderActionBar?(actionBar: ActionBar, expression: IExpression, data: IExpressionTemplateData): codemavi;
+	protected renderActionBar?(actionBar: ActionBar, expression: IExpression, data: IExpressionTemplateData): void;
 
-	disposeElement(node: ITreeNode<T, FuzzyScore>, index: number, templateData: IExpressionTemplateData): codemavi {
+	disposeElement(node: ITreeNode<T, FuzzyScore>, index: number, templateData: IExpressionTemplateData): void {
 		templateData.elementDisposable.clear();
 	}
 
-	disposeTemplate(templateData: IExpressionTemplateData): codemavi {
+	disposeTemplate(templateData: IExpressionTemplateData): void {
 		templateData.elementDisposable.dispose();
 		templateData.templateDisposable.dispose();
 	}

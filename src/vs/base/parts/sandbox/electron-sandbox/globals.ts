@@ -47,7 +47,7 @@ export interface ISandboxNodeProcess extends INodeProcess {
 	/**
 	 * A listener on the process. Only a small subset of listener types are allowed.
 	 */
-	on: (type: string, callback: Function) => codemavi;
+	on: (type: string, callback: Function) => void;
 
 	/**
 	 * The current working directory of the process.
@@ -97,7 +97,7 @@ export interface IpcMessagePort {
 	 * matches `nonce`, `e.source` matches `window` and then receiving the `MessagePort`
 	 * via `e.ports[0]`.
 	 */
-	acquire(responseChannel: string, nonce: string): codemavi;
+	acquire(responseChannel: string, nonce: string): void;
 }
 
 export interface ISandboxContext {

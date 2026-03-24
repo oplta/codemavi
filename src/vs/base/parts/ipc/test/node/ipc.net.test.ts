@@ -20,7 +20,7 @@ import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../test/common
 
 class MessageStream extends Disposable {
 
-	private _currentComplete: ((data: VSBuffer) => codemavi) | null;
+	private _currentComplete: ((data: VSBuffer) => void) | null;
 	private _messages: VSBuffer[];
 
 	constructor(x: Protocol | PersistentProtocol) {
@@ -33,7 +33,7 @@ class MessageStream extends Disposable {
 		}));
 	}
 
-	private _trigger(): codemavi {
+	private _trigger(): void {
 		if (!this._currentComplete) {
 			return;
 		}
@@ -71,7 +71,7 @@ class EtherStream extends EventEmitter {
 		return true;
 	}
 
-	destroy(): codemavi {
+	destroy(): void {
 	}
 }
 
@@ -100,7 +100,7 @@ class Ether {
 		this._ba = [];
 	}
 
-	public write(from: 'a' | 'b', data: Buffer): codemavi {
+	public write(from: 'a' | 'b', data: Buffer): void {
 		setTimeout(() => {
 			if (from === 'a') {
 				this._ab.push(data);
@@ -112,7 +112,7 @@ class Ether {
 		}, this._wireLatency);
 	}
 
-	private _deliver(): codemavi {
+	private _deliver(): void {
 
 		if (this._ab.length > 0) {
 			const data = Buffer.concat(this._ab);
@@ -568,8 +568,8 @@ flakySuite('IPC, create handle', () => {
 		return testIPCHandle(createStaticIPCHandle(tmpdir(), 'test', '1.64.0'));
 	});
 
-	function testIPCHandle(handle: string): Promise<codemavi> {
-		return new Promise<codemavi>((resolve, reject) => {
+	function testIPCHandle(handle: string): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			const pipeName = createRandomIPCHandle();
 
 			const server = createServer();
@@ -628,18 +628,18 @@ suite('WebSocketNodeSocket', () => {
 
 		public writtenData: VSBuffer[] = [];
 
-		public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): codemavi {
+		public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
 		}
 
 		constructor() {
 			super();
 		}
 
-		public write(data: VSBuffer): codemavi {
+		public write(data: VSBuffer): void {
 			this.writtenData.push(data);
 		}
 
-		public fireData(data: number[]): codemavi {
+		public fireData(data: number[]): void {
 			this._onData.fire(VSBuffer.wrap(toUint8Array(data)));
 		}
 	}
@@ -817,7 +817,7 @@ suite('WebSocketNodeSocket', () => {
 		return buff;
 	}
 
-	function listenOnRandomPort(handler: (socket: Socket) => codemavi): Promise<Server> {
+	function listenOnRandomPort(handler: (socket: Socket) => void): Promise<Server> {
 		return new Promise((resolve, reject) => {
 			const server = createServer(handler).listen(0);
 			server.on('listening', () => {

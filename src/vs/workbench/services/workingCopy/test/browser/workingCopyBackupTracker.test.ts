@@ -69,7 +69,7 @@ suite('WorkingCopyBackupTracker (browser)', function () {
 			return this.unrestoredBackups;
 		}
 
-		async testRestoreBackups(handler: IWorkingCopyEditorHandler): Promise<codemavi> {
+		async testRestoreBackups(handler: IWorkingCopyEditorHandler): Promise<void> {
 			return super.restoreBackups(handler);
 		}
 	}
@@ -105,7 +105,7 @@ suite('WorkingCopyBackupTracker (browser)', function () {
 		return { accessor, part, tracker, workingCopyBackupService: workingCopyBackupService, instantiationService };
 	}
 
-	async function untitledBackupTest(untitled: IUntitledTextResourceEditorInput = { resource: undefined }): Promise<codemavi> {
+	async function untitledBackupTest(untitled: IUntitledTextResourceEditorInput = { resource: undefined }): Promise<void> {
 		const { accessor, workingCopyBackupService } = await createTracker();
 
 		const untitledTextEditor = disposables.add((await accessor.editorService.openEditor(untitled))?.input as UntitledTextEditorInput);

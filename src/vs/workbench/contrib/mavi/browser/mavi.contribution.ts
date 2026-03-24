@@ -23,13 +23,13 @@ import './autocompleteService.js'
 // import './contextUserChangesService.js'
 
 // settings pane
-import './codemaviSettingsPane.js'
+import './maviSettingsPane.js'
 
 // register css
-import './media/codemavi.css'
+import './media/mavi.css'
 
 // update (frontend part, also see platform/)
-import './codemaviUpdateActions.js'
+import './maviUpdateActions.js'
 
 import './convertToLLMMessageWorkbenchContrib.js'
 
@@ -47,13 +47,13 @@ import './metricsPollService.js'
 import './helperServices/consistentItemService.js'
 
 // register selection helper
-import './codemaviSelectionHelperWidget.js'
+import './maviSelectionHelperWidget.js'
 
 // register tooltip service
 import './tooltipService.js'
 
 // register onboarding service
-import './codemaviOnboardingService.js'
+import './maviOnboardingService.js'
 
 // register misc service
 import './miscWokrbenchContrib.js'
@@ -62,15 +62,15 @@ import './miscWokrbenchContrib.js'
 import './fileService.js'
 
 // register source control management
-import './codemaviSCMService.js'
+import './maviSCMService.js'
 
 // ---------- common (unclear if these actually need to be imported, because they're already imported wherever they're used) ----------
 
 // llmMessage
 import '../common/sendLLMMessageService.js'
 
-// codemaviSettings
-import '../common/codemaviSettingsService.js'
+// maviSettings
+import '../common/maviSettingsService.js'
 
 // refreshModel
 import '../common/refreshModelService.js'
@@ -79,7 +79,7 @@ import '../common/refreshModelService.js'
 import '../common/metricsService.js'
 
 // updates
-import '../common/codemaviUpdateService.js'
+import '../common/maviUpdateService.js'
 
 // model service
-import '../common/codemaviModelService.js'
+import '../common/maviModelService.js'

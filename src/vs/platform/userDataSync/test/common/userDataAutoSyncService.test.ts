@@ -21,7 +21,7 @@ class TestUserDataAutoSyncService extends UserDataAutoSyncService {
 	protected override startAutoSync(): boolean { return false; }
 	protected override getSyncTriggerDelayTime(): number { return 50; }
 
-	sync(): Promise<codemavi> {
+	sync(): Promise<void> {
 		return this.triggerSync(['sync']);
 	}
 }

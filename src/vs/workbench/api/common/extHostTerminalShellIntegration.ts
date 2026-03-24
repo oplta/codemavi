@@ -60,7 +60,7 @@ export class ExtHostTerminalShellIntegration extends Disposable implements IExtH
 		// });
 		// this.onDidStartTerminalShellExecution(async e => {
 		// 	console.log('*** onDidStartTerminalShellExecution', e);
-		// 	// new Promise<codemavi>(r => {
+		// 	// new Promise<void>(r => {
 		// 	// 	(async () => {
 		// 	// 		for await (const d of e.execution.read()) {
 		// 	// 			console.log('data2', d);
@@ -81,7 +81,7 @@ export class ExtHostTerminalShellIntegration extends Disposable implements IExtH
 		// }, 4000);
 	}
 
-	public $shellIntegrationChange(instanceId: number): codemavi {
+	public $shellIntegrationChange(instanceId: number): void {
 		const terminal = this._extHostTerminalService.getTerminalById(instanceId);
 		if (!terminal) {
 			return;
@@ -104,7 +104,7 @@ export class ExtHostTerminalShellIntegration extends Disposable implements IExtH
 		});
 	}
 
-	public $shellExecutionStart(instanceId: number, commandLineValue: string, commandLineConfidence: TerminalShellExecutionCommandLineConfidence, isTrusted: boolean, cwd: UriComponents | undefined): codemavi {
+	public $shellExecutionStart(instanceId: number, commandLineValue: string, commandLineConfidence: TerminalShellExecutionCommandLineConfidence, isTrusted: boolean, cwd: UriComponents | undefined): void {
 		// Force shellIntegration creation if it hasn't been created yet, this could when events
 		// don't come through on startup
 		if (!this._activeShellIntegrations.has(instanceId)) {
@@ -118,7 +118,7 @@ export class ExtHostTerminalShellIntegration extends Disposable implements IExtH
 		this._activeShellIntegrations.get(instanceId)?.startShellExecution(commandLine, URI.revive(cwd));
 	}
 
-	public $shellExecutionEnd(instanceId: number, commandLineValue: string, commandLineConfidence: TerminalShellExecutionCommandLineConfidence, isTrusted: boolean, exitCode: number | undefined): codemavi {
+	public $shellExecutionEnd(instanceId: number, commandLineValue: string, commandLineConfidence: TerminalShellExecutionCommandLineConfidence, isTrusted: boolean, exitCode: number | undefined): void {
 		const commandLine: vscode.TerminalShellExecutionCommandLine = {
 			value: commandLineValue,
 			confidence: commandLineConfidence,
@@ -127,19 +127,19 @@ export class ExtHostTerminalShellIntegration extends Disposable implements IExtH
 		this._activeShellIntegrations.get(instanceId)?.endShellExecution(commandLine, exitCode);
 	}
 
-	public $shellExecutionData(instanceId: number, data: string): codemavi {
+	public $shellExecutionData(instanceId: number, data: string): void {
 		this._activeShellIntegrations.get(instanceId)?.emitData(data);
 	}
 
-	public $shellEnvChange(instanceId: number, shellEnvKeys: string[], shellEnvValues: string[], isTrusted: boolean): codemavi {
+	public $shellEnvChange(instanceId: number, shellEnvKeys: string[], shellEnvValues: string[], isTrusted: boolean): void {
 		this._activeShellIntegrations.get(instanceId)?.setEnv(shellEnvKeys, shellEnvValues, isTrusted);
 	}
 
-	public $cwdChange(instanceId: number, cwd: UriComponents | undefined): codemavi {
+	public $cwdChange(instanceId: number, cwd: UriComponents | undefined): void {
 		this._activeShellIntegrations.get(instanceId)?.setCwd(URI.revive(cwd));
 	}
 
-	public $closeTerminal(instanceId: number): codemavi {
+	public $closeTerminal(instanceId: number): void {
 		this._activeShellIntegrations.get(instanceId)?.dispose();
 		this._activeShellIntegrations.delete(instanceId);
 	}
@@ -302,11 +302,11 @@ export class InternalTerminalShellIntegration extends Disposable {
 		this._onDidStartTerminalShellExecution.fire({ terminal: this._terminal, shellIntegration: this.value, execution: this._currentExecution.value });
 	}
 
-	emitData(data: string): codemavi {
+	emitData(data: string): void {
 		this.currentExecution?.emitData(data);
 	}
 
-	endShellExecution(commandLine: vscode.TerminalShellExecutionCommandLine | undefined, exitCode: number | undefined): codemavi {
+	endShellExecution(commandLine: vscode.TerminalShellExecutionCommandLine | undefined, exitCode: number | undefined): void {
 		// If the current execution is multi-line, don't end it until the next command line is
 		// confirmed to not be a part of it.
 		if (this._currentExecutionProperties?.isMultiLine) {
@@ -334,7 +334,7 @@ export class InternalTerminalShellIntegration extends Disposable {
 		}
 	}
 
-	setEnv(keys: string[], values: string[], isTrusted: boolean): codemavi {
+	setEnv(keys: string[], values: string[], isTrusted: boolean): void {
 		const env: { [key: string]: string | undefined } = {};
 		for (let i = 0; i < keys.length; i++) {
 			env[keys[i]] = values[i];
@@ -343,7 +343,7 @@ export class InternalTerminalShellIntegration extends Disposable {
 		this._fireChangeEvent();
 	}
 
-	setCwd(cwd: URI | undefined): codemavi {
+	setCwd(cwd: URI | undefined): void {
 		let wasChanged = false;
 		if (URI.isUri(this._cwd)) {
 			wasChanged = !URI.isUri(cwd) || this._cwd.toString() !== cwd.toString();
@@ -395,13 +395,13 @@ class InternalTerminalShellExecution {
 		return this._dataStream.createIterable();
 	}
 
-	emitData(data: string): codemavi {
+	emitData(data: string): void {
 		if (!this._isEnded) {
 			this._dataStream?.emitData(data);
 		}
 	}
 
-	endExecution(commandLine: vscode.TerminalShellExecutionCommandLine | undefined): codemavi {
+	endExecution(commandLine: vscode.TerminalShellExecutionCommandLine | undefined): void {
 		if (commandLine) {
 			this._commandLine = commandLine;
 		}
@@ -409,7 +409,7 @@ class InternalTerminalShellExecution {
 		this._isEnded = true;
 	}
 
-	async flush(): Promise<codemavi> {
+	async flush(): Promise<void> {
 		if (this._dataStream) {
 			await this._dataStream.flush();
 			this._dataStream.dispose();
@@ -436,17 +436,17 @@ class ShellExecutionDataStream extends Disposable {
 		return iterable;
 	}
 
-	emitData(data: string): codemavi {
+	emitData(data: string): void {
 		for (const emitter of this._emitters) {
 			emitter.emitOne(data);
 		}
 	}
 
-	endExecution(): codemavi {
+	endExecution(): void {
 		this._barrier?.open();
 	}
 
-	async flush(): Promise<codemavi> {
+	async flush(): Promise<void> {
 		await Promise.all(this._iterables.map(e => e.toPromise()));
 	}
 }

@@ -3108,7 +3108,7 @@
 		}
 	},
 	{
-		"c": "codemavi",
+		"c": "mavi",
 		"t": "support.type.ts support.type.primitive.ts",
 		"r": {
 			"dark_plus": "support.type: #4EC9B0",

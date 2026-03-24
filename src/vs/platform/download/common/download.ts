@@ -13,6 +13,6 @@ export interface IDownloadService {
 
 	readonly _serviceBrand: undefined;
 
-	download(uri: URI, to: URI, cancellationToken?: CancellationToken): Promise<codemavi>;
+	download(uri: URI, to: URI, cancellationToken?: CancellationToken): Promise<void>;
 
 }

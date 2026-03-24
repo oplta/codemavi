@@ -1,5 +1,5 @@
 /**
- * Code Mavi - Semantic Apply Engine
+ * Mavi - Semantic Apply Engine
  * 
  * LLM tarafından üretilen kod değişikliklerini (SEARCH/REPLACE veya Semantic Diff)
  * kod tabanına güvenli ve anlamsal olarak uygulayan motor.

@@ -22,7 +22,7 @@ export interface IProgressService {
 	withProgress<R>(
 		options: IProgressOptions | IProgressDialogOptions | IProgressNotificationOptions | IProgressWindowOptions | IProgressCompositeOptions,
 		task: (progress: IProgress<IProgressStep>) => Promise<R>,
-		onDidCancel?: (choice?: number) => codemavi
+		onDidCancel?: (choice?: number) => void
 	): Promise<R>;
 }
 
@@ -38,7 +38,7 @@ export interface IProgressIndicator {
 	 * Indicate progress for the duration of the provided promise. Progress will stop in
 	 * any case of promise completion, error or cancellation.
 	 */
-	showWhile(promise: Promise<unknown>, delay?: number): Promise<codemavi>;
+	showWhile(promise: Promise<unknown>, delay?: number): Promise<void>;
 }
 
 export const enum ProgressLocation {
@@ -92,9 +92,9 @@ export interface IProgressStep {
 }
 
 export interface IProgressRunner {
-	total(value: number): codemavi;
-	worked(value: number): codemavi;
-	done(): codemavi;
+	total(value: number): void;
+	worked(value: number): void;
+	done(): void;
 }
 
 export const emptyProgressRunner = Object.freeze<IProgressRunner>({
@@ -104,7 +104,7 @@ export const emptyProgressRunner = Object.freeze<IProgressRunner>({
 });
 
 export interface IProgress<T> {
-	report(item: T): codemavi;
+	report(item: T): void;
 }
 
 export class Progress<T> implements IProgress<T> {
@@ -130,7 +130,7 @@ export class AsyncProgress<T> implements IProgress<T> {
 
 	private _asyncQueue?: T[];
 	private _processingAsyncQueue?: boolean;
-	private _drainListener: (() => codemavi) | undefined;
+	private _drainListener: (() => void) | undefined;
 
 	constructor(private callback: (data: T) => unknown) { }
 
@@ -164,9 +164,9 @@ export class AsyncProgress<T> implements IProgress<T> {
 		}
 	}
 
-	drain(): Promise<codemavi> {
+	drain(): Promise<void> {
 		if (this._processingAsyncQueue) {
-			return new Promise<codemavi>(resolve => {
+			return new Promise<void>(resolve => {
 				const prevListener = this._drainListener;
 				this._drainListener = () => {
 					prevListener?.();
@@ -186,7 +186,7 @@ export interface IOperation {
 	id: number;
 	isCurrent: () => boolean;
 	token: CancellationToken;
-	stop(): codemavi;
+	stop(): void;
 }
 
 /**
@@ -194,7 +194,7 @@ export interface IOperation {
  * once `dispose()` is called.
  */
 export class UnmanagedProgress extends Disposable {
-	private readonly deferred = new DeferredPromise<codemavi>();
+	private readonly deferred = new DeferredPromise<void>();
 	private reporter?: IProgress<IProgressStep>;
 	private lastStep?: IProgressStep;
 
@@ -262,11 +262,11 @@ export class LongRunningOperation extends Disposable {
 		};
 	}
 
-	stop(): codemavi {
+	stop(): void {
 		this.doStop(this.currentOperationId);
 	}
 
-	private doStop(operationId: number): codemavi {
+	private doStop(operationId: number): void {
 		if (this.currentOperationId === operationId) {
 			this.currentOperationDisposables.clear();
 		}

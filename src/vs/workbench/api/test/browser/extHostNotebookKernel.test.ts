@@ -69,7 +69,7 @@ suite('NotebookKernel', function () {
 			override $registerCommand() { }
 		});
 		rpcProtocol.set(MainContext.MainThreadNotebookKernels, new class extends mock<MainThreadNotebookKernelsShape>() {
-			override async $addKernel(handle: number, data: INotebookKernelDto2): Promise<codemavi> {
+			override async $addKernel(handle: number, data: INotebookKernelDto2): Promise<void> {
 				kernelData.set(handle, data);
 			}
 			override $removeKernel(handle: number) {
@@ -79,13 +79,13 @@ suite('NotebookKernel', function () {
 				assert.strictEqual(kernelData.has(handle), true);
 				kernelData.set(handle, { ...kernelData.get(handle)!, ...data, });
 			}
-			override $createExecution(handle: number, controllerId: string, uri: UriComponents, cellHandle: number): codemavi {
+			override $createExecution(handle: number, controllerId: string, uri: UriComponents, cellHandle: number): void {
 				cellExecuteCreate.push({ notebook: uri, cell: cellHandle });
 			}
-			override $updateExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecuteUpdateDto[]>): codemavi {
+			override $updateExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecuteUpdateDto[]>): void {
 				cellExecuteUpdates.push(...data.value);
 			}
-			override $completeExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecutionCompleteDto>): codemavi {
+			override $completeExecution(handle: number, data: SerializableObjectWithBuffers<ICellExecutionCompleteDto>): void {
 				cellExecuteComplete.push(data.value);
 			}
 		});

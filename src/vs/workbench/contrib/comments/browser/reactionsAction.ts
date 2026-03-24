@@ -13,8 +13,8 @@ import { ActionViewItem } from '../../../../base/browser/ui/actionbar/actionView
 export class ToggleReactionsAction extends Action {
 	static readonly ID = 'toolbar.toggle.pickReactions';
 	private _menuActions: IAction[] = [];
-	private toggleDropdownMenu: () => codemavi;
-	constructor(toggleDropdownMenu: () => codemavi, title?: string) {
+	private toggleDropdownMenu: () => void;
+	constructor(toggleDropdownMenu: () => void, title?: string) {
 		super(ToggleReactionsAction.ID, title || nls.localize('pickReactions', "Pick Reactions..."), 'toggle-reactions', true);
 		this.toggleDropdownMenu = toggleDropdownMenu;
 	}
@@ -33,7 +33,7 @@ export class ReactionActionViewItem extends ActionViewItem {
 	constructor(action: ReactionAction) {
 		super(null, action, {});
 	}
-	protected override updateLabel(): codemavi {
+	protected override updateLabel(): void {
 		if (!this.label) {
 			return;
 		}

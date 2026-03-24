@@ -79,5 +79,5 @@ export interface ILanguageFeaturesService {
 
 	// --
 
-	setNotebookTypeResolver(resolver: NotebookInfoResolver | undefined): codemavi;
+	setNotebookTypeResolver(resolver: NotebookInfoResolver | undefined): void;
 }

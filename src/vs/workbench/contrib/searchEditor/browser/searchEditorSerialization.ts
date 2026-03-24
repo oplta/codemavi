@@ -40,7 +40,7 @@ const matchToSearchResultFormat = (match: ISearchTreeMatch, longestLineNumber: n
 			const prefix = `  ${paddingStr}${lineNumber}: `;
 			const prefixOffset = prefix.length;
 
-			// split instead of replace to acodemavi creating a new string object
+			// split instead of replace to avoid creating a new string object
 			const line = prefix + (sourceLine.split(/\r?\n?$/, 1)[0] || '');
 
 			const rangeOnThisLine = ({ start, end }: { start?: number; end?: number }) => new Range(1, (start ?? 1) + prefixOffset, 1, (end ?? sourceLine.length + 1) + prefixOffset);

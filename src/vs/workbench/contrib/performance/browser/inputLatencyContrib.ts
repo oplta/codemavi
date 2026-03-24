@@ -38,11 +38,11 @@ export class InputLatencyContrib extends Disposable implements IWorkbenchContrib
 
 	}
 
-	private _setupListener(): codemavi {
+	private _setupListener(): void {
 		this._listener.value = Event.once(this._editorService.onDidActiveEditorChange)(() => this._scheduler.schedule());
 	}
 
-	private _logSamples(): codemavi {
+	private _logSamples(): void {
 		const measurements = inputLatency.getAndClearMeasurements();
 		if (!measurements) {
 			return;

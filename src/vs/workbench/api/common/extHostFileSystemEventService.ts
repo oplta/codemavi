@@ -66,7 +66,7 @@ class FileSystemWatcher implements vscode.FileSystemWatcher {
 
 		// 1.64.x behaviour change: given the new support to watch any folder
 		// we start to ignore events outside the workspace when only a string
-		// pattern is provided to acodemavi sending events to extensions that are
+		// pattern is provided to avoid sending events to extensions that are
 		// unexpected.
 		// https://github.com/microsoft/vscode/issues/3025
 		const excludeOutOfWorkspaceEvents = typeof globPattern === 'string';
@@ -294,7 +294,7 @@ export class ExtHostFileSystemEventService implements ExtHostFileSystemEventServ
 
 	//--- file operations
 
-	$onDidRunFileOperation(operation: FileOperation, files: SourceTargetPair[]): codemavi {
+	$onDidRunFileOperation(operation: FileOperation, files: SourceTargetPair[]): void {
 		switch (operation) {
 			case FileOperation.MOVE:
 				this._onDidRenameFile.fire(Object.freeze({ files: files.map(f => ({ oldUri: URI.revive(f.source!), newUri: URI.revive(f.target) })) }));

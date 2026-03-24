@@ -33,18 +33,18 @@ export interface ILogFile {
 }
 
 export interface IWindowDriver {
-	setValue(selector: string, text: string): Promise<codemavi>;
+	setValue(selector: string, text: string): Promise<void>;
 	isActiveElement(selector: string): Promise<boolean>;
 	getElements(selector: string, recursive: boolean): Promise<IElement[]>;
 	getElementXY(selector: string, xoffset?: number, yoffset?: number): Promise<{ x: number; y: number }>;
-	typeInEditor(selector: string, text: string): Promise<codemavi>;
+	typeInEditor(selector: string, text: string): Promise<void>;
 	getEditorSelection(selector: string): Promise<{ selectionStart: number; selectionEnd: number }>;
 	getTerminalBuffer(selector: string): Promise<string[]>;
-	writeInTerminal(selector: string, text: string): Promise<codemavi>;
+	writeInTerminal(selector: string, text: string): Promise<void>;
 	getLocaleInfo(): Promise<ILocaleInfo>;
 	getLocalizedStrings(): Promise<ILocalizedStrings>;
 	getLogs(): Promise<ILogFile[]>;
-	whenWorkbenchRestored(): Promise<codemavi>;
-	exitApplication(): Promise<codemavi>;
+	whenWorkbenchRestored(): Promise<void>;
+	exitApplication(): Promise<void>;
 }
 //*END

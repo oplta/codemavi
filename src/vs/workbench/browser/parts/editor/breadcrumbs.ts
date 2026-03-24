@@ -56,11 +56,11 @@ registerSingleton(IBreadcrumbsService, BreadcrumbsService, InstantiationType.Del
 export abstract class BreadcrumbsConfig<T> {
 
 	abstract get name(): string;
-	abstract get onDidChange(): Event<codemavi>;
+	abstract get onDidChange(): Event<void>;
 
 	abstract getValue(overrides?: IConfigurationOverrides): T;
-	abstract updateValue(value: T, overrides?: IConfigurationOverrides): Promise<codemavi>;
-	abstract dispose(): codemavi;
+	abstract updateValue(value: T, overrides?: IConfigurationOverrides): Promise<void>;
+	abstract dispose(): void;
 
 	private constructor() {
 		// internal
@@ -79,7 +79,7 @@ export abstract class BreadcrumbsConfig<T> {
 	private static _stub<T>(name: string): { bindTo(service: IConfigurationService): BreadcrumbsConfig<T> } {
 		return {
 			bindTo(service) {
-				const onDidChange = new Emitter<codemavi>();
+				const onDidChange = new Emitter<void>();
 
 				const listener = service.onDidChangeConfiguration(e => {
 					if (e.affectsConfiguration(name)) {
@@ -97,14 +97,14 @@ export abstract class BreadcrumbsConfig<T> {
 							return service.getValue(name);
 						}
 					}
-					updateValue(newValue: T, overrides?: IConfigurationOverrides): Promise<codemavi> {
+					updateValue(newValue: T, overrides?: IConfigurationOverrides): Promise<void> {
 						if (overrides) {
 							return service.updateValue(name, newValue, overrides);
 						} else {
 							return service.updateValue(name, newValue);
 						}
 					}
-					dispose(): codemavi {
+					dispose(): void {
 						listener.dispose();
 						onDidChange.dispose();
 					}

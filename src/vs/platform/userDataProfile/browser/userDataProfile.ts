@@ -49,7 +49,7 @@ export class BrowserUserDataProfilesService extends UserDataProfilesService impl
 		}));
 	}
 
-	private updateTransientProfiles(added: IUserDataProfile[], removed: IUserDataProfile[], updated: IUserDataProfile[]): codemavi {
+	private updateTransientProfiles(added: IUserDataProfile[], removed: IUserDataProfile[], updated: IUserDataProfile[]): void {
 		if (added.length) {
 			this.transientProfilesObject.profiles.push(...added);
 		}
@@ -83,7 +83,7 @@ export class BrowserUserDataProfilesService extends UserDataProfilesService impl
 		this.changesBroadcastChannel.postData({ added, removed, updated });
 	}
 
-	protected override saveStoredProfiles(storedProfiles: StoredUserDataProfile[]): codemavi {
+	protected override saveStoredProfiles(storedProfiles: StoredUserDataProfile[]): void {
 		localStorage.setItem(UserDataProfilesService.PROFILES_KEY, JSON.stringify(storedProfiles));
 	}
 
@@ -100,7 +100,7 @@ export class BrowserUserDataProfilesService extends UserDataProfilesService impl
 		return {};
 	}
 
-	protected override saveStoredProfileAssociations(storedProfileAssociations: StoredProfileAssociations): codemavi {
+	protected override saveStoredProfileAssociations(storedProfileAssociations: StoredProfileAssociations): void {
 		localStorage.setItem(UserDataProfilesService.PROFILE_ASSOCIATIONS_KEY, JSON.stringify(storedProfileAssociations));
 	}
 

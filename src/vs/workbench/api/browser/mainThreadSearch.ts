@@ -32,30 +32,30 @@ export class MainThreadSearch implements MainThreadSearchShape {
 		this._proxy.$enableExtensionHostSearch();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._searchProvider.forEach(value => value.dispose());
 		this._searchProvider.clear();
 	}
 
-	$registerTextSearchProvider(handle: number, scheme: string): codemavi {
+	$registerTextSearchProvider(handle: number, scheme: string): void {
 		this._searchProvider.set(handle, new RemoteSearchProvider(this._searchService, SearchProviderType.text, scheme, handle, this._proxy));
 	}
 
-	$registerAITextSearchProvider(handle: number, scheme: string): codemavi {
+	$registerAITextSearchProvider(handle: number, scheme: string): void {
 		Constants.SearchContext.hasAIResultProvider.bindTo(this.contextKeyService).set(true);
 		this._searchProvider.set(handle, new RemoteSearchProvider(this._searchService, SearchProviderType.aiText, scheme, handle, this._proxy));
 	}
 
-	$registerFileSearchProvider(handle: number, scheme: string): codemavi {
+	$registerFileSearchProvider(handle: number, scheme: string): void {
 		this._searchProvider.set(handle, new RemoteSearchProvider(this._searchService, SearchProviderType.file, scheme, handle, this._proxy));
 	}
 
-	$unregisterProvider(handle: number): codemavi {
+	$unregisterProvider(handle: number): void {
 		dispose(this._searchProvider.get(handle));
 		this._searchProvider.delete(handle);
 	}
 
-	$handleFileMatch(handle: number, session: number, data: UriComponents[]): codemavi {
+	$handleFileMatch(handle: number, session: number, data: UriComponents[]): void {
 		const provider = this._searchProvider.get(handle);
 		if (!provider) {
 			throw new Error('Got result for unknown provider');
@@ -64,7 +64,7 @@ export class MainThreadSearch implements MainThreadSearchShape {
 		provider.handleFindMatch(session, data);
 	}
 
-	$handleTextMatch(handle: number, session: number, data: IRawFileMatch2[]): codemavi {
+	$handleTextMatch(handle: number, session: number, data: IRawFileMatch2[]): void {
 		const provider = this._searchProvider.get(handle);
 		if (!provider) {
 			throw new Error('Got result for unknown provider');
@@ -72,7 +72,7 @@ export class MainThreadSearch implements MainThreadSearchShape {
 
 		provider.handleFindMatch(session, data);
 	}
-	$handleTelemetry(eventName: string, data: any): codemavi {
+	$handleTelemetry(eventName: string, data: any): void {
 		this._telemetryService.publicLog(eventName, data);
 	}
 }
@@ -89,7 +89,7 @@ class SearchOperation {
 		//
 	}
 
-	addMatch(match: IFileMatch): codemavi {
+	addMatch(match: IFileMatch): void {
 		const existingMatch = this.matches.get(match.resource.toString());
 		if (existingMatch) {
 			// TODO@rob clean up text/file result types
@@ -129,7 +129,7 @@ class RemoteSearchProvider implements ISearchResultProvider, IDisposable {
 		return this.cachedAIName;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._registrations.dispose();
 	}
 
@@ -137,11 +137,11 @@ class RemoteSearchProvider implements ISearchResultProvider, IDisposable {
 		return this.doSearch(query, undefined, token);
 	}
 
-	textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => codemavi, token: CancellationToken = CancellationToken.None): Promise<ISearchComplete> {
+	textSearch(query: ITextQuery, onProgress?: (p: ISearchProgressItem) => void, token: CancellationToken = CancellationToken.None): Promise<ISearchComplete> {
 		return this.doSearch(query, onProgress, token);
 	}
 
-	doSearch(query: ISearchQuery, onProgress?: (p: ISearchProgressItem) => codemavi, token: CancellationToken = CancellationToken.None): Promise<ISearchComplete> {
+	doSearch(query: ISearchQuery, onProgress?: (p: ISearchProgressItem) => void, token: CancellationToken = CancellationToken.None): Promise<ISearchComplete> {
 		if (!query.folderQueries.length) {
 			throw new Error('Empty folderQueries');
 		}
@@ -160,11 +160,11 @@ class RemoteSearchProvider implements ISearchResultProvider, IDisposable {
 		});
 	}
 
-	clearCache(cacheKey: string): Promise<codemavi> {
+	clearCache(cacheKey: string): Promise<void> {
 		return Promise.resolve(this._proxy.$clearCache(cacheKey));
 	}
 
-	handleFindMatch(session: number, dataOrUri: Array<UriComponents | IRawFileMatch2>): codemavi {
+	handleFindMatch(session: number, dataOrUri: Array<UriComponents | IRawFileMatch2>): void {
 		const searchOp = this._searches.get(session);
 
 		if (!searchOp) {

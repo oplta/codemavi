@@ -36,7 +36,7 @@ export class ResourceMap<T> {
 		return this._map.size;
 	}
 
-	public clear(): codemavi {
+	public clear(): void {
 		this._map.clear();
 	}
 

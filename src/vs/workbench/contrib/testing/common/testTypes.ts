@@ -870,22 +870,22 @@ export interface IncrementalChangeCollector<T> {
 	/**
 	 * A node was added.
 	 */
-	add?(node: T): codemavi;
+	add?(node: T): void;
 
 	/**
 	 * A node in the collection was updated.
 	 */
-	update?(node: T): codemavi;
+	update?(node: T): void;
 
 	/**
 	 * A node was removed.
 	 */
-	remove?(node: T, isNestedOperation: boolean): codemavi;
+	remove?(node: T, isNestedOperation: boolean): void;
 
 	/**
 	 * Called when the diff has been applied.
 	 */
-	complete?(): codemavi;
+	complete?(): void;
 }
 
 /**

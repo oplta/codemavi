@@ -58,7 +58,7 @@ let statusItem: vscode.StatusBarItem | undefined; // and there is no status bar 
 let server: Promise<Server | undefined> | undefined; // auto attach server
 let isTemporarilyDisabled = false; // whether the auto attach server is disabled temporarily, reset whenever the state changes
 
-export function activate(context: vscode.ExtensionContext): codemavi {
+export function activate(context: vscode.ExtensionContext): void {
 	currentState = Promise.resolve({ context, state: null });
 
 	context.subscriptions.push(
@@ -81,7 +81,7 @@ export function activate(context: vscode.ExtensionContext): codemavi {
 	updateAutoAttach(readCurrentState());
 }
 
-export async function deactivate(): Promise<codemavi> {
+export async function deactivate(): Promise<void> {
 	await destroyAttachServer();
 }
 
@@ -107,7 +107,7 @@ function getDefaultScope(info: ReturnType<vscode.WorkspaceConfiguration['inspect
 type PickResult = { state: State } | { setTempDisabled: boolean } | { scope: vscode.ConfigurationTarget } | undefined;
 type PickItem = vscode.QuickPickItem & ({ state: State } | { setTempDisabled: boolean });
 
-async function toggleAutoAttachSetting(context: vscode.ExtensionContext, scope?: vscode.ConfigurationTarget): Promise<codemavi> {
+async function toggleAutoAttachSetting(context: vscode.ExtensionContext, scope?: vscode.ConfigurationTarget): Promise<void> {
 	const section = vscode.workspace.getConfiguration(SETTING_SECTION);
 	scope = scope || getDefaultScope(section.inspect(SETTING_STATE));
 
@@ -291,7 +291,7 @@ interface CachedIpcState {
  * Map of logic that happens when auto attach states are entered and exited.
  * All state transitions are queued and run in order; promises are awaited.
  */
-const transitions: { [S in State]: (context: vscode.ExtensionContext) => Promise<codemavi> } = {
+const transitions: { [S in State]: (context: vscode.ExtensionContext) => Promise<void> } = {
 	async [State.Disabled](context) {
 		await clearJsDebugAttachState(context);
 	},

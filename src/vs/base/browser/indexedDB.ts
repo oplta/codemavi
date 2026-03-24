@@ -78,7 +78,7 @@ export class IndexedDB {
 		});
 	}
 
-	private static deleteDatabase(database: IDBDatabase): Promise<codemavi> {
+	private static deleteDatabase(database: IDBDatabase): Promise<void> {
 		return new Promise((c, e) => {
 			// Close any opened connections
 			database.close();
@@ -101,7 +101,7 @@ export class IndexedDB {
 		return this.pendingTransactions.length > 0;
 	}
 
-	close(): codemavi {
+	close(): void {
 		if (this.pendingTransactions.length) {
 			this.pendingTransactions.splice(0, this.pendingTransactions.length).forEach(transaction => transaction.abort());
 		}

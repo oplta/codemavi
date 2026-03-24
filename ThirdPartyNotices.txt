@@ -2943,7 +2943,7 @@ Section 2 -- Scope.
 
             b. produce, reproduce, and Share Adapted Material.
 
-       2. Exceptions and Limitations. For the acodemaviance of doubt, where
+       2. Exceptions and Limitations. For the avoidance of doubt, where
           Exceptions and Limitations apply to Your use, this Public
           License does not apply, and You do not need to comply with
           its terms and conditions.
@@ -3063,7 +3063,7 @@ Section 4 -- Sui Generis Database Rights.
 Where the Licensed Rights include Sui Generis Database Rights that
 apply to Your use of the Licensed Material:
 
-  a. for the acodemaviance of doubt, Section 2(a)(1) grants You the right
+  a. for the avoidance of doubt, Section 2(a)(1) grants You the right
      to extract, reuse, reproduce, and Share all or a substantial
      portion of the contents of the database;
 
@@ -3075,7 +3075,7 @@ apply to Your use of the Licensed Material:
   c. You must comply with the conditions in Section 3(a) if You Share
      all or a substantial portion of the contents of the database.
 
-For the acodemaviance of doubt, this Section 4 supplements and does not
+For the avoidance of doubt, this Section 4 supplements and does not
 replace Your obligations under this Public License where the Licensed
 Rights include other Copyright and Similar Rights.
 
@@ -3125,11 +3125,11 @@ Section 6 -- Term and Termination.
 
        2. upon express reinstatement by the Licensor.
 
-     For the acodemaviance of doubt, this Section 6(b) does not affect any
+     For the avoidance of doubt, this Section 6(b) does not affect any
      right the Licensor may have to seek remedies for Your violations
      of this Public License.
 
-  c. For the acodemaviance of doubt, the Licensor may also offer the
+  c. For the avoidance of doubt, the Licensor may also offer the
      Licensed Material under separate terms or conditions or stop
      distributing the Licensed Material at any time; however, doing so
      will not terminate this Public License.
@@ -3150,7 +3150,7 @@ Section 7 -- Other Terms and Conditions.
 
 Section 8 -- Interpretation.
 
-  a. For the acodemaviance of doubt, this Public License does not, and
+  a. For the avoidance of doubt, this Public License does not, and
      shall not be interpreted to, reduce, limit, restrict, or impose
      conditions on any use of the Licensed Material that could lawfully
      be made without permission under this Public License.
@@ -3188,7 +3188,7 @@ of Creative Commons without its prior written consent including,
 without limitation, in connection with any unauthorized modifications
 to any of its public licenses or any other arrangements,
 understandings, or agreements concerning use of licensed material. For
-the acodemaviance of doubt, this paragraph does not form part of the
+the avoidance of doubt, this paragraph does not form part of the
 public licenses.
 
 Creative Commons may be contacted at creativecommons.org.

@@ -19,8 +19,8 @@ export class BracketSelectionRangeProvider implements SelectionRangeProvider {
 			result.push(bucket);
 
 			const ranges = new Map<string, LinkedList<Range>>();
-			await new Promise<codemavi>(resolve => BracketSelectionRangeProvider._bracketsRightYield(resolve, 0, model, position, ranges));
-			await new Promise<codemavi>(resolve => BracketSelectionRangeProvider._bracketsLeftYield(resolve, 0, model, position, ranges, bucket));
+			await new Promise<void>(resolve => BracketSelectionRangeProvider._bracketsRightYield(resolve, 0, model, position, ranges));
+			await new Promise<void>(resolve => BracketSelectionRangeProvider._bracketsLeftYield(resolve, 0, model, position, ranges, bucket));
 		}
 
 		return result;
@@ -29,7 +29,7 @@ export class BracketSelectionRangeProvider implements SelectionRangeProvider {
 	public static _maxDuration = 30;
 	private static readonly _maxRounds = 2;
 
-	private static _bracketsRightYield(resolve: () => codemavi, round: number, model: ITextModel, pos: Position, ranges: Map<string, LinkedList<Range>>): codemavi {
+	private static _bracketsRightYield(resolve: () => void, round: number, model: ITextModel, pos: Position, ranges: Map<string, LinkedList<Range>>): void {
 		const counts = new Map<string, number>();
 		const t1 = Date.now();
 		while (true) {
@@ -75,7 +75,7 @@ export class BracketSelectionRangeProvider implements SelectionRangeProvider {
 		}
 	}
 
-	private static _bracketsLeftYield(resolve: () => codemavi, round: number, model: ITextModel, pos: Position, ranges: Map<string, LinkedList<Range>>, bucket: SelectionRange[]): codemavi {
+	private static _bracketsLeftYield(resolve: () => void, round: number, model: ITextModel, pos: Position, ranges: Map<string, LinkedList<Range>>, bucket: SelectionRange[]): void {
 		const counts = new Map<string, number>();
 		const t1 = Date.now();
 		while (true) {
@@ -127,7 +127,7 @@ export class BracketSelectionRangeProvider implements SelectionRangeProvider {
 		}
 	}
 
-	private static _addBracketLeading(model: ITextModel, bracket: Range, bucket: SelectionRange[]): codemavi {
+	private static _addBracketLeading(model: ITextModel, bracket: Range, bucket: SelectionRange[]): void {
 		if (bracket.startLineNumber === bracket.endLineNumber) {
 			return;
 		}

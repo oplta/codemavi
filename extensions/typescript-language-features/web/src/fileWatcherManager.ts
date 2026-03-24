@@ -9,7 +9,7 @@ import { Logger } from './logging';
 import { PathMapper, fromResource, looksLikeLibDtsPath, looksLikeNodeModules, mapUri } from './pathMapper';
 
 /**
- * Copied from `ts.FileWatcherEventKind` to acodemavi direct dependency.
+ * Copied from `ts.FileWatcherEventKind` to avoid direct dependency.
  */
 enum FileWatcherEventKind {
 	Created = 0,

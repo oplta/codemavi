@@ -217,13 +217,13 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return tabsScrollbar;
 	}
 
-	private updateTabsScrollbarSizing(): codemavi {
+	private updateTabsScrollbarSizing(): void {
 		this.tabsScrollbar?.updateOptions({
 			horizontalScrollbarSize: this.getTabsScrollbarSizing()
 		});
 	}
 
-	private updateTabSizing(fromEvent: boolean): codemavi {
+	private updateTabSizing(fromEvent: boolean): void {
 		const [tabsContainer, tabSizingFixedDisposables] = assertAllDefined(this.tabsContainer, this.tabSizingFixedDisposables);
 
 		tabSizingFixedDisposables.clear();
@@ -252,7 +252,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private updateTabsFixedWidth(fixed: boolean): codemavi {
+	private updateTabsFixedWidth(fixed: boolean): void {
 		this.forEachTab((editor, tabIndex, tabContainer) => {
 			if (fixed) {
 				const { width } = tabContainer.getBoundingClientRect();
@@ -271,7 +271,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return MultiEditorTabsControl.SCROLLBAR_SIZES.large;
 	}
 
-	private registerTabsContainerListeners(tabsContainer: HTMLElement, tabsScrollbar: ScrollableElement): codemavi {
+	private registerTabsContainerListeners(tabsContainer: HTMLElement, tabsScrollbar: ScrollableElement): void {
 
 		// Forward scrolling inside the container to our custom scrollbar
 		this._register(addDisposableListener(tabsContainer, EventType.SCROLL, () => {
@@ -469,14 +469,14 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this._register(addDisposableListener(tabsContainer, EventType.CONTEXT_MENU, e => showContextMenu(e)));
 	}
 
-	private doHandleDecorationsChange(): codemavi {
+	private doHandleDecorationsChange(): void {
 
 		// A change to decorations potentially has an impact on the size of tabs
 		// so we need to trigger a layout in that case to adjust things
 		this.layout(this.dimensions);
 	}
 
-	protected override updateEditorActionsToolbar(): codemavi {
+	protected override updateEditorActionsToolbar(): void {
 		super.updateEditorActionsToolbar();
 
 		// Changing the actions in the toolbar can have an impact on the size of the
@@ -565,7 +565,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 			labelA.ariaLabel === labelB.ariaLabel;
 	}
 
-	beforeCloseEditor(editor: EditorInput): codemavi {
+	beforeCloseEditor(editor: EditorInput): void {
 
 		// Fix tabs width if the mouse is over tabs and before closing
 		// a tab (except the last tab) when tab sizing is 'fixed'.
@@ -578,15 +578,15 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	closeEditor(editor: EditorInput): codemavi {
+	closeEditor(editor: EditorInput): void {
 		this.handleClosedEditors();
 	}
 
-	closeEditors(editors: EditorInput[]): codemavi {
+	closeEditors(editors: EditorInput[]): void {
 		this.handleClosedEditors();
 	}
 
-	private handleClosedEditors(): codemavi {
+	private handleClosedEditors(): void {
 
 		// There are tabs to show
 		if (this.tabsModel.count) {
@@ -626,7 +626,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	moveEditor(editor: EditorInput, fromTabIndex: number, targeTabIndex: number): codemavi {
+	moveEditor(editor: EditorInput, fromTabIndex: number, targeTabIndex: number): void {
 
 		// Move the editor label
 		const editorLabel = this.tabLabels[fromTabIndex];
@@ -645,19 +645,19 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.layout(this.dimensions, { forceRevealActiveTab: true });
 	}
 
-	pinEditor(editor: EditorInput): codemavi {
+	pinEditor(editor: EditorInput): void {
 		this.withTab(editor, (editor, tabIndex, tabContainer, tabLabelWidget, tabLabel) => this.redrawTabLabel(editor, tabIndex, tabContainer, tabLabelWidget, tabLabel));
 	}
 
-	stickEditor(editor: EditorInput): codemavi {
+	stickEditor(editor: EditorInput): void {
 		this.doHandleStickyEditorChange(editor);
 	}
 
-	unstickEditor(editor: EditorInput): codemavi {
+	unstickEditor(editor: EditorInput): void {
 		this.doHandleStickyEditorChange(editor);
 	}
 
-	private doHandleStickyEditorChange(editor: EditorInput): codemavi {
+	private doHandleStickyEditorChange(editor: EditorInput): void {
 
 		// Update tab
 		this.withTab(editor, (editor, tabIndex, tabContainer, tabLabelWidget, tabLabel, tabActionBar) => this.redrawTab(editor, tabIndex, tabContainer, tabLabelWidget, tabLabel, tabActionBar));
@@ -672,7 +672,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.layout(this.dimensions, { forceRevealActiveTab: true });
 	}
 
-	setActive(isGroupActive: boolean): codemavi {
+	setActive(isGroupActive: boolean): void {
 
 		// Activity has an impact on each tab's active indication
 		this.forEachTab((editor, tabIndex, tabContainer, tabLabelWidget, tabLabel, tabActionBar) => {
@@ -684,7 +684,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.layout(this.dimensions, { forceRevealActiveTab: true });
 	}
 
-	updateEditorSelections(): codemavi {
+	updateEditorSelections(): void {
 		this.forEachTab((editor, tabIndex, tabContainer, tabLabelWidget, tabLabel, tabActionBar) => {
 			this.redrawTabSelectedActiveAndDirty(this.groupsView.activeGroup === this.groupView, editor, tabContainer, tabActionBar);
 		});
@@ -692,7 +692,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 
 	private updateEditorLabelScheduler = this._register(new RunOnceScheduler(() => this.doUpdateEditorLabels(), 0));
 
-	updateEditorLabel(editor: EditorInput): codemavi {
+	updateEditorLabel(editor: EditorInput): void {
 
 		// Update all labels to account for changes to tab labels
 		// Since this method may be called a lot of times from
@@ -702,7 +702,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.updateEditorLabelScheduler.schedule();
 	}
 
-	private doUpdateEditorLabels(): codemavi {
+	private doUpdateEditorLabels(): void {
 
 		// A change to a label requires to recompute all labels
 		this.computeTabLabels();
@@ -716,11 +716,11 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.layout(this.dimensions);
 	}
 
-	updateEditorDirty(editor: EditorInput): codemavi {
+	updateEditorDirty(editor: EditorInput): void {
 		this.withTab(editor, (editor, tabIndex, tabContainer, tabLabelWidget, tabLabel, tabActionBar) => this.redrawTabSelectedActiveAndDirty(this.groupsView.activeGroup === this.groupView, editor, tabContainer, tabActionBar));
 	}
 
-	override updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi {
+	override updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {
 		super.updateOptions(oldOptions, newOptions);
 
 		// A change to a label format options requires to recompute all labels
@@ -765,11 +765,11 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		this.redraw();
 	}
 
-	private forEachTab(fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => codemavi, fromTabIndex?: number, toTabIndex?: number): codemavi {
+	private forEachTab(fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => void, fromTabIndex?: number, toTabIndex?: number): void {
 		this.tabsModel.getEditors(EditorsOrder.SEQUENTIAL).forEach((editor: EditorInput, tabIndex: number) => {
 			if (typeof fromTabIndex === 'number' && fromTabIndex > tabIndex) {
 				return; // do nothing if we are not yet at `fromIndex`
@@ -783,11 +783,11 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		});
 	}
 
-	private withTab(editor: EditorInput, fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => codemavi): codemavi {
+	private withTab(editor: EditorInput, fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => void): void {
 		this.doWithTab(this.tabsModel.indexOf(editor), editor, fn);
 	}
 
-	private doWithTab(tabIndex: number, editor: EditorInput, fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => codemavi): codemavi {
+	private doWithTab(tabIndex: number, editor: EditorInput, fn: (editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar) => void): void {
 		const tabsContainer = assertIsDefined(this.tabsContainer);
 		const tabContainer = tabsContainer.children[tabIndex] as HTMLElement;
 		const tabResourceLabel = this.tabResourceLabels.get(tabIndex);
@@ -866,7 +866,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 	private registerTabListeners(tab: HTMLElement, tabIndex: number, tabsContainer: HTMLElement, tabsScrollbar: ScrollableElement): IDisposable {
 		const disposables = new DisposableStore();
 
-		const handleClickOrTouch = async (e: MouseEvent | GestureEvent, preserveFocus: boolean): Promise<codemavi> => {
+		const handleClickOrTouch = async (e: MouseEvent | GestureEvent, preserveFocus: boolean): Promise<void> => {
 			tab.blur(); // prevent flicker of focus outline on tab until editor got focus
 
 			if (isMouseEvent(e) && (e.button !== 0 /* middle/right mouse button */ || (isMacintosh && e.ctrlKey /* macOS context menu */))) {
@@ -1201,7 +1201,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return false;
 	}
 
-	private updateDropFeedback(element: HTMLElement, isDND: boolean, e: DragEvent, tabIndex?: number): codemavi {
+	private updateDropFeedback(element: HTMLElement, isDND: boolean, e: DragEvent, tabIndex?: number): void {
 		const isTab = (typeof tabIndex === 'number');
 
 		let dropTarget;
@@ -1219,7 +1219,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 	}
 
 	private dropTarget: { leftElement: HTMLElement | undefined; rightElement: HTMLElement | undefined } | undefined;
-	private updateDropTarget(newTarget: { leftElement: HTMLElement | undefined; rightElement: HTMLElement | undefined } | undefined): codemavi {
+	private updateDropTarget(newTarget: { leftElement: HTMLElement | undefined; rightElement: HTMLElement | undefined } | undefined): void {
 		const oldTargets = this.dropTarget;
 		if (oldTargets === newTarget || oldTargets && newTarget && oldTargets.leftElement === newTarget.leftElement && oldTargets.rightElement === newTarget.rightElement) {
 			return;
@@ -1270,7 +1270,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return { leftElement: tabBefore as HTMLElement, rightElement: tabAfter as HTMLElement };
 	}
 
-	private async selectEditor(editor: EditorInput): Promise<codemavi> {
+	private async selectEditor(editor: EditorInput): Promise<void> {
 		if (this.groupView.isActive(editor)) {
 			return;
 		}
@@ -1278,7 +1278,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		await this.groupView.setSelection(editor, this.groupView.selectedEditors);
 	}
 
-	private async selectEditorsBetween(target: EditorInput, anchor: EditorInput): Promise<codemavi> {
+	private async selectEditorsBetween(target: EditorInput, anchor: EditorInput): Promise<void> {
 		const editorIndex = this.groupView.getIndexOfEditor(target);
 		if (editorIndex === -1) {
 			throw new BugIndicatingError();
@@ -1323,7 +1323,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		await this.groupView.setSelection(target, inactiveSelectedEditors);
 	}
 
-	private async unselectEditor(editor: EditorInput): Promise<codemavi> {
+	private async unselectEditor(editor: EditorInput): Promise<void> {
 		const isUnselectingActiveEditor = this.groupView.isActive(editor);
 
 		// If there is only one editor selected, do not unselect it
@@ -1350,14 +1350,14 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		await this.groupView.setSelection(newActiveEditor, inactiveSelectedEditors);
 	}
 
-	private async unselectAllEditors(): Promise<codemavi> {
+	private async unselectAllEditors(): Promise<void> {
 		if (this.groupView.selectedEditors.length > 1) {
 			const activeEditor = assertIsDefined(this.groupView.activeEditor);
 			await this.groupView.setSelection(activeEditor, []);
 		}
 	}
 
-	private computeTabLabels(): codemavi {
+	private computeTabLabels(): void {
 		const { labelFormat } = this.groupsView.partOptions;
 		const { verbosity, shortenDuplicates } = this.getLabelConfigFlags(labelFormat);
 
@@ -1389,7 +1389,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.activeTabLabel = labels[activeEditorTabIndex];
 	}
 
-	private shortenTabLabels(labels: IEditorInputLabel[]): codemavi {
+	private shortenTabLabels(labels: IEditorInputLabel[]): void {
 
 		// Gather duplicate titles, while filtering out invalid descriptions
 		const mapNameToDuplicates = new Map<string, IEditorInputLabel[]>();
@@ -1476,7 +1476,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private redraw(options?: IMultiEditorTabsControlLayoutOptions): codemavi {
+	private redraw(options?: IMultiEditorTabsControlLayoutOptions): void {
 
 		// Border below tabs if any with explicit high contrast support
 		if (this.tabsAndActionsContainer) {
@@ -1506,7 +1506,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.layout(this.dimensions, options);
 	}
 
-	private redrawTab(editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar): codemavi {
+	private redrawTab(editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel, tabActionBar: ActionBar): void {
 		const isTabSticky = this.tabsModel.isSticky(tabIndex);
 		const options = this.groupsView.partOptions;
 
@@ -1578,7 +1578,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		this.redrawTabSelectedActiveAndDirty(this.groupsView.activeGroup === this.groupView, editor, tabContainer, tabActionBar);
 	}
 
-	private redrawTabLabel(editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel): codemavi {
+	private redrawTabLabel(editor: EditorInput, tabIndex: number, tabContainer: HTMLElement, tabLabelWidget: IResourceLabel, tabLabel: IEditorInputLabel): void {
 		const options = this.groupsView.partOptions;
 
 		// Unless tabs are sticky compact, show the full label and description
@@ -1633,14 +1633,14 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private redrawTabSelectedActiveAndDirty(isGroupActive: boolean, editor: EditorInput, tabContainer: HTMLElement, tabActionBar: ActionBar): codemavi {
+	private redrawTabSelectedActiveAndDirty(isGroupActive: boolean, editor: EditorInput, tabContainer: HTMLElement, tabActionBar: ActionBar): void {
 		const isTabActive = this.tabsModel.isActive(editor);
 		const hasModifiedBorderTop = this.doRedrawTabDirty(isGroupActive, isTabActive, editor, tabContainer);
 
 		this.doRedrawTabActive(isGroupActive, !hasModifiedBorderTop, editor, tabContainer, tabActionBar);
 	}
 
-	private doRedrawTabActive(isGroupActive: boolean, allowBorderTop: boolean, editor: EditorInput, tabContainer: HTMLElement, tabActionBar: ActionBar): codemavi {
+	private doRedrawTabActive(isGroupActive: boolean, allowBorderTop: boolean, editor: EditorInput, tabContainer: HTMLElement, tabActionBar: ActionBar): void {
 		const isActive = this.tabsModel.isActive(editor);
 		const isSelected = this.tabsModel.isSelected(editor);
 
@@ -1714,7 +1714,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return hasModifiedBorderColor;
 	}
 
-	private redrawTabBorders(tabIndex: number, tabContainer: HTMLElement): codemavi {
+	private redrawTabBorders(tabIndex: number, tabContainer: HTMLElement): void {
 		const isTabSticky = this.tabsModel.isSticky(tabIndex);
 		const isTabLastSticky = isTabSticky && this.tabsModel.stickyCount === tabIndex + 1;
 		const showLastStickyTabBorderColor = this.tabsModel.stickyCount !== this.tabsModel.count;
@@ -1809,7 +1809,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return this.dimensions.used;
 	}
 
-	private doLayout(dimensions: IEditorTitleControlDimensions, options?: IMultiEditorTabsControlLayoutOptions): codemavi {
+	private doLayout(dimensions: IEditorTitleControlDimensions, options?: IMultiEditorTabsControlLayoutOptions): void {
 
 		// Layout tabs
 		if (dimensions.container !== Dimension.None && dimensions.available !== Dimension.None) {
@@ -1831,7 +1831,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private doLayoutTabs(dimensions: IEditorTitleControlDimensions, options?: IMultiEditorTabsControlLayoutOptions): codemavi {
+	private doLayoutTabs(dimensions: IEditorTitleControlDimensions, options?: IMultiEditorTabsControlLayoutOptions): void {
 
 		// Always first layout tabs with wrapping support even if wrapping
 		// is disabled. The result indicates if tabs wrap and if not, we
@@ -1854,7 +1854,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		const didTabsWrapMultiLine = tabsAndActionsContainer.classList.contains('wrapping');
 		let tabsWrapMultiLine = didTabsWrapMultiLine;
 
-		function updateTabsWrapping(enabled: boolean): codemavi {
+		function updateTabsWrapping(enabled: boolean): void {
 			tabsWrapMultiLine = enabled;
 
 			// Toggle the `wrapped` class to enable wrapping
@@ -1862,7 +1862,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 
 			// Update `last-tab-margin-right` CSS variable to account for the absolute
 			// positioned editor actions container when tabs wrap. The margin needs to
-			// be the width of the editor actions container to acodemavi screen cheese.
+			// be the width of the editor actions container to avoid screen cheese.
 			tabsContainer.style.setProperty('--last-tab-margin-right', tabsWrapMultiLine ? `${editorToolbarContainer.offsetWidth}px` : '0');
 
 			// Remove old css classes that are not needed anymore
@@ -1978,7 +1978,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return tabsWrapMultiLine;
 	}
 
-	private doLayoutTabsNonWrapping(options?: IMultiEditorTabsControlLayoutOptions): codemavi {
+	private doLayoutTabsNonWrapping(options?: IMultiEditorTabsControlLayoutOptions): void {
 		const [tabsContainer, tabsScrollbar] = assertAllDefined(this.tabsContainer, this.tabsScrollbar);
 
 		//
@@ -2122,7 +2122,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	private updateTabsControlVisibility(): codemavi {
+	private updateTabsControlVisibility(): void {
 		const tabsAndActionsContainer = assertIsDefined(this.tabsAndActionsContainer);
 		tabsAndActionsContainer.classList.toggle('empty', !this.visible);
 
@@ -2160,7 +2160,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return this.getTabAtIndex(this.tabsModel.count - 1);
 	}
 
-	private blockRevealActiveTabOnce(): codemavi {
+	private blockRevealActiveTabOnce(): void {
 
 		// When closing tabs through the tab close button or gesture, the user
 		// might want to rapidly close tabs in sequence and as such revealing
@@ -2181,7 +2181,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		return !!findParentWithClass(element, 'action-item', 'tab');
 	}
 
-	private async onDrop(e: DragEvent, targetTabIndex: number, tabsContainer: HTMLElement): Promise<codemavi> {
+	private async onDrop(e: DragEvent, targetTabIndex: number, tabsContainer: HTMLElement): Promise<void> {
 		EventHelper.stop(e, true);
 
 		this.updateDropFeedback(tabsContainer, false, e, targetTabIndex);
@@ -2273,7 +2273,7 @@ export class MultiEditorTabsControl extends EditorTabsControl {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.tabDisposables = dispose(this.tabDisposables);

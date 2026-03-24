@@ -52,12 +52,12 @@ export class MainThreadNotebookEditors implements MainThreadNotebookEditorsShape
 		this._editorGroupService.onDidMoveGroup(() => this._updateEditorViewColumns(), this, this._disposables);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		dispose(this._mainThreadEditors.values());
 	}
 
-	handleEditorsAdded(editors: readonly INotebookEditor[]): codemavi {
+	handleEditorsAdded(editors: readonly INotebookEditor[]): void {
 
 		for (const editor of editors) {
 
@@ -75,14 +75,14 @@ export class MainThreadNotebookEditors implements MainThreadNotebookEditorsShape
 		}
 	}
 
-	handleEditorsRemoved(editorIds: readonly string[]): codemavi {
+	handleEditorsRemoved(editorIds: readonly string[]): void {
 		for (const id of editorIds) {
 			this._mainThreadEditors.get(id)?.dispose();
 			this._mainThreadEditors.delete(id);
 		}
 	}
 
-	private _updateEditorViewColumns(): codemavi {
+	private _updateEditorViewColumns(): void {
 		const result: INotebookEditorViewColumnInfo = Object.create(null);
 		for (const editorPane of this._editorService.visibleEditorPanes) {
 			const candidate = getNotebookEditorFromEditorPane(editorPane);
@@ -119,7 +119,7 @@ export class MainThreadNotebookEditors implements MainThreadNotebookEditorsShape
 		}
 	}
 
-	async $tryRevealRange(id: string, range: ICellRange, revealType: NotebookEditorRevealType): Promise<codemavi> {
+	async $tryRevealRange(id: string, range: ICellRange, revealType: NotebookEditorRevealType): Promise<void> {
 		const editor = this._notebookEditorService.getNotebookEditor(id);
 		if (!editor) {
 			return;
@@ -147,7 +147,7 @@ export class MainThreadNotebookEditors implements MainThreadNotebookEditorsShape
 		}
 	}
 
-	$trySetSelections(id: string, ranges: ICellRange[]): codemavi {
+	$trySetSelections(id: string, ranges: ICellRange[]): void {
 		const editor = this._notebookEditorService.getNotebookEditor(id);
 		if (!editor) {
 			return;

@@ -32,7 +32,7 @@ namespace IProblemCollectorEvent {
 }
 
 export interface IProblemMatcher {
-	processLine(line: string): codemavi;
+	processLine(line: string): void;
 }
 
 export abstract class AbstractProblemCollector extends Disposable implements IDisposable {
@@ -45,7 +45,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 	private bufferLength: number;
 	private openModels: IStringDictionary<boolean>;
 	protected readonly modelListeners = new DisposableStore();
-	private tail: Promise<codemavi> | undefined;
+	private tail: Promise<void> | undefined;
 
 	// [owner] -> ApplyToKind
 	protected applyToByOwner: Map<string, ApplyToKind>;
@@ -58,13 +58,13 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 
 	protected _onDidStateChange: Emitter<IProblemCollectorEvent>;
 
-	protected readonly _onDidFindFirstMatch = new Emitter<codemavi>();
+	protected readonly _onDidFindFirstMatch = new Emitter<void>();
 	readonly onDidFindFirstMatch = this._onDidFindFirstMatch.event;
 
-	protected readonly _onDidFindErrors = new Emitter<codemavi>();
+	protected readonly _onDidFindErrors = new Emitter<void>();
 	readonly onDidFindErrors = this._onDidFindErrors.event;
 
-	protected readonly _onDidRequestInvalidateLastMarker = new Emitter<codemavi>();
+	protected readonly _onDidRequestInvalidateLastMarker = new Emitter<void>();
 	readonly onDidRequestInvalidateLastMarker = this._onDidRequestInvalidateLastMarker.event;
 
 	constructor(public readonly problemMatchers: ProblemMatcher[], protected markerService: IMarkerService, protected modelService: IModelService, fileService?: IFileService) {
@@ -126,7 +126,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		}
 	}
 
-	protected abstract processLineInternal(line: string): Promise<codemavi>;
+	protected abstract processLineInternal(line: string): Promise<void>;
 
 	public override dispose() {
 		super.dispose();
@@ -211,29 +211,29 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		return null;
 	}
 
-	private captureMatch(match: IProblemMatch): codemavi {
+	private captureMatch(match: IProblemMatch): void {
 		this._numberOfMatches++;
 		if (this._maxMarkerSeverity === undefined || match.marker.severity > this._maxMarkerSeverity) {
 			this._maxMarkerSeverity = match.marker.severity;
 		}
 	}
 
-	private clearBuffer(): codemavi {
+	private clearBuffer(): void {
 		if (this.buffer.length > 0) {
 			this.buffer = [];
 		}
 	}
 
-	protected recordResourcesToClean(owner: string): codemavi {
+	protected recordResourcesToClean(owner: string): void {
 		const resourceSetToClean = this.getResourceSetToClean(owner);
 		this.markerService.read({ owner: owner }).forEach(marker => resourceSetToClean.set(marker.resource.toString(), marker.resource));
 	}
 
-	protected recordResourceToClean(owner: string, resource: URI): codemavi {
+	protected recordResourceToClean(owner: string, resource: URI): void {
 		this.getResourceSetToClean(owner).set(resource.toString(), resource);
 	}
 
-	protected removeResourceToClean(owner: string, resource: string): codemavi {
+	protected removeResourceToClean(owner: string, resource: string): void {
 		const resourceSet = this.resourcesToClean.get(owner);
 		resourceSet?.delete(resource);
 	}
@@ -247,14 +247,14 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		return result;
 	}
 
-	protected cleanAllMarkers(): codemavi {
+	protected cleanAllMarkers(): void {
 		this.resourcesToClean.forEach((value, owner) => {
 			this._cleanMarkers(owner, value);
 		});
 		this.resourcesToClean = new Map<string, Map<string, URI>>();
 	}
 
-	protected cleanMarkers(owner: string): codemavi {
+	protected cleanMarkers(owner: string): void {
 		const toClean = this.resourcesToClean.get(owner);
 		if (toClean) {
 			this._cleanMarkers(owner, toClean);
@@ -262,7 +262,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		}
 	}
 
-	private _cleanMarkers(owner: string, toClean: Map<string, URI>): codemavi {
+	private _cleanMarkers(owner: string, toClean: Map<string, URI>): void {
 		const uris: URI[] = [];
 		const applyTo = this.applyToByOwner.get(owner);
 		toClean.forEach((uri, uriAsString) => {
@@ -277,7 +277,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		this.markerService.remove(owner, uris);
 	}
 
-	protected recordMarker(marker: IMarkerData, owner: string, resourceAsString: string): codemavi {
+	protected recordMarker(marker: IMarkerData, owner: string, resourceAsString: string): void {
 		let markersPerOwner = this.markers.get(owner);
 		if (!markersPerOwner) {
 			markersPerOwner = new Map<string, Map<string, IMarkerData>>();
@@ -299,7 +299,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		}
 	}
 
-	protected reportMarkers(): codemavi {
+	protected reportMarkers(): void {
 		this.markers.forEach((markersPerOwner, owner) => {
 			const deliveredMarkersPerOwner = this.getDeliveredMarkersPerOwner(owner);
 			markersPerOwner.forEach((markers, resource) => {
@@ -308,7 +308,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		});
 	}
 
-	protected deliverMarkersPerOwnerAndResource(owner: string, resource: string): codemavi {
+	protected deliverMarkersPerOwnerAndResource(owner: string, resource: string): void {
 		const markersPerOwner = this.markers.get(owner);
 		if (!markersPerOwner) {
 			return;
@@ -321,7 +321,7 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		this.deliverMarkersPerOwnerAndResourceResolved(owner, resource, markersPerResource, deliveredMarkersPerOwner);
 	}
 
-	private deliverMarkersPerOwnerAndResourceResolved(owner: string, resource: string, markers: Map<string, IMarkerData>, reported: Map<string, number>): codemavi {
+	private deliverMarkersPerOwnerAndResourceResolved(owner: string, resource: string, markers: Map<string, IMarkerData>, reported: Map<string, number>): void {
 		if (markers.size !== reported.get(resource)) {
 			const toSet: IMarkerData[] = [];
 			markers.forEach(value => toSet.push(value));
@@ -339,14 +339,14 @@ export abstract class AbstractProblemCollector extends Disposable implements IDi
 		return result;
 	}
 
-	protected cleanMarkerCaches(): codemavi {
+	protected cleanMarkerCaches(): void {
 		this._numberOfMatches = 0;
 		this._maxMarkerSeverity = undefined;
 		this.markers.clear();
 		this.deliveredMarkers.clear();
 	}
 
-	public done(): codemavi {
+	public done(): void {
 		this.reportMarkers();
 		this.cleanAllMarkers();
 	}
@@ -374,7 +374,7 @@ export class StartStopProblemCollector extends AbstractProblemCollector implemen
 		});
 	}
 
-	protected async processLineInternal(line: string): Promise<codemavi> {
+	protected async processLineInternal(line: string): Promise<void> {
 		if (!this._hasStarted) {
 			this._hasStarted = true;
 			this._onDidStateChange.fire(IProblemCollectorEvent.create(ProblemCollectorEventKind.BackgroundProcessingBegins));
@@ -469,7 +469,7 @@ export class WatchingProblemCollector extends AbstractProblemCollector implement
 		}));
 	}
 
-	public aboutToStart(): codemavi {
+	public aboutToStart(): void {
 		for (const background of this.backgroundPatterns) {
 			if (background.matcher.watching && background.matcher.watching.activeOnStart) {
 				this._activeBackgroundMatchers.add(background.key);
@@ -479,7 +479,7 @@ export class WatchingProblemCollector extends AbstractProblemCollector implement
 		}
 	}
 
-	protected async processLineInternal(line: string): Promise<codemavi> {
+	protected async processLineInternal(line: string): Promise<void> {
 		if (await this.tryBegin(line) || this.tryFinish(line)) {
 			return;
 		}
@@ -503,7 +503,7 @@ export class WatchingProblemCollector extends AbstractProblemCollector implement
 		}
 	}
 
-	public forceDelivery(): codemavi {
+	public forceDelivery(): void {
 		this.reportMarkersForCurrentResource();
 	}
 
@@ -561,19 +561,19 @@ export class WatchingProblemCollector extends AbstractProblemCollector implement
 		return result;
 	}
 
-	private resetCurrentResource(): codemavi {
+	private resetCurrentResource(): void {
 		this.reportMarkersForCurrentResource();
 		this.currentOwner = undefined;
 		this.currentResource = undefined;
 	}
 
-	private reportMarkersForCurrentResource(): codemavi {
+	private reportMarkersForCurrentResource(): void {
 		if (this.currentOwner && this.currentResource) {
 			this.deliverMarkersPerOwnerAndResource(this.currentOwner, this.currentResource);
 		}
 	}
 
-	public override done(): codemavi {
+	public override done(): void {
 		[...this.applyToByOwner.keys()].forEach(owner => {
 			this.recordResourcesToClean(owner);
 		});

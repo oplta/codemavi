@@ -265,7 +265,7 @@ export class DecorationsOverviewRuler extends ViewPart {
 		this._cursorPositions = [{ position: new Position(1, 1), color: this._settings.cursorColorSingle }];
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 		this._tokensColorTrackerListener.dispose();
 	}
@@ -345,16 +345,16 @@ export class DecorationsOverviewRuler extends ViewPart {
 		return this._domNode.domNode;
 	}
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	public render(editorCtx: RestrictedRenderingContext): codemavi {
+	public render(editorCtx: RestrictedRenderingContext): void {
 		this._render();
 		this._actualShouldRender = ShouldRenderValue.NotNeeded;
 	}
 
-	private _render(): codemavi {
+	private _render(): void {
 		const backgroundColor = this._settings.backgroundColor;
 		if (this._settings.overviewRulerLanes === 0) {
 			// overview ruler is off

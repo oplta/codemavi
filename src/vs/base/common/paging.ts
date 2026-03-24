@@ -19,7 +19,7 @@ export interface IPager<T> {
 
 interface IPage<T> {
 	isResolved: boolean;
-	promise: Promise<codemavi> | null;
+	promise: Promise<void> | null;
 	cts: CancellationTokenSource | null;
 	promiseIndexes: Set<number>;
 	elements: T[];

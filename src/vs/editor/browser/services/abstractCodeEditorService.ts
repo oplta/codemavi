@@ -23,7 +23,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onWillCreateCodeEditor = this._register(new Emitter<codemavi>());
+	private readonly _onWillCreateCodeEditor = this._register(new Emitter<void>());
 	public readonly onWillCreateCodeEditor = this._onWillCreateCodeEditor.event;
 
 	private readonly _onCodeEditorAdd: Emitter<ICodeEditor> = this._register(new Emitter<ICodeEditor>());
@@ -32,7 +32,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 	private readonly _onCodeEditorRemove: Emitter<ICodeEditor> = this._register(new Emitter<ICodeEditor>());
 	public readonly onCodeEditorRemove: Event<ICodeEditor> = this._onCodeEditorRemove.event;
 
-	private readonly _onWillCreateDiffEditor = this._register(new Emitter<codemavi>());
+	private readonly _onWillCreateDiffEditor = this._register(new Emitter<void>());
 	public readonly onWillCreateDiffEditor = this._onWillCreateDiffEditor.event;
 
 	private readonly _onDiffEditorAdd: Emitter<IDiffEditor> = this._register(new Emitter<IDiffEditor>());
@@ -63,16 +63,16 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		this._globalStyleSheet = null;
 	}
 
-	willCreateCodeEditor(): codemavi {
+	willCreateCodeEditor(): void {
 		this._onWillCreateCodeEditor.fire();
 	}
 
-	addCodeEditor(editor: ICodeEditor): codemavi {
+	addCodeEditor(editor: ICodeEditor): void {
 		this._codeEditors[editor.getId()] = editor;
 		this._onCodeEditorAdd.fire(editor);
 	}
 
-	removeCodeEditor(editor: ICodeEditor): codemavi {
+	removeCodeEditor(editor: ICodeEditor): void {
 		if (delete this._codeEditors[editor.getId()]) {
 			this._onCodeEditorRemove.fire(editor);
 		}
@@ -82,16 +82,16 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		return Object.keys(this._codeEditors).map(id => this._codeEditors[id]);
 	}
 
-	willCreateDiffEditor(): codemavi {
+	willCreateDiffEditor(): void {
 		this._onWillCreateDiffEditor.fire();
 	}
 
-	addDiffEditor(editor: IDiffEditor): codemavi {
+	addDiffEditor(editor: IDiffEditor): void {
 		this._diffEditors[editor.getId()] = editor;
 		this._onDiffEditorAdd.fire(editor);
 	}
 
-	removeDiffEditor(editor: IDiffEditor): codemavi {
+	removeDiffEditor(editor: IDiffEditor): void {
 		if (delete this._diffEditors[editor.getId()]) {
 			this._onDiffEditorRemove.fire(editor);
 		}
@@ -148,7 +148,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		return this._editorStyleSheets.get(editorId)!;
 	}
 
-	_removeEditorStyleSheets(editorId: string): codemavi {
+	_removeEditorStyleSheets(editorId: string): void {
 		this._editorStyleSheets.delete(editorId);
 	}
 
@@ -182,7 +182,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		return Array.from(this._decorationOptionProviders.keys());
 	}
 
-	public removeDecorationType(key: string): codemavi {
+	public removeDecorationType(key: string): void {
 		const provider = this._decorationOptionProviders.get(key);
 		if (provider) {
 			provider.refCount--;
@@ -213,7 +213,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 	private readonly _transientWatchers = this._register(new DisposableMap<string, ModelTransientSettingWatcher>());
 	private readonly _modelProperties = new Map<string, Map<string, any>>();
 
-	public setModelProperty(resource: URI, key: string, value: any): codemavi {
+	public setModelProperty(resource: URI, key: string, value: any): void {
 		const key1 = resource.toString();
 		let dest: Map<string, any>;
 		if (this._modelProperties.has(key1)) {
@@ -235,7 +235,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		return undefined;
 	}
 
-	public setTransientModelProperty(model: ITextModel, key: string, value: any): codemavi {
+	public setTransientModelProperty(model: ITextModel, key: string, value: any): void {
 		const uri = model.uri.toString();
 
 		let w = this._transientWatchers.get(uri);
@@ -273,7 +273,7 @@ export abstract class AbstractCodeEditorService extends Disposable implements IC
 		return watcher.keys().map(key => [key, watcher.get(key)]);
 	}
 
-	_removeWatcher(w: ModelTransientSettingWatcher): codemavi {
+	_removeWatcher(w: ModelTransientSettingWatcher): void {
 		this._transientWatchers.deleteAndDispose(w.uri);
 	}
 
@@ -307,7 +307,7 @@ export class ModelTransientSettingWatcher extends Disposable {
 		this._register(model.onWillDispose(() => owner._removeWatcher(this)));
 	}
 
-	public set(key: string, value: any): codemavi {
+	public set(key: string, value: any): void {
 		this._values[key] = value;
 	}
 
@@ -338,11 +338,11 @@ class RefCountedStyleSheet {
 		this._refCount = 0;
 	}
 
-	public ref(): codemavi {
+	public ref(): void {
 		this._refCount++;
 	}
 
-	public unref(): codemavi {
+	public unref(): void {
 		this._refCount--;
 		if (this._refCount === 0) {
 			this._styleSheet.remove();
@@ -350,11 +350,11 @@ class RefCountedStyleSheet {
 		}
 	}
 
-	public insertRule(selector: string, rule: string): codemavi {
+	public insertRule(selector: string, rule: string): void {
 		domStylesheets.createCSSRule(selector, rule, this._styleSheet);
 	}
 
-	public removeRulesContainingSelector(ruleName: string): codemavi {
+	public removeRulesContainingSelector(ruleName: string): void {
 		domStylesheets.removeCSSRulesContainingSelector(ruleName, this._styleSheet);
 	}
 }
@@ -370,17 +370,17 @@ export class GlobalStyleSheet {
 		this._styleSheet = styleSheet;
 	}
 
-	public ref(): codemavi {
+	public ref(): void {
 	}
 
-	public unref(): codemavi {
+	public unref(): void {
 	}
 
-	public insertRule(selector: string, rule: string): codemavi {
+	public insertRule(selector: string, rule: string): void {
 		domStylesheets.createCSSRule(selector, rule, this._styleSheet);
 	}
 
-	public removeRulesContainingSelector(ruleName: string): codemavi {
+	public removeRulesContainingSelector(ruleName: string): void {
 		domStylesheets.removeCSSRulesContainingSelector(ruleName, this._styleSheet);
 	}
 }
@@ -425,7 +425,7 @@ class DecorationSubTypeOptionsProvider implements IModelDecorationOptionsProvide
 		return this._styleSheet.sheet.cssRules;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		if (this._beforeContentRules) {
 			this._beforeContentRules.dispose();
 			this._beforeContentRules = null;
@@ -560,7 +560,7 @@ class DecorationTypeOptionsProvider implements IModelDecorationOptionsProvider {
 		return this._styleSheet.sheet.rules;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._disposables.dispose();
 		this._styleSheet.unref();
 	}
@@ -670,7 +670,7 @@ class DecorationCSSRules {
 		return this._className;
 	}
 
-	private _buildCSS(): codemavi {
+	private _buildCSS(): void {
 		const options = this._providerArgs.options;
 		let unthemedCSS: string, lightCSS: string, darkCSS: string;
 		switch (this._ruleType) {
@@ -730,7 +730,7 @@ class DecorationCSSRules {
 		this._hasContent = hasContent;
 	}
 
-	private _removeCSS(): codemavi {
+	private _removeCSS(): void {
 		this._providerArgs.styleSheet.removeRulesContainingSelector(this._unThemedSelector);
 	}
 

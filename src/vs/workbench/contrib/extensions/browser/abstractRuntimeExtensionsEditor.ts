@@ -106,7 +106,7 @@ export abstract class AbstractRuntimeExtensionsEditor extends EditorPane {
 		this._updateExtensions();
 	}
 
-	protected async _updateExtensions(): Promise<codemavi> {
+	protected async _updateExtensions(): Promise<void> {
 		this._elements = await this._resolveExtensions();
 		this._list?.splice(0, this._list.length, this._elements);
 	}
@@ -204,7 +204,7 @@ export abstract class AbstractRuntimeExtensionsEditor extends EditorPane {
 		return result;
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		parent.classList.add('runtime-extensions-editor');
 
 		const TEMPLATE_ID = 'runtimeExtensionElementTemplate';
@@ -271,7 +271,7 @@ export abstract class AbstractRuntimeExtensionsEditor extends EditorPane {
 				};
 			},
 
-			renderElement: (element: IRuntimeExtension, index: number, data: IRuntimeExtensionTemplateData): codemavi => {
+			renderElement: (element: IRuntimeExtension, index: number, data: IRuntimeExtensionTemplateData): void => {
 
 				data.elementDisposables = dispose(data.elementDisposables);
 
@@ -442,7 +442,7 @@ export abstract class AbstractRuntimeExtensionsEditor extends EditorPane {
 
 			},
 
-			disposeTemplate: (data: IRuntimeExtensionTemplateData): codemavi => {
+			disposeTemplate: (data: IRuntimeExtensionTemplateData): void => {
 				data.disposables = dispose(data.disposables);
 			}
 		};
@@ -507,7 +507,7 @@ export abstract class AbstractRuntimeExtensionsEditor extends EditorPane {
 		});
 	}
 
-	public layout(dimension: Dimension): codemavi {
+	public layout(dimension: Dimension): void {
 		this._list?.layout(dimension.height);
 	}
 
@@ -534,7 +534,7 @@ export class ShowRuntimeExtensionsAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IEditorService).openEditor(RuntimeExtensionsInput.instance, { pinned: true });
 	}
 }

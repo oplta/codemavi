@@ -149,7 +149,7 @@ export async function provideInlineCompletions(
 }
 
 /** If the token does not leak, this will not leak either. */
-function runWhenCancelled(token: CancellationToken, callback: () => codemavi): IDisposable {
+function runWhenCancelled(token: CancellationToken, callback: () => void): IDisposable {
 	if (token.isCancellationRequested) {
 		callback();
 		return Disposable.None;
@@ -234,7 +234,7 @@ export class InlineCompletionProviderResult implements IDisposable {
 			|| this.completions.every(c => c.range.isEmpty() && c.insertText.length === 0);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		for (const result of this.providerResults) {
 			result.removeRef();
 		}
@@ -252,11 +252,11 @@ export class InlineCompletionList {
 		public readonly provider: InlineCompletionsProvider,
 	) { }
 
-	addRef(): codemavi {
+	addRef(): void {
 		this.refCount++;
 	}
 
-	removeRef(): codemavi {
+	removeRef(): void {
 		this.refCount--;
 		if (this.refCount === 0) {
 			this.provider.freeInlineCompletions(this.inlineCompletions);
@@ -385,7 +385,7 @@ export class InlineCompletionItem {
 	public get didShow(): boolean {
 		return this._didCallShow;
 	}
-	public markAsShown(): codemavi {
+	public markAsShown(): void {
 		this._didCallShow = true;
 	}
 

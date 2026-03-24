@@ -78,7 +78,7 @@ export class SessionWholeRange {
 		}
 	}
 
-	fixup(changes: readonly DetailedLineRangeMapping[]): codemavi {
+	fixup(changes: readonly DetailedLineRangeMapping[]): void {
 		const newDeco: IModelDeltaDecoration[] = [];
 		for (const { modified } of changes) {
 			const modifiedRange = this._textModel.validateRange(modified.isEmpty
@@ -323,7 +323,7 @@ export class HunkData {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		if (!this._textModelN.isDisposed()) {
 			this._textModelN.changeDecorations(accessor => {
 				for (const { textModelNDecorations } of this._data.values()) {
@@ -355,7 +355,7 @@ export class HunkData {
 		// mirror textModelN changes to textModel0 execept for those that
 		// overlap with a hunk
 
-		type HunkRangePair = { rangeN: Range; range0: Range; markAccepted: () => codemavi };
+		type HunkRangePair = { rangeN: Range; range0: Range; markAccepted: () => void };
 		const hunkRanges: HunkRangePair[] = [];
 
 		const ranges0: Range[] = [];
@@ -635,12 +635,12 @@ export interface HunkInformation {
 
 	isInsertion(): boolean;
 
-	discardChanges(): codemavi;
+	discardChanges(): void;
 
 	/**
 	 * Accept the hunk. Applies the corresponding edits into textModel0
 	 */
-	acceptChanges(): codemavi;
+	acceptChanges(): void;
 
 	getState(): HunkState;
 }

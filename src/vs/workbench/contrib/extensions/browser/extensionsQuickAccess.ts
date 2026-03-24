@@ -76,7 +76,7 @@ export class InstallExtensionQuickAccessProvider extends PickerQuickAccessProvid
 		}
 	}
 
-	private async installExtension(extension: IGalleryExtension, name: string): Promise<codemavi> {
+	private async installExtension(extension: IGalleryExtension, name: string): Promise<void> {
 		try {
 			await this.extensionsWorkbenchService.openSearch(`@id:${name}`);
 			await this.extensionsService.installFromGallery(extension);

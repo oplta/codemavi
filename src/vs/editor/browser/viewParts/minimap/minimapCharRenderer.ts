@@ -8,7 +8,7 @@ import { Constants, getCharIndex } from './minimapCharSheet.js';
 import { toUint8 } from '../../../../base/common/uint.js';
 
 export class MinimapCharRenderer {
-	_minimapCharRendererBrand: codemavi = undefined;
+	_minimapCharRendererBrand: void = undefined;
 
 	private readonly charDataNormal: Uint8ClampedArray;
 	private readonly charDataLight: Uint8ClampedArray;
@@ -38,7 +38,7 @@ export class MinimapCharRenderer {
 		fontScale: number,
 		useLighterFont: boolean,
 		force1pxHeight: boolean
-	): codemavi {
+	): void {
 		const charWidth = Constants.BASE_CHAR_WIDTH * this.scale;
 		const charHeight = Constants.BASE_CHAR_HEIGHT * this.scale;
 		const renderHeight = (force1pxHeight ? 1 : charHeight);
@@ -89,7 +89,7 @@ export class MinimapCharRenderer {
 		backgroundColor: RGBA8,
 		backgroundAlpha: number,
 		force1pxHeight: boolean
-	): codemavi {
+	): void {
 		const charWidth = Constants.BASE_CHAR_WIDTH * this.scale;
 		const charHeight = Constants.BASE_CHAR_HEIGHT * this.scale;
 		const renderHeight = (force1pxHeight ? 1 : charHeight);

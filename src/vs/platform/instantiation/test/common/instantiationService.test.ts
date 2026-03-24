@@ -400,7 +400,7 @@ suite('Instantiation Service', () => {
 
 		const A = createDecorator<A>('A');
 		const B = createDecorator<B>('B');
-		interface A { _serviceBrand: undefined; doIt(): codemavi }
+		interface A { _serviceBrand: undefined; doIt(): void }
 		interface B { _serviceBrand: undefined; b(): boolean }
 
 		class BConsumer {
@@ -468,7 +468,7 @@ suite('Instantiation Service', () => {
 		interface A {
 			_serviceBrand: undefined;
 			onDidDoIt: Event<any>;
-			doIt(): codemavi;
+			doIt(): void;
 		}
 
 		let created = false;
@@ -483,7 +483,7 @@ suite('Instantiation Service', () => {
 				created = true;
 			}
 
-			doIt(): codemavi {
+			doIt(): void {
 				this._doIt += 1;
 				this._onDidDoIt.fire(this);
 			}
@@ -532,8 +532,8 @@ suite('Instantiation Service', () => {
 		interface A {
 			_serviceBrand: undefined;
 			onDidDoIt: Event<any>;
-			doIt(): codemavi;
-			noop(): codemavi;
+			doIt(): void;
+			noop(): void;
 		}
 
 		let created = false;
@@ -548,12 +548,12 @@ suite('Instantiation Service', () => {
 				created = true;
 			}
 
-			doIt(): codemavi {
+			doIt(): void {
 				this._doIt += 1;
 				this._onDidDoIt.fire(this);
 			}
 
-			noop(): codemavi {
+			noop(): void {
 			}
 		}
 
@@ -600,7 +600,7 @@ suite('Instantiation Service', () => {
 		interface A {
 			_serviceBrand: undefined;
 			onDidDoIt: Event<any>;
-			doIt(): codemavi;
+			doIt(): void;
 		}
 		let created = false;
 		class AImpl implements A {
@@ -614,7 +614,7 @@ suite('Instantiation Service', () => {
 				created = true;
 			}
 
-			doIt(): codemavi {
+			doIt(): void {
 				this._doIt += 1;
 				this._onDidDoIt.fire(this);
 			}

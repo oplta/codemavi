@@ -216,7 +216,7 @@ export class TestingPeekOpener extends Disposable implements ITestingPeekOpener 
 		}
 	}
 
-	public openCurrentInEditor(): codemavi {
+	public openCurrentInEditor(): void {
 		const current = this.getActiveControl();
 		if (!current) {
 			return;
@@ -714,7 +714,7 @@ class TestResultsPeek extends PeekViewWidget {
 
 		const lineHeight = this.editor.getOption(EditorOption.lineHeight);
 		// 41 is experimentally determined to be the overhead of the peek view itself
-		// to acodemavi showing scrollbars by default in its content.
+		// to avoid showing scrollbars by default in its content.
 		const basePeekOverhead = 41;
 
 		return Math.min(defaultMaxHeight || Infinity, (contentHeight + basePeekOverhead) / lineHeight + 1);
@@ -736,7 +736,7 @@ class TestResultsPeek extends PeekViewWidget {
 		});
 	}
 
-	protected override _fillContainer(container: HTMLElement): codemavi {
+	protected override _fillContainer(container: HTMLElement): void {
 		if (!this.scopedContextKeyService) {
 			this.scopedContextKeyService = this._disposables.add(this.contextKeyService.createScoped(container));
 			TestingContextKeys.isInPeek.bindTo(this.scopedContextKeyService).set(true);
@@ -751,7 +751,7 @@ class TestResultsPeek extends PeekViewWidget {
 		super._fillContainer(container);
 	}
 
-	protected override _fillHead(container: HTMLElement): codemavi {
+	protected override _fillHead(container: HTMLElement): void {
 		super._fillHead(container);
 
 		const menuContextKeyService = this._disposables.add(this.contextKeyService.createScoped(container));
@@ -777,7 +777,7 @@ class TestResultsPeek extends PeekViewWidget {
 		actionBar.push(actions, { label: false, icon: true, index: 0 });
 	}
 
-	protected override _fillBody(containerElement: HTMLElement): codemavi {
+	protected override _fillBody(containerElement: HTMLElement): void {
 		this.content.fillBody(containerElement);
 
 		// Resize on height updates for a short time to allow any heights made
@@ -810,7 +810,7 @@ class TestResultsPeek extends PeekViewWidget {
 	/**
 	 * Updates the test to be shown.
 	 */
-	public setModel(subject: InspectSubject): Promise<codemavi> {
+	public setModel(subject: InspectSubject): Promise<void> {
 		if (subject instanceof TaskSubject || subject instanceof TestOutputSubject) {
 			this.current.set(subject, undefined);
 			return this.showInPlace(subject);
@@ -915,9 +915,9 @@ export class TestResultsView extends ViewPane {
 		this.content.rawValue?.reveal({ preserveFocus, subject: new TaskSubject(result, 0) });
 	}
 
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
-		// Acodemavi rendering into the body until it's attached the DOM, as it can
+		// Avoid rendering into the body until it's attached the DOM, as it can
 		// result in rendering issues in the terminal (#194156)
 		if (this.isBodyVisible()) {
 			this.renderContent(container);
@@ -926,7 +926,7 @@ export class TestResultsView extends ViewPane {
 		}
 	}
 
-	protected override layoutBody(height: number, width: number): codemavi {
+	protected override layoutBody(height: number, width: number): void {
 		super.layoutBody(height, width);
 		this.content.rawValue?.onLayoutBody(height, width);
 	}
@@ -975,7 +975,7 @@ export class CloseTestPeek extends EditorAction2 {
 		});
 	}
 
-	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	runEditorCommand(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const parent = getPeekedEditorFromFocus(accessor.get(ICodeEditorService));
 		TestingOutputPeekController.get(parent ?? editor)?.removePeek();
 	}

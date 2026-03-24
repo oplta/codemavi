@@ -224,7 +224,7 @@ export class SymbolsQuickAccessProvider extends PickerQuickAccessProvider<ISymbo
 		return symbolPicks;
 	}
 
-	private async openSymbol(provider: IWorkspaceSymbolProvider, symbol: IWorkspaceSymbol, token: CancellationToken, options: { keyMods: IKeyMods; forceOpenSideBySide?: boolean; preserveFocus?: boolean; forcePinned?: boolean }): Promise<codemavi> {
+	private async openSymbol(provider: IWorkspaceSymbolProvider, symbol: IWorkspaceSymbol, token: CancellationToken, options: { keyMods: IKeyMods; forceOpenSideBySide?: boolean; preserveFocus?: boolean; forcePinned?: boolean }): Promise<void> {
 
 		// Resolve actual symbol to open for providers that can resolve
 		let symbolToOpen = symbol;

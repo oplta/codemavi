@@ -17,8 +17,8 @@ export interface IExtHostContext extends IRPCProtocol {
 
 export interface IInternalExtHostContext extends IExtHostContext {
 	readonly internalExtensionService: IInternalExtensionService;
-	_setExtensionHostProxy(extensionHostProxy: IExtensionHostProxy): codemavi;
-	_setAllMainProxyIdentifiers(mainProxyIdentifiers: ProxyIdentifier<any>[]): codemavi;
+	_setExtensionHostProxy(extensionHostProxy: IExtensionHostProxy): void;
+	_setAllMainProxyIdentifiers(mainProxyIdentifiers: ProxyIdentifier<any>[]): void;
 }
 
 export type IExtHostNamedCustomer<T extends IDisposable> = [ProxyIdentifier<T>, IExtHostCustomerCtor<T>];
@@ -26,12 +26,12 @@ export type IExtHostNamedCustomer<T extends IDisposable> = [ProxyIdentifier<T>, 
 export type IExtHostCustomerCtor<T extends IDisposable> = IConstructorSignature<T, [IExtHostContext]>;
 
 export function extHostNamedCustomer<T extends IDisposable>(id: ProxyIdentifier<T>) {
-	return function <Services extends BrandedService[]>(ctor: { new(context: IExtHostContext, ...services: Services): T }): codemavi {
+	return function <Services extends BrandedService[]>(ctor: { new(context: IExtHostContext, ...services: Services): T }): void {
 		ExtHostCustomersRegistryImpl.INSTANCE.registerNamedCustomer(id, ctor as IExtHostCustomerCtor<T>);
 	};
 }
 
-export function extHostCustomer<T extends IDisposable, Services extends BrandedService[]>(ctor: { new(context: IExtHostContext, ...services: Services): T }): codemavi {
+export function extHostCustomer<T extends IDisposable, Services extends BrandedService[]>(ctor: { new(context: IExtHostContext, ...services: Services): T }): void {
 	ExtHostCustomersRegistryImpl.INSTANCE.registerCustomer(ctor as IExtHostCustomerCtor<T>);
 }
 
@@ -58,7 +58,7 @@ class ExtHostCustomersRegistryImpl {
 		this._customers = [];
 	}
 
-	public registerNamedCustomer<T extends IDisposable>(id: ProxyIdentifier<T>, ctor: IExtHostCustomerCtor<T>): codemavi {
+	public registerNamedCustomer<T extends IDisposable>(id: ProxyIdentifier<T>, ctor: IExtHostCustomerCtor<T>): void {
 		const entry: IExtHostNamedCustomer<T> = [id, ctor];
 		this._namedCustomers.push(entry);
 	}
@@ -66,7 +66,7 @@ class ExtHostCustomersRegistryImpl {
 		return this._namedCustomers;
 	}
 
-	public registerCustomer<T extends IDisposable>(ctor: IExtHostCustomerCtor<T>): codemavi {
+	public registerCustomer<T extends IDisposable>(ctor: IExtHostCustomerCtor<T>): void {
 		this._customers.push(ctor);
 	}
 	public getCustomers(): IExtHostCustomerCtor<any>[] {

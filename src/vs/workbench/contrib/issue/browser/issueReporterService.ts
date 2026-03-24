@@ -43,7 +43,7 @@ export class IssueWebReporter extends BaseIssueReporterService {
 		this.setEventHandlers();
 	}
 
-	public override setEventHandlers(): codemavi {
+	public override setEventHandlers(): void {
 		super.setEventHandlers();
 
 		this.addEventListener('issue-type', 'change', (event: Event) => {

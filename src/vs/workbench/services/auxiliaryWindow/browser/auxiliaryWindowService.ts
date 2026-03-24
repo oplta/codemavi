@@ -62,7 +62,7 @@ export interface IAuxiliaryWindowService {
 }
 
 export interface BeforeAuxiliaryWindowUnloadEvent {
-	veto(reason: string | undefined): codemavi;
+	veto(reason: string | undefined): void;
 }
 
 export interface IAuxiliaryWindow extends IDisposable {
@@ -71,14 +71,14 @@ export interface IAuxiliaryWindow extends IDisposable {
 	readonly onDidLayout: Event<Dimension>;
 
 	readonly onBeforeUnload: Event<BeforeAuxiliaryWindowUnloadEvent>;
-	readonly onUnload: Event<codemavi>;
+	readonly onUnload: Event<void>;
 
-	readonly whenStylesHaveLoaded: Promise<codemavi>;
+	readonly whenStylesHaveLoaded: Promise<void>;
 
 	readonly window: CodeWindow;
 	readonly container: HTMLElement;
 
-	layout(): codemavi;
+	layout(): void;
 
 	createState(): IAuxiliaryWindowOpenOptions;
 }
@@ -96,13 +96,13 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 	private readonly _onBeforeUnload = this._register(new Emitter<BeforeAuxiliaryWindowUnloadEvent>());
 	readonly onBeforeUnload = this._onBeforeUnload.event;
 
-	private readonly _onUnload = this._register(new Emitter<codemavi>());
+	private readonly _onUnload = this._register(new Emitter<void>());
 	readonly onUnload = this._onUnload.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
-	readonly whenStylesHaveLoaded: Promise<codemavi>;
+	readonly whenStylesHaveLoaded: Promise<void>;
 
 	constructor(
 		readonly window: CodeWindow,
@@ -119,7 +119,7 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(addDisposableListener(this.window, EventType.BEFORE_UNLOAD, (e: BeforeUnloadEvent) => this.handleBeforeUnload(e)));
 		this._register(addDisposableListener(this.window, EventType.UNLOAD, () => this.handleUnload()));
 
@@ -142,7 +142,7 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		}
 	}
 
-	private handleBeforeUnload(e: BeforeUnloadEvent): codemavi {
+	private handleBeforeUnload(e: BeforeUnloadEvent): void {
 
 		// Check for veto from a listening component
 		let veto: string | undefined;
@@ -167,26 +167,26 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		}
 	}
 
-	protected handleVetoBeforeClose(e: BeforeUnloadEvent, reason: string): codemavi {
+	protected handleVetoBeforeClose(e: BeforeUnloadEvent, reason: string): void {
 		this.preventUnload(e);
 	}
 
-	protected preventUnload(e: BeforeUnloadEvent): codemavi {
+	protected preventUnload(e: BeforeUnloadEvent): void {
 		e.preventDefault();
 		e.returnValue = localize('lifecycleVeto', "Changes that you made may not be saved. Please check press 'Cancel' and try again.");
 	}
 
-	protected confirmBeforeClose(e: BeforeUnloadEvent): codemavi {
+	protected confirmBeforeClose(e: BeforeUnloadEvent): void {
 		this.preventUnload(e);
 	}
 
-	private handleUnload(): codemavi {
+	private handleUnload(): void {
 
 		// Event
 		this._onUnload.fire();
 	}
 
-	layout(): codemavi {
+	layout(): void {
 
 		// Split layout up into two events so that downstream components
 		// have a chance to participate in the beginning or end of the
@@ -212,7 +212,7 @@ export class AuxiliaryWindow extends BaseWindow implements IAuxiliaryWindow {
 		};
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		if (this._store.isDisposed) {
 			return;
 		}
@@ -348,7 +348,7 @@ export class BrowserAuxiliaryWindowService extends Disposable implements IAuxili
 			return (await this.dialogService.prompt({
 				type: Severity.Warning,
 				message: localize('unableToOpenWindow', "The browser interrupted the opening of a new window. Press 'Retry' to try again."),
-				detail: localize('unableToOpenWindowDetail', "To acodemavi this problem in the future, please ensure to allow popups for this website."),
+				detail: localize('unableToOpenWindowDetail', "To avoid this problem in the future, please ensure to allow popups for this website."),
 				buttons: [
 					{
 						label: localize({ key: 'retry', comment: ['&& denotes a mnemonic'] }, "&&Retry"),
@@ -381,7 +381,7 @@ export class BrowserAuxiliaryWindowService extends Disposable implements IAuxili
 		return { stylesLoaded, container };
 	}
 
-	private applyMeta(auxiliaryWindow: CodeWindow): codemavi {
+	private applyMeta(auxiliaryWindow: CodeWindow): void {
 		for (const metaTag of ['meta[charset="utf-8"]', 'meta[http-equiv="Content-Security-Policy"]', 'meta[name="viewport"]', 'meta[name="theme-color"]']) {
 			const metaElement = mainWindow.document.querySelector(metaTag);
 			if (metaElement) {
@@ -422,7 +422,7 @@ export class BrowserAuxiliaryWindowService extends Disposable implements IAuxili
 			}
 		}
 
-		function cloneNode(originalNode: Element): codemavi {
+		function cloneNode(originalNode: Element): void {
 			if (isGlobalStylesheet(originalNode)) {
 				return; // global stylesheets are handled by `cloneGlobalStylesheets` below
 			}

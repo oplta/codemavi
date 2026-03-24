@@ -23,23 +23,23 @@ export class TestUntitledFileWorkingCopyModel extends Disposable implements IUnt
 	private readonly _onDidChangeContent = this._register(new Emitter<IUntitledFileWorkingCopyModelContentChangedEvent>());
 	readonly onDidChangeContent = this._onDidChangeContent.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	constructor(readonly resource: URI, public contents: string) {
 		super();
 	}
 
-	fireContentChangeEvent(event: IUntitledFileWorkingCopyModelContentChangedEvent): codemavi {
+	fireContentChangeEvent(event: IUntitledFileWorkingCopyModelContentChangedEvent): void {
 		this._onDidChangeContent.fire(event);
 	}
 
-	updateContents(newContents: string): codemavi {
+	updateContents(newContents: string): void {
 		this.doUpdate(newContents);
 	}
 
 	private throwOnSnapshot = false;
-	setThrowOnSnapshot(): codemavi {
+	setThrowOnSnapshot(): void {
 		this.throwOnSnapshot = true;
 	}
 
@@ -54,11 +54,11 @@ export class TestUntitledFileWorkingCopyModel extends Disposable implements IUnt
 		return stream;
 	}
 
-	async update(contents: VSBufferReadableStream, token: CancellationToken): Promise<codemavi> {
+	async update(contents: VSBufferReadableStream, token: CancellationToken): Promise<void> {
 		this.doUpdate((await streamToBuffer(contents)).toString());
 	}
 
-	private doUpdate(newContents: string): codemavi {
+	private doUpdate(newContents: string): void {
 		this.contents = newContents;
 
 		this.versionId++;
@@ -70,11 +70,11 @@ export class TestUntitledFileWorkingCopyModel extends Disposable implements IUnt
 
 	pushedStackElement = false;
 
-	pushStackElement(): codemavi {
+	pushStackElement(): void {
 		this.pushedStackElement = true;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._onWillDispose.fire();
 
 		super.dispose();

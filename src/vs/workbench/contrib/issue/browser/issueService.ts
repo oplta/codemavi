@@ -42,7 +42,7 @@ export class BrowserIssueService implements IWorkbenchIssueService {
 		@IConfigurationService private readonly configurationService: IConfigurationService
 	) { }
 
-	async openReporter(options: Partial<IssueReporterData>): Promise<codemavi> {
+	async openReporter(options: Partial<IssueReporterData>): Promise<void> {
 		// If web reporter setting is false open the old GitHub issue reporter
 		if (!this.configurationService.getValue<boolean>('issueReporter.experimental.webReporter')) {
 			const extensionId = options.extensionId;

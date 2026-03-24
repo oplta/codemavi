@@ -93,7 +93,7 @@ suite('Editor ViewModel - SplitLinesCollection', () => {
 		}
 	});
 
-	function withSplitLinesCollection(text: string, callback: (model: TextModel, linesCollection: ViewModelLinesFromProjectedModel) => codemavi): codemavi {
+	function withSplitLinesCollection(text: string, callback: (model: TextModel, linesCollection: ViewModelLinesFromProjectedModel) => void): void {
 		const config = new TestConfiguration({});
 		const wrappingInfo = config.options.get(EditorOption.wrappingInfo);
 		const fontInfo = config.options.get(EditorOption.fontInfo);
@@ -373,7 +373,7 @@ suite('SplitLinesCollection', () => {
 		value: number;
 	}
 
-	function assertViewLineTokens(_actual: IViewLineTokens, expected: ITestViewLineToken[]): codemavi {
+	function assertViewLineTokens(_actual: IViewLineTokens, expected: ITestViewLineToken[]): void {
 		const actual: ITestViewLineToken[] = [];
 		for (let i = 0, len = _actual.getCount(); i < len; i++) {
 			actual[i] = {
@@ -391,7 +391,7 @@ suite('SplitLinesCollection', () => {
 		tokens: ITestViewLineToken[];
 	}
 
-	function assertMinimapLineRenderingData(actual: ViewLineData, expected: ITestMinimapLineRenderingData | null): codemavi {
+	function assertMinimapLineRenderingData(actual: ViewLineData, expected: ITestMinimapLineRenderingData | null): void {
 		if (actual === null && expected === null) {
 			assert.ok(true);
 			return;
@@ -405,14 +405,14 @@ suite('SplitLinesCollection', () => {
 		assertViewLineTokens(actual.tokens, expected.tokens);
 	}
 
-	function assertMinimapLinesRenderingData(actual: ViewLineData[], expected: Array<ITestMinimapLineRenderingData | null>): codemavi {
+	function assertMinimapLinesRenderingData(actual: ViewLineData[], expected: Array<ITestMinimapLineRenderingData | null>): void {
 		assert.strictEqual(actual.length, expected.length);
 		for (let i = 0; i < expected.length; i++) {
 			assertMinimapLineRenderingData(actual[i], expected[i]);
 		}
 	}
 
-	function assertAllMinimapLinesRenderingData(splitLinesCollection: ViewModelLinesFromProjectedModel, all: ITestMinimapLineRenderingData[]): codemavi {
+	function assertAllMinimapLinesRenderingData(splitLinesCollection: ViewModelLinesFromProjectedModel, all: ITestMinimapLineRenderingData[]): void {
 		const lineCount = all.length;
 		for (let line = 1; line <= lineCount; line++) {
 			assert.strictEqual(splitLinesCollection.getViewLineData(line).content, splitLinesCollection.getViewLineContent(line));
@@ -944,7 +944,7 @@ suite('SplitLinesCollection', () => {
 		});
 	});
 
-	function withSplitLinesCollection(model: TextModel, wordWrap: 'on' | 'off' | 'wordWrapColumn' | 'bounded', wordWrapColumn: number, callback: (splitLinesCollection: ViewModelLinesFromProjectedModel) => codemavi): codemavi {
+	function withSplitLinesCollection(model: TextModel, wordWrap: 'on' | 'off' | 'wordWrapColumn' | 'bounded', wordWrapColumn: number, callback: (splitLinesCollection: ViewModelLinesFromProjectedModel) => void): void {
 		const configuration = new TestConfiguration({
 			wordWrap: wordWrap,
 			wordWrapColumn: wordWrapColumn,

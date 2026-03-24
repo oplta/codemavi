@@ -73,7 +73,7 @@ export class IssueReporterModel {
 		return this._data;
 	}
 
-	update(newData: Partial<IssueReporterData>): codemavi {
+	update(newData: Partial<IssueReporterData>): void {
 		Object.assign(this._data, newData);
 	}
 

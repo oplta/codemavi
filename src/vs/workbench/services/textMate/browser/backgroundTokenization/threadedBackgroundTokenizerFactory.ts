@@ -38,7 +38,7 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 	private _grammarDefinitions: IValidGrammarDefinition[] = [];
 
 	constructor(
-		private readonly _reportTokenizationTime: (timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean) => codemavi,
+		private readonly _reportTokenizationTime: (timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean) => void,
 		private readonly _shouldTokenizeAsync: () => boolean,
 		@IExtensionResourceLoaderService private readonly _extensionResourceLoaderService: IExtensionResourceLoaderService,
 		@IConfigurationService private readonly _configurationService: IConfigurationService,
@@ -49,7 +49,7 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 	) {
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._disposeWorker();
 	}
 
@@ -105,12 +105,12 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 		};
 	}
 
-	public setGrammarDefinitions(grammarDefinitions: IValidGrammarDefinition[]): codemavi {
+	public setGrammarDefinitions(grammarDefinitions: IValidGrammarDefinition[]): void {
 		this._grammarDefinitions = grammarDefinitions;
 		this._disposeWorker();
 	}
 
-	public acceptTheme(theme: IRawTheme, colorMap: string[]): codemavi {
+	public acceptTheme(theme: IRawTheme, colorMap: string[]): void {
 		this._currentTheme = theme;
 		this._currentTokenColorMap = colorMap;
 		if (this._currentTheme && this._currentTokenColorMap && this._workerProxy) {
@@ -146,7 +146,7 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 				const resource = URI.revive(_resource);
 				return this._extensionResourceLoaderService.readExtensionResource(resource);
 			},
-			$setTokensAndStates: async (controllerId: number, versionId: number, tokens: Uint8Array, lineEndStateDeltas: StateDeltas[]): Promise<codemavi> => {
+			$setTokensAndStates: async (controllerId: number, versionId: number, tokens: Uint8Array, lineEndStateDeltas: StateDeltas[]): Promise<void> => {
 				const controller = this._workerTokenizerControllers.get(controllerId);
 				// When a model detaches, it is removed synchronously from the map.
 				// However, the worker might still be sending tokens for that model,
@@ -155,7 +155,7 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 					controller.setTokensAndStates(controllerId, versionId, tokens, lineEndStateDeltas);
 				}
 			},
-			$reportTokenizationTime: (timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): codemavi => {
+			$reportTokenizationTime: (timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): void => {
 				this._reportTokenizationTime(timeMs, languageId, sourceExtensionId, lineLength, isRandomSample);
 			}
 		});
@@ -172,7 +172,7 @@ export class ThreadedBackgroundTokenizerFactory implements IDisposable {
 		return worker.proxy;
 	}
 
-	private _disposeWorker(): codemavi {
+	private _disposeWorker(): void {
 		for (const controller of this._workerTokenizerControllers.values()) {
 			controller.dispose();
 		}

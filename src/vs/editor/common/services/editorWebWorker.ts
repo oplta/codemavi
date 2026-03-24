@@ -73,7 +73,7 @@ export class EditorWorker implements IDisposable, IWorkerTextModelSyncChannelSer
 		private readonly _foreignModule: any | null = null
 	) { }
 
-	dispose(): codemavi {
+	dispose(): void {
 	}
 
 	public async $ping() {
@@ -88,15 +88,15 @@ export class EditorWorker implements IDisposable, IWorkerTextModelSyncChannelSer
 		return this._workerTextModelSyncServer.getModels();
 	}
 
-	public $acceptNewModel(data: IRawModelData): codemavi {
+	public $acceptNewModel(data: IRawModelData): void {
 		this._workerTextModelSyncServer.$acceptNewModel(data);
 	}
 
-	public $acceptModelChanged(uri: string, e: IModelChangedEvent): codemavi {
+	public $acceptModelChanged(uri: string, e: IModelChangedEvent): void {
 		this._workerTextModelSyncServer.$acceptModelChanged(uri, e);
 	}
 
-	public $acceptRemovedModel(uri: string): codemavi {
+	public $acceptRemovedModel(uri: string): void {
 		this._workerTextModelSyncServer.$acceptRemovedModel(uri);
 	}
 
@@ -522,7 +522,7 @@ export class EditorWorker implements IDisposable, IWorkerTextModelSyncChannelSer
 }
 
 // This is only available in a Web Worker
-declare function importScripts(...urls: string[]): codemavi;
+declare function importScripts(...urls: string[]): void;
 
 if (typeof importScripts === 'function') {
 	// Running in a web worker

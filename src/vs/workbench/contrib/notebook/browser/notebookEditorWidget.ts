@@ -108,7 +108,7 @@ import { InlineCompletionsController } from '../../../../editor/contrib/inlineCo
 const $ = DOM.$;
 
 export function getDefaultNotebookCreationOptions(): INotebookEditorCreationOptions {
-	// We inlined the id to acodemavi loading comment contrib in tests
+	// We inlined the id to avoid loading comment contrib in tests
 	const skipContributions = [
 		'editor.contrib.review',
 		FloatingEditorClickMenu.ID,
@@ -145,32 +145,32 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	readonly onWillChangeModel: Event<NotebookTextModel | undefined> = this._onWillChangeModel.event;
 	private readonly _onDidChangeModel = this._register(new Emitter<NotebookTextModel | undefined>());
 	readonly onDidChangeModel: Event<NotebookTextModel | undefined> = this._onDidChangeModel.event;
-	private readonly _onDidAttachViewModel = this._register(new Emitter<codemavi>());
-	readonly onDidAttachViewModel: Event<codemavi> = this._onDidAttachViewModel.event;
-	private readonly _onDidChangeOptions = this._register(new Emitter<codemavi>());
-	readonly onDidChangeOptions: Event<codemavi> = this._onDidChangeOptions.event;
-	private readonly _onDidChangeDecorations = this._register(new Emitter<codemavi>());
-	readonly onDidChangeDecorations: Event<codemavi> = this._onDidChangeDecorations.event;
-	private readonly _onDidScroll = this._register(new Emitter<codemavi>());
-	readonly onDidScroll: Event<codemavi> = this._onDidScroll.event;
-	private readonly _onDidChangeLayout = this._register(new Emitter<codemavi>());
-	readonly onDidChangeLayout: Event<codemavi> = this._onDidChangeLayout.event;
-	private readonly _onDidChangeActiveCell = this._register(new Emitter<codemavi>());
-	readonly onDidChangeActiveCell: Event<codemavi> = this._onDidChangeActiveCell.event;
-	private readonly _onDidChangeFocus = this._register(new Emitter<codemavi>());
-	readonly onDidChangeFocus: Event<codemavi> = this._onDidChangeFocus.event;
-	private readonly _onDidChangeSelection = this._register(new Emitter<codemavi>());
-	readonly onDidChangeSelection: Event<codemavi> = this._onDidChangeSelection.event;
-	private readonly _onDidChangeVisibleRanges = this._register(new Emitter<codemavi>());
-	readonly onDidChangeVisibleRanges: Event<codemavi> = this._onDidChangeVisibleRanges.event;
-	private readonly _onDidFocusEmitter = this._register(new Emitter<codemavi>());
+	private readonly _onDidAttachViewModel = this._register(new Emitter<void>());
+	readonly onDidAttachViewModel: Event<void> = this._onDidAttachViewModel.event;
+	private readonly _onDidChangeOptions = this._register(new Emitter<void>());
+	readonly onDidChangeOptions: Event<void> = this._onDidChangeOptions.event;
+	private readonly _onDidChangeDecorations = this._register(new Emitter<void>());
+	readonly onDidChangeDecorations: Event<void> = this._onDidChangeDecorations.event;
+	private readonly _onDidScroll = this._register(new Emitter<void>());
+	readonly onDidScroll: Event<void> = this._onDidScroll.event;
+	private readonly _onDidChangeLayout = this._register(new Emitter<void>());
+	readonly onDidChangeLayout: Event<void> = this._onDidChangeLayout.event;
+	private readonly _onDidChangeActiveCell = this._register(new Emitter<void>());
+	readonly onDidChangeActiveCell: Event<void> = this._onDidChangeActiveCell.event;
+	private readonly _onDidChangeFocus = this._register(new Emitter<void>());
+	readonly onDidChangeFocus: Event<void> = this._onDidChangeFocus.event;
+	private readonly _onDidChangeSelection = this._register(new Emitter<void>());
+	readonly onDidChangeSelection: Event<void> = this._onDidChangeSelection.event;
+	private readonly _onDidChangeVisibleRanges = this._register(new Emitter<void>());
+	readonly onDidChangeVisibleRanges: Event<void> = this._onDidChangeVisibleRanges.event;
+	private readonly _onDidFocusEmitter = this._register(new Emitter<void>());
 	readonly onDidFocusWidget = this._onDidFocusEmitter.event;
-	private readonly _onDidBlurEmitter = this._register(new Emitter<codemavi>());
+	private readonly _onDidBlurEmitter = this._register(new Emitter<void>());
 	readonly onDidBlurWidget = this._onDidBlurEmitter.event;
 	private readonly _onDidChangeActiveEditor = this._register(new Emitter<this>());
 	readonly onDidChangeActiveEditor: Event<this> = this._onDidChangeActiveEditor.event;
-	private readonly _onDidChangeActiveKernel = this._register(new Emitter<codemavi>());
-	readonly onDidChangeActiveKernel: Event<codemavi> = this._onDidChangeActiveKernel.event;
+	private readonly _onDidChangeActiveKernel = this._register(new Emitter<void>());
+	readonly onDidChangeActiveKernel: Event<void> = this._onDidChangeActiveKernel.event;
 	private readonly _onMouseUp: Emitter<INotebookEditorMouseEvent> = this._register(new Emitter<INotebookEditorMouseEvent>());
 	readonly onMouseUp: Event<INotebookEditorMouseEvent> = this._onMouseUp.event;
 	private readonly _onMouseDown: Emitter<INotebookEditorMouseEvent> = this._register(new Emitter<INotebookEditorMouseEvent>());
@@ -552,11 +552,11 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return !!this._notebookViewModel;
 	}
 
-	showProgress(): codemavi {
+	showProgress(): void {
 		this._currentProgress = this.editorProgressService.show(true);
 	}
 
-	hideProgress(): codemavi {
+	hideProgress(): void {
 		if (this._currentProgress) {
 			this._currentProgress.done();
 			this._currentProgress = undefined;
@@ -600,13 +600,13 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 
 	}
 
-	private _generateFontInfo(): codemavi {
+	private _generateFontInfo(): void {
 		const editorOptions = this.configurationService.getValue<IEditorOptions>('editor');
 		const targetWindow = DOM.getWindow(this.getDomNode());
 		this._fontInfo = FontMeasurements.readFontInfo(targetWindow, BareFontInfo.createFromRawSettings(editorOptions, PixelRatio.getInstance(targetWindow).value));
 	}
 
-	private _createBody(parent: HTMLElement): codemavi {
+	private _createBody(parent: HTMLElement): void {
 		this._notebookTopToolbarContainer = document.createElement('div');
 		this._notebookTopToolbarContainer.classList.add('notebook-toolbar-container');
 		this._notebookTopToolbarContainer.style.display = 'none';
@@ -639,7 +639,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this._fontInfo?.fontFamily ?? `"SF Mono", Monaco, Menlo, Consolas, "Ubuntu Mono", "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace`;
 	}
 
-	private _createLayoutStyles(): codemavi {
+	private _createLayoutStyles(): void {
 		this._styleElement = domStylesheets.createStyleSheet(this._body);
 		const {
 			cellRightMargin,
@@ -918,7 +918,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		this._styleElement.textContent = styleSheets.join('\n');
 	}
 
-	private _createCellList(): codemavi {
+	private _createCellList(): void {
 		this._body.classList.add('cell-list-container');
 		this._dndController = this._register(new CellDragAndDropController(this, this._body));
 		const getScopedContextKeyService = (container: HTMLElement) => this._list.contextKeyService.createScoped(container);
@@ -1147,15 +1147,15 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this._webview?.webview;
 	}
 
-	setEditorProgressService(editorProgressService: IEditorProgressService): codemavi {
+	setEditorProgressService(editorProgressService: IEditorProgressService): void {
 		this.editorProgressService = editorProgressService;
 	}
 
-	setParentContextKeyService(parentContextKeyService: IContextKeyService): codemavi {
+	setParentContextKeyService(parentContextKeyService: IContextKeyService): void {
 		this.scopedContextKeyService.updateParent(parentContextKeyService);
 	}
 
-	async setModel(textModel: NotebookTextModel, viewState: INotebookEditorViewState | undefined, perf?: NotebookPerfMarks, viewType?: string): Promise<codemavi> {
+	async setModel(textModel: NotebookTextModel, viewState: INotebookEditorViewState | undefined, perf?: NotebookPerfMarks, viewType?: string): Promise<void> {
 		if (this.viewModel === undefined || !this.viewModel.equal(textModel)) {
 			const oldBottomToolbarDimensions = this._notebookOptions.computeBottomToolbarDimensions(this.viewModel?.viewType);
 			this._detachModel();
@@ -1364,7 +1364,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		dispose(this._localCellStateListeners);
 		this._list.detachViewModel();
 		this.viewModel?.dispose();
-		// acodemavi event
+		// avoid event
 		this.viewModel = undefined;
 		this._webview?.dispose();
 		this._webview?.element.remove();
@@ -1373,7 +1373,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	}
 
 
-	private _updateForOptions(): codemavi {
+	private _updateForOptions(): void {
 		if (!this.viewModel) {
 			return;
 		}
@@ -1763,7 +1763,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		});
 	}
 
-	restoreListViewState(viewState: INotebookEditorViewState | undefined): codemavi {
+	restoreListViewState(viewState: INotebookEditorViewState | undefined): void {
 		if (!this.viewModel) {
 			return;
 		}
@@ -1802,7 +1802,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _restoreSelectedKernel(viewState: INotebookEditorViewState | undefined): codemavi {
+	private _restoreSelectedKernel(viewState: INotebookEditorViewState | undefined): void {
 		if (viewState?.selectedKernelId && this.textModel) {
 			const matching = this.notebookKernelService.getMatchingKernel(this.textModel);
 			const kernel = matching.all.find(k => k.id === viewState.selectedKernelId);
@@ -1872,7 +1872,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return Math.max(dimensionHeight - (this._notebookTopToolbar?.useGlobalToolbar ? /** Toolbar height */ 26 : 0), 0);
 	}
 
-	layout(dimension: DOM.Dimension, shadowElement?: HTMLElement, position?: DOM.IDomPosition): codemavi {
+	layout(dimension: DOM.Dimension, shadowElement?: HTMLElement, position?: DOM.IDomPosition): void {
 		if (!shadowElement && this._shadowElementViewInfo === null) {
 			this._dimension = dimension;
 			this._position = position;
@@ -1962,7 +1962,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private layoutContainerOverShadowElement(dimension?: DOM.Dimension, position?: DOM.IDomPosition): codemavi {
+	private layoutContainerOverShadowElement(dimension?: DOM.Dimension, position?: DOM.IDomPosition): void {
 		if (dimension && position) {
 			this._overlayContainer.style.top = `${position.top}px`;
 			this._overlayContainer.style.left = `${position.left}px`;
@@ -2024,7 +2024,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		this._isVisible = true;
 	}
 
-	private focusEditor(activeElement: CellViewModel): codemavi {
+	private focusEditor(activeElement: CellViewModel): void {
 		for (const [element, editor] of this._renderedEditors.entries()) {
 			if (element === activeElement) {
 				editor.focus();
@@ -2179,7 +2179,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		this._list.scrollToBottom();
 	}
 
-	setScrollTop(scrollTop: number): codemavi {
+	setScrollTop(scrollTop: number): void {
 		this._list.scrollTop = scrollTop;
 	}
 
@@ -2207,27 +2207,27 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		await this._list.revealCell(cell, CellRevealType.FirstLineIfOutsideViewport);
 	}
 
-	async revealLineInViewAsync(cell: ICellViewModel, line: number): Promise<codemavi> {
+	async revealLineInViewAsync(cell: ICellViewModel, line: number): Promise<void> {
 		return this._list.revealRangeInCell(cell, new Range(line, 1, line, 1), CellRevealRangeType.Default);
 	}
 
-	async revealLineInCenterAsync(cell: ICellViewModel, line: number): Promise<codemavi> {
+	async revealLineInCenterAsync(cell: ICellViewModel, line: number): Promise<void> {
 		return this._list.revealRangeInCell(cell, new Range(line, 1, line, 1), CellRevealRangeType.Center);
 	}
 
-	async revealLineInCenterIfOutsideViewportAsync(cell: ICellViewModel, line: number): Promise<codemavi> {
+	async revealLineInCenterIfOutsideViewportAsync(cell: ICellViewModel, line: number): Promise<void> {
 		return this._list.revealRangeInCell(cell, new Range(line, 1, line, 1), CellRevealRangeType.CenterIfOutsideViewport);
 	}
 
-	async revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi> {
+	async revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<void> {
 		return this._list.revealRangeInCell(cell, range, CellRevealRangeType.Default);
 	}
 
-	async revealRangeInCenterAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi> {
+	async revealRangeInCenterAsync(cell: ICellViewModel, range: Selection | Range): Promise<void> {
 		return this._list.revealRangeInCell(cell, range, CellRevealRangeType.Center);
 	}
 
-	async revealRangeInCenterIfOutsideViewportAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi> {
+	async revealRangeInCenterIfOutsideViewportAsync(cell: ICellViewModel, range: Selection | Range): Promise<void> {
 		return this._list.revealRangeInCell(cell, range, CellRevealRangeType.CenterIfOutsideViewport);
 	}
 
@@ -2267,7 +2267,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this._listViewInfoAccessor.getCellsInRange(range);
 	}
 
-	setCellEditorSelection(cell: ICellViewModel, range: Range): codemavi {
+	setCellEditorSelection(cell: ICellViewModel, range: Range): void {
 		this._list.setCellEditorSelection(cell, range);
 	}
 
@@ -2289,7 +2289,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return ret;
 	}
 
-	deltaCellContainerClassNames(cellId: string, added: string[], removed: string[], cellkind: CellKind): codemavi {
+	deltaCellContainerClassNames(cellId: string, added: string[], removed: string[], cellkind: CellKind): void {
 		if (cellkind === CellKind.Markup) {
 			this._webview?.deltaMarkupPreviewClassNames(cellId, added, removed);
 		} else {
@@ -2304,7 +2304,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	//#endregion
 
 	//#region View Zones
-	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => codemavi): codemavi {
+	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => void): void {
 		this._list.changeViewZones(callback);
 		this._onDidChangeLayout.fire();
 	}
@@ -2315,14 +2315,14 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	//#endregion
 
 	//#region Overlay
-	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => codemavi): codemavi {
+	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => void): void {
 		this._list.changeCellOverlays(callback);
 	}
 	//#endregion
 
 	//#region Kernel/Execution
 
-	private async _loadKernelPreloads(): Promise<codemavi> {
+	private async _loadKernelPreloads(): Promise<void> {
 		if (!this.hasModel()) {
 			return;
 		}
@@ -2337,7 +2337,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this.textModel && this.notebookKernelService.getSelectedOrSuggestedKernel(this.textModel);
 	}
 
-	async cancelNotebookCells(cells?: Iterable<ICellViewModel>): Promise<codemavi> {
+	async cancelNotebookCells(cells?: Iterable<ICellViewModel>): Promise<void> {
 		if (!this.viewModel || !this.hasModel()) {
 			return;
 		}
@@ -2347,7 +2347,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this.notebookExecutionService.cancelNotebookCellHandles(this.textModel, Array.from(cells).map(cell => cell.handle));
 	}
 
-	async executeNotebookCells(cells?: Iterable<ICellViewModel>): Promise<codemavi> {
+	async executeNotebookCells(cells?: Iterable<ICellViewModel>): Promise<void> {
 		if (!this.viewModel || !this.hasModel()) {
 			this.logService.info('notebookEditorWidget', 'No NotebookViewModel, cannot execute cells');
 			return;
@@ -2363,7 +2363,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	//#region Cell operations/layout API
 	private _pendingLayouts: WeakMap<ICellViewModel, IDisposable> | null = new WeakMap<ICellViewModel, IDisposable>();
 	private _layoutDisposables: Set<IDisposable> = new Set<IDisposable>();
-	async layoutNotebookCell(cell: ICellViewModel, height: number, context?: CellLayoutContext): Promise<codemavi> {
+	async layoutNotebookCell(cell: ICellViewModel, height: number, context?: CellLayoutContext): Promise<void> {
 		this._debug('layout cell', cell.handle, height);
 		const viewIndex = this._list.getViewIndex(cell);
 		if (viewIndex === undefined) {
@@ -2375,7 +2375,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 			this._pendingLayouts?.get(cell)!.dispose();
 		}
 
-		const deferred = new DeferredPromise<codemavi>();
+		const deferred = new DeferredPromise<void>();
 		const doLayout = () => {
 			if (this._isDisposed) {
 				return;
@@ -2446,7 +2446,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return undefined;
 	}
 
-	private _toggleNotebookCellSelection(selectedCell: ICellViewModel, selectFromPrevious: boolean): codemavi {
+	private _toggleNotebookCellSelection(selectedCell: ICellViewModel, selectFromPrevious: boolean): void {
 		const currentSelections = this._list.getSelectedElements();
 		const isSelected = currentSelections.includes(selectedCell);
 
@@ -2613,7 +2613,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 			const result: IInsetRenderOutput = { type: RenderOutputType.Extension, renderer, source: output, mimeType: pickedMimeTypeRenderer.mimeType };
 			const inset = this._webview?.insetMapping.get(result.source);
 			if (!inset || !inset.initialized) {
-				const p = new Promise<codemavi>(resolve => {
+				const p = new Promise<void>(resolve => {
 					this._register(Event.any(this.onDidRenderOutput, this.onDidRemoveOutput)(e => {
 						if (e.model === result.source.model) {
 							resolve();
@@ -2799,7 +2799,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		return this._webview?.findHighlightCurrent(matchIndex, ownerID ?? this.getId());
 	}
 
-	async findUnHighlightCurrent(matchIndex: number, ownerID?: string): Promise<codemavi> {
+	async findUnHighlightCurrent(matchIndex: number, ownerID?: string): Promise<void> {
 		if (!this._webview) {
 			return;
 		}
@@ -2915,7 +2915,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		await this._webview?.deleteMarkupPreviews(cells.map(cell => cell.id));
 	}
 
-	private async updateSelectedMarkdownPreviews(): Promise<codemavi> {
+	private async updateSelectedMarkdownPreviews(): Promise<void> {
 		if (!this._webview) {
 			return;
 		}
@@ -2930,7 +2930,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		await this._webview?.updateMarkupPreviewSelections(selectedCells.length > 1 ? selectedCells : []);
 	}
 
-	async createOutput(cell: CodeCellViewModel, output: IInsetRenderOutput, offset: number, createWhenIdle: boolean): Promise<codemavi> {
+	async createOutput(cell: CodeCellViewModel, output: IInsetRenderOutput, offset: number, createWhenIdle: boolean): Promise<void> {
 		this._insetModifyQueueByOutputId.queue(output.source.model.outputId, async () => {
 			if (this._isDisposed || !this._webview) {
 				return;
@@ -2988,7 +2988,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		});
 	}
 
-	async updateOutput(cell: CodeCellViewModel, output: IInsetRenderOutput, offset: number): Promise<codemavi> {
+	async updateOutput(cell: CodeCellViewModel, output: IInsetRenderOutput, offset: number): Promise<void> {
 		this._insetModifyQueueByOutputId.queue(output.source.model.outputId, async () => {
 			if (this._isDisposed || !this._webview || cell.isOutputCollapsed) {
 				return;
@@ -3018,7 +3018,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		});
 	}
 
-	async copyOutputImage(cellOutput: ICellOutputViewModel): Promise<codemavi> {
+	async copyOutputImage(cellOutput: ICellOutputViewModel): Promise<void> {
 		this._webview?.copyImage(cellOutput);
 	}
 
@@ -3158,7 +3158,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 	//#endregion
 
 	//#region BacklayerWebview delegate
-	private _updateOutputHeight(cellInfo: ICommonCellInfo, output: ICellOutputViewModel, outputHeight: number, isInit: boolean, source?: string): codemavi {
+	private _updateOutputHeight(cellInfo: ICommonCellInfo, output: ICellOutputViewModel, outputHeight: number, isInit: boolean, source?: string): void {
 		const cell = this.viewModel?.viewCells.find(vc => vc.handle === cellInfo.cellHandle);
 		if (cell && cell instanceof CodeCellViewModel) {
 			const outputIndex = cell.outputsViewModels.indexOf(output);
@@ -3207,7 +3207,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _setMarkupCellEditState(cellId: string, editState: CellEditState): codemavi {
+	private _setMarkupCellEditState(cellId: string, editState: CellEditState): void {
 		const cell = this._getCellById(cellId);
 		if (cell instanceof MarkupCellViewModel) {
 			this.revealInView(cell);
@@ -3215,7 +3215,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi {
+	private _didStartDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void {
 		const cell = this._getCellById(cellId);
 		if (cell instanceof MarkupCellViewModel) {
 			const webviewOffset = this._list.webviewElement ? -parseInt(this._list.webviewElement.domNode.style.top, 10) : 0;
@@ -3223,7 +3223,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): codemavi {
+	private _didDragMarkupCell(cellId: string, event: { dragOffsetY: number }): void {
 		const cell = this._getCellById(cellId);
 		if (cell instanceof MarkupCellViewModel) {
 			const webviewOffset = this._list.webviewElement ? -parseInt(this._list.webviewElement.domNode.style.top, 10) : 0;
@@ -3231,7 +3231,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _didDropMarkupCell(cellId: string, event: { dragOffsetY: number; ctrlKey: boolean; altKey: boolean }): codemavi {
+	private _didDropMarkupCell(cellId: string, event: { dragOffsetY: number; ctrlKey: boolean; altKey: boolean }): void {
 		const cell = this._getCellById(cellId);
 		if (cell instanceof MarkupCellViewModel) {
 			const webviewOffset = this._list.webviewElement ? -parseInt(this._list.webviewElement.domNode.style.top, 10) : 0;
@@ -3240,21 +3240,21 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 	}
 
-	private _didEndDragMarkupCell(cellId: string): codemavi {
+	private _didEndDragMarkupCell(cellId: string): void {
 		const cell = this._getCellById(cellId);
 		if (cell instanceof MarkupCellViewModel) {
 			this._dndController?.endExplicitDrag(cell);
 		}
 	}
 
-	private _didResizeOutput(cellId: string): codemavi {
+	private _didResizeOutput(cellId: string): void {
 		const cell = this._getCellById(cellId);
 		if (cell) {
 			this._onDidResizeOutputEmitter.fire(cell);
 		}
 	}
 
-	private _updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): codemavi {
+	private _updatePerformanceMetadata(cellId: string, executionId: string, duration: number, rendererId: string): void {
 		if (!this.hasModel()) {
 			return;
 		}

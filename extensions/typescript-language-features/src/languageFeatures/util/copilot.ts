@@ -95,7 +95,7 @@ export class CompositeCommand implements Command {
 	public static readonly ID = '_typescript.compositeCommand';
 	public readonly id = CompositeCommand.ID;
 
-	public async execute(...commands: vscode.Command[]): Promise<codemavi> {
+	public async execute(...commands: vscode.Command[]): Promise<void> {
 		for (const command of commands) {
 			await vscode.commands.executeCommand(
 				command.command,

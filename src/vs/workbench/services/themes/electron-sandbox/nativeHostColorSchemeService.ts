@@ -21,7 +21,7 @@ export class NativeHostColorSchemeService extends Disposable implements IHostCol
 
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _onDidChangeColorScheme = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeColorScheme = this._register(new Emitter<void>());
 	readonly onDidChangeColorScheme = this._onDidChangeColorScheme.event;
 
 	public dark: boolean;

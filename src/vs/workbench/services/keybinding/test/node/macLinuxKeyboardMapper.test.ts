@@ -36,11 +36,11 @@ suite('keyboardMapper - MAC de_ch', () => {
 		return assertMapping(WRITE_FILE_IF_DIFFERENT, mapper, 'mac_de_ch.txt');
 	});
 
-	function assertKeybindingTranslation(kb: number, expected: string | string[]): codemavi {
+	function assertKeybindingTranslation(kb: number, expected: string | string[]): void {
 		_assertKeybindingTranslation(mapper, OperatingSystem.Macintosh, kb, expected);
 	}
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Macintosh)!, expected);
 	}
 
@@ -533,11 +533,11 @@ suite('keyboardMapper - LINUX de_ch', () => {
 		return assertMapping(WRITE_FILE_IF_DIFFERENT, mapper, 'linux_de_ch.txt');
 	});
 
-	function assertKeybindingTranslation(kb: number, expected: string | string[]): codemavi {
+	function assertKeybindingTranslation(kb: number, expected: string | string[]): void {
 		_assertKeybindingTranslation(mapper, OperatingSystem.Linux, kb, expected);
 	}
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Linux)!, expected);
 	}
 
@@ -914,7 +914,7 @@ suite('keyboardMapper - LINUX en_us', () => {
 		return assertMapping(WRITE_FILE_IF_DIFFERENT, mapper, 'linux_en_us.txt');
 	});
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Linux)!, expected);
 	}
 
@@ -1581,7 +1581,7 @@ suite('keyboardMapper', () => {
 	test('issue #24064: NumLock/NumPad keys stopped working in 1.11 on Linux', () => {
 		const mapper = new MacLinuxKeyboardMapper(false, {}, false, OperatingSystem.Linux);
 
-		function assertNumpadKeyboardEvent(keyCode: KeyCode, code: string, label: string, electronAccelerator: string | null, userSettingsLabel: string, dispatch: string): codemavi {
+		function assertNumpadKeyboardEvent(keyCode: KeyCode, code: string, label: string, electronAccelerator: string | null, userSettingsLabel: string, dispatch: string): void {
 			assertResolveKeyboardEvent(
 				mapper,
 				{
@@ -1623,7 +1623,7 @@ suite('keyboardMapper', () => {
 	test('issue #24107: Delete, Insert, Home, End, PgUp, PgDn, and arrow keys no longer work editor in 1.11', () => {
 		const mapper = new MacLinuxKeyboardMapper(false, {}, false, OperatingSystem.Linux);
 
-		function assertKeyboardEvent(keyCode: KeyCode, code: string, label: string, electronAccelerator: string, userSettingsLabel: string, dispatch: string): codemavi {
+		function assertKeyboardEvent(keyCode: KeyCode, code: string, label: string, electronAccelerator: string, userSettingsLabel: string, dispatch: string): void {
 			assertResolveKeyboardEvent(
 				mapper,
 				{
@@ -1690,7 +1690,7 @@ suite('keyboardMapper - LINUX ru', () => {
 		return assertMapping(WRITE_FILE_IF_DIFFERENT, mapper, 'linux_ru.txt');
 	});
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Linux)!, expected);
 	}
 
@@ -1768,7 +1768,7 @@ suite('keyboardMapper - MAC zh_hant', () => {
 		return assertMapping(WRITE_FILE_IF_DIFFERENT, mapper, 'mac_zh_hant.txt');
 	});
 
-	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): codemavi {
+	function _assertResolveKeybinding(k: number, expected: IResolvedKeybinding[]): void {
 		assertResolveKeybinding(mapper, decodeKeybinding(k, OperatingSystem.Macintosh)!, expected);
 	}
 
@@ -1805,7 +1805,7 @@ suite('keyboardMapper - MAC zh_hant2', () => {
 	});
 });
 
-function _assertKeybindingTranslation(mapper: MacLinuxKeyboardMapper, OS: OperatingSystem, kb: number, _expected: string | string[]): codemavi {
+function _assertKeybindingTranslation(mapper: MacLinuxKeyboardMapper, OS: OperatingSystem, kb: number, _expected: string | string[]): void {
 	let expected: string[];
 	if (typeof _expected === 'string') {
 		expected = [_expected];

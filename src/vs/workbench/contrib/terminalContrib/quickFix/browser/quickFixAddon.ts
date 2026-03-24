@@ -48,12 +48,12 @@ const quickFixClasses = [
 export interface ITerminalQuickFixAddon {
 	readonly onDidRequestRerunCommand: Event<{ command: string; shouldExecute?: boolean }>;
 	readonly onDidUpdateQuickFixes: Event<{ command: ITerminalCommand; actions: ITerminalAction[] | undefined }>;
-	showMenu(): codemavi;
+	showMenu(): void;
 	/**
 	 * Registers a listener on onCommandFinished scoped to a particular command or regular
 	 * expression and provides a callback to be executed for commands that match.
 	 */
-	registerCommandFinishedListener(options: ITerminalQuickFixOptions): codemavi;
+	registerCommandFinishedListener(options: ITerminalQuickFixOptions): void;
 }
 
 export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon, ITerminalQuickFixAddon {
@@ -114,11 +114,11 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 		this._register(this._quickFixService.onDidUnregisterProvider(id => this._commandListeners.delete(id)));
 	}
 
-	activate(terminal: Terminal): codemavi {
+	activate(terminal: Terminal): void {
 		this._terminal = terminal;
 	}
 
-	showMenu(): codemavi {
+	showMenu(): void {
 		if (!this._currentRenderContext) {
 			return;
 		}
@@ -144,7 +144,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 		this._actionWidgetService.show('quickFixWidget', false, toActionWidgetItems(actionSet.validActions, true), delegate, this._currentRenderContext.anchor, this._currentRenderContext.parentElement);
 	}
 
-	registerCommandSelector(selector: ITerminalCommandSelector): codemavi {
+	registerCommandSelector(selector: ITerminalCommandSelector): void {
 		if (this._registeredSelectors.has(selector.id)) {
 			return;
 		}
@@ -162,7 +162,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 		this._commandListeners.set(matcherKey, currentOptions);
 	}
 
-	registerCommandFinishedListener(options: ITerminalQuickFixOptions | ITerminalQuickFixResolvedExtensionOptions): codemavi {
+	registerCommandFinishedListener(options: ITerminalQuickFixOptions | ITerminalQuickFixResolvedExtensionOptions): void {
 		const matcherKey = options.commandLineMatcher.toString();
 		let currentOptions = this._commandListeners.get(matcherKey) || [];
 		// removes the unresolved options
@@ -171,7 +171,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 		this._commandListeners.set(matcherKey, currentOptions);
 	}
 
-	private _registerCommandHandlers(): codemavi {
+	private _registerCommandHandlers(): void {
 		const terminal = this._terminal;
 		const commandDetection = this._capabilities.get(TerminalCapability.CommandDetection);
 		if (!terminal || !commandDetection) {
@@ -184,7 +184,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 	 * Resolves quick fixes, if any, based on the
 	 * @param command & its output
 	 */
-	private async _resolveQuickFixes(command: ITerminalCommand, aliases?: string[][]): Promise<codemavi> {
+	private async _resolveQuickFixes(command: ITerminalCommand, aliases?: string[][]): Promise<void> {
 		const terminal = this._terminal;
 		if (!terminal || command.wasReplayed) {
 			return;
@@ -220,7 +220,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 		this._quickFixes = undefined;
 	}
 
-	private _disposeQuickFix(command: ITerminalCommand, id: string): codemavi {
+	private _disposeQuickFix(command: ITerminalCommand, id: string): void {
 		type QuickFixResultTelemetryEvent = {
 			quickFixId: string;
 			ranQuickFix: boolean;
@@ -246,7 +246,7 @@ export class TerminalQuickFixAddon extends Disposable implements ITerminalAddon,
 	/**
 	 * Registers a decoration with the quick fixes
 	 */
-	private _registerQuickFixDecoration(): codemavi {
+	private _registerQuickFixDecoration(): void {
 		if (!this._terminal) {
 			return;
 		}

@@ -16,7 +16,7 @@ import { ViewportData } from '../../common/viewLayout/viewLinesViewportData.js';
  */
 export interface IVisibleLine extends ILine {
 	getDomNode(): HTMLElement | null;
-	setDomNode(domNode: HTMLElement): codemavi;
+	setDomNode(domNode: HTMLElement): void;
 
 	/**
 	 * Return null if the HTML should not be touched.
@@ -27,12 +27,12 @@ export interface IVisibleLine extends ILine {
 	/**
 	 * Layout the line.
 	 */
-	layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): codemavi;
+	layoutLine(lineNumber: number, deltaTop: number, lineHeight: number): void;
 }
 
 export interface ILine {
-	onContentChanged(): codemavi;
-	onTokensChanged(): codemavi;
+	onContentChanged(): void;
+	onTokensChanged(): void;
 }
 
 export interface ILineFactory<T extends ILine> {
@@ -49,11 +49,11 @@ export class RenderedLinesCollection<T extends ILine> {
 		this._set(1, []);
 	}
 
-	public flush(): codemavi {
+	public flush(): void {
 		this._set(1, []);
 	}
 
-	_set(rendLineNumberStart: number, lines: T[]): codemavi {
+	_set(rendLineNumberStart: number, lines: T[]): void {
 		this._lines = lines;
 		this._rendLineNumberStart = rendLineNumberStart;
 	}
@@ -350,7 +350,7 @@ export class VisibleLinesCollection<T extends IVisibleLine> {
 		return this._linesCollection.getLine(lineNumber);
 	}
 
-	public renderLines(viewportData: ViewportData): codemavi {
+	public renderLines(viewportData: ViewportData): void {
 
 		const inp = this._linesCollection._get();
 
@@ -461,7 +461,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		return ctx;
 	}
 
-	private _renderUntouchedLines(ctx: IRendererContext<T>, startIndex: number, endIndex: number, deltaTop: number[], deltaLN: number): codemavi {
+	private _renderUntouchedLines(ctx: IRendererContext<T>, startIndex: number, endIndex: number, deltaTop: number[], deltaLN: number): void {
 		const rendLineNumberStart = ctx.rendLineNumberStart;
 		const lines = ctx.lines;
 
@@ -471,7 +471,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		}
 	}
 
-	private _insertLinesBefore(ctx: IRendererContext<T>, fromLineNumber: number, toLineNumber: number, deltaTop: number[], deltaLN: number): codemavi {
+	private _insertLinesBefore(ctx: IRendererContext<T>, fromLineNumber: number, toLineNumber: number, deltaTop: number[], deltaLN: number): void {
 		const newLines: T[] = [];
 		let newLinesLen = 0;
 		for (let lineNumber = fromLineNumber; lineNumber <= toLineNumber; lineNumber++) {
@@ -480,7 +480,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		ctx.lines = newLines.concat(ctx.lines);
 	}
 
-	private _removeLinesBefore(ctx: IRendererContext<T>, removeCount: number): codemavi {
+	private _removeLinesBefore(ctx: IRendererContext<T>, removeCount: number): void {
 		for (let i = 0; i < removeCount; i++) {
 			const lineDomNode = ctx.lines[i].getDomNode();
 			lineDomNode?.remove();
@@ -488,7 +488,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		ctx.lines.splice(0, removeCount);
 	}
 
-	private _insertLinesAfter(ctx: IRendererContext<T>, fromLineNumber: number, toLineNumber: number, deltaTop: number[], deltaLN: number): codemavi {
+	private _insertLinesAfter(ctx: IRendererContext<T>, fromLineNumber: number, toLineNumber: number, deltaTop: number[], deltaLN: number): void {
 		const newLines: T[] = [];
 		let newLinesLen = 0;
 		for (let lineNumber = fromLineNumber; lineNumber <= toLineNumber; lineNumber++) {
@@ -497,7 +497,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		ctx.lines = ctx.lines.concat(newLines);
 	}
 
-	private _removeLinesAfter(ctx: IRendererContext<T>, removeCount: number): codemavi {
+	private _removeLinesAfter(ctx: IRendererContext<T>, removeCount: number): void {
 		const removeIndex = ctx.linesLength - removeCount;
 
 		for (let i = 0; i < removeCount; i++) {
@@ -507,7 +507,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		ctx.lines.splice(removeIndex, removeCount);
 	}
 
-	private _finishRenderingNewLines(ctx: IRendererContext<T>, domNodeIsEmpty: boolean, newLinesHTML: string | TrustedHTML, wasNew: boolean[]): codemavi {
+	private _finishRenderingNewLines(ctx: IRendererContext<T>, domNodeIsEmpty: boolean, newLinesHTML: string | TrustedHTML, wasNew: boolean[]): void {
 		if (ViewLayerRenderer._ttPolicy) {
 			newLinesHTML = ViewLayerRenderer._ttPolicy.createHTML(newLinesHTML as string);
 		}
@@ -528,7 +528,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 		}
 	}
 
-	private _finishRenderingInvalidLines(ctx: IRendererContext<T>, invalidLinesHTML: string | TrustedHTML, wasInvalid: boolean[]): codemavi {
+	private _finishRenderingInvalidLines(ctx: IRendererContext<T>, invalidLinesHTML: string | TrustedHTML, wasInvalid: boolean[]): void {
 		const hugeDomNode = document.createElement('div');
 
 		if (ViewLayerRenderer._ttPolicy) {
@@ -549,7 +549,7 @@ class ViewLayerRenderer<T extends IVisibleLine> {
 
 	private static readonly _sb = new StringBuilder(100000);
 
-	private _finishRendering(ctx: IRendererContext<T>, domNodeIsEmpty: boolean, deltaTop: number[]): codemavi {
+	private _finishRendering(ctx: IRendererContext<T>, domNodeIsEmpty: boolean, deltaTop: number[]): void {
 
 		const sb = ViewLayerRenderer._sb;
 		const linesLength = ctx.linesLength;

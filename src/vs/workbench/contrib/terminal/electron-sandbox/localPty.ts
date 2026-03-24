@@ -23,29 +23,29 @@ export class LocalPty extends BasePty implements ITerminalChildProcess {
 		return this._proxy.start(this.id);
 	}
 
-	detach(forcePersist?: boolean): Promise<codemavi> {
+	detach(forcePersist?: boolean): Promise<void> {
 		return this._proxy.detachFromProcess(this.id, forcePersist);
 	}
 
-	shutdown(immediate: boolean): codemavi {
+	shutdown(immediate: boolean): void {
 		this._proxy.shutdown(this.id, immediate);
 	}
 
-	async processBinary(data: string): Promise<codemavi> {
+	async processBinary(data: string): Promise<void> {
 		if (this._inReplay) {
 			return;
 		}
 		return this._proxy.processBinary(this.id, data);
 	}
 
-	input(data: string): codemavi {
+	input(data: string): void {
 		if (this._inReplay) {
 			return;
 		}
 		this._proxy.input(this.id, data);
 	}
 
-	resize(cols: number, rows: number): codemavi {
+	resize(cols: number, rows: number): void {
 		if (this._inReplay || this._lastDimensions.cols === cols && this._lastDimensions.rows === rows) {
 			return;
 		}
@@ -54,7 +54,7 @@ export class LocalPty extends BasePty implements ITerminalChildProcess {
 		this._proxy.resize(this.id, cols, rows);
 	}
 
-	async clearBuffer(): Promise<codemavi> {
+	async clearBuffer(): Promise<void> {
 		this._proxy.clearBuffer?.(this.id);
 	}
 
@@ -69,18 +69,18 @@ export class LocalPty extends BasePty implements ITerminalChildProcess {
 		return this._proxy.refreshProperty(this.id, type);
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
 		return this._proxy.updateProperty(this.id, type, value);
 	}
 
-	acknowledgeDataEvent(charCount: number): codemavi {
+	acknowledgeDataEvent(charCount: number): void {
 		if (this._inReplay) {
 			return;
 		}
 		this._proxy.acknowledgeDataEvent(this.id, charCount);
 	}
 
-	setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
+	setUnicodeVersion(version: '6' | '11'): Promise<void> {
 		return this._proxy.setUnicodeVersion(this.id, version);
 	}
 

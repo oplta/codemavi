@@ -109,7 +109,7 @@
 		const TOGGLE_DEV_TOOLS_KB_ALT = '123'; // F12
 		const RELOAD_KB = (safeProcess.platform === 'darwin' ? 'meta-82' : 'ctrl-82'); // mac: Cmd-R, rest: Ctrl-R
 
-		let listener: ((e: KeyboardEvent) => codemavi) | undefined = function (e) {
+		let listener: ((e: KeyboardEvent) => void) | undefined = function (e) {
 			const key = extractKey(e);
 			if (key === TOGGLE_DEV_TOOLS_KB || key === TOGGLE_DEV_TOOLS_KB_ALT) {
 				ipcRenderer.send('vscode:toggleDevTools');
@@ -128,7 +128,7 @@
 		};
 	}
 
-	function setupNLS<T extends ISandboxConfiguration>(configuration: T): codemavi {
+	function setupNLS<T extends ISandboxConfiguration>(configuration: T): void {
 		globalThis._VSCODE_NLS_MESSAGES = configuration.nls.messages;
 		globalThis._VSCODE_NLS_LANGUAGE = configuration.nls.language;
 
@@ -142,7 +142,7 @@
 		window.document.documentElement.setAttribute('lang', language);
 	}
 
-	function onUnexpectedError(error: string | Error, showDevtoolsOnError: boolean): codemavi {
+	function onUnexpectedError(error: string | Error, showDevtoolsOnError: boolean): void {
 		if (showDevtoolsOnError) {
 			const ipcRenderer = preloadGlobals.ipcRenderer;
 			ipcRenderer.send('vscode:openDevTools');

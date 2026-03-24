@@ -39,7 +39,7 @@ export class Server extends IPCServer {
 
 			client?.dispose();
 
-			const onDidClientReconnect = new Emitter<codemavi>();
+			const onDidClientReconnect = new Emitter<void>();
 			Server.Clients.set(id, toDisposable(() => onDidClientReconnect.fire()));
 
 			const onMessage = createScopedOnMessageEvent(id, 'vscode:message') as Event<VSBuffer>;

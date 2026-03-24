@@ -15,7 +15,7 @@ export class InternalEditorAction implements IEditorAction {
 		public readonly alias: string,
 		public readonly metadata: ICommandMetadata | undefined,
 		private readonly _precondition: ContextKeyExpression | undefined,
-		private readonly _run: (args: unknown) => Promise<codemavi>,
+		private readonly _run: (args: unknown) => Promise<void>,
 		private readonly _contextKeyService: IContextKeyService
 	) { }
 
@@ -23,7 +23,7 @@ export class InternalEditorAction implements IEditorAction {
 		return this._contextKeyService.contextMatchesRules(this._precondition);
 	}
 
-	public run(args: unknown): Promise<codemavi> {
+	public run(args: unknown): Promise<void> {
 		if (!this.isSupported()) {
 			return Promise.resolve(undefined);
 		}

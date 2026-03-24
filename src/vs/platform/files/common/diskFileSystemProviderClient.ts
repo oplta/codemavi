@@ -42,7 +42,7 @@ export class DiskFileSystemProviderClient extends Disposable implements
 
 	//#region File Capabilities
 
-	readonly onDidChangeCapabilities: Event<codemavi> = Event.None;
+	readonly onDidChangeCapabilities: Event<void> = Event.None;
 
 	private _capabilities: FileSystemProviderCapabilities | undefined;
 	get capabilities(): FileSystemProviderCapabilities {
@@ -151,7 +151,7 @@ export class DiskFileSystemProviderClient extends Disposable implements
 		return stream;
 	}
 
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 		return this.channel.call('writeFile', [resource, VSBuffer.wrap(content), opts]);
 	}
 
@@ -159,7 +159,7 @@ export class DiskFileSystemProviderClient extends Disposable implements
 		return this.channel.call('open', [resource, opts]);
 	}
 
-	close(fd: number): Promise<codemavi> {
+	close(fd: number): Promise<void> {
 		return this.channel.call('close', [fd]);
 	}
 
@@ -183,19 +183,19 @@ export class DiskFileSystemProviderClient extends Disposable implements
 
 	//#region Move/Copy/Delete/Create Folder
 
-	mkdir(resource: URI): Promise<codemavi> {
+	mkdir(resource: URI): Promise<void> {
 		return this.channel.call('mkdir', [resource]);
 	}
 
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
 		return this.channel.call('delete', [resource, opts]);
 	}
 
-	rename(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	rename(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<void> {
 		return this.channel.call('rename', [resource, target, opts]);
 	}
 
-	copy(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	copy(resource: URI, target: URI, opts: IFileOverwriteOptions): Promise<void> {
 		return this.channel.call('copy', [resource, target, opts]);
 	}
 
@@ -203,7 +203,7 @@ export class DiskFileSystemProviderClient extends Disposable implements
 
 	//#region Clone File
 
-	cloneFile(resource: URI, target: URI): Promise<codemavi> {
+	cloneFile(resource: URI, target: URI): Promise<void> {
 		return this.channel.call('cloneFile', [resource, target]);
 	}
 
@@ -224,7 +224,7 @@ export class DiskFileSystemProviderClient extends Disposable implements
 	// clients.
 	private readonly sessionId = generateUuid();
 
-	private registerFileChangeListeners(): codemavi {
+	private registerFileChangeListeners(): void {
 
 		// The contract for file changes is that there is one listener
 		// for both events and errors from the watcher. So we need to

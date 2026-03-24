@@ -102,7 +102,7 @@ export class ExtHostEditors extends Disposable implements ExtHostEditorsShape {
 
 	// --- called from main thread
 
-	$acceptEditorPropertiesChanged(id: string, data: IEditorPropertiesChangeData): codemavi {
+	$acceptEditorPropertiesChanged(id: string, data: IEditorPropertiesChangeData): void {
 		const textEditor = this._extHostDocumentsAndEditors.getEditor(id);
 		if (!textEditor) {
 			throw new Error('unknown text editor');
@@ -146,7 +146,7 @@ export class ExtHostEditors extends Disposable implements ExtHostEditorsShape {
 		}
 	}
 
-	$acceptEditorPositionData(data: ITextEditorPositionData): codemavi {
+	$acceptEditorPositionData(data: ITextEditorPositionData): void {
 		for (const id in data) {
 			const textEditor = this._extHostDocumentsAndEditors.getEditor(id);
 			if (!textEditor) {
@@ -160,7 +160,7 @@ export class ExtHostEditors extends Disposable implements ExtHostEditorsShape {
 		}
 	}
 
-	$acceptEditorDiffInformation(id: string, diffInformation: ITextEditorDiffInformation[] | undefined): codemavi {
+	$acceptEditorDiffInformation(id: string, diffInformation: ITextEditorDiffInformation[] | undefined): void {
 		const textEditor = this._extHostDocumentsAndEditors.getEditor(id);
 		if (!textEditor) {
 			throw new Error('unknown text editor');

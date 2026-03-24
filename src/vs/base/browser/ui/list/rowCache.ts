@@ -50,7 +50,7 @@ export class RowCache<T> implements IDisposable {
 	/**
 	 * Releases the row for eventual reuse.
 	 */
-	release(row: IRow): codemavi {
+	release(row: IRow): void {
 		if (!row) {
 			return;
 		}
@@ -61,7 +61,7 @@ export class RowCache<T> implements IDisposable {
 	/**
 	 * Begin a set of changes that use the cache. This lets us skip work when a row is removed and then inserted again.
 	 */
-	transact(makeChanges: () => codemavi) {
+	transact(makeChanges: () => void) {
 		if (this.inTransaction) {
 			throw new Error('Already in transaction');
 		}
@@ -80,7 +80,7 @@ export class RowCache<T> implements IDisposable {
 		}
 	}
 
-	private releaseRow(row: IRow): codemavi {
+	private releaseRow(row: IRow): void {
 		const { domNode, templateId } = row;
 		if (domNode) {
 			if (this.inTransaction) {
@@ -110,7 +110,7 @@ export class RowCache<T> implements IDisposable {
 		return result;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.cache.forEach((cachedRows, templateId) => {
 			for (const cachedRow of cachedRows) {
 				const renderer = this.getRenderer(templateId);

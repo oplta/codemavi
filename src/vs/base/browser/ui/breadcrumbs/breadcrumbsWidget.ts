@@ -15,9 +15,9 @@ import { ScrollbarVisibility } from '../../../common/scrollable.js';
 import './breadcrumbsWidget.css';
 
 export abstract class BreadcrumbsItem {
-	abstract dispose(): codemavi;
+	abstract dispose(): void;
 	abstract equals(other: BreadcrumbsItem): boolean;
-	abstract render(container: HTMLElement): codemavi;
+	abstract render(container: HTMLElement): void;
 }
 
 export interface IBreadcrumbsWidgetStyles {
@@ -99,7 +99,7 @@ export class BreadcrumbsWidget {
 		});
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._pendingLayout?.dispose();
 		this._pendingDimLayout?.dispose();
@@ -111,7 +111,7 @@ export class BreadcrumbsWidget {
 		this._freeNodes.length = 0;
 	}
 
-	layout(dim: dom.Dimension | undefined): codemavi {
+	layout(dim: dom.Dimension | undefined): void {
 		if (dim && dom.Dimension.equals(dim, this._dimension)) {
 			return;
 		}
@@ -146,7 +146,7 @@ export class BreadcrumbsWidget {
 		});
 	}
 
-	private _style(styleElement: HTMLStyleElement, style: IBreadcrumbsWidgetStyles): codemavi {
+	private _style(styleElement: HTMLStyleElement, style: IBreadcrumbsWidgetStyles): void {
 		let content = '';
 		if (style.breadcrumbsBackground) {
 			content += `.monaco-breadcrumbs { background-color: ${style.breadcrumbsBackground}}`;
@@ -171,7 +171,7 @@ export class BreadcrumbsWidget {
 		this._domNode.classList.toggle('disabled', !this._enabled);
 	}
 
-	domFocus(): codemavi {
+	domFocus(): void {
 		const idx = this._focusedItemIdx >= 0 ? this._focusedItemIdx : this._items.length - 1;
 		if (idx >= 0 && idx < this._items.length) {
 			this._focus(idx, undefined);
@@ -188,23 +188,23 @@ export class BreadcrumbsWidget {
 		return this._items[this._focusedItemIdx];
 	}
 
-	setFocused(item: BreadcrumbsItem | undefined, payload?: any): codemavi {
+	setFocused(item: BreadcrumbsItem | undefined, payload?: any): void {
 		this._focus(this._items.indexOf(item!), payload);
 	}
 
-	focusPrev(payload?: any): codemavi {
+	focusPrev(payload?: any): void {
 		if (this._focusedItemIdx > 0) {
 			this._focus(this._focusedItemIdx - 1, payload);
 		}
 	}
 
-	focusNext(payload?: any): codemavi {
+	focusNext(payload?: any): void {
 		if (this._focusedItemIdx + 1 < this._nodes.length) {
 			this._focus(this._focusedItemIdx + 1, payload);
 		}
 	}
 
-	private _focus(nth: number, payload: any): codemavi {
+	private _focus(nth: number, payload: any): void {
 		this._focusedItemIdx = -1;
 		for (let i = 0; i < this._nodes.length; i++) {
 			const node = this._nodes[i];
@@ -220,18 +220,18 @@ export class BreadcrumbsWidget {
 		this._onDidFocusItem.fire({ type: 'focus', item: this._items[this._focusedItemIdx], node: this._nodes[this._focusedItemIdx], payload });
 	}
 
-	reveal(item: BreadcrumbsItem): codemavi {
+	reveal(item: BreadcrumbsItem): void {
 		const idx = this._items.indexOf(item);
 		if (idx >= 0) {
 			this._reveal(idx, false);
 		}
 	}
 
-	revealLast(): codemavi {
+	revealLast(): void {
 		this._reveal(this._items.length - 1, false);
 	}
 
-	private _reveal(nth: number, minimal: boolean): codemavi {
+	private _reveal(nth: number, minimal: boolean): void {
 		if (nth < 0 || nth >= this._nodes.length) {
 			return;
 		}
@@ -252,11 +252,11 @@ export class BreadcrumbsWidget {
 		return this._items[this._selectedItemIdx];
 	}
 
-	setSelection(item: BreadcrumbsItem | undefined, payload?: any): codemavi {
+	setSelection(item: BreadcrumbsItem | undefined, payload?: any): void {
 		this._select(this._items.indexOf(item!), payload);
 	}
 
-	private _select(nth: number, payload: any): codemavi {
+	private _select(nth: number, payload: any): void {
 		this._selectedItemIdx = -1;
 		for (let i = 0; i < this._nodes.length; i++) {
 			const node = this._nodes[i];
@@ -274,7 +274,7 @@ export class BreadcrumbsWidget {
 		return this._items;
 	}
 
-	setItems(items: BreadcrumbsItem[]): codemavi {
+	setItems(items: BreadcrumbsItem[]): void {
 		let prefix: number | undefined;
 		let removed: BreadcrumbsItem[] = [];
 		try {
@@ -292,7 +292,7 @@ export class BreadcrumbsWidget {
 		}
 	}
 
-	private _render(start: number): codemavi {
+	private _render(start: number): void {
 		let didChange = false;
 		for (; start < this._items.length && start < this._nodes.length; start++) {
 			const item = this._items[start];
@@ -326,7 +326,7 @@ export class BreadcrumbsWidget {
 		}
 	}
 
-	private _renderItem(item: BreadcrumbsItem, container: HTMLDivElement): codemavi {
+	private _renderItem(item: BreadcrumbsItem, container: HTMLDivElement): void {
 		dom.clearNode(container);
 		container.className = '';
 		try {
@@ -342,7 +342,7 @@ export class BreadcrumbsWidget {
 		container.appendChild(iconContainer);
 	}
 
-	private _onClick(event: IMouseEvent): codemavi {
+	private _onClick(event: IMouseEvent): void {
 		if (!this._enabled) {
 			return;
 		}

@@ -506,7 +506,7 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		}));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		for (const value of this._providers.values()) {
 			value.disposable.dispose();
 		}
@@ -525,7 +525,7 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		});
 	}
 
-	public $registerTaskProvider(handle: number, type: string): Promise<codemavi> {
+	public $registerTaskProvider(handle: number, type: string): Promise<void> {
 		const provider: ITaskProvider = {
 			provideTasks: (validTypes: IStringDictionary<boolean>) => {
 				return Promise.resolve(this._proxy.$provideTasks(handle, validTypes)).then((value) => {
@@ -569,7 +569,7 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		return Promise.resolve(undefined);
 	}
 
-	public $unregisterTaskProvider(handle: number): Promise<codemavi> {
+	public $unregisterTaskProvider(handle: number): Promise<void> {
 		const provider = this._providers.get(handle);
 		if (provider) {
 			provider.disposable.dispose();
@@ -678,8 +678,8 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 	}
 
 
-	public $customExecutionComplete(id: string, result?: number): Promise<codemavi> {
-		return new Promise<codemavi>((resolve, reject) => {
+	public $customExecutionComplete(id: string, result?: number): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			this._taskService.getActiveTasks().then((tasks) => {
 				for (const task of tasks) {
 					if (id === task._id) {
@@ -696,8 +696,8 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		});
 	}
 
-	public $terminateTask(id: string): Promise<codemavi> {
-		return new Promise<codemavi>((resolve, reject) => {
+	public $terminateTask(id: string): Promise<void> {
+		return new Promise<void>((resolve, reject) => {
 			this._taskService.getActiveTasks().then((tasks) => {
 				for (const task of tasks) {
 					if (id === task._id) {
@@ -714,7 +714,7 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		});
 	}
 
-	public $registerTaskSystem(key: string, info: ITaskSystemInfoDTO): codemavi {
+	public $registerTaskSystem(key: string, info: ITaskSystemInfoDTO): void {
 		let platform: Platform.Platform;
 		switch (info.platform) {
 			case 'Web':
@@ -780,7 +780,7 @@ export class MainThreadTask extends Disposable implements MainThreadTaskShape {
 		});
 	}
 
-	async $registerSupportedExecutions(custom?: boolean, shell?: boolean, process?: boolean): Promise<codemavi> {
+	async $registerSupportedExecutions(custom?: boolean, shell?: boolean, process?: boolean): Promise<void> {
 		return this._taskService.registerSupportedExecutions(custom, shell, process);
 	}
 

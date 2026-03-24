@@ -21,7 +21,7 @@ export class InsertFinalNewLineAction extends EditorAction {
 		});
 	}
 
-	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): codemavi {
+	public run(_accessor: ServicesAccessor, editor: ICodeEditor, args: any): void {
 		const selection = editor.getSelection();
 		if (selection === null) {
 			return;

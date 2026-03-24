@@ -65,7 +65,7 @@ export class TypeItem {
 		readonly parent: TypeItem | undefined,
 	) { }
 
-	remove(): codemavi {
+	remove(): void {
 		this.model.remove(this);
 	}
 }
@@ -122,7 +122,7 @@ class TypesModel implements SymbolItemNavigation<TypeItem>, SymbolItemEditorHigh
 		return this._move(from, false) ?? from;
 	}
 
-	private _move(item: TypeItem, fwd: boolean): TypeItem | codemavi {
+	private _move(item: TypeItem, fwd: boolean): TypeItem | void {
 		if (item.children?.length) {
 			return fwd ? item.children[0] : tail(item.children);
 		}
@@ -161,7 +161,7 @@ class TypeItemDataProvider implements vscode.TreeDataProvider<TypeItem> {
 		this._modelListener = _model.onDidChange(e => this._emitter.fire(e instanceof TypeItem ? e : undefined));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._emitter.dispose();
 		this._modelListener.dispose();
 	}

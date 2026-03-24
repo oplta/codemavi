@@ -67,7 +67,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 
 	protected abstract onFinalBeforeShutdown(reason: ShutdownReason): boolean | Promise<boolean>;
 
-	private onWillShutdown(): codemavi {
+	private onWillShutdown(): void {
 
 		// Here we know that we will shutdown. Any backup operation that is
 		// already scheduled or being scheduled from this moment on runs
@@ -83,11 +83,11 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 
 	//#region Backup Creator
 
-	// Delay creation of backups when content changes to acodemavi too much
+	// Delay creation of backups when content changes to avoid too much
 	// load on the backup service when the user is typing into the editor
 	// Since we always schedule a backup, even when auto save is on, we
 	// have different scheduling delays based on auto save configuration.
-	// With 'delayed' we acodemavi a (not critical but also not really wanted)
+	// With 'delayed' we avoid a (not critical but also not really wanted)
 	// race between saving (after 1s per default) and making a backup of
 	// the working copy.
 	private static readonly DEFAULT_BACKUP_SCHEDULE_DELAYS = {
@@ -104,11 +104,11 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 	// Given https://github.com/microsoft/vscode/issues/158038, we explicitly
 	// do not store `IWorkingCopy` but the identifier in the map, since it
 	// looks like GC is not running for the working copy otherwise.
-	protected readonly pendingBackupOperations = new Map<IWorkingCopyIdentifier, { disposable: IDisposable; cancel: () => codemavi }>();
+	protected readonly pendingBackupOperations = new Map<IWorkingCopyIdentifier, { disposable: IDisposable; cancel: () => void }>();
 
 	private suspended = false;
 
-	private onDidRegister(workingCopy: IWorkingCopy): codemavi {
+	private onDidRegister(workingCopy: IWorkingCopy): void {
 		if (this.suspended) {
 			this.logService.warn(`[backup tracker] suspended, ignoring register event`, workingCopy.resource.toString(), workingCopy.typeId);
 			return;
@@ -119,7 +119,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		}
 	}
 
-	private onDidUnregister(workingCopy: IWorkingCopy): codemavi {
+	private onDidUnregister(workingCopy: IWorkingCopy): void {
 
 		// Remove from content version map
 		this.mapWorkingCopyToContentVersion.delete(workingCopy);
@@ -134,7 +134,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		this.discardBackup(workingCopy);
 	}
 
-	private onDidChangeDirty(workingCopy: IWorkingCopy): codemavi {
+	private onDidChangeDirty(workingCopy: IWorkingCopy): void {
 		if (this.suspended) {
 			this.logService.warn(`[backup tracker] suspended, ignoring dirty change event`, workingCopy.resource.toString(), workingCopy.typeId);
 			return;
@@ -147,7 +147,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		}
 	}
 
-	private onDidChangeContent(workingCopy: IWorkingCopy): codemavi {
+	private onDidChangeContent(workingCopy: IWorkingCopy): void {
 
 		// Increment content version ID
 		const contentVersionId = this.getContentVersion(workingCopy);
@@ -168,7 +168,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		}
 	}
 
-	private scheduleBackup(workingCopy: IWorkingCopy): codemavi {
+	private scheduleBackup(workingCopy: IWorkingCopy): void {
 
 		// Clear any running backup operation
 		this.cancelBackupOperation(workingCopy);
@@ -243,7 +243,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		return this.mapWorkingCopyToContentVersion.get(workingCopy) || 0;
 	}
 
-	private discardBackup(workingCopy: IWorkingCopy): codemavi {
+	private discardBackup(workingCopy: IWorkingCopy): void {
 
 		// Clear any running backup operation
 		this.cancelBackupOperation(workingCopy);
@@ -281,7 +281,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		}
 	}
 
-	private cancelBackupOperation(workingCopy: IWorkingCopy): codemavi {
+	private cancelBackupOperation(workingCopy: IWorkingCopy): void {
 
 		// Given a working copy we want to find the matching
 		// identifier in our pending operations map because
@@ -301,7 +301,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		}
 	}
 
-	private doClearPendingBackupOperation(workingCopyIdentifier: IWorkingCopyIdentifier, options?: { cancel: boolean }): codemavi {
+	private doClearPendingBackupOperation(workingCopyIdentifier: IWorkingCopyIdentifier, options?: { cancel: boolean }): void {
 		const pendingBackupOperation = this.pendingBackupOperations.get(workingCopyIdentifier);
 		if (!pendingBackupOperation) {
 			return;
@@ -316,7 +316,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		this.pendingBackupOperations.delete(workingCopyIdentifier);
 	}
 
-	protected cancelBackupOperations(): codemavi {
+	protected cancelBackupOperations(): void {
 		for (const [, operation] of this.pendingBackupOperations) {
 			operation.cancel();
 			operation.disposable.dispose();
@@ -325,7 +325,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		this.pendingBackupOperations.clear();
 	}
 
-	protected suspendBackupOperations(): { resume: () => codemavi } {
+	protected suspendBackupOperations(): { resume: () => void } {
 		this.suspended = true;
 
 		return { resume: () => this.suspended = false };
@@ -337,12 +337,12 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 	//#region Backup Restorer
 
 	protected readonly unrestoredBackups = new Set<IWorkingCopyIdentifier>();
-	protected readonly whenReady: Promise<codemavi>;
+	protected readonly whenReady: Promise<void>;
 
 	private _isReady = false;
 	protected get isReady(): boolean { return this._isReady; }
 
-	private async resolveBackupsToRestore(): Promise<codemavi> {
+	private async resolveBackupsToRestore(): Promise<void> {
 
 		// Wait for resolving backups until we are restored to reduce startup pressure
 		await this.lifecycleService.when(LifecyclePhase.Restored);
@@ -355,7 +355,7 @@ export abstract class WorkingCopyBackupTracker extends Disposable {
 		this._isReady = true;
 	}
 
-	protected async restoreBackups(handler: IWorkingCopyEditorHandler): Promise<codemavi> {
+	protected async restoreBackups(handler: IWorkingCopyEditorHandler): Promise<void> {
 
 		// Wait for backups to be resolved
 		await this.whenReady;

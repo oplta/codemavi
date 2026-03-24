@@ -90,7 +90,7 @@ class UpdateImportsOnFileRenameHandler extends Disposable {
 		}));
 	}
 
-	private async flushRenames(): Promise<codemavi> {
+	private async flushRenames(): Promise<void> {
 		const renames = Array.from(this._pendingRenames);
 		this._pendingRenames.clear();
 		for (const group of this.groupRenames(renames)) {

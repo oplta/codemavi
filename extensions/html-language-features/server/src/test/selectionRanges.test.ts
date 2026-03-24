@@ -9,7 +9,7 @@ import { getLanguageModes, ClientCapabilities, TextDocument, SelectionRange } fr
 import { getSelectionRanges } from '../modes/selectionRanges';
 import { getNodeFileFS } from '../node/nodeFs';
 
-async function assertRanges(content: string, expected: (number | string)[][]): Promise<codemavi> {
+async function assertRanges(content: string, expected: (number | string)[][]): Promise<void> {
 	let message = `${content} gives selection range:\n`;
 
 	const offset = content.indexOf('|');

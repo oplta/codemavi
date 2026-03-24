@@ -113,18 +113,18 @@ export interface IWorkbenchContributionsRegistry {
 	/**
 	 * @deprecated use `registerWorkbenchContribution2` instead.
 	 */
-	registerWorkbenchContribution<Services extends BrandedService[]>(contribution: IWorkbenchContributionSignature<Services>, phase: LifecyclePhase.Restored | LifecyclePhase.Eventually): codemavi;
+	registerWorkbenchContribution<Services extends BrandedService[]>(contribution: IWorkbenchContributionSignature<Services>, phase: LifecyclePhase.Restored | LifecyclePhase.Eventually): void;
 
 	/**
 	 * Starts the registry by providing the required services.
 	 */
-	start(accessor: ServicesAccessor): codemavi;
+	start(accessor: ServicesAccessor): void;
 
 	/**
 	 * A promise that resolves when all contributions up to the `Restored`
 	 * phase have been instantiated.
 	 */
-	readonly whenRestored: Promise<codemavi>;
+	readonly whenRestored: Promise<void>;
 
 	/**
 	 * Provides access to the instantiation times of all contributions by
@@ -161,14 +161,14 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 	private readonly timingsByPhase = new Map<LifecyclePhase, Array<[string /* ID */, number /* Creation Time */]>>();
 	get timings() { return this.timingsByPhase; }
 
-	private readonly pendingRestoredContributions = new DeferredPromise<codemavi>();
+	private readonly pendingRestoredContributions = new DeferredPromise<void>();
 	readonly whenRestored = this.pendingRestoredContributions.p;
 
-	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, phase: WorkbenchPhase.BlockStartup | WorkbenchPhase.BlockRestore): codemavi;
-	registerWorkbenchContribution2(id: string | undefined, ctor: IConstructorSignature<IWorkbenchContribution>, phase: WorkbenchPhase.AfterRestored | WorkbenchPhase.Eventually): codemavi;
-	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, lazy: ILazyWorkbenchContributionInstantiation): codemavi;
-	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, onEditor: IOnEditorWorkbenchContributionInstantiation): codemavi;
-	registerWorkbenchContribution2(id: string | undefined, ctor: IConstructorSignature<IWorkbenchContribution>, instantiation: WorkbenchContributionInstantiation): codemavi {
+	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, phase: WorkbenchPhase.BlockStartup | WorkbenchPhase.BlockRestore): void;
+	registerWorkbenchContribution2(id: string | undefined, ctor: IConstructorSignature<IWorkbenchContribution>, phase: WorkbenchPhase.AfterRestored | WorkbenchPhase.Eventually): void;
+	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, lazy: ILazyWorkbenchContributionInstantiation): void;
+	registerWorkbenchContribution2(id: string, ctor: IConstructorSignature<IWorkbenchContribution>, onEditor: IOnEditorWorkbenchContributionInstantiation): void;
+	registerWorkbenchContribution2(id: string | undefined, ctor: IConstructorSignature<IWorkbenchContribution>, instantiation: WorkbenchContributionInstantiation): void {
 		const contribution: IWorkbenchContributionRegistration = { id, ctor };
 
 		// Instantiate directly if we already have a matching instantiation condition
@@ -207,7 +207,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		}
 	}
 
-	registerWorkbenchContribution(ctor: IConstructorSignature<IWorkbenchContribution>, phase: LifecyclePhase.Restored | LifecyclePhase.Eventually): codemavi {
+	registerWorkbenchContribution(ctor: IConstructorSignature<IWorkbenchContribution>, phase: LifecyclePhase.Restored | LifecyclePhase.Eventually): void {
 		this.registerWorkbenchContribution2(undefined, ctor, toWorkbenchPhase(phase));
 	}
 
@@ -243,7 +243,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		return instance as T;
 	}
 
-	start(accessor: ServicesAccessor): codemavi {
+	start(accessor: ServicesAccessor): void {
 		const instantiationService = this.instantiationService = accessor.get(IInstantiationService);
 		const lifecycleService = this.lifecycleService = accessor.get(ILifecycleService);
 		const logService = this.logService = accessor.get(ILogService);
@@ -269,7 +269,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		this._register(editorPaneService.onWillInstantiateEditorPane(e => this.onEditor(e.typeId, instantiationService, lifecycleService, logService, environmentService)));
 	}
 
-	private onEditor(editorTypeId: string, instantiationService: IInstantiationService, lifecycleService: ILifecycleService, logService: ILogService, environmentService: IEnvironmentService): codemavi {
+	private onEditor(editorTypeId: string, instantiationService: IInstantiationService, lifecycleService: ILifecycleService, logService: ILogService, environmentService: IEnvironmentService): void {
 		const contributions = this.contributionsByEditor.get(editorTypeId);
 		if (contributions) {
 			this.contributionsByEditor.delete(editorTypeId);
@@ -280,7 +280,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		}
 	}
 
-	private instantiateByPhase(instantiationService: IInstantiationService, lifecycleService: ILifecycleService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): codemavi {
+	private instantiateByPhase(instantiationService: IInstantiationService, lifecycleService: ILifecycleService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): void {
 
 		// Instantiate contributions directly when phase is already reached
 		if (lifecycleService.phase >= phase) {
@@ -293,7 +293,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		}
 	}
 
-	private async doInstantiateByPhase(instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): Promise<codemavi> {
+	private async doInstantiateByPhase(instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): Promise<void> {
 		const contributions = this.contributionsByPhase.get(phase);
 		if (contributions) {
 			this.contributionsByPhase.delete(phase);
@@ -337,7 +337,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		}
 	}
 
-	private doInstantiateWhenIdle(contributions: IWorkbenchContributionRegistration[], instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): codemavi {
+	private doInstantiateWhenIdle(contributions: IWorkbenchContributionRegistration[], instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, phase: LifecyclePhase): void {
 		mark(`code/willCreateWorkbenchContributions/${phase}`);
 
 		let i = 0;
@@ -366,7 +366,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
 		runWhenGlobalIdle(instantiateSome, forcedTimeout);
 	}
 
-	private safeCreateContribution(instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, contribution: IWorkbenchContributionRegistration, phase: LifecyclePhase): codemavi {
+	private safeCreateContribution(instantiationService: IInstantiationService, logService: ILogService, environmentService: IEnvironmentService, contribution: IWorkbenchContributionRegistration, phase: LifecyclePhase): void {
 		if (typeof contribution.id === 'string' && this.instancesById.has(contribution.id)) {
 			return;
 		}
@@ -418,7 +418,7 @@ export class WorkbenchContributionsRegistry extends Disposable implements IWorkb
  * based on the `instantiation` property.
  */
 export const registerWorkbenchContribution2 = WorkbenchContributionsRegistry.INSTANCE.registerWorkbenchContribution2.bind(WorkbenchContributionsRegistry.INSTANCE) as {
-	<Services extends BrandedService[]>(id: string, ctor: IWorkbenchContributionSignature<Services>, instantiation: WorkbenchContributionInstantiation): codemavi;
+	<Services extends BrandedService[]>(id: string, ctor: IWorkbenchContributionSignature<Services>, instantiation: WorkbenchContributionInstantiation): void;
 };
 
 /**

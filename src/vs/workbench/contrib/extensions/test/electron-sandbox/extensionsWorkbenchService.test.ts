@@ -1620,7 +1620,7 @@ suite('ExtensionsWorkbenchServiceTest', () => {
 		return workbenchService;
 	}
 
-	function stubConfiguration(autoUpdateValue?: any, autoCheckUpdatesValue?: any): codemavi {
+	function stubConfiguration(autoUpdateValue?: any, autoCheckUpdatesValue?: any): void {
 		const values: any = {
 			[AutoUpdateConfigurationKey]: autoUpdateValue ?? true,
 			[AutoCheckUpdatesConfigurationKey]: autoCheckUpdatesValue ?? true

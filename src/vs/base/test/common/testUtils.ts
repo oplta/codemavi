@@ -5,7 +5,7 @@
 
 import { randomInt } from '../../common/numbers.js';
 
-export function flakySuite(title: string, fn: () => codemavi) /* Suite */ {
+export function flakySuite(title: string, fn: () => void) /* Suite */ {
 	return suite(title, function () {
 
 		// Flaky suites need retries and timeout to complete
@@ -24,7 +24,7 @@ export function flakySuite(title: string, fn: () => codemavi) /* Suite */ {
  * Helper function that allows to await for a specified amount of time.
  * @param ms The amount of time to wait in milliseconds.
  */
-export const wait = (ms: number): Promise<codemavi> => {
+export const wait = (ms: number): Promise<void> => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
 
@@ -33,7 +33,7 @@ export const wait = (ms: number): Promise<codemavi> => {
  * @param maxMs The `maximum` amount of time to wait, in milliseconds.
  * @param minMs [`optional`] The `minimum` amount of time to wait, in milliseconds.
  */
-export const waitRandom = (maxMs: number, minMs: number = 0): Promise<codemavi> => {
+export const waitRandom = (maxMs: number, minMs: number = 0): Promise<void> => {
 	return wait(randomInt(maxMs, minMs));
 };
 

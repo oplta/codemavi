@@ -18,7 +18,7 @@ export interface IUserKeybindingItem {
 
 export class KeybindingIO {
 
-	public static writeKeybindingItem(out: OutputBuilder, item: ResolvedKeybindingItem): codemavi {
+	public static writeKeybindingItem(out: OutputBuilder, item: ResolvedKeybindingItem): void {
 		if (!item.resolvedKeybinding) {
 			return;
 		}
@@ -77,11 +77,11 @@ export class OutputBuilder {
 	private _lines: string[] = [];
 	private _currentLine: string = '';
 
-	write(str: string): codemavi {
+	write(str: string): void {
 		this._currentLine += str;
 	}
 
-	writeLine(str: string = ''): codemavi {
+	writeLine(str: string = ''): void {
 		this._lines.push(this._currentLine + str);
 		this._currentLine = '';
 	}

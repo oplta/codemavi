@@ -82,7 +82,7 @@ class TestMcpHostDelegate implements IMcpHostDelegate {
 		return new TestMcpMessageTransport();
 	}
 
-	waitForInitialProviderPromises(): Promise<codemavi> {
+	waitForInitialProviderPromises(): Promise<void> {
 		return Promise.resolve();
 	}
 }
@@ -100,7 +100,7 @@ class TestDialogService implements Partial<IDialogService> {
 		});
 	}
 
-	setPromptResult(result: boolean | undefined): codemavi {
+	setPromptResult(result: boolean | undefined): void {
 		this._promptResult = result;
 	}
 

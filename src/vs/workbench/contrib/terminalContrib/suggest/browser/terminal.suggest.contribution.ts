@@ -80,7 +80,7 @@ class TerminalSuggestContribution extends DisposableStore implements ITerminalCo
 		}));
 	}
 
-	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
+	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
 		const config = this._configurationService.getValue<ITerminalSuggestConfiguration>(terminalSuggestConfigSection);
 		const enabled = config.enabled;
 		if (!enabled) {
@@ -92,7 +92,7 @@ class TerminalSuggestContribution extends DisposableStore implements ITerminalCo
 		}));
 	}
 
-	private async _loadPwshCompletionAddon(xterm: RawXtermTerminal): Promise<codemavi> {
+	private async _loadPwshCompletionAddon(xterm: RawXtermTerminal): Promise<void> {
 		// Disable when shell type is not powershell. A naive check is done for Windows PowerShell
 		// as we don't differentiate it in shellType
 		if (
@@ -141,7 +141,7 @@ class TerminalSuggestContribution extends DisposableStore implements ITerminalCo
 		}
 	}
 
-	private _loadAddons(xterm: RawXtermTerminal): codemavi {
+	private _loadAddons(xterm: RawXtermTerminal): void {
 		// Don't re-create the addon
 		if (this._addon.value) {
 			return;
@@ -185,7 +185,7 @@ class TerminalSuggestContribution extends DisposableStore implements ITerminalCo
 		}
 	}
 
-	private _refreshAddons(): codemavi {
+	private _refreshAddons(): void {
 		const addon = this._addon.value;
 		if (!addon) {
 			return;

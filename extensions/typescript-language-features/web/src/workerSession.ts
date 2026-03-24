@@ -30,13 +30,13 @@ export function startWorkerSession(
 	port: MessagePort,
 	pathMapper: PathMapper,
 	logger: Logger,
-): codemavi {
+): void {
 	const indent: (str: string) => string = (ts as any).server.indent;
 
 	const worker = new class WorkerSession extends ts.server.Session<{}> {
 
 		private readonly wasmCancellationToken: WasmCancellationToken;
-		private readonly listener: (message: any) => codemavi;
+		private readonly listener: (message: any) => void;
 
 		constructor() {
 			const cancellationToken = new WasmCancellationToken();

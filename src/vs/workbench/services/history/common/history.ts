@@ -64,12 +64,12 @@ export interface IHistoryService {
 	/**
 	 * Navigate forwards in editor navigation history.
 	 */
-	goForward(filter?: GoFilter): Promise<codemavi>;
+	goForward(filter?: GoFilter): Promise<void>;
 
 	/**
 	 * Navigate backwards in editor navigation history.
 	 */
-	goBack(filter?: GoFilter): Promise<codemavi>;
+	goBack(filter?: GoFilter): Promise<void>;
 
 	/**
 	 * Navigate between the current editor navigtion history entry
@@ -77,17 +77,17 @@ export interface IHistoryService {
 	 * like a toggle for `forward` and `back` to jump between 2 points
 	 * in editor navigation history.
 	 */
-	goPrevious(filter?: GoFilter): Promise<codemavi>;
+	goPrevious(filter?: GoFilter): Promise<void>;
 
 	/**
 	 * Navigate to the last entry in editor navigation history.
 	 */
-	goLast(filter?: GoFilter): Promise<codemavi>;
+	goLast(filter?: GoFilter): Promise<void>;
 
 	/**
 	 * Re-opens the last closed editor if any.
 	 */
-	reopenLastClosedEditor(): Promise<codemavi>;
+	reopenLastClosedEditor(): Promise<void>;
 
 	/**
 	 * Get the entire history of editors that were opened.
@@ -97,7 +97,7 @@ export interface IHistoryService {
 	/**
 	 * Removes an entry from history.
 	 */
-	removeFromHistory(input: EditorInput | IResourceEditorInput): codemavi;
+	removeFromHistory(input: EditorInput | IResourceEditorInput): void;
 
 	/**
 	 * Looking at the editor history, returns the workspace root of the last file that was
@@ -119,22 +119,22 @@ export interface IHistoryService {
 	 *
 	 * @param group optional indicator to scope to a specific group.
 	 */
-	openNextRecentlyUsedEditor(group?: GroupIdentifier): Promise<codemavi>;
+	openNextRecentlyUsedEditor(group?: GroupIdentifier): Promise<void>;
 
 	/**
 	 * Opens the previously used editor if any.
 	 *
 	 * @param group optional indicator to scope to a specific group.
 	 */
-	openPreviouslyUsedEditor(group?: GroupIdentifier): Promise<codemavi>;
+	openPreviouslyUsedEditor(group?: GroupIdentifier): Promise<void>;
 
 	/**
 	 * Clears all history.
 	 */
-	clear(): codemavi;
+	clear(): void;
 
 	/**
 	 * Clear list of recently opened editors.
 	 */
-	clearRecentlyOpened(): codemavi;
+	clearRecentlyOpened(): void;
 }

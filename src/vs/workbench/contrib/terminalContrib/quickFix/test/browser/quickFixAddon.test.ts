@@ -497,7 +497,7 @@ function createCommand(command: string, output: string, outputMatcher?: RegExp |
 }
 
 type TestAction = Pick<IAction, 'id' | 'label' | 'tooltip' | 'enabled'> & { command?: string; uri?: URI };
-function assertMatchOptions(actual: TestAction[] | undefined, expected: TestAction[]): codemavi {
+function assertMatchOptions(actual: TestAction[] | undefined, expected: TestAction[]): void {
 	strictEqual(actual?.length, expected.length);
 	for (let i = 0; i < expected.length; i++) {
 		const expectedItem = expected[i];

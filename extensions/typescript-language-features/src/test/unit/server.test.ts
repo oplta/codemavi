@@ -17,14 +17,14 @@ import { nulToken } from '../../utils/cancellation';
 
 
 const NoopTelemetryReporter = new class implements TelemetryReporter {
-	logTelemetry(): codemavi { /* noop */ }
-	dispose(): codemavi { /* noop */ }
+	logTelemetry(): void { /* noop */ }
+	dispose(): void { /* noop */ }
 };
 
 class FakeServerProcess implements TsServerProcess {
 	private readonly _out: stream.PassThrough;
 
-	private readonly writeListeners = new Set<(data: Buffer) => codemavi>();
+	private readonly writeListeners = new Set<(data: Buffer) => void>();
 	public stdout: stream.PassThrough;
 
 	constructor() {
@@ -49,7 +49,7 @@ class FakeServerProcess implements TsServerProcess {
 	onError(_handler: any) { /* noop */ }
 	onExit(_handler: any) { /* noop */ }
 
-	kill(): codemavi { /* noop */ }
+	kill(): void { /* noop */ }
 
 	public onWrite(): Promise<any> {
 		return new Promise<string>((resolve) => {

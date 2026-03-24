@@ -11,7 +11,7 @@ export const IExtensionHostStatusService = createDecorator<IExtensionHostStatusS
 export interface IExtensionHostStatusService {
 	readonly _serviceBrand: undefined;
 
-	setExitInfo(reconnectionToken: string, info: IExtensionHostExitInfo): codemavi;
+	setExitInfo(reconnectionToken: string, info: IExtensionHostExitInfo): void;
 	getExitInfo(reconnectionToken: string): IExtensionHostExitInfo | null;
 }
 
@@ -20,7 +20,7 @@ export class ExtensionHostStatusService implements IExtensionHostStatusService {
 
 	private readonly _exitInfo = new Map<string, IExtensionHostExitInfo>();
 
-	setExitInfo(reconnectionToken: string, info: IExtensionHostExitInfo): codemavi {
+	setExitInfo(reconnectionToken: string, info: IExtensionHostExitInfo): void {
 		this._exitInfo.set(reconnectionToken, info);
 	}
 

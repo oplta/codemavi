@@ -39,11 +39,11 @@ export class CompositeDragAndDrop implements ICompositeDragAndDrop {
 		private targetContainerLocation: ViewContainerLocation,
 		private orientation: ActionsOrientation,
 		private openComposite: (id: string, focus?: boolean) => Promise<IPaneComposite | null>,
-		private moveComposite: (from: string, to: string, before?: Before2D) => codemavi,
+		private moveComposite: (from: string, to: string, before?: Before2D) => void,
 		private getItems: () => ICompositeBarItem[]
 	) { }
 
-	drop(data: CompositeDragAndDropData, targetCompositeId: string | undefined, originalEvent: DragEvent, before?: Before2D): codemavi {
+	drop(data: CompositeDragAndDropData, targetCompositeId: string | undefined, originalEvent: DragEvent, before?: Before2D): void {
 		const dragData = data.getData();
 
 		if (dragData.type === 'composite') {
@@ -152,7 +152,7 @@ export interface ICompositeBarOptions {
 	readonly getCompositePinnedAction: (compositeId: string) => IAction;
 	readonly getCompositeBadgeAction: (compositeId: string) => IAction;
 	readonly getOnCompositeClickAction: (compositeId: string) => IAction;
-	readonly fillExtraContextMenuActions: (actions: IAction[], e?: MouseEvent | GestureEvent) => codemavi;
+	readonly fillExtraContextMenuActions: (actions: IAction[], e?: MouseEvent | GestureEvent) => void;
 	readonly getContextMenuActionsForComposite: (compositeId: string) => IAction[];
 
 	readonly openComposite: (compositeId: string, preserveFocus?: boolean) => Promise<IComposite | null>;
@@ -233,7 +233,7 @@ class CompositeBarDndCallbacks implements ICompositeDragAndDropObserverCallbacks
 
 export class CompositeBar extends Widget implements ICompositeBar {
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
 	private dimension: Dimension | undefined;
@@ -265,7 +265,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return [...this.model.items];
 	}
 
-	setCompositeBarItems(items: ICompositeBarItem[]): codemavi {
+	setCompositeBarItems(items: ICompositeBarItem[]): void {
 		this.model.setItems(items);
 		this.updateCompositeSwitcher(true);
 	}
@@ -321,16 +321,16 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return actionBarDiv;
 	}
 
-	focus(index?: number): codemavi {
+	focus(index?: number): void {
 		this.compositeSwitcherBar?.focus(index);
 	}
 
-	recomputeSizes(): codemavi {
+	recomputeSizes(): void {
 		this.computeSizes(this.model.visibleItems);
 		this.updateCompositeSwitcher();
 	}
 
-	layout(dimension: Dimension): codemavi {
+	layout(dimension: Dimension): void {
 		this.dimension = dimension;
 
 		if (dimension.height === 0 || dimension.width === 0) {
@@ -347,14 +347,14 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		this.updateCompositeSwitcher();
 	}
 
-	addComposite({ id, name, order, requestedIndex }: { id: string; name: string; order?: number; requestedIndex?: number }): codemavi {
+	addComposite({ id, name, order, requestedIndex }: { id: string; name: string; order?: number; requestedIndex?: number }): void {
 		if (this.model.add(id, name, order, requestedIndex)) {
 			this.computeSizes([this.model.findItem(id)]);
 			this.updateCompositeSwitcher();
 		}
 	}
 
-	removeComposite(id: string): codemavi {
+	removeComposite(id: string): void {
 
 		// If it pinned, unpin it first
 		if (this.isPinned(id)) {
@@ -367,14 +367,14 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		}
 	}
 
-	hideComposite(id: string): codemavi {
+	hideComposite(id: string): void {
 		if (this.model.hide(id)) {
 			this.resetActiveComposite(id);
 			this.updateCompositeSwitcher();
 		}
 	}
 
-	activateComposite(id: string): codemavi {
+	activateComposite(id: string): void {
 		const previousActiveItem = this.model.activeItem;
 		if (this.model.activate(id)) {
 			// Update if current composite is neither visible nor pinned
@@ -385,7 +385,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		}
 	}
 
-	deactivateComposite(id: string): codemavi {
+	deactivateComposite(id: string): void {
 		const previousActiveItem = this.model.activeItem;
 		if (this.model.deactivate()) {
 			if (previousActiveItem && !previousActiveItem.pinned) {
@@ -394,7 +394,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		}
 	}
 
-	async pin(compositeId: string, open?: boolean): Promise<codemavi> {
+	async pin(compositeId: string, open?: boolean): Promise<void> {
 		if (this.model.setPinned(compositeId, true)) {
 			this.updateCompositeSwitcher();
 
@@ -405,7 +405,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		}
 	}
 
-	unpin(compositeId: string): codemavi {
+	unpin(compositeId: string): void {
 		if (this.model.setPinned(compositeId, false)) {
 
 			this.updateCompositeSwitcher();
@@ -418,7 +418,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return this.viewDescriptorService.getViewContainerBadgeEnablementState(compositeId);
 	}
 
-	toggleBadgeEnablement(compositeId: string): codemavi {
+	toggleBadgeEnablement(compositeId: string): void {
 		this.viewDescriptorService.setViewContainerBadgeEnablementState(compositeId, !this.areBadgesEnabled(compositeId));
 		this.updateCompositeSwitcher();
 		const item = this.model.findItem(compositeId);
@@ -462,7 +462,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return item?.pinned;
 	}
 
-	move(compositeId: string, toCompositeId: string, before?: boolean): codemavi {
+	move(compositeId: string, toCompositeId: string, before?: boolean): void {
 		if (before !== undefined) {
 			const fromIndex = this.model.items.findIndex(c => c.id === compositeId);
 			let toIndex = this.model.items.findIndex(c => c.id === toCompositeId);
@@ -497,7 +497,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return item?.activityAction;
 	}
 
-	private computeSizes(items: ICompositeBarModelItem[]): codemavi {
+	private computeSizes(items: ICompositeBarModelItem[]): void {
 		const size = this.options.compositeSize;
 		if (size) {
 			items.forEach(composite => this.compositeSizeInBar.set(composite.id, size));
@@ -517,7 +517,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		}
 	}
 
-	private updateCompositeSwitcher(donotTrigger?: boolean): codemavi {
+	private updateCompositeSwitcher(donotTrigger?: boolean): void {
 		const compositeSwitcherBar = this.compositeSwitcherBar;
 		if (!compositeSwitcherBar || !this.dimension) {
 			return; // We have not been rendered yet so there is nothing to update.
@@ -653,7 +653,7 @@ export class CompositeBar extends Widget implements ICompositeBar {
 		return this.model.visibleItems.filter(c => overflowingIds.includes(c.id)).map(item => { return { id: item.id, name: this.getAction(item.id)?.label || item.name }; });
 	}
 
-	private showContextMenu(targetWindow: Window, e: MouseEvent | GestureEvent): codemavi {
+	private showContextMenu(targetWindow: Window, e: MouseEvent | GestureEvent): void {
 		EventHelper.stop(e, true);
 
 		const event = new StandardMouseEvent(targetWindow, e);
@@ -712,7 +712,7 @@ class CompositeBarModel {
 		this.setItems(items);
 	}
 
-	setItems(items: ICompositeBarItem[]): codemavi {
+	setItems(items: ICompositeBarItem[]): void {
 		this._items = [];
 		this._items = items
 			.map(i => this.createCompositeBarItem(i.id, i.name, i.order, i.pinned, i.visible));

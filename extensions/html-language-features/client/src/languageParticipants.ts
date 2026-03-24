@@ -20,15 +20,15 @@ interface LanguageParticipantContribution {
 }
 
 export interface LanguageParticipants {
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 	readonly documentSelector: string[];
 	hasLanguage(languageId: string): boolean;
 	useAutoInsert(languageId: string): boolean;
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export function getLanguageParticipants(): LanguageParticipants {
-	const onDidChangeEmmiter = new EventEmitter<codemavi>();
+	const onDidChangeEmmiter = new EventEmitter<void>();
 	let languages = new Set<string>();
 	let autoInsert = new Set<string>();
 

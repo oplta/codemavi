@@ -45,11 +45,11 @@ export const ITerminalInstanceService = createDecorator<ITerminalInstanceService
  * been initialized.
  */
 export interface ITerminalContribution extends IDisposable {
-	layout?(xterm: IXtermTerminal & { raw: RawXtermTerminal }, dimension: IDimension): codemavi;
-	xtermOpen?(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi;
-	xtermReady?(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi;
+	layout?(xterm: IXtermTerminal & { raw: RawXtermTerminal }, dimension: IDimension): void;
+	xtermOpen?(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void;
+	xtermReady?(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void;
 
-	handleMouseEvent?(event: MouseEvent): Promise<{ handled: boolean } | codemavi> | { handled: boolean } | codemavi;
+	handleMouseEvent?(event: MouseEvent): Promise<{ handled: boolean } | void> | { handled: boolean } | void;
 }
 
 /**
@@ -88,13 +88,13 @@ export interface ITerminalInstanceService {
 
 	/**
 	 * Gets the registered backend for a remote authority (undefined = local). This is a convenience
-	 * method to acodemavi using the more verbose fetching from the registry.
+	 * method to avoid using the more verbose fetching from the registry.
 	 * @param remoteAuthority The remote authority of the backend.
 	 */
 	getBackend(remoteAuthority?: string): Promise<ITerminalBackend | undefined>;
 
 	getRegisteredBackends(): IterableIterator<ITerminalBackend>;
-	didRegisterBackend(backend: ITerminalBackend): codemavi;
+	didRegisterBackend(backend: ITerminalBackend): void;
 }
 
 export const enum Direction {
@@ -110,23 +110,23 @@ export interface IQuickPickTerminalObject {
 }
 
 export interface IMarkTracker {
-	scrollToPreviousMark(scrollPosition?: ScrollPosition, retainSelection?: boolean, skipEmptyCommands?: boolean): codemavi;
-	scrollToNextMark(): codemavi;
-	selectToPreviousMark(): codemavi;
-	selectToNextMark(): codemavi;
-	selectToPreviousLine(): codemavi;
-	selectToNextLine(): codemavi;
-	clear(): codemavi;
-	scrollToClosestMarker(startMarkerId: string, endMarkerId?: string, highlight?: boolean | undefined): codemavi;
+	scrollToPreviousMark(scrollPosition?: ScrollPosition, retainSelection?: boolean, skipEmptyCommands?: boolean): void;
+	scrollToNextMark(): void;
+	selectToPreviousMark(): void;
+	selectToNextMark(): void;
+	selectToPreviousLine(): void;
+	selectToNextLine(): void;
+	clear(): void;
+	scrollToClosestMarker(startMarkerId: string, endMarkerId?: string, highlight?: boolean | undefined): void;
 
-	scrollToLine(line: number, position: ScrollPosition): codemavi;
-	revealCommand(command: ITerminalCommand | ICurrentPartialCommand, position?: ScrollPosition): codemavi;
-	revealRange(range: IBufferRange): codemavi;
-	registerTemporaryDecoration(marker: IMarker, endMarker: IMarker | undefined, showOutline: boolean): codemavi;
-	showCommandGuide(command: ITerminalCommand | undefined): codemavi;
+	scrollToLine(line: number, position: ScrollPosition): void;
+	revealCommand(command: ITerminalCommand | ICurrentPartialCommand, position?: ScrollPosition): void;
+	revealRange(range: IBufferRange): void;
+	registerTemporaryDecoration(marker: IMarker, endMarker: IMarker | undefined, showOutline: boolean): void;
+	showCommandGuide(command: ITerminalCommand | undefined): void;
 
-	saveScrollState(): codemavi;
-	restoreScrollState(): codemavi;
+	saveScrollState(): void;
+	restoreScrollState(): void;
 }
 
 export interface ITerminalGroup {
@@ -136,21 +136,21 @@ export interface ITerminalGroup {
 
 	readonly onDidDisposeInstance: Event<ITerminalInstance>;
 	readonly onDisposed: Event<ITerminalGroup>;
-	readonly onInstancesChanged: Event<codemavi>;
+	readonly onInstancesChanged: Event<void>;
 	readonly onPanelOrientationChanged: Event<Orientation>;
 
-	focusPreviousPane(): codemavi;
-	focusNextPane(): codemavi;
-	resizePane(direction: Direction): codemavi;
-	resizePanes(relativeSizes: number[]): codemavi;
-	setActiveInstanceByIndex(index: number, force?: boolean): codemavi;
-	attachToElement(element: HTMLElement): codemavi;
-	addInstance(instance: ITerminalInstance): codemavi;
-	removeInstance(instance: ITerminalInstance): codemavi;
-	moveInstance(instances: ITerminalInstance | ITerminalInstance[], index: number, position: 'before' | 'after'): codemavi;
-	setVisible(visible: boolean): codemavi;
-	layout(width: number, height: number): codemavi;
-	addDisposable(disposable: IDisposable): codemavi;
+	focusPreviousPane(): void;
+	focusNextPane(): void;
+	resizePane(direction: Direction): void;
+	resizePanes(relativeSizes: number[]): void;
+	setActiveInstanceByIndex(index: number, force?: boolean): void;
+	attachToElement(element: HTMLElement): void;
+	addInstance(instance: ITerminalInstance): void;
+	removeInstance(instance: ITerminalInstance): void;
+	moveInstance(instances: ITerminalInstance | ITerminalInstance[], index: number, position: 'before' | 'after'): void;
+	setVisible(visible: boolean): void;
+	layout(width: number, height: number): void;
+	addDisposable(disposable: IDisposable): void;
 	split(shellLaunchConfig: IShellLaunchConfig): ITerminalInstance;
 	getLayoutInfo(isActive: boolean): ITerminalTabLayoutInfoById;
 }
@@ -195,25 +195,25 @@ export interface IBaseTerminalInstance {
 	/**
 	 * Clear current selection.
 	 */
-	clearSelection(): codemavi;
+	clearSelection(): void;
 
 	/**
 	 * Focuses the terminal instance if it's able to (the xterm.js instance must exist).
 	 *
 	 * @param force Force focus even if there is a selection.
 	 */
-	focus(force?: boolean): codemavi;
+	focus(force?: boolean): void;
 
 	/**
 	 * Force the scroll bar to be visible until {@link resetScrollbarVisibility} is called.
 	 */
-	forceScrollbarVisibility(): codemavi;
+	forceScrollbarVisibility(): void;
 
 	/**
 	 * Resets the scroll bar to only be visible when needed, this does nothing unless
 	 * {@link forceScrollbarVisibility} was called.
 	 */
-	resetScrollbarVisibility(): codemavi;
+	resetScrollbarVisibility(): void;
 
 	/**
 	 * Gets a terminal contribution by its ID.
@@ -238,7 +238,7 @@ export interface IDetachedTerminalInstance extends IDisposable, IBaseTerminalIns
 	 * @param container Container the terminal will be rendered in
 	 * @param options Additional options for mounting the terminal in an element
 	 */
-	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions>): codemavi;
+	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions>): void;
 }
 
 export const isDetachedTerminalInstance = (t: ITerminalInstance | IDetachedTerminalInstance): t is IDetachedTerminalInstance => typeof (t as ITerminalInstance).instanceId !== 'number';
@@ -254,15 +254,15 @@ export interface ITerminalService extends ITerminalInstanceHost {
 
 	readonly isProcessSupportRegistered: boolean;
 	readonly connectionState: TerminalConnectionState;
-	readonly whenConnected: Promise<codemavi>;
+	readonly whenConnected: Promise<void>;
 	/** The number of restored terminal groups on startup. */
 	readonly restoredGroupCount: number;
 
 	readonly onDidCreateInstance: Event<ITerminalInstance>;
 	readonly onDidChangeInstanceDimensions: Event<ITerminalInstance>;
 	readonly onDidRequestStartExtensionTerminal: Event<IStartExtensionTerminalRequest>;
-	readonly onDidRegisterProcessSupport: Event<codemavi>;
-	readonly onDidChangeConnectionState: Event<codemavi>;
+	readonly onDidRegisterProcessSupport: Event<void>;
+	readonly onDidChangeConnectionState: Event<void>;
 
 	// Group events
 	readonly onDidChangeActiveGroup: Event<ITerminalGroup | undefined>;
@@ -306,40 +306,40 @@ export interface ITerminalService extends ITerminalInstanceHost {
 	getReconnectedTerminals(reconnectionOwner: string): ITerminalInstance[] | undefined;
 
 	getActiveOrCreateInstance(options?: { acceptsInput?: boolean }): Promise<ITerminalInstance>;
-	revealTerminal(source: ITerminalInstance, preserveFocus?: boolean): Promise<codemavi>;
-	revealActiveTerminal(preserveFocus?: boolean): Promise<codemavi>;
-	moveToEditor(source: ITerminalInstance, group?: GroupIdentifier | SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | AUX_WINDOW_GROUP_TYPE): codemavi;
-	moveIntoNewEditor(source: ITerminalInstance): codemavi;
-	moveToTerminalView(source: ITerminalInstance | URI): Promise<codemavi>;
+	revealTerminal(source: ITerminalInstance, preserveFocus?: boolean): Promise<void>;
+	revealActiveTerminal(preserveFocus?: boolean): Promise<void>;
+	moveToEditor(source: ITerminalInstance, group?: GroupIdentifier | SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | AUX_WINDOW_GROUP_TYPE): void;
+	moveIntoNewEditor(source: ITerminalInstance): void;
+	moveToTerminalView(source: ITerminalInstance | URI): Promise<void>;
 	getPrimaryBackend(): ITerminalBackend | undefined;
 
 	/**
 	 * Fire the onActiveTabChanged event, this will trigger the terminal dropdown to be updated,
 	 * among other things.
 	 */
-	refreshActiveGroup(): codemavi;
+	refreshActiveGroup(): void;
 
-	registerProcessSupport(isSupported: boolean): codemavi;
+	registerProcessSupport(isSupported: boolean): void;
 
 	showProfileQuickPick(type: 'setDefault' | 'createInstance', cwd?: string | URI): Promise<ITerminalInstance | undefined>;
 
-	setContainers(panelContainer: HTMLElement, terminalContainer: HTMLElement): codemavi;
+	setContainers(panelContainer: HTMLElement, terminalContainer: HTMLElement): void;
 
 	requestStartExtensionTerminal(proxy: ITerminalProcessExtHostProxy, cols: number, rows: number): Promise<ITerminalLaunchError | undefined>;
 	isAttachedToTerminal(remoteTerm: IRemoteTerminalAttachTarget): boolean;
 	getEditableData(instance: ITerminalInstance): IEditableData | undefined;
-	setEditable(instance: ITerminalInstance, data: IEditableData | null): codemavi;
+	setEditable(instance: ITerminalInstance, data: IEditableData | null): void;
 	isEditable(instance: ITerminalInstance | undefined): boolean;
-	safeDisposeTerminal(instance: ITerminalInstance): Promise<codemavi>;
+	safeDisposeTerminal(instance: ITerminalInstance): Promise<void>;
 
 	getDefaultInstanceHost(): ITerminalInstanceHost;
 	getInstanceHost(target: ITerminalLocationOptions | undefined): Promise<ITerminalInstanceHost>;
 
 	resolveLocation(location?: ITerminalLocationOptions): Promise<TerminalLocation | undefined>;
-	setNativeDelegate(nativeCalls: ITerminalServiceNativeDelegate): codemavi;
+	setNativeDelegate(nativeCalls: ITerminalServiceNativeDelegate): void;
 
 	getEditingTerminal(): ITerminalInstance | undefined;
-	setEditingTerminal(instance: ITerminalInstance | undefined): codemavi;
+	setEditingTerminal(instance: ITerminalInstance | undefined): void;
 
 	/**
 	 * Creates an instance event listener that listens to all instances, dynamically adding new
@@ -371,9 +371,9 @@ export interface ITerminalConfigurationService {
 	/**
 	 * Fires when something within the terminal configuration changes.
 	 */
-	readonly onConfigChanged: Event<codemavi>;
+	readonly onConfigChanged: Event<void>;
 
-	setPanelContainer(panelContainer: HTMLElement): codemavi;
+	setPanelContainer(panelContainer: HTMLElement): void;
 	configFontIsMonospace(): boolean;
 	getFont(w: Window, xtermCore?: IXtermCore, excludeDimensions?: boolean): ITerminalFont;
 }
@@ -395,10 +395,10 @@ export interface ITerminalEditorService extends ITerminalInstanceHost {
 	/** Gets all _terminal editor_ instances. */
 	readonly instances: readonly ITerminalInstance[];
 
-	openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<codemavi>;
-	detachInstance(instance: ITerminalInstance): codemavi;
+	openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<void>;
+	detachInstance(instance: ITerminalInstance): void;
 	splitInstance(instanceToSplit: ITerminalInstance, shellLaunchConfig?: IShellLaunchConfig): ITerminalInstance;
-	revealActiveEditor(preserveFocus?: boolean): Promise<codemavi>;
+	revealActiveEditor(preserveFocus?: boolean): Promise<void>;
 	resolveResource(instance: ITerminalInstance): URI;
 	reviveInput(deserializedInput: IDeserializedTerminalEditorInput): EditorInput;
 	getInputFromResource(resource: URI): EditorInput;
@@ -483,9 +483,9 @@ export interface ITerminalGroupService extends ITerminalInstanceHost {
 	readonly onDidChangeActiveGroup: Event<ITerminalGroup | undefined>;
 	readonly onDidDisposeGroup: Event<ITerminalGroup>;
 	/** Fires when a group is created, disposed of, or shown (in the case of a background group). */
-	readonly onDidChangeGroups: Event<codemavi>;
+	readonly onDidChangeGroups: Event<void>;
 	/** Fires when the panel has been shown and expanded, so has non-zero dimensions. */
-	readonly onDidShow: Event<codemavi>;
+	readonly onDidShow: Event<void>;
 	readonly onDidChangePanelOrientation: Event<Orientation>;
 
 	createGroup(shellLaunchConfig?: IShellLaunchConfig): ITerminalGroup;
@@ -497,28 +497,28 @@ export interface ITerminalGroupService extends ITerminalInstanceHost {
 	 * @param source The source instance to move.
 	 * @param target The target instance to move the source instance to.
 	 */
-	moveGroup(source: ITerminalInstance | ITerminalInstance[], target: ITerminalInstance): codemavi;
-	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): codemavi;
+	moveGroup(source: ITerminalInstance | ITerminalInstance[], target: ITerminalInstance): void;
+	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): void;
 
-	moveInstance(source: ITerminalInstance, target: ITerminalInstance, side: 'before' | 'after'): codemavi;
-	unsplitInstance(instance: ITerminalInstance): codemavi;
-	joinInstances(instances: ITerminalInstance[]): codemavi;
+	moveInstance(source: ITerminalInstance, target: ITerminalInstance, side: 'before' | 'after'): void;
+	unsplitInstance(instance: ITerminalInstance): void;
+	joinInstances(instances: ITerminalInstance[]): void;
 	instanceIsSplit(instance: ITerminalInstance): boolean;
 
 	getGroupLabels(): string[];
-	setActiveGroupByIndex(index: number): codemavi;
-	setActiveGroupToNext(): codemavi;
-	setActiveGroupToPrevious(): codemavi;
+	setActiveGroupByIndex(index: number): void;
+	setActiveGroupToNext(): void;
+	setActiveGroupToPrevious(): void;
 
-	setActiveInstanceByIndex(terminalIndex: number): codemavi;
+	setActiveInstanceByIndex(terminalIndex: number): void;
 
-	setContainer(container: HTMLElement): codemavi;
+	setContainer(container: HTMLElement): void;
 
-	showPanel(focus?: boolean): Promise<codemavi>;
-	hidePanel(): codemavi;
-	focusTabs(): codemavi;
-	focusHover(): codemavi;
-	updateVisibility(): codemavi;
+	showPanel(focus?: boolean): Promise<void>;
+	hidePanel(): void;
+	focusTabs(): void;
+	focusHover(): void;
+	updateVisibility(): void;
 }
 
 /**
@@ -532,18 +532,18 @@ export interface ITerminalInstanceHost {
 	readonly onDidDisposeInstance: Event<ITerminalInstance>;
 	readonly onDidFocusInstance: Event<ITerminalInstance>;
 	readonly onDidChangeActiveInstance: Event<ITerminalInstance | undefined>;
-	readonly onDidChangeInstances: Event<codemavi>;
+	readonly onDidChangeInstances: Event<void>;
 	readonly onDidChangeInstanceCapability: Event<ITerminalInstance>;
 
-	setActiveInstance(instance: ITerminalInstance): codemavi;
+	setActiveInstance(instance: ITerminalInstance): void;
 	/**
 	 * Reveal and focus the instance, regardless of its location.
 	 */
-	focusInstance(instance: ITerminalInstance): codemavi;
+	focusInstance(instance: ITerminalInstance): void;
 	/**
 	 * Reveal and focus the active instance, regardless of its location.
 	 */
-	focusActiveInstance(): Promise<codemavi>;
+	focusActiveInstance(): Promise<void>;
 	/**
 	 * Gets an instance from a resource if it exists. This MUST be used instead of getInstanceFromId
 	 * when you only know about a terminal's URI. (a URI's instance ID may not be this window's instance ID)
@@ -571,7 +571,7 @@ export interface ITerminalLink {
 	 * Activates the link.
 	 * @param text The text of the link.
 	 */
-	activate(text: string): codemavi;
+	activate(text: string): void;
 }
 
 export interface ISearchOptions {
@@ -695,18 +695,18 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	onDisposed: Event<ITerminalInstance>;
 
 	onProcessIdReady: Event<ITerminalInstance>;
-	onProcessReplayComplete: Event<codemavi>;
+	onProcessReplayComplete: Event<void>;
 	onRequestExtHostProcess: Event<ITerminalInstance>;
-	onDimensionsChanged: Event<codemavi>;
-	onMaximumDimensionsChanged: Event<codemavi>;
+	onDimensionsChanged: Event<void>;
+	onMaximumDimensionsChanged: Event<void>;
 	onDidChangeHasChildProcesses: Event<boolean>;
 
 	onDidFocus: Event<ITerminalInstance>;
-	onDidRequestFocus: Event<codemavi>;
+	onDidRequestFocus: Event<void>;
 	onDidBlur: Event<ITerminalInstance>;
 	onDidInputData: Event<string>;
 	onDidChangeSelection: Event<ITerminalInstance>;
-	onDidExecuteText: Event<codemavi>;
+	onDidExecuteText: Event<void>;
 	onDidChangeTarget: Event<TerminalLocation | undefined>;
 	onDidSendText: Event<string>;
 	onDidChangeShellType: Event<TerminalShellType>;
@@ -775,7 +775,7 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	readonly initialDataEvents: string[] | undefined;
 
 	/** A promise that resolves when the terminal's pty/process have been created. */
-	readonly processReady: Promise<codemavi>;
+	readonly processReady: Promise<void>;
 
 	/** Whether the terminal's process has child processes (ie. is dirty/busy). */
 	readonly hasChildProcesses: boolean;
@@ -843,7 +843,7 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	/**
 	 * Adds a marker to the buffer, mapping it to an ID if provided.
 	 */
-	addBufferMarker(properties: IMarkProperties): codemavi;
+	addBufferMarker(properties: IMarkProperties): void;
 
 	/**
 	 *
@@ -852,14 +852,14 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * @param highlight Whether the buffer from startMarker to endMarker
 	 * should be highlighted
 	 */
-	scrollToMark(startMarkId: string, endMarkId?: string, highlight?: boolean): codemavi;
+	scrollToMark(startMarkId: string, endMarkId?: string, highlight?: boolean): void;
 
 	/**
 	 * Dispose the terminal instance, removing it from the panel/service and freeing up resources.
 	 *
 	 * @param reason The reason why the terminal is being disposed
 	 */
-	dispose(reason?: TerminalExitReason): codemavi;
+	dispose(reason?: TerminalExitReason): void;
 
 	/**
 	 * Informs the process that the terminal is now detached and
@@ -867,13 +867,13 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 *
 	 * @param reason The reason why the terminal is being disposed
 	 */
-	detachProcessAndDispose(reason: TerminalExitReason): Promise<codemavi>;
+	detachProcessAndDispose(reason: TerminalExitReason): Promise<void>;
 
 	/**
 	 * When the panel is hidden or a terminal in the editor area becomes inactive, reset the focus context key
-	 * to acodemavi issues like #147180.
+	 * to avoid issues like #147180.
 	 */
-	resetFocusContextKey(): codemavi;
+	resetFocusContextKey(): void;
 
 	/**
 	 * Focuses the terminal instance when it's ready (the xterm.js instance much exist). This is the
@@ -882,7 +882,7 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 *
 	 * @param force Force focus even if there is a selection.
 	 */
-	focusWhenReady(force?: boolean): Promise<codemavi>;
+	focusWhenReady(force?: boolean): Promise<void>;
 
 	/**
 	 * Send text to the terminal instance. The text is written to the stdin of the underlying pty
@@ -896,7 +896,7 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * this may for example select the text and it will also ensure that the text will not be
 	 * interpreted as a shell keybinding.
 	 */
-	sendText(text: string, shouldExecute: boolean, bracketedPasteMode?: boolean): Promise<codemavi>;
+	sendText(text: string, shouldExecute: boolean, bracketedPasteMode?: boolean): Promise<void>;
 
 	/**
 	 * Sends a path to the terminal instance, preparing it as needed based on the detected shell
@@ -907,9 +907,9 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * @param shouldExecute Indicates that the text being sent should be executed rather than just inserted in the terminal.
 	 * The character(s) added are \n or \r\n, depending on the platform. This defaults to `true`.
 	 */
-	sendPath(originalPath: string | URI, shouldExecute: boolean): Promise<codemavi>;
+	sendPath(originalPath: string | URI, shouldExecute: boolean): Promise<void>;
 
-	runCommand(command: string, shouldExecute?: boolean): codemavi;
+	runCommand(command: string, shouldExecute?: boolean): void;
 
 	/**
 	 * Takes a path and returns the properly escaped path to send to a given shell. On Windows, this
@@ -919,18 +919,18 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 */
 	preparePathForShell(originalPath: string): Promise<string>;
 
-	/** Scroll the terminal buffer down 1 line. */   scrollDownLine(): codemavi;
-	/** Scroll the terminal buffer down 1 page. */   scrollDownPage(): codemavi;
-	/** Scroll the terminal buffer to the bottom. */ scrollToBottom(): codemavi;
-	/** Scroll the terminal buffer up 1 line. */     scrollUpLine(): codemavi;
-	/** Scroll the terminal buffer up 1 page. */     scrollUpPage(): codemavi;
-	/** Scroll the terminal buffer to the top. */    scrollToTop(): codemavi;
+	/** Scroll the terminal buffer down 1 line. */   scrollDownLine(): void;
+	/** Scroll the terminal buffer down 1 page. */   scrollDownPage(): void;
+	/** Scroll the terminal buffer to the bottom. */ scrollToBottom(): void;
+	/** Scroll the terminal buffer up 1 line. */     scrollUpLine(): void;
+	/** Scroll the terminal buffer up 1 page. */     scrollUpPage(): void;
+	/** Scroll the terminal buffer to the top. */    scrollToTop(): void;
 
 	/**
 	 * Clears the terminal buffer, leaving only the prompt line and moving it to the top of the
 	 * viewport.
 	 */
-	clearBuffer(): codemavi;
+	clearBuffer(): void;
 
 	/**
 	 * Attaches the terminal instance to an element on the DOM, before this is called the terminal
@@ -938,55 +938,55 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 *
 	 * @param container The element to attach the terminal instance to.
 	 */
-	attachToElement(container: HTMLElement): codemavi;
+	attachToElement(container: HTMLElement): void;
 
 	/**
 	 * Detaches the terminal instance from the terminal editor DOM element.
 	 */
-	detachFromElement(): codemavi;
+	detachFromElement(): void;
 
 	/**
 	 * Layout the terminal instance.
 	 *
 	 * @param dimension The dimensions of the container.
 	 */
-	layout(dimension: { width: number; height: number }): codemavi;
+	layout(dimension: { width: number; height: number }): void;
 
 	/**
 	 * Sets whether the terminal instance's element is visible in the DOM.
 	 *
 	 * @param visible Whether the element is visible.
 	 */
-	setVisible(visible: boolean): codemavi;
+	setVisible(visible: boolean): void;
 
 	/**
 	 * Immediately kills the terminal's current pty process and launches a new one to replace it.
 	 *
 	 * @param shell The new launch configuration.
 	 */
-	reuseTerminal(shell: IShellLaunchConfig): Promise<codemavi>;
+	reuseTerminal(shell: IShellLaunchConfig): Promise<void>;
 
 	/**
 	 * Relaunches the terminal, killing it and reusing the launch config used initially. Any
 	 * environment variable changes will be recalculated when this happens.
 	 */
-	relaunch(): codemavi;
+	relaunch(): void;
 
 	/**
 	 * Sets the terminal instance's dimensions to the values provided via the onDidOverrideDimensions event,
 	 * which allows overriding the regular dimensions (fit to the size of the panel).
 	 */
-	setOverrideDimensions(dimensions: ITerminalDimensions): codemavi;
+	setOverrideDimensions(dimensions: ITerminalDimensions): void;
 
 	/**
 	 * Sets the terminal instance's dimensions to the values provided via quick input.
 	 */
-	setFixedDimensions(): Promise<codemavi>;
+	setFixedDimensions(): Promise<void>;
 
 	/**
 	 * Toggles terminal line wrapping.
 	 */
-	toggleSizeToContentWidth(): Promise<codemavi>;
+	toggleSizeToContentWidth(): Promise<void>;
 
 	/**
 	 * Gets the initial current working directory, fetching it from the backend if required.
@@ -1005,7 +1005,7 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * to the terminal's title if it was not explicitly set by the user or API.
 	 * @param title The new title.
 	 */
-	rename(title?: string): Promise<codemavi>;
+	rename(title?: string): Promise<void>;
 
 	/**
 	 * Sets or triggers a quick pick to change the icon of this terminal.
@@ -1021,12 +1021,12 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * Attempts to detect and kill the process listening on specified port.
 	 * If successful, places commandToRun on the command line
 	 */
-	freePortKillProcess(port: string, commandToRun: string): Promise<codemavi>;
+	freePortKillProcess(port: string, commandToRun: string): Promise<void>;
 
 	/**
 	 * Update the parent context key service to use for this terminal instance.
 	 */
-	setParentContextKeyService(parentContextKeyService: IContextKeyService): codemavi;
+	setParentContextKeyService(parentContextKeyService: IContextKeyService): void;
 
 	/**
 	 * Handles a mouse event for the terminal, this may happen on an anscestor of the terminal
@@ -1035,13 +1035,13 @@ export interface ITerminalInstance extends IBaseTerminalInstance {
 	 * @param contextMenu The context menu to show if needed.
 	 * @returns Whether the context menu should be suppressed.
 	 */
-	handleMouseEvent(event: MouseEvent, contextMenu: IMenu): Promise<{ cancelContextMenu: boolean } | codemavi>;
+	handleMouseEvent(event: MouseEvent, contextMenu: IMenu): Promise<{ cancelContextMenu: boolean } | void>;
 
 	/**
 	 * Pause input events until the provided barrier is resolved.
 	 * @param barrier The barrier to wait for until input events can continue.
 	 */
-	pauseInputEvents(barrier: Barrier): codemavi;
+	pauseInputEvents(barrier: Barrier): void;
 }
 
 export const enum XtermTerminalConstants {
@@ -1069,7 +1069,7 @@ export interface IXtermTerminal extends IDisposable {
 
 	readonly decorationAddon: IDecorationAddon;
 
-	readonly onDidChangeSelection: Event<codemavi>;
+	readonly onDidChangeSelection: Event<void>;
 	readonly onDidChangeFindResults: Event<{ resultIndex: number; resultCount: number }>;
 	readonly onDidRequestRunCommand: Event<{ command: ITerminalCommand; noNewLine?: boolean }>;
 	readonly onDidRequestCopyAsHtml: Event<{ command: ITerminalCommand }>;
@@ -1109,7 +1109,7 @@ export interface IXtermTerminal extends IDisposable {
 	 * @param container Container the terminal will be rendered in
 	 * @param options Additional options for mounting the terminal in an element
 	 */
-	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions>): codemavi;
+	attachToElement(container: HTMLElement, options?: Partial<IXtermAttachToElementOptions>): void;
 
 	findResult?: { resultIndex: number; resultCount: number };
 
@@ -1126,7 +1126,7 @@ export interface IXtermTerminal extends IDisposable {
 	/**
 	 * Forces the terminal to redraw its viewport.
 	 */
-	forceRedraw(): codemavi;
+	forceRedraw(): void;
 
 	/**
 	 * Gets the font metrics of this xterm.js instance.
@@ -1141,12 +1141,12 @@ export interface IXtermTerminal extends IDisposable {
 	/**
 	 * Clears any terminal selection.
 	 */
-	clearSelection(): codemavi;
+	clearSelection(): void;
 
 	/**
 	 * Selects all terminal contents/
 	 */
-	selectAll(): codemavi;
+	selectAll(): void;
 
 	/**
 	 * Selects the content between the two markers by their VS Code OSC `SetMarker`
@@ -1157,43 +1157,43 @@ export interface IXtermTerminal extends IDisposable {
 	 * @param scrollIntoView Whether the terminal should scroll to the start of
 	 * the range, defaults tof alse
 	 */
-	selectMarkedRange(fromMarkerId: string, toMarkerId: string, scrollIntoView?: boolean): codemavi;
+	selectMarkedRange(fromMarkerId: string, toMarkerId: string, scrollIntoView?: boolean): void;
 
 	/**
 	 * Copies the terminal selection.
 	 * @param copyAsHtml Whether to copy selection as HTML, defaults to false.
 	 */
-	copySelection(copyAsHtml?: boolean, command?: ITerminalCommand): codemavi;
+	copySelection(copyAsHtml?: boolean, command?: ITerminalCommand): void;
 	/**
 	 * Focuses the terminal. Warning: {@link ITerminalInstance.focus} should be
 	 * preferred when dealing with terminal instances in order to get
 	 * accessibility triggers.
 	 */
-	focus(): codemavi;
+	focus(): void;
 
-	/** Scroll the terminal buffer down 1 line.   */ scrollDownLine(): codemavi;
-	/** Scroll the terminal buffer down 1 page.   */ scrollDownPage(): codemavi;
-	/** Scroll the terminal buffer to the bottom. */ scrollToBottom(): codemavi;
-	/** Scroll the terminal buffer up 1 line.     */ scrollUpLine(): codemavi;
-	/** Scroll the terminal buffer up 1 page.     */ scrollUpPage(): codemavi;
-	/** Scroll the terminal buffer to the top.    */ scrollToTop(): codemavi;
-	/** Scroll the terminal buffer to a set line  */ scrollToLine(line: number, position?: ScrollPosition): codemavi;
+	/** Scroll the terminal buffer down 1 line.   */ scrollDownLine(): void;
+	/** Scroll the terminal buffer down 1 page.   */ scrollDownPage(): void;
+	/** Scroll the terminal buffer to the bottom. */ scrollToBottom(): void;
+	/** Scroll the terminal buffer up 1 line.     */ scrollUpLine(): void;
+	/** Scroll the terminal buffer up 1 page.     */ scrollUpPage(): void;
+	/** Scroll the terminal buffer to the top.    */ scrollToTop(): void;
+	/** Scroll the terminal buffer to a set line  */ scrollToLine(line: number, position?: ScrollPosition): void;
 
 	/**
 	 * Clears the terminal buffer, leaving only the prompt line and moving it to the top of the
 	 * viewport.
 	 */
-	clearBuffer(): codemavi;
+	clearBuffer(): void;
 
 	/**
 	 * Clears the search result decorations
 	 */
-	clearSearchDecorations(): codemavi;
+	clearSearchDecorations(): void;
 
 	/**
 	 * Clears the active search result decorations
 	 */
-	clearActiveSearchDecoration(): codemavi;
+	clearActiveSearchDecoration(): void;
 
 	/**
 	 * Returns a reverse iterator of buffer lines as strings
@@ -1208,7 +1208,7 @@ export interface IXtermTerminal extends IDisposable {
 	/**
 	 * Refreshes the terminal after it has been moved.
 	 */
-	refresh(): codemavi;
+	refresh(): void;
 
 	getXtermTheme(theme?: IColorTheme): ITheme;
 }
@@ -1220,12 +1220,12 @@ export interface IDetachedXtermTerminal extends IXtermTerminal {
 	 * @param callback Optional callback that fires when the data was processed
 	 * by the parser.
 	 */
-	write(data: string | Uint8Array, callback?: () => codemavi): codemavi;
+	write(data: string | Uint8Array, callback?: () => void): void;
 
 	/**
 	 * Resizes the terminal.
 	 */
-	resize(columns: number, rows: number): codemavi;
+	resize(columns: number, rows: number): void;
 }
 
 export interface IInternalXtermTerminal {
@@ -1235,7 +1235,7 @@ export interface IInternalXtermTerminal {
 	 * **WARNING:** This should never be used outside of the terminal component and only for
 	 * developer purposed inside the terminal component.
 	 */
-	_writeText(data: string): codemavi; // eslint-disable-line @typescript-eslint/naming-convention
+	_writeText(data: string): void; // eslint-disable-line @typescript-eslint/naming-convention
 }
 
 export interface IXtermColorProvider {

@@ -46,7 +46,7 @@ export function assertCompletion(completions: CompletionList, expected: ItemDesc
 
 const testUri = 'test://test/test.html';
 
-export async function testCompletionFor(value: string, expected: { count?: number; items?: ItemDescription[] }, uri = testUri, workspaceFolders?: WorkspaceFolder[]): Promise<codemavi> {
+export async function testCompletionFor(value: string, expected: { count?: number; items?: ItemDescription[] }, uri = testUri, workspaceFolders?: WorkspaceFolder[]): Promise<void> {
 	const offset = value.indexOf('|');
 	value = value.substr(0, offset) + value.substr(offset + 1);
 

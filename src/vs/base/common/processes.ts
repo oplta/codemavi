@@ -101,7 +101,7 @@ export interface ProcessItem {
 /**
  * Sanitizes a VS Code process environment by removing all Electron/VS Code-related values.
  */
-export function sanitizeProcessEnvironment(env: IProcessEnvironment, ...preserve: string[]): codemavi {
+export function sanitizeProcessEnvironment(env: IProcessEnvironment, ...preserve: string[]): void {
 	const set = preserve.reduce<Record<string, boolean>>((set, key) => {
 		set[key] = true;
 		return set;
@@ -131,7 +131,7 @@ export function sanitizeProcessEnvironment(env: IProcessEnvironment, ...preserve
  *
  * @param env The env object to change
  */
-export function removeDangerousEnvVariables(env: IProcessEnvironment | undefined): codemavi {
+export function removeDangerousEnvVariables(env: IProcessEnvironment | undefined): void {
 	if (!env) {
 		return;
 	}

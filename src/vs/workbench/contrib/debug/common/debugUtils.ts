@@ -56,7 +56,7 @@ export function isSessionAttach(session: IDebugSession): boolean {
  * Returns the session or any parent which is an extension host debug session.
  * Returns undefined if there's none.
  */
-export function getExtensionHostDebugSession(session: IDebugSession): IDebugSession | codemavi {
+export function getExtensionHostDebugSession(session: IDebugSession): IDebugSession | void {
 	let type = session.configuration.type;
 	if (!type) {
 		return;
@@ -239,7 +239,7 @@ export function convertToVSCPaths(message: DebugProtocol.ProtocolMessage, toUri:
 	return msg;
 }
 
-function convertPaths(msg: DebugProtocol.ProtocolMessage, fixSourcePath: (toDA: boolean, source: PathContainer | undefined) => codemavi): codemavi {
+function convertPaths(msg: DebugProtocol.ProtocolMessage, fixSourcePath: (toDA: boolean, source: PathContainer | undefined) => void): void {
 
 	switch (msg.type) {
 		case 'event': {
@@ -362,7 +362,7 @@ function compareOrders(first: number | undefined, second: number | undefined): n
 	return first - second;
 }
 
-export async function saveAllBeforeDebugStart(configurationService: IConfigurationService, editorService: IEditorService): Promise<codemavi> {
+export async function saveAllBeforeDebugStart(configurationService: IConfigurationService, editorService: IEditorService): Promise<void> {
 	const saveBeforeStartConfig: string = configurationService.getValue('debug.saveBeforeStart', { overrideIdentifier: editorService.activeTextEditorLanguageId });
 	if (saveBeforeStartConfig !== 'none') {
 		await editorService.saveAll();

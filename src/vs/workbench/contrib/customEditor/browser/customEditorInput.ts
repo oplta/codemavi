@@ -106,7 +106,7 @@ export class CustomEditorInput extends LazilyResolvedWebviewEditorInput {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// Clear our labels on certain label related events
 		this._register(this.labelService.onDidChangeFormatters(e => this.onLabelEvent(e.scheme)));
@@ -116,13 +116,13 @@ export class CustomEditorInput extends LazilyResolvedWebviewEditorInput {
 		this._register(this.filesConfigurationService.onDidChangeReadonly(() => this._onDidChangeCapabilities.fire()));
 	}
 
-	private onLabelEvent(scheme: string): codemavi {
+	private onLabelEvent(scheme: string): void {
 		if (scheme === this.resource.scheme) {
 			this.updateLabel();
 		}
 	}
 
-	private updateLabel(): codemavi {
+	private updateLabel(): void {
 
 		// Clear any cached labels from before
 		this._editorName = undefined;
@@ -321,7 +321,7 @@ export class CustomEditorInput extends LazilyResolvedWebviewEditorInput {
 		return (await this.rename(groupId, target))?.editor;
 	}
 
-	public override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
+	public override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
 		if (this._modelRef) {
 			return this._modelRef.object.revert(options);
 		}
@@ -361,19 +361,19 @@ export class CustomEditorInput extends LazilyResolvedWebviewEditorInput {
 		return { editor: { resource: newResource } };
 	}
 
-	public undo(): codemavi | Promise<codemavi> {
+	public undo(): void | Promise<void> {
 		assertIsDefined(this._modelRef);
 		return this.undoRedoService.undo(this.resource);
 	}
 
-	public redo(): codemavi | Promise<codemavi> {
+	public redo(): void | Promise<void> {
 		assertIsDefined(this._modelRef);
 		return this.undoRedoService.redo(this.resource);
 	}
 
-	private _moveHandler?: (newResource: URI) => codemavi;
+	private _moveHandler?: (newResource: URI) => void;
 
-	public onMove(handler: (newResource: URI) => codemavi): codemavi {
+	public onMove(handler: (newResource: URI) => void): void {
 		// TODO: Move this to the service
 		this._moveHandler = handler;
 	}
@@ -408,7 +408,7 @@ export class CustomEditorInput extends LazilyResolvedWebviewEditorInput {
 		};
 	}
 
-	public override claim(claimant: unknown, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): codemavi {
+	public override claim(claimant: unknown, targetWindow: CodeWindow, scopedContextKeyService: IContextKeyService | undefined): void {
 		if (this.doCanMove(targetWindow.vscodeWindowId) !== true) {
 			throw createEditorOpenError(localize('editorUnsupportedInWindow', "Unable to open the editor in this window, it contains modifications that can only be saved in the original window."), [
 				toAction({

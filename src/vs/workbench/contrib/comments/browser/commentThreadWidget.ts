@@ -72,7 +72,7 @@ export class CommentThreadWidget<T extends IRange | ICellRange = IRange> extends
 		private _markdownOptions: IMarkdownRendererOptions,
 		private _commentOptions: languages.CommentOptions | undefined,
 		private _containerDelegate: {
-			actionRunner: (() => codemavi) | null;
+			actionRunner: (() => void) | null;
 			collapse: () => Promise<boolean>;
 		},
 		@ICommentService private readonly commentService: ICommentService,
@@ -159,7 +159,7 @@ export class CommentThreadWidget<T extends IRange | ICellRange = IRange> extends
 		return !!this._commentReply?.commentEditor.getValue() || this._body.hasCommentsInEditMode();
 	}
 
-	private _setAriaLabel(): codemavi {
+	private _setAriaLabel(): void {
 		let ariaLabel = localize('commentLabel', "Comment");
 		let keybinding: string | undefined;
 		const verbose = this.configurationService.getValue(AccessibilityVerbositySettingId.Comments);

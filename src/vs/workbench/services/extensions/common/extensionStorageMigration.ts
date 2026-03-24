@@ -20,7 +20,7 @@ import { IWorkspaceContextService } from '../../../../platform/workspace/common/
  * 	- State: Stored using storage service with extension id as key and state as value.
  *  - Resources: Stored under a location scoped to the extension.
  */
-export async function migrateExtensionStorage(fromExtensionId: string, toExtensionId: string, global: boolean, instantionService: IInstantiationService): Promise<codemavi> {
+export async function migrateExtensionStorage(fromExtensionId: string, toExtensionId: string, global: boolean, instantionService: IInstantiationService): Promise<void> {
 	return instantionService.invokeFunction(async serviceAccessor => {
 		const environmentService = serviceAccessor.get(IEnvironmentService);
 		const userDataProfilesService = serviceAccessor.get(IUserDataProfilesService);

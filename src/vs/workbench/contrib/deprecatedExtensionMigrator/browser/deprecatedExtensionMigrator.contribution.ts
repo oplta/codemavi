@@ -28,7 +28,7 @@ class DeprecatedExtensionMigratorContribution {
 		this.init().catch(onUnexpectedError);
 	}
 
-	private async init(): Promise<codemavi> {
+	private async init(): Promise<void> {
 		const bracketPairColorizerId = 'coenraads.bracket-pair-colorizer';
 
 		await this.extensionsWorkbenchService.queryLocal();
@@ -87,7 +87,7 @@ class DeprecatedExtensionMigratorContribution {
 		return JSON.parse(jsonStr) as State;
 	}
 
-	private async setState(state: State): Promise<codemavi> {
+	private async setState(state: State): Promise<void> {
 		const json = JSON.stringify(state);
 		await this.storageService.store(this.storageKey, json, StorageScope.APPLICATION, StorageTarget.USER);
 	}

@@ -14,7 +14,7 @@ suite('vscode API - editors', () => {
 		await closeAllEditors();
 	});
 
-	function withRandomFileEditor(initialContents: string, run: (editor: TextEditor, doc: TextDocument) => Thenable<codemavi>): Thenable<boolean> {
+	function withRandomFileEditor(initialContents: string, run: (editor: TextEditor, doc: TextDocument) => Thenable<void>): Thenable<boolean> {
 		return createRandomFile(initialContents).then(file => {
 			return workspace.openTextDocument(file).then(doc => {
 				return window.showTextDocument(doc).then((editor) => {
@@ -107,7 +107,7 @@ suite('vscode API - editors', () => {
 	 * The 3rd line should not be auto-indented, as the edit already
 	 * contains the necessary adjustment.
 	 */
-	test('insert snippet with replacement, acodemavi adjusting indentation', () => {
+	test('insert snippet with replacement, avoid adjusting indentation', () => {
 		const snippetString = new SnippetString()
 			.appendText('This is line 2\n  This is line 3');
 

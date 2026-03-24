@@ -12,10 +12,10 @@ import { Disposable, markAsSingleton } from '../common/lifecycle.js';
  */
 class DevicePixelRatioMonitor extends Disposable {
 
-	private readonly _onDidChange = this._register(new Emitter<codemavi>());
+	private readonly _onDidChange = this._register(new Emitter<void>());
 	readonly onDidChange = this._onDidChange.event;
 
-	private readonly _listener: () => codemavi;
+	private readonly _listener: () => void;
 	private _mediaQueryList: MediaQueryList | null;
 
 	constructor(targetWindow: Window) {
@@ -26,7 +26,7 @@ class DevicePixelRatioMonitor extends Disposable {
 		this._handleChange(targetWindow, false);
 	}
 
-	private _handleChange(targetWindow: Window, fireEvent: boolean): codemavi {
+	private _handleChange(targetWindow: Window, fireEvent: boolean): void {
 		this._mediaQueryList?.removeEventListener('change', this._listener);
 
 		this._mediaQueryList = targetWindow.matchMedia(`(resolution: ${targetWindow.devicePixelRatio}dppx)`);

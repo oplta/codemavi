@@ -22,13 +22,13 @@ export function searchRangeToRange(range: SearchRange): searchExtTypes.Range {
 }
 
 export interface IOutputChannel {
-	appendLine(msg: string): codemavi;
+	appendLine(msg: string): void;
 }
 
 export class OutputChannel implements IOutputChannel {
 	constructor(private prefix: string, @ILogService private readonly logService: ILogService) { }
 
-	appendLine(msg: string): codemavi {
+	appendLine(msg: string): void {
 		this.logService.debug(`${this.prefix}#search`, msg);
 	}
 }

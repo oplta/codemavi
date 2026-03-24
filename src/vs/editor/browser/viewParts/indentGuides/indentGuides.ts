@@ -49,7 +49,7 @@ export class IndentGuidesOverlay extends DynamicViewOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -106,7 +106,7 @@ export class IndentGuidesOverlay extends DynamicViewOverlay {
 
 	// --- end event handlers
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		if (!this._bracketPairGuideOptions.indentation && this._bracketPairGuideOptions.bracketPairs === false) {
 			this._renderResult = null;
 			return;

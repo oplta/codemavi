@@ -59,7 +59,7 @@ class PostEditWidget<T extends DocumentPasteEdit | DocumentDropEdit> extends Dis
 		private readonly showCommand: ShowCommand,
 		private readonly range: Range,
 		private readonly edits: EditSet<T>,
-		private readonly onSelectNewEdit: (editIndex: number) => codemavi,
+		private readonly onSelectNewEdit: (editIndex: number) => void,
 		private readonly additionalActions: readonly IAction[],
 		@IContextKeyService contextKeyService: IContextKeyService,
 		@IKeybindingService private readonly _keybindingService: IKeybindingService,
@@ -92,7 +92,7 @@ class PostEditWidget<T extends DocumentPasteEdit | DocumentDropEdit> extends Dis
 		this.button.element.title = this.showCommand.label + (binding ? ` (${binding})` : '');
 	}
 
-	private create(): codemavi {
+	private create(): void {
 		this.domNode = dom.$('.post-edit-widget');
 
 		this.button = this._register(new Button(this.domNode, {
@@ -246,7 +246,7 @@ export class PostEditWidgetManager<T extends DocumentPasteEdit | DocumentDropEdi
 		}
 	}
 
-	public show(range: Range, edits: EditSet<T>, onDidSelectEdit: (newIndex: number) => codemavi) {
+	public show(range: Range, edits: EditSet<T>, onDidSelectEdit: (newIndex: number) => void) {
 		this.clear();
 
 		if (this._editor.hasModel()) {

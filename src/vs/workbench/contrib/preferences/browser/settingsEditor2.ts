@@ -182,14 +182,14 @@ export class SettingsEditor2 extends EditorPane {
 	private tocTreeContainer!: HTMLElement;
 	private tocTree!: TOCTree;
 
-	private searchDelayer: Delayer<codemavi>;
+	private searchDelayer: Delayer<void>;
 	private searchInProgress: CancellationTokenSource | null = null;
 
-	private searchInputDelayer: Delayer<codemavi>;
-	private updatedConfigSchemaDelayer: Delayer<codemavi>;
+	private searchInputDelayer: Delayer<void>;
+	private updatedConfigSchemaDelayer: Delayer<void>;
 
-	private settingFastUpdateDelayer: Delayer<codemavi>;
-	private settingSlowUpdateDelayer: Delayer<codemavi>;
+	private settingFastUpdateDelayer: Delayer<void>;
+	private settingSlowUpdateDelayer: Delayer<void>;
 	private pendingSettingUpdate: { key: string; value: any; languageFilter: string | undefined } | null = null;
 
 	private readonly viewState: ISettingsEditorViewState;
@@ -254,11 +254,11 @@ export class SettingsEditor2 extends EditorPane {
 		this.searchDelayer = new Delayer(300);
 		this.viewState = { settingsTarget: ConfigurationTarget.USER_LOCAL };
 
-		this.settingFastUpdateDelayer = new Delayer<codemavi>(SettingsEditor2.SETTING_UPDATE_FAST_DEBOUNCE);
-		this.settingSlowUpdateDelayer = new Delayer<codemavi>(SettingsEditor2.SETTING_UPDATE_SLOW_DEBOUNCE);
+		this.settingFastUpdateDelayer = new Delayer<void>(SettingsEditor2.SETTING_UPDATE_FAST_DEBOUNCE);
+		this.settingSlowUpdateDelayer = new Delayer<void>(SettingsEditor2.SETTING_UPDATE_SLOW_DEBOUNCE);
 
-		this.searchInputDelayer = new Delayer<codemavi>(SettingsEditor2.SEARCH_DEBOUNCE);
-		this.updatedConfigSchemaDelayer = new Delayer<codemavi>(SettingsEditor2.CONFIG_SCHEMA_UPDATE_DELAYER);
+		this.searchInputDelayer = new Delayer<void>(SettingsEditor2.SEARCH_DEBOUNCE);
+		this.updatedConfigSchemaDelayer = new Delayer<void>(SettingsEditor2.CONFIG_SCHEMA_UPDATE_DELAYER);
 
 		this.inSettingsEditorContextKey = CONTEXT_SETTINGS_EDITOR.bindTo(contextKeyService);
 		this.searchFocusContextKey = CONTEXT_SETTINGS_SEARCH_FOCUS.bindTo(contextKeyService);
@@ -313,7 +313,7 @@ export class SettingsEditor2 extends EditorPane {
 		this.inputChangeListener = this._register(new MutableDisposable());
 	}
 
-	private async whenCurrentProfileChanged(): Promise<codemavi> {
+	private async whenCurrentProfileChanged(): Promise<void> {
 		this.updatedConfigSchemaDelayer.trigger(() => {
 			this.dismissedExtensionSettings = this.storageService
 				.get(this.DISMISSED_EXTENSION_SETTINGS_STORAGE_KEY, StorageScope.PROFILE, '')
@@ -357,7 +357,7 @@ export class SettingsEditor2 extends EditorPane {
 		return this._currentFocusContext;
 	}
 
-	protected createEditor(parent: HTMLElement): codemavi {
+	protected createEditor(parent: HTMLElement): void {
 		parent.setAttribute('tabindex', '-1');
 		this.rootElement = DOM.append(parent, $('.settings-editor', { tabindex: '-1' }));
 
@@ -382,7 +382,7 @@ export class SettingsEditor2 extends EditorPane {
 		}));
 	}
 
-	override async setInput(input: SettingsEditor2Input, options: ISettingsEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+	override async setInput(input: SettingsEditor2Input, options: ISettingsEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 		this.inSettingsEditorContextKey.set(true);
 		await super.setInput(input, options, context, token);
 		if (!this.input) {
@@ -425,7 +425,7 @@ export class SettingsEditor2 extends EditorPane {
 		await this.refreshInstalledExtensionsList();
 	}
 
-	private async refreshInstalledExtensionsList(): Promise<codemavi> {
+	private async refreshInstalledExtensionsList(): Promise<void> {
 		const installedExtensions = await this.extensionManagementService.getInstalled();
 		this.installedExtensionIds = installedExtensions
 			.filter(ext => ext.manifest.contributes?.configuration)
@@ -458,7 +458,7 @@ export class SettingsEditor2 extends EditorPane {
 		return this.viewState;
 	}
 
-	override setOptions(options: ISettingsEditorOptions | undefined): codemavi {
+	override setOptions(options: ISettingsEditorOptions | undefined): void {
 		super.setOptions(options);
 
 		if (options) {
@@ -466,7 +466,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private _setOptions(options: ISettingsEditorOptions): codemavi {
+	private _setOptions(options: ISettingsEditorOptions): void {
 		if (options.focusSearch && !platform.isIOS) {
 			// isIOS - #122044
 			this.focusSearch();
@@ -487,12 +487,12 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	override clearInput(): codemavi {
+	override clearInput(): void {
 		this.inSettingsEditorContextKey.set(false);
 		super.clearInput();
 	}
 
-	layout(dimension: DOM.Dimension): codemavi {
+	layout(dimension: DOM.Dimension): void {
 		this.dimension = dimension;
 
 		if (!this.isVisible()) {
@@ -509,7 +509,7 @@ export class SettingsEditor2 extends EditorPane {
 		this.rootElement.classList.toggle('narrow-width', dimension.width < SettingsEditor2.NARROW_TOTAL_WIDTH);
 	}
 
-	override focus(): codemavi {
+	override focus(): void {
 		super.focus();
 
 		if (this._currentFocusContext === SettingsFocusContext.Search) {
@@ -533,7 +533,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	protected override setEditorVisible(visible: boolean): codemavi {
+	protected override setEditorVisible(visible: boolean): void {
 		super.setEditorVisible(visible);
 
 		if (!visible) {
@@ -545,7 +545,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	focusSettings(focusSettingInput = false): codemavi {
+	focusSettings(focusSettingInput = false): void {
 		const focused = this.settingsTree.getFocus();
 		if (!focused.length) {
 			this.settingsTree.focusFirst();
@@ -561,11 +561,11 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	focusTOC(): codemavi {
+	focusTOC(): void {
 		this.tocTree.domFocus();
 	}
 
-	showContextMenu(): codemavi {
+	showContextMenu(): void {
 		const focused = this.settingsTree.getFocus()[0];
 		const rowElement = this.focusedSettingDOMElement;
 		if (rowElement && focused instanceof SettingsTreeSettingElement) {
@@ -573,7 +573,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	focusSearch(filter?: string, selectAll = true): codemavi {
+	focusSearch(filter?: string, selectAll = true): void {
 		if (filter && this.searchWidget) {
 			this.searchWidget.setValue(filter);
 		}
@@ -582,12 +582,12 @@ export class SettingsEditor2 extends EditorPane {
 		this.searchWidget.focus(selectAll && !this.searchInputDelayer.isTriggered);
 	}
 
-	clearSearchResults(): codemavi {
+	clearSearchResults(): void {
 		this.searchWidget.setValue('');
 		this.focusSearch();
 	}
 
-	clearSearchFilters(): codemavi {
+	clearSearchFilters(): void {
 		const query = this.searchWidget.getValue();
 
 		const splitQuery = query.split(' ').filter(word => {
@@ -613,7 +613,7 @@ export class SettingsEditor2 extends EditorPane {
 	/**
 	 * Render the header of the Settings editor, which includes the content above the splitview.
 	 */
-	private createHeader(parent: HTMLElement): codemavi {
+	private createHeader(parent: HTMLElement): void {
 		this.headerContainer = DOM.append(parent, $('.settings-header'));
 
 		const searchContainer = DOM.append(this.headerContainer, $('.search-container'));
@@ -701,14 +701,14 @@ export class SettingsEditor2 extends EditorPane {
 		actionBar.push([clearInputAction, filterAction], { label: false, icon: true });
 	}
 
-	private onDidSettingsTargetChange(target: SettingsTarget): codemavi {
+	private onDidSettingsTargetChange(target: SettingsTarget): void {
 		this.viewState.settingsTarget = target;
 
 		// TODO Instead of rebuilding the whole model, refresh and uncache the inspected setting value
 		this.onConfigUpdate(undefined, true);
 	}
 
-	private onDidDismissExtensionSetting(extensionId: string): codemavi {
+	private onDidDismissExtensionSetting(extensionId: string): void {
 		if (!this.dismissedExtensionSettings.includes(extensionId)) {
 			this.dismissedExtensionSettings.push(extensionId);
 		}
@@ -721,7 +721,7 @@ export class SettingsEditor2 extends EditorPane {
 		this.onConfigUpdate(undefined, true);
 	}
 
-	private onDidClickSetting(evt: ISettingLinkClickEvent, recursed?: boolean): codemavi {
+	private onDidClickSetting(evt: ISettingLinkClickEvent, recursed?: boolean): void {
 		const targetElement = this.currentSettingsModel?.getElementsByName(evt.targetKey)?.[0];
 		let revealFailed = false;
 		if (targetElement) {
@@ -810,7 +810,7 @@ export class SettingsEditor2 extends EditorPane {
 		return undefined;
 	}
 
-	private createBody(parent: HTMLElement): codemavi {
+	private createBody(parent: HTMLElement): void {
 		this.bodyContainer = DOM.append(parent, $('.settings-body'));
 
 		this.noResultsMessage = DOM.append(this.bodyContainer, $('.no-results-message'));
@@ -874,21 +874,21 @@ export class SettingsEditor2 extends EditorPane {
 		this.splitView.style({ separatorBorder: borderColor });
 	}
 
-	private addCtrlAInterceptor(container: HTMLElement): codemavi {
+	private addCtrlAInterceptor(container: HTMLElement): void {
 		this._register(DOM.addStandardDisposableListener(container, DOM.EventType.KEY_DOWN, (e: StandardKeyboardEvent) => {
 			if (
 				e.keyCode === KeyCode.KeyA &&
 				(platform.isMacintosh ? e.metaKey : e.ctrlKey) &&
 				!DOM.isEditableElement(e.target)
 			) {
-				// Acodemavi browser ctrl+a
+				// Avoid browser ctrl+a
 				e.browserEvent.stopPropagation();
 				e.browserEvent.preventDefault();
 			}
 		}));
 	}
 
-	private createTOC(container: HTMLElement): codemavi {
+	private createTOC(container: HTMLElement): void {
 		this.tocTreeModel = this.instantiationService.createInstance(TOCTreeModel, this.viewState);
 
 		this.tocTree = this._register(this.instantiationService.createInstance(TOCTree,
@@ -954,7 +954,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private createSettingsTree(container: HTMLElement): codemavi {
+	private createSettingsTree(container: HTMLElement): void {
 		this.settingRenderers = this._register(this.instantiationService.createInstance(SettingTreeRenderers));
 		this._register(this.settingRenderers.onDidChangeSetting(e => this.onDidChangeSetting(e.key, e.value, e.type, e.manualReset, e.scope)));
 		this._register(this.settingRenderers.onDidDismissExtensionSetting((e) => this.onDidDismissExtensionSetting(e)));
@@ -1051,7 +1051,7 @@ export class SettingsEditor2 extends EditorPane {
 		}));
 	}
 
-	private onDidChangeSetting(key: string, value: any, type: SettingValueType | SettingValueType[], manualReset: boolean, scope: ConfigurationScope | undefined): codemavi {
+	private onDidChangeSetting(key: string, value: any, type: SettingValueType | SettingValueType[], manualReset: boolean, scope: ConfigurationScope | undefined): void {
 		const parsedQuery = parseQuery(this.searchWidget.getValue());
 		const languageFilter = parsedQuery.languageFilter;
 		if (manualReset || (this.pendingSettingUpdate && this.pendingSettingUpdate.key !== key)) {
@@ -1066,7 +1066,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private updateTreeScrollSync(): codemavi {
+	private updateTreeScrollSync(): void {
 		this.settingRenderers.cancelSuggesters();
 		if (this.searchResultModel) {
 			return;
@@ -1132,7 +1132,7 @@ export class SettingsEditor2 extends EditorPane {
 		return ancestors.reverse();
 	}
 
-	private updateChangedSetting(key: string, value: any, manualReset: boolean, languageFilter: string | undefined, scope: ConfigurationScope | undefined): Promise<codemavi> {
+	private updateChangedSetting(key: string, value: any, manualReset: boolean, languageFilter: string | undefined, scope: ConfigurationScope | undefined): Promise<void> {
 		// ConfigurationService displays the error if this fails.
 		// Force a render afterwards because onDidConfigurationUpdate doesn't fire if the update doesn't result in an effective setting value change.
 		const settingsTarget = this.settingsTargetsWidget.settingsTarget;
@@ -1174,7 +1174,7 @@ export class SettingsEditor2 extends EditorPane {
 			});
 	}
 
-	private reportModifiedSetting(props: { key: string; query: string; searchResults: ISearchResult | null; rawResults: ISearchResult[] | null; showConfiguredOnly: boolean; isReset: boolean; settingsTarget: SettingsTarget }): codemavi {
+	private reportModifiedSetting(props: { key: string; query: string; searchResults: ISearchResult | null; rawResults: ISearchResult[] | null; showConfiguredOnly: boolean; isReset: boolean; settingsTarget: SettingsTarget }): void {
 		type SettingsEditorModifiedSettingEvent = {
 			key: string;
 			groupId: string | undefined;
@@ -1233,7 +1233,7 @@ export class SettingsEditor2 extends EditorPane {
 		this.telemetryService.publicLog2<SettingsEditorModifiedSettingEvent, SettingsEditorModifiedSettingClassification>('settingsEditor.settingModified', data);
 	}
 
-	private scheduleRefresh(element: HTMLElement, key = ''): codemavi {
+	private scheduleRefresh(element: HTMLElement, key = ''): void {
 		if (key && this.scheduledRefreshes.has(key)) {
 			return;
 		}
@@ -1282,7 +1282,7 @@ export class SettingsEditor2 extends EditorPane {
 		this.settingsOrderByTocIndex = this.createSettingsOrderByTocIndex(resolvedSettingsRoot);
 	}
 
-	private async onConfigUpdate(keys?: ReadonlySet<string>, forceRefresh = false, schemaChange = false): Promise<codemavi> {
+	private async onConfigUpdate(keys?: ReadonlySet<string>, forceRefresh = false, schemaChange = false): Promise<void> {
 		if (keys && this.settingsTreeModel) {
 			return this.updateElementsByKey(keys);
 		}
@@ -1455,7 +1455,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private updateElementsByKey(keys: ReadonlySet<string>): codemavi {
+	private updateElementsByKey(keys: ReadonlySet<string>): void {
 		if (keys.size) {
 			if (this.searchResultModel) {
 				keys.forEach(key => this.searchResultModel!.updateElementsByName(key));
@@ -1479,7 +1479,7 @@ export class SettingsEditor2 extends EditorPane {
 			null;
 	}
 
-	private renderTree(key?: string, force = false): codemavi {
+	private renderTree(key?: string, force = false): void {
 		if (!force && key && this.scheduledRefreshes.has(key)) {
 			this.updateModifiedLabelForKey(key);
 			return;
@@ -1539,7 +1539,7 @@ export class SettingsEditor2 extends EditorPane {
 		return !!DOM.findParentWithClass(<HTMLElement>this.rootElement.ownerDocument.activeElement, 'context-view');
 	}
 
-	private refreshSingleElement(element: SettingsTreeSettingElement): codemavi {
+	private refreshSingleElement(element: SettingsTreeSettingElement): void {
 		if (this.isVisible()) {
 			if (!element.setting.deprecationMessage || element.isConfigured) {
 				this.settingsTree.rerender(element);
@@ -1547,20 +1547,20 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private refreshTree(): codemavi {
+	private refreshTree(): void {
 		if (this.isVisible() && this.currentSettingsModel) {
 			this.settingsTree.setChildren(null, createGroupIterator(this.currentSettingsModel.root));
 		}
 	}
 
-	private refreshTOCTree(): codemavi {
+	private refreshTOCTree(): void {
 		if (this.isVisible()) {
 			this.tocTreeModel.update();
 			this.tocTree.setChildren(null, createTOCIterator(this.tocTreeModel, this.tocTree));
 		}
 	}
 
-	private updateModifiedLabelForKey(key: string): codemavi {
+	private updateModifiedLabelForKey(key: string): void {
 		if (!this.currentSettingsModel) {
 			return;
 		}
@@ -1572,7 +1572,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private async onSearchInputChanged(): Promise<codemavi> {
+	private async onSearchInputChanged(): Promise<void> {
 		if (!this.currentSettingsModel) {
 			// Initializing search widget value
 			return;
@@ -1605,7 +1605,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private async triggerSearch(query: string): Promise<codemavi> {
+	private async triggerSearch(query: string): Promise<void> {
 		const progressRunner = this.editorProgressService.show(true, 800);
 		this.viewState.tagFilters = new Set<string>();
 		this.viewState.extensionFilters = new Set<string>();
@@ -1687,7 +1687,7 @@ export class SettingsEditor2 extends EditorPane {
 		return filterModel;
 	}
 
-	private async triggerFilterPreferences(query: string): Promise<codemavi> {
+	private async triggerFilterPreferences(query: string): Promise<void> {
 		if (this.searchInProgress) {
 			this.searchInProgress.dispose(true);
 			this.searchInProgress = null;
@@ -1801,7 +1801,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	private layoutSplitView(dimension: DOM.Dimension): codemavi {
+	private layoutSplitView(dimension: DOM.Dimension): void {
 		if (!this.isVisible()) {
 			return;
 		}
@@ -1833,7 +1833,7 @@ export class SettingsEditor2 extends EditorPane {
 		}
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 		if (this.isVisible()) {
 			const searchQuery = this.searchWidget.getValue().trim();
 			const target = this.settingsTargetsWidget.settingsTarget as SettingsTarget;
@@ -1897,7 +1897,7 @@ class SyncControls extends Disposable {
 		}));
 	}
 
-	private updateLastSyncedTime(): codemavi {
+	private updateLastSyncedTime(): void {
 		const last = this.userDataSyncService.lastSyncTime;
 		let label: string;
 		if (typeof last === 'number') {
@@ -1911,7 +1911,7 @@ class SyncControls extends Disposable {
 		this._onDidChangeLastSyncedLabel.fire(label);
 	}
 
-	private update(): codemavi {
+	private update(): void {
 		if (this.userDataSyncService.status === SyncStatus.Uninitialized) {
 			return;
 		}

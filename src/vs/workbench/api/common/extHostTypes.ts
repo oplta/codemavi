@@ -846,25 +846,25 @@ export class WorkspaceEdit implements vscode.WorkspaceEdit {
 
 	// --- file
 
-	renameFile(from: vscode.Uri, to: vscode.Uri, options?: { readonly overwrite?: boolean; readonly ignoreIfExists?: boolean }, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	renameFile(from: vscode.Uri, to: vscode.Uri, options?: { readonly overwrite?: boolean; readonly ignoreIfExists?: boolean }, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.File, from, to, options, metadata });
 	}
 
-	createFile(uri: vscode.Uri, options?: { readonly overwrite?: boolean; readonly ignoreIfExists?: boolean; readonly contents?: Uint8Array | vscode.DataTransferFile }, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	createFile(uri: vscode.Uri, options?: { readonly overwrite?: boolean; readonly ignoreIfExists?: boolean; readonly contents?: Uint8Array | vscode.DataTransferFile }, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.File, from: undefined, to: uri, options, metadata });
 	}
 
-	deleteFile(uri: vscode.Uri, options?: { readonly recursive?: boolean; readonly ignoreIfNotExists?: boolean }, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	deleteFile(uri: vscode.Uri, options?: { readonly recursive?: boolean; readonly ignoreIfNotExists?: boolean }, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.File, from: uri, to: undefined, options, metadata });
 	}
 
 	// --- notebook
 
-	private replaceNotebookMetadata(uri: URI, value: Record<string, any>, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	private replaceNotebookMetadata(uri: URI, value: Record<string, any>, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.Cell, metadata, uri, edit: { editType: CellEditType.DocumentMetadata, metadata: value } });
 	}
 
-	private replaceNotebookCells(uri: URI, startOrRange: vscode.NotebookRange, cellData: vscode.NotebookCellData[], metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	private replaceNotebookCells(uri: URI, startOrRange: vscode.NotebookRange, cellData: vscode.NotebookCellData[], metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		const start = startOrRange.start;
 		const end = startOrRange.end;
 
@@ -873,21 +873,21 @@ export class WorkspaceEdit implements vscode.WorkspaceEdit {
 		}
 	}
 
-	private replaceNotebookCellMetadata(uri: URI, index: number, cellMetadata: Record<string, any>, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	private replaceNotebookCellMetadata(uri: URI, index: number, cellMetadata: Record<string, any>, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.Cell, metadata, uri, edit: { editType: CellEditType.Metadata, index, metadata: cellMetadata } });
 	}
 
 	// --- text
 
-	replace(uri: URI, range: Range, newText: string, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	replace(uri: URI, range: Range, newText: string, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this._edits.push({ _type: FileEditType.Text, uri, edit: new TextEdit(range, newText), metadata });
 	}
 
-	insert(resource: URI, position: Position, newText: string, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	insert(resource: URI, position: Position, newText: string, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this.replace(resource, new Range(position, position), newText, metadata);
 	}
 
-	delete(resource: URI, range: Range, metadata?: vscode.WorkspaceEditEntryMetadata): codemavi {
+	delete(resource: URI, range: Range, metadata?: vscode.WorkspaceEditEntryMetadata): void {
 		this.replace(resource, range, '', metadata);
 	}
 
@@ -897,12 +897,12 @@ export class WorkspaceEdit implements vscode.WorkspaceEdit {
 		return this._edits.some(edit => edit._type === FileEditType.Text && edit.uri.toString() === uri.toString());
 	}
 
-	set(uri: URI, edits: ReadonlyArray<TextEdit | SnippetTextEdit>): codemavi;
-	set(uri: URI, edits: ReadonlyArray<[TextEdit | SnippetTextEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): codemavi;
-	set(uri: URI, edits: readonly NotebookEdit[]): codemavi;
-	set(uri: URI, edits: ReadonlyArray<[NotebookEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): codemavi;
+	set(uri: URI, edits: ReadonlyArray<TextEdit | SnippetTextEdit>): void;
+	set(uri: URI, edits: ReadonlyArray<[TextEdit | SnippetTextEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): void;
+	set(uri: URI, edits: readonly NotebookEdit[]): void;
+	set(uri: URI, edits: ReadonlyArray<[NotebookEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): void;
 
-	set(uri: URI, edits: null | undefined | ReadonlyArray<TextEdit | SnippetTextEdit | NotebookEdit | [NotebookEdit, vscode.WorkspaceEditEntryMetadata | undefined] | [TextEdit | SnippetTextEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): codemavi {
+	set(uri: URI, edits: null | undefined | ReadonlyArray<TextEdit | SnippetTextEdit | NotebookEdit | [NotebookEdit, vscode.WorkspaceEditEntryMetadata | undefined] | [TextEdit | SnippetTextEdit, vscode.WorkspaceEditEntryMetadata | undefined]>): void {
 		if (!edits) {
 			// remove all text, snippet, or notebook edits for `uri`
 			for (let i = 0; i < this._edits.length; i++) {
@@ -1341,7 +1341,7 @@ export enum SymbolTag {
 @es5ClassCompat
 export class SymbolInformation {
 
-	static validate(candidate: SymbolInformation): codemavi {
+	static validate(candidate: SymbolInformation): void {
 		if (!candidate.name) {
 			throw new Error('name must not be falsy');
 		}
@@ -1386,7 +1386,7 @@ export class SymbolInformation {
 @es5ClassCompat
 export class DocumentSymbol {
 
-	static validate(candidate: DocumentSymbol): codemavi {
+	static validate(candidate: DocumentSymbol): void {
 		if (!candidate.name) {
 			throw new Error('name must not be falsy');
 		}
@@ -2582,7 +2582,7 @@ export class Task implements vscode.Task {
 		return this.__deprecated;
 	}
 
-	private clear(): codemavi {
+	private clear(): void {
 		if (this.__id === undefined) {
 			return;
 		}
@@ -2591,7 +2591,7 @@ export class Task implements vscode.Task {
 		this.computeDefinitionBasedOnExecution();
 	}
 
-	private computeDefinitionBasedOnExecution(): codemavi {
+	private computeDefinitionBasedOnExecution(): void {
 		if (this._execution instanceof ProcessExecution) {
 			this._definition = {
 				type: Task.ProcessType,
@@ -2962,13 +2962,13 @@ export class DataTransfer implements vscode.DataTransfer {
 		return this.#items.get(this.#normalizeMime(mimeType))?.[0];
 	}
 
-	set(mimeType: string, value: vscode.DataTransferItem): codemavi {
+	set(mimeType: string, value: vscode.DataTransferItem): void {
 		// This intentionally overwrites all entries for a given mimetype.
 		// This is similar to how the DOM DataTransfer type works
 		this.#items.set(this.#normalizeMime(mimeType), [value]);
 	}
 
-	forEach(callbackfn: (value: vscode.DataTransferItem, key: string, dataTransfer: DataTransfer) => codemavi, thisArg?: unknown): codemavi {
+	forEach(callbackfn: (value: vscode.DataTransferItem, key: string, dataTransfer: DataTransfer) => void, thisArg?: unknown): void {
 		for (const [mime, items] of this.#items) {
 			for (const item of items) {
 				callbackfn.call(thisArg, item, mime, this);
@@ -3544,9 +3544,9 @@ export class SemanticTokensBuilder {
 		}
 	}
 
-	public push(line: number, char: number, length: number, tokenType: number, tokenModifiers?: number): codemavi;
-	public push(range: Range, tokenType: string, tokenModifiers?: string[]): codemavi;
-	public push(arg0: any, arg1: any, arg2: any, arg3?: any, arg4?: any): codemavi {
+	public push(line: number, char: number, length: number, tokenType: number, tokenModifiers?: number): void;
+	public push(range: Range, tokenType: string, tokenModifiers?: string[]): void;
+	public push(arg0: any, arg1: any, arg2: any, arg3?: any, arg4?: any): void {
 		if (typeof arg0 === 'number' && typeof arg1 === 'number' && typeof arg2 === 'number' && typeof arg3 === 'number' && (typeof arg4 === 'number' || typeof arg4 === 'undefined')) {
 			if (typeof arg4 === 'undefined') {
 				arg4 = 0;
@@ -3561,7 +3561,7 @@ export class SemanticTokensBuilder {
 		throw illegalArgument();
 	}
 
-	private _push(range: vscode.Range, tokenType: string, tokenModifiers?: string[]): codemavi {
+	private _push(range: vscode.Range, tokenType: string, tokenModifiers?: string[]): void {
 		if (!this._hasLegend) {
 			throw new Error('Legend must be provided in constructor');
 		}
@@ -3588,7 +3588,7 @@ export class SemanticTokensBuilder {
 		this._pushEncoded(line, char, length, nTokenType, nTokenModifiers);
 	}
 
-	private _pushEncoded(line: number, char: number, length: number, tokenType: number, tokenModifiers: number): codemavi {
+	private _pushEncoded(line: number, char: number, length: number, tokenType: number, tokenModifiers: number): void {
 		if (this._dataIsSortedAndDeltaEncoded && (line < this._prevLine || (line === this._prevLine && char < this._prevChar))) {
 			// push calls were ordered and are no longer ordered
 			this._dataIsSortedAndDeltaEncoded = false;
@@ -3890,7 +3890,7 @@ export class NotebookRange {
 
 export class NotebookCellData {
 
-	static validate(data: NotebookCellData): codemavi {
+	static validate(data: NotebookCellData): void {
 		if (typeof data.kind !== 'number') {
 			throw new Error('NotebookCellData MUST have \'kind\' property');
 		}
@@ -4592,7 +4592,7 @@ export class ChatResponseAnchorPart implements vscode.ChatResponseAnchorPart {
 	title?: string;
 
 	value2: vscode.Uri | vscode.Location | vscode.SymbolInformation;
-	resolve?(token: vscode.CancellationToken): Thenable<codemavi>;
+	resolve?(token: vscode.CancellationToken): Thenable<void>;
 
 	constructor(value: vscode.Uri | vscode.Location | vscode.SymbolInformation, title?: string) {
 		this.value = value as any;
@@ -4610,8 +4610,8 @@ export class ChatResponseProgressPart {
 
 export class ChatResponseProgressPart2 {
 	value: string;
-	task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | codemavi>;
-	constructor(value: string, task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | codemavi>) {
+	task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | void>;
+	constructor(value: string, task?: (progress: vscode.Progress<vscode.ChatResponseWarningPart>) => Thenable<string | void>) {
 		this.value = value;
 		this.task = task;
 	}
@@ -4829,7 +4829,7 @@ export class LanguageModelChatMessage implements vscode.LanguageModelChatMessage
 		return this._content;
 	}
 
-	// Temp to acodemavi breaking changes
+	// Temp to avoid breaking changes
 	set content2(value: (string | LanguageModelToolResultPart | LanguageModelToolCallPart)[] | undefined) {
 		if (value) {
 			this.content = value.map(part => {
@@ -4888,7 +4888,7 @@ export class LanguageModelChatMessage2 implements vscode.LanguageModelChatMessag
 		return this._content;
 	}
 
-	// Temp to acodemavi breaking changes
+	// Temp to avoid breaking changes
 	set content2(value: (string | LanguageModelToolResultPart | LanguageModelToolCallPart | LanguageModelDataPart)[] | undefined) {
 		if (value) {
 			this.content = value.map(part => {

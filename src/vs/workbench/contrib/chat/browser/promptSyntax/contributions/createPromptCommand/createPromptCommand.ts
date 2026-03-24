@@ -57,7 +57,7 @@ const USER_COMMAND_TITLE = localize('commands.prompts.create.title.user', "Creat
 const command = async (
 	accessor: ServicesAccessor,
 	type: IPromptPath['type'],
-): Promise<codemavi> => {
+): Promise<void> => {
 	const logService = accessor.get(ILogService);
 	const fileService = accessor.get(IFileService);
 	const labelService = accessor.get(ILabelService);
@@ -152,7 +152,7 @@ const command = async (
  * Factory for creating the command handler with specific prompt `type`.
  */
 const commandFactory = (type: 'local' | 'user') => {
-	return async (accessor: ServicesAccessor): Promise<codemavi> => {
+	return async (accessor: ServicesAccessor): Promise<void> => {
 		return command(accessor, type);
 	};
 };

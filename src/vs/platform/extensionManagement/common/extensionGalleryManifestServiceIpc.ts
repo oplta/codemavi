@@ -41,7 +41,7 @@ export class ExtensionGalleryManifestIPCService extends ExtensionGalleryManifest
 		return this.extensionGalleryManifest ?? null;
 	}
 
-	private setExtensionGalleryManifest(manifest: IExtensionGalleryManifest | null): codemavi {
+	private setExtensionGalleryManifest(manifest: IExtensionGalleryManifest | null): void {
 		this.extensionGalleryManifest = manifest;
 		this._onDidChangeExtensionGalleryManifest.fire(manifest);
 		this.barrier.open();

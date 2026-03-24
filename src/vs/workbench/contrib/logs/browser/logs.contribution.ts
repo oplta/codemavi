@@ -22,7 +22,7 @@ class WebLogOutputChannels extends Disposable implements IWorkbenchContribution 
 		this.registerWebContributions();
 	}
 
-	private registerWebContributions(): codemavi {
+	private registerWebContributions(): void {
 		this.instantiationService.createInstance(LogsDataCleaner);
 
 		this._register(registerAction2(class extends Action2 {
@@ -34,7 +34,7 @@ class WebLogOutputChannels extends Disposable implements IWorkbenchContribution 
 					f1: true
 				});
 			}
-			run(servicesAccessor: ServicesAccessor): Promise<codemavi> {
+			run(servicesAccessor: ServicesAccessor): Promise<void> {
 				return servicesAccessor.get(IInstantiationService).createInstance(OpenWindowSessionLogFileAction, OpenWindowSessionLogFileAction.ID, OpenWindowSessionLogFileAction.TITLE.value).run();
 			}
 		}));

@@ -173,7 +173,7 @@ Registry.add(EditorExtensions.EditorPane, new EditorPaneRegistry());
 
 //#region Editor Close Tracker
 
-export function whenEditorClosed(accessor: ServicesAccessor, resources: URI[]): Promise<codemavi> {
+export function whenEditorClosed(accessor: ServicesAccessor, resources: URI[]): Promise<void> {
 	const editorService = accessor.get(IEditorService);
 	const uriIdentityService = accessor.get(IUriIdentityService);
 	const workingCopyService = accessor.get(IWorkingCopyService);
@@ -244,7 +244,7 @@ export function whenEditorClosed(accessor: ServicesAccessor, resources: URI[]): 
 				// for them to get saved.
 				const dirtyResources = resources.filter(resource => workingCopyService.isDirty(resource));
 				if (dirtyResources.length > 0) {
-					await Promises.settled(dirtyResources.map(async resource => await new Promise<codemavi>(resolve => {
+					await Promises.settled(dirtyResources.map(async resource => await new Promise<void>(resolve => {
 						if (!workingCopyService.isDirty(resource)) {
 							return resolve(); // return early if resource is not dirty
 						}

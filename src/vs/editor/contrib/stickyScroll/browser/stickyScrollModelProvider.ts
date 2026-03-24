@@ -51,7 +51,7 @@ export class StickyModelProvider extends Disposable implements IStickyModelProvi
 
 	constructor(
 		private readonly _editor: IActiveCodeEditor,
-		onProviderUpdate: () => codemavi,
+		onProviderUpdate: () => void,
 		@IInstantiationService _languageConfigurationService: ILanguageConfigurationService,
 		@ILanguageFeaturesService _languageFeaturesService: ILanguageFeaturesService,
 	) {
@@ -70,14 +70,14 @@ export class StickyModelProvider extends Disposable implements IStickyModelProvi
 		}
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._modelProviders.forEach(provider => provider.dispose());
 		this._updateOperation.clear();
 		this._cancelModelPromise();
 		super.dispose();
 	}
 
-	private _cancelModelPromise(): codemavi {
+	private _cancelModelPromise(): void {
 		if (this._modelPromise) {
 			this._modelPromise.cancel();
 			this._modelPromise = null;
@@ -388,7 +388,7 @@ class StickyModelFromCandidateSyntaxFoldingProvider extends StickyModelFromCandi
 	private readonly provider: SyntaxRangeProvider | undefined;
 
 	constructor(editor: IActiveCodeEditor,
-		onProviderUpdate: () => codemavi,
+		onProviderUpdate: () => void,
 		@ILanguageFeaturesService private readonly _languageFeaturesService: ILanguageFeaturesService
 	) {
 		super(editor);

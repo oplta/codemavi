@@ -20,7 +20,7 @@ function processUNCHostAllowlist(): Set<string> {
 	return (process as any).uncHostAllowlist;
 }
 
-export function addUNCHostToAllowlist(allowedHost: string | string[]): codemavi {
+export function addUNCHostToAllowlist(allowedHost: string | string[]): void {
 	if (process.platform !== 'win32') {
 		return;
 	}
@@ -85,7 +85,7 @@ export function getUNCHost(maybeUNCPath: string | undefined | null): string | un
 	return host;
 }
 
-export function disableUNCAccessRestrictions(): codemavi {
+export function disableUNCAccessRestrictions(): void {
 	if (process.platform !== 'win32') {
 		return;
 	}

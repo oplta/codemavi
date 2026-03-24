@@ -69,7 +69,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		this._modifierPressed = false;
 	}
 
-	private onEditorKeyDown(e: IKeyboardEvent): codemavi {
+	private onEditorKeyDown(e: IKeyboardEvent): void {
 		if (!this._editor.getOption(EditorOption.dragAndDrop) || this._editor.getOption(EditorOption.columnSelection)) {
 			return;
 		}
@@ -85,7 +85,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		}
 	}
 
-	private onEditorKeyUp(e: IKeyboardEvent): codemavi {
+	private onEditorKeyUp(e: IKeyboardEvent): void {
 		if (!this._editor.getOption(EditorOption.dragAndDrop) || this._editor.getOption(EditorOption.columnSelection)) {
 			return;
 		}
@@ -101,11 +101,11 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		}
 	}
 
-	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): codemavi {
+	private _onEditorMouseDown(mouseEvent: IEditorMouseEvent): void {
 		this._mouseDown = true;
 	}
 
-	private _onEditorMouseUp(mouseEvent: IEditorMouseEvent): codemavi {
+	private _onEditorMouseUp(mouseEvent: IEditorMouseEvent): void {
 		this._mouseDown = false;
 		// Whenever users release the mouse, the drag and drop operation should finish and the cursor should revert to text.
 		this._editor.updateOptions({
@@ -113,7 +113,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		});
 	}
 
-	private _onEditorMouseDrag(mouseEvent: IEditorMouseEvent): codemavi {
+	private _onEditorMouseDrag(mouseEvent: IEditorMouseEvent): void {
 		const target = mouseEvent.target;
 
 		if (this._dragSelection === null) {
@@ -155,7 +155,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		this._mouseDown = false;
 	}
 
-	private _onEditorMouseDrop(mouseEvent: IPartialEditorMouseEvent): codemavi {
+	private _onEditorMouseDrop(mouseEvent: IPartialEditorMouseEvent): void {
 		if (mouseEvent.target && (this._hitContent(mouseEvent.target) || this._hitMargin(mouseEvent.target)) && mouseEvent.target.position) {
 			const newCursorPosition = new Position(mouseEvent.target.position.lineNumber, mouseEvent.target.position.column);
 
@@ -207,7 +207,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		className: 'dnd-target'
 	});
 
-	public showAt(position: Position): codemavi {
+	public showAt(position: Position): void {
 		this._dndDecorationIds.set([{
 			range: new Range(position.lineNumber, position.column, position.lineNumber, position.column),
 			options: DragAndDropController._DECORATION_OPTIONS
@@ -215,7 +215,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 		this._editor.revealPosition(position, ScrollType.Immediate);
 	}
 
-	private _removeDecoration(): codemavi {
+	private _removeDecoration(): void {
 		this._dndDecorationIds.clear();
 	}
 
@@ -230,7 +230,7 @@ export class DragAndDropController extends Disposable implements IEditorContribu
 			target.type === MouseTargetType.GUTTER_LINE_DECORATIONS;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._removeDecoration();
 		this._dragSelection = null;
 		this._mouseDown = false;

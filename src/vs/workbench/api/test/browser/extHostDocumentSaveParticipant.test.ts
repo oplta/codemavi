@@ -377,7 +377,7 @@ suite('ExtHostDocumentSaveParticipant', () => {
 	test('Log failing listener', function () {
 		let didLogSomething = false;
 		const participant = new ExtHostDocumentSaveParticipant(new class extends NullLogService {
-			override error(message: string | Error, ...args: any[]): codemavi {
+			override error(message: string | Error, ...args: any[]): void {
 				didLogSomething = true;
 			}
 		}, documents, mainThreadBulkEdits);

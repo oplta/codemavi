@@ -36,8 +36,8 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 	// keyboard mapper
 	protected _initialized: boolean;
 	protected _keyboardMapper: IKeyboardMapper | null;
-	private readonly _onDidChangeKeyboardMapper = new Emitter<codemavi>();
-	public readonly onDidChangeKeyboardMapper: Event<codemavi> = this._onDidChangeKeyboardMapper.event;
+	private readonly _onDidChangeKeyboardMapper = new Emitter<void>();
+	public readonly onDidChangeKeyboardMapper: Event<void> = this._onDidChangeKeyboardMapper.event;
 
 	// keymap infos
 	protected _keymapInfos: KeymapInfo[];
@@ -112,7 +112,7 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 		this._mru = this._keymapInfos;
 	}
 
-	removeKeyboardLayout(layout: KeymapInfo): codemavi {
+	removeKeyboardLayout(layout: KeymapInfo): void {
 		let index = this._mru.indexOf(layout);
 		this._mru.splice(index, 1);
 		index = this._keymapInfos.indexOf(layout);
@@ -194,7 +194,7 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 			// let score = matchedKeyboardLayout.score;
 
 			// Due to https://bugs.chromium.org/p/chromium/issues/detail?id=977609, any key after a dead key will generate a wrong mapping,
-			// we shoud acodemavi yielding the false error.
+			// we shoud avoid yielding the false error.
 			// if (keymap && score < 0) {
 			// const donotAskUpdateKey = 'missing.keyboardlayout.donotask';
 			// if (this._storageService.getBoolean(donotAskUpdateKey, StorageScope.APPLICATION)) {
@@ -263,7 +263,7 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 		this._setKeyboardData(this._activeKeymapInfo);
 	}
 
-	public setLayoutFromBrowserAPI(): codemavi {
+	public setLayoutFromBrowserAPI(): void {
 		this._updateKeyboardLayoutAsync(this._initialized);
 	}
 
@@ -293,7 +293,7 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 		return this._keyboardMapper;
 	}
 
-	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): codemavi {
+	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): void {
 		if (!this._initialized) {
 			return;
 		}
@@ -315,7 +315,7 @@ export class BrowserKeyboardMapperFactoryBase extends Disposable {
 		}
 	}
 
-	private _setKeyboardData(keymapInfo: KeymapInfo): codemavi {
+	private _setKeyboardData(keymapInfo: KeymapInfo): void {
 		this._initialized = true;
 
 		this._keyboardMapper = null;
@@ -469,8 +469,8 @@ export class BrowserKeyboardMapperFactory extends BrowserKeyboardMapperFactoryBa
 class UserKeyboardLayout extends Disposable {
 
 	private readonly reloadConfigurationScheduler: RunOnceScheduler;
-	protected readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	protected readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	private _keyboardLayout: KeymapInfo | null;
 	get keyboardLayout(): KeymapInfo | null { return this._keyboardLayout; }
@@ -492,7 +492,7 @@ class UserKeyboardLayout extends Disposable {
 		this._register(Event.filter(this.fileService.onDidFilesChange, e => e.contains(this.keyboardLayoutResource))(() => this.reloadConfigurationScheduler.schedule()));
 	}
 
-	async initialize(): Promise<codemavi> {
+	async initialize(): Promise<void> {
 		await this.reload();
 	}
 
@@ -520,8 +520,8 @@ class UserKeyboardLayout extends Disposable {
 export class BrowserKeyboardLayoutService extends Disposable implements IKeyboardLayoutService {
 	public _serviceBrand: undefined;
 
-	private readonly _onDidChangeKeyboardLayout = new Emitter<codemavi>();
-	public readonly onDidChangeKeyboardLayout: Event<codemavi> = this._onDidChangeKeyboardLayout.event;
+	private readonly _onDidChangeKeyboardLayout = new Emitter<void>();
+	public readonly onDidChangeKeyboardLayout: Event<void> = this._onDidChangeKeyboardLayout.event;
 
 	private _userKeyboardLayout: UserKeyboardLayout;
 
@@ -623,7 +623,7 @@ export class BrowserKeyboardLayoutService extends Disposable implements IKeyboar
 		return this._factory.activeKeyMapping;
 	}
 
-	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): codemavi {
+	public validateCurrentKeyboardMapping(keyboardEvent: IKeyboardEvent): void {
 		if (this._keyboardLayoutMode !== 'autodetect') {
 			return;
 		}

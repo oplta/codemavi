@@ -117,7 +117,7 @@ export interface IView {
 	 * This will be called by the {@link GridView} during layout. A view meant to
 	 * pass along the layout information down to its descendants.
 	 */
-	layout(width: number, height: number, top: number, left: number): codemavi;
+	layout(width: number, height: number, top: number, left: number): void;
 
 	/**
 	 * This will be called by the {@link GridView} whenever this view is made
@@ -125,14 +125,14 @@ export interface IView {
 	 *
 	 * @param visible Whether the view becomes visible.
 	 */
-	setVisible?(visible: boolean): codemavi;
+	setVisible?(visible: boolean): void;
 
 	/**
 	 * This will be called by the {@link GridView} whenever this view is on
 	 * an edge of the grid and the grid's
 	 * {@link GridView.boundarySashes boundary sashes} change.
 	 */
-	setBoundarySashes?(sashes: IBoundarySashes): codemavi;
+	setBoundarySashes?(sashes: IBoundarySashes): void;
 }
 
 export interface ISerializableView extends IView {
@@ -349,9 +349,9 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 	readonly onDidVisibilityChange: Event<boolean> = this._onDidVisibilityChange.event;
 	private readonly childrenVisibilityChangeDisposable: DisposableStore = new DisposableStore();
 
-	private _onDidScroll = new Emitter<codemavi>();
+	private _onDidScroll = new Emitter<void>();
 	private onDidScrollDisposable: IDisposable = Disposable.None;
-	readonly onDidScroll: Event<codemavi> = this._onDidScroll.event;
+	readonly onDidScroll: Event<void> = this._onDidScroll.event;
 
 	private childrenChangeDisposable: IDisposable = Disposable.None;
 
@@ -464,7 +464,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.updateChildrenEvents();
 	}
 
-	style(styles: IGridViewStyles): codemavi {
+	style(styles: IGridViewStyles): void {
 		this._styles = styles;
 		this.splitview.style(styles);
 
@@ -475,7 +475,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		}
 	}
 
-	layout(size: number, offset: number, ctx: ILayoutContext | undefined): codemavi {
+	layout(size: number, offset: number, ctx: ILayoutContext | undefined): void {
 		if (!this.layoutController.isLayoutEnabled) {
 			return;
 		}
@@ -502,13 +502,13 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.updateSplitviewEdgeSnappingEnablement();
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		for (const child of this.children) {
 			child.setVisible(visible);
 		}
 	}
 
-	addChild(node: Node, size: number | Sizing, index: number, skipLayout?: boolean): codemavi {
+	addChild(node: Node, size: number | Sizing, index: number, skipLayout?: boolean): void {
 		index = validateIndex(index, this.children.length);
 
 		this.splitview.addView(node, size, index, skipLayout);
@@ -541,7 +541,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		return result;
 	}
 
-	moveChild(from: number, to: number): codemavi {
+	moveChild(from: number, to: number): void {
 		from = validateIndex(from, this.children.length);
 		to = validateIndex(to, this.children.length);
 
@@ -560,7 +560,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.onDidChildrenChange();
 	}
 
-	swapChildren(from: number, to: number): codemavi {
+	swapChildren(from: number, to: number): void {
 		from = validateIndex(from, this.children.length);
 		to = validateIndex(to, this.children.length);
 
@@ -580,7 +580,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.onDidChildrenChange();
 	}
 
-	resizeChild(index: number, size: number): codemavi {
+	resizeChild(index: number, size: number): void {
 		index = validateIndex(index, this.children.length);
 
 		this.splitview.resizeView(index, size);
@@ -590,7 +590,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		return this.splitview.isViewExpanded(index);
 	}
 
-	distributeViewSizes(recursive = false): codemavi {
+	distributeViewSizes(recursive = false): void {
 		this.splitview.distributeViewSizes();
 
 		if (recursive) {
@@ -614,7 +614,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		return this.splitview.isViewVisible(index);
 	}
 
-	setChildVisible(index: number, visible: boolean): codemavi {
+	setChildVisible(index: number, visible: boolean): void {
 		index = validateIndex(index, this.children.length);
 
 		if (this.splitview.isViewVisible(index) === visible) {
@@ -638,7 +638,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		return this.splitview.getViewCachedVisibleSize(index);
 	}
 
-	private updateBoundarySashes(): codemavi {
+	private updateBoundarySashes(): void {
 		for (let i = 0; i < this.children.length; i++) {
 			this.children[i].boundarySashes = {
 				start: this.boundarySashes.orthogonalStart,
@@ -649,12 +649,12 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		}
 	}
 
-	private onDidChildrenChange(): codemavi {
+	private onDidChildrenChange(): void {
 		this.updateChildrenEvents();
 		this._onDidChange.fire(undefined);
 	}
 
-	private updateChildrenEvents(): codemavi {
+	private updateChildrenEvents(): void {
 		const onDidChildrenChange = Event.map(Event.any(...this.children.map(c => c.onDidChange)), () => undefined);
 		this.childrenChangeDisposable.dispose();
 		this.childrenChangeDisposable = onDidChildrenChange(this._onDidChange.fire, this._onDidChange);
@@ -726,12 +726,12 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 		});
 	}
 
-	private updateSplitviewEdgeSnappingEnablement(): codemavi {
+	private updateSplitviewEdgeSnappingEnablement(): void {
 		this.splitview.startSnappingEnabled = this._edgeSnapping || this._absoluteOrthogonalOffset > 0;
 		this.splitview.endSnappingEnabled = this._edgeSnapping || this._absoluteOrthogonalOffset + this._size < this.absoluteOrthogonalSize;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		for (const child of this.children) {
 			child.dispose();
 		}
@@ -750,7 +750,7 @@ class BranchNode implements ISplitView<ILayoutContext>, IDisposable {
 }
 
 /**
- * Creates a latched event that acodemavis being fired when the view
+ * Creates a latched event that avoids being fired when the view
  * constraints do not change at all.
  */
 function createLatchedOnDidChangeViewEvent(view: IView): Event<IViewSize | undefined> {
@@ -779,7 +779,7 @@ class LeafNode implements ISplitView<ILayoutContext>, IDisposable {
 	private absoluteOffset: number = 0;
 	private absoluteOrthogonalOffset: number = 0;
 
-	readonly onDidScroll: Event<codemavi> = Event.None;
+	readonly onDidScroll: Event<void> = Event.None;
 	readonly onDidSashReset: Event<GridLocation> = Event.None;
 
 	private _onDidLinkedWidthNodeChange = new Relay<number | undefined>();
@@ -893,7 +893,7 @@ class LeafNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.view.setBoundarySashes?.(toAbsoluteBoundarySashes(boundarySashes, this.orientation));
 	}
 
-	layout(size: number, offset: number, ctx: ILayoutContext | undefined): codemavi {
+	layout(size: number, offset: number, ctx: ILayoutContext | undefined): void {
 		if (!this.layoutController.isLayoutEnabled) {
 			return;
 		}
@@ -915,7 +915,7 @@ class LeafNode implements ISplitView<ILayoutContext>, IDisposable {
 	private cachedTop: number = 0;
 	private cachedLeft: number = 0;
 
-	private _layout(width: number, height: number, top: number, left: number): codemavi {
+	private _layout(width: number, height: number, top: number, left: number): void {
 		if (this.cachedWidth === width && this.cachedHeight === height && this.cachedTop === top && this.cachedLeft === left) {
 			return;
 		}
@@ -927,11 +927,11 @@ class LeafNode implements ISplitView<ILayoutContext>, IDisposable {
 		this.view.layout(width, height, top, left);
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		this.view.setVisible?.(visible);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }
@@ -1046,7 +1046,7 @@ export class GridView implements IDisposable {
 	private proportionalLayout: boolean;
 	private _root!: BranchNode;
 	private onDidSashResetRelay = new Relay<GridLocation>();
-	private _onDidScroll = new Relay<codemavi>();
+	private _onDidScroll = new Relay<void>();
 	private _onDidChange = new Relay<IViewSize | undefined>();
 	private _boundarySashes: IBoundarySashes = {};
 
@@ -1173,7 +1173,7 @@ export class GridView implements IDisposable {
 		this.root = new BranchNode(Orientation.VERTICAL, this.layoutController, this.styles, this.proportionalLayout);
 	}
 
-	style(styles: IGridViewStyles): codemavi {
+	style(styles: IGridViewStyles): void {
 		this.styles = styles;
 		this.root.style(styles);
 	}
@@ -1189,7 +1189,7 @@ export class GridView implements IDisposable {
 	 * @param top Optional, the top location of the {@link GridView}.
 	 * @param left Optional, the left location of the {@link GridView}.
 	 */
-	layout(width: number, height: number, top: number = 0, left: number = 0): codemavi {
+	layout(width: number, height: number, top: number = 0, left: number = 0): void {
 		this.layoutController.isLayoutEnabled = true;
 
 		const [size, orthogonalSize, offset, orthogonalOffset] = this.root.orientation === Orientation.HORIZONTAL ? [height, width, top, left] : [width, height, left, top];
@@ -1203,7 +1203,7 @@ export class GridView implements IDisposable {
 	 * @param size Either a fixed size, or a dynamic {@link Sizing} strategy.
 	 * @param location The {@link GridLocation location} to insert the view on.
 	 */
-	addView(view: IView, size: number | Sizing, location: GridLocation): codemavi {
+	addView(view: IView, size: number | Sizing, location: GridLocation): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1350,7 +1350,7 @@ export class GridView implements IDisposable {
 	 * @param from The index of the {@link IView view} to move.
 	 * @param to The index where the {@link IView view} should move to.
 	 */
-	moveView(parentLocation: GridLocation, from: number, to: number): codemavi {
+	moveView(parentLocation: GridLocation, from: number, to: number): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1372,7 +1372,7 @@ export class GridView implements IDisposable {
 	 * @param from The {@link GridLocation location} of one view.
 	 * @param to The {@link GridLocation location} of another view.
 	 */
-	swapViews(from: GridLocation, to: GridLocation): codemavi {
+	swapViews(from: GridLocation, to: GridLocation): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1424,7 +1424,7 @@ export class GridView implements IDisposable {
 	 * @param location The {@link GridLocation location} of the view.
 	 * @param size The size the view should be. Optionally provide a single dimension.
 	 */
-	resizeView(location: GridLocation, size: Partial<IViewSize>): codemavi {
+	resizeView(location: GridLocation, size: Partial<IViewSize>): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1494,7 +1494,7 @@ export class GridView implements IDisposable {
 	 *
 	 * @param location The {@link GridLocation location} of the view.
 	 */
-	expandView(location: GridLocation): codemavi {
+	expandView(location: GridLocation): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1550,7 +1550,7 @@ export class GridView implements IDisposable {
 			this.exitMaximizedView();
 		}
 
-		function hideAllViewsBut(parent: BranchNode, exclude: LeafNode): codemavi {
+		function hideAllViewsBut(parent: BranchNode, exclude: LeafNode): void {
 			for (let i = 0; i < parent.children.length; i++) {
 				const child = parent.children[i];
 				if (child instanceof LeafNode) {
@@ -1569,7 +1569,7 @@ export class GridView implements IDisposable {
 		this._onDidChangeViewMaximized.fire(true);
 	}
 
-	exitMaximizedView(): codemavi {
+	exitMaximizedView(): void {
 		if (!this.maximizedNode) {
 			return;
 		}
@@ -1577,7 +1577,7 @@ export class GridView implements IDisposable {
 
 		// When hiding a view, it's previous size is cached.
 		// To restore the sizes of all views, they need to be made visible in reverse order.
-		function showViewsInReverseOrder(parent: BranchNode): codemavi {
+		function showViewsInReverseOrder(parent: BranchNode): void {
 			for (let index = parent.children.length - 1; index >= 0; index--) {
 				const child = parent.children[index];
 				if (child instanceof LeafNode) {
@@ -1619,7 +1619,7 @@ export class GridView implements IDisposable {
 	 * view's size. Provide `undefined` to recursively distribute all views' sizes
 	 * in the entire grid.
 	 */
-	distributeViewSizes(location?: GridLocation): codemavi {
+	distributeViewSizes(location?: GridLocation): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 		}
@@ -1660,7 +1660,7 @@ export class GridView implements IDisposable {
 	 *
 	 * @param location The {@link GridLocation location} of the view.
 	 */
-	setViewVisible(location: GridLocation, visible: boolean): codemavi {
+	setViewVisible(location: GridLocation, visible: boolean): void {
 		if (this.hasMaximizedView()) {
 			this.exitMaximizedView();
 			return;
@@ -1721,7 +1721,7 @@ export class GridView implements IDisposable {
 		return result;
 	}
 
-	private _deserialize(root: ISerializedBranchNode, orientation: Orientation, deserializer: IViewDeserializer<ISerializableView>, orthogonalSize: number): codemavi {
+	private _deserialize(root: ISerializedBranchNode, orientation: Orientation, deserializer: IViewDeserializer<ISerializableView>, orthogonalSize: number): void {
 		this.root = this._deserializeNode(root, orientation, deserializer, orthogonalSize) as BranchNode;
 	}
 
@@ -1795,7 +1795,7 @@ export class GridView implements IDisposable {
 	 * In case the grid isn't a 2x2 grid _and_ all sashes are not aligned,
 	 * this method is a no-op.
 	 */
-	trySet2x2(): codemavi {
+	trySet2x2(): void {
 		this.disposable2x2.dispose();
 		this.disposable2x2 = Disposable.None;
 
@@ -1816,7 +1816,7 @@ export class GridView implements IDisposable {
 	 * Populate a map with views to DOM nodes.
 	 * @remarks To be used internally only.
 	 */
-	getViewMap(map: Map<IView, HTMLElement>, node?: Node): codemavi {
+	getViewMap(map: Map<IView, HTMLElement>, node?: Node): void {
 		if (!node) {
 			node = this.root;
 		}
@@ -1828,7 +1828,7 @@ export class GridView implements IDisposable {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.onDidSashResetRelay.dispose();
 		this.root.dispose();
 		this.element.remove();

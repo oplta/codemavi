@@ -131,7 +131,7 @@ Code Mavi is currently in an **advanced prototype stage** with a fully implement
 ### P1: High Priority
 1. **Semantic Search MVP** - Basic file search without vector DB
 2. **Self-Correction Loop** - Lint feedback to agent retry
-3. **Rule System UI** - Edit `.codemavi/rules.md` from IDE
+3. **Rule System UI** - Edit `.mavi/rules.md` from IDE
 
 ### P2: Medium Priority
 1. **Complete Provider System** - Multiple providers with failover

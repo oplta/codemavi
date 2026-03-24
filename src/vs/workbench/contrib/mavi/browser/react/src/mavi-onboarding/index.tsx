@@ -4,6 +4,6 @@
  *--------------------------------------------------------------------------------------*/
 
 import { mountFnGenerator } from '../util/mountFnGenerator.js'
-import { Code MaviOnboarding } from './Code MaviOnboarding.js'
+import { MaviOnboarding } from './MaviOnboarding.js'
 
-export const mountCode MaviOnboarding = mountFnGenerator(Code MaviOnboarding)
+export const mountMaviOnboarding = mountFnGenerator(MaviOnboarding)

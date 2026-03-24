@@ -38,7 +38,7 @@ export class ChatEditingEditorAccessibility implements IWorkbenchContribution {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 	}
 }

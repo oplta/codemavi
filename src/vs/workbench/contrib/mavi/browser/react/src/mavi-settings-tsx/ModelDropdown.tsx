@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------*/
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FeatureName, featureNames, isFeatureNameDisabled, ModelSelection, modelSelectionsEqual, ProviderName, providerNames, SettingsOfProvider } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsTypes.js'
+import { FeatureName, featureNames, isFeatureNameDisabled, ModelSelection, modelSelectionsEqual, ProviderName, providerNames, SettingsOfProvider } from '../../../../../../../workbench/contrib/mavi/common/maviSettingsTypes.js'
 import { useSettingsState, useRefreshModelState, useAccessor } from '../util/services.js'
-import { _Code MaviSelectBox, Code MaviCustomDropdownBox } from '../util/inputs.js'
+import { _MaviSelectBox, MaviCustomDropdownBox } from '../util/inputs.js'
 import { SelectBox } from '../../../../../../../base/browser/ui/selectBox/selectBox.js'
 import { IconWarning } from '../sidebar-tsx/SidebarChat.js'
-import { MAVI_OPEN_SETTINGS_ACTION_ID, MAVI_TOGGLE_SETTINGS_ACTION_ID } from '../../../codemaviSettingsPane.js'
-import { modelFilterOfFeatureName, ModelOption } from '../../../../../../../workbench/contrib/codemavi/common/codemaviSettingsService.js'
+import { MAVI_OPEN_SETTINGS_ACTION_ID, MAVI_TOGGLE_SETTINGS_ACTION_ID } from '../../../maviSettingsPane.js'
+import { modelFilterOfFeatureName, ModelOption } from '../../../../../../../workbench/contrib/mavi/common/maviSettingsService.js'
 import { WarningBox } from './WarningBox.js'
 import ErrorBoundary from '../sidebar-tsx/ErrorBoundary.js'
 
@@ -24,16 +24,16 @@ const optionsEqual = (m1: ModelOption[], m2: ModelOption[]) => {
 
 const ModelSelectBox = ({ options, featureName, className }: { options: ModelOption[], featureName: FeatureName, className: string }) => {
 	const accessor = useAccessor()
-	const codemaviSettingsService = accessor.get('IMaviSettingsService')
+	const maviSettingsService = accessor.get('IMaviSettingsService')
 
-	const selection = codemaviSettingsService.state.modelSelectionOfFeature[featureName]
-	const selectedOption = selection ? codemaviSettingsService.state._modelOptions.find(v => modelSelectionsEqual(v.selection, selection))! : options[0]
+	const selection = maviSettingsService.state.modelSelectionOfFeature[featureName]
+	const selectedOption = selection ? maviSettingsService.state._modelOptions.find(v => modelSelectionsEqual(v.selection, selection))! : options[0]
 
 	const onChangeOption = useCallback((newOption: ModelOption) => {
-		codemaviSettingsService.setModelSelectionOfFeature(featureName, newOption.selection)
-	}, [codemaviSettingsService, featureName])
+		maviSettingsService.setModelSelectionOfFeature(featureName, newOption.selection)
+	}, [maviSettingsService, featureName])
 
-	return <Code MaviCustomDropdownBox
+	return <MaviCustomDropdownBox
 		options={options}
 		selectedOption={selectedOption}
 		onChangeOption={onChangeOption}

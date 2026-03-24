@@ -11,8 +11,8 @@ import { IFileService } from '../../files/common/files.js';
 import { AdapterLogger, DEFAULT_LOG_LEVEL, ILogger, LogLevel } from '../common/log.js';
 
 export interface IAutomatedWindow {
-	codeAutomationLog(type: string, args: any[]): codemavi;
-	codeAutomationExit(code: number, logs: Array<ILogFile>): codemavi;
+	codeAutomationLog(type: string, args: any[]): void;
+	codeAutomationExit(code: number, logs: Array<ILogFile>): void;
 }
 
 export interface ILogFile {
@@ -33,7 +33,7 @@ export async function getLogs(fileService: IFileService, environmentService: IEn
 	return result;
 }
 
-async function doGetLogs(fileService: IFileService, logs: ILogFile[], curFolder: URI, logsHome: URI): Promise<codemavi> {
+async function doGetLogs(fileService: IFileService, logs: ILogFile[], curFolder: URI, logsHome: URI): Promise<void> {
 	const stat = await fileService.resolve(curFolder);
 
 	for (const { resource, isDirectory } of stat.children || []) {
@@ -75,7 +75,7 @@ export class ConsoleLogInAutomationLogger extends AdapterLogger implements ILogg
 		super({ log: (level, args) => this.consoleLog(logLevelToString(level), args) }, logLevel);
 	}
 
-	private consoleLog(type: string, args: any[]): codemavi {
+	private consoleLog(type: string, args: any[]): void {
 		const automatedWindow = mainWindow as unknown as IAutomatedWindow;
 		if (typeof automatedWindow.codeAutomationLog === 'function') {
 			try {

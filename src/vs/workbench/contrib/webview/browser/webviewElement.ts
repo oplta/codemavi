@@ -56,7 +56,7 @@ namespace WebviewState {
 				readonly channel: string;
 				readonly data?: any;
 				readonly transferable: Transferable[];
-				readonly resolve: (posted: boolean) => codemavi;
+				readonly resolve: (posted: boolean) => void;
 			}>
 		) { }
 	}
@@ -136,7 +136,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	protected readonly onDidHtmlChange = this._onDidHtmlChange.event;
 
 	private _messagePort?: MessagePort;
-	private readonly _messageHandlers = new Map<string, Set<(data: any, e: MessageEvent) => codemavi>>();
+	private readonly _messageHandlers = new Map<string, Set<(data: any, e: MessageEvent) => void>>();
 
 	protected readonly _webviewFindWidget: WebviewFindWidget | undefined;
 	public readonly checkImeCompletionState = true;
@@ -317,7 +317,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._disposed = true;
 
 		this.element?.remove();
@@ -349,7 +349,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	private readonly _onDidClickLink = this._register(new Emitter<string>());
 	public readonly onDidClickLink = this._onDidClickLink.event;
 
-	private readonly _onDidReload = this._register(new Emitter<codemavi>());
+	private readonly _onDidReload = this._register(new Emitter<void>());
 	public readonly onDidReload = this._onDidReload.event;
 
 	private readonly _onMessage = this._register(new Emitter<WebviewMessageReceivedEvent>());
@@ -364,16 +364,16 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	private readonly _onDidUpdateState = this._register(new Emitter<string | undefined>());
 	public readonly onDidUpdateState = this._onDidUpdateState.event;
 
-	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
+	private readonly _onDidFocus = this._register(new Emitter<void>());
 	public readonly onDidFocus = this._onDidFocus.event;
 
-	private readonly _onDidBlur = this._register(new Emitter<codemavi>());
+	private readonly _onDidBlur = this._register(new Emitter<void>());
 	public readonly onDidBlur = this._onDidBlur.event;
 
 	private readonly _onFatalError = this._register(new Emitter<{ readonly message: string }>());
 	public readonly onFatalError = this._onFatalError.event;
 
-	private readonly _onDidDispose = this._register(new Emitter<codemavi>());
+	private readonly _onDidDispose = this._register(new Emitter<void>());
 	public readonly onDidDispose = this._onDidDispose.event;
 
 	public postMessage(message: any, transfer?: ArrayBuffer[]): Promise<boolean> {
@@ -562,7 +562,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		return false;
 	}
 
-	private on<K extends keyof FromWebviewMessage>(channel: K, handler: (data: FromWebviewMessage[K], e: MessageEvent) => codemavi): IDisposable {
+	private on<K extends keyof FromWebviewMessage>(channel: K, handler: (data: FromWebviewMessage[K], e: MessageEvent) => void): IDisposable {
 		let handlers = this._messageHandlers.get(channel);
 		if (!handlers) {
 			handlers = new Set();
@@ -576,7 +576,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	}
 
 	private _hasAlertedAboutMissingCsp = false;
-	private handleNoCspFound(): codemavi {
+	private handleNoCspFound(): void {
 		if (this._hasAlertedAboutMissingCsp) {
 			return;
 		}
@@ -589,7 +589,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		}
 	}
 
-	public reload(): codemavi {
+	public reload(): void {
 		this.doUpdateContent(this._content);
 
 		const subscription = this._register(this.on('did-load', () => {
@@ -654,7 +654,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		});
 	}
 
-	protected style(): codemavi {
+	protected style(): void {
 		let { styles, activeTheme, themeLabel, themeId } = this.webviewThemeDataProvider.getWebviewThemeData();
 		if (this._options.transformCssVariables) {
 			styles = this._options.transformCssVariables(styles);
@@ -667,7 +667,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	}
 
 
-	protected handleFocusChange(isFocused: boolean): codemavi {
+	protected handleFocusChange(isFocused: boolean): void {
 		this._focused = isFocused;
 		if (isFocused) {
 			this._onDidFocus.fire();
@@ -698,14 +698,14 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		this.window?.dispatchEvent(emulatedDragEvent);
 	}
 
-	windowDidDragStart(): codemavi {
+	windowDidDragStart(): void {
 		// Webview break drag and dropping around the main window (no events are generated when you are over them)
 		// Work around this by disabling pointer events during the drag.
 		// https://github.com/electron/electron/issues/18226
 		this._startBlockingIframeDragEvents();
 	}
 
-	windowDidDragEnd(): codemavi {
+	windowDidDragEnd(): void {
 		this._stopBlockingIframeDragEvents();
 	}
 
@@ -803,7 +803,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		});
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		this._doFocus();
 
 		// Handle focus change programmatically (do not rely on event from <webview>)
@@ -853,8 +853,8 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	protected readonly _hasFindResult = this._register(new Emitter<boolean>());
 	public readonly hasFindResult: Event<boolean> = this._hasFindResult.event;
 
-	protected readonly _onDidStopFind = this._register(new Emitter<codemavi>());
-	public readonly onDidStopFind: Event<codemavi> = this._onDidStopFind.event;
+	protected readonly _onDidStopFind = this._register(new Emitter<void>());
+	public readonly onDidStopFind: Event<void> = this._onDidStopFind.event;
 
 	/**
 	 * Webviews expose a stateful find API.
@@ -863,7 +863,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 	 *
 	 * @param value The string to search for. Empty strings are ignored.
 	 */
-	public find(value: string, previous: boolean): codemavi {
+	public find(value: string, previous: boolean): void {
 		if (!this.element) {
 			return;
 		}
@@ -878,7 +878,7 @@ export class WebviewElement extends Disposable implements IWebview, WebviewFindD
 		this._send('find', { value });
 	}
 
-	public stopFind(keepSelection?: boolean): codemavi {
+	public stopFind(keepSelection?: boolean): void {
 		if (!this.element) {
 			return;
 		}

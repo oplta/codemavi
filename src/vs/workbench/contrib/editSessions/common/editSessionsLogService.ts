@@ -23,27 +23,27 @@ export class EditSessionsLogService extends AbstractLogger implements IEditSessi
 		this.logger = this._register(loggerService.createLogger(joinPath(environmentService.logsHome, `${editSessionsLogId}.log`), { id: editSessionsLogId, name: localize('cloudChangesLog', "Cloud Changes"), group: windowLogGroup }));
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		this.logger.trace(message, ...args);
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		this.logger.debug(message, ...args);
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		this.logger.info(message, ...args);
 	}
 
-	warn(message: string, ...args: any[]): codemavi {
+	warn(message: string, ...args: any[]): void {
 		this.logger.warn(message, ...args);
 	}
 
-	error(message: string | Error, ...args: any[]): codemavi {
+	error(message: string | Error, ...args: any[]): void {
 		this.logger.error(message, ...args);
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		this.logger.flush();
 	}
 }

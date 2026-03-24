@@ -42,14 +42,14 @@ export class KeybindingsSearchWidget extends SearchWidget {
 	private _onKeybinding = this._register(new Emitter<ResolvedKeybinding[] | null>());
 	readonly onKeybinding: Event<ResolvedKeybinding[] | null> = this._onKeybinding.event;
 
-	private _onEnter = this._register(new Emitter<codemavi>());
-	readonly onEnter: Event<codemavi> = this._onEnter.event;
+	private _onEnter = this._register(new Emitter<void>());
+	readonly onEnter: Event<void> = this._onEnter.event;
 
-	private _onEscape = this._register(new Emitter<codemavi>());
-	readonly onEscape: Event<codemavi> = this._onEscape.event;
+	private _onEscape = this._register(new Emitter<void>());
+	readonly onEscape: Event<void> = this._onEscape.event;
 
-	private _onBlur = this._register(new Emitter<codemavi>());
-	readonly onBlur: Event<codemavi> = this._onBlur.event;
+	private _onBlur = this._register(new Emitter<void>());
+	readonly onBlur: Event<void> = this._onBlur.event;
 
 	constructor(parent: HTMLElement, options: KeybindingsSearchOptions,
 		@IContextViewService contextViewService: IContextViewService,
@@ -65,12 +65,12 @@ export class KeybindingsSearchWidget extends SearchWidget {
 		this._inputValue = '';
 	}
 
-	override clear(): codemavi {
+	override clear(): void {
 		this._chords = null;
 		super.clear();
 	}
 
-	startRecordingKeys(): codemavi {
+	startRecordingKeys(): void {
 		this.recordDisposables.add(dom.addDisposableListener(this.inputBox.inputElement, dom.EventType.KEY_DOWN, (e: KeyboardEvent) => this._onKeyDown(new StandardKeyboardEvent(e))));
 		this.recordDisposables.add(dom.addDisposableListener(this.inputBox.inputElement, dom.EventType.BLUR, () => this._onBlur.fire()));
 		this.recordDisposables.add(dom.addDisposableListener(this.inputBox.inputElement, dom.EventType.INPUT, () => {
@@ -79,17 +79,17 @@ export class KeybindingsSearchWidget extends SearchWidget {
 		}));
 	}
 
-	stopRecordingKeys(): codemavi {
+	stopRecordingKeys(): void {
 		this._chords = null;
 		this.recordDisposables.clear();
 	}
 
-	setInputValue(value: string): codemavi {
+	setInputValue(value: string): void {
 		this._inputValue = value;
 		this.inputBox.value = this._inputValue;
 	}
 
-	private _onKeyDown(keyboardEvent: IKeyboardEvent): codemavi {
+	private _onKeyDown(keyboardEvent: IKeyboardEvent): void {
 		keyboardEvent.preventDefault();
 		keyboardEvent.stopPropagation();
 		const options = this.options as KeybindingsSearchOptions;
@@ -104,7 +104,7 @@ export class KeybindingsSearchWidget extends SearchWidget {
 		this.printKeybinding(keyboardEvent);
 	}
 
-	private printKeybinding(keyboardEvent: IKeyboardEvent): codemavi {
+	private printKeybinding(keyboardEvent: IKeyboardEvent): void {
 		const keybinding = this.keybindingService.resolveKeyboardEvent(keyboardEvent);
 		const info = `code: ${keyboardEvent.browserEvent.code}, keyCode: ${keyboardEvent.browserEvent.keyCode}, key: ${keyboardEvent.browserEvent.key} => UI: ${keybinding.getAriaLabel()}, user settings: ${keybinding.getUserSettingsLabel()}, dispatch: ${keybinding.getDispatchChords()[0]}`;
 		const options = this.options as KeybindingsSearchOptions;
@@ -146,7 +146,7 @@ export class DefineKeybindingWidget extends Widget {
 	private _chords: ResolvedKeybinding[] | null = null;
 	private _isVisible: boolean = false;
 
-	private _onHide = this._register(new Emitter<codemavi>());
+	private _onHide = this._register(new Emitter<void>());
 
 	private _onDidChange = this._register(new Emitter<string>());
 	onDidChange: Event<string> = this._onDidChange.event;
@@ -217,7 +217,7 @@ export class DefineKeybindingWidget extends Widget {
 		});
 	}
 
-	layout(layout: dom.Dimension): codemavi {
+	layout(layout: dom.Dimension): void {
 		const top = Math.round((layout.height - DefineKeybindingWidget.HEIGHT) / 2);
 		this._domNode.setTop(top);
 
@@ -225,7 +225,7 @@ export class DefineKeybindingWidget extends Widget {
 		this._domNode.setLeft(left);
 	}
 
-	printExisting(numberOfExisting: number): codemavi {
+	printExisting(numberOfExisting: number): void {
 		if (numberOfExisting > 0) {
 			const existingElement = dom.$('span.existingText');
 			const text = numberOfExisting === 1 ? nls.localize('defineKeybinding.oneExists', "1 existing command has this keybinding", numberOfExisting) : nls.localize('defineKeybinding.existing', "{0} existing commands have this keybinding", numberOfExisting);
@@ -238,7 +238,7 @@ export class DefineKeybindingWidget extends Widget {
 		}
 	}
 
-	private onKeybinding(keybinding: ResolvedKeybinding[] | null): codemavi {
+	private onKeybinding(keybinding: ResolvedKeybinding[] | null): void {
 		this._keybindingDisposables.clear();
 		this._chords = keybinding;
 		dom.clearNode(this._outputNode);
@@ -269,12 +269,12 @@ export class DefineKeybindingWidget extends Widget {
 		return label;
 	}
 
-	private onCancel(): codemavi {
+	private onCancel(): void {
 		this._chords = null;
 		this.hide();
 	}
 
-	private clearOrHide(): codemavi {
+	private clearOrHide(): void {
 		if (this._chords === null) {
 			this.hide();
 		} else {
@@ -285,7 +285,7 @@ export class DefineKeybindingWidget extends Widget {
 		}
 	}
 
-	private hide(): codemavi {
+	private hide(): void {
 		this._domNode.setDisplay('none');
 		this._isVisible = false;
 		this._onHide.fire();
@@ -321,7 +321,7 @@ export class DefineKeybindingOverlayWidget extends Disposable implements IOverla
 		};
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._editor.removeOverlayWidget(this);
 		super.dispose();
 	}

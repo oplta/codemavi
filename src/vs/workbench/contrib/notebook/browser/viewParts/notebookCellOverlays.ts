@@ -41,18 +41,18 @@ export class NotebookCellOverlays extends Disposable {
 		this.listView.containerDomNode.appendChild(this.domNode.domNode);
 	}
 
-	changeCellOverlays(callback: (changeAccessor: INotebookCellOverlayChangeAccessor) => codemavi): boolean {
+	changeCellOverlays(callback: (changeAccessor: INotebookCellOverlayChangeAccessor) => void): boolean {
 		let overlaysHaveChanged = false;
 		const changeAccessor: INotebookCellOverlayChangeAccessor = {
 			addOverlay: (overlay: INotebookCellOverlay): string => {
 				overlaysHaveChanged = true;
 				return this._addOverlay(overlay);
 			},
-			removeOverlay: (id: string): codemavi => {
+			removeOverlay: (id: string): void => {
 				overlaysHaveChanged = true;
 				this._removeOverlay(id);
 			},
-			layoutOverlay: (id: string): codemavi => {
+			layoutOverlay: (id: string): void => {
 				overlaysHaveChanged = true;
 				this._layoutOverlay(id);
 			}
@@ -63,7 +63,7 @@ export class NotebookCellOverlays extends Disposable {
 		return overlaysHaveChanged;
 	}
 
-	onCellsChanged(e: INotebookViewCellsUpdateEvent): codemavi {
+	onCellsChanged(e: INotebookViewCellsUpdateEvent): void {
 		this.layout();
 	}
 
@@ -94,7 +94,7 @@ export class NotebookCellOverlays extends Disposable {
 		return overlayId;
 	}
 
-	private _removeOverlay(id: string): codemavi {
+	private _removeOverlay(id: string): void {
 		const overlay = this._overlays[id];
 		if (overlay) {
 			// overlay.overlay.dispose();
@@ -108,7 +108,7 @@ export class NotebookCellOverlays extends Disposable {
 		}
 	}
 
-	private _layoutOverlay(id: string): codemavi {
+	private _layoutOverlay(id: string): void {
 		const overlay = this._overlays[id];
 		if (!overlay) {
 			return;
@@ -155,7 +155,7 @@ class ToggleNotebookCellOverlaysDeveloperAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const editor = getNotebookEditorFromEditorPane(editorService.activeEditorPane);
 

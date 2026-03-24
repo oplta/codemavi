@@ -320,7 +320,7 @@ export interface IDragAndDropContributionRegistry {
 	/**
 	 * Registers a drag and drop contribution.
 	 */
-	register(contribution: IDragAndDropContribution): codemavi;
+	register(contribution: IDragAndDropContribution): void;
 
 	/**
 	 * Returns all registered drag and drop contributions.
@@ -331,13 +331,13 @@ export interface IDragAndDropContributionRegistry {
 interface IDragAndDropContribution {
 	readonly dataFormatKey: string;
 	getEditorInputs(data: string): IDraggedResourceEditorInput[];
-	setData(resources: IResourceStat[], event: DragMouseEvent | DragEvent): codemavi;
+	setData(resources: IResourceStat[], event: DragMouseEvent | DragEvent): void;
 }
 
 class DragAndDropContributionRegistry implements IDragAndDropContributionRegistry {
 	private readonly _contributions = new Map<string, IDragAndDropContribution>();
 
-	register(contribution: IDragAndDropContribution): codemavi {
+	register(contribution: IDragAndDropContribution): void {
 		if (this._contributions.has(contribution.dataFormatKey)) {
 			throw new Error(`A drag and drop contributiont with key '${contribution.dataFormatKey}' was already registered.`);
 		}
@@ -381,7 +381,7 @@ export class LocalSelectionTransfer<T> {
 		return proto && proto === this.proto;
 	}
 
-	clearData(proto: T): codemavi {
+	clearData(proto: T): void {
 		if (this.hasData(proto)) {
 			this.proto = undefined;
 			this.data = undefined;
@@ -396,7 +396,7 @@ export class LocalSelectionTransfer<T> {
 		return undefined;
 	}
 
-	setData(data: T[], proto: T): codemavi {
+	setData(data: T[], proto: T): void {
 		if (proto) {
 			this.data = data;
 			this.proto = proto;
@@ -437,7 +437,7 @@ export function extractSymbolDropData(e: DragEvent): DocumentSymbolTransferData[
 	return getDataAsJSON(e, CodeDataTransfers.SYMBOLS, []);
 }
 
-export function fillInSymbolsDragData(symbolsData: readonly DocumentSymbolTransferData[], e: DragEvent): codemavi {
+export function fillInSymbolsDragData(symbolsData: readonly DocumentSymbolTransferData[], e: DragEvent): void {
 	setDataAsJSON(e, CodeDataTransfers.SYMBOLS, symbolsData);
 }
 
@@ -447,7 +447,7 @@ export function extractMarkerDropData(e: DragEvent): MarkerTransferData[] | unde
 	return getDataAsJSON(e, CodeDataTransfers.MARKERS, undefined);
 }
 
-export function fillInMarkersDragData(markerData: MarkerTransferData[], e: DragEvent): codemavi {
+export function fillInMarkersDragData(markerData: MarkerTransferData[], e: DragEvent): void {
 	setDataAsJSON(e, CodeDataTransfers.MARKERS, markerData);
 }
 

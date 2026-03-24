@@ -11,7 +11,7 @@ import { IExtHostRpcService } from './extHostRpcService.js';
 import { VSBuffer } from '../../../base/common/buffer.js';
 
 export interface IExtHostManagedSockets extends ExtHostManagedSocketsShape {
-	setFactory(socketFactoryId: number, makeConnection: () => Thenable<vscode.ManagedMessagePassing>): codemavi;
+	setFactory(socketFactoryId: number, makeConnection: () => Thenable<vscode.ManagedMessagePassing>): void;
 	readonly _serviceBrand: undefined;
 }
 
@@ -31,7 +31,7 @@ export class ExtHostManagedSockets implements IExtHostManagedSockets {
 		this._proxy = extHostRpc.getProxy(MainContext.MainThreadManagedSockets);
 	}
 
-	setFactory(socketFactoryId: number, makeConnection: () => Thenable<vscode.ManagedMessagePassing>): codemavi {
+	setFactory(socketFactoryId: number, makeConnection: () => Thenable<vscode.ManagedMessagePassing>): void {
 		// Terminate all previous sockets
 		for (const socket of this._managedRemoteSockets.values()) {
 			// calling dispose() will lead to it removing itself from the map
@@ -70,11 +70,11 @@ export class ExtHostManagedSockets implements IExtHostManagedSockets {
 		return id;
 	}
 
-	$remoteSocketWrite(socketId: number, buffer: VSBuffer): codemavi {
+	$remoteSocketWrite(socketId: number, buffer: VSBuffer): void {
 		this._managedRemoteSockets.get(socketId)?.actual.send(buffer.buffer);
 	}
 
-	$remoteSocketEnd(socketId: number): codemavi {
+	$remoteSocketEnd(socketId: number): void {
 		const socket = this._managedRemoteSockets.get(socketId);
 		if (socket) {
 			socket.actual.end();
@@ -82,7 +82,7 @@ export class ExtHostManagedSockets implements IExtHostManagedSockets {
 		}
 	}
 
-	async $remoteSocketDrain(socketId: number): Promise<codemavi> {
+	async $remoteSocketDrain(socketId: number): Promise<void> {
 		await this._managedRemoteSockets.get(socketId)?.actual.drain?.();
 	}
 }

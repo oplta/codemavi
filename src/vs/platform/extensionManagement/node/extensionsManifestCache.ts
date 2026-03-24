@@ -26,7 +26,7 @@ export class ExtensionsManifestCache extends Disposable {
 		this._register(extensionsManagementService.onDidUninstallExtension(e => this.onDidUnInstallExtension(e)));
 	}
 
-	private onDidInstallExtensions(results: readonly InstallExtensionResult[]): codemavi {
+	private onDidInstallExtensions(results: readonly InstallExtensionResult[]): void {
 		for (const r of results) {
 			if (r.local) {
 				this.invalidate(r.profileLocation);
@@ -34,13 +34,13 @@ export class ExtensionsManifestCache extends Disposable {
 		}
 	}
 
-	private onDidUnInstallExtension(e: DidUninstallExtensionEvent): codemavi {
+	private onDidUnInstallExtension(e: DidUninstallExtensionEvent): void {
 		if (!e.error) {
 			this.invalidate(e.profileLocation);
 		}
 	}
 
-	async invalidate(extensionsManifestLocation: URI | undefined): Promise<codemavi> {
+	async invalidate(extensionsManifestLocation: URI | undefined): Promise<void> {
 		if (extensionsManifestLocation) {
 			for (const profile of this.userDataProfilesService.profiles) {
 				if (this.uriIdentityService.extUri.isEqual(profile.extensionsResource, extensionsManifestLocation)) {
@@ -52,7 +52,7 @@ export class ExtensionsManifestCache extends Disposable {
 		}
 	}
 
-	private async deleteUserCacheFile(profile: IUserDataProfile): Promise<codemavi> {
+	private async deleteUserCacheFile(profile: IUserDataProfile): Promise<void> {
 		try {
 			await this.fileService.del(this.uriIdentityService.extUri.joinPath(profile.cacheHome, USER_MANIFEST_CACHE_FILE));
 		} catch (error) {

@@ -78,15 +78,15 @@ export class ListSettingListModel<TDataItem extends object> {
 		this._newDataItem = newItem;
 	}
 
-	setEditKey(key: EditKey): codemavi {
+	setEditKey(key: EditKey): void {
 		this._editKey = key;
 	}
 
-	setValue(listData: TDataItem[]): codemavi {
+	setValue(listData: TDataItem[]): void {
 		this._dataItems = listData;
 	}
 
-	select(idx: number | null): codemavi {
+	select(idx: number | null): void {
 		this._selectedIdx = idx;
 	}
 
@@ -94,7 +94,7 @@ export class ListSettingListModel<TDataItem extends object> {
 		return this._selectedIdx;
 	}
 
-	selectNext(): codemavi {
+	selectNext(): void {
 		if (typeof this._selectedIdx === 'number') {
 			this._selectedIdx = Math.min(this._selectedIdx + 1, this._dataItems.length - 1);
 		} else {
@@ -102,7 +102,7 @@ export class ListSettingListModel<TDataItem extends object> {
 		}
 	}
 
-	selectPrevious(): codemavi {
+	selectPrevious(): void {
 		if (typeof this._selectedIdx === 'number') {
 			this._selectedIdx = Math.max(this._selectedIdx - 1, 0);
 		} else {
@@ -198,7 +198,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		}));
 	}
 
-	setValue(listData: TDataItem[]): codemavi {
+	setValue(listData: TDataItem[]): void {
 		this.model.setValue(listData);
 		this.renderList();
 	}
@@ -209,7 +209,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 	protected abstract getActionsForItem(item: TDataItem, idx: number): IAction[];
 	protected abstract renderItem(item: TDataItem, idx: number): RowElementGroup;
 	protected abstract renderEdit(item: TDataItem, idx: number): HTMLElement;
-	protected abstract addTooltipsToRow(rowElement: RowElementGroup, item: TDataItem): codemavi;
+	protected abstract addTooltipsToRow(rowElement: RowElementGroup, item: TDataItem): void;
 	protected abstract getLocalizedStrings(): {
 		deleteActionTooltip: string;
 		editActionTooltip: string;
@@ -224,7 +224,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		return true;
 	}
 
-	protected renderList(): codemavi {
+	protected renderList(): void {
 		const focused = DOM.isAncestorOfActiveElement(this.listElement);
 
 		DOM.clearNode(this.listElement);
@@ -268,12 +268,12 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		return selectBox;
 	}
 
-	protected editSetting(idx: number): codemavi {
+	protected editSetting(idx: number): void {
 		this.model.setEditKey(idx);
 		this.renderList();
 	}
 
-	public cancelEdit(): codemavi {
+	public cancelEdit(): void {
 		this.model.setEditKey('none');
 		this.renderList();
 	}
@@ -351,7 +351,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		return rowElement;
 	}
 
-	private onListClick(e: PointerEvent): codemavi {
+	private onListClick(e: PointerEvent): void {
 		const targetIdx = this.getClickedItemIndex(e);
 		if (targetIdx < 0) {
 			return;
@@ -366,7 +366,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		this.selectRow(targetIdx);
 	}
 
-	private onListDoubleClick(e: MouseEvent): codemavi {
+	private onListDoubleClick(e: MouseEvent): void {
 		const targetIdx = this.getClickedItemIndex(e);
 		if (targetIdx < 0) {
 			return;
@@ -409,7 +409,7 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		return targetIdx;
 	}
 
-	private selectRow(idx: number): codemavi {
+	private selectRow(idx: number): void {
 		this.model.select(idx);
 		this.rowElements.forEach(row => row.classList.remove('selected'));
 
@@ -419,12 +419,12 @@ export abstract class AbstractListSettingWidget<TDataItem extends object> extend
 		selectedRow.focus();
 	}
 
-	private selectNextRow(): codemavi {
+	private selectNextRow(): void {
 		this.model.selectNext();
 		this.selectRow(this.model.getSelected()!);
 	}
 
-	private selectPreviousRow(): codemavi {
+	private selectPreviousRow(): void {
 		this.model.selectPrevious();
 		this.selectRow(this.model.getSelected()!);
 	}
@@ -778,7 +778,7 @@ export class ExcludeSettingWidget extends ListSettingWidget<IIncludeExcludeDataI
 		return;
 	}
 
-	protected override addTooltipsToRow(rowElementGroup: RowElementGroup, item: IIncludeExcludeDataItem): codemavi {
+	protected override addTooltipsToRow(rowElementGroup: RowElementGroup, item: IIncludeExcludeDataItem): void {
 		let title = isUndefinedOrNull(item.sibling)
 			? localize('excludePatternHintLabel', "Exclude files matching `{0}`", item.value.data)
 			: localize('excludeSiblingHintLabel', "Exclude files matching `{0}`, only when a file matching `{1}` is present", item.value.data, item.sibling);
@@ -814,7 +814,7 @@ export class IncludeSettingWidget extends ListSettingWidget<IIncludeExcludeDataI
 		return;
 	}
 
-	protected override addTooltipsToRow(rowElementGroup: RowElementGroup, item: IIncludeExcludeDataItem): codemavi {
+	protected override addTooltipsToRow(rowElementGroup: RowElementGroup, item: IIncludeExcludeDataItem): void {
 		let title = isUndefinedOrNull(item.sibling)
 			? localize('includePatternHintLabel', "Include files matching `{0}`", item.value.data)
 			: localize('includeSiblingHintLabel', "Include files matching `{0}`, only when a file matching `{1}` is present", item.value.data, item.sibling);
@@ -903,7 +903,7 @@ interface IObjectRenderEditWidgetOptions {
 	idx: number;
 	readonly originalItem: IObjectDataItem;
 	readonly changedItem: IObjectDataItem;
-	update(keyOrValue: ObjectKey | ObjectValue): codemavi;
+	update(keyOrValue: ObjectKey | ObjectValue): void;
 }
 
 export class ObjectSettingDropdownWidget extends AbstractListSettingWidget<IObjectDataItem> {
@@ -922,7 +922,7 @@ export class ObjectSettingDropdownWidget extends AbstractListSettingWidget<IObje
 		super(container, themeService, contextViewService);
 	}
 
-	override setValue(listData: IObjectDataItem[], options?: IObjectSetValueOptions): codemavi {
+	override setValue(listData: IObjectDataItem[], options?: IObjectSetValueOptions): void {
 		this.editable = !options?.isReadOnly;
 		this.showAddButton = options?.showAddButton ?? this.showAddButton;
 		this.keySuggester = options?.keySuggester ?? this.keySuggester;
@@ -1254,7 +1254,7 @@ export class ObjectSettingDropdownWidget extends AbstractListSettingWidget<IObje
 		return true;
 	}
 
-	protected addTooltipsToRow(rowElementGroup: RowElementGroup, item: IObjectDataItem): codemavi {
+	protected addTooltipsToRow(rowElementGroup: RowElementGroup, item: IObjectDataItem): void {
 		const { keyElement, valueElement, rowElement } = rowElementGroup;
 
 		let accessibleDescription;
@@ -1319,7 +1319,7 @@ export class ObjectSettingCheckboxWidget extends AbstractListSettingWidget<IBool
 		super(container, themeService, contextViewService);
 	}
 
-	override setValue(listData: IBoolObjectDataItem[], options?: IBoolObjectSetValueOptions): codemavi {
+	override setValue(listData: IBoolObjectDataItem[], options?: IBoolObjectSetValueOptions): void {
 		if (isDefined(options) && options.settingKey !== this.currentSettingKey) {
 			this.model.setEditKey('none');
 			this.model.select(null);
@@ -1406,7 +1406,7 @@ export class ObjectSettingCheckboxWidget extends AbstractListSettingWidget<IBool
 	private renderEditWidget(
 		value: boolean,
 		checkboxDescription: string,
-		onValueChange: (newValue: boolean) => codemavi
+		onValueChange: (newValue: boolean) => void
 	) {
 		const checkbox = new Toggle({
 			icon: Codicon.check,
@@ -1435,7 +1435,7 @@ export class ObjectSettingCheckboxWidget extends AbstractListSettingWidget<IBool
 		return { widget: checkbox, element: wrapper };
 	}
 
-	protected addTooltipsToRow(rowElementGroup: RowElementGroup, item: IBoolObjectDataItem): codemavi {
+	protected addTooltipsToRow(rowElementGroup: RowElementGroup, item: IBoolObjectDataItem): void {
 		const accessibleDescription = localize('objectPairHintLabel', "The property `{0}` is set to `{1}`.", item.key.data, item.value.data);
 		const title = item.keyDescription ?? accessibleDescription;
 		const { rowElement, keyElement, valueElement } = rowElementGroup;

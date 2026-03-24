@@ -107,7 +107,7 @@ export class StandaloneColorPickerParticipant {
 		return { colorHover, foundInEditor };
 	}
 
-	public async updateEditorModel(colorHoverData: StandaloneColorPickerHover): Promise<codemavi> {
+	public async updateEditorModel(colorHoverData: StandaloneColorPickerHover): Promise<void> {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -128,7 +128,7 @@ export class StandaloneColorPickerParticipant {
 		return this._renderedParts;
 	}
 
-	private _setMinimumDimensions(context: IEditorHoverRenderContext): codemavi {
+	private _setMinimumDimensions(context: IEditorHoverRenderContext): void {
 		const minimumHeight = this._editor.getOption(EditorOption.lineHeight) + 8;
 		context.setMinimumDimensions(new Dimension(302, minimumHeight));
 	}

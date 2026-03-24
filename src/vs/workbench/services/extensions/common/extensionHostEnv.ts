@@ -23,7 +23,7 @@ export class IPCExtHostConnection {
 		public readonly pipeName: string
 	) { }
 
-	public serialize(env: IProcessEnvironment): codemavi {
+	public serialize(env: IProcessEnvironment): void {
 		env[IPCExtHostConnection.ENV_KEY] = this.pipeName;
 	}
 }
@@ -36,7 +36,7 @@ export class SocketExtHostConnection {
 
 	public readonly type = ExtHostConnectionType.Socket;
 
-	public serialize(env: IProcessEnvironment): codemavi {
+	public serialize(env: IProcessEnvironment): void {
 		env[SocketExtHostConnection.ENV_KEY] = '1';
 	}
 }
@@ -49,14 +49,14 @@ export class MessagePortExtHostConnection {
 
 	public readonly type = ExtHostConnectionType.MessagePort;
 
-	public serialize(env: IProcessEnvironment): codemavi {
+	public serialize(env: IProcessEnvironment): void {
 		env[MessagePortExtHostConnection.ENV_KEY] = '1';
 	}
 }
 
 export type ExtHostConnection = IPCExtHostConnection | SocketExtHostConnection | MessagePortExtHostConnection;
 
-function clean(env: IProcessEnvironment): codemavi {
+function clean(env: IProcessEnvironment): void {
 	delete env[IPCExtHostConnection.ENV_KEY];
 	delete env[SocketExtHostConnection.ENV_KEY];
 	delete env[MessagePortExtHostConnection.ENV_KEY];
@@ -65,8 +65,8 @@ function clean(env: IProcessEnvironment): codemavi {
 /**
  * Write `connection` into `env` and clean up `env`.
  */
-export function writeExtHostConnection(connection: ExtHostConnection, env: IProcessEnvironment): codemavi {
-	// Acodemavi having two different keys that might introduce amiguity or problems.
+export function writeExtHostConnection(connection: ExtHostConnection, env: IProcessEnvironment): void {
+	// Avoid having two different keys that might introduce amiguity or problems.
 	clean(env);
 	connection.serialize(env);
 }

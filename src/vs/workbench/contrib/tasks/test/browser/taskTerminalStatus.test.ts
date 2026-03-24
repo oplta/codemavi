@@ -23,13 +23,13 @@ class TestTaskService implements Partial<ITaskService> {
 	public get onDidStateChange(): Event<ITaskEvent> {
 		return this._onDidStateChange.event;
 	}
-	public triggerStateChange(event: Partial<ITaskEvent>): codemavi {
+	public triggerStateChange(event: Partial<ITaskEvent>): void {
 		this._onDidStateChange.fire(event as ITaskEvent);
 	}
 }
 
 class TestaccessibilitySignalService implements Partial<IAccessibilitySignalService> {
-	async playSignal(cue: AccessibilitySignal): Promise<codemavi> {
+	async playSignal(cue: AccessibilitySignal): Promise<void> {
 		return;
 	}
 }
@@ -39,7 +39,7 @@ class TestTerminal extends Disposable implements Partial<ITerminalInstance> {
 	constructor() {
 		super();
 	}
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 	}
 }
@@ -59,11 +59,11 @@ class TestTask extends CommonTask {
 }
 
 class TestProblemCollector extends Disposable implements Partial<AbstractProblemCollector> {
-	protected readonly _onDidFindFirstMatch = new Emitter<codemavi>();
+	protected readonly _onDidFindFirstMatch = new Emitter<void>();
 	readonly onDidFindFirstMatch = this._onDidFindFirstMatch.event;
-	protected readonly _onDidFindErrors = new Emitter<codemavi>();
+	protected readonly _onDidFindErrors = new Emitter<void>();
 	readonly onDidFindErrors = this._onDidFindErrors.event;
-	protected readonly _onDidRequestInvalidateLastMarker = new Emitter<codemavi>();
+	protected readonly _onDidRequestInvalidateLastMarker = new Emitter<void>();
 	readonly onDidRequestInvalidateLastMarker = this._onDidRequestInvalidateLastMarker.event;
 }
 
@@ -92,7 +92,7 @@ suite('Task Terminal Status', () => {
 		taskService.triggerStateChange({ kind: TaskEventKind.Inactive });
 		assertStatus(testTerminal.statusList, SUCCEEDED_TASK_STATUS);
 		taskService.triggerStateChange({ kind: TaskEventKind.End });
-		await poll<codemavi>(async () => Promise.resolve(), () => testTerminal?.statusList.primary?.id === FAILED_TASK_STATUS.id, 'terminal status should be updated');
+		await poll<void>(async () => Promise.resolve(), () => testTerminal?.statusList.primary?.id === FAILED_TASK_STATUS.id, 'terminal status should be updated');
 	});
 	test('Should add active status when a non-background task is run for a second time in the same terminal', () => {
 		taskTerminalStatus.addTerminal(testTask, testTerminal, problemCollector);
@@ -112,7 +112,7 @@ suite('Task Terminal Status', () => {
 		taskService.triggerStateChange({ kind: TaskEventKind.Inactive });
 		assertStatus(testTerminal.statusList, SUCCEEDED_TASK_STATUS);
 		taskService.triggerStateChange({ kind: TaskEventKind.ProcessEnded, exitCode: 0 });
-		await poll<codemavi>(async () => Promise.resolve(), () => testTerminal?.statusList.statuses?.includes(SUCCEEDED_TASK_STATUS) === false, 'terminal should have dropped status');
+		await poll<void>(async () => Promise.resolve(), () => testTerminal?.statusList.statuses?.includes(SUCCEEDED_TASK_STATUS) === false, 'terminal should have dropped status');
 	});
 	test('Should add succeeded status when a non-background task exits', () => {
 		taskTerminalStatus.addTerminal(testTask, testTerminal, problemCollector);
@@ -125,7 +125,7 @@ suite('Task Terminal Status', () => {
 	});
 });
 
-function assertStatus(actual: ITerminalStatusList, expected: ITerminalStatus): codemavi {
+function assertStatus(actual: ITerminalStatusList, expected: ITerminalStatus): void {
 	ok(actual.statuses.length === 1, '# of statuses');
 	ok(actual.primary?.id === expected.id, 'ID');
 	ok(actual.primary?.severity === expected.severity, 'Severity');

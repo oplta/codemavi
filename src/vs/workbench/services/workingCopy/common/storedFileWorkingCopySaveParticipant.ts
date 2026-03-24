@@ -34,7 +34,7 @@ export class StoredFileWorkingCopySaveParticipant extends Disposable {
 		return toDisposable(() => remove());
 	}
 
-	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	async participate(workingCopy: IStoredFileWorkingCopy<IStoredFileWorkingCopyModel>, context: IStoredFileWorkingCopySaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 		const cts = new CancellationTokenSource(token);
 
 		// undoStop before participation
@@ -94,7 +94,7 @@ export class StoredFileWorkingCopySaveParticipant extends Disposable {
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.saveParticipants.clear();
 
 		super.dispose();

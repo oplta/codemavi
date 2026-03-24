@@ -86,7 +86,7 @@ export class ConflictDetector {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._onDidConflict.dispose();
 	}

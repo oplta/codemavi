@@ -18,7 +18,7 @@ class EditorFontZoomIn extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		EditorZoom.setZoomLevel(EditorZoom.getZoomLevel() + 1);
 	}
 }
@@ -33,7 +33,7 @@ class EditorFontZoomOut extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		EditorZoom.setZoomLevel(EditorZoom.getZoomLevel() - 1);
 	}
 }
@@ -48,7 +48,7 @@ class EditorFontZoomReset extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		EditorZoom.setZoomLevel(0);
 	}
 }

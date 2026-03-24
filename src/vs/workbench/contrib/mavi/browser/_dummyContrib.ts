@@ -29,15 +29,15 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			f1: true,
-			id: 'codemavi.dummy',
+			id: 'mavi.dummy',
 			title: localize2('dummy', 'dummy: Init'),
 			keybinding: {
 				primary: KeyMod.CtrlCmd | KeyCode.Digit0,
-				weight: KeybindingWeight.Code MaviExtension,
+				weight: KeybindingWeight.MaviExtension,
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const n = accessor.get(IDummyService)
 		console.log('Hi', n._serviceBrand)
 	}
@@ -45,7 +45,7 @@ registerAction2(class extends Action2 {
 
 
 class DummyService extends Disposable implements IWorkbenchContribution, IDummyService {
-	static readonly ID = 'workbench.contrib.codemavi.dummy' // workbenchContributions need this, services do not
+	static readonly ID = 'workbench.contrib.mavi.dummy' // workbenchContributions need this, services do not
 	_serviceBrand: undefined;
 
 	constructor(

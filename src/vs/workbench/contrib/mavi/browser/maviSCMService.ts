@@ -9,12 +9,12 @@ import { Action2, MenuId, registerAction2 } from '../../../../platform/actions/c
 import { ContextKeyExpr, IContextKey, IContextKeyService } from '../../../../platform/contextkey/common/contextkey.js'
 import { ISCMService } from '../../scm/common/scm.js'
 import { ProxyChannel } from '../../../../base/parts/ipc/common/ipc.js'
-import { IMaviSCMService } from '../common/codemaviSCMTypes.js'
+import { IMaviSCMService } from '../common/maviSCMTypes.js'
 import { IMainProcessService } from '../../../../platform/ipc/common/mainProcessService.js'
-import { IMaviSettingsService } from '../common/codemaviSettingsService.js'
+import { IMaviSettingsService } from '../common/maviSettingsService.js'
 import { IConvertToLLMMessageService } from './convertToLLMMessageService.js'
 import { ILLMMessageService } from '../common/sendLLMMessageService.js'
-import { ModelSelection, OverridesOfModel, ModelSelectionOptions } from '../common/codemaviSettingsTypes.js'
+import { ModelSelection, OverridesOfModel, ModelSelectionOptions } from '../common/maviSettingsTypes.js'
 import { gitCommitMessage_systemMessage, gitCommitMessage_userMessage } from '../common/prompt/prompts.js'
 import { LLMChatMessage } from '../common/sendLLMMessageTypes.js'
 import { generateUuid } from '../../../../base/common/uuid.js'
@@ -33,26 +33,26 @@ interface ModelOptions {
 
 export interface IGenerateCommitMessageService {
 	readonly _serviceBrand: undefined
-	generateCommitMessage(): Promise<codemavi>
-	abort(): codemavi
+	generateCommitMessage(): Promise<void>
+	abort(): void
 }
 
-export const IGenerateCommitMessageService = createDecorator<IGenerateCommitMessageService>('codemaviGenerateCommitMessageService');
+export const IGenerateCommitMessageService = createDecorator<IGenerateCommitMessageService>('maviGenerateCommitMessageService');
 
-const loadingContextKey = 'codemaviSCMGenerateCommitMessageLoading'
+const loadingContextKey = 'maviSCMGenerateCommitMessageLoading'
 
 class GenerateCommitMessageService extends Disposable implements IGenerateCommitMessageService {
 	readonly _serviceBrand: undefined;
 	private readonly execute = new ThrottledDelayer(300)
 	private llmRequestId: string | null = null
 	private currentRequestId: string | null = null
-	private codemaviSCM: IMaviSCMService
+	private maviSCM: IMaviSCMService
 	private loadingContextKey: IContextKey<boolean>
 
 	constructor(
 		@ISCMService private readonly scmService: ISCMService,
 		@IMainProcessService mainProcessService: IMainProcessService,
-		@IMaviSettingsService private readonly codemaviSettingsService: IMaviSettingsService,
+		@IMaviSettingsService private readonly maviSettingsService: IMaviSettingsService,
 		@IConvertToLLMMessageService private readonly convertToLLMMessageService: IConvertToLLMMessageService,
 		@ILLMMessageService private readonly llmMessageService: ILLMMessageService,
 		@IContextKeyService private readonly contextKeyService: IContextKeyService,
@@ -60,7 +60,7 @@ class GenerateCommitMessageService extends Disposable implements IGenerateCommit
 	) {
 		super()
 		this.loadingContextKey = this.contextKeyService.createKey(loadingContextKey, false)
-		this.codemaviSCM = ProxyChannel.toService<IMaviSCMService>(mainProcessService.getChannel('mavi-channel-scm'))
+		this.maviSCM = ProxyChannel.toService<IMaviSCMService>(mainProcessService.getChannel('mavi-channel-scm'))
 	}
 
 	override dispose() {
@@ -78,17 +78,17 @@ class GenerateCommitMessageService extends Disposable implements IGenerateCommit
 			try {
 				const { path, repo } = this.gitRepoInfo()
 				const [stat, sampledDiffs, branch, log] = await Promise.all([
-					this.codemaviSCM.gitStat(path),
-					this.codemaviSCM.gitSampledDiffs(path),
-					this.codemaviSCM.gitBranch(path),
-					this.codemaviSCM.gitLog(path)
+					this.maviSCM.gitStat(path),
+					this.maviSCM.gitSampledDiffs(path),
+					this.maviSCM.gitBranch(path),
+					this.maviSCM.gitLog(path)
 				])
 
 				if (!this.isCurrentRequest(requestId)) { throw new CancellationError() }
 
-				const modelSelection = this.codemaviSettingsService.state.modelSelectionOfFeature['SCM'] ?? null
-				const modelSelectionOptions = modelSelection ? this.codemaviSettingsService.state.optionsOfModelSelection['SCM'][modelSelection?.providerName]?.[modelSelection.modelName] : undefined
-				const overridesOfModel = this.codemaviSettingsService.state.overridesOfModel
+				const modelSelection = this.maviSettingsService.state.modelSelectionOfFeature['SCM'] ?? null
+				const modelSelectionOptions = modelSelection ? this.maviSettingsService.state.optionsOfModelSelection['SCM'][modelSelection?.providerName]?.[modelSelection.modelName] : undefined
+				const overridesOfModel = this.maviSettingsService.state.overridesOfModel
 
 				const modelOptions: ModelOptions = { modelSelection, modelSelectionOptions, overridesOfModel }
 
@@ -159,7 +159,7 @@ class GenerateCommitMessageService extends Disposable implements IGenerateCommit
 				onAbort: () => {
 					reject(new CancellationError())
 				},
-				logging: { loggingName: 'Code MaviSCM - Commit Message' },
+				logging: { loggingName: 'MaviSCM - Commit Message' },
 			})
 		})
 	}
@@ -177,7 +177,7 @@ class GenerateCommitMessageService extends Disposable implements IGenerateCommit
 	private onError(error: any) {
 		if (!isCancellationError(error)) {
 			console.error(error)
-			this.notificationService.error(localize2('codemaviFailedToGenerateCommitMessage', 'Failed to generate commit message.').value)
+			this.notificationService.error(localize2('maviFailedToGenerateCommitMessage', 'Failed to generate commit message.').value)
 		}
 	}
 }
@@ -185,10 +185,10 @@ class GenerateCommitMessageService extends Disposable implements IGenerateCommit
 class GenerateCommitMessageAction extends Action2 {
 	constructor() {
 		super({
-			id: 'codemavi.generateCommitMessageAction',
-			title: localize2('codemaviCommitMessagePrompt', 'Code Mavi: Generate Commit Message'),
+			id: 'mavi.generateCommitMessageAction',
+			title: localize2('maviCommitMessagePrompt', 'Mavi: Generate Commit Message'),
 			icon: ThemeIcon.fromId('sparkle'),
-			tooltip: localize2('codemaviCommitMessagePromptTooltip', 'Code Mavi: Generate Commit Message'),
+			tooltip: localize2('maviCommitMessagePromptTooltip', 'Mavi: Generate Commit Message'),
 			f1: true,
 			menu: [{
 				id: MenuId.SCMInputBox,
@@ -198,7 +198,7 @@ class GenerateCommitMessageAction extends Action2 {
 		})
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const generateCommitMessageService = accessor.get(IGenerateCommitMessageService)
 		generateCommitMessageService.generateCommitMessage()
 	}
@@ -207,10 +207,10 @@ class GenerateCommitMessageAction extends Action2 {
 class LoadingGenerateCommitMessageAction extends Action2 {
 	constructor() {
 		super({
-			id: 'codemavi.loadingGenerateCommitMessageAction',
-			title: localize2('codemaviCommitMessagePromptCancel', 'Code Mavi: Cancel Commit Message Generation'),
+			id: 'mavi.loadingGenerateCommitMessageAction',
+			title: localize2('maviCommitMessagePromptCancel', 'Mavi: Cancel Commit Message Generation'),
 			icon: ThemeIcon.fromId('stop-circle'),
-			tooltip: localize2('codemaviCommitMessagePromptCancelTooltip', 'Code Mavi: Cancel Commit Message Generation'),
+			tooltip: localize2('maviCommitMessagePromptCancelTooltip', 'Mavi: Cancel Commit Message Generation'),
 			f1: false, //Having a cancel command in the command palette is more confusing than useful.
 			menu: [{
 				id: MenuId.SCMInputBox,
@@ -219,7 +219,7 @@ class LoadingGenerateCommitMessageAction extends Action2 {
 			}]
 		})
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const generateCommitMessageService = accessor.get(IGenerateCommitMessageService)
 		generateCommitMessageService.abort()
 	}

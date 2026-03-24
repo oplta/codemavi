@@ -60,7 +60,7 @@ export class MainThreadAuthenticationProvider extends Disposable implements IAut
 		return this._proxy.$createSession(this.id, scopes, options);
 	}
 
-	async removeSession(sessionId: string): Promise<codemavi> {
+	async removeSession(sessionId: string): Promise<void> {
 		await this._proxy.$removeSession(this.id, sessionId);
 		this.notificationService.info(nls.localize('signedOut', "Successfully signed out."));
 	}
@@ -98,7 +98,7 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 		}));
 	}
 
-	async $registerAuthenticationProvider(id: string, label: string, supportsMultipleAccounts: boolean): Promise<codemavi> {
+	async $registerAuthenticationProvider(id: string, label: string, supportsMultipleAccounts: boolean): Promise<void> {
 		if (!this.authenticationService.declaredProviders.find(p => p.id === id)) {
 			// If telemetry shows that this is not happening much, we can instead throw an error here.
 			this.logService.warn(`Authentication provider ${id} was not declared in the Extension Manifest.`);
@@ -115,25 +115,25 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 		this.authenticationService.registerAuthenticationProvider(id, provider);
 	}
 
-	$unregisterAuthenticationProvider(id: string): codemavi {
+	$unregisterAuthenticationProvider(id: string): void {
 		this._registrations.deleteAndDispose(id);
 		this.authenticationService.unregisterAuthenticationProvider(id);
 	}
 
-	async $ensureProvider(id: string): Promise<codemavi> {
+	async $ensureProvider(id: string): Promise<void> {
 		if (!this.authenticationService.isAuthenticationProviderRegistered(id)) {
 			return await this.extensionService.activateByEvent(getAuthenticationProviderActivationEvent(id), ActivationKind.Immediate);
 		}
 	}
 
-	$sendDidChangeSessions(providerId: string, event: AuthenticationSessionsChangeEvent): codemavi {
+	$sendDidChangeSessions(providerId: string, event: AuthenticationSessionsChangeEvent): void {
 		const obj = this._registrations.get(providerId);
 		if (obj instanceof Emitter) {
 			obj.fire(event);
 		}
 	}
 
-	$removeSession(providerId: string, sessionId: string): Promise<codemavi> {
+	$removeSession(providerId: string, sessionId: string): Promise<void> {
 		return this.authenticationService.removeSession(providerId, sessionId);
 	}
 	private async loginPrompt(provider: IAuthenticationProvider, extensionName: string, recreatingSession: boolean, options?: AuthenticationInteractiveOptions): Promise<boolean> {
@@ -322,7 +322,7 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 	// due to the adoption of the Microsoft broker.
 	// Remove this in a few iterations.
 	private _sentClientIdUsageEvents = new Set<string>();
-	private sendClientIdUsageTelemetry(extensionId: string, providerId: string, scopes: string[]): codemavi {
+	private sendClientIdUsageTelemetry(extensionId: string, providerId: string, scopes: string[]): void {
 		const containsVSCodeClientIdScope = scopes.some(scope => scope.startsWith('VSCODE_CLIENT_ID:'));
 		const key = `${extensionId}|${providerId}|${containsVSCodeClientIdScope}`;
 		if (this._sentClientIdUsageEvents.has(key)) {
@@ -339,7 +339,7 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 		}
 	}
 
-	private sendProviderUsageTelemetry(extensionId: string, providerId: string): codemavi {
+	private sendProviderUsageTelemetry(extensionId: string, providerId: string): void {
 		const key = `${extensionId}|${providerId}`;
 		if (this._sentProviderUsageEvents.has(key)) {
 			return;
@@ -379,12 +379,12 @@ export class MainThreadAuthentication extends Disposable implements MainThreadAu
 		return undefined;
 	}
 
-	private _updateAccountPreference(extensionId: string, providerId: string, session: AuthenticationSession): codemavi {
+	private _updateAccountPreference(extensionId: string, providerId: string, session: AuthenticationSession): void {
 		this.authenticationExtensionsService.updateAccountPreference(extensionId, providerId, session.account);
 		this.authenticationExtensionsService.updateSessionPreference(providerId, extensionId, session);
 	}
 
-	private _removeAccountPreference(extensionId: string, providerId: string, scopes: string[]): codemavi {
+	private _removeAccountPreference(extensionId: string, providerId: string, scopes: string[]): void {
 		this.authenticationExtensionsService.removeAccountPreference(extensionId, providerId);
 		this.authenticationExtensionsService.removeSessionPreference(providerId, extensionId, scopes);
 	}

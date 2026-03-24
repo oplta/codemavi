@@ -44,7 +44,7 @@ class TestEditor extends EditorPane {
 	}
 
 	override getId(): string { return 'testEditor'; }
-	layout(): codemavi { }
+	layout(): void { }
 	protected createEditor(): any { }
 }
 
@@ -59,7 +59,7 @@ class OtherTestEditor extends EditorPane {
 
 	override getId(): string { return 'testOtherEditor'; }
 
-	layout(): codemavi { }
+	layout(): void { }
 	protected createEditor(): any { }
 }
 
@@ -462,7 +462,7 @@ suite('EditorPane', () => {
 			}
 
 			override getId(): string { return 'trustRequiredTestEditor'; }
-			layout(): codemavi { }
+			layout(): void { }
 			protected createEditor(): any { }
 		}
 

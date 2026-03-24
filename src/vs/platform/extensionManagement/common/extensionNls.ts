@@ -27,7 +27,7 @@ export function localizeManifest(logger: ILogger, extensionManifest: IExtensionM
  * This routine makes the following assumptions:
  * The root element is an object literal
  */
-function replaceNLStrings(logger: ILogger, extensionManifest: IExtensionManifest, messages: ITranslations, originalMessages?: ITranslations): codemavi {
+function replaceNLStrings(logger: ILogger, extensionManifest: IExtensionManifest, messages: ITranslations, originalMessages?: ITranslations): void {
 	const processEntry = (obj: any, key: string | number, command?: boolean) => {
 		const value = obj[key];
 		if (isString(value)) {

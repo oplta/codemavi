@@ -130,8 +130,8 @@ const provider: CompletionItemProvider = {
 async function withAsyncTestCodeEditorAndInlineCompletionsModel(
 	text: string,
 	options: TestCodeEditorInstantiationOptions & { provider?: CompletionItemProvider; fakeClock?: boolean; serviceCollection?: never },
-	callback: (args: { editor: ITestCodeEditor; editorViewModel: ViewModel; model: InlineCompletionsModel; context: GhostTextContext }) => Promise<codemavi>
-): Promise<codemavi> {
+	callback: (args: { editor: ITestCodeEditor; editorViewModel: ViewModel; model: InlineCompletionsModel; context: GhostTextContext }) => Promise<void>
+): Promise<void> {
 	await runWithFakedTimers({ useFakeTimers: options.fakeClock }, async () => {
 		const disposableStore = new DisposableStore();
 
@@ -147,7 +147,7 @@ async function withAsyncTestCodeEditorAndInlineCompletionsModel(
 					}
 				}],
 				[ISuggestMemoryService, new class extends mock<ISuggestMemoryService>() {
-					override memorize(): codemavi { }
+					override memorize(): void { }
 					override select(): number { return 0; }
 				}],
 				[IMenuService, new class extends mock<IMenuService>() {

@@ -62,7 +62,7 @@ export class NotebookFindContrib extends Disposable implements INotebookEditorCo
 		return this._widget.value;
 	}
 
-	show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): Promise<codemavi> {
+	show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): Promise<void> {
 		return this._widget.value.show(initialInput, options);
 	}
 
@@ -137,7 +137,7 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		return this._isFocused;
 	}
 
-	private _onFindInputKeyDown(e: IKeyboardEvent): codemavi {
+	private _onFindInputKeyDown(e: IKeyboardEvent): void {
 		if (e.equals(KeyCode.Enter)) {
 			this.find(false);
 			e.preventDefault();
@@ -149,7 +149,7 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		}
 	}
 
-	private _onReplaceInputKeyDown(e: IKeyboardEvent): codemavi {
+	private _onReplaceInputKeyDown(e: IKeyboardEvent): void {
 		if (e.equals(KeyCode.Enter)) {
 			this.replaceOne();
 			e.preventDefault();
@@ -168,11 +168,11 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		return false;
 	}
 
-	private findIndex(index: number): codemavi {
+	private findIndex(index: number): void {
 		this._findModel.find({ index });
 	}
 
-	protected find(previous: boolean): codemavi {
+	protected find(previous: boolean): void {
 		this._findModel.find({ previous });
 	}
 
@@ -235,7 +235,7 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		});
 	}
 
-	protected findFirst(): codemavi { }
+	protected findFirst(): void { }
 
 	protected onFocusTrackerFocus() {
 		this._findWidgetFocused.set(true);
@@ -248,17 +248,17 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		this._isFocused = false;
 	}
 
-	protected onReplaceInputFocusTrackerFocus(): codemavi {
+	protected onReplaceInputFocusTrackerFocus(): void {
 		// throw new Error('Method not implemented.');
 	}
-	protected onReplaceInputFocusTrackerBlur(): codemavi {
+	protected onReplaceInputFocusTrackerBlur(): void {
 		// throw new Error('Method not implemented.');
 	}
 
-	protected onFindInputFocusTrackerFocus(): codemavi { }
-	protected onFindInputFocusTrackerBlur(): codemavi { }
+	protected onFindInputFocusTrackerFocus(): void { }
+	protected onFindInputFocusTrackerBlur(): void { }
 
-	override async show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): Promise<codemavi> {
+	override async show(initialInput?: string, options?: IShowNotebookFindWidgetOptions): Promise<void> {
 		const searchStringUpdate = this._state.searchString !== initialInput;
 		super.show(initialInput, options);
 		this._state.change({ searchString: initialInput ?? this._state.searchString, isRevealed: true }, false);
@@ -352,7 +352,7 @@ class NotebookFindWidget extends SimpleFindReplaceWidget implements INotebookEdi
 		}
 	}
 
-	protected override _updateMatchesCount(): codemavi {
+	protected override _updateMatchesCount(): void {
 		if (!this._findModel || !this._findModel.findMatches) {
 			return;
 		}

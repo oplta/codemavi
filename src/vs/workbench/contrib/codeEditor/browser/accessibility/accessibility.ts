@@ -38,7 +38,7 @@ class ToggleScreenReaderMode extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const accessibiiltyService = accessor.get(IAccessibilityService);
 		const configurationService = accessor.get(IConfigurationService);
 		const isScreenReaderOptimized = accessibiiltyService.isScreenReaderOptimized();

@@ -49,7 +49,7 @@ export class Debugger implements IDebugger, IDebuggerMetadata {
 		this.debuggerHiddenWhen = typeof this.debuggerContribution.hiddenWhen === 'string' ? ContextKeyExpr.deserialize(this.debuggerContribution.hiddenWhen) : undefined;
 	}
 
-	merge(otherDebuggerContribution: IDebuggerContribution, extensionDescription: IExtensionDescription): codemavi {
+	merge(otherDebuggerContribution: IDebuggerContribution, extensionDescription: IExtensionDescription): void {
 
 		/**
 		 * Copies all properties of source into destination. The optional parameter "overwrite" allows to control

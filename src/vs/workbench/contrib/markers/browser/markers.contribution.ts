@@ -174,7 +174,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.setViewMode(MarkersViewMode.Tree);
 	}
 });
@@ -198,7 +198,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.setViewMode(MarkersViewMode.Table);
 	}
 });
@@ -223,7 +223,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.filters.showErrors = !view.filters.showErrors;
 	}
 });
@@ -248,7 +248,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.filters.showWarnings = !view.filters.showWarnings;
 	}
 });
@@ -273,7 +273,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.filters.showInfos = !view.filters.showInfos;
 	}
 });
@@ -298,7 +298,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.filters.activeFile = !view.filters.activeFile;
 	}
 });
@@ -323,7 +323,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 		});
 	}
 
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		view.filters.excludedFiles = !view.filters.excludedFiles;
 	}
 });
@@ -337,7 +337,7 @@ registerAction2(class extends Action2 {
 			f1: true,
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		accessor.get(IViewsService).openView(Markers.MARKERS_VIEW_ID, true);
 	}
 });
@@ -361,7 +361,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		const clipboardService = serviceAccessor.get(IClipboardService);
 		const selection = markersView.getFocusedSelectedElements() || markersView.getAllResourceMarkers();
 		const markers: Marker[] = [];
@@ -396,7 +396,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		const clipboardService = serviceAccessor.get(IClipboardService);
 		const element = markersView.getFocusElement();
 		if (element instanceof Marker) {
@@ -418,7 +418,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		const clipboardService = serviceAccessor.get(IClipboardService);
 		const element = markersView.getFocusElement();
 		if (element instanceof RelatedInformation) {
@@ -440,7 +440,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		markersView.focus();
 	}
 });
@@ -458,7 +458,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		markersView.focusFilter();
 	}
 });
@@ -476,7 +476,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		markersView.setMultiline(true);
 	}
 });
@@ -494,7 +494,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		markersView.setMultiline(false);
 	}
 });
@@ -513,7 +513,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, markersView: IMarkersView): Promise<void> {
 		markersView.clearFilterText();
 	}
 });
@@ -533,7 +533,7 @@ registerAction2(class extends ViewAction<IMarkersView> {
 			viewId: Markers.MARKERS_VIEW_ID
 		});
 	}
-	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<codemavi> {
+	async runInView(serviceAccessor: ServicesAccessor, view: IMarkersView): Promise<void> {
 		return view.collapseAll();
 	}
 });
@@ -545,7 +545,7 @@ registerAction2(class extends Action2 {
 			title: Messages.MARKERS_PANEL_TOGGLE_LABEL,
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const viewsService = accessor.get(IViewsService);
 		if (viewsService.isViewVisible(Markers.MARKERS_VIEW_ID)) {
 			viewsService.closeView(Markers.MARKERS_VIEW_ID);
@@ -690,7 +690,7 @@ class ActivityUpdater extends Disposable implements IWorkbenchContribution {
 		this.updateBadge();
 	}
 
-	private updateBadge(): codemavi {
+	private updateBadge(): void {
 		const { errors, warnings, infos } = this.markerService.getStatistics();
 		const total = errors + warnings + infos;
 		if (total > 0) {

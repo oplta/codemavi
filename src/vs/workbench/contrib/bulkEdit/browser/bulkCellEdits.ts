@@ -49,7 +49,7 @@ export class BulkCellEdits {
 	constructor(
 		private readonly _undoRedoGroup: UndoRedoGroup,
 		undoRedoSource: UndoRedoSource | undefined,
-		private readonly _progress: IProgress<codemavi>,
+		private readonly _progress: IProgress<void>,
 		private readonly _token: CancellationToken,
 		private readonly _edits: ResourceNotebookCellEdit[],
 		@IEditorService private readonly _editorService: IEditorService,

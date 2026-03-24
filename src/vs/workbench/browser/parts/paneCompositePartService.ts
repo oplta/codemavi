@@ -77,7 +77,7 @@ export class PaneCompositePartService extends Disposable implements IPaneComposi
 		return this.getPartByLocation(viewContainerLocation).getProgressIndicator(id);
 	}
 
-	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): codemavi {
+	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): void {
 		this.getPartByLocation(viewContainerLocation).hideActivePaneComposite();
 	}
 

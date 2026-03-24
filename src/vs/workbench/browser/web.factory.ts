@@ -146,7 +146,7 @@ export namespace window {
 		return workbench.window.withProgress(options, task);
 	}
 
-	export async function createTerminal(options: IEmbedderTerminalOptions): Promise<codemavi> {
+	export async function createTerminal(options: IEmbedderTerminalOptions): Promise<void> {
 		const workbench = await workbenchPromise.p;
 		workbench.window.createTerminal(options);
 	}

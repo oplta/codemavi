@@ -33,14 +33,14 @@ export class IntervalTimer extends Disposable {
 		this._token = -1;
 	}
 
-	cancel(): codemavi {
+	cancel(): void {
 		if (this._token !== -1) {
 			clearInterval(this._token);
 			this._token = -1;
 		}
 	}
 
-	cancelAndSet(runner: () => codemavi, interval: number): codemavi {
+	cancelAndSet(runner: () => void, interval: number): void {
 		this.cancel();
 		this._token = setInterval(() => {
 			runner();
@@ -114,7 +114,7 @@ export function toPromise<T>(event: Event<T>): Promise<T> {
 
 //#region DeferredPromise
 
-export type ValueCallback<T = unknown> = (value: T | Promise<T>) => codemavi;
+export type ValueCallback<T = unknown> = (value: T | Promise<T>) => void;
 
 const enum DeferredOutcome {
 	Resolved,
@@ -127,7 +127,7 @@ const enum DeferredOutcome {
 export class DeferredPromise<T> {
 
 	private completeCallback!: ValueCallback<T>;
-	private errorCallback!: (err: unknown) => codemavi;
+	private errorCallback!: (err: unknown) => void;
 	private outcome?: { outcome: DeferredOutcome.Rejected; value: any } | { outcome: DeferredOutcome.Resolved; value: T };
 
 	public get isRejected() {
@@ -156,7 +156,7 @@ export class DeferredPromise<T> {
 	}
 
 	public complete(value: T) {
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			this.completeCallback(value);
 			this.outcome = { outcome: DeferredOutcome.Resolved, value };
 			resolve();
@@ -164,7 +164,7 @@ export class DeferredPromise<T> {
 	}
 
 	public error(err: unknown) {
-		return new Promise<codemavi>(resolve => {
+		return new Promise<void>(resolve => {
 			this.errorCallback(err);
 			this.outcome = { outcome: DeferredOutcome.Rejected, value: err };
 			resolve();

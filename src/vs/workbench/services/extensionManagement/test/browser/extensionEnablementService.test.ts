@@ -102,11 +102,11 @@ export class TestExtensionEnablementService extends ExtensionEnablementService {
 		this._register(disposables);
 	}
 
-	public async waitUntilInitialized(): Promise<codemavi> {
+	public async waitUntilInitialized(): Promise<void> {
 		await this.extensionsManager.whenInitialized();
 	}
 
-	public reset(): codemavi {
+	public reset(): void {
 		let extensions = this.globalExtensionEnablementService.getDisabledExtensions();
 		for (const e of this._getWorkspaceDisabledExtensions()) {
 			if (!extensions.some(r => areSameExtensions(r, e))) {

@@ -33,7 +33,7 @@ export class StyleLoadingMonitor {
 		});
 	}
 
-	public setPoster(poster: MessagePoster): codemavi {
+	public setPoster(poster: MessagePoster): void {
 		this._poster = poster;
 		if (this._finishedLoading) {
 			poster.postMessage('previewStyleLoadError', { unloadedStyles: this._unloadedStyles });

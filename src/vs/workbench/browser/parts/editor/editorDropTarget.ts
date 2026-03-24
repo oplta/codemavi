@@ -80,7 +80,7 @@ class DropOverlay extends Themable {
 		this.create();
 	}
 
-	private create(): codemavi {
+	private create(): void {
 		const overlayOffsetHeight = this.getOverlayOffsetHeight();
 
 		// Container
@@ -112,7 +112,7 @@ class DropOverlay extends Themable {
 		this.updateStyles();
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		const overlay = assertIsDefined(this.overlay);
 
 		// Overlay drop background
@@ -140,7 +140,7 @@ class DropOverlay extends Themable {
 		}
 	}
 
-	private registerListeners(container: HTMLElement): codemavi {
+	private registerListeners(container: HTMLElement): void {
 		this._register(new DragAndDropObserver(container, {
 			onDragOver: e => {
 				if (this.enableDropIntoEditor && isDragIntoEditorEvent(e)) {
@@ -248,7 +248,7 @@ class DropOverlay extends Themable {
 		return undefined;
 	}
 
-	private async handleDrop(event: DragEvent, splitDirection?: GroupDirection): Promise<codemavi> {
+	private async handleDrop(event: DragEvent, splitDirection?: GroupDirection): Promise<void> {
 
 		// Determine target group
 		const ensureTargetGroup = () => {
@@ -382,7 +382,7 @@ class DropOverlay extends Themable {
 		return (e.altKey && !isMacintosh) || (e.shiftKey && isMacintosh);
 	}
 
-	private positionOverlay(mousePosX: number, mousePosY: number, isDraggingGroup: boolean, enableSplitting: boolean): codemavi {
+	private positionOverlay(mousePosX: number, mousePosY: number, isDraggingGroup: boolean, enableSplitting: boolean): void {
 		const preferSplitVertically = this.editorGroupService.partOptions.openSideBySideDirection === 'right';
 
 		const editorControlWidth = this.groupView.element.clientWidth;
@@ -502,7 +502,7 @@ class DropOverlay extends Themable {
 		this.currentDropOperation = { splitDirection };
 	}
 
-	private doPositionOverlay(options: { top: string; left: string; width: string; height: string }): codemavi {
+	private doPositionOverlay(options: { top: string; left: string; width: string; height: string }): void {
 		const [container, overlay] = assertAllDefined(this.container, this.overlay);
 
 		// Container
@@ -531,7 +531,7 @@ class DropOverlay extends Themable {
 		return 0;
 	}
 
-	private hideOverlay(): codemavi {
+	private hideOverlay(): void {
 		const overlay = assertIsDefined(this.overlay);
 
 		// Reset overlay
@@ -554,7 +554,7 @@ class DropOverlay extends Themable {
 		return element === this.container || element === this.overlay;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this._disposed = true;
@@ -591,7 +591,7 @@ export class EditorDropTarget extends Themable {
 		return undefined;
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(addDisposableListener(this.container, EventType.DRAG_ENTER, e => this.onDragEnter(e)));
 		this._register(addDisposableListener(this.container, EventType.DRAG_LEAVE, () => this.onDragLeave()));
 		for (const target of [this.container, getWindow(this.container)]) {
@@ -599,7 +599,7 @@ export class EditorDropTarget extends Themable {
 		}
 	}
 
-	private onDragEnter(event: DragEvent): codemavi {
+	private onDragEnter(event: DragEvent): void {
 		if (isDropIntoEditorEnabledGlobally(this.configurationService) && isDragIntoEditorEvent(event)) {
 			return;
 		}
@@ -641,7 +641,7 @@ export class EditorDropTarget extends Themable {
 		}
 	}
 
-	private onDragLeave(): codemavi {
+	private onDragLeave(): void {
 		this.counter--;
 
 		if (this.counter === 0) {
@@ -649,7 +649,7 @@ export class EditorDropTarget extends Themable {
 		}
 	}
 
-	private onDragEnd(): codemavi {
+	private onDragEnd(): void {
 		this.counter = 0;
 
 		this.updateContainer(false);
@@ -662,17 +662,17 @@ export class EditorDropTarget extends Themable {
 		return groups.find(groupView => isAncestor(child, groupView.element) || this.delegate.containsGroup?.(groupView));
 	}
 
-	private updateContainer(isDraggedOver: boolean): codemavi {
+	private updateContainer(isDraggedOver: boolean): void {
 		this.container.classList.toggle('dragged-over', isDraggedOver);
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.disposeOverlay();
 	}
 
-	private disposeOverlay(): codemavi {
+	private disposeOverlay(): void {
 		if (this.overlay) {
 			this.overlay.dispose();
 			this._overlay = undefined;

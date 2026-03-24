@@ -47,7 +47,7 @@ suite('Notebook builtin output renderer', () => {
 	function createContext(settings?: optionalRenderOptions): IRichRenderContext {
 		settingsChangedHandlers.length = 0;
 		return {
-			setState(_value: codemavi) { },
+			setState(_value: void) { },
 			getState() { return undefined; },
 			async getRenderer(_id): Promise<RendererApi | undefined> { return undefined; },
 			settings: {

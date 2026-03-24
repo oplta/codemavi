@@ -48,12 +48,12 @@ export class TerminalStickyScrollContribution extends Disposable implements ITer
 		}));
 	}
 
-	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
+	xtermReady(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
 		this._xterm = xterm;
 		this._refreshState();
 	}
 
-	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): codemavi {
+	xtermOpen(xterm: IXtermTerminal & { raw: RawXtermTerminal }): void {
 		this._refreshState();
 	}
 
@@ -65,7 +65,7 @@ export class TerminalStickyScrollContribution extends Disposable implements ITer
 		this._overlay.value?.unlockHide();
 	}
 
-	private _refreshState(): codemavi {
+	private _refreshState(): void {
 		if (this._overlay.value) {
 			this._tryDisable();
 		} else {
@@ -93,7 +93,7 @@ export class TerminalStickyScrollContribution extends Disposable implements ITer
 		}
 	}
 
-	private _tryEnable(): codemavi {
+	private _tryEnable(): void {
 		if (this._shouldBeEnabled()) {
 			const xtermCtorEventually = TerminalInstance.getXtermConstructor(this._keybindingService, this._contextKeyService);
 			this._overlay.value = this._instantiationService.createInstance(
@@ -107,7 +107,7 @@ export class TerminalStickyScrollContribution extends Disposable implements ITer
 		}
 	}
 
-	private _tryDisable(): codemavi {
+	private _tryDisable(): void {
 		if (!this._shouldBeEnabled()) {
 			this._overlay.clear();
 		}

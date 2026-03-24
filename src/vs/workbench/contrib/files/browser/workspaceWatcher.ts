@@ -40,14 +40,14 @@ export class WorkspaceWatcher extends Disposable {
 		this.refresh();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.contextService.onDidChangeWorkspaceFolders(e => this.onDidChangeWorkspaceFolders(e)));
 		this._register(this.contextService.onDidChangeWorkbenchState(() => this.onDidChangeWorkbenchState()));
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.onDidChangeConfiguration(e)));
 		this._register(this.fileService.onDidWatchError(error => this.onDidWatchError(error)));
 	}
 
-	private onDidChangeWorkspaceFolders(e: IWorkspaceFoldersChangeEvent): codemavi {
+	private onDidChangeWorkspaceFolders(e: IWorkspaceFoldersChangeEvent): void {
 
 		// Removed workspace: Unwatch
 		for (const removed of e.removed) {
@@ -60,17 +60,17 @@ export class WorkspaceWatcher extends Disposable {
 		}
 	}
 
-	private onDidChangeWorkbenchState(): codemavi {
+	private onDidChangeWorkbenchState(): void {
 		this.refresh();
 	}
 
-	private onDidChangeConfiguration(e: IConfigurationChangeEvent): codemavi {
+	private onDidChangeConfiguration(e: IConfigurationChangeEvent): void {
 		if (e.affectsConfiguration('files.watcherExclude') || e.affectsConfiguration('files.watcherInclude')) {
 			this.refresh();
 		}
 	}
 
-	private onDidWatchError(error: Error): codemavi {
+	private onDidWatchError(error: Error): void {
 		const msg = error.toString();
 		let reason: 'ENOSPC' | 'EUNKNOWN' | 'ETERM' | undefined = undefined;
 
@@ -130,7 +130,7 @@ export class WorkspaceWatcher extends Disposable {
 		}
 	}
 
-	private watchWorkspace(workspace: IWorkspaceFolder): codemavi {
+	private watchWorkspace(workspace: IWorkspaceFolder): void {
 
 		// Compute the watcher exclude rules from configuration
 		const excludes: string[] = [];
@@ -179,14 +179,14 @@ export class WorkspaceWatcher extends Disposable {
 		this.watchedWorkspaces.set(workspace.uri, disposables);
 	}
 
-	private unwatchWorkspace(workspace: IWorkspaceFolder): codemavi {
+	private unwatchWorkspace(workspace: IWorkspaceFolder): void {
 		if (this.watchedWorkspaces.has(workspace.uri)) {
 			dispose(this.watchedWorkspaces.get(workspace.uri));
 			this.watchedWorkspaces.delete(workspace.uri);
 		}
 	}
 
-	private refresh(): codemavi {
+	private refresh(): void {
 
 		// Unwatch all first
 		this.unwatchWorkspaces();
@@ -197,14 +197,14 @@ export class WorkspaceWatcher extends Disposable {
 		}
 	}
 
-	private unwatchWorkspaces(): codemavi {
+	private unwatchWorkspaces(): void {
 		for (const [, disposable] of this.watchedWorkspaces) {
 			disposable.dispose();
 		}
 		this.watchedWorkspaces.clear();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.unwatchWorkspaces();

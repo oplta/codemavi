@@ -192,7 +192,7 @@ export class TerminalStickyScrollOverlay extends Disposable {
 		this._element?.classList.toggle(CssClasses.Visible, isVisible);
 	}
 
-	private _refresh(): codemavi {
+	private _refresh(): void {
 		if (this._isRefreshQueued) {
 			return;
 		}
@@ -203,7 +203,7 @@ export class TerminalStickyScrollOverlay extends Disposable {
 		});
 	}
 
-	private _refreshNow(): codemavi {
+	private _refreshNow(): void {
 		const command = this._commandDetection.getCommandForLine(this._xterm.raw.buffer.active.viewportY);
 
 		// The command from viewportY + 1 is used because this one will not be obscured by sticky

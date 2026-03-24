@@ -69,7 +69,7 @@ const enum ProcessType {
  */
 export class TerminalProcessManager extends Disposable implements ITerminalProcessManager {
 	processState: ProcessState = ProcessState.Uninitialized;
-	ptyProcessReady: Promise<codemavi>;
+	ptyProcessReady: Promise<void>;
 	shellProcessId: number | undefined;
 	readonly remoteAuthority: string | undefined;
 	os: OperatingSystem | undefined;
@@ -98,20 +98,20 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 	private _shellLaunchConfig?: IShellLaunchConfig;
 	private _dimensions: ITerminalDimensions = { cols: 0, rows: 0 };
 
-	private readonly _onPtyDisconnect = this._register(new Emitter<codemavi>());
+	private readonly _onPtyDisconnect = this._register(new Emitter<void>());
 	readonly onPtyDisconnect = this._onPtyDisconnect.event;
-	private readonly _onPtyReconnect = this._register(new Emitter<codemavi>());
+	private readonly _onPtyReconnect = this._register(new Emitter<void>());
 	readonly onPtyReconnect = this._onPtyReconnect.event;
 
 	private readonly _onProcessReady = this._register(new Emitter<IProcessReadyEvent>());
 	readonly onProcessReady = this._onProcessReady.event;
-	private readonly _onProcessStateChange = this._register(new Emitter<codemavi>());
+	private readonly _onProcessStateChange = this._register(new Emitter<void>());
 	readonly onProcessStateChange = this._onProcessStateChange.event;
 	private readonly _onBeforeProcessData = this._register(new Emitter<IBeforeProcessDataEvent>());
 	readonly onBeforeProcessData = this._onBeforeProcessData.event;
 	private readonly _onProcessData = this._register(new Emitter<IProcessDataEvent>());
 	readonly onProcessData = this._onProcessData.event;
-	private readonly _onProcessReplayComplete = this._register(new Emitter<codemavi>());
+	private readonly _onProcessReplayComplete = this._register(new Emitter<void>());
 	readonly onProcessReplayComplete = this._onProcessReplayComplete.event;
 	private readonly _onDidChangeProperty = this._register(new Emitter<IProcessProperty<any>>());
 	readonly onDidChangeProperty = this._onDidChangeProperty.event;
@@ -187,7 +187,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		this.shellIntegrationNonce = shellIntegrationNonce ?? generateUuid();
 	}
 
-	async freePortKillProcess(port: string): Promise<codemavi> {
+	async freePortKillProcess(port: string): Promise<void> {
 		try {
 			if (this._process?.freePortKillProcess) {
 				await this._process?.freePortKillProcess(port);
@@ -197,7 +197,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		}
 	}
 
-	override dispose(immediate: boolean = false): codemavi {
+	override dispose(immediate: boolean = false): void {
 		this._isDisposed = true;
 		if (this._process) {
 			// If the process was still connected this dispose came from
@@ -210,9 +210,9 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		super.dispose();
 	}
 
-	private _createPtyProcessReadyPromise(): Promise<codemavi> {
+	private _createPtyProcessReadyPromise(): Promise<void> {
 
-		return new Promise<codemavi>(c => {
+		return new Promise<void>(c => {
 			const listener = Event.once(this.onProcessReady)(() => {
 				this._logService.debug(`Terminal process ready (shellProcessId: ${this.shellProcessId})`);
 				this._store.delete(listener);
@@ -222,7 +222,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		});
 	}
 
-	async detachFromProcess(forcePersist?: boolean): Promise<codemavi> {
+	async detachFromProcess(forcePersist?: boolean): Promise<void> {
 		await this._process?.detach?.(forcePersist);
 		this._process = null;
 	}
@@ -437,7 +437,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 
 		let baseEnv: IProcessEnvironment;
 		if (shellLaunchConfig.useShellEnvironment) {
-			// TODO: Acodemavi as any?
+			// TODO: Avoid as any?
 			baseEnv = await backend.getShellEnvironment() as any;
 		} else {
 			baseEnv = await this._terminalProfileResolverService.getEnvironment(this.remoteAuthority);
@@ -561,10 +561,10 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		return os;
 	}
 
-	setDimensions(cols: number, rows: number): Promise<codemavi>;
-	setDimensions(cols: number, rows: number, sync: false): Promise<codemavi>;
-	setDimensions(cols: number, rows: number, sync: true): codemavi;
-	setDimensions(cols: number, rows: number, sync?: boolean): Promise<codemavi> | codemavi {
+	setDimensions(cols: number, rows: number): Promise<void>;
+	setDimensions(cols: number, rows: number, sync: false): Promise<void>;
+	setDimensions(cols: number, rows: number, sync: true): void;
+	setDimensions(cols: number, rows: number, sync?: boolean): Promise<void> | void {
 		if (sync) {
 			this._resize(cols, rows);
 			return;
@@ -573,7 +573,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		return this.ptyProcessReady.then(() => this._resize(cols, rows));
 	}
 
-	async setUnicodeVersion(version: '6' | '11'): Promise<codemavi> {
+	async setUnicodeVersion(version: '6' | '11'): Promise<void> {
 		return this._process?.setUnicodeVersion(version);
 	}
 
@@ -594,7 +594,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		this._dimensions.rows = rows;
 	}
 
-	async write(data: string): Promise<codemavi> {
+	async write(data: string): Promise<void> {
 		await this.ptyProcessReady;
 		this._dataFilter.disableSeamlessRelaunch();
 		this._hasWrittenData = true;
@@ -609,7 +609,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		}
 	}
 
-	async processBinary(data: string): Promise<codemavi> {
+	async processBinary(data: string): Promise<void> {
 		await this.ptyProcessReady;
 		this._dataFilter.disableSeamlessRelaunch();
 		this._hasWrittenData = true;
@@ -627,15 +627,15 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		return this._process.refreshProperty(type);
 	}
 
-	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<codemavi> {
+	async updateProperty<T extends ProcessPropertyType>(type: T, value: IProcessPropertyMap[T]): Promise<void> {
 		return this._process?.updateProperty(type, value);
 	}
 
-	acknowledgeDataEvent(charCount: number): codemavi {
+	acknowledgeDataEvent(charCount: number): void {
 		this._ackDataBufferer.ack(charCount);
 	}
 
-	private _onExit(exitCode: number | undefined): codemavi {
+	private _onExit(exitCode: number | undefined): void {
 		this._process = null;
 		// If the process is marked as launching then mark the process as killed
 		// during launch. This typically means that there is a problem with the
@@ -658,7 +658,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		this._onProcessStateChange.fire();
 	}
 
-	private _onEnvironmentVariableCollectionChange(newCollection: IMergedEnvironmentVariableCollection): codemavi {
+	private _onEnvironmentVariableCollectionChange(newCollection: IMergedEnvironmentVariableCollection): void {
 		const diff = this._extEnvironmentVariableCollection!.diff(newCollection, { workspaceFolder: this._cwdWorkspaceFolder });
 		if (diff === undefined) {
 			// If there are no longer differences, remove the stale info indicator
@@ -672,7 +672,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 		this._onEnvironmentVariableInfoChange.fire(this.environmentVariableInfo);
 	}
 
-	async clearBuffer(): Promise<codemavi> {
+	async clearBuffer(): Promise<void> {
 		this._process?.clearBuffer?.();
 	}
 }
@@ -681,7 +681,7 @@ class AckDataBufferer {
 	private _unsentCharCount: number = 0;
 
 	constructor(
-		private readonly _callback: (charCount: number) => codemavi
+		private readonly _callback: (charCount: number) => void
 	) {
 	}
 

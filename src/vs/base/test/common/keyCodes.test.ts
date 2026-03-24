@@ -13,7 +13,7 @@ suite('keyCodes', () => {
 
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	function testBinaryEncoding(expected: Keybinding | null, k: number, OS: OperatingSystem): codemavi {
+	function testBinaryEncoding(expected: Keybinding | null, k: number, OS: OperatingSystem): void {
 		assert.deepStrictEqual(decodeKeybinding(k, OS), expected);
 	}
 
@@ -54,7 +54,7 @@ suite('keyCodes', () => {
 
 	test('MAC binary encoding', () => {
 
-		function test(expected: Keybinding | null, k: number): codemavi {
+		function test(expected: Keybinding | null, k: number): void {
 			testBinaryEncoding(expected, k, OperatingSystem.Macintosh);
 		}
 
@@ -96,7 +96,7 @@ suite('keyCodes', () => {
 
 		[OperatingSystem.Linux, OperatingSystem.Windows].forEach((OS) => {
 
-			function test(expected: Keybinding | null, k: number): codemavi {
+			function test(expected: Keybinding | null, k: number): void {
 				testBinaryEncoding(expected, k, OS);
 			}
 

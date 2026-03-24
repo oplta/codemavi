@@ -42,7 +42,7 @@ export class OriginalNotebookModelReferenceCollection extends ReferenceCollectio
 
 		return this.notebookService.createNotebookTextModel(viewType, uri, stream);
 	}
-	protected override destroyReferencedObject(key: string, modelPromise: Promise<NotebookTextModel>): codemavi {
+	protected override destroyReferencedObject(key: string, modelPromise: Promise<NotebookTextModel>): void {
 		this.modelsToDispose.add(key);
 
 		(async () => {

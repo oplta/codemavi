@@ -1,12 +1,12 @@
 /**
- * Code Mavi - Semantic Search Service
+ * Mavi - Semantic Search Service
  *
  * Complete implementation of semantic search with hybrid search capabilities
  * Integrates AST parsing, embedding generation, and vector search
  */
 
-import { URI } from '../../../../base/common/uri.js';
-import { Disposable } from '../../../../base/common/lifecycle.js';
+import { URI } from '../../../../../../base/common/uri.js';
+import { Disposable } from '../../../../../../base/common/lifecycle.js';
 import { ASTService, ParseResult, CodeChunk } from '../services/ast-service.js';
 import { VectorDBService, SearchResult, SearchOptions } from '../services/vector-db-service.js';
 import { EmbeddingService, EmbeddingConfig } from '../services/embedding-service.js';
@@ -679,3 +679,4 @@ export class SemanticSearchService extends Disposable {
 			return results;
 		}
 	}
+}

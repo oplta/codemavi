@@ -96,7 +96,7 @@ export function fillInActionBarActions(
 	primaryGroup?: string | ((actionGroup: string) => boolean),
 	shouldInlineSubmenu?: (action: SubmenuAction, group: string, groupSize: number) => boolean,
 	useSeparatorsInPrimaryActions?: boolean
-): codemavi {
+): void {
 	const isPrimaryAction = typeof primaryGroup === 'string' ? (actionGroup: string) => actionGroup === primaryGroup : primaryGroup;
 
 	// Action bars handle alternative actions on their own so the alternative actions should be ignored
@@ -110,7 +110,7 @@ function fillInActions(
 	isPrimaryAction: (actionGroup: string) => boolean = actionGroup => actionGroup === 'navigation',
 	shouldInlineSubmenu: (action: SubmenuAction, group: string, groupSize: number) => boolean = () => false,
 	useSeparatorsInPrimaryActions: boolean = false
-): codemavi {
+): void {
 
 	let primaryBucket: IAction[];
 	let secondaryBucket: IAction[];
@@ -200,7 +200,7 @@ export class MenuEntryActionViewItem<T extends IMenuEntryActionViewItemOptions =
 		return this._wantsAltCommand && this._menuItemAction.alt || this._menuItemAction;
 	}
 
-	override async onClick(event: MouseEvent): Promise<codemavi> {
+	override async onClick(event: MouseEvent): Promise<void> {
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -211,7 +211,7 @@ export class MenuEntryActionViewItem<T extends IMenuEntryActionViewItemOptions =
 		}
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.classList.add('menu-entry');
 
@@ -253,7 +253,7 @@ export class MenuEntryActionViewItem<T extends IMenuEntryActionViewItemOptions =
 		}
 	}
 
-	protected override updateLabel(): codemavi {
+	protected override updateLabel(): void {
 		if (this.options.label && this.label) {
 			this.label.textContent = this._commandAction.label;
 		}
@@ -280,7 +280,7 @@ export class MenuEntryActionViewItem<T extends IMenuEntryActionViewItemOptions =
 		return title;
 	}
 
-	protected override updateClass(): codemavi {
+	protected override updateClass(): void {
 		if (this.options.icon) {
 			if (this._commandAction !== this._menuItemAction) {
 				if (this._menuItemAction.alt) {
@@ -292,7 +292,7 @@ export class MenuEntryActionViewItem<T extends IMenuEntryActionViewItemOptions =
 		}
 	}
 
-	private _updateItemClass(item: ICommandAction): codemavi {
+	private _updateItemClass(item: ICommandAction): void {
 		this._itemClassDispose.value = undefined;
 
 		const { element, label } = this;
@@ -343,7 +343,7 @@ export interface ITextOnlyMenuEntryActionViewItemOptions extends IMenuEntryActio
 
 export class TextOnlyMenuEntryActionViewItem extends MenuEntryActionViewItem<ITextOnlyMenuEntryActionViewItemOptions> {
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		this.options.label = true;
 		this.options.icon = false;
 		super.render(container);
@@ -394,7 +394,7 @@ export class SubmenuEntryActionViewItem extends DropdownMenuActionViewItem {
 		super(action, { getActions: () => action.actions }, _contextMenuService, dropdownOptions);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		assertType(this.element);
 
@@ -480,7 +480,7 @@ export class DropdownWithDefaultActionViewItem extends BaseActionViewItem {
 		}));
 	}
 
-	private update(lastAction: MenuItemAction): codemavi {
+	private update(lastAction: MenuItemAction): void {
 		if (this._options?.persistLastActionId) {
 			this._storageService.store(this._storageKey, lastAction.id, StorageScope.WORKSPACE, StorageTarget.MACHINE);
 		}
@@ -488,7 +488,7 @@ export class DropdownWithDefaultActionViewItem extends BaseActionViewItem {
 		this._defaultActionDisposables.clear();
 		this._defaultAction = this._defaultActionDisposables.add(this._instaService.createInstance(MenuEntryActionViewItem, lastAction, { keybinding: this._getDefaultActionKeybindingLabel(lastAction) }));
 		this._defaultAction.actionRunner = this._defaultActionDisposables.add(new class extends ActionRunner {
-			protected override async runAction(action: IAction, context?: unknown): Promise<codemavi> {
+			protected override async runAction(action: IAction, context?: unknown): Promise<void> {
 				await action.run(undefined);
 			}
 		}());
@@ -509,13 +509,13 @@ export class DropdownWithDefaultActionViewItem extends BaseActionViewItem {
 		return defaultActionKeybinding;
 	}
 
-	override setActionContext(newContext: unknown): codemavi {
+	override setActionContext(newContext: unknown): void {
 		super.setActionContext(newContext);
 		this._defaultAction.setActionContext(newContext);
 		this._dropdown.setActionContext(newContext);
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		this._container = container;
 		super.render(this._container);
 
@@ -545,7 +545,7 @@ export class DropdownWithDefaultActionViewItem extends BaseActionViewItem {
 		}));
 	}
 
-	override focus(fromRight?: boolean): codemavi {
+	override focus(fromRight?: boolean): void {
 		if (fromRight) {
 			this._dropdown.focus();
 		} else {
@@ -554,13 +554,13 @@ export class DropdownWithDefaultActionViewItem extends BaseActionViewItem {
 		}
 	}
 
-	override blur(): codemavi {
+	override blur(): void {
 		this._defaultAction.element!.tabIndex = -1;
 		this._dropdown.blur();
 		this._container!.blur();
 	}
 
-	override setFocusable(focusable: boolean): codemavi {
+	override setFocusable(focusable: boolean): void {
 		if (focusable) {
 			this._defaultAction.element!.tabIndex = 0;
 		} else {
@@ -583,12 +583,12 @@ class SubmenuEntrySelectActionViewItem extends SelectActionViewItem {
 		this.select(Math.max(0, action.actions.findIndex(a => a.checked)));
 	}
 
-	override render(container: HTMLElement): codemavi {
+	override render(container: HTMLElement): void {
 		super.render(container);
 		container.style.borderColor = asCssVariable(selectBorder);
 	}
 
-	protected override runAction(option: string, index: number): codemavi {
+	protected override runAction(option: string, index: number): void {
 		const action = (this.action as SubmenuItemAction).actions[index];
 		if (action) {
 			this.actionRunner.run(action);

@@ -114,13 +114,13 @@ export class CompletionModel {
 		return this._stats!;
 	}
 
-	private _ensureCachedState(): codemavi {
+	private _ensureCachedState(): void {
 		if (this._refilterKind !== Refilter.Nothing) {
 			this._createCachedState();
 		}
 	}
 
-	private _createCachedState(): codemavi {
+	private _createCachedState(): void {
 
 		this._itemsByProvider = new Map();
 

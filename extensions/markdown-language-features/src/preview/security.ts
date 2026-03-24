@@ -17,13 +17,13 @@ export const enum MarkdownPreviewSecurityLevel {
 export interface ContentSecurityPolicyArbiter {
 	getSecurityLevelForResource(resource: vscode.Uri): MarkdownPreviewSecurityLevel;
 
-	setSecurityLevelForResource(resource: vscode.Uri, level: MarkdownPreviewSecurityLevel): Thenable<codemavi>;
+	setSecurityLevelForResource(resource: vscode.Uri, level: MarkdownPreviewSecurityLevel): Thenable<void>;
 
-	shouldAllowSvgsForResource(resource: vscode.Uri): codemavi;
+	shouldAllowSvgsForResource(resource: vscode.Uri): void;
 
 	shouldDisableSecurityWarnings(): boolean;
 
-	setShouldDisableSecurityWarning(shouldShow: boolean): Thenable<codemavi>;
+	setShouldDisableSecurityWarning(shouldShow: boolean): Thenable<void>;
 }
 
 export class ExtensionContentSecurityPolicyArbiter implements ContentSecurityPolicyArbiter {
@@ -50,7 +50,7 @@ export class ExtensionContentSecurityPolicyArbiter implements ContentSecurityPol
 		return MarkdownPreviewSecurityLevel.Strict;
 	}
 
-	public setSecurityLevelForResource(resource: vscode.Uri, level: MarkdownPreviewSecurityLevel): Thenable<codemavi> {
+	public setSecurityLevelForResource(resource: vscode.Uri, level: MarkdownPreviewSecurityLevel): Thenable<void> {
 		return this._globalState.update(this._security_level_key + this._getRoot(resource), level);
 	}
 
@@ -63,7 +63,7 @@ export class ExtensionContentSecurityPolicyArbiter implements ContentSecurityPol
 		return this._workspaceState.get<boolean>(this._should_disable_security_warning_key, false);
 	}
 
-	public setShouldDisableSecurityWarning(disabled: boolean): Thenable<codemavi> {
+	public setShouldDisableSecurityWarning(disabled: boolean): Thenable<void> {
 		return this._workspaceState.update(this._should_disable_security_warning_key, disabled);
 	}
 
@@ -90,7 +90,7 @@ export class PreviewSecuritySelector {
 		private readonly _webviewManager: MarkdownPreviewManager
 	) { }
 
-	public async showSecuritySelectorForResource(resource: vscode.Uri): Promise<codemavi> {
+	public async showSecuritySelectorForResource(resource: vscode.Uri): Promise<void> {
 		interface PreviewSecurityPickItem extends vscode.QuickPickItem {
 			readonly type: 'moreinfo' | 'toggle' | MarkdownPreviewSecurityLevel;
 		}

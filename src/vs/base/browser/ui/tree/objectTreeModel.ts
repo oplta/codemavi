@@ -9,11 +9,11 @@ import { ICollapseStateChangeEvent, IObjectTreeElement, ITreeElement, ITreeListS
 import { Event } from '../../../common/event.js';
 import { Iterable } from '../../../common/iterator.js';
 
-export type ITreeNodeCallback<T, TFilterData> = (node: ITreeNode<T, TFilterData>) => codemavi;
+export type ITreeNodeCallback<T, TFilterData> = (node: ITreeNode<T, TFilterData>) => void;
 
-export interface IObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = codemavi> extends ITreeModel<T | null, TFilterData, T | null> {
-	setChildren(element: T | null, children: Iterable<IObjectTreeElement<T>> | undefined, options?: IObjectTreeModelSetChildrenOptions<T, TFilterData>): codemavi;
-	resort(element?: T | null, recursive?: boolean): codemavi;
+export interface IObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = void> extends ITreeModel<T | null, TFilterData, T | null> {
+	setChildren(element: T | null, children: Iterable<IObjectTreeElement<T>> | undefined, options?: IObjectTreeModelSetChildrenOptions<T, TFilterData>): void;
+	resort(element?: T | null, recursive?: boolean): void;
 }
 
 export interface IObjectTreeModelSetChildrenOptions<T, TFilterData> extends IIndexTreeModelSpliceOptions<T, TFilterData> {
@@ -24,7 +24,7 @@ export interface IObjectTreeModelOptions<T, TFilterData> extends IIndexTreeModel
 	readonly identityProvider?: IIdentityProvider<T>;
 }
 
-export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = codemavi> implements IObjectTreeModel<T, TFilterData> {
+export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends NonNullable<any> = void> implements IObjectTreeModel<T, TFilterData> {
 
 	readonly rootRef = null;
 
@@ -66,7 +66,7 @@ export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends Non
 		element: T | null,
 		children: Iterable<IObjectTreeElement<T>> = Iterable.empty(),
 		options: IObjectTreeModelSetChildrenOptions<T, TFilterData> = {},
-	): codemavi {
+	): void {
 		const location = this.getElementLocation(element);
 		this._setChildren(location, this.preserveCollapseState(children), options);
 	}
@@ -75,7 +75,7 @@ export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends Non
 		location: number[],
 		children: Iterable<ITreeElement<T>> = Iterable.empty(),
 		options: IObjectTreeModelSetChildrenOptions<T, TFilterData>,
-	): codemavi {
+	): void {
 		const insertedElements = new Set<T | null>();
 		const insertedElementIds = new Set<string>();
 
@@ -182,12 +182,12 @@ export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends Non
 		});
 	}
 
-	rerender(element: T | null): codemavi {
+	rerender(element: T | null): void {
 		const location = this.getElementLocation(element);
 		this.model.rerender(location);
 	}
 
-	resort(element: T | null = null, recursive = true): codemavi {
+	resort(element: T | null = null, recursive = true): void {
 		if (!this.sorter) {
 			return;
 		}
@@ -257,12 +257,12 @@ export class ObjectTreeModel<T extends NonNullable<any>, TFilterData extends Non
 		return this.model.setCollapsed(location, collapsed, recursive);
 	}
 
-	expandTo(element: T | null): codemavi {
+	expandTo(element: T | null): void {
 		const location = this.getElementLocation(element);
 		this.model.expandTo(location);
 	}
 
-	refilter(): codemavi {
+	refilter(): void {
 		this.model.refilter();
 	}
 

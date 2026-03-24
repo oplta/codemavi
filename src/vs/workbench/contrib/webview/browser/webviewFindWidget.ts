@@ -13,12 +13,12 @@ import { KEYBINDING_CONTEXT_WEBVIEW_FIND_WIDGET_FOCUSED } from './webview.js';
 
 export interface WebviewFindDelegate {
 	readonly hasFindResult: Event<boolean>;
-	readonly onDidStopFind: Event<codemavi>;
+	readonly onDidStopFind: Event<void>;
 	readonly checkImeCompletionState: boolean;
-	find(value: string, previous: boolean): codemavi;
-	updateFind(value: string): codemavi;
-	stopFind(keepSelection?: boolean): codemavi;
-	focus(): codemavi;
+	find(value: string, previous: boolean): void;
+	updateFind(value: string): void;
+	stopFind(keepSelection?: boolean): void;
+	focus(): void;
 }
 
 export class WebviewFindWidget extends SimpleFindWidget {

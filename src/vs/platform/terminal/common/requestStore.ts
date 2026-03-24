@@ -16,7 +16,7 @@ import { ILogService } from '../../log/common/log.js';
 export class RequestStore<T, RequestArgs> extends Disposable {
 	private _lastRequestId = 0;
 	private readonly _timeout: number;
-	private _pendingRequests: Map<number, (resolved: T) => codemavi> = new Map();
+	private _pendingRequests: Map<number, (resolved: T) => void> = new Map();
 	private _pendingRequestDisposables: Map<number, IDisposable[]> = new Map();
 
 	private readonly _onCreateRequest = this._register(new Emitter<RequestArgs & { requestId: number }>());

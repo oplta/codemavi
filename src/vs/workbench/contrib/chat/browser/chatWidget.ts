@@ -85,7 +85,7 @@ export interface IChatWidgetContrib extends IDisposable {
 	/**
 	 * Called with the result of getInputState when navigating input history.
 	 */
-	setInputState?(s: any): codemavi;
+	setInputState?(s: any): void;
 }
 
 export interface IChatWidgetLocationOptions {
@@ -108,35 +108,35 @@ export class ChatWidget extends Disposable implements IChatWidget {
 	private _onDidChangeAgent = this._register(new Emitter<{ agent: IChatAgentData; slashCommand?: IChatAgentCommand }>());
 	readonly onDidChangeAgent = this._onDidChangeAgent.event;
 
-	private _onDidFocus = this._register(new Emitter<codemavi>());
+	private _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
-	private _onDidChangeViewModel = this._register(new Emitter<codemavi>());
+	private _onDidChangeViewModel = this._register(new Emitter<void>());
 	readonly onDidChangeViewModel = this._onDidChangeViewModel.event;
 
-	private _onDidScroll = this._register(new Emitter<codemavi>());
+	private _onDidScroll = this._register(new Emitter<void>());
 	readonly onDidScroll = this._onDidScroll.event;
 
-	private _onDidClear = this._register(new Emitter<codemavi>());
+	private _onDidClear = this._register(new Emitter<void>());
 	readonly onDidClear = this._onDidClear.event;
 
-	private _onDidAcceptInput = this._register(new Emitter<codemavi>());
+	private _onDidAcceptInput = this._register(new Emitter<void>());
 	readonly onDidAcceptInput = this._onDidAcceptInput.event;
 
-	private _onDidHide = this._register(new Emitter<codemavi>());
+	private _onDidHide = this._register(new Emitter<void>());
 	readonly onDidHide = this._onDidHide.event;
 
-	private _onDidChangeParsedInput = this._register(new Emitter<codemavi>());
+	private _onDidChangeParsedInput = this._register(new Emitter<void>());
 	readonly onDidChangeParsedInput = this._onDidChangeParsedInput.event;
 
-	private readonly _onWillMaybeChangeHeight = new Emitter<codemavi>();
-	readonly onWillMaybeChangeHeight: Event<codemavi> = this._onWillMaybeChangeHeight.event;
+	private readonly _onWillMaybeChangeHeight = new Emitter<void>();
+	readonly onWillMaybeChangeHeight: Event<void> = this._onWillMaybeChangeHeight.event;
 
 	private _onDidChangeHeight = this._register(new Emitter<number>());
 	readonly onDidChangeHeight = this._onDidChangeHeight.event;
 
-	private readonly _onDidChangeContentHeight = new Emitter<codemavi>();
-	readonly onDidChangeContentHeight: Event<codemavi> = this._onDidChangeContentHeight.event;
+	private readonly _onDidChangeContentHeight = new Emitter<void>();
+	readonly onDidChangeContentHeight: Event<void> = this._onDidChangeContentHeight.event;
 
 	private contribs: ReadonlyArray<IChatWidgetContrib> = [];
 
@@ -454,7 +454,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this.inputPart.attachmentModel;
 	}
 
-	render(parent: HTMLElement): codemavi {
+	render(parent: HTMLElement): void {
 		const viewId = 'viewId' in this.viewContext ? this.viewContext.viewId : undefined;
 		this.editorOptions = this._register(this.instantiationService.createInstance(ChatEditorOptions, viewId, this.styles.listForeground, this.styles.inputEditorBackground, this.styles.resultEditorBackground));
 		const renderInputOnTop = this.viewOptions.renderInputOnTop ?? false;
@@ -520,7 +520,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this.contribs.find(c => c.id === id) as T;
 	}
 
-	focusInput(): codemavi {
+	focusInput(): void {
 		this.inputPart.focus();
 
 		// Sometimes focusing the input part is not possible,
@@ -561,7 +561,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return responseItems[indexToFocus];
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		if (this._dynamicMessageLayoutData) {
 			this._dynamicMessageLayoutData.enabled = true;
 		}
@@ -668,7 +668,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}
 	}
 
-	private async renderFollowups(items: IChatFollowup[] | undefined, response?: IChatResponseViewModel): Promise<codemavi> {
+	private async renderFollowups(items: IChatFollowup[] | undefined, response?: IChatResponseViewModel): Promise<void> {
 		this.inputPart.renderFollowups(items, response);
 
 		if (this.bodyDimension) {
@@ -676,7 +676,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		const wasVisible = this._visible;
 		this._visible = visible;
 		this.visibleChangeCount++;
@@ -696,7 +696,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}
 	}
 
-	private createList(listContainer: HTMLElement, options: IChatListItemRendererOptions): codemavi {
+	private createList(listContainer: HTMLElement, options: IChatListItemRendererOptions): void {
 		const scopedInstantiationService = this._register(this.instantiationService.createChild(new ServiceCollection([IContextKeyService, this.contextKeyService])));
 		const delegate = scopedInstantiationService.createInstance(ChatListDelegate, this.viewOptions.defaultElementHeight ?? 200);
 		const rendererDelegate: IChatRendererDelegate = {
@@ -792,7 +792,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}));
 	}
 
-	private onContextMenu(e: ITreeContextMenuEvent<ChatTreeItem | null>): codemavi {
+	private onContextMenu(e: ITreeContextMenuEvent<ChatTreeItem | null>): void {
 		e.browserEvent.preventDefault();
 		e.browserEvent.stopPropagation();
 
@@ -809,7 +809,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		});
 	}
 
-	private onDidChangeTreeContentHeight(): codemavi {
+	private onDidChangeTreeContentHeight(): void {
 		// If the list was previously scrolled all the way down, ensure it stays scrolled down, if scroll lock is on
 		if (this.tree.scrollHeight !== this.previousTreeScrollHeight) {
 			const lastItem = this.viewModel?.getItems().at(-1);
@@ -846,7 +846,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}
 	}
 
-	private createInput(container: HTMLElement, options?: { renderFollowups: boolean; renderStyle?: 'compact' | 'minimal' }): codemavi {
+	private createInput(container: HTMLElement, options?: { renderFollowups: boolean; renderStyle?: 'compact' | 'minimal' }): void {
 		this.inputPart = this._register(this.instantiationService.createInstance(ChatInputPart,
 			this.location,
 			{
@@ -945,7 +945,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}));
 	}
 
-	private onDidStyleChange(): codemavi {
+	private onDidStyleChange(): void {
 		this.container.style.setProperty('--vscode-interactive-result-editor-background-color', this.editorOptions.configuration.resultEditor.backgroundColor?.toString() ?? '');
 		this.container.style.setProperty('--vscode-interactive-session-foreground', this.editorOptions.configuration.foreground?.toString() ?? '');
 		this.container.style.setProperty('--vscode-chat-list-background', this.themeService.getColorTheme().getColor(this.styles.listBackground)?.toString() ?? '');
@@ -956,7 +956,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		this.onDidChangeItems();
 	}
 
-	setModel(model: IChatModel, viewState: IChatViewState): codemavi {
+	setModel(model: IChatModel, viewState: IChatViewState): void {
 		if (!this.container) {
 			throw new Error('Call render() before setModel()');
 		}
@@ -1020,11 +1020,11 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this.tree.getFocus()[0] ?? undefined;
 	}
 
-	reveal(item: ChatTreeItem, relativeTop?: number): codemavi {
+	reveal(item: ChatTreeItem, relativeTop?: number): void {
 		this.tree.reveal(item, relativeTop);
 	}
 
-	focus(item: ChatTreeItem): codemavi {
+	focus(item: ChatTreeItem): void {
 		const items = this.tree.getNode(null).children;
 		const node = items.find(i => i.element?.id === item.id);
 		if (!node) {
@@ -1039,15 +1039,15 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		this.tree.refilter();
 	}
 
-	setInputPlaceholder(placeholder: string): codemavi {
+	setInputPlaceholder(placeholder: string): void {
 		this.viewModel?.setInputPlaceholder(placeholder);
 	}
 
-	resetInputPlaceholder(): codemavi {
+	resetInputPlaceholder(): void {
 		this.viewModel?.resetInputPlaceholder();
 	}
 
-	setInput(value = ''): codemavi {
+	setInput(value = ''): void {
 		this.inputPart.setValue(value, false);
 		this.refreshParsedInput();
 	}
@@ -1056,7 +1056,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this.inputPart.inputEditor.getValue();
 	}
 
-	logInputHistory(): codemavi {
+	logInputHistory(): void {
 		this.inputPart.logInputHistory();
 	}
 
@@ -1064,7 +1064,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this._acceptInput(query ? { query } : undefined, options);
 	}
 
-	async rerunLastRequest(): Promise<codemavi> {
+	async rerunLastRequest(): Promise<void> {
 		if (!this.viewModel) {
 			return;
 		}
@@ -1121,7 +1121,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 
 			let attachedContext = this.inputPart.getAttachedAndImplicitContext(this.viewModel.sessionId);
 			if (this.viewOptions.enableWorkingSet !== undefined && this.input.currentMode !== ChatMode.Ask) {
-				const uniqueWorkingSetEntries = new ResourceSet(); // NOTE: this is used for bookkeeping so the UI can acodemavi rendering references in the UI that are already shown in the working set
+				const uniqueWorkingSetEntries = new ResourceSet(); // NOTE: this is used for bookkeeping so the UI can avoid rendering references in the UI that are already shown in the working set
 				const editingSessionAttachedContext: IChatRequestVariableEntry[] = attachedContext;
 
 				// Collect file variables from previous requests before sending the request
@@ -1205,7 +1205,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		return this.renderer.getLastFocusedFileTreeForResponse(response);
 	}
 
-	focusLastMessage(): codemavi {
+	focusLastMessage(): void {
 		if (!this.viewModel) {
 			return;
 		}
@@ -1220,7 +1220,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		this.tree.domFocus();
 	}
 
-	layout(height: number, width: number): codemavi {
+	layout(height: number, width: number): void {
 		width = Math.min(width, 850);
 		this.bodyDimension = new dom.Dimension(width, height);
 
@@ -1328,7 +1328,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		this._dynamicMessageLayoutData.enabled = value;
 	}
 
-	layoutDynamicChatTreeItemMode(): codemavi {
+	layoutDynamicChatTreeItemMode(): void {
 		if (!this.viewModel || !this._dynamicMessageLayoutData?.enabled) {
 			return;
 		}
@@ -1360,7 +1360,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 		}
 	}
 
-	saveState(): codemavi {
+	saveState(): void {
 		this.inputPart.saveState();
 
 		const welcomeContent = this.chatAgentService.getDefaultAgent(this.location, this.input.currentMode)?.metadata.welcomeMessageContent;
@@ -1412,7 +1412,7 @@ export class ChatWidgetService extends Disposable implements IChatWidgetService 
 		return this._widgets.find(w => w.viewModel?.sessionId === sessionId);
 	}
 
-	private setLastFocusedWidget(widget: ChatWidget | undefined): codemavi {
+	private setLastFocusedWidget(widget: ChatWidget | undefined): void {
 		if (widget === this._lastFocusedWidget) {
 			return;
 		}

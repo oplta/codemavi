@@ -42,7 +42,7 @@ export interface IPickerQuickAccessItem extends IQuickPickItem {
 	* @param keyMods the state of modifier keys when the item was accepted.
 	* @param event the underlying event that caused the accept to trigger.
 	*/
-	accept?(keyMods: IKeyMods, event: IQuickPickDidAcceptEvent): codemavi;
+	accept?(keyMods: IKeyMods, event: IQuickPickDidAcceptEvent): void;
 
 	/**
 	 * A method that will be executed when a button of the pick item was
@@ -199,7 +199,7 @@ export abstract class PickerQuickAccessProvider<T extends IPickerQuickAccessItem
 				return true;
 			};
 
-			const applyFastAndSlowPicks = async (fastAndSlowPicks: FastAndSlowPicks<T>): Promise<codemavi> => {
+			const applyFastAndSlowPicks = async (fastAndSlowPicks: FastAndSlowPicks<T>): Promise<void> => {
 				let fastPicksApplied = false;
 				let slowPicksApplied = false;
 

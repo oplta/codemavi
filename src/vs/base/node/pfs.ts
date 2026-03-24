@@ -40,10 +40,10 @@ export enum RimRafMode {
  *           the optional `moveToPath` allows to override where to rename the
  *           path to before deleting it.
  */
-async function rimraf(path: string, mode: RimRafMode.UNLINK): Promise<codemavi>;
-async function rimraf(path: string, mode: RimRafMode.MOVE, moveToPath?: string): Promise<codemavi>;
-async function rimraf(path: string, mode?: RimRafMode, moveToPath?: string): Promise<codemavi>;
-async function rimraf(path: string, mode = RimRafMode.UNLINK, moveToPath?: string): Promise<codemavi> {
+async function rimraf(path: string, mode: RimRafMode.UNLINK): Promise<void>;
+async function rimraf(path: string, mode: RimRafMode.MOVE, moveToPath?: string): Promise<void>;
+async function rimraf(path: string, mode?: RimRafMode, moveToPath?: string): Promise<void>;
+async function rimraf(path: string, mode = RimRafMode.UNLINK, moveToPath?: string): Promise<void> {
 	if (isRootOrDriveLetter(path)) {
 		throw new Error('rimraf - will refuse to recursively delete root');
 	}
@@ -57,7 +57,7 @@ async function rimraf(path: string, mode = RimRafMode.UNLINK, moveToPath?: strin
 	return rimrafMove(path, moveToPath);
 }
 
-async function rimrafMove(path: string, moveToPath = randomPath(tmpdir())): Promise<codemavi> {
+async function rimrafMove(path: string, moveToPath = randomPath(tmpdir())): Promise<void> {
 	try {
 		try {
 			await fs.promises.rename(path, moveToPath);
@@ -78,11 +78,11 @@ async function rimrafMove(path: string, moveToPath = randomPath(tmpdir())): Prom
 	}
 }
 
-async function rimrafUnlink(path: string): Promise<codemavi> {
+async function rimrafUnlink(path: string): Promise<void> {
 	return fs.promises.rm(path, { recursive: true, force: true, maxRetries: 3 });
 }
 
-export function rimrafSync(path: string): codemavi {
+export function rimrafSync(path: string): void {
 	if (isRootOrDriveLetter(path)) {
 		throw new Error('rimraf - will refuse to recursively delete root');
 	}
@@ -207,8 +207,8 @@ async function readDirsInDir(dirPath: string): Promise<string[]> {
  * A `Promise` that resolves when the provided `path`
  * is deleted from disk.
  */
-export function whenDeleted(path: string, intervalMs = 1000): Promise<codemavi> {
-	return new Promise<codemavi>(resolve => {
+export function whenDeleted(path: string, intervalMs = 1000): Promise<void> {
+	return new Promise<void>(resolve => {
 		let running = false;
 		const interval = setInterval(() => {
 			if (!running) {
@@ -367,11 +367,11 @@ const writeQueues = new ResourceQueue();
  *
  * In addition, multiple writes to the same path are queued.
  */
-function writeFile(path: string, data: string, options?: IWriteFileOptions): Promise<codemavi>;
-function writeFile(path: string, data: Buffer, options?: IWriteFileOptions): Promise<codemavi>;
-function writeFile(path: string, data: Uint8Array, options?: IWriteFileOptions): Promise<codemavi>;
-function writeFile(path: string, data: string | Buffer | Uint8Array, options?: IWriteFileOptions): Promise<codemavi>;
-function writeFile(path: string, data: string | Buffer | Uint8Array, options?: IWriteFileOptions): Promise<codemavi> {
+function writeFile(path: string, data: string, options?: IWriteFileOptions): Promise<void>;
+function writeFile(path: string, data: Buffer, options?: IWriteFileOptions): Promise<void>;
+function writeFile(path: string, data: Uint8Array, options?: IWriteFileOptions): Promise<void>;
+function writeFile(path: string, data: string | Buffer | Uint8Array, options?: IWriteFileOptions): Promise<void>;
+function writeFile(path: string, data: string | Buffer | Uint8Array, options?: IWriteFileOptions): Promise<void> {
 	return writeQueues.queueFor(URI.file(path), () => {
 		const ensuredOptions = ensureWriteOptions(options);
 
@@ -390,7 +390,7 @@ interface IEnsuredWriteFileOptions extends IWriteFileOptions {
 }
 
 let canFlush = true;
-export function configureFlushOnWrite(enabled: boolean): codemavi {
+export function configureFlushOnWrite(enabled: boolean): void {
 	canFlush = enabled;
 }
 
@@ -399,7 +399,7 @@ export function configureFlushOnWrite(enabled: boolean): codemavi {
 // not in some cache.
 //
 // See https://github.com/nodejs/node/blob/v5.10.0/lib/fs.js#L1194
-function doWriteFileAndFlush(path: string, data: string | Buffer | Uint8Array, options: IEnsuredWriteFileOptions, callback: (error: Error | null) => codemavi): codemavi {
+function doWriteFileAndFlush(path: string, data: string | Buffer | Uint8Array, options: IEnsuredWriteFileOptions, callback: (error: Error | null) => void): void {
 	if (!canFlush) {
 		return fs.writeFile(path, data, { mode: options.mode, flag: options.flag }, callback);
 	}
@@ -438,7 +438,7 @@ function doWriteFileAndFlush(path: string, data: string | Buffer | Uint8Array, o
  * `fs.fdatasyncSync` after writing to ensure changes are
  * flushed to disk.
  */
-export function writeFileSync(path: string, data: string | Buffer, options?: IWriteFileOptions): codemavi {
+export function writeFileSync(path: string, data: string | Buffer, options?: IWriteFileOptions): void {
 	const ensuredOptions = ensureWriteOptions(options);
 
 	if (!canFlush) {
@@ -485,7 +485,7 @@ function ensureWriteOptions(options?: IWriteFileOptions): IEnsuredWriteFileOptio
  * - allows to move across multiple disks
  * - attempts to retry the operation for certain error codes on Windows
  */
-async function rename(source: string, target: string, windowsRetryTimeout: number | false = 60000): Promise<codemavi> {
+async function rename(source: string, target: string, windowsRetryTimeout: number | false = 60000): Promise<void> {
 	if (source === target) {
 		return;  // simulate node.js behaviour here and do a no-op if paths match
 	}
@@ -516,7 +516,7 @@ async function rename(source: string, target: string, windowsRetryTimeout: numbe
 	}
 }
 
-async function renameWithRetry(source: string, target: string, startTime: number, retryTimeout: number, attempt = 0): Promise<codemavi> {
+async function renameWithRetry(source: string, target: string, startTime: number, retryTimeout: number, attempt = 0): Promise<void> {
 	try {
 		return await fs.promises.rename(source, target);
 	} catch (error) {
@@ -567,7 +567,7 @@ interface ICopyPayload {
  * links should be handled when encountered. Set to
  * `false` to not preserve them and `true` otherwise.
  */
-async function copy(source: string, target: string, options: { preserveSymlinks: boolean }): Promise<codemavi> {
+async function copy(source: string, target: string, options: { preserveSymlinks: boolean }): Promise<void> {
 	return doCopy(source, target, { root: { source, target }, options, handledSourcePaths: new Set<string>() });
 }
 
@@ -577,7 +577,7 @@ async function copy(source: string, target: string, options: { preserveSymlinks:
 // (https://github.com/nodejs/node-v0.x-archive/issues/3045#issuecomment-4862588)
 const COPY_MODE_MASK = 0o777;
 
-async function doCopy(source: string, target: string, payload: ICopyPayload): Promise<codemavi> {
+async function doCopy(source: string, target: string, payload: ICopyPayload): Promise<void> {
 
 	// Keep track of paths already copied to prevent
 	// cycles from symbolic links to cause issues
@@ -617,7 +617,7 @@ async function doCopy(source: string, target: string, payload: ICopyPayload): Pr
 	}
 }
 
-async function doCopyDirectory(source: string, target: string, mode: number, payload: ICopyPayload): Promise<codemavi> {
+async function doCopyDirectory(source: string, target: string, mode: number, payload: ICopyPayload): Promise<void> {
 
 	// Create folder
 	await fs.promises.mkdir(target, { recursive: true, mode });
@@ -629,7 +629,7 @@ async function doCopyDirectory(source: string, target: string, mode: number, pay
 	}
 }
 
-async function doCopyFile(source: string, target: string, mode: number): Promise<codemavi> {
+async function doCopyFile(source: string, target: string, mode: number): Promise<void> {
 
 	// Copy file
 	await fs.promises.copyFile(source, target);
@@ -638,7 +638,7 @@ async function doCopyFile(source: string, target: string, mode: number): Promise
 	await fs.promises.chmod(target, mode);
 }
 
-async function doCopySymlink(source: string, target: string, payload: ICopyPayload): Promise<codemavi> {
+async function doCopySymlink(source: string, target: string, payload: ICopyPayload): Promise<void> {
 
 	// Figure out link target
 	let linkTarget = await fs.promises.readlink(source);

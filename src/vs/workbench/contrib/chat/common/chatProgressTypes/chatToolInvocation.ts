@@ -17,8 +17,8 @@ export class ChatToolInvocation implements IChatToolInvocation {
 		return this._isComplete;
 	}
 
-	private _isCompleteDeferred = new DeferredPromise<codemavi>();
-	public get isCompletePromise(): Promise<codemavi> {
+	private _isCompleteDeferred = new DeferredPromise<void>();
+	public get isCompletePromise(): Promise<void> {
 		return this._isCompleteDeferred.p;
 	}
 
@@ -71,7 +71,7 @@ export class ChatToolInvocation implements IChatToolInvocation {
 		});
 	}
 
-	public complete(result: IToolResult | undefined): codemavi {
+	public complete(result: IToolResult | undefined): void {
 		if (result?.toolResultMessage) {
 			this.pastTenseMessage = result.toolResultMessage;
 		}

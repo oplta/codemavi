@@ -92,7 +92,7 @@ export class LinksList {
 		this.links = links;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables?.dispose();
 		this.links.length = 0;
 	}

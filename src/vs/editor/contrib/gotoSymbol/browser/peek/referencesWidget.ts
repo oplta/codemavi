@@ -57,13 +57,13 @@ class DecorationsManager implements IDisposable {
 		this._onModelChanged();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._callOnModelChange.dispose();
 		this._callOnDispose.dispose();
 		this.removeDecorations();
 	}
 
-	private _onModelChanged(): codemavi {
+	private _onModelChanged(): void {
 		this._callOnModelChange.clear();
 		const model = this._editor.getModel();
 		if (!model) {
@@ -77,7 +77,7 @@ class DecorationsManager implements IDisposable {
 		}
 	}
 
-	private _addDecorations(reference: FileReferences): codemavi {
+	private _addDecorations(reference: FileReferences): void {
 		if (!this._editor.hasModel()) {
 			return;
 		}
@@ -109,7 +109,7 @@ class DecorationsManager implements IDisposable {
 		});
 	}
 
-	private _onDecorationChanged(): codemavi {
+	private _onDecorationChanged(): void {
 		const toRemove: string[] = [];
 
 		const model = this._editor.getModel();
@@ -157,7 +157,7 @@ class DecorationsManager implements IDisposable {
 		this._editor.removeDecorations(toRemove);
 	}
 
-	removeDecorations(): codemavi {
+	removeDecorations(): void {
 		this._editor.removeDecorations([...this._decorations.keys()]);
 		this._decorations.clear();
 	}
@@ -215,7 +215,7 @@ class ReferencesDragAndDrop implements ITreeDragAndDrop<TreeElement> {
 		return labels.join(', ');
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
 		if (!originalEvent.dataTransfer) {
 			return;
 		}
@@ -233,8 +233,8 @@ class ReferencesDragAndDrop implements ITreeDragAndDrop<TreeElement> {
 	}
 
 	onDragOver(): boolean | ITreeDragOverReaction { return false; }
-	drop(): codemavi { }
-	dispose(): codemavi { this.disposables.dispose(); }
+	drop(): void { }
+	dispose(): void { this.disposables.dispose(); }
 }
 
 /**
@@ -285,7 +285,7 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		return this._isClosing;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._isClosing = true;
 		this.setModel(undefined);
 		this._callOnDispose.dispose();
@@ -313,11 +313,11 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		super.show(where, this.layoutData.heightInLines || 18);
 	}
 
-	focusOnReferenceTree(): codemavi {
+	focusOnReferenceTree(): void {
 		this._tree.domFocus();
 	}
 
-	focusOnPreviewEditor(): codemavi {
+	focusOnPreviewEditor(): void {
 		this._preview.focus();
 	}
 
@@ -325,7 +325,7 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		return this._preview.hasTextFocus();
 	}
 
-	protected override _onTitleClick(e: IMouseEvent): codemavi {
+	protected override _onTitleClick(e: IMouseEvent): void {
 		if (this._preview && this._preview.getModel()) {
 			this._onDidSelectReference.fire({
 				element: this._getFocusedReference(),
@@ -335,7 +335,7 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		}
 	}
 
-	protected _fillBody(containerElement: HTMLElement): codemavi {
+	protected _fillBody(containerElement: HTMLElement): void {
 		this.setCssClass('reference-zone-widget');
 
 		// message pane
@@ -459,7 +459,7 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		}
 	}
 
-	protected override _doLayoutBody(heightInPixel: number, widthInPixel: number): codemavi {
+	protected override _doLayoutBody(heightInPixel: number, widthInPixel: number): void {
 		super._doLayoutBody(heightInPixel, widthInPixel);
 		this._dim = new dom.Dimension(widthInPixel, heightInPixel);
 		this.layoutData.heightInLines = this._viewZone ? this._viewZone.heightInLines : this.layoutData.heightInLines;
@@ -548,14 +548,14 @@ export class ReferenceWidget extends peekView.PeekViewWidget {
 		return undefined;
 	}
 
-	async revealReference(reference: OneReference): Promise<codemavi> {
+	async revealReference(reference: OneReference): Promise<void> {
 		await this._revealReference(reference, false);
 		this._onDidSelectReference.fire({ element: reference, kind: 'goto', source: 'tree' });
 	}
 
 	private _revealedReference?: OneReference;
 
-	private async _revealReference(reference: OneReference, revealParent: boolean): Promise<codemavi> {
+	private async _revealReference(reference: OneReference, revealParent: boolean): Promise<void> {
 
 		// check if there is anything to do...
 		if (this._revealedReference === reference) {

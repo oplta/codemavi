@@ -36,30 +36,30 @@ class MockMainThreadSearch implements MainThreadSearchShape {
 
 	results: Array<UriComponents | IRawFileMatch2> = [];
 
-	$registerFileSearchProvider(handle: number, scheme: string): codemavi {
+	$registerFileSearchProvider(handle: number, scheme: string): void {
 		this.lastHandle = handle;
 	}
 
-	$registerTextSearchProvider(handle: number, scheme: string): codemavi {
+	$registerTextSearchProvider(handle: number, scheme: string): void {
 		this.lastHandle = handle;
 	}
 
-	$registerAITextSearchProvider(handle: number, scheme: string): codemavi {
+	$registerAITextSearchProvider(handle: number, scheme: string): void {
 		this.lastHandle = handle;
 	}
 
-	$unregisterProvider(handle: number): codemavi {
+	$unregisterProvider(handle: number): void {
 	}
 
-	$handleFileMatch(handle: number, session: number, data: UriComponents[]): codemavi {
+	$handleFileMatch(handle: number, session: number, data: UriComponents[]): void {
 		this.results.push(...data);
 	}
 
-	$handleTextMatch(handle: number, session: number, data: IRawFileMatch2[]): codemavi {
+	$handleTextMatch(handle: number, session: number, data: IRawFileMatch2[]): void {
 		this.results.push(...data);
 	}
 
-	$handleTelemetry(eventName: string, data: any): codemavi {
+	$handleTelemetry(eventName: string, data: any): void {
 	}
 
 	dispose() {
@@ -75,12 +75,12 @@ function extensionResultIsMatch(data: vscode.TextSearchResult): data is vscode.T
 suite('ExtHostSearch', () => {
 	const disposables = ensureNoDisposablesAreLeakedInTestSuite();
 
-	async function registerTestTextSearchProvider(provider: vscode.TextSearchProvider, scheme = 'file'): Promise<codemavi> {
+	async function registerTestTextSearchProvider(provider: vscode.TextSearchProvider, scheme = 'file'): Promise<void> {
 		disposables.add(extHostSearch.registerTextSearchProviderOld(scheme, provider));
 		await rpcProtocol.sync();
 	}
 
-	async function registerTestFileSearchProvider(provider: vscode.FileSearchProvider, scheme = 'file'): Promise<codemavi> {
+	async function registerTestFileSearchProvider(provider: vscode.FileSearchProvider, scheme = 'file'): Promise<void> {
 		disposables.add(extHostSearch.registerFileSearchProviderOld(scheme, provider));
 		await rpcProtocol.sync();
 	}
@@ -148,7 +148,7 @@ suite('ExtHostSearch', () => {
 					new class extends mock<IExtHostConfiguration>() {
 						override async getConfigProvider(): Promise<ExtHostConfigProvider> {
 							return {
-								onDidChangeConfiguration(_listener: (event: vscode.ConfigurationChangeEvent) => codemavi) { },
+								onDidChangeConfiguration(_listener: (event: vscode.ConfigurationChangeEvent) => void) { },
 								getConfiguration(): vscode.WorkspaceConfiguration {
 									return {
 										get() { },

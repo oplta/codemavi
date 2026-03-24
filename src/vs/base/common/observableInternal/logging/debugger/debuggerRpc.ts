@@ -47,7 +47,7 @@ interface GlobalObj {
 }
 
 interface IHost {
-	sendNotification: (data: unknown) => codemavi;
+	sendNotification: (data: unknown) => void;
 }
 
 function createChannelFactoryFromDebugChannel(host: IHost): { channel: ChannelFactory; handler: { handleRequest: (data: unknown) => unknown } } {

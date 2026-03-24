@@ -92,7 +92,7 @@ export class ExtHostTask extends ExtHostTaskBase {
 		}
 	}
 
-	protected provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<codemavi>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription } {
+	protected provideTasksInternal(validTypes: { [key: string]: boolean }, taskIdPromises: Promise<void>[], handler: HandlerData, value: vscode.Task[] | null | undefined): { tasks: tasks.ITaskDTO[]; extension: IExtensionDescription } {
 		const taskDTOs: tasks.ITaskDTO[] = [];
 		if (value) {
 			for (const task of value) {

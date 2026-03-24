@@ -23,8 +23,8 @@ type GettingStartedIndexListOptions<T> = {
 };
 
 export class GettingStartedIndexList<T extends { id: string; when?: ContextKeyExpression }> extends Disposable {
-	private readonly _onDidChangeEntries = new Emitter<codemavi>();
-	private readonly onDidChangeEntries: Event<codemavi> = this._onDidChangeEntries.event;
+	private readonly _onDidChangeEntries = new Emitter<void>();
+	private readonly onDidChangeEntries: Event<void> = this._onDidChangeEntries.event;
 
 	private domElement: HTMLElement;
 	private list: HTMLUListElement;
@@ -73,7 +73,7 @@ export class GettingStartedIndexList<T extends { id: string; when?: ContextKeyEx
 		this.scrollbar.scanDomNode();
 	}
 
-	onDidChange(listener: () => codemavi) {
+	onDidChange(listener: () => void) {
 		this._register(this.onDidChangeEntries(listener));
 	}
 

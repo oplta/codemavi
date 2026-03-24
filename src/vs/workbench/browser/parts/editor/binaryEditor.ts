@@ -16,7 +16,7 @@ import { EditorPlaceholder, IEditorPlaceholderContents } from './editorPlacehold
 import { IEditorGroup } from '../../../services/editor/common/editorGroupsService.js';
 
 export interface IOpenCallbacks {
-	openInternal: (input: EditorInput, options: IEditorOptions | undefined) => Promise<codemavi>;
+	openInternal: (input: EditorInput, options: IEditorOptions | undefined) => Promise<void>;
 }
 
 /*
@@ -24,10 +24,10 @@ export interface IOpenCallbacks {
  */
 export abstract class BaseBinaryResourceEditor extends EditorPlaceholder {
 
-	private readonly _onDidChangeMetadata = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeMetadata = this._register(new Emitter<void>());
 	readonly onDidChangeMetadata = this._onDidChangeMetadata.event;
 
-	private readonly _onDidOpenInPlace = this._register(new Emitter<codemavi>());
+	private readonly _onDidOpenInPlace = this._register(new Emitter<void>());
 	readonly onDidOpenInPlace = this._onDidOpenInPlace.event;
 
 	private metadata: string | undefined;
@@ -78,7 +78,7 @@ export abstract class BaseBinaryResourceEditor extends EditorPlaceholder {
 		};
 	}
 
-	private handleMetadataChanged(meta: string | undefined): codemavi {
+	private handleMetadataChanged(meta: string | undefined): void {
 		this.metadata = meta;
 
 		this._onDidChangeMetadata.fire();

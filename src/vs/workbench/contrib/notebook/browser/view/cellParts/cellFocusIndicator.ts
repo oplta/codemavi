@@ -74,7 +74,7 @@ export class CellFocusIndicator extends CellContentPart {
 		}));
 	}
 
-	override updateInternalLayoutNow(element: ICellViewModel): codemavi {
+	override updateInternalLayoutNow(element: ICellViewModel): void {
 		if (element.cellKind === CellKind.Markup) {
 			const indicatorPostion = this.notebookEditor.notebookOptions.computeIndicatorPosition(element.layoutInfo.totalHeight, (element as MarkupCellViewModel).layoutInfo.foldHintHeight, this.notebookEditor.textModel?.viewType);
 			this.bottom.domNode.style.transform = `translateY(${indicatorPostion.bottomIndicatorTop + 6}px)`;
@@ -96,7 +96,7 @@ export class CellFocusIndicator extends CellContentPart {
 		this.updateFocusIndicatorsForTitleMenu();
 	}
 
-	private updateFocusIndicatorsForTitleMenu(): codemavi {
+	private updateFocusIndicatorsForTitleMenu(): void {
 		const y = (this.currentCell?.layoutInfo.chatHeight ?? 0) + this.getIndicatorTopMargin();
 		this.left.domNode.style.transform = `translateY(${y}px)`;
 		this.right.domNode.style.transform = `translateY(${y}px)`;

@@ -7,7 +7,7 @@ import { Event } from '../../../../base/common/event.js';
 import { URI } from '../../../../base/common/uri.js';
 import { ICodeEditor } from '../../../../editor/browser/editorBrowser.js';
 import { createDecorator } from '../../../../platform/instantiation/common/instantiation.js';
-import { Diff, DiffArea, Code MaviFileSnapshot } from '../common/editCodeServiceTypes.js';
+import { Diff, DiffArea, MaviFileSnapshot } from '../common/editCodeServiceTypes.js';
 
 
 export type StartBehavior = 'accept-conflicts' | 'reject-conflicts' | 'keep-conflicts'
@@ -44,20 +44,20 @@ export interface IEditCodeService {
 
 	processRawKeybindingText(keybindingStr: string): string;
 
-	callBeforeApplyOrEdit(uri: URI | 'current'): Promise<codemavi>;
-	startApplying(opts: StartApplyingOpts): [URI, Promise<codemavi>] | null;
-	instantlyApplySearchReplaceBlocks(opts: { uri: URI; searchReplaceBlocks: string }): codemavi;
-	instantlyRewriteFile(opts: { uri: URI; newContent: string }): codemavi;
+	callBeforeApplyOrEdit(uri: URI | 'current'): Promise<void>;
+	startApplying(opts: StartApplyingOpts): [URI, Promise<void>] | null;
+	instantlyApplySearchReplaceBlocks(opts: { uri: URI; searchReplaceBlocks: string }): void;
+	instantlyRewriteFile(opts: { uri: URI; newContent: string }): void;
 	addCtrlKZone(opts: AddCtrlKOpts): number | undefined;
-	removeCtrlKZone(opts: { diffareaid: number }): codemavi;
+	removeCtrlKZone(opts: { diffareaid: number }): void;
 
 	diffAreaOfId: Record<string, DiffArea>;
 	diffAreasOfURI: Record<string, Set<string> | undefined>;
 	diffOfId: Record<string, Diff>;
 
-	acceptOrRejectAllDiffAreas(opts: { uri: URI, removeCtrlKs: boolean, behavior: 'reject' | 'accept', _addToHistory?: boolean }): codemavi;
-	acceptDiff({ diffid }: { diffid: number }): codemavi;
-	rejectDiff({ diffid }: { diffid: number }): codemavi;
+	acceptOrRejectAllDiffAreas(opts: { uri: URI, removeCtrlKs: boolean, behavior: 'reject' | 'accept', _addToHistory?: boolean }): void;
+	acceptDiff({ diffid }: { diffid: number }): void;
+	rejectDiff({ diffid }: { diffid: number }): void;
 
 	// events
 	onDidAddOrDeleteDiffZones: Event<{ uri: URI }>;
@@ -67,12 +67,12 @@ export interface IEditCodeService {
 
 	// CtrlKZone streaming state
 	isCtrlKZoneStreaming(opts: { diffareaid: number }): boolean;
-	interruptCtrlKStreaming(opts: { diffareaid: number }): codemavi;
+	interruptCtrlKStreaming(opts: { diffareaid: number }): void;
 
 	// // DiffZone codeBoxId streaming state
-	interruptURIStreaming(opts: { uri: URI }): codemavi;
+	interruptURIStreaming(opts: { uri: URI }): void;
 
-	// testDiffs(): codemavi;
-	getCode MaviFileSnapshot(uri: URI): Code MaviFileSnapshot;
-	restoreCode MaviFileSnapshot(uri: URI, snapshot: Code MaviFileSnapshot): codemavi;
+	// testDiffs(): void;
+	getMaviFileSnapshot(uri: URI): MaviFileSnapshot;
+	restoreMaviFileSnapshot(uri: URI, snapshot: MaviFileSnapshot): void;
 }

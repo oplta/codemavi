@@ -203,18 +203,18 @@ Registry.as<IEditorFactoryRegistry>(EditorExtensions.EditorFactory).registerFile
 
 export class TestTextResourceEditor extends TextResourceEditor {
 
-	protected override createEditorControl(parent: HTMLElement, configuration: any): codemavi {
+	protected override createEditorControl(parent: HTMLElement, configuration: any): void {
 		this.editorControl = this._register(this.instantiationService.createInstance(TestCodeEditor, parent, configuration, {}));
 	}
 }
 
 export class TestTextFileEditor extends TextFileEditor {
 
-	protected override createEditorControl(parent: HTMLElement, configuration: any): codemavi {
+	protected override createEditorControl(parent: HTMLElement, configuration: any): void {
 		this.editorControl = this._register(this.instantiationService.createInstance(TestCodeEditor, parent, configuration, { contributions: [] }));
 	}
 
-	setSelection(selection: Selection | undefined, reason: EditorPaneSelectionChangeReason): codemavi {
+	setSelection(selection: Selection | undefined, reason: EditorPaneSelectionChangeReason): void {
 		this._options = selection ? upcast<IEditorOptions, ITextEditorOptions>({ selection }) : undefined;
 
 		this._onDidChangeSelection.fire({ reason });
@@ -240,7 +240,7 @@ export interface ITestInstantiationService extends IInstantiationService {
 }
 
 export class TestWorkingCopyService extends WorkingCopyService {
-	testUnregisterWorkingCopy(workingCopy: IWorkingCopy): codemavi {
+	testUnregisterWorkingCopy(workingCopy: IWorkingCopy): void {
 		return super.unregisterWorkingCopy(workingCopy);
 	}
 }
@@ -454,7 +454,7 @@ export class TestTextFileService extends BrowserTextFileService {
 		);
 	}
 
-	setReadStreamErrorOnce(error: FileOperationError): codemavi {
+	setReadStreamErrorOnce(error: FileOperationError): void {
 		this.readStreamError = error;
 	}
 
@@ -481,7 +481,7 @@ export class TestTextFileService extends BrowserTextFileService {
 		};
 	}
 
-	setWriteErrorOnce(error: FileOperationError): codemavi {
+	setWriteErrorOnce(error: FileOperationError): void {
 		this.writeError = error;
 	}
 
@@ -535,7 +535,7 @@ export class TestProgressService implements IProgressService {
 	withProgress(
 		options: IProgressOptions | IProgressDialogOptions | IProgressWindowOptions | IProgressNotificationOptions | IProgressCompositeOptions,
 		task: (progress: IProgress<IProgressStep>) => Promise<any>,
-		onDidCancel?: ((choice?: number | undefined) => codemavi) | undefined
+		onDidCancel?: ((choice?: number | undefined) => void) | undefined
 	): Promise<any> {
 		return task(Progress.None);
 	}
@@ -571,7 +571,7 @@ export class TestMenuService implements IMenuService {
 		throw new Error('Method not implemented.');
 	}
 
-	resetHiddenStates(): codemavi {
+	resetHiddenStates(): void {
 		// nothing
 	}
 }
@@ -595,13 +595,13 @@ export class TestFileDialogService implements IFileDialogService {
 	pickWorkspaceAndOpen(_options: IPickAndOpenOptions): Promise<any> { return Promise.resolve(0); }
 
 	private fileToSave!: URI;
-	setPickFileToSave(path: URI): codemavi { this.fileToSave = path; }
+	setPickFileToSave(path: URI): void { this.fileToSave = path; }
 	pickFileToSave(defaultUri: URI, availableFileSystems?: string[]): Promise<URI | undefined> { return Promise.resolve(this.fileToSave); }
 
 	showSaveDialog(_options: ISaveDialogOptions): Promise<URI | undefined> { return Promise.resolve(undefined); }
 	showOpenDialog(_options: IOpenDialogOptions): Promise<URI[] | undefined> { return Promise.resolve(undefined); }
 
-	setConfirmResult(result: ConfirmResult): codemavi { this.confirmResult = result; }
+	setConfirmResult(result: ConfirmResult): void { this.confirmResult = result; }
 	showSaveConfirm(fileNamesOrResources: (string | URI)[]): Promise<ConfirmResult> { return Promise.resolve(this.confirmResult); }
 }
 
@@ -625,7 +625,7 @@ export class TestLayoutService implements IWorkbenchLayoutService {
 	onDidChangeWindowMaximized: Event<{ windowId: number; maximized: boolean }> = Event.None;
 	onDidChangePanelPosition: Event<string> = Event.None;
 	onDidChangePanelAlignment: Event<PanelAlignment> = Event.None;
-	onDidChangePartVisibility: Event<codemavi> = Event.None;
+	onDidChangePartVisibility: Event<void> = Event.None;
 	onDidLayoutMainContainer = Event.None;
 	onDidLayoutActiveContainer = Event.None;
 	onDidLayoutContainer = Event.None;
@@ -633,12 +633,12 @@ export class TestLayoutService implements IWorkbenchLayoutService {
 	onDidAddContainer = Event.None;
 	onDidChangeActiveContainer = Event.None;
 
-	layout(): codemavi { }
+	layout(): void { }
 	isRestored(): boolean { return true; }
-	whenReady: Promise<codemavi> = Promise.resolve(undefined);
-	whenRestored: Promise<codemavi> = Promise.resolve(undefined);
+	whenReady: Promise<void> = Promise.resolve(undefined);
+	whenRestored: Promise<void> = Promise.resolve(undefined);
 	hasFocus(_part: Parts): boolean { return false; }
-	focusPart(_part: Parts): codemavi { }
+	focusPart(_part: Parts): void { }
 	hasMainWindowBorder(): boolean { return false; }
 	getMainWindowBorderRadius(): string | undefined { return undefined; }
 	isVisible(_part: Parts): boolean { return true; }
@@ -647,36 +647,36 @@ export class TestLayoutService implements IWorkbenchLayoutService {
 	isTitleBarHidden(): boolean { return false; }
 	isStatusBarHidden(): boolean { return false; }
 	isActivityBarHidden(): boolean { return false; }
-	setActivityBarHidden(_hidden: boolean): codemavi { }
-	setBannerHidden(_hidden: boolean): codemavi { }
+	setActivityBarHidden(_hidden: boolean): void { }
+	setBannerHidden(_hidden: boolean): void { }
 	isSideBarHidden(): boolean { return false; }
-	async setEditorHidden(_hidden: boolean): Promise<codemavi> { }
-	async setSideBarHidden(_hidden: boolean): Promise<codemavi> { }
-	async setAuxiliaryBarHidden(_hidden: boolean): Promise<codemavi> { }
-	async setPartHidden(_hidden: boolean, part: Parts): Promise<codemavi> { }
+	async setEditorHidden(_hidden: boolean): Promise<void> { }
+	async setSideBarHidden(_hidden: boolean): Promise<void> { }
+	async setAuxiliaryBarHidden(_hidden: boolean): Promise<void> { }
+	async setPartHidden(_hidden: boolean, part: Parts): Promise<void> { }
 	isPanelHidden(): boolean { return false; }
-	async setPanelHidden(_hidden: boolean): Promise<codemavi> { }
-	toggleMaximizedPanel(): codemavi { }
+	async setPanelHidden(_hidden: boolean): Promise<void> { }
+	toggleMaximizedPanel(): void { }
 	isPanelMaximized(): boolean { return false; }
 	getMenubarVisibility(): MenuBarVisibility { throw new Error('not implemented'); }
-	toggleMenuBar(): codemavi { }
+	toggleMenuBar(): void { }
 	getSideBarPosition() { return 0; }
 	getPanelPosition() { return 0; }
 	getPanelAlignment(): PanelAlignment { return 'center'; }
-	async setPanelPosition(_position: PartPosition): Promise<codemavi> { }
-	async setPanelAlignment(_alignment: PanelAlignment): Promise<codemavi> { }
-	addClass(_clazz: string): codemavi { }
-	removeClass(_clazz: string): codemavi { }
+	async setPanelPosition(_position: PartPosition): Promise<void> { }
+	async setPanelAlignment(_alignment: PanelAlignment): Promise<void> { }
+	addClass(_clazz: string): void { }
+	removeClass(_clazz: string): void { }
 	getMaximumEditorDimensions(): IDimension { throw new Error('not implemented'); }
-	toggleZenMode(): codemavi { }
+	toggleZenMode(): void { }
 	isMainEditorLayoutCentered(): boolean { return false; }
-	centerMainEditorLayout(_active: boolean): codemavi { }
-	resizePart(_part: Parts, _sizeChangeWidth: number, _sizeChangeHeight: number): codemavi { }
+	centerMainEditorLayout(_active: boolean): void { }
+	resizePart(_part: Parts, _sizeChangeWidth: number, _sizeChangeHeight: number): void { }
 	getSize(part: Parts): IViewSize { throw new Error('Method not implemented.'); }
-	setSize(part: Parts, size: IViewSize): codemavi { throw new Error('Method not implemented.'); }
+	setSize(part: Parts, size: IViewSize): void { throw new Error('Method not implemented.'); }
 	registerPart(part: Part): IDisposable { return Disposable.None; }
 	isWindowMaximized(targetWindow: Window) { return false; }
-	updateWindowMaximizedState(targetWindow: Window, maximized: boolean): codemavi { }
+	updateWindowMaximizedState(targetWindow: Window, maximized: boolean): void { }
 	getVisibleNeighborPart(part: Parts, direction: Direction): Parts | undefined { return undefined; }
 	focus() { }
 }
@@ -716,7 +716,7 @@ export class TestPaneCompositeService extends Disposable implements IPaneComposi
 	getProgressIndicator(id: string, viewContainerLocation: ViewContainerLocation): IProgressIndicator | undefined {
 		return this.getPartByLocation(viewContainerLocation).getProgressIndicator(id);
 	}
-	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): codemavi {
+	hideActivePaneComposite(viewContainerLocation: ViewContainerLocation): void {
 		this.getPartByLocation(viewContainerLocation).hideActivePaneComposite();
 	}
 	getLastActivePaneCompositeId(viewContainerLocation: ViewContainerLocation): string {
@@ -765,13 +765,13 @@ export class TestSideBarPart implements IPaneCompositePart {
 	getDefaultViewletId(): string { return 'workbench.view.explorer'; }
 	getPaneComposite(id: string): PaneCompositeDescriptor | undefined { return undefined; }
 	getProgressIndicator(id: string) { return undefined; }
-	hideActivePaneComposite(): codemavi { }
+	hideActivePaneComposite(): void { }
 	getLastActivePaneCompositeId(): string { return undefined!; }
 	dispose() { }
 	getPinnedPaneCompositeIds() { return []; }
 	getVisiblePaneCompositeIds() { return []; }
 	getPaneCompositeIds() { return []; }
-	layout(width: number, height: number, top: number, left: number): codemavi { }
+	layout(width: number, height: number, top: number, left: number): void { }
 }
 
 export class TestPanelPart implements IPaneCompositePart {
@@ -794,12 +794,12 @@ export class TestPanelPart implements IPaneCompositePart {
 	getVisiblePaneCompositeIds() { return []; }
 	getPaneCompositeIds() { return []; }
 	getActivePaneComposite(): IPaneComposite { return activeViewlet; }
-	setPanelEnablement(id: string, enabled: boolean): codemavi { }
+	setPanelEnablement(id: string, enabled: boolean): void { }
 	dispose() { }
 	getProgressIndicator(id: string) { return null!; }
-	hideActivePaneComposite(): codemavi { }
+	hideActivePaneComposite(): void { }
 	getLastActivePaneCompositeId(): string { return undefined!; }
-	layout(width: number, height: number, top: number, left: number): codemavi { }
+	layout(width: number, height: number, top: number, left: number): void { }
 }
 
 export class TestViewsService implements IViewsService {
@@ -811,17 +811,17 @@ export class TestViewsService implements IViewsService {
 	isViewContainerActive(id: string): boolean { return true; }
 	getVisibleViewContainer(): ViewContainer | null { return null; }
 	openViewContainer(id: string, focus?: boolean): Promise<IPaneComposite | null> { return Promise.resolve(null); }
-	closeViewContainer(id: string): codemavi { }
+	closeViewContainer(id: string): void { }
 
 	onDidChangeViewVisibilityEmitter = new Emitter<{ id: string; visible: boolean }>();
 	onDidChangeViewVisibility = this.onDidChangeViewVisibilityEmitter.event;
-	onDidChangeFocusedViewEmitter = new Emitter<codemavi>();
+	onDidChangeFocusedViewEmitter = new Emitter<void>();
 	onDidChangeFocusedView = this.onDidChangeFocusedViewEmitter.event;
 	isViewVisible(id: string): boolean { return true; }
 	getActiveViewWithId<T extends IView>(id: string): T | null { return null; }
 	getViewWithId<T extends IView>(id: string): T | null { return null; }
 	openView<T extends IView>(id: string, focus?: boolean | undefined): Promise<T | null> { return Promise.resolve(null); }
-	closeView(id: string): codemavi { }
+	closeView(id: string): void { }
 	getViewProgressIndicator(id: string) { return null!; }
 	getActiveViewPaneContainerWithId(id: string) { return null; }
 	getFocusedViewName(): string { return ''; }
@@ -855,8 +855,8 @@ export class TestEditorGroupsService implements IEditorGroupsService {
 
 	orientation = GroupOrientation.HORIZONTAL;
 	isReady = true;
-	whenReady: Promise<codemavi> = Promise.resolve(undefined);
-	whenRestored: Promise<codemavi> = Promise.resolve(undefined);
+	whenReady: Promise<void> = Promise.resolve(undefined);
+	whenRestored: Promise<void> = Promise.resolve(undefined);
 	hasRestorableState = false;
 
 	contentDimension = { width: 800, height: 600 };
@@ -877,21 +877,21 @@ export class TestEditorGroupsService implements IEditorGroupsService {
 	activateGroup(_group: number | IEditorGroup): IEditorGroup { throw new Error('not implemented'); }
 	restoreGroup(_group: number | IEditorGroup): IEditorGroup { throw new Error('not implemented'); }
 	getSize(_group: number | IEditorGroup): { width: number; height: number } { return { width: 100, height: 100 }; }
-	setSize(_group: number | IEditorGroup, _size: { width: number; height: number }): codemavi { }
-	arrangeGroups(_arrangement: GroupsArrangement): codemavi { }
-	toggleMaximizeGroup(): codemavi { }
+	setSize(_group: number | IEditorGroup, _size: { width: number; height: number }): void { }
+	arrangeGroups(_arrangement: GroupsArrangement): void { }
+	toggleMaximizeGroup(): void { }
 	hasMaximizedGroup(): boolean { throw new Error('not implemented'); }
-	toggleExpandGroup(): codemavi { }
-	applyLayout(_layout: EditorGroupLayout): codemavi { }
+	toggleExpandGroup(): void { }
+	applyLayout(_layout: EditorGroupLayout): void { }
 	getLayout(): EditorGroupLayout { throw new Error('not implemented'); }
-	setGroupOrientation(_orientation: GroupOrientation): codemavi { }
+	setGroupOrientation(_orientation: GroupOrientation): void { }
 	addGroup(_location: number | IEditorGroup, _direction: GroupDirection): IEditorGroup { throw new Error('not implemented'); }
-	removeGroup(_group: number | IEditorGroup): codemavi { }
+	removeGroup(_group: number | IEditorGroup): void { }
 	moveGroup(_group: number | IEditorGroup, _location: number | IEditorGroup, _direction: GroupDirection): IEditorGroup { throw new Error('not implemented'); }
 	mergeGroup(_group: number | IEditorGroup, _target: number | IEditorGroup, _options?: IMergeGroupOptions): boolean { throw new Error('not implemented'); }
 	mergeAllGroups(_group: number | IEditorGroup, _options?: IMergeGroupOptions): boolean { throw new Error('not implemented'); }
 	copyGroup(_group: number | IEditorGroup, _location: number | IEditorGroup, _direction: GroupDirection): IEditorGroup { throw new Error('not implemented'); }
-	centerLayout(active: boolean): codemavi { }
+	centerLayout(active: boolean): void { }
 	isLayoutCentered(): boolean { return false; }
 	createEditorDropTarget(container: HTMLElement, delegate: IEditorDropTargetDelegate): IDisposable { return Disposable.None; }
 	registerContextKeyProvider<T extends ContextKeyValue>(_provider: IEditorGroupContextKeyProvider<T>): IDisposable { throw new Error('not implemented'); }
@@ -923,7 +923,7 @@ export class TestEditorGroupView implements IEditorGroupView {
 	isLocked!: boolean;
 	ariaLabel!: string;
 	index!: number;
-	whenRestored: Promise<codemavi> = Promise.resolve(undefined);
+	whenRestored: Promise<void> = Promise.resolve(undefined);
 	element!: HTMLElement;
 	minimumWidth!: number;
 	maximumWidth!: number;
@@ -934,12 +934,12 @@ export class TestEditorGroupView implements IEditorGroupView {
 
 	isEmpty = true;
 
-	onWillDispose: Event<codemavi> = Event.None;
+	onWillDispose: Event<void> = Event.None;
 	onDidModelChange: Event<IGroupModelChangeEvent> = Event.None;
 	onWillCloseEditor: Event<IEditorCloseEvent> = Event.None;
 	onDidCloseEditor: Event<IEditorCloseEvent> = Event.None;
 	onDidOpenEditorFail: Event<EditorInput> = Event.None;
-	onDidFocus: Event<codemavi> = Event.None;
+	onDidFocus: Event<void> = Event.None;
 	onDidChange: Event<{ width: number; height: number }> = Event.None;
 	onWillMoveEditor: Event<IEditorWillMoveEvent> = Event.None;
 	onWillOpenEditor: Event<IEditorWillOpenEvent> = Event.None;
@@ -957,29 +957,29 @@ export class TestEditorGroupView implements IEditorGroupView {
 	isSticky(_editor: EditorInput): boolean { return false; }
 	isTransient(_editor: EditorInput): boolean { return false; }
 	isActive(_editor: EditorInput | IUntypedEditorInput): boolean { return false; }
-	setSelection(_activeSelectedEditor: EditorInput, _inactiveSelectedEditors: EditorInput[]): Promise<codemavi> { throw new Error('not implemented'); }
+	setSelection(_activeSelectedEditor: EditorInput, _inactiveSelectedEditors: EditorInput[]): Promise<void> { throw new Error('not implemented'); }
 	isSelected(_editor: EditorInput): boolean { return false; }
 	contains(candidate: EditorInput | IUntypedEditorInput): boolean { return false; }
 	moveEditor(_editor: EditorInput, _target: IEditorGroup, _options?: IEditorOptions): boolean { return true; }
 	moveEditors(_editors: EditorInputWithOptions[], _target: IEditorGroup): boolean { return true; }
-	copyEditor(_editor: EditorInput, _target: IEditorGroup, _options?: IEditorOptions): codemavi { }
-	copyEditors(_editors: EditorInputWithOptions[], _target: IEditorGroup): codemavi { }
+	copyEditor(_editor: EditorInput, _target: IEditorGroup, _options?: IEditorOptions): void { }
+	copyEditors(_editors: EditorInputWithOptions[], _target: IEditorGroup): void { }
 	async closeEditor(_editor?: EditorInput, options?: ICloseEditorOptions): Promise<boolean> { return true; }
 	async closeEditors(_editors: EditorInput[] | ICloseEditorsFilter, options?: ICloseEditorOptions): Promise<boolean> { return true; }
 	async closeAllEditors(options?: ICloseAllEditorsOptions): Promise<boolean> { return true; }
-	async replaceEditors(_editors: IEditorReplacement[]): Promise<codemavi> { }
-	pinEditor(_editor?: EditorInput): codemavi { }
-	stickEditor(editor?: EditorInput | undefined): codemavi { }
-	unstickEditor(editor?: EditorInput | undefined): codemavi { }
-	lock(locked: boolean): codemavi { }
-	focus(): codemavi { }
+	async replaceEditors(_editors: IEditorReplacement[]): Promise<void> { }
+	pinEditor(_editor?: EditorInput): void { }
+	stickEditor(editor?: EditorInput | undefined): void { }
+	unstickEditor(editor?: EditorInput | undefined): void { }
+	lock(locked: boolean): void { }
+	focus(): void { }
 	get scopedContextKeyService(): IContextKeyService { throw new Error('not implemented'); }
-	setActive(_isActive: boolean): codemavi { }
-	notifyIndexChanged(_index: number): codemavi { }
-	notifyLabelChanged(_label: string): codemavi { }
-	dispose(): codemavi { }
+	setActive(_isActive: boolean): void { }
+	notifyIndexChanged(_index: number): void { }
+	notifyLabelChanged(_label: string): void { }
+	dispose(): void { }
 	toJSON(): object { return Object.create(null); }
-	layout(_width: number, _height: number): codemavi { }
+	layout(_width: number, _height: number): void { }
 	relayout() { }
 	createEditorActions(_menuDisposable: IDisposable): { actions: IToolbarActions; onDidChange: Event<IMenuChangeEvent> } { throw new Error('not implemented'); }
 }
@@ -1005,23 +1005,23 @@ export class TestEditorGroupAccessor implements IEditorGroupsView {
 	mergeGroup(group: number | IEditorGroupView, target: number | IEditorGroupView, options?: IMergeGroupOptions | undefined): boolean { throw new Error('Method not implemented.'); }
 	moveGroup(group: number | IEditorGroupView, location: number | IEditorGroupView, direction: GroupDirection): IEditorGroupView { throw new Error('Method not implemented.'); }
 	copyGroup(group: number | IEditorGroupView, location: number | IEditorGroupView, direction: GroupDirection): IEditorGroupView { throw new Error('Method not implemented.'); }
-	removeGroup(group: number | IEditorGroupView): codemavi { throw new Error('Method not implemented.'); }
-	arrangeGroups(arrangement: GroupsArrangement, target?: number | IEditorGroupView | undefined): codemavi { throw new Error('Method not implemented.'); }
-	toggleMaximizeGroup(group: number | IEditorGroupView): codemavi { throw new Error('Method not implemented.'); }
-	toggleExpandGroup(group: number | IEditorGroupView): codemavi { throw new Error('Method not implemented.'); }
+	removeGroup(group: number | IEditorGroupView): void { throw new Error('Method not implemented.'); }
+	arrangeGroups(arrangement: GroupsArrangement, target?: number | IEditorGroupView | undefined): void { throw new Error('Method not implemented.'); }
+	toggleMaximizeGroup(group: number | IEditorGroupView): void { throw new Error('Method not implemented.'); }
+	toggleExpandGroup(group: number | IEditorGroupView): void { throw new Error('Method not implemented.'); }
 }
 
 export class TestEditorService extends Disposable implements EditorServiceImpl {
 
 	declare readonly _serviceBrand: undefined;
 
-	onDidActiveEditorChange: Event<codemavi> = Event.None;
-	onDidVisibleEditorsChange: Event<codemavi> = Event.None;
+	onDidActiveEditorChange: Event<void> = Event.None;
+	onDidVisibleEditorsChange: Event<void> = Event.None;
 	onDidEditorsChange: Event<IEditorsChangeEvent> = Event.None;
 	onWillOpenEditor: Event<IEditorWillOpenEvent> = Event.None;
 	onDidCloseEditor: Event<IEditorCloseEvent> = Event.None;
 	onDidOpenEditorFail: Event<IEditorIdentifier> = Event.None;
-	onDidMostRecentlyActiveEditorsChange: Event<codemavi> = Event.None;
+	onDidMostRecentlyActiveEditorsChange: Event<void> = Event.None;
 
 	private _activeTextEditorControl: ICodeEditor | IDiffEditor | undefined;
 	public get activeTextEditorControl(): ICodeEditor | IDiffEditor | undefined { return this._activeTextEditorControl; }
@@ -1059,8 +1059,8 @@ export class TestEditorService extends Disposable implements EditorServiceImpl {
 		}
 		return undefined;
 	}
-	async closeEditor(editor: IEditorIdentifier, options?: ICloseEditorOptions): Promise<codemavi> { }
-	async closeEditors(editors: IEditorIdentifier[], options?: ICloseEditorOptions): Promise<codemavi> { }
+	async closeEditor(editor: IEditorIdentifier, options?: ICloseEditorOptions): Promise<void> { }
+	async closeEditors(editors: IEditorIdentifier[], options?: ICloseEditorOptions): Promise<void> { }
 	doResolveEditorOpenRequest(editor: EditorInput | IUntypedEditorInput): [IEditorGroup, EditorInput, IEditorOptions | undefined] | undefined {
 		if (!this.editorGroupService) {
 			return undefined;
@@ -1084,15 +1084,15 @@ export class TestFileService implements IFileService {
 
 	private readonly _onDidFilesChange = new Emitter<FileChangesEvent>();
 	get onDidFilesChange(): Event<FileChangesEvent> { return this._onDidFilesChange.event; }
-	fireFileChanges(event: FileChangesEvent): codemavi { this._onDidFilesChange.fire(event); }
+	fireFileChanges(event: FileChangesEvent): void { this._onDidFilesChange.fire(event); }
 
 	private readonly _onDidRunOperation = new Emitter<FileOperationEvent>();
 	get onDidRunOperation(): Event<FileOperationEvent> { return this._onDidRunOperation.event; }
-	fireAfterOperation(event: FileOperationEvent): codemavi { this._onDidRunOperation.fire(event); }
+	fireAfterOperation(event: FileOperationEvent): void { this._onDidRunOperation.fire(event); }
 
 	private readonly _onDidChangeFileSystemProviderCapabilities = new Emitter<IFileSystemProviderCapabilitiesChangeEvent>();
 	get onDidChangeFileSystemProviderCapabilities(): Event<IFileSystemProviderCapabilitiesChangeEvent> { return this._onDidChangeFileSystemProviderCapabilities.event; }
-	fireFileSystemProviderCapabilitiesChangeEvent(event: IFileSystemProviderCapabilitiesChangeEvent): codemavi { this._onDidChangeFileSystemProviderCapabilities.fire(event); }
+	fireFileSystemProviderCapabilitiesChangeEvent(event: IFileSystemProviderCapabilitiesChangeEvent): void { this._onDidChangeFileSystemProviderCapabilities.fire(event); }
 
 	private _onWillActivateFileSystemProvider = new Emitter<IFileSystemProviderActivationEvent>();
 	readonly onWillActivateFileSystemProvider = this._onWillActivateFileSystemProvider.event;
@@ -1103,7 +1103,7 @@ export class TestFileService implements IFileService {
 
 	readonly = false;
 
-	setContent(content: string): codemavi { this.content = content; }
+	setContent(content: string): void { this.content = content; }
 	getContent(): string { return this.content; }
 	getLastReadFileUri(): URI { return this.lastReadFileUri; }
 
@@ -1169,7 +1169,7 @@ export class TestFileService implements IFileService {
 
 	move(_source: URI, _target: URI, _overwrite?: boolean): Promise<IFileStatWithMetadata> { return Promise.resolve(null!); }
 	copy(_source: URI, _target: URI, _overwrite?: boolean): Promise<IFileStatWithMetadata> { return Promise.resolve(null!); }
-	async cloneFile(_source: URI, _target: URI): Promise<codemavi> { }
+	async cloneFile(_source: URI, _target: URI): Promise<void> { }
 	createFile(_resource: URI, _content?: VSBuffer | VSBufferReadable, _options?: ICreateFileOptions): Promise<IFileStatWithMetadata> { return Promise.resolve(null!); }
 	createFolder(_resource: URI): Promise<IFileStatWithMetadata> { return Promise.resolve(null!); }
 
@@ -1187,7 +1187,7 @@ export class TestFileService implements IFileService {
 		return this.providers.get(scheme);
 	}
 
-	async activateProvider(_scheme: string): Promise<codemavi> {
+	async activateProvider(_scheme: string): Promise<void> {
 		this._onWillActivateFileSystemProvider.fire({ scheme: _scheme, join: () => { } });
 	}
 	async canHandleResource(resource: URI): Promise<boolean> { return this.hasProvider(resource); }
@@ -1208,7 +1208,7 @@ export class TestFileService implements IFileService {
 		return !!(provider && (provider.capabilities & capability));
 	}
 
-	async del(_resource: URI, _options?: { useTrash?: boolean; recursive?: boolean }): Promise<codemavi> { }
+	async del(_resource: URI, _options?: { useTrash?: boolean; recursive?: boolean }): Promise<void> { }
 
 	createWatcher(resource: URI, options: IWatchOptions): IFileSystemWatcher {
 		return {
@@ -1228,7 +1228,7 @@ export class TestFileService implements IFileService {
 	}
 
 	getWriteEncoding(_resource: URI): IResourceEncoding { return { encoding: 'utf8', hasBOM: false }; }
-	dispose(): codemavi { }
+	dispose(): void { }
 
 	async canCreateFile(source: URI, options?: ICreateFileOptions): Promise<Error | true> { return true; }
 	async canMove(source: URI, target: URI, overwrite?: boolean | undefined): Promise<Error | true> { return true; }
@@ -1295,15 +1295,15 @@ export class InMemoryTestWorkingCopyBackupService extends BrowserWorkingCopyBack
 		return this.fileService;
 	}
 
-	joinBackupResource(): Promise<codemavi> {
+	joinBackupResource(): Promise<void> {
 		return new Promise(resolve => this.backupResourceJoiners.push(resolve));
 	}
 
-	joinDiscardBackup(): Promise<codemavi> {
+	joinDiscardBackup(): Promise<void> {
 		return new Promise(resolve => this.discardBackupJoiners.push(resolve));
 	}
 
-	override async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: any, token?: CancellationToken): Promise<codemavi> {
+	override async backup(identifier: IWorkingCopyIdentifier, content?: VSBufferReadableStream | VSBufferReadable, versionId?: number, meta?: any, token?: CancellationToken): Promise<void> {
 		await super.backup(identifier, content, versionId, meta, token);
 
 		while (this.backupResourceJoiners.length) {
@@ -1311,7 +1311,7 @@ export class InMemoryTestWorkingCopyBackupService extends BrowserWorkingCopyBack
 		}
 	}
 
-	override async discardBackup(identifier: IWorkingCopyIdentifier): Promise<codemavi> {
+	override async discardBackup(identifier: IWorkingCopyIdentifier): Promise<void> {
 		await super.discardBackup(identifier);
 		this.discardedBackups.push(identifier);
 
@@ -1349,11 +1349,11 @@ export class TestLifecycleService extends Disposable implements ILifecycleServic
 		}
 	}
 
-	private readonly whenStarted = new DeferredPromise<codemavi>();
-	private readonly whenReady = new DeferredPromise<codemavi>();
-	private readonly whenRestored = new DeferredPromise<codemavi>();
-	private readonly whenEventually = new DeferredPromise<codemavi>();
-	async when(phase: LifecyclePhase): Promise<codemavi> {
+	private readonly whenStarted = new DeferredPromise<void>();
+	private readonly whenReady = new DeferredPromise<void>();
+	private readonly whenRestored = new DeferredPromise<void>();
+	private readonly whenEventually = new DeferredPromise<void>();
+	async when(phase: LifecyclePhase): Promise<void> {
 		if (!this.usePhases) {
 			return;
 		}
@@ -1377,18 +1377,18 @@ export class TestLifecycleService extends Disposable implements ILifecycleServic
 	private readonly _onBeforeShutdownError = this._register(new Emitter<BeforeShutdownErrorEvent>());
 	get onBeforeShutdownError(): Event<BeforeShutdownErrorEvent> { return this._onBeforeShutdownError.event; }
 
-	private readonly _onShutdownVeto = this._register(new Emitter<codemavi>());
-	get onShutdownVeto(): Event<codemavi> { return this._onShutdownVeto.event; }
+	private readonly _onShutdownVeto = this._register(new Emitter<void>());
+	get onShutdownVeto(): Event<void> { return this._onShutdownVeto.event; }
 
 	private readonly _onWillShutdown = this._register(new Emitter<WillShutdownEvent>());
 	get onWillShutdown(): Event<WillShutdownEvent> { return this._onWillShutdown.event; }
 
-	private readonly _onDidShutdown = this._register(new Emitter<codemavi>());
-	get onDidShutdown(): Event<codemavi> { return this._onDidShutdown.event; }
+	private readonly _onDidShutdown = this._register(new Emitter<void>());
+	get onDidShutdown(): Event<void> { return this._onDidShutdown.event; }
 
-	shutdownJoiners: Promise<codemavi>[] = [];
+	shutdownJoiners: Promise<void>[] = [];
 
-	fireShutdown(reason = ShutdownReason.QUIT): codemavi {
+	fireShutdown(reason = ShutdownReason.QUIT): void {
 		this.shutdownJoiners = [];
 
 		this._onWillShutdown.fire({
@@ -1402,11 +1402,11 @@ export class TestLifecycleService extends Disposable implements ILifecycleServic
 		});
 	}
 
-	fireBeforeShutdown(event: InternalBeforeShutdownEvent): codemavi { this._onBeforeShutdown.fire(event); }
+	fireBeforeShutdown(event: InternalBeforeShutdownEvent): void { this._onBeforeShutdown.fire(event); }
 
-	fireWillShutdown(event: WillShutdownEvent): codemavi { this._onWillShutdown.fire(event); }
+	fireWillShutdown(event: WillShutdownEvent): void { this._onWillShutdown.fire(event); }
 
-	async shutdown(): Promise<codemavi> {
+	async shutdown(): Promise<void> {
 		this.fireShutdown();
 	}
 }
@@ -1417,11 +1417,11 @@ export class TestBeforeShutdownEvent implements InternalBeforeShutdownEvent {
 	finalValue: (() => boolean | Promise<boolean>) | undefined;
 	reason = ShutdownReason.CLOSE;
 
-	veto(value: boolean | Promise<boolean>): codemavi {
+	veto(value: boolean | Promise<boolean>): void {
 		this.value = value;
 	}
 
-	finalVeto(vetoFn: () => boolean | Promise<boolean>): codemavi {
+	finalVeto(vetoFn: () => boolean | Promise<boolean>): void {
 		this.value = vetoFn();
 		this.finalValue = vetoFn;
 	}
@@ -1429,12 +1429,12 @@ export class TestBeforeShutdownEvent implements InternalBeforeShutdownEvent {
 
 export class TestWillShutdownEvent implements WillShutdownEvent {
 
-	value: Promise<codemavi>[] = [];
+	value: Promise<void>[] = [];
 	joiners = () => [];
 	reason = ShutdownReason.CLOSE;
 	token = CancellationToken.None;
 
-	join(promise: Promise<codemavi> | (() => Promise<codemavi>), joiner: IWillShutdownEventJoiner): codemavi {
+	join(promise: Promise<void> | (() => Promise<void>), joiner: IWillShutdownEventJoiner): void {
 		this.value.push(typeof promise === 'function' ? promise() : promise);
 	}
 
@@ -1461,7 +1461,7 @@ export class TestTextResourceConfigurationService implements ITextResourceConfig
 		return this.configurationService.inspect<T>(section, { resource });
 	}
 
-	updateValue(resource: URI, key: string, value: any, configurationTarget?: ConfigurationTarget): Promise<codemavi> {
+	updateValue(resource: URI, key: string, value: any, configurationTarget?: ConfigurationTarget): Promise<void> {
 		return this.configurationService.updateValue(key, value);
 	}
 }
@@ -1480,24 +1480,24 @@ export class RemoteFileSystemProvider implements IFileSystemProvider {
 	}
 
 	readonly capabilities: FileSystemProviderCapabilities;
-	readonly onDidChangeCapabilities: Event<codemavi>;
+	readonly onDidChangeCapabilities: Event<void>;
 
 	readonly onDidChangeFile: Event<readonly IFileChange[]>;
 	watch(resource: URI, opts: IWatchOptions): IDisposable { return this.wrappedFsp.watch(this.toFileResource(resource), opts); }
 
 	stat(resource: URI): Promise<IStat> { return this.wrappedFsp.stat(this.toFileResource(resource)); }
-	mkdir(resource: URI): Promise<codemavi> { return this.wrappedFsp.mkdir(this.toFileResource(resource)); }
+	mkdir(resource: URI): Promise<void> { return this.wrappedFsp.mkdir(this.toFileResource(resource)); }
 	readdir(resource: URI): Promise<[string, FileType][]> { return this.wrappedFsp.readdir(this.toFileResource(resource)); }
-	delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> { return this.wrappedFsp.delete(this.toFileResource(resource), opts); }
+	delete(resource: URI, opts: IFileDeleteOptions): Promise<void> { return this.wrappedFsp.delete(this.toFileResource(resource), opts); }
 
-	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> { return this.wrappedFsp.rename(this.toFileResource(from), this.toFileResource(to), opts); }
-	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> { return this.wrappedFsp.copy!(this.toFileResource(from), this.toFileResource(to), opts); }
+	rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> { return this.wrappedFsp.rename(this.toFileResource(from), this.toFileResource(to), opts); }
+	copy(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> { return this.wrappedFsp.copy!(this.toFileResource(from), this.toFileResource(to), opts); }
 
 	readFile(resource: URI): Promise<Uint8Array> { return this.wrappedFsp.readFile!(this.toFileResource(resource)); }
-	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> { return this.wrappedFsp.writeFile!(this.toFileResource(resource), content, opts); }
+	writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> { return this.wrappedFsp.writeFile!(this.toFileResource(resource), content, opts); }
 
 	open(resource: URI, opts: IFileOpenOptions): Promise<number> { return this.wrappedFsp.open!(this.toFileResource(resource), opts); }
-	close(fd: number): Promise<codemavi> { return this.wrappedFsp.close!(fd); }
+	close(fd: number): Promise<void> { return this.wrappedFsp.close!(fd); }
 	read(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number> { return this.wrappedFsp.read!(fd, pos, data, offset, length); }
 	write(fd: number, pos: number, data: Uint8Array, offset: number, length: number): Promise<number> { return this.wrappedFsp.write!(fd, pos, data, offset, length); }
 
@@ -1562,20 +1562,20 @@ export class TestHostService implements IHostService {
 		this._onDidChangeFocus.fire(this._hasFocus);
 	}
 
-	async restart(): Promise<codemavi> { }
-	async reload(): Promise<codemavi> { }
-	async close(): Promise<codemavi> { }
+	async restart(): Promise<void> { }
+	async reload(): Promise<void> { }
+	async close(): Promise<void> { }
 	async withExpectedShutdown<T>(expectedShutdownTask: () => Promise<T>): Promise<T> {
 		return await expectedShutdownTask();
 	}
 
-	async focus(): Promise<codemavi> { }
-	async moveTop(): Promise<codemavi> { }
+	async focus(): Promise<void> { }
+	async moveTop(): Promise<void> { }
 	async getCursorScreenPoint(): Promise<undefined> { return undefined; }
 
-	async openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<codemavi> { }
+	async openWindow(arg1?: IOpenEmptyWindowOptions | IWindowOpenable[], arg2?: IOpenWindowOptions): Promise<void> { }
 
-	async toggleFullScreen(): Promise<codemavi> { }
+	async toggleFullScreen(): Promise<void> { }
 
 	async getScreenshot(): Promise<ArrayBufferLike | undefined> { return undefined; }
 
@@ -1587,7 +1587,7 @@ export class TestHostService implements IHostService {
 
 export class TestFilesConfigurationService extends FilesConfigurationService {
 
-	testOnFilesConfigurationChange(configuration: any): codemavi {
+	testOnFilesConfigurationChange(configuration: any): void {
 		super.onFilesConfigurationChange(configuration, true);
 	}
 }
@@ -1630,15 +1630,15 @@ export function registerTestEditor(id: string, inputs: SyncDescriptor<EditorInpu
 			this._scopedContextKeyService = new MockContextKeyService();
 		}
 
-		override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<codemavi> {
+		override async setInput(input: EditorInput, options: IEditorOptions | undefined, context: IEditorOpenContext, token: CancellationToken): Promise<void> {
 			super.setInput(input, options, context, token);
 
 			await input.resolve();
 		}
 
 		override getId(): string { return id; }
-		layout(): codemavi { }
-		protected createEditor(): codemavi { }
+		layout(): void { }
+		protected createEditor(): void { }
 
 		override get scopedContextKeyService() {
 			return this._scopedContextKeyService;
@@ -1776,17 +1776,17 @@ export class TestFileEditorInput extends EditorInput implements IFileEditorInput
 		}
 		return isEqual(this.resource, other.resource) && (this.editorId === other.options?.override || other.options?.override === undefined);
 	}
-	setPreferredResource(resource: URI): codemavi { }
+	setPreferredResource(resource: URI): void { }
 	async setEncoding(encoding: string) { }
 	getEncoding() { return undefined; }
-	setPreferredName(name: string): codemavi { }
-	setPreferredDescription(description: string): codemavi { }
+	setPreferredName(name: string): void { }
+	setPreferredDescription(description: string): void { }
 	setPreferredEncoding(encoding: string) { }
-	setPreferredContents(contents: string): codemavi { }
+	setPreferredContents(contents: string): void { }
 	setLanguageId(languageId: string, source?: string) { }
 	setPreferredLanguageId(languageId: string) { }
-	setForceOpenAsBinary(): codemavi { }
-	setFailToOpen(): codemavi {
+	setForceOpenAsBinary(): void { }
+	setFailToOpen(): void {
 		this.fails = true;
 	}
 	override async save(groupId: GroupIdentifier, options?: ISaveOptions): Promise<EditorInput | undefined> {
@@ -1798,7 +1798,7 @@ export class TestFileEditorInput extends EditorInput implements IFileEditorInput
 		this.gotSavedAs = true;
 		return this;
 	}
-	override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<codemavi> {
+	override async revert(group: GroupIdentifier, options?: IRevertOptions): Promise<void> {
 		this.gotReverted = true;
 		this.gotSaved = false;
 		this.gotSavedAs = false;
@@ -1810,16 +1810,16 @@ export class TestFileEditorInput extends EditorInput implements IFileEditorInput
 		}
 		return { resource: this.resource };
 	}
-	setModified(): codemavi { this.modified = true; }
+	setModified(): void { this.modified = true; }
 	override isModified(): boolean {
 		return this.modified === undefined ? this.dirty : this.modified;
 	}
-	setDirty(): codemavi { this.dirty = true; }
+	setDirty(): void { this.dirty = true; }
 	override isDirty(): boolean {
 		return this.dirty;
 	}
 	isResolved(): boolean { return false; }
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 		this.gotDisposed = true;
 	}
@@ -1827,7 +1827,7 @@ export class TestFileEditorInput extends EditorInput implements IFileEditorInput
 	override async rename(): Promise<IMoveResult | undefined> { return this.movedEditor; }
 
 	private moveDisabledReason: string | undefined = undefined;
-	setMoveDisabled(reason: string): codemavi {
+	setMoveDisabled(reason: string): void {
 		this.moveDisabledReason = reason;
 	}
 
@@ -1853,11 +1853,11 @@ export class TestEditorPart extends MainEditorPart implements IEditorGroupsServi
 
 	readonly onDidCreateAuxiliaryEditorPart: Event<IAuxiliaryEditorPart> = Event.None;
 
-	testSaveState(): codemavi {
+	testSaveState(): void {
 		return super.saveState();
 	}
 
-	clearState(): codemavi {
+	clearState(): void {
 		const workspaceMemento = this.getMemento(StorageScope.WORKSPACE, StorageTarget.MACHINE);
 		for (const key of Object.keys(workspaceMemento)) {
 			delete workspaceMemento[key];
@@ -1958,8 +1958,8 @@ export class TestPathService implements IPathService {
 }
 
 export interface ITestTextFileEditorModelManager extends ITextFileEditorModelManager, IDisposable {
-	add(resource: URI, model: TextFileEditorModel): codemavi;
-	remove(resource: URI): codemavi;
+	add(resource: URI, model: TextFileEditorModel): void;
+	remove(resource: URI): void;
 }
 
 interface ITestTextFileEditorModel extends ITextFileEditorModel {
@@ -1978,10 +1978,10 @@ export class TestWorkspacesService implements IWorkspacesService {
 	onDidChangeRecentlyOpened = Event.None;
 
 	async createUntitledWorkspace(folders?: IWorkspaceFolderCreationData[], remoteAuthority?: string): Promise<IWorkspaceIdentifier> { throw new Error('Method not implemented.'); }
-	async deleteUntitledWorkspace(workspace: IWorkspaceIdentifier): Promise<codemavi> { }
-	async addRecentlyOpened(recents: IRecent[]): Promise<codemavi> { }
-	async removeRecentlyOpened(workspaces: URI[]): Promise<codemavi> { }
-	async clearRecentlyOpened(): Promise<codemavi> { }
+	async deleteUntitledWorkspace(workspace: IWorkspaceIdentifier): Promise<void> { }
+	async addRecentlyOpened(recents: IRecent[]): Promise<void> { }
+	async removeRecentlyOpened(workspaces: URI[]): Promise<void> { }
+	async clearRecentlyOpened(): Promise<void> { }
 	async getRecentlyOpened(): Promise<IRecentlyOpened> { return { files: [], workspaces: [] }; }
 	async getDirtyWorkspaces(): Promise<(IFolderBackupInfo | IWorkspaceBackupInfo)[]> { return []; }
 	async enterWorkspace(path: URI): Promise<IEnterWorkspaceResult | undefined> { throw new Error('Method not implemented.'); }
@@ -1997,7 +1997,7 @@ export class TestTerminalInstanceService implements ITerminalInstanceService {
 	preparePathForTerminalAsync(path: string, executable: string | undefined, title: string, shellType: TerminalShellType, remoteAuthority: string | undefined): Promise<string> { throw new Error('Method not implemented.'); }
 	createInstance(options: ICreateTerminalOptions, target: TerminalLocation): ITerminalInstance { throw new Error('Method not implemented.'); }
 	async getBackend(remoteAuthority?: string): Promise<ITerminalBackend | undefined> { throw new Error('Method not implemented.'); }
-	didRegisterBackend(backend: ITerminalBackend): codemavi { throw new Error('Method not implemented.'); }
+	didRegisterBackend(backend: ITerminalBackend): void { throw new Error('Method not implemented.'); }
 	getRegisteredBackends(): IterableIterator<ITerminalBackend> { throw new Error('Method not implemented.'); }
 }
 
@@ -2010,21 +2010,21 @@ export class TestTerminalEditorService implements ITerminalEditorService {
 	onDidChangeInstanceCapability = Event.None;
 	onDidChangeActiveInstance = Event.None;
 	onDidChangeInstances = Event.None;
-	openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<codemavi> { throw new Error('Method not implemented.'); }
-	detachInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
+	openEditor(instance: ITerminalInstance, editorOptions?: TerminalEditorLocation): Promise<void> { throw new Error('Method not implemented.'); }
+	detachInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
 	splitInstance(instanceToSplit: ITerminalInstance, shellLaunchConfig?: IShellLaunchConfig): ITerminalInstance { throw new Error('Method not implemented.'); }
-	revealActiveEditor(preserveFocus?: boolean): Promise<codemavi> { throw new Error('Method not implemented.'); }
+	revealActiveEditor(preserveFocus?: boolean): Promise<void> { throw new Error('Method not implemented.'); }
 	resolveResource(instance: ITerminalInstance): URI { throw new Error('Method not implemented.'); }
 	reviveInput(deserializedInput: IDeserializedTerminalEditorInput): TerminalEditorInput { throw new Error('Method not implemented.'); }
 	getInputFromResource(resource: URI): TerminalEditorInput { throw new Error('Method not implemented.'); }
-	setActiveInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
-	focusActiveInstance(): Promise<codemavi> { throw new Error('Method not implemented.'); }
-	focusInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
+	setActiveInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
+	focusActiveInstance(): Promise<void> { throw new Error('Method not implemented.'); }
+	focusInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
 	getInstanceFromResource(resource: URI | undefined): ITerminalInstance | undefined { throw new Error('Method not implemented.'); }
-	focusFindWidget(): codemavi { throw new Error('Method not implemented.'); }
-	hideFindWidget(): codemavi { throw new Error('Method not implemented.'); }
-	findNext(): codemavi { throw new Error('Method not implemented.'); }
-	findPrevious(): codemavi { throw new Error('Method not implemented.'); }
+	focusFindWidget(): void { throw new Error('Method not implemented.'); }
+	hideFindWidget(): void { throw new Error('Method not implemented.'); }
+	findNext(): void { throw new Error('Method not implemented.'); }
+	findPrevious(): void { throw new Error('Method not implemented.'); }
 }
 
 export class TestTerminalGroupService implements ITerminalGroupService {
@@ -2047,45 +2047,45 @@ export class TestTerminalGroupService implements ITerminalGroupService {
 	onDidChangeInstances = Event.None;
 	createGroup(instance?: any): ITerminalGroup { throw new Error('Method not implemented.'); }
 	getGroupForInstance(instance: ITerminalInstance): ITerminalGroup | undefined { throw new Error('Method not implemented.'); }
-	moveGroup(source: ITerminalInstance | ITerminalInstance[], target: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
-	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): codemavi { throw new Error('Method not implemented.'); }
-	moveInstance(source: ITerminalInstance, target: ITerminalInstance, side: 'before' | 'after'): codemavi { throw new Error('Method not implemented.'); }
-	unsplitInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
-	joinInstances(instances: ITerminalInstance[]): codemavi { throw new Error('Method not implemented.'); }
+	moveGroup(source: ITerminalInstance | ITerminalInstance[], target: ITerminalInstance): void { throw new Error('Method not implemented.'); }
+	moveGroupToEnd(source: ITerminalInstance | ITerminalInstance[]): void { throw new Error('Method not implemented.'); }
+	moveInstance(source: ITerminalInstance, target: ITerminalInstance, side: 'before' | 'after'): void { throw new Error('Method not implemented.'); }
+	unsplitInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
+	joinInstances(instances: ITerminalInstance[]): void { throw new Error('Method not implemented.'); }
 	instanceIsSplit(instance: ITerminalInstance): boolean { throw new Error('Method not implemented.'); }
 	getGroupLabels(): string[] { throw new Error('Method not implemented.'); }
-	setActiveGroupByIndex(index: number): codemavi { throw new Error('Method not implemented.'); }
-	setActiveGroupToNext(): codemavi { throw new Error('Method not implemented.'); }
-	setActiveGroupToPrevious(): codemavi { throw new Error('Method not implemented.'); }
-	setActiveInstanceByIndex(terminalIndex: number): codemavi { throw new Error('Method not implemented.'); }
-	setContainer(container: HTMLElement): codemavi { throw new Error('Method not implemented.'); }
-	showPanel(focus?: boolean): Promise<codemavi> { throw new Error('Method not implemented.'); }
-	hidePanel(): codemavi { throw new Error('Method not implemented.'); }
-	focusTabs(): codemavi { throw new Error('Method not implemented.'); }
-	focusHover(): codemavi { throw new Error('Method not implemented.'); }
-	setActiveInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
-	focusActiveInstance(): Promise<codemavi> { throw new Error('Method not implemented.'); }
-	focusInstance(instance: ITerminalInstance): codemavi { throw new Error('Method not implemented.'); }
+	setActiveGroupByIndex(index: number): void { throw new Error('Method not implemented.'); }
+	setActiveGroupToNext(): void { throw new Error('Method not implemented.'); }
+	setActiveGroupToPrevious(): void { throw new Error('Method not implemented.'); }
+	setActiveInstanceByIndex(terminalIndex: number): void { throw new Error('Method not implemented.'); }
+	setContainer(container: HTMLElement): void { throw new Error('Method not implemented.'); }
+	showPanel(focus?: boolean): Promise<void> { throw new Error('Method not implemented.'); }
+	hidePanel(): void { throw new Error('Method not implemented.'); }
+	focusTabs(): void { throw new Error('Method not implemented.'); }
+	focusHover(): void { throw new Error('Method not implemented.'); }
+	setActiveInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
+	focusActiveInstance(): Promise<void> { throw new Error('Method not implemented.'); }
+	focusInstance(instance: ITerminalInstance): void { throw new Error('Method not implemented.'); }
 	getInstanceFromResource(resource: URI | undefined): ITerminalInstance | undefined { throw new Error('Method not implemented.'); }
-	focusFindWidget(): codemavi { throw new Error('Method not implemented.'); }
-	hideFindWidget(): codemavi { throw new Error('Method not implemented.'); }
-	findNext(): codemavi { throw new Error('Method not implemented.'); }
-	findPrevious(): codemavi { throw new Error('Method not implemented.'); }
-	updateVisibility(): codemavi { throw new Error('Method not implemented.'); }
+	focusFindWidget(): void { throw new Error('Method not implemented.'); }
+	hideFindWidget(): void { throw new Error('Method not implemented.'); }
+	findNext(): void { throw new Error('Method not implemented.'); }
+	findPrevious(): void { throw new Error('Method not implemented.'); }
+	updateVisibility(): void { throw new Error('Method not implemented.'); }
 }
 
 export class TestTerminalProfileService implements ITerminalProfileService {
 	_serviceBrand: undefined;
 	availableProfiles: ITerminalProfile[] = [];
 	contributedProfiles: IExtensionTerminalProfile[] = [];
-	profilesReady: Promise<codemavi> = Promise.resolve();
+	profilesReady: Promise<void> = Promise.resolve();
 	onDidChangeAvailableProfiles = Event.None;
 	getPlatformKey(): Promise<string> { throw new Error('Method not implemented.'); }
-	refreshAvailableProfiles(): codemavi { throw new Error('Method not implemented.'); }
+	refreshAvailableProfiles(): void { throw new Error('Method not implemented.'); }
 	getDefaultProfileName(): string | undefined { throw new Error('Method not implemented.'); }
 	getDefaultProfile(): ITerminalProfile | undefined { throw new Error('Method not implemented.'); }
 	getContributedDefaultProfile(shellLaunchConfig: IShellLaunchConfig): Promise<IExtensionTerminalProfile | undefined> { throw new Error('Method not implemented.'); }
-	registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<codemavi> { throw new Error('Method not implemented.'); }
+	registerContributedProfile(args: IRegisterContributedProfileArgs): Promise<void> { throw new Error('Method not implemented.'); }
 	getContributedProfileProvider(extensionIdentifier: string, id: string): ITerminalProfileProvider | undefined { throw new Error('Method not implemented.'); }
 	registerTerminalProfileProvider(extensionIdentifier: string, id: string, profileProvider: ITerminalProfileProvider): IDisposable { throw new Error('Method not implemented.'); }
 }
@@ -2093,8 +2093,8 @@ export class TestTerminalProfileService implements ITerminalProfileService {
 export class TestTerminalProfileResolverService implements ITerminalProfileResolverService {
 	_serviceBrand: undefined;
 	defaultProfileName = '';
-	resolveIcon(shellLaunchConfig: IShellLaunchConfig): codemavi { }
-	async resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<codemavi> { }
+	resolveIcon(shellLaunchConfig: IShellLaunchConfig): void { }
+	async resolveShellLaunchConfig(shellLaunchConfig: IShellLaunchConfig, options: IShellLaunchConfigResolveOptions): Promise<void> { }
 	async getDefaultProfile(options: IShellLaunchConfigResolveOptions): Promise<ITerminalProfile> { return { path: '/default', profileName: 'Default', isDefault: true }; }
 	async getDefaultShell(options: IShellLaunchConfigResolveOptions): Promise<string> { return '/default'; }
 	async getDefaultShellArgs(options: IShellLaunchConfigResolveOptions): Promise<string | string[]> { return []; }
@@ -2135,14 +2135,14 @@ export class TestQuickInputService implements IQuickInputService {
 	createQuickPick<T extends IQuickPickItem>(): IQuickPick<T, { useSeparators: boolean }> { throw new Error('not implemented.'); }
 	createInputBox(): IInputBox { throw new Error('not implemented.'); }
 	createQuickWidget(): IQuickWidget { throw new Error('Method not implemented.'); }
-	focus(): codemavi { throw new Error('not implemented.'); }
-	toggle(): codemavi { throw new Error('not implemented.'); }
-	navigate(next: boolean, quickNavigate?: IQuickNavigateConfiguration): codemavi { throw new Error('not implemented.'); }
-	accept(): Promise<codemavi> { throw new Error('not implemented.'); }
-	back(): Promise<codemavi> { throw new Error('not implemented.'); }
-	cancel(): Promise<codemavi> { throw new Error('not implemented.'); }
-	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): codemavi { throw new Error('not implemented.'); }
-	toggleHover(): codemavi { throw new Error('not implemented.'); }
+	focus(): void { throw new Error('not implemented.'); }
+	toggle(): void { throw new Error('not implemented.'); }
+	navigate(next: boolean, quickNavigate?: IQuickNavigateConfiguration): void { throw new Error('not implemented.'); }
+	accept(): Promise<void> { throw new Error('not implemented.'); }
+	back(): Promise<void> { throw new Error('not implemented.'); }
+	cancel(): Promise<void> { throw new Error('not implemented.'); }
+	setAlignment(alignment: 'top' | 'center' | { top: number; left: number }): void { throw new Error('not implemented.'); }
+	toggleHover(): void { throw new Error('not implemented.'); }
 }
 
 class TestLanguageDetectionService implements ILanguageDetectionService {
@@ -2162,11 +2162,11 @@ export class TestRemoteAgentService implements IRemoteAgentService {
 	async getRawEnvironment(): Promise<IRemoteAgentEnvironment | null> { return null; }
 	async getExtensionHostExitInfo(reconnectionToken: string): Promise<IExtensionHostExitInfo | null> { return null; }
 	async getDiagnosticInfo(options: IDiagnosticInfoOptions): Promise<IDiagnosticInfo | undefined> { return undefined; }
-	async updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<codemavi> { }
-	async logTelemetry(eventName: string, data?: ITelemetryData): Promise<codemavi> { }
-	async flushTelemetry(): Promise<codemavi> { }
+	async updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<void> { }
+	async logTelemetry(eventName: string, data?: ITelemetryData): Promise<void> { }
+	async flushTelemetry(): Promise<void> { }
 	async getRoundTripTime(): Promise<number | undefined> { return undefined; }
-	async endConnection(): Promise<codemavi> { }
+	async endConnection(): Promise<void> { }
 }
 
 export class TestRemoteExtensionsScannerService implements IRemoteExtensionsScannerService {
@@ -2187,7 +2187,7 @@ export class TestWorkbenchExtensionEnablementService implements IWorkbenchExtens
 	isEnabledEnablementState(enablementState: EnablementState): boolean { return true; }
 	isDisabledGlobally(extension: IExtension): boolean { return false; }
 	async setEnablement(extensions: IExtension[], state: EnablementState): Promise<boolean[]> { return []; }
-	async updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<codemavi> { }
+	async updateExtensionsEnablementsWhenWorkspaceTrustChanges(): Promise<void> { }
 }
 
 export class TestWorkbenchExtensionManagementService implements IWorkbenchExtensionManagementService {
@@ -2229,10 +2229,10 @@ export class TestWorkbenchExtensionManagementService implements IWorkbenchExtens
 	installFromGallery(extension: IGalleryExtension, options?: InstallOptions | undefined): Promise<ILocalExtension> {
 		throw new Error('Method not implemented.');
 	}
-	uninstall(extension: ILocalExtension, options?: UninstallOptions | undefined): Promise<codemavi> {
+	uninstall(extension: ILocalExtension, options?: UninstallOptions | undefined): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi> {
+	uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	async getInstalled(type?: ExtensionType | undefined): Promise<ILocalExtension[]> { return []; }
@@ -2240,27 +2240,27 @@ export class TestWorkbenchExtensionManagementService implements IWorkbenchExtens
 		throw new Error('Method not implemented.');
 	}
 	async updateMetadata(local: ILocalExtension, metadata: Partial<Metadata>): Promise<ILocalExtension> { return local; }
-	registerParticipant(pariticipant: IExtensionManagementParticipant): codemavi { }
+	registerParticipant(pariticipant: IExtensionManagementParticipant): void { }
 	async getTargetPlatform(): Promise<TargetPlatform> { return TargetPlatform.UNDEFINED; }
-	async cleanUp(): Promise<codemavi> { }
+	async cleanUp(): Promise<void> { }
 	download(): Promise<URI> {
 		throw new Error('Method not implemented.');
 	}
-	copyExtensions(): Promise<codemavi> { throw new Error('Not Supported'); }
+	copyExtensions(): Promise<void> { throw new Error('Not Supported'); }
 	toggleAppliationScope(): Promise<ILocalExtension> { throw new Error('Not Supported'); }
 	installExtensionsFromProfile(): Promise<ILocalExtension[]> { throw new Error('Not Supported'); }
-	whenProfileChanged(from: IUserDataProfile, to: IUserDataProfile): Promise<codemavi> { throw new Error('Not Supported'); }
+	whenProfileChanged(from: IUserDataProfile, to: IUserDataProfile): Promise<void> { throw new Error('Not Supported'); }
 	getInstalledWorkspaceExtensionLocations(): URI[] { throw new Error('Method not implemented.'); }
 	getInstalledWorkspaceExtensions(): Promise<ILocalExtension[]> { throw new Error('Method not implemented.'); }
 	installResourceExtension(): Promise<ILocalExtension> { throw new Error('Method not implemented.'); }
 	getExtensions(): Promise<IResourceExtension[]> { throw new Error('Method not implemented.'); }
-	resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<codemavi> { throw new Error('Method not implemented.'); }
+	resetPinnedStateForAllUserExtensions(pinned: boolean): Promise<void> { throw new Error('Method not implemented.'); }
 	getInstallableServers(extension: IGalleryExtension): Promise<IExtensionManagementServer[]> { throw new Error('Method not implemented.'); }
 	isPublisherTrusted(extension: IGalleryExtension): boolean { return false; }
 	getTrustedPublishers() { return []; }
-	trustPublishers(): codemavi { }
-	untrustPublishers(): codemavi { }
-	async requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<codemavi> { }
+	trustPublishers(): void { }
+	untrustPublishers(): void { }
+	async requestPublisherTrust(extensions: InstallExtensionInfo[]): Promise<void> { }
 }
 
 export class TestUserDataProfileService implements IUserDataProfileService {
@@ -2268,7 +2268,7 @@ export class TestUserDataProfileService implements IUserDataProfileService {
 	readonly _serviceBrand: undefined;
 	readonly onDidChangeCurrentProfile = Event.None;
 	readonly currentProfile = toUserDataProfile('test', 'test', URI.file('tests').with({ scheme: 'vscode-tests' }), URI.file('tests').with({ scheme: 'vscode-tests' }));
-	async updateCurrentProfile(): Promise<codemavi> { }
+	async updateCurrentProfile(): Promise<void> { }
 }
 
 export class TestWebExtensionsScannerService implements IWebExtensionsScannerService {
@@ -2277,7 +2277,7 @@ export class TestWebExtensionsScannerService implements IWebExtensionsScannerSer
 	async scanSystemExtensions(): Promise<IExtension[]> { return []; }
 	async scanUserExtensions(): Promise<IScannedExtension[]> { return []; }
 	async scanExtensionsUnderDevelopment(): Promise<IExtension[]> { return []; }
-	async copyExtensions(): Promise<codemavi> {
+	async copyExtensions(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	scanExistingExtension(extensionLocation: URI, extensionType: ExtensionType): Promise<IScannedExtension | null> {
@@ -2289,7 +2289,7 @@ export class TestWebExtensionsScannerService implements IWebExtensionsScannerSer
 	addExtensionFromGallery(galleryExtension: IGalleryExtension, metadata?: Partial<IGalleryMetadata & { isApplicationScoped: boolean; isMachineScoped: boolean; isBuiltin: boolean; isSystem: boolean; updated: boolean; preRelease: boolean; installedTimestamp: number }> | undefined): Promise<IExtension> {
 		throw new Error('Method not implemented.');
 	}
-	removeExtension(): Promise<codemavi> {
+	removeExtension(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	updateMetadata(extension: IScannedExtension, metaData: Partial<Metadata>, profileLocation: URI): Promise<IScannedExtension> {
@@ -2300,7 +2300,7 @@ export class TestWebExtensionsScannerService implements IWebExtensionsScannerSer
 	}
 }
 
-export async function workbenchTeardown(instantiationService: IInstantiationService): Promise<codemavi> {
+export async function workbenchTeardown(instantiationService: IInstantiationService): Promise<void> {
 	return instantiationService.invokeFunction(async accessor => {
 		const workingCopyService = accessor.get(IWorkingCopyService);
 		const editorGroupService = accessor.get(IEditorGroupsService);

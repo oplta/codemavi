@@ -29,7 +29,7 @@ suite.skip('vscode API - Copy Paste', function () {
 		editor.selections = [new vscode.Selection(0, 1, 0, 6)];
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				const existing = dataTransfer.get(textPlain);
 				if (existing) {
 					const str = await existing.asString();
@@ -51,7 +51,7 @@ suite.skip('vscode API - Copy Paste', function () {
 		await vscode.window.showTextDocument(doc);
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				const existing = dataTransfer.get(textPlain);
 				if (existing) {
 					const str = await existing.asString();
@@ -81,7 +81,7 @@ suite.skip('vscode API - Copy Paste', function () {
 		];
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(document: vscode.TextDocument, ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				const existing = dataTransfer.get(textPlain);
 				if (existing) {
 					const selections = ranges.map(range => document.getText(range));
@@ -109,11 +109,11 @@ suite.skip('vscode API - Copy Paste', function () {
 		const a_id = 'a';
 		const b_id = 'b';
 
-		let providerAResolve: () => codemavi;
-		const providerAFinished = new Promise<codemavi>(resolve => providerAResolve = resolve);
+		let providerAResolve: () => void;
+		const providerAFinished = new Promise<void>(resolve => providerAResolve = resolve);
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				callOrder.push(a_id);
 				dataTransfer.set(textPlain, new vscode.DataTransferItem('a'));
 				providerAResolve();
@@ -122,7 +122,7 @@ suite.skip('vscode API - Copy Paste', function () {
 
 		// Later registered providers will be called first
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				callOrder.push(b_id);
 
 				// Wait for the first provider to finish even though we were called first.
@@ -151,18 +151,18 @@ suite.skip('vscode API - Copy Paste', function () {
 		editor.selections = [new vscode.Selection(0, 0, 0, 3)];
 
 
-		let providerAResolve: () => codemavi;
-		const providerAFinished = new Promise<codemavi>(resolve => providerAResolve = resolve);
+		let providerAResolve: () => void;
+		const providerAFinished = new Promise<void>(resolve => providerAResolve = resolve);
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				dataTransfer.set(textPlain, new vscode.DataTransferItem('xyz'));
 				providerAResolve();
 			}
 		}, { providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Empty.append('test')], copyMimeTypes: [textPlain] }));
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 
 				// Wait for the first provider to finish
 				await providerAFinished;
@@ -189,13 +189,13 @@ suite.skip('vscode API - Copy Paste', function () {
 		editor.selections = [new vscode.Selection(0, 0, 0, 3)];
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				dataTransfer.set(textPlain, new vscode.DataTransferItem('xyz'));
 			}
 		}, { providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Empty.append('test')], copyMimeTypes: [textPlain] }));
 
 		testDisposables.push(vscode.languages.registerDocumentPasteEditProvider({ language: 'plaintext' }, new class implements vscode.DocumentPasteEditProvider {
-			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], _dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<codemavi> {
+			async prepareDocumentPaste(_document: vscode.TextDocument, _ranges: readonly vscode.Range[], _dataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 				throw new Error('Expected testing error from bad provider');
 			}
 		}, { providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Empty.append('test')], copyMimeTypes: [textPlain] }));

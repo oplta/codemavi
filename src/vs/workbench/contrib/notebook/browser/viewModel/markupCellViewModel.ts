@@ -195,7 +195,7 @@ export class MarkupCellViewModel extends BaseCellViewModel implements ICellViewM
 		// throw new Error('Method not implemented.');
 		return -1;
 	}
-	updateOutputHeight(index: number, height: number): codemavi {
+	updateOutputHeight(index: number, height: number): void {
 		// throw new Error('Method not implemented.');
 	}
 
@@ -294,7 +294,7 @@ export class MarkupCellViewModel extends BaseCellViewModel implements ICellViewM
 		}
 	}
 
-	protected onDidChangeTextModelContent(): codemavi {
+	protected onDidChangeTextModelContent(): void {
 		this._onDidChangeState.fire({ contentChanged: true });
 	}
 

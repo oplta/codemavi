@@ -18,7 +18,7 @@ export class MoveCaretCommand implements ICommand {
 		this._isMovingLeft = isMovingLeft;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		if (this._selection.startLineNumber !== this._selection.endLineNumber || this._selection.isEmpty()) {
 			return;
 		}

@@ -43,7 +43,7 @@ export class RemoteStartEntry extends Disposable implements IWorkbenchContributi
 		this.registerListeners();
 	}
 
-	private registerActions(): codemavi {
+	private registerActions(): void {
 		const category = nls.localize2('remote.category', "Remote");
 
 		// Show Remote Start Action
@@ -58,13 +58,13 @@ export class RemoteStartEntry extends Disposable implements IWorkbenchContributi
 				});
 			}
 
-			async run(): Promise<codemavi> {
+			async run(): Promise<void> {
 				await startEntry.showWebRemoteStartActions();
 			}
 		}));
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.extensionEnablementService.onEnablementChanged(async (result) => {
 
 			for (const ext of result) {
@@ -79,7 +79,7 @@ export class RemoteStartEntry extends Disposable implements IWorkbenchContributi
 		}));
 	}
 
-	private async _init(): Promise<codemavi> {
+	private async _init(): Promise<void> {
 
 		// Check if installed and enabled
 		const installed = (await this.extensionManagementService.getInstalled()).find(value => ExtensionIdentifier.equals(value.identifier.id, this.remoteExtensionId));

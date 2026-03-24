@@ -156,7 +156,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private readonly _onDidChangePanelPosition = this._register(new Emitter<string>());
 	readonly onDidChangePanelPosition = this._onDidChangePanelPosition.event;
 
-	private readonly _onDidChangePartVisibility = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangePartVisibility = this._register(new Emitter<void>());
 	readonly onDidChangePartVisibility = this._onDidChangePartVisibility.event;
 
 	private readonly _onDidChangeNotificationsVisibility = this._register(new Emitter<boolean>());
@@ -174,7 +174,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private readonly _onDidAddContainer = this._register(new Emitter<{ container: HTMLElement; disposables: DisposableStore }>());
 	readonly onDidAddContainer = this._onDidAddContainer.event;
 
-	private readonly _onDidChangeActiveContainer = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeActiveContainer = this._register(new Emitter<void>());
 	readonly onDidChangeActiveContainer = this._onDidChangeActiveContainer.event;
 
 	//#endregion
@@ -202,8 +202,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private readonly containerStylesLoaded = new Map<number /* window ID */, Promise<codemavi>>();
-	whenContainerStylesLoaded(window: CodeWindow): Promise<codemavi> | undefined {
+	private readonly containerStylesLoaded = new Map<number /* window ID */, Promise<void>>();
+	whenContainerStylesLoaded(window: CodeWindow): Promise<void> | undefined {
 		return this.containerStylesLoaded.get(window.vscodeWindowId);
 	}
 
@@ -302,7 +302,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		super();
 	}
 
-	protected initLayout(accessor: ServicesAccessor): codemavi {
+	protected initLayout(accessor: ServicesAccessor): void {
 
 		// Services
 		this.environmentService = accessor.get(IBrowserWorkbenchEnvironmentService);
@@ -335,7 +335,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.initLayoutState(accessor.get(ILifecycleService), accessor.get(IFileService));
 	}
 
-	private registerLayoutListeners(): codemavi {
+	private registerLayoutListeners(): void {
 
 		// Restore editor if hidden
 		const showEditorIfHidden = () => {
@@ -345,7 +345,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		};
 
 		// Wait to register these listeners after the editor group service
-		// is ready to acodemavi conflicts on startup
+		// is ready to avoid conflicts on startup
 		this.editorGroupService.whenRestored.then(() => {
 
 			// Restore main editor part on any editor change in main part
@@ -438,7 +438,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}));
 	}
 
-	private onMenubarToggled(visible: boolean): codemavi {
+	private onMenubarToggled(visible: boolean): void {
 		if (visible !== this.state.runtime.menuBar.toggled) {
 			this.state.runtime.menuBar.toggled = visible;
 
@@ -461,7 +461,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private handleContainerDidLayout(container: HTMLElement, dimension: IDimension): codemavi {
+	private handleContainerDidLayout(container: HTMLElement, dimension: IDimension): void {
 		if (container === this.mainContainer) {
 			this._onDidLayoutMainContainer.fire(dimension);
 		}
@@ -473,7 +473,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this._onDidLayoutContainer.fire({ container, dimension });
 	}
 
-	private onFullscreenChanged(windowId: number): codemavi {
+	private onFullscreenChanged(windowId: number): void {
 		if (windowId !== mainWindow.vscodeWindowId) {
 			return; // ignore all but main window
 		}
@@ -506,7 +506,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private onActiveWindowChanged(): codemavi {
+	private onActiveWindowChanged(): void {
 		const activeContainerId = this.getActiveContainerId();
 		if (this.state.runtime.activeContainerId !== activeContainerId) {
 			this.state.runtime.activeContainerId = activeContainerId;
@@ -518,7 +518,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private onWindowFocusChanged(hasFocus: boolean): codemavi {
+	private onWindowFocusChanged(hasFocus: boolean): void {
 		if (this.state.runtime.hasFocus !== hasFocus) {
 			this.state.runtime.hasFocus = hasFocus;
 			this.updateWindowsBorder();
@@ -531,7 +531,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return getWindow(activeContainer).vscodeWindowId;
 	}
 
-	private doUpdateLayoutConfiguration(skipLayout?: boolean): codemavi {
+	private doUpdateLayoutConfiguration(skipLayout?: boolean): void {
 
 		// Custom Titlebar visibility with native titlebar
 		this.updateCustomTitleBarVisibility();
@@ -543,7 +543,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.editorGroupService.whenRestored.then(() => this.centerMainEditorLayout(this.stateModel.getRuntimeValue(LayoutStateKeys.MAIN_EDITOR_CENTERED), skipLayout));
 	}
 
-	private setSideBarPosition(position: Position): codemavi {
+	private setSideBarPosition(position: Position): void {
 		const activityBar = this.getPart(Parts.ACTIVITYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const auxiliaryBar = this.getPart(Parts.AUXILIARYBAR_PART);
@@ -621,7 +621,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private initLayoutState(lifecycleService: ILifecycleService, fileService: IFileService): codemavi {
+	private initLayoutState(lifecycleService: ILifecycleService, fileService: IFileService): void {
 		this._mainContainerDimension = getClientArea(this.parent, DEFAULT_WINDOW_DIMENSIONS); // running with fallback to ensure no error is thrown (https://github.com/microsoft/vscode/issues/240242)
 
 		this.stateModel = new LayoutStateModel(this.storageService, this.configurationService, this.contextService);
@@ -875,10 +875,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return undefined;
 	}
 
-	private readonly whenReadyPromise = new DeferredPromise<codemavi>();
+	private readonly whenReadyPromise = new DeferredPromise<void>();
 	protected readonly whenReady = this.whenReadyPromise.p;
 
-	private readonly whenRestoredPromise = new DeferredPromise<codemavi>();
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
 	readonly whenRestored = this.whenRestoredPromise.p;
 	private restored = false;
 
@@ -886,7 +886,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.restored;
 	}
 
-	protected restoreParts(): codemavi {
+	protected restoreParts(): void {
 
 		// distinguish long running restore operations that
 		// are required for the layout to be ready from those
@@ -1137,7 +1137,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return part;
 	}
 
-	registerNotifications(delegate: { onDidChangeNotificationsVisibility: Event<boolean> }): codemavi {
+	registerNotifications(delegate: { onDidChangeNotificationsVisibility: Event<boolean> }): void {
 		this._register(delegate.onDidChangeNotificationsVisibility(visible => this._onDidChangeNotificationsVisibility.fire(visible)));
 	}
 
@@ -1165,9 +1165,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return undefined;
 	}
 
-	focusPart(part: MULTI_WINDOW_PARTS, targetWindow: Window): codemavi;
-	focusPart(part: SINGLE_WINDOW_PARTS): codemavi;
-	focusPart(part: Parts, targetWindow: Window = mainWindow): codemavi {
+	focusPart(part: MULTI_WINDOW_PARTS, targetWindow: Window): void;
+	focusPart(part: SINGLE_WINDOW_PARTS): void;
+	focusPart(part: Parts, targetWindow: Window = mainWindow): void {
 		const container = this.getContainer(targetWindow, part) ?? this.mainContainer;
 
 		switch (part) {
@@ -1281,7 +1281,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return isWeb && !isWCOEnabled();
 	}
 
-	focus(): codemavi {
+	focus(): void {
 		if (this.isPanelMaximized() && this.mainContainer === this.activeContainer) {
 			this.focusPart(Parts.PANEL_PART);
 		} else {
@@ -1289,7 +1289,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private focusPanelOrEditor(): codemavi {
+	private focusPanelOrEditor(): void {
 		const activePanel = this.paneCompositeService.getActivePaneComposite(ViewContainerLocation.Panel);
 		if ((this.hasFocus(Parts.PANEL_PART) || !this.isVisible(Parts.EDITOR_PART)) && activePanel) {
 			activePanel.focus(); // prefer panel if it has focus or editor is hidden
@@ -1336,7 +1336,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.stateModel.setRuntimeValue(LayoutStateKeys.ZEN_MODE_ACTIVE, active);
 	}
 
-	toggleZenMode(skipLayout?: boolean, restoring = false): codemavi {
+	toggleZenMode(skipLayout?: boolean, restoring = false): void {
 		const focusedPartPreTransition = this._getFocusedPart();
 
 		this.setZenModeActive(!this.isZenModeActive());
@@ -1509,7 +1509,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this._onDidChangeZenMode.fire(this.isZenModeActive());
 	}
 
-	private setStatusBarHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setStatusBarHidden(hidden: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.STATUSBAR_HIDDEN, hidden);
 
 		// Adjust CSS
@@ -1523,7 +1523,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.workbenchGrid.setViewVisible(this.statusBarPartView, !hidden);
 	}
 
-	protected createWorkbenchLayout(): codemavi {
+	protected createWorkbenchLayout(): void {
 		const titleBar = this.getPart(Parts.TITLEBAR_PART);
 		const bannerPart = this.getPart(Parts.BANNER_PART);
 		const editorPart = this.getPart(Parts.EDITOR_PART);
@@ -1608,7 +1608,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}));
 	}
 
-	layout(): codemavi {
+	layout(): void {
 		if (!this.disposed) {
 			this._mainContainerDimension = getClientArea(this.state.runtime.mainWindowFullscreen ?
 				mainWindow.document.body : 	// in fullscreen mode, make sure to use <body> element because
@@ -1633,7 +1633,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.stateModel.getRuntimeValue(LayoutStateKeys.MAIN_EDITOR_CENTERED);
 	}
 
-	centerMainEditorLayout(active: boolean, skipLayout?: boolean): codemavi {
+	centerMainEditorLayout(active: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.MAIN_EDITOR_CENTERED, active);
 
 		const mainVisibleEditors = coalesce(this.editorGroupService.mainPart.groups.map(group => group.activeEditor));
@@ -1680,11 +1680,11 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.workbenchGrid.getViewSize(this.getPart(part));
 	}
 
-	setSize(part: Parts, size: IViewSize): codemavi {
+	setSize(part: Parts, size: IViewSize): void {
 		this.workbenchGrid.resizeView(this.getPart(part), size);
 	}
 
-	resizePart(part: Parts, sizeChangeWidth: number, sizeChangeHeight: number): codemavi {
+	resizePart(part: Parts, sizeChangeWidth: number, sizeChangeHeight: number): void {
 		const sizeChangePxWidth = Math.sign(sizeChangeWidth) * computeScreenAwareSize(getActiveWindow(), Math.abs(sizeChangeWidth));
 		const sizeChangePxHeight = Math.sign(sizeChangeHeight) * computeScreenAwareSize(getActiveWindow(), Math.abs(sizeChangeHeight));
 
@@ -1753,16 +1753,16 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	private setActivityBarHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setActivityBarHidden(hidden: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.ACTIVITYBAR_HIDDEN, hidden);
 		this.workbenchGrid.setViewVisible(this.activityBarPartView, !hidden);
 	}
 
-	private setBannerHidden(hidden: boolean): codemavi {
+	private setBannerHidden(hidden: boolean): void {
 		this.workbenchGrid.setViewVisible(this.bannerPartView, !hidden);
 	}
 
-	private setEditorHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setEditorHidden(hidden: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.EDITOR_HIDDEN, hidden);
 
 		// Adjust CSS
@@ -1792,7 +1792,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		]);
 	}
 
-	private setSideBarHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setSideBarHidden(hidden: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.SIDEBAR_HIDDEN, hidden);
 
 		// Adjust CSS
@@ -1837,7 +1837,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return viewContainerModel.activeViewDescriptors.length >= 1;
 	}
 
-	private adjustPartPositions(sideBarPosition: Position, panelAlignment: PanelAlignment, panelPosition: Position): codemavi {
+	private adjustPartPositions(sideBarPosition: Position, panelAlignment: PanelAlignment, panelPosition: Position): void {
 
 		// Move activity bar and side bars
 		const isPanelVertical = !isHorizontal(panelPosition);
@@ -1900,7 +1900,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	setPanelAlignment(alignment: PanelAlignment, skipLayout?: boolean): codemavi {
+	setPanelAlignment(alignment: PanelAlignment, skipLayout?: boolean): void {
 
 		// Panel alignment only applies to a panel in the top/bottom position
 		if (!isHorizontal(this.getPanelPosition())) {
@@ -1919,7 +1919,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this._onDidChangePanelAlignment.fire(alignment);
 	}
 
-	private setPanelHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setPanelHidden(hidden: boolean, skipLayout?: boolean): void {
 
 		// Return if not initialized fully #105480
 		if (!this.workbenchGrid) {
@@ -1996,7 +1996,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	toggleMaximizedPanel(): codemavi {
+	toggleMaximizedPanel(): void {
 		const size = this.workbenchGrid.getViewSize(this.panelPartView);
 		const panelPosition = this.getPanelPosition();
 		const isMaximized = this.isPanelMaximized();
@@ -2034,7 +2034,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return panelOpensMaximized === PanelOpensMaximizedOptions.ALWAYS || (panelOpensMaximized === PanelOpensMaximizedOptions.REMEMBER_LAST && panelLastIsMaximized);
 	}
 
-	private setAuxiliaryBarHidden(hidden: boolean, skipLayout?: boolean): codemavi {
+	private setAuxiliaryBarHidden(hidden: boolean, skipLayout?: boolean): void {
 		this.stateModel.setRuntimeValue(LayoutStateKeys.AUXILIARYBAR_HIDDEN, hidden);
 
 		// Adjust CSS
@@ -2075,9 +2075,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.workbenchGrid.setViewVisible(this.auxiliaryBarPartView, !hidden);
 	}
 
-	setPartHidden(hidden: boolean, part: Exclude<SINGLE_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>): codemavi;
-	setPartHidden(hidden: boolean, part: Exclude<MULTI_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): codemavi;
-	setPartHidden(hidden: boolean, part: Parts, targetWindow: Window = mainWindow): codemavi {
+	setPartHidden(hidden: boolean, part: Exclude<SINGLE_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>): void;
+	setPartHidden(hidden: boolean, part: Exclude<MULTI_WINDOW_PARTS, Parts.STATUSBAR_PART | Parts.TITLEBAR_PART>, targetWindow: Window): void;
+	setPartHidden(hidden: boolean, part: Parts, targetWindow: Window = mainWindow): void {
 		switch (part) {
 			case Parts.ACTIVITYBAR_PART:
 				return this.setActivityBarHidden(hidden);
@@ -2115,14 +2115,14 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_ALIGNMENT);
 	}
 
-	updateMenubarVisibility(skipLayout: boolean): codemavi {
+	updateMenubarVisibility(skipLayout: boolean): void {
 		const shouldShowTitleBar = shouldShowCustomTitleBar(this.configurationService, mainWindow, this.state.runtime.menuBar.toggled);
 		if (!skipLayout && this.workbenchGrid && shouldShowTitleBar !== this.isVisible(Parts.TITLEBAR_PART, mainWindow)) {
 			this.workbenchGrid.setViewVisible(this.titleBarPartView, shouldShowTitleBar);
 		}
 	}
 
-	updateCustomTitleBarVisibility(): codemavi {
+	updateCustomTitleBarVisibility(): void {
 		const shouldShowTitleBar = shouldShowCustomTitleBar(this.configurationService, mainWindow, this.state.runtime.menuBar.toggled);
 		const titlebarVisible = this.isVisible(Parts.TITLEBAR_PART);
 		if (shouldShowTitleBar !== titlebarVisible) {
@@ -2130,7 +2130,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 	}
 
-	toggleMenuBar(): codemavi {
+	toggleMenuBar(): void {
 		let currentVisibilityValue = getMenuBarVisibility(this.configurationService);
 		if (typeof currentVisibilityValue !== 'string') {
 			currentVisibilityValue = 'classic';
@@ -2150,7 +2150,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_POSITION);
 	}
 
-	setPanelPosition(position: Position): codemavi {
+	setPanelPosition(position: Position): void {
 		if (!this.isVisible(Parts.PANEL_PART)) {
 			this.setPanelHidden(false);
 		}
@@ -2281,7 +2281,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return undefined;
 	}
 
-	private onDidChangeWCO(): codemavi {
+	private onDidChangeWCO(): void {
 		const bannerFirst = this.workbenchGrid.getNeighborViews(this.titleBarPartView, Direction.Up, false).length > 0;
 		const shouldBannerBeFirst = this.shouldShowBannerFirst();
 
@@ -2509,7 +2509,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			comment: 'Information about the layout of the workbench during statup';
 			activityBarVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the activity bar is visible' };
 			sideBarVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the primary side bar is visible' };
-			auxiliaryBarVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the Code Mavi side bar is visible' };
+			auxiliaryBarVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the Mavi side bar is visible' };
 			panelVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the panel is visible' };
 			statusbarVisible: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether or the not the status bar is visible' };
 			sideBarPosition: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'Whether the primary side bar is on the left or right' };
@@ -2531,7 +2531,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return result;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		this.disposed = true;
@@ -2608,7 +2608,7 @@ const LayoutStateKeys = {
 
 	// Part Sizing
 	SIDEBAR_SIZE: new InitializationStateKey<number>('sideBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 200),
-	AUXILIARYBAR_SIZE: new InitializationStateKey<number>('auxiliaryBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 800), // Code Mavi changed this from 200 to 800
+	AUXILIARYBAR_SIZE: new InitializationStateKey<number>('auxiliaryBar.size', StorageScope.PROFILE, StorageTarget.MACHINE, 800), // Mavi changed this from 200 to 800
 	PANEL_SIZE: new InitializationStateKey<number>('panel.size', StorageScope.PROFILE, StorageTarget.MACHINE, 300),
 
 	PANEL_LAST_NON_MAXIMIZED_HEIGHT: new RuntimeStateKey<number>('panel.lastNonMaximizedHeight', StorageScope.PROFILE, StorageTarget.MACHINE, 300),
@@ -2666,7 +2666,7 @@ class LayoutStateModel extends Disposable {
 		this._register(this.configurationService.onDidChangeConfiguration(configurationChange => this.updateStateFromLegacySettings(configurationChange)));
 	}
 
-	private updateStateFromLegacySettings(configurationChangeEvent: IConfigurationChangeEvent): codemavi {
+	private updateStateFromLegacySettings(configurationChangeEvent: IConfigurationChangeEvent): void {
 		if (configurationChangeEvent.affectsConfiguration(LayoutSettings.ACTIVITY_BAR_LOCATION)) {
 			this.setRuntimeValueAndFire(LayoutStateKeys.ACTIVITYBAR_HIDDEN, this.isActivityBarHidden());
 		}
@@ -2680,7 +2680,7 @@ class LayoutStateModel extends Disposable {
 		}
 	}
 
-	private updateLegacySettingsFromState<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): codemavi {
+	private updateLegacySettingsFromState<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): void {
 		const isZenMode = this.getRuntimeValue(LayoutStateKeys.ZEN_MODE_ACTIVE);
 		if (key.zenModeIgnore && isZenMode) {
 			return;
@@ -2695,7 +2695,7 @@ class LayoutStateModel extends Disposable {
 		}
 	}
 
-	load(mainContainerDimension: IDimension): codemavi {
+	load(mainContainerDimension: IDimension): void {
 		let key: keyof typeof LayoutStateKeys;
 
 		// Load stored values for all keys
@@ -2746,7 +2746,7 @@ class LayoutStateModel extends Disposable {
 		}));
 	}
 
-	save(workspace: boolean, global: boolean): codemavi {
+	save(workspace: boolean, global: boolean): void {
 		let key: keyof typeof LayoutStateKeys;
 
 		const isZenMode = this.getRuntimeValue(LayoutStateKeys.ZEN_MODE_ACTIVE);
@@ -2768,7 +2768,7 @@ class LayoutStateModel extends Disposable {
 		return this.stateCache.get(key.name) as T;
 	}
 
-	setInitializationValue<T extends StorageKeyType>(key: InitializationStateKey<T>, value: T): codemavi {
+	setInitializationValue<T extends StorageKeyType>(key: InitializationStateKey<T>, value: T): void {
 		this.stateCache.set(key.name, value);
 	}
 
@@ -2790,7 +2790,7 @@ class LayoutStateModel extends Disposable {
 		return this.stateCache.get(key.name) as T;
 	}
 
-	setRuntimeValue<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): codemavi {
+	setRuntimeValue<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): void {
 		this.stateCache.set(key.name, value);
 		const isZenMode = this.getRuntimeValue(LayoutStateKeys.ZEN_MODE_ACTIVE);
 
@@ -2811,7 +2811,7 @@ class LayoutStateModel extends Disposable {
 		return this.configurationService.getValue(LayoutSettings.ACTIVITY_BAR_LOCATION) !== ActivityBarPosition.DEFAULT;
 	}
 
-	private setRuntimeValueAndFire<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): codemavi {
+	private setRuntimeValueAndFire<T extends StorageKeyType>(key: RuntimeStateKey<T>, value: T): void {
 		const previousValue = this.stateCache.get(key.name);
 		if (previousValue === value) {
 			return;
@@ -2821,7 +2821,7 @@ class LayoutStateModel extends Disposable {
 		this._onDidChangeState.fire({ key, value });
 	}
 
-	private saveKeyToStorage<T extends StorageKeyType>(key: WorkbenchLayoutStateKey<T>): codemavi {
+	private saveKeyToStorage<T extends StorageKeyType>(key: WorkbenchLayoutStateKey<T>): void {
 		const value = this.stateCache.get(key.name) as T;
 		this.storageService.store(`${LayoutStateModel.STORAGE_PREFIX}${key.name}`, typeof value === 'object' ? JSON.stringify(value) : value, key.scope, key.target);
 	}

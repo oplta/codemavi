@@ -40,7 +40,7 @@ suite('MainThreadHostTreeView', function () {
 			return false;
 		}
 
-		override $setVisible(): codemavi { }
+		override $setVisible(): void { }
 	}
 
 	let container: ViewContainer;

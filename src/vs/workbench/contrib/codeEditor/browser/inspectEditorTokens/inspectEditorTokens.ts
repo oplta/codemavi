@@ -80,12 +80,12 @@ export class InspectEditorTokensController extends Disposable implements IEditor
 		this._register(this._editor.onKeyUp((e) => e.keyCode === KeyCode.Escape && this.stop()));
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.stop();
 		super.dispose();
 	}
 
-	public launch(): codemavi {
+	public launch(): void {
 		if (this._widget) {
 			return;
 		}
@@ -99,14 +99,14 @@ export class InspectEditorTokensController extends Disposable implements IEditor
 		this._widget = new InspectEditorTokensWidget(this._editor, this._textMateService, this._treeSitterService, this._languageService, this._themeService, this._notificationService, this._configurationService, this._languageFeaturesService);
 	}
 
-	public stop(): codemavi {
+	public stop(): void {
 		if (this._widget) {
 			this._widget.dispose();
 			this._widget = null;
 		}
 	}
 
-	public toggle(): codemavi {
+	public toggle(): void {
 		if (!this._widget) {
 			this.launch();
 		} else {
@@ -125,7 +125,7 @@ class InspectEditorTokens extends EditorAction {
 		});
 	}
 
-	public run(accessor: ServicesAccessor, editor: ICodeEditor): codemavi {
+	public run(accessor: ServicesAccessor, editor: ICodeEditor): void {
 		const controller = InspectEditorTokensController.get(editor);
 		controller?.toggle();
 	}
@@ -231,7 +231,7 @@ class InspectEditorTokensWidget extends Disposable implements IContentWidget {
 		this._editor.addContentWidget(this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._isDisposed = true;
 		this._editor.removeContentWidget(this);
 		this._currentRequestCancellationTokenSource.cancel();
@@ -242,7 +242,7 @@ class InspectEditorTokensWidget extends Disposable implements IContentWidget {
 		return InspectEditorTokensWidget._ID;
 	}
 
-	private _beginCompute(position: Position): codemavi {
+	private _beginCompute(position: Position): void {
 		const grammar = this._textMateService.createTokenizer(this._model.getLanguageId());
 		const semanticTokens = this._computeSemanticTokens(position);
 		const tree = this._treeSitterService.getParseResult(this._model);

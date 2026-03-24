@@ -40,7 +40,7 @@ class NativeLocalizationWorkbenchContribution extends BaseLocalizationWorkbenchC
 		this._register(this.extensionManagementService.onDidUninstallExtension(e => this.onDidUninstallExtension(e)));
 	}
 
-	private async onDidInstallExtensions(results: readonly InstallExtensionResult[]): Promise<codemavi> {
+	private async onDidInstallExtensions(results: readonly InstallExtensionResult[]): Promise<void> {
 		for (const result of results) {
 			if (result.operation === InstallOperation.Install && result.local) {
 				await this.onDidInstallExtension(result.local, !!result.context?.extensionsSync);
@@ -49,7 +49,7 @@ class NativeLocalizationWorkbenchContribution extends BaseLocalizationWorkbenchC
 
 	}
 
-	private async onDidInstallExtension(localExtension: ILocalExtension, fromSettingsSync: boolean): Promise<codemavi> {
+	private async onDidInstallExtension(localExtension: ILocalExtension, fromSettingsSync: boolean): Promise<void> {
 		const localization = localExtension.manifest.contributes?.localizations?.[0];
 		if (!localization || platform.language === localization.languageId) {
 			return;
@@ -78,7 +78,7 @@ class NativeLocalizationWorkbenchContribution extends BaseLocalizationWorkbenchC
 		);
 	}
 
-	private async onDidUninstallExtension(_event: DidUninstallExtensionEvent): Promise<codemavi> {
+	private async onDidUninstallExtension(_event: DidUninstallExtensionEvent): Promise<void> {
 		if (!await this.isLocaleInstalled(platform.language)) {
 			this.localeService.setLocale({
 				id: 'en',
@@ -87,7 +87,7 @@ class NativeLocalizationWorkbenchContribution extends BaseLocalizationWorkbenchC
 		}
 	}
 
-	private async checkAndInstall(): Promise<codemavi> {
+	private async checkAndInstall(): Promise<void> {
 		const language = platform.language;
 		let locale = platform.locale ?? '';
 		const languagePackSuggestionIgnoreList: string[] = JSON.parse(

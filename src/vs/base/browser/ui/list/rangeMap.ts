@@ -91,7 +91,7 @@ export interface IRangeMap {
 	readonly size: number;
 	readonly count: number;
 	paddingTop: number;
-	splice(index: number, deleteCount: number, items?: IItem[]): codemavi;
+	splice(index: number, deleteCount: number, items?: IItem[]): void;
 	indexAt(position: number): number;
 	indexAfter(position: number): number;
 	positionAt(index: number): number;
@@ -117,7 +117,7 @@ export class RangeMap implements IRangeMap {
 		this._size = this._paddingTop;
 	}
 
-	splice(index: number, deleteCount: number, items: IItem[] = []): codemavi {
+	splice(index: number, deleteCount: number, items: IItem[] = []): void {
 		const diff = items.length - deleteCount;
 		const before = groupIntersect({ start: 0, end: index }, this.groups);
 		const after = groupIntersect({ start: index + deleteCount, end: Number.POSITIVE_INFINITY }, this.groups)

@@ -183,7 +183,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 	private _cachedResolver: KeybindingResolver | null;
 	private userKeybindings: UserKeybindings;
 	private isComposingGlobalContextKey: IContextKey<boolean>;
-	private _keybindingHoldMode: DeferredPromise<codemavi> | null;
+	private _keybindingHoldMode: DeferredPromise<void> | null;
 	private readonly _contributions: KeybindingsSchemaContribution[] = [];
 	private readonly kbsJsonSchema: KeybindingsJsonSchema;
 
@@ -300,7 +300,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return disposables;
 	}
 
-	public registerSchemaContribution(contribution: KeybindingsSchemaContribution): codemavi {
+	public registerSchemaContribution(contribution: KeybindingsSchemaContribution): void {
 		this._contributions.push(contribution);
 		if (contribution.onDidChange) {
 			this._register(contribution.onDidChange(() => this.updateKeybindingsJsonSchema()));
@@ -325,7 +325,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return resolvedKeybinding.getDispatchChords().map(x => x || '[null]').join(' ');
 	}
 
-	private _printResolvedKeybindings(output: string[], input: string, resolvedKeybindings: ResolvedKeybinding[]): codemavi {
+	private _printResolvedKeybindings(output: string[], input: string, resolvedKeybindings: ResolvedKeybinding[]): void {
 		const padLength = 35;
 		const firstRow = `${input.padStart(padLength, ' ')} => `;
 		if (resolvedKeybindings.length === 0) {
@@ -397,11 +397,11 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return JSON.stringify(info, null, '\t');
 	}
 
-	public override enableKeybindingHoldMode(commandId: string): Promise<codemavi> | undefined {
+	public override enableKeybindingHoldMode(commandId: string): Promise<void> | undefined {
 		if (this._currentlyDispatchingCommandId !== commandId) {
 			return undefined;
 		}
-		this._keybindingHoldMode = new DeferredPromise<codemavi>();
+		this._keybindingHoldMode = new DeferredPromise<void>();
 		const focusTracker = dom.trackFocus(dom.getWindow(undefined));
 		const listener = focusTracker.onDidBlur(() => this._resetKeybindingHoldMode());
 		this._keybindingHoldMode.p.finally(() => {
@@ -412,7 +412,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return this._keybindingHoldMode.p;
 	}
 
-	private _resetKeybindingHoldMode(): codemavi {
+	private _resetKeybindingHoldMode(): void {
 		if (this._keybindingHoldMode) {
 			this._keybindingHoldMode?.complete();
 			this._keybindingHoldMode = null;
@@ -423,7 +423,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return this.userKeybindings.keybindings.length;
 	}
 
-	private updateResolver(): codemavi {
+	private updateResolver(): void {
 		this._cachedResolver = null;
 		this._onDidUpdateKeybindings.fire();
 	}
@@ -561,7 +561,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return (keybinding ? this._keyboardMapper.resolveKeybinding(keybinding) : []);
 	}
 
-	private _handleKeybindingsExtensionPointUser(extensionId: ExtensionIdentifier, isBuiltin: boolean, keybindings: ContributedKeyBinding | ContributedKeyBinding[], collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): codemavi {
+	private _handleKeybindingsExtensionPointUser(extensionId: ExtensionIdentifier, isBuiltin: boolean, keybindings: ContributedKeyBinding | ContributedKeyBinding[], collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): void {
 		if (Array.isArray(keybindings)) {
 			for (let i = 0, len = keybindings.length; i < len; i++) {
 				this._handleKeybinding(extensionId, isBuiltin, i + 1, keybindings[i], collector, result);
@@ -571,7 +571,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		}
 	}
 
-	private _handleKeybinding(extensionId: ExtensionIdentifier, isBuiltin: boolean, idx: number, keybindings: ContributedKeyBinding, collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): codemavi {
+	private _handleKeybinding(extensionId: ExtensionIdentifier, isBuiltin: boolean, idx: number, keybindings: ContributedKeyBinding, collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): void {
 
 		const rejects: string[] = [];
 
@@ -738,8 +738,8 @@ class UserKeybindings extends Disposable {
 
 	private readonly watchDisposables = this._register(new DisposableStore());
 
-	private readonly _onDidChange: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onDidChange: Event<codemavi> = this._onDidChange.event;
+	private readonly _onDidChange: Emitter<void> = this._register(new Emitter<void>());
+	readonly onDidChange: Event<void> = this._onDidChange.event;
 
 	constructor(
 		private readonly userDataProfileService: IUserDataProfileService,
@@ -776,19 +776,19 @@ class UserKeybindings extends Disposable {
 		}));
 	}
 
-	private async whenCurrentProfileChanged(): Promise<codemavi> {
+	private async whenCurrentProfileChanged(): Promise<void> {
 		this.watch();
 		this.reloadConfigurationScheduler.schedule();
 	}
 
-	private watch(): codemavi {
+	private watch(): void {
 		this.watchDisposables.clear();
 		this.watchDisposables.add(this.fileService.watch(dirname(this.userDataProfileService.currentProfile.keybindingsResource)));
 		// Also listen to the resource incase the resource is a symlink - https://github.com/microsoft/vscode/issues/118134
 		this.watchDisposables.add(this.fileService.watch(this.userDataProfileService.currentProfile.keybindingsResource));
 	}
 
-	async initialize(): Promise<codemavi> {
+	async initialize(): Promise<void> {
 		await this.reload();
 	}
 

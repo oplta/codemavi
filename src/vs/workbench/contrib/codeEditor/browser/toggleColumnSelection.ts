@@ -36,7 +36,7 @@ export class ToggleColumnSelectionAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 		const codeEditorService = accessor.get(ICodeEditorService);
 

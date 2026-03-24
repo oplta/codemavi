@@ -49,7 +49,7 @@ class IntegrityStorage {
 		return this.value;
 	}
 
-	set(data: IStorageData | null): codemavi {
+	set(data: IStorageData | null): void {
 		this.value = data;
 		this.storageService.store(IntegrityStorage.KEY, JSON.stringify(this.value), StorageScope.APPLICATION, StorageTarget.MACHINE);
 	}
@@ -79,7 +79,7 @@ export class IntegrityService implements IIntegrityService {
 		this._compute();
 	}
 
-	private async _compute(): Promise<codemavi> {
+	private async _compute(): Promise<void> {
 		const { isPure } = await this.isPure();
 		if (isPure) {
 			return; // all is good
@@ -143,7 +143,7 @@ export class IntegrityService implements IIntegrityService {
 		};
 	}
 
-	private _showNotification(): codemavi {
+	private _showNotification(): void {
 		const checksumFailMoreInfoUrl = this.productService.checksumFailMoreInfoUrl;
 		const message = localize('integrity.prompt', "Your {0} installation appears to be corrupt. Please reinstall.", this.productService.nameShort);
 		if (checksumFailMoreInfoUrl) {

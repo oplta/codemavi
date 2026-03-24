@@ -17,8 +17,8 @@ import { IMainProcessService } from '../../../../platform/ipc/common/mainProcess
 import { MCPServerOfName, MCPConfigFileJSON, MCPServer, MCPToolCallParams, RawMCPToolCall, MCPServerEventResponse } from './mcpServiceTypes.js';
 import { Event, Emitter } from '../../../../base/common/event.js';
 import { InternalToolInfo } from './prompt/prompts.js';
-import { IMaviSettingsService } from './codemaviSettingsService.js';
-import { MCPUserStateOfName } from './codemaviSettingsTypes.js';
+import { IMaviSettingsService } from './maviSettingsService.js';
+import { MCPUserStateOfName } from './maviSettingsTypes.js';
 
 
 type MCPServiceState = {
@@ -28,11 +28,11 @@ type MCPServiceState = {
 
 export interface IMCPService {
 	readonly _serviceBrand: undefined;
-	revealMCPConfigFile(): Promise<codemavi>;
-	toggleServerIsOn(serverName: string, isOn: boolean): Promise<codemavi>;
+	revealMCPConfigFile(): Promise<void>;
+	toggleServerIsOn(serverName: string, isOn: boolean): Promise<void>;
 
 	readonly state: MCPServiceState; // NOT persisted
-	onDidChangeState: Event<codemavi>;
+	onDidChangeState: Event<void>;
 
 	getMCPTools(): InternalToolInfo[] | undefined;
 	callMCPTool(toolData: MCPToolCallParams): Promise<{ result: RawMCPToolCall }>;
@@ -51,7 +51,7 @@ const MCP_CONFIG_SAMPLE_STRING = JSON.stringify(MCP_CONFIG_SAMPLE, null, 2);
 // export interface MCPCallToolOfToolName {
 // 	[toolName: string]: (params: any) => Promise<{
 // 		result: any | Promise<any>,
-// 		interruptTool?: () => codemavi
+// 		interruptTool?: () => void
 // 	}>;
 // }
 
@@ -69,7 +69,7 @@ class MCPService extends Disposable implements IMCPService {
 	}
 
 	// Emitters for server events
-	private readonly _onDidChangeState = new Emitter<codemavi>();
+	private readonly _onDidChangeState = new Emitter<void>();
 	public readonly onDidChangeState = this._onDidChangeState.event;
 
 	// private readonly _onLoadingServersChange = new Emitter<MCPServerEventLoadingParam>();
@@ -81,7 +81,7 @@ class MCPService extends Disposable implements IMCPService {
 		@IProductService private readonly productService: IProductService,
 		@IEditorService private readonly editorService: IEditorService,
 		@IMainProcessService private readonly mainProcessService: IMainProcessService,
-		@IMaviSettingsService private readonly codemaviSettingsService: IMaviSettingsService,
+		@IMaviSettingsService private readonly maviSettingsService: IMaviSettingsService,
 	) {
 		super();
 		this.channel = this.mainProcessService.getChannel('mavi-channel-mcp')
@@ -101,7 +101,7 @@ class MCPService extends Disposable implements IMCPService {
 
 	private async _initialize() {
 		try {
-			await this.codemaviSettingsService.waitForInitState;
+			await this.maviSettingsService.waitForInitState;
 
 			// Create .mcpConfig if it doesn't exist
 			const mcpConfigUri = await this._getMCPConfigFilePath();
@@ -147,14 +147,14 @@ class MCPService extends Disposable implements IMCPService {
 	}
 
 	// Create the file/directory if it doesn't exist
-	private async _createMCPConfigFile(mcpConfigUri: URI): Promise<codemavi> {
+	private async _createMCPConfigFile(mcpConfigUri: URI): Promise<void> {
 		await this.fileService.createFile(mcpConfigUri.with({ path: mcpConfigUri.path }));
 		const buffer = VSBuffer.fromString(MCP_CONFIG_SAMPLE_STRING);
 		await this.fileService.writeFile(mcpConfigUri, buffer);
 	}
 
 
-	private async _addMCPConfigFileWatcher(): Promise<codemavi> {
+	private async _addMCPConfigFileWatcher(): Promise<void> {
 		const mcpConfigUri = await this._getMCPConfigFilePath();
 		this._register(
 			this.fileService.watch(mcpConfigUri)
@@ -168,7 +168,7 @@ class MCPService extends Disposable implements IMCPService {
 
 	// Client-side functions
 
-	public async revealMCPConfigFile(): Promise<codemavi> {
+	public async revealMCPConfigFile(): Promise<void> {
 		try {
 			const mcpConfigUri = await this._getMCPConfigFilePath();
 			await this.editorService.openEditor({
@@ -259,7 +259,7 @@ class MCPService extends Disposable implements IMCPService {
 
 
 	// Handle server state changes
-	private async _refreshMCPServers(): Promise<codemavi> {
+	private async _refreshMCPServers(): Promise<void> {
 
 		this._setHasError(undefined)
 
@@ -277,10 +277,10 @@ class MCPService extends Disposable implements IMCPService {
 		// set isOn to any new servers in the config
 		const addedUserStateOfName: MCPUserStateOfName = {}
 		for (const name of addedServerNames) { addedUserStateOfName[name] = { isOn: true } }
-		await this.codemaviSettingsService.addMCPUserStateOfNames(addedUserStateOfName);
+		await this.maviSettingsService.addMCPUserStateOfNames(addedUserStateOfName);
 
 		// delete isOn for any servers that no longer show up in the config
-		await this.codemaviSettingsService.removeMCPUserStateOfNames(removedServerNames);
+		await this.maviSettingsService.removeMCPUserStateOfNames(removedServerNames);
 
 		// set all servers to loading
 		for (const serverName in newConfigFileJSON.mcpServers) {
@@ -293,7 +293,7 @@ class MCPService extends Disposable implements IMCPService {
 			addedServerNames,
 			removedServerNames,
 			updatedServerNames,
-			userStateOfName: this.codemaviSettingsService.state.mcpUserStateOfName,
+			userStateOfName: this.maviSettingsService.state.mcpUserStateOfName,
 		})
 	}
 
@@ -313,11 +313,11 @@ class MCPService extends Disposable implements IMCPService {
 		return toolResultStr
 	}
 
-	// toggle MCP server and update isOn in codemavi settings
-	public async toggleServerIsOn(serverName: string, isOn: boolean): Promise<codemavi> {
+	// toggle MCP server and update isOn in mavi settings
+	public async toggleServerIsOn(serverName: string, isOn: boolean): Promise<void> {
 		this._setMCPServerState(serverName, { status: 'loading', tools: [] })
 
-		await this.codemaviSettingsService.setMCPServerState(serverName, { isOn });
+		await this.maviSettingsService.setMCPServerState(serverName, { isOn });
 		this.channel.call('toggleMCPServer', { serverName, isOn })
 	}
 

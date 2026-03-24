@@ -32,7 +32,7 @@ interface IAsyncDataTreeNode<TInput, T> {
 	readonly parent: IAsyncDataTreeNode<TInput, T> | null;
 	readonly children: IAsyncDataTreeNode<TInput, T>[];
 	readonly id?: string | null;
-	refreshPromise: Promise<codemavi> | undefined;
+	refreshPromise: Promise<void> | undefined;
 	hasChildren: boolean;
 	stale: boolean;
 	slow: boolean;
@@ -111,7 +111,7 @@ class AsyncDataTreeRenderer<TInput, T, TFilterData, TTemplateData> implements IT
 		return { templateData };
 	}
 
-	renderElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.renderElement(this.nodeMapper.map(node) as ITreeNode<T, TFilterData>, index, templateData.templateData, height);
 	}
 
@@ -125,15 +125,15 @@ class AsyncDataTreeRenderer<TInput, T, TFilterData, TTemplateData> implements IT
 		}
 	}
 
-	disposeElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	disposeElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.disposeElement?.(this.nodeMapper.map(node) as ITreeNode<T, TFilterData>, index, templateData.templateData, height);
 	}
 
-	disposeTemplate(templateData: IDataTreeListTemplateData<TTemplateData>): codemavi {
+	disposeTemplate(templateData: IDataTreeListTemplateData<TTemplateData>): void {
 		this.renderer.disposeTemplate(templateData.templateData);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.renderedNodes.clear();
 	}
 }
@@ -201,7 +201,7 @@ class AsyncDataTreeNodeListDragAndDrop<TInput, T> implements IListDragAndDrop<IA
 		return undefined;
 	}
 
-	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): codemavi {
+	onDragStart(data: IDragAndDropData, originalEvent: DragEvent): void {
 		this.dnd.onDragStart?.(asAsyncDataTreeDragAndDropData(data), originalEvent);
 	}
 
@@ -209,15 +209,15 @@ class AsyncDataTreeNodeListDragAndDrop<TInput, T> implements IListDragAndDrop<IA
 		return this.dnd.onDragOver(asAsyncDataTreeDragAndDropData(data), targetNode && targetNode.element as T, targetIndex, targetSector, originalEvent);
 	}
 
-	drop(data: IDragAndDropData, targetNode: IAsyncDataTreeNode<TInput, T> | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): codemavi {
+	drop(data: IDragAndDropData, targetNode: IAsyncDataTreeNode<TInput, T> | undefined, targetIndex: number | undefined, targetSector: ListViewTargetSector | undefined, originalEvent: DragEvent): void {
 		this.dnd.drop(asAsyncDataTreeDragAndDropData(data), targetNode && targetNode.element as T, targetIndex, targetSector, originalEvent);
 	}
 
-	onDragEnd(originalEvent: DragEvent): codemavi {
+	onDragEnd(originalEvent: DragEvent): void {
 		this.dnd.onDragEnd?.(originalEvent);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.dnd.dispose();
 	}
 }
@@ -238,7 +238,7 @@ export interface IAsyncFindProvider<T> {
 	 * `startSession` is called when the user enters the first character in the find widget.
 	 * This can be used to allocate some state to preserve for the session.
 	 */
-	startSession?(): codemavi;
+	startSession?(): void;
 
 	/**
 	 * `find` is called when the user types one or more character into the find input.
@@ -255,7 +255,7 @@ export interface IAsyncFindProvider<T> {
 	 * End Session is called when the user either closes the find widget or has an empty find input.
 	 * This can be used to deallocate any state that was allocated.
 	 */
-	endSession?(): Promise<codemavi>;
+	endSession?(): Promise<void>;
 }
 
 class AsyncFindFilter<T> extends FindFilter<T> {
@@ -311,7 +311,7 @@ class AsyncFindController<TInput, T, TFilterData> extends FindController<T, TFil
 		}));
 	}
 
-	protected override applyPattern(_pattern: string): codemavi {
+	protected override applyPattern(_pattern: string): void {
 		this.renderMessage(false);
 
 		this.activeTokenSource?.cancel();
@@ -320,7 +320,7 @@ class AsyncFindController<TInput, T, TFilterData> extends FindController<T, TFil
 		this.taskQueue.trigger(() => this.applyPatternAsync());
 	}
 
-	private async applyPatternAsync(): Promise<codemavi> {
+	private async applyPatternAsync(): Promise<void> {
 		const token = this.activeTokenSource?.token;
 		if (!token || token.isCancellationRequested) {
 			return;
@@ -364,19 +364,19 @@ class AsyncFindController<TInput, T, TFilterData> extends FindController<T, TFil
 		}
 	}
 
-	private activateFindSession(): codemavi {
+	private activateFindSession(): void {
 		this.activeSession = true;
 		this.filter.isFindSessionActive = true;
 		this.findProvider.startSession?.();
 	}
 
-	private async deactivateFindSession(): Promise<codemavi> {
+	private async deactivateFindSession(): Promise<void> {
 		this.activeSession = false;
 		this.filter.isFindSessionActive = false;
 		await this.findProvider.endSession?.();
 	}
 
-	protected override render(): codemavi {
+	protected override render(): void {
 		if (this.asyncWorkInProgress || !this.activeFindMetadata) {
 			return;
 		}
@@ -389,7 +389,7 @@ class AsyncFindController<TInput, T, TFilterData> extends FindController<T, TFil
 		}
 	}
 
-	protected override onDidToggleChange(e: ITreeFindToggleChangeEvent): codemavi {
+	protected override onDidToggleChange(e: ITreeFindToggleChangeEvent): void {
 		// TODO@benibenj handle toggles nicely across all controllers and between controller and filter
 		this.toggles.set(e.id, e.isChecked);
 		this.filter.findMode = this.mode;
@@ -493,7 +493,7 @@ function asObjectTreeOptions<TInput, T, TFilterData>(options?: IAsyncDataTreeOpt
 export interface IAsyncDataTreeOptionsUpdate extends IAbstractTreeOptionsUpdate { }
 export interface IAsyncDataTreeUpdateChildrenOptions<T> extends IObjectTreeSetChildrenOptions<T> { }
 
-export interface IAsyncDataTreeOptions<T, TFilterData = codemavi> extends IAsyncDataTreeOptionsUpdate, Pick<IAbstractTreeOptions<T, TFilterData>, Exclude<keyof IAbstractTreeOptions<T, TFilterData>, 'collapseByDefault'>> {
+export interface IAsyncDataTreeOptions<T, TFilterData = void> extends IAsyncDataTreeOptionsUpdate, Pick<IAbstractTreeOptions<T, TFilterData>, Exclude<keyof IAbstractTreeOptions<T, TFilterData>, 'collapseByDefault'>> {
 	readonly collapseByDefault?: { (e: T): boolean };
 	readonly identityProvider?: IIdentityProvider<T>;
 	readonly sorter?: ITreeSorter<T>;
@@ -514,12 +514,12 @@ interface IAsyncDataTreeViewStateContext<TInput, T> {
 	readonly focus: IAsyncDataTreeNode<TInput, T>[];
 }
 
-function dfs<TInput, T>(node: IAsyncDataTreeNode<TInput, T>, fn: (node: IAsyncDataTreeNode<TInput, T>) => codemavi): codemavi {
+function dfs<TInput, T>(node: IAsyncDataTreeNode<TInput, T>, fn: (node: IAsyncDataTreeNode<TInput, T>) => void): void {
 	fn(node);
 	node.children.forEach(child => dfs(child, fn));
 }
 
-export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDisposable {
+export class AsyncDataTree<TInput, T, TFilterData = void> implements IDisposable {
 
 	protected readonly tree: ObjectTree<IAsyncDataTreeNode<TInput, T>, TFilterData>;
 	protected readonly root: IAsyncDataTreeNode<TInput, T>;
@@ -528,13 +528,13 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 	private readonly findController?: AsyncFindController<TInput, T, TFilterData>;
 	private readonly getDefaultCollapseState: { (e: T): undefined | ObjectTreeElementCollapseState.PreserveOrCollapsed | ObjectTreeElementCollapseState.PreserveOrExpanded };
 
-	private readonly subTreeRefreshPromises = new Map<IAsyncDataTreeNode<TInput, T>, Promise<codemavi>>();
+	private readonly subTreeRefreshPromises = new Map<IAsyncDataTreeNode<TInput, T>, Promise<void>>();
 	private readonly refreshPromises = new Map<IAsyncDataTreeNode<TInput, T>, CancelablePromise<Iterable<T>>>();
 
 	protected readonly identityProvider?: IIdentityProvider<T>;
 	private readonly autoExpandSingleChildren: boolean;
 
-	private readonly _onDidRender = new Emitter<codemavi>();
+	private readonly _onDidRender = new Emitter<void>();
 	protected readonly _onDidChangeNodeSlowState = new Emitter<IAsyncDataTreeNode<TInput, T>>();
 
 	protected readonly nodeMapper: AsyncDataTreeNodeMapper<TInput, T, TFilterData> = new WeakMapper(node => new AsyncDataTreeNodeWrapper(node));
@@ -552,14 +552,14 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 	get onContextMenu(): Event<ITreeContextMenuEvent<T>> { return Event.map(this.tree.onContextMenu, asTreeContextMenuEvent); }
 	get onTap(): Event<ITreeMouseEvent<T>> { return Event.map(this.tree.onTap, asTreeMouseEvent); }
 	get onPointer(): Event<ITreeMouseEvent<T>> { return Event.map(this.tree.onPointer, asTreeMouseEvent); }
-	get onDidFocus(): Event<codemavi> { return this.tree.onDidFocus; }
-	get onDidBlur(): Event<codemavi> { return this.tree.onDidBlur; }
+	get onDidFocus(): Event<void> { return this.tree.onDidFocus; }
+	get onDidBlur(): Event<void> { return this.tree.onDidBlur; }
 
 	/**
 	 * To be used internally only!
 	 * @deprecated
 	 */
-	get onDidChangeModel(): Event<codemavi> { return this.tree.onDidChangeModel; }
+	get onDidChangeModel(): Event<void> { return this.tree.onDidChangeModel; }
 	get onDidChangeCollapseState(): Event<ICollapseStateChangeEvent<IAsyncDataTreeNode<TInput, T> | null, TFilterData>> { return this.tree.onDidChangeCollapseState; }
 
 	get onDidUpdateOptions(): Event<IAsyncDataTreeOptionsUpdate> { return this.tree.onDidUpdateOptions; }
@@ -586,7 +586,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return element => fn(this.nodes.get((element === this.root.element ? null : element) as T) || null);
 	}
 
-	get onDidDispose(): Event<codemavi> { return this.tree.onDidDispose; }
+	get onDidDispose(): Event<void> { return this.tree.onDidDispose; }
 
 	constructor(
 		protected user: string,
@@ -662,7 +662,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return new ObjectTree(user, container, objectTreeDelegate, objectTreeRenderers, objectTreeOptions);
 	}
 
-	updateOptions(optionsUpdate: IAsyncDataTreeOptionsUpdate = {}): codemavi {
+	updateOptions(optionsUpdate: IAsyncDataTreeOptionsUpdate = {}): void {
 		if (this.findController) {
 			if (optionsUpdate.defaultFindMode !== undefined) {
 				this.findController.mode = optionsUpdate.defaultFindMode;
@@ -738,7 +738,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		this.tree.ariaLabel = value;
 	}
 
-	domFocus(): codemavi {
+	domFocus(): void {
 		this.tree.domFocus();
 	}
 
@@ -754,11 +754,11 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return new AsyncDataTreeNavigator(this.tree.navigate(startNode));
 	}
 
-	layout(height?: number, width?: number): codemavi {
+	layout(height?: number, width?: number): void {
 		this.tree.layout(height, width);
 	}
 
-	style(styles: IListStyles): codemavi {
+	style(styles: IListStyles): void {
 		this.tree.style(styles);
 	}
 
@@ -768,7 +768,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return this.root.element as TInput;
 	}
 
-	async setInput(input: TInput, viewState?: IAsyncDataTreeViewState): Promise<codemavi> {
+	async setInput(input: TInput, viewState?: IAsyncDataTreeViewState): Promise<void> {
 		this.refreshPromises.forEach(promise => promise.cancel());
 		this.refreshPromises.clear();
 
@@ -788,11 +788,11 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		}
 	}
 
-	async updateChildren(element: TInput | T = this.root.element, recursive = true, rerender = false, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<codemavi> {
+	async updateChildren(element: TInput | T = this.root.element, recursive = true, rerender = false, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<void> {
 		await this._updateChildren(element, recursive, rerender, undefined, options);
 	}
 
-	private async _updateChildren(element: TInput | T = this.root.element, recursive = true, rerender = false, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<codemavi> {
+	private async _updateChildren(element: TInput | T = this.root.element, recursive = true, rerender = false, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<void> {
 		if (typeof this.root.element === 'undefined') {
 			throw new TreeError(this.user, 'Tree input not set');
 		}
@@ -815,7 +815,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		}
 	}
 
-	resort(element: TInput | T = this.root.element, recursive = true): codemavi {
+	resort(element: TInput | T = this.root.element, recursive = true): void {
 		this.tree.resort(this.getDataNode(element), recursive);
 	}
 
@@ -825,7 +825,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 
 	// View
 
-	rerender(element?: T): codemavi {
+	rerender(element?: T): void {
 		if (element === undefined || element === this.root.element) {
 			this.tree.rerender();
 			return;
@@ -835,12 +835,12 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		this.tree.rerender(node);
 	}
 
-	updateElementHeight(element: T, height: number | undefined): codemavi {
+	updateElementHeight(element: T, height: number | undefined): void {
 		const node = this.getDataNode(element);
 		this.tree.updateElementHeight(node, height);
 	}
 
-	updateWidth(element: T): codemavi {
+	updateWidth(element: T): void {
 		const node = this.getDataNode(element);
 		this.tree.updateWidth(node);
 	}
@@ -897,11 +897,11 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return this.tree.toggleCollapsed(this.getDataNode(element), recursive);
 	}
 
-	expandAll(): codemavi {
+	expandAll(): void {
 		this.tree.expandAll();
 	}
 
-	async expandTo(element: T): Promise<codemavi> {
+	async expandTo(element: T): Promise<void> {
 		if (!this.dataSource.getParent) {
 			throw new Error('Can\'t expand to element without getParent method');
 		}
@@ -922,7 +922,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		this.tree.expandTo(this.getDataNode(element));
 	}
 
-	collapseAll(): codemavi {
+	collapseAll(): void {
 		this.tree.collapseAll();
 	}
 
@@ -934,11 +934,11 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return this.tree.isCollapsed(this.getDataNode(element));
 	}
 
-	triggerTypeNavigation(): codemavi {
+	triggerTypeNavigation(): void {
 		this.tree.triggerTypeNavigation();
 	}
 
-	openFind(): codemavi {
+	openFind(): void {
 		if (this.findController) {
 			this.findController.open();
 		} else {
@@ -946,7 +946,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		}
 	}
 
-	closeFind(): codemavi {
+	closeFind(): void {
 		if (this.findController) {
 			this.findController.close();
 		} else {
@@ -954,11 +954,11 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		}
 	}
 
-	refilter(): codemavi {
+	refilter(): void {
 		this.tree.refilter();
 	}
 
-	setAnchor(element: T | undefined): codemavi {
+	setAnchor(element: T | undefined): void {
 		this.tree.setAnchor(typeof element === 'undefined' ? undefined : this.getDataNode(element));
 	}
 
@@ -967,7 +967,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return node?.element as T;
 	}
 
-	setSelection(elements: T[], browserEvent?: UIEvent): codemavi {
+	setSelection(elements: T[], browserEvent?: UIEvent): void {
 		const nodes = elements.map(e => this.getDataNode(e));
 		this.tree.setSelection(nodes, browserEvent);
 	}
@@ -977,32 +977,32 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return nodes.map(n => n!.element as T);
 	}
 
-	setFocus(elements: T[], browserEvent?: UIEvent): codemavi {
+	setFocus(elements: T[], browserEvent?: UIEvent): void {
 		const nodes = elements.map(e => this.getDataNode(e));
 		this.tree.setFocus(nodes, browserEvent);
 	}
 
-	focusNext(n = 1, loop = false, browserEvent?: UIEvent): codemavi {
+	focusNext(n = 1, loop = false, browserEvent?: UIEvent): void {
 		this.tree.focusNext(n, loop, browserEvent, this.focusNavigationFilter);
 	}
 
-	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent): codemavi {
+	focusPrevious(n = 1, loop = false, browserEvent?: UIEvent): void {
 		this.tree.focusPrevious(n, loop, browserEvent, this.focusNavigationFilter);
 	}
 
-	focusNextPage(browserEvent?: UIEvent): Promise<codemavi> {
+	focusNextPage(browserEvent?: UIEvent): Promise<void> {
 		return this.tree.focusNextPage(browserEvent, this.focusNavigationFilter);
 	}
 
-	focusPreviousPage(browserEvent?: UIEvent): Promise<codemavi> {
+	focusPreviousPage(browserEvent?: UIEvent): Promise<void> {
 		return this.tree.focusPreviousPage(browserEvent, this.focusNavigationFilter);
 	}
 
-	focusLast(browserEvent?: UIEvent): codemavi {
+	focusLast(browserEvent?: UIEvent): void {
 		this.tree.focusLast(browserEvent, this.focusNavigationFilter);
 	}
 
-	focusFirst(browserEvent?: UIEvent): codemavi {
+	focusFirst(browserEvent?: UIEvent): void {
 		this.tree.focusFirst(browserEvent, this.focusNavigationFilter);
 	}
 
@@ -1020,7 +1020,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return this.tree.getFocusedPart();
 	}
 
-	reveal(element: T, relativeTop?: number): codemavi {
+	reveal(element: T, relativeTop?: number): void {
 		this.tree.reveal(this.getDataNode(element), relativeTop);
 	}
 
@@ -1054,7 +1054,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return node;
 	}
 
-	private async refreshAndRenderNode(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<codemavi> {
+	private async refreshAndRenderNode(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): Promise<void> {
 		if (this.disposables.isDisposed) {
 			return; // tree disposed during refresh, again (#228211)
 		}
@@ -1065,8 +1065,8 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		this.render(node, viewStateContext, options);
 	}
 
-	private async refreshNode(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>): Promise<codemavi> {
-		let result: Promise<codemavi> | undefined;
+	private async refreshNode(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>): Promise<void> {
+		let result: Promise<void> | undefined;
 
 		this.subTreeRefreshPromises.forEach((refreshPromise, refreshNode) => {
 			if (!result && intersects(refreshNode, node)) {
@@ -1092,8 +1092,8 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return this.doRefreshSubTree(node, recursive, viewStateContext);
 	}
 
-	private async doRefreshSubTree(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>): Promise<codemavi> {
-		let done: () => codemavi;
+	private async doRefreshSubTree(node: IAsyncDataTreeNode<TInput, T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>): Promise<void> {
+		let done: () => void;
 		node.refreshPromise = new Promise(c => done = c);
 		this.subTreeRefreshPromises.set(node, node.refreshPromise);
 
@@ -1172,7 +1172,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		}
 	}
 
-	private _onDidChangeCollapseState({ node, deep }: ICollapseStateChangeEvent<IAsyncDataTreeNode<TInput, T> | null, any>): codemavi {
+	private _onDidChangeCollapseState({ node, deep }: ICollapseStateChangeEvent<IAsyncDataTreeNode<TInput, T> | null, any>): void {
 		if (node.element === null) {
 			return;
 		}
@@ -1190,7 +1190,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 	private setChildren(node: IAsyncDataTreeNode<TInput, T>, childrenElementsIterable: Iterable<T>, recursive: boolean, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>): IAsyncDataTreeNode<TInput, T>[] {
 		const childrenElements = [...childrenElementsIterable];
 
-		// perf: if the node was and still is a leaf, acodemavi all this hassle
+		// perf: if the node was and still is a leaf, avoid all this hassle
 		if (node.children.length === 0 && childrenElements.length === 0) {
 			return [];
 		}
@@ -1287,7 +1287,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return childrenToRefresh;
 	}
 
-	protected render(node: IAsyncDataTreeNode<TInput, T>, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): codemavi {
+	protected render(node: IAsyncDataTreeNode<TInput, T>, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): void {
 		const children = node.children.map(node => this.asTreeElement(node, viewStateContext));
 		const objectTreeOptions: IObjectTreeSetChildrenOptions<IAsyncDataTreeNode<TInput, T>> | undefined = options && {
 			...options,
@@ -1371,7 +1371,7 @@ export class AsyncDataTree<TInput, T, TFilterData = codemavi> implements IDispos
 		return { focus, selection, expanded, scrollTop: this.scrollTop };
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 		this.tree.dispose();
 	}
@@ -1420,11 +1420,11 @@ class CompressibleAsyncDataTreeRenderer<TInput, T, TFilterData, TTemplateData> i
 		return { templateData };
 	}
 
-	renderElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	renderElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.renderElement(this.nodeMapper.map(node) as ITreeNode<T, TFilterData>, index, templateData.templateData, height);
 	}
 
-	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IAsyncDataTreeNode<TInput, T>>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	renderCompressedElements(node: ITreeNode<ICompressedTreeNode<IAsyncDataTreeNode<TInput, T>>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.renderCompressedElements(this.compressibleNodeMapperProvider().map(node) as ITreeNode<ICompressedTreeNode<T>, TFilterData>, index, templateData.templateData, height);
 	}
 
@@ -1438,19 +1438,19 @@ class CompressibleAsyncDataTreeRenderer<TInput, T, TFilterData, TTemplateData> i
 		}
 	}
 
-	disposeElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	disposeElement(node: ITreeNode<IAsyncDataTreeNode<TInput, T>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.disposeElement?.(this.nodeMapper.map(node) as ITreeNode<T, TFilterData>, index, templateData.templateData, height);
 	}
 
-	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<IAsyncDataTreeNode<TInput, T>>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): codemavi {
+	disposeCompressedElements(node: ITreeNode<ICompressedTreeNode<IAsyncDataTreeNode<TInput, T>>, TFilterData>, index: number, templateData: IDataTreeListTemplateData<TTemplateData>, height: number | undefined): void {
 		this.renderer.disposeCompressedElements?.(this.compressibleNodeMapperProvider().map(node) as ITreeNode<ICompressedTreeNode<T>, TFilterData>, index, templateData.templateData, height);
 	}
 
-	disposeTemplate(templateData: IDataTreeListTemplateData<TTemplateData>): codemavi {
+	disposeTemplate(templateData: IDataTreeListTemplateData<TTemplateData>): void {
 		this.renderer.disposeTemplate(templateData.templateData);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.renderedNodes.clear();
 		this.disposables = dispose(this.disposables);
 	}
@@ -1474,7 +1474,7 @@ function asCompressibleObjectTreeOptions<TInput, T, TFilterData>(options?: IComp
 	};
 }
 
-export interface ICompressibleAsyncDataTreeOptions<T, TFilterData = codemavi> extends IAsyncDataTreeOptions<T, TFilterData> {
+export interface ICompressibleAsyncDataTreeOptions<T, TFilterData = void> extends IAsyncDataTreeOptions<T, TFilterData> {
 	readonly compressionEnabled?: boolean;
 	readonly keyboardNavigationLabelProvider?: ICompressibleKeyboardNavigationLabelProvider<T>;
 }
@@ -1483,7 +1483,7 @@ export interface ICompressibleAsyncDataTreeOptionsUpdate extends IAsyncDataTreeO
 	readonly compressionEnabled?: boolean;
 }
 
-export class CompressibleAsyncDataTree<TInput, T, TFilterData = codemavi> extends AsyncDataTree<TInput, T, TFilterData> {
+export class CompressibleAsyncDataTree<TInput, T, TFilterData = void> extends AsyncDataTree<TInput, T, TFilterData> {
 
 	protected declare readonly tree: CompressibleObjectTree<IAsyncDataTreeNode<TInput, T>, TFilterData>;
 	protected readonly compressibleNodeMapper: CompressibleAsyncDataTreeNodeMapper<TInput, T, TFilterData> = new WeakMapper(node => new CompressibleAsyncDataTreeNodeWrapper(node));
@@ -1556,7 +1556,7 @@ export class CompressibleAsyncDataTree<TInput, T, TFilterData = codemavi> extend
 		return { focus, selection, expanded, scrollTop: this.scrollTop };
 	}
 
-	protected override render(node: IAsyncDataTreeNode<TInput, T>, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): codemavi {
+	protected override render(node: IAsyncDataTreeNode<TInput, T>, viewStateContext?: IAsyncDataTreeViewStateContext<TInput, T>, options?: IAsyncDataTreeUpdateChildrenOptions<T>): void {
 		if (!this.identityProvider) {
 			return super.render(node, viewStateContext);
 		}

@@ -61,7 +61,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 
@@ -89,7 +89,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const editorService = accessor.get(IEditorService);
@@ -129,7 +129,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const contextKeyService = accessor.get(IContextKeyService);
 
@@ -154,7 +154,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const commandService = accessor.get(ICommandService);
 
@@ -191,7 +191,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const editorService = accessor.get(IEditorService);
 
@@ -220,7 +220,7 @@ registerAction2(class extends Action2 {
 			icon: LOCAL_HISTORY_ICON_RESTORE
 		});
 	}
-	async run(accessor: ServicesAccessor, uri: URI): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, uri: URI): Promise<void> {
 		const { associatedResource, location } = LocalHistoryFileSystemProvider.fromLocalHistoryFileSystem(uri);
 
 		return restore(accessor, { uri: associatedResource, handle: basenameOrAuthority(location) });
@@ -240,14 +240,14 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		return restore(accessor, item);
 	}
 });
 
 const restoreSaveSource = SaveSourceRegistry.registerSource('localHistoryRestore.source', localize('localHistoryRestore.source', "File Restored"));
 
-async function restore(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+async function restore(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 	const fileService = accessor.get(IFileService);
 	const dialogService = accessor.get(IDialogService);
 	const workingCopyService = accessor.get(IWorkingCopyService);
@@ -325,7 +325,7 @@ registerAction2(class extends Action2 {
 			precondition: CTX_LOCAL_HISTORY_ENABLED
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const modelService = accessor.get(IModelService);
@@ -447,7 +447,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const quickInputService = accessor.get(IQuickInputService);
 
@@ -487,7 +487,7 @@ registerAction2(class extends Action2 {
 			}
 		});
 	}
-	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<codemavi> {
+	async run(accessor: ServicesAccessor, item: ITimelineCommandArgument): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const editorService = accessor.get(IEditorService);
 		const dialogService = accessor.get(IDialogService);
@@ -530,7 +530,7 @@ registerAction2(class extends Action2 {
 			precondition: CTX_LOCAL_HISTORY_ENABLED
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const dialogService = accessor.get(IDialogService);
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 
@@ -565,7 +565,7 @@ registerAction2(class extends Action2 {
 			precondition: ContextKeyExpr.and(CTX_LOCAL_HISTORY_ENABLED, ActiveEditorContext)
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const workingCopyHistoryService = accessor.get(IWorkingCopyHistoryService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const editorService = accessor.get(IEditorService);
@@ -598,7 +598,7 @@ registerAction2(class extends Action2 {
 
 //#region Helpers
 
-async function openEntry(entry: IWorkingCopyHistoryEntry, editorService: IEditorService, options?: IEditorOptions): Promise<codemavi> {
+async function openEntry(entry: IWorkingCopyHistoryEntry, editorService: IEditorService, options?: IEditorOptions): Promise<void> {
 	const resource = LocalHistoryFileSystemProvider.toLocalHistoryFileSystem({ location: entry.location, associatedResource: entry.workingCopy.resource });
 
 	await editorService.openEditor({
@@ -608,7 +608,7 @@ async function openEntry(entry: IWorkingCopyHistoryEntry, editorService: IEditor
 	});
 }
 
-async function closeEntry(entry: IWorkingCopyHistoryEntry, editorService: IEditorService): Promise<codemavi> {
+async function closeEntry(entry: IWorkingCopyHistoryEntry, editorService: IEditorService): Promise<void> {
 	const resource = LocalHistoryFileSystemProvider.toLocalHistoryFileSystem({ location: entry.location, associatedResource: entry.workingCopy.resource });
 
 	const editors = editorService.findEditors(resource, { supportSideBySide: SideBySideEditor.ANY });

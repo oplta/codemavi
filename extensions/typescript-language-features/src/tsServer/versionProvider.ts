@@ -58,7 +58,7 @@ export class TypeScriptVersion {
 }
 
 export interface ITypeScriptVersionProvider {
-	updateConfiguration(configuration: TypeScriptServiceConfiguration): codemavi;
+	updateConfiguration(configuration: TypeScriptServiceConfiguration): void;
 
 	readonly defaultVersion: TypeScriptVersion;
 	readonly globalVersion: TypeScriptVersion | undefined;

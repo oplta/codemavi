@@ -86,8 +86,8 @@ export class TerminalService extends Disposable implements ITerminalService {
 	private _connectionState: TerminalConnectionState = TerminalConnectionState.Connecting;
 	get connectionState(): TerminalConnectionState { return this._connectionState; }
 
-	private readonly _whenConnected = new DeferredPromise<codemavi>();
-	get whenConnected(): Promise<codemavi> { return this._whenConnected.p; }
+	private readonly _whenConnected = new DeferredPromise<void>();
+	get whenConnected(): Promise<void> { return this._whenConnected.p; }
 
 	private _restoredGroupCount: number = 0;
 	get restoredGroupCount(): number { return this._restoredGroupCount; }
@@ -115,7 +115,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 	private _activeInstance: ITerminalInstance | undefined;
 	get activeInstance(): ITerminalInstance | undefined {
 		// Check if either an editor or panel terminal has focus and return that, regardless of the
-		// value of _activeInstance. This acodemavis terminals created in the panel for example stealing
+		// value of _activeInstance. This avoids terminals created in the panel for example stealing
 		// the active status even when it's not focused.
 		for (const activeHostTerminal of this._hostActiveTerminals.values()) {
 			if (activeHostTerminal?.hasFocus) {
@@ -132,10 +132,10 @@ export class TerminalService extends Disposable implements ITerminalService {
 	get onDidCreateInstance(): Event<ITerminalInstance> { return this._onDidCreateInstance.event; }
 	private readonly _onDidChangeInstanceDimensions = this._register(new Emitter<ITerminalInstance>());
 	get onDidChangeInstanceDimensions(): Event<ITerminalInstance> { return this._onDidChangeInstanceDimensions.event; }
-	private readonly _onDidRegisterProcessSupport = this._register(new Emitter<codemavi>());
-	get onDidRegisterProcessSupport(): Event<codemavi> { return this._onDidRegisterProcessSupport.event; }
-	private readonly _onDidChangeConnectionState = this._register(new Emitter<codemavi>());
-	get onDidChangeConnectionState(): Event<codemavi> { return this._onDidChangeConnectionState.event; }
+	private readonly _onDidRegisterProcessSupport = this._register(new Emitter<void>());
+	get onDidRegisterProcessSupport(): Event<void> { return this._onDidRegisterProcessSupport.event; }
+	private readonly _onDidChangeConnectionState = this._register(new Emitter<void>());
+	get onDidChangeConnectionState(): Event<void> { return this._onDidChangeConnectionState.event; }
 	private readonly _onDidRequestStartExtensionTerminal = this._register(new Emitter<IStartExtensionTerminalRequest>());
 	get onDidRequestStartExtensionTerminal(): Event<IStartExtensionTerminalRequest> { return this._onDidRequestStartExtensionTerminal.event; }
 
@@ -146,8 +146,8 @@ export class TerminalService extends Disposable implements ITerminalService {
 	get onDidFocusInstance(): Event<ITerminalInstance> { return this._onDidFocusInstance.event; }
 	private readonly _onDidChangeActiveInstance = this._register(new Emitter<ITerminalInstance | undefined>());
 	get onDidChangeActiveInstance(): Event<ITerminalInstance | undefined> { return this._onDidChangeActiveInstance.event; }
-	private readonly _onDidChangeInstances = this._register(new Emitter<codemavi>());
-	get onDidChangeInstances(): Event<codemavi> { return this._onDidChangeInstances.event; }
+	private readonly _onDidChangeInstances = this._register(new Emitter<void>());
+	get onDidChangeInstances(): Event<void> { return this._onDidChangeInstances.event; }
 	private readonly _onDidChangeInstanceCapability = this._register(new Emitter<ITerminalInstance>());
 	get onDidChangeInstanceCapability(): Event<ITerminalInstance> { return this._onDidChangeInstanceCapability.event; }
 
@@ -193,7 +193,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 	) {
 		super();
 
-		// the below acodemavis having to poll routinely.
+		// the below avoids having to poll routinely.
 		// we update detected profiles when an instance is created so that,
 		// for example, we detect if you've installed a pwsh
 		this._register(this.onDidCreateInstance(() => this._terminalProfileService.refreshAvailableProfiles()));
@@ -326,7 +326,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 			mark('code/terminal/didReconnect');
 			mark('code/terminal/willReplay');
 			const instances = await this._reconnectedTerminalGroups?.then(groups => groups.map(e => e.terminalInstances).flat()) ?? [];
-			await Promise.all(instances.map(e => new Promise<codemavi>(r => Event.once(e.onProcessReplayComplete)(r))));
+			await Promise.all(instances.map(e => new Promise<void>(r => Event.once(e.onProcessReplayComplete)(r))));
 			mark('code/terminal/didReplay');
 			mark('code/terminal/willGetPerformanceMarks');
 			await Promise.all(Array.from(this._terminalInstanceService.getRegisteredBackends()).map(async backend => {
@@ -386,21 +386,21 @@ export class TerminalService extends Disposable implements ITerminalService {
 		}
 	}
 
-	async focusInstance(instance: ITerminalInstance): Promise<codemavi> {
+	async focusInstance(instance: ITerminalInstance): Promise<void> {
 		if (instance.target === TerminalLocation.Editor) {
 			return this._terminalEditorService.focusInstance(instance);
 		}
 		return this._terminalGroupService.focusInstance(instance);
 	}
 
-	async focusActiveInstance(): Promise<codemavi> {
+	async focusActiveInstance(): Promise<void> {
 		if (!this._activeInstance) {
 			return;
 		}
 		return this.focusInstance(this._activeInstance);
 	}
 
-	async createContributedTerminalProfile(extensionIdentifier: string, id: string, options: ICreateContributedTerminalProfileOptions): Promise<codemavi> {
+	async createContributedTerminalProfile(extensionIdentifier: string, id: string, options: ICreateContributedTerminalProfileOptions): Promise<void> {
 		await this._extensionService.activateByEvent(`onTerminalProfile:${id}`);
 
 		const profileProvider = this._terminalProfileService.getContributedProfileProvider(extensionIdentifier, id);
@@ -417,7 +417,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		}
 	}
 
-	async safeDisposeTerminal(instance: ITerminalInstance): Promise<codemavi> {
+	async safeDisposeTerminal(instance: ITerminalInstance): Promise<void> {
 		// Confirm on kill in the editor is handled by the editor input
 		if (instance.target !== TerminalLocation.Editor &&
 			instance.hasChildProcesses &&
@@ -427,7 +427,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 				return;
 			}
 		}
-		return new Promise<codemavi>(r => {
+		return new Promise<void>(r => {
 			Event.once(instance.onExit)(() => r());
 			instance.dispose(TerminalExitReason.User);
 		});
@@ -439,7 +439,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		this._logService.trace('Pty host ready');
 	}
 
-	private async _reconnectToRemoteTerminals(): Promise<codemavi> {
+	private async _reconnectToRemoteTerminals(): Promise<void> {
 		const remoteAuthority = this._environmentService.remoteAuthority;
 		if (!remoteAuthority) {
 			return;
@@ -462,7 +462,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		this._logService.trace('Reconnected to remote terminals');
 	}
 
-	private async _reconnectToLocalTerminals(): Promise<codemavi> {
+	private async _reconnectToLocalTerminals(): Promise<void> {
 		const localBackend = await this._terminalInstanceService.getBackend();
 		if (!localBackend) {
 			return;
@@ -530,7 +530,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return group;
 	}
 
-	private _attachProcessLayoutListeners(): codemavi {
+	private _attachProcessLayoutListeners(): void {
 		this._register(this.onDidChangeActiveGroup(() => this._saveState()));
 		this._register(this.onDidChangeActiveInstance(() => this._saveState()));
 		this._register(this.onDidChangeInstances(() => this._saveState()));
@@ -541,7 +541,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		this._register(this.onAnyInstanceIconChange(e => this._updateIcon(e.instance, e.userInitiated)));
 	}
 
-	private _handleInstanceContextKeys(): codemavi {
+	private _handleInstanceContextKeys(): void {
 		const terminalIsOpenContext = TerminalContextKeys.isOpen.bindTo(this._contextKeyService);
 		const updateTerminalContextKeys = () => {
 			terminalIsOpenContext.set(this.instances.length > 0);
@@ -567,7 +567,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return instance;
 	}
 
-	async revealTerminal(source: ITerminalInstance, preserveFocus?: boolean): Promise<codemavi> {
+	async revealTerminal(source: ITerminalInstance, preserveFocus?: boolean): Promise<void> {
 		if (source.target === TerminalLocation.Editor) {
 			await this._terminalEditorService.revealActiveEditor(preserveFocus);
 		} else {
@@ -575,7 +575,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		}
 	}
 
-	async revealActiveTerminal(preserveFocus?: boolean): Promise<codemavi> {
+	async revealActiveTerminal(preserveFocus?: boolean): Promise<void> {
 		const instance = this.activeInstance;
 		if (!instance) {
 			return;
@@ -583,7 +583,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		await this.revealTerminal(instance, preserveFocus);
 	}
 
-	setEditable(instance: ITerminalInstance, data?: IEditableData | null): codemavi {
+	setEditable(instance: ITerminalInstance, data?: IEditableData | null): void {
 		if (!data) {
 			this._editable = undefined;
 		} else {
@@ -663,7 +663,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return false;
 	}
 
-	setNativeDelegate(nativeDelegate: ITerminalServiceNativeDelegate): codemavi {
+	setNativeDelegate(nativeDelegate: ITerminalServiceNativeDelegate): void {
 		this._nativeDelegate = nativeDelegate;
 	}
 
@@ -694,7 +694,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return veto;
 	}
 
-	private _onWillShutdown(e: WillShutdownEvent): codemavi {
+	private _onWillShutdown(e: WillShutdownEvent): void {
 		// Don't touch processes if the shutdown was a result of reload as they will be reattached
 		const shouldPersistTerminals = this._terminalConfigurationService.config.enablePersistentSessions && e.reason === ShutdownReason.RELOAD;
 
@@ -713,8 +713,8 @@ export class TerminalService extends Disposable implements ITerminalService {
 	}
 
 	@debounce(500)
-	private _saveState(): codemavi {
-		// Acodemavi saving state when shutting down as that would override process state to be revived
+	private _saveState(): void {
+		// Avoid saving state when shutting down as that would override process state to be revived
 		if (this._isShuttingDown) {
 			return;
 		}
@@ -727,7 +727,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 	}
 
 	@debounce(500)
-	private _updateTitle(instance: ITerminalInstance | undefined): codemavi {
+	private _updateTitle(instance: ITerminalInstance | undefined): void {
 		if (!this._terminalConfigurationService.config.enablePersistentSessions || !instance || !instance.persistentProcessId || !instance.title || instance.isDisposed) {
 			return;
 		}
@@ -739,14 +739,14 @@ export class TerminalService extends Disposable implements ITerminalService {
 	}
 
 	@debounce(500)
-	private _updateIcon(instance: ITerminalInstance, userInitiated: boolean): codemavi {
+	private _updateIcon(instance: ITerminalInstance, userInitiated: boolean): void {
 		if (!this._terminalConfigurationService.config.enablePersistentSessions || !instance || !instance.persistentProcessId || !instance.icon || instance.isDisposed) {
 			return;
 		}
 		this._primaryBackend?.updateIcon(instance.persistentProcessId, userInitiated, instance.icon, instance.color);
 	}
 
-	refreshActiveGroup(): codemavi {
+	refreshActiveGroup(): void {
 		this._onDidChangeActiveGroup.fire(this._terminalGroupService.activeGroup);
 	}
 
@@ -779,7 +779,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return this.instances.some(term => term.processId === remoteTerm.pid);
 	}
 
-	moveToEditor(source: ITerminalInstance, group?: GroupIdentifier | SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | AUX_WINDOW_GROUP_TYPE): codemavi {
+	moveToEditor(source: ITerminalInstance, group?: GroupIdentifier | SIDE_GROUP_TYPE | ACTIVE_GROUP_TYPE | AUX_WINDOW_GROUP_TYPE): void {
 		if (source.target === TerminalLocation.Editor) {
 			return;
 		}
@@ -792,11 +792,11 @@ export class TerminalService extends Disposable implements ITerminalService {
 
 	}
 
-	moveIntoNewEditor(source: ITerminalInstance): codemavi {
+	moveIntoNewEditor(source: ITerminalInstance): void {
 		this.moveToEditor(source, AUX_WINDOW_GROUP);
 	}
 
-	async moveToTerminalView(source?: ITerminalInstance | URI, target?: ITerminalInstance, side?: 'before' | 'after'): Promise<codemavi> {
+	async moveToTerminalView(source?: ITerminalInstance | URI, target?: ITerminalInstance, side?: 'before' | 'after'): Promise<void> {
 		if (URI.isUri(source)) {
 			source = this.getInstanceFromResource(source);
 		}
@@ -836,7 +836,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		this._onDidChangeActiveGroup.fire(this._terminalGroupService.activeGroup);
 	}
 
-	protected _initInstanceListeners(instance: ITerminalInstance): codemavi {
+	protected _initInstanceListeners(instance: ITerminalInstance): void {
 		const instanceDisposables = new DisposableStore();
 		instanceDisposables.add(instance.onDimensionsChanged(() => {
 			this._onDidChangeInstanceDimensions.fire(instance);
@@ -852,7 +852,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		}));
 	}
 
-	private async _addInstanceToGroup(instance: ITerminalInstance, e: IRequestAddInstanceToGroupEvent): Promise<codemavi> {
+	private async _addInstanceToGroup(instance: ITerminalInstance, e: IRequestAddInstanceToGroupEvent): Promise<void> {
 		const terminalIdentifier = parseTerminalUri(e.uri);
 		if (terminalIdentifier.instanceId === undefined) {
 			return;
@@ -886,7 +886,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return;
 	}
 
-	registerProcessSupport(isSupported: boolean): codemavi {
+	registerProcessSupport(isSupported: boolean): void {
 		if (!isSupported) {
 			return;
 		}
@@ -1054,7 +1054,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return instance;
 	}
 
-	private async _resolveCwd(shellLaunchConfig: IShellLaunchConfig, splitActiveTerminal: boolean, options?: ICreateTerminalOptions): Promise<codemavi> {
+	private async _resolveCwd(shellLaunchConfig: IShellLaunchConfig, splitActiveTerminal: boolean, options?: ICreateTerminalOptions): Promise<void> {
 		const cwd = shellLaunchConfig.cwd;
 		if (!cwd) {
 			if (options?.cwd) {
@@ -1096,7 +1096,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		return instance;
 	}
 
-	private _addToReconnected(instance: ITerminalInstance): codemavi {
+	private _addToReconnected(instance: ITerminalInstance): void {
 		if (!instance.reconnectionProperties?.ownerId) {
 			return;
 		}
@@ -1170,7 +1170,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		}
 	}
 
-	protected _showBackgroundTerminal(instance: ITerminalInstance): codemavi {
+	protected _showBackgroundTerminal(instance: ITerminalInstance): void {
 		const index = this._backgroundedTerminalInstances.indexOf(instance);
 		if (index === -1) {
 			return;
@@ -1191,7 +1191,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 		this._onDidChangeInstances.fire();
 	}
 
-	async setContainers(panelContainer: HTMLElement, terminalContainer: HTMLElement): Promise<codemavi> {
+	async setContainers(panelContainer: HTMLElement, terminalContainer: HTMLElement): Promise<void> {
 		this._terminalConfigurationService.setPanelContainer(panelContainer);
 		this._terminalGroupService.setContainer(terminalContainer);
 	}
@@ -1230,7 +1230,7 @@ class TerminalEditorStyle extends Themable {
 		this.updateStyles();
 	}
 
-	private _registerListeners(): codemavi {
+	private _registerListeners(): void {
 		this._register(this._terminalService.onAnyInstanceIconChange(() => this.updateStyles()));
 		this._register(this._terminalService.onDidCreateInstance(() => this.updateStyles()));
 		this._register(this._editorService.onDidActiveEditorChange(() => {
@@ -1246,11 +1246,11 @@ class TerminalEditorStyle extends Themable {
 		this._register(this._terminalProfileService.onDidChangeAvailableProfiles(() => this.updateStyles()));
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		super.updateStyles();
 		const colorTheme = this._themeService.getColorTheme();
 
-		// TODO: add a rule collector to acodemavi duplication
+		// TODO: add a rule collector to avoid duplication
 		let css = '';
 
 		const productIconTheme = this._themeService.getProductIconTheme();

@@ -116,7 +116,7 @@ export class TimelineService extends Disposable implements ITimelineService {
 		};
 	}
 
-	unregisterTimelineProvider(id: string): codemavi {
+	unregisterTimelineProvider(id: string): void {
 		this.logService.trace(`TimelineService#unregisterTimelineProvider: id=${id}`);
 
 		if (!this.providers.has(id)) {

@@ -45,7 +45,7 @@ class AccessibleViewNextAction extends Action2 {
 			title: localize('editor.action.accessibleViewNext', "Show Next in Accessible View")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).next();
 	}
 }
@@ -71,7 +71,7 @@ class AccessibleViewNextCodeBlockAction extends Action2 {
 			title: localize('editor.action.accessibleViewNextCodeBlock', "Accessible View: Next Code Block")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).navigateToCodeBlock('next');
 	}
 }
@@ -96,7 +96,7 @@ class AccessibleViewPreviousCodeBlockAction extends Action2 {
 			title: localize('editor.action.accessibleViewPreviousCodeBlock', "Accessible View: Previous Code Block")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).navigateToCodeBlock('previous');
 	}
 }
@@ -122,7 +122,7 @@ class AccessibleViewPreviousAction extends Action2 {
 			title: localize('editor.action.accessibleViewPrevious', "Show Previous in Accessible View")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).previous();
 	}
 }
@@ -150,7 +150,7 @@ class AccessibleViewGoToSymbolAction extends Action2 {
 			title: localize('editor.action.accessibleViewGoToSymbol', "Go To Symbol in Accessible View")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).goToSymbol();
 	}
 }
@@ -222,7 +222,7 @@ class AccessibleViewDisableHintAction extends Action2 {
 			title: localize('editor.action.accessibleViewDisableHint', "Disable Accessible View Hint")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).disableHint();
 	}
 }
@@ -249,7 +249,7 @@ class AccessibilityHelpConfigureKeybindingsAction extends Action2 {
 			title: localize('editor.action.accessibilityHelpConfigureUnassignedKeybindings', "Accessibility Help Configure Unassigned Keybindings")
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IAccessibleViewService).configureKeybindings(true);
 	}
 }
@@ -276,7 +276,7 @@ class AccessibilityHelpConfigureAssignedKeybindingsAction extends Action2 {
 			title: localize('editor.action.accessibilityHelpConfigureAssignedKeybindings', "Accessibility Help Configure Assigned Keybindings")
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		await accessor.get(IAccessibleViewService).configureKeybindings(false);
 	}
 }
@@ -295,7 +295,7 @@ class AccessibilityHelpOpenHelpLinkAction extends Action2 {
 			title: localize('editor.action.accessibilityHelpOpenHelpLink', "Accessibility Help Open Help Link")
 		});
 	}
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		accessor.get(IAccessibleViewService).openHelpLink();
 	}
 }
@@ -323,7 +323,7 @@ class AccessibleViewAcceptInlineCompletionAction extends Action2 {
 			title: localize('editor.action.accessibleViewAcceptInlineCompletionAction', "Accept Inline Completion")
 		});
 	}
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const codeEditorService = accessor.get(ICodeEditorService);
 		const editor = codeEditorService.getActiveCodeEditor() || codeEditorService.getFocusedCodeEditor();
 		if (!editor) {

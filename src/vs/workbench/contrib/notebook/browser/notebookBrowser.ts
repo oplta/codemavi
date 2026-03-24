@@ -110,10 +110,10 @@ export interface ICellOutputViewModel extends IDisposable {
 	resolveMimeTypes(textModel: NotebookTextModel, kernelProvides: readonly string[] | undefined): [readonly IOrderedMimeType[], number];
 	pickedMimeType: IOrderedMimeType | undefined;
 	hasMultiMimeType(): boolean;
-	readonly onDidResetRenderer: Event<codemavi>;
+	readonly onDidResetRenderer: Event<void>;
 	readonly visible: IObservable<boolean>;
-	setVisible(visible: boolean, force?: boolean): codemavi;
-	resetRenderer(): codemavi;
+	setVisible(visible: boolean, force?: boolean): void;
+	resetRenderer(): void;
 	toRawJSON(): any;
 }
 
@@ -136,7 +136,7 @@ export interface IGenericCellViewModel {
 	inputInOutputIsFocused: boolean;
 	outputsViewModels: ICellOutputViewModel[];
 	getOutputOffset(index: number): number;
-	updateOutputHeight(index: number, height: number, source?: string): codemavi;
+	updateOutputHeight(index: number, height: number, source?: string): void;
 }
 
 export interface IDisplayOutputLayoutUpdateRequest {
@@ -243,10 +243,10 @@ export interface ICellViewModel extends IGenericCellViewModel {
 	readonly textBuffer: IReadonlyTextBuffer;
 	readonly layoutInfo: CellLayoutInfo;
 	readonly onDidChangeLayout: Event<ICommonCellViewModelLayoutChangeInfo>;
-	readonly onDidChangeCellStatusBarItems: Event<codemavi>;
+	readonly onDidChangeCellStatusBarItems: Event<void>;
 	readonly onCellDecorationsChanged: Event<{ added: INotebookCellDecorationOptions[]; removed: INotebookCellDecorationOptions[] }>;
 	readonly onDidChangeState: Event<CellViewModelStateChangeEvent>;
-	readonly onDidChangeEditorAttachState: Event<codemavi>;
+	readonly onDidChangeEditorAttachState: Event<void>;
 	readonly editStateSource: string;
 	readonly editorAttached: boolean;
 	isInputCollapsed: boolean;
@@ -274,15 +274,15 @@ export interface ICellViewModel extends IGenericCellViewModel {
 	hasModel(): this is IEditableCellViewModel;
 	resolveTextModel(): Promise<ITextModel>;
 	getSelections(): Selection[];
-	setSelections(selections: Selection[]): codemavi;
+	setSelections(selections: Selection[]): void;
 	getSelectionsStartPosition(): IPosition[] | undefined;
 	getCellDecorations(): INotebookCellDecorationOptions[];
 	getCellStatusBarItems(): INotebookCellStatusBarItem[];
 	getEditState(): CellEditState;
-	updateEditState(state: CellEditState, source: string): codemavi;
+	updateEditState(state: CellEditState, source: string): void;
 	deltaModelDecorations(oldDecorations: readonly string[], newDecorations: readonly IModelDeltaDecoration[]): string[];
 	getCellDecorationRange(id: string): Range | null;
-	enableAutoLanguageDetection(): codemavi;
+	enableAutoLanguageDetection(): void;
 }
 
 export interface IEditableCellViewModel extends ICellViewModel {
@@ -298,7 +298,7 @@ export interface INotebookEditorContribution {
 	/**
 	 * Dispose this contribution.
 	 */
-	dispose(): codemavi;
+	dispose(): void;
 	/**
 	 * Store view state.
 	 */
@@ -306,7 +306,7 @@ export interface INotebookEditorContribution {
 	/**
 	 * Restore view state.
 	 */
-	restoreViewState?(state: unknown): codemavi;
+	restoreViewState?(state: unknown): void;
 }
 
 /**
@@ -460,8 +460,8 @@ export interface INotebookViewZone {
 
 export interface INotebookViewZoneChangeAccessor {
 	addZone(zone: INotebookViewZone): string;
-	removeZone(id: string): codemavi;
-	layoutZone(id: string): codemavi;
+	removeZone(id: string): void;
+	layoutZone(id: string): void;
 }
 
 export interface INotebookCellOverlay {
@@ -471,8 +471,8 @@ export interface INotebookCellOverlay {
 
 export interface INotebookCellOverlayChangeAccessor {
 	addOverlay(overlay: INotebookCellOverlay): string;
-	removeOverlay(id: string): codemavi;
-	layoutOverlay(id: string): codemavi;
+	removeOverlay(id: string): void;
+	layoutOverlay(id: string): void;
 }
 
 export type NotebookViewCellsSplice = [
@@ -493,7 +493,7 @@ export interface INotebookViewModel {
 	viewType: string;
 	onDidChangeViewCells: Event<INotebookViewCellsUpdateEvent>;
 	onDidChangeSelection: Event<string>;
-	onDidFoldingStateChanged: Event<codemavi>;
+	onDidFoldingStateChanged: Event<void>;
 	getNearestVisibleCellIndexUpwards(index: number): number;
 	getTrackedRange(id: string): ICellRange | null;
 	setTrackedRange(id: string | null, newRange: ICellRange | null, newStickiness: TrackedRangeStickiness): string | null;
@@ -504,8 +504,8 @@ export interface INotebookViewModel {
 	deltaCellStatusBarItems(oldItems: string[], newItems: INotebookDeltaCellStatusBarItems[]): string[];
 	getFoldedLength(index: number): number;
 	getFoldingStartIndex(index: number): number;
-	replaceOne(cell: ICellViewModel, range: Range, text: string): Promise<codemavi>;
-	replaceAll(matches: CellFindMatchWithIndex[], texts: string[]): Promise<codemavi>;
+	replaceOne(cell: ICellViewModel, range: Range, text: string): Promise<void>;
+	replaceAll(matches: CellFindMatchWithIndex[], texts: string[]): Promise<void>;
 }
 //#endregion
 
@@ -513,21 +513,21 @@ export interface INotebookEditor {
 	//#region Eventing
 	readonly onDidChangeCellState: Event<NotebookCellStateChangedEvent>;
 	readonly onDidChangeViewCells: Event<INotebookViewCellsUpdateEvent>;
-	readonly onDidChangeVisibleRanges: Event<codemavi>;
-	readonly onDidChangeSelection: Event<codemavi>;
-	readonly onDidChangeFocus: Event<codemavi>;
+	readonly onDidChangeVisibleRanges: Event<void>;
+	readonly onDidChangeSelection: Event<void>;
+	readonly onDidChangeFocus: Event<void>;
 	/**
 	 * An event emitted when the model of this editor has changed.
 	 */
 	readonly onDidChangeModel: Event<NotebookTextModel | undefined>;
-	readonly onDidAttachViewModel: Event<codemavi>;
-	readonly onDidFocusWidget: Event<codemavi>;
-	readonly onDidBlurWidget: Event<codemavi>;
-	readonly onDidScroll: Event<codemavi>;
-	readonly onDidChangeLayout: Event<codemavi>;
-	readonly onDidChangeActiveCell: Event<codemavi>;
+	readonly onDidAttachViewModel: Event<void>;
+	readonly onDidFocusWidget: Event<void>;
+	readonly onDidBlurWidget: Event<void>;
+	readonly onDidScroll: Event<void>;
+	readonly onDidChangeLayout: Event<void>;
+	readonly onDidChangeActiveCell: Event<void>;
 	readonly onDidChangeActiveEditor: Event<INotebookEditor>;
-	readonly onDidChangeActiveKernel: Event<codemavi>;
+	readonly onDidChangeActiveKernel: Event<void>;
 	readonly onMouseUp: Event<INotebookEditorMouseEvent>;
 	readonly onMouseDown: Event<INotebookEditorMouseEvent>;
 	//#endregion
@@ -553,42 +553,42 @@ export interface INotebookEditor {
 
 	getLength(): number;
 	getSelections(): ICellRange[];
-	setSelections(selections: ICellRange[]): codemavi;
+	setSelections(selections: ICellRange[]): void;
 	getFocus(): ICellRange;
-	setFocus(focus: ICellRange): codemavi;
+	setFocus(focus: ICellRange): void;
 	getId(): string;
 
 	getViewModel(): INotebookViewModel | undefined;
 	hasModel(): this is IActiveNotebookEditor;
-	dispose(): codemavi;
+	dispose(): void;
 	getDomNode(): HTMLElement;
 	getInnerWebview(): IWebviewElement | undefined;
 	getSelectionViewModels(): ICellViewModel[];
 	getEditorViewState(): INotebookEditorViewState;
-	restoreListViewState(viewState: INotebookEditorViewState | undefined): codemavi;
+	restoreListViewState(viewState: INotebookEditorViewState | undefined): void;
 
 	getBaseCellEditorOptions(language: string): IBaseCellEditorOptions;
 
 	/**
 	 * Focus the active cell in notebook cell list
 	 */
-	focus(): codemavi;
+	focus(): void;
 
 	/**
 	 * Focus the notebook cell list container
 	 */
-	focusContainer(clearSelection?: boolean): codemavi;
+	focusContainer(clearSelection?: boolean): void;
 
 	hasEditorFocus(): boolean;
 	hasWebviewFocus(): boolean;
 
 	hasOutputTextSelection(): boolean;
-	setOptions(options: INotebookEditorOptions | undefined): Promise<codemavi>;
+	setOptions(options: INotebookEditorOptions | undefined): Promise<void>;
 
 	/**
 	 * Select & focus cell
 	 */
-	focusElement(cell: ICellViewModel): codemavi;
+	focusElement(cell: ICellViewModel): void;
 
 	/**
 	 * Layout info for the notebook editor
@@ -600,17 +600,17 @@ export interface INotebookEditor {
 	/**
 	 * Focus the container of a cell (the monaco editor inside is not focused).
 	 */
-	focusNotebookCell(cell: ICellViewModel, focus: 'editor' | 'container' | 'output', options?: IFocusNotebookCellOptions): Promise<codemavi>;
+	focusNotebookCell(cell: ICellViewModel, focus: 'editor' | 'container' | 'output', options?: IFocusNotebookCellOptions): Promise<void>;
 
 	/**
 	 * Execute the given notebook cells
 	 */
-	executeNotebookCells(cells?: Iterable<ICellViewModel>): Promise<codemavi>;
+	executeNotebookCells(cells?: Iterable<ICellViewModel>): Promise<void>;
 
 	/**
 	 * Cancel the given notebook cells
 	 */
-	cancelNotebookCells(cells?: Iterable<ICellViewModel>): Promise<codemavi>;
+	cancelNotebookCells(cells?: Iterable<ICellViewModel>): Promise<void>;
 
 	/**
 	 * Get current active cell
@@ -620,124 +620,124 @@ export interface INotebookEditor {
 	/**
 	 * Layout the cell with a new height
 	 */
-	layoutNotebookCell(cell: ICellViewModel, height: number): Promise<codemavi>;
+	layoutNotebookCell(cell: ICellViewModel, height: number): Promise<void>;
 
 	/**
 	 * Render the output in webview layer
 	 */
-	createOutput(cell: ICellViewModel, output: IInsetRenderOutput, offset: number, createWhenIdle: boolean): Promise<codemavi>;
+	createOutput(cell: ICellViewModel, output: IInsetRenderOutput, offset: number, createWhenIdle: boolean): Promise<void>;
 
 	/**
 	 * Update the output in webview layer with latest content. It will delegate to `createOutput` is the output is not rendered yet
 	 */
-	updateOutput(cell: ICellViewModel, output: IInsetRenderOutput, offset: number): Promise<codemavi>;
+	updateOutput(cell: ICellViewModel, output: IInsetRenderOutput, offset: number): Promise<void>;
 
 	/**
 	 * Copy the image in the specific cell output to the clipboard
 	 */
-	copyOutputImage(cellOutput: ICellOutputViewModel): Promise<codemavi>;
+	copyOutputImage(cellOutput: ICellOutputViewModel): Promise<void>;
 	/**
 	 * Select the contents of the first focused output of the cell.
 	 * Implementation of Ctrl+A for an output item.
 	 */
-	selectOutputContent(cell: ICellViewModel): codemavi;
+	selectOutputContent(cell: ICellViewModel): void;
 	/**
 	 * Select the active input element of the first focused output of the cell.
 	 * Implementation of Ctrl+A for an input element in an output item.
 	 */
-	selectInputContents(cell: ICellViewModel): codemavi;
+	selectInputContents(cell: ICellViewModel): void;
 
 	readonly onDidReceiveMessage: Event<INotebookWebviewMessage>;
 
 	/**
 	 * Send message to the webview for outputs.
 	 */
-	postMessage(message: any): codemavi;
+	postMessage(message: any): void;
 
 	/**
 	 * Remove class name on the notebook editor root DOM node.
 	 */
-	addClassName(className: string): codemavi;
+	addClassName(className: string): void;
 
 	/**
 	 * Remove class name on the notebook editor root DOM node.
 	 */
-	removeClassName(className: string): codemavi;
+	removeClassName(className: string): void;
 
 	/**
 	 * Set scrollTop value of the notebook editor.
 	 */
-	setScrollTop(scrollTop: number): codemavi;
+	setScrollTop(scrollTop: number): void;
 
 	/**
 	 * The range will be revealed with as little scrolling as possible.
 	 */
-	revealCellRangeInView(range: ICellRange): codemavi;
+	revealCellRangeInView(range: ICellRange): void;
 
 	/**
 	 * Reveal cell into viewport.
 	 */
-	revealInView(cell: ICellViewModel): Promise<codemavi>;
+	revealInView(cell: ICellViewModel): Promise<void>;
 
 	/**
 	 * Reveal cell into the top of viewport.
 	 */
-	revealInViewAtTop(cell: ICellViewModel): codemavi;
+	revealInViewAtTop(cell: ICellViewModel): void;
 
 	/**
 	 * Reveal cell into viewport center.
 	 */
-	revealInCenter(cell: ICellViewModel): codemavi;
+	revealInCenter(cell: ICellViewModel): void;
 
 	/**
 	 * Reveal cell into viewport center if cell is currently out of the viewport.
 	 */
-	revealInCenterIfOutsideViewport(cell: ICellViewModel): Promise<codemavi>;
+	revealInCenterIfOutsideViewport(cell: ICellViewModel): Promise<void>;
 
 	/**
 	 * Reveal the first line of the cell into the view if the cell is outside of the viewport.
 	 */
-	revealFirstLineIfOutsideViewport(cell: ICellViewModel): Promise<codemavi>;
+	revealFirstLineIfOutsideViewport(cell: ICellViewModel): Promise<void>;
 
 	/**
 	 * Reveal a line in notebook cell into viewport with minimal scrolling.
 	 */
-	revealLineInViewAsync(cell: ICellViewModel, line: number): Promise<codemavi>;
+	revealLineInViewAsync(cell: ICellViewModel, line: number): Promise<void>;
 
 	/**
 	 * Reveal a line in notebook cell into viewport center.
 	 */
-	revealLineInCenterAsync(cell: ICellViewModel, line: number): Promise<codemavi>;
+	revealLineInCenterAsync(cell: ICellViewModel, line: number): Promise<void>;
 
 	/**
 	 * Reveal a line in notebook cell into viewport center.
 	 */
-	revealLineInCenterIfOutsideViewportAsync(cell: ICellViewModel, line: number): Promise<codemavi>;
+	revealLineInCenterIfOutsideViewportAsync(cell: ICellViewModel, line: number): Promise<void>;
 
 	/**
 	 * Reveal a range in notebook cell into viewport with minimal scrolling.
 	 */
-	revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi>;
+	revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<void>;
 
 	/**
 	 * Reveal a range in notebook cell into viewport center.
 	 */
-	revealRangeInCenterAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi>;
+	revealRangeInCenterAsync(cell: ICellViewModel, range: Selection | Range): Promise<void>;
 
 	/**
 	 * Reveal a range in notebook cell into viewport center.
 	 */
-	revealRangeInCenterIfOutsideViewportAsync(cell: ICellViewModel, range: Selection | Range): Promise<codemavi>;
+	revealRangeInCenterIfOutsideViewportAsync(cell: ICellViewModel, range: Selection | Range): Promise<void>;
 
 	/**
 	 * Reveal a position with `offset` in a cell into viewport center.
 	 */
-	revealCellOffsetInCenter(cell: ICellViewModel, offset: number): codemavi;
+	revealCellOffsetInCenter(cell: ICellViewModel, offset: number): void;
 
 	/**
 	 * Reveal `offset` in the list view into viewport center if it is outside of the viewport.
 	 */
-	revealOffsetInCenterIfOutsideViewport(offset: number): codemavi;
+	revealOffsetInCenterIfOutsideViewport(offset: number): void;
 
 	/**
 	 * Convert the view range to model range
@@ -755,7 +755,7 @@ export interface INotebookEditor {
 	 * Set selectiosn on the text editor attached to the cell
 	 */
 
-	setCellEditorSelection(cell: ICellViewModel, selection: Range): codemavi;
+	setCellEditorSelection(cell: ICellViewModel, selection: Range): void;
 
 	/**
 	 *Change the decorations on the notebook cell list
@@ -769,9 +769,9 @@ export interface INotebookEditor {
 	 */
 	changeModelDecorations<T>(callback: (changeAccessor: IModelDecorationsChangeAccessor) => T): T | null;
 
-	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => codemavi): codemavi;
+	changeViewZones(callback: (accessor: INotebookViewZoneChangeAccessor) => void): void;
 
-	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => codemavi): codemavi;
+	changeCellOverlays(callback: (accessor: INotebookCellOverlayChangeAccessor) => void): void;
 
 	getViewZoneLayoutInfo(id: string): { top: number; height: number } | null;
 
@@ -794,10 +794,10 @@ export interface INotebookEditor {
 	getPreviousVisibleCellIndex(index: number): number | undefined;
 	find(query: string, options: INotebookFindOptions, token: CancellationToken, skipWarmup?: boolean, shouldGetSearchPreviewInfo?: boolean, ownerID?: string): Promise<CellFindMatchWithIndex[]>;
 	findHighlightCurrent(matchIndex: number, ownerID?: string): Promise<number>;
-	findUnHighlightCurrent(matchIndex: number, ownerID?: string): Promise<codemavi>;
-	findStop(ownerID?: string): codemavi;
-	showProgress(): codemavi;
-	hideProgress(): codemavi;
+	findUnHighlightCurrent(matchIndex: number, ownerID?: string): Promise<void>;
+	findStop(ownerID?: string): void;
+	showProgress(): void;
+	hideProgress(): void;
 
 	getAbsoluteTopOfElement(cell: ICellViewModel): number;
 	getHeightOfElement(cell: ICellViewModel): number;
@@ -814,13 +814,13 @@ export interface IActiveNotebookEditor extends INotebookEditor {
 
 export interface INotebookEditorPane extends IEditorPaneWithSelection {
 	getControl(): INotebookEditor | undefined;
-	readonly onDidChangeModel: Event<codemavi>;
+	readonly onDidChangeModel: Event<void>;
 	textModel: NotebookTextModel | undefined;
 }
 
 export interface IBaseCellEditorOptions extends IDisposable {
 	readonly value: IEditorOptions;
-	readonly onDidChange: Event<codemavi>;
+	readonly onDidChange: Event<void>;
 }
 
 /**
@@ -830,22 +830,22 @@ export interface INotebookEditorDelegate extends INotebookEditor {
 	hasModel(): this is IActiveNotebookEditorDelegate;
 
 	readonly creationOptions: INotebookEditorCreationOptions;
-	readonly onDidChangeOptions: Event<codemavi>;
-	readonly onDidChangeDecorations: Event<codemavi>;
-	createMarkupPreview(cell: ICellViewModel): Promise<codemavi>;
-	unhideMarkupPreviews(cells: readonly ICellViewModel[]): Promise<codemavi>;
-	hideMarkupPreviews(cells: readonly ICellViewModel[]): Promise<codemavi>;
+	readonly onDidChangeOptions: Event<void>;
+	readonly onDidChangeDecorations: Event<void>;
+	createMarkupPreview(cell: ICellViewModel): Promise<void>;
+	unhideMarkupPreviews(cells: readonly ICellViewModel[]): Promise<void>;
+	hideMarkupPreviews(cells: readonly ICellViewModel[]): Promise<void>;
 
 	/**
 	 * Remove the output from the webview layer
 	 */
-	removeInset(output: IDisplayOutputViewModel): codemavi;
+	removeInset(output: IDisplayOutputViewModel): void;
 
 	/**
 	 * Hide the inset in the webview layer without removing it
 	 */
-	hideInset(output: IDisplayOutputViewModel): codemavi;
-	deltaCellContainerClassNames(cellId: string, added: string[], removed: string[], cellKind: CellKind): codemavi;
+	hideInset(output: IDisplayOutputViewModel): void;
+	deltaCellContainerClassNames(cellId: string, added: string[], removed: string[], cellKind: CellKind): void;
 }
 
 export interface IActiveNotebookEditorDelegate extends INotebookEditorDelegate {

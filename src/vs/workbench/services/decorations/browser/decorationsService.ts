@@ -59,7 +59,7 @@ class DecorationRule {
 		this.iconBadgeClassName = `${DecorationRule._classNamesPrefix}-iconBadge-${suffix}`;
 	}
 
-	acquire(): codemavi {
+	acquire(): void {
 		this._refCounter += 1;
 	}
 
@@ -67,7 +67,7 @@ class DecorationRule {
 		return --this._refCounter === 0;
 	}
 
-	appendCSSRules(element: HTMLStyleElement): codemavi {
+	appendCSSRules(element: HTMLStyleElement): void {
 		if (!Array.isArray(this.data)) {
 			this._appendForOne(this.data, element);
 		} else {
@@ -75,7 +75,7 @@ class DecorationRule {
 		}
 	}
 
-	private _appendForOne(data: IDecorationData, element: HTMLStyleElement): codemavi {
+	private _appendForOne(data: IDecorationData, element: HTMLStyleElement): void {
 		const { color, letter } = data;
 		// label
 		createCSSRule(`.${this.itemColorClassName}`, `color: ${getColor(color)};`, element);
@@ -86,7 +86,7 @@ class DecorationRule {
 		}
 	}
 
-	private _appendForMany(data: IDecorationData[], element: HTMLStyleElement): codemavi {
+	private _appendForMany(data: IDecorationData[], element: HTMLStyleElement): void {
 		// label
 		const { color } = data.find(d => !!d.color) ?? data[0];
 		createCSSRule(`.${this.itemColorClassName}`, `color: ${getColor(color)};`, element);
@@ -149,7 +149,7 @@ class DecorationRule {
 		);
 	}
 
-	removeCSSRules(element: HTMLStyleElement): codemavi {
+	removeCSSRules(element: HTMLStyleElement): void {
 		removeCSSRulesContainingSelector(this.itemColorClassName, element);
 		removeCSSRulesContainingSelector(this.itemBadgeClassName, element);
 		removeCSSRulesContainingSelector(this.bubbleBadgeClassName, element);
@@ -166,7 +166,7 @@ class DecorationStyles {
 	constructor(private readonly _themeService: IThemeService) {
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._dispoables.dispose();
 	}
 
@@ -232,7 +232,7 @@ class FileDecorationChangeEvent implements IResourceDecorationChangeEvent {
 class DecorationDataRequest {
 	constructor(
 		readonly source: CancellationTokenSource,
-		readonly thenable: Promise<codemavi>,
+		readonly thenable: Promise<void>,
 	) { }
 }
 
@@ -266,7 +266,7 @@ export class DecorationsService implements IDecorationsService {
 		this._store.add(this._onDidChangeDecorationsDelayed.event(event => { this._onDidChangeDecorations.fire(new FileDecorationChangeEvent(event)); }));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._store.dispose();
 		this._data.clear();
 	}

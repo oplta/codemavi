@@ -24,10 +24,10 @@ export const acceptSelectedActionCommand = 'acceptSelectedCodeAction';
 export const previewSelectedActionCommand = 'previewSelectedCodeAction';
 
 export interface IActionListDelegate<T> {
-	onHide(didCancel?: boolean): codemavi;
-	onSelect(action: T, preview?: boolean): codemavi;
-	onHover?(action: T, cancellationToken: CancellationToken): Promise<{ canPreview: boolean } | codemavi>;
-	onFocus?(action: T | undefined): codemavi;
+	onHide(didCancel?: boolean): void;
+	onSelect(action: T, preview?: boolean): void;
+	onHover?(action: T, cancellationToken: CancellationToken): Promise<{ canPreview: boolean } | void>;
+	onFocus?(action: T | undefined): void;
 }
 
 export interface IActionListItem<T> {
@@ -71,11 +71,11 @@ class HeaderRenderer<T> implements IListRenderer<IActionListItem<T>, IHeaderTemp
 		return { container, text };
 	}
 
-	renderElement(element: IActionListItem<T>, _index: number, templateData: IHeaderTemplateData): codemavi {
+	renderElement(element: IActionListItem<T>, _index: number, templateData: IHeaderTemplateData): void {
 		templateData.text.textContent = element.group?.title ?? '';
 	}
 
-	disposeTemplate(_templateData: IHeaderTemplateData): codemavi {
+	disposeTemplate(_templateData: IHeaderTemplateData): void {
 		// noop
 	}
 }
@@ -105,7 +105,7 @@ class ActionItemRenderer<T> implements IListRenderer<IActionListItem<T>, IAction
 		return { container, icon, text, keybinding };
 	}
 
-	renderElement(element: IActionListItem<T>, _index: number, data: IActionMenuTemplateData): codemavi {
+	renderElement(element: IActionListItem<T>, _index: number, data: IActionMenuTemplateData): void {
 		if (element.group?.icon) {
 			data.icon.className = ThemeIcon.asClassName(element.group.icon);
 			if (element.group.icon.color) {
@@ -143,7 +143,7 @@ class ActionItemRenderer<T> implements IListRenderer<IActionListItem<T>, IAction
 		}
 	}
 
-	disposeTemplate(templateData: IActionMenuTemplateData): codemavi {
+	disposeTemplate(templateData: IActionMenuTemplateData): void {
 		templateData.keybinding.dispose();
 	}
 }
@@ -237,7 +237,7 @@ export class ActionList<T> extends Disposable {
 		return !element.disabled && element.kind === ActionListItemKind.Action;
 	}
 
-	hide(didCancel?: boolean): codemavi {
+	hide(didCancel?: boolean): void {
 		this._delegate.onHide(didCancel);
 		this.cts.cancel();
 		this._contextViewService.hideContextView();
@@ -304,7 +304,7 @@ export class ActionList<T> extends Disposable {
 		this._list.setSelection([focusIndex], event);
 	}
 
-	private onListSelection(e: IListEvent<IActionListItem<T>>): codemavi {
+	private onListSelection(e: IListEvent<IActionListItem<T>>): void {
 		if (!e.elements.length) {
 			return;
 		}
@@ -342,7 +342,7 @@ export class ActionList<T> extends Disposable {
 		this._list.setFocus(typeof e.index === 'number' ? [e.index] : []);
 	}
 
-	private onListClick(e: IListMouseEvent<IActionListItem<T>>): codemavi {
+	private onListClick(e: IListMouseEvent<IActionListItem<T>>): void {
 		if (e.element && this.focusCondition(e.element)) {
 			this._list.setFocus([]);
 		}

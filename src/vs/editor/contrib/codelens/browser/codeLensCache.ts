@@ -19,9 +19,9 @@ export const ICodeLensCache = createDecorator<ICodeLensCache>('ICodeLensCache');
 
 export interface ICodeLensCache {
 	readonly _serviceBrand: undefined;
-	put(model: ITextModel, data: CodeLensModel): codemavi;
+	put(model: ITextModel, data: CodeLensModel): void;
 	get(model: ITextModel): CodeLensModel | undefined;
-	delete(model: ITextModel): codemavi;
+	delete(model: ITextModel): void;
 }
 
 interface ISerializedCacheData {
@@ -67,7 +67,7 @@ export class CodeLensCache implements ICodeLensCache {
 		});
 	}
 
-	put(model: ITextModel, data: CodeLensModel): codemavi {
+	put(model: ITextModel, data: CodeLensModel): void {
 		// create a copy of the model that is without command-ids
 		// but with comand-labels
 		const copyItems = data.lenses.map((item): CodeLens => {
@@ -88,7 +88,7 @@ export class CodeLensCache implements ICodeLensCache {
 		return item && item.lineCount === model.getLineCount() ? item.data : undefined;
 	}
 
-	delete(model: ITextModel): codemavi {
+	delete(model: ITextModel): void {
 		this._cache.delete(model.uri.toString());
 	}
 
@@ -109,7 +109,7 @@ export class CodeLensCache implements ICodeLensCache {
 		return JSON.stringify(data);
 	}
 
-	private _deserialize(raw: string): codemavi {
+	private _deserialize(raw: string): void {
 		try {
 			const data: Record<string, ISerializedCacheData> = JSON.parse(raw);
 			for (const key in data) {

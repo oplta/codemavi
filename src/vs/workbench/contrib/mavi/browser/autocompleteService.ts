@@ -18,8 +18,8 @@ import { extractCodeFromRegular } from '../common/helpers/extractCodeFromResult.
 import { registerWorkbenchContribution2, WorkbenchPhase } from '../../../common/contributions.js';
 import { ILLMMessageService } from '../common/sendLLMMessageService.js';
 import { isWindows } from '../../../../base/common/platform.js';
-import { IMaviSettingsService } from '../common/codemaviSettingsService.js';
-import { FeatureName } from '../common/codemaviSettingsTypes.js';
+import { IMaviSettingsService } from '../common/maviSettingsService.js';
+import { FeatureName } from '../common/maviSettingsTypes.js';
 import { IConvertToLLMMessageService } from './convertToLLMMessageService.js';
 // import { IContextGatheringService } from './contextGatheringService.js';
 
@@ -28,7 +28,7 @@ import { IConvertToLLMMessageService } from './convertToLLMMessageService.js';
 const allLinebreakSymbols = ['\r\n', '\n']
 const _ln = isWindows ? allLinebreakSymbols[0] : allLinebreakSymbols[1]
 
-// The extension this was called from is here - https://github.com/codemavieditor/codemavi/blob/autocomplete/extensions/codemavi/src/extension/extension.ts
+// The extension this was called from is here - https://github.com/mavieditor/mavi/blob/autocomplete/extensions/mavi/src/extension/extension.ts
 
 
 /*
@@ -70,9 +70,9 @@ class LRUCache<K, V> {
 	public items: Map<K, V>;
 	private keyOrder: K[];
 	private maxSize: number;
-	private disposeCallback?: (value: V, key?: K) => codemavi;
+	private disposeCallback?: (value: V, key?: K) => void;
 
-	constructor(maxSize: number, disposeCallback?: (value: V, key?: K) => codemavi) {
+	constructor(maxSize: number, disposeCallback?: (value: V, key?: K) => void) {
 		if (maxSize <= 0) throw new Error('Cache size must be greater than 0');
 
 		this.items = new Map();
@@ -81,7 +81,7 @@ class LRUCache<K, V> {
 		this.disposeCallback = disposeCallback;
 	}
 
-	set(key: K, value: V): codemavi {
+	set(key: K, value: V): void {
 		// If key exists, remove it from the order list
 		if (this.items.has(key)) {
 			this.keyOrder = this.keyOrder.filter(k => k !== key);
@@ -122,7 +122,7 @@ class LRUCache<K, V> {
 		return false;
 	}
 
-	clear(): codemavi {
+	clear(): void {
 		// Call dispose callback for all items if it exists
 		if (this.disposeCallback) {
 			for (const [key, value] of this.items.entries()) {
@@ -617,7 +617,7 @@ export const IAutocompleteService = createDecorator<IAutocompleteService>('Autoc
 
 export class AutocompleteService extends Disposable implements IAutocompleteService {
 
-	static readonly ID = 'codemavi.autocompleteService'
+	static readonly ID = 'mavi.autocompleteService'
 
 	_serviceBrand: undefined;
 

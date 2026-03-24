@@ -62,7 +62,7 @@ export class ChatEditingNotebookEditorIntegration extends Disposable implements 
 	public get currentIndex(): IObservable<number> {
 		return this.integration.currentIndex;
 	}
-	reveal(firstOrLast: boolean): codemavi {
+	reveal(firstOrLast: boolean): void {
 		return this.integration.reveal(firstOrLast);
 	}
 	next(wrap: boolean): boolean {
@@ -71,20 +71,20 @@ export class ChatEditingNotebookEditorIntegration extends Disposable implements 
 	previous(wrap: boolean): boolean {
 		return this.integration.previous(wrap);
 	}
-	enableAccessibleDiffView(): codemavi {
+	enableAccessibleDiffView(): void {
 		this.integration.enableAccessibleDiffView();
 	}
-	acceptNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	acceptNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		this.integration.acceptNearestChange(change);
 	}
-	rejectNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	rejectNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		this.integration.rejectNearestChange(change);
 	}
-	toggleDiff(change: IModifiedFileEntryChangeHunk | undefined): Promise<codemavi> {
+	toggleDiff(change: IModifiedFileEntryChangeHunk | undefined): Promise<void> {
 		return this.integration.toggleDiff(change);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this.integration.dispose();
 		super.dispose();
 	}
@@ -347,7 +347,7 @@ class ChatEditingNotebookEditorWidgetIntegration extends Disposable implements I
 		return integration;
 	}
 
-	reveal(firstOrLast: boolean): codemavi {
+	reveal(firstOrLast: boolean): void {
 		const changes = sortCellChanges(this.cellChanges.get().filter(c => c.type !== 'unchanged'));
 		if (!changes.length) {
 			return undefined;
@@ -418,7 +418,7 @@ class ChatEditingNotebookEditorWidgetIntegration extends Disposable implements I
 		return cellViewModel;
 	}
 
-	private async revealChangeInView(cell: ICellViewModel, lines: LineRange | undefined): Promise<codemavi> {
+	private async revealChangeInView(cell: ICellViewModel, lines: LineRange | undefined): Promise<void> {
 		const targetLines = lines ?? new LineRange(0, 0);
 		await this.notebookEditor.focusNotebookCell(cell, 'container', { focusEditorLine: targetLines.startLineNumber });
 		await this.notebookEditor.revealRangeInCenterAsync(cell, new Range(targetLines.startLineNumber, 0, targetLines.endLineNumberExclusive, 0));
@@ -538,22 +538,22 @@ class ChatEditingNotebookEditorWidgetIntegration extends Disposable implements I
 		return false;
 	}
 
-	enableAccessibleDiffView(): codemavi {
+	enableAccessibleDiffView(): void {
 		const cell = this.notebookEditor.getActiveCell()?.model;
 		if (cell) {
 			const integration = this.cellEditorIntegrations.get(cell)?.integration;
 			integration?.enableAccessibleDiffView();
 		}
 	}
-	acceptNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	acceptNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		change.accept();
 		this.next(true);
 	}
-	rejectNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	rejectNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		change.reject();
 		this.next(true);
 	}
-	async toggleDiff(_change: IModifiedFileEntryChangeHunk | undefined): Promise<codemavi> {
+	async toggleDiff(_change: IModifiedFileEntryChangeHunk | undefined): Promise<void> {
 		const defaultAgentName = this._chatAgentService.getDefaultAgent(ChatAgentLocation.EditingSession)?.fullName;
 		const diffInput = {
 			original: { resource: this._entry.originalURI, options: { selection: undefined } },
@@ -592,7 +592,7 @@ export class ChatEditingNotebookDiffEditorIntegration extends Disposable impleme
 		}));
 	}
 
-	reveal(firstOrLast: boolean): codemavi {
+	reveal(firstOrLast: boolean): void {
 		const changes = sortCellChanges(this.cellChanges.get().filter(c => c.type !== 'unchanged'));
 		if (!changes.length) {
 			return undefined;
@@ -622,18 +622,18 @@ export class ChatEditingNotebookDiffEditorIntegration extends Disposable impleme
 		return true;
 	}
 
-	enableAccessibleDiffView(): codemavi {
+	enableAccessibleDiffView(): void {
 		//
 	}
-	acceptNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	acceptNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		change.accept();
 		this.next(true);
 	}
-	rejectNearestChange(change: IModifiedFileEntryChangeHunk): codemavi {
+	rejectNearestChange(change: IModifiedFileEntryChangeHunk): void {
 		change.reject();
 		this.next(true);
 	}
-	async toggleDiff(_change: IModifiedFileEntryChangeHunk | undefined): Promise<codemavi> {
+	async toggleDiff(_change: IModifiedFileEntryChangeHunk | undefined): Promise<void> {
 		//
 	}
 }

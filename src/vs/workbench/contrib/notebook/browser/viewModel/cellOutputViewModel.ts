@@ -13,7 +13,7 @@ import { INotebookService } from '../../common/notebookService.js';
 
 let handle = 0;
 export class CellOutputViewModel extends Disposable implements ICellOutputViewModel {
-	private _onDidResetRendererEmitter = this._register(new Emitter<codemavi>());
+	private _onDidResetRendererEmitter = this._register(new Emitter<void>());
 	readonly onDidResetRenderer = this._onDidResetRendererEmitter.event;
 
 	private alwaysShow = false;

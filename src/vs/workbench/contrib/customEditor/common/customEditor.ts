@@ -50,7 +50,7 @@ export interface ICustomEditorModelManager {
 
 	add(resource: URI, viewType: string, model: Promise<ICustomEditorModel>): Promise<IReference<ICustomEditorModel>>;
 
-	disposeAllModelsForView(viewType: string): codemavi;
+	disposeAllModelsForView(viewType: string): void;
 }
 
 export interface ICustomEditorModel extends IDisposable {
@@ -60,15 +60,15 @@ export interface ICustomEditorModel extends IDisposable {
 	readonly canHotExit: boolean;
 
 	isReadonly(): boolean | IMarkdownString;
-	readonly onDidChangeReadonly: Event<codemavi>;
+	readonly onDidChangeReadonly: Event<void>;
 
 	isOrphaned(): boolean;
-	readonly onDidChangeOrphaned: Event<codemavi>;
+	readonly onDidChangeOrphaned: Event<void>;
 
 	isDirty(): boolean;
-	readonly onDidChangeDirty: Event<codemavi>;
+	readonly onDidChangeDirty: Event<void>;
 
-	revert(options?: IRevertOptions): Promise<codemavi>;
+	revert(options?: IRevertOptions): Promise<void>;
 
 	saveCustomEditor(options?: ISaveOptions): Promise<URI | undefined>;
 	saveCustomEditorAs(resource: URI, targetResource: URI, currentOptions?: ISaveOptions): Promise<boolean>;

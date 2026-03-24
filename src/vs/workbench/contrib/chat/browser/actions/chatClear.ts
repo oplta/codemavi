@@ -8,7 +8,7 @@ import { IChatEditorOptions } from '../chatEditor.js';
 import { ChatEditorInput } from '../chatEditorInput.js';
 import { IEditorService } from '../../../../services/editor/common/editorService.js';
 
-export async function clearChatEditor(accessor: ServicesAccessor, chatEditorInput?: ChatEditorInput): Promise<codemavi> {
+export async function clearChatEditor(accessor: ServicesAccessor, chatEditorInput?: ChatEditorInput): Promise<void> {
 	const editorService = accessor.get(IEditorService);
 
 	if (!chatEditorInput) {

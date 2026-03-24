@@ -16,7 +16,7 @@ declare global {
 	 * CSS loader that's available during development time.
 	 * DO NOT call directly, instead just import css modules, like `import 'some.css'`
 	 */
-	var _VSCODE_CSS_LOAD: (module: string) => codemavi;
+	var _VSCODE_CSS_LOAD: (module: string) => void;
 
 	/**
 	 * @deprecated You MUST use `IProductService` whenever possible.

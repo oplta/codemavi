@@ -11,8 +11,8 @@ import { NodeJSWatcher } from './nodejsWatcher.js';
 export class NodeJSWatcherClient extends AbstractNonRecursiveWatcherClient {
 
 	constructor(
-		onFileChanges: (changes: IFileChange[]) => codemavi,
-		onLogMessage: (msg: ILogMessage) => codemavi,
+		onFileChanges: (changes: IFileChange[]) => void,
+		onLogMessage: (msg: ILogMessage) => void,
 		verboseLogging: boolean
 	) {
 		super(onFileChanges, onLogMessage, verboseLogging);

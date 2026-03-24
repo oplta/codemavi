@@ -54,7 +54,7 @@ export class EditorGutter<T extends IGutterItemInfo = IGutterItemInfo> extends D
 		this._register(autorun(reader => /** @description EditorGutter.Render */ this.render(reader)));
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		super.dispose();
 
 		reset(this._domNode);
@@ -62,7 +62,7 @@ export class EditorGutter<T extends IGutterItemInfo = IGutterItemInfo> extends D
 
 	private readonly views = new Map<string, ManagedGutterItemView>();
 
-	private render(reader: IReader): codemavi {
+	private render(reader: IReader): void {
 		if (!this.modelAttached.read(reader)) {
 			return;
 		}
@@ -162,5 +162,5 @@ export interface IGutterItemInfo {
 }
 
 export interface IGutterItemView extends IDisposable {
-	layout(itemRange: OffsetRange, viewRange: OffsetRange): codemavi;
+	layout(itemRange: OffsetRange, viewRange: OffsetRange): void;
 }

@@ -34,8 +34,8 @@ function printTime(ms: number): string {
 
 export class ManagementConnection {
 
-	private _onClose = new Emitter<codemavi>();
-	public readonly onClose: Event<codemavi> = this._onClose.event;
+	private _onClose = new Emitter<void>();
+	public readonly onClose: Event<void> = this._onClose.event;
 
 	private readonly _reconnectionGraceTime: number;
 	private readonly _reconnectionShortGraceTime: number;
@@ -80,11 +80,11 @@ export class ManagementConnection {
 		this._log(`New connection established.`);
 	}
 
-	private _log(_str: string): codemavi {
+	private _log(_str: string): void {
 		this._logService.info(`[${this._remoteAddress}][${this._reconnectionToken.substr(0, 8)}][ManagementConnection] ${_str}`);
 	}
 
-	public shortenReconnectionGraceTimeIfNecessary(): codemavi {
+	public shortenReconnectionGraceTimeIfNecessary(): void {
 		if (this._disconnectRunner2.isScheduled()) {
 			// we are disconnected and already running the short reconnection timer
 			return;
@@ -96,7 +96,7 @@ export class ManagementConnection {
 		}
 	}
 
-	private _cleanResources(): codemavi {
+	private _cleanResources(): void {
 		if (this._disposed) {
 			// already called
 			return;
@@ -111,7 +111,7 @@ export class ManagementConnection {
 		this._onClose.fire(undefined);
 	}
 
-	public acceptReconnection(remoteAddress: string, socket: ISocket, initialDataChunk: VSBuffer): codemavi {
+	public acceptReconnection(remoteAddress: string, socket: ISocket, initialDataChunk: VSBuffer): void {
 		this._remoteAddress = remoteAddress;
 		this._log(`The client has reconnected.`);
 		this._disconnectRunner1.cancel();

@@ -57,7 +57,7 @@ export class ExtHostLocalizationService implements ExtHostLocalizationShape {
 		return this.bundleCache.get(extensionId)?.uri;
 	}
 
-	async initializeLocalizedMessages(extension: IExtensionDescription): Promise<codemavi> {
+	async initializeLocalizedMessages(extension: IExtensionDescription): Promise<void> {
 		if (this.isDefaultLanguage
 			|| (!extension.l10n && !extension.isBuiltin)
 		) {

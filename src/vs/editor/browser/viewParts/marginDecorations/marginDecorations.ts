@@ -20,7 +20,7 @@ export class MarginViewLineDecorationsOverlay extends DedupOverlay {
 		this._context.addEventHandler(this);
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._context.removeEventHandler(this);
 		this._renderResult = null;
 		super.dispose();
@@ -70,7 +70,7 @@ export class MarginViewLineDecorationsOverlay extends DedupOverlay {
 		return r;
 	}
 
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		const visibleStartLineNumber = ctx.visibleRange.startLineNumber;
 		const visibleEndLineNumber = ctx.visibleRange.endLineNumber;
 		const toRender = this._render(visibleStartLineNumber, visibleEndLineNumber, this._getDecorations(ctx));

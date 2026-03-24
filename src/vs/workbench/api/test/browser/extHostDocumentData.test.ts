@@ -381,7 +381,7 @@ suite('ExtHostDocumentData updates line mapping', () => {
 		return '(' + position.line + ',' + position.character + ')';
 	}
 
-	function assertDocumentLineMapping(doc: ExtHostDocumentData, direction: AssertDocumentLineMappingDirection): codemavi {
+	function assertDocumentLineMapping(doc: ExtHostDocumentData, direction: AssertDocumentLineMappingDirection): void {
 		const allText = doc.getText();
 
 		let line = 0, character = 0, previousIsCarriageReturn = false;
@@ -425,7 +425,7 @@ suite('ExtHostDocumentData updates line mapping', () => {
 		};
 	}
 
-	function testLineMappingDirectionAfterEvents(lines: string[], eol: string, direction: AssertDocumentLineMappingDirection, e: IModelChangedEvent): codemavi {
+	function testLineMappingDirectionAfterEvents(lines: string[], eol: string, direction: AssertDocumentLineMappingDirection, e: IModelChangedEvent): void {
 		const myDocument = new ExtHostDocumentData(undefined!, URI.file(''), lines.slice(0), eol, 1, 'text', false, 'utf8');
 		assertDocumentLineMapping(myDocument, direction);
 
@@ -433,7 +433,7 @@ suite('ExtHostDocumentData updates line mapping', () => {
 		assertDocumentLineMapping(myDocument, direction);
 	}
 
-	function testLineMappingAfterEvents(lines: string[], e: IModelChangedEvent): codemavi {
+	function testLineMappingAfterEvents(lines: string[], e: IModelChangedEvent): void {
 		testLineMappingDirectionAfterEvents(lines, '\n', AssertDocumentLineMappingDirection.PositionToOffset, e);
 		testLineMappingDirectionAfterEvents(lines, '\n', AssertDocumentLineMappingDirection.OffsetToPosition, e);
 

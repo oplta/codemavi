@@ -23,7 +23,7 @@ function createServerHost(
 	watchManager: FileWatcherManager,
 	pathMapper: PathMapper,
 	enabledExperimentalTypeAcquisition: boolean,
-	exit: () => codemavi,
+	exit: () => void,
 ): ServerHostWithImport {
 	const currentDirectory = '/';
 	const fs = apiClient?.vscode.workspace.fileSystem;
@@ -59,16 +59,16 @@ function createServerHost(
 	return {
 		watchFile: watchManager.watchFile.bind(watchManager),
 		watchDirectory: watchManager.watchDirectory.bind(watchManager),
-		setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): any {
+		setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
 			return setTimeout(callback, ms, ...args);
 		},
-		clearTimeout(timeoutId: any): codemavi {
+		clearTimeout(timeoutId: any): void {
 			clearTimeout(timeoutId);
 		},
-		setImmediate(callback: (...args: any[]) => codemavi, ...args: any[]): any {
+		setImmediate(callback: (...args: any[]) => void, ...args: any[]): any {
 			return this.setTimeout(callback, 0, ...args);
 		},
-		clearImmediate(timeoutId: any): codemavi {
+		clearImmediate(timeoutId: any): void {
 			this.clearTimeout(timeoutId);
 		},
 		importPlugin: async (root, moduleName) => {
@@ -264,7 +264,7 @@ function createServerHost(
 				return false;
 			}
 		},
-		createDirectory(path: string): codemavi {
+		createDirectory(path: string): void {
 			logger.logVerbose('fs.createDirectory', { path });
 			if (!fs) {
 				throw new Error('not supported');
@@ -313,7 +313,7 @@ function createServerHost(
 			}
 			return s && new Date(s.mtime);
 		},
-		deleteFile(path: string): codemavi {
+		deleteFile(path: string): void {
 			logger.logVerbose('fs.deleteFile', { path });
 
 			if (!fs) {
@@ -427,7 +427,7 @@ export async function createSys(
 	logger: Logger,
 	watchManager: FileWatcherManager,
 	pathMapper: PathMapper,
-	onExit: () => codemavi,
+	onExit: () => void,
 ) {
 	if (hasArgument(args, '--enableProjectWideIntelliSenseOnWeb')) {
 		const enabledExperimentalTypeAcquisition = hasArgument(args, '--experimentalTypeAcquisition');

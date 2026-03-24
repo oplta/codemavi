@@ -53,7 +53,7 @@ class InspectContextKeysAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const contextKeyService = accessor.get(IContextKeyService);
 
 		const disposables = new DisposableStore();
@@ -119,7 +119,7 @@ class ToggleScreencastModeAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		if (ToggleScreencastModeAction.disposable) {
 			ToggleScreencastModeAction.disposable.dispose();
 			ToggleScreencastModeAction.disposable = undefined;
@@ -144,7 +144,7 @@ class ToggleScreencastModeAction extends Action2 {
 		const onMouseUp = disposables.add(new Emitter<MouseEvent>());
 		const onMouseMove = disposables.add(new Emitter<MouseEvent>());
 
-		function registerContainerListeners(container: HTMLElement, disposables: DisposableStore): codemavi {
+		function registerContainerListeners(container: HTMLElement, disposables: DisposableStore): void {
 			disposables.add(disposables.add(new DomEmitter(container, 'mousedown', true)).event(e => onMouseDown.fire(e)));
 			disposables.add(disposables.add(new DomEmitter(container, 'mouseup', true)).event(e => onMouseUp.fire(e)));
 			disposables.add(disposables.add(new DomEmitter(container, 'mousemove', true)).event(e => onMouseMove.fire(e)));
@@ -239,7 +239,7 @@ class ToggleScreencastModeAction extends Action2 {
 		const onCompositionUpdate = disposables.add(new Emitter<CompositionEvent>());
 		const onCompositionEnd = disposables.add(new Emitter<CompositionEvent>());
 
-		function registerWindowListeners(window: Window, disposables: DisposableStore): codemavi {
+		function registerWindowListeners(window: Window, disposables: DisposableStore): void {
 			disposables.add(disposables.add(new DomEmitter(window, 'keydown', true)).event(e => onKeyDown.fire(e)));
 			disposables.add(disposables.add(new DomEmitter(window, 'compositionstart', true)).event(e => onCompositionStart.fire(e)));
 			disposables.add(disposables.add(new DomEmitter(window, 'compositionupdate', true)).event(e => onCompositionUpdate.fire(e)));
@@ -403,7 +403,7 @@ class LogStorageAction extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const storageService = accessor.get(IStorageService);
 		const dialogService = accessor.get(IDialogService);
 
@@ -424,7 +424,7 @@ class LogWorkingCopiesAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const workingCopyService = accessor.get(IWorkingCopyService);
 		const workingCopyBackupService = accessor.get(IWorkingCopyBackupService);
 		const logService = accessor.get(ILogService);
@@ -464,7 +464,7 @@ class RemoveLargeStorageEntriesAction extends Action2 {
 		});
 	}
 
-	async run(accessor: ServicesAccessor): Promise<codemavi> {
+	async run(accessor: ServicesAccessor): Promise<void> {
 		const storageService = accessor.get(IStorageService);
 		const quickInputService = accessor.get(IQuickInputService);
 		const userDataProfileService = accessor.get(IUserDataProfileService);
@@ -482,7 +482,7 @@ class RemoveLargeStorageEntriesAction extends Action2 {
 
 		for (const scope of [StorageScope.APPLICATION, StorageScope.PROFILE, StorageScope.WORKSPACE]) {
 			if (scope === StorageScope.PROFILE && userDataProfileService.currentProfile.isDefault) {
-				continue; // acodemavi duplicates
+				continue; // avoid duplicates
 			}
 
 			for (const target of [StorageTarget.MACHINE, StorageTarget.USER]) {
@@ -575,7 +575,7 @@ class StartTrackDisposables extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const disposablesSnapshotStateContext = DisposablesSnapshotStateContext.bindTo(accessor.get(IContextKeyService));
 		disposablesSnapshotStateContext.set('started');
 
@@ -598,7 +598,7 @@ class SnapshotTrackedDisposables extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const disposablesSnapshotStateContext = DisposablesSnapshotStateContext.bindTo(accessor.get(IContextKeyService));
 		disposablesSnapshotStateContext.set('pending');
 
@@ -618,7 +618,7 @@ class StopTrackDisposables extends Action2 {
 		});
 	}
 
-	run(accessor: ServicesAccessor): codemavi {
+	run(accessor: ServicesAccessor): void {
 		const editorService = accessor.get(IEditorService);
 
 		const disposablesSnapshotStateContext = DisposablesSnapshotStateContext.bindTo(accessor.get(IContextKeyService));

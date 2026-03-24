@@ -37,12 +37,12 @@ suite('WindowsFinder', () => {
 			onDidMaximize = Event.None;
 			onDidUnmaximize = Event.None;
 			onDidTriggerSystemContextMenu: Event<{ x: number; y: number }> = Event.None;
-			onDidSignalReady: Event<codemavi> = Event.None;
-			onDidClose: Event<codemavi> = Event.None;
-			onDidDestroy: Event<codemavi> = Event.None;
-			onDidEnterFullScreen: Event<codemavi> = Event.None;
-			onDidLeaveFullScreen: Event<codemavi> = Event.None;
-			whenClosedOrLoaded: Promise<codemavi> = Promise.resolve();
+			onDidSignalReady: Event<void> = Event.None;
+			onDidClose: Event<void> = Event.None;
+			onDidDestroy: Event<void> = Event.None;
+			onDidEnterFullScreen: Event<void> = Event.None;
+			onDidLeaveFullScreen: Event<void> = Event.None;
+			whenClosedOrLoaded: Promise<void> = Promise.resolve();
 			id: number = -1;
 			win: Electron.BrowserWindow = null!;
 			config: INativeWindowConfiguration | undefined;
@@ -56,26 +56,26 @@ suite('WindowsFinder', () => {
 			isReady = true;
 
 			ready(): Promise<ICodeWindow> { throw new Error('Method not implemented.'); }
-			setReady(): codemavi { throw new Error('Method not implemented.'); }
-			addTabbedWindow(window: ICodeWindow): codemavi { throw new Error('Method not implemented.'); }
-			load(config: INativeWindowConfiguration, options: { isReload?: boolean }): codemavi { throw new Error('Method not implemented.'); }
-			reload(cli?: NativeParsedArgs): codemavi { throw new Error('Method not implemented.'); }
-			focus(options?: { force: boolean }): codemavi { throw new Error('Method not implemented.'); }
-			close(): codemavi { throw new Error('Method not implemented.'); }
+			setReady(): void { throw new Error('Method not implemented.'); }
+			addTabbedWindow(window: ICodeWindow): void { throw new Error('Method not implemented.'); }
+			load(config: INativeWindowConfiguration, options: { isReload?: boolean }): void { throw new Error('Method not implemented.'); }
+			reload(cli?: NativeParsedArgs): void { throw new Error('Method not implemented.'); }
+			focus(options?: { force: boolean }): void { throw new Error('Method not implemented.'); }
+			close(): void { throw new Error('Method not implemented.'); }
 			getBounds(): Electron.Rectangle { throw new Error('Method not implemented.'); }
-			send(channel: string, ...args: any[]): codemavi { throw new Error('Method not implemented.'); }
-			sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): codemavi { throw new Error('Method not implemented.'); }
-			toggleFullScreen(): codemavi { throw new Error('Method not implemented.'); }
-			setRepresentedFilename(name: string): codemavi { throw new Error('Method not implemented.'); }
+			send(channel: string, ...args: any[]): void { throw new Error('Method not implemented.'); }
+			sendWhenReady(channel: string, token: CancellationToken, ...args: any[]): void { throw new Error('Method not implemented.'); }
+			toggleFullScreen(): void { throw new Error('Method not implemented.'); }
+			setRepresentedFilename(name: string): void { throw new Error('Method not implemented.'); }
 			getRepresentedFilename(): string | undefined { throw new Error('Method not implemented.'); }
-			setDocumentEdited(edited: boolean): codemavi { throw new Error('Method not implemented.'); }
+			setDocumentEdited(edited: boolean): void { throw new Error('Method not implemented.'); }
 			isDocumentEdited(): boolean { throw new Error('Method not implemented.'); }
-			updateTouchBar(items: UriDto<ICommandAction>[][]): codemavi { throw new Error('Method not implemented.'); }
+			updateTouchBar(items: UriDto<ICommandAction>[][]): void { throw new Error('Method not implemented.'); }
 			serializeWindowState(): IWindowState { throw new Error('Method not implemented'); }
-			updateWindowControls(options: { height?: number | undefined; backgroundColor?: string | undefined; foregroundColor?: string | undefined }): codemavi { throw new Error('Method not implemented.'); }
-			notifyZoomLevel(level: number): codemavi { throw new Error('Method not implemented.'); }
+			updateWindowControls(options: { height?: number | undefined; backgroundColor?: string | undefined; foregroundColor?: string | undefined }): void { throw new Error('Method not implemented.'); }
+			notifyZoomLevel(level: number): void { throw new Error('Method not implemented.'); }
 			matches(webContents: any): boolean { throw new Error('Method not implemented.'); }
-			dispose(): codemavi { }
+			dispose(): void { }
 		};
 	}
 

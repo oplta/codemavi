@@ -44,7 +44,7 @@ export class ExtensionDescriptionRegistry implements IReadOnlyExtensionDescripti
 		return false;
 	}
 
-	private readonly _onDidChange = new Emitter<codemavi>();
+	private readonly _onDidChange = new Emitter<void>();
 	public readonly onDidChange = this._onDidChange.event;
 
 	private _versionId: number = 0;
@@ -61,7 +61,7 @@ export class ExtensionDescriptionRegistry implements IReadOnlyExtensionDescripti
 		this._initialize();
 	}
 
-	private _initialize(): codemavi {
+	private _initialize(): void {
 		// Ensure extensions are stored in the order: builtin, user, under development
 		this._extensionDescriptions.sort(extensionCmp);
 
@@ -124,14 +124,14 @@ export class ExtensionDescriptionRegistry implements IReadOnlyExtensionDescripti
 			private _nodesSet = new Set<string>();
 			private _nodesArr: string[] = [];
 
-			addNode(id: string): codemavi {
+			addNode(id: string): void {
 				if (!this._nodesSet.has(id)) {
 					this._nodesSet.add(id);
 					this._nodesArr.push(id);
 				}
 			}
 
-			addArc(from: string, to: string): codemavi {
+			addArc(from: string, to: string): void {
 				this.addNode(from);
 				this.addNode(to);
 				if (this._arcs.has(from)) {
@@ -324,7 +324,7 @@ export class ExtensionDescriptionRegistryLock extends Disposable {
 
 class LockCustomer {
 	public readonly promise: Promise<IDisposable>;
-	private readonly _resolve: (value: IDisposable) => codemavi;
+	private readonly _resolve: (value: IDisposable) => void;
 
 	constructor(
 		public readonly name: string
@@ -334,7 +334,7 @@ class LockCustomer {
 		this._resolve = withResolvers.resolve;
 	}
 
-	resolve(value: IDisposable): codemavi {
+	resolve(value: IDisposable): void {
 		this._resolve(value);
 	}
 }
@@ -350,7 +350,7 @@ class Lock {
 		return customer.promise;
 	}
 
-	private _advance(): codemavi {
+	private _advance(): void {
 		if (this._isLocked) {
 			// cannot advance yet
 			return;

@@ -3,7 +3,7 @@
  *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
  *--------------------------------------------------------------------------------------*/
 
-export type Code MaviCheckUpdateRespose = {
+export type MaviCheckUpdateRespose = {
 	message: string,
 	action?: 'reinstall' | 'restart' | 'download' | 'apply'
 } | {

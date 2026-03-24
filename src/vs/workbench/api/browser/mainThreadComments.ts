@@ -360,7 +360,7 @@ export class MainThreadCommentController implements ICommentController {
 	updateCommentThread(commentThreadHandle: number,
 		threadId: string,
 		resource: UriComponents,
-		changes: CommentThreadChanges): codemavi {
+		changes: CommentThreadChanges): void {
 		const thread = this.getKnownThread(commentThreadHandle);
 		thread.batchUpdate(changes);
 
@@ -498,7 +498,7 @@ export class MainThreadCommentController implements ICommentController {
 		};
 	}
 
-	async toggleReaction(uri: URI, thread: languages.CommentThread, comment: languages.Comment, reaction: languages.CommentReaction, token: CancellationToken): Promise<codemavi> {
+	async toggleReaction(uri: URI, thread: languages.CommentThread, comment: languages.Comment, reaction: languages.CommentReaction, token: CancellationToken): Promise<void> {
 		return this._proxy.$toggleReaction(this._handle, thread.commentThreadHandle, uri, comment, reaction);
 	}
 
@@ -511,7 +511,7 @@ export class MainThreadCommentController implements ICommentController {
 		return ret;
 	}
 
-	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined, editorId?: string): Promise<codemavi> {
+	createCommentThreadTemplate(resource: UriComponents, range: IRange | undefined, editorId?: string): Promise<void> {
 		return this._proxy.$createCommentThreadTemplate(this.handle, resource, range, editorId);
 	}
 
@@ -570,7 +570,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		}));
 	}
 
-	$registerCommentController(handle: number, id: string, label: string, extensionId: string): codemavi {
+	$registerCommentController(handle: number, id: string, label: string, extensionId: string): void {
 		const providerId = `${id}-${extensionId}`;
 		this._handlers.set(handle, providerId);
 
@@ -589,7 +589,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		this._commentService.setWorkspaceComments(String(handle), []);
 	}
 
-	$unregisterCommentController(handle: number): codemavi {
+	$unregisterCommentController(handle: number): void {
 		const providerId = this._handlers.get(handle);
 		this._handlers.delete(handle);
 		this._commentControllers.delete(handle);
@@ -602,7 +602,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		}
 	}
 
-	$updateCommentControllerFeatures(handle: number, features: CommentProviderFeatures): codemavi {
+	$updateCommentControllerFeatures(handle: number, features: CommentProviderFeatures): void {
 		const provider = this._commentControllers.get(handle);
 
 		if (!provider) {
@@ -635,7 +635,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		commentThreadHandle: number,
 		threadId: string,
 		resource: UriComponents,
-		changes: CommentThreadChanges): codemavi {
+		changes: CommentThreadChanges): void {
 		const provider = this._commentControllers.get(handle);
 
 		if (!provider) {
@@ -665,7 +665,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		provider.updateCommentingRanges(resourceHints);
 	}
 
-	async $revealCommentThread(handle: number, commentThreadHandle: number, commentUniqueIdInThread: number, options: languages.CommentThreadRevealOptions): Promise<codemavi> {
+	async $revealCommentThread(handle: number, commentThreadHandle: number, commentUniqueIdInThread: number, options: languages.CommentThreadRevealOptions): Promise<void> {
 		const provider = this._commentControllers.get(handle);
 
 		if (!provider) {
@@ -682,7 +682,7 @@ export class MainThreadComments extends Disposable implements MainThreadComments
 		revealCommentThread(this._commentService, this._editorService, this._uriIdentityService, thread, comment, options.focusReply, undefined, options.preserveFocus);
 	}
 
-	async $hideCommentThread(handle: number, commentThreadHandle: number): Promise<codemavi> {
+	async $hideCommentThread(handle: number, commentThreadHandle: number): Promise<void> {
 		const provider = this._commentControllers.get(handle);
 
 		if (!provider) {

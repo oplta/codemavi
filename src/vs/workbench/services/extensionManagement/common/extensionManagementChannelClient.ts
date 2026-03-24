@@ -44,14 +44,14 @@ export abstract class ProfileAwareExtensionManagementChannelClient extends BaseE
 		}));
 	}
 
-	protected override async onInstallExtensionEvent(data: InstallExtensionEvent): Promise<codemavi> {
+	protected override async onInstallExtensionEvent(data: InstallExtensionEvent): Promise<void> {
 		const result = this.filterEvent(data.profileLocation, data.applicationScoped ?? false);
 		if (result instanceof Promise ? await result : result) {
 			this._onInstallExtension.fire(data);
 		}
 	}
 
-	protected override async onDidInstallExtensionsEvent(results: readonly InstallExtensionResult[]): Promise<codemavi> {
+	protected override async onDidInstallExtensionsEvent(results: readonly InstallExtensionResult[]): Promise<void> {
 		const filtered = [];
 		for (const e of results) {
 			const result = this.filterEvent(e.profileLocation, e.applicationScoped ?? e.local?.isApplicationScoped ?? false);
@@ -65,14 +65,14 @@ export abstract class ProfileAwareExtensionManagementChannelClient extends BaseE
 		this._onDidProfileAwareInstallExtensions.fire(results);
 	}
 
-	protected override async onUninstallExtensionEvent(data: UninstallExtensionEvent): Promise<codemavi> {
+	protected override async onUninstallExtensionEvent(data: UninstallExtensionEvent): Promise<void> {
 		const result = this.filterEvent(data.profileLocation, data.applicationScoped ?? false);
 		if (result instanceof Promise ? await result : result) {
 			this._onUninstallExtension.fire(data);
 		}
 	}
 
-	protected override async onDidUninstallExtensionEvent(data: DidUninstallExtensionEvent): Promise<codemavi> {
+	protected override async onDidUninstallExtensionEvent(data: DidUninstallExtensionEvent): Promise<void> {
 		const result = this.filterEvent(data.profileLocation, data.applicationScoped ?? false);
 		if (result instanceof Promise ? await result : result) {
 			this._onDidUninstallExtension.fire(data);
@@ -80,7 +80,7 @@ export abstract class ProfileAwareExtensionManagementChannelClient extends BaseE
 		this._onDidProfileAwareUninstallExtension.fire(data);
 	}
 
-	protected override async onDidUpdateExtensionMetadataEvent(data: DidUpdateExtensionMetadata): Promise<codemavi> {
+	protected override async onDidUpdateExtensionMetadataEvent(data: DidUpdateExtensionMetadata): Promise<void> {
 		const result = this.filterEvent(data.profileLocation, data.local?.isApplicationScoped ?? false);
 		if (result instanceof Promise ? await result : result) {
 			this._onDidUpdateExtensionMetadata.fire(data);
@@ -110,12 +110,12 @@ export abstract class ProfileAwareExtensionManagementChannelClient extends BaseE
 		return super.installGalleryExtensions(infos);
 	}
 
-	override async uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<codemavi> {
+	override async uninstall(extension: ILocalExtension, options?: UninstallOptions): Promise<void> {
 		options = { ...options, profileLocation: await this.getProfileLocation(options?.profileLocation) };
 		return super.uninstall(extension, options);
 	}
 
-	override async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<codemavi> {
+	override async uninstallExtensions(extensions: UninstallExtensionInfo[]): Promise<void> {
 		const infos: UninstallExtensionInfo[] = [];
 		for (const { extension, options } of extensions) {
 			infos.push({ extension, options: { ...options, profileLocation: await this.getProfileLocation(options?.profileLocation) } });
@@ -135,11 +135,11 @@ export abstract class ProfileAwareExtensionManagementChannelClient extends BaseE
 		return super.toggleAppliationScope(local, await this.getProfileLocation(fromProfileLocation));
 	}
 
-	override async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<codemavi> {
+	override async copyExtensions(fromProfileLocation: URI, toProfileLocation: URI): Promise<void> {
 		return super.copyExtensions(await this.getProfileLocation(fromProfileLocation), await this.getProfileLocation(toProfileLocation));
 	}
 
-	private async whenProfileChanged(e: DidChangeUserDataProfileEvent): Promise<codemavi> {
+	private async whenProfileChanged(e: DidChangeUserDataProfileEvent): Promise<void> {
 		const previousProfileLocation = await this.getProfileLocation(e.previous.extensionsResource);
 		const currentProfileLocation = await this.getProfileLocation(e.profile.extensionsResource);
 

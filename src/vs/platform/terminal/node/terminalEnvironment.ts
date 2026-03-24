@@ -111,7 +111,7 @@ export async function getShellIntegrationInjection(
 			if (!newArgs) {
 				return undefined;
 			}
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot, '');
 			envMixin['VSCODE_STABLE'] = productService.quality === 'stable' ? '1' : '0';
 			if (options.shellIntegration.suggestEnabled) {
@@ -129,7 +129,7 @@ export async function getShellIntegrationInjection(
 			if (!newArgs) {
 				return undefined;
 			}
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot);
 			envMixin['VSCODE_STABLE'] = productService.quality === 'stable' ? '1' : '0';
 			return { newArgs, envMixin };
@@ -151,7 +151,7 @@ export async function getShellIntegrationInjection(
 			if (!newArgs) {
 				return undefined;
 			}
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot);
 			envMixin['VSCODE_STABLE'] = productService.quality === 'stable' ? '1' : '0';
 			return { newArgs, envMixin };
@@ -172,7 +172,7 @@ export async function getShellIntegrationInjection(
 			// to apply the path prefix fix always, not only for login shells (see #232291)
 			addEnvMixinPathPrefix(options, envMixin, shell);
 
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot);
 			return { newArgs, envMixin };
 		}
@@ -188,7 +188,7 @@ export async function getShellIntegrationInjection(
 			if (options.shellIntegration.suggestEnabled) {
 				envMixin['VSCODE_SUGGEST'] = '1';
 			}
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot, '');
 			envMixin['VSCODE_STABLE'] = productService.quality === 'stable' ? '1' : '0';
 			return { newArgs, envMixin };
@@ -205,7 +205,7 @@ export async function getShellIntegrationInjection(
 			if (!newArgs) {
 				return undefined;
 			}
-			newArgs = [...newArgs]; // Shallow clone the array to acodemavi setting the default array
+			newArgs = [...newArgs]; // Shallow clone the array to avoid setting the default array
 			newArgs[newArgs.length - 1] = format(newArgs[newArgs.length - 1], appRoot);
 
 			// Move .zshrc into $ZDOTDIR as the way to activate the script
@@ -290,7 +290,7 @@ export async function getShellIntegrationInjection(
  *
  * See #99878 for more information.
  */
-function addEnvMixinPathPrefix(options: ITerminalProcessOptions, envMixin: IProcessEnvironment, shell: string): codemavi {
+function addEnvMixinPathPrefix(options: ITerminalProcessOptions, envMixin: IProcessEnvironment, shell: string): void {
 	if ((isMacintosh || shell === 'fish') && options.environmentVariableCollections) {
 		// Deserialize and merge
 		const deserialized = deserializeEnvironmentVariableCollections(options.environmentVariableCollections);

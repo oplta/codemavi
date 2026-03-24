@@ -112,7 +112,7 @@ export const notebookEditorConfiguration = Object.freeze<IConfigurationNode>({
 
 export class CodeActionsContribution extends Disposable implements IWorkbenchContribution {
 
-	private readonly _onDidChangeSchemaContributions = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeSchemaContributions = this._register(new Emitter<void>());
 
 	private _allProvidedCodeActionKinds: HierarchicalKind[] = [];
 
@@ -148,7 +148,7 @@ export class CodeActionsContribution extends Disposable implements IWorkbenchCon
 		return Array.from(out.values());
 	}
 
-	private updateConfigurationSchema(allProvidedKinds: Iterable<HierarchicalKind>): codemavi {
+	private updateConfigurationSchema(allProvidedKinds: Iterable<HierarchicalKind>): void {
 		const properties: IJSONSchemaMap = { ...codeActionsOnSaveSchema.properties };
 		const notebookProperties: IJSONSchemaMap = { ...notebookCodeActionsOnSaveSchema.properties };
 		for (const codeActionKind of allProvidedKinds) {

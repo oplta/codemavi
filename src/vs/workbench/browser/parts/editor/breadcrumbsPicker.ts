@@ -57,8 +57,8 @@ export abstract class BreadcrumbsPicker {
 	protected _fakeEvent = new UIEvent('fakeEvent');
 	protected _layoutInfo!: ILayoutInfo;
 
-	protected readonly _onWillPickElement = new Emitter<codemavi>();
-	readonly onWillPickElement: Event<codemavi> = this._onWillPickElement.event;
+	protected readonly _onWillPickElement = new Emitter<void>();
+	readonly onWillPickElement: Event<void> = this._onWillPickElement.event;
 
 	private readonly _previewDispoables = new MutableDisposable();
 
@@ -74,7 +74,7 @@ export abstract class BreadcrumbsPicker {
 		parent.appendChild(this._domNode);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 		this._previewDispoables.dispose();
 		this._onWillPickElement.dispose();
@@ -82,7 +82,7 @@ export abstract class BreadcrumbsPicker {
 		setTimeout(() => this._tree.dispose(), 0); // tree cannot be disposed while being opened...
 	}
 
-	async show(input: any, maxHeight: number, width: number, arrowSize: number, arrowOffset: number): Promise<codemavi> {
+	async show(input: any, maxHeight: number, width: number, arrowSize: number, arrowOffset: number): Promise<void> {
 
 		const theme = this._themeService.getColorTheme();
 		const color = theme.getColor(breadcrumbsPickerBackground);
@@ -126,7 +126,7 @@ export abstract class BreadcrumbsPicker {
 		}
 	}
 
-	protected _layout(): codemavi {
+	protected _layout(): void {
 
 		const headerHeight = 2 * this._layoutInfo.arrowSize;
 		const treeHeight = Math.min(this._layoutInfo.maxHeight - headerHeight, this._tree.contentHeight);
@@ -142,9 +142,9 @@ export abstract class BreadcrumbsPicker {
 		this._tree.layout(treeHeight, this._layoutInfo.width);
 	}
 
-	restoreViewState(): codemavi { }
+	restoreViewState(): void { }
 
-	protected abstract _setInput(element: FileElement | OutlineElement2): Promise<codemavi>;
+	protected abstract _setInput(element: FileElement | OutlineElement2): Promise<void>;
 	protected abstract _createTree(container: HTMLElement, input: any): Tree<any, any>;
 	protected abstract _previewElement(element: any): IDisposable;
 	protected abstract _revealElement(element: any, options: IEditorOptions, sideBySide: boolean): Promise<boolean>;
@@ -221,7 +221,7 @@ class FileRenderer implements ITreeRenderer<IFileStat | IWorkspaceFolder, FuzzyS
 		return this._labels.create(container, { supportHighlights: true });
 	}
 
-	renderElement(node: ITreeNode<IWorkspaceFolder | IFileStat, [number, number, number]>, index: number, templateData: IResourceLabel): codemavi {
+	renderElement(node: ITreeNode<IWorkspaceFolder | IFileStat, [number, number, number]>, index: number, templateData: IResourceLabel): void {
 		const fileDecorations = this._configService.getValue<{ colors: boolean; badges: boolean }>('explorer.decorations');
 		const { element } = node;
 		let resource: URI;
@@ -242,7 +242,7 @@ class FileRenderer implements ITreeRenderer<IFileStat | IWorkspaceFolder, FuzzyS
 		});
 	}
 
-	disposeTemplate(templateData: IResourceLabel): codemavi {
+	disposeTemplate(templateData: IResourceLabel): void {
 		templateData.dispose();
 	}
 }
@@ -303,7 +303,7 @@ class FileFilter implements ITreeFilter<IWorkspaceFolder | IFileStat> {
 		this._disposables.add(_workspaceService.onDidChangeWorkspaceFolders(update));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._disposables.dispose();
 	}
 
@@ -390,7 +390,7 @@ export class BreadcrumbsFilePicker extends BreadcrumbsPicker {
 			});
 	}
 
-	protected async _setInput(element: FileElement | OutlineElement2): Promise<codemavi> {
+	protected async _setInput(element: FileElement | OutlineElement2): Promise<void> {
 		const { uri, kind } = (element as FileElement);
 		let input: IWorkspace | URI;
 		if (kind === FileKind.ROOT_FOLDER) {
@@ -482,7 +482,7 @@ export class BreadcrumbsOutlinePicker extends BreadcrumbsPicker {
 		);
 	}
 
-	protected _setInput(input: OutlineElement2): Promise<codemavi> {
+	protected _setInput(input: OutlineElement2): Promise<void> {
 
 		const viewState = input.outline.captureViewState();
 		this.restoreViewState = () => { viewState.dispose(); };

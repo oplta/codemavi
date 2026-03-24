@@ -90,11 +90,11 @@ export default class PHPValidationProvider {
 	private validationEnabled: boolean;
 	private pauseValidation: boolean;
 	private config: IPhpConfig | undefined;
-	private loadConfigP: Promise<codemavi>;
+	private loadConfigP: Promise<void>;
 
 	private documentListener: vscode.Disposable | null = null;
 	private diagnosticCollection?: vscode.DiagnosticCollection;
-	private delayers?: { [key: string]: ThrottledDelayer<codemavi> };
+	private delayers?: { [key: string]: ThrottledDelayer<void> };
 
 	constructor() {
 		this.validationEnabled = true;
@@ -116,7 +116,7 @@ export default class PHPValidationProvider {
 		}, null, subscriptions);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		if (this.diagnosticCollection) {
 			this.diagnosticCollection.clear();
 			this.diagnosticCollection.dispose();
@@ -127,7 +127,7 @@ export default class PHPValidationProvider {
 		}
 	}
 
-	private async loadConfiguration(): Promise<codemavi> {
+	private async loadConfiguration(): Promise<void> {
 		const section = vscode.workspace.getConfiguration();
 		const oldExecutable = this.config?.executable;
 		this.validationEnabled = section.get<boolean>(Setting.Enable, true);
@@ -156,7 +156,7 @@ export default class PHPValidationProvider {
 		}
 	}
 
-	private async triggerValidate(textDocument: vscode.TextDocument): Promise<codemavi> {
+	private async triggerValidate(textDocument: vscode.TextDocument): Promise<void> {
 		await this.loadConfigP;
 		if (textDocument.languageId !== 'php' || this.pauseValidation || !this.validationEnabled) {
 			return;
@@ -166,15 +166,15 @@ export default class PHPValidationProvider {
 			const key = textDocument.uri.toString();
 			let delayer = this.delayers![key];
 			if (!delayer) {
-				delayer = new ThrottledDelayer<codemavi>(this.config?.trigger === RunTrigger.onType ? 250 : 0);
+				delayer = new ThrottledDelayer<void>(this.config?.trigger === RunTrigger.onType ? 250 : 0);
 				this.delayers![key] = delayer;
 			}
 			delayer.trigger(() => this.doValidate(textDocument));
 		}
 	}
 
-	private doValidate(textDocument: vscode.TextDocument): Promise<codemavi> {
-		return new Promise<codemavi>(resolve => {
+	private doValidate(textDocument: vscode.TextDocument): Promise<void> {
+		return new Promise<void>(resolve => {
 			const executable = this.config!.executable;
 			if (!executable) {
 				this.showErrorMessage(vscode.l10n.t("Cannot validate since a PHP installation could not be found. Use the setting 'php.validate.executablePath' to configure the PHP executable."));
@@ -248,7 +248,7 @@ export default class PHPValidationProvider {
 		});
 	}
 
-	private async showError(error: any, executable: string): Promise<codemavi> {
+	private async showError(error: any, executable: string): Promise<void> {
 		let message: string | null = null;
 		if (error.code === 'ENOENT') {
 			if (this.config!.executable) {
@@ -266,7 +266,7 @@ export default class PHPValidationProvider {
 		return this.showErrorMessage(message);
 	}
 
-	private async showErrorMessage(message: string): Promise<codemavi> {
+	private async showErrorMessage(message: string): Promise<void> {
 		const openSettings = vscode.l10n.t("Open Settings");
 		if (await vscode.window.showInformationMessage(message, openSettings) === openSettings) {
 			vscode.commands.executeCommand('workbench.action.openSettings', Setting.ExecutablePath);

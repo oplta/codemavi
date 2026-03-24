@@ -98,8 +98,8 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 	protected _onChange = this._register(new Emitter<IChangeEvent>());
 	readonly onChange: Event<IChangeEvent> = this._onChange.event;
 
-	private _onDispose = this._register(new Emitter<codemavi>());
-	readonly onDispose: Event<codemavi> = this._onDispose.event;
+	private _onDispose = this._register(new Emitter<void>());
+	readonly onDispose: Event<void> = this._onDispose.event;
 	private readonly _id: string;
 	private _name: Lazy<string>;
 	protected _unDisposedFileMatches: Map<string, ISearchTreeFileMatch>; // id to fileMatch
@@ -138,7 +138,7 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 		return this._fileMatches.size;
 	}
 
-	doAddFile(fileMatch: ISearchTreeFileMatch): codemavi {
+	doAddFile(fileMatch: ISearchTreeFileMatch): void {
 		this._fileMatches.set(fileMatch.id(), fileMatch);
 	}
 
@@ -168,7 +168,7 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 		return true;
 	}
 
-	private onFileChange(fileMatch: ISearchTreeFileMatch, removed = false): codemavi {
+	private onFileChange(fileMatch: ISearchTreeFileMatch, removed = false): void {
 		let added = false;
 		if (!this._fileMatches.has(fileMatch.id())) {
 			this.doAddFile(fileMatch);
@@ -197,14 +197,14 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 		return [...this._fileMatches.values()];
 	}
 
-	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource | (ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource)[]): codemavi {
+	remove(matches: ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource | (ISearchTreeFileMatch | ISearchTreeFolderMatchWithResource)[]): void {
 		if (!Array.isArray(matches)) {
 			matches = [matches];
 		}
 		const allMatches = getFileMatches(matches);
 		this.doRemoveFile(allMatches);
 	}
-	addFileMatch(raw: IFileMatch[], silent: boolean, searchInstanceID: string): codemavi {
+	addFileMatch(raw: IFileMatch[], silent: boolean, searchInstanceID: string): void {
 		// when adding a fileMatch that has intermediate directories
 		const added: ISearchTreeFileMatch[] = [];
 		const updated: ISearchTreeFileMatch[] = [];
@@ -222,7 +222,7 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 	isEmpty(): boolean {
 		return this.recursiveFileCount() === 0;
 	}
-	clear(clearingAll?: boolean): codemavi {
+	clear(clearingAll?: boolean): void {
 		const changed: ISearchTreeFileMatch[] = this.allDownstreamFileMatches();
 		this.disposeMatches();
 		this._onChange.fire({ elements: changed, removed: true, added: false, clearingAll });
@@ -258,7 +258,7 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 		return this._fileMatches.size;
 	}
 
-	doRemoveFile(fileMatches: ISearchTreeFileMatch[], dispose: boolean = true, trigger: boolean = true, keepReadonly = false): codemavi {
+	doRemoveFile(fileMatches: ISearchTreeFileMatch[], dispose: boolean = true, trigger: boolean = true, keepReadonly = false): void {
 
 		const removed = [];
 		for (const match of fileMatches as ISearchTreeFileMatch[]) {
@@ -286,13 +286,13 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 	}
 	replacingAll: boolean = false;
 
-	bindModel(model: ITextModel): codemavi {
+	bindModel(model: ITextModel): void {
 		// no op
 	}
-	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): codemavi {
+	unbindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): void {
 		//no op
 	}
-	bindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): Promise<codemavi> {
+	bindNotebookEditorWidget(editor: NotebookEditorWidget, resource: URI): Promise<void> {
 		//no op
 		return Promise.resolve();
 	}
@@ -310,13 +310,13 @@ export class AIFolderMatchWorkspaceRootImpl extends Disposable implements ISearc
 		return this._fileMatches.size;
 	}
 
-	private disposeMatches(): codemavi {
+	private disposeMatches(): void {
 		[...this._fileMatches.values()].forEach((fileMatch: ISearchTreeFileMatch) => fileMatch.dispose());
 		[...this._unDisposedFileMatches.values()].forEach((fileMatch: ISearchTreeFileMatch) => fileMatch.dispose());
 		this._fileMatches.clear();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.disposeMatches();
 		this._onDispose.fire();
 		super.dispose();
@@ -384,7 +384,7 @@ class AIFileMatch extends FileMatchImpl implements ISearchTreeAIFileMatch {
 		return super.name() + range ? ' ' + range : '';
 	}
 
-	override createMatches(): codemavi {
+	override createMatches(): void {
 		if (this.rawMatch.results) {
 			this.rawMatch.results
 				.filter(resultIsMatch)

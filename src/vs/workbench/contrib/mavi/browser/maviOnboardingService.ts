@@ -7,12 +7,12 @@ import { Disposable, toDisposable } from '../../../../base/common/lifecycle.js';
 import { IInstantiationService } from '../../../../platform/instantiation/common/instantiation.js';
 import { IWorkbenchContribution, registerWorkbenchContribution2, WorkbenchPhase } from '../../../common/contributions.js';
 import { ServicesAccessor } from '../../../../editor/browser/editorExtensions.js';
-import { mountCode MaviOnboarding } from './react/out/codemavi-onboarding/index.js'
+import { mountMaviOnboarding } from './react/out/mavi-onboarding/index.js'
 import { h, getActiveWindow } from '../../../../base/browser/dom.js';
 
 // Onboarding contribution that mounts the component at startup
 export class OnboardingContribution extends Disposable implements IWorkbenchContribution {
-	static readonly ID = 'workbench.contrib.codemaviOnboarding';
+	static readonly ID = 'workbench.contrib.maviOnboarding';
 
 	constructor(
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
@@ -21,7 +21,7 @@ export class OnboardingContribution extends Disposable implements IWorkbenchCont
 		this.initialize();
 	}
 
-	private initialize(): codemavi {
+	private initialize(): void {
 		// Get the active window reference for multi-window support
 		const targetWindow = getActiveWindow();
 
@@ -30,10 +30,10 @@ export class OnboardingContribution extends Disposable implements IWorkbenchCont
 
 		if (workbench) {
 
-			const onboardingContainer = h('div.codemavi-onboarding-container').root;
+			const onboardingContainer = h('div.mavi-onboarding-container').root;
 			workbench.appendChild(onboardingContainer);
 			this.instantiationService.invokeFunction((accessor: ServicesAccessor) => {
-				const result = mountCode MaviOnboarding(onboardingContainer, accessor);
+				const result = mountMaviOnboarding(onboardingContainer, accessor);
 				if (result && typeof result.dispose === 'function') {
 					this._register(toDisposable(result.dispose));
 				}

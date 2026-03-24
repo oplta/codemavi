@@ -20,11 +20,11 @@ suite('History Storage', () => {
 			configPath: uri
 		};
 	}
-	function assertEqualURI(u1: URI | undefined, u2: URI | undefined, message?: string): codemavi {
+	function assertEqualURI(u1: URI | undefined, u2: URI | undefined, message?: string): void {
 		assert.strictEqual(u1 && u1.toString(), u2 && u2.toString(), message);
 	}
 
-	function assertEqualWorkspace(w1: IWorkspaceIdentifier | undefined, w2: IWorkspaceIdentifier | undefined, message?: string): codemavi {
+	function assertEqualWorkspace(w1: IWorkspaceIdentifier | undefined, w2: IWorkspaceIdentifier | undefined, message?: string): void {
 		if (!w1 || !w2) {
 			assert.strictEqual(w1, w2, message);
 			return;

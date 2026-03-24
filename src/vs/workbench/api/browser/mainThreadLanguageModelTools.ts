@@ -54,7 +54,7 @@ export class MainThreadLanguageModelTools extends Disposable implements MainThre
 		return fn(input, token);
 	}
 
-	$registerTool(id: string): codemavi {
+	$registerTool(id: string): void {
 		const disposable = this._languageModelToolsService.registerToolImplementation(
 			id,
 			{
@@ -72,7 +72,7 @@ export class MainThreadLanguageModelTools extends Disposable implements MainThre
 		this._tools.set(id, disposable);
 	}
 
-	$unregisterTool(name: string): codemavi {
+	$unregisterTool(name: string): void {
 		this._tools.deleteAndDispose(name);
 	}
 }

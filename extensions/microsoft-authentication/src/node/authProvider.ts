@@ -21,7 +21,7 @@ const MSA_PASSTHRU_TID = 'f8cdef31-a31e-4b4a-93e4-5f571e91255a';
 
 export class MsalAuthProvider implements AuthenticationProvider {
 
-	private readonly _disposables: { dispose(): codemavi }[];
+	private readonly _disposables: { dispose(): void }[];
 	private readonly _eventBufferer = new EventBufferer();
 
 	/**
@@ -121,7 +121,7 @@ export class MsalAuthProvider implements AuthenticationProvider {
 		}
 	}
 
-	private async initialize(): Promise<codemavi> {
+	private async initialize(): Promise<void> {
 		if (!this._context.globalState.get('msalMigration', false)) {
 			await this._migrateSessions();
 		}
@@ -258,9 +258,9 @@ export class MsalAuthProvider implements AuthenticationProvider {
 		throw lastError ?? new Error('No auth flow succeeded');
 	}
 
-	async removeSession(sessionId: string): Promise<codemavi> {
+	async removeSession(sessionId: string): Promise<void> {
 		this._logger.info('[removeSession]', sessionId, 'starting');
-		const promises = new Array<Promise<codemavi>>();
+		const promises = new Array<Promise<void>>();
 		for (const cachedPca of this._publicClientManager.getAll()) {
 			const accounts = cachedPca.accounts;
 			for (const account of accounts) {

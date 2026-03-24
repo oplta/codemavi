@@ -42,14 +42,14 @@ window.cspAlerter.setPoster(messaging);
 window.styleLoadingMonitor.setPoster(messaging);
 
 
-function doAfterImagesLoaded(cb: () => codemavi) {
+function doAfterImagesLoaded(cb: () => void) {
 	const imgElements = document.getElementsByTagName('img');
 	if (imgElements.length > 0) {
 		const ps = Array.from(imgElements, e => {
 			if (e.complete) {
 				return Promise.resolve();
 			} else {
-				return new Promise<codemavi>((resolve) => {
+				return new Promise<void>((resolve) => {
 					e.addEventListener('load', () => resolve());
 					e.addEventListener('error', () => resolve());
 				});
@@ -416,7 +416,7 @@ function areNodesEqual(a: Element, b: Element): boolean {
 }
 
 
-function domEval(el: Element): codemavi {
+function domEval(el: Element): void {
 	const preservedScriptAttributes: (keyof HTMLScriptElement)[] = [
 		'type', 'src', 'nonce', 'noModule', 'async',
 	];

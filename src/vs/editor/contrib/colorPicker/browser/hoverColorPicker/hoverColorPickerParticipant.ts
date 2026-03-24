@@ -152,11 +152,11 @@ export class HoverColorPickerParticipant implements IEditorHoverParticipant<Colo
 		return nls.localize('hoverAccessibilityColorParticipant', 'There is a color picker here.');
 	}
 
-	public handleResize(): codemavi {
+	public handleResize(): void {
 		this._colorPicker?.layout();
 	}
 
-	public handleHide(): codemavi {
+	public handleHide(): void {
 		this._colorPicker?.dispose();
 		this._colorPicker = undefined;
 	}

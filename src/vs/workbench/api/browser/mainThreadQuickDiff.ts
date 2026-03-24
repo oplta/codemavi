@@ -23,7 +23,7 @@ export class MainThreadQuickDiff implements MainThreadQuickDiffShape {
 		this.proxy = extHostContext.getProxy(ExtHostContext.ExtHostQuickDiff);
 	}
 
-	async $registerQuickDiffProvider(handle: number, selector: IDocumentFilterDto[], label: string, rootUri: UriComponents | undefined, visible: boolean): Promise<codemavi> {
+	async $registerQuickDiffProvider(handle: number, selector: IDocumentFilterDto[], label: string, rootUri: UriComponents | undefined, visible: boolean): Promise<void> {
 		const provider: QuickDiffProvider = {
 			label,
 			rootUri: URI.revive(rootUri),
@@ -38,13 +38,13 @@ export class MainThreadQuickDiff implements MainThreadQuickDiffShape {
 		this.providerDisposables.set(handle, disposable);
 	}
 
-	async $unregisterQuickDiffProvider(handle: number): Promise<codemavi> {
+	async $unregisterQuickDiffProvider(handle: number): Promise<void> {
 		if (this.providerDisposables.has(handle)) {
 			this.providerDisposables.deleteAndDispose(handle);
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.providerDisposables.dispose();
 	}
 }

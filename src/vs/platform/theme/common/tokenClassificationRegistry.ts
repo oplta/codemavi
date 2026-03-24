@@ -192,21 +192,21 @@ const Extensions = {
 
 export interface ITokenClassificationRegistry {
 
-	readonly onDidChangeSchema: Event<codemavi>;
+	readonly onDidChangeSchema: Event<void>;
 
 	/**
 	 * Register a token type to the registry.
 	 * @param id The TokenType id as used in theme description files
 	 * @param description the description
 	 */
-	registerTokenType(id: string, description: string, superType?: string, deprecationMessage?: string): codemavi;
+	registerTokenType(id: string, description: string, superType?: string, deprecationMessage?: string): void;
 
 	/**
 	 * Register a token modifier to the registry.
 	 * @param id The TokenModifier id as used in theme description files
 	 * @param description the description
 	 */
-	registerTokenModifier(id: string, description: string): codemavi;
+	registerTokenModifier(id: string, description: string): void;
 
 	/**
 	 * Parses a token selector from a selector string.
@@ -222,23 +222,23 @@ export interface ITokenClassificationRegistry {
 	 * @param selector The rule selector
 	 * @param defaults The default values
 	 */
-	registerTokenStyleDefault(selector: TokenSelector, defaults: TokenStyleDefaults): codemavi;
+	registerTokenStyleDefault(selector: TokenSelector, defaults: TokenStyleDefaults): void;
 
 	/**
 	 * Deregister a TokenStyle default to the registry.
 	 * @param selector The rule selector
 	 */
-	deregisterTokenStyleDefault(selector: TokenSelector): codemavi;
+	deregisterTokenStyleDefault(selector: TokenSelector): void;
 
 	/**
 	 * Deregister a TokenType from the registry.
 	 */
-	deregisterTokenType(id: string): codemavi;
+	deregisterTokenType(id: string): void;
 
 	/**
 	 * Deregister a TokenModifier from the registry.
 	 */
-	deregisterTokenModifier(id: string): codemavi;
+	deregisterTokenModifier(id: string): void;
 
 	/**
 	 * Get all TokenType contributions
@@ -263,8 +263,8 @@ export interface ITokenClassificationRegistry {
 
 class TokenClassificationRegistry implements ITokenClassificationRegistry {
 
-	private readonly _onDidChangeSchema = new Emitter<codemavi>();
-	readonly onDidChangeSchema: Event<codemavi> = this._onDidChangeSchema.event;
+	private readonly _onDidChangeSchema = new Emitter<void>();
+	readonly onDidChangeSchema: Event<void> = this._onDidChangeSchema.event;
 
 	private currentTypeNumber = 0;
 	private currentModifierBit = 1;
@@ -352,7 +352,7 @@ class TokenClassificationRegistry implements ITokenClassificationRegistry {
 		this.typeHierarchy = Object.create(null);
 	}
 
-	public registerTokenType(id: string, description: string, superType?: string, deprecationMessage?: string): codemavi {
+	public registerTokenType(id: string, description: string, superType?: string, deprecationMessage?: string): void {
 		if (!id.match(typeAndModifierIdPattern)) {
 			throw new Error('Invalid token type id.');
 		}
@@ -369,7 +369,7 @@ class TokenClassificationRegistry implements ITokenClassificationRegistry {
 		this.typeHierarchy = Object.create(null);
 	}
 
-	public registerTokenModifier(id: string, description: string, deprecationMessage?: string): codemavi {
+	public registerTokenModifier(id: string, description: string, deprecationMessage?: string): void {
 		if (!id.match(typeAndModifierIdPattern)) {
 			throw new Error('Invalid token modifier id.');
 		}
@@ -421,22 +421,22 @@ class TokenClassificationRegistry implements ITokenClassificationRegistry {
 		};
 	}
 
-	public registerTokenStyleDefault(selector: TokenSelector, defaults: TokenStyleDefaults): codemavi {
+	public registerTokenStyleDefault(selector: TokenSelector, defaults: TokenStyleDefaults): void {
 		this.tokenStylingDefaultRules.push({ selector, defaults });
 	}
 
-	public deregisterTokenStyleDefault(selector: TokenSelector): codemavi {
+	public deregisterTokenStyleDefault(selector: TokenSelector): void {
 		const selectorString = selector.id;
 		this.tokenStylingDefaultRules = this.tokenStylingDefaultRules.filter(r => r.selector.id !== selectorString);
 	}
 
-	public deregisterTokenType(id: string): codemavi {
+	public deregisterTokenType(id: string): void {
 		delete this.tokenTypeById[id];
 		delete this.tokenStylingSchema.properties[id];
 		this.typeHierarchy = Object.create(null);
 	}
 
-	public deregisterTokenModifier(id: string): codemavi {
+	public deregisterTokenModifier(id: string): void {
 		delete this.tokenModifierById[id];
 		delete this.tokenStylingSchema.properties[`*.${id}`];
 	}

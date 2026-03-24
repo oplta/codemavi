@@ -79,7 +79,7 @@ export class GlobalExtensionEnablementService extends Disposable implements IGlo
 		return false;
 	}
 
-	private _setDisabledExtensions(disabledExtensions: IExtensionIdentifier[]): codemavi {
+	private _setDisabledExtensions(disabledExtensions: IExtensionIdentifier[]): void {
 		this._setExtensions(DISABLED_EXTENSIONS_STORAGE_PATH, disabledExtensions);
 	}
 
@@ -87,7 +87,7 @@ export class GlobalExtensionEnablementService extends Disposable implements IGlo
 		return this.storageManager.get(storageId, StorageScope.PROFILE);
 	}
 
-	private _setExtensions(storageId: string, extensions: IExtensionIdentifier[]): codemavi {
+	private _setExtensions(storageId: string, extensions: IExtensionIdentifier[]): void {
 		this.storageManager.set(storageId, extensions, StorageScope.PROFILE);
 	}
 
@@ -118,7 +118,7 @@ export class StorageManager extends Disposable {
 		return JSON.parse(value);
 	}
 
-	set(key: string, value: IExtensionIdentifier[], scope: StorageScope): codemavi {
+	set(key: string, value: IExtensionIdentifier[], scope: StorageScope): void {
 		const newValue: string = JSON.stringify(value.map(({ id, uuid }): IExtensionIdentifier => ({ id, uuid })));
 		const oldValue = this._get(key, scope);
 		if (oldValue !== newValue) {
@@ -133,7 +133,7 @@ export class StorageManager extends Disposable {
 		}
 	}
 
-	private onDidStorageChange(storageChangeEvent: IProfileStorageValueChangeEvent): codemavi {
+	private onDidStorageChange(storageChangeEvent: IProfileStorageValueChangeEvent): void {
 		if (!isUndefinedOrNull(this.storage[storageChangeEvent.key])) {
 			const newValue = this._get(storageChangeEvent.key, storageChangeEvent.scope);
 			if (newValue !== this.storage[storageChangeEvent.key]) {
@@ -153,7 +153,7 @@ export class StorageManager extends Disposable {
 		return this.storageService.get(key, scope, '[]');
 	}
 
-	private _set(key: string, value: string | undefined, scope: StorageScope): codemavi {
+	private _set(key: string, value: string | undefined, scope: StorageScope): void {
 		if (value) {
 			// Enablement state is synced separately through extensions
 			this.storageService.store(key, value, scope, StorageTarget.MACHINE);

@@ -25,13 +25,13 @@ export interface PromiseAdapter<T, U> {
 	(
 		value: T,
 		resolve:
-			(value: U | PromiseLike<U>) => codemavi,
+			(value: U | PromiseLike<U>) => void,
 		reject:
-			(reason: any) => codemavi
+			(reason: any) => void
 	): any;
 }
 
-const passthrough = (value: any, resolve: (value?: any) => codemavi) => resolve(value);
+const passthrough = (value: any, resolve: (value?: any) => void) => resolve(value);
 
 /**
  * Return a promise that resolves with the next emitted event, or with some future
@@ -49,9 +49,9 @@ const passthrough = (value: any, resolve: (value?: any) => codemavi) => resolve(
  */
 export function promiseFromEvent<T, U>(
 	event: Event<T>,
-	adapter: PromiseAdapter<T, U> = passthrough): { promise: Promise<U>; cancel: EventEmitter<codemavi> } {
+	adapter: PromiseAdapter<T, U> = passthrough): { promise: Promise<U>; cancel: EventEmitter<void> } {
 	let subscription: Disposable;
-	const cancel = new EventEmitter<codemavi>();
+	const cancel = new EventEmitter<void>();
 	return {
 		promise: new Promise<U>((resolve, reject) => {
 			cancel.event(_ => reject('Cancelled'));
@@ -105,7 +105,7 @@ export class StopWatch {
 	private _startTime: number = Date.now();
 	private _stopTime: number = -1;
 
-	public stop(): codemavi {
+	public stop(): void {
 		this._stopTime = Date.now();
 	}
 

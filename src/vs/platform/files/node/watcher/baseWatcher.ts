@@ -36,11 +36,11 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 	private readonly suspendedWatchRequests = this._register(new DisposableMap<number /* request ID */>());
 	private readonly suspendedWatchRequestsWithPolling = new Set<number /* request ID */>();
 
-	private readonly updateWatchersDelayer = this._register(new ThrottledDelayer<codemavi>(this.getUpdateWatchersDelay()));
+	private readonly updateWatchersDelayer = this._register(new ThrottledDelayer<void>(this.getUpdateWatchersDelay()));
 
 	protected readonly suspendedWatchRequestPollingInterval: number = 5007; // node.js default
 
-	private joinWatch = new DeferredPromise<codemavi>();
+	private joinWatch = new DeferredPromise<void>();
 
 	constructor() {
 		super();
@@ -67,11 +67,11 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		}
 	}
 
-	async watch(requests: IUniversalWatchRequest[]): Promise<codemavi> {
+	async watch(requests: IUniversalWatchRequest[]): Promise<void> {
 		if (!this.joinWatch.isSettled) {
 			this.joinWatch.complete();
 		}
-		this.joinWatch = new DeferredPromise<codemavi>();
+		this.joinWatch = new DeferredPromise<void>();
 
 		try {
 			this.correlatedWatchRequests.clear();
@@ -100,7 +100,7 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		}
 	}
 
-	private updateWatchers(delayed: boolean): Promise<codemavi> {
+	private updateWatchers(delayed: boolean): Promise<void> {
 		const nonSuspendedRequests: IUniversalWatchRequest[] = [];
 		for (const [id, request] of [...this.nonCorrelatedWatchRequests, ...this.correlatedWatchRequests]) {
 			if (!this.suspendedWatchRequests.has(id)) {
@@ -120,7 +120,7 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		return this.suspendedWatchRequestsWithPolling.has(id) ? 'polling' : this.suspendedWatchRequests.has(id);
 	}
 
-	private async suspendWatchRequest(request: ISuspendedWatchRequest): Promise<codemavi> {
+	private async suspendWatchRequest(request: ISuspendedWatchRequest): Promise<void> {
 		if (this.suspendedWatchRequests.has(request.id)) {
 			return; // already suspended
 		}
@@ -144,14 +144,14 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		this.updateWatchers(true /* delay this call as we might accumulate many failing watch requests on startup */);
 	}
 
-	private resumeWatchRequest(request: ISuspendedWatchRequest): codemavi {
+	private resumeWatchRequest(request: ISuspendedWatchRequest): void {
 		this.suspendedWatchRequests.deleteAndDispose(request.id);
 		this.suspendedWatchRequestsWithPolling.delete(request.id);
 
 		this.updateWatchers(false);
 	}
 
-	private monitorSuspendedWatchRequest(request: ISuspendedWatchRequest, disposables: DisposableStore): codemavi {
+	private monitorSuspendedWatchRequest(request: ISuspendedWatchRequest, disposables: DisposableStore): void {
 		if (this.doMonitorWithExistingWatcher(request, disposables)) {
 			this.trace(`reusing an existing recursive watcher to monitor ${request.path}`);
 			this.suspendedWatchRequestsWithPolling.delete(request.id);
@@ -183,10 +183,10 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		return false;
 	}
 
-	private doMonitorWithNodeJS(request: ISuspendedWatchRequest, disposables: DisposableStore): codemavi {
+	private doMonitorWithNodeJS(request: ISuspendedWatchRequest, disposables: DisposableStore): void {
 		let pathNotFound = false;
 
-		const watchFileCallback: (curr: Stats, prev: Stats) => codemavi = (curr, prev) => {
+		const watchFileCallback: (curr: Stats, prev: Stats) => void = (curr, prev) => {
 			if (disposables.isDisposed) {
 				return; // return early if already disposed
 			}
@@ -220,7 +220,7 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		}));
 	}
 
-	private onMonitoredPathAdded(request: ISuspendedWatchRequest): codemavi {
+	private onMonitoredPathAdded(request: ISuspendedWatchRequest): void {
 		this.trace(`detected ${request.path} exists again, resuming watcher (correlationId: ${request.correlationId})`);
 
 		// Emit as event
@@ -236,19 +236,19 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		return stats.ctimeMs === 0 && stats.ino === 0;
 	}
 
-	async stop(): Promise<codemavi> {
+	async stop(): Promise<void> {
 		this.suspendedWatchRequests.clearAndDisposeAll();
 		this.suspendedWatchRequestsWithPolling.clear();
 	}
 
-	protected traceEvent(event: IFileChange, request: IUniversalWatchRequest | ISuspendedWatchRequest): codemavi {
+	protected traceEvent(event: IFileChange, request: IUniversalWatchRequest | ISuspendedWatchRequest): void {
 		if (this.verboseLogging) {
 			const traceMsg = ` >> normalized ${event.type === FileChangeType.ADDED ? '[ADDED]' : event.type === FileChangeType.DELETED ? '[DELETED]' : '[CHANGED]'} ${event.resource.fsPath}`;
 			this.traceWithCorrelation(traceMsg, request);
 		}
 	}
 
-	protected traceWithCorrelation(message: string, request: IUniversalWatchRequest | ISuspendedWatchRequest): codemavi {
+	protected traceWithCorrelation(message: string, request: IUniversalWatchRequest | ISuspendedWatchRequest): void {
 		if (this.verboseLogging) {
 			this.trace(`${message}${typeof request.correlationId === 'number' ? ` <${request.correlationId}> ` : ``}`);
 		}
@@ -258,18 +258,18 @@ export abstract class BaseWatcher extends Disposable implements IWatcher {
 		return `${request.path} (excludes: ${request.excludes.length > 0 ? request.excludes : '<none>'}, includes: ${request.includes && request.includes.length > 0 ? JSON.stringify(request.includes) : '<all>'}, filter: ${requestFilterToString(request.filter)}, correlationId: ${typeof request.correlationId === 'number' ? request.correlationId : '<none>'})`;
 	}
 
-	protected abstract doWatch(requests: IUniversalWatchRequest[]): Promise<codemavi>;
+	protected abstract doWatch(requests: IUniversalWatchRequest[]): Promise<void>;
 
 	protected abstract readonly recursiveWatcher: IRecursiveWatcherWithSubscribe | undefined;
 
-	protected abstract trace(message: string): codemavi;
-	protected abstract warn(message: string): codemavi;
+	protected abstract trace(message: string): void;
+	protected abstract warn(message: string): void;
 
 	abstract onDidError: Event<IWatcherErrorEvent>;
 
 	protected verboseLogging = false;
 
-	async setVerboseLogging(enabled: boolean): Promise<codemavi> {
+	async setVerboseLogging(enabled: boolean): Promise<void> {
 		this.verboseLogging = enabled;
 	}
 }

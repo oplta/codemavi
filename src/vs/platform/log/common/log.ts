@@ -43,25 +43,25 @@ export const DEFAULT_LOG_LEVEL: LogLevel = LogLevel.Info;
 export interface ILogger extends IDisposable {
 	onDidChangeLogLevel: Event<LogLevel>;
 	getLevel(): LogLevel;
-	setLevel(level: LogLevel): codemavi;
+	setLevel(level: LogLevel): void;
 
-	trace(message: string, ...args: any[]): codemavi;
-	debug(message: string, ...args: any[]): codemavi;
-	info(message: string, ...args: any[]): codemavi;
-	warn(message: string, ...args: any[]): codemavi;
-	error(message: string | Error, ...args: any[]): codemavi;
+	trace(message: string, ...args: any[]): void;
+	debug(message: string, ...args: any[]): void;
+	info(message: string, ...args: any[]): void;
+	warn(message: string, ...args: any[]): void;
+	error(message: string | Error, ...args: any[]): void;
 
 	/**
 	 * An operation to flush the contents. Can be synchronous.
 	 */
-	flush(): codemavi;
+	flush(): void;
 }
 
 export function canLog(loggerLevel: LogLevel, messageLevel: LogLevel): boolean {
 	return loggerLevel !== LogLevel.Off && loggerLevel <= messageLevel;
 }
 
-export function log(logger: ILogger, level: LogLevel, message: string): codemavi {
+export function log(logger: ILogger, level: LogLevel, message: string): void {
 	switch (level) {
 		case LogLevel.Trace: logger.trace(message); break;
 		case LogLevel.Debug: logger.debug(message); break;
@@ -199,12 +199,12 @@ export interface ILoggerService {
 	/**
 	 * Set default log level.
 	 */
-	setLogLevel(level: LogLevel): codemavi;
+	setLogLevel(level: LogLevel): void;
 
 	/**
 	 * Set log level for a logger.
 	 */
-	setLogLevel(resource: URI, level: LogLevel): codemavi;
+	setLogLevel(resource: URI, level: LogLevel): void;
 
 	/**
 	 * Get log level for a logger or the default log level.
@@ -219,7 +219,7 @@ export interface ILoggerService {
 	/**
 	 * Set the visibility of a logger.
 	 */
-	setVisibility(resourceOrId: URI | string, visible: boolean): codemavi;
+	setVisibility(resourceOrId: URI | string, visible: boolean): void;
 
 	/**
 	 * An event which fires when the logger resources are changed
@@ -235,12 +235,12 @@ export interface ILoggerService {
 	 *
 	 * Use it when you want to register a logger that is not created by the logger service.
 	 */
-	registerLogger(resource: ILoggerResource): codemavi;
+	registerLogger(resource: ILoggerResource): void;
 
 	/**
 	 * Deregister the logger for the given resource.
 	 */
-	deregisterLogger(idOrResource: URI | string): codemavi;
+	deregisterLogger(idOrResource: URI | string): void;
 
 	/**
 	 * Get all registered loggers
@@ -259,7 +259,7 @@ export abstract class AbstractLogger extends Disposable implements ILogger {
 	private readonly _onDidChangeLogLevel: Emitter<LogLevel> = this._register(new Emitter<LogLevel>());
 	readonly onDidChangeLogLevel: Event<LogLevel> = this._onDidChangeLogLevel.event;
 
-	setLevel(level: LogLevel): codemavi {
+	setLevel(level: LogLevel): void {
 		if (this.level !== level) {
 			this.level = level;
 			this._onDidChangeLogLevel.fire(this.level);
@@ -281,12 +281,12 @@ export abstract class AbstractLogger extends Disposable implements ILogger {
 		return this.checkLogLevel(level);
 	}
 
-	abstract trace(message: string, ...args: any[]): codemavi;
-	abstract debug(message: string, ...args: any[]): codemavi;
-	abstract info(message: string, ...args: any[]): codemavi;
-	abstract warn(message: string, ...args: any[]): codemavi;
-	abstract error(message: string | Error, ...args: any[]): codemavi;
-	abstract flush(): codemavi;
+	abstract trace(message: string, ...args: any[]): void;
+	abstract debug(message: string, ...args: any[]): void;
+	abstract info(message: string, ...args: any[]): void;
+	abstract warn(message: string, ...args: any[]): void;
+	abstract error(message: string | Error, ...args: any[]): void;
+	abstract flush(): void;
 }
 
 export abstract class AbstractMessageLogger extends AbstractLogger implements ILogger {
@@ -299,31 +299,31 @@ export abstract class AbstractMessageLogger extends AbstractLogger implements IL
 		return this.logAlways || super.checkLogLevel(level);
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Trace)) {
 			this.log(LogLevel.Trace, format([message, ...args], true));
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Debug)) {
 			this.log(LogLevel.Debug, format([message, ...args]));
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Info)) {
 			this.log(LogLevel.Info, format([message, ...args]));
 		}
 	}
 
-	warn(message: string, ...args: any[]): codemavi {
+	warn(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Warning)) {
 			this.log(LogLevel.Warning, format([message, ...args]));
 		}
 	}
 
-	error(message: string | Error, ...args: any[]): codemavi {
+	error(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Error)) {
 			if (message instanceof Error) {
 				const array = Array.prototype.slice.call(arguments) as any[];
@@ -335,9 +335,9 @@ export abstract class AbstractMessageLogger extends AbstractLogger implements IL
 		}
 	}
 
-	flush(): codemavi { }
+	flush(): void { }
 
-	protected abstract log(level: LogLevel, message: string): codemavi;
+	protected abstract log(level: LogLevel, message: string): void;
 }
 
 
@@ -351,7 +351,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		this.useColors = !isWindows;
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Trace)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[main ${now()}]\x1b[0m`, message, ...args);
@@ -361,7 +361,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Debug)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[main ${now()}]\x1b[0m`, message, ...args);
@@ -371,7 +371,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Info)) {
 			if (this.useColors) {
 				console.log(`\x1b[90m[main ${now()}]\x1b[0m`, message, ...args);
@@ -381,7 +381,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	warn(message: string | Error, ...args: any[]): codemavi {
+	warn(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Warning)) {
 			if (this.useColors) {
 				console.warn(`\x1b[93m[main ${now()}]\x1b[0m`, message, ...args);
@@ -391,7 +391,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	error(message: string, ...args: any[]): codemavi {
+	error(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Error)) {
 			if (this.useColors) {
 				console.error(`\x1b[91m[main ${now()}]\x1b[0m`, message, ...args);
@@ -401,7 +401,7 @@ export class ConsoleMainLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		// noop
 	}
 
@@ -414,7 +414,7 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 		this.setLevel(logLevel);
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Trace)) {
 			if (this.useColors) {
 				console.log('%cTRACE', 'color: #888', message, ...args);
@@ -424,7 +424,7 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Debug)) {
 			if (this.useColors) {
 				console.log('%cDEBUG', 'background: #eee; color: #888', message, ...args);
@@ -434,7 +434,7 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Info)) {
 			if (this.useColors) {
 				console.log('%c INFO', 'color: #33f', message, ...args);
@@ -444,7 +444,7 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	warn(message: string | Error, ...args: any[]): codemavi {
+	warn(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Warning)) {
 			if (this.useColors) {
 				console.warn('%c WARN', 'color: #993', message, ...args);
@@ -454,7 +454,7 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	error(message: string, ...args: any[]): codemavi {
+	error(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Error)) {
 			if (this.useColors) {
 				console.error('%c  ERR', 'color: #f33', message, ...args);
@@ -465,43 +465,43 @@ export class ConsoleLogger extends AbstractLogger implements ILogger {
 	}
 
 
-	flush(): codemavi {
+	flush(): void {
 		// noop
 	}
 }
 
 export class AdapterLogger extends AbstractLogger implements ILogger {
 
-	constructor(private readonly adapter: { log: (logLevel: LogLevel, args: any[]) => codemavi }, logLevel: LogLevel = DEFAULT_LOG_LEVEL) {
+	constructor(private readonly adapter: { log: (logLevel: LogLevel, args: any[]) => void }, logLevel: LogLevel = DEFAULT_LOG_LEVEL) {
 		super();
 		this.setLevel(logLevel);
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Trace)) {
 			this.adapter.log(LogLevel.Trace, [this.extractMessage(message), ...args]);
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Debug)) {
 			this.adapter.log(LogLevel.Debug, [this.extractMessage(message), ...args]);
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		if (this.canLog(LogLevel.Info)) {
 			this.adapter.log(LogLevel.Info, [this.extractMessage(message), ...args]);
 		}
 	}
 
-	warn(message: string | Error, ...args: any[]): codemavi {
+	warn(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Warning)) {
 			this.adapter.log(LogLevel.Warning, [this.extractMessage(message), ...args]);
 		}
 	}
 
-	error(message: string | Error, ...args: any[]): codemavi {
+	error(message: string | Error, ...args: any[]): void {
 		if (this.canLog(LogLevel.Error)) {
 			this.adapter.log(LogLevel.Error, [this.extractMessage(message), ...args]);
 		}
@@ -515,7 +515,7 @@ export class AdapterLogger extends AbstractLogger implements ILogger {
 		return toErrorMessage(msg, this.canLog(LogLevel.Trace));
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		// noop
 	}
 }
@@ -529,50 +529,50 @@ export class MultiplexLogger extends AbstractLogger implements ILogger {
 		}
 	}
 
-	override setLevel(level: LogLevel): codemavi {
+	override setLevel(level: LogLevel): void {
 		for (const logger of this.loggers) {
 			logger.setLevel(level);
 		}
 		super.setLevel(level);
 	}
 
-	trace(message: string, ...args: any[]): codemavi {
+	trace(message: string, ...args: any[]): void {
 		for (const logger of this.loggers) {
 			logger.trace(message, ...args);
 		}
 	}
 
-	debug(message: string, ...args: any[]): codemavi {
+	debug(message: string, ...args: any[]): void {
 		for (const logger of this.loggers) {
 			logger.debug(message, ...args);
 		}
 	}
 
-	info(message: string, ...args: any[]): codemavi {
+	info(message: string, ...args: any[]): void {
 		for (const logger of this.loggers) {
 			logger.info(message, ...args);
 		}
 	}
 
-	warn(message: string, ...args: any[]): codemavi {
+	warn(message: string, ...args: any[]): void {
 		for (const logger of this.loggers) {
 			logger.warn(message, ...args);
 		}
 	}
 
-	error(message: string | Error, ...args: any[]): codemavi {
+	error(message: string | Error, ...args: any[]): void {
 		for (const logger of this.loggers) {
 			logger.error(message, ...args);
 		}
 	}
 
-	flush(): codemavi {
+	flush(): void {
 		for (const logger of this.loggers) {
 			logger.flush();
 		}
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		for (const logger of this.loggers) {
 			logger.dispose();
 		}
@@ -652,9 +652,9 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		return isString(idOrResource) ? joinPath(this.logsHome, `${idOrResource}.log`) : idOrResource;
 	}
 
-	setLogLevel(logLevel: LogLevel): codemavi;
-	setLogLevel(resource: URI, logLevel: LogLevel): codemavi;
-	setLogLevel(arg1: any, arg2?: any): codemavi {
+	setLogLevel(logLevel: LogLevel): void;
+	setLogLevel(resource: URI, logLevel: LogLevel): void;
+	setLogLevel(arg1: any, arg2?: any): void {
 		if (URI.isUri(arg1)) {
 			const resource = arg1;
 			const logLevel = arg2;
@@ -676,7 +676,7 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		}
 	}
 
-	setVisibility(resourceOrId: URI | string, visibility: boolean): codemavi {
+	setVisibility(resourceOrId: URI | string, visibility: boolean): void {
 		const logger = this.getLoggerEntry(resourceOrId);
 		if (logger && visibility !== !logger.info.hidden) {
 			logger.info.hidden = !visibility;
@@ -693,7 +693,7 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		return logLevel ?? this.logLevel;
 	}
 
-	registerLogger(resource: ILoggerResource): codemavi {
+	registerLogger(resource: ILoggerResource): void {
 		const existing = this._loggers.get(resource.resource);
 		if (existing) {
 			if (existing.info.hidden !== resource.hidden) {
@@ -705,7 +705,7 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		}
 	}
 
-	deregisterLogger(idOrResource: URI | string): codemavi {
+	deregisterLogger(idOrResource: URI | string): void {
 		const resource = this.toResource(idOrResource);
 		const existing = this._loggers.get(resource);
 		if (existing) {
@@ -727,7 +727,7 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		return this._loggers.get(resource)?.info;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._loggers.forEach(logger => logger.logger?.dispose());
 		this._loggers.clear();
 		super.dispose();
@@ -738,16 +738,16 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 
 export class NullLogger implements ILogger {
 	readonly onDidChangeLogLevel: Event<LogLevel> = new Emitter<LogLevel>().event;
-	setLevel(level: LogLevel): codemavi { }
+	setLevel(level: LogLevel): void { }
 	getLevel(): LogLevel { return LogLevel.Info; }
-	trace(message: string, ...args: any[]): codemavi { }
-	debug(message: string, ...args: any[]): codemavi { }
-	info(message: string, ...args: any[]): codemavi { }
-	warn(message: string, ...args: any[]): codemavi { }
-	error(message: string | Error, ...args: any[]): codemavi { }
-	critical(message: string | Error, ...args: any[]): codemavi { }
-	dispose(): codemavi { }
-	flush(): codemavi { }
+	trace(message: string, ...args: any[]): void { }
+	debug(message: string, ...args: any[]): void { }
+	info(message: string, ...args: any[]): void { }
+	warn(message: string, ...args: any[]): void { }
+	error(message: string | Error, ...args: any[]): void { }
+	critical(message: string | Error, ...args: any[]): void { }
+	dispose(): void { }
+	flush(): void { }
 }
 
 export class NullLogService extends NullLogger implements ILogService {

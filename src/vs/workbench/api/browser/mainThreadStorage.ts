@@ -39,7 +39,7 @@ export class MainThreadStorage implements MainThreadStorageShape {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._storageListener.dispose();
 	}
 
@@ -53,15 +53,15 @@ export class MainThreadStorage implements MainThreadStorageShape {
 		return this._extensionStorageService.getExtensionStateRaw(extensionId, shared);
 	}
 
-	async $setValue(shared: boolean, key: string, value: object): Promise<codemavi> {
+	async $setValue(shared: boolean, key: string, value: object): Promise<void> {
 		this._extensionStorageService.setExtensionState(key, value, shared);
 	}
 
-	$registerExtensionStorageKeysToSync(extension: IExtensionIdWithVersion, keys: string[]): codemavi {
+	$registerExtensionStorageKeysToSync(extension: IExtensionIdWithVersion, keys: string[]): void {
 		this._extensionStorageService.setKeysForSync(extension, keys);
 	}
 
-	private async checkAndMigrateExtensionStorage(extensionId: string, shared: boolean): Promise<codemavi> {
+	private async checkAndMigrateExtensionStorage(extensionId: string, shared: boolean): Promise<void> {
 		try {
 			let sourceExtensionId = this._extensionStorageService.getSourceExtensionToMigrate(extensionId);
 

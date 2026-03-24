@@ -85,7 +85,7 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	$markTestRetired(testIds: string[] | undefined): codemavi {
+	$markTestRetired(testIds: string[] | undefined): void {
 		let tree: WellDefinedPrefixTree<undefined> | undefined;
 		if (testIds) {
 			tree = new WellDefinedPrefixTree();
@@ -105,7 +105,7 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	$publishTestRunProfile(profile: ITestRunProfile): codemavi {
+	$publishTestRunProfile(profile: ITestRunProfile): void {
 		const controller = this.testProviderRegistrations.get(profile.controllerId);
 		if (controller) {
 			this.testProfiles.addProfile(controller.instance, profile);
@@ -115,21 +115,21 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	$updateTestRunConfig(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): codemavi {
+	$updateTestRunConfig(controllerId: string, profileId: number, update: Partial<ITestRunProfile>): void {
 		this.testProfiles.updateProfile(controllerId, profileId, update);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	$removeTestProfile(controllerId: string, profileId: number): codemavi {
+	$removeTestProfile(controllerId: string, profileId: number): void {
 		this.testProfiles.removeProfile(controllerId, profileId);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	$addTestsToRun(controllerId: string, runId: string, tests: ITestItem.Serialized[]): codemavi {
+	$addTestsToRun(controllerId: string, runId: string, tests: ITestItem.Serialized[]): void {
 		this.withLiveRun(runId, r => r.addTestChainToRun(controllerId,
 			tests.map(t => ITestItem.deserialize(this.uriIdentityService, t))));
 	}
@@ -137,7 +137,7 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	$appendCoverage(runId: string, taskId: string, coverage: IFileCoverage.Serialized): codemavi {
+	$appendCoverage(runId: string, taskId: string, coverage: IFileCoverage.Serialized): void {
 		this.withLiveRun(runId, run => {
 			const task = run.tasks.find(t => t.id === taskId);
 			if (!task) {
@@ -165,42 +165,42 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	$startedExtensionTestRun(req: ExtensionRunTestsRequest): codemavi {
+	$startedExtensionTestRun(req: ExtensionRunTestsRequest): void {
 		this.resultService.createLiveResult(req);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	$startedTestRunTask(runId: string, task: ITestRunTask): codemavi {
+	$startedTestRunTask(runId: string, task: ITestRunTask): void {
 		this.withLiveRun(runId, r => r.addTask(task));
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	$finishedTestRunTask(runId: string, taskId: string): codemavi {
+	$finishedTestRunTask(runId: string, taskId: string): void {
 		this.withLiveRun(runId, r => r.markTaskComplete(taskId));
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	$finishedExtensionTestRun(runId: string): codemavi {
+	$finishedExtensionTestRun(runId: string): void {
 		this.withLiveRun(runId, r => r.markComplete());
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public $updateTestStateInRun(runId: string, taskId: string, testId: string, state: TestResultState, duration?: number): codemavi {
+	public $updateTestStateInRun(runId: string, taskId: string, testId: string, state: TestResultState, duration?: number): void {
 		this.withLiveRun(runId, r => r.updateState(testId, taskId, state, duration));
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public $appendOutputToRun(runId: string, taskId: string, output: VSBuffer, locationDto?: ILocationDto, testId?: string): codemavi {
+	public $appendOutputToRun(runId: string, taskId: string, output: VSBuffer, locationDto?: ILocationDto, testId?: string): void {
 		const location = locationDto && {
 			uri: URI.revive(locationDto.uri),
 			range: Range.lift(locationDto.range)
@@ -213,7 +213,7 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	public $appendTestMessagesInRun(runId: string, taskId: string, testId: string, messages: ITestMessage.Serialized[]): codemavi {
+	public $appendTestMessagesInRun(runId: string, taskId: string, testId: string, messages: ITestMessage.Serialized[]): void {
 		const r = this.resultService.getResult(runId);
 		if (r && r instanceof LiveTestResult) {
 			for (const message of messages) {
@@ -290,7 +290,7 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	public $subscribeToDiffs(): codemavi {
+	public $subscribeToDiffs(): void {
 		this.proxy.$acceptDiff(this.testService.collection.getReviverDiff().map(TestsDiffOp.serialize));
 		this.diffListener.value = this.testService.onDidProcessDiff(this.proxy.$acceptDiff, this.proxy);
 	}
@@ -298,14 +298,14 @@ export class MainThreadTesting extends Disposable implements MainThreadTestingSh
 	/**
 	 * @inheritdoc
 	 */
-	public $unsubscribeFromDiffs(): codemavi {
+	public $unsubscribeFromDiffs(): void {
 		this.diffListener.clear();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public $publishDiff(controllerId: string, diff: TestsDiffOp.Serialized[]): codemavi {
+	public $publishDiff(controllerId: string, diff: TestsDiffOp.Serialized[]): void {
 		this.testService.publishDiff(controllerId,
 			diff.map(d => TestsDiffOp.deserialize(this.uriIdentityService, d)));
 	}

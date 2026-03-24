@@ -88,7 +88,7 @@ export class ExternalTerminalContribution implements IWorkbenchContribution {
 		this._updateConfiguration();
 	}
 
-	private async _updateConfiguration(): Promise<codemavi> {
+	private async _updateConfiguration(): Promise<void> {
 		const terminals = await this._externalTerminalService.getDefaultTerminalForPlatforms();
 		const configurationRegistry = Registry.as<IConfigurationRegistry>(Extensions.Configuration);
 		const terminalKindProperties: Partial<IConfigurationPropertySchema> = {

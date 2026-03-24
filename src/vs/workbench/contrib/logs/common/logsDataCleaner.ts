@@ -21,7 +21,7 @@ export class LogsDataCleaner extends Disposable {
 		this.cleanUpOldLogsSoon();
 	}
 
-	private cleanUpOldLogsSoon(): codemavi {
+	private cleanUpOldLogsSoon(): void {
 		let handle: any = setTimeout(async () => {
 			handle = undefined;
 			const stat = await this.fileService.resolve(dirname(this.environmentService.logsHome));

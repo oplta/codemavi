@@ -218,7 +218,7 @@ export class SettingsSynchroniser extends AbstractJsonFileSynchroniser implement
 		throw new Error(`Invalid Resource: ${resource.toString()}`);
 	}
 
-	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ISettingsResourcePreview, IAcceptResult][], force: boolean): Promise<codemavi> {
+	protected async applyResult(remoteUserData: IRemoteUserData, lastSyncUserData: IRemoteUserData | null, resourcePreviews: [ISettingsResourcePreview, IAcceptResult][], force: boolean): Promise<void> {
 		const { fileContent } = resourcePreviews[0][0];
 		let { content, localChange, remoteChange } = resourcePreviews[0][1];
 
@@ -350,7 +350,7 @@ export class SettingsSynchroniser extends AbstractJsonFileSynchroniser implement
 		return distinct(userExtensions.map(e => getIgnoredSettingsForExtension(e.manifest)).flat());
 	}
 
-	private validateContent(content: string): codemavi {
+	private validateContent(content: string): void {
 		if (this.hasErrors(content, false)) {
 			throw new UserDataSyncError(localize('errorInvalidSettings', "Unable to sync settings as there are errors/warning in settings file."), UserDataSyncErrorCode.LocalInvalidContent, this.resource);
 		}
@@ -371,7 +371,7 @@ export class SettingsInitializer extends AbstractInitializer {
 		super(SyncResource.Settings, userDataProfilesService, environmentService, logService, fileService, storageService, uriIdentityService);
 	}
 
-	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<codemavi> {
+	protected async doInitialize(remoteUserData: IRemoteUserData): Promise<void> {
 		const settingsSyncContent = remoteUserData.syncData ? this.parseSettingsSyncContent(remoteUserData.syncData.content) : null;
 		if (!settingsSyncContent) {
 			this.logService.info('Skipping initializing settings because remote settings does not exist.');

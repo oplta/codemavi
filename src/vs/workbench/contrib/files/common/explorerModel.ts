@@ -27,7 +27,7 @@ export class ExplorerModel implements IDisposable {
 
 	private _roots!: ExplorerItem[];
 	private _listener: IDisposable;
-	private readonly _onDidChangeRoots = new Emitter<codemavi>();
+	private readonly _onDidChangeRoots = new Emitter<void>();
 
 	constructor(
 		private readonly contextService: IWorkspaceContextService,
@@ -50,7 +50,7 @@ export class ExplorerModel implements IDisposable {
 		return this._roots;
 	}
 
-	get onDidChangeRoots(): Event<codemavi> {
+	get onDidChangeRoots(): Event<void> {
 		return this._onDidChangeRoots.event;
 	}
 
@@ -80,7 +80,7 @@ export class ExplorerModel implements IDisposable {
 		return null;
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this._listener);
 	}
 }
@@ -181,7 +181,7 @@ export class ExplorerItem {
 		return new Map<string, ExplorerItem>();
 	}
 
-	private updateName(value: string): codemavi {
+	private updateName(value: string): void {
 		// Re-add to parent since the parent has a name map to children and the name might have changed
 		this._parent?.removeChild(this);
 		this._name = value;
@@ -233,15 +233,15 @@ export class ExplorerItem {
 
 	/**
 	 * Merges the stat which was resolved from the disk with the local stat by copying over properties
-	 * and children. The merge will only consider resolved stat elements to acodemavi overwriting data which
+	 * and children. The merge will only consider resolved stat elements to avoid overwriting data which
 	 * exists locally.
 	 */
-	static mergeLocalWithDisk(disk: ExplorerItem, local: ExplorerItem): codemavi {
+	static mergeLocalWithDisk(disk: ExplorerItem, local: ExplorerItem): void {
 		if (disk.resource.toString() !== local.resource.toString()) {
 			return; // Merging only supported for stats with the same resource
 		}
 
-		// Stop merging when a folder is not resolved to acodemavi loosing local data
+		// Stop merging when a folder is not resolved to avoid loosing local data
 		const mergingDirectories = disk.isDirectory || local.isDirectory;
 		if (mergingDirectories && local._isDirectoryResolved && !disk._isDirectoryResolved) {
 			return;
@@ -297,7 +297,7 @@ export class ExplorerItem {
 	/**
 	 * Adds a child element to this folder.
 	 */
-	addChild(child: ExplorerItem): codemavi {
+	addChild(child: ExplorerItem): void {
 		// Inherit some parent properties to child
 		child._parent = this;
 		child.updateResource(false);
@@ -399,12 +399,12 @@ export class ExplorerItem {
 	/**
 	 * Removes a child element from this folder.
 	 */
-	removeChild(child: ExplorerItem): codemavi {
+	removeChild(child: ExplorerItem): void {
 		this.nestedChildren = undefined;
 		this.children.delete(this.getPlatformAwareName(child.name));
 	}
 
-	forgetChildren(): codemavi {
+	forgetChildren(): void {
 		this.children.clear();
 		this.nestedChildren = undefined;
 		this._isDirectoryResolved = false;
@@ -418,7 +418,7 @@ export class ExplorerItem {
 	/**
 	 * Moves this element under a new parent element.
 	 */
-	move(newParent: ExplorerItem): codemavi {
+	move(newParent: ExplorerItem): void {
 		this.nestedParent?.removeChild(this);
 		this._parent?.removeChild(this);
 		newParent.removeChild(this); // make sure to remove any previous version of the file if any
@@ -426,7 +426,7 @@ export class ExplorerItem {
 		this.updateResource(true);
 	}
 
-	private updateResource(recursive: boolean): codemavi {
+	private updateResource(recursive: boolean): void {
 		if (this._parent) {
 			this.resource = joinPath(this._parent.resource, this.name);
 		}
@@ -444,7 +444,7 @@ export class ExplorerItem {
 	 * Tells this stat that it was renamed. This requires changes to all children of this stat (if any)
 	 * so that the path property can be updated properly.
 	 */
-	rename(renamedStat: { name: string; mtime?: number }): codemavi {
+	rename(renamedStat: { name: string; mtime?: number }): void {
 
 		// Merge a subset of Properties that can change on rename
 		this.updateName(renamedStat.name);
@@ -506,12 +506,12 @@ export class ExplorerItem {
 		return this.markedAsFindResult;
 	}
 
-	markItemAndParentsAsFiltered(): codemavi {
+	markItemAndParentsAsFiltered(): void {
 		this.markedAsFindResult = true;
 		this.parent?.markItemAndParentsAsFiltered();
 	}
 
-	unmarkItemAndChildren(): codemavi {
+	unmarkItemAndChildren(): void {
 		this.markedAsFindResult = false;
 		this.children.forEach(child => child.unmarkItemAndChildren());
 	}

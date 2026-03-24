@@ -40,7 +40,7 @@ export class TerminalSuggestTelemetry extends Disposable {
 			this._acceptedCompletions = undefined;
 		}));
 	}
-	acceptCompletion(completion: ITerminalCompletion | undefined, commandLine?: string): codemavi {
+	acceptCompletion(completion: ITerminalCompletion | undefined, commandLine?: string): void {
 		if (!completion || !commandLine) {
 			this._acceptedCompletions = undefined;
 			return;
@@ -48,7 +48,7 @@ export class TerminalSuggestTelemetry extends Disposable {
 		this._acceptedCompletions = this._acceptedCompletions || [];
 		this._acceptedCompletions.push({ label: typeof completion.label === 'string' ? completion.label : completion.label.label, kind: this._kindMap.get(completion.kind!) });
 	}
-	private _sendTelemetryInfo(fromInterrupt?: boolean, exitCode?: number): codemavi {
+	private _sendTelemetryInfo(fromInterrupt?: boolean, exitCode?: number): void {
 		const commandLine = this._promptInputModel?.value;
 		for (const completion of this._acceptedCompletions || []) {
 			const label = completion?.label;

@@ -63,7 +63,7 @@ flakySuite('BackupMainService', () => {
 		};
 	}
 
-	function ensureFolderExists(uri: URI): Promise<codemavi> {
+	function ensureFolderExists(uri: URI): Promise<void> {
 		if (!fs.existsSync(uri.fsPath)) {
 			fs.mkdirSync(uri.fsPath);
 		}
@@ -83,7 +83,7 @@ flakySuite('BackupMainService', () => {
 		return workspace;
 	}
 
-	async function createBackupFolder(backupFolder: string): Promise<codemavi> {
+	async function createBackupFolder(backupFolder: string): Promise<void> {
 		if (!fs.existsSync(backupFolder)) {
 			fs.mkdirSync(backupFolder);
 			fs.mkdirSync(path.join(backupFolder, Schemas.file));
@@ -95,7 +95,7 @@ flakySuite('BackupMainService', () => {
 		return stateMainService.getItem('backupWorkspaces') as ISerializedBackupWorkspaces;
 	}
 
-	function writeWorkspacesMetadata(data: string): codemavi {
+	function writeWorkspacesMetadata(data: string): void {
 		if (!data) {
 			stateMainService.removeItem('backupWorkspaces');
 		} else {

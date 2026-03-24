@@ -1318,7 +1318,7 @@ export class WorkspaceTagsService implements IWorkspaceTagsService {
 				tags['workspace.android.cpp'] = true;
 			}
 
-			function getFilePromises(filename: string, fileService: IFileService, textFileService: ITextFileService, contentHandler: (content: ITextFileContent) => codemavi): Promise<codemavi>[] {
+			function getFilePromises(filename: string, fileService: IFileService, textFileService: ITextFileService, contentHandler: (content: ITextFileContent) => void): Promise<void>[] {
 				return !nameSet.has(filename) ? [] : (folders as URI[]).map(workspaceUri => {
 					const uri = workspaceUri.with({ path: `${workspaceUri.path !== '/' ? workspaceUri.path : ''}/${filename}` });
 					return fileService.exists(uri).then(exists => {
@@ -1333,7 +1333,7 @@ export class WorkspaceTagsService implements IWorkspaceTagsService {
 				});
 			}
 
-			function addPythonTags(packageName: string): codemavi {
+			function addPythonTags(packageName: string): void {
 				if (PyModulesToLookFor.indexOf(packageName) > -1) {
 					tags['workspace.py.' + packageName] = true;
 				}
@@ -1482,7 +1482,7 @@ export class WorkspaceTagsService implements IWorkspaceTagsService {
 		});
 	}
 
-	private processGradleDependencies(content: string, regex: RegExp, tags: Tags): codemavi {
+	private processGradleDependencies(content: string, regex: RegExp, tags: Tags): void {
 		let dependencyContent;
 		while (dependencyContent = regex.exec(content)) {
 			const groupId = dependencyContent[1];
@@ -1493,7 +1493,7 @@ export class WorkspaceTagsService implements IWorkspaceTagsService {
 		}
 	}
 
-	private tagJavaDependency(groupId: string, artifactId: string, prefix: string, tags: Tags): codemavi {
+	private tagJavaDependency(groupId: string, artifactId: string, prefix: string, tags: Tags): void {
 		for (const javaLibrary of JavaLibrariesToLookFor) {
 			if (javaLibrary.predicate(groupId, artifactId)) {
 				tags[prefix + javaLibrary.tag] = true;

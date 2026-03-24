@@ -61,7 +61,7 @@ class IndexedDBFileSystemNode {
 		return next.doRead(pathParts.slice(1));
 	}
 
-	delete(path: string): codemavi {
+	delete(path: string): void {
 		const toDelete = path.split('/').filter(p => p.length);
 		if (toDelete.length === 0) {
 			if (this.entry.type !== FileType.Directory) {
@@ -73,7 +73,7 @@ class IndexedDBFileSystemNode {
 		}
 	}
 
-	private doDelete(pathParts: string[], originalPath: string): codemavi {
+	private doDelete(pathParts: string[], originalPath: string): void {
 		if (pathParts.length === 0) {
 			throw ERR_UNKNOWN_INTERNAL(`Internal error deleting from IndexedDBFSNode -- got no deletion path parts (encountered while deleting ${originalPath})`);
 		}
@@ -157,7 +157,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 	readonly capabilities: FileSystemProviderCapabilities =
 		FileSystemProviderCapabilities.FileReadWrite
 		| FileSystemProviderCapabilities.PathCaseSensitive;
-	readonly onDidChangeCapabilities: Event<codemavi> = Event.None;
+	readonly onDidChangeCapabilities: Event<void> = Event.None;
 
 	private readonly extUri = new ExtUri(() => false) /* Case Sensitive */;
 
@@ -186,7 +186,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		return Disposable.None;
 	}
 
-	async mkdir(resource: URI): Promise<codemavi> {
+	async mkdir(resource: URI): Promise<void> {
 		try {
 			const resourceStat = await this.stat(resource);
 			if (resourceStat.type === FileType.File) {
@@ -263,7 +263,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		}
 	}
 
-	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<codemavi> {
+	async writeFile(resource: URI, content: Uint8Array, opts: IFileWriteOptions): Promise<void> {
 		try {
 			const existing = await this.stat(resource).catch(() => undefined);
 			if (existing?.type === FileType.Directory) {
@@ -275,7 +275,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		}
 	}
 
-	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<codemavi> {
+	async rename(from: URI, to: URI, opts: IFileOverwriteOptions): Promise<void> {
 		const fileTree = await this.getFiletree();
 		const fromEntry = fileTree.read(from.path);
 		if (!fromEntry) {
@@ -322,7 +322,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		await this.delete(from, { recursive: true, useTrash: false, atomic: false });
 	}
 
-	async delete(resource: URI, opts: IFileDeleteOptions): Promise<codemavi> {
+	async delete(resource: URI, opts: IFileDeleteOptions): Promise<void> {
 		let stat: IStat;
 		try {
 			stat = await this.stat(resource);
@@ -366,7 +366,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		return allEntries;
 	}
 
-	private triggerChanges(changes: IFileChange[]): codemavi {
+	private triggerChanges(changes: IFileChange[]): void {
 		if (changes.length) {
 			this._onDidChangeFile.fire(changes);
 
@@ -391,7 +391,7 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		return this.cachedFiletree;
 	}
 
-	private async bulkWrite(files: [URI, Uint8Array][]): Promise<codemavi> {
+	private async bulkWrite(files: [URI, Uint8Array][]): Promise<void> {
 		files.forEach(([resource, content]) => this.fileWriteBatch.push({ content, resource }));
 		await this.writeManyThrottler.queue(() => this.writeMany());
 
@@ -422,13 +422,13 @@ export class IndexedDBFileSystemProvider extends Disposable implements IFileSyst
 		}
 	}
 
-	private async deleteKeys(keys: string[]): Promise<codemavi> {
+	private async deleteKeys(keys: string[]): Promise<void> {
 		if (keys.length) {
 			await this.indexedDB.runInTransaction(this.store, 'readwrite', objectStore => keys.map(key => objectStore.delete(key)));
 		}
 	}
 
-	async reset(): Promise<codemavi> {
+	async reset(): Promise<void> {
 		await this.indexedDB.runInTransaction(this.store, 'readwrite', objectStore => objectStore.clear());
 	}
 

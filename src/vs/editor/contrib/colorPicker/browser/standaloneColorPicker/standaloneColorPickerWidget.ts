@@ -133,7 +133,7 @@ export class StandaloneColorPickerWidget extends Disposable implements IContentW
 		};
 	}
 
-	public hide(): codemavi {
+	public hide(): void {
 		this.dispose();
 		this._standaloneColorPickerVisible.set(false);
 		this._standaloneColorPickerFocused.set(false);
@@ -141,7 +141,7 @@ export class StandaloneColorPickerWidget extends Disposable implements IContentW
 		this._editor.focus();
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		this._standaloneColorPickerFocused.set(true);
 		this._body.focus();
 	}

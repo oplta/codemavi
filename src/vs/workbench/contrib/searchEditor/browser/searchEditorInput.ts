@@ -70,8 +70,8 @@ export class SearchEditorInput extends EditorInput {
 
 	private lastLabel: string | undefined;
 
-	private readonly _onDidChangeContent = this._register(new Emitter<codemavi>());
-	readonly onDidChangeContent: Event<codemavi> = this._onDidChangeContent.event;
+	private readonly _onDidChangeContent = this._register(new Emitter<void>());
+	readonly onDidChangeContent: Event<void> = this._onDidChangeContent.event;
 
 	private readonly _onDidSave = this._register(new Emitter<IWorkingCopySaveEvent>());
 	readonly onDidSave: Event<IWorkingCopySaveEvent> = this._onDidSave.event;
@@ -124,7 +124,7 @@ export class SearchEditorInput extends EditorInput {
 			isModified(): boolean { return input.isDirty(); }
 			backup(token: CancellationToken): Promise<IWorkingCopyBackup> { return input.backup(token); }
 			save(options?: ISaveOptions): Promise<boolean> { return input.save(0, options).then(editor => !!editor); }
-			revert(options?: IRevertOptions): Promise<codemavi> { return input.revert(0, options); }
+			revert(options?: IRevertOptions): Promise<void> { return input.revert(0, options); }
 		};
 
 		this._register(this.workingCopyService.registerWorkingCopy(workingCopyAdapter));

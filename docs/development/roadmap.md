@@ -46,7 +46,7 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 4. **Privacy-First Configuration** - All telemetry disabled by default
 
 ### Technical Focus:
-- Global search/replace for "void" → "codemavi" (case-sensitive)
+- Global search/replace for "void" → "mavi" (case-sensitive)
 - Theme implementation in CSS and product.json
 - Telemetry removal from all services
 - Build script updates and validation
@@ -110,8 +110,8 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 **Goal:** Implement transparent, customizable prompt system with rule hierarchy
 
 ### Tasks:
-- [ ] Create `.codemavi/rules.md` file system and parser
-- [ ] Implement global `~/.codemavi/global-rules.md` support
+- [ ] Create `.mavi/rules.md` file system and parser
+- [ ] Implement global `~/.mavi/global-rules.md` support
 - [ ] Develop prompt layering system with priority hierarchy
 - [ ] Build UI for viewing and editing system prompts
 - [ ] Create "Prompt Inspector" for debugging agent interactions
@@ -128,8 +128,8 @@ This roadmap outlines the development phases for Code Mavi, following the strate
 ### Prompt Architecture:
 ```
 1. Base Agent Prompt (System-defined)
-2. Global User Rules (~/.codemavi/global-rules.md)
-3. Project Rules (.codemavi/rules.md)
+2. Global User Rules (~/.mavi/global-rules.md)
+3. Project Rules (.mavi/rules.md)
 4. Dynamic Context (Current session state)
 5. Task-specific Instructions
 ```

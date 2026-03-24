@@ -31,7 +31,7 @@ export class MainThreadLoggerService implements MainThreadLoggerShape {
 		}));
 	}
 
-	$log(file: UriComponents, messages: [LogLevel, string][]): codemavi {
+	$log(file: UriComponents, messages: [LogLevel, string][]): void {
 		const logger = this.loggerService.getLogger(URI.revive(file));
 		if (!logger) {
 			throw new Error('Create the logger before logging');
@@ -41,26 +41,26 @@ export class MainThreadLoggerService implements MainThreadLoggerShape {
 		}
 	}
 
-	async $createLogger(file: UriComponents, options?: ILoggerOptions): Promise<codemavi> {
+	async $createLogger(file: UriComponents, options?: ILoggerOptions): Promise<void> {
 		this.loggerService.createLogger(URI.revive(file), options);
 	}
 
-	async $registerLogger(logResource: UriDto<ILoggerResource>): Promise<codemavi> {
+	async $registerLogger(logResource: UriDto<ILoggerResource>): Promise<void> {
 		this.loggerService.registerLogger({
 			...logResource,
 			resource: URI.revive(logResource.resource)
 		});
 	}
 
-	async $deregisterLogger(resource: UriComponents): Promise<codemavi> {
+	async $deregisterLogger(resource: UriComponents): Promise<void> {
 		this.loggerService.deregisterLogger(URI.revive(resource));
 	}
 
-	async $setVisibility(resource: UriComponents, visible: boolean): Promise<codemavi> {
+	async $setVisibility(resource: UriComponents, visible: boolean): Promise<void> {
 		this.loggerService.setVisibility(URI.revive(resource), visible);
 	}
 
-	$flush(file: UriComponents): codemavi {
+	$flush(file: UriComponents): void {
 		const logger = this.loggerService.getLogger(URI.revive(file));
 		if (!logger) {
 			throw new Error('Create the logger before flushing');
@@ -68,7 +68,7 @@ export class MainThreadLoggerService implements MainThreadLoggerShape {
 		logger.flush();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposables.dispose();
 	}
 }

@@ -115,7 +115,7 @@ export class ChatPromptAttachmentsCollection extends Disposable {
 	 * Promise that resolves when parsing of all attached prompt instruction
 	 * files completes, including parsing of all its possible child references.
 	 */
-	public async allSettled(): Promise<codemavi> {
+	public async allSettled(): Promise<void> {
 		const attachments = [...this.attachments.values()];
 
 		await Promise.allSettled(
@@ -130,7 +130,7 @@ export class ChatPromptAttachmentsCollection extends Disposable {
 	 *
 	 * See {@linkcode onUpdate}.
 	 */
-	protected _onUpdate = this._register(new Emitter<codemavi>());
+	protected _onUpdate = this._register(new Emitter<void>());
 	/**
 	 * Subscribe to the `onUpdate` event.
 	 * @param callback Function to invoke on update.

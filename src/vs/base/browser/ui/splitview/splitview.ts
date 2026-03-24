@@ -105,7 +105,7 @@ export interface IView<TLayoutContext = undefined> {
 	 * @param offset The offset of this view, relative to the start of the {@link SplitView}.
 	 * @param context The optional {@link IView layout context} passed to {@link SplitView.layout}.
 	 */
-	layout(size: number, offset: number, context: TLayoutContext | undefined): codemavi;
+	layout(size: number, offset: number, context: TLayoutContext | undefined): void;
 
 	/**
 	 * This will be called by the {@link SplitView} whenever this view is made
@@ -113,7 +113,7 @@ export interface IView<TLayoutContext = undefined> {
 	 *
 	 * @param visible Whether the view becomes visible.
 	 */
-	setVisible?(visible: boolean): codemavi;
+	setVisible?(visible: boolean): void;
 }
 
 /**
@@ -225,7 +225,7 @@ abstract class ViewItem<TLayoutContext, TView extends IView<TLayoutContext>> {
 		return typeof this._cachedVisibleSize === 'undefined';
 	}
 
-	setVisible(visible: boolean, size?: number): codemavi {
+	setVisible(visible: boolean, size?: number): void {
 		if (visible === this.visible) {
 			return;
 		}
@@ -278,7 +278,7 @@ abstract class ViewItem<TLayoutContext, TView extends IView<TLayoutContext>> {
 		}
 	}
 
-	layout(offset: number, layoutContext: TLayoutContext | undefined): codemavi {
+	layout(offset: number, layoutContext: TLayoutContext | undefined): void {
 		this.layoutContainer(offset);
 
 		try {
@@ -289,16 +289,16 @@ abstract class ViewItem<TLayoutContext, TView extends IView<TLayoutContext>> {
 		}
 	}
 
-	abstract layoutContainer(offset: number): codemavi;
+	abstract layoutContainer(offset: number): void;
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.disposable.dispose();
 	}
 }
 
 class VerticalViewItem<TLayoutContext, TView extends IView<TLayoutContext>> extends ViewItem<TLayoutContext, TView> {
 
-	layoutContainer(offset: number): codemavi {
+	layoutContainer(offset: number): void {
 		this.container.style.top = `${offset}px`;
 		this.container.style.height = `${this.size}px`;
 	}
@@ -306,7 +306,7 @@ class VerticalViewItem<TLayoutContext, TView extends IView<TLayoutContext>> exte
 
 class HorizontalViewItem<TLayoutContext, TView extends IView<TLayoutContext>> extends ViewItem<TLayoutContext, TView> {
 
-	layoutContainer(offset: number): codemavi {
+	layoutContainer(offset: number): void {
 		this.container.style.left = `${offset}px`;
 		this.container.style.width = `${this.size}px`;
 	}
@@ -634,7 +634,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		}
 	}
 
-	style(styles: ISplitViewStyles): codemavi {
+	style(styles: ISplitViewStyles): void {
 		if (styles.separatorBorder.isTransparent()) {
 			this.el.classList.remove('separator-border');
 			this.el.style.removeProperty('--separator-border');
@@ -652,7 +652,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param index The index to insert the view on.
 	 * @param skipLayout Whether layout should be skipped.
 	 */
-	addView(view: TView, size: number | Sizing, index = this.viewItems.length, skipLayout?: boolean): codemavi {
+	addView(view: TView, size: number | Sizing, index = this.viewItems.length, skipLayout?: boolean): void {
 		this.doAddView(view, size, index, skipLayout);
 	}
 
@@ -749,7 +749,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param from The source index.
 	 * @param to The target index.
 	 */
-	moveView(from: number, to: number): codemavi {
+	moveView(from: number, to: number): void {
 		if (this.state !== State.Idle) {
 			throw new Error('Cant modify splitview');
 		}
@@ -767,7 +767,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param from The source index.
 	 * @param to The target index.
 	 */
-	swapViews(from: number, to: number): codemavi {
+	swapViews(from: number, to: number): void {
 		if (this.state !== State.Idle) {
 			throw new Error('Cant modify splitview');
 		}
@@ -805,7 +805,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param index The {@link IView view} index.
 	 * @param visible Whether the {@link IView view} should be visible.
 	 */
-	setViewVisible(index: number, visible: boolean): codemavi {
+	setViewVisible(index: number, visible: boolean): void {
 		if (index < 0 || index >= this.viewItems.length) {
 			throw new Error('Index out of bounds');
 		}
@@ -838,7 +838,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param size The entire size of the {@link SplitView}.
 	 * @param layoutContext An optional layout context to pass along to {@link IView views}.
 	 */
-	layout(size: number, layoutContext?: TLayoutContext): codemavi {
+	layout(size: number, layoutContext?: TLayoutContext): void {
 		const previousSize = Math.max(this.size, this._contentSize);
 		this.size = size;
 		this.layoutContext = layoutContext;
@@ -877,13 +877,13 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		this.layoutViews();
 	}
 
-	private saveProportions(): codemavi {
+	private saveProportions(): void {
 		if (this.proportionalLayout && this._contentSize > 0) {
 			this.proportions = this.viewItems.map(v => v.proportionalLayout && v.visible ? v.size / this._contentSize : undefined);
 		}
 	}
 
-	private onSashStart({ sash, start, alt }: ISashEvent): codemavi {
+	private onSashStart({ sash, start, alt }: ISashEvent): void {
 		for (const item of this.viewItems) {
 			item.enabled = false;
 		}
@@ -966,7 +966,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		resetSashDragState(start, alt);
 	}
 
-	private onSashChange({ current }: ISashEvent): codemavi {
+	private onSashChange({ current }: ISashEvent): void {
 		const { index, start, sizes, alt, minDelta, maxDelta, snapBefore, snapAfter } = this.sashDragState!;
 		this.sashDragState!.current = current;
 
@@ -989,7 +989,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		this.layoutViews();
 	}
 
-	private onSashEnd(index: number): codemavi {
+	private onSashEnd(index: number): void {
 		this._onDidSashChange.fire(index);
 		this.sashDragState!.disposable.dispose();
 		this.saveProportions();
@@ -999,7 +999,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		}
 	}
 
-	private onViewChange(item: ViewItem<TLayoutContext, TView>, size: number | undefined): codemavi {
+	private onViewChange(item: ViewItem<TLayoutContext, TView>, size: number | undefined): void {
 		const index = this.viewItems.indexOf(item);
 
 		if (index < 0 || index >= this.viewItems.length) {
@@ -1027,7 +1027,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	 * @param index The {@link IView view} index.
 	 * @param size The {@link IView view} size.
 	 */
-	resizeView(index: number, size: number): codemavi {
+	resizeView(index: number, size: number): void {
 		if (index < 0 || index >= this.viewItems.length) {
 			return;
 		}
@@ -1074,7 +1074,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 	/**
 	 * Distribute the entire {@link SplitView} size among all {@link IView views}.
 	 */
-	distributeViewSizes(): codemavi {
+	distributeViewSizes(): void {
 		const flexibleViewItems: ViewItem<TLayoutContext, TView>[] = [];
 		let flexibleSize = 0;
 
@@ -1109,7 +1109,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		return this.viewItems[index].size;
 	}
 
-	private doAddView(view: TView, size: number | Sizing, index = this.viewItems.length, skipLayout?: boolean): codemavi {
+	private doAddView(view: TView, size: number | Sizing, index = this.viewItems.length, skipLayout?: boolean): void {
 		if (this.state !== State.Idle) {
 			throw new Error('Cant modify splitview');
 		}
@@ -1223,7 +1223,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		}
 	}
 
-	private relayout(lowPriorityIndexes?: number[], highPriorityIndexes?: number[]): codemavi {
+	private relayout(lowPriorityIndexes?: number[], highPriorityIndexes?: number[]): void {
 		const contentSize = this.viewItems.reduce((r, i) => r + i.size, 0);
 
 		this.resize(this.viewItems.length - 1, this.size - contentSize, undefined, lowPriorityIndexes, highPriorityIndexes);
@@ -1320,7 +1320,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		return delta;
 	}
 
-	private distributeEmptySpace(lowPriorityIndex?: number): codemavi {
+	private distributeEmptySpace(lowPriorityIndex?: number): void {
 		const contentSize = this.viewItems.reduce((r, i) => r + i.size, 0);
 		let emptyDelta = this.size - contentSize;
 
@@ -1350,7 +1350,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		}
 	}
 
-	private layoutViews(): codemavi {
+	private layoutViews(): void {
 		// Save new content size
 		this._contentSize = this.viewItems.reduce((r, i) => r + i.size, 0);
 
@@ -1368,7 +1368,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		this.updateScrollableElement();
 	}
 
-	private updateScrollableElement(): codemavi {
+	private updateScrollableElement(): void {
 		if (this.orientation === Orientation.VERTICAL) {
 			this.scrollableElement.setScrollDimensions({
 				height: this.size,
@@ -1382,7 +1382,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		}
 	}
 
-	private updateSashEnablement(): codemavi {
+	private updateSashEnablement(): void {
 		let previous = false;
 		const collapsesDown = this.viewItems.map(i => previous = (i.size - i.minimumSize > 0) || previous);
 
@@ -1490,7 +1490,7 @@ export class SplitView<TLayoutContext = undefined, TView extends IView<TLayoutCo
 		return true;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.sashDragState?.disposable.dispose();
 
 		dispose(this.viewItems);

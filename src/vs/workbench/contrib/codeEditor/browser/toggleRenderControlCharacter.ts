@@ -32,7 +32,7 @@ export class ToggleRenderControlCharacterAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<codemavi> {
+	override run(accessor: ServicesAccessor): Promise<void> {
 		const configurationService = accessor.get(IConfigurationService);
 
 		const newRenderControlCharacters = !configurationService.getValue<boolean>('editor.renderControlCharacters');

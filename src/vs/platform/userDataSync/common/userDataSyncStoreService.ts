@@ -40,7 +40,7 @@ export abstract class AbstractUserDataSyncStoreManagementService extends Disposa
 
 	_serviceBrand: any;
 
-	private readonly _onDidChangeUserDataSyncStore = this._register(new Emitter<codemavi>());
+	private readonly _onDidChangeUserDataSyncStore = this._register(new Emitter<void>());
 	readonly onDidChangeUserDataSyncStore = this._onDidChangeUserDataSyncStore.event;
 	private _userDataSyncStore: UserDataSyncStore | undefined;
 	get userDataSyncStore(): UserDataSyncStore | undefined { return this._userDataSyncStore; }
@@ -63,7 +63,7 @@ export abstract class AbstractUserDataSyncStoreManagementService extends Disposa
 		this._register(Event.filter(storageService.onDidChangeValue(StorageScope.APPLICATION, SYNC_SERVICE_URL_TYPE, disposable), () => this.userDataSyncStoreType !== this.userDataSyncStore?.type, disposable)(() => this.updateUserDataSyncStore()));
 	}
 
-	protected updateUserDataSyncStore(): codemavi {
+	protected updateUserDataSyncStore(): void {
 		this._userDataSyncStore = this.toUserDataSyncStore(this.productService[CONFIGURATION_SYNC_STORE_KEY]);
 		this._onDidChangeUserDataSyncStore.fire();
 	}
@@ -102,7 +102,7 @@ export abstract class AbstractUserDataSyncStoreManagementService extends Disposa
 		return undefined;
 	}
 
-	abstract switch(type: UserDataSyncStoreType): Promise<codemavi>;
+	abstract switch(type: UserDataSyncStoreType): Promise<void>;
 	abstract getPreviousUserDataSyncStore(): Promise<IUserDataSyncStore | undefined>;
 
 }
@@ -131,7 +131,7 @@ export class UserDataSyncStoreManagementService extends AbstractUserDataSyncStor
 		}
 	}
 
-	async switch(type: UserDataSyncStoreType): Promise<codemavi> {
+	async switch(type: UserDataSyncStoreType): Promise<void> {
 		if (type !== this.userDataSyncStoreType) {
 			this.userDataSyncStoreType = type;
 			this.updateUserDataSyncStore();
@@ -154,12 +154,12 @@ export class UserDataSyncStoreClient extends Disposable {
 	private _onTokenFailed = this._register(new Emitter<UserDataSyncErrorCode>());
 	readonly onTokenFailed = this._onTokenFailed.event;
 
-	private _onTokenSucceed: Emitter<codemavi> = this._register(new Emitter<codemavi>());
-	readonly onTokenSucceed: Event<codemavi> = this._onTokenSucceed.event;
+	private _onTokenSucceed: Emitter<void> = this._register(new Emitter<void>());
+	readonly onTokenSucceed: Event<void> = this._onTokenSucceed.event;
 
 	private _donotMakeRequestsUntil: Date | undefined = undefined;
 	get donotMakeRequestsUntil() { return this._donotMakeRequestsUntil; }
-	private _onDidChangeDonotMakeRequestsUntil = this._register(new Emitter<codemavi>());
+	private _onDidChangeDonotMakeRequestsUntil = this._register(new Emitter<void>());
 	readonly onDidChangeDonotMakeRequestsUntil = this._onDidChangeDonotMakeRequestsUntil.event;
 
 	constructor(
@@ -196,23 +196,23 @@ export class UserDataSyncStoreClient extends Disposable {
 		}));
 	}
 
-	setAuthToken(token: string, type: string): codemavi {
+	setAuthToken(token: string, type: string): void {
 		this.authToken = { token, type };
 	}
 
-	protected updateUserDataSyncStoreUrl(userDataSyncStoreUrl: URI | undefined): codemavi {
+	protected updateUserDataSyncStoreUrl(userDataSyncStoreUrl: URI | undefined): void {
 		this.userDataSyncStoreUrl = userDataSyncStoreUrl ? joinPath(userDataSyncStoreUrl, 'v1') : undefined;
 	}
 
-	private initDonotMakeRequestsUntil(): codemavi {
+	private initDonotMakeRequestsUntil(): void {
 		const donotMakeRequestsUntil = this.storageService.getNumber(DONOT_MAKE_REQUESTS_UNTIL_KEY, StorageScope.APPLICATION);
 		if (donotMakeRequestsUntil && Date.now() < donotMakeRequestsUntil) {
 			this.setDonotMakeRequestsUntil(new Date(donotMakeRequestsUntil));
 		}
 	}
 
-	private resetDonotMakeRequestsUntilPromise: CancelablePromise<codemavi> | undefined = undefined;
-	private setDonotMakeRequestsUntil(donotMakeRequestsUntil: Date | undefined): codemavi {
+	private resetDonotMakeRequestsUntilPromise: CancelablePromise<void> | undefined = undefined;
+	private setDonotMakeRequestsUntil(donotMakeRequestsUntil: Date | undefined): void {
 		if (this._donotMakeRequestsUntil?.getTime() !== donotMakeRequestsUntil?.getTime()) {
 			this._donotMakeRequestsUntil = donotMakeRequestsUntil;
 
@@ -266,7 +266,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		return collectionId;
 	}
 
-	async deleteCollection(collection?: string, headers: IHeaders = {}): Promise<codemavi> {
+	async deleteCollection(collection?: string, headers: IHeaders = {}): Promise<void> {
 		if (!this.userDataSyncStoreUrl) {
 			throw new Error('No settings sync store url configured.');
 		}
@@ -309,7 +309,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		return content;
 	}
 
-	async deleteResource(resource: ServerResource, ref: string | null, collection?: string): Promise<codemavi> {
+	async deleteResource(resource: ServerResource, ref: string | null, collection?: string): Promise<void> {
 		if (!this.userDataSyncStoreUrl) {
 			throw new Error('No settings sync store url configured.');
 		}
@@ -320,7 +320,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		await this.request(url, { type: 'DELETE', headers }, [], CancellationToken.None);
 	}
 
-	async deleteResources(): Promise<codemavi> {
+	async deleteResources(): Promise<void> {
 		if (!this.userDataSyncStoreUrl) {
 			throw new Error('No settings sync store url configured.');
 		}
@@ -446,7 +446,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		return manifest;
 	}
 
-	async clear(): Promise<codemavi> {
+	async clear(): Promise<void> {
 		if (!this.userDataSyncStoreUrl) {
 			throw new Error('No settings sync store url configured.');
 		}
@@ -483,7 +483,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		return collection ? joinPath(userDataSyncStoreUrl, 'collection', collection, 'resource', resource) : joinPath(userDataSyncStoreUrl, 'resource', resource);
 	}
 
-	private clearSession(): codemavi {
+	private clearSession(): void {
 		this.storageService.remove(USER_SESSION_ID_KEY, StorageScope.APPLICATION);
 		this.storageService.remove(MACHINE_SESSION_ID_KEY, StorageScope.APPLICATION);
 	}
@@ -620,7 +620,7 @@ export class UserDataSyncStoreClient extends Disposable {
 		return context;
 	}
 
-	private addSessionHeaders(headers: IHeaders): codemavi {
+	private addSessionHeaders(headers: IHeaders): void {
 		let machineSessionId = this.storageService.get(MACHINE_SESSION_ID_KEY, StorageScope.APPLICATION);
 		if (machineSessionId === undefined) {
 			machineSessionId = generateUuid();
@@ -689,7 +689,7 @@ export class RequestsSession {
 		return this.startTime !== undefined && new Date().getTime() - this.startTime.getTime() > this.interval;
 	}
 
-	private reset(): codemavi {
+	private reset(): void {
 		this.requests = [];
 		this.startTime = undefined;
 	}

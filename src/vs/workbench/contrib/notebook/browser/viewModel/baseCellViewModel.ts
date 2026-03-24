@@ -29,7 +29,7 @@ import { IInlineChatSessionService } from '../../../inlineChat/browser/inlineCha
 
 export abstract class BaseCellViewModel extends Disposable {
 
-	protected readonly _onDidChangeEditorAttachState = this._register(new Emitter<codemavi>());
+	protected readonly _onDidChangeEditorAttachState = this._register(new Emitter<void>());
 	// Do not merge this event with `onDidChangeState` as we are using `Event.once(onDidChangeEditorAttachState)` elsewhere.
 	readonly onDidChangeEditorAttachState = this._onDidChangeEditorAttachState.event;
 	protected readonly _onDidChangeState = this._register(new Emitter<CellViewModelStateChangeEvent>());
@@ -126,8 +126,8 @@ export abstract class BaseCellViewModel extends Disposable {
 	private _lastDecorationId: number = 0;
 
 	private _cellStatusBarItems = new Map<string, INotebookCellStatusBarItem>();
-	private readonly _onDidChangeCellStatusBarItems = this._register(new Emitter<codemavi>());
-	readonly onDidChangeCellStatusBarItems: Event<codemavi> = this._onDidChangeCellStatusBarItems.event;
+	private readonly _onDidChangeCellStatusBarItems = this._register(new Emitter<void>());
+	readonly onDidChangeCellStatusBarItems: Event<void> = this._onDidChangeCellStatusBarItems.event;
 	private _lastStatusBarId: number = 0;
 
 	get textModel(): model.ITextModel | undefined {
@@ -230,7 +230,7 @@ export abstract class BaseCellViewModel extends Disposable {
 	}
 
 
-	updateOptions(e: NotebookOptionsChangeEvent): codemavi {
+	updateOptions(e: NotebookOptionsChangeEvent): void {
 		if (this._textEditor && typeof e.readonly === 'boolean') {
 			this._textEditor.updateOptions({ readOnly: e.readonly });
 		}
@@ -239,8 +239,8 @@ export abstract class BaseCellViewModel extends Disposable {
 		}
 	}
 	abstract getHeight(lineHeight: number): number;
-	abstract onDeselect(): codemavi;
-	abstract layoutChange(change: CellLayoutChangeEvent, source?: string): codemavi;
+	abstract onDeselect(): void;
+	abstract layoutChange(change: CellLayoutChangeEvent, source?: string): void;
 
 	assertTextModelAttached(): boolean {
 		if (this.textModel && this._textEditor && this._textEditor.getModel() === this.textModel) {
@@ -368,7 +368,7 @@ export abstract class BaseCellViewModel extends Disposable {
 		this.model.enableAutoLanguageDetection();
 	}
 
-	private saveViewState(): codemavi {
+	private saveViewState(): void {
 		if (!this._textEditor) {
 			return;
 		}
@@ -396,7 +396,7 @@ export abstract class BaseCellViewModel extends Disposable {
 		this._editorViewStates = editorViewStates;
 	}
 
-	private _restoreViewState(state: editorCommon.ICodeEditorViewState | null): codemavi {
+	private _restoreViewState(state: editorCommon.ICodeEditorViewState | null): void {
 		if (state) {
 			this._textEditor?.restoreViewState(state);
 		}
@@ -695,7 +695,7 @@ export abstract class BaseCellViewModel extends Disposable {
 		return this.textModel!;
 	}
 
-	protected abstract onDidChangeTextModelContent(): codemavi;
+	protected abstract onDidChangeTextModelContent(): void;
 
 	protected cellStartFind(value: string, options: INotebookFindOptions): model.FindMatch[] | null {
 		let cellMatches: model.FindMatch[] = [];

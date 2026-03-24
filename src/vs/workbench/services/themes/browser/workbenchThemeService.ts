@@ -136,7 +136,7 @@ export class WorkbenchThemeService extends Disposable implements IWorkbenchTheme
 
 		this._register(this.onDidColorThemeChange(theme => getColorRegistry().notifyThemeUpdate(theme)));
 
-		// In order to acodemavi paint flashing for tokens, because
+		// In order to avoid paint flashing for tokens, because
 		// themes are loaded asynchronously, we need to initialize
 		// a color theme document with good defaults until the theme is loaded
 		let themeData: ColorThemeData | undefined = ColorThemeData.fromStorageData(this.storageService);
@@ -635,7 +635,7 @@ export class WorkbenchThemeService extends Disposable implements IWorkbenchTheme
 		});
 	}
 
-	private applyAndSetFileIconTheme(iconThemeData: FileIconThemeData, silent = false): codemavi {
+	private applyAndSetFileIconTheme(iconThemeData: FileIconThemeData, silent = false): void {
 		this.currentFileIconTheme = iconThemeData;
 
 		_applyRules(iconThemeData.styleSheetContent!, fileIconThemeRulesClassName);
@@ -741,7 +741,7 @@ export class WorkbenchThemeService extends Disposable implements IWorkbenchTheme
 		});
 	}
 
-	private applyAndSetProductIconTheme(iconThemeData: ProductIconThemeData, silent = false): codemavi {
+	private applyAndSetProductIconTheme(iconThemeData: ProductIconThemeData, silent = false): void {
 
 		this.currentProductIconTheme = iconThemeData;
 
@@ -764,7 +764,7 @@ class ThemeFileWatcher {
 	private watcherDisposable: IDisposable | undefined;
 	private fileChangeListener: IDisposable | undefined;
 
-	constructor(private fileService: IFileService, private environmentService: IBrowserWorkbenchEnvironmentService, private onUpdate: () => codemavi) {
+	constructor(private fileService: IFileService, private environmentService: IBrowserWorkbenchEnvironmentService, private onUpdate: () => void) {
 	}
 
 	update(theme: { location?: URI; watch?: boolean }) {

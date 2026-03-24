@@ -538,7 +538,7 @@ CommandsRegistry.registerCommand({
 	}
 });
 
-function overrideActionForActiveExtensionEditorWebview(command: MultiCommand | undefined, f: (webview: IWebview) => codemavi) {
+function overrideActionForActiveExtensionEditorWebview(command: MultiCommand | undefined, f: (webview: IWebview) => void) {
 	command?.addImplementation(105, 'extensions-editor', (accessor) => {
 		const editorService = accessor.get(IEditorService);
 		const editor = editorService.activeEditorPane;
@@ -565,7 +565,7 @@ const CONTEXT_GALLERY_FILTER_CAPABILITIES = new RawContextKey<string>('galleryFi
 const CONTEXT_GALLERY_ALL_REPOSITORY_SIGNED = new RawContextKey<boolean>('galleryAllRepositorySigned', false);
 const CONTEXT_GALLERY_HAS_EXTENSION_LINK = new RawContextKey<boolean>('galleryHasExtensionLink', false);
 
-async function runAction(action: IAction): Promise<codemavi> {
+async function runAction(action: IAction): Promise<void> {
 	try {
 		await action.run();
 	} finally {
@@ -626,14 +626,14 @@ class ExtensionsContributions extends Disposable implements IWorkbenchContributi
 		this.registerQuickAccessProvider();
 	}
 
-	private async registerGalleryCapabilitiesContexts(extensionGalleryManifest: IExtensionGalleryManifest | null): Promise<codemavi> {
+	private async registerGalleryCapabilitiesContexts(extensionGalleryManifest: IExtensionGalleryManifest | null): Promise<void> {
 		CONTEXT_GALLERY_SORT_CAPABILITIES.bindTo(this.contextKeyService).set(`_${extensionGalleryManifest?.capabilities.extensionQuery.sorting?.map(s => s.name)?.join('_')}_UpdateDate_`);
 		CONTEXT_GALLERY_FILTER_CAPABILITIES.bindTo(this.contextKeyService).set(`_${extensionGalleryManifest?.capabilities.extensionQuery.filtering?.map(s => s.name)?.join('_')}_`);
 		CONTEXT_GALLERY_ALL_REPOSITORY_SIGNED.bindTo(this.contextKeyService).set(!!extensionGalleryManifest?.capabilities?.signing?.allRepositorySigned);
 		CONTEXT_GALLERY_HAS_EXTENSION_LINK.bindTo(this.contextKeyService).set(!!(extensionGalleryManifest && getExtensionGalleryManifestResourceUri(extensionGalleryManifest, ExtensionGalleryResourceType.ExtensionDetailsViewUri)));
 	}
 
-	private registerQuickAccessProvider(): codemavi {
+	private registerQuickAccessProvider(): void {
 		if (this.extensionManagementServerService.localExtensionManagementServer
 			|| this.extensionManagementServerService.remoteExtensionManagementServer
 			|| this.extensionManagementServerService.webExtensionManagementServer
@@ -648,7 +648,7 @@ class ExtensionsContributions extends Disposable implements IWorkbenchContributi
 	}
 
 	// Global actions
-	private registerGlobalActions(): codemavi {
+	private registerGlobalActions(): void {
 		this._register(MenuRegistry.appendMenuItem(MenuId.MenubarPreferencesMenu, {
 			command: {
 				id: VIEWLET_ID,
@@ -976,7 +976,7 @@ class ExtensionsContributions extends Disposable implements IWorkbenchContributi
 			run: async (accessor: ServicesAccessor) => {
 				const extensionManagementService = accessor.get(IWorkbenchExtensionManagementService);
 				if (isWeb) {
-					return new Promise<codemavi>((c, e) => {
+					return new Promise<void>((c, e) => {
 						const quickInputService = accessor.get(IQuickInputService);
 						const disposables = new DisposableStore();
 						const quickPick = disposables.add(quickInputService.createQuickPick());
@@ -1338,7 +1338,7 @@ class ExtensionsContributions extends Disposable implements IWorkbenchContributi
 	}
 
 	// Extension Context Menu
-	private registerContextMenuActions(): codemavi {
+	private registerContextMenuActions(): void {
 
 		this.registerExtensionAction({
 			id: SetColorThemeAction.ID,

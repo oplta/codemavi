@@ -28,7 +28,7 @@ export class TerminalLinkQuickpick extends DisposableStore {
 
 	private _instance: ITerminalInstance | IDetachedTerminalInstance | undefined;
 
-	private readonly _onDidRequestMoreLinks = this.add(new Emitter<codemavi>());
+	private readonly _onDidRequestMoreLinks = this.add(new Emitter<void>());
 	readonly onDidRequestMoreLinks = this._onDidRequestMoreLinks.event;
 
 	constructor(
@@ -41,7 +41,7 @@ export class TerminalLinkQuickpick extends DisposableStore {
 		this._editorViewState = this.add(instantiationService.createInstance(PickerEditorState));
 	}
 
-	async show(instance: ITerminalInstance | IDetachedTerminalInstance, links: { viewport: IDetectedLinks; all: Promise<IDetectedLinks> }): Promise<codemavi> {
+	async show(instance: ITerminalInstance | IDetachedTerminalInstance, links: { viewport: IDetectedLinks; all: Promise<IDetectedLinks> }): Promise<void> {
 		this._instance = instance;
 
 		// Allow all links a small amount of time to elapse to finish, if this is not done in this

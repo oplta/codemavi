@@ -7,7 +7,7 @@ import { OutputItem, RendererContext } from 'vscode-notebook-renderer';
 import { Event } from 'vscode';
 
 export interface IDisposable {
-	dispose(): codemavi;
+	dispose(): void;
 }
 
 export interface HtmlRenderingHook {
@@ -36,7 +36,7 @@ export interface RenderOptions {
 	readonly minimalError: boolean;
 }
 
-export type IRichRenderContext = RendererContext<codemavi> & { readonly settings: RenderOptions; readonly onDidChangeSettings: Event<RenderOptions> };
+export type IRichRenderContext = RendererContext<void> & { readonly settings: RenderOptions; readonly onDidChangeSettings: Event<RenderOptions> };
 
 export type OutputElementOptions = {
 	linesLimit: number;

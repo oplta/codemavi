@@ -140,7 +140,7 @@ function doFindGroup(input: EditorInputWithOptions | IUntypedEditorInput, prefer
 		}
 	}
 
-	// Fallback to active group if target not valid but acodemavi
+	// Fallback to active group if target not valid but avoid
 	// locked editor groups unless editor is already opened there
 	if (!group) {
 		let candidateGroup = editorGroupService.activeGroup;

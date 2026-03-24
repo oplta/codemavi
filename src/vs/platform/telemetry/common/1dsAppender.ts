@@ -15,8 +15,8 @@ import { ITelemetryAppender, validateTelemetryData } from './telemetryUtils.js';
 // Allows us to more easily build mock objects for testing as the interface is quite large and we only need a few properties.
 export interface IAppInsightsCore {
 	pluginVersionString: string;
-	track(item: ITelemetryItem | IExtendedTelemetryItem): codemavi;
-	unload(isAsync: boolean, unloadComplete: (unloadState: ITelemetryUnloadState) => codemavi): codemavi;
+	track(item: ITelemetryItem | IExtendedTelemetryItem): void;
+	unload(isAsync: boolean, unloadComplete: (unloadState: ITelemetryUnloadState) => void): void;
 }
 
 const endpointUrl = 'https://mobile.events.data.microsoft.com/OneCollector/1.0';
@@ -100,7 +100,7 @@ export abstract class AbstractOneDataSystemAppender implements ITelemetryAppende
 		this._asyncAiCore = null;
 	}
 
-	private _withAIClient(callback: (aiCore: IAppInsightsCore) => codemavi): codemavi {
+	private _withAIClient(callback: (aiCore: IAppInsightsCore) => void): void {
 		if (!this._aiCoreOrKey) {
 			return;
 		}
@@ -125,7 +125,7 @@ export abstract class AbstractOneDataSystemAppender implements ITelemetryAppende
 		);
 	}
 
-	log(eventName: string, data?: any): codemavi {
+	log(eventName: string, data?: any): void {
 		if (!this._aiCoreOrKey) {
 			return;
 		}
@@ -144,7 +144,7 @@ export abstract class AbstractOneDataSystemAppender implements ITelemetryAppende
 		} catch { }
 	}
 
-	flush(): Promise<codemavi> {
+	flush(): Promise<void> {
 		if (this._aiCoreOrKey) {
 			return new Promise(resolve => {
 				this._withAIClient((aiClient) => {

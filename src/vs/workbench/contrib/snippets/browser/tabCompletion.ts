@@ -58,12 +58,12 @@ export class TabCompletionController implements IEditorContribution {
 		this._update();
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._configListener.dispose();
 		this._selectionListener?.dispose();
 	}
 
-	private _update(): codemavi {
+	private _update(): void {
 		const enabled = this._editor.getOption(EditorOption.tabCompletion) === 'onlySnippets';
 		if (this._enabled !== enabled) {
 			this._enabled = enabled;
@@ -78,7 +78,7 @@ export class TabCompletionController implements IEditorContribution {
 		}
 	}
 
-	private _updateSnippets(): codemavi {
+	private _updateSnippets(): void {
 
 		// reset first
 		this._activeSnippets = [];

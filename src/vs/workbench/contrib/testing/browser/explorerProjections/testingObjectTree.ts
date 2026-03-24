@@ -10,7 +10,7 @@ import { ISerializedTestTreeCollapseState } from './testingViewState.js';
 import { TestId } from '../../common/testId.js';
 
 
-export class TestingObjectTree<TFilterData = codemavi> extends WorkbenchObjectTree<TestExplorerTreeElement, TFilterData> {
+export class TestingObjectTree<TFilterData = void> extends WorkbenchObjectTree<TestExplorerTreeElement, TFilterData> {
 
 	/**
 	 * Gets a serialized view state for the tree, optimized for storage.

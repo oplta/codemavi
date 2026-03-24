@@ -52,7 +52,7 @@ export class DebugContentProvider extends Disposable implements IWorkbenchContri
 		DebugContentProvider.INSTANCE = this;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.pendingUpdates.forEach(cancellationSource => cancellationSource.dispose());
 		super.dispose();
 	}
@@ -65,7 +65,7 @@ export class DebugContentProvider extends Disposable implements IWorkbenchContri
 	 * Reload the model content of the given resource.
 	 * If there is no model for the given resource, this method does nothing.
 	 */
-	static refreshDebugContent(resource: uri): codemavi {
+	static refreshDebugContent(resource: uri): void {
 		DebugContentProvider.INSTANCE?.createOrUpdateContentModel(resource, false);
 	}
 

@@ -23,7 +23,7 @@
 		 */
 		ipcRenderer: {
 
-			send(channel: string, ...args: any[]): codemavi {
+			send(channel: string, ...args: any[]): void {
 				if (validateIPC(channel)) {
 					ipcRenderer.send(channel, ...args);
 				}
@@ -41,7 +41,7 @@
 		 */
 		webFrame: {
 
-			setZoomLevel(level: number): codemavi {
+			setZoomLevel(level: number): void {
 				if (typeof level === 'number') {
 					webFrame.setZoomLevel(level);
 				}

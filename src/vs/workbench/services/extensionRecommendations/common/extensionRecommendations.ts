@@ -28,7 +28,7 @@ export const IExtensionRecommendationsService = createDecorator<IExtensionRecomm
 export interface IExtensionRecommendationsService {
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeRecommendations: Event<codemavi>;
+	readonly onDidChangeRecommendations: Event<void>;
 	getAllRecommendationsWithReason(): IStringDictionary<IExtensionRecommendationReason>;
 
 	getImportantRecommendations(): Promise<string[]>;
@@ -52,12 +52,12 @@ export const IExtensionIgnoredRecommendationsService = createDecorator<IExtensio
 export interface IExtensionIgnoredRecommendationsService {
 	readonly _serviceBrand: undefined;
 
-	onDidChangeIgnoredRecommendations: Event<codemavi>;
+	onDidChangeIgnoredRecommendations: Event<void>;
 	readonly ignoredRecommendations: string[];
 
 	onDidChangeGlobalIgnoredRecommendation: Event<IgnoredRecommendationChangeNotification>;
 	readonly globalIgnoredRecommendations: string[];
-	toggleGlobalIgnoredRecommendation(extensionId: string, ignore: boolean): codemavi;
+	toggleGlobalIgnoredRecommendation(extensionId: string, ignore: boolean): void;
 }
 
 

@@ -28,7 +28,7 @@ export function getSearchView(viewsService: IViewsService): SearchView | undefin
 	return viewsService.getActiveViewWithId(VIEW_ID) as SearchView;
 }
 
-export function getElementsToOperateOn(viewer: WorkbenchCompressibleAsyncDataTree<ISearchResult, RenderableMatch, codemavi>, currElement: RenderableMatch | undefined, sortConfig: ISearchConfigurationProperties): RenderableMatch[] {
+export function getElementsToOperateOn(viewer: WorkbenchCompressibleAsyncDataTree<ISearchResult, RenderableMatch, void>, currElement: RenderableMatch | undefined, sortConfig: ISearchConfigurationProperties): RenderableMatch[] {
 	let elements: RenderableMatch[] = viewer.getSelection().filter((x): x is RenderableMatch => x !== null).sort((a, b) => searchComparer(a, b, sortConfig.sortOrder));
 
 	// if selection doesn't include multiple elements, just return current focus element.

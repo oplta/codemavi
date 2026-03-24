@@ -24,7 +24,7 @@ export interface IObservable<T> extends IObservableWithChange<T, unknown> { }
  *
  * @template T The type of the values the observable can hold.
  * @template TChange The type used to describe value changes
- * (usually `codemavi` and only used in advanced scenarios).
+ * (usually `mavi` and only used in advanced scenarios).
  * While observers can miss temporary values of an observable,
  * they will receive all change values (as long as they are subscribed)!
  */
@@ -45,19 +45,19 @@ export interface IObservableWithChange<T, TChange = unknown> {
 	 * Calls {@link IObserver.handleChange} if the observable notices that the value changed.
 	 * Must not be called from {@link IObserver.handleChange}!
 	 */
-	reportChanges(): codemavi;
+	reportChanges(): void;
 
 	/**
 	 * Adds the observer to the set of subscribed observers.
 	 * This method is idempotent.
 	 */
-	addObserver(observer: IObserver): codemavi;
+	addObserver(observer: IObserver): void;
 
 	/**
 	 * Removes the observer from the set of subscribed observers.
 	 * This method is idempotent.
 	 */
-	removeObserver(observer: IObserver): codemavi;
+	removeObserver(observer: IObserver): void;
 
 	// #region These members have a standard implementation and are only part of the interface for convenience.
 
@@ -72,7 +72,7 @@ export interface IObservableWithChange<T, TChange = unknown> {
 	/**
 	 * Makes sure this value is computed eagerly.
 	 */
-	recomputeInitiallyAndOnChange(store: DisposableStore, handleValue?: (value: T) => codemavi): IObservable<T>;
+	recomputeInitiallyAndOnChange(store: DisposableStore, handleValue?: (value: T) => void): IObservable<T>;
 
 	/**
 	 * Makes sure this value is cached.
@@ -125,13 +125,13 @@ export interface IObserver {
 	 * Implementations must not get/read the value of other observables, as they might not have received this event yet!
 	 * The method {@link IObservable.reportChanges} can be used to force the observable to report the changes.
 	 */
-	beginUpdate<T>(observable: IObservable<T>): codemavi;
+	beginUpdate<T>(observable: IObservable<T>): void;
 
 	/**
 	 * Signals that the transaction that potentially modified the given observable ended.
 	 * This is a good place to react to (potential) changes.
 	 */
-	endUpdate<T>(observable: IObservable<T>): codemavi;
+	endUpdate<T>(observable: IObservable<T>): void;
 
 	/**
 	 * Signals that the given observable might have changed.
@@ -140,7 +140,7 @@ export interface IObserver {
 	 * Implementations must not get/read the value of other observables, as they might not have received this event yet!
 	 * The change should be processed lazily or in {@link IObserver.endUpdate}.
 	 */
-	handlePossibleChange<T>(observable: IObservable<T>): codemavi;
+	handlePossibleChange<T>(observable: IObservable<T>): void;
 
 	/**
 	 * Signals that the given {@link observable} changed.
@@ -150,7 +150,7 @@ export interface IObserver {
 	 *
 	 * @param change Indicates how or why the value changed.
 	 */
-	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): codemavi;
+	handleChange<T, TChange>(observable: IObservableWithChange<T, TChange>, change: TChange): void;
 }
 
 export interface IReader {
@@ -160,7 +160,7 @@ export interface IReader {
 	readObservable<T>(observable: IObservableWithChange<T, any>): T;
 }
 
-export interface ISettable<T, TChange = codemavi> {
+export interface ISettable<T, TChange = void> {
 	/**
 	 * Sets the value of the observable.
 	 * Use a transaction to batch multiple changes (with a transaction, observers only react at the end of the transaction).
@@ -168,7 +168,7 @@ export interface ISettable<T, TChange = codemavi> {
 	 * @param transaction When given, value changes are handled on demand or when the transaction ends.
 	 * @param change Describes how or why the value changed.
 	 */
-	set(value: T, transaction: ITransaction | undefined, change: TChange): codemavi;
+	set(value: T, transaction: ITransaction | undefined, change: TChange): void;
 }
 
 export interface ITransaction {
@@ -176,7 +176,7 @@ export interface ITransaction {
 	 * Calls {@link Observer.beginUpdate} immediately
 	 * and {@link Observer.endUpdate} when the transaction ends.
 	 */
-	updateObserver(observer: IObserver, observable: IObservableWithChange<any, any>): codemavi;
+	updateObserver(observer: IObserver, observable: IObservableWithChange<any, any>): void;
 }
 
 let _recomputeInitiallyAndOnChange: typeof recomputeInitiallyAndOnChange;
@@ -203,12 +203,12 @@ export abstract class ConvenientObservable<T, TChange> implements IObservableWit
 
 	public abstract get(): T;
 
-	public reportChanges(): codemavi {
+	public reportChanges(): void {
 		this.get();
 	}
 
-	public abstract addObserver(observer: IObserver): codemavi;
-	public abstract removeObserver(observer: IObserver): codemavi;
+	public abstract addObserver(observer: IObserver): void;
+	public abstract removeObserver(observer: IObserver): void;
 
 	/** @sealed */
 	public read(reader: IReader | undefined): T {
@@ -268,7 +268,7 @@ export abstract class ConvenientObservable<T, TChange> implements IObservableWit
 		);
 	}
 
-	public recomputeInitiallyAndOnChange(store: DisposableStore, handleValue?: (value: T) => codemavi): IObservable<T> {
+	public recomputeInitiallyAndOnChange(store: DisposableStore, handleValue?: (value: T) => void): IObservable<T> {
 		store.add(_recomputeInitiallyAndOnChange!(this, handleValue));
 		return this;
 	}
@@ -290,7 +290,7 @@ export abstract class ConvenientObservable<T, TChange> implements IObservableWit
 	}
 }
 
-export abstract class BaseObservable<T, TChange = codemavi> extends ConvenientObservable<T, TChange> {
+export abstract class BaseObservable<T, TChange = void> extends ConvenientObservable<T, TChange> {
 	protected readonly _observers = new Set<IObserver>();
 
 	constructor() {
@@ -298,7 +298,7 @@ export abstract class BaseObservable<T, TChange = codemavi> extends ConvenientOb
 		getLogger()?.handleObservableCreated(this);
 	}
 
-	public addObserver(observer: IObserver): codemavi {
+	public addObserver(observer: IObserver): void {
 		const len = this._observers.size;
 		this._observers.add(observer);
 		if (len === 0) {
@@ -309,7 +309,7 @@ export abstract class BaseObservable<T, TChange = codemavi> extends ConvenientOb
 		}
 	}
 
-	public removeObserver(observer: IObserver): codemavi {
+	public removeObserver(observer: IObserver): void {
 		const deleted = this._observers.delete(observer);
 		if (deleted && this._observers.size === 0) {
 			this.onLastObserverRemoved();
@@ -319,8 +319,8 @@ export abstract class BaseObservable<T, TChange = codemavi> extends ConvenientOb
 		}
 	}
 
-	protected onFirstObserverAdded(): codemavi { }
-	protected onLastObserverRemoved(): codemavi { }
+	protected onFirstObserverAdded(): void { }
+	protected onLastObserverRemoved(): void { }
 
 	public override log(): IObservableWithChange<T, TChange> {
 		const hadLogger = !!getLogger();
@@ -342,7 +342,7 @@ export abstract class BaseObservable<T, TChange = codemavi> extends ConvenientOb
  * Reaction run on demand or when the transaction ends.
  */
 
-export function transaction(fn: (tx: ITransaction) => codemavi, getDebugName?: () => string): codemavi {
+export function transaction(fn: (tx: ITransaction) => void, getDebugName?: () => string): void {
 	const tx = new TransactionImpl(fn, getDebugName);
 	try {
 		fn(tx);
@@ -353,7 +353,7 @@ export function transaction(fn: (tx: ITransaction) => codemavi, getDebugName?: (
 
 let _globalTransaction: ITransaction | undefined = undefined;
 
-export function globalTransaction(fn: (tx: ITransaction) => codemavi) {
+export function globalTransaction(fn: (tx: ITransaction) => void) {
 	if (_globalTransaction) {
 		fn(_globalTransaction);
 	} else {
@@ -369,7 +369,7 @@ export function globalTransaction(fn: (tx: ITransaction) => codemavi) {
 	}
 }
 
-export async function asyncTransaction(fn: (tx: ITransaction) => Promise<codemavi>, getDebugName?: () => string): Promise<codemavi> {
+export async function asyncTransaction(fn: (tx: ITransaction) => Promise<void>, getDebugName?: () => string): Promise<void> {
 	const tx = new TransactionImpl(fn, getDebugName);
 	try {
 		await fn(tx);
@@ -381,7 +381,7 @@ export async function asyncTransaction(fn: (tx: ITransaction) => Promise<codemav
 /**
  * Allows to chain transactions.
  */
-export function subtransaction(tx: ITransaction | undefined, fn: (tx: ITransaction) => codemavi, getDebugName?: () => string): codemavi {
+export function subtransaction(tx: ITransaction | undefined, fn: (tx: ITransaction) => void, getDebugName?: () => string): void {
 	if (!tx) {
 		transaction(fn, getDebugName);
 	} else {
@@ -403,7 +403,7 @@ export class TransactionImpl implements ITransaction {
 		return getFunctionName(this._fn);
 	}
 
-	public updateObserver(observer: IObserver, observable: IObservable<any>): codemavi {
+	public updateObserver(observer: IObserver, observable: IObservable<any>): void {
 		if (!this._updatingObservers) {
 			// This happens when a transaction is used in a callback or async function.
 			// If an async transaction is used, make sure the promise awaits all users of the transaction (e.g. no race).
@@ -420,7 +420,7 @@ export class TransactionImpl implements ITransaction {
 		observer.beginUpdate(observable);
 	}
 
-	public finish(): codemavi {
+	public finish(): void {
 		const updatingObservers = this._updatingObservers;
 		if (!updatingObservers) {
 			handleBugIndicatingErrorRecovery('transaction.finish() has already been called!');
@@ -453,18 +453,18 @@ function handleBugIndicatingErrorRecovery(message: string) {
 /**
  * A settable observable.
  */
-export interface ISettableObservable<T, TChange = codemavi> extends IObservableWithChange<T, TChange>, ISettable<T, TChange> {
+export interface ISettableObservable<T, TChange = void> extends IObservableWithChange<T, TChange>, ISettable<T, TChange> {
 }
 
 /**
  * Creates an observable value.
  * Observers get informed when the value changes.
- * @template TChange An arbitrary type to describe how or why the value changed. Defaults to `codemavi`.
+ * @template TChange An arbitrary type to describe how or why the value changed. Defaults to `mavi`.
  * Observers will receive every single change value.
  */
-export function observableValue<T, TChange = codemavi>(name: string, initialValue: T): ISettableObservable<T, TChange>;
-export function observableValue<T, TChange = codemavi>(owner: object, initialValue: T): ISettableObservable<T, TChange>;
-export function observableValue<T, TChange = codemavi>(nameOrOwner: string | object, initialValue: T): ISettableObservable<T, TChange> {
+export function observableValue<T, TChange = void>(name: string, initialValue: T): ISettableObservable<T, TChange>;
+export function observableValue<T, TChange = void>(owner: object, initialValue: T): ISettableObservable<T, TChange>;
+export function observableValue<T, TChange = void>(nameOrOwner: string | object, initialValue: T): ISettableObservable<T, TChange> {
 	let debugNameData: DebugNameData;
 	if (typeof nameOrOwner === 'string') {
 		debugNameData = new DebugNameData(undefined, nameOrOwner, undefined);
@@ -474,7 +474,7 @@ export function observableValue<T, TChange = codemavi>(nameOrOwner: string | obj
 	return new ObservableValue(debugNameData, initialValue, strictEquals);
 }
 
-export class ObservableValue<T, TChange = codemavi>
+export class ObservableValue<T, TChange = void>
 	extends BaseObservable<T, TChange>
 	implements ISettableObservable<T, TChange> {
 	protected _value: T;
@@ -497,7 +497,7 @@ export class ObservableValue<T, TChange = codemavi>
 		return this._value;
 	}
 
-	public set(value: T, tx: ITransaction | undefined, change: TChange): codemavi {
+	public set(value: T, tx: ITransaction | undefined, change: TChange): void {
 		if (change === undefined && this._equalityComparator(this._value, value)) {
 			return;
 		}
@@ -526,7 +526,7 @@ export class ObservableValue<T, TChange = codemavi>
 		return `${this.debugName}: ${this._value}`;
 	}
 
-	protected _setValue(newValue: T): codemavi {
+	protected _setValue(newValue: T): void {
 		this._value = newValue;
 	}
 
@@ -545,7 +545,7 @@ export class ObservableValue<T, TChange = codemavi>
  * A disposable observable. When disposed, its value is also disposed.
  * When a new value is set, the previous value is disposed.
  */
-export function disposableObservableValue<T extends IDisposable | undefined, TChange = codemavi>(nameOrOwner: string | object, initialValue: T): ISettableObservable<T, TChange> & IDisposable {
+export function disposableObservableValue<T extends IDisposable | undefined, TChange = void>(nameOrOwner: string | object, initialValue: T): ISettableObservable<T, TChange> & IDisposable {
 	let debugNameData: DebugNameData;
 	if (typeof nameOrOwner === 'string') {
 		debugNameData = new DebugNameData(undefined, nameOrOwner, undefined);
@@ -555,8 +555,8 @@ export function disposableObservableValue<T extends IDisposable | undefined, TCh
 	return new DisposableObservableValue(debugNameData, initialValue, strictEquals);
 }
 
-export class DisposableObservableValue<T extends IDisposable | undefined, TChange = codemavi> extends ObservableValue<T, TChange> implements IDisposable {
-	protected override _setValue(newValue: T): codemavi {
+export class DisposableObservableValue<T extends IDisposable | undefined, TChange = void> extends ObservableValue<T, TChange> implements IDisposable {
+	protected override _setValue(newValue: T): void {
 		if (this._value === newValue) {
 			return;
 		}
@@ -566,7 +566,7 @@ export class DisposableObservableValue<T extends IDisposable | undefined, TChang
 		this._value = newValue;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		this._value?.dispose();
 	}
 }

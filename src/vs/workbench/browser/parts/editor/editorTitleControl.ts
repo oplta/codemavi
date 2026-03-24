@@ -101,19 +101,19 @@ export class EditorTitleControl extends Themable {
 		return breadcrumbsControlFactory;
 	}
 
-	openEditor(editor: EditorInput, options?: IInternalEditorOpenOptions): codemavi {
+	openEditor(editor: EditorInput, options?: IInternalEditorOpenOptions): void {
 		const didChange = this.editorTabsControl.openEditor(editor, options);
 
 		this.handleOpenedEditors(didChange);
 	}
 
-	openEditors(editors: EditorInput[]): codemavi {
+	openEditors(editors: EditorInput[]): void {
 		const didChange = this.editorTabsControl.openEditors(editors);
 
 		this.handleOpenedEditors(didChange);
 	}
 
-	private handleOpenedEditors(didChange: boolean): codemavi {
+	private handleOpenedEditors(didChange: boolean): void {
 		if (didChange) {
 			this.breadcrumbsControl?.update();
 		} else {
@@ -121,61 +121,61 @@ export class EditorTitleControl extends Themable {
 		}
 	}
 
-	beforeCloseEditor(editor: EditorInput): codemavi {
+	beforeCloseEditor(editor: EditorInput): void {
 		return this.editorTabsControl.beforeCloseEditor(editor);
 	}
 
-	closeEditor(editor: EditorInput): codemavi {
+	closeEditor(editor: EditorInput): void {
 		this.editorTabsControl.closeEditor(editor);
 
 		this.handleClosedEditors();
 	}
 
-	closeEditors(editors: EditorInput[]): codemavi {
+	closeEditors(editors: EditorInput[]): void {
 		this.editorTabsControl.closeEditors(editors);
 
 		this.handleClosedEditors();
 	}
 
-	private handleClosedEditors(): codemavi {
+	private handleClosedEditors(): void {
 		if (!this.groupView.activeEditor) {
 			this.breadcrumbsControl?.update();
 		}
 	}
 
-	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): codemavi {
+	moveEditor(editor: EditorInput, fromIndex: number, targetIndex: number, stickyStateChange: boolean): void {
 		return this.editorTabsControl.moveEditor(editor, fromIndex, targetIndex, stickyStateChange);
 	}
 
-	pinEditor(editor: EditorInput): codemavi {
+	pinEditor(editor: EditorInput): void {
 		return this.editorTabsControl.pinEditor(editor);
 	}
 
-	stickEditor(editor: EditorInput): codemavi {
+	stickEditor(editor: EditorInput): void {
 		return this.editorTabsControl.stickEditor(editor);
 	}
 
-	unstickEditor(editor: EditorInput): codemavi {
+	unstickEditor(editor: EditorInput): void {
 		return this.editorTabsControl.unstickEditor(editor);
 	}
 
-	setActive(isActive: boolean): codemavi {
+	setActive(isActive: boolean): void {
 		return this.editorTabsControl.setActive(isActive);
 	}
 
-	updateEditorSelections(): codemavi {
+	updateEditorSelections(): void {
 		this.editorTabsControl.updateEditorSelections();
 	}
 
-	updateEditorLabel(editor: EditorInput): codemavi {
+	updateEditorLabel(editor: EditorInput): void {
 		return this.editorTabsControl.updateEditorLabel(editor);
 	}
 
-	updateEditorDirty(editor: EditorInput): codemavi {
+	updateEditorDirty(editor: EditorInput): void {
 		return this.editorTabsControl.updateEditorDirty(editor);
 	}
 
-	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): codemavi {
+	updateOptions(oldOptions: IEditorPartOptions, newOptions: IEditorPartOptions): void {
 		// Update editor tabs control if options changed
 		if (
 			oldOptions.showTabs !== newOptions.showTabs ||

@@ -11,7 +11,7 @@ import { INativeHostService } from '../../../../platform/native/common/native.js
 
 // Commands
 
-export function revealResourcesInOS(resources: URI[], nativeHostService: INativeHostService, workspaceContextService: IWorkspaceContextService): codemavi {
+export function revealResourcesInOS(resources: URI[], nativeHostService: INativeHostService, workspaceContextService: IWorkspaceContextService): void {
 	if (resources.length) {
 		sequence(resources.map(r => async () => {
 			if (r.scheme === Schemas.file || r.scheme === Schemas.vscodeUserData) {

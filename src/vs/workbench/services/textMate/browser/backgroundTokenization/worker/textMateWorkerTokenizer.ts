@@ -23,8 +23,8 @@ import { Disposable } from '../../../../../../base/common/lifecycle.js';
 
 export interface TextMateModelTokenizerHost {
 	getOrCreateGrammar(languageId: string, encodedLanguageId: LanguageId): Promise<ICreateGrammarResult | null>;
-	setTokensAndStates(versionId: number, tokens: Uint8Array, stateDeltas: StateDeltas[]): codemavi;
-	reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): codemavi;
+	setTokensAndStates(versionId: number, tokens: Uint8Array, stateDeltas: StateDeltas[]): void;
+	reportTokenizationTime(timeMs: number, languageId: string, sourceExtensionId: string | undefined, lineLength: number, isRandomSample: boolean): void;
 }
 
 export class TextMateWorkerTokenizer extends MirrorTextModel {
@@ -49,25 +49,25 @@ export class TextMateWorkerTokenizer extends MirrorTextModel {
 		this._resetTokenization();
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		this._isDisposed = true;
 		super.dispose();
 	}
 
-	public onLanguageId(languageId: string, encodedLanguageId: LanguageId): codemavi {
+	public onLanguageId(languageId: string, encodedLanguageId: LanguageId): void {
 		this._languageId = languageId;
 		this._encodedLanguageId = encodedLanguageId;
 		this._resetTokenization();
 	}
 
-	override onEvents(e: IModelChangedEvent): codemavi {
+	override onEvents(e: IModelChangedEvent): void {
 		super.onEvents(e);
 
 		this._tokenizerWithStateStore?.store.acceptChanges(e.changes);
 		this._tokenizeDebouncer.schedule();
 	}
 
-	public acceptMaxTokenizationLineLength(maxTokenizationLineLength: number): codemavi {
+	public acceptMaxTokenizationLineLength(maxTokenizationLineLength: number): void {
 		this._maxTokenizationLineLength.set(maxTokenizationLineLength, undefined);
 	}
 
@@ -109,7 +109,7 @@ export class TextMateWorkerTokenizer extends MirrorTextModel {
 		this._tokenize();
 	}
 
-	private async _tokenize(): Promise<codemavi> {
+	private async _tokenize(): Promise<void> {
 		if (this._isDisposed || !this._tokenizerWithStateStore) {
 			return;
 		}
@@ -178,7 +178,7 @@ class StateDeltaBuilder {
 	private _lastStartLineNumber: number = -1;
 	private _stateDeltas: StateDeltas[] = [];
 
-	public setState(lineNumber: number, stackDiff: StackDiff | null): codemavi {
+	public setState(lineNumber: number, stackDiff: StackDiff | null): void {
 		if (lineNumber === this._lastStartLineNumber + 1) {
 			this._stateDeltas[this._stateDeltas.length - 1].stateDeltas.push(stackDiff);
 		} else {

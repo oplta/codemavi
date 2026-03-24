@@ -10,7 +10,7 @@ import { ICurrentPartialCommand } from './commandDetection/terminalCommand.js';
 import { ITerminalOutputMatch, ITerminalOutputMatcher } from '../terminal.js';
 import { ReplayEntry } from '../terminalProcess.js';
 
-interface IEvent<T, U = codemavi> {
+interface IEvent<T, U = void> {
 	(listener: (arg1: T, arg2: U) => any): IDisposable;
 }
 
@@ -36,7 +36,7 @@ export interface IMarker extends IDisposable {
 	 * might happen for a marker, that got invalidated by scrolling out or removal of
 	 * a line from the buffer.
 	 */
-	onDispose: IEvent<codemavi>;
+	onDispose: IEvent<void>;
 }
 
 
@@ -147,18 +147,18 @@ export interface ICwdDetectionCapability {
 	readonly onDidChangeCwd: Event<string>;
 	readonly cwds: string[];
 	getCwd(): string;
-	updateCwd(cwd: string): codemavi;
+	updateCwd(cwd: string): void;
 }
 
 export interface IShellEnvDetectionCapability {
 	readonly type: TerminalCapability.ShellEnvDetection;
 	readonly onDidChangeEnv: Event<TerminalShellIntegrationEnvironment>;
 	get env(): TerminalShellIntegrationEnvironment;
-	setEnvironment(envs: { [key: string]: string | undefined } | undefined, isTrusted: boolean): codemavi;
-	startEnvironmentSingleVar(clear: boolean, isTrusted: boolean): codemavi;
-	setEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): codemavi;
-	deleteEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): codemavi;
-	endEnvironmentSingleVar(isTrusted: boolean): codemavi;
+	setEnvironment(envs: { [key: string]: string | undefined } | undefined, isTrusted: boolean): void;
+	startEnvironmentSingleVar(clear: boolean, isTrusted: boolean): void;
+	setEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): void;
+	deleteEnvironmentSingleVar(key: string, value: string | undefined, isTrusted: boolean): void;
+	endEnvironmentSingleVar(isTrusted: boolean): void;
 }
 
 export interface TerminalShellIntegrationEnvironment {
@@ -200,7 +200,7 @@ export interface IBufferMarkCapability {
 	type: TerminalCapability.BufferMarkDetection;
 	markers(): IterableIterator<IMarker>;
 	onMarkAdded: Event<IMarkProperties>;
-	addMark(properties?: IMarkProperties): codemavi;
+	addMark(properties?: IMarkProperties): void;
 	getMark(id: string): IMarker | undefined;
 }
 
@@ -222,26 +222,26 @@ export interface ICommandDetectionCapability {
 	readonly onCommandInvalidated: Event<ITerminalCommand[]>;
 	readonly onCurrentCommandInvalidated: Event<ICommandInvalidationRequest>;
 	readonly onSetRichCommandDetection: Event<boolean>;
-	setContinuationPrompt(value: string): codemavi;
-	setPromptTerminator(value: string, lastPromptLine: string): codemavi;
-	setCwd(value: string): codemavi;
-	setIsWindowsPty(value: boolean): codemavi;
-	setIsCommandStorageDisabled(): codemavi;
+	setContinuationPrompt(value: string): void;
+	setPromptTerminator(value: string, lastPromptLine: string): void;
+	setCwd(value: string): void;
+	setIsWindowsPty(value: boolean): void;
+	setIsCommandStorageDisabled(): void;
 	/**
 	 * Gets the working directory for a line, this will return undefined if it's unknown in which
 	 * case the terminal's initial cwd should be used.
 	 */
 	getCwdForLine(line: number): string | undefined;
 	getCommandForLine(line: number): ITerminalCommand | ICurrentPartialCommand | undefined;
-	handlePromptStart(options?: IHandleCommandOptions): codemavi;
-	handleContinuationStart(): codemavi;
-	handleContinuationEnd(): codemavi;
-	handleRightPromptStart(): codemavi;
-	handleRightPromptEnd(): codemavi;
-	handleCommandStart(options?: IHandleCommandOptions): codemavi;
-	handleCommandExecuted(options?: IHandleCommandOptions): codemavi;
-	handleCommandFinished(exitCode?: number, options?: IHandleCommandOptions): codemavi;
-	setHasRichCommandDetection(value: boolean): codemavi;
+	handlePromptStart(options?: IHandleCommandOptions): void;
+	handleContinuationStart(): void;
+	handleContinuationEnd(): void;
+	handleRightPromptStart(): void;
+	handleRightPromptEnd(): void;
+	handleCommandStart(options?: IHandleCommandOptions): void;
+	handleCommandExecuted(options?: IHandleCommandOptions): void;
+	handleCommandFinished(exitCode?: number, options?: IHandleCommandOptions): void;
+	setHasRichCommandDetection(value: boolean): void;
 	/**
 	 * Set the command line explicitly.
 	 * @param commandLine The command line being set.
@@ -250,9 +250,9 @@ export interface ICommandDetectionCapability {
 	 * before re-running a command. Note that this is optional according to the spec, it should
 	 * always be present when running the _builtin_ SI scripts.
 	 */
-	setCommandLine(commandLine: string, isTrusted: boolean): codemavi;
+	setCommandLine(commandLine: string, isTrusted: boolean): void;
 	serialize(): ISerializedCommandDetectionCapability;
-	deserialize(serialized: ISerializedCommandDetectionCapability): codemavi;
+	deserialize(serialized: ISerializedCommandDetectionCapability): void;
 }
 
 export interface IHandleCommandOptions {
@@ -333,9 +333,9 @@ export interface IXtermMarker {
 	readonly id: number;
 	readonly isDisposed: boolean;
 	readonly line: number;
-	dispose(): codemavi;
+	dispose(): void;
 	onDispose: {
-		(listener: () => any): { dispose(): codemavi };
+		(listener: () => any): { dispose(): void };
 	};
 }
 

@@ -69,7 +69,7 @@ export class ConfigurationService extends Disposable implements IConfigurationSe
 		this._register(this.userConfiguration.onDidChange(() => this.reloadConfigurationScheduler.schedule()));
 	}
 
-	async initialize(): Promise<codemavi> {
+	async initialize(): Promise<void> {
 		const [defaultModel, policyModel, userModel] = await Promise.all([this.defaultConfiguration.initialize(), this.policyConfiguration.initialize(), this.userConfiguration.loadConfiguration()]);
 		this.configuration = new Configuration(
 			defaultModel,
@@ -99,11 +99,11 @@ export class ConfigurationService extends Disposable implements IConfigurationSe
 		return this.configuration.getValue(section, overrides, undefined);
 	}
 
-	updateValue(key: string, value: any): Promise<codemavi>;
-	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides): Promise<codemavi>;
-	updateValue(key: string, value: any, target: ConfigurationTarget): Promise<codemavi>;
-	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides, target: ConfigurationTarget, options?: IConfigurationUpdateOptions): Promise<codemavi>;
-	async updateValue(key: string, value: any, arg3?: any, arg4?: any, options?: any): Promise<codemavi> {
+	updateValue(key: string, value: any): Promise<void>;
+	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides): Promise<void>;
+	updateValue(key: string, value: any, target: ConfigurationTarget): Promise<void>;
+	updateValue(key: string, value: any, overrides: IConfigurationOverrides | IConfigurationUpdateOverrides, target: ConfigurationTarget, options?: IConfigurationUpdateOptions): Promise<void>;
+	async updateValue(key: string, value: any, arg3?: any, arg4?: any, options?: any): Promise<void> {
 		const overrides: IConfigurationUpdateOverrides | undefined = isConfigurationUpdateOverrides(arg3) ? arg3
 			: isConfigurationOverrides(arg3) ? { resource: arg3.resource, overrideIdentifiers: arg3.overrideIdentifier ? [arg3.overrideIdentifier] : undefined } : undefined;
 
@@ -156,30 +156,30 @@ export class ConfigurationService extends Disposable implements IConfigurationSe
 		return this.configuration.keys(undefined);
 	}
 
-	async reloadConfiguration(): Promise<codemavi> {
+	async reloadConfiguration(): Promise<void> {
 		const configurationModel = await this.userConfiguration.loadConfiguration();
 		this.onDidChangeUserConfiguration(configurationModel);
 	}
 
-	private onDidChangeUserConfiguration(userConfigurationModel: ConfigurationModel): codemavi {
+	private onDidChangeUserConfiguration(userConfigurationModel: ConfigurationModel): void {
 		const previous = this.configuration.toData();
 		const change = this.configuration.compareAndUpdateLocalUserConfiguration(userConfigurationModel);
 		this.trigger(change, previous, ConfigurationTarget.USER);
 	}
 
-	private onDidDefaultConfigurationChange(defaultConfigurationModel: ConfigurationModel, properties: string[]): codemavi {
+	private onDidDefaultConfigurationChange(defaultConfigurationModel: ConfigurationModel, properties: string[]): void {
 		const previous = this.configuration.toData();
 		const change = this.configuration.compareAndUpdateDefaultConfiguration(defaultConfigurationModel, properties);
 		this.trigger(change, previous, ConfigurationTarget.DEFAULT);
 	}
 
-	private onDidPolicyConfigurationChange(policyConfiguration: ConfigurationModel): codemavi {
+	private onDidPolicyConfigurationChange(policyConfiguration: ConfigurationModel): void {
 		const previous = this.configuration.toData();
 		const change = this.configuration.compareAndUpdatePolicyConfiguration(policyConfiguration);
 		this.trigger(change, previous, ConfigurationTarget.DEFAULT);
 	}
 
-	private trigger(configurationChange: IConfigurationChange, previous: IConfigurationData, source: ConfigurationTarget): codemavi {
+	private trigger(configurationChange: IConfigurationChange, previous: IConfigurationData, source: ConfigurationTarget): void {
 		const event = new ConfigurationChangeEvent(configurationChange, { data: previous }, this.configuration, undefined, this.logService);
 		event.source = source;
 		this._onDidChangeConfiguration.fire(event);
@@ -188,21 +188,21 @@ export class ConfigurationService extends Disposable implements IConfigurationSe
 
 class ConfigurationEditing {
 
-	private readonly queue: Queue<codemavi>;
+	private readonly queue: Queue<void>;
 
 	constructor(
 		private readonly settingsResource: URI,
 		private readonly fileService: IFileService,
 		private readonly configurationService: IConfigurationService,
 	) {
-		this.queue = new Queue<codemavi>();
+		this.queue = new Queue<void>();
 	}
 
-	write(path: JSONPath, value: any): Promise<codemavi> {
+	write(path: JSONPath, value: any): Promise<void> {
 		return this.queue.queue(() => this.doWriteConfiguration(path, value)); // queue up writes to prevent race conditions
 	}
 
-	private async doWriteConfiguration(path: JSONPath, value: any): Promise<codemavi> {
+	private async doWriteConfiguration(path: JSONPath, value: any): Promise<void> {
 		let content: string;
 		try {
 			const fileContent = await this.fileService.readFile(this.settingsResource);

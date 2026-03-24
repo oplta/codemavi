@@ -35,7 +35,7 @@ export class ExtHostEditorInsets implements ExtHostEditorInsetsShape {
 		}));
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._insets.forEach(value => value.inset.dispose());
 		this._disposables.dispose();
 	}
@@ -56,7 +56,7 @@ export class ExtHostEditorInsets implements ExtHostEditorInsetsShape {
 		const that = this;
 		const handle = this._handlePool++;
 		const onDidReceiveMessage = new Emitter<any>();
-		const onDidDispose = new Emitter<codemavi>();
+		const onDidDispose = new Emitter<void>();
 
 		const webview = new class implements vscode.Webview {
 
@@ -104,9 +104,9 @@ export class ExtHostEditorInsets implements ExtHostEditorInsetsShape {
 			readonly line: number = line;
 			readonly height: number = height;
 			readonly webview: vscode.Webview = webview;
-			readonly onDidDispose: vscode.Event<codemavi> = onDidDispose.event;
+			readonly onDidDispose: vscode.Event<void> = onDidDispose.event;
 
-			dispose(): codemavi {
+			dispose(): void {
 				if (that._insets.has(handle)) {
 					that._insets.delete(handle);
 					that._proxy.$disposeEditorInset(handle);
@@ -125,14 +125,14 @@ export class ExtHostEditorInsets implements ExtHostEditorInsetsShape {
 		return inset;
 	}
 
-	$onDidDispose(handle: number): codemavi {
+	$onDidDispose(handle: number): void {
 		const value = this._insets.get(handle);
 		if (value) {
 			value.inset.dispose();
 		}
 	}
 
-	$onDidReceiveMessage(handle: number, message: any): codemavi {
+	$onDidReceiveMessage(handle: number, message: any): void {
 		const value = this._insets.get(handle);
 		value?.onDidReceiveMessage.fire(message);
 	}

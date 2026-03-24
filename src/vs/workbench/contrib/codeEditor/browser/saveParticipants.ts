@@ -44,7 +44,7 @@ export class TrimWhitespaceParticipant implements ITextFileSaveParticipant {
 		// Nothing
 	}
 
-	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<codemavi> {
+	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<void> {
 		if (!model.textEditorModel) {
 			return;
 		}
@@ -56,14 +56,14 @@ export class TrimWhitespaceParticipant implements ITextFileSaveParticipant {
 		}
 	}
 
-	private doTrimTrailingWhitespace(model: ITextModel, isAutoSaved: boolean, trimInRegexesAndStrings: boolean): codemavi {
+	private doTrimTrailingWhitespace(model: ITextModel, isAutoSaved: boolean, trimInRegexesAndStrings: boolean): void {
 		let prevSelection: Selection[] = [];
 		let cursors: Position[] = [];
 
 		const editor = findEditor(model, this.codeEditorService);
 		if (editor) {
 			// Find `prevSelection` in any case do ensure a good undo stack when pushing the edit
-			// Collect active cursors in `cursors` only if `isAutoSaved` to acodemavi having the cursors jump
+			// Collect active cursors in `cursors` only if `isAutoSaved` to avoid having the cursors jump
 			prevSelection = editor.getSelections();
 			if (isAutoSaved) {
 				cursors = prevSelection.map(s => s.getPosition());
@@ -112,7 +112,7 @@ export class FinalNewLineParticipant implements ITextFileSaveParticipant {
 		// Nothing
 	}
 
-	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<codemavi> {
+	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<void> {
 		if (!model.textEditorModel) {
 			return;
 		}
@@ -122,7 +122,7 @@ export class FinalNewLineParticipant implements ITextFileSaveParticipant {
 		}
 	}
 
-	private doInsertFinalNewLine(model: ITextModel): codemavi {
+	private doInsertFinalNewLine(model: ITextModel): void {
 		const lineCount = model.getLineCount();
 		const lastLine = model.getLineContent(lineCount);
 		const lastLineIsEmptyOrWhitespace = strings.lastNonWhitespaceIndex(lastLine) === -1;
@@ -150,7 +150,7 @@ export class TrimFinalNewLinesParticipant implements ITextFileSaveParticipant {
 		// Nothing
 	}
 
-	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<codemavi> {
+	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext): Promise<void> {
 		if (!model.textEditorModel) {
 			return;
 		}
@@ -175,7 +175,7 @@ export class TrimFinalNewLinesParticipant implements ITextFileSaveParticipant {
 		return 0;
 	}
 
-	private doTrimFinalNewLines(model: ITextModel, isAutoSaved: boolean): codemavi {
+	private doTrimFinalNewLines(model: ITextModel, isAutoSaved: boolean): void {
 		const lineCount = model.getLineCount();
 
 		// Do not insert new line if file does not end with new line
@@ -222,7 +222,7 @@ class FormatOnSaveParticipant implements ITextFileSaveParticipant {
 		// Nothing
 	}
 
-	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 		if (!model.textEditorModel) {
 			return;
 		}
@@ -317,7 +317,7 @@ class CodeActionOnSaveParticipant extends Disposable implements ITextFileSavePar
 		}
 	}
 
-	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	async participate(model: ITextFileEditorModel, context: ITextFileSaveParticipantContext, progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 		if (!model.textEditorModel) {
 			return;
 		}
@@ -385,11 +385,11 @@ class CodeActionOnSaveParticipant extends Disposable implements ITextFileSavePar
 		});
 	}
 
-	private async applyOnSaveActions(model: ITextModel, codeActionsOnSave: readonly HierarchicalKind[], excludes: readonly HierarchicalKind[], progress: IProgress<IProgressStep>, token: CancellationToken): Promise<codemavi> {
+	private async applyOnSaveActions(model: ITextModel, codeActionsOnSave: readonly HierarchicalKind[], excludes: readonly HierarchicalKind[], progress: IProgress<IProgressStep>, token: CancellationToken): Promise<void> {
 
 		const getActionProgress = new class implements IProgress<CodeActionProvider> {
 			private _names = new Set<string>();
-			private _report(): codemavi {
+			private _report(): void {
 				progress.report({
 					message: localize(
 						{ key: 'codeaction.get2', comment: ['[configure]({1}) is a link. Only translate `configure`. Do not change brackets and parentheses or {1}'] },
@@ -451,7 +451,7 @@ export class SaveParticipantsContribution extends Disposable implements IWorkben
 		this.registerSaveParticipants();
 	}
 
-	private registerSaveParticipants(): codemavi {
+	private registerSaveParticipants(): void {
 		this._register(this.textFileService.files.addSaveParticipant(this.instantiationService.createInstance(TrimWhitespaceParticipant)));
 		this._register(this.textFileService.files.addSaveParticipant(this.instantiationService.createInstance(CodeActionOnSaveParticipant)));
 		this._register(this.textFileService.files.addSaveParticipant(this.instantiationService.createInstance(FormatOnSaveParticipant)));

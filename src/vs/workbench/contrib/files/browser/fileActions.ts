@@ -78,7 +78,7 @@ export const UPLOAD_LABEL = nls.localize('upload', "Upload...");
 const CONFIRM_DELETE_SETTING_KEY = 'explorer.confirmDelete';
 const MAX_UNDO_FILE_SIZE = 5000000; // 5mb
 
-function onError(notificationService: INotificationService, error: any): codemavi {
+function onError(notificationService: INotificationService, error: any): void {
 	if (error.message === 'string') {
 		error = error.message;
 	}
@@ -86,14 +86,14 @@ function onError(notificationService: INotificationService, error: any): codemav
 	notificationService.error(toErrorMessage(error, false));
 }
 
-async function refreshIfSeparator(value: string, explorerService: IExplorerService): Promise<codemavi> {
+async function refreshIfSeparator(value: string, explorerService: IExplorerService): Promise<void> {
 	if (value && ((value.indexOf('/') >= 0) || (value.indexOf('\\') >= 0))) {
 		// New input contains separator, multiple resources will get created workaround for #68204
 		await explorerService.refresh();
 	}
 }
 
-async function deleteFiles(explorerService: IExplorerService, workingCopyFileService: IWorkingCopyFileService, dialogService: IDialogService, configurationService: IConfigurationService, filesConfigurationService: IFilesConfigurationService, elements: ExplorerItem[], useTrash: boolean, skipConfirm = false, ignoreIfNotExists = false): Promise<codemavi> {
+async function deleteFiles(explorerService: IExplorerService, workingCopyFileService: IWorkingCopyFileService, dialogService: IDialogService, configurationService: IConfigurationService, filesConfigurationService: IFilesConfigurationService, elements: ExplorerItem[], useTrash: boolean, skipConfirm = false, ignoreIfNotExists = false): Promise<void> {
 	let primaryButton: string;
 	if (useTrash) {
 		primaryButton = isWindows ? nls.localize('deleteButtonLabelRecycleBin', "&&Move to Recycle Bin") : nls.localize({ key: 'deleteButtonLabelTrash', comment: ['&& denotes a mnemonic'] }, "&&Move to Trash");
@@ -520,7 +520,7 @@ export class GlobalCompareResourcesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const textModelService = accessor.get(ITextModelService);
 		const quickInputService = accessor.get(IQuickInputService);
@@ -556,7 +556,7 @@ export class ToggleAutoSaveAction extends Action2 {
 		});
 	}
 
-	override run(accessor: ServicesAccessor): Promise<codemavi> {
+	override run(accessor: ServicesAccessor): Promise<void> {
 		const filesConfigurationService = accessor.get(IFilesConfigurationService);
 		return filesConfigurationService.toggleAutoSave();
 	}
@@ -580,15 +580,15 @@ abstract class BaseSaveAllAction extends Action {
 		this.registerListeners();
 	}
 
-	protected abstract doRun(context: unknown): Promise<codemavi>;
+	protected abstract doRun(context: unknown): Promise<void>;
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 
 		// update enablement based on working copy changes
 		this._register(this.workingCopyService.onDidChangeDirty(workingCopy => this.updateEnablement(workingCopy)));
 	}
 
-	private updateEnablement(workingCopy: IWorkingCopy): codemavi {
+	private updateEnablement(workingCopy: IWorkingCopy): void {
 		const hasDirty = workingCopy.isDirty() || this.workingCopyService.hasDirty;
 		if (this.lastDirtyState !== hasDirty) {
 			this.enabled = hasDirty;
@@ -596,7 +596,7 @@ abstract class BaseSaveAllAction extends Action {
 		}
 	}
 
-	override async run(context?: unknown): Promise<codemavi> {
+	override async run(context?: unknown): Promise<void> {
 		try {
 			await this.doRun(context);
 		} catch (error) {
@@ -614,7 +614,7 @@ export class SaveAllInGroupAction extends BaseSaveAllAction {
 		return 'explorer-action ' + ThemeIcon.asClassName(Codicon.saveAll);
 	}
 
-	protected doRun(context: unknown): Promise<codemavi> {
+	protected doRun(context: unknown): Promise<void> {
 		return this.commandService.executeCommand(SAVE_ALL_IN_GROUP_COMMAND_ID, {}, context);
 	}
 }
@@ -628,7 +628,7 @@ export class CloseGroupAction extends Action {
 		super(id, label, ThemeIcon.asClassName(Codicon.closeAll));
 	}
 
-	override run(context?: unknown): Promise<codemavi> {
+	override run(context?: unknown): Promise<void> {
 		return this.commandService.executeCommand(CLOSE_EDITORS_AND_GROUP_COMMAND_ID, {}, context);
 	}
 }
@@ -650,7 +650,7 @@ export class FocusFilesExplorer extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const paneCompositeService = accessor.get(IPaneCompositePartService);
 		await paneCompositeService.openPaneComposite(VIEWLET_ID, ViewContainerLocation.Sidebar, true);
 	}
@@ -673,7 +673,7 @@ export class ShowActiveFileInExplorer extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		const editorService = accessor.get(IEditorService);
 		const resource = EditorResourceAccessor.getOriginalUri(editorService.activeEditor, { supportSideBySide: SideBySideEditor.PRIMARY });
@@ -702,7 +702,7 @@ export class OpenActiveFileInEmptyWorkspace extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const hostService = accessor.get(IHostService);
 		const dialogService = accessor.get(IDialogService);
@@ -813,7 +813,7 @@ export class CompareNewUntitledTextFilesAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 
 		await editorService.openEditor({
@@ -845,7 +845,7 @@ export class CompareWithClipboardAction extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const instantiationService = accessor.get(IInstantiationService);
 		const textModelService = accessor.get(ITextModelService);
@@ -874,7 +874,7 @@ export class CompareWithClipboardAction extends Action2 {
 		}
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		dispose(this.registrationDisposal);
 		this.registrationDisposal = undefined;
 	}
@@ -895,7 +895,7 @@ class ClipboardContentProvider implements ITextModelContentProvider {
 	}
 }
 
-function onErrorWithRetry(notificationService: INotificationService, error: unknown, retry: () => Promise<unknown>): codemavi {
+function onErrorWithRetry(notificationService: INotificationService, error: unknown, retry: () => Promise<unknown>): void {
 	notificationService.prompt(Severity.Error, toErrorMessage(error, false),
 		[{
 			label: nls.localize('retry', "Retry"),
@@ -904,7 +904,7 @@ function onErrorWithRetry(notificationService: INotificationService, error: unkn
 	);
 }
 
-async function openExplorerAndCreate(accessor: ServicesAccessor, isFolder: boolean): Promise<codemavi> {
+async function openExplorerAndCreate(accessor: ServicesAccessor, isFolder: boolean): Promise<void> {
 	const explorerService = accessor.get(IExplorerService);
 	const fileService = accessor.get(IFileService);
 	const configService = accessor.get(IConfigurationService);
@@ -948,7 +948,7 @@ async function openExplorerAndCreate(accessor: ServicesAccessor, isFolder: boole
 	const newStat = new NewExplorerItem(fileService, configService, filesConfigService, folder, isFolder);
 	folder.addChild(newStat);
 
-	const onSuccess = async (value: string): Promise<codemavi> => {
+	const onSuccess = async (value: string): Promise<void> => {
 		try {
 			const resourceToCreate = resources.joinPath(folder.resource, value);
 			if (value.endsWith('/')) {
@@ -1350,7 +1350,7 @@ class BaseSetActiveEditorReadonlyInSession extends Action2 {
 		});
 	}
 
-	override async run(accessor: ServicesAccessor): Promise<codemavi> {
+	override async run(accessor: ServicesAccessor): Promise<void> {
 		const editorService = accessor.get(IEditorService);
 		const filesConfigurationService = accessor.get(IFilesConfigurationService);
 

@@ -69,13 +69,13 @@ declare module 'vscode' {
 		 * @param updatedInsertText The actual insert text (after brackets were fixed).
 		 */
 		// eslint-disable-next-line local/vscode-dts-provider-naming
-		handleDidShowCompletionItem?(completionItem: InlineCompletionItem, updatedInsertText: string): codemavi;
+		handleDidShowCompletionItem?(completionItem: InlineCompletionItem, updatedInsertText: string): void;
 
 		/**
 		 * @param completionItem The completion item that was rejected.
 		*/
 		// eslint-disable-next-line local/vscode-dts-provider-naming
-		handleDidRejectCompletionItem?(completionItem: InlineCompletionItem): codemavi;
+		handleDidRejectCompletionItem?(completionItem: InlineCompletionItem): void;
 
 		/**
 		 * Is called when an inline completion item was accepted partially.
@@ -83,14 +83,14 @@ declare module 'vscode' {
 		 * @deprecated Use `handleDidPartiallyAcceptCompletionItem` with `PartialAcceptInfo` instead.
 		 */
 		// eslint-disable-next-line local/vscode-dts-provider-naming
-		handleDidPartiallyAcceptCompletionItem?(completionItem: InlineCompletionItem, acceptedLength: number): codemavi;
+		handleDidPartiallyAcceptCompletionItem?(completionItem: InlineCompletionItem, acceptedLength: number): void;
 
 		/**
 		 * Is called when an inline completion item was accepted partially.
 		 * @param info Additional info for the partial accepted trigger.
 		 */
 		// eslint-disable-next-line local/vscode-dts-provider-naming
-		handleDidPartiallyAcceptCompletionItem?(completionItem: InlineCompletionItem, info: PartialAcceptInfo): codemavi;
+		handleDidPartiallyAcceptCompletionItem?(completionItem: InlineCompletionItem, info: PartialAcceptInfo): void;
 
 		provideInlineEditsForRange?(document: TextDocument, range: Range, context: InlineCompletionContext, token: CancellationToken): ProviderResult<InlineCompletionItem[] | InlineCompletionList>;
 

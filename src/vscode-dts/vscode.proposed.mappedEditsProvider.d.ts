@@ -78,8 +78,8 @@ declare module 'vscode' {
 	}
 
 	export interface MappedEditsResponseStream {
-		textEdit(target: Uri, edits: TextEdit | TextEdit[]): codemavi;
-		notebookEdit(target: Uri, edits: NotebookEdit | NotebookEdit[]): codemavi;
+		textEdit(target: Uri, edits: TextEdit | TextEdit[]): void;
+		notebookEdit(target: Uri, edits: NotebookEdit | NotebookEdit[]): void;
 	}
 
 	export interface MappedEditsResult {

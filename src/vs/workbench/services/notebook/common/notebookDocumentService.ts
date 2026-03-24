@@ -100,8 +100,8 @@ export interface INotebookDocumentService {
 	readonly _serviceBrand: undefined;
 
 	getNotebook(uri: URI): INotebookDocument | undefined;
-	addNotebookDocument(document: INotebookDocument): codemavi;
-	removeNotebookDocument(document: INotebookDocument): codemavi;
+	addNotebookDocument(document: INotebookDocument): void;
+	removeNotebookDocument(document: INotebookDocument): void;
 }
 
 export class NotebookDocumentWorkbenchService implements INotebookDocumentService {

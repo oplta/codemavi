@@ -16,11 +16,11 @@ console.error = connection.console.error.bind(connection.console);
 
 const runtime: RuntimeEnvironment = {
 	timer: {
-		setImmediate(callback: (...args: any[]) => codemavi, ...args: any[]): Disposable {
+		setImmediate(callback: (...args: any[]) => void, ...args: any[]): Disposable {
 			const handle = setTimeout(callback, 0, ...args);
 			return { dispose: () => clearTimeout(handle) };
 		},
-		setTimeout(callback: (...args: any[]) => codemavi, ms: number, ...args: any[]): Disposable {
+		setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): Disposable {
 			const handle = setTimeout(callback, ms, ...args);
 			return { dispose: () => clearTimeout(handle) };
 		}

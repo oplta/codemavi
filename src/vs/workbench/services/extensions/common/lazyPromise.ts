@@ -49,7 +49,7 @@ export class LazyPromise implements Promise<any> {
 		return this._actual;
 	}
 
-	public resolveOk(value: any): codemavi {
+	public resolveOk(value: any): void {
 		if (this._hasValue || this._hasErr) {
 			return;
 		}
@@ -62,7 +62,7 @@ export class LazyPromise implements Promise<any> {
 		}
 	}
 
-	public resolveErr(err: any): codemavi {
+	public resolveErr(err: any): void {
 		if (this._hasValue || this._hasErr) {
 			return;
 		}
@@ -87,7 +87,7 @@ export class LazyPromise implements Promise<any> {
 		return this._ensureActual().then(undefined, error);
 	}
 
-	public finally(callback: () => codemavi): any {
+	public finally(callback: () => void): any {
 		return this._ensureActual().finally(callback);
 	}
 }

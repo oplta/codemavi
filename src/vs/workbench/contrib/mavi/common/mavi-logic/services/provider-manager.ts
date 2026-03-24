@@ -1,17 +1,17 @@
 /**
- * Code Mavi - Provider Manager Service
+ * Mavi - Provider Manager Service
  *
  * Manages multiple LLM providers with failover, load balancing, and cost tracking
  * Supports Ollama, OpenAI, Anthropic, and other LLM providers
  */
 
-import { URI } from "../../../../base/common/uri.js";
-import { IFileService } from "../../../../platform/files/common/files.js";
-import { ILogService } from "../../../../platform/log/common/log.js";
-import { Event, Emitter } from "../../../../base/common/event.js";
-import { Disposable } from "../../../../base/common/lifecycle.js";
-import { createDecorator } from "../../../../platform/instantiation/common/instantiation.js";
-import { CancellationToken } from "../../../../base/common/cancellation.js";
+import { URI } from "../../../../../../base/common/uri.js";
+import { IFileService } from "../../../../../../platform/files/common/files.js";
+import { ILogService } from "../../../../../../platform/log/common/log.js";
+import { Event, Emitter } from "../../../../../../base/common/event.js";
+import { Disposable } from "../../../../../../base/common/lifecycle.js";
+import { createDecorator } from "../../../../../../platform/instantiation/common/instantiation.js";
+import { CancellationToken } from "../../../../../../base/common/cancellation.js";
 
 export interface ProviderConfig {
 	id: string;
@@ -676,7 +676,7 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 	async saveConfiguration(): Promise<void> {
 		try {
 			const homeDir = process.env.HOME || process.env.USERPROFILE || '.';
-			const configDir = `${homeDir}/.codemavi`;
+			const configDir = `${homeDir}/.mavi`;
 			const configPath = `${configDir}/${this.CONFIG_FILE}`;
 
 			// Ensure directory exists
@@ -715,7 +715,7 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 	async loadConfiguration(): Promise<void> {
 		try {
 			const homeDir = process.env.HOME || process.env.USERPROFILE || '.';
-			const configPath = `${homeDir}/.codemavi/${this.CONFIG_FILE}`;
+			const configPath = `${homeDir}/.mavi/${this.CONFIG_FILE}`;
 			const uri = URI.file(configPath);
 
 			if (!await this.fileExists(uri)) {
@@ -1078,3 +1078,5 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 			max_tokens: request.maxTokens || provider.config.maxTokens || 4000,
 			stream: request.stream || false
 		};
+}
+}

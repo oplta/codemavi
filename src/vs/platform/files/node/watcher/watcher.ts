@@ -35,7 +35,7 @@ export class UniversalWatcher extends Disposable implements IUniversalWatcher {
 		}));
 	}
 
-	async watch(requests: IUniversalWatchRequest[]): Promise<codemavi> {
+	async watch(requests: IUniversalWatchRequest[]): Promise<void> {
 		this.requests = requests;
 		this.failedRecursiveRequests = 0;
 
@@ -63,7 +63,7 @@ export class UniversalWatcher extends Disposable implements IUniversalWatcher {
 		}
 	}
 
-	async setVerboseLogging(enabled: boolean): Promise<codemavi> {
+	async setVerboseLogging(enabled: boolean): Promise<void> {
 
 		// Log stats
 		if (enabled && this.requests.length > 0) {
@@ -77,7 +77,7 @@ export class UniversalWatcher extends Disposable implements IUniversalWatcher {
 		]);
 	}
 
-	async stop(): Promise<codemavi> {
+	async stop(): Promise<void> {
 		await Promises.settled([
 			this.recursiveWatcher.stop(),
 			this.nonRecursiveWatcher.stop()

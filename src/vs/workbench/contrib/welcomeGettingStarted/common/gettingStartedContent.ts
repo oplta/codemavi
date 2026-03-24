@@ -22,7 +22,7 @@ class GettingStartedContentProviderRegistry {
 
 	private readonly providers = new Map<string, IGettingStartedContentProvider>();
 
-	registerProvider(moduleId: string, provider: IGettingStartedContentProvider): codemavi {
+	registerProvider(moduleId: string, provider: IGettingStartedContentProvider): void {
 		this.providers.set(moduleId, provider);
 	}
 
@@ -467,7 +467,7 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 				{
 					id: 'verbositySettings',
 					title: localize('gettingStarted.verbositySettings.title', "Control the verbosity of aria labels"),
-					description: localize('gettingStarted.verbositySettings.description.interpolated', "Screen reader verbosity settings exist for features around the workbench so that once a user is familiar with a feature, they can acodemavi hearing hints about how to operate it. For example, features for which an accessibility help dialog exists will indicate how to open the dialog until the verbosity setting for that feature has been disabled.\n These and other accessibility settings can be configured by running the Open Accessibility Settings command.\n{0}", Button(localize('openVerbositySettings', "Open Accessibility Settings"), 'command:workbench.action.openAccessibilitySettings')),
+					description: localize('gettingStarted.verbositySettings.description.interpolated', "Screen reader verbosity settings exist for features around the workbench so that once a user is familiar with a feature, they can avoid hearing hints about how to operate it. For example, features for which an accessibility help dialog exists will indicate how to open the dialog until the verbosity setting for that feature has been disabled.\n These and other accessibility settings can be configured by running the Open Accessibility Settings command.\n{0}", Button(localize('openVerbositySettings', "Open Accessibility Settings"), 'command:workbench.action.openAccessibilitySettings')),
 					media: {
 						type: 'markdown', path: 'empty'
 					}

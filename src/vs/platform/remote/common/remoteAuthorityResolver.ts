@@ -143,7 +143,7 @@ export interface IRemoteAuthorityResolverService {
 
 	readonly _serviceBrand: undefined;
 
-	readonly onDidChangeConnectionData: Event<codemavi>;
+	readonly onDidChangeConnectionData: Event<void>;
 
 	resolveAuthority(authority: string): Promise<ResolverResult>;
 	getConnectionData(authority: string): IRemoteConnectionData | null;
@@ -156,11 +156,11 @@ export interface IRemoteAuthorityResolverService {
 	 */
 	getCanonicalURI(uri: URI): Promise<URI>;
 
-	_clearResolvedAuthority(authority: string): codemavi;
-	_setResolvedAuthority(resolvedAuthority: ResolvedAuthority, resolvedOptions?: ResolvedOptions): codemavi;
-	_setResolvedAuthorityError(authority: string, err: any): codemavi;
-	_setAuthorityConnectionToken(authority: string, connectionToken: string): codemavi;
-	_setCanonicalURIProvider(provider: (uri: URI) => Promise<URI>): codemavi;
+	_clearResolvedAuthority(authority: string): void;
+	_setResolvedAuthority(resolvedAuthority: ResolvedAuthority, resolvedOptions?: ResolvedOptions): void;
+	_setResolvedAuthorityError(authority: string, err: any): void;
+	_setAuthorityConnectionToken(authority: string, connectionToken: string): void;
+	_setCanonicalURIProvider(provider: (uri: URI) => Promise<URI>): void;
 }
 
 export function getRemoteAuthorityPrefix(remoteAuthority: string): string {

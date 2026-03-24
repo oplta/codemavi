@@ -15,7 +15,7 @@ import { IListAccessibilityProvider, IListOptions, IListOptionsUpdate, IListStyl
 import { isActiveElement } from '../../dom.js';
 
 export interface IPagedRenderer<TElement, TTemplateData> extends IListRenderer<TElement, TTemplateData> {
-	renderPlaceholder(index: number, templateData: TTemplateData): codemavi;
+	renderPlaceholder(index: number, templateData: TTemplateData): void;
 }
 
 export interface ITemplateData<T> {
@@ -37,7 +37,7 @@ class PagedRenderer<TElement, TTemplateData> implements IListRenderer<number, IT
 		return { data, disposable: Disposable.None };
 	}
 
-	renderElement(index: number, _: number, data: ITemplateData<TTemplateData>, height: number | undefined): codemavi {
+	renderElement(index: number, _: number, data: ITemplateData<TTemplateData>, height: number | undefined): void {
 		data.disposable?.dispose();
 
 		if (!data.data) {
@@ -58,7 +58,7 @@ class PagedRenderer<TElement, TTemplateData> implements IListRenderer<number, IT
 		promise.then(entry => this.renderer.renderElement(entry, index, data.data!, height));
 	}
 
-	disposeTemplate(data: ITemplateData<TTemplateData>): codemavi {
+	disposeTemplate(data: ITemplateData<TTemplateData>): void {
 		if (data.disposable) {
 			data.disposable.dispose();
 			data.disposable = undefined;
@@ -148,15 +148,15 @@ export class PagedList<T> implements IDisposable {
 		return isActiveElement(this.getHTMLElement());
 	}
 
-	domFocus(): codemavi {
+	domFocus(): void {
 		this.list.domFocus();
 	}
 
-	get onDidFocus(): Event<codemavi> {
+	get onDidFocus(): Event<void> {
 		return this.list.onDidFocus;
 	}
 
-	get onDidBlur(): Event<codemavi> {
+	get onDidBlur(): Event<void> {
 		return this.list.onDidBlur;
 	}
 
@@ -164,7 +164,7 @@ export class PagedList<T> implements IDisposable {
 		return this.list;
 	}
 
-	get onDidDispose(): Event<codemavi> {
+	get onDidDispose(): Event<void> {
 		return this.list.onDidDispose;
 	}
 
@@ -225,7 +225,7 @@ export class PagedList<T> implements IDisposable {
 		this.list.scrollLeft = scrollLeft;
 	}
 
-	setAnchor(index: number | undefined): codemavi {
+	setAnchor(index: number | undefined): void {
 		this.list.setAnchor(index);
 	}
 
@@ -233,31 +233,31 @@ export class PagedList<T> implements IDisposable {
 		return this.list.getAnchor();
 	}
 
-	setFocus(indexes: number[]): codemavi {
+	setFocus(indexes: number[]): void {
 		this.list.setFocus(indexes);
 	}
 
-	focusNext(n?: number, loop?: boolean): codemavi {
+	focusNext(n?: number, loop?: boolean): void {
 		this.list.focusNext(n, loop);
 	}
 
-	focusPrevious(n?: number, loop?: boolean): codemavi {
+	focusPrevious(n?: number, loop?: boolean): void {
 		this.list.focusPrevious(n, loop);
 	}
 
-	focusNextPage(): Promise<codemavi> {
+	focusNextPage(): Promise<void> {
 		return this.list.focusNextPage();
 	}
 
-	focusPreviousPage(): Promise<codemavi> {
+	focusPreviousPage(): Promise<void> {
 		return this.list.focusPreviousPage();
 	}
 
-	focusLast(): codemavi {
+	focusLast(): void {
 		this.list.focusLast();
 	}
 
-	focusFirst(): codemavi {
+	focusFirst(): void {
 		this.list.focusFirst();
 	}
 
@@ -265,7 +265,7 @@ export class PagedList<T> implements IDisposable {
 		return this.list.getFocus();
 	}
 
-	setSelection(indexes: number[], browserEvent?: UIEvent): codemavi {
+	setSelection(indexes: number[], browserEvent?: UIEvent): void {
 		this.list.setSelection(indexes, browserEvent);
 	}
 
@@ -277,23 +277,23 @@ export class PagedList<T> implements IDisposable {
 		return this.getSelection().map(i => this.model.get(i));
 	}
 
-	layout(height?: number, width?: number): codemavi {
+	layout(height?: number, width?: number): void {
 		this.list.layout(height, width);
 	}
 
-	triggerTypeNavigation(): codemavi {
+	triggerTypeNavigation(): void {
 		this.list.triggerTypeNavigation();
 	}
 
-	reveal(index: number, relativeTop?: number): codemavi {
+	reveal(index: number, relativeTop?: number): void {
 		this.list.reveal(index, relativeTop);
 	}
 
-	style(styles: IListStyles): codemavi {
+	style(styles: IListStyles): void {
 		this.list.style(styles);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this.list.dispose();
 	}
 }

@@ -28,7 +28,7 @@ export class UserDataProfilesHandler extends Disposable {
 		this._register(new RunOnceScheduler(() => this.cleanUpEmptyWindowAssociations(), 30 * 1000 /* after 30s */)).schedule();
 	}
 
-	private async unsetProfileForWorkspace(window: ICodeWindow): Promise<codemavi> {
+	private async unsetProfileForWorkspace(window: ICodeWindow): Promise<void> {
 		const workspace = this.getWorkspace(window);
 		const profile = this.userDataProfilesService.getProfileForWorkspace(workspace);
 		if (profile?.isTransient) {
@@ -43,7 +43,7 @@ export class UserDataProfilesHandler extends Disposable {
 		return window.openedWorkspace ?? toWorkspaceIdentifier(window.backupPath, window.isExtensionDevelopmentHost);
 	}
 
-	private cleanUpEmptyWindowAssociations(): codemavi {
+	private cleanUpEmptyWindowAssociations(): void {
 		const associatedEmptyWindows = this.userDataProfilesService.getAssociatedEmptyWindows();
 		if (associatedEmptyWindows.length === 0) {
 			return;

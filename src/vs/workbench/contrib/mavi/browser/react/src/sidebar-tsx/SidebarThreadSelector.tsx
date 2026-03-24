@@ -43,7 +43,7 @@ export const PastThreadsList = ({ className = '' }: { className?: string }) => {
 	const displayThreads = showAll ? sortedThreadIds : sortedThreadIds.slice(0, numInitialThreads);
 
 	return (
-		<div className={`flex flex-col mb-2 gap-2 w-full text-nowrap text-codemavi-fg-3 select-none relative ${className}`}>
+		<div className={`flex flex-col mb-2 gap-2 w-full text-nowrap text-mavi-fg-3 select-none relative ${className}`}>
 			{displayThreads.length === 0 // this should never happen
 				? <></>
 				: displayThreads.map((threadId, i) => {
@@ -67,7 +67,7 @@ export const PastThreadsList = ({ className = '' }: { className?: string }) => {
 
 			{hasMoreThreads && !showAll && (
 				<div
-					className="text-codemavi-fg-3 opacity-80 hover:opacity-100 hover:brightness-115 cursor-pointer p-1 text-xs"
+					className="text-mavi-fg-3 opacity-80 hover:opacity-100 hover:brightness-115 cursor-pointer p-1 text-xs"
 					onClick={() => setShowAll(true)}
 				>
 					Show {sortedThreadIds.length - numInitialThreads} more...
@@ -75,7 +75,7 @@ export const PastThreadsList = ({ className = '' }: { className?: string }) => {
 			)}
 			{hasMoreThreads && showAll && (
 				<div
-					className="text-codemavi-fg-3 opacity-80 hover:opacity-100 hover:brightness-115 cursor-pointer p-1 text-xs"
+					className="text-mavi-fg-3 opacity-80 hover:opacity-100 hover:brightness-115 cursor-pointer p-1 text-xs"
 					onClick={() => setShowAll(false)}
 				>
 					Show less
@@ -122,7 +122,7 @@ const DuplicateButton = ({ threadId }: { threadId: string }) => {
 		Icon={Copy}
 		className='size-[11px]'
 		onClick={() => { chatThreadsService.duplicateThread(threadId); }}
-		data-tooltip-id='codemavi-tooltip'
+		data-tooltip-id='mavi-tooltip'
 		data-tooltip-place='top'
 		data-tooltip-content='Duplicate thread'
 	>
@@ -144,7 +144,7 @@ const TrashButton = ({ threadId }: { threadId: string }) => {
 				Icon={X}
 				className='size-[11px]'
 				onClick={() => { setIsTrashPressed(false); }}
-				data-tooltip-id='codemavi-tooltip'
+				data-tooltip-id='mavi-tooltip'
 				data-tooltip-place='top'
 				data-tooltip-content='Cancel'
 			/>
@@ -152,7 +152,7 @@ const TrashButton = ({ threadId }: { threadId: string }) => {
 				Icon={Check}
 				className='size-[11px]'
 				onClick={() => { chatThreadsService.deleteThread(threadId); setIsTrashPressed(false); }}
-				data-tooltip-id='codemavi-tooltip'
+				data-tooltip-id='mavi-tooltip'
 				data-tooltip-place='top'
 				data-tooltip-content='Confirm'
 			/>
@@ -161,7 +161,7 @@ const TrashButton = ({ threadId }: { threadId: string }) => {
 			Icon={Trash2}
 			className='size-[11px]'
 			onClick={() => { setIsTrashPressed(true); }}
-			data-tooltip-id='codemavi-tooltip'
+			data-tooltip-id='mavi-tooltip'
 			data-tooltip-place='top'
 			data-tooltip-content='Delete thread'
 		/>
@@ -172,7 +172,7 @@ const PastThreadElement = ({ pastThread, idx, hoveredIdx, setHoveredIdx, isRunni
 	pastThread: ThreadType,
 	idx: number,
 	hoveredIdx: number | null,
-	setHoveredIdx: (idx: number | null) => codemavi,
+	setHoveredIdx: (idx: number | null) => void,
 	isRunning: IsRunningType | undefined,
 }
 
@@ -204,7 +204,7 @@ const PastThreadElement = ({ pastThread, idx, hoveredIdx, setHoveredIdx, isRunni
 	// 	codeStr={async () => {
 	// 		return JSON.stringify(currentThread.messages, null, 2)
 	// 	}}
-	// 	toolTipName={`Copy As Code Mavi Chat`}
+	// 	toolTipName={`Copy As Mavi Chat`}
 	// />
 
 	let firstMsg = null;
@@ -220,7 +220,7 @@ const PastThreadElement = ({ pastThread, idx, hoveredIdx, setHoveredIdx, isRunni
 	const numMessages = pastThread.messages.filter((msg) => msg.role === 'assistant' || msg.role === 'user').length;
 
 	const detailsHTML = <span
-	// data-tooltip-id='codemavi-tooltip'
+	// data-tooltip-id='mavi-tooltip'
 	// data-tooltip-content={`Last modified ${formatTime(new Date(pastThread.lastModified))}`}
 	// data-tooltip-place='top'
 	>
@@ -244,14 +244,14 @@ const PastThreadElement = ({ pastThread, idx, hoveredIdx, setHoveredIdx, isRunni
 		<div className="flex items-center justify-between gap-1">
 			<span className="flex items-center gap-2 min-w-0 overflow-hidden">
 				{/* spinner */}
-				{isRunning === 'LLM' || isRunning === 'tool' || isRunning === 'idle' ? <LoaderCircle className="animate-spin bg-codemavi-stroke-1 flex-shrink-0 flex-grow-0" size={14} />
+				{isRunning === 'LLM' || isRunning === 'tool' || isRunning === 'idle' ? <LoaderCircle className="animate-spin bg-mavi-stroke-1 flex-shrink-0 flex-grow-0" size={14} />
 					:
-					isRunning === 'awaiting_user' ? <MessageCircleQuestion className="bg-codemavi-stroke-1 flex-shrink-0 flex-grow-0" size={14} />
+					isRunning === 'awaiting_user' ? <MessageCircleQuestion className="bg-mavi-stroke-1 flex-shrink-0 flex-grow-0" size={14} />
 						:
 						null}
 				{/* name */}
 				<span className="truncate overflow-hidden text-ellipsis"
-					data-tooltip-id='codemavi-tooltip'
+					data-tooltip-id='mavi-tooltip'
 					data-tooltip-content={numMessages + ' messages'}
 					data-tooltip-place='top'
 				>{firstMsg}</span>

@@ -66,7 +66,7 @@ function createMapping(origLegend: string[], newLegend: string[]): number[] | un
 	return needsMapping ? mapping : undefined;
 }
 
-function applyTypesMapping(tokens: SemanticTokenData[], typesMapping: number[] | undefined): codemavi {
+function applyTypesMapping(tokens: SemanticTokenData[], typesMapping: number[] | undefined): void {
 	if (typesMapping) {
 		for (const token of tokens) {
 			token.typeIdx = typesMapping[token.typeIdx];
@@ -74,7 +74,7 @@ function applyTypesMapping(tokens: SemanticTokenData[], typesMapping: number[] |
 	}
 }
 
-function applyModifiersMapping(tokens: SemanticTokenData[], modifiersMapping: number[] | undefined): codemavi {
+function applyModifiersMapping(tokens: SemanticTokenData[], modifiersMapping: number[] | undefined): void {
 	if (modifiersMapping) {
 		for (const token of tokens) {
 			let modifierSet = token.modifierSet;

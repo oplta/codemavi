@@ -75,7 +75,7 @@ export class ContiguousMultilineTokens {
 		return this._tokens[lineNumber - this._startLineNumber];
 	}
 
-	public appendLineTokens(lineTokens: Uint32Array): codemavi {
+	public appendLineTokens(lineTokens: Uint32Array): void {
 		this._tokens.push(lineTokens);
 	}
 
@@ -108,13 +108,13 @@ export class ContiguousMultilineTokens {
 		return offset;
 	}
 
-	public applyEdit(range: IRange, text: string): codemavi {
+	public applyEdit(range: IRange, text: string): void {
 		const [eolCount, firstLineLength] = countEOL(text);
 		this._acceptDeleteRange(range);
 		this._acceptInsertText(new Position(range.startLineNumber, range.startColumn), eolCount, firstLineLength);
 	}
 
-	private _acceptDeleteRange(range: IRange): codemavi {
+	private _acceptDeleteRange(range: IRange): void {
 		if (range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn) {
 			// Nothing to delete
 			return;
@@ -184,7 +184,7 @@ export class ContiguousMultilineTokens {
 		}
 	}
 
-	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number): codemavi {
+	private _acceptInsertText(position: Position, eolCount: number, firstLineLength: number): void {
 
 		if (eolCount === 0 && firstLineLength === 0) {
 			// Nothing to insert
@@ -216,7 +216,7 @@ export class ContiguousMultilineTokens {
 		this._insertLines(position.lineNumber, eolCount);
 	}
 
-	private _insertLines(insertIndex: number, insertCount: number): codemavi {
+	private _insertLines(insertIndex: number, insertCount: number): void {
 		if (insertCount === 0) {
 			return;
 		}

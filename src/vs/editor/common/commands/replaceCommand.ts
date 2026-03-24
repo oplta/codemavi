@@ -21,7 +21,7 @@ export class ReplaceCommand implements ICommand {
 		this.insertsAutoWhitespace = insertsAutoWhitespace;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._range, this._text);
 	}
 
@@ -44,7 +44,7 @@ export class ReplaceOvertypeCommand implements ICommand {
 		this.insertsAutoWhitespace = insertsAutoWhitespace;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const intialStartPosition = this._range.getStartPosition();
 		const initialEndPosition = this._range.getEndPosition();
 		const initialEndLineNumber = initialEndPosition.lineNumber;
@@ -74,7 +74,7 @@ export class ReplaceCommandThatSelectsText implements ICommand {
 		this._text = text;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._range, this._text);
 	}
 
@@ -97,7 +97,7 @@ export class ReplaceCommandWithoutChangingPosition implements ICommand {
 		this.insertsAutoWhitespace = insertsAutoWhitespace;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._range, this._text);
 	}
 
@@ -124,7 +124,7 @@ export class ReplaceCommandWithOffsetCursorState implements ICommand {
 		this.insertsAutoWhitespace = insertsAutoWhitespace;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._range, this._text);
 	}
 
@@ -143,7 +143,7 @@ export class ReplaceOvertypeCommandOnCompositionEnd implements ICommand {
 		this._range = range;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const text = model.getValueInRange(this._range);
 		const initialEndPosition = this._range.getEndPosition();
 		const initialEndLineNumber = initialEndPosition.lineNumber;
@@ -178,7 +178,7 @@ export class ReplaceCommandThatPreservesSelection implements ICommand {
 		this._selectionId = null;
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		builder.addTrackedEditOperation(this._range, this._text, this._forceMoveMarkers);
 		this._selectionId = builder.trackSelection(this._initialSelection);
 	}

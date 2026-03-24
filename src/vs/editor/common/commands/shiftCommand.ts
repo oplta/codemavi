@@ -100,7 +100,7 @@ export class ShiftCommand implements ICommand {
 		}
 	}
 
-	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): codemavi {
+	public getEditOperations(model: ITextModel, builder: IEditOperationBuilder): void {
 		const startLine = this._selection.startLineNumber;
 
 		let endLine = this._selection.endLineNumber;

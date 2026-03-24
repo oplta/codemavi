@@ -19,7 +19,7 @@ export class FocusTracker extends Disposable {
 
 	constructor(
 		private readonly _domNode: HTMLElement,
-		private readonly _onFocusChange: (newFocusValue: boolean) => codemavi,
+		private readonly _onFocusChange: (newFocusValue: boolean) => void,
 	) {
 		super();
 		this._register(addDisposableListener(this._domNode, 'focus', () => {
@@ -39,16 +39,16 @@ export class FocusTracker extends Disposable {
 		}));
 	}
 
-	public pause(): codemavi {
+	public pause(): void {
 		this._isPaused = true;
 	}
 
-	public resume(): codemavi {
+	public resume(): void {
 		this._isPaused = false;
 		this.refreshFocusState();
 	}
 
-	private _handleFocusedChanged(focused: boolean): codemavi {
+	private _handleFocusedChanged(focused: boolean): void {
 		if (this._isFocused === focused) {
 			return;
 		}
@@ -56,12 +56,12 @@ export class FocusTracker extends Disposable {
 		this._onFocusChange(this._isFocused);
 	}
 
-	public focus(): codemavi {
+	public focus(): void {
 		this._domNode.focus();
 		this.refreshFocusState();
 	}
 
-	public refreshFocusState(): codemavi {
+	public refreshFocusState(): void {
 		const shadowRoot = getShadowRoot(this._domNode);
 		const activeElement = shadowRoot ? shadowRoot.activeElement : getActiveElement();
 		const focused = this._domNode === activeElement;

@@ -18,7 +18,7 @@ import { ServicesAccessor } from '../../../../platform/instantiation/common/inst
 import { ILabelService } from '../../../../platform/label/common/label.js';
 
 export interface IPickerDebugItem extends IQuickPickItem {
-	accept(): codemavi;
+	accept(): void;
 }
 
 /**

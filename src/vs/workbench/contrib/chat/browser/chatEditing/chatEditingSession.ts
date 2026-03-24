@@ -174,7 +174,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		return this._onDidChange.event;
 	}
 
-	private readonly _onDidDispose = new Emitter<codemavi>();
+	private readonly _onDidDispose = new Emitter<void>();
 	get onDidDispose() {
 		this._assertNotDisposed();
 		return this._onDidDispose.event;
@@ -200,7 +200,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		super();
 	}
 
-	public async init(): Promise<codemavi> {
+	public async init(): Promise<void> {
 		const restoredSessionState = await this._instantiationService.createInstance(ChatEditingSessionStorage, this.chatSessionId).restoreState();
 		if (restoredSessionState) {
 			for (const [uri, content] of restoredSessionState.initialFileContents) {
@@ -240,7 +240,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		return this._entriesObs.read(reader).find(e => isEqual(e.modifiedURI, uri));
 	}
 
-	public storeState(): Promise<codemavi> {
+	public storeState(): Promise<void> {
 		const storage = this._instantiationService.createInstance(ChatEditingSessionStorage, this.chatSessionId);
 		const state: StoredSessionState = {
 			initialFileContents: this._initialFileContents,
@@ -356,7 +356,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 			},
 		);
 
-		// Separate observable for model refs to acodemavi unnecessary disposal
+		// Separate observable for model refs to avoid unnecessary disposal
 		const modelUrisObservable = derivedOpts<[URI, URI] | undefined>({ equalsFn: (a, b) => arraysEqual(a, b, isEqual) }, reader => {
 			const entriesValue = entries.read(reader);
 			if (!entriesValue) { return undefined; }
@@ -381,7 +381,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		return observable;
 	}
 
-	public createSnapshot(requestId: string, undoStop: string | undefined): codemavi {
+	public createSnapshot(requestId: string, undoStop: string | undefined): void {
 		const snapshot = this._createSnapshot(requestId, undoStop);
 		for (const [uri, _] of this._workingSet) {
 			this._workingSet.set(uri, { state: WorkingSetEntryState.Sent });
@@ -450,7 +450,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 	 * A snapshot representing the state of the working set before a new request has been sent
 	 */
 	private _pendingSnapshot: IChatEditingSessionStop | undefined;
-	public async restoreSnapshot(requestId: string | undefined, stopId: string | undefined): Promise<codemavi> {
+	public async restoreSnapshot(requestId: string | undefined, stopId: string | undefined): Promise<void> {
 		if (requestId !== undefined) {
 			const stopRef = this._findEditStop(requestId, stopId);
 			if (stopRef) {
@@ -471,7 +471,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		}
 	}
 
-	private async _restoreSnapshot({ workingSet, entries }: IChatEditingSessionStop, tx: ITransaction | undefined, restoreResolvedToDisk = true): Promise<codemavi> {
+	private async _restoreSnapshot({ workingSet, entries }: IChatEditingSessionStop, tx: ITransaction | undefined, restoreResolvedToDisk = true): Promise<void> {
 		this._workingSet = new ResourceMap(workingSet);
 
 		// Reset all the files which are modified in this session state
@@ -496,7 +496,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._entriesObs.set(entriesArr, tx);
 	}
 
-	remove(reason: WorkingSetEntryRemovalReason, ...uris: URI[]): codemavi {
+	remove(reason: WorkingSetEntryRemovalReason, ...uris: URI[]): void {
 		this._assertNotDisposed();
 
 		let didRemoveUris = false;
@@ -523,13 +523,13 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._onDidChange.fire(ChatEditingSessionChangeType.WorkingSet);
 	}
 
-	private _assertNotDisposed(): codemavi {
+	private _assertNotDisposed(): void {
 		if (this._state.get() === ChatEditingSessionState.Disposed) {
 			throw new BugIndicatingError(`Cannot access a disposed editing session`);
 		}
 	}
 
-	async accept(...uris: URI[]): Promise<codemavi> {
+	async accept(...uris: URI[]): Promise<void> {
 		this._assertNotDisposed();
 
 		await asyncTransaction(async tx => {
@@ -549,7 +549,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._onDidChange.fire(ChatEditingSessionChangeType.Other);
 	}
 
-	async reject(...uris: URI[]): Promise<codemavi> {
+	async reject(...uris: URI[]): Promise<void> {
 		this._assertNotDisposed();
 
 		await asyncTransaction(async tx => {
@@ -568,7 +568,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._onDidChange.fire(ChatEditingSessionChangeType.Other);
 	}
 
-	async show(): Promise<codemavi> {
+	async show(): Promise<void> {
 		this._assertNotDisposed();
 		if (this._editorPane) {
 			if (this._editorPane.isVisible()) {
@@ -586,9 +586,9 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._editorPane = await this._editorGroupsService.activeGroup.openEditor(input, { pinned: true, activation: EditorActivation.ACTIVATE }) as MultiDiffEditor | undefined;
 	}
 
-	private _stopPromise: Promise<codemavi> | undefined;
+	private _stopPromise: Promise<void> | undefined;
 
-	async stop(clearState = false): Promise<codemavi> {
+	async stop(clearState = false): Promise<void> {
 		this._stopPromise ??= Promise.allSettled([this._performStop(), this.storeState()]).then(() => { });
 		await this._stopPromise;
 		if (clearState) {
@@ -596,7 +596,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		}
 	}
 
-	private async _performStop(): Promise<codemavi> {
+	private async _performStop(): Promise<void> {
 		// Close out all open files
 		const schemes = [AbstractChatEditingModifiedFileEntry.scheme, ChatEditingTextModelContentProvider.scheme];
 		await Promise.allSettled(this._editorGroupsService.groups.flatMap(async (g) => {
@@ -628,8 +628,8 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 	}
 
 	startStreamingEdits(resource: URI, responseModel: IChatResponseModel, inUndoStop: string | undefined): IStreamingEdits {
-		const completePromise = new DeferredPromise<codemavi>();
-		const startPromise = new DeferredPromise<codemavi>();
+		const completePromise = new DeferredPromise<void>();
+		const startPromise = new DeferredPromise<void>();
 
 		// Sequence all edits made this this resource in this streaming edits instance,
 		// and also sequence the resource overall in the rare (currently invalid?) case
@@ -702,7 +702,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		};
 	}
 
-	async undoInteraction(): Promise<codemavi> {
+	async undoInteraction(): Promise<void> {
 		const newIndex = this._linearHistoryIndex.get() - 1;
 		const previousSnapshot = this._getHistoryEntryByLinearIndex(newIndex);
 		if (!previousSnapshot) {
@@ -717,7 +717,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._updateRequestHiddenState();
 	}
 
-	async redoInteraction(): Promise<codemavi> {
+	async redoInteraction(): Promise<void> {
 		const maxIndex = getMaxHistoryIndex(this._linearHistory.get());
 		const newIndex = this._linearHistoryIndex.get() + 1;
 		if (newIndex > maxIndex) {
@@ -777,7 +777,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 	 * that it can be undone successfully.
 	 *
 	 * We ensure that the same file is not concurrently edited via the
-	 * {@link _streamingEditLocks}, acodemaviing race conditions.
+	 * {@link _streamingEditLocks}, avoiding race conditions.
 	 *
 	 * @param next If true, this will edit the snapshot _after_ the undo stop
 	 */
@@ -825,7 +825,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		this._linearHistory.set(newHistory, tx);
 	}
 
-	private async _acceptEdits(resource: URI, textEdits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<codemavi> {
+	private async _acceptEdits(resource: URI, textEdits: (TextEdit | ICellEditOperation)[], isLastEdits: boolean, responseModel: IChatResponseModel): Promise<void> {
 		const entry = await this._getOrCreateModifiedFileEntry(resource, this._getTelemetryInfoForModel(responseModel));
 		await entry.acceptAgentEdits(resource, textEdits, isLastEdits, responseModel);
 	}
@@ -841,7 +841,7 @@ export class ChatEditingSession extends Disposable implements IChatEditingSessio
 		};
 	}
 
-	private async _resolve(requestId: string, undoStop: string | undefined, resource: URI): Promise<codemavi> {
+	private async _resolve(requestId: string, undoStop: string | undefined, resource: URI): Promise<void> {
 		await asyncTransaction(async (tx) => {
 			const hasOtherTasks = Iterable.some(this._streamingEditLocks.keys(), k => k !== resource.toString());
 			if (!hasOtherTasks) {
@@ -1069,7 +1069,7 @@ class ChatEditingSessionStorage {
 		return undefined;
 	}
 
-	public async storeState(state: StoredSessionState): Promise<codemavi> {
+	public async storeState(state: StoredSessionState): Promise<void> {
 		const storageFolder = this._getStorageLocation();
 		const contentsFolder = URI.joinPath(storageFolder, STORAGE_CONTENTS_FOLDER);
 
@@ -1155,7 +1155,7 @@ class ChatEditingSessionStorage {
 		}
 	}
 
-	public async clearState(): Promise<codemavi> {
+	public async clearState(): Promise<void> {
 		const storageFolder = this._getStorageLocation();
 		if (await this._fileService.exists(storageFolder)) {
 			this._logService.debug(`chatEditingSession: Clearing editing session at ${storageFolder.toString()}`);

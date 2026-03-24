@@ -35,7 +35,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('when profiles does not exist', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			assert.deepStrictEqual(await testObject.getLastSyncUserData(), null);
 			let manifest = await testClient.getResourceManifest();
 			server.reset();
@@ -64,7 +64,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('when profile is created after first sync', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await testObject.sync(await testClient.getResourceManifest());
 			await testClient.instantiationService.get(IUserDataProfilesService).createProfile('1', '1');
 
@@ -87,7 +87,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('first time sync - outgoing to server (no state)', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await testClient.instantiationService.get(IUserDataProfilesService).createProfile('1', '1');
 
 			await testObject.sync(await testClient.getResourceManifest());
@@ -101,7 +101,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('first time sync - incoming from server (no state)', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await client2.sync();
 
@@ -115,7 +115,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('first time sync when profiles exists', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await client2.sync();
 
@@ -135,7 +135,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('first time sync when storage exists - has conflicts', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await client2.sync();
 
@@ -156,7 +156,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync adding a profile', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await testClient.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await testObject.sync(await testClient.getResourceManifest());
 			await client2.sync();
@@ -178,7 +178,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync updating a profile', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			const profile = await testClient.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await testObject.sync(await testClient.getResourceManifest());
 			await client2.sync();
@@ -200,7 +200,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync removing a profile', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			const profile = await testClient.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await testClient.instantiationService.get(IUserDataProfilesService).createProfile('2', 'name 2');
 			await testObject.sync(await testClient.getResourceManifest());
@@ -223,7 +223,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync profile that uses default profile', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1', { useDefaultFlags: { keybindings: true } });
 			await client2.sync();
 
@@ -241,7 +241,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync profile when the profile is updated to use default profile locally', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await client2.sync();
 
@@ -263,7 +263,7 @@ suite('UserDataProfilesManifestSync', () => {
 	});
 
 	test('sync profile when the profile is updated to use default profile remotely', async () => {
-		await runWithFakedTimers<codemavi>({}, async () => {
+		await runWithFakedTimers<void>({}, async () => {
 			const profile = await client2.instantiationService.get(IUserDataProfilesService).createProfile('1', 'name 1');
 			await client2.sync();
 

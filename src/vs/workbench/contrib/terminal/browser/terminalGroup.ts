@@ -51,18 +51,18 @@ class SplitPaneContainer extends Disposable {
 		this._splitView.layout(this.orientation === Orientation.HORIZONTAL ? this._width : this._height);
 	}
 
-	private _createSplitView(): codemavi {
+	private _createSplitView(): void {
 		this._splitViewDisposables.clear();
 		this._splitView = new SplitView(this._container, { orientation: this.orientation });
 		this._splitViewDisposables.add(this._splitView);
 		this._splitViewDisposables.add(this._splitView.onDidSashReset(() => this._splitView.distributeViewSizes()));
 	}
 
-	split(instance: ITerminalInstance, index: number): codemavi {
+	split(instance: ITerminalInstance, index: number): void {
 		this._addChild(instance, index);
 	}
 
-	resizePane(index: number, direction: Direction, amount: number): codemavi {
+	resizePane(index: number, direction: Direction, amount: number): void {
 		// Only resize when there is more than one pane
 		if (this._children.length <= 1) {
 			return;
@@ -102,7 +102,7 @@ class SplitPaneContainer extends Disposable {
 		}
 	}
 
-	resizePanes(relativeSizes: number[]): codemavi {
+	resizePanes(relativeSizes: number[]): void {
 		if (this._children.length <= 1) {
 			return;
 		}
@@ -128,7 +128,7 @@ class SplitPaneContainer extends Disposable {
 		return this._splitView.getViewSize(index);
 	}
 
-	private _addChild(instance: ITerminalInstance, index: number): codemavi {
+	private _addChild(instance: ITerminalInstance, index: number): void {
 		const child = new SplitPane(instance, this.orientation === Orientation.HORIZONTAL ? this._height : this._width);
 		child.orientation = this.orientation;
 		if (typeof index === 'number') {
@@ -144,7 +144,7 @@ class SplitPaneContainer extends Disposable {
 		this._onDidChange = Event.any(...this._children.map(c => c.onDidChange));
 	}
 
-	remove(instance: ITerminalInstance): codemavi {
+	remove(instance: ITerminalInstance): void {
 		let index: number | null = null;
 		for (let i = 0; i < this._children.length; i++) {
 			if (this._children[i].instance === instance) {
@@ -159,7 +159,7 @@ class SplitPaneContainer extends Disposable {
 		}
 	}
 
-	layout(width: number, height: number): codemavi {
+	layout(width: number, height: number): void {
 		this._width = width;
 		this._height = height;
 		if (this.orientation === Orientation.HORIZONTAL) {
@@ -171,7 +171,7 @@ class SplitPaneContainer extends Disposable {
 		}
 	}
 
-	setOrientation(orientation: Orientation): codemavi {
+	setOrientation(orientation: Orientation): void {
 		if (this.orientation === orientation) {
 			return;
 		}
@@ -192,7 +192,7 @@ class SplitPaneContainer extends Disposable {
 		});
 	}
 
-	private _withDisabledLayout(innerFunction: () => codemavi): codemavi {
+	private _withDisabledLayout(innerFunction: () => void): void {
 		// Whenever manipulating views that are going to be changed immediately, disabling
 		// layout/resize events in the terminal prevent bad dimensions going to the pty.
 		this._children.forEach(c => c.instance.disableLayout = true);
@@ -221,7 +221,7 @@ class SplitPane implements IView {
 		this.instance.attachToElement(this.element);
 	}
 
-	layout(size: number): codemavi {
+	layout(size: number): void {
 		// Only layout when both sizes are known
 		if (!size || !this.orthogonalSize) {
 			return;
@@ -234,7 +234,7 @@ class SplitPane implements IView {
 		}
 	}
 
-	orthogonalLayout(size: number): codemavi {
+	orthogonalLayout(size: number): void {
 		this.orthogonalSize = size;
 	}
 }
@@ -262,7 +262,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 	readonly onDidChangeInstanceCapability = this._onDidChangeInstanceCapability.event;
 	private readonly _onDisposed: Emitter<ITerminalGroup> = this._register(new Emitter<ITerminalGroup>());
 	readonly onDisposed = this._onDisposed.event;
-	private readonly _onInstancesChanged: Emitter<codemavi> = this._register(new Emitter<codemavi>());
+	private readonly _onInstancesChanged: Emitter<void> = this._register(new Emitter<void>());
 	readonly onInstancesChanged = this._onInstancesChanged.event;
 	private readonly _onDidChangeActiveInstance = this._register(new Emitter<ITerminalInstance | undefined>());
 	readonly onDidChangeActiveInstance = this._onDidChangeActiveInstance.event;
@@ -294,7 +294,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		}));
 	}
 
-	addInstance(shellLaunchConfigOrInstance: IShellLaunchConfig | ITerminalInstance, parentTerminalId?: number): codemavi {
+	addInstance(shellLaunchConfigOrInstance: IShellLaunchConfig | ITerminalInstance, parentTerminalId?: number): void {
 		let instance: ITerminalInstance;
 		// if a parent terminal is provided, find it
 		// otherwise, parent is the active terminal
@@ -319,7 +319,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		this._onInstancesChanged.fire();
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this._terminalInstances = [];
 		this._onInstancesChanged.fire();
 		this._splitPaneContainer?.dispose();
@@ -409,7 +409,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		}
 	}
 
-	moveInstance(instances: ITerminalInstance | ITerminalInstance[], index: number, position: 'before' | 'after'): codemavi {
+	moveInstance(instances: ITerminalInstance | ITerminalInstance[], index: number, position: 'before' | 'after'): void {
 		instances = asArray(instances);
 		const hasInvalidInstance = instances.some(instance => !this.terminalInstances.includes(instance));
 		if (hasInvalidInstance) {
@@ -448,7 +448,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		return terminalIndex;
 	}
 
-	setActiveInstanceByIndex(index: number, force?: boolean): codemavi {
+	setActiveInstanceByIndex(index: number, force?: boolean): void {
 		// Check for invalid value
 		if (index < 0 || index >= this._terminalInstances.length) {
 			return;
@@ -462,7 +462,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		}
 	}
 
-	attachToElement(element: HTMLElement): codemavi {
+	attachToElement(element: HTMLElement): void {
 		this._container = element;
 
 		// If we already have a group element, we can reparent it
@@ -510,7 +510,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		return '';
 	}
 
-	setVisible(visible: boolean): codemavi {
+	setVisible(visible: boolean): void {
 		this._visible = visible;
 		if (this._groupElement) {
 			this._groupElement.style.display = visible ? '' : 'none';
@@ -525,11 +525,11 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		return instance;
 	}
 
-	addDisposable(disposable: IDisposable): codemavi {
+	addDisposable(disposable: IDisposable): void {
 		this._register(disposable);
 	}
 
-	layout(width: number, height: number): codemavi {
+	layout(width: number, height: number): void {
 		if (this._splitPaneContainer) {
 			// Check if the panel position changed and rotate panes if so
 			const newPanelPosition = this._layoutService.getPanelPosition();
@@ -550,12 +550,12 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		}
 	}
 
-	focusPreviousPane(): codemavi {
+	focusPreviousPane(): void {
 		const newIndex = this._activeInstanceIndex === 0 ? this._terminalInstances.length - 1 : this._activeInstanceIndex - 1;
 		this.setActiveInstanceByIndex(newIndex);
 	}
 
-	focusNextPane(): codemavi {
+	focusNextPane(): void {
 		const newIndex = this._activeInstanceIndex === this._terminalInstances.length - 1 ? 0 : this._activeInstanceIndex + 1;
 		this.setActiveInstanceByIndex(newIndex);
 	}
@@ -575,7 +575,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		return isHorizontal(this._getPosition()) ? Orientation.HORIZONTAL : Orientation.VERTICAL;
 	}
 
-	resizePane(direction: Direction): codemavi {
+	resizePane(direction: Direction): void {
 		if (!this._splitPaneContainer) {
 			return;
 		}
@@ -616,7 +616,7 @@ export class TerminalGroup extends Disposable implements ITerminalGroup {
 		}
 	}
 
-	resizePanes(relativeSizes: number[]): codemavi {
+	resizePanes(relativeSizes: number[]): void {
 		if (!this._splitPaneContainer) {
 			this._initialRelativeSizes = relativeSizes;
 			return;

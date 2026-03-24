@@ -75,7 +75,7 @@ export function prepareCommand(shell: string, args: string[], argsCanBeInterpret
 	}
 
 	let quote: (s: string) => string;
-	// begin command with a space to acodemavi polluting shell history
+	// begin command with a space to avoid polluting shell history
 	let command = ' ';
 
 	switch (shellType) {

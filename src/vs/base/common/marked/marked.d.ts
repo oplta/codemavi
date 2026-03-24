@@ -377,7 +377,7 @@ export interface TokenizerThis {
 	lexer: _Lexer;
 }
 export type TokenizerExtensionFunction = (this: TokenizerThis, src: string, tokens: Token[] | TokensList) => Tokens.Generic | undefined;
-export type TokenizerStartFunction = (this: TokenizerThis, src: string) => number | codemavi;
+export type TokenizerStartFunction = (this: TokenizerThis, src: string) => number | void;
 export interface TokenizerExtension {
 	name: string;
 	level: "block" | "inline";
@@ -454,7 +454,7 @@ export interface MarkedExtension {
 	 * Each token is passed by reference so updates are persisted when passed to the parser.
 	 * The return value of the function is ignored.
 	 */
-	walkTokens?: ((token: Token) => codemavi | Promise<codemavi>) | undefined | null;
+	walkTokens?: ((token: Token) => void | Promise<void>) | undefined | null;
 }
 export interface MarkedOptions extends Omit<MarkedExtension, "hooks" | "renderer" | "tokenizer" | "extensions" | "walkTokens"> {
 	/**
@@ -489,7 +489,7 @@ export interface MarkedOptions extends Omit<MarkedExtension, "hooks" | "renderer
 	/**
 	 * walkTokens function returns array of values for Promise.all
 	 */
-	walkTokens?: null | ((token: Token) => codemavi | Promise<codemavi> | (codemavi | Promise<codemavi>)[]);
+	walkTokens?: null | ((token: Token) => void | Promise<void> | (void | Promise<void>)[]);
 }
 /**
  * Block Lexer
@@ -583,7 +583,7 @@ declare class _Lexer {
  */
 declare function _getDefaults(): MarkedOptions;
 declare let _defaults: MarkedOptions;
-export type MaybePromise = codemavi | Promise<codemavi>;
+export type MaybePromise = void | Promise<void>;
 export declare class Marked {
 	defaults: MarkedOptions;
 	options: (opt: MarkedOptions) => this;

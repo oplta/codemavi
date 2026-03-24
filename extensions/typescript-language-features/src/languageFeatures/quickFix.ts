@@ -71,7 +71,7 @@ class ApplyFixAllCodeAction implements Command {
 		private readonly telemetryReporter: TelemetryReporter,
 	) { }
 
-	public async execute(args: ApplyFixAllCodeAction_args): Promise<codemavi> {
+	public async execute(args: ApplyFixAllCodeAction_args): Promise<void> {
 		/* __GDPR__
 			"quickFixAll.execute" : {
 				"owner": "mjbvz",

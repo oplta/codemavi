@@ -32,7 +32,7 @@ class BaseClass {
 		public readonly instantiationService: IInstantiationService,
 	) { }
 
-	public init(...params: any[]): codemavi { }
+	public init(...params: any[]): void { }
 }
 
 function createWrapper<T extends any[]>(clazz: IObservable<any>, B: new (...args: T) => BaseClass) {
@@ -46,7 +46,7 @@ function createWrapper<T extends any[]>(clazz: IObservable<any>, B: new (...args
 			});
 		}
 
-		dispose(): codemavi {
+		dispose(): void {
 			this._autorun?.dispose();
 		}
 	}) as any;

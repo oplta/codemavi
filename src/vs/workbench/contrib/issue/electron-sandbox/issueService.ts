@@ -32,7 +32,7 @@ export class NativeIssueService implements IWorkbenchIssueService {
 		@IIntegrityService private readonly integrityService: IIntegrityService,
 	) { }
 
-	async openReporter(dataOverrides: Partial<IssueReporterData> = {}): Promise<codemavi> {
+	async openReporter(dataOverrides: Partial<IssueReporterData> = {}): Promise<void> {
 		const extensionData: IssueReporterExtensionData[] = [];
 		try {
 			const extensions = await this.extensionManagementService.getInstalled();

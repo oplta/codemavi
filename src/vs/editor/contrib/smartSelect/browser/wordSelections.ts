@@ -29,7 +29,7 @@ export class WordSelectionRangeProvider implements SelectionRangeProvider {
 		return result;
 	}
 
-	private _addInWordRanges(bucket: SelectionRange[], model: ITextModel, pos: Position): codemavi {
+	private _addInWordRanges(bucket: SelectionRange[], model: ITextModel, pos: Position): void {
 		const obj = model.getWordAtPosition(pos);
 		if (!obj) {
 			return;
@@ -73,14 +73,14 @@ export class WordSelectionRangeProvider implements SelectionRangeProvider {
 		}
 	}
 
-	private _addWordRanges(bucket: SelectionRange[], model: ITextModel, pos: Position): codemavi {
+	private _addWordRanges(bucket: SelectionRange[], model: ITextModel, pos: Position): void {
 		const word = model.getWordAtPosition(pos);
 		if (word) {
 			bucket.push({ range: new Range(pos.lineNumber, word.startColumn, pos.lineNumber, word.endColumn) });
 		}
 	}
 
-	private _addWhitespaceLine(bucket: SelectionRange[], model: ITextModel, pos: Position): codemavi {
+	private _addWhitespaceLine(bucket: SelectionRange[], model: ITextModel, pos: Position): void {
 		if (model.getLineLength(pos.lineNumber) > 0
 			&& model.getLineFirstNonWhitespaceColumn(pos.lineNumber) === 0
 			&& model.getLineLastNonWhitespaceColumn(pos.lineNumber) === 0

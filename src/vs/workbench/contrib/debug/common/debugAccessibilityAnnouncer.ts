@@ -29,7 +29,7 @@ export class DebugWatchAccessibilityAnnouncer extends Disposable implements IWor
 		}));
 	}
 
-	private _setListener(): codemavi {
+	private _setListener(): void {
 		const value = this._configurationService.getValue('accessibility.debugWatchVariableAnnouncements');
 		if (value && !this._listener.value) {
 			this._listener.value = this._debugService.getModel().onDidChangeWatchExpressionValue((e) => {

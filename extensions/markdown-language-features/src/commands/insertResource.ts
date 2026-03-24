@@ -74,7 +74,7 @@ function getDefaultUri(document: vscode.TextDocument) {
 	return Utils.dirname(docUri);
 }
 
-async function insertLink(activeEditor: vscode.TextEditor, selectedFiles: readonly vscode.Uri[], insertAsMedia: boolean): Promise<codemavi> {
+async function insertLink(activeEditor: vscode.TextEditor, selectedFiles: readonly vscode.Uri[], insertAsMedia: boolean): Promise<void> {
 	const edit = createInsertLinkEdit(activeEditor, selectedFiles, insertAsMedia);
 	if (edit) {
 		await vscode.workspace.applyEdit(edit);

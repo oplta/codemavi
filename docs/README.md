@@ -87,7 +87,7 @@ All Code Mavi documentation is:
 
 ### Community Resources
 - **Example Projects**: Community-contributed examples
-- **Rule Templates**: Shared `.codemavi/rules.md` templates
+- **Rule Templates**: Shared `.mavi/rules.md` templates
 - **Prompt Library**: Community-optimized agent prompts
 - **Tool Extensions**: User-created agent tools
 
@@ -108,7 +108,7 @@ All Code Mavi documentation is:
 ### For Contributors
 1. Understand [Codebase Structure](../CODEMAVI_CODEBASE_GUIDE.md)
 2. Review [Roadmap](development/roadmap.md)
-3. Pick [Good First Issues](https://github.com/codemavi/codemavi/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+3. Pick [Good First Issues](https://github.com/mavi/mavi/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 4. Join [Community Channels](#-getting-help)
 
 ## 🎓 Tutorials and Examples
@@ -196,4 +196,4 @@ This documentation is licensed under [CC BY-SA 4.0](https://creativecommons.org/
 *Last updated: $(date)*  
 *Documentation version: $(git describe --tags)*
 
-For the latest updates, check the [GitHub repository](https://github.com/codemavi/codemavi).
+For the latest updates, check the [GitHub repository](https://github.com/mavi/void).

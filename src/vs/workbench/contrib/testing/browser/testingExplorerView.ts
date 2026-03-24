@@ -234,7 +234,7 @@ export class TestingExplorerView extends ViewPane {
 				L:
 				for (const node of sel) {
 					if (node instanceof TestItemTreeElement) {
-						// acodemavi adding an item if its parent is already included
+						// avoid adding an item if its parent is already included
 						for (let i: TestItemTreeElement | null = node; i; i = i.parent) {
 							if (include.has(i.test)) {
 								continue L;
@@ -281,7 +281,7 @@ export class TestingExplorerView extends ViewPane {
 		return { include: [...include], exclude };
 	}
 
-	override render(): codemavi {
+	override render(): void {
 		super.render();
 		this._register(registerNavigableContainer({
 			name: 'testingExplorerView',
@@ -302,7 +302,7 @@ export class TestingExplorerView extends ViewPane {
 	/**
 	 * @override
 	 */
-	protected override renderBody(container: HTMLElement): codemavi {
+	protected override renderBody(container: HTMLElement): void {
 		super.renderBody(container);
 
 		this.container = dom.append(container, dom.$('.test-explorer'));
@@ -547,7 +547,7 @@ export class TestingExplorerView extends ViewPane {
 	/**
 	 * @override
 	 */
-	protected override layoutBody(height = this.dimensions.height, width = this.dimensions.width): codemavi {
+	protected override layoutBody(height = this.dimensions.height, width = this.dimensions.width): void {
 		super.layoutBody(height, width);
 		this.dimensions.height = height;
 		this.dimensions.width = width;
@@ -809,7 +809,7 @@ class TestingExplorerViewModel extends Disposable {
 		// saves the collapse state so that if items are removed or refreshed, they
 		// retain the same state (#170169)
 		const collapseStateSaver = this._register(new RunOnceScheduler(() => {
-			// reuse the last view state to acodemavi making a bunch of object garbage:
+			// reuse the last view state to avoid making a bunch of object garbage:
 			const state = this.tree.getOptimizedViewState(this.lastViewState.get({}));
 			const projection = this.projection.value;
 			if (projection) {
@@ -983,7 +983,7 @@ class TestingExplorerViewModel extends Disposable {
 	/**
 	 * Re-layout the tree.
 	 */
-	public layout(height?: number, width?: number): codemavi {
+	public layout(height?: number, width?: number): void {
 		this.tree.layout(height, width);
 	}
 
@@ -1016,7 +1016,7 @@ class TestingExplorerViewModel extends Disposable {
 			if (i < idPath.length - 1) {
 				if (expand) {
 					this.tree.expand(element);
-					expandToLevel = i + 1; // acodemavi an infinite loop if the test does not exist
+					expandToLevel = i + 1; // avoid an infinite loop if the test does not exist
 					i = idPath.length - 1; // restart the loop since new children may now be visible
 					continue;
 				}
@@ -1220,7 +1220,7 @@ class TestsFilter implements ITreeFilter<TestExplorerTreeElement> {
 	/**
 	 * @inheritdoc
 	 */
-	public filter(element: TestItemTreeElement): TreeFilterResult<codemavi> {
+	public filter(element: TestItemTreeElement): TreeFilterResult<void> {
 		if (element instanceof TestTreeErrorMessage) {
 			return TreeVisibility.Visible;
 		}
@@ -1477,7 +1477,7 @@ class ErrorRenderer implements ITreeRenderer<TestTreeErrorMessage, FuzzyScore, I
 		return { label, disposable: new DisposableStore() };
 	}
 
-	renderElement({ element }: ITreeNode<TestTreeErrorMessage, FuzzyScore>, _: number, data: IErrorTemplateData): codemavi {
+	renderElement({ element }: ITreeNode<TestTreeErrorMessage, FuzzyScore>, _: number, data: IErrorTemplateData): void {
 		dom.clearNode(data.label);
 
 		if (typeof element.message === 'string') {
@@ -1489,7 +1489,7 @@ class ErrorRenderer implements ITreeRenderer<TestTreeErrorMessage, FuzzyScore, I
 		data.disposable.add(this.hoverService.setupManagedHover(getDefaultHoverDelegate('mouse'), data.label, element.description));
 	}
 
-	disposeTemplate(data: IErrorTemplateData): codemavi {
+	disposeTemplate(data: IErrorTemplateData): void {
 		data.disposable.dispose();
 	}
 }
@@ -1559,14 +1559,14 @@ class TestItemRenderer extends Disposable
 	/**
 	 * @inheritdoc
 	 */
-	disposeTemplate(templateData: ITestElementTemplateData): codemavi {
+	disposeTemplate(templateData: ITestElementTemplateData): void {
 		templateData.templateDisposable.clear();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	disposeElement(_element: ITreeNode<TestItemTreeElement, FuzzyScore>, _: number, templateData: ITestElementTemplateData): codemavi {
+	disposeElement(_element: ITreeNode<TestItemTreeElement, FuzzyScore>, _: number, templateData: ITestElementTemplateData): void {
 		templateData.elementDisposable.clear();
 	}
 
@@ -1583,7 +1583,7 @@ class TestItemRenderer extends Disposable
 	/**
 	 * @inheritdoc
 	 */
-	public renderElement(node: ITreeNode<TestItemTreeElement, FuzzyScore>, _depth: number, data: ITestElementTemplateData): codemavi {
+	public renderElement(node: ITreeNode<TestItemTreeElement, FuzzyScore>, _depth: number, data: ITestElementTemplateData): void {
 		data.elementDisposable.clear();
 		data.current = node.element;
 
@@ -1591,7 +1591,7 @@ class TestItemRenderer extends Disposable
 		this._renderElement(node, data);
 	}
 
-	public _renderElement(node: ITreeNode<TestItemTreeElement, FuzzyScore>, data: ITestElementTemplateData): codemavi {
+	public _renderElement(node: ITreeNode<TestItemTreeElement, FuzzyScore>, data: ITestElementTemplateData): void {
 		this.fillActionBar(node.element, data);
 
 		const testHidden = this.testService.excluded.contains(node.element.test);

@@ -177,7 +177,7 @@ export class MarkupCell extends Disposable {
 		this._register(this.cellEditorOptions.onDidChange(() => this.updateMarkupCellOptions()));
 	}
 
-	private updateMarkupCellOptions(): codemavi {
+	private updateMarkupCellOptions(): void {
 		this.updateEditorOptions(this.cellEditorOptions.getUpdatedValue(this.viewCell.internalMetadata, this.viewCell.uri));
 
 		if (this.editor) {
@@ -209,7 +209,7 @@ export class MarkupCell extends Disposable {
 		}
 	}
 
-	private updateForHover(): codemavi {
+	private updateForHover(): void {
 		this.templateData.container.classList.toggle('markdown-cell-hover', this.viewCell.cellIsHovered);
 	}
 
@@ -239,7 +239,7 @@ export class MarkupCell extends Disposable {
 		this.templateData.foldingIndicator.classList.add(showFoldingIcon);
 	}
 
-	private viewUpdate(): codemavi {
+	private viewUpdate(): void {
 		if (this.viewCell.isInputCollapsed) {
 			this.viewUpdateCollapsed();
 		} else if (this.viewCell.getEditState() === CellEditState.Editing) {
@@ -249,7 +249,7 @@ export class MarkupCell extends Disposable {
 		}
 	}
 
-	private viewUpdateCollapsed(): codemavi {
+	private viewUpdateCollapsed(): void {
 		DOM.show(this.templateData.cellInputCollapsedContainer);
 		DOM.hide(this.editorPart);
 
@@ -283,7 +283,7 @@ export class MarkupCell extends Disposable {
 		return tokenizeToStringSync(this.languageService, buffer.getLineContent(1), language);
 	}
 
-	private viewUpdateEditing(): codemavi {
+	private viewUpdateEditing(): void {
 		// switch to editing mode
 		let editorHeight: number;
 
@@ -389,7 +389,7 @@ export class MarkupCell extends Disposable {
 		this.renderedEditors.set(this.viewCell, this.editor);
 	}
 
-	private viewUpdatePreview(): codemavi {
+	private viewUpdatePreview(): void {
 		this.viewCell.detachTextEditor();
 		DOM.hide(this.editorPart);
 		DOM.hide(this.templateData.cellInputCollapsedContainer);
@@ -430,11 +430,11 @@ export class MarkupCell extends Disposable {
 		}
 	}
 
-	private layoutEditor(dimension: DOM.IDimension): codemavi {
+	private layoutEditor(dimension: DOM.IDimension): void {
 		this.editor?.layout(dimension);
 	}
 
-	private onCellEditorWidthChange(): codemavi {
+	private onCellEditorWidthChange(): void {
 		const realContentHeight = this.editor!.getContentHeight();
 		this.layoutEditor(
 			{
@@ -448,12 +448,12 @@ export class MarkupCell extends Disposable {
 		// this.relayoutCell();
 	}
 
-	relayoutCell(): codemavi {
+	relayoutCell(): void {
 		this.notebookEditor.layoutNotebookCell(this.viewCell, this.viewCell.layoutInfo.totalHeight);
 		this.layoutFoldingIndicator();
 	}
 
-	updateEditorOptions(newValue: IEditorOptions): codemavi {
+	updateEditorOptions(newValue: IEditorOptions): void {
 		this.editorOptions = newValue;
 		this.editor?.updateOptions(this.editorOptions);
 	}
@@ -528,7 +528,7 @@ export class MarkupCell extends Disposable {
 		updateFocusMode();
 	}
 
-	private onCellEditorHeightChange(editor: CodeEditorWidget, newHeight: number): codemavi {
+	private onCellEditorHeightChange(editor: CodeEditorWidget, newHeight: number): void {
 		const viewLayout = editor.getLayoutInfo();
 		this.viewCell.editorHeight = newHeight;
 		editor.layout(

@@ -40,12 +40,12 @@ export interface IRemoteAgentService {
 	/**
 	 * Gracefully ends the current connection, if any.
 	 */
-	endConnection(): Promise<codemavi>;
+	endConnection(): Promise<void>;
 
 	getDiagnosticInfo(options: IDiagnosticInfoOptions): Promise<IDiagnosticInfo | undefined>;
-	updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<codemavi>;
-	logTelemetry(eventName: string, data?: ITelemetryData): Promise<codemavi>;
-	flushTelemetry(): Promise<codemavi>;
+	updateTelemetryLevel(telemetryLevel: TelemetryLevel): Promise<void>;
+	logTelemetry(eventName: string, data?: ITelemetryData): Promise<void>;
+	flushTelemetry(): Promise<void>;
 }
 
 export interface IExtensionHostExitInfo {
@@ -56,14 +56,14 @@ export interface IExtensionHostExitInfo {
 export interface IRemoteAgentConnection {
 	readonly remoteAuthority: string;
 
-	readonly onReconnecting: Event<codemavi>;
+	readonly onReconnecting: Event<void>;
 	readonly onDidStateChange: Event<PersistentConnectionEvent>;
 
-	end(): Promise<codemavi>;
-	dispose(): codemavi;
+	end(): Promise<void>;
+	dispose(): void;
 	getChannel<T extends IChannel>(channelName: string): T;
 	withChannel<T extends IChannel, R>(channelName: string, callback: (channel: T) => Promise<R>): Promise<R>;
-	registerChannel<T extends IServerChannel<RemoteAgentConnectionContext>>(channelName: string, channel: T): codemavi;
+	registerChannel<T extends IServerChannel<RemoteAgentConnectionContext>>(channelName: string, channel: T): void;
 	getInitialConnectionTimeMs(): Promise<number>;
 }
 

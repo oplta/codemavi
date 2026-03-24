@@ -32,29 +32,29 @@ export class CursorCollection {
 		this.lastAddedCursorIndex = 0;
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		for (const cursor of this.cursors) {
 			cursor.dispose(this.context);
 		}
 	}
 
-	public startTrackingSelections(): codemavi {
+	public startTrackingSelections(): void {
 		for (const cursor of this.cursors) {
 			cursor.startTrackingSelection(this.context);
 		}
 	}
 
-	public stopTrackingSelections(): codemavi {
+	public stopTrackingSelections(): void {
 		for (const cursor of this.cursors) {
 			cursor.stopTrackingSelection(this.context);
 		}
 	}
 
-	public updateContext(context: CursorContext): codemavi {
+	public updateContext(context: CursorContext): void {
 		this.context = context;
 	}
 
-	public ensureValidState(): codemavi {
+	public ensureValidState(): void {
 		for (const cursor of this.cursors) {
 			cursor.ensureValidState(this.context);
 		}
@@ -94,7 +94,7 @@ export class CursorCollection {
 		return this.cursors.map(c => c.viewState.selection);
 	}
 
-	public setSelections(selections: ISelection[]): codemavi {
+	public setSelections(selections: ISelection[]): void {
 		this.setStates(CursorState.fromModelSelections(selections));
 	}
 
@@ -102,7 +102,7 @@ export class CursorCollection {
 		return this.cursors[0].asCursorState();
 	}
 
-	public setStates(states: PartialCursorState[] | null): codemavi {
+	public setStates(states: PartialCursorState[] | null): void {
 		if (states === null) {
 			return;
 		}
@@ -113,7 +113,7 @@ export class CursorCollection {
 	/**
 	 * Creates or disposes secondary cursors as necessary to match the number of `secondarySelections`.
 	 */
-	private _setSecondaryStates(secondaryStates: PartialCursorState[]): codemavi {
+	private _setSecondaryStates(secondaryStates: PartialCursorState[]): void {
 		const secondaryCursorsLength = this.cursors.length - 1;
 		const secondaryStatesLength = secondaryStates.length;
 
@@ -134,11 +134,11 @@ export class CursorCollection {
 		}
 	}
 
-	public killSecondaryCursors(): codemavi {
+	public killSecondaryCursors(): void {
 		this._setSecondaryStates([]);
 	}
 
-	private _addSecondaryCursor(): codemavi {
+	private _addSecondaryCursor(): void {
 		this.cursors.push(new Cursor(this.context));
 		this.lastAddedCursorIndex = this.cursors.length - 1;
 	}
@@ -150,7 +150,7 @@ export class CursorCollection {
 		return this.lastAddedCursorIndex;
 	}
 
-	private _removeSecondaryCursor(removeIndex: number): codemavi {
+	private _removeSecondaryCursor(removeIndex: number): void {
 		if (this.lastAddedCursorIndex >= removeIndex + 1) {
 			this.lastAddedCursorIndex--;
 		}
@@ -158,7 +158,7 @@ export class CursorCollection {
 		this.cursors.splice(removeIndex + 1, 1);
 	}
 
-	public normalize(): codemavi {
+	public normalize(): void {
 		if (this.cursors.length === 1) {
 			return;
 		}

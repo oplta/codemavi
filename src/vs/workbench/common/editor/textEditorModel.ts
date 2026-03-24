@@ -30,7 +30,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 	private createdEditorModel: boolean | undefined;
 
 	private readonly modelDisposeListener = this._register(new MutableDisposable());
-	private readonly autoDetectLanguageThrottler = this._register(new ThrottledDelayer<codemavi>(BaseTextEditorModel.AUTO_DETECT_LANGUAGE_THROTTLE_DELAY));
+	private readonly autoDetectLanguageThrottler = this._register(new ThrottledDelayer<void>(BaseTextEditorModel.AUTO_DETECT_LANGUAGE_THROTTLE_DELAY));
 
 	constructor(
 		@IModelService protected modelService: IModelService,
@@ -46,7 +46,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		}
 	}
 
-	private handleExistingModel(textEditorModelHandle: URI): codemavi {
+	private handleExistingModel(textEditorModelHandle: URI): void {
 
 		// We need the resource to point to an existing model
 		const model = this.modelService.getModel(textEditorModelHandle);
@@ -60,7 +60,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		this.registerModelDisposeListener(model);
 	}
 
-	private registerModelDisposeListener(model: ITextModel): codemavi {
+	private registerModelDisposeListener(model: ITextModel): void {
 		this.modelDisposeListener.value = model.onWillDispose(() => {
 			this.textEditorModelHandle = undefined; // make sure we do not dispose code editor model again
 			this.dispose();
@@ -87,7 +87,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		return typeof this._languageChangeSource === 'string';
 	}
 
-	setLanguageId(languageId: string, source?: string): codemavi {
+	setLanguageId(languageId: string, source?: string): void {
 
 		// Remember that an explicit language was set
 		this._languageChangeSource = 'user';
@@ -95,7 +95,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		this.setLanguageIdInternal(languageId, source);
 	}
 
-	private setLanguageIdInternal(languageId: string, source?: string): codemavi {
+	private setLanguageIdInternal(languageId: string, source?: string): void {
 		if (!this.isResolved()) {
 			return;
 		}
@@ -112,7 +112,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		}
 	}
 
-	protected installModelListeners(model: ITextModel): codemavi {
+	protected installModelListeners(model: ITextModel): void {
 
 		// Setup listener for lower level language changes
 		const disposable = this._register(model.onDidChangeLanguage(e => {
@@ -132,11 +132,11 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		return this.textEditorModel?.getLanguageId();
 	}
 
-	protected autoDetectLanguage(): Promise<codemavi> {
+	protected autoDetectLanguage(): Promise<void> {
 		return this.autoDetectLanguageThrottler.trigger(() => this.doAutoDetectLanguage());
 	}
 
-	private async doAutoDetectLanguage(): Promise<codemavi> {
+	private async doAutoDetectLanguage(): Promise<void> {
 		if (
 			this.hasLanguageSetExplicitly || 																	// skip detection when the user has made an explicit choice on the language
 			!this.textEditorModelHandle ||																		// require a URI to run the detection for
@@ -214,7 +214,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 	/**
 	 * Updates the text editor model with the provided value. If the value is the same as the model has, this is a no-op.
 	 */
-	updateTextEditorModel(newValue?: ITextBufferFactory, preferredLanguageId?: string): codemavi {
+	updateTextEditorModel(newValue?: ITextBufferFactory, preferredLanguageId?: string): void {
 		if (!this.isResolved()) {
 			return;
 		}
@@ -244,7 +244,7 @@ export class BaseTextEditorModel extends EditorModel implements ITextEditorModel
 		return !!this.textEditorModelHandle;
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 		this.modelDisposeListener.dispose(); // dispose this first because it will trigger another dispose() otherwise
 
 		if (this.textEditorModelHandle && this.createdEditorModel) {

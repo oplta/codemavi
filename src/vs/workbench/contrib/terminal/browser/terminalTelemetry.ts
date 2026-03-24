@@ -26,7 +26,7 @@ export class TerminalTelemetryContribution extends Disposable implements IWorkbe
 		}));
 	}
 
-	private _logCreateInstance(shellLaunchConfig: IShellLaunchConfig): codemavi {
+	private _logCreateInstance(shellLaunchConfig: IShellLaunchConfig): void {
 		type TerminalCreationTelemetryData = {
 			shellType: string;
 			isReconnect: boolean;

@@ -112,11 +112,11 @@ export class ObservableElementSizeObserver extends Disposable {
 		})));
 	}
 
-	public observe(dimension?: IDimension): codemavi {
+	public observe(dimension?: IDimension): void {
 		this.elementSizeObserver.observe(dimension);
 	}
 
-	public setAutomaticLayout(automaticLayout: boolean): codemavi {
+	public setAutomaticLayout(automaticLayout: boolean): void {
 		this._automaticLayout = automaticLayout;
 		if (automaticLayout) {
 			this.elementSizeObserver.startObserving();
@@ -215,7 +215,7 @@ export interface IObservableViewZone extends IViewZone {
 	onChange?: IObservable<unknown>;
 
 	// Tells a view zone its id.
-	setZoneId?(zoneId: string): codemavi;
+	setZoneId?(zoneId: string): void;
 }
 
 export class PlaceholderViewZone implements IObservableViewZone {
@@ -266,7 +266,7 @@ export class ManagedOverlayWidget implements IDisposable {
 		this._editor.addOverlayWidget(this._overlayWidget);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._editor.removeOverlayWidget(this._overlayWidget);
 	}
 }
@@ -297,7 +297,7 @@ export function applyStyle(domNode: HTMLElement, style: Partial<{ [TKey in keyof
 	});
 }
 
-export function applyViewZones(editor: ICodeEditor, viewZones: IObservable<IObservableViewZone[]>, setIsUpdating?: (isUpdatingViewZones: boolean) => codemavi, zoneIds?: Set<string>): IDisposable {
+export function applyViewZones(editor: ICodeEditor, viewZones: IObservable<IObservableViewZone[]>, setIsUpdating?: (isUpdatingViewZones: boolean) => void, zoneIds?: Set<string>): IDisposable {
 	const store = new DisposableStore();
 	const lastViewZoneIds: string[] = [];
 
@@ -438,7 +438,7 @@ export abstract class RefCounted<T> implements IDisposable, IReference<T> {
 
 	public abstract createNewRef(debugOwner?: object | undefined): RefCounted<T>;
 
-	public abstract dispose(): codemavi;
+	public abstract dispose(): void;
 
 	public abstract get object(): T;
 }
@@ -474,13 +474,13 @@ class BaseRefCounted<T> extends RefCounted<T> {
 		return new ClonedRefCounted(this, debugOwner);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		if (this._isDisposed) { return; }
 		this._isDisposed = true;
 		this._decreaseRefCount(this._debugOwner);
 	}
 
-	public _decreaseRefCount(debugOwner?: object | undefined): codemavi {
+	public _decreaseRefCount(debugOwner?: object | undefined): void {
 		this._refCount--;
 		if (this._refCount === 0) {
 			this._disposable.dispose();
@@ -510,7 +510,7 @@ class ClonedRefCounted<T> extends RefCounted<T> {
 		return this._base.createNewRef(debugOwner);
 	}
 
-	public dispose(): codemavi {
+	public dispose(): void {
 		if (this._isDisposed) { return; }
 		this._isDisposed = true;
 		this._base._decreaseRefCount(this._debugOwner);

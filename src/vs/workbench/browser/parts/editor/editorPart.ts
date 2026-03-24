@@ -74,11 +74,11 @@ class GridWidgetView<T extends IView> implements IView {
 		this._gridWidget = grid;
 	}
 
-	layout(width: number, height: number, top: number, left: number): codemavi {
+	layout(width: number, height: number, top: number, left: number): void {
 		this.gridWidget?.layout(width, height, top, left);
 	}
 
-	dispose(): codemavi {
+	dispose(): void {
 		this._onDidChange.dispose();
 	}
 }
@@ -90,7 +90,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 
 	//#region Events
 
-	private readonly _onDidFocus = this._register(new Emitter<codemavi>());
+	private readonly _onDidFocus = this._register(new Emitter<void>());
 	readonly onDidFocus = this._onDidFocus.event;
 
 	private readonly _onDidLayout = this._register(new Emitter<Dimension>());
@@ -128,13 +128,13 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 	private readonly _onDidChangeSizeConstraints = this._register(new Relay<{ width: number; height: number } | undefined>());
 	readonly onDidChangeSizeConstraints = Event.any(this.onDidSetGridWidget.event, this._onDidChangeSizeConstraints.event);
 
-	private readonly _onDidScroll = this._register(new Relay<codemavi>());
+	private readonly _onDidScroll = this._register(new Relay<void>());
 	readonly onDidScroll = Event.any(this.onDidSetGridWidget.event, this._onDidScroll.event);
 
 	private readonly _onDidChangeEditorPartOptions = this._register(new Emitter<IEditorPartOptionsChangeEvent>());
 	readonly onDidChangeEditorPartOptions = this._onDidChangeEditorPartOptions.event;
 
-	private readonly _onWillDispose = this._register(new Emitter<codemavi>());
+	private readonly _onWillDispose = this._register(new Emitter<void>());
 	readonly onWillDispose = this._onWillDispose.event;
 
 	//#endregion
@@ -175,19 +175,19 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.registerListeners();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.configurationService.onDidChangeConfiguration(e => this.onConfigurationUpdated(e)));
 		this._register(this.themeService.onDidFileIconThemeChange(() => this.handleChangedPartOptions()));
 		this._register(this.onDidChangeMementoValue(StorageScope.WORKSPACE, this._store)(e => this.onDidChangeMementoState(e)));
 	}
 
-	private onConfigurationUpdated(event: IConfigurationChangeEvent): codemavi {
+	private onConfigurationUpdated(event: IConfigurationChangeEvent): void {
 		if (impactsEditorPartOptions(event)) {
 			this.handleChangedPartOptions();
 		}
 	}
 
-	private handleChangedPartOptions(): codemavi {
+	private handleChangedPartOptions(): void {
 		const oldPartOptions = this._partOptions;
 		const newPartOptions = getEditorPartOptions(this.configurationService, this.themeService);
 
@@ -248,10 +248,10 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 	private _isReady = false;
 	get isReady(): boolean { return this._isReady; }
 
-	private readonly whenReadyPromise = new DeferredPromise<codemavi>();
+	private readonly whenReadyPromise = new DeferredPromise<void>();
 	readonly whenReady = this.whenReadyPromise.p;
 
-	private readonly whenRestoredPromise = new DeferredPromise<codemavi>();
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
 	readonly whenRestored = this.whenRestoredPromise.p;
 
 	get hasRestorableState(): boolean {
@@ -284,7 +284,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	private fillGridNodes(target: IEditorGroupView[], node: GridBranchNode<IEditorGroupView> | GridNode<IEditorGroupView>): codemavi {
+	private fillGridNodes(target: IEditorGroupView[], node: GridBranchNode<IEditorGroupView> | GridNode<IEditorGroupView>): void {
 		if (isGridBranchNode(node)) {
 			node.children.forEach(child => this.fillGridNodes(target, child));
 		} else {
@@ -379,13 +379,13 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return this.gridWidget.getViewSize(groupView);
 	}
 
-	setSize(group: IEditorGroupView | GroupIdentifier, size: { width: number; height: number }): codemavi {
+	setSize(group: IEditorGroupView | GroupIdentifier, size: { width: number; height: number }): void {
 		const groupView = this.assertGroupView(group);
 
 		this.gridWidget.resizeView(groupView, size);
 	}
 
-	arrangeGroups(arrangement: GroupsArrangement, target: IEditorGroupView | GroupIdentifier = this.activeGroup): codemavi {
+	arrangeGroups(arrangement: GroupsArrangement, target: IEditorGroupView | GroupIdentifier = this.activeGroup): void {
 		if (this.count < 2) {
 			return; // require at least 2 groups to show
 		}
@@ -413,7 +413,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	toggleMaximizeGroup(target: IEditorGroupView | GroupIdentifier = this.activeGroup): codemavi {
+	toggleMaximizeGroup(target: IEditorGroupView | GroupIdentifier = this.activeGroup): void {
 		if (this.hasMaximizedGroup()) {
 			this.unmaximizeGroup();
 		} else {
@@ -421,7 +421,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	toggleExpandGroup(target: IEditorGroupView | GroupIdentifier = this.activeGroup): codemavi {
+	toggleExpandGroup(target: IEditorGroupView | GroupIdentifier = this.activeGroup): void {
 		if (this.isGroupExpanded(this.activeGroup)) {
 			this.arrangeGroups(GroupsArrangement.EVEN);
 		} else {
@@ -429,7 +429,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	private unmaximizeGroup(): codemavi {
+	private unmaximizeGroup(): void {
 		this.gridWidget.exitMaximizedView();
 		this._activeGroup.focus(); // When making views visible the focus can be affected, so restore it
 	}
@@ -446,7 +446,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return this.gridWidget.isViewExpanded(targetGroup);
 	}
 
-	setGroupOrientation(orientation: GroupOrientation): codemavi {
+	setGroupOrientation(orientation: GroupOrientation): void {
 		if (!this.gridWidget) {
 			return; // we have not been created yet
 		}
@@ -457,12 +457,12 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	applyLayout(layout: EditorGroupLayout): codemavi {
+	applyLayout(layout: EditorGroupLayout): void {
 		const restoreFocus = this.shouldRestoreFocus(this.container);
 
 		// Determine how many groups we need overall
 		let layoutGroupsCount = 0;
-		function countGroups(groups: GroupLayoutArgument[]): codemavi {
+		function countGroups(groups: GroupLayoutArgument[]): void {
 			for (const group of groups) {
 				if (Array.isArray(group.groups)) {
 					countGroups(group.groups);
@@ -673,7 +673,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return groupView;
 	}
 
-	private doSetGroupActive(group: IEditorGroupView): codemavi {
+	private doSetGroupActive(group: IEditorGroupView): void {
 		if (this._activeGroup !== group) {
 			const previousActiveGroup = this._activeGroup;
 			this._activeGroup = group;
@@ -702,7 +702,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this._onDidActivateGroup.fire(group);
 	}
 
-	private doRestoreGroup(group: IEditorGroupView): codemavi {
+	private doRestoreGroup(group: IEditorGroupView): void {
 		if (!this.gridWidget) {
 			return; // method is called as part of state restore very early
 		}
@@ -721,7 +721,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	private doUpdateMostRecentActive(group: IEditorGroupView, makeMostRecentlyActive?: boolean): codemavi {
+	private doUpdateMostRecentActive(group: IEditorGroupView, makeMostRecentlyActive?: boolean): void {
 		const index = this.mostRecentActiveGroups.indexOf(group.id);
 
 		// Remove from MRU list
@@ -752,7 +752,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return fallback;
 	}
 
-	removeGroup(group: IEditorGroupView | GroupIdentifier, preserveFocus?: boolean): codemavi {
+	removeGroup(group: IEditorGroupView | GroupIdentifier, preserveFocus?: boolean): void {
 		const groupView = this.assertGroupView(group);
 		if (this.count === 1) {
 			return; // Cannot remove the last root group
@@ -769,7 +769,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	private doRemoveGroupWithEditors(groupView: IEditorGroupView): codemavi {
+	private doRemoveGroupWithEditors(groupView: IEditorGroupView): void {
 		const mostRecentlyActiveGroups = this.getGroups(GroupsOrder.MOST_RECENTLY_ACTIVE);
 
 		let lastActiveGroup: IEditorGroupView;
@@ -784,7 +784,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.mergeGroup(groupView, lastActiveGroup);
 	}
 
-	private doRemoveEmptyGroup(groupView: IEditorGroupView, preserveFocus?: boolean): codemavi {
+	private doRemoveEmptyGroup(groupView: IEditorGroupView, preserveFocus?: boolean): void {
 		const restoreFocus = !preserveFocus && this.shouldRestoreFocus(this.container);
 
 		// Activate next group if the removed one was active
@@ -982,7 +982,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return this.theme.getColor(EDITOR_GROUP_BORDER) || this.theme.getColor(contrastBorder) || Color.transparent;
 	}
 
-	override updateStyles(): codemavi {
+	override updateStyles(): void {
 		const container = assertIsDefined(this.container);
 		container.style.backgroundColor = this.getColor(editorBackground) || '';
 
@@ -1033,7 +1033,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return this.container;
 	}
 
-	private handleContextKeys(contextKeyService: IContextKeyService): codemavi {
+	private handleContextKeys(contextKeyService: IContextKeyService): void {
 		const isAuxiliaryEditorPartContext = IsAuxiliaryEditorPartContext.bindTo(contextKeyService);
 		isAuxiliaryEditorPartContext.set(this.windowId !== mainWindow.vscodeWindowId);
 
@@ -1062,7 +1062,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this._register(this.onDidChangeGroupMaximized(() => updateContextKeys()));
 	}
 
-	private setupDragAndDropSupport(parent: HTMLElement, container: HTMLElement): codemavi {
+	private setupDragAndDropSupport(parent: HTMLElement, container: HTMLElement): void {
 
 		// Editor drop target
 		this._register(this.createEditorDropTarget(container, Object.create(null)));
@@ -1157,7 +1157,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}));
 	}
 
-	centerLayout(active: boolean): codemavi {
+	centerLayout(active: boolean): void {
 		this.centeredLayoutWidget.activate(active);
 	}
 
@@ -1169,7 +1169,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return false;
 	}
 
-	private doCreateGridControl(): codemavi {
+	private doCreateGridControl(): void {
 
 		// Grid Widget (with previous UI state)
 		let restoreError = false;
@@ -1218,7 +1218,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return true; // success
 	}
 
-	private doCreateGridControlWithState(serializedGrid: ISerializedGrid, activeGroupId: GroupIdentifier, editorGroupViewsToReuse?: IEditorGroupView[], options?: IEditorGroupViewOptions): codemavi {
+	private doCreateGridControlWithState(serializedGrid: ISerializedGrid, activeGroupId: GroupIdentifier, editorGroupViewsToReuse?: IEditorGroupView[], options?: IEditorGroupViewOptions): void {
 
 		// Determine group views to reuse if any
 		let reuseGroupViews: IEditorGroupView[];
@@ -1265,7 +1265,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.doSetGridWidget(gridWidget);
 	}
 
-	private doSetGridWidget(gridWidget: SerializableGrid<IEditorGroupView>): codemavi {
+	private doSetGridWidget(gridWidget: SerializableGrid<IEditorGroupView>): void {
 		let boundarySashes: IBoundarySashes = {};
 
 		if (this.gridWidget) {
@@ -1285,12 +1285,12 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.onDidSetGridWidget.fire(undefined);
 	}
 
-	private updateContainer(): codemavi {
+	private updateContainer(): void {
 		const container = assertIsDefined(this.container);
 		container.classList.toggle('empty', this.isEmpty);
 	}
 
-	private notifyGroupIndexChange(): codemavi {
+	private notifyGroupIndexChange(): void {
 		this.getGroups(GroupsOrder.GRID_APPEARANCE).forEach((group, index) => group.notifyIndexChanged(index));
 	}
 
@@ -1304,12 +1304,12 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return this.count === 1 && this._activeGroup.isEmpty;
 	}
 
-	setBoundarySashes(sashes: IBoundarySashes): codemavi {
+	setBoundarySashes(sashes: IBoundarySashes): void {
 		this.gridWidget.boundarySashes = sashes;
 		this.centeredLayoutWidget.boundarySashes = sashes;
 	}
 
-	override layout(width: number, height: number, top: number, left: number): codemavi {
+	override layout(width: number, height: number, top: number, left: number): void {
 		this.top = top;
 		this.left = left;
 
@@ -1320,7 +1320,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.doLayout(Dimension.lift(contentAreaSize), top, left);
 	}
 
-	private doLayout(dimension: Dimension, top = this.top, left = this.left): codemavi {
+	private doLayout(dimension: Dimension, top = this.top, left = this.left): void {
 		this._contentDimension = dimension;
 
 		// Layout Grid
@@ -1330,7 +1330,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this._onDidLayout.fire(dimension);
 	}
 
-	protected override saveState(): codemavi {
+	protected override saveState(): void {
 
 		// Persist grid UI state
 		if (this.gridWidget) {
@@ -1366,7 +1366,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		};
 	}
 
-	applyState(state: IEditorPartUIState | 'empty', options?: IEditorGroupViewOptions): Promise<codemavi> {
+	applyState(state: IEditorPartUIState | 'empty', options?: IEditorGroupViewOptions): Promise<void> {
 		if (state === 'empty') {
 			return this.doApplyEmptyState();
 		} else {
@@ -1374,7 +1374,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		}
 	}
 
-	private async doApplyState(state: IEditorPartUIState, options?: IEditorGroupViewOptions): Promise<codemavi> {
+	private async doApplyState(state: IEditorPartUIState, options?: IEditorGroupViewOptions): Promise<void> {
 		const groups = await this.doPrepareApplyState();
 
 		// Pause add/remove events for groups during the duration of applying the state
@@ -1414,7 +1414,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		);
 	}
 
-	private async doApplyEmptyState(): Promise<codemavi> {
+	private async doApplyEmptyState(): Promise<void> {
 		await this.doPrepareApplyState();
 
 		this.mergeAllGroups(this.activeGroup);
@@ -1435,7 +1435,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		return groups;
 	}
 
-	private doApplyGridState(gridState: ISerializedGrid, activeGroupId: GroupIdentifier, editorGroupViewsToReuse?: IEditorGroupView[], options?: IEditorGroupViewOptions): codemavi {
+	private doApplyGridState(gridState: ISerializedGrid, activeGroupId: GroupIdentifier, editorGroupViewsToReuse?: IEditorGroupView[], options?: IEditorGroupViewOptions): void {
 
 		// Recreate grid widget from state
 		this.doCreateGridControlWithState(gridState, activeGroupId, editorGroupViewsToReuse, options);
@@ -1457,7 +1457,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.notifyGroupIndexChange();
 	}
 
-	private onDidChangeMementoState(e: IStorageValueChangeEvent): codemavi {
+	private onDidChangeMementoState(e: IStorageValueChangeEvent): void {
 		if (e.external && e.scope === StorageScope.WORKSPACE) {
 			this.reloadMemento(e.scope);
 
@@ -1474,7 +1474,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		};
 	}
 
-	private disposeGroups(): codemavi {
+	private disposeGroups(): void {
 		for (const group of this.groups) {
 			group.dispose();
 
@@ -1485,7 +1485,7 @@ export class EditorPart extends Part implements IEditorPart, IEditorGroupsView {
 		this.mostRecentActiveGroups = [];
 	}
 
-	override dispose(): codemavi {
+	override dispose(): void {
 
 		// Event
 		this._onWillDispose.fire();

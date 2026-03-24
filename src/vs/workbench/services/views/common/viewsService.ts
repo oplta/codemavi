@@ -19,7 +19,7 @@ export interface IViewsService {
 	isViewContainerVisible(id: string): boolean;
 	isViewContainerActive(id: string): boolean;
 	openViewContainer(id: string, focus?: boolean): Promise<IPaneComposite | null>;
-	closeViewContainer(id: string): codemavi;
+	closeViewContainer(id: string): void;
 	getVisibleViewContainer(location: ViewContainerLocation): ViewContainer | null;
 	getActiveViewPaneContainerWithId(viewContainerId: string): IViewPaneContainer | null;
 	getFocusedView(): IViewDescriptor | null;
@@ -27,10 +27,10 @@ export interface IViewsService {
 
 	// View APIs
 	readonly onDidChangeViewVisibility: Event<{ id: string; visible: boolean }>;
-	readonly onDidChangeFocusedView: Event<codemavi>;
+	readonly onDidChangeFocusedView: Event<void>;
 	isViewVisible(id: string): boolean;
 	openView<T extends IView>(id: string, focus?: boolean): Promise<T | null>;
-	closeView(id: string): codemavi;
+	closeView(id: string): void;
 	getActiveViewWithId<T extends IView>(id: string): T | null;
 	getViewWithId<T extends IView>(id: string): T | null;
 	getViewProgressIndicator(id: string): IProgressIndicator | undefined;

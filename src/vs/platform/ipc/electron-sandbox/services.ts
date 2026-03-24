@@ -52,7 +52,7 @@ class MainProcessRemoteServiceStub<T extends object> extends RemoteServiceStub<T
 	}
 }
 
-export function registerMainProcessRemoteService<T>(id: ServiceIdentifier<T>, channelName: string, options?: IRemoteServiceWithChannelClientOptions<T> | IRemoteServiceWithProxyOptions): codemavi {
+export function registerMainProcessRemoteService<T>(id: ServiceIdentifier<T>, channelName: string, options?: IRemoteServiceWithChannelClientOptions<T> | IRemoteServiceWithProxyOptions): void {
 	registerSingleton(id, new SyncDescriptor(MainProcessRemoteServiceStub, [channelName, options], true));
 }
 
@@ -77,7 +77,7 @@ export interface ISharedProcessService extends IRemoteService {
 	 */
 	createRawConnection(): Promise<MessagePort>;
 
-	notifyRestored(): codemavi;
+	notifyRestored(): void;
 }
 
 class SharedProcessRemoteServiceStub<T extends object> extends RemoteServiceStub<T> {
@@ -86,7 +86,7 @@ class SharedProcessRemoteServiceStub<T extends object> extends RemoteServiceStub
 	}
 }
 
-export function registerSharedProcessRemoteService<T>(id: ServiceIdentifier<T>, channelName: string, options?: IRemoteServiceWithChannelClientOptions<T> | IRemoteServiceWithProxyOptions): codemavi {
+export function registerSharedProcessRemoteService<T>(id: ServiceIdentifier<T>, channelName: string, options?: IRemoteServiceWithChannelClientOptions<T> | IRemoteServiceWithProxyOptions): void {
 	registerSingleton(id, new SyncDescriptor(SharedProcessRemoteServiceStub, [channelName, options], true));
 }
 

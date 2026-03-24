@@ -10,7 +10,7 @@ export interface TelemetryProperties {
 }
 
 export interface TelemetryReporter {
-	logTelemetry(eventName: string, properties?: TelemetryProperties): codemavi;
+	logTelemetry(eventName: string, properties?: TelemetryProperties): void;
 }
 
 export class VSCodeTelemetryReporter implements TelemetryReporter {

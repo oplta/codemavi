@@ -6,13 +6,13 @@
 import * as fs from 'fs';
 import { IPCClient } from './ipc/ipcClient';
 
-function fatal(err: any): codemavi {
+function fatal(err: any): void {
 	console.error('Missing or invalid credentials.');
 	console.error(err);
 	process.exit(1);
 }
 
-function main(argv: string[]): codemavi {
+function main(argv: string[]): void {
 	if (!process.env['VSCODE_GIT_ASKPASS_PIPE']) {
 		return fatal('Missing pipe');
 	}

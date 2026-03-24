@@ -32,21 +32,21 @@ export class Cursor {
 		);
 	}
 
-	public dispose(context: CursorContext): codemavi {
+	public dispose(context: CursorContext): void {
 		this._removeTrackedRange(context);
 	}
 
-	public startTrackingSelection(context: CursorContext): codemavi {
+	public startTrackingSelection(context: CursorContext): void {
 		this._trackSelection = true;
 		this._updateTrackedRange(context);
 	}
 
-	public stopTrackingSelection(context: CursorContext): codemavi {
+	public stopTrackingSelection(context: CursorContext): void {
 		this._trackSelection = false;
 		this._removeTrackedRange(context);
 	}
 
-	private _updateTrackedRange(context: CursorContext): codemavi {
+	private _updateTrackedRange(context: CursorContext): void {
 		if (!this._trackSelection) {
 			// don't track the selection
 			return;
@@ -54,7 +54,7 @@ export class Cursor {
 		this._selTrackedRange = context.model._setTrackedRange(this._selTrackedRange, this.modelState.selection, TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges);
 	}
 
-	private _removeTrackedRange(context: CursorContext): codemavi {
+	private _removeTrackedRange(context: CursorContext): void {
 		this._selTrackedRange = context.model._setTrackedRange(this._selTrackedRange, null, TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges);
 	}
 
@@ -66,18 +66,18 @@ export class Cursor {
 		const range = context.model._getTrackedRange(this._selTrackedRange!)!;
 
 		if (this.modelState.selection.isEmpty() && !range.isEmpty()) {
-			// Acodemavi selecting text when recovering from markers
+			// Avoid selecting text when recovering from markers
 			return Selection.fromRange(range.collapseToEnd(), this.modelState.selection.getDirection());
 		}
 
 		return Selection.fromRange(range, this.modelState.selection.getDirection());
 	}
 
-	public ensureValidState(context: CursorContext): codemavi {
+	public ensureValidState(context: CursorContext): void {
 		this._setState(context, this.modelState, this.viewState);
 	}
 
-	public setState(context: CursorContext, modelState: SingleCursorState | null, viewState: SingleCursorState | null): codemavi {
+	public setState(context: CursorContext, modelState: SingleCursorState | null, viewState: SingleCursorState | null): void {
 		this._setState(context, modelState, viewState);
 	}
 
@@ -111,7 +111,7 @@ export class Cursor {
 		);
 	}
 
-	private _setState(context: CursorContext, modelState: SingleCursorState | null, viewState: SingleCursorState | null): codemavi {
+	private _setState(context: CursorContext, modelState: SingleCursorState | null, viewState: SingleCursorState | null): void {
 		if (viewState) {
 			viewState = Cursor._validateViewState(context.viewModel, viewState);
 		}

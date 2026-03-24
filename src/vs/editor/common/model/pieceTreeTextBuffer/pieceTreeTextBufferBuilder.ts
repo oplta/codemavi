@@ -95,7 +95,7 @@ export class PieceTreeTextBufferBuilder implements ITextBufferBuilder {
 		this.isBasicASCII = true;
 	}
 
-	public acceptChunk(chunk: string): codemavi {
+	public acceptChunk(chunk: string): void {
 		if (chunk.length === 0) {
 			return;
 		}
@@ -120,7 +120,7 @@ export class PieceTreeTextBufferBuilder implements ITextBufferBuilder {
 		}
 	}
 
-	private _acceptChunk1(chunk: string, allowEmptyStrings: boolean): codemavi {
+	private _acceptChunk1(chunk: string, allowEmptyStrings: boolean): void {
 		if (!allowEmptyStrings && chunk.length === 0) {
 			// Nothing to do
 			return;
@@ -133,7 +133,7 @@ export class PieceTreeTextBufferBuilder implements ITextBufferBuilder {
 		}
 	}
 
-	private _acceptChunk2(chunk: string): codemavi {
+	private _acceptChunk2(chunk: string): void {
 		const lineStarts = createLineStarts(this._tmpLineStarts, chunk);
 
 		this.chunks.push(new StringBuffer(chunk, lineStarts.lineStarts));
@@ -168,7 +168,7 @@ export class PieceTreeTextBufferBuilder implements ITextBufferBuilder {
 		);
 	}
 
-	private _finish(): codemavi {
+	private _finish(): void {
 		if (this.chunks.length === 0) {
 			this._acceptChunk1('', true);
 		}

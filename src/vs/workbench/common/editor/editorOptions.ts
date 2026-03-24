@@ -60,7 +60,7 @@ function massageEditorViewState(options: ITextEditorOptions): object | undefined
 
 	// Diff editor: since we have an explicit selection, clear the
 	// cursor state from the modified side where the selection
-	// applies. This acodemavis a redundant selection change event.
+	// applies. This avoids a redundant selection change event.
 	const candidateDiffViewState = options.viewState as IDiffEditorViewState;
 	if (candidateDiffViewState.modified) {
 		candidateDiffViewState.modified.cursorState = [];
@@ -69,7 +69,7 @@ function massageEditorViewState(options: ITextEditorOptions): object | undefined
 	}
 
 	// Code editor: since we have an explicit selection, clear the
-	// cursor state. This acodemavis a redundant selection change event.
+	// cursor state. This avoids a redundant selection change event.
 	const candidateEditorViewState = options.viewState as ICodeEditorViewState;
 	if (candidateEditorViewState.cursorState) {
 		candidateEditorViewState.cursorState = [];

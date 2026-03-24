@@ -76,7 +76,7 @@ export function showCopilotView(viewsService: IViewsService, layoutService: IWor
 	}
 }
 
-export function ensureSideBarChatViewSize(viewDescriptorService: IViewDescriptorService, layoutService: IWorkbenchLayoutService, viewsService: IViewsService): codemavi {
+export function ensureSideBarChatViewSize(viewDescriptorService: IViewDescriptorService, layoutService: IWorkbenchLayoutService, viewsService: IViewsService): void {
 	const viewId = preferCopilotEditsView(viewsService) ? EditsViewId : ChatViewId;
 
 	const location = viewDescriptorService.getViewLocationById(viewId);
@@ -102,14 +102,14 @@ export function ensureSideBarChatViewSize(viewDescriptorService: IViewDescriptor
 export const IQuickChatService = createDecorator<IQuickChatService>('quickChatService');
 export interface IQuickChatService {
 	readonly _serviceBrand: undefined;
-	readonly onDidClose: Event<codemavi>;
+	readonly onDidClose: Event<void>;
 	readonly enabled: boolean;
 	readonly focused: boolean;
-	toggle(options?: IQuickChatOpenOptions): codemavi;
-	focus(): codemavi;
-	open(options?: IQuickChatOpenOptions): codemavi;
-	close(): codemavi;
-	openInChatView(): codemavi;
+	toggle(options?: IQuickChatOpenOptions): void;
+	focus(): void;
+	open(options?: IQuickChatOpenOptions): void;
+	close(): void;
+	openInChatView(): void;
 }
 
 export interface IQuickChatOpenOptions {
@@ -131,7 +131,7 @@ export const IChatAccessibilityService = createDecorator<IChatAccessibilityServi
 export interface IChatAccessibilityService {
 	readonly _serviceBrand: undefined;
 	acceptRequest(): number;
-	acceptResponse(response: IChatResponseViewModel | string | undefined, requestId: number, isVoiceInput?: boolean): codemavi;
+	acceptResponse(response: IChatResponseViewModel | string | undefined, requestId: number, isVoiceInput?: boolean): void;
 }
 
 export interface IChatCodeBlockInfo {
@@ -142,13 +142,13 @@ export interface IChatCodeBlockInfo {
 	readonly uriPromise: Promise<URI | undefined>;
 	codemapperUri: URI | undefined;
 	readonly isStreaming: boolean;
-	focus(): codemavi;
+	focus(): void;
 }
 
 export interface IChatFileTreeInfo {
 	treeDataId: string;
 	treeIndex: number;
-	focus(): codemavi;
+	focus(): void;
 }
 
 export type ChatTreeItem = IChatRequestViewModel | IChatResponseViewModel;
@@ -209,12 +209,12 @@ export interface IChatAcceptInputOptions {
 }
 
 export interface IChatWidget {
-	readonly onDidChangeViewModel: Event<codemavi>;
-	readonly onDidAcceptInput: Event<codemavi>;
-	readonly onDidHide: Event<codemavi>;
+	readonly onDidChangeViewModel: Event<void>;
+	readonly onDidAcceptInput: Event<void>;
+	readonly onDidHide: Event<void>;
 	readonly onDidSubmitAgent: Event<{ agent: IChatAgentData; slashCommand?: IChatAgentCommand }>;
 	readonly onDidChangeAgent: Event<{ agent: IChatAgentData; slashCommand?: IChatAgentCommand }>;
-	readonly onDidChangeParsedInput: Event<codemavi>;
+	readonly onDidChangeParsedInput: Event<void>;
 	readonly location: ChatAgentLocation;
 	readonly viewContext: IChatWidgetViewContext;
 	readonly viewModel: IChatViewModel | undefined;
@@ -230,28 +230,28 @@ export interface IChatWidget {
 	readonly isUnifiedPanelWidget: boolean;
 
 	getContrib<T extends IChatWidgetContrib>(id: string): T | undefined;
-	reveal(item: ChatTreeItem): codemavi;
-	focus(item: ChatTreeItem): codemavi;
+	reveal(item: ChatTreeItem): void;
+	focus(item: ChatTreeItem): void;
 	getSibling(item: ChatTreeItem, type: 'next' | 'previous'): ChatTreeItem | undefined;
 	getFocus(): ChatTreeItem | undefined;
-	setInput(query?: string): codemavi;
+	setInput(query?: string): void;
 	getInput(): string;
-	refreshParsedInput(): codemavi;
-	logInputHistory(): codemavi;
+	refreshParsedInput(): void;
+	logInputHistory(): void;
 	acceptInput(query?: string, options?: IChatAcceptInputOptions): Promise<IChatResponseModel | undefined>;
-	rerunLastRequest(): Promise<codemavi>;
-	setInputPlaceholder(placeholder: string): codemavi;
-	resetInputPlaceholder(): codemavi;
-	focusLastMessage(): codemavi;
-	focusInput(): codemavi;
+	rerunLastRequest(): Promise<void>;
+	setInputPlaceholder(placeholder: string): void;
+	resetInputPlaceholder(): void;
+	focusLastMessage(): void;
+	focusInput(): void;
 	hasInputFocus(): boolean;
 	getCodeBlockInfoForEditor(uri: URI): IChatCodeBlockInfo | undefined;
 	getCodeBlockInfosForResponse(response: IChatResponseViewModel): IChatCodeBlockInfo[];
 	getFileTreeInfosForResponse(response: IChatResponseViewModel): IChatFileTreeInfo[];
 	getLastFocusedFileTreeForResponse(response: IChatResponseViewModel): IChatFileTreeInfo | undefined;
-	clear(): codemavi;
+	clear(): void;
 	getViewState(): IChatViewState;
-	togglePaused(): codemavi;
+	togglePaused(): void;
 }
 
 

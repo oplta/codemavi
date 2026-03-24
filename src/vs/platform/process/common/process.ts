@@ -60,8 +60,8 @@ export const IProcessMainService = createDecorator<IProcessMainService>('process
 export interface IProcessMainService {
 	readonly _serviceBrand: undefined;
 	getSystemStatus(): Promise<string>;
-	stopTracing(): Promise<codemavi>;
-	openProcessExplorer(data: ProcessExplorerData): Promise<codemavi>;
+	stopTracing(): Promise<void>;
+	openProcessExplorer(data: ProcessExplorerData): Promise<void>;
 
 	// Used by the process explorer
 	$getSystemInfo(): Promise<SystemInfo>;

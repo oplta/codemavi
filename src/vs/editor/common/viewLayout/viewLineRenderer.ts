@@ -214,7 +214,7 @@ export class CharacterMapping {
 		this._horizontalOffset = new Uint32Array(this.length);
 	}
 
-	public setColumnInfo(column: number, partIndex: number, charIndex: number, horizontalOffset: number): codemavi {
+	public setColumnInfo(column: number, partIndex: number, charIndex: number, horizontalOffset: number): void {
 		const partData = (
 			(partIndex << CharacterMappingConstants.PART_INDEX_OFFSET)
 			| (charIndex << CharacterMappingConstants.CHAR_INDEX_OFFSET)
@@ -336,7 +336,7 @@ export const enum ForeignElementType {
 }
 
 export class RenderLineOutput {
-	_renderLineOutputBrand: codemavi = undefined;
+	_renderLineOutputBrand: void = undefined;
 
 	readonly characterMapping: CharacterMapping;
 	readonly containsRTL: boolean;
@@ -552,7 +552,7 @@ const enum Constants {
 /**
  * See https://github.com/microsoft/vscode/issues/6885.
  * It appears that having very large spans causes very slow reading of character positions.
- * So here we try to acodemavi that.
+ * So here we try to avoid that.
  */
 function splitLargeTokens(lineContent: string, tokens: LinePart[], onlyAtSpaces: boolean): LinePart[] {
 	let lastTokenEndIndex = 0;

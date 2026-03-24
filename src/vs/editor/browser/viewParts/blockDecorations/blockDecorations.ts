@@ -51,7 +51,7 @@ export class BlockDecorations extends ViewPart {
 		return didChange;
 	}
 
-	public override dispose(): codemavi {
+	public override dispose(): void {
 		super.dispose();
 	}
 
@@ -72,11 +72,11 @@ export class BlockDecorations extends ViewPart {
 	}
 
 	// --- end event handlers
-	public prepareRender(ctx: RenderingContext): codemavi {
+	public prepareRender(ctx: RenderingContext): void {
 		// Nothing to read
 	}
 
-	public render(ctx: RestrictedRenderingContext): codemavi {
+	public render(ctx: RestrictedRenderingContext): void {
 		let count = 0;
 		const decorations = ctx.getDecorationsInViewport();
 		for (const decoration of decorations) {

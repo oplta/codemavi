@@ -38,11 +38,11 @@ export class OutputLinkProvider extends Disposable {
 		this.updateLinkProviderWorker();
 	}
 
-	private registerListeners(): codemavi {
+	private registerListeners(): void {
 		this._register(this.contextService.onDidChangeWorkspaceFolders(() => this.updateLinkProviderWorker()));
 	}
 
-	private updateLinkProviderWorker(): codemavi {
+	private updateLinkProviderWorker(): void {
 
 		// Setup link provider depending on folders being opened or not
 		const folders = this.contextService.getWorkspace().folders;
@@ -80,7 +80,7 @@ export class OutputLinkProvider extends Disposable {
 		return this.getOrCreateWorker().provideLinks(modelUri);
 	}
 
-	private disposeWorker(): codemavi {
+	private disposeWorker(): void {
 		if (this.worker) {
 			this.worker.dispose();
 			this.worker = undefined;
@@ -91,7 +91,7 @@ export class OutputLinkProvider extends Disposable {
 class OutputLinkWorkerClient extends Disposable {
 	private readonly _workerClient: IWebWorkerClient<OutputLinkComputer>;
 	private readonly _workerTextModelSyncClient: WorkerTextModelSyncClient;
-	private readonly _initializeBarrier: Promise<codemavi>;
+	private readonly _initializeBarrier: Promise<void>;
 
 	constructor(
 		@IWorkspaceContextService private readonly contextService: IWorkspaceContextService,
@@ -106,7 +106,7 @@ class OutputLinkWorkerClient extends Disposable {
 		this._initializeBarrier = this._ensureWorkspaceFolders();
 	}
 
-	private async _ensureWorkspaceFolders(): Promise<codemavi> {
+	private async _ensureWorkspaceFolders(): Promise<void> {
 		await this._workerClient.proxy.$setWorkspaceFolders(this.contextService.getWorkspace().folders.map(folder => folder.uri.toString()));
 	}
 

@@ -202,13 +202,13 @@ export class SimpleSettingRenderer {
 		return undefined;
 	}
 
-	async restoreSetting(settingId: string): Promise<codemavi> {
+	async restoreSetting(settingId: string): Promise<void> {
 		const userOriginalSettingValue = this._updatedSettings.get(settingId);
 		this._updatedSettings.delete(settingId);
 		return this._configurationService.updateValue(settingId, userOriginalSettingValue, ConfigurationTarget.USER);
 	}
 
-	async setSetting(settingId: string, currentSettingValue: any, newSettingValue: any): Promise<codemavi> {
+	async setSetting(settingId: string, currentSettingValue: any, newSettingValue: any): Promise<void> {
 		this._updatedSettings.set(settingId, currentSettingValue);
 		return this._configurationService.updateValue(settingId, newSettingValue, ConfigurationTarget.USER);
 	}

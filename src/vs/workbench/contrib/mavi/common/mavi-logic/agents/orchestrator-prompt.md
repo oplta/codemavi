@@ -24,7 +24,7 @@ Adım 1: İsteği analiz et
 Adım 2: Context topla
 - Semantic search ile ilgili dosyaları bul
 - Önemli dosyaları Oku
-- Proje kurallarını (.codemavi/rules.md) kontrol et
+- Proje kurallarını (.mavi/rules.md) kontrol et
 
 Adım 3: Plan oluştur
 - Alt-görevleri listele

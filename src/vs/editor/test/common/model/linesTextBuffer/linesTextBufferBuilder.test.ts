@@ -9,7 +9,7 @@ import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../../base/tes
 import { DefaultEndOfLine } from '../../../../common/model.js';
 import { createTextBufferFactory } from '../../../../common/model/textModel.js';
 
-function testTextBufferFactory(text: string, eol: string, mightContainNonBasicASCII: boolean, mightContainRTL: boolean): codemavi {
+function testTextBufferFactory(text: string, eol: string, mightContainNonBasicASCII: boolean, mightContainRTL: boolean): void {
 	const { disposable, textBuffer } = createTextBufferFactory(text).create(DefaultEndOfLine.LF);
 
 	assert.strictEqual(textBuffer.mightContainNonBasicASCII(), mightContainNonBasicASCII);

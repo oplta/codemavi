@@ -22,7 +22,7 @@ suite('NotebookCellAnchor', () => {
 	let focusedCell: CodeCellViewModel;
 	let config: TestConfigurationService;
 	let scrollEvent: Emitter<ScrollEvent>;
-	let onDidStopExecution: Emitter<codemavi>;
+	let onDidStopExecution: Emitter<void>;
 	let resizingCell: CodeCellViewModel;
 
 	let cellAnchor: NotebookCellAnchor;
@@ -30,7 +30,7 @@ suite('NotebookCellAnchor', () => {
 	setup(() => {
 		config = new TestConfigurationService();
 		scrollEvent = new Emitter<ScrollEvent>();
-		onDidStopExecution = new Emitter<codemavi>();
+		onDidStopExecution = new Emitter<void>();
 
 		const executionService = {
 			getCellExecution: () => { return { state: NotebookCellExecutionState.Executing }; },
