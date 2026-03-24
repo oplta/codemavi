@@ -58,7 +58,7 @@ export type ExtensionVirtualWorkspaceSupport = {
 export interface IProductConfiguration {
 	readonly version: string;
 	readonly maviVersion?: string;
-	readonly release?: string; // Code Mavi IDE IDE - VSCodium added this, we add it for TS
+	readonly release?: string; // Code Mavi IDE - VSCodium added this, we add it for TS
 	readonly date?: string;
 	readonly quality?: string;
 	readonly commit?: string;

@@ -1,4 +1,4 @@
-# Code Mavi IDE IDE — Proje Planı v3
+# Code Mavi IDE — Proje Planı v3
 ### "Void'un düştüğü çukura düşmeyeceğiz"
 
 > Void neden öldü? Provider eklediler, UI yaptılar, ama **agent beyni yoktu.**

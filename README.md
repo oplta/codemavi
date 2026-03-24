@@ -1,12 +1,12 @@
-# 🟦 Code Mavi IDE IDE: The Agentic Open-Source IDE
+# 🟦 Code Mavi IDE: The Agentic Open-Source IDE
 
 > **"A tool that doesn't just assist, but thinks, acts, and verifies."**
 
-Code Mavi IDE IDE is an **"Agent-First"** open-source IDE designed to revolutionize AI-assisted software development. Built as a fork of VS Code (via Void), it combines the convenience of tools like Cursor with the transparency and extensibility of open-source software.
+Code Mavi IDE is an **"Agent-First"** open-source IDE designed to revolutionize AI-assisted software development. Built as a fork of VS Code (via Void), it combines the convenience of tools like Cursor with the transparency and extensibility of open-source software.
 
 ## 🎯 Vision: Transparent and Powerful Agent Experience
 
-We bring the convenience of tools like Cursor to the open-source world with complete transparency. In Code Mavi IDE IDE, you can see how agents think, intervene in prompts, and guide them with your local rules.
+We bring the convenience of tools like Cursor to the open-source world with complete transparency. In Code Mavi IDE, you can see how agents think, intervene in prompts, and guide them with your local rules.
 
 - **Transparent Prompts:** No black boxes. Every step is traceable and customizable.
 - **Agentic Loop:** Intelligence that doesn't stop at errors—it analyzes and retries.
@@ -14,7 +14,7 @@ We bring the convenience of tools like Cursor to the open-source world with comp
 
 ## 🏗️ Architecture: Triple Agent System (The Brain)
 
-Code Mavi IDE IDE uses three specialized agent layers to solve complex tasks:
+Code Mavi IDE uses three specialized agent layers to solve complex tasks:
 
 ### 🧠 1. Orchestrator (The Conductor)
 The central nervous system of the system. Analyzes user requests, researches the codebase, and creates a strategic plan.
@@ -60,7 +60,7 @@ npm install
 # Start development build
 npm run watch
 
-# Launch Code Mavi IDE IDE in development mode
+# Launch Code Mavi IDE in development mode
 ./scripts/code.sh  # Mac/Linux
 ./scripts/code.bat # Windows
 ```
@@ -68,8 +68,8 @@ npm run watch
 ### First-Time Setup
 
 1. **Configure LLM Provider:**
-   - Open Code Mavi IDE IDE
-   - Go to Settings → Code Mavi IDE IDE → Providers
+   - Open Code Mavi IDE
+   - Go to Settings → Code Mavi IDE → Providers
    - Add your preferred LLM provider (Ollama recommended for local use)
 
 2. **Create Project Rules:**
@@ -81,7 +81,7 @@ npm run watch
 
 3. **Try Auto Dev Mode:**
    - Open Command Palette (Cmd+Shift+P)
-   - Type "Code Mavi IDE IDE: Auto Dev Mode"
+   - Type "Code Mavi IDE: Auto Dev Mode"
    - Enter: "Fix all TypeScript errors in this project"
 
 ## 📖 Documentation
@@ -94,9 +94,9 @@ npm run watch
 
 ### For Developers
 - [Architecture Overview](docs/architecture/overview.md) - System design and components
-- [Development Guide](docs/development/contributing.md) - How to contribute to Code Mavi IDE IDE
+- [Development Guide](docs/development/contributing.md) - How to contribute to Code Mavi IDE
 - [Agent API Reference](docs/agents/api-reference.md) - Building custom agents
-- [Extension Development](docs/development/extensions.md) - Creating Code Mavi IDE IDE extensions
+- [Extension Development](docs/development/extensions.md) - Creating Code Mavi IDE extensions
 
 ### For Contributors
 - [Codebase Guide](CODEMAVI_CODEBASE_GUIDE.md) - Understanding the codebase structure
@@ -125,7 +125,7 @@ npm run eslint
 
 ```
 mavi-ide/
-├── src/vs/workbench/contrib/mavi/     # Code Mavi IDE IDE core
+├── src/vs/workbench/contrib/mavi/     # Code Mavi IDE core
 │   ├── common/mavi-logic/            # Agent logic and prompts
 │   ├── browser/                      # UI components and services
 │   └── electron-main/                # Main process extensions
@@ -147,7 +147,7 @@ mavi-ide/
 
 ## 🤝 Contributing
 
-Code Mavi IDE IDE is a community-driven project. We welcome contributions in all areas:
+Code Mavi IDE is a community-driven project. We welcome contributions in all areas:
 
 ### How to Contribute
 
@@ -155,7 +155,7 @@ Code Mavi IDE IDE is a community-driven project. We welcome contributions in all
 2. **Add New Tools:** Extend agent capabilities with new tools
 3. **Enhance UI/UX:** Improve the developer experience
 4. **Support New Providers:** Add integration with more LLM providers
-5. **Fix Bugs:** Help us make Code Mavi IDE IDE more stable
+5. **Fix Bugs:** Help us make Code Mavi IDE more stable
 
 ### Contribution Process
 
@@ -208,7 +208,7 @@ See our [Contributing Guide](HOW_TO_CONTRIBUTE.md) for detailed instructions.
 
 ## 📄 License
 
-Code Mavi IDE IDE is released under the [MIT License](LICENSE.txt).
+Code Mavi IDE is released under the [MIT License](LICENSE.txt).
 
 VS Code components are licensed under their respective licenses as noted in [LICENSE-VS-Code.txt](LICENSE-VS-Code.txt).
 
@@ -217,11 +217,11 @@ VS Code components are licensed under their respective licenses as noted in [LIC
 - **VS Code Team** for creating the amazing foundation
 - **Void Editor** for the initial fork and inspiration
 - **Cursor** for showing what's possible with AI-assisted development
-- **All Contributors** who help make Code Mavi IDE IDE better every day
+- **All Contributors** who help make Code Mavi IDE better every day
 
 ---
 
-*Code Mavi IDE IDE — Making what Cursor does open, transparent, and free.*
+*Code Mavi IDE — Making what Cursor does open, transparent, and free.*
 *Completing Void's vision with an agent brain.*
 ```
 

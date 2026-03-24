@@ -160,7 +160,7 @@ export const defaultModelsOfProvider = {
 
 
 export type MaviStaticModelInfo = { // not stateful
-	// Code Mavi IDE IDE uses the information below to know how to handle each model.
+	// Code Mavi IDE uses the information below to know how to handle each model.
 	// for some examples, see openAIModelOptions and anthropicModelOptions (below).
 
 	contextWindow: number; // input tokens

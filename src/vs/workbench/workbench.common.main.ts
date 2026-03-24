@@ -13,7 +13,7 @@ import './browser/workbench.contribution.js';
 //#endregion
 
 //#region --- Code Mavi IDE
-import './contrib/mavi/browser/mavi.contribution.js'; // Code Mavi IDE IDE added this
+import './contrib/mavi/browser/mavi.contribution.js'; // Code Mavi IDE added this
 //#endregion
 
 //#region --- workbench actions
@@ -192,7 +192,7 @@ import './contrib/notebook/browser/notebook.contribution.js';
 import './contrib/speech/browser/speech.contribution.js';
 
 // Chat
-// Code Mavi IDE IDE - this is still registered to avoid console errors, we just commented it out in chatParticipant.contribution.ts
+// Code Mavi IDE - this is still registered to avoid console errors, we just commented it out in chatParticipant.contribution.ts
 import './contrib/chat/browser/chat.contribution.js';
 import './contrib/inlineChat/browser/inlineChat.contribution.js';
 import './contrib/mcp/browser/mcp.contribution.js';
@@ -328,7 +328,7 @@ import './contrib/surveys/browser/nps.contribution.js';
 import './contrib/surveys/browser/languageSurveys.contribution.js';
 
 // Welcome
-// Code Mavi IDE IDE commented this out
+// Code Mavi IDE commented this out
 // import './contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js';
 import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
 import './contrib/welcomeViews/common/viewsWelcome.contribution.js';

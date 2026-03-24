@@ -677,7 +677,7 @@ for (const menuId of [MenuId.EmptyEditorGroupContext, MenuId.EditorTabsBarContex
 // File menu
 
 
-// Code Mavi IDE IDE added this:
+// Code Mavi IDE added this:
 MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
 	group: '0_mavi',
 	command: {

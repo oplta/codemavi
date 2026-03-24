@@ -29,6 +29,6 @@ Bu doküman, Code Mavi IDE projesinin gelişim aşamalarını ve hedeflerini tak
 - [x] GitHub release v0.4.0
 
 ## 🟡 v1.0.0: IDE Entegrasyonu ve Yayılım (Şu anki hedef)
-- [ ] Mantık katmanının Code Mavi IDE IDE (VS Code Fork) ile tam entegrasyonu.
+- [ ] Mantık katmanının Code Mavi IDE (VS Code Fork) ile tam entegrasyonu.
 - [ ] Kullanıcı dostu agent arayüzü.
 - [ ] Topluluk eklenti desteği.

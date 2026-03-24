@@ -21,7 +21,7 @@ export class ExpandLineSelectionAction extends EditorAction {
 			kbOpts: {
 				weight: KeybindingWeight.EditorCore,
 				kbExpr: EditorContextKeys.textInputFocus,
-				primary: KeyMod.CtrlCmd | KeyCode.KeyM // Code Mavi IDE IDE changed this to Cmd+M
+				primary: KeyMod.CtrlCmd | KeyCode.KeyM // Code Mavi IDE changed this to Cmd+M
 			},
 		});
 	}

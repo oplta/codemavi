@@ -122,7 +122,7 @@ export class SmartSelectController implements IEditorContribution {
 		this._state = this._state.map(state => state.mov(forward));
 		const newSelections = this._state.map(state => Selection.fromPositions(state.ranges[state.index].getStartPosition(), state.ranges[state.index].getEndPosition()));
 
-		// Code Mavi IDE IDE changed this to skip over added whitespace when using smartSelect
+		// Code Mavi IDE changed this to skip over added whitespace when using smartSelect
 		// // Store the original selections for comparison
 		// const originalSelections = selections;
 

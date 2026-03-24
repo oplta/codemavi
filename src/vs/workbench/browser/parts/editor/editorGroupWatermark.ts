@@ -24,7 +24,7 @@ import { IWindowOpenable } from '../../../../platform/window/common/window.js';
 import { splitRecentLabel } from '../../../../base/common/labels.js';
 import { IViewsService } from '../../../services/views/common/viewsService.js';
 
-/* eslint-disable */ // Code Mavi IDE IDE
+/* eslint-disable */ // Code Mavi IDE
 import { MAVI_CTRL_K_ACTION_ID, MAVI_CTRL_L_ACTION_ID } from '../../../contrib/mavi/browser/actionIDs.js';
 import { VIEWLET_ID as REMOTE_EXPLORER_VIEWLET_ID } from '../../../contrib/remote/browser/remoteExplorer.js';
 /* eslint-enable */
@@ -181,7 +181,7 @@ export class EditorGroupWatermark extends Disposable {
 			this.currentDisposables.clear();
 
 
-			// Code Mavi IDE IDE - if the workbench is empty, show open
+			// Code Mavi IDE - if the workbench is empty, show open
 			if (this.contextService.getWorkbenchState() === WorkbenchState.EMPTY) {
 
 				// Create a flex container for buttons with vertical direction
