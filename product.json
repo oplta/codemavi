@@ -5,8 +5,8 @@
     "dataFolderName": ".codemavi-ide-editor",
     "win32MutexName": "codemavi-ide",
     "licenseName": "MIT",
-    "licenseUrl": "https://github.com/oplta/codemavi-ide/blob/main/LICENSE.txt",
-    "serverLicenseUrl": "https://github.com/oplta/codemavi-ide/blob/main/LICENSE.txt",
+	"licenseUrl": "https://github.com/oplta/codemavi/blob/main/LICENSE.txt",
+	"serverLicenseUrl": "https://github.com/oplta/codemavi/blob/main/LICENSE.txt",
     "serverApplicationName": "codemavi-ide-server",
     "serverDataFolderName": ".codemavi-ide-server",
     "tunnelApplicationName": "codemavi-ide-tunnel",
@@ -22,7 +22,7 @@
 		"itemUrl": "https://marketplace.visualstudio.com/items"
 	},
     "linkProtectionTrustedDomains": [
-        "https://github.com/oplta/codemavi-ide",
+		"https://github.com/oplta/codemavi",
         "https://ollama.com"
     ]
 }
