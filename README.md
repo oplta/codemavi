@@ -181,7 +181,10 @@ Code Mavi IDE is a community-driven project. We welcome contributions in all are
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-See our [Contributing Guide](HOW_TO_CONTRIBUTE.md) for detailed instructions.
+ See our [Contributing Guide](HOW_TO_CONTRIBUTE.md) for detailed instructions.
+
+## Documentation Hub
+- Central hub for Wiki and Docs: [Documentation](documentation/README.md)
 
 ## 📋 Roadmap
 

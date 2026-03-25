@@ -6,6 +6,7 @@
  */
 
 import { URI } from "../../../../../../base/common/uri.js";
+import { VSBuffer } from "../../../../../../base/common/buffer.js";
 import { IFileService } from "../../../../../../platform/files/common/files.js";
 import { ILogService } from "../../../../../../platform/log/common/log.js";
 import { Event, Emitter } from "../../../../../../base/common/event.js";
@@ -218,7 +219,7 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 	private initialized = false;
 
 	constructor(
-		@IFileService private readonly fileService: IFileService,
+		@IFileService private readonly _fileService: IFileService,
 		@ILogService private readonly logService: ILogService
 	) {
 		super();
@@ -240,7 +241,7 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 		}
 	}
 
-	async addProvider(config: Omit<ProviderConfig, 'id' | 'metadata'>): Promise<string> {
+	async addProvider(config: Omit<ProviderConfig, 'id' | 'metadata'> & { metadata?: Partial<ProviderConfig['metadata']> }): Promise<string> {
 		const providerId = `provider_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 		const fullConfig: ProviderConfig = {
@@ -821,7 +822,6 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 
 	private selectFallback(providers: ProviderConfig[], config?: any): string {
 		// Try providers in order until one works
-		const maxRetries = config?.maxRetries || 3;
 		const sorted = providers.sort((a, b) => b.priority - a.priority);
 
 		for (const provider of sorted) {
@@ -844,9 +844,6 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 		if (!provider || !stats) {
 			return true;
 		}
-
-		const now = Date.now();
-		const oneMinuteAgo = now - 60 * 1000;
 
 		// Check requests per minute
 		if (provider.limits.maxRequestsPerMinute) {
@@ -1078,5 +1075,260 @@ export class ProviderManagerService extends Disposable implements IProviderManag
 			max_tokens: request.maxTokens || provider.config.maxTokens || 4000,
 			stream: request.stream || false
 		};
-}
+
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${apiKey}`,
+			...provider.config.customHeaders
+		};
+
+		const controller = new AbortController();
+		if (token) {
+			token.onCancellationRequested(() => controller.abort());
+		}
+
+		const timeout = provider.config.timeoutMs || 30000;
+		const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers,
+				body: JSON.stringify(payload),
+				signal: controller.signal
+			});
+
+			clearTimeout(timeoutId);
+
+			if (!response.ok) {
+				throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+
+			const choice = data.choices[0];
+			const usage = data.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
+
+			return {
+				id: `resp_${Date.now()}`,
+				requestId: request.id,
+				providerId: provider.id,
+				content: choice.message.content,
+				model: data.model,
+				usage: {
+					promptTokens: usage.prompt_tokens,
+					completionTokens: usage.completion_tokens,
+					totalTokens: usage.total_tokens
+				},
+				metadata: {
+					responseTimeMs: 0,
+					cost: this.calculateCost(provider, usage.total_tokens),
+					success: true,
+					finishReason: choice.finish_reason
+				}
+			};
+
+		} catch (error) {
+			clearTimeout(timeoutId);
+			throw error;
+		}
+	}
+
+	private async sendAnthropicRequest(
+		provider: ProviderConfig,
+		request: ProviderRequest,
+		token?: CancellationToken
+	): Promise<ProviderResponse> {
+		// Anthropic API implementation
+		const url = provider.config.apiUrl || 'https://api.anthropic.com/v1/messages';
+		const apiKey = provider.config.apiKey;
+
+		if (!apiKey) {
+			throw new Error('Anthropic API key is required');
+		}
+
+		const payload = {
+			model: request.model || provider.config.model,
+			messages: [
+				{
+					role: 'user',
+					content: request.prompt
+				}
+			],
+			max_tokens: request.maxTokens || provider.config.maxTokens || 4000
+		};
+
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+			'x-api-key': apiKey,
+			'anthropic-version': '2023-06-01',
+			...provider.config.customHeaders
+		};
+
+		const controller = new AbortController();
+		if (token) {
+			token.onCancellationRequested(() => controller.abort());
+		}
+
+		const timeout = provider.config.timeoutMs || 30000;
+		const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers,
+				body: JSON.stringify(payload),
+				signal: controller.signal
+			});
+
+			clearTimeout(timeoutId);
+
+			if (!response.ok) {
+				throw new Error(`Anthropic API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+
+			const content = data.content[0]?.text || '';
+			const usage = data.usage || { input_tokens: 0, output_tokens: 0 };
+			const totalTokens = usage.input_tokens + usage.output_tokens;
+
+			return {
+				id: `resp_${Date.now()}`,
+				requestId: request.id,
+				providerId: provider.id,
+				content,
+				model: data.model,
+				usage: {
+					promptTokens: usage.input_tokens,
+					completionTokens: usage.output_tokens,
+					totalTokens
+				},
+				metadata: {
+					responseTimeMs: 0,
+					cost: this.calculateCost(provider, totalTokens),
+					success: true,
+					finishReason: data.stop_reason
+				}
+			};
+
+		} catch (error) {
+			clearTimeout(timeoutId);
+			throw error;
+		}
+	}
+
+	private async sendCustomRequest(
+		provider: ProviderConfig,
+		request: ProviderRequest,
+		token?: CancellationToken
+	): Promise<ProviderResponse> {
+		// Custom API implementation
+		const url = provider.config.apiUrl;
+		if (!url) {
+			throw new Error('Custom provider requires apiUrl');
+		}
+
+		const payload = {
+			model: request.model || provider.config.model,
+			prompt: request.prompt,
+			temperature: request.temperature || provider.config.temperature || 0.1,
+			max_tokens: request.maxTokens || provider.config.maxTokens || 4000,
+			stream: request.stream || false
+		};
+
+		const headers: Record<string, string> = {
+			'Content-Type': 'application/json',
+			...provider.config.customHeaders
+		};
+
+		if (provider.config.apiKey) {
+			headers['Authorization'] = `Bearer ${provider.config.apiKey}`;
+		}
+
+		const controller = new AbortController();
+		if (token) {
+			token.onCancellationRequested(() => controller.abort());
+		}
+
+		const timeout = provider.config.timeoutMs || 30000;
+		const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+		try {
+			const response = await fetch(url, {
+				method: 'POST',
+				headers,
+				body: JSON.stringify(payload),
+				signal: controller.signal
+			});
+
+			clearTimeout(timeoutId);
+
+			if (!response.ok) {
+				throw new Error(`Custom API error: ${response.status} ${response.statusText}`);
+			}
+
+			const data = await response.json();
+
+			// Try to extract content from common response formats
+			const content = data.content || data.response || data.text || data.message?.content || JSON.stringify(data);
+			const promptTokens = data.usage?.prompt_tokens || Math.ceil(request.prompt.length / 4);
+			const completionTokens = data.usage?.completion_tokens || Math.ceil(content.length / 4);
+			const totalTokens = promptTokens + completionTokens;
+
+			return {
+				id: `resp_${Date.now()}`,
+				requestId: request.id,
+				providerId: provider.id,
+				content,
+				model: data.model || provider.config.model,
+				usage: {
+					promptTokens,
+					completionTokens,
+					totalTokens
+				},
+				metadata: {
+					responseTimeMs: 0,
+					cost: this.calculateCost(provider, totalTokens),
+					success: true,
+					finishReason: data.finish_reason || 'stop'
+				}
+			};
+
+		} catch (error) {
+			clearTimeout(timeoutId);
+			throw error;
+		}
+	}
+
+	private calculateCost(provider: ProviderConfig, totalTokens: number): number {
+		const costPerToken = provider.limits.costPerToken || 0;
+		return totalTokens * costPerToken;
+	}
+
+	private async ensureDirectoryExists(uri: URI): Promise<void> {
+		try {
+			await this._fileService.resolve(uri);
+		} catch {
+			await this._fileService.createFolder(uri);
+		}
+	}
+
+	private async writeFile(uri: URI, content: string): Promise<void> {
+		await this._fileService.writeFile(uri, VSBuffer.fromString(content));
+	}
+
+	private async fileExists(uri: URI): Promise<boolean> {
+		try {
+			await this._fileService.resolve(uri);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	private async readFile(uri: URI): Promise<string> {
+		const content = await this._fileService.readFile(uri);
+		return new TextDecoder().decode(content.value.buffer);
+	}
 }

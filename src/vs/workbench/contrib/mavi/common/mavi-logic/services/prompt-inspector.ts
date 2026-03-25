@@ -6,6 +6,7 @@
  */
 
 import { URI } from "../../../../../../base/common/uri.js";
+import { VSBuffer } from "../../../../../../base/common/buffer.js";
 import { IFileService } from "../../../../../../platform/files/common/files.js";
 import { ILogService } from "../../../../../../platform/log/common/log.js";
 import { Event, Emitter } from "../../../../../../base/common/event.js";
@@ -1160,10 +1161,11 @@ private async readFile(uri: URI): Promise<string> {
 
 private async writeFile(uri: URI, content: string): Promise<void> {
 	try {
-		await this.fileService.writeFile(uri, content);
+		const buffer = VSBuffer.fromString(content);
+		await this.fileService.writeFile(uri, buffer);
 	} catch (error) {
-		this.logService.error(`[PromptInspector] Failed to write file \${uri.fsPath}:`, error);
-		throw new Error(`Failed to write file: \${uri.fsPath}`);
+		this.logService.error(`[PromptInspector] Failed to write file ${uri.fsPath}:`, error);
+		throw new Error(`Failed to write file: ${uri.fsPath}`);
 	}
 }
 

@@ -5,7 +5,6 @@
  * Supports local (Ollama) and cloud (OpenAI) embedding models
  */
 
-import { URI } from '../../../../../../base/common/uri.js';
 import { Disposable } from '../../../../../../base/common/lifecycle.js';
 
 export interface EmbeddingConfig {
@@ -170,7 +169,7 @@ export class EmbeddingService extends Disposable {
         model: this.config.model,
         prompt: text
       }),
-      signal: AbortSignal.timeout(this.config.timeoutMs)
+      signal: AbortSignal.timeout(this.config.timeoutMs!)
     });
 
     if (!response.ok) {
@@ -204,7 +203,7 @@ export class EmbeddingService extends Disposable {
         input: text,
         encoding_format: 'float'
       }),
-      signal: AbortSignal.timeout(this.config.timeoutMs)
+      signal: AbortSignal.timeout(this.config.timeoutMs!)
     });
 
     if (!response.ok) {
@@ -251,13 +250,16 @@ export class EmbeddingService extends Disposable {
     let failed = 0;
     let totalTokens = 0;
 
-    // Process in batches
-    for (let i = 0; i < chunks.length; i += this.config.batchSize) {
-      const batch = chunks.slice(i, i + this.config.batchSize);
+    // Process in batches - use default values if config is undefined
+    const batchSize = this.config.batchSize ?? 32;
+    const provider = this.config.provider ?? 'ollama';
+    
+    for (let i = 0; i < chunks.length; i += batchSize) {
+      const batch = chunks.slice(i, i + batchSize);
 
       try {
         // For providers that support batch processing
-        if (this.config.provider === 'openai') {
+        if (provider === 'openai') {
           const batchResults = await this.batchEmbedOpenAI(batch);
           results.push(...batchResults.results);
           successful += batchResults.successful;
@@ -322,7 +324,7 @@ export class EmbeddingService extends Disposable {
         input: inputs,
         encoding_format: 'float'
       }),
-      signal: AbortSignal.timeout(this.config.timeoutMs * 2) // Longer timeout for batch
+      signal: AbortSignal.timeout((this.config.timeoutMs || 30000) * 2) // Longer timeout for batch
     });
 
     if (!response.ok) {
@@ -341,14 +343,17 @@ export class EmbeddingService extends Disposable {
 
     for (let i = 0; i < chunks.length; i++) {
       const chunk = chunks[i];
-      const embeddingData = data.data[i];
+      const embeddingData = data.data?.[i];
 
-      if (embeddingData && embeddingData.embedding) {
+      const embedding = embeddingData?.embedding;
+      if (embedding && Array.isArray(embedding)) {
+        const usage = data.usage;
+        const totalTokens = (usage?.total_tokens ?? 0) as number;
         results.push({
           chunkId: chunk.id,
-          embedding: embeddingData.embedding,
+          embedding: embedding,
           model: this.config.model,
-          tokensUsed: embeddingData.total_tokens ? Math.floor(embeddingData.total_tokens / chunks.length) : undefined,
+          tokensUsed: totalTokens > 0 ? Math.floor(totalTokens / chunks.length) : undefined,
           durationMs: Date.now() - startTime
         });
       }

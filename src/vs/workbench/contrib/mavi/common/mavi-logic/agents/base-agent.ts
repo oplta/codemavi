@@ -291,7 +291,7 @@ export abstract class BaseAgent extends Disposable {
 		}
 	}
 
-	protected validateToolParameters(
+	public validateToolParameters(
 		tool: ToolDefinition,
 		parameters: Record<string, any>
 	): void {

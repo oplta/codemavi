@@ -11,7 +11,6 @@ import {
 	BaseAgent,
 	AgentTask,
 	AgentResult,
-	ToolDefinition,
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
@@ -185,7 +184,6 @@ export class VerifierAgent extends BaseAgent {
 	}>();
 	readonly onWarningFound = this._onWarningFound.event;
 
-	private readonly DEFAULT_TIMEOUT_MS = 30000; // 30 seconds
 	private readonly MAX_PARALLEL_CHECKS = 3;
 
 	constructor(
@@ -586,7 +584,6 @@ export class VerifierAgent extends BaseAgent {
 		fileContents: Map<URI, string>,
 	): Promise<CheckResult> {
 		const startTime = Date.now();
-		const timeout = check.timeoutMs || this.DEFAULT_TIMEOUT_MS;
 
 		try {
 			let result: CheckResult;
@@ -877,7 +874,7 @@ export class VerifierAgent extends BaseAgent {
 		const checks: CheckResult[] = [];
 
 		// Collect all errors and warnings from check results
-		for (const [checkType, result] of checkResults) {
+		for (const [, result] of checkResults) {
 			checks.push(result);
 
 			if (result.details?.errors) {
@@ -1172,7 +1169,7 @@ export class VerifierAgent extends BaseAgent {
 				// Check for suspicious import patterns
 				if (
 					line.includes("../..") &&
-					line.includes("../..") !== line.lastIndexOf("../..")
+					line.indexOf("../..") !== line.lastIndexOf("../..")
 				) {
 					errors.push({
 						id: `import_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -1319,7 +1316,7 @@ export class VerifierAgent extends BaseAgent {
 	}
 
 	// Task validation
-	private validateTask(task: AgentTask): void {
+	protected override validateTask(task: AgentTask): void {
 		if (!task.id) {
 			throw new Error("Task must have an ID");
 		}
@@ -1328,17 +1325,21 @@ export class VerifierAgent extends BaseAgent {
 			throw new Error("Task must have a description");
 		}
 
-		if (task.retryCount < 0) {
+		// Check if retry count exceeds max retries (both should be numbers)
+		const retryCount = task.retryCount;
+		const maxRetries = task.maxRetries;
+		
+		if (typeof retryCount === 'number' && retryCount < 0) {
 			throw new Error("Retry count cannot be negative");
 		}
 
-		if (task.maxRetries < 0) {
+		if (typeof maxRetries === 'number' && maxRetries < 0) {
 			throw new Error("Max retries cannot be negative");
 		}
 
-		if (task.retryCount > task.maxRetries) {
+		if (typeof retryCount === 'number' && typeof maxRetries === 'number' && retryCount > maxRetries) {
 			throw new Error(
-				`Retry count (${task.retryCount}) exceeds max retries (${task.maxRetries})`,
+				`Retry count (${retryCount}) exceeds max retries (${maxRetries})`,
 			);
 		}
 	}
@@ -1456,7 +1457,7 @@ export class VerifierAgent extends BaseAgent {
 	}
 
 	// Tool execution methods
-	protected async executeTool(
+	protected override async executeTool(
 		toolName: string,
 		parameters: Record<string, any>,
 	): Promise<any> {
@@ -1695,43 +1696,13 @@ export class VerifierAgent extends BaseAgent {
 		return report;
 	}
 
-	private validateToolParameters(
-		tool: ToolDefinition,
-		parameters: Record<string, any>,
-	): void {
-		for (const [paramName, paramDef] of Object.entries(tool.parameters)) {
-			if (paramDef.required && !(paramName in parameters)) {
-				throw new Error(`Missing required parameter: ${paramName}`);
-			}
+	// validateToolParameters is inherited from BaseAgent (public)
 
-			if (paramName in parameters) {
-				const value = parameters[paramName];
-				const expectedType = paramDef.type;
-
-				// Basic type checking
-				if (expectedType === "string" && typeof value !== "string") {
-					throw new Error(`Parameter ${paramName} must be a string`);
-				} else if (expectedType === "number" && typeof value !== "number") {
-					throw new Error(`Parameter ${paramName} must be a number`);
-				} else if (expectedType === "boolean" && typeof value !== "boolean") {
-					throw new Error(`Parameter ${paramName} must be a boolean`);
-				} else if (expectedType === "array" && !Array.isArray(value)) {
-					throw new Error(`Parameter ${paramName} must be an array`);
-				} else if (
-					expectedType === "object" &&
-					(typeof value !== "object" || value === null || Array.isArray(value))
-				) {
-					throw new Error(`Parameter ${paramName} must be an object`);
-				}
-			}
-		}
-	}
-
-	public getExecutionHistory(): ToolExecution[] {
+	public override getExecutionHistory(): ToolExecution[] {
 		return [...this.executionHistory];
 	}
 
-	public clearExecutionHistory(): void {
+	public override clearExecutionHistory(): void {
 		this.executionHistory = [];
 	}
 }

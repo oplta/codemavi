@@ -37,3 +37,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .eslintcache
+
+# AI Agent Skills (for Cline development)
+.skills/
+.cline/skills/
+*.skill.md
+skills-lock.json

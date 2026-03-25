@@ -3,6 +3,24 @@
  *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
  *--------------------------------------------------------------------------------------*/
 
+/* ============================================================
+ * CODE MAVI IDE - BRAND COLORS & STYLES
+ * ============================================================ */
+
+/* Mavi Brand Color Variables */
+:root {
+	--mavi-primary: #0066CC;
+	--mavi-primary-light: #3399FF;
+	--mavi-primary-dark: #004499;
+	--mavi-accent: #00A3BF;
+	--mavi-accent-light: #00C4E0;
+	--mavi-success: #1E7A3E;
+	--mavi-success-light: #22A34A;
+	--mavi-error: #C9283D;
+	--mavi-error-light: #E03E52;
+}
+
+/* Mavi Sweep & Highlight Backgrounds */
 .monaco-editor .mavi-sweepIdxBG {
 	background-color: var(--vscode-mavi-sweepIdxBG);
 }
@@ -23,43 +41,50 @@
 	background-color: var(--vscode-mavi-redBG);
 }
 
-
-/* Renamed from mavi-watermark-button to mavi-openfolder-button */
+/* ============================================================
+ * MAVI PRIMARY BUTTON - Open Folder
+ * ============================================================ */
 .mavi-openfolder-button {
     padding: 8px 20px;
-    background-color: #306dce;
+    background-color: var(--mavi-primary);
     color: white;
     border: none;
     border-radius: 4px;
     outline: none !important;
 	box-shadow: none !important;
 	cursor: pointer;
-	transition: background-color 0.2s ease;
+	transition: all 0.2s ease;
 }
 .mavi-openfolder-button:hover {
-    background-color: #2563eb;
+    background-color: var(--mavi-primary-light);
+	box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
 }
 .mavi-openfolder-button:active {
-    background-color: #2563eb;
+    background-color: var(--mavi-primary-dark);
+	transform: translateY(1px);
 }
 
-/* Added for Open SSH button with slightly darker color */
+/* ============================================================
+ * MAVI SECONDARY BUTTON - Open SSH
+ * ============================================================ */
 .mavi-openssh-button {
     padding: 8px 20px;
-    background-color: #656565; /* Slightly darker than the #5a5a5a in the TS file */
+    background-color: var(--mavi-accent);
     color: white;
     border: none;
     border-radius: 4px;
     outline: none !important;
 	box-shadow: none !important;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 .mavi-openssh-button:hover {
-    background-color: #474747; /* Darker on hover */
+    background-color: var(--mavi-accent-light);
+	box-shadow: 0 2px 8px rgba(0, 163, 191, 0.3);
 }
 .mavi-openssh-button:active {
-    background-color: #474747;
+    background-color: var(--mavi-accent-dark, #008299);
+	transform: translateY(1px);
 }
 
 
@@ -84,14 +109,23 @@
 	filter: brightness(1.1);
 }
 
+/* ============================================================
+ * MAVI LINK STYLE
+ * ============================================================ */
 .mavi-link {
-	color: #3b82f6;
+	color: var(--mavi-primary-light);
 	cursor: pointer;
 	transition: all 0.2s ease;
+	text-decoration: none;
 }
 
 .mavi-link:hover {
-	opacity: 80%;
+	color: var(--mavi-primary);
+	text-decoration: underline;
+}
+
+.mavi-link:active {
+	color: var(--mavi-primary-dark);
 }
 
 /* styles for all containers used by mavi */

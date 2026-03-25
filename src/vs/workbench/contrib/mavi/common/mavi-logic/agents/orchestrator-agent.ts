@@ -5,20 +5,15 @@
  * Analyzes user requests, creates execution plans, and delegates to specialized agents
  */
 
-import { URI } from "../../../../../../base/common/uri.js";
 import {
 	BaseAgent,
 	AgentTask,
 	AgentResult,
 	AgentContext,
-	ToolDefinition,
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join, dirname } from "path";
-import { Event, Emitter } from "../../../../../../base/common/event.js";
-import { CancellationToken } from "../../../../../../base/common/cancellation.js";
+import { Emitter } from "../../../../../../base/common/event.js";
 
 export interface ExecutionPlan {
 	id: string;
@@ -116,9 +111,6 @@ export class OrchestratorAgent extends BaseAgent {
 	readonly onCheckpointCreated = this._onCheckpointCreated.event;
 
 	private readonly MAX_PARALLEL_TASKS = 4;
-	private readonly MAX_PLAN_DEPTH = 10;
-	private readonly MAX_RETRIES = 3;
-	private readonly CHECKPOINT_DIR = ".mavi/checkpoints";
 
 	constructor(
 		model: string = "gpt-4",
@@ -132,14 +124,9 @@ export class OrchestratorAgent extends BaseAgent {
 			temperature,
 			maxTokens,
 		);
-
-		// Ensure checkpoint directory exists
-		if (!existsSync(this.CHECKPOINT_DIR)) {
-			writeFileSync(this.CHECKPOINT_DIR, "", { flag: "wx" });
-		}
 	}
 
-	async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
+	override async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
 		await super.initialize(semanticSearch);
 		this.registerOrchestratorTools();
 		console.log(`[OrchestratorAgent] Initialized with ${this.tools.size} tools`);
@@ -528,7 +515,7 @@ export class OrchestratorAgent extends BaseAgent {
 		return { status: 'delegated', taskId: task.id };
 	}
 
-	private async searchCodebase(query: string, topK: number): Promise<any[]> {
+	protected override async searchCodebase(query: string, topK: number): Promise<any[]> {
 		if (!this.semanticSearch) {
 			console.warn('[OrchestratorAgent] Semantic search not available, returning empty results');
 			return [];
@@ -755,7 +742,7 @@ export class OrchestratorAgent extends BaseAgent {
 		}
 	}
 
-	private validateTask(task: AgentTask): void {
+	protected override validateTask(task: AgentTask): void {
 		if (!task.id) {
 			throw new Error('Task must have an ID');
 		}
@@ -770,10 +757,6 @@ export class OrchestratorAgent extends BaseAgent {
 
 		if (task.maxRetries < 0) {
 			throw new Error('Max retries cannot be negative');
-		}
-
-		if (task.retryCount > task.maxRetries) {
-			throw new Error(`Retry count (${task.retryCount}) exceeds max retries (${task.maxRetries})`);
 		}
 	}
 
@@ -950,7 +933,7 @@ export class OrchestratorAgent extends BaseAgent {
 	}
 
 	// Tool execution methods
-	protected async executeTool(toolName: string, parameters: Record<string, any>): Promise<any> {
+	protected override async executeTool(toolName: string, parameters: Record<string, any>): Promise<any> {
 		const tool = this.tools.get(toolName);
 		if (!tool) {
 			throw new Error(`Tool not found: ${toolName}`);
@@ -1017,34 +1000,13 @@ export class OrchestratorAgent extends BaseAgent {
 		}
 	}
 
-	private validateToolParameters(tool: ToolDefinition, parameters: Record<string, any>): void {
-		for (const [paramName, paramDef] of Object.entries(tool.parameters)) {
-			if (paramDef.required && !(paramName in parameters)) {
-				throw new Error(`Missing required parameter: ${paramName}`);
-			}
+	// validateToolParameters is inherited from BaseAgent (public)
 
-			if (paramName in parameters) {
-				const value = parameters[paramName];
-				const expectedType = paramDef.type;
-
-				// Basic type checking
-				if (expectedType === 'string' && typeof value !== 'string') {
-					throw new Error(`Parameter ${paramName} must be a string`);
-				} else if (expectedType === 'number' && typeof value !== 'number') {
-					throw new Error(`Parameter ${paramName} must be a number`);
-				} else if (expectedType === 'boolean' && typeof value !== 'boolean') {
-					throw new Error(`Parameter ${paramName} must be a boolean`);
-				} else if (expectedType === 'array' && !Array.isArray(value)) {
-					throw new Error(`Parameter ${paramName} must be an array`);
-				} else if (expectedType === 'object' && (typeof value !== 'object' || value === null || Array.isArray(value))) {
-					throw new Error(`Parameter ${paramName} must be an object`);
-				}
-			}
-		}
-	}
-
-	public getExecutionHistory(): ToolExecution[] {
+	public override getExecutionHistory(): ToolExecution[] {
 		return [...this.executionHistory];
 	}
 
+	public override clearExecutionHistory(): void {
+		this.executionHistory = [];
+	}
 }

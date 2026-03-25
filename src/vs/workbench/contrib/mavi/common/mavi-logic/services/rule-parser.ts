@@ -6,6 +6,7 @@
  */
 
 import { URI } from "../../../../../../base/common/uri.js";
+import { VSBuffer } from "../../../../../../base/common/buffer.js";
 import { IFileService } from "../../../../../../platform/files/common/files.js";
 import { ILogService } from "../../../../../../platform/log/common/log.js";
 import { Event, Emitter } from "../../../../../../base/common/event.js";
@@ -807,6 +808,7 @@ ${rules
 			"code-style": {
 				title: "Code Style Guidelines",
 				description: "Rules for code formatting and style consistency",
+				priority: 70,
 				content: `# Code Style Rules
 
 ## Indentation
@@ -828,14 +830,17 @@ ${rules
 - Prefer const over let
 - Avoid global variables
 - Use strict equality (===)`,
-				priority: 70,
-				metadata: {
-					tags: ["style", "formatting", "conventions"],
-				},
 			},
 			security: {
 				title: "Security Guidelines",
 				description: "Security best practices and vulnerability prevention",
+				priority: 90,
+				metadata: {
+					createdAt: Date.now(),
+					updatedAt: Date.now(),
+					version: "1.0.0",
+					tags: ["security", "authentication", "encryption"],
+				},
 				content: `# Security Rules
 
 ## Input Validation
@@ -857,14 +862,17 @@ ${rules
 - Prevent SQL injection
 - Prevent XSS attacks
 - Prevent CSRF attacks`,
-				priority: 90,
-				metadata: {
-					tags: ["security", "authentication", "encryption"],
-				},
 			},
 			testing: {
 				title: "Testing Guidelines",
 				description: "Rules for writing and maintaining tests",
+				priority: 60,
+				metadata: {
+					createdAt: Date.now(),
+					updatedAt: Date.now(),
+					version: "1.0.0",
+					tags: ["testing", "quality", "coverage"],
+				},
 				content: `# Testing Rules
 
 ## Test Structure
@@ -881,10 +889,6 @@ ${rules
 - Tests should be independent
 - Use mocking for external dependencies
 - Keep tests fast and reliable`,
-				priority: 60,
-				metadata: {
-					tags: ["testing", "quality", "coverage"],
-				},
 			},
 		};
 
@@ -1174,7 +1178,8 @@ ${rules
 
 	private async writeFile(uri: URI, content: string): Promise<void> {
 		try {
-			await this.fileService.writeFile(uri, content);
+			const buffer = VSBuffer.fromString(content);
+			await this.fileService.writeFile(uri, buffer);
 		} catch (error) {
 			this.logService.error(
 				`[RuleParser] Failed to write file ${uri.fsPath}:`,

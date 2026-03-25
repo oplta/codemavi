@@ -39,6 +39,8 @@ import { Codicon } from '../../../../base/common/codicons.js';
 import { Orientation } from '../../../../base/browser/ui/sash/sash.js';
 // import { IDisposable } from '../../../../base/common/lifecycle.js';
 import { toDisposable } from '../../../../base/common/lifecycle.js';
+import { registerIcon } from '../../../../platform/theme/common/iconRegistry.js';
+import { localize } from '../../../../nls.js';
 import { Action2, registerAction2 } from '../../../../platform/actions/common/actions.js';
 import { ServicesAccessor } from '../../../../editor/browser/editorExtensions.js';
 import { IViewsService } from '../../../services/views/common/viewsService.js';
@@ -97,8 +99,12 @@ class SidebarViewPane extends ViewPane {
 
 // ---------- Register viewpane inside the mavi container ----------
 
-// const maviThemeIcon = Codicon.symbolObject;
-// const maviViewIcon = registerIcon('mavi-view-icon', maviThemeIcon, localize('maviViewIcon', 'View icon of the Code Mavi IDE chat view.'));
+// Mavi Chat Icon - Custom blue block icon
+const maviChatIcon = registerIcon(
+	'mavi-chat-icon',
+	Codicon.commentDiscussion,
+	localize('maviChatIcon', 'Icon for Code Mavi IDE Chat view.')
+);
 
 // called VIEWLET_ID in other places for some reason
 export const MAVI_VIEW_CONTAINER_ID = 'workbench.view.mavi'
@@ -117,7 +123,7 @@ const container = viewContainerRegistry.registerViewContainer({
 	order: 1,
 
 	rejectAddedViews: true,
-	icon: Codicon.symbolMethod,
+	icon: maviChatIcon,
 
 
 }, ViewContainerLocation.AuxiliaryBar, { doNotRegisterOpenCommand: true, isDefault: true });

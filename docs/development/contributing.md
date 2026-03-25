@@ -1,113 +1,155 @@
 # Contributing to Code Mavi IDE
 
-Thank you for your interest in contributing to Code Mavi IDE! This guide will help you understand our development process and how to contribute effectively.
+Welcome! 👋 This is the official guide on how to contribute to Code Mavi IDE. We want to make it as easy as possible to contribute, so if you have any questions or comments, reach out via email or discord!
 
-## Table of Contents
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Environment](#development-environment)
-- [Project Structure](#project-structure)
-- [Contribution Areas](#contribution-areas)
-- [Development Workflow](#development-workflow)
-- [Code Standards](#code-standards)
-- [Testing](#testing)
-- [Pull Request Process](#pull-request-process)
-- [Community](#community)
+## Ways to Contribute
 
-## Code of Conduct
+- 💫 Complete items on the [Roadmap](https://github.com/orgs/mavi/projects/2).
+- 💡 Make suggestions in our [Discord](https://discord.gg/RSNjgaugJs).
+- 🪴 Start new Issues - see [Issues](https://github.com/mavi/mavi/issues).
 
-We are committed to fostering a welcoming and inclusive community. Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
+## Codebase Guide
 
-## Getting Started
+We [highly recommend reading this](https://github.com/mavi/mavi/blob/main/CODEMAVI_CODEBASE_GUIDE.md) guide that we put together on Code Mavi IDE's sourcecode if you'd like to add new features.
+
+The repo is not as intimidating as it first seems if you read the guide!
+
+Most of Code Mavi IDE's code lives in the folder `src/vs/workbench/contrib/mavi/`.
+
+---
+
+## Editing Code Mavi IDE's Code
+
+If you're making changes to Code Mavi IDE's code as a contributor, you'll want to run a local version of Code Mavi IDE to make sure your changes worked. Developer mode lets you do this. Here's how to use it.
 
 ### Prerequisites
-- Node.js 18 or higher
-- npm 8 or higher
-- Git
-- Basic understanding of TypeScript and React
 
-### First-Time Setup
+#### Mac
+You need Python and XCode. You probably have these by default.
 
-1. **Fork the Repository**
-   ```bash
-   # Fork on GitHub first, then:
-   git clone https://github.com/YOUR_USERNAME/mavi.git
-   cd mavi
-   ```
+#### Windows
+First get [Visual Studio 2022](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community) (recommended) or [VS Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools) (not recommended). If you already have both, you might need to run the next few steps on both of them.
 
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+Go to the "Workloads" tab and select:
+- `Desktop development with C++`
+- `Node.js build tools`
 
-3. **Build the Project**
-   ```bash
-   # Development build (watch mode)
-   npm run watch
-   
-   # Or for a one-time build:
-   npm run compile
-   ```
+Go to the "Individual Components" tab and select:
+- `MSVC v143 - VS 2022 C++ x64/x86 Spectre-mitigated libs (Latest)`
+- `C++ ATL for latest build tools with Spectre Mitigations`
+- `C++ MFC for latest build tools with Spectre Mitigations`
 
-4. **Launch Code Mavi IDE**
-   ```bash
-   # macOS/Linux
-   ./scripts/code.sh
-   
-   # Windows
-   ./scripts/code.bat
-   ```
+Finally, click Install.
 
-## Development Environment
+#### Linux
+First, run `npm install -g node-gyp`. Then:
 
-### Recommended Tools
-- **VS Code** (with TypeScript and ESLint extensions)
-- **Node.js 18+**
-- **Git** with commit signing enabled
-- **Docker** (optional, for testing)
+- **Debian (Ubuntu, etc):** `sudo apt-get install build-essential g++ libx11-dev libxkbfile-dev libsecret-1-dev libkrb5-dev python-is-python3`
+- **Red Hat (Fedora, etc):** `sudo dnf install @development-tools gcc gcc-c++ make libsecret-devel krb5-devel libX11-devel libxkbfile-devel`
+- **SUSE (openSUSE, etc):** `sudo zypper install patterns-devel-C-C++-devel_C_C++  krb5-devel libsecret-devel libxkbfile-devel libX11-devel`
+- **Others:** see [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute).
 
-### Environment Variables
+---
 
-Create a `.env` file in the project root for development:
+### Developer Mode Instructions
 
-```bash
-# LLM Provider API Keys (for testing)
-OPENAI_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-DEEPSEEK_API_KEY=...
+Here's how to start changing Code Mavi IDE's code. These steps cover everything from cloning Code Mavi IDE, to opening a Developer Mode window where you can play around with your updates.
 
-# Development flags
-CODEMAVI_DEV_MODE=true
-CODEMAVI_LOG_LEVEL=debug
-CODEMAVI_ENABLE_TELEMETRY=false
+1. `git clone https://github.com/mavi/mavi` to clone the repo.
+2. `npm install` to install all dependencies.
+3. Open Code Mavi IDE or VSCode, and initialize Developer Mode (this can take ~5 min to finish, it's done when 2 of the 3 spinners turn to check marks):
+   - Windows: Press <kbd>Ctrl+Shift+B</kbd>.
+   - Mac: Press <kbd>Cmd+Shift+B</kbd>.
+   - Linux: Press <kbd>Ctrl+Shift+B</kbd>.
+4. Open the Code Mavi IDE Developer Mode window:
+   - Windows: `./scripts/code.bat`.
+   - Mac: `./scripts/code.sh`.
+   - Linux: `./scripts/code.sh`.
+5. You're good to start editing Code Mavi IDE's code! 
+   - You won't see your changes unless you press <kbd>Ctrl+R</kbd> (<kbd>Cmd+R</kbd>) inside the new window to reload. Alternatively, press <kbd>Ctrl+Shift+P</kbd> and `Reload Window`.
+   - You might want to add the flags `--user-data-dir ./.tmp/user-data --extensions-dir ./.tmp/extensions` to the command in step 4, which lets you reset any IDE changes you made by deleting the `.tmp` folder.
+   - You can kill any of the build scripts by pressing `Ctrl+D` in its terminal. If you press `Ctrl+C` the script will close but will keep running in the background.
+
+---
+
+### Common Fixes
+
+- Make sure you followed the prerequisite steps above.
+- Make sure you have Node version `20.18.2` (the version in `.nvmrc`).
+    - You can do this without changing your global Node version using [nvm](https://github.com/nvm-sh/nvm): run `nvm install`, followed by `nvm use` to install the version in `.nvmrc` locally.
+- Make sure the path to your Code Mavi IDE folder does not have any spaces in it.
+- If you get `"TypeError: Failed to fetch dynamically imported module"`, make sure all imports end with `.js`.
+- If you get an error with React, try running `NODE_OPTIONS="--max-old-space-size=8192" npm run buildreact`.
+- If you see missing styles, wait a few seconds and then reload.
+- If you get errors like `npm error libtool:   error: unrecognised option: '-static'`, when running ./scripts/code.sh, make sure you have GNU libtool instead of BSD libtool (BSD is the default in macos)
+- If you get errors like `The SUID sandbox helper binary was found, but is not configured correctly` when running ./scripts/code.sh, run:
+  `sudo chown root:root .build/electron/chrome-sandbox && sudo chmod 4755 .build/electron/chrome-sandbox` and then run `./scripts/code.sh` again.
+- If you have any other questions, feel free to [submit an issue](https://github.com/mavi/mavi/issues/new). You can also refer to VSCode's complete [How to Contribute](https://github.com/microsoft/vscode/wiki/How-to-Contribute) page.
+
+---
+
+### Building Code Mavi IDE from Terminal
+
+To build Code Mavi IDE from the terminal instead of from inside VSCode, follow the steps above, but instead of pressing <kbd>Cmd+Shift+B</kbd>, run `npm run watch`. The build is done when you see something like this:
+
+```
+[watch-extensions] [00:37:39] Finished compilation extensions with 0 errors after 19303 ms
+[watch-client    ] [00:38:06] Finished compilation with 0 errors after 46248 ms
+[watch-client    ] [00:38:07] Starting compilation...
+[watch-client    ] [00:38:07] Finished compilation with 0 errors after 5 ms
 ```
 
-### Common Development Commands
+---
 
+## Distributing
+
+Code Mavi IDE's maintainers distribute Code Mavi IDE on our website and in releases. Our build pipeline is a fork of VSCodium, and it works by running GitHub Actions which create the downloadables. The build repo with more instructions lives [here](https://github.com/mavi/mavi-builder).
+
+If you want to completely control Code Mavi IDE's build pipeline for your own internal usage, which comes with a lot of time cost (and is typically not recommended), see our [`mavi-builder`](https://github.com/mavi/mavi-builder) repo which builds Code Mavi IDE and contains a few important notes about auto-updating and rebasing.
+
+### Building a Local Executable
+
+We don't usually recommend building a local executable of Code Mavi IDE - typically you should follow the steps above to distribute a complete executable with the advantages of VSCodium baked-in, or you should just use Developer Mode to run Code Mavi IDE locally which is much faster. If you're certain this is what you want, see details below.
+
+<details>
+<summary>Building Locally (not recommended)</summary>
+
+If you're certain you want to build a local executable of Code Mavi IDE, follow these steps. It can take ~25 minutes.
+
+Make sure you've already entered Developer Mode with Code Mavi IDE first, then run one of the following commands. This will create a folder named `VSCode-darwin-arm64` or similar outside of the mavi/ repo.
+
+#### Mac
+- `npm run gulp vscode-darwin-arm64` - most common (Apple Silicon)
+- `npm run gulp vscode-darwin-x64` (Intel)
+
+#### Windows
+- `npm run gulp vscode-win32-x64` - most common
+- `npm run gulp vscode-win32-arm64`
+
+#### Linux
+- `npm run gulp vscode-linux-x64` - most common
+- `npm run gulp vscode-linux-arm64`
+
+#### Local Executable Output
+
+The local executable will be located in a folder outside of `mavi/`:
 ```bash
-# Start development server
-npm run watch
-
-# Run tests
-npm test
-npm run test-browser  # Browser tests
-npm run test-node     # Node.js tests
-
-# Lint code
-npm run eslint
-npm run stylelint
-
-# Type checking
-npm run tsec-compile-check
-npm run vscode-dts-compile-check
-
-# Build for production
-npm run compile
-npm run minify-vscode
-
-# Clean build artifacts
-npm run clean
+workspace/
+├── mavi/   # Your Code Mavi IDE fork
+└── VSCode-darwin-arm64/ # Generated output
 ```
+
+</details>
+
+---
+
+## Pull Request Guidelines
+
+- Please submit a pull request once you've made a change.
+- No need to submit an Issue unless you're creating a new feature that might involve multiple PRs.
+- Please don't use AI to write your PR 🙂
+
+---
 
 ## Project Structure
 
@@ -133,146 +175,7 @@ mavi-ide/
 └── scripts/                        # Build and utility scripts
 ```
 
-### Key Directories
-
-1. **`src/vs/workbench/contrib/mavi/common/mavi-logic/`**
-   - Heart of the agent system
-   - Contains agent prompts, tool definitions, and core logic
-   - Changes here affect all agent behavior
-
-2. **`src/vs/workbench/contrib/mavi/browser/`**
-   - User interface components
-   - React-based views and services
-   - Integration with VS Code workbench
-
-3. **`src/vs/workbench/contrib/mavi/electron-main/`**
-   - Main process extensions
-   - Native integrations and system APIs
-   - Provider management
-
-## Contribution Areas
-
-We welcome contributions in all areas! Here are some specific areas where help is especially valuable:
-
-### 1. Agent System Improvements
-- **Enhance agent prompts** in `mavi-logic/agents/`
-- **Add new tools** to extend agent capabilities
-- **Improve error handling** and recovery mechanisms
-- **Optimize token usage** and context management
-
-### 2. LLM Provider Integrations
-- **Add new providers** (local or cloud)
-- **Improve existing provider** implementations
-- **Add provider-specific optimizations**
-- **Implement fallback mechanisms**
-
-### 3. User Interface
-- **Improve existing UI components**
-- **Add new views and panels**
-- **Enhance user experience**
-- **Improve accessibility**
-
-### 4. Codebase Intelligence
-- **Enhance semantic search**
-- **Add new code analysis features**
-- **Improve AST parsing and analysis**
-- **Add language-specific optimizations**
-
-### 5. Documentation
-- **Improve existing documentation**
-- **Add tutorials and guides**
-- **Create API documentation**
-- **Translate documentation**
-
-### 6. Testing and Quality
-- **Add unit tests**
-- **Improve test coverage**
-- **Add integration tests**
-- **Enhance CI/CD pipelines**
-
-### 7. Performance Optimization
-- **Reduce bundle size**
-- **Improve startup time**
-- **Optimize memory usage**
-- **Enhance caching mechanisms**
-
-## Development Workflow
-
-### 1. Find an Issue
-- Check [GitHub Issues](https://github.com/mavi/mavi/issues)
-- Look for issues labeled `good-first-issue` or `help-wanted`
-- Or create a new issue if you have an idea
-
-### 2. Discuss the Change
-- Comment on the issue to express interest
-- Discuss implementation approach
-- Ask questions if anything is unclear
-
-### 3. Create a Branch
-```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/issue-number-description
-```
-
-### 4. Make Changes
-- Follow our [Code Standards](#code-standards)
-- Write tests for new functionality
-- Update documentation as needed
-
-### 5. Test Your Changes
-```bash
-# Run all tests
-npm test
-
-# Run specific test suites
-npm run test-browser
-npm run test-node
-
-# Lint your code
-npm run eslint
-
-# Type checking
-npm run tsec-compile-check
-```
-
-### 6. Commit Your Changes
-```bash
-# Stage changes
-git add .
-
-# Commit with conventional commit message
-git commit -m "feat: add new LLM provider integration"
-```
-
-**Commit Message Format:**
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-**Types:**
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `test`: Adding tests
-- `chore`: Maintenance tasks
-
-### 7. Push and Create Pull Request
-```bash
-git push origin your-branch-name
-```
-
-Then create a Pull Request on GitHub with:
-- Clear description of changes
-- Reference to related issue
-- Screenshots for UI changes
-- Test results
+---
 
 ## Code Standards
 
@@ -283,13 +186,6 @@ Then create a Pull Request on GitHub with:
 - Use interfaces for object shapes
 - Prefer `const` over `let`
 
-### React Standards
-- Use functional components
-- Implement proper TypeScript interfaces for props
-- Use hooks appropriately
-- Follow React best practices
-- Use CSS modules or styled-components
-
 ### Naming Conventions
 - **Files:** kebab-case for all files
 - **Variables:** camelCase
@@ -297,106 +193,21 @@ Then create a Pull Request on GitHub with:
 - **Types/Interfaces:** PascalCase
 - **Components:** PascalCase
 
-### Code Organization
-- One component per file
-- Group related functionality
-- Use barrel exports (`index.ts`)
-- Keep files under 300 lines when possible
-
-### Comments and Documentation
-- Use JSDoc for public APIs
-- Add comments for complex logic
-- Keep comments up-to-date
-- Use TODO comments for future work
-
-## Testing
-
-### Test Structure
+### Commit Message Format
 ```
-test/
-├── unit/                    # Unit tests
-│   ├── browser/            # Browser-specific tests
-│   └── node/               # Node.js tests
-├── integration/            # Integration tests
-└── e2e/                    # End-to-end tests
+type(scope): description
+
+Types:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- style: Code style changes
+- refactor: Code refactoring
+- test: Adding tests
+- chore: Maintenance tasks
 ```
 
-### Writing Tests
-
-**Unit Test Example:**
-```typescript
-import { describe, it, expect } from 'vitest';
-import { someFunction } from './some-module';
-
-describe('someFunction', () => {
-  it('should handle normal input', () => {
-    const result = someFunction('input');
-    expect(result).toBe('expected');
-  });
-
-  it('should handle edge cases', () => {
-    const result = someFunction('');
-    expect(result).toBe('');
-  });
-});
-```
-
-**Integration Test Example:**
-```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { AgentSystem } from '../src/agent-system';
-
-describe('AgentSystem Integration', () => {
-  let agentSystem: AgentSystem;
-
-  beforeEach(() => {
-    agentSystem = new AgentSystem();
-  });
-
-  it('should complete full agent workflow', async () => {
-    const result = await agentSystem.executeTask('test task');
-    expect(result.success).toBe(true);
-  });
-});
-```
-
-### Running Tests
-```bash
-# Run all tests
-npm test
-
-# Run tests with coverage
-npm test -- --coverage
-
-# Run specific test file
-npm test -- test/unit/some-test.ts
-
-# Watch mode
-npm test -- --watch
-```
-
-## Pull Request Process
-
-### PR Requirements
-1. **Tests Pass:** All tests must pass
-2. **Code Linted:** No ESLint errors
-3. **Type Checking:** No TypeScript errors
-4. **Documentation Updated:** Relevant docs updated
-5. **Commit Messages:** Follow conventional commits
-
-### Review Process
-1. **Automated Checks:** CI runs tests and linting
-2. **Code Review:** At least one maintainer reviews
-3. **Feedback:** Address all review comments
-4. **Merge:** Once approved, maintainer merges
-
-### PR Labels
-- `enhancement`: New features or improvements
-- `bug`: Bug fixes
-- `documentation`: Documentation changes
-- `refactor`: Code refactoring
-- `test`: Test-related changes
-- `dependencies`: Dependency updates
+---
 
 ## Community
 
@@ -404,92 +215,19 @@ npm test -- --watch
 - **GitHub Issues:** Bug reports and feature requests
 - **GitHub Discussions:** Questions and discussions
 - **Discord Server:** Real-time chat (link in README)
-- **Weekly Meetings:** Community calls (announced in Discussions)
 
 ### Getting Help
-- Check the [documentation](docs/) first
+- Check the [documentation](../docs/) first
 - Search existing issues and discussions
 - Ask in GitHub Discussions
 - Join our Discord server
 
-### Recognition
-Contributors are recognized in:
-- GitHub contributor list
-- Release notes
-- Project documentation
-- Community highlights
-
-## Advanced Topics
-
-### Working with Agent Prompts
-Agent prompts are in Markdown format with special syntax:
-
-```markdown
-# Agent Prompt Template
-
-## Role
-[Agent role description]
-
-## Rules
-- [Rule 1]
-- [Rule 2]
-
-## Tools Available
-- `tool_name(params)` - Description
-
-## Output Format
-[Expected output format]
-```
-
-When modifying prompts:
-1. Test with various scenarios
-2. Consider edge cases
-3. Update documentation
-4. Add examples if needed
-
-### Adding New LLM Providers
-1. Create provider class in `src/vs/workbench/contrib/mavi/common/providers/`
-2. Implement required interfaces
-3. Add to provider registry
-4. Update configuration UI
-5. Add tests
-6. Update documentation
-
-### Performance Profiling
-```bash
-# Build with profiling
-npm run compile -- --profile
-
-# Run performance tests
-npm run perf
-
-# Memory profiling
-node --inspect-brk scripts/profile-memory.js
-```
-
-## Release Process
-
-### Versioning
-We follow [Semantic Versioning](https://semver.org/):
-- **Major:** Breaking changes
-- **Minor:** New features (backward compatible)
-- **Patch:** Bug fixes
-
-### Release Checklist
-- [ ] All tests pass
-- [ ] Documentation updated
-- [ ] Changelog updated
-- [ ] Version bumped
-- [ ] Release notes prepared
-- [ ] Build artifacts created
-- [ ] Announcement prepared
+---
 
 ## License
 
-By contributing to Code Mavi IDE, you agree that your contributions will be licensed under the project's [MIT License](LICENSE.txt).
+By contributing to Code Mavi IDE, you agree that your contributions will be licensed under the project's [MIT License](../../LICENSE.txt).
 
 ---
 
 Thank you for contributing to Code Mavi IDE! Your efforts help make AI-assisted development more transparent, accessible, and powerful for everyone.
-
-If you have any questions not covered in this guide, please don't hesitate to ask in our community channels.

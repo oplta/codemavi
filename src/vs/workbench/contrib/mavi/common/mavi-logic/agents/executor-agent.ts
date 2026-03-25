@@ -11,13 +11,10 @@ import {
 	BaseAgent,
 	AgentTask,
 	AgentResult,
-	AgentContext,
-	ToolDefinition,
 	ToolExecution,
 } from "./base-agent.js";
 import { SemanticSearchService } from "../tools/semantic-search-service.js";
-import { Event, Emitter } from "../../../../../../base/common/event.js";
-import { createHash } from "crypto";
+import { Emitter } from "../../../../../../base/common/event.js";
 
 export interface SemanticDiff {
 	file: URI;
@@ -78,7 +75,6 @@ export class ExecutorAgent extends BaseAgent {
 	}>();
 	readonly onChangeApplied = this._onChangeApplied.event;
 
-	private readonly MAX_FILE_SIZE = 1024 * 1024; // 1MB
 	private readonly MAX_DIFF_SIZE = 1000; // lines
 	private readonly MAX_SEARCH_CONTEXT = 50; // lines for search block
 
@@ -96,7 +92,7 @@ export class ExecutorAgent extends BaseAgent {
 		);
 	}
 
-	async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
+	override async initialize(semanticSearch?: SemanticSearchService): Promise<void> {
 		await super.initialize(semanticSearch);
 		this.registerExecutorTools();
 		console.log(`[ExecutorAgent] Initialized with ${this.tools.size} tools`);
@@ -845,10 +841,17 @@ export class ExecutorAgent extends BaseAgent {
 	}
 
 	private calculateChecksum(content: string): string {
-		return createHash("md5").update(content).digest("hex");
+		// Simple hash implementation for checksum
+		let hash = 0;
+		for (let i = 0; i < content.length; i++) {
+			const char = content.charCodeAt(i);
+			hash = ((hash << 5) - hash) + char;
+			hash = hash & hash;
+		}
+		return Math.abs(hash).toString(16);
 	}
 
-	private validateTask(task: AgentTask): void {
+	protected override validateTask(task: AgentTask): void {
 		if (!task.id) {
 			throw new Error("Task must have an ID");
 		}
@@ -863,12 +866,6 @@ export class ExecutorAgent extends BaseAgent {
 
 		if (task.maxRetries < 0) {
 			throw new Error("Max retries cannot be negative");
-		}
-
-		if (task.retryCount > task.maxRetries) {
-			throw new Error(
-				`Retry count (${task.retryCount}) exceeds max retries (${task.maxRetries})`,
-			);
 		}
 	}
 
@@ -940,7 +937,7 @@ export class ExecutorAgent extends BaseAgent {
 	}
 
 	// Tool execution methods
-	protected async executeTool(
+	protected override async executeTool(
 		toolName: string,
 		parameters: Record<string, any>,
 	): Promise<any> {
@@ -1082,43 +1079,13 @@ export class ExecutorAgent extends BaseAgent {
 		return content.substring(start, end);
 	}
 
-	private validateToolParameters(
-		tool: ToolDefinition,
-		parameters: Record<string, any>,
-	): void {
-		for (const [paramName, paramDef] of Object.entries(tool.parameters)) {
-			if (paramDef.required && !(paramName in parameters)) {
-				throw new Error(`Missing required parameter: ${paramName}`);
-			}
+	// validateToolParameters is inherited from BaseAgent (public)
 
-			if (paramName in parameters) {
-				const value = parameters[paramName];
-				const expectedType = paramDef.type;
-
-				// Basic type checking
-				if (expectedType === "string" && typeof value !== "string") {
-					throw new Error(`Parameter ${paramName} must be a string`);
-				} else if (expectedType === "number" && typeof value !== "number") {
-					throw new Error(`Parameter ${paramName} must be a number`);
-				} else if (expectedType === "boolean" && typeof value !== "boolean") {
-					throw new Error(`Parameter ${paramName} must be a boolean`);
-				} else if (expectedType === "array" && !Array.isArray(value)) {
-					throw new Error(`Parameter ${paramName} must be an array`);
-				} else if (
-					expectedType === "object" &&
-					(typeof value !== "object" || value === null || Array.isArray(value))
-				) {
-					throw new Error(`Parameter ${paramName} must be an object`);
-				}
-			}
-		}
-	}
-
-	public getExecutionHistory(): ToolExecution[] {
+	public override getExecutionHistory(): ToolExecution[] {
 		return [...this.executionHistory];
 	}
 
-	public clearExecutionHistory(): void {
+	public override clearExecutionHistory(): void {
 		this.executionHistory = [];
 	}
 }

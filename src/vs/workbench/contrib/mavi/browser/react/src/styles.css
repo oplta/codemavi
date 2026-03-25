@@ -8,29 +8,80 @@
 @tailwind utilities;
 
 & {
+	/* ============================================================
+	 * CODE MAVI IDE - BRAND COLOR VARIABLES
+	 * ============================================================ */
+	
+	/* Primary Mavi Blue */
+	--mavi-primary: #0066CC;
+	--mavi-primary-light: #3399FF;
+	--mavi-primary-dark: #004499;
+	
+	/* Accent Colors */
+	--mavi-accent: #00A3BF;
+	--mavi-accent-light: #00C4E0;
+	--mavi-accent-dark: #008299;
+	
+	/* Semantic Colors */
+	--mavi-success: #1E7A3E;
+	--mavi-success-light: #22A34A;
+	--mavi-error: #C9283D;
+	--mavi-error-light: #E03E52;
+	--mavi-warning: #D4A000;
+	
+	/* Background Colors */
 	--mavi-bg-1: var(--vscode-input-background);
 	--mavi-bg-1-alt: var(--vscode-badge-background);
 	--mavi-bg-2: var(--vscode-sideBar-background);
 	--mavi-bg-2-alt: color-mix(in srgb, var(--vscode-editor-background) 30%, var(--vscode-sideBar-background) 70%);
-	--mavi-bg-2-hover: color-mix(in srgb, var(--vscode-editor-foreground) 2%, var(--vscode-sideBar-background) 98%);
+	--mavi-bg-2-hover: color-mix(in srgb, var(--mavi-primary) 3%, var(--vscode-sideBar-background) 97%);
 	--mavi-bg-3: var(--vscode-editor-background);
 
+	/* Foreground Colors */
 	--mavi-fg-0: color-mix(in srgb, var(--vscode-tab-activeForeground) 90%, black 10%);
 	--mavi-fg-1: var(--vscode-editor-foreground);
 	--mavi-fg-2: var(--vscode-input-foreground);
 	--mavi-fg-3: var(--vscode-input-placeholderForeground);
-	/* --mavi-fg-4: var(--vscode-tab-inactiveForeground); */
 	--mavi-fg-4: var(--vscode-list-deemphasizedForeground);
 
-	--mavi-warning: var(--vscode-charts-yellow);
-
-	--mavi-border-1: var(--vscode-commandCenter-activeBorder);
-	--mavi-border-2: var(--vscode-commandCenter-border);
+	/* Border Colors - Mavi themed */
+	--mavi-border-1: var(--mavi-primary);
+	--mavi-border-2: color-mix(in srgb, var(--mavi-primary) 50%, transparent 50%);
 	--mavi-border-3: var(--vscode-commandCenter-inactiveBorder);
 	--mavi-border-4: var(--vscode-editorGroup-border);
 
-	--mavi-ring-color: #007FD4;
-	--mavi-link-color: #007FD4;
+	/* Focus & Link Colors */
+	--mavi-ring-color: var(--mavi-primary);
+	--mavi-link-color: var(--mavi-primary-light);
+	--mavi-focus-glow: 0 0 0 2px color-mix(in srgb, var(--mavi-primary) 30%, transparent 70%);
+	
+	/* ============================================================
+	 * CHAT UI SPECIFIC VARIABLES
+	 * ============================================================ */
+	
+	/* Chat Message Colors */
+	--mavi-chat-user-bg: color-mix(in srgb, var(--mavi-primary) 12%, var(--vscode-input-background) 88%);
+	--mavi-chat-user-border: color-mix(in srgb, var(--mavi-primary) 30%, transparent 70%);
+	--mavi-chat-assistant-bg: var(--vscode-sideBar-background);
+	--mavi-chat-assistant-border: var(--vscode-editorGroup-border);
+	
+	/* Chat Input */
+	--mavi-input-active-border: var(--mavi-primary);
+	--mavi-input-active-shadow: 0 0 0 3px color-mix(in srgb, var(--mavi-primary) 15%, transparent 85%);
+	
+	/* Button Colors */
+	--mavi-btn-primary-bg: var(--mavi-primary);
+	--mavi-btn-primary-hover: var(--mavi-primary-light);
+	--mavi-btn-primary-active: var(--mavi-primary-dark);
+	--mavi-btn-secondary-bg: color-mix(in srgb, var(--mavi-primary) 15%, transparent 85%);
+	--mavi-btn-secondary-hover: color-mix(in srgb, var(--mavi-primary) 25%, transparent 75%);
+	
+	/* Tool/Status Colors */
+	--mavi-tool-bg: color-mix(in srgb, var(--vscode-editor-background) 50%, var(--vscode-sideBar-background) 50%);
+	--mavi-tool-border: var(--vscode-editorGroup-border);
+	--mavi-tool-running: var(--mavi-accent);
+	--mavi-tool-success: var(--mavi-success);
+	--mavi-tool-error: var(--mavi-error);
 }
 
 .select-child-restyle select {

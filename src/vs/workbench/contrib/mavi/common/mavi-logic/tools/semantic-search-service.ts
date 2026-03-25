@@ -48,8 +48,6 @@ export class SemanticSearchService extends Disposable {
 	private embeddingService: EmbeddingService;
 	private initialized = false;
 	private indexingInProgress = false;
-	private readonly CHUNK_SIZE_LINES = 50;
-	private readonly CHUNK_OVERLAP_LINES = 10;
 
 	constructor(
 		embeddingConfig?: EmbeddingConfig,
@@ -573,11 +571,6 @@ export class SemanticSearchService extends Disposable {
 		// This is a simplified implementation
 		// In production, this would recursively scan the workspace
 		// and filter by file extensions
-
-		const supportedExtensions = [
-			'.js', '.jsx', '.ts', '.tsx', '.py', '.rs', '.java', '.go', '.cpp', '.c',
-			'.cs', '.php', '.rb', '.swift', '.kt', '.scala', '.hs', '.lua', '.sh', '.bash'
-		];
 
 		// For now, return an empty array
 		// In a real implementation, we would use VS Code's workspace API

@@ -2,6 +2,8 @@
 
 Welcome to the Code Mavi IDE documentation! This comprehensive guide covers everything you need to know about Code Mavi IDE, the open-source, agent-first IDE.
 
+> **Note**: This documentation hub consolidates all project documentation including wiki content. For a quick overview, see [Home](home.md).
+
 ## 📚 Documentation Categories
 
 ### 🚀 Getting Started
@@ -24,9 +26,10 @@ Welcome to the Code Mavi IDE documentation! This comprehensive guide covers ever
 ### 💻 For Developers
 - **[Contributing Guide](development/contributing.md)** - How to contribute to Code Mavi IDE
 - **[Quick Start for Developers](development/quick-start.md)** - Development setup
-- **[Build Instructions](development/build.md)** - Building from source
-- **[Testing Guide](development/testing.md)** - Running tests
-- **[Extension Development](development/extensions.md)** - Creating extensions
+- **[Implementation Guide](development/implementation-guide.md)** - Detailed technical roadmap
+- **[Project Plan](development/plan.md)** - Strategic vision and architecture
+- **[Plan Implementation](development/plan-implementation.md)** - Phase-by-phase implementation
+- **[Main Roadmap](development/roadmap-main.md)** - High-level project timeline
 
 ### 🔧 For Contributors
 - **[Codebase Guide](../CODEMAVI_CODEBASE_GUIDE.md)** - Understanding the codebase

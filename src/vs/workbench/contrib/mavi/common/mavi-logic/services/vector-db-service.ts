@@ -53,7 +53,6 @@ export interface SearchOptions {
 export class VectorDBService extends Disposable {
   private db: Database.Database | null = null;
   private dbPath: string;
-  private readonly DIMENSIONS = 768; // Default for nomic-embed-text
   private initialized = false;
 
   constructor(dbPath?: string) {

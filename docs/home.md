@@ -10,8 +10,8 @@ Sections:
 - FAQ
 
 Quick Links:
-- [Getting Started](Getting-Started.md)
-- [Architecture](Architecture.md)
-- [Branding](Branding.md)
-- [Contributing](Contributing.md)
-- [FAQ](FAQ.md)
+- [Getting Started](user-guide/getting-started.md)
+- [Architecture](architecture/overview.md)
+- [Branding](architecture/branding.md)
+- [Contributing](development/contributing.md)
+- [FAQ](user-guide/faq.md)

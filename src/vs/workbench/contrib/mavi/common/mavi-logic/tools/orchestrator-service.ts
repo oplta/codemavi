@@ -121,6 +121,24 @@ export const MAX_RETRIES = 3
 export const MAX_PARALLEL_TASKS = 4
 
 // ============================================
+// HATA SINIFLARI
+// ============================================
+
+export class OrchestratorError extends Error {
+	constructor(message: string, public taskId: string) {
+		super(message)
+		this.name = 'OrchestratorError'
+	}
+}
+
+export class MaxRetriesExceededError extends Error {
+	constructor(public taskId: string) {
+		super(`Max retries exceeded for task: ${taskId}`)
+		this.name = 'MaxRetriesExceededError'
+	}
+}
+
+// ============================================
 // SOMUT IMPLEMENTASYON (TASLAK)
 // ============================================
 

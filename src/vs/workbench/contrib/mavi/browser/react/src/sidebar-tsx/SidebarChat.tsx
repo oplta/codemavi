@@ -342,11 +342,14 @@ export const MaviChatArea: React.FC<MaviChatAreaProps> = ({
 			ref={divRef}
 			className={`
 				gap-x-1
-                flex flex-col p-2 relative input text-left shrink-0
-                rounded-md
+                flex flex-col p-3 relative input text-left shrink-0
+                rounded-xl
                 bg-mavi-bg-1
-				transition-all duration-200
-				border border-mavi-border-3 focus-within:border-mavi-border-1 hover:border-mavi-border-1
+				transition-all duration-300 ease-in-out
+				border-2 border-mavi-border-3 
+				focus-within:border-[var(--mavi-primary)] 
+				focus-within:shadow-[var(--mavi-input-active-shadow)]
+				hover:border-[var(--mavi-primary-light)]
 				max-h-[80vh] overflow-y-auto
                 ${className}
             `}
@@ -416,34 +419,39 @@ export const MaviChatArea: React.FC<MaviChatAreaProps> = ({
 
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>
-const DEFAULT_BUTTON_SIZE = 22;
+const DEFAULT_BUTTON_SIZE = 26;
 export const ButtonSubmit = ({ className, disabled, ...props }: ButtonProps & Required<Pick<ButtonProps, 'disabled'>>) => {
 
 	return <button
 		type='button'
-		className={`rounded-full flex-shrink-0 flex-grow-0 flex items-center justify-center
-			${disabled ? 'bg-vscode-disabled-fg cursor-default' : 'bg-white cursor-pointer'}
+		className={`
+			rounded-full flex-shrink-0 flex-grow-0 flex items-center justify-center
+			transition-all duration-200 ease-in-out
+			${disabled 
+				? 'bg-[var(--vscode-disabled-fg)] cursor-default opacity-50' 
+				: 'bg-[var(--mavi-btn-primary-bg)] hover:bg-[var(--mavi-btn-primary-hover)] active:bg-[var(--mavi-btn-primary-active)] cursor-pointer shadow-md hover:shadow-lg'
+			}
 			${className}
 		`}
-		// data-tooltip-id='mavi-tooltip'
-		// data-tooltip-content={'Send'}
-		// data-tooltip-place='left'
 		{...props}
 	>
-		<IconArrowUp size={DEFAULT_BUTTON_SIZE} className="stroke-[2] p-[2px]" />
+		<IconArrowUp size={DEFAULT_BUTTON_SIZE} className="stroke-[2.5] p-[3px] fill-white" />
 	</button>
 }
 
 export const ButtonStop = ({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => {
 	return <button
-		className={`rounded-full flex-shrink-0 flex-grow-0 cursor-pointer flex items-center justify-center
-			bg-white
+		className={`
+			rounded-full flex-shrink-0 flex-grow-0 cursor-pointer flex items-center justify-center
+			bg-[var(--mavi-error)] hover:bg-[var(--mavi-error-light)] 
+			transition-all duration-200 ease-in-out
+			shadow-md hover:shadow-lg
 			${className}
 		`}
 		type='button'
 		{...props}
 	>
-		<IconSquare size={DEFAULT_BUTTON_SIZE} className="stroke-[3] p-[7px]" />
+		<IconSquare size={DEFAULT_BUTTON_SIZE} className="stroke-[3] p-[8px] fill-white" />
 	</button>
 }
 
