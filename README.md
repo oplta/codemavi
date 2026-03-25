@@ -2,7 +2,6 @@
 
 > **"A tool that doesn't just assist, but thinks, acts, and verifies."**
 > 
-> Geçmişin ışığı geleceğin yolunu aydınlatır. (Ata Sözü)
 
 ## Table of Contents
 - Quick Start
